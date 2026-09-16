@@ -1,0 +1,129 @@
+id: https://data.moex.com/mdms/integration/v0.1
+name: moex_integration
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mdms: https://data.moex.com/mdms/
+imports:
+  - linkml:types
+  - moex-types
+  - moex-registries
+  - moex-governance
+  - moex-core
+default_prefix: mdms
+default_range: string
+
+classes:
+  DataFlow:
+    is_a: ModelElement
+    mixins:
+      - HasOwnership
+      - HasLifecycle
+    description: Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr, а семантика — модели данных.
+    slots:
+      - integration_ref
+      - contract_ref
+      - source_solution_ref
+      - target_solution_ref
+      - source_system_ref
+      - target_system_ref
+      - source_platform_ref
+      - target_platform_ref
+      - integration_level
+      - integration_class
+      - integration_channel
+      - integration_spec_ref
+      - entity_bindings
+
+  DataFlowEntityBinding:
+    is_a: ModelElement
+    description: Связь потока с логическими сущностями, атрибутами и физическими объектами модели решения.
+    slots:
+      - flow_ref
+      - source_model_ref
+      - logical_entity_ref
+      - logical_attribute_refs
+      - physical_object_refs
+      - physical_field_refs
+      - transformation_mapping_refs
+      - direction
+
+slots:
+  integration_ref:
+    range: IntegrationReference
+    inlined: false
+    required: true
+  contract_ref:
+    range: DataContractReference
+    inlined: false
+  source_solution_ref:
+    range: ITSolution
+    inlined: false
+    required: true
+  target_solution_ref:
+    range: ITSolution
+    inlined: false
+    required: true
+  source_system_ref:
+    range: ITSystem
+    inlined: false
+    required: true
+  target_system_ref:
+    range: ITSystem
+    inlined: false
+    required: true
+  source_platform_ref:
+    range: ITPlatform
+    inlined: false
+    required: true
+  target_platform_ref:
+    range: ITPlatform
+    inlined: false
+    required: true
+  integration_level:
+    range: IntegrationLevelEnum
+    required: true
+  integration_class:
+    range: IntegrationClassEnum
+    required: true
+  integration_channel:
+    range: IntegrationChannelEnum
+    required: true
+  integration_spec_ref:
+    range: uri
+    required: true
+  entity_bindings:
+    range: DataFlowEntityBinding
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  flow_ref:
+    range: DataFlow
+    inlined: false
+    required: true
+  source_model_ref:
+    range: uri
+    required: true
+  logical_entity_ref:
+    range: LogicalEntity
+    inlined: false
+    required: true
+  logical_attribute_refs:
+    range: LogicalAttribute
+    multivalued: true
+    inlined: false
+    minimum_cardinality: 1
+  physical_object_refs:
+    range: PhysicalObject
+    multivalued: true
+    inlined: false
+    minimum_cardinality: 1
+  physical_field_refs:
+    range: PhysicalField
+    multivalued: true
+    inlined: false
+  transformation_mapping_refs:
+    range: Mapping
+    multivalued: true
+    inlined: false

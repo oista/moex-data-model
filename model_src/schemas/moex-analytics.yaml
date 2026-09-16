@@ -1,0 +1,64 @@
+id: https://data.moex.com/mdms/analytics/v0.1
+name: moex_analytics
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mdms: https://data.moex.com/mdms/
+imports:
+  - linkml:types
+  - moex-types
+  - moex-registries
+  - moex-governance
+  - moex-core
+default_prefix: mdms
+default_range: string
+
+classes:
+  Metric:
+    is_a: ModelElement
+    mixins:
+      - HasOwnership
+      - HasPolicyBindings
+    description: Управляемое определение бизнес- или технической метрики; является опциональным аналитическим профилем.
+    slots:
+      - metric_expression
+      - aggregation_function
+      - grain_entity_refs
+      - dimension_attribute_refs
+      - measure_attribute_refs
+      - unit
+      - filter_expression
+
+  Dimension:
+    is_a: ModelElement
+    description: Переиспользуемое аналитическое измерение, связанное с логическими атрибутами.
+    slots:
+      - dimension_attribute_refs
+      - grain_entity_refs
+
+slots:
+  metric_expression:
+    range: string
+    required: true
+  aggregation_function:
+    range: string
+    required: true
+  grain_entity_refs:
+    range: LogicalEntity
+    multivalued: true
+    inlined: false
+    minimum_cardinality: 1
+  dimension_attribute_refs:
+    range: LogicalAttribute
+    multivalued: true
+    inlined: false
+  measure_attribute_refs:
+    range: LogicalAttribute
+    multivalued: true
+    inlined: false
+    minimum_cardinality: 1
+  unit:
+    range: string
+  filter_expression:
+    range: string

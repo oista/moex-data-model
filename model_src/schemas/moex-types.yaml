@@ -1,0 +1,162 @@
+id: https://data.moex.com/mdms/types/v0.1
+name: moex_types
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  xsd: http://www.w3.org/2001/XMLSchema#
+  mdms: https://data.moex.com/mdms/
+imports:
+  - linkml:types
+default_prefix: mdms
+default_range: string
+
+types:
+  SemVer:
+    typeof: string
+    uri: xsd:string
+    pattern: '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$'
+  Sha256Digest:
+    typeof: string
+    uri: xsd:string
+    pattern: '^sha256:[a-fA-F0-9]{64}$'
+
+enums:
+  LifecycleStatusEnum:
+    permissible_values:
+      draft:
+      active:
+      deprecated:
+      retired:
+  ApprovalStatusEnum:
+    permissible_values:
+      proposed:
+      approved:
+      rejected:
+      superseded:
+  ModelLevelEnum:
+    permissible_values:
+      conceptual:
+      logical:
+      physical:
+  EntityTypeEnum:
+    description: Роль логической сущности в модели решения.
+    permissible_values:
+      core:
+        description: Базовая сущность, создаваемая и управляемая решением.
+      derived:
+        description: Производная сущность, вычисляемая или агрегируемая из других данных.
+      reference:
+        description: Справочная сущность или представление управляемого справочника.
+  DataClassEnum:
+    description: Класс данных для наследования модельной спецификацией дата-контракта; не совпадает с entity_type.
+    permissible_values:
+      reference_data:
+        description: Нормативно-справочная информация (НСИ).
+      master_data:
+        description: Мастер-данные.
+      transactional_data:
+        description: Транзакционные данные.
+      analytical_data:
+        description: Аналитические или производные наборы данных.
+      metadata:
+        description: Метаданные.
+  BusinessImportanceEnum:
+    permissible_values:
+      high:
+      medium:
+      low:
+  GovernanceClassificationEnum:
+    description: Базовая шкала ограничения доступа; специальные виды тайны задаются отдельными терминами классификации.
+    permissible_values:
+      public:
+      internal:
+      confidential:
+      restricted:
+  LogicalDataTypeEnum:
+    permissible_values:
+      string:
+      integer:
+      decimal:
+      boolean:
+      date:
+      datetime:
+      time:
+      binary:
+      identifier:
+      uri:
+      object:
+  PhysicalObjectKindEnum:
+    permissible_values:
+      database:
+      schema:
+      table:
+      view:
+      column:
+      api:
+      endpoint:
+      payload:
+      topic:
+      queue:
+      message:
+      file:
+      dataset:
+      pipeline:
+  FlowDirectionEnum:
+    permissible_values:
+      inbound:
+      outbound:
+      internal:
+      bidirectional:
+  SolutionDataRoleEnum:
+    permissible_values:
+      producer:
+      consumer:
+      intermediary:
+  IntegrationChannelEnum:
+    permissible_values:
+      api:
+      queue:
+      database:
+      file:
+      other:
+  IntegrationClassEnum:
+    permissible_values:
+      EAP:
+      EDA:
+  IntegrationLevelEnum:
+    permissible_values:
+      intraplatform:
+      interplatform:
+  MappingTypeEnum:
+    permissible_values:
+      semantic_equivalence:
+      specialization:
+      implementation:
+      field_mapping:
+      transformation:
+      aggregation:
+      derivation:
+  MappingCardinalityEnum:
+    permissible_values:
+      one_to_one:
+      one_to_many:
+      many_to_one:
+      many_to_many:
+  CompatibilityModeEnum:
+    permissible_values:
+      backward:
+      forward:
+      full:
+      none:
+  SpecificationKindEnum:
+    permissible_values:
+      integration:
+      data_model:
+      data_quality:
+  EnforcementResultEnum:
+    permissible_values:
+      pass:
+      warn:
+      fail:
+      not_applicable:

@@ -1,0 +1,3603 @@
+{
+    "$defs": {
+        "ApprovalStatusEnum": {
+            "description": "",
+            "enum": [
+                "proposed",
+                "approved",
+                "rejected",
+                "superseded"
+            ],
+            "title": "ApprovalStatusEnum",
+            "type": "string"
+        },
+        "BusinessDomain": {
+            "additionalProperties": false,
+            "description": "\u0411\u0438\u0437\u043d\u0435\u0441-\u0434\u043e\u043c\u0435\u043d \u0438\u043b\u0438 \u043f\u0440\u0435\u0434\u043c\u0435\u0442\u043d\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c; \u043c\u0430\u0441\u0442\u0435\u0440 \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u044f\u0435\u0442\u0441\u044f \u0430\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u043d\u044b\u043c governance.",
+            "properties": {
+                "master_system": {
+                    "type": "string"
+                },
+                "parent_domain_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "registry_description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "registry_id": {
+                    "type": "string"
+                },
+                "registry_name": {
+                    "type": "string"
+                },
+                "registry_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "source_uri": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "registry_id",
+                "registry_name",
+                "master_system",
+                "registry_status"
+            ],
+            "title": "BusinessDomain",
+            "type": "object"
+        },
+        "BusinessImportanceEnum": {
+            "description": "",
+            "enum": [
+                "high",
+                "medium",
+                "low"
+            ],
+            "title": "BusinessImportanceEnum",
+            "type": "string"
+        },
+        "BusinessProcess": {
+            "additionalProperties": false,
+            "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u0431\u0438\u0437\u043d\u0435\u0441-\u043f\u0440\u043e\u0446\u0435\u0441\u0441 \u0438\u043b\u0438 \u0435\u0433\u043e \u0448\u0430\u0433 \u0432 BPMN-\u0440\u0435\u043f\u043e\u0437\u0438\u0442\u043e\u0440\u0438\u0438.",
+            "properties": {
+                "master_system": {
+                    "type": "string"
+                },
+                "registry_description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "registry_id": {
+                    "type": "string"
+                },
+                "registry_name": {
+                    "type": "string"
+                },
+                "registry_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "source_uri": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "registry_id",
+                "registry_name",
+                "master_system",
+                "registry_status"
+            ],
+            "title": "BusinessProcess",
+            "type": "object"
+        },
+        "ClassificationAssignment": {
+            "additionalProperties": false,
+            "description": "\u0412\u0435\u0440\u0441\u0438\u043e\u043d\u0438\u0440\u0443\u0435\u043c\u043e\u0435 \u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u0438 \u043a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u0438 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0443 \u043c\u043e\u0434\u0435\u043b\u0438 \u0441 \u043e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u0435\u043c \u0438 \u043f\u0435\u0440\u0438\u043e\u0434\u043e\u043c \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044f.",
+            "properties": {
+                "approval_status": {
+                    "$ref": "#/$defs/ApprovalStatusEnum"
+                },
+                "assignment_id": {
+                    "type": "string"
+                },
+                "classification_rationale": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "classification_source": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "classification_term_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "classified_element_ref": {
+                    "type": "string"
+                },
+                "governance_classification": {
+                    "$ref": "#/$defs/GovernanceClassificationEnum"
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "assignment_id",
+                "classified_element_ref"
+            ],
+            "title": "ClassificationAssignment",
+            "type": "object"
+        },
+        "CompatibilityModeEnum": {
+            "description": "",
+            "enum": [
+                "backward",
+                "forward",
+                "full",
+                "none"
+            ],
+            "title": "CompatibilityModeEnum",
+            "type": "string"
+        },
+        "ConceptualEntity": {
+            "additionalProperties": false,
+            "description": "\u041a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u0435 \u0431\u0438\u0437\u043d\u0435\u0441-\u043f\u043e\u043d\u044f\u0442\u0438\u0435 \u0432\u0435\u0440\u0445\u043d\u0435\u0433\u043e \u0443\u0440\u043e\u0432\u043d\u044f, \u043d\u0435\u0437\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0435 \u043e\u0442 \u043a\u043e\u043d\u043a\u0440\u0435\u0442\u043d\u043e\u0439 \u0440\u0435\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u0438.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "business_importance": {
+                    "$ref": "#/$defs/BusinessImportanceEnum"
+                },
+                "data_class": {
+                    "$ref": "#/$defs/DataClassEnum"
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "entity_type": {
+                    "$ref": "#/$defs/EntityTypeEnum"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "key_attribute_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "parent_concept_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "ConceptualEntity",
+            "type": "object"
+        },
+        "DataClassEnum": {
+            "description": "\u041a\u043b\u0430\u0441\u0441 \u0434\u0430\u043d\u043d\u044b\u0445 \u0434\u043b\u044f \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043c\u043e\u0434\u0435\u043b\u044c\u043d\u043e\u0439 \u0441\u043f\u0435\u0446\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u0435\u0439 \u0434\u0430\u0442\u0430-\u043a\u043e\u043d\u0442\u0440\u0430\u043a\u0442\u0430; \u043d\u0435 \u0441\u043e\u0432\u043f\u0430\u0434\u0430\u0435\u0442 \u0441 entity_type.",
+            "enum": [
+                "reference_data",
+                "master_data",
+                "transactional_data",
+                "analytical_data",
+                "metadata"
+            ],
+            "title": "DataClassEnum",
+            "type": "string"
+        },
+        "DataClassificationTerm": {
+            "additionalProperties": false,
+            "description": "\u0421\u043f\u0435\u0446\u0438\u0430\u043b\u044c\u043d\u0430\u044f \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f \u0447\u0443\u0432\u0441\u0442\u0432\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438 \u0438\u043b\u0438 \u0440\u0435\u0433\u0443\u043b\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f, \u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 \u041f\u0414\u043d \u0438\u043b\u0438 \u0438\u043d\u0441\u0430\u0439\u0434\u0435\u0440\u0441\u043a\u0430\u044f \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f.",
+            "properties": {
+                "master_system": {
+                    "type": "string"
+                },
+                "registry_description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "registry_id": {
+                    "type": "string"
+                },
+                "registry_name": {
+                    "type": "string"
+                },
+                "registry_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "source_uri": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "registry_id",
+                "registry_name",
+                "master_system",
+                "registry_status"
+            ],
+            "title": "DataClassificationTerm",
+            "type": "object"
+        },
+        "DataContractReference": {
+            "additionalProperties": false,
+            "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u0434\u0430\u0442\u0430-\u043a\u043e\u043d\u0442\u0440\u0430\u043a\u0442 \u0432 \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u043c \u0434\u0430\u0442\u0430-\u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0435.",
+            "properties": {
+                "master_system": {
+                    "type": "string"
+                },
+                "registry_description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "registry_id": {
+                    "type": "string"
+                },
+                "registry_name": {
+                    "type": "string"
+                },
+                "registry_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "source_uri": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "registry_id",
+                "registry_name",
+                "master_system",
+                "registry_status"
+            ],
+            "title": "DataContractReference",
+            "type": "object"
+        },
+        "DataFlow": {
+            "additionalProperties": false,
+            "description": "\u0421\u0441\u044b\u043b\u043e\u0447\u043d\u0430\u044f \u043f\u0440\u043e\u0435\u043a\u0446\u0438\u044f \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u043e\u0439 \u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u0438; \u0442\u043e\u043f\u043e\u043b\u043e\u0433\u0438\u044f \u0438 \u043a\u0430\u043d\u0430\u043b \u044f\u0432\u043b\u044f\u044e\u0442\u0441\u044f \u0434\u0430\u043d\u043d\u044b\u043c\u0438 Clinkr, \u0430 \u0441\u0435\u043c\u0430\u043d\u0442\u0438\u043a\u0430 \u2014 \u043c\u043e\u0434\u0435\u043b\u0438 \u0434\u0430\u043d\u043d\u044b\u0445.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "contract_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "entity_bindings": {
+                    "items": {
+                        "$ref": "#/$defs/DataFlowEntityBinding"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "integration_channel": {
+                    "$ref": "#/$defs/IntegrationChannelEnum"
+                },
+                "integration_class": {
+                    "$ref": "#/$defs/IntegrationClassEnum"
+                },
+                "integration_level": {
+                    "$ref": "#/$defs/IntegrationLevelEnum"
+                },
+                "integration_ref": {
+                    "type": "string"
+                },
+                "integration_spec_ref": {
+                    "format": "uri",
+                    "type": "string"
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "source_platform_ref": {
+                    "type": "string"
+                },
+                "source_solution_ref": {
+                    "type": "string"
+                },
+                "source_system_ref": {
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "target_platform_ref": {
+                    "type": "string"
+                },
+                "target_solution_ref": {
+                    "type": "string"
+                },
+                "target_system_ref": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "integration_ref",
+                "source_solution_ref",
+                "target_solution_ref",
+                "source_system_ref",
+                "target_system_ref",
+                "source_platform_ref",
+                "target_platform_ref",
+                "integration_level",
+                "integration_class",
+                "integration_channel",
+                "integration_spec_ref",
+                "lifecycle_status",
+                "element_id",
+                "name",
+                "description"
+            ],
+            "title": "DataFlow",
+            "type": "object"
+        },
+        "DataFlowEntityBinding": {
+            "additionalProperties": false,
+            "description": "\u0421\u0432\u044f\u0437\u044c \u043f\u043e\u0442\u043e\u043a\u0430 \u0441 \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0438\u043c\u0438 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u044f\u043c\u0438, \u0430\u0442\u0440\u0438\u0431\u0443\u0442\u0430\u043c\u0438 \u0438 \u0444\u0438\u0437\u0438\u0447\u0435\u0441\u043a\u0438\u043c\u0438 \u043e\u0431\u044a\u0435\u043a\u0442\u0430\u043c\u0438 \u043c\u043e\u0434\u0435\u043b\u0438 \u0440\u0435\u0448\u0435\u043d\u0438\u044f.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "direction": {
+                    "$ref": "#/$defs/FlowDirectionEnum"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "flow_ref": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "logical_attribute_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "logical_entity_ref": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "physical_field_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "physical_object_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "source_model_ref": {
+                    "format": "uri",
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "transformation_mapping_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "flow_ref",
+                "source_model_ref",
+                "logical_entity_ref",
+                "direction",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "DataFlowEntityBinding",
+            "type": "object"
+        },
+        "DataModelBinding": {
+            "additionalProperties": false,
+            "description": "\u0414\u043e\u0447\u0435\u0440\u043d\u044f\u044f \u043c\u043e\u0434\u0435\u043b\u044c\u043d\u0430\u044f \u0441\u043f\u0435\u0446\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u044f \u0434\u0430\u0442\u0430-\u043a\u043e\u043d\u0442\u0440\u0430\u043a\u0442\u0430, \u0444\u0438\u043a\u0441\u0438\u0440\u0443\u044e\u0449\u0430\u044f \u043d\u0435\u0438\u0437\u043c\u0435\u043d\u044f\u0435\u043c\u0443\u044e \u0440\u0435\u0432\u0438\u0437\u0438\u044e \u043c\u043e\u0434\u0435\u043b\u0438 \u0438 \u043f\u0435\u0440\u0435\u0434\u0430\u0432\u0430\u0435\u043c\u044b\u0439 \u0441\u0440\u0435\u0437.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "compatibility_baseline_ref": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "compatibility_mode": {
+                    "$ref": "#/$defs/CompatibilityModeEnum"
+                },
+                "contract_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "generated_at": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "implementation_version": {
+                    "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$",
+                    "type": "string"
+                },
+                "integration_ref": {
+                    "type": "string"
+                },
+                "integrity_digest": {
+                    "pattern": "^sha256:[a-fA-F0-9]{64}$",
+                    "type": "string"
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "model_package_ref": {
+                    "format": "uri",
+                    "type": "string"
+                },
+                "model_revision": {
+                    "type": "string"
+                },
+                "model_version": {
+                    "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "selections": {
+                    "items": {
+                        "$ref": "#/$defs/ModelSelection"
+                    },
+                    "minItems": 1,
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "specification_version": {
+                    "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$",
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "specification_version",
+                "implementation_version",
+                "integration_ref",
+                "model_package_ref",
+                "model_version",
+                "model_revision",
+                "compatibility_mode",
+                "integrity_digest",
+                "generated_at",
+                "lifecycle_status",
+                "element_id",
+                "name",
+                "description"
+            ],
+            "title": "DataModelBinding",
+            "type": "object"
+        },
+        "Dimension": {
+            "additionalProperties": false,
+            "description": "\u041f\u0435\u0440\u0435\u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0435\u043c\u043e\u0435 \u0430\u043d\u0430\u043b\u0438\u0442\u0438\u0447\u0435\u0441\u043a\u043e\u0435 \u0438\u0437\u043c\u0435\u0440\u0435\u043d\u0438\u0435, \u0441\u0432\u044f\u0437\u0430\u043d\u043d\u043e\u0435 \u0441 \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0438\u043c\u0438 \u0430\u0442\u0440\u0438\u0431\u0443\u0442\u0430\u043c\u0438.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "dimension_attribute_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "grain_entity_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "Dimension",
+            "type": "object"
+        },
+        "DomainContext": {
+            "additionalProperties": false,
+            "description": "\u041e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u043d\u044b\u0439 \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442 \u0441 \u0441\u043e\u0431\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0439 \u0442\u0435\u0440\u043c\u0438\u043d\u043e\u043b\u043e\u0433\u0438\u0435\u0439 \u0438 \u043e\u0431\u043b\u0430\u0441\u0442\u044c\u044e \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "business_process_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "domain_ref": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "namespace": {
+                    "format": "uri",
+                    "type": "string"
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "solution_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "domain_ref",
+                "namespace",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "DomainContext",
+            "type": "object"
+        },
+        "EnforcementResultEnum": {
+            "description": "",
+            "enum": [
+                "pass",
+                "warn",
+                "fail",
+                "not_applicable"
+            ],
+            "title": "EnforcementResultEnum",
+            "type": "string"
+        },
+        "EntityTypeEnum": {
+            "description": "\u0420\u043e\u043b\u044c \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u043e\u0439 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0438 \u0432 \u043c\u043e\u0434\u0435\u043b\u0438 \u0440\u0435\u0448\u0435\u043d\u0438\u044f.",
+            "enum": [
+                "core",
+                "derived",
+                "reference"
+            ],
+            "title": "EntityTypeEnum",
+            "type": "string"
+        },
+        "FlowDirectionEnum": {
+            "description": "",
+            "enum": [
+                "inbound",
+                "outbound",
+                "internal",
+                "bidirectional"
+            ],
+            "title": "FlowDirectionEnum",
+            "type": "string"
+        },
+        "GlossaryTerm": {
+            "additionalProperties": false,
+            "description": "\u0422\u0435\u0440\u043c\u0438\u043d \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u0433\u043e \u0431\u0438\u0437\u043d\u0435\u0441-\u0433\u043b\u043e\u0441\u0441\u0430\u0440\u0438\u044f.",
+            "properties": {
+                "master_system": {
+                    "type": "string"
+                },
+                "registry_description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "registry_id": {
+                    "type": "string"
+                },
+                "registry_name": {
+                    "type": "string"
+                },
+                "registry_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "source_uri": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "registry_id",
+                "registry_name",
+                "master_system",
+                "registry_status"
+            ],
+            "title": "GlossaryTerm",
+            "type": "object"
+        },
+        "GovernanceClassificationEnum": {
+            "description": "\u0411\u0430\u0437\u043e\u0432\u0430\u044f \u0448\u043a\u0430\u043b\u0430 \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u0438\u044f \u0434\u043e\u0441\u0442\u0443\u043f\u0430; \u0441\u043f\u0435\u0446\u0438\u0430\u043b\u044c\u043d\u044b\u0435 \u0432\u0438\u0434\u044b \u0442\u0430\u0439\u043d\u044b \u0437\u0430\u0434\u0430\u044e\u0442\u0441\u044f \u043e\u0442\u0434\u0435\u043b\u044c\u043d\u044b\u043c\u0438 \u0442\u0435\u0440\u043c\u0438\u043d\u0430\u043c\u0438 \u043a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u0438.",
+            "enum": [
+                "public",
+                "internal",
+                "confidential",
+                "restricted"
+            ],
+            "title": "GovernanceClassificationEnum",
+            "type": "string"
+        },
+        "HasBusinessClassification": {
+            "additionalProperties": false,
+            "description": "\u041a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u044f \u0440\u043e\u043b\u0438 \u0438 \u0431\u0438\u0437\u043d\u0435\u0441-\u0437\u043d\u0430\u0447\u0438\u043c\u043e\u0441\u0442\u0438 \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u043e\u0439 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0438.",
+            "properties": {
+                "business_importance": {
+                    "$ref": "#/$defs/BusinessImportanceEnum"
+                },
+                "data_class": {
+                    "$ref": "#/$defs/DataClassEnum"
+                },
+                "entity_type": {
+                    "$ref": "#/$defs/EntityTypeEnum"
+                }
+            },
+            "title": "HasBusinessClassification",
+            "type": "object"
+        },
+        "HasGovernanceClassification": {
+            "additionalProperties": false,
+            "description": "\u0411\u0430\u0437\u043e\u0432\u0430\u044f \u0438 \u0441\u043f\u0435\u0446\u0438\u0430\u043b\u044c\u043d\u0430\u044f \u043a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u044f \u0447\u0443\u0432\u0441\u0442\u0432\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438 \u0434\u0430\u043d\u043d\u044b\u0445.",
+            "properties": {
+                "classification_rationale": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "classification_source": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "governance_classification": {
+                    "$ref": "#/$defs/GovernanceClassificationEnum"
+                },
+                "sensitivity_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                }
+            },
+            "title": "HasGovernanceClassification",
+            "type": "object"
+        },
+        "HasLifecycle": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "lifecycle_status"
+            ],
+            "title": "HasLifecycle",
+            "type": "object"
+        },
+        "HasOwnership": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "HasOwnership",
+            "type": "object"
+        },
+        "HasPolicyBindings": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "policy_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                }
+            },
+            "title": "HasPolicyBindings",
+            "type": "object"
+        },
+        "HasProvenance": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "approval_status": {
+                    "$ref": "#/$defs/ApprovalStatusEnum"
+                },
+                "approved_at": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "approved_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "evidence_refs": {
+                    "items": {
+                        "format": "uri",
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "source_artifact_ref": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "HasProvenance",
+            "type": "object"
+        },
+        "ITPlatform": {
+            "additionalProperties": false,
+            "description": "\u0418\u0422-\u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u0430; \u043c\u0430\u0441\u0442\u0435\u0440 \u0434\u0430\u043d\u043d\u044b\u0445 \u2014 EAM.",
+            "properties": {
+                "master_system": {
+                    "type": "string"
+                },
+                "registry_description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "registry_id": {
+                    "type": "string"
+                },
+                "registry_name": {
+                    "type": "string"
+                },
+                "registry_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "source_uri": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "registry_id",
+                "registry_name",
+                "master_system",
+                "registry_status"
+            ],
+            "title": "ITPlatform",
+            "type": "object"
+        },
+        "ITSolution": {
+            "additionalProperties": false,
+            "description": "\u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u0435, \u043e\u0431\u044a\u0435\u0434\u0438\u043d\u044f\u044e\u0449\u0435\u0435 \u043e\u0434\u043d\u0443 \u0438\u043b\u0438 \u043d\u0435\u0441\u043a\u043e\u043b\u044c\u043a\u043e \u0418\u0422-\u0441\u0438\u0441\u0442\u0435\u043c; \u043c\u0430\u0441\u0442\u0435\u0440 \u0434\u0430\u043d\u043d\u044b\u0445 \u2014 EAM.",
+            "properties": {
+                "master_system": {
+                    "type": "string"
+                },
+                "member_system_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "platform_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "registry_description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "registry_id": {
+                    "type": "string"
+                },
+                "registry_name": {
+                    "type": "string"
+                },
+                "registry_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "source_uri": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "registry_id",
+                "registry_name",
+                "master_system",
+                "registry_status"
+            ],
+            "title": "ITSolution",
+            "type": "object"
+        },
+        "ITSystem": {
+            "additionalProperties": false,
+            "description": "\u0418\u0422-\u0441\u0438\u0441\u0442\u0435\u043c\u0430; \u043c\u0430\u0441\u0442\u0435\u0440 \u0434\u0430\u043d\u043d\u044b\u0445 \u2014 EAM.",
+            "properties": {
+                "master_system": {
+                    "type": "string"
+                },
+                "registry_description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "registry_id": {
+                    "type": "string"
+                },
+                "registry_name": {
+                    "type": "string"
+                },
+                "registry_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "source_uri": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "registry_id",
+                "registry_name",
+                "master_system",
+                "registry_status"
+            ],
+            "title": "ITSystem",
+            "type": "object"
+        },
+        "IntegrationChannelEnum": {
+            "description": "",
+            "enum": [
+                "api",
+                "queue",
+                "database",
+                "file",
+                "other"
+            ],
+            "title": "IntegrationChannelEnum",
+            "type": "string"
+        },
+        "IntegrationClassEnum": {
+            "description": "",
+            "enum": [
+                "EAP",
+                "EDA"
+            ],
+            "title": "IntegrationClassEnum",
+            "type": "string"
+        },
+        "IntegrationLevelEnum": {
+            "description": "",
+            "enum": [
+                "intraplatform",
+                "interplatform"
+            ],
+            "title": "IntegrationLevelEnum",
+            "type": "string"
+        },
+        "IntegrationReference": {
+            "additionalProperties": false,
+            "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u044e \u0432 Clinkr.",
+            "properties": {
+                "master_system": {
+                    "type": "string"
+                },
+                "registry_description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "registry_id": {
+                    "type": "string"
+                },
+                "registry_name": {
+                    "type": "string"
+                },
+                "registry_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "source_uri": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "registry_id",
+                "registry_name",
+                "master_system",
+                "registry_status"
+            ],
+            "title": "IntegrationReference",
+            "type": "object"
+        },
+        "LifecycleStatusEnum": {
+            "description": "",
+            "enum": [
+                "draft",
+                "active",
+                "deprecated",
+                "retired"
+            ],
+            "title": "LifecycleStatusEnum",
+            "type": "string"
+        },
+        "LogicalAttribute": {
+            "additionalProperties": false,
+            "description": "\u041b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u0430\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0438 \u0441 \u0431\u0438\u0437\u043d\u0435\u0441-\u0441\u043c\u044b\u0441\u043b\u043e\u043c, \u0442\u0438\u043f\u043e\u043c, \u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c\u044e \u0438 \u043a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u0435\u0439.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "classification_rationale": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "classification_source": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "default_value": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "derived_expression": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "format_pattern": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "governance_classification": {
+                    "$ref": "#/$defs/GovernanceClassificationEnum"
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "logical_type": {
+                    "$ref": "#/$defs/LogicalDataTypeEnum"
+                },
+                "maximum_cardinality": {
+                    "minimum": 1,
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "minimum_cardinality": {
+                    "minimum": 0,
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "multivalued": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owner_entity_ref": {
+                    "type": "string"
+                },
+                "policy_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "required": {
+                    "type": "boolean"
+                },
+                "sensitivity_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "value_set_ref": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "owner_entity_ref",
+                "logical_type",
+                "required",
+                "multivalued",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "LogicalAttribute",
+            "type": "object"
+        },
+        "LogicalDataTypeEnum": {
+            "description": "",
+            "enum": [
+                "string",
+                "integer",
+                "decimal",
+                "boolean",
+                "date",
+                "datetime",
+                "time",
+                "binary",
+                "identifier",
+                "uri",
+                "object"
+            ],
+            "title": "LogicalDataTypeEnum",
+            "type": "string"
+        },
+        "LogicalEntity": {
+            "additionalProperties": false,
+            "description": "\u041f\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0431\u0438\u0437\u043d\u0435\u0441-\u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0438 \u0432 \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u043c \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0435 \u0438 \u043c\u043e\u0434\u0435\u043b\u0438 \u043a\u043e\u043d\u043a\u0440\u0435\u0442\u043d\u043e\u0433\u043e \u0440\u0435\u0448\u0435\u043d\u0438\u044f.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "attributes": {
+                    "items": {
+                        "$ref": "#/$defs/LogicalAttribute"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "business_importance": {
+                    "$ref": "#/$defs/BusinessImportanceEnum"
+                },
+                "classification_rationale": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "classification_source": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "conceptual_entity_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "context_ref": {
+                    "type": "string"
+                },
+                "data_class": {
+                    "$ref": "#/$defs/DataClassEnum"
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "entity_type": {
+                    "$ref": "#/$defs/EntityTypeEnum"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "governance_classification": {
+                    "$ref": "#/$defs/GovernanceClassificationEnum"
+                },
+                "invariant_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "key_attribute_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "policy_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "sensitivity_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "solution_data_role": {
+                    "$ref": "#/$defs/SolutionDataRoleEnum"
+                },
+                "solution_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "context_ref",
+                "solution_data_role",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "LogicalEntity",
+            "type": "object"
+        },
+        "MOEXModelRepository": {
+            "additionalProperties": false,
+            "description": "\u041a\u043e\u0440\u043d\u0435\u0432\u043e\u0439 \u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440 \u0434\u043b\u044f \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0438 \u043d\u0430\u0431\u043e\u0440\u0430 \u043c\u043e\u0434\u0435\u043b\u0435\u0439, \u0441\u0441\u044b\u043b\u043e\u0447\u043d\u044b\u0445 \u043f\u0440\u043e\u0435\u043a\u0446\u0438\u0439 \u0441\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a\u043e\u0432, \u043f\u043e\u0442\u043e\u043a\u043e\u0432 \u0438 \u043a\u043e\u043d\u0442\u0440\u0430\u043a\u0442\u043d\u044b\u0445 bindings.",
+            "properties": {
+                "classification_assignments": {
+                    "items": {
+                        "$ref": "#/$defs/ClassificationAssignment"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "data_flows": {
+                    "items": {
+                        "$ref": "#/$defs/DataFlow"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "data_model_bindings": {
+                    "items": {
+                        "$ref": "#/$defs/DataModelBinding"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "dimensions": {
+                    "items": {
+                        "$ref": "#/$defs/Dimension"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "metrics": {
+                    "items": {
+                        "$ref": "#/$defs/Metric"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "model_packages": {
+                    "items": {
+                        "$ref": "#/$defs/ModelPackage"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "policy_bindings": {
+                    "items": {
+                        "$ref": "#/$defs/PolicyBinding"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "registry_entries": {
+                    "items": {
+                        "$ref": "#/$defs/RegistryEntry"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "repository_id": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "repository_id"
+            ],
+            "title": "MOEXModelRepository",
+            "type": "object"
+        },
+        "Mapping": {
+            "additionalProperties": false,
+            "description": "\u042f\u0432\u043d\u043e\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430\u043c\u0438 \u043a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u043e\u0433\u043e, \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u043e\u0433\u043e \u0438 \u0444\u0438\u0437\u0438\u0447\u0435\u0441\u043a\u043e\u0433\u043e \u0443\u0440\u043e\u0432\u043d\u0435\u0439.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "approval_status": {
+                    "$ref": "#/$defs/ApprovalStatusEnum"
+                },
+                "approved_at": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "approved_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "confidence": {
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "evidence_refs": {
+                    "items": {
+                        "format": "uri",
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "mapping_cardinality": {
+                    "$ref": "#/$defs/MappingCardinalityEnum"
+                },
+                "mapping_type": {
+                    "$ref": "#/$defs/MappingTypeEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "source_artifact_ref": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "source_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "target_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "transformation_expression": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "transformation_ref": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "mapping_type",
+                "mapping_cardinality",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "Mapping",
+            "type": "object"
+        },
+        "MappingCardinalityEnum": {
+            "description": "",
+            "enum": [
+                "one_to_one",
+                "one_to_many",
+                "many_to_one",
+                "many_to_many"
+            ],
+            "title": "MappingCardinalityEnum",
+            "type": "string"
+        },
+        "MappingTypeEnum": {
+            "description": "",
+            "enum": [
+                "semantic_equivalence",
+                "specialization",
+                "implementation",
+                "field_mapping",
+                "transformation",
+                "aggregation",
+                "derivation"
+            ],
+            "title": "MappingTypeEnum",
+            "type": "string"
+        },
+        "Metric": {
+            "additionalProperties": false,
+            "description": "\u0423\u043f\u0440\u0430\u0432\u043b\u044f\u0435\u043c\u043e\u0435 \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u0438\u0435 \u0431\u0438\u0437\u043d\u0435\u0441- \u0438\u043b\u0438 \u0442\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u043e\u0439 \u043c\u0435\u0442\u0440\u0438\u043a\u0438; \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043e\u043f\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u044b\u043c \u0430\u043d\u0430\u043b\u0438\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u043c \u043f\u0440\u043e\u0444\u0438\u043b\u0435\u043c.",
+            "properties": {
+                "aggregation_function": {
+                    "type": "string"
+                },
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "dimension_attribute_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "filter_expression": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "grain_entity_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "measure_attribute_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "metric_expression": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "policy_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "unit": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "metric_expression",
+                "aggregation_function",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "Metric",
+            "type": "object"
+        },
+        "ModelElement": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "ModelElement",
+            "type": "object"
+        },
+        "ModelLevelEnum": {
+            "description": "",
+            "enum": [
+                "conceptual",
+                "logical",
+                "physical"
+            ],
+            "title": "ModelLevelEnum",
+            "type": "string"
+        },
+        "ModelPackage": {
+            "additionalProperties": false,
+            "description": "\u0412\u0435\u0440\u0441\u0438\u043e\u043d\u0438\u0440\u0443\u0435\u043c\u044b\u0439 \u0430\u0440\u0442\u0435\u0444\u0430\u043a\u0442 \u043c\u043e\u0434\u0435\u043b\u0438 \u0434\u0430\u043d\u043d\u044b\u0445 \u043e\u0434\u043d\u043e\u0433\u043e \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f \u0438\u043b\u0438 \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u0439 \u043c\u043e\u0434\u0435\u043b\u0438.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "api_version": {
+                    "type": "string"
+                },
+                "conceptual_entities": {
+                    "items": {
+                        "$ref": "#/$defs/ConceptualEntity"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "domain_contexts": {
+                    "items": {
+                        "$ref": "#/$defs/DomainContext"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "domain_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "imports_refs": {
+                    "items": {
+                        "format": "uri",
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "logical_entities": {
+                    "items": {
+                        "$ref": "#/$defs/LogicalEntity"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "mappings": {
+                    "items": {
+                        "$ref": "#/$defs/Mapping"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "model_version": {
+                    "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "physical_objects": {
+                    "items": {
+                        "$ref": "#/$defs/PhysicalObject"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "relationships": {
+                    "items": {
+                        "$ref": "#/$defs/Relationship"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "solution_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "api_version",
+                "model_version",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "ModelPackage",
+            "type": "object"
+        },
+        "ModelSelection": {
+            "additionalProperties": false,
+            "description": "\u041f\u0435\u0440\u0435\u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0435\u043c\u044b\u0439 \u043d\u0430\u0431\u043e\u0440 \u0432\u044b\u0431\u0440\u0430\u043d\u043d\u044b\u0445 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0435\u0439, \u0430\u0442\u0440\u0438\u0431\u0443\u0442\u043e\u0432 \u0438 \u0444\u0438\u0437\u0438\u0447\u0435\u0441\u043a\u0438\u0445 \u043f\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u0438\u0439.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "selected_entities": {
+                    "items": {
+                        "$ref": "#/$defs/SelectedEntity"
+                    },
+                    "minItems": 1,
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "ModelSelection",
+            "type": "object"
+        },
+        "OrganizationUnit": {
+            "additionalProperties": false,
+            "description": "\u041e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u043e\u043d\u043d\u043e\u0435 \u043f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435.",
+            "properties": {
+                "master_system": {
+                    "type": "string"
+                },
+                "registry_description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "registry_id": {
+                    "type": "string"
+                },
+                "registry_name": {
+                    "type": "string"
+                },
+                "registry_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "source_uri": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "registry_id",
+                "registry_name",
+                "master_system",
+                "registry_status"
+            ],
+            "title": "OrganizationUnit",
+            "type": "object"
+        },
+        "PhysicalField": {
+            "additionalProperties": false,
+            "description": "\u041f\u043e\u043b\u0435 \u0444\u0438\u0437\u0438\u0447\u0435\u0441\u043a\u043e\u0433\u043e \u043e\u0431\u044a\u0435\u043a\u0442\u0430; \u0435\u0433\u043e \u0441\u0435\u043c\u0430\u043d\u0442\u0438\u043a\u0430 \u0437\u0430\u0434\u0430\u0451\u0442\u0441\u044f Mapping \u043a LogicalAttribute.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "native_name": {
+                    "type": "string"
+                },
+                "native_type": {
+                    "type": "string"
+                },
+                "ordinal_position": {
+                    "minimum": 1,
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "physical_object_ref": {
+                    "type": "string"
+                },
+                "required": {
+                    "type": "boolean"
+                },
+                "schema_path": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "physical_object_ref",
+                "native_name",
+                "native_type",
+                "required",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "PhysicalField",
+            "type": "object"
+        },
+        "PhysicalObject": {
+            "additionalProperties": false,
+            "description": "\u041a\u0432\u0430\u043d\u0442 \u0434\u0430\u043d\u043d\u044b\u0445 \u0438\u043b\u0438 \u0442\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u0430\u044f \u0442\u043e\u0447\u043a\u0430 \u043f\u0443\u0431\u043b\u0438\u043a\u0430\u0446\u0438\u0438/\u043f\u043e\u0442\u0440\u0435\u0431\u043b\u0435\u043d\u0438\u044f.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "direction": {
+                    "$ref": "#/$defs/FlowDirectionEnum"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "native_schema_ref": {
+                    "format": "uri",
+                    "type": "string"
+                },
+                "object_kind": {
+                    "$ref": "#/$defs/PhysicalObjectKindEnum"
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "physical_fields": {
+                    "items": {
+                        "$ref": "#/$defs/PhysicalField"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "policy_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "qualified_name": {
+                    "type": "string"
+                },
+                "solution_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "system_ref": {
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "technology": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "system_ref",
+                "object_kind",
+                "qualified_name",
+                "technology",
+                "native_schema_ref",
+                "direction",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "PhysicalObject",
+            "type": "object"
+        },
+        "PhysicalObjectKindEnum": {
+            "description": "",
+            "enum": [
+                "database",
+                "schema",
+                "table",
+                "view",
+                "column",
+                "api",
+                "endpoint",
+                "payload",
+                "topic",
+                "queue",
+                "message",
+                "file",
+                "dataset",
+                "pipeline"
+            ],
+            "title": "PhysicalObjectKindEnum",
+            "type": "string"
+        },
+        "Policy": {
+            "additionalProperties": false,
+            "description": "\u041f\u043e\u043b\u0438\u0442\u0438\u043a\u0430 \u0434\u043e\u0441\u0442\u0443\u043f\u0430, \u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f, \u043a\u0430\u0447\u0435\u0441\u0442\u0432\u0430 \u0438\u043b\u0438 \u0430\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u043d\u044b\u0439 \u0438\u043d\u0432\u0430\u0440\u0438\u0430\u043d\u0442.",
+            "properties": {
+                "master_system": {
+                    "type": "string"
+                },
+                "registry_description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "registry_id": {
+                    "type": "string"
+                },
+                "registry_name": {
+                    "type": "string"
+                },
+                "registry_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "source_uri": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "registry_id",
+                "registry_name",
+                "master_system",
+                "registry_status"
+            ],
+            "title": "Policy",
+            "type": "object"
+        },
+        "PolicyBinding": {
+            "additionalProperties": false,
+            "description": "\u041f\u0440\u0438\u043c\u0435\u043d\u0435\u043d\u0438\u0435 \u0443\u043f\u0440\u0430\u0432\u043b\u044f\u0435\u043c\u043e\u0439 \u043f\u043e\u043b\u0438\u0442\u0438\u043a\u0438 \u043a \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0443 \u043c\u043e\u0434\u0435\u043b\u0438.",
+            "properties": {
+                "approval_status": {
+                    "$ref": "#/$defs/ApprovalStatusEnum"
+                },
+                "policy_binding_id": {
+                    "type": "string"
+                },
+                "policy_ref": {
+                    "type": "string"
+                },
+                "policy_target_ref": {
+                    "type": "string"
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "policy_binding_id",
+                "policy_target_ref",
+                "policy_ref"
+            ],
+            "title": "PolicyBinding",
+            "type": "object"
+        },
+        "RegistryEntry": {
+            "additionalProperties": false,
+            "description": "\u041b\u043e\u043a\u0430\u043b\u044c\u043d\u0430\u044f \u0441\u0441\u044b\u043b\u043e\u0447\u043d\u0430\u044f \u043f\u0440\u043e\u0435\u043a\u0446\u0438\u044f \u0437\u0430\u043f\u0438\u0441\u0438 \u0432\u043d\u0435\u0448\u043d\u0435\u0439 \u043c\u0430\u0441\u0442\u0435\u0440-\u0441\u0438\u0441\u0442\u0435\u043c\u044b; \u043d\u0435 \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043c\u0430\u0441\u0442\u0435\u0440-\u043a\u043e\u043f\u0438\u0435\u0439 \u0441\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a\u0430.",
+            "properties": {
+                "master_system": {
+                    "type": "string"
+                },
+                "registry_description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "registry_id": {
+                    "type": "string"
+                },
+                "registry_name": {
+                    "type": "string"
+                },
+                "registry_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "source_uri": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "registry_id",
+                "registry_name",
+                "master_system",
+                "registry_status"
+            ],
+            "title": "RegistryEntry",
+            "type": "object"
+        },
+        "Relationship": {
+            "additionalProperties": false,
+            "description": "\u0418\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u043d\u0430\u044f \u0441\u0432\u044f\u0437\u044c \u043c\u0435\u0436\u0434\u0443 \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0438\u043c\u0438 \u0438\u043b\u0438 \u043a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u044b\u043c\u0438 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u044f\u043c\u0438.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "associative": {
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "identifying": {
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "source_entity_ref": {
+                    "type": "string"
+                },
+                "source_max_cardinality": {
+                    "minimum": 1,
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "source_min_cardinality": {
+                    "minimum": 0,
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "source_role": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "target_entity_ref": {
+                    "type": "string"
+                },
+                "target_max_cardinality": {
+                    "minimum": 1,
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "target_min_cardinality": {
+                    "minimum": 0,
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "target_role": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "source_entity_ref",
+                "target_entity_ref",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "Relationship",
+            "type": "object"
+        },
+        "Role": {
+            "additionalProperties": false,
+            "description": "\u0423\u043f\u0440\u0430\u0432\u043b\u044f\u0435\u043c\u0430\u044f \u0440\u043e\u043b\u044c \u0432\u043b\u0430\u0434\u0435\u043b\u044c\u0446\u0430, \u0441\u0442\u044e\u0430\u0440\u0434\u0430, \u043f\u043e\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043b\u044f \u0438\u043b\u0438 \u0441\u043e\u0433\u043b\u0430\u0441\u0443\u044e\u0449\u0435\u0433\u043e.",
+            "properties": {
+                "master_system": {
+                    "type": "string"
+                },
+                "registry_description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "registry_id": {
+                    "type": "string"
+                },
+                "registry_name": {
+                    "type": "string"
+                },
+                "registry_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "source_uri": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "registry_id",
+                "registry_name",
+                "master_system",
+                "registry_status"
+            ],
+            "title": "Role",
+            "type": "object"
+        },
+        "SelectedAttribute": {
+            "additionalProperties": false,
+            "description": "\u0412\u044b\u0431\u0440\u0430\u043d\u043d\u044b\u0439 \u0430\u0442\u0440\u0438\u0431\u0443\u0442 \u0438 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u044e\u0449\u0435\u0435 \u0444\u0438\u0437\u0438\u0447\u0435\u0441\u043a\u043e\u0435 \u043f\u043e\u043b\u0435 payload, \u0442\u0430\u0431\u043b\u0438\u0446\u044b \u0438\u043b\u0438 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "logical_attribute_ref": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "physical_field_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "transformation_mapping_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "logical_attribute_ref",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "SelectedAttribute",
+            "type": "object"
+        },
+        "SelectedEntity": {
+            "additionalProperties": false,
+            "description": "\u0412\u044b\u0431\u0440\u0430\u043d\u043d\u0430\u044f \u0434\u043b\u044f \u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u0438 \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0430\u044f \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u044c.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "logical_entity_ref": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "physical_object_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "selected_attributes": {
+                    "items": {
+                        "$ref": "#/$defs/SelectedAttribute"
+                    },
+                    "minItems": 1,
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "logical_entity_ref",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "SelectedEntity",
+            "type": "object"
+        },
+        "SolutionDataRoleEnum": {
+            "description": "",
+            "enum": [
+                "producer",
+                "consumer",
+                "intermediary"
+            ],
+            "title": "SolutionDataRoleEnum",
+            "type": "string"
+        },
+        "SpecificationKindEnum": {
+            "description": "",
+            "enum": [
+                "integration",
+                "data_model",
+                "data_quality"
+            ],
+            "title": "SpecificationKindEnum",
+            "type": "string"
+        }
+    },
+    "$id": "https://data.moex.com/mdms/v0.1",
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "additionalProperties": true,
+    "description": "\u041a\u043e\u0440\u043d\u0435\u0432\u043e\u0439 \u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440 \u0434\u043b\u044f \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0438 \u043d\u0430\u0431\u043e\u0440\u0430 \u043c\u043e\u0434\u0435\u043b\u0435\u0439, \u0441\u0441\u044b\u043b\u043e\u0447\u043d\u044b\u0445 \u043f\u0440\u043e\u0435\u043a\u0446\u0438\u0439 \u0441\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a\u043e\u0432, \u043f\u043e\u0442\u043e\u043a\u043e\u0432 \u0438 \u043a\u043e\u043d\u0442\u0440\u0430\u043a\u0442\u043d\u044b\u0445 bindings.",
+    "metamodel_version": "1.11.0",
+    "properties": {
+        "classification_assignments": {
+            "items": {
+                "$ref": "#/$defs/ClassificationAssignment"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "data_flows": {
+            "items": {
+                "$ref": "#/$defs/DataFlow"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "data_model_bindings": {
+            "items": {
+                "$ref": "#/$defs/DataModelBinding"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "dimensions": {
+            "items": {
+                "$ref": "#/$defs/Dimension"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "metrics": {
+            "items": {
+                "$ref": "#/$defs/Metric"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "model_packages": {
+            "items": {
+                "$ref": "#/$defs/ModelPackage"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "policy_bindings": {
+            "items": {
+                "$ref": "#/$defs/PolicyBinding"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "registry_entries": {
+            "items": {
+                "$ref": "#/$defs/RegistryEntry"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "repository_id": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "repository_id"
+    ],
+    "title": "moex_mdms",
+    "type": "object",
+    "version": "0.1.0"
+}
+

@@ -1,0 +1,726 @@
+//////////////////////////////////////////////////////////////////
+// MOEX Data Model Specification (MDMS) v0.1 - DBML metamodel
+// Target: drawDB (open-source, self-hosted, drawdb.app)
+// Also compatible with dbdiagram.io free plan (no TableGroup used)
+//
+// COLOR CODING BY LAYER (Table headercolor):
+//   Registries          #F4B400  amber   - EAM/Glossary/Clinkr/Catalog projections
+//   Governance          #9E9E9E  gray    - lifecycle/ownership/classification mixins
+//   Conceptual          #AB47BC  purple  - ModelPackage, ConceptualEntity, DomainContext
+//   Logical             #4285F4  blue    - LogicalEntity/Attribute/Relationship
+//   Physical            #0F9D58  green   - PhysicalObject/PhysicalField
+//   Mapping             #00ACC1  teal    - cross-layer Mapping + its junctions
+//   Integration         #DB4437  red     - DataFlow (Clinkr projection)
+//   Contract binding    #F06292  pink    - DataModelBinding / ModelSelection
+//   Analytics           #795548  brown   - optional Metric/Dimension profile
+//   Root                #5C6BC0  indigo  - repository containers
+//
+// LAYOUT NOTE: table declaration order below is grouped by layer so that
+// drawDB auto-arrange places related tables next to each other on the
+// canvas. After import, you can still drag tables freely; re-running
+// "Auto layout" in drawDB will re-cluster using this same declaration order.
+//
+// FK convention (unchanged from previous version):
+//   - NOT NULL FK            -> inline `ref: >` (strict, required relation)
+//   - nullable / optional FK -> plain column + separate top-level `Ref:` block
+//////////////////////////////////////////////////////////////////
+
+Project MOEX_MDMS_v0_1 {
+  database_type: 'Metamodel (LinkML-derived)'
+  Note: 'MOEX Data Model Specification v0.1. Kanonicheskaya metamodel dlya opisaniya korporativnoy modeli dannykh MOEX i modeley dannykh IT-resheniy. Bazovyy yazyk avtoringa - LinkML. Tsvetovoe kodirovanie: registries=amber, governance=gray, conceptual=purple, logical=blue, physical=green, mapping=teal, integration=red, contract-binding=pink, analytics=brown, root=indigo.'
+}
+
+//////////////////// ENUMS (moex-types) ////////////////////
+
+Enum lifecycle_status_enum {
+  draft
+  active
+  deprecated
+  retired
+}
+
+Enum approval_status_enum {
+  proposed
+  approved
+  rejected
+  superseded
+}
+
+Enum model_level_enum {
+  conceptual
+  logical
+  physical
+}
+
+Enum entity_type_enum {
+  core
+  derived
+  reference
+}
+
+Enum data_class_enum {
+  reference_data
+  master_data
+  transactional_data
+  analytical_data
+  metadata
+}
+
+Enum business_importance_enum {
+  high
+  medium
+  low
+}
+
+Enum governance_classification_enum {
+  public
+  internal
+  confidential
+  restricted
+}
+
+Enum logical_data_type_enum {
+  string
+  integer
+  decimal
+  boolean
+  date
+  datetime
+  time
+  binary
+  identifier
+  uri
+  object
+}
+
+Enum physical_object_kind_enum {
+  database
+  schema
+  table
+  view
+  column
+  api
+  endpoint
+  payload
+  topic
+  queue
+  message
+  file
+  dataset
+  pipeline
+}
+
+Enum flow_direction_enum {
+  inbound
+  outbound
+  internal
+  bidirectional
+}
+
+Enum solution_data_role_enum {
+  producer
+  consumer
+  intermediary
+}
+
+Enum integration_channel_enum {
+  api
+  queue
+  database
+  file
+  other
+}
+
+Enum integration_class_enum {
+  EAP
+  EDA
+}
+
+Enum integration_level_enum {
+  intraplatform
+  interplatform
+}
+
+Enum mapping_type_enum {
+  semantic_equivalence
+  specialization
+  implementation
+  field_mapping
+  transformation
+  aggregation
+  derivation
+}
+
+Enum mapping_cardinality_enum {
+  one_to_one
+  one_to_many
+  many_to_one
+  many_to_many
+}
+
+Enum compatibility_mode_enum {
+  backward
+  forward
+  full
+  none
+}
+
+Enum enforcement_result_enum {
+  pass
+  warn
+  fail
+  not_applicable
+}
+
+//////////////////// LAYER: REGISTRIES ////////////////////
+// Local read-only projections of external master systems (EAM, Glossary, IAM, Clinkr, Catalog).
+// Registry content is NOT stored here - only identity and form of the reference.
+
+Table registry_entry [headercolor: #F4B400] {
+  registry_id varchar [pk, note: 'stable URI/CURIE, identifier slot']
+  registry_name varchar [not null]
+  registry_description text
+  master_system varchar [not null, note: 'EAM | IAM_ORG | DataCatalog | Clinkr | Governance']
+  source_uri varchar
+  registry_status lifecycle_status_enum [not null]
+  registry_kind varchar [not null, note: 'discriminator: ITSystem | ITSolution | ITPlatform | etc']
+  Note: 'Abstract base class (LinkML abstract) for all external registry projections'
+}
+
+Table it_system [headercolor: #F4B400] {
+  registry_id varchar [pk, ref: - registry_entry.registry_id]
+  Note: 'IT-sistema. Master: EAM.'
+}
+
+Table it_solution [headercolor: #F4B400] {
+  registry_id varchar [pk, ref: - registry_entry.registry_id]
+  platform_ref varchar [note: 'nullable FK -> it_platform.registry_id, see Ref block']
+  Note: 'IT-reshenie (nabor sistem). Master: EAM.'
+}
+
+Table it_solution_member_system [headercolor: #F4B400] {
+  solution_ref varchar [ref: > it_solution.registry_id]
+  system_ref varchar [ref: > it_system.registry_id]
+  Note: 'multivalued slot member_system_refs: ITSolution -> ITSystem (M:N)'
+  indexes { (solution_ref, system_ref) [pk] }
+}
+
+Table it_platform [headercolor: #F4B400] {
+  registry_id varchar [pk, ref: - registry_entry.registry_id]
+  Note: 'IT-platforma. Master: EAM. (utochnenie: ne obobshchennoe Platform)'
+}
+
+Table business_domain [headercolor: #F4B400] {
+  registry_id varchar [pk, ref: - registry_entry.registry_id]
+  parent_domain_ref varchar [note: 'nullable self-referencing FK -> business_domain.registry_id, see Ref block']
+  Note: 'Biznes-domen / predmetnaya oblast'
+}
+
+Table glossary_term [headercolor: #F4B400] {
+  registry_id varchar [pk, ref: - registry_entry.registry_id]
+  Note: 'Termin korporativnogo biznes-glossariya'
+}
+
+Table organization_unit [headercolor: #F4B400] {
+  registry_id varchar [pk, ref: - registry_entry.registry_id]
+  Note: 'Organizatsionnoe podrazdelenie'
+}
+
+Table role [headercolor: #F4B400] {
+  registry_id varchar [pk, ref: - registry_entry.registry_id]
+  Note: 'Upravlyaemaya rol vladeltsa/stjuarda/soglasuyushchego'
+}
+
+Table data_classification_term [headercolor: #F4B400] {
+  registry_id varchar [pk, ref: - registry_entry.registry_id]
+  Note: 'Spetsialnaya kategoriya chuvstvitelnosti: PDn, insider info, tayna i t.d.'
+}
+
+Table policy [headercolor: #F4B400] {
+  registry_id varchar [pk, ref: - registry_entry.registry_id]
+  Note: 'Politika dostupa/khraneniya/kachestva, arkhitekturnyy invariant'
+}
+
+Table business_process [headercolor: #F4B400] {
+  registry_id varchar [pk, ref: - registry_entry.registry_id]
+  Note: 'Ssylka na protsess/shag BPMN-repozitoriya'
+}
+
+Table data_contract_reference [headercolor: #F4B400] {
+  registry_id varchar [pk, ref: - registry_entry.registry_id]
+  Note: 'Ssylka na data-kontrakt v data-kataloge (master: katalog)'
+}
+
+Table integration_reference [headercolor: #F4B400] {
+  registry_id varchar [pk, ref: - registry_entry.registry_id]
+  Note: 'Ssylka na integratsiyu v Clinkr (master: Clinkr)'
+}
+
+//////////////////// LAYER: GOVERNANCE ////////////////////
+
+Table classification_assignment [headercolor: #9E9E9E] {
+  assignment_id varchar [pk]
+  classified_element_ref varchar [not null, note: 'FK -> any ModelElement.element_id']
+  classification_term_ref varchar [note: 'nullable FK -> data_classification_term.registry_id, see Ref block']
+  governance_classification governance_classification_enum
+  classification_source varchar
+  classification_rationale text
+  valid_from datetime
+  valid_to datetime
+  approval_status approval_status_enum
+  Note: 'Normalizovannaya versioniruemaya istoriya klassifikatsii elementa'
+}
+
+Table policy_binding [headercolor: #9E9E9E] {
+  policy_binding_id varchar [pk]
+  policy_target_ref varchar [not null, note: 'FK -> any ModelElement.element_id']
+  policy_ref varchar [not null, ref: > policy.registry_id]
+  valid_from datetime
+  valid_to datetime
+  approval_status approval_status_enum
+  Note: 'Primenenie upravlyaemoy politiki k elementu modeli'
+}
+
+// Mixins below are LinkML mixins (reusable field groups) merged into
+// ModelElement descendants; shown as reference templates, not separate tables.
+
+Table mixin_has_lifecycle [headercolor: #9E9E9E] {
+  lifecycle_status lifecycle_status_enum [not null]
+  valid_from datetime
+  valid_to datetime
+  deprecated_by_ref varchar
+  Note: 'MIXIN: podmeshivaetsya v ModelElement i ego naslednikov'
+}
+
+Table mixin_has_ownership [headercolor: #9E9E9E] {
+  data_owner_ref varchar [note: 'nullable FK -> role.registry_id, see Ref block']
+  data_steward_ref varchar [note: 'nullable FK -> role.registry_id, see Ref block']
+  owning_unit_ref varchar [note: 'nullable FK -> organization_unit.registry_id, see Ref block']
+  Note: 'MIXIN: vladenie - data_owner_ref ssylaetsya na upravlyaemuyu rol, ne stroka'
+}
+
+Table mixin_has_business_classification [headercolor: #9E9E9E] {
+  entity_type entity_type_enum
+  data_class data_class_enum
+  business_importance business_importance_enum
+  Note: 'MIXIN: rol sushchnosti + klass dannykh (NSI/master/tranz) + vazhnost'
+}
+
+Table mixin_has_governance_classification [headercolor: #9E9E9E] {
+  governance_classification governance_classification_enum
+  classification_source varchar
+  classification_rationale text
+  Note: 'MIXIN: bazovaya markirovka chuvstvitelnosti (nasleduetsya kontraktom)'
+}
+
+Table mixin_has_policy_bindings [headercolor: #9E9E9E] {
+  policy_refs varchar [note: 'multivalued: 0..* Policy references, materialized via policy_binding table']
+  Note: 'MIXIN: derzhatel multivalued policy_refs -> Policy'
+}
+
+Table mixin_has_provenance [headercolor: #9E9E9E] {
+  source_artifact_ref varchar
+  approval_status approval_status_enum
+  approved_by_ref varchar [note: 'nullable FK -> role.registry_id, see Ref block']
+  approved_at datetime
+  Note: 'MIXIN: proiskhozhdenie i soglasovanie (dlya Mapping i dr.)'
+}
+
+//////////////////// LAYER: CONCEPTUAL ////////////////////
+
+Table model_element [headercolor: #AB47BC] {
+  element_id varchar [pk, note: 'stable global identifier (URI/CURIE)']
+  name varchar [not null]
+  title varchar
+  description text [not null]
+  lifecycle_status lifecycle_status_enum [not null, note: 'from mixin HasLifecycle']
+  tags varchar
+  Note: 'ABSTRACT root class vsey metamodeli MDMS Core. Vse nizhe - is_a model_element.'
+}
+
+Table model_package [headercolor: #AB47BC] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  api_version varchar [not null, note: 'versiya metamodeli MDMS']
+  model_version varchar [not null, note: 'SemVer paketa modeli']
+  solution_ref varchar [note: 'nullable FK -> it_solution.registry_id, see Ref block']
+  data_owner_ref varchar [note: 'nullable FK -> role.registry_id (mixin HasOwnership), see Ref block']
+  Note: 'Versioniruemyy artefakt modeli odnogo IT-resheniya ili korp. modeli'
+}
+
+Table model_package_domain_context [headercolor: #AB47BC] {
+  model_package_ref varchar [ref: > model_package.element_id]
+  domain_ref varchar [ref: > business_domain.registry_id]
+  indexes { (model_package_ref, domain_ref) [pk] }
+}
+
+Table domain_context [headercolor: #AB47BC] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  domain_ref varchar [not null, ref: > business_domain.registry_id]
+  solution_ref varchar [note: 'nullable FK -> it_solution.registry_id, see Ref block']
+  namespace varchar [not null]
+  data_owner_ref varchar [note: 'nullable FK -> role.registry_id, see Ref block']
+  model_package_ref varchar [note: 'nullable FK -> model_package.element_id, see Ref block']
+  Note: 'Ogranichennyy domennyy kontekst (bounded context) vnutri modeli'
+}
+
+Table domain_context_business_process [headercolor: #AB47BC] {
+  context_ref varchar [ref: > domain_context.element_id]
+  process_ref varchar [ref: > business_process.registry_id]
+  indexes { (context_ref, process_ref) [pk] }
+}
+
+Table conceptual_entity [headercolor: #AB47BC] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  parent_concept_ref varchar [note: 'nullable specialization FK -> conceptual_entity.element_id, see Ref block']
+  data_owner_ref varchar [note: 'nullable FK -> role.registry_id, see Ref block']
+  entity_type entity_type_enum
+  data_class data_class_enum
+  business_importance business_importance_enum
+  Note: 'Korporativnoe biznes-ponyatie verkhnego urovnya: Klient, Schet, Instrument'
+}
+
+//////////////////// LAYER: LOGICAL ////////////////////
+
+Table logical_entity [headercolor: #4285F4] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  context_ref varchar [not null, ref: > domain_context.element_id]
+  solution_ref varchar [note: 'nullable FK -> it_solution.registry_id, see Ref block']
+  solution_data_role solution_data_role_enum [not null]
+  data_owner_ref varchar [note: 'nullable FK -> role.registry_id, see Ref block']
+  entity_type entity_type_enum
+  data_class data_class_enum
+  business_importance business_importance_enum
+  governance_classification governance_classification_enum
+  classification_source varchar
+  Note: 'Realizatsiya biznes-sushchnosti v domennom kontekste konkretnogo resheniya'
+}
+
+Table logical_entity_conceptual_ref [headercolor: #4285F4] {
+  logical_entity_ref varchar [ref: > logical_entity.element_id]
+  conceptual_entity_ref varchar [ref: > conceptual_entity.element_id]
+  indexes { (logical_entity_ref, conceptual_entity_ref) [pk] }
+  Note: 'M:N - odna logicheskaya sushchnost mozhet specializirovat neskolko kontseptov'
+}
+
+Table logical_entity_sensitivity_term [headercolor: #4285F4] {
+  logical_entity_ref varchar [ref: > logical_entity.element_id]
+  classification_term_ref varchar [ref: > data_classification_term.registry_id]
+  indexes { (logical_entity_ref, classification_term_ref) [pk] }
+}
+
+Table logical_entity_policy [headercolor: #4285F4] {
+  logical_entity_ref varchar [ref: > logical_entity.element_id]
+  policy_ref varchar [ref: > policy.registry_id]
+  indexes { (logical_entity_ref, policy_ref) [pk] }
+}
+
+Table logical_attribute [headercolor: #4285F4] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  owner_entity_ref varchar [not null, ref: > logical_entity.element_id]
+  logical_type logical_data_type_enum [not null]
+  required boolean [not null]
+  multivalued boolean [not null]
+  minimum_cardinality integer
+  maximum_cardinality integer
+  value_set_ref varchar
+  format_pattern varchar
+  default_value varchar
+  derived_expression varchar
+  governance_classification governance_classification_enum
+  classification_source varchar
+  classification_rationale text
+  Note: 'Atomarnyy atribut sushchnosti; klassifikatsiya mozhet usilivat klassifikatsiyu sushchnosti'
+}
+
+Table logical_attribute_sensitivity_term [headercolor: #4285F4] {
+  logical_attribute_ref varchar [ref: > logical_attribute.element_id]
+  classification_term_ref varchar [ref: > data_classification_term.registry_id]
+  indexes { (logical_attribute_ref, classification_term_ref) [pk] }
+}
+
+Table relationship [headercolor: #4285F4] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  source_entity_ref varchar [not null, note: 'ssylka na LogicalEntity ili ConceptualEntity']
+  target_entity_ref varchar [not null]
+  source_role varchar
+  target_role varchar
+  source_min_cardinality integer
+  source_max_cardinality integer
+  target_min_cardinality integer
+  target_max_cardinality integer
+  identifying boolean
+  associative boolean
+  Note: 'Imenovannaya predmetnaya svyaz mezhdu sushchnostyami (ne putat s DataFlow)'
+}
+
+//////////////////// LAYER: PHYSICAL ////////////////////
+
+Table physical_object [headercolor: #0F9D58] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  solution_ref varchar [note: 'nullable FK -> it_solution.registry_id, see Ref block']
+  system_ref varchar [not null, ref: > it_system.registry_id]
+  data_owner_ref varchar [note: 'nullable FK -> role.registry_id, see Ref block']
+  object_kind physical_object_kind_enum [not null]
+  qualified_name varchar [not null]
+  technology varchar [not null]
+  native_schema_ref varchar [not null, note: 'authoritative wire/DDL schema - ne kopiruetsya v MDMS']
+  direction flow_direction_enum [not null]
+  Note: 'Kvant dannykh: tablitsa, topik, endpoint, fayl, dataset, pipeline...'
+}
+
+Table physical_object_policy [headercolor: #0F9D58] {
+  physical_object_ref varchar [ref: > physical_object.element_id]
+  policy_ref varchar [ref: > policy.registry_id]
+  indexes { (physical_object_ref, policy_ref) [pk] }
+}
+
+Table physical_field [headercolor: #0F9D58] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  physical_object_ref varchar [not null, ref: > physical_object.element_id]
+  native_name varchar [not null]
+  native_type varchar [not null]
+  required boolean
+  ordinal_position integer
+  schema_path varchar
+  Note: 'Pole fizicheskogo obyekta; semantika zadayotsya cherez Mapping -> LogicalAttribute'
+}
+
+//////////////////// LAYER: MAPPING (cross-layer) ////////////////////
+
+Table mapping [headercolor: #00ACC1] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  mapping_type mapping_type_enum [not null]
+  mapping_cardinality mapping_cardinality_enum [not null]
+  transformation_ref varchar
+  transformation_expression text
+  confidence decimal
+  valid_from datetime
+  valid_to datetime
+  source_artifact_ref varchar
+  approval_status approval_status_enum
+  approved_by_ref varchar [note: 'nullable FK -> role.registry_id, see Ref block']
+  approved_at datetime
+  Note: 'Obyekt pervogo klassa: yavnoe sootvetstvie conceptual<->logical<->physical'
+}
+
+Table mapping_source_ref [headercolor: #00ACC1] {
+  mapping_ref varchar [ref: > mapping.element_id]
+  source_element_ref varchar [not null, note: 'FK -> any ModelElement.element_id']
+  indexes { (mapping_ref, source_element_ref) [pk] }
+}
+
+Table mapping_target_ref [headercolor: #00ACC1] {
+  mapping_ref varchar [ref: > mapping.element_id]
+  target_element_ref varchar [not null, note: 'FK -> any ModelElement.element_id']
+  indexes { (mapping_ref, target_element_ref) [pk] }
+}
+
+//////////////////// LAYER: INTEGRATION (Clinkr projection) ////////////////////
+// DataFlow is a READ-ONLY projection of a Clinkr integration, not a second master.
+
+Table data_flow [headercolor: #DB4437] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  integration_ref varchar [not null, ref: > integration_reference.registry_id]
+  contract_ref varchar [note: 'nullable FK -> data_contract_reference.registry_id, see Ref block']
+  source_solution_ref varchar [not null, ref: > it_solution.registry_id]
+  target_solution_ref varchar [not null, ref: > it_solution.registry_id]
+  source_system_ref varchar [not null, ref: > it_system.registry_id]
+  target_system_ref varchar [not null, ref: > it_system.registry_id]
+  source_platform_ref varchar [not null, ref: > it_platform.registry_id]
+  target_platform_ref varchar [not null, ref: > it_platform.registry_id]
+  integration_level integration_level_enum [not null]
+  integration_class integration_class_enum [not null]
+  integration_channel integration_channel_enum [not null]
+  integration_spec_ref varchar [not null, note: 'URI na OpenAPI/AsyncAPI spetsifikatsiyu v Clinkr']
+  data_owner_ref varchar [note: 'nullable FK -> role.registry_id, see Ref block']
+  Note: 'Topologiya i kanal nasleduyutsya iz Clinkr; semantika - iz modeli resheniya-istochnika'
+}
+
+Table data_flow_entity_binding [headercolor: #DB4437] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  flow_ref varchar [not null, ref: > data_flow.element_id]
+  source_model_ref varchar [not null, note: 'URI na ModelPackage resheniya-istochnika']
+  logical_entity_ref varchar [not null, ref: > logical_entity.element_id]
+  direction flow_direction_enum [not null]
+  Note: 'Skvoznaya semanticheskaya privyazka kross-sistemnoy sushchnosti k potoku'
+}
+
+Table dfeb_logical_attribute [headercolor: #DB4437] {
+  binding_ref varchar [ref: > data_flow_entity_binding.element_id]
+  logical_attribute_ref varchar [ref: > logical_attribute.element_id]
+  indexes { (binding_ref, logical_attribute_ref) [pk] }
+}
+
+Table dfeb_physical_object [headercolor: #DB4437] {
+  binding_ref varchar [ref: > data_flow_entity_binding.element_id]
+  physical_object_ref varchar [ref: > physical_object.element_id]
+  indexes { (binding_ref, physical_object_ref) [pk] }
+}
+
+Table dfeb_physical_field [headercolor: #DB4437] {
+  binding_ref varchar [ref: > data_flow_entity_binding.element_id]
+  physical_field_ref varchar [ref: > physical_field.element_id]
+  indexes { (binding_ref, physical_field_ref) [pk] }
+}
+
+Table dfeb_transformation_mapping [headercolor: #DB4437] {
+  binding_ref varchar [ref: > data_flow_entity_binding.element_id]
+  mapping_ref varchar [ref: > mapping.element_id]
+  indexes { (binding_ref, mapping_ref) [pk] }
+}
+
+//////////////////// LAYER: CONTRACT BINDING ////////////////////
+
+Table data_model_binding [headercolor: #F06292] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  specification_version varchar [not null, note: 'SemVer standarta MDMS-profilya kontrakta']
+  implementation_version varchar [not null, note: 'SemVer konkretnoy realizatsii']
+  contract_ref varchar [note: 'nullable FK -> data_contract_reference.registry_id, see Ref block']
+  integration_ref varchar [note: 'nullable FK -> integration_reference.registry_id, see Ref block']
+  model_package_ref varchar [not null, note: 'URI ModelPackage']
+  model_version varchar [not null]
+  model_revision varchar [not null, note: 'immutable revision, napr. git commit']
+  compatibility_mode compatibility_mode_enum [not null]
+  compatibility_baseline_ref varchar
+  integrity_digest varchar [not null, note: 'sha256:...']
+  generated_at datetime [not null]
+  data_owner_ref varchar [note: 'nullable FK -> role.registry_id, see Ref block']
+  Note: 'Dochernyaya modelnaya spetsifikatsiya data-kontrakta (DC-XXXXX:datamodel:x.y.z)'
+}
+
+Table model_selection [headercolor: #F06292] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  binding_ref varchar [not null, ref: > data_model_binding.element_id]
+  Note: 'Pereispolzuemyy imenovannyy nabor selections vnutri binding'
+}
+
+Table selected_entity [headercolor: #F06292] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  selection_ref varchar [not null, ref: > model_selection.element_id]
+  logical_entity_ref varchar [not null, ref: > logical_entity.element_id]
+  Note: 'Vybrannaya dlya peredachi logicheskaya sushchnost'
+}
+
+Table selected_entity_physical_object [headercolor: #F06292] {
+  selected_entity_ref varchar [ref: > selected_entity.element_id]
+  physical_object_ref varchar [ref: > physical_object.element_id]
+  indexes { (selected_entity_ref, physical_object_ref) [pk] }
+}
+
+Table selected_attribute [headercolor: #F06292] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  selected_entity_ref varchar [not null, ref: > selected_entity.element_id]
+  logical_attribute_ref varchar [not null, ref: > logical_attribute.element_id]
+  transformation_mapping_ref varchar [note: 'nullable FK -> mapping.element_id, see Ref block']
+  Note: 'Vybrannyy atribut i sootvetstvuyushchee fizicheskoe pole payload'
+}
+
+Table selected_attribute_physical_field [headercolor: #F06292] {
+  selected_attribute_ref varchar [ref: > selected_attribute.element_id]
+  physical_field_ref varchar [ref: > physical_field.element_id]
+  indexes { (selected_attribute_ref, physical_field_ref) [pk] }
+}
+
+//////////////////// LAYER: ANALYTICS (optional profile) ////////////////////
+
+Table metric [headercolor: #795548] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  metric_expression text [not null]
+  aggregation_function varchar [not null]
+  unit varchar
+  filter_expression text
+  data_owner_ref varchar [note: 'nullable FK -> role.registry_id, see Ref block']
+  Note: 'Upravlyaemoe opredelenie metriki; optsionalnyy analiticheskiy profil'
+}
+
+Table metric_grain_entity [headercolor: #795548] {
+  metric_ref varchar [ref: > metric.element_id]
+  logical_entity_ref varchar [ref: > logical_entity.element_id]
+  indexes { (metric_ref, logical_entity_ref) [pk] }
+}
+
+Table metric_dimension_attribute [headercolor: #795548] {
+  metric_ref varchar [ref: > metric.element_id]
+  logical_attribute_ref varchar [ref: > logical_attribute.element_id]
+  indexes { (metric_ref, logical_attribute_ref) [pk] }
+}
+
+Table metric_measure_attribute [headercolor: #795548] {
+  metric_ref varchar [ref: > metric.element_id]
+  logical_attribute_ref varchar [ref: > logical_attribute.element_id]
+  indexes { (metric_ref, logical_attribute_ref) [pk] }
+}
+
+Table dimension [headercolor: #795548] {
+  element_id varchar [pk, ref: - model_element.element_id]
+  Note: 'Pereispolzuemoe analiticheskoe izmerenie'
+}
+
+Table dimension_attribute [headercolor: #795548] {
+  dimension_ref varchar [ref: > dimension.element_id]
+  logical_attribute_ref varchar [ref: > logical_attribute.element_id]
+  indexes { (dimension_ref, logical_attribute_ref) [pk] }
+}
+
+//////////////////// LAYER: ROOT ////////////////////
+
+Table moex_model_repository [headercolor: #5C6BC0] {
+  repository_id varchar [pk]
+  Note: 'tree_root: kornevoy konteyner dlya konformans-testov nabora modeley'
+}
+
+Table repo_registry_entry [headercolor: #5C6BC0] {
+  repository_ref varchar [ref: > moex_model_repository.repository_id]
+  registry_entry_ref varchar [ref: > registry_entry.registry_id]
+  indexes { (repository_ref, registry_entry_ref) [pk] }
+}
+
+Table repo_model_package [headercolor: #5C6BC0] {
+  repository_ref varchar [ref: > moex_model_repository.repository_id]
+  model_package_ref varchar [ref: > model_package.element_id]
+  indexes { (repository_ref, model_package_ref) [pk] }
+}
+
+Table repo_data_flow [headercolor: #5C6BC0] {
+  repository_ref varchar [ref: > moex_model_repository.repository_id]
+  data_flow_ref varchar [ref: > data_flow.element_id]
+  indexes { (repository_ref, data_flow_ref) [pk] }
+}
+
+Table repo_data_model_binding [headercolor: #5C6BC0] {
+  repository_ref varchar [ref: > moex_model_repository.repository_id]
+  binding_ref varchar [ref: > data_model_binding.element_id]
+  indexes { (repository_ref, binding_ref) [pk] }
+}
+
+//////////////////// NULLABLE / OPTIONAL RELATIONSHIPS ////////////////////
+// Declared as free-standing Ref blocks (not inline) so DBML-compliant renderers
+// (drawDB, dbdiagram.io) do not force NOT NULL on the referencing column -
+// these FKs are intentionally optional per MDMS semantics.
+
+Ref: it_solution.platform_ref > it_platform.registry_id
+Ref: business_domain.parent_domain_ref > business_domain.registry_id
+Ref: classification_assignment.classification_term_ref > data_classification_term.registry_id
+Ref: mixin_has_ownership.data_owner_ref > role.registry_id
+Ref: mixin_has_ownership.data_steward_ref > role.registry_id
+Ref: mixin_has_ownership.owning_unit_ref > organization_unit.registry_id
+Ref: mixin_has_provenance.approved_by_ref > role.registry_id
+Ref: model_package.solution_ref > it_solution.registry_id
+Ref: model_package.data_owner_ref > role.registry_id
+Ref: domain_context.solution_ref > it_solution.registry_id
+Ref: domain_context.data_owner_ref > role.registry_id
+Ref: domain_context.model_package_ref > model_package.element_id
+Ref: conceptual_entity.parent_concept_ref > conceptual_entity.element_id
+Ref: conceptual_entity.data_owner_ref > role.registry_id
+Ref: logical_entity.solution_ref > it_solution.registry_id
+Ref: logical_entity.data_owner_ref > role.registry_id
+Ref: physical_object.solution_ref > it_solution.registry_id
+Ref: physical_object.data_owner_ref > role.registry_id
+Ref: mapping.approved_by_ref > role.registry_id
+Ref: data_flow.contract_ref > data_contract_reference.registry_id
+Ref: data_flow.data_owner_ref > role.registry_id
+Ref: data_model_binding.contract_ref > data_contract_reference.registry_id
+Ref: data_model_binding.integration_ref > integration_reference.registry_id
+Ref: data_model_binding.data_owner_ref > role.registry_id
+Ref: selected_attribute.transformation_mapping_ref > mapping.element_id
+Ref: metric.data_owner_ref > role.registry_id

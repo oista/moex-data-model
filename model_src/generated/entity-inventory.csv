@@ -1,0 +1,41 @@
+module,class,description,is_a,mixins
+moex-analytics.yaml,Metric,Управляемое определение бизнес- или технической метрики; является опциональным аналитическим профилем.,ModelElement,"HasOwnership,HasPolicyBindings"
+moex-analytics.yaml,Dimension,"Переиспользуемое аналитическое измерение, связанное с логическими атрибутами.",ModelElement,
+moex-contract-binding.yaml,DataModelBinding,"Дочерняя модельная спецификация дата-контракта, фиксирующая неизменяемую ревизию модели и передаваемый срез.",ModelElement,"HasLifecycle,HasOwnership"
+moex-contract-binding.yaml,ModelSelection,"Переиспользуемый набор выбранных сущностей, атрибутов и физических представлений.",ModelElement,
+moex-contract-binding.yaml,SelectedEntity,Выбранная для интеграции логическая сущность.,ModelElement,
+moex-contract-binding.yaml,SelectedAttribute,"Выбранный атрибут и соответствующее физическое поле payload, таблицы или сообщения.",ModelElement,
+moex-core.yaml,ModelElement,,,HasLifecycle
+moex-core.yaml,ModelPackage,Версионируемый артефакт модели данных одного ИТ-решения или корпоративной модели.,ModelElement,HasOwnership
+moex-core.yaml,DomainContext,Ограниченный логический контекст с собственной терминологией и областью ответственности.,ModelElement,HasOwnership
+moex-core.yaml,ConceptualEntity,"Корпоративное бизнес-понятие верхнего уровня, независимое от конкретной реализации.",ModelElement,"HasOwnership,HasBusinessClassification"
+moex-core.yaml,LogicalEntity,Представление бизнес-сущности в доменном контексте и модели конкретного решения.,ModelElement,"HasOwnership,HasBusinessClassification,HasGovernanceClassification,HasPolicyBindings"
+moex-core.yaml,LogicalAttribute,"Логический атрибут сущности с бизнес-смыслом, типом, обязательностью и классификацией.",ModelElement,"HasGovernanceClassification,HasPolicyBindings"
+moex-core.yaml,Relationship,Именованная связь между логическими или концептуальными сущностями.,ModelElement,
+moex-core.yaml,PhysicalObject,Квант данных или техническая точка публикации/потребления.,ModelElement,"HasOwnership,HasPolicyBindings"
+moex-core.yaml,PhysicalField,Поле физического объекта; его семантика задаётся Mapping к LogicalAttribute.,ModelElement,
+moex-core.yaml,Mapping,"Явное соответствие между элементами концептуального, логического и физического уровней.",ModelElement,HasProvenance
+moex-governance.yaml,ClassificationAssignment,Версионируемое назначение категории классификации элементу модели с основанием и периодом действия.,,
+moex-governance.yaml,PolicyBinding,Применение управляемой политики к элементу модели.,,
+moex-governance.yaml,HasLifecycle,,,
+moex-governance.yaml,HasOwnership,,,
+moex-governance.yaml,HasBusinessClassification,Классификация роли и бизнес-значимости логической сущности.,,
+moex-governance.yaml,HasGovernanceClassification,Базовая и специальная классификация чувствительности данных.,,
+moex-governance.yaml,HasPolicyBindings,,,
+moex-governance.yaml,HasProvenance,,,
+moex-integration.yaml,DataFlow,"Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr, а семантика — модели данных.",ModelElement,"HasOwnership,HasLifecycle"
+moex-integration.yaml,DataFlowEntityBinding,"Связь потока с логическими сущностями, атрибутами и физическими объектами модели решения.",ModelElement,
+moex-mdms.yaml,MOEXModelRepository,"Корневой контейнер для проверки набора моделей, ссылочных проекций справочников, потоков и контрактных bindings.",,
+moex-registries.yaml,RegistryEntry,Локальная ссылочная проекция записи внешней мастер-системы; не является мастер-копией справочника.,,
+moex-registries.yaml,ITSystem,ИТ-система; мастер данных — EAM.,RegistryEntry,
+moex-registries.yaml,ITSolution,"ИТ-решение, объединяющее одну или несколько ИТ-систем; мастер данных — EAM.",RegistryEntry,
+moex-registries.yaml,ITPlatform,ИТ-платформа; мастер данных — EAM.,RegistryEntry,
+moex-registries.yaml,BusinessDomain,Бизнес-домен или предметная область; мастер определяется архитектурным governance.,RegistryEntry,
+moex-registries.yaml,GlossaryTerm,Термин корпоративного бизнес-глоссария.,RegistryEntry,
+moex-registries.yaml,OrganizationUnit,Организационное подразделение.,RegistryEntry,
+moex-registries.yaml,Role,"Управляемая роль владельца, стюарда, потребителя или согласующего.",RegistryEntry,
+moex-registries.yaml,DataClassificationTerm,"Специальная категория чувствительности или регулирования, например ПДн или инсайдерская информация.",RegistryEntry,
+moex-registries.yaml,Policy,"Политика доступа, хранения, качества или архитектурный инвариант.",RegistryEntry,
+moex-registries.yaml,BusinessProcess,Ссылка на бизнес-процесс или его шаг в BPMN-репозитории.,RegistryEntry,
+moex-registries.yaml,DataContractReference,Ссылка на дата-контракт в корпоративном дата-каталоге.,RegistryEntry,
+moex-registries.yaml,IntegrationReference,Ссылка на интеграцию в Clinkr.,RegistryEntry,

@@ -1,0 +1,79 @@
+id: https://data.moex.com/mdms/v0.1
+name: moex_mdms
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mdms: https://data.moex.com/mdms/
+imports:
+  - linkml:types
+  - moex-types
+  - moex-registries
+  - moex-governance
+  - moex-core
+  - moex-integration
+  - moex-contract-binding
+  - moex-analytics
+default_prefix: mdms
+default_range: string
+
+classes:
+  MOEXModelRepository:
+    tree_root: true
+    description: Корневой контейнер для проверки набора моделей, ссылочных проекций справочников, потоков и контрактных bindings.
+    slots:
+      - repository_id
+      - registry_entries
+      - model_packages
+      - data_flows
+      - data_model_bindings
+      - metrics
+      - dimensions
+      - classification_assignments
+      - policy_bindings
+
+slots:
+  repository_id:
+    identifier: true
+    range: uriorcurie
+    required: true
+  registry_entries:
+    range: RegistryEntry
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  model_packages:
+    range: ModelPackage
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  data_flows:
+    range: DataFlow
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  data_model_bindings:
+    range: DataModelBinding
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  metrics:
+    range: Metric
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  dimensions:
+    range: Dimension
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  classification_assignments:
+    range: ClassificationAssignment
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  policy_bindings:
+    range: PolicyBinding
+    multivalued: true
+    inlined: true
+    inlined_as_list: true

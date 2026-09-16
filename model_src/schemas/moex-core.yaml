@@ -1,0 +1,381 @@
+id: https://data.moex.com/mdms/core/v0.1
+name: moex_core
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mdms: https://data.moex.com/mdms/
+imports:
+  - linkml:types
+  - moex-types
+  - moex-registries
+  - moex-governance
+default_prefix: mdms
+default_range: string
+
+classes:
+  ModelElement:
+    abstract: true
+    mixins:
+      - HasLifecycle
+    slots:
+      - element_id
+      - name
+      - title
+      - description
+      - aliases
+      - glossary_term_refs
+      - tags
+
+  ModelPackage:
+    is_a: ModelElement
+    mixins:
+      - HasOwnership
+    description: Версионируемый артефакт модели данных одного ИТ-решения или корпоративной модели.
+    slots:
+      - api_version
+      - model_version
+      - solution_ref
+      - domain_refs
+      - imports_refs
+      - conceptual_entities
+      - domain_contexts
+      - logical_entities
+      - relationships
+      - physical_objects
+      - mappings
+
+  DomainContext:
+    is_a: ModelElement
+    mixins:
+      - HasOwnership
+    description: Ограниченный логический контекст с собственной терминологией и областью ответственности.
+    slots:
+      - domain_ref
+      - solution_ref
+      - namespace
+      - business_process_refs
+
+  ConceptualEntity:
+    is_a: ModelElement
+    mixins:
+      - HasOwnership
+      - HasBusinessClassification
+    description: Корпоративное бизнес-понятие верхнего уровня, независимое от конкретной реализации.
+    slots:
+      - parent_concept_ref
+      - key_attribute_refs
+
+  LogicalEntity:
+    is_a: ModelElement
+    mixins:
+      - HasOwnership
+      - HasBusinessClassification
+      - HasGovernanceClassification
+      - HasPolicyBindings
+    description: Представление бизнес-сущности в доменном контексте и модели конкретного решения.
+    slots:
+      - context_ref
+      - conceptual_entity_refs
+      - solution_ref
+      - solution_data_role
+      - attributes
+      - key_attribute_refs
+      - invariant_refs
+
+  LogicalAttribute:
+    is_a: ModelElement
+    mixins:
+      - HasGovernanceClassification
+      - HasPolicyBindings
+    description: Логический атрибут сущности с бизнес-смыслом, типом, обязательностью и классификацией.
+    slots:
+      - owner_entity_ref
+      - logical_type
+      - required
+      - multivalued
+      - minimum_cardinality
+      - maximum_cardinality
+      - value_set_ref
+      - format_pattern
+      - default_value
+      - derived_expression
+
+  Relationship:
+    is_a: ModelElement
+    description: Именованная связь между логическими или концептуальными сущностями.
+    slots:
+      - source_entity_ref
+      - target_entity_ref
+      - source_role
+      - target_role
+      - source_min_cardinality
+      - source_max_cardinality
+      - target_min_cardinality
+      - target_max_cardinality
+      - identifying
+      - associative
+
+  PhysicalObject:
+    is_a: ModelElement
+    mixins:
+      - HasOwnership
+      - HasPolicyBindings
+    description: Квант данных или техническая точка публикации/потребления.
+    slots:
+      - solution_ref
+      - system_ref
+      - object_kind
+      - qualified_name
+      - technology
+      - native_schema_ref
+      - direction
+      - physical_fields
+
+  PhysicalField:
+    is_a: ModelElement
+    description: Поле физического объекта; его семантика задаётся Mapping к LogicalAttribute.
+    slots:
+      - physical_object_ref
+      - native_name
+      - native_type
+      - required
+      - ordinal_position
+      - schema_path
+
+  Mapping:
+    is_a: ModelElement
+    mixins:
+      - HasProvenance
+    description: Явное соответствие между элементами концептуального, логического и физического уровней.
+    slots:
+      - source_refs
+      - target_refs
+      - mapping_type
+      - mapping_cardinality
+      - transformation_ref
+      - transformation_expression
+      - confidence
+      - valid_from
+      - valid_to
+
+slots:
+  element_id:
+    identifier: true
+    range: uriorcurie
+    required: true
+  name:
+    range: string
+    required: true
+  title:
+    range: string
+  description:
+    range: string
+    required: true
+  aliases:
+    range: string
+    multivalued: true
+  glossary_term_refs:
+    range: GlossaryTerm
+    multivalued: true
+    inlined: false
+  tags:
+    range: string
+    multivalued: true
+  api_version:
+    range: string
+    required: true
+  model_version:
+    range: SemVer
+    required: true
+  solution_ref:
+    range: ITSolution
+    inlined: false
+  domain_refs:
+    range: BusinessDomain
+    multivalued: true
+    inlined: false
+  imports_refs:
+    range: uri
+    multivalued: true
+  conceptual_entities:
+    range: ConceptualEntity
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  domain_contexts:
+    range: DomainContext
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  logical_entities:
+    range: LogicalEntity
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  relationships:
+    range: Relationship
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  physical_objects:
+    range: PhysicalObject
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  mappings:
+    range: Mapping
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  domain_ref:
+    range: BusinessDomain
+    inlined: false
+    required: true
+  namespace:
+    range: uri
+    required: true
+  business_process_refs:
+    range: BusinessProcess
+    multivalued: true
+    inlined: false
+  parent_concept_ref:
+    range: ConceptualEntity
+    inlined: false
+  key_attribute_refs:
+    range: uriorcurie
+    multivalued: true
+  context_ref:
+    range: DomainContext
+    inlined: false
+    required: true
+  conceptual_entity_refs:
+    range: ConceptualEntity
+    multivalued: true
+    inlined: false
+  solution_data_role:
+    range: SolutionDataRoleEnum
+    required: true
+  attributes:
+    range: LogicalAttribute
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  invariant_refs:
+    range: Policy
+    multivalued: true
+    inlined: false
+  owner_entity_ref:
+    range: LogicalEntity
+    inlined: false
+    required: true
+  logical_type:
+    range: LogicalDataTypeEnum
+    required: true
+  required:
+    range: boolean
+    required: true
+  multivalued:
+    range: boolean
+    required: true
+  minimum_cardinality:
+    range: integer
+    minimum_value: 0
+  maximum_cardinality:
+    range: integer
+    minimum_value: 1
+  value_set_ref:
+    range: uri
+  format_pattern:
+    range: string
+  default_value:
+    range: string
+  derived_expression:
+    range: string
+  source_entity_ref:
+    range: uriorcurie
+    required: true
+  target_entity_ref:
+    range: uriorcurie
+    required: true
+  source_role:
+    range: string
+  target_role:
+    range: string
+  source_min_cardinality:
+    range: integer
+    minimum_value: 0
+  source_max_cardinality:
+    range: integer
+    minimum_value: 1
+  target_min_cardinality:
+    range: integer
+    minimum_value: 0
+  target_max_cardinality:
+    range: integer
+    minimum_value: 1
+  identifying:
+    range: boolean
+  associative:
+    range: boolean
+  system_ref:
+    range: ITSystem
+    inlined: false
+    required: true
+  object_kind:
+    range: PhysicalObjectKindEnum
+    required: true
+  qualified_name:
+    range: string
+    required: true
+  technology:
+    range: string
+    required: true
+  native_schema_ref:
+    range: uri
+    required: true
+  direction:
+    range: FlowDirectionEnum
+    required: true
+  physical_fields:
+    range: PhysicalField
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  physical_object_ref:
+    range: PhysicalObject
+    inlined: false
+    required: true
+  native_name:
+    range: string
+    required: true
+  native_type:
+    range: string
+    required: true
+  ordinal_position:
+    range: integer
+    minimum_value: 1
+  schema_path:
+    range: string
+  source_refs:
+    range: uriorcurie
+    multivalued: true
+    minimum_cardinality: 1
+  target_refs:
+    range: uriorcurie
+    multivalued: true
+    minimum_cardinality: 1
+  mapping_type:
+    range: MappingTypeEnum
+    required: true
+  mapping_cardinality:
+    range: MappingCardinalityEnum
+    required: true
+  transformation_ref:
+    range: uri
+  transformation_expression:
+    range: string
+  confidence:
+    range: decimal
+    minimum_value: 0
+    maximum_value: 1

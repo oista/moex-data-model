@@ -1,0 +1,10 @@
+MOEX MDMS v0.1 validation report
+
+1. All 8 LinkML schema modules parsed successfully.
+2. Root JSON Schema generated successfully.
+3. SHACL and OWL projections generated successfully.
+4. ModelPackage example validated: No issues found.
+5. DataFlow example validated: No issues found.
+6. DataModelBinding example validated: No issues found.
+
+Note: cross-document reference resolution, master-data existence checks, classification inheritance and physical reality checks are responsibilities of the future dmr engine.

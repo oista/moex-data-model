@@ -1,0 +1,3071 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix linkml: <https://w3id.org/linkml/> .
+@prefix mdms: <https://data.moex.com/mdms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix pav: <http://purl.org/pav/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+mdms:MOEXModelRepository a owl:Class ;
+    rdfs:label "MOEXModelRepository" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ModelPackage ;
+            owl:onProperty mdms:model_packages ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:model_packages ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:DataModelBinding ;
+            owl:onProperty mdms:data_model_bindings ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:repository_id ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:data_model_bindings ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:RegistryEntry ;
+            owl:onProperty mdms:registry_entries ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:classification_assignments ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ClassificationAssignment ;
+            owl:onProperty mdms:classification_assignments ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:metrics ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:Metric ;
+            owl:onProperty mdms:metrics ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:PolicyBinding ;
+            owl:onProperty mdms:policy_bindings ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:repository_id ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:repository_id ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:registry_entries ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:data_flows ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:dimensions ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:DataFlow ;
+            owl:onProperty mdms:data_flows ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:Dimension ;
+            owl:onProperty mdms:dimensions ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:policy_bindings ] ;
+    skos:definition "Корневой контейнер для проверки набора моделей, ссылочных проекций справочников, потоков и контрактных bindings." ;
+    skos:inScheme mdms:v0.1 .
+
+mdms:v0.1.owl.ttl a owl:Ontology ;
+    rdfs:label "moex_mdms" ;
+    dcterms:license "https://www.apache.org/licenses/LICENSE-2.0" ;
+    pav:version "0.1.0" .
+
+mdms:HasProvenance a owl:Class ;
+    rdfs:label "HasProvenance" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:approved_at ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:evidence_refs ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:approval_status ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:approved_by_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:Role ;
+            owl:onProperty mdms:approved_by_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:dateTime ;
+            owl:onProperty mdms:approved_at ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:source_artifact_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:approved_at ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:evidence_refs ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:source_artifact_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:approval_status ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:source_artifact_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:approved_by_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ApprovalStatusEnum ;
+            owl:onProperty mdms:approval_status ] ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+<https://data.moex.com/mdms/ApprovalStatusEnum#approved> a owl:Class ;
+    rdfs:label "approved" ;
+    rdfs:subClassOf mdms:ApprovalStatusEnum .
+
+<https://data.moex.com/mdms/ApprovalStatusEnum#proposed> a owl:Class ;
+    rdfs:label "proposed" ;
+    rdfs:subClassOf mdms:ApprovalStatusEnum .
+
+<https://data.moex.com/mdms/ApprovalStatusEnum#rejected> a owl:Class ;
+    rdfs:label "rejected" ;
+    rdfs:subClassOf mdms:ApprovalStatusEnum .
+
+<https://data.moex.com/mdms/ApprovalStatusEnum#superseded> a owl:Class ;
+    rdfs:label "superseded" ;
+    rdfs:subClassOf mdms:ApprovalStatusEnum .
+
+<https://data.moex.com/mdms/BusinessImportanceEnum#high> a owl:Class ;
+    rdfs:label "high" ;
+    rdfs:subClassOf mdms:BusinessImportanceEnum .
+
+<https://data.moex.com/mdms/BusinessImportanceEnum#low> a owl:Class ;
+    rdfs:label "low" ;
+    rdfs:subClassOf mdms:BusinessImportanceEnum .
+
+<https://data.moex.com/mdms/BusinessImportanceEnum#medium> a owl:Class ;
+    rdfs:label "medium" ;
+    rdfs:subClassOf mdms:BusinessImportanceEnum .
+
+mdms:ClassificationAssignment a owl:Class ;
+    rdfs:label "ClassificationAssignment" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:approval_status ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:classification_source ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:assignment_id ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:classification_term_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:classified_element_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:classified_element_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:classification_rationale ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:classification_source ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:valid_from ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:classification_rationale ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:dateTime ;
+            owl:onProperty mdms:valid_to ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:valid_to ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:valid_to ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:DataClassificationTerm ;
+            owl:onProperty mdms:classification_term_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:governance_classification ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:GovernanceClassificationEnum ;
+            owl:onProperty mdms:governance_classification ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:valid_from ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:approval_status ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:classification_rationale ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:assignment_id ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:classification_source ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:classification_term_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:assignment_id ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ApprovalStatusEnum ;
+            owl:onProperty mdms:approval_status ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:dateTime ;
+            owl:onProperty mdms:valid_from ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:classified_element_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:governance_classification ] ;
+    skos:definition "Версионируемое назначение категории классификации элементу модели с основанием и периодом действия." ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+<https://data.moex.com/mdms/CompatibilityModeEnum#backward> a owl:Class ;
+    rdfs:label "backward" ;
+    rdfs:subClassOf mdms:CompatibilityModeEnum .
+
+<https://data.moex.com/mdms/CompatibilityModeEnum#forward> a owl:Class ;
+    rdfs:label "forward" ;
+    rdfs:subClassOf mdms:CompatibilityModeEnum .
+
+<https://data.moex.com/mdms/CompatibilityModeEnum#full> a owl:Class ;
+    rdfs:label "full" ;
+    rdfs:subClassOf mdms:CompatibilityModeEnum .
+
+<https://data.moex.com/mdms/CompatibilityModeEnum#none> a owl:Class ;
+    rdfs:label "none" ;
+    rdfs:subClassOf mdms:CompatibilityModeEnum .
+
+<https://data.moex.com/mdms/DataClassEnum#analytical_data> a owl:Class ;
+    rdfs:label "analytical_data" ;
+    rdfs:subClassOf mdms:DataClassEnum ;
+    skos:definition "Аналитические или производные наборы данных." .
+
+<https://data.moex.com/mdms/DataClassEnum#master_data> a owl:Class ;
+    rdfs:label "master_data" ;
+    rdfs:subClassOf mdms:DataClassEnum ;
+    skos:definition "Мастер-данные." .
+
+<https://data.moex.com/mdms/DataClassEnum#metadata> a owl:Class ;
+    rdfs:label "metadata" ;
+    rdfs:subClassOf mdms:DataClassEnum ;
+    skos:definition "Метаданные." .
+
+<https://data.moex.com/mdms/DataClassEnum#reference_data> a owl:Class ;
+    rdfs:label "reference_data" ;
+    rdfs:subClassOf mdms:DataClassEnum ;
+    skos:definition "Нормативно-справочная информация (НСИ)." .
+
+<https://data.moex.com/mdms/DataClassEnum#transactional_data> a owl:Class ;
+    rdfs:label "transactional_data" ;
+    rdfs:subClassOf mdms:DataClassEnum ;
+    skos:definition "Транзакционные данные." .
+
+<https://data.moex.com/mdms/EnforcementResultEnum#fail> a owl:Class ;
+    rdfs:label "fail" ;
+    rdfs:subClassOf mdms:EnforcementResultEnum .
+
+<https://data.moex.com/mdms/EnforcementResultEnum#not_applicable> a owl:Class ;
+    rdfs:label "not_applicable" ;
+    rdfs:subClassOf mdms:EnforcementResultEnum .
+
+<https://data.moex.com/mdms/EnforcementResultEnum#pass> a owl:Class ;
+    rdfs:label "pass" ;
+    rdfs:subClassOf mdms:EnforcementResultEnum .
+
+<https://data.moex.com/mdms/EnforcementResultEnum#warn> a owl:Class ;
+    rdfs:label "warn" ;
+    rdfs:subClassOf mdms:EnforcementResultEnum .
+
+<https://data.moex.com/mdms/EntityTypeEnum#core> a owl:Class ;
+    rdfs:label "core" ;
+    rdfs:subClassOf mdms:EntityTypeEnum ;
+    skos:definition "Базовая сущность, создаваемая и управляемая решением." .
+
+<https://data.moex.com/mdms/EntityTypeEnum#derived> a owl:Class ;
+    rdfs:label "derived" ;
+    rdfs:subClassOf mdms:EntityTypeEnum ;
+    skos:definition "Производная сущность, вычисляемая или агрегируемая из других данных." .
+
+<https://data.moex.com/mdms/EntityTypeEnum#reference> a owl:Class ;
+    rdfs:label "reference" ;
+    rdfs:subClassOf mdms:EntityTypeEnum ;
+    skos:definition "Справочная сущность или представление управляемого справочника." .
+
+<https://data.moex.com/mdms/FlowDirectionEnum#bidirectional> a owl:Class ;
+    rdfs:label "bidirectional" ;
+    rdfs:subClassOf mdms:FlowDirectionEnum .
+
+<https://data.moex.com/mdms/FlowDirectionEnum#inbound> a owl:Class ;
+    rdfs:label "inbound" ;
+    rdfs:subClassOf mdms:FlowDirectionEnum .
+
+<https://data.moex.com/mdms/FlowDirectionEnum#internal> a owl:Class ;
+    rdfs:label "internal" ;
+    rdfs:subClassOf mdms:FlowDirectionEnum .
+
+<https://data.moex.com/mdms/FlowDirectionEnum#outbound> a owl:Class ;
+    rdfs:label "outbound" ;
+    rdfs:subClassOf mdms:FlowDirectionEnum .
+
+<https://data.moex.com/mdms/GovernanceClassificationEnum#confidential> a owl:Class ;
+    rdfs:label "confidential" ;
+    rdfs:subClassOf mdms:GovernanceClassificationEnum .
+
+<https://data.moex.com/mdms/GovernanceClassificationEnum#internal> a owl:Class ;
+    rdfs:label "internal" ;
+    rdfs:subClassOf mdms:GovernanceClassificationEnum .
+
+<https://data.moex.com/mdms/GovernanceClassificationEnum#public> a owl:Class ;
+    rdfs:label "public" ;
+    rdfs:subClassOf mdms:GovernanceClassificationEnum .
+
+<https://data.moex.com/mdms/GovernanceClassificationEnum#restricted> a owl:Class ;
+    rdfs:label "restricted" ;
+    rdfs:subClassOf mdms:GovernanceClassificationEnum .
+
+mdms:HasBusinessClassification a owl:Class ;
+    rdfs:label "HasBusinessClassification" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:business_importance ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:data_class ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:data_class ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:business_importance ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:entity_type ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:EntityTypeEnum ;
+            owl:onProperty mdms:entity_type ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:DataClassEnum ;
+            owl:onProperty mdms:data_class ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:BusinessImportanceEnum ;
+            owl:onProperty mdms:business_importance ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:entity_type ] ;
+    skos:definition "Классификация роли и бизнес-значимости логической сущности." ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:HasGovernanceClassification a owl:Class ;
+    rdfs:label "HasGovernanceClassification" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:sensitivity_term_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:classification_source ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:classification_source ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:governance_classification ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:classification_rationale ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:GovernanceClassificationEnum ;
+            owl:onProperty mdms:governance_classification ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:governance_classification ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:classification_source ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:DataClassificationTerm ;
+            owl:onProperty mdms:sensitivity_term_refs ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:classification_rationale ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:classification_rationale ] ;
+    skos:definition "Базовая и специальная классификация чувствительности данных." ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+<https://data.moex.com/mdms/IntegrationChannelEnum#api> a owl:Class ;
+    rdfs:label "api" ;
+    rdfs:subClassOf mdms:IntegrationChannelEnum .
+
+<https://data.moex.com/mdms/IntegrationChannelEnum#database> a owl:Class ;
+    rdfs:label "database" ;
+    rdfs:subClassOf mdms:IntegrationChannelEnum .
+
+<https://data.moex.com/mdms/IntegrationChannelEnum#file> a owl:Class ;
+    rdfs:label "file" ;
+    rdfs:subClassOf mdms:IntegrationChannelEnum .
+
+<https://data.moex.com/mdms/IntegrationChannelEnum#other> a owl:Class ;
+    rdfs:label "other" ;
+    rdfs:subClassOf mdms:IntegrationChannelEnum .
+
+<https://data.moex.com/mdms/IntegrationChannelEnum#queue> a owl:Class ;
+    rdfs:label "queue" ;
+    rdfs:subClassOf mdms:IntegrationChannelEnum .
+
+<https://data.moex.com/mdms/IntegrationClassEnum#EAP> a owl:Class ;
+    rdfs:label "EAP" ;
+    rdfs:subClassOf mdms:IntegrationClassEnum .
+
+<https://data.moex.com/mdms/IntegrationClassEnum#EDA> a owl:Class ;
+    rdfs:label "EDA" ;
+    rdfs:subClassOf mdms:IntegrationClassEnum .
+
+<https://data.moex.com/mdms/IntegrationLevelEnum#interplatform> a owl:Class ;
+    rdfs:label "interplatform" ;
+    rdfs:subClassOf mdms:IntegrationLevelEnum .
+
+<https://data.moex.com/mdms/IntegrationLevelEnum#intraplatform> a owl:Class ;
+    rdfs:label "intraplatform" ;
+    rdfs:subClassOf mdms:IntegrationLevelEnum .
+
+<https://data.moex.com/mdms/LifecycleStatusEnum#active> a owl:Class ;
+    rdfs:label "active" ;
+    rdfs:subClassOf mdms:LifecycleStatusEnum .
+
+<https://data.moex.com/mdms/LifecycleStatusEnum#deprecated> a owl:Class ;
+    rdfs:label "deprecated" ;
+    rdfs:subClassOf mdms:LifecycleStatusEnum .
+
+<https://data.moex.com/mdms/LifecycleStatusEnum#draft> a owl:Class ;
+    rdfs:label "draft" ;
+    rdfs:subClassOf mdms:LifecycleStatusEnum .
+
+<https://data.moex.com/mdms/LifecycleStatusEnum#retired> a owl:Class ;
+    rdfs:label "retired" ;
+    rdfs:subClassOf mdms:LifecycleStatusEnum .
+
+<https://data.moex.com/mdms/LogicalDataTypeEnum#binary> a owl:Class ;
+    rdfs:label "binary" ;
+    rdfs:subClassOf mdms:LogicalDataTypeEnum .
+
+<https://data.moex.com/mdms/LogicalDataTypeEnum#boolean> a owl:Class ;
+    rdfs:label "boolean" ;
+    rdfs:subClassOf mdms:LogicalDataTypeEnum .
+
+<https://data.moex.com/mdms/LogicalDataTypeEnum#date> a owl:Class ;
+    rdfs:label "date" ;
+    rdfs:subClassOf mdms:LogicalDataTypeEnum .
+
+<https://data.moex.com/mdms/LogicalDataTypeEnum#datetime> a owl:Class ;
+    rdfs:label "datetime" ;
+    rdfs:subClassOf mdms:LogicalDataTypeEnum .
+
+<https://data.moex.com/mdms/LogicalDataTypeEnum#decimal> a owl:Class ;
+    rdfs:label "decimal" ;
+    rdfs:subClassOf mdms:LogicalDataTypeEnum .
+
+<https://data.moex.com/mdms/LogicalDataTypeEnum#identifier> a owl:Class ;
+    rdfs:label "identifier" ;
+    rdfs:subClassOf mdms:LogicalDataTypeEnum .
+
+<https://data.moex.com/mdms/LogicalDataTypeEnum#integer> a owl:Class ;
+    rdfs:label "integer" ;
+    rdfs:subClassOf mdms:LogicalDataTypeEnum .
+
+<https://data.moex.com/mdms/LogicalDataTypeEnum#object> a owl:Class ;
+    rdfs:label "object" ;
+    rdfs:subClassOf mdms:LogicalDataTypeEnum .
+
+<https://data.moex.com/mdms/LogicalDataTypeEnum#string> a owl:Class ;
+    rdfs:label "string" ;
+    rdfs:subClassOf mdms:LogicalDataTypeEnum .
+
+<https://data.moex.com/mdms/LogicalDataTypeEnum#time> a owl:Class ;
+    rdfs:label "time" ;
+    rdfs:subClassOf mdms:LogicalDataTypeEnum .
+
+<https://data.moex.com/mdms/LogicalDataTypeEnum#uri> a owl:Class ;
+    rdfs:label "uri" ;
+    rdfs:subClassOf mdms:LogicalDataTypeEnum .
+
+<https://data.moex.com/mdms/MappingCardinalityEnum#many_to_many> a owl:Class ;
+    rdfs:label "many_to_many" ;
+    rdfs:subClassOf mdms:MappingCardinalityEnum .
+
+<https://data.moex.com/mdms/MappingCardinalityEnum#many_to_one> a owl:Class ;
+    rdfs:label "many_to_one" ;
+    rdfs:subClassOf mdms:MappingCardinalityEnum .
+
+<https://data.moex.com/mdms/MappingCardinalityEnum#one_to_many> a owl:Class ;
+    rdfs:label "one_to_many" ;
+    rdfs:subClassOf mdms:MappingCardinalityEnum .
+
+<https://data.moex.com/mdms/MappingCardinalityEnum#one_to_one> a owl:Class ;
+    rdfs:label "one_to_one" ;
+    rdfs:subClassOf mdms:MappingCardinalityEnum .
+
+<https://data.moex.com/mdms/MappingTypeEnum#aggregation> a owl:Class ;
+    rdfs:label "aggregation" ;
+    rdfs:subClassOf mdms:MappingTypeEnum .
+
+<https://data.moex.com/mdms/MappingTypeEnum#derivation> a owl:Class ;
+    rdfs:label "derivation" ;
+    rdfs:subClassOf mdms:MappingTypeEnum .
+
+<https://data.moex.com/mdms/MappingTypeEnum#field_mapping> a owl:Class ;
+    rdfs:label "field_mapping" ;
+    rdfs:subClassOf mdms:MappingTypeEnum .
+
+<https://data.moex.com/mdms/MappingTypeEnum#implementation> a owl:Class ;
+    rdfs:label "implementation" ;
+    rdfs:subClassOf mdms:MappingTypeEnum .
+
+<https://data.moex.com/mdms/MappingTypeEnum#semantic_equivalence> a owl:Class ;
+    rdfs:label "semantic_equivalence" ;
+    rdfs:subClassOf mdms:MappingTypeEnum .
+
+<https://data.moex.com/mdms/MappingTypeEnum#specialization> a owl:Class ;
+    rdfs:label "specialization" ;
+    rdfs:subClassOf mdms:MappingTypeEnum .
+
+<https://data.moex.com/mdms/MappingTypeEnum#transformation> a owl:Class ;
+    rdfs:label "transformation" ;
+    rdfs:subClassOf mdms:MappingTypeEnum .
+
+<https://data.moex.com/mdms/ModelLevelEnum#conceptual> a owl:Class ;
+    rdfs:label "conceptual" ;
+    rdfs:subClassOf mdms:ModelLevelEnum .
+
+<https://data.moex.com/mdms/ModelLevelEnum#logical> a owl:Class ;
+    rdfs:label "logical" ;
+    rdfs:subClassOf mdms:ModelLevelEnum .
+
+<https://data.moex.com/mdms/ModelLevelEnum#physical> a owl:Class ;
+    rdfs:label "physical" ;
+    rdfs:subClassOf mdms:ModelLevelEnum .
+
+<https://data.moex.com/mdms/PhysicalObjectKindEnum#api> a owl:Class ;
+    rdfs:label "api" ;
+    rdfs:subClassOf mdms:PhysicalObjectKindEnum .
+
+<https://data.moex.com/mdms/PhysicalObjectKindEnum#column> a owl:Class ;
+    rdfs:label "column" ;
+    rdfs:subClassOf mdms:PhysicalObjectKindEnum .
+
+<https://data.moex.com/mdms/PhysicalObjectKindEnum#database> a owl:Class ;
+    rdfs:label "database" ;
+    rdfs:subClassOf mdms:PhysicalObjectKindEnum .
+
+<https://data.moex.com/mdms/PhysicalObjectKindEnum#dataset> a owl:Class ;
+    rdfs:label "dataset" ;
+    rdfs:subClassOf mdms:PhysicalObjectKindEnum .
+
+<https://data.moex.com/mdms/PhysicalObjectKindEnum#endpoint> a owl:Class ;
+    rdfs:label "endpoint" ;
+    rdfs:subClassOf mdms:PhysicalObjectKindEnum .
+
+<https://data.moex.com/mdms/PhysicalObjectKindEnum#file> a owl:Class ;
+    rdfs:label "file" ;
+    rdfs:subClassOf mdms:PhysicalObjectKindEnum .
+
+<https://data.moex.com/mdms/PhysicalObjectKindEnum#message> a owl:Class ;
+    rdfs:label "message" ;
+    rdfs:subClassOf mdms:PhysicalObjectKindEnum .
+
+<https://data.moex.com/mdms/PhysicalObjectKindEnum#payload> a owl:Class ;
+    rdfs:label "payload" ;
+    rdfs:subClassOf mdms:PhysicalObjectKindEnum .
+
+<https://data.moex.com/mdms/PhysicalObjectKindEnum#pipeline> a owl:Class ;
+    rdfs:label "pipeline" ;
+    rdfs:subClassOf mdms:PhysicalObjectKindEnum .
+
+<https://data.moex.com/mdms/PhysicalObjectKindEnum#queue> a owl:Class ;
+    rdfs:label "queue" ;
+    rdfs:subClassOf mdms:PhysicalObjectKindEnum .
+
+<https://data.moex.com/mdms/PhysicalObjectKindEnum#schema> a owl:Class ;
+    rdfs:label "schema" ;
+    rdfs:subClassOf mdms:PhysicalObjectKindEnum .
+
+<https://data.moex.com/mdms/PhysicalObjectKindEnum#table> a owl:Class ;
+    rdfs:label "table" ;
+    rdfs:subClassOf mdms:PhysicalObjectKindEnum .
+
+<https://data.moex.com/mdms/PhysicalObjectKindEnum#topic> a owl:Class ;
+    rdfs:label "topic" ;
+    rdfs:subClassOf mdms:PhysicalObjectKindEnum .
+
+<https://data.moex.com/mdms/PhysicalObjectKindEnum#view> a owl:Class ;
+    rdfs:label "view" ;
+    rdfs:subClassOf mdms:PhysicalObjectKindEnum .
+
+mdms:PolicyBinding a owl:Class ;
+    rdfs:label "PolicyBinding" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:policy_target_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:policy_binding_id ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:valid_from ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:valid_to ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:policy_target_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:dateTime ;
+            owl:onProperty mdms:valid_from ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:policy_target_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:dateTime ;
+            owl:onProperty mdms:valid_to ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:Policy ;
+            owl:onProperty mdms:policy_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ApprovalStatusEnum ;
+            owl:onProperty mdms:approval_status ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:policy_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:approval_status ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:valid_from ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:policy_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:policy_binding_id ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:policy_binding_id ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:valid_to ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:approval_status ] ;
+    skos:definition "Применение управляемой политики к элементу модели." ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+<https://data.moex.com/mdms/SolutionDataRoleEnum#consumer> a owl:Class ;
+    rdfs:label "consumer" ;
+    rdfs:subClassOf mdms:SolutionDataRoleEnum .
+
+<https://data.moex.com/mdms/SolutionDataRoleEnum#intermediary> a owl:Class ;
+    rdfs:label "intermediary" ;
+    rdfs:subClassOf mdms:SolutionDataRoleEnum .
+
+<https://data.moex.com/mdms/SolutionDataRoleEnum#producer> a owl:Class ;
+    rdfs:label "producer" ;
+    rdfs:subClassOf mdms:SolutionDataRoleEnum .
+
+<https://data.moex.com/mdms/SpecificationKindEnum#data_model> a owl:Class ;
+    rdfs:label "data_model" ;
+    rdfs:subClassOf mdms:SpecificationKindEnum .
+
+<https://data.moex.com/mdms/SpecificationKindEnum#data_quality> a owl:Class ;
+    rdfs:label "data_quality" ;
+    rdfs:subClassOf mdms:SpecificationKindEnum .
+
+<https://data.moex.com/mdms/SpecificationKindEnum#integration> a owl:Class ;
+    rdfs:label "integration" ;
+    rdfs:subClassOf mdms:SpecificationKindEnum .
+
+mdms:aliases a owl:DatatypeProperty ;
+    rdfs:label "aliases" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:attributes a owl:ObjectProperty ;
+    rdfs:label "attributes" ;
+    rdfs:range mdms:LogicalAttribute ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:business_process_refs a owl:ObjectProperty ;
+    rdfs:label "business_process_refs" ;
+    rdfs:range mdms:BusinessProcess ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:classification_assignments a owl:ObjectProperty ;
+    rdfs:label "classification_assignments" ;
+    rdfs:range mdms:ClassificationAssignment ;
+    skos:inScheme mdms:v0.1 .
+
+mdms:conceptual_entities a owl:ObjectProperty ;
+    rdfs:label "conceptual_entities" ;
+    rdfs:range mdms:ConceptualEntity ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:conceptual_entity_refs a owl:ObjectProperty ;
+    rdfs:label "conceptual_entity_refs" ;
+    rdfs:range mdms:ConceptualEntity ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:data_flows a owl:ObjectProperty ;
+    rdfs:label "data_flows" ;
+    rdfs:range mdms:DataFlow ;
+    skos:inScheme mdms:v0.1 .
+
+mdms:data_model_bindings a owl:ObjectProperty ;
+    rdfs:label "data_model_bindings" ;
+    rdfs:range mdms:DataModelBinding ;
+    skos:inScheme mdms:v0.1 .
+
+mdms:dimensions a owl:ObjectProperty ;
+    rdfs:label "dimensions" ;
+    rdfs:range mdms:Dimension ;
+    skos:inScheme mdms:v0.1 .
+
+mdms:domain_contexts a owl:ObjectProperty ;
+    rdfs:label "domain_contexts" ;
+    rdfs:range mdms:DomainContext ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:domain_refs a owl:ObjectProperty ;
+    rdfs:label "domain_refs" ;
+    rdfs:range mdms:BusinessDomain ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:entity_bindings a owl:ObjectProperty ;
+    rdfs:label "entity_bindings" ;
+    rdfs:range mdms:DataFlowEntityBinding ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:evidence_refs a owl:DatatypeProperty ;
+    rdfs:label "evidence_refs" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:glossary_term_refs a owl:ObjectProperty ;
+    rdfs:label "glossary_term_refs" ;
+    rdfs:range mdms:GlossaryTerm ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:imports_refs a owl:DatatypeProperty ;
+    rdfs:label "imports_refs" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:invariant_refs a owl:ObjectProperty ;
+    rdfs:label "invariant_refs" ;
+    rdfs:range mdms:Policy ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:logical_attribute_refs a owl:ObjectProperty ;
+    rdfs:label "logical_attribute_refs" ;
+    rdfs:range mdms:LogicalAttribute ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:logical_entities a owl:ObjectProperty ;
+    rdfs:label "logical_entities" ;
+    rdfs:range mdms:LogicalEntity ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:mappings a owl:ObjectProperty ;
+    rdfs:label "mappings" ;
+    rdfs:range mdms:Mapping ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:measure_attribute_refs a owl:ObjectProperty ;
+    rdfs:label "measure_attribute_refs" ;
+    rdfs:range mdms:LogicalAttribute ;
+    skos:inScheme <https://data.moex.com/mdms/analytics/v0.1> .
+
+mdms:member_system_refs a owl:ObjectProperty ;
+    rdfs:label "member_system_refs" ;
+    rdfs:range mdms:ITSystem ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:metrics a owl:ObjectProperty ;
+    rdfs:label "metrics" ;
+    rdfs:range mdms:Metric ;
+    skos:inScheme mdms:v0.1 .
+
+mdms:model_packages a owl:ObjectProperty ;
+    rdfs:label "model_packages" ;
+    rdfs:range mdms:ModelPackage ;
+    skos:inScheme mdms:v0.1 .
+
+mdms:physical_fields a owl:ObjectProperty ;
+    rdfs:label "physical_fields" ;
+    rdfs:range mdms:PhysicalField ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:physical_objects a owl:ObjectProperty ;
+    rdfs:label "physical_objects" ;
+    rdfs:range mdms:PhysicalObject ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:policy_bindings a owl:ObjectProperty ;
+    rdfs:label "policy_bindings" ;
+    rdfs:range mdms:PolicyBinding ;
+    skos:inScheme mdms:v0.1 .
+
+mdms:policy_refs a owl:ObjectProperty ;
+    rdfs:label "policy_refs" ;
+    rdfs:range mdms:Policy ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:registry_entries a owl:ObjectProperty ;
+    rdfs:label "registry_entries" ;
+    rdfs:range mdms:RegistryEntry ;
+    skos:inScheme mdms:v0.1 .
+
+mdms:relationships a owl:ObjectProperty ;
+    rdfs:label "relationships" ;
+    rdfs:range mdms:Relationship ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:selected_attributes a owl:ObjectProperty ;
+    rdfs:label "selected_attributes" ;
+    rdfs:range mdms:SelectedAttribute ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:selected_entities a owl:ObjectProperty ;
+    rdfs:label "selected_entities" ;
+    rdfs:range mdms:SelectedEntity ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:selections a owl:ObjectProperty ;
+    rdfs:label "selections" ;
+    rdfs:range mdms:ModelSelection ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:sensitivity_term_refs a owl:ObjectProperty ;
+    rdfs:label "sensitivity_term_refs" ;
+    rdfs:range mdms:DataClassificationTerm ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:source_refs a owl:DatatypeProperty ;
+    rdfs:label "source_refs" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:tags a owl:DatatypeProperty ;
+    rdfs:label "tags" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:target_refs a owl:DatatypeProperty ;
+    rdfs:label "target_refs" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:transformation_mapping_refs a owl:ObjectProperty ;
+    rdfs:label "transformation_mapping_refs" ;
+    rdfs:range mdms:Mapping ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:BusinessProcess a owl:Class ;
+    rdfs:label "BusinessProcess" ;
+    rdfs:subClassOf mdms:RegistryEntry ;
+    skos:definition "Ссылка на бизнес-процесс или его шаг в BPMN-репозитории." ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:DataFlowEntityBinding a owl:Class ;
+    rdfs:label "DataFlowEntityBinding" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:flow_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:direction ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:logical_entity_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:DataFlow ;
+            owl:onProperty mdms:flow_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:physical_object_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:Mapping ;
+            owl:onProperty mdms:transformation_mapping_refs ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:flow_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:FlowDirectionEnum ;
+            owl:onProperty mdms:direction ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:transformation_mapping_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:PhysicalField ;
+            owl:onProperty mdms:physical_field_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:LogicalEntity ;
+            owl:onProperty mdms:logical_entity_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:source_model_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:logical_entity_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:physical_field_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:source_model_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:direction ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:logical_attribute_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:source_model_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:LogicalAttribute ;
+            owl:onProperty mdms:logical_attribute_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:PhysicalObject ;
+            owl:onProperty mdms:physical_object_refs ],
+        mdms:ModelElement ;
+    skos:definition "Связь потока с логическими сущностями, атрибутами и физическими объектами модели решения." ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:DataModelBinding a owl:Class ;
+    rdfs:label "DataModelBinding" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:integrity_digest ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:dateTime ;
+            owl:onProperty mdms:generated_at ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:IntegrationReference ;
+            owl:onProperty mdms:integration_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:model_version ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:generated_at ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:DataContractReference ;
+            owl:onProperty mdms:contract_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:model_version ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:compatibility_baseline_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:compatibility_mode ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:specification_version ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:contract_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:specification_version ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:generated_at ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:model_revision ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:model_revision ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:CompatibilityModeEnum ;
+            owl:onProperty mdms:compatibility_mode ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:model_package_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:implementation_version ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:implementation_version ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:implementation_version ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:selections ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ModelSelection ;
+            owl:onProperty mdms:selections ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:model_package_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:integration_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:compatibility_mode ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:specification_version ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:contract_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:compatibility_baseline_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:model_version ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:model_revision ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:integration_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:compatibility_baseline_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:model_package_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:integrity_digest ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:integrity_digest ],
+        mdms:HasLifecycle,
+        mdms:HasOwnership,
+        mdms:ModelElement ;
+    skos:definition "Дочерняя модельная спецификация дата-контракта, фиксирующая неизменяемую ревизию модели и передаваемый срез." ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:Dimension a owl:Class ;
+    rdfs:label "Dimension" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom mdms:LogicalEntity ;
+            owl:onProperty mdms:grain_entity_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:dimension_attribute_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:LogicalAttribute ;
+            owl:onProperty mdms:dimension_attribute_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:grain_entity_refs ],
+        mdms:ModelElement ;
+    skos:definition "Переиспользуемое аналитическое измерение, связанное с логическими атрибутами." ;
+    skos:inScheme <https://data.moex.com/mdms/analytics/v0.1> .
+
+mdms:GlossaryTerm a owl:Class ;
+    rdfs:label "GlossaryTerm" ;
+    rdfs:subClassOf mdms:RegistryEntry ;
+    skos:definition "Термин корпоративного бизнес-глоссария." ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:HasLifecycle a owl:Class ;
+    rdfs:label "HasLifecycle" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:valid_to ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:deprecated_by_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:lifecycle_status ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:LifecycleStatusEnum ;
+            owl:onProperty mdms:lifecycle_status ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:valid_to ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:valid_from ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:valid_from ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:dateTime ;
+            owl:onProperty mdms:valid_from ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:lifecycle_status ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:deprecated_by_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:dateTime ;
+            owl:onProperty mdms:valid_to ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:deprecated_by_ref ] ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:Metric a owl:Class ;
+    rdfs:label "Metric" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:aggregation_function ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:metric_expression ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:metric_expression ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:unit ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:aggregation_function ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:metric_expression ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:dimension_attribute_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:grain_entity_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:measure_attribute_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:aggregation_function ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:LogicalEntity ;
+            owl:onProperty mdms:grain_entity_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:filter_expression ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:LogicalAttribute ;
+            owl:onProperty mdms:measure_attribute_refs ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:filter_expression ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:filter_expression ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:LogicalAttribute ;
+            owl:onProperty mdms:dimension_attribute_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:unit ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:unit ],
+        mdms:HasOwnership,
+        mdms:HasPolicyBindings,
+        mdms:ModelElement ;
+    skos:definition "Управляемое определение бизнес- или технической метрики; является опциональным аналитическим профилем." ;
+    skos:inScheme <https://data.moex.com/mdms/analytics/v0.1> .
+
+mdms:ModelLevelEnum a owl:Class ;
+    rdfs:label "ModelLevelEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/ModelLevelEnum#conceptual> <https://data.moex.com/mdms/ModelLevelEnum#logical> <https://data.moex.com/mdms/ModelLevelEnum#physical> ) ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/ModelLevelEnum#conceptual>,
+        <https://data.moex.com/mdms/ModelLevelEnum#logical>,
+        <https://data.moex.com/mdms/ModelLevelEnum#physical> .
+
+mdms:ModelPackage a owl:Class ;
+    rdfs:label "ModelPackage" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom mdms:Mapping ;
+            owl:onProperty mdms:mappings ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:mappings ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:physical_objects ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:api_version ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ConceptualEntity ;
+            owl:onProperty mdms:conceptual_entities ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:solution_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ITSolution ;
+            owl:onProperty mdms:solution_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:model_version ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:api_version ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:BusinessDomain ;
+            owl:onProperty mdms:domain_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:imports_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:imports_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:model_version ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:conceptual_entities ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:solution_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:DomainContext ;
+            owl:onProperty mdms:domain_contexts ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:domain_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:PhysicalObject ;
+            owl:onProperty mdms:physical_objects ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:api_version ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:LogicalEntity ;
+            owl:onProperty mdms:logical_entities ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:model_version ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:Relationship ;
+            owl:onProperty mdms:relationships ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:domain_contexts ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:logical_entities ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:relationships ],
+        mdms:HasOwnership,
+        mdms:ModelElement ;
+    skos:definition "Версионируемый артефакт модели данных одного ИТ-решения или корпоративной модели." ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:ModelSelection a owl:Class ;
+    rdfs:label "ModelSelection" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:selected_entities ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:SelectedEntity ;
+            owl:onProperty mdms:selected_entities ],
+        mdms:ModelElement ;
+    skos:definition "Переиспользуемый набор выбранных сущностей, атрибутов и физических представлений." ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:OrganizationUnit a owl:Class ;
+    rdfs:label "OrganizationUnit" ;
+    rdfs:subClassOf mdms:RegistryEntry ;
+    skos:definition "Организационное подразделение." ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:Relationship a owl:Class ;
+    rdfs:label "Relationship" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:target_role ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom [ a rdfs:Datatype ;
+                    owl:intersectionOf ( xsd:integer [ a rdfs:Datatype ;
+                                owl:onDatatype xsd:integer ;
+                                owl:withRestrictions ( [ xsd:minInclusive 1 ] ) ] ) ] ;
+            owl:onProperty mdms:target_max_cardinality ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:target_role ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:identifying ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:source_max_cardinality ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:target_max_cardinality ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:associative ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom [ a rdfs:Datatype ;
+                    owl:intersectionOf ( xsd:integer [ a rdfs:Datatype ;
+                                owl:onDatatype xsd:integer ;
+                                owl:withRestrictions ( [ xsd:minInclusive 0 ] ) ] ) ] ;
+            owl:onProperty mdms:source_min_cardinality ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:target_min_cardinality ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:source_min_cardinality ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:target_entity_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:source_max_cardinality ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:target_entity_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom [ a rdfs:Datatype ;
+                    owl:intersectionOf ( xsd:integer [ a rdfs:Datatype ;
+                                owl:onDatatype xsd:integer ;
+                                owl:withRestrictions ( [ xsd:minInclusive 0 ] ) ] ) ] ;
+            owl:onProperty mdms:target_min_cardinality ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:source_entity_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:source_role ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:target_role ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:source_role ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:associative ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom [ a rdfs:Datatype ;
+                    owl:intersectionOf ( xsd:integer [ a rdfs:Datatype ;
+                                owl:onDatatype xsd:integer ;
+                                owl:withRestrictions ( [ xsd:minInclusive 1 ] ) ] ) ] ;
+            owl:onProperty mdms:source_max_cardinality ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:source_min_cardinality ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:source_role ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:boolean ;
+            owl:onProperty mdms:associative ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:identifying ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:target_entity_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:boolean ;
+            owl:onProperty mdms:identifying ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:source_entity_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:target_min_cardinality ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:target_max_cardinality ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:source_entity_ref ],
+        mdms:ModelElement ;
+    skos:definition "Именованная связь между логическими или концептуальными сущностями." ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:SelectedAttribute a owl:Class ;
+    rdfs:label "SelectedAttribute" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom mdms:LogicalAttribute ;
+            owl:onProperty mdms:logical_attribute_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:logical_attribute_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:PhysicalField ;
+            owl:onProperty mdms:physical_field_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:physical_field_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:Mapping ;
+            owl:onProperty mdms:transformation_mapping_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:transformation_mapping_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:transformation_mapping_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:logical_attribute_ref ],
+        mdms:ModelElement ;
+    skos:definition "Выбранный атрибут и соответствующее физическое поле payload, таблицы или сообщения." ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:SelectedEntity a owl:Class ;
+    rdfs:label "SelectedEntity" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom mdms:PhysicalObject ;
+            owl:onProperty mdms:physical_object_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:LogicalEntity ;
+            owl:onProperty mdms:logical_entity_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:physical_object_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:selected_attributes ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:SelectedAttribute ;
+            owl:onProperty mdms:selected_attributes ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:logical_entity_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:logical_entity_ref ],
+        mdms:ModelElement ;
+    skos:definition "Выбранная для интеграции логическая сущность." ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:SpecificationKindEnum a owl:Class ;
+    rdfs:label "SpecificationKindEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/SpecificationKindEnum#integration> <https://data.moex.com/mdms/SpecificationKindEnum#data_model> <https://data.moex.com/mdms/SpecificationKindEnum#data_quality> ) ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/SpecificationKindEnum#data_model>,
+        <https://data.moex.com/mdms/SpecificationKindEnum#data_quality>,
+        <https://data.moex.com/mdms/SpecificationKindEnum#integration> .
+
+mdms:aggregation_function a owl:DatatypeProperty ;
+    rdfs:label "aggregation_function" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/analytics/v0.1> .
+
+mdms:api_version a owl:DatatypeProperty ;
+    rdfs:label "api_version" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:approved_at a owl:DatatypeProperty ;
+    rdfs:label "approved_at" ;
+    rdfs:range xsd:dateTime ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:approved_by_ref a owl:ObjectProperty ;
+    rdfs:label "approved_by_ref" ;
+    rdfs:range mdms:Role ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:assignment_id a owl:DatatypeProperty ;
+    rdfs:label "assignment_id" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:associative a owl:DatatypeProperty ;
+    rdfs:label "associative" ;
+    rdfs:range xsd:boolean ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:business_importance a owl:ObjectProperty ;
+    rdfs:label "business_importance" ;
+    rdfs:range mdms:BusinessImportanceEnum ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:classification_term_ref a owl:ObjectProperty ;
+    rdfs:label "classification_term_ref" ;
+    rdfs:range mdms:DataClassificationTerm ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:classified_element_ref a owl:DatatypeProperty ;
+    rdfs:label "classified_element_ref" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:compatibility_baseline_ref a owl:DatatypeProperty ;
+    rdfs:label "compatibility_baseline_ref" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:compatibility_mode a owl:ObjectProperty ;
+    rdfs:label "compatibility_mode" ;
+    rdfs:range mdms:CompatibilityModeEnum ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:confidence a owl:DatatypeProperty ;
+    rdfs:label "confidence" ;
+    rdfs:range [ a rdfs:Datatype ;
+            owl:intersectionOf ( xsd:decimal [ a rdfs:Datatype ;
+                        owl:onDatatype xsd:integer ;
+                        owl:withRestrictions ( [ xsd:minInclusive 0 ] ) ] [ a rdfs:Datatype ;
+                        owl:onDatatype xsd:integer ;
+                        owl:withRestrictions ( [ xsd:maxInclusive 1 ] ) ] ) ] ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:context_ref a owl:ObjectProperty ;
+    rdfs:label "context_ref" ;
+    rdfs:range mdms:DomainContext ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:data_class a owl:ObjectProperty ;
+    rdfs:label "data_class" ;
+    rdfs:range mdms:DataClassEnum ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:data_owner_ref a owl:ObjectProperty ;
+    rdfs:label "data_owner_ref" ;
+    rdfs:range mdms:Role ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:data_steward_ref a owl:ObjectProperty ;
+    rdfs:label "data_steward_ref" ;
+    rdfs:range mdms:Role ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:default_value a owl:DatatypeProperty ;
+    rdfs:label "default_value" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:deprecated_by_ref a owl:DatatypeProperty ;
+    rdfs:label "deprecated_by_ref" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:derived_expression a owl:DatatypeProperty ;
+    rdfs:label "derived_expression" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:description a owl:DatatypeProperty ;
+    rdfs:label "description" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:domain_ref a owl:ObjectProperty ;
+    rdfs:label "domain_ref" ;
+    rdfs:range mdms:BusinessDomain ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:element_id a owl:DatatypeProperty ;
+    rdfs:label "element_id" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:entity_type a owl:ObjectProperty ;
+    rdfs:label "entity_type" ;
+    rdfs:range mdms:EntityTypeEnum ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:filter_expression a owl:DatatypeProperty ;
+    rdfs:label "filter_expression" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/analytics/v0.1> .
+
+mdms:flow_ref a owl:ObjectProperty ;
+    rdfs:label "flow_ref" ;
+    rdfs:range mdms:DataFlow ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:format_pattern a owl:DatatypeProperty ;
+    rdfs:label "format_pattern" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:generated_at a owl:DatatypeProperty ;
+    rdfs:label "generated_at" ;
+    rdfs:range xsd:dateTime ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:identifying a owl:DatatypeProperty ;
+    rdfs:label "identifying" ;
+    rdfs:range xsd:boolean ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:implementation_version a owl:DatatypeProperty ;
+    rdfs:label "implementation_version" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:integration_channel a owl:ObjectProperty ;
+    rdfs:label "integration_channel" ;
+    rdfs:range mdms:IntegrationChannelEnum ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:integration_class a owl:ObjectProperty ;
+    rdfs:label "integration_class" ;
+    rdfs:range mdms:IntegrationClassEnum ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:integration_level a owl:ObjectProperty ;
+    rdfs:label "integration_level" ;
+    rdfs:range mdms:IntegrationLevelEnum ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:integration_spec_ref a owl:DatatypeProperty ;
+    rdfs:label "integration_spec_ref" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:integrity_digest a owl:DatatypeProperty ;
+    rdfs:label "integrity_digest" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:lifecycle_status a owl:ObjectProperty ;
+    rdfs:label "lifecycle_status" ;
+    rdfs:range mdms:LifecycleStatusEnum ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:logical_attribute_ref a owl:ObjectProperty ;
+    rdfs:label "logical_attribute_ref" ;
+    rdfs:range mdms:LogicalAttribute ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:logical_type a owl:ObjectProperty ;
+    rdfs:label "logical_type" ;
+    rdfs:range mdms:LogicalDataTypeEnum ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:mapping_cardinality a owl:ObjectProperty ;
+    rdfs:label "mapping_cardinality" ;
+    rdfs:range mdms:MappingCardinalityEnum ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:mapping_type a owl:ObjectProperty ;
+    rdfs:label "mapping_type" ;
+    rdfs:range mdms:MappingTypeEnum ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:master_system a owl:DatatypeProperty ;
+    rdfs:label "master_system" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:maximum_cardinality a owl:DatatypeProperty ;
+    rdfs:label "maximum_cardinality" ;
+    rdfs:range [ a rdfs:Datatype ;
+            owl:intersectionOf ( xsd:integer [ a rdfs:Datatype ;
+                        owl:onDatatype xsd:integer ;
+                        owl:withRestrictions ( [ xsd:minInclusive 1 ] ) ] ) ] ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:metric_expression a owl:DatatypeProperty ;
+    rdfs:label "metric_expression" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/analytics/v0.1> .
+
+mdms:minimum_cardinality a owl:DatatypeProperty ;
+    rdfs:label "minimum_cardinality" ;
+    rdfs:range [ a rdfs:Datatype ;
+            owl:intersectionOf ( xsd:integer [ a rdfs:Datatype ;
+                        owl:onDatatype xsd:integer ;
+                        owl:withRestrictions ( [ xsd:minInclusive 0 ] ) ] ) ] ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:model_package_ref a owl:DatatypeProperty ;
+    rdfs:label "model_package_ref" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:model_revision a owl:DatatypeProperty ;
+    rdfs:label "model_revision" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:multivalued a owl:DatatypeProperty ;
+    rdfs:label "multivalued" ;
+    rdfs:range xsd:boolean ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:name a owl:DatatypeProperty ;
+    rdfs:label "name" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:namespace a owl:DatatypeProperty ;
+    rdfs:label "namespace" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:native_name a owl:DatatypeProperty ;
+    rdfs:label "native_name" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:native_schema_ref a owl:DatatypeProperty ;
+    rdfs:label "native_schema_ref" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:native_type a owl:DatatypeProperty ;
+    rdfs:label "native_type" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:object_kind a owl:ObjectProperty ;
+    rdfs:label "object_kind" ;
+    rdfs:range mdms:PhysicalObjectKindEnum ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:ordinal_position a owl:DatatypeProperty ;
+    rdfs:label "ordinal_position" ;
+    rdfs:range [ a rdfs:Datatype ;
+            owl:intersectionOf ( xsd:integer [ a rdfs:Datatype ;
+                        owl:onDatatype xsd:integer ;
+                        owl:withRestrictions ( [ xsd:minInclusive 1 ] ) ] ) ] ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:owner_entity_ref a owl:ObjectProperty ;
+    rdfs:label "owner_entity_ref" ;
+    rdfs:range mdms:LogicalEntity ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:owning_unit_ref a owl:ObjectProperty ;
+    rdfs:label "owning_unit_ref" ;
+    rdfs:range mdms:OrganizationUnit ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:parent_concept_ref a owl:ObjectProperty ;
+    rdfs:label "parent_concept_ref" ;
+    rdfs:range mdms:ConceptualEntity ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:parent_domain_ref a owl:ObjectProperty ;
+    rdfs:label "parent_domain_ref" ;
+    rdfs:range mdms:BusinessDomain ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:physical_object_ref a owl:ObjectProperty ;
+    rdfs:label "physical_object_ref" ;
+    rdfs:range mdms:PhysicalObject ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:platform_ref a owl:ObjectProperty ;
+    rdfs:label "platform_ref" ;
+    rdfs:range mdms:ITPlatform ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:policy_binding_id a owl:DatatypeProperty ;
+    rdfs:label "policy_binding_id" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:policy_ref a owl:ObjectProperty ;
+    rdfs:label "policy_ref" ;
+    rdfs:range mdms:Policy ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:policy_target_ref a owl:DatatypeProperty ;
+    rdfs:label "policy_target_ref" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:qualified_name a owl:DatatypeProperty ;
+    rdfs:label "qualified_name" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:registry_description a owl:DatatypeProperty ;
+    rdfs:label "registry_description" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:registry_id a owl:DatatypeProperty ;
+    rdfs:label "registry_id" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:registry_name a owl:DatatypeProperty ;
+    rdfs:label "registry_name" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:registry_status a owl:ObjectProperty ;
+    rdfs:label "registry_status" ;
+    rdfs:range mdms:LifecycleStatusEnum ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:repository_id a owl:DatatypeProperty ;
+    rdfs:label "repository_id" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme mdms:v0.1 .
+
+mdms:schema_path a owl:DatatypeProperty ;
+    rdfs:label "schema_path" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:solution_data_role a owl:ObjectProperty ;
+    rdfs:label "solution_data_role" ;
+    rdfs:range mdms:SolutionDataRoleEnum ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:source_artifact_ref a owl:DatatypeProperty ;
+    rdfs:label "source_artifact_ref" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:source_entity_ref a owl:DatatypeProperty ;
+    rdfs:label "source_entity_ref" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:source_max_cardinality a owl:DatatypeProperty ;
+    rdfs:label "source_max_cardinality" ;
+    rdfs:range [ a rdfs:Datatype ;
+            owl:intersectionOf ( xsd:integer [ a rdfs:Datatype ;
+                        owl:onDatatype xsd:integer ;
+                        owl:withRestrictions ( [ xsd:minInclusive 1 ] ) ] ) ] ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:source_min_cardinality a owl:DatatypeProperty ;
+    rdfs:label "source_min_cardinality" ;
+    rdfs:range [ a rdfs:Datatype ;
+            owl:intersectionOf ( xsd:integer [ a rdfs:Datatype ;
+                        owl:onDatatype xsd:integer ;
+                        owl:withRestrictions ( [ xsd:minInclusive 0 ] ) ] ) ] ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:source_model_ref a owl:DatatypeProperty ;
+    rdfs:label "source_model_ref" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:source_platform_ref a owl:ObjectProperty ;
+    rdfs:label "source_platform_ref" ;
+    rdfs:range mdms:ITPlatform ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:source_role a owl:DatatypeProperty ;
+    rdfs:label "source_role" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:source_solution_ref a owl:ObjectProperty ;
+    rdfs:label "source_solution_ref" ;
+    rdfs:range mdms:ITSolution ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:source_system_ref a owl:ObjectProperty ;
+    rdfs:label "source_system_ref" ;
+    rdfs:range mdms:ITSystem ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:source_uri a owl:DatatypeProperty ;
+    rdfs:label "source_uri" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:specification_version a owl:DatatypeProperty ;
+    rdfs:label "specification_version" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:system_ref a owl:ObjectProperty ;
+    rdfs:label "system_ref" ;
+    rdfs:range mdms:ITSystem ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:target_entity_ref a owl:DatatypeProperty ;
+    rdfs:label "target_entity_ref" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:target_max_cardinality a owl:DatatypeProperty ;
+    rdfs:label "target_max_cardinality" ;
+    rdfs:range [ a rdfs:Datatype ;
+            owl:intersectionOf ( xsd:integer [ a rdfs:Datatype ;
+                        owl:onDatatype xsd:integer ;
+                        owl:withRestrictions ( [ xsd:minInclusive 1 ] ) ] ) ] ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:target_min_cardinality a owl:DatatypeProperty ;
+    rdfs:label "target_min_cardinality" ;
+    rdfs:range [ a rdfs:Datatype ;
+            owl:intersectionOf ( xsd:integer [ a rdfs:Datatype ;
+                        owl:onDatatype xsd:integer ;
+                        owl:withRestrictions ( [ xsd:minInclusive 0 ] ) ] ) ] ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:target_platform_ref a owl:ObjectProperty ;
+    rdfs:label "target_platform_ref" ;
+    rdfs:range mdms:ITPlatform ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:target_role a owl:DatatypeProperty ;
+    rdfs:label "target_role" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:target_solution_ref a owl:ObjectProperty ;
+    rdfs:label "target_solution_ref" ;
+    rdfs:range mdms:ITSolution ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:target_system_ref a owl:ObjectProperty ;
+    rdfs:label "target_system_ref" ;
+    rdfs:range mdms:ITSystem ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:technology a owl:DatatypeProperty ;
+    rdfs:label "technology" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:title a owl:DatatypeProperty ;
+    rdfs:label "title" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:transformation_expression a owl:DatatypeProperty ;
+    rdfs:label "transformation_expression" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:transformation_mapping_ref a owl:ObjectProperty ;
+    rdfs:label "transformation_mapping_ref" ;
+    rdfs:range mdms:Mapping ;
+    skos:inScheme <https://data.moex.com/mdms/contract-binding/v0.1> .
+
+mdms:transformation_ref a owl:DatatypeProperty ;
+    rdfs:label "transformation_ref" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:unit a owl:DatatypeProperty ;
+    rdfs:label "unit" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/analytics/v0.1> .
+
+mdms:value_set_ref a owl:DatatypeProperty ;
+    rdfs:label "value_set_ref" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:DataContractReference a owl:Class ;
+    rdfs:label "DataContractReference" ;
+    rdfs:subClassOf mdms:RegistryEntry ;
+    skos:definition "Ссылка на дата-контракт в корпоративном дата-каталоге." ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:EnforcementResultEnum a owl:Class ;
+    rdfs:label "EnforcementResultEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/EnforcementResultEnum#pass> <https://data.moex.com/mdms/EnforcementResultEnum#warn> <https://data.moex.com/mdms/EnforcementResultEnum#fail> <https://data.moex.com/mdms/EnforcementResultEnum#not_applicable> ) ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/EnforcementResultEnum#fail>,
+        <https://data.moex.com/mdms/EnforcementResultEnum#not_applicable>,
+        <https://data.moex.com/mdms/EnforcementResultEnum#pass>,
+        <https://data.moex.com/mdms/EnforcementResultEnum#warn> .
+
+mdms:HasPolicyBindings a owl:Class ;
+    rdfs:label "HasPolicyBindings" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom mdms:Policy ;
+            owl:onProperty mdms:policy_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:policy_refs ] ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:IntegrationClassEnum a owl:Class ;
+    rdfs:label "IntegrationClassEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/IntegrationClassEnum#EAP> <https://data.moex.com/mdms/IntegrationClassEnum#EDA> ) ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/IntegrationClassEnum#EAP>,
+        <https://data.moex.com/mdms/IntegrationClassEnum#EDA> .
+
+mdms:IntegrationLevelEnum a owl:Class ;
+    rdfs:label "IntegrationLevelEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/IntegrationLevelEnum#intraplatform> <https://data.moex.com/mdms/IntegrationLevelEnum#interplatform> ) ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/IntegrationLevelEnum#interplatform>,
+        <https://data.moex.com/mdms/IntegrationLevelEnum#intraplatform> .
+
+mdms:IntegrationReference a owl:Class ;
+    rdfs:label "IntegrationReference" ;
+    rdfs:subClassOf mdms:RegistryEntry ;
+    skos:definition "Ссылка на интеграцию в Clinkr." ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:dimension_attribute_refs a owl:ObjectProperty ;
+    rdfs:label "dimension_attribute_refs" ;
+    rdfs:range mdms:LogicalAttribute ;
+    skos:inScheme <https://data.moex.com/mdms/analytics/v0.1> .
+
+mdms:grain_entity_refs a owl:ObjectProperty ;
+    rdfs:label "grain_entity_refs" ;
+    rdfs:range mdms:LogicalEntity ;
+    skos:inScheme <https://data.moex.com/mdms/analytics/v0.1> .
+
+mdms:key_attribute_refs a owl:DatatypeProperty ;
+    rdfs:label "key_attribute_refs" ;
+    rdfs:range xsd:anyURI ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:physical_field_refs a owl:ObjectProperty ;
+    rdfs:label "physical_field_refs" ;
+    rdfs:range mdms:PhysicalField ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:physical_object_refs a owl:ObjectProperty ;
+    rdfs:label "physical_object_refs" ;
+    rdfs:range mdms:PhysicalObject ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:BusinessImportanceEnum a owl:Class ;
+    rdfs:label "BusinessImportanceEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/BusinessImportanceEnum#high> <https://data.moex.com/mdms/BusinessImportanceEnum#medium> <https://data.moex.com/mdms/BusinessImportanceEnum#low> ) ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/BusinessImportanceEnum#high>,
+        <https://data.moex.com/mdms/BusinessImportanceEnum#low>,
+        <https://data.moex.com/mdms/BusinessImportanceEnum#medium> .
+
+mdms:DataClassificationTerm a owl:Class ;
+    rdfs:label "DataClassificationTerm" ;
+    rdfs:subClassOf mdms:RegistryEntry ;
+    skos:definition "Специальная категория чувствительности или регулирования, например ПДн или инсайдерская информация." ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:DataFlow a owl:Class ;
+    rdfs:label "DataFlow" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:target_solution_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ITSolution ;
+            owl:onProperty mdms:source_solution_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:contract_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:source_system_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:entity_bindings ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ITPlatform ;
+            owl:onProperty mdms:source_platform_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:DataContractReference ;
+            owl:onProperty mdms:contract_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ITSolution ;
+            owl:onProperty mdms:target_solution_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ITPlatform ;
+            owl:onProperty mdms:target_platform_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:integration_channel ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:integration_spec_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:IntegrationLevelEnum ;
+            owl:onProperty mdms:integration_level ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:target_system_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:target_solution_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:source_system_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:DataFlowEntityBinding ;
+            owl:onProperty mdms:entity_bindings ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:integration_class ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ITSystem ;
+            owl:onProperty mdms:source_system_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:source_platform_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:IntegrationChannelEnum ;
+            owl:onProperty mdms:integration_channel ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:integration_level ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:integration_spec_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:integration_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:target_platform_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:source_solution_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:integration_level ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:target_system_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:source_solution_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:target_platform_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:contract_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:integration_class ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:integration_spec_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:source_platform_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:integration_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:IntegrationClassEnum ;
+            owl:onProperty mdms:integration_class ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:IntegrationReference ;
+            owl:onProperty mdms:integration_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:integration_channel ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ITSystem ;
+            owl:onProperty mdms:target_system_ref ],
+        mdms:HasLifecycle,
+        mdms:HasOwnership,
+        mdms:ModelElement ;
+    skos:definition "Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr, а семантика — модели данных." ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:DomainContext a owl:Class ;
+    rdfs:label "DomainContext" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:namespace ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:domain_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:BusinessProcess ;
+            owl:onProperty mdms:business_process_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:domain_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:solution_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:namespace ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ITSolution ;
+            owl:onProperty mdms:solution_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:business_process_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:namespace ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:solution_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:BusinessDomain ;
+            owl:onProperty mdms:domain_ref ],
+        mdms:HasOwnership,
+        mdms:ModelElement ;
+    skos:definition "Ограниченный логический контекст с собственной терминологией и областью ответственности." ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:EntityTypeEnum a owl:Class ;
+    rdfs:label "EntityTypeEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/EntityTypeEnum#core> <https://data.moex.com/mdms/EntityTypeEnum#derived> <https://data.moex.com/mdms/EntityTypeEnum#reference> ) ;
+    skos:definition "Роль логической сущности в модели решения." ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/EntityTypeEnum#core>,
+        <https://data.moex.com/mdms/EntityTypeEnum#derived>,
+        <https://data.moex.com/mdms/EntityTypeEnum#reference> .
+
+mdms:SolutionDataRoleEnum a owl:Class ;
+    rdfs:label "SolutionDataRoleEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/SolutionDataRoleEnum#producer> <https://data.moex.com/mdms/SolutionDataRoleEnum#consumer> <https://data.moex.com/mdms/SolutionDataRoleEnum#intermediary> ) ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/SolutionDataRoleEnum#consumer>,
+        <https://data.moex.com/mdms/SolutionDataRoleEnum#intermediary>,
+        <https://data.moex.com/mdms/SolutionDataRoleEnum#producer> .
+
+mdms:CompatibilityModeEnum a owl:Class ;
+    rdfs:label "CompatibilityModeEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/CompatibilityModeEnum#backward> <https://data.moex.com/mdms/CompatibilityModeEnum#forward> <https://data.moex.com/mdms/CompatibilityModeEnum#full> <https://data.moex.com/mdms/CompatibilityModeEnum#none> ) ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/CompatibilityModeEnum#backward>,
+        <https://data.moex.com/mdms/CompatibilityModeEnum#forward>,
+        <https://data.moex.com/mdms/CompatibilityModeEnum#full>,
+        <https://data.moex.com/mdms/CompatibilityModeEnum#none> .
+
+mdms:MappingCardinalityEnum a owl:Class ;
+    rdfs:label "MappingCardinalityEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/MappingCardinalityEnum#one_to_one> <https://data.moex.com/mdms/MappingCardinalityEnum#one_to_many> <https://data.moex.com/mdms/MappingCardinalityEnum#many_to_one> <https://data.moex.com/mdms/MappingCardinalityEnum#many_to_many> ) ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/MappingCardinalityEnum#many_to_many>,
+        <https://data.moex.com/mdms/MappingCardinalityEnum#many_to_one>,
+        <https://data.moex.com/mdms/MappingCardinalityEnum#one_to_many>,
+        <https://data.moex.com/mdms/MappingCardinalityEnum#one_to_one> .
+
+mdms:PhysicalField a owl:Class ;
+    rdfs:label "PhysicalField" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:native_type ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:native_name ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:ordinal_position ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:schema_path ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:required ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:required ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:physical_object_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:schema_path ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:native_name ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:native_type ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:PhysicalObject ;
+            owl:onProperty mdms:physical_object_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:boolean ;
+            owl:onProperty mdms:required ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:schema_path ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:native_name ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom [ a rdfs:Datatype ;
+                    owl:intersectionOf ( xsd:integer [ a rdfs:Datatype ;
+                                owl:onDatatype xsd:integer ;
+                                owl:withRestrictions ( [ xsd:minInclusive 1 ] ) ] ) ] ;
+            owl:onProperty mdms:ordinal_position ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:physical_object_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:native_type ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:ordinal_position ],
+        mdms:ModelElement ;
+    skos:definition "Поле физического объекта; его семантика задаётся Mapping к LogicalAttribute." ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:classification_rationale a owl:DatatypeProperty ;
+    rdfs:label "classification_rationale" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:classification_source a owl:DatatypeProperty ;
+    rdfs:label "classification_source" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:contract_ref a owl:ObjectProperty ;
+    rdfs:label "contract_ref" ;
+    rdfs:range mdms:DataContractReference ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:direction a owl:ObjectProperty ;
+    rdfs:label "direction" ;
+    rdfs:range mdms:FlowDirectionEnum ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:governance_classification a owl:ObjectProperty ;
+    rdfs:label "governance_classification" ;
+    rdfs:range mdms:GovernanceClassificationEnum ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:integration_ref a owl:ObjectProperty ;
+    rdfs:label "integration_ref" ;
+    rdfs:range mdms:IntegrationReference ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:logical_entity_ref a owl:ObjectProperty ;
+    rdfs:label "logical_entity_ref" ;
+    rdfs:range mdms:LogicalEntity ;
+    skos:inScheme <https://data.moex.com/mdms/integration/v0.1> .
+
+mdms:model_version a owl:DatatypeProperty ;
+    rdfs:label "model_version" ;
+    rdfs:range xsd:string ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:required a owl:DatatypeProperty ;
+    rdfs:label "required" ;
+    rdfs:range xsd:boolean ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:BusinessDomain a owl:Class ;
+    rdfs:label "BusinessDomain" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:parent_domain_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:BusinessDomain ;
+            owl:onProperty mdms:parent_domain_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:parent_domain_ref ],
+        mdms:RegistryEntry ;
+    skos:definition "Бизнес-домен или предметная область; мастер определяется архитектурным governance." ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:ConceptualEntity a owl:Class ;
+    rdfs:label "ConceptualEntity" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:key_attribute_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ConceptualEntity ;
+            owl:onProperty mdms:parent_concept_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:parent_concept_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:parent_concept_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:key_attribute_refs ],
+        mdms:HasBusinessClassification,
+        mdms:HasOwnership,
+        mdms:ModelElement ;
+    skos:definition "Корпоративное бизнес-понятие верхнего уровня, независимое от конкретной реализации." ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:DataClassEnum a owl:Class ;
+    rdfs:label "DataClassEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/DataClassEnum#reference_data> <https://data.moex.com/mdms/DataClassEnum#master_data> <https://data.moex.com/mdms/DataClassEnum#transactional_data> <https://data.moex.com/mdms/DataClassEnum#analytical_data> <https://data.moex.com/mdms/DataClassEnum#metadata> ) ;
+    skos:definition "Класс данных для наследования модельной спецификацией дата-контракта; не совпадает с entity_type." ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/DataClassEnum#analytical_data>,
+        <https://data.moex.com/mdms/DataClassEnum#master_data>,
+        <https://data.moex.com/mdms/DataClassEnum#metadata>,
+        <https://data.moex.com/mdms/DataClassEnum#reference_data>,
+        <https://data.moex.com/mdms/DataClassEnum#transactional_data> .
+
+mdms:FlowDirectionEnum a owl:Class ;
+    rdfs:label "FlowDirectionEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/FlowDirectionEnum#inbound> <https://data.moex.com/mdms/FlowDirectionEnum#outbound> <https://data.moex.com/mdms/FlowDirectionEnum#internal> <https://data.moex.com/mdms/FlowDirectionEnum#bidirectional> ) ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/FlowDirectionEnum#bidirectional>,
+        <https://data.moex.com/mdms/FlowDirectionEnum#inbound>,
+        <https://data.moex.com/mdms/FlowDirectionEnum#internal>,
+        <https://data.moex.com/mdms/FlowDirectionEnum#outbound> .
+
+mdms:GovernanceClassificationEnum a owl:Class ;
+    rdfs:label "GovernanceClassificationEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/GovernanceClassificationEnum#public> <https://data.moex.com/mdms/GovernanceClassificationEnum#internal> <https://data.moex.com/mdms/GovernanceClassificationEnum#confidential> <https://data.moex.com/mdms/GovernanceClassificationEnum#restricted> ) ;
+    skos:definition "Базовая шкала ограничения доступа; специальные виды тайны задаются отдельными терминами классификации." ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/GovernanceClassificationEnum#confidential>,
+        <https://data.moex.com/mdms/GovernanceClassificationEnum#internal>,
+        <https://data.moex.com/mdms/GovernanceClassificationEnum#public>,
+        <https://data.moex.com/mdms/GovernanceClassificationEnum#restricted> .
+
+mdms:ITPlatform a owl:Class ;
+    rdfs:label "ITPlatform" ;
+    rdfs:subClassOf mdms:RegistryEntry ;
+    skos:definition "ИТ-платформа; мастер данных — EAM." ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:IntegrationChannelEnum a owl:Class ;
+    rdfs:label "IntegrationChannelEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/IntegrationChannelEnum#api> <https://data.moex.com/mdms/IntegrationChannelEnum#queue> <https://data.moex.com/mdms/IntegrationChannelEnum#database> <https://data.moex.com/mdms/IntegrationChannelEnum#file> <https://data.moex.com/mdms/IntegrationChannelEnum#other> ) ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/IntegrationChannelEnum#api>,
+        <https://data.moex.com/mdms/IntegrationChannelEnum#database>,
+        <https://data.moex.com/mdms/IntegrationChannelEnum#file>,
+        <https://data.moex.com/mdms/IntegrationChannelEnum#other>,
+        <https://data.moex.com/mdms/IntegrationChannelEnum#queue> .
+
+mdms:Mapping a owl:Class ;
+    rdfs:label "Mapping" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:transformation_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:confidence ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:source_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:valid_from ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:target_refs ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:mapping_cardinality ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:dateTime ;
+            owl:onProperty mdms:valid_to ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:MappingTypeEnum ;
+            owl:onProperty mdms:mapping_type ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:transformation_expression ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:mapping_type ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:transformation_expression ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:valid_from ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:confidence ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:dateTime ;
+            owl:onProperty mdms:valid_from ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:transformation_expression ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:mapping_type ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:valid_to ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:target_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom [ a rdfs:Datatype ;
+                    owl:intersectionOf ( xsd:decimal [ a rdfs:Datatype ;
+                                owl:onDatatype xsd:integer ;
+                                owl:withRestrictions ( [ xsd:minInclusive 0 ] ) ] [ a rdfs:Datatype ;
+                                owl:onDatatype xsd:integer ;
+                                owl:withRestrictions ( [ xsd:maxInclusive 1 ] ) ] ) ] ;
+            owl:onProperty mdms:confidence ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:valid_to ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:MappingCardinalityEnum ;
+            owl:onProperty mdms:mapping_cardinality ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:transformation_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:transformation_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:source_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:mapping_cardinality ],
+        mdms:HasProvenance,
+        mdms:ModelElement ;
+    skos:definition "Явное соответствие между элементами концептуального, логического и физического уровней." ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:Policy a owl:Class ;
+    rdfs:label "Policy" ;
+    rdfs:subClassOf mdms:RegistryEntry ;
+    skos:definition "Политика доступа, хранения, качества или архитектурный инвариант." ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:Role a owl:Class ;
+    rdfs:label "Role" ;
+    rdfs:subClassOf mdms:RegistryEntry ;
+    skos:definition "Управляемая роль владельца, стюарда, потребителя или согласующего." ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:ApprovalStatusEnum a owl:Class ;
+    rdfs:label "ApprovalStatusEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/ApprovalStatusEnum#proposed> <https://data.moex.com/mdms/ApprovalStatusEnum#approved> <https://data.moex.com/mdms/ApprovalStatusEnum#rejected> <https://data.moex.com/mdms/ApprovalStatusEnum#superseded> ) ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/ApprovalStatusEnum#approved>,
+        <https://data.moex.com/mdms/ApprovalStatusEnum#proposed>,
+        <https://data.moex.com/mdms/ApprovalStatusEnum#rejected>,
+        <https://data.moex.com/mdms/ApprovalStatusEnum#superseded> .
+
+mdms:HasOwnership a owl:Class ;
+    rdfs:label "HasOwnership" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:owning_unit_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:Role ;
+            owl:onProperty mdms:data_steward_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:data_steward_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:owning_unit_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:OrganizationUnit ;
+            owl:onProperty mdms:owning_unit_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:data_owner_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:Role ;
+            owl:onProperty mdms:data_owner_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:data_owner_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:data_steward_ref ] ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:LifecycleStatusEnum a owl:Class ;
+    rdfs:label "LifecycleStatusEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/LifecycleStatusEnum#draft> <https://data.moex.com/mdms/LifecycleStatusEnum#active> <https://data.moex.com/mdms/LifecycleStatusEnum#deprecated> <https://data.moex.com/mdms/LifecycleStatusEnum#retired> ) ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/LifecycleStatusEnum#active>,
+        <https://data.moex.com/mdms/LifecycleStatusEnum#deprecated>,
+        <https://data.moex.com/mdms/LifecycleStatusEnum#draft>,
+        <https://data.moex.com/mdms/LifecycleStatusEnum#retired> .
+
+mdms:PhysicalObject a owl:Class ;
+    rdfs:label "PhysicalObject" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:object_kind ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:native_schema_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:native_schema_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:direction ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:technology ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:object_kind ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:PhysicalField ;
+            owl:onProperty mdms:physical_fields ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:technology ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:native_schema_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ITSolution ;
+            owl:onProperty mdms:solution_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:qualified_name ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:qualified_name ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ITSystem ;
+            owl:onProperty mdms:system_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:system_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:physical_fields ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:solution_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:FlowDirectionEnum ;
+            owl:onProperty mdms:direction ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:solution_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:PhysicalObjectKindEnum ;
+            owl:onProperty mdms:object_kind ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:system_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:qualified_name ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:technology ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:direction ],
+        mdms:HasOwnership,
+        mdms:HasPolicyBindings,
+        mdms:ModelElement ;
+    skos:definition "Квант данных или техническая точка публикации/потребления." ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:ITSystem a owl:Class ;
+    rdfs:label "ITSystem" ;
+    rdfs:subClassOf mdms:RegistryEntry ;
+    skos:definition "ИТ-система; мастер данных — EAM." ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:MappingTypeEnum a owl:Class ;
+    rdfs:label "MappingTypeEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/MappingTypeEnum#semantic_equivalence> <https://data.moex.com/mdms/MappingTypeEnum#specialization> <https://data.moex.com/mdms/MappingTypeEnum#implementation> <https://data.moex.com/mdms/MappingTypeEnum#field_mapping> <https://data.moex.com/mdms/MappingTypeEnum#transformation> <https://data.moex.com/mdms/MappingTypeEnum#aggregation> <https://data.moex.com/mdms/MappingTypeEnum#derivation> ) ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/MappingTypeEnum#aggregation>,
+        <https://data.moex.com/mdms/MappingTypeEnum#derivation>,
+        <https://data.moex.com/mdms/MappingTypeEnum#field_mapping>,
+        <https://data.moex.com/mdms/MappingTypeEnum#implementation>,
+        <https://data.moex.com/mdms/MappingTypeEnum#semantic_equivalence>,
+        <https://data.moex.com/mdms/MappingTypeEnum#specialization>,
+        <https://data.moex.com/mdms/MappingTypeEnum#transformation> .
+
+mdms:approval_status a owl:ObjectProperty ;
+    rdfs:label "approval_status" ;
+    rdfs:range mdms:ApprovalStatusEnum ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:ITSolution a owl:Class ;
+    rdfs:label "ITSolution" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ITSystem ;
+            owl:onProperty mdms:member_system_refs ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:platform_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:member_system_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ITPlatform ;
+            owl:onProperty mdms:platform_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:platform_ref ],
+        mdms:RegistryEntry ;
+    skos:definition "ИТ-решение, объединяющее одну или несколько ИТ-систем; мастер данных — EAM." ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:LogicalEntity a owl:Class ;
+    rdfs:label "LogicalEntity" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:attributes ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:key_attribute_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:DomainContext ;
+            owl:onProperty mdms:context_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:conceptual_entity_refs ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:solution_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:LogicalAttribute ;
+            owl:onProperty mdms:attributes ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:solution_data_role ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:SolutionDataRoleEnum ;
+            owl:onProperty mdms:solution_data_role ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:solution_data_role ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ITSolution ;
+            owl:onProperty mdms:solution_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:key_attribute_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:context_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:invariant_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:ConceptualEntity ;
+            owl:onProperty mdms:conceptual_entity_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:Policy ;
+            owl:onProperty mdms:invariant_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:solution_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:context_ref ],
+        mdms:HasBusinessClassification,
+        mdms:HasGovernanceClassification,
+        mdms:HasOwnership,
+        mdms:HasPolicyBindings,
+        mdms:ModelElement ;
+    skos:definition "Представление бизнес-сущности в доменном контексте и модели конкретного решения." ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:LogicalAttribute a owl:Class ;
+    rdfs:label "LogicalAttribute" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:maximum_cardinality ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:maximum_cardinality ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:LogicalEntity ;
+            owl:onProperty mdms:owner_entity_ref ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:derived_expression ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:LogicalDataTypeEnum ;
+            owl:onProperty mdms:logical_type ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:owner_entity_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:value_set_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:required ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:boolean ;
+            owl:onProperty mdms:required ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:logical_type ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:multivalued ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:minimum_cardinality ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:minimum_cardinality ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:format_pattern ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:boolean ;
+            owl:onProperty mdms:multivalued ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:required ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:logical_type ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:value_set_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom [ a rdfs:Datatype ;
+                    owl:intersectionOf ( xsd:integer [ a rdfs:Datatype ;
+                                owl:onDatatype xsd:integer ;
+                                owl:withRestrictions ( [ xsd:minInclusive 1 ] ) ] ) ] ;
+            owl:onProperty mdms:maximum_cardinality ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:format_pattern ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:default_value ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:multivalued ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:derived_expression ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:owner_entity_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:derived_expression ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:default_value ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:value_set_ref ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom [ a rdfs:Datatype ;
+                    owl:intersectionOf ( xsd:integer [ a rdfs:Datatype ;
+                                owl:onDatatype xsd:integer ;
+                                owl:withRestrictions ( [ xsd:minInclusive 0 ] ) ] ) ] ;
+            owl:onProperty mdms:minimum_cardinality ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:format_pattern ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:default_value ],
+        mdms:HasGovernanceClassification,
+        mdms:HasPolicyBindings,
+        mdms:ModelElement ;
+    skos:definition "Логический атрибут сущности с бизнес-смыслом, типом, обязательностью и классификацией." ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:solution_ref a owl:ObjectProperty ;
+    rdfs:label "solution_ref" ;
+    rdfs:range mdms:ITSolution ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+mdms:valid_from a owl:DatatypeProperty ;
+    rdfs:label "valid_from" ;
+    rdfs:range xsd:dateTime ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:valid_to a owl:DatatypeProperty ;
+    rdfs:label "valid_to" ;
+    rdfs:range xsd:dateTime ;
+    skos:inScheme <https://data.moex.com/mdms/governance/v0.1> .
+
+mdms:LogicalDataTypeEnum a owl:Class ;
+    rdfs:label "LogicalDataTypeEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/LogicalDataTypeEnum#string> <https://data.moex.com/mdms/LogicalDataTypeEnum#integer> <https://data.moex.com/mdms/LogicalDataTypeEnum#decimal> <https://data.moex.com/mdms/LogicalDataTypeEnum#boolean> <https://data.moex.com/mdms/LogicalDataTypeEnum#date> <https://data.moex.com/mdms/LogicalDataTypeEnum#datetime> <https://data.moex.com/mdms/LogicalDataTypeEnum#time> <https://data.moex.com/mdms/LogicalDataTypeEnum#binary> <https://data.moex.com/mdms/LogicalDataTypeEnum#identifier> <https://data.moex.com/mdms/LogicalDataTypeEnum#uri> <https://data.moex.com/mdms/LogicalDataTypeEnum#object> ) ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/LogicalDataTypeEnum#binary>,
+        <https://data.moex.com/mdms/LogicalDataTypeEnum#boolean>,
+        <https://data.moex.com/mdms/LogicalDataTypeEnum#date>,
+        <https://data.moex.com/mdms/LogicalDataTypeEnum#datetime>,
+        <https://data.moex.com/mdms/LogicalDataTypeEnum#decimal>,
+        <https://data.moex.com/mdms/LogicalDataTypeEnum#identifier>,
+        <https://data.moex.com/mdms/LogicalDataTypeEnum#integer>,
+        <https://data.moex.com/mdms/LogicalDataTypeEnum#object>,
+        <https://data.moex.com/mdms/LogicalDataTypeEnum#string>,
+        <https://data.moex.com/mdms/LogicalDataTypeEnum#time>,
+        <https://data.moex.com/mdms/LogicalDataTypeEnum#uri> .
+
+mdms:RegistryEntry a owl:Class ;
+    rdfs:label "RegistryEntry" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:master_system ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:registry_name ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:master_system ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:registry_name ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:registry_id ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:registry_description ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:source_uri ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:source_uri ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:registry_name ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:registry_description ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:source_uri ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:LifecycleStatusEnum ;
+            owl:onProperty mdms:registry_status ],
+        [ owl:unionOf ( mdms:BusinessDomain mdms:BusinessProcess mdms:DataClassificationTerm mdms:DataContractReference mdms:GlossaryTerm mdms:ITPlatform mdms:ITSolution mdms:ITSystem mdms:IntegrationReference mdms:OrganizationUnit mdms:Policy mdms:Role ) ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:registry_id ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:registry_status ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:registry_id ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:registry_description ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:registry_status ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:master_system ] ;
+    skos:definition "Локальная ссылочная проекция записи внешней мастер-системы; не является мастер-копией справочника." ;
+    skos:inScheme <https://data.moex.com/mdms/registries/v0.1> .
+
+mdms:PhysicalObjectKindEnum a owl:Class ;
+    rdfs:label "PhysicalObjectKindEnum" ;
+    owl:unionOf ( <https://data.moex.com/mdms/PhysicalObjectKindEnum#database> <https://data.moex.com/mdms/PhysicalObjectKindEnum#schema> <https://data.moex.com/mdms/PhysicalObjectKindEnum#table> <https://data.moex.com/mdms/PhysicalObjectKindEnum#view> <https://data.moex.com/mdms/PhysicalObjectKindEnum#column> <https://data.moex.com/mdms/PhysicalObjectKindEnum#api> <https://data.moex.com/mdms/PhysicalObjectKindEnum#endpoint> <https://data.moex.com/mdms/PhysicalObjectKindEnum#payload> <https://data.moex.com/mdms/PhysicalObjectKindEnum#topic> <https://data.moex.com/mdms/PhysicalObjectKindEnum#queue> <https://data.moex.com/mdms/PhysicalObjectKindEnum#message> <https://data.moex.com/mdms/PhysicalObjectKindEnum#file> <https://data.moex.com/mdms/PhysicalObjectKindEnum#dataset> <https://data.moex.com/mdms/PhysicalObjectKindEnum#pipeline> ) ;
+    skos:inScheme <https://data.moex.com/mdms/types/v0.1> ;
+    linkml:permissible_values <https://data.moex.com/mdms/PhysicalObjectKindEnum#api>,
+        <https://data.moex.com/mdms/PhysicalObjectKindEnum#column>,
+        <https://data.moex.com/mdms/PhysicalObjectKindEnum#database>,
+        <https://data.moex.com/mdms/PhysicalObjectKindEnum#dataset>,
+        <https://data.moex.com/mdms/PhysicalObjectKindEnum#endpoint>,
+        <https://data.moex.com/mdms/PhysicalObjectKindEnum#file>,
+        <https://data.moex.com/mdms/PhysicalObjectKindEnum#message>,
+        <https://data.moex.com/mdms/PhysicalObjectKindEnum#payload>,
+        <https://data.moex.com/mdms/PhysicalObjectKindEnum#pipeline>,
+        <https://data.moex.com/mdms/PhysicalObjectKindEnum#queue>,
+        <https://data.moex.com/mdms/PhysicalObjectKindEnum#schema>,
+        <https://data.moex.com/mdms/PhysicalObjectKindEnum#table>,
+        <https://data.moex.com/mdms/PhysicalObjectKindEnum#topic>,
+        <https://data.moex.com/mdms/PhysicalObjectKindEnum#view> .
+
+mdms:ModelElement a owl:Class ;
+    rdfs:label "ModelElement" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:aliases ],
+        [ owl:unionOf ( mdms:ConceptualEntity mdms:DataFlow mdms:DataFlowEntityBinding mdms:DataModelBinding mdms:Dimension mdms:DomainContext mdms:LogicalAttribute mdms:LogicalEntity mdms:Mapping mdms:Metric mdms:ModelPackage mdms:ModelSelection mdms:PhysicalField mdms:PhysicalObject mdms:Relationship mdms:SelectedAttribute mdms:SelectedEntity ) ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:description ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty mdms:element_id ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:tags ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:element_id ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:title ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:tags ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:element_id ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:title ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:name ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:glossary_term_refs ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom mdms:GlossaryTerm ;
+            owl:onProperty mdms:glossary_term_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty mdms:aliases ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty mdms:description ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:name ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:name ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty mdms:description ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty mdms:title ],
+        mdms:HasLifecycle ;
+    skos:inScheme <https://data.moex.com/mdms/core/v0.1> .
+
+xsd:string a rdfs:Datatype ;
+    owl:equivalentClass [ a rdfs:Datatype ;
+            owl:onDatatype xsd:string ;
+            owl:withRestrictions ( [ xsd:pattern "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$" ] ) ],
+        [ a rdfs:Datatype ;
+            owl:onDatatype xsd:string ;
+            owl:withRestrictions ( [ xsd:pattern "^sha256:[a-fA-F0-9]{64}$" ] ) ] .
+
+

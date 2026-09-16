@@ -1,0 +1,27 @@
+- registry_id: eam:system/TRADING_CORE
+  registry_name: Trading Core
+  master_system: EAM
+  registry_status: active
+- registry_id: eam:solution/TRADING
+  registry_name: Торговое решение
+  master_system: EAM
+  registry_status: active
+  member_system_refs:
+    - eam:system/TRADING_CORE
+  platform_ref: eam:platform/TRADING_PLATFORM
+- registry_id: eam:platform/TRADING_PLATFORM
+  registry_name: Торговая платформа
+  master_system: EAM
+  registry_status: active
+- registry_id: eam:domain/MARKETS
+  registry_name: Рынки
+  master_system: EAM
+  registry_status: active
+- registry_id: org:role/CLIENT_DATA_OWNER
+  registry_name: Владелец данных Клиент
+  master_system: IAM_ORG
+  registry_status: active
+- registry_id: catalog:classification/PDN
+  registry_name: Персональные данные
+  master_system: DataCatalog
+  registry_status: active

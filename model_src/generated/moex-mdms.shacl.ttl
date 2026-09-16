@@ -1,0 +1,2584 @@
+@prefix mdms: <https://data.moex.com/mdms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+mdms:HasBusinessClassification a sh:NodeShape ;
+    rdfs:comment "Классификация роли и бизнес-значимости логической сущности." ;
+    sh:closed false ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:in ( "reference_data" "master_data" "transactional_data" "analytical_data" "metadata" ) ;
+            sh:maxCount 1 ;
+            sh:order 1 ;
+            sh:path mdms:data_class ],
+        [ sh:in ( "high" "medium" "low" ) ;
+            sh:maxCount 1 ;
+            sh:order 2 ;
+            sh:path mdms:business_importance ],
+        [ sh:in ( "core" "derived" "reference" ) ;
+            sh:maxCount 1 ;
+            sh:order 0 ;
+            sh:path mdms:entity_type ] ;
+    sh:targetClass mdms:HasBusinessClassification .
+
+mdms:HasGovernanceClassification a sh:NodeShape ;
+    rdfs:comment "Базовая и специальная классификация чувствительности данных." ;
+    sh:closed false ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:classification_source ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:classification_rationale ],
+        [ sh:class mdms:DataClassificationTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:sensitivity_term_refs ],
+        [ sh:in ( "public" "internal" "confidential" "restricted" ) ;
+            sh:maxCount 1 ;
+            sh:order 0 ;
+            sh:path mdms:governance_classification ] ;
+    sh:targetClass mdms:HasGovernanceClassification .
+
+mdms:HasLifecycle a sh:NodeShape ;
+    sh:closed false ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:valid_to ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 0 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:valid_from ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path mdms:deprecated_by_ref ] ;
+    sh:targetClass mdms:HasLifecycle .
+
+mdms:HasOwnership a sh:NodeShape ;
+    sh:closed false ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:class mdms:OrganizationUnit ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path mdms:owning_unit_ref ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:data_steward_ref ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:data_owner_ref ] ;
+    sh:targetClass mdms:HasOwnership .
+
+mdms:HasPolicyBindings a sh:NodeShape ;
+    sh:closed false ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:class mdms:Policy ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:policy_refs ] ;
+    sh:targetClass mdms:HasPolicyBindings .
+
+mdms:HasProvenance a sh:NodeShape ;
+    sh:closed false ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:source_artifact_ref ],
+        [ sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:evidence_refs ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path mdms:approved_at ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path mdms:approved_by_ref ],
+        [ sh:in ( "proposed" "approved" "rejected" "superseded" ) ;
+            sh:maxCount 1 ;
+            sh:order 2 ;
+            sh:path mdms:approval_status ] ;
+    sh:targetClass mdms:HasProvenance .
+
+mdms:MOEXModelRepository a sh:NodeShape ;
+    rdfs:comment "Корневой контейнер для проверки набора моделей, ссылочных проекций справочников, потоков и контрактных bindings." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:class mdms:ClassificationAssignment ;
+            sh:nodeKind sh:IRI ;
+            sh:order 7 ;
+            sh:path mdms:classification_assignments ],
+        [ sh:class mdms:PolicyBinding ;
+            sh:nodeKind sh:IRI ;
+            sh:order 8 ;
+            sh:path mdms:policy_bindings ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:repository_id ],
+        [ sh:class mdms:RegistryEntry ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:registry_entries ],
+        [ sh:class mdms:ModelPackage ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path mdms:model_packages ],
+        [ sh:class mdms:DataFlow ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path mdms:data_flows ],
+        [ sh:class mdms:DataModelBinding ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:data_model_bindings ],
+        [ sh:class mdms:Metric ;
+            sh:nodeKind sh:IRI ;
+            sh:order 5 ;
+            sh:path mdms:metrics ],
+        [ sh:class mdms:Dimension ;
+            sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path mdms:dimensions ] ;
+    sh:targetClass mdms:MOEXModelRepository .
+
+mdms:ModelElement a sh:NodeShape ;
+    sh:closed false ;
+    sh:ignoredProperties ( mdms:selections mdms:source_entity_ref mdms:relationships mdms:imports_refs mdms:logical_attribute_ref mdms:key_attribute_refs mdms:solution_ref mdms:mappings mdms:selected_attributes mdms:generated_at mdms:classification_source mdms:integration_ref mdms:default_value mdms:attributes mdms:source_role mdms:integration_level mdms:integration_spec_ref mdms:identifying mdms:target_max_cardinality mdms:source_artifact_ref mdms:compatibility_mode mdms:source_platform_ref mdms:integrity_digest mdms:integration_class mdms:context_ref mdms:data_steward_ref mdms:evidence_refs mdms:minimum_cardinality mdms:physical_field_refs mdms:measure_attribute_refs mdms:conceptual_entities mdms:domain_ref mdms:transformation_expression mdms:domain_contexts mdms:metric_expression mdms:data_owner_ref mdms:data_class mdms:physical_object_ref mdms:flow_ref mdms:approval_status mdms:business_process_refs mdms:logical_entity_ref mdms:source_model_ref mdms:governance_classification mdms:specification_version mdms:filter_expression mdms:classification_rationale mdms:entity_bindings mdms:model_package_ref mdms:owning_unit_ref mdms:schema_path mdms:model_revision mdms:source_refs mdms:implementation_version mdms:target_refs mdms:invariant_refs mdms:aggregation_function mdms:transformation_mapping_ref mdms:source_min_cardinality mdms:target_entity_ref mdms:api_version mdms:derived_expression mdms:target_platform_ref mdms:parent_concept_ref mdms:selected_entities rdf:type mdms:qualified_name mdms:logical_entities mdms:target_system_ref mdms:physical_object_refs mdms:target_solution_ref mdms:source_max_cardinality mdms:native_type mdms:mapping_type mdms:business_importance mdms:maximum_cardinality mdms:compatibility_baseline_ref mdms:transformation_ref mdms:grain_entity_refs mdms:approved_at mdms:multivalued mdms:sensitivity_term_refs mdms:native_name mdms:solution_data_role mdms:policy_refs mdms:logical_type mdms:source_system_ref mdms:namespace mdms:object_kind mdms:required mdms:format_pattern mdms:owner_entity_ref mdms:target_min_cardinality mdms:integration_channel mdms:approved_by_ref mdms:system_ref mdms:entity_type mdms:value_set_ref mdms:target_role mdms:mapping_cardinality mdms:confidence mdms:native_schema_ref mdms:technology mdms:dimension_attribute_refs mdms:logical_attribute_refs mdms:transformation_mapping_refs mdms:physical_objects mdms:source_solution_ref mdms:unit mdms:conceptual_entity_refs mdms:ordinal_position mdms:physical_fields mdms:associative mdms:contract_ref mdms:model_version mdms:domain_refs mdms:direction ) ;
+    sh:property [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path mdms:valid_to ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 8 ;
+            sh:path mdms:valid_from ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path mdms:tags ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:name ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:description ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 5 ;
+            sh:path mdms:glossary_term_refs ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path mdms:aliases ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 10 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 7 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:element_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:title ] ;
+    sh:targetClass mdms:ModelElement .
+
+mdms:BusinessProcess a sh:NodeShape ;
+    rdfs:comment "Ссылка на бизнес-процесс или его шаг в BPMN-репозитории." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:registry_description ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:master_system ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:source_uri ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:registry_name ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 5 ;
+            sh:path mdms:registry_status ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:registry_id ] ;
+    sh:targetClass mdms:BusinessProcess .
+
+mdms:ClassificationAssignment a sh:NodeShape ;
+    rdfs:comment "Версионируемое назначение категории классификации элементу модели с основанием и периодом действия." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path mdms:valid_to ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path mdms:classification_rationale ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path mdms:classification_source ],
+        [ sh:in ( "public" "internal" "confidential" "restricted" ) ;
+            sh:maxCount 1 ;
+            sh:order 3 ;
+            sh:path mdms:governance_classification ],
+        [ sh:in ( "proposed" "approved" "rejected" "superseded" ) ;
+            sh:maxCount 1 ;
+            sh:order 8 ;
+            sh:path mdms:approval_status ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:assignment_id ],
+        [ sh:class mdms:DataClassificationTerm ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path mdms:classification_term_ref ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path mdms:valid_from ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:classified_element_ref ] ;
+    sh:targetClass mdms:ClassificationAssignment .
+
+mdms:DataFlowEntityBinding a sh:NodeShape ;
+    rdfs:comment "Связь потока с логическими сущностями, атрибутами и физическими объектами модели решения." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 15 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:class mdms:PhysicalObject ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:physical_object_refs ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 10 ;
+            sh:path mdms:title ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path mdms:name ],
+        [ sh:class mdms:LogicalAttribute ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path mdms:logical_attribute_refs ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 8 ;
+            sh:path mdms:element_id ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 18 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:class mdms:PhysicalField ;
+            sh:nodeKind sh:IRI ;
+            sh:order 5 ;
+            sh:path mdms:physical_field_refs ],
+        [ sh:class mdms:LogicalEntity ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path mdms:logical_entity_ref ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 14 ;
+            sh:path mdms:tags ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 11 ;
+            sh:path mdms:description ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 17 ;
+            sh:path mdms:valid_to ],
+        [ sh:class mdms:DataFlow ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:flow_ref ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 16 ;
+            sh:path mdms:valid_from ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 13 ;
+            sh:path mdms:glossary_term_refs ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 12 ;
+            sh:path mdms:aliases ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:source_model_ref ],
+        [ sh:class mdms:Mapping ;
+            sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path mdms:transformation_mapping_refs ],
+        [ sh:in ( "inbound" "outbound" "internal" "bidirectional" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 7 ;
+            sh:path mdms:direction ] ;
+    sh:targetClass mdms:DataFlowEntityBinding .
+
+mdms:DataModelBinding a sh:NodeShape ;
+    rdfs:comment "Дочерняя модельная спецификация дата-контракта, фиксирующая неизменяемую ревизию модели и передаваемый срез." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path mdms:specification_version ;
+            sh:pattern "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$" ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 17 ;
+            sh:path mdms:data_steward_ref ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 25 ;
+            sh:path mdms:tags ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path mdms:model_revision ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 22 ;
+            sh:path mdms:description ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 24 ;
+            sh:path mdms:glossary_term_refs ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 23 ;
+            sh:path mdms:aliases ],
+        [ sh:class mdms:IntegrationReference ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path mdms:integration_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:implementation_version ;
+            sh:pattern "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$" ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:model_package_ref ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 15 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 9 ;
+            sh:path mdms:compatibility_baseline_ref ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 19 ;
+            sh:path mdms:element_id ],
+        [ sh:class mdms:ModelSelection ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 7 ;
+            sh:path mdms:selections ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 11 ;
+            sh:path mdms:generated_at ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 16 ;
+            sh:path mdms:data_owner_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 10 ;
+            sh:path mdms:integrity_digest ;
+            sh:pattern "^sha256:[a-fA-F0-9]{64}$" ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 12 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 14 ;
+            sh:path mdms:valid_to ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path mdms:model_version ;
+            sh:pattern "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$" ],
+        [ sh:class mdms:DataContractReference ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path mdms:contract_ref ],
+        [ sh:in ( "backward" "forward" "full" "none" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 8 ;
+            sh:path mdms:compatibility_mode ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 13 ;
+            sh:path mdms:valid_from ],
+        [ sh:class mdms:OrganizationUnit ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 18 ;
+            sh:path mdms:owning_unit_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 21 ;
+            sh:path mdms:title ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 20 ;
+            sh:path mdms:name ] ;
+    sh:targetClass mdms:DataModelBinding .
+
+mdms:Dimension a sh:NodeShape ;
+    rdfs:comment "Переиспользуемое аналитическое измерение, связанное с логическими атрибутами." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:name ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 11 ;
+            sh:path mdms:valid_to ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path mdms:aliases ],
+        [ sh:class mdms:LogicalAttribute ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:dimension_attribute_refs ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 10 ;
+            sh:path mdms:valid_from ],
+        [ sh:class mdms:LogicalEntity ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:grain_entity_refs ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 9 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 8 ;
+            sh:path mdms:tags ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path mdms:description ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 7 ;
+            sh:path mdms:glossary_term_refs ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 12 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path mdms:title ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path mdms:element_id ] ;
+    sh:targetClass mdms:Dimension .
+
+mdms:Metric a sh:NodeShape ;
+    rdfs:comment "Управляемое определение бизнес- или технической метрики; является опциональным аналитическим профилем." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:class mdms:Policy ;
+            sh:nodeKind sh:IRI ;
+            sh:order 10 ;
+            sh:path mdms:policy_refs ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 20 ;
+            sh:path mdms:valid_to ],
+        [ sh:class mdms:OrganizationUnit ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 9 ;
+            sh:path mdms:owning_unit_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path mdms:unit ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 18 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 15 ;
+            sh:path mdms:aliases ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 17 ;
+            sh:path mdms:tags ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 14 ;
+            sh:path mdms:description ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 11 ;
+            sh:path mdms:element_id ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 16 ;
+            sh:path mdms:glossary_term_refs ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 7 ;
+            sh:path mdms:data_owner_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 13 ;
+            sh:path mdms:title ],
+        [ sh:class mdms:LogicalAttribute ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:measure_attribute_refs ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 21 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:class mdms:LogicalEntity ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path mdms:grain_entity_refs ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:aggregation_function ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path mdms:metric_expression ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path mdms:filter_expression ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 12 ;
+            sh:path mdms:name ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 8 ;
+            sh:path mdms:data_steward_ref ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 19 ;
+            sh:path mdms:valid_from ],
+        [ sh:class mdms:LogicalAttribute ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path mdms:dimension_attribute_refs ] ;
+    sh:targetClass mdms:Metric .
+
+mdms:ModelPackage a sh:NodeShape ;
+    rdfs:comment "Версионируемый артефакт модели данных одного ИТ-решения или корпоративной модели." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 20 ;
+            sh:path mdms:tags ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 15 ;
+            sh:path mdms:name ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 21 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 22 ;
+            sh:path mdms:valid_from ],
+        [ sh:class mdms:ConceptualEntity ;
+            sh:nodeKind sh:IRI ;
+            sh:order 5 ;
+            sh:path mdms:conceptual_entities ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 23 ;
+            sh:path mdms:valid_to ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:model_version ;
+            sh:pattern "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$" ],
+        [ sh:class mdms:LogicalEntity ;
+            sh:nodeKind sh:IRI ;
+            sh:order 7 ;
+            sh:path mdms:logical_entities ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 16 ;
+            sh:path mdms:title ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path mdms:api_version ],
+        [ sh:class mdms:Mapping ;
+            sh:nodeKind sh:IRI ;
+            sh:order 10 ;
+            sh:path mdms:mappings ],
+        [ sh:class mdms:OrganizationUnit ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 13 ;
+            sh:path mdms:owning_unit_ref ],
+        [ sh:class mdms:ITSolution ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path mdms:solution_ref ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 14 ;
+            sh:path mdms:element_id ],
+        [ sh:class mdms:BusinessDomain ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path mdms:domain_refs ],
+        [ sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:imports_refs ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 24 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:class mdms:PhysicalObject ;
+            sh:nodeKind sh:IRI ;
+            sh:order 9 ;
+            sh:path mdms:physical_objects ],
+        [ sh:class mdms:Relationship ;
+            sh:nodeKind sh:IRI ;
+            sh:order 8 ;
+            sh:path mdms:relationships ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 18 ;
+            sh:path mdms:aliases ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 19 ;
+            sh:path mdms:glossary_term_refs ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 17 ;
+            sh:path mdms:description ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 11 ;
+            sh:path mdms:data_owner_ref ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 12 ;
+            sh:path mdms:data_steward_ref ],
+        [ sh:class mdms:DomainContext ;
+            sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path mdms:domain_contexts ] ;
+    sh:targetClass mdms:ModelPackage .
+
+mdms:ModelSelection a sh:NodeShape ;
+    rdfs:comment "Переиспользуемый набор выбранных сущностей, атрибутов и физических представлений." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 8 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path mdms:valid_from ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path mdms:aliases ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path mdms:glossary_term_refs ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:title ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:element_id ],
+        [ sh:class mdms:SelectedEntity ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:selected_entities ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path mdms:tags ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:name ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path mdms:description ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 11 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 10 ;
+            sh:path mdms:valid_to ] ;
+    sh:targetClass mdms:ModelSelection .
+
+mdms:PolicyBinding a sh:NodeShape ;
+    rdfs:comment "Применение управляемой политики к элементу модели." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:class mdms:Policy ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path mdms:policy_ref ],
+        [ sh:in ( "proposed" "approved" "rejected" "superseded" ) ;
+            sh:maxCount 1 ;
+            sh:order 5 ;
+            sh:path mdms:approval_status ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:policy_binding_id ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path mdms:valid_to ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:valid_from ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:policy_target_ref ] ;
+    sh:targetClass mdms:PolicyBinding .
+
+mdms:RegistryEntry a sh:NodeShape ;
+    rdfs:comment "Локальная ссылочная проекция записи внешней мастер-системы; не является мастер-копией справочника." ;
+    sh:closed false ;
+    sh:ignoredProperties ( mdms:member_system_refs mdms:parent_domain_ref rdf:type mdms:platform_ref ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:registry_description ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:registry_id ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:source_uri ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 5 ;
+            sh:path mdms:registry_status ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:registry_name ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:master_system ] ;
+    sh:targetClass mdms:RegistryEntry .
+
+mdms:Relationship a sh:NodeShape ;
+    rdfs:comment "Именованная связь между логическими или концептуальными сущностями." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:target_role ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 15 ;
+            sh:path mdms:glossary_term_refs ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:source_role ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 16 ;
+            sh:path mdms:tags ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minInclusive 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path mdms:source_max_cardinality ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:source_entity_ref ],
+        [ sh:datatype xsd:boolean ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 8 ;
+            sh:path mdms:identifying ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 17 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 11 ;
+            sh:path mdms:name ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minInclusive 0 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path mdms:source_min_cardinality ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 14 ;
+            sh:path mdms:aliases ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 13 ;
+            sh:path mdms:description ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 20 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 10 ;
+            sh:path mdms:element_id ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 18 ;
+            sh:path mdms:valid_from ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 12 ;
+            sh:path mdms:title ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minInclusive 0 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path mdms:target_min_cardinality ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minInclusive 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path mdms:target_max_cardinality ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 19 ;
+            sh:path mdms:valid_to ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:target_entity_ref ],
+        [ sh:datatype xsd:boolean ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path mdms:associative ] ;
+    sh:targetClass mdms:Relationship .
+
+mdms:SelectedAttribute a sh:NodeShape ;
+    rdfs:comment "Выбранный атрибут и соответствующее физическое поле payload, таблицы или сообщения." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 8 ;
+            sh:path mdms:glossary_term_refs ],
+        [ sh:class mdms:Mapping ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path mdms:transformation_mapping_ref ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path mdms:element_id ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 10 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path mdms:tags ],
+        [ sh:class mdms:PhysicalField ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:physical_field_refs ],
+        [ sh:class mdms:LogicalAttribute ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:logical_attribute_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path mdms:name ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 12 ;
+            sh:path mdms:valid_to ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path mdms:title ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path mdms:aliases ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path mdms:description ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 11 ;
+            sh:path mdms:valid_from ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 13 ;
+            sh:path mdms:deprecated_by_ref ] ;
+    sh:targetClass mdms:SelectedAttribute .
+
+mdms:SelectedEntity a sh:NodeShape ;
+    rdfs:comment "Выбранная для интеграции логическая сущность." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 10 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 13 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path mdms:title ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path mdms:aliases ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path mdms:tags ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path mdms:element_id ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 11 ;
+            sh:path mdms:valid_from ],
+        [ sh:class mdms:LogicalEntity ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:logical_entity_ref ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 12 ;
+            sh:path mdms:valid_to ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 8 ;
+            sh:path mdms:glossary_term_refs ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path mdms:name ],
+        [ sh:class mdms:PhysicalObject ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path mdms:physical_object_refs ],
+        [ sh:class mdms:SelectedAttribute ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:selected_attributes ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path mdms:description ] ;
+    sh:targetClass mdms:SelectedEntity .
+
+mdms:DataContractReference a sh:NodeShape ;
+    rdfs:comment "Ссылка на дата-контракт в корпоративном дата-каталоге." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:registry_name ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 5 ;
+            sh:path mdms:registry_status ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:master_system ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:registry_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:registry_description ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:source_uri ] ;
+    sh:targetClass mdms:DataContractReference .
+
+mdms:DataFlow a sh:NodeShape ;
+    rdfs:comment "Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr, а семантика — модели данных." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 17 ;
+            sh:path mdms:valid_from ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 22 ;
+            sh:path mdms:title ],
+        [ sh:class mdms:ITSystem ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 5 ;
+            sh:path mdms:target_system_ref ],
+        [ sh:class mdms:ITSolution ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path mdms:target_solution_ref ],
+        [ sh:class mdms:ITSolution ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path mdms:source_solution_ref ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 18 ;
+            sh:path mdms:valid_to ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 20 ;
+            sh:path mdms:element_id ],
+        [ sh:in ( "intraplatform" "interplatform" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 8 ;
+            sh:path mdms:integration_level ],
+        [ sh:class mdms:IntegrationReference ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:integration_ref ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 16 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:class mdms:ITPlatform ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path mdms:source_platform_ref ],
+        [ sh:class mdms:DataContractReference ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:contract_ref ],
+        [ sh:class mdms:ITSystem ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:source_system_ref ],
+        [ sh:class mdms:ITPlatform ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 7 ;
+            sh:path mdms:target_platform_ref ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 14 ;
+            sh:path mdms:data_steward_ref ],
+        [ sh:class mdms:OrganizationUnit ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 15 ;
+            sh:path mdms:owning_unit_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 23 ;
+            sh:path mdms:description ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 13 ;
+            sh:path mdms:data_owner_ref ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 24 ;
+            sh:path mdms:aliases ],
+        [ sh:class mdms:DataFlowEntityBinding ;
+            sh:nodeKind sh:IRI ;
+            sh:order 12 ;
+            sh:path mdms:entity_bindings ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 21 ;
+            sh:path mdms:name ],
+        [ sh:in ( "api" "queue" "database" "file" "other" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 10 ;
+            sh:path mdms:integration_channel ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 19 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 26 ;
+            sh:path mdms:tags ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 11 ;
+            sh:path mdms:integration_spec_ref ],
+        [ sh:in ( "EAP" "EDA" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 9 ;
+            sh:path mdms:integration_class ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 25 ;
+            sh:path mdms:glossary_term_refs ] ;
+    sh:targetClass mdms:DataFlow .
+
+mdms:DomainContext a sh:NodeShape ;
+    rdfs:comment "Ограниченный логический контекст с собственной терминологией и областью ответственности." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 16 ;
+            sh:path mdms:valid_to ],
+        [ sh:class mdms:ITSolution ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:solution_ref ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 13 ;
+            sh:path mdms:tags ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 17 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 14 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:class mdms:BusinessProcess ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path mdms:business_process_refs ],
+        [ sh:class mdms:OrganizationUnit ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path mdms:owning_unit_ref ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:data_owner_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 10 ;
+            sh:path mdms:description ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 11 ;
+            sh:path mdms:aliases ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 5 ;
+            sh:path mdms:data_steward_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 8 ;
+            sh:path mdms:name ],
+        [ sh:class mdms:BusinessDomain ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:domain_ref ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 7 ;
+            sh:path mdms:element_id ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 15 ;
+            sh:path mdms:valid_from ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path mdms:title ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path mdms:namespace ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 12 ;
+            sh:path mdms:glossary_term_refs ] ;
+    sh:targetClass mdms:DomainContext .
+
+mdms:IntegrationReference a sh:NodeShape ;
+    rdfs:comment "Ссылка на интеграцию в Clinkr." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 5 ;
+            sh:path mdms:registry_status ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:master_system ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:source_uri ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:registry_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:registry_name ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:registry_description ] ;
+    sh:targetClass mdms:IntegrationReference .
+
+mdms:BusinessDomain a sh:NodeShape ;
+    rdfs:comment "Бизнес-домен или предметная область; мастер определяется архитектурным governance." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 6 ;
+            sh:path mdms:registry_status ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:registry_name ],
+        [ sh:class mdms:BusinessDomain ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:parent_domain_ref ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:registry_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path mdms:master_system ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:registry_description ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 5 ;
+            sh:path mdms:source_uri ] ;
+    sh:targetClass mdms:BusinessDomain .
+
+mdms:ConceptualEntity a sh:NodeShape ;
+    rdfs:comment "Корпоративное бизнес-понятие верхнего уровня, независимое от конкретной реализации." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path mdms:name ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 17 ;
+            sh:path mdms:valid_to ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 12 ;
+            sh:path mdms:aliases ],
+        [ sh:in ( "high" "medium" "low" ) ;
+            sh:maxCount 1 ;
+            sh:order 7 ;
+            sh:path mdms:business_importance ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 18 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 10 ;
+            sh:path mdms:title ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path mdms:data_owner_ref ],
+        [ sh:class mdms:ConceptualEntity ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:parent_concept_ref ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 16 ;
+            sh:path mdms:valid_from ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 8 ;
+            sh:path mdms:element_id ],
+        [ sh:class mdms:OrganizationUnit ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:owning_unit_ref ],
+        [ sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:key_attribute_refs ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 14 ;
+            sh:path mdms:tags ],
+        [ sh:in ( "reference_data" "master_data" "transactional_data" "analytical_data" "metadata" ) ;
+            sh:maxCount 1 ;
+            sh:order 6 ;
+            sh:path mdms:data_class ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 15 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:in ( "core" "derived" "reference" ) ;
+            sh:maxCount 1 ;
+            sh:order 5 ;
+            sh:path mdms:entity_type ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 13 ;
+            sh:path mdms:glossary_term_refs ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path mdms:data_steward_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 11 ;
+            sh:path mdms:description ] ;
+    sh:targetClass mdms:ConceptualEntity .
+
+mdms:ITPlatform a sh:NodeShape ;
+    rdfs:comment "ИТ-платформа; мастер данных — EAM." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:registry_name ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:master_system ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:registry_description ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:source_uri ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 5 ;
+            sh:path mdms:registry_status ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:registry_id ] ;
+    sh:targetClass mdms:ITPlatform .
+
+mdms:Mapping a sh:NodeShape ;
+    rdfs:comment "Явное соответствие между элементами концептуального, логического и физического уровней." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 17 ;
+            sh:path mdms:description ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 18 ;
+            sh:path mdms:aliases ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 16 ;
+            sh:path mdms:title ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 19 ;
+            sh:path mdms:glossary_term_refs ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 12 ;
+            sh:path mdms:approved_by_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 15 ;
+            sh:path mdms:name ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 14 ;
+            sh:path mdms:element_id ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 13 ;
+            sh:path mdms:approved_at ],
+        [ sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:source_refs ],
+        [ sh:in ( "proposed" "approved" "rejected" "superseded" ) ;
+            sh:maxCount 1 ;
+            sh:order 11 ;
+            sh:path mdms:approval_status ],
+        [ sh:in ( "semantic_equivalence" "specialization" "implementation" "field_mapping" "transformation" "aggregation" "derivation" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 2 ;
+            sh:path mdms:mapping_type ],
+        [ sh:in ( "one_to_one" "one_to_many" "many_to_one" "many_to_many" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 3 ;
+            sh:path mdms:mapping_cardinality ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 22 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path mdms:valid_from ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 8 ;
+            sh:path mdms:valid_to ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 20 ;
+            sh:path mdms:tags ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:transformation_ref ],
+        [ sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:target_refs ],
+        [ sh:nodeKind sh:IRI ;
+            sh:order 10 ;
+            sh:path mdms:evidence_refs ],
+        [ sh:datatype xsd:decimal ;
+            sh:maxCount 1 ;
+            sh:maxInclusive 1 ;
+            sh:minInclusive 0 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path mdms:confidence ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path mdms:transformation_expression ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 21 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 9 ;
+            sh:path mdms:source_artifact_ref ] ;
+    sh:targetClass mdms:Mapping .
+
+mdms:PhysicalField a sh:NodeShape ;
+    rdfs:comment "Поле физического объекта; его семантика задаётся Mapping к LogicalAttribute." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path mdms:description ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path mdms:element_id ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 15 ;
+            sh:path mdms:valid_to ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path mdms:schema_path ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 11 ;
+            sh:path mdms:glossary_term_refs ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 12 ;
+            sh:path mdms:tags ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 13 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minInclusive 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path mdms:ordinal_position ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:native_type ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path mdms:name ],
+        [ sh:datatype xsd:boolean ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:required ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 8 ;
+            sh:path mdms:title ],
+        [ sh:class mdms:PhysicalObject ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:physical_object_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:native_name ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 14 ;
+            sh:path mdms:valid_from ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 16 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 10 ;
+            sh:path mdms:aliases ] ;
+    sh:targetClass mdms:PhysicalField .
+
+mdms:DataClassificationTerm a sh:NodeShape ;
+    rdfs:comment "Специальная категория чувствительности или регулирования, например ПДн или инсайдерская информация." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:source_uri ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:registry_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:master_system ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:registry_description ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:registry_name ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 5 ;
+            sh:path mdms:registry_status ] ;
+    sh:targetClass mdms:DataClassificationTerm .
+
+mdms:ITSystem a sh:NodeShape ;
+    rdfs:comment "ИТ-система; мастер данных — EAM." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:registry_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:master_system ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:source_uri ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 5 ;
+            sh:path mdms:registry_status ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:registry_description ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:registry_name ] ;
+    sh:targetClass mdms:ITSystem .
+
+mdms:PhysicalObject a sh:NodeShape ;
+    rdfs:comment "Квант данных или техническая точка публикации/потребления." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 21 ;
+            sh:path mdms:valid_to ],
+        [ sh:class mdms:Policy ;
+            sh:nodeKind sh:IRI ;
+            sh:order 11 ;
+            sh:path mdms:policy_refs ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 19 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 18 ;
+            sh:path mdms:tags ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 22 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:class mdms:OrganizationUnit ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 10 ;
+            sh:path mdms:owning_unit_ref ],
+        [ sh:in ( "inbound" "outbound" "internal" "bidirectional" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 6 ;
+            sh:path mdms:direction ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 9 ;
+            sh:path mdms:data_steward_ref ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 12 ;
+            sh:path mdms:element_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 14 ;
+            sh:path mdms:title ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path mdms:technology ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 13 ;
+            sh:path mdms:name ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 16 ;
+            sh:path mdms:aliases ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:qualified_name ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 15 ;
+            sh:path mdms:description ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 20 ;
+            sh:path mdms:valid_from ],
+        [ sh:class mdms:ITSolution ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:solution_ref ],
+        [ sh:class mdms:ITSystem ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:system_ref ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 8 ;
+            sh:path mdms:data_owner_ref ],
+        [ sh:in ( "database" "schema" "table" "view" "column" "api" "endpoint" "payload" "topic" "queue" "message" "file" "dataset" "pipeline" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 2 ;
+            sh:path mdms:object_kind ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 5 ;
+            sh:path mdms:native_schema_ref ],
+        [ sh:class mdms:PhysicalField ;
+            sh:nodeKind sh:IRI ;
+            sh:order 7 ;
+            sh:path mdms:physical_fields ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 17 ;
+            sh:path mdms:glossary_term_refs ] ;
+    sh:targetClass mdms:PhysicalObject .
+
+mdms:ITSolution a sh:NodeShape ;
+    rdfs:comment "ИТ-решение, объединяющее одну или несколько ИТ-систем; мастер данных — EAM." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:class mdms:ITPlatform ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:platform_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:registry_name ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path mdms:master_system ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path mdms:source_uri ],
+        [ sh:class mdms:ITSystem ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:member_system_refs ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path mdms:registry_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path mdms:registry_description ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 7 ;
+            sh:path mdms:registry_status ] ;
+    sh:targetClass mdms:ITSolution .
+
+mdms:LogicalAttribute a sh:NodeShape ;
+    rdfs:comment "Логический атрибут сущности с бизнес-смыслом, типом, обязательностью и классификацией." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 18 ;
+            sh:path mdms:description ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 17 ;
+            sh:path mdms:title ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 23 ;
+            sh:path mdms:valid_from ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 19 ;
+            sh:path mdms:aliases ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path mdms:format_pattern ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 25 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minInclusive 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path mdms:maximum_cardinality ],
+        [ sh:datatype xsd:boolean ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:required ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minInclusive 0 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path mdms:minimum_cardinality ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 16 ;
+            sh:path mdms:name ],
+        [ sh:in ( "string" "integer" "decimal" "boolean" "date" "datetime" "time" "binary" "identifier" "uri" "object" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 1 ;
+            sh:path mdms:logical_type ],
+        [ sh:class mdms:LogicalEntity ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:owner_entity_ref ],
+        [ sh:class mdms:DataClassificationTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 11 ;
+            sh:path mdms:sensitivity_term_refs ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 20 ;
+            sh:path mdms:glossary_term_refs ],
+        [ sh:class mdms:Policy ;
+            sh:nodeKind sh:IRI ;
+            sh:order 14 ;
+            sh:path mdms:policy_refs ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 13 ;
+            sh:path mdms:classification_rationale ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 8 ;
+            sh:path mdms:default_value ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 24 ;
+            sh:path mdms:valid_to ],
+        [ sh:in ( "public" "internal" "confidential" "restricted" ) ;
+            sh:maxCount 1 ;
+            sh:order 10 ;
+            sh:path mdms:governance_classification ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 12 ;
+            sh:path mdms:classification_source ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 21 ;
+            sh:path mdms:tags ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 15 ;
+            sh:path mdms:element_id ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path mdms:value_set_ref ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 22 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path mdms:derived_expression ],
+        [ sh:datatype xsd:boolean ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:multivalued ] ;
+    sh:targetClass mdms:LogicalAttribute .
+
+mdms:LogicalEntity a sh:NodeShape ;
+    rdfs:comment "Представление бизнес-сущности в доменном контексте и модели конкретного решения." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 25 ;
+            sh:path mdms:lifecycle_status ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 15 ;
+            sh:path mdms:classification_source ],
+        [ sh:nodeKind sh:IRI ;
+            sh:order 5 ;
+            sh:path mdms:key_attribute_refs ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 22 ;
+            sh:path mdms:aliases ],
+        [ sh:class mdms:Policy ;
+            sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path mdms:invariant_refs ],
+        [ sh:class mdms:LogicalAttribute ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:attributes ],
+        [ sh:class mdms:ITSolution ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path mdms:solution_ref ],
+        [ sh:in ( "producer" "consumer" "intermediary" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 3 ;
+            sh:path mdms:solution_data_role ],
+        [ sh:class mdms:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 23 ;
+            sh:path mdms:glossary_term_refs ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 8 ;
+            sh:path mdms:data_steward_ref ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 27 ;
+            sh:path mdms:valid_to ],
+        [ sh:in ( "reference_data" "master_data" "transactional_data" "analytical_data" "metadata" ) ;
+            sh:maxCount 1 ;
+            sh:order 11 ;
+            sh:path mdms:data_class ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 28 ;
+            sh:path mdms:deprecated_by_ref ],
+        [ sh:class mdms:OrganizationUnit ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 9 ;
+            sh:path mdms:owning_unit_ref ],
+        [ sh:class mdms:DataClassificationTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 14 ;
+            sh:path mdms:sensitivity_term_refs ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 21 ;
+            sh:path mdms:description ],
+        [ sh:class mdms:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 7 ;
+            sh:path mdms:data_owner_ref ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 18 ;
+            sh:path mdms:element_id ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 24 ;
+            sh:path mdms:tags ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 26 ;
+            sh:path mdms:valid_from ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 19 ;
+            sh:path mdms:name ],
+        [ sh:in ( "high" "medium" "low" ) ;
+            sh:maxCount 1 ;
+            sh:order 12 ;
+            sh:path mdms:business_importance ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 16 ;
+            sh:path mdms:classification_rationale ],
+        [ sh:class mdms:ConceptualEntity ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path mdms:conceptual_entity_refs ],
+        [ sh:in ( "public" "internal" "confidential" "restricted" ) ;
+            sh:maxCount 1 ;
+            sh:order 13 ;
+            sh:path mdms:governance_classification ],
+        [ sh:class mdms:DomainContext ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:context_ref ],
+        [ sh:in ( "core" "derived" "reference" ) ;
+            sh:maxCount 1 ;
+            sh:order 10 ;
+            sh:path mdms:entity_type ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 20 ;
+            sh:path mdms:title ],
+        [ sh:class mdms:Policy ;
+            sh:nodeKind sh:IRI ;
+            sh:order 17 ;
+            sh:path mdms:policy_refs ] ;
+    sh:targetClass mdms:LogicalEntity .
+
+mdms:Policy a sh:NodeShape ;
+    rdfs:comment "Политика доступа, хранения, качества или архитектурный инвариант." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 5 ;
+            sh:path mdms:registry_status ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:registry_description ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:registry_name ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:registry_id ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:source_uri ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:master_system ] ;
+    sh:targetClass mdms:Policy .
+
+mdms:OrganizationUnit a sh:NodeShape ;
+    rdfs:comment "Организационное подразделение." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:registry_id ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 5 ;
+            sh:path mdms:registry_status ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:master_system ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:registry_name ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:source_uri ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:registry_description ] ;
+    sh:targetClass mdms:OrganizationUnit .
+
+mdms:GlossaryTerm a sh:NodeShape ;
+    rdfs:comment "Термин корпоративного бизнес-глоссария." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 5 ;
+            sh:path mdms:registry_status ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:source_uri ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:registry_description ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:registry_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:master_system ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:registry_name ] ;
+    sh:targetClass mdms:GlossaryTerm .
+
+mdms:Role a sh:NodeShape ;
+    rdfs:comment "Управляемая роль владельца, стюарда, потребителя или согласующего." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path mdms:registry_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path mdms:master_system ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path mdms:source_uri ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path mdms:registry_name ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path mdms:registry_description ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 5 ;
+            sh:path mdms:registry_status ] ;
+    sh:targetClass mdms:Role .
+
+

@@ -1,0 +1,124 @@
+
+
+
+```mermaid
+ classDiagram
+    class ConceptualEntity
+    click ConceptualEntity href "../ConceptualEntity"
+      HasOwnership <|-- ConceptualEntity
+        click HasOwnership href "../HasOwnership"
+      HasBusinessClassification <|-- ConceptualEntity
+        click HasBusinessClassification href "../HasBusinessClassification"
+      ModelElement <|-- ConceptualEntity
+        click ModelElement href "../ModelElement"
+      
+      ConceptualEntity : aliases
+        
+      ConceptualEntity : business_importance
+        
+          
+    
+        
+        
+        ConceptualEntity --> "0..1" BusinessImportanceEnum : business_importance
+        click BusinessImportanceEnum href "../BusinessImportanceEnum"
+    
+
+        
+      ConceptualEntity : data_owner_ref
+        
+          
+    
+        
+        
+        ConceptualEntity --> "0..1" Role : data_owner_ref
+        click Role href "../Role"
+    
+
+        
+      ConceptualEntity : data_steward_ref
+        
+          
+    
+        
+        
+        ConceptualEntity --> "0..1" Role : data_steward_ref
+        click Role href "../Role"
+    
+
+        
+      ConceptualEntity : deprecated_by_ref
+        
+      ConceptualEntity : description
+        
+      ConceptualEntity : element_id
+        
+      ConceptualEntity : entity_type
+        
+          
+    
+        
+        
+        ConceptualEntity --> "0..1" EntityTypeEnum : entity_type
+        click EntityTypeEnum href "../EntityTypeEnum"
+    
+
+        
+      ConceptualEntity : glossary_term_refs
+        
+          
+    
+        
+        
+        ConceptualEntity --> "*" GlossaryTerm : glossary_term_refs
+        click GlossaryTerm href "../GlossaryTerm"
+    
+
+        
+      ConceptualEntity : key_attribute_refs
+        
+      ConceptualEntity : lifecycle_status
+        
+          
+    
+        
+        
+        ConceptualEntity --> "1" LifecycleStatusEnum : lifecycle_status
+        click LifecycleStatusEnum href "../LifecycleStatusEnum"
+    
+
+        
+      ConceptualEntity : name
+        
+      ConceptualEntity : owning_unit_ref
+        
+          
+    
+        
+        
+        ConceptualEntity --> "0..1" OrganizationUnit : owning_unit_ref
+        click OrganizationUnit href "../OrganizationUnit"
+    
+
+        
+      ConceptualEntity : parent_concept_ref
+        
+          
+    
+        
+        
+        ConceptualEntity --> "0..1" ConceptualEntity : parent_concept_ref
+        click ConceptualEntity href "../ConceptualEntity"
+    
+
+        
+      ConceptualEntity : tags
+        
+      ConceptualEntity : title
+        
+      ConceptualEntity : valid_from
+        
+      ConceptualEntity : valid_to
+        
+      
+```

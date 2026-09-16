@@ -1,0 +1,109 @@
+id: https://data.moex.com/mdms/contract-binding/v0.1
+name: moex_contract_binding
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mdms: https://data.moex.com/mdms/
+imports:
+  - linkml:types
+  - moex-types
+  - moex-registries
+  - moex-governance
+  - moex-core
+  - moex-integration
+default_prefix: mdms
+default_range: string
+
+classes:
+  DataModelBinding:
+    is_a: ModelElement
+    mixins:
+      - HasLifecycle
+      - HasOwnership
+    description: Дочерняя модельная спецификация дата-контракта, фиксирующая неизменяемую ревизию модели и передаваемый срез.
+    slots:
+      - specification_version
+      - implementation_version
+      - contract_ref
+      - integration_ref
+      - model_package_ref
+      - model_version
+      - model_revision
+      - selections
+      - compatibility_mode
+      - compatibility_baseline_ref
+      - integrity_digest
+      - generated_at
+
+  ModelSelection:
+    is_a: ModelElement
+    description: Переиспользуемый набор выбранных сущностей, атрибутов и физических представлений.
+    slots:
+      - selected_entities
+
+  SelectedEntity:
+    is_a: ModelElement
+    description: Выбранная для интеграции логическая сущность.
+    slots:
+      - logical_entity_ref
+      - selected_attributes
+      - physical_object_refs
+
+  SelectedAttribute:
+    is_a: ModelElement
+    description: Выбранный атрибут и соответствующее физическое поле payload, таблицы или сообщения.
+    slots:
+      - logical_attribute_ref
+      - physical_field_refs
+      - transformation_mapping_ref
+
+slots:
+  specification_version:
+    range: SemVer
+    required: true
+  implementation_version:
+    range: SemVer
+    required: true
+  model_package_ref:
+    range: uri
+    required: true
+  model_revision:
+    range: string
+    required: true
+  selections:
+    range: ModelSelection
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    minimum_cardinality: 1
+  compatibility_mode:
+    range: CompatibilityModeEnum
+    required: true
+  compatibility_baseline_ref:
+    range: uri
+  integrity_digest:
+    range: Sha256Digest
+    required: true
+  generated_at:
+    range: datetime
+    required: true
+  selected_entities:
+    range: SelectedEntity
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    minimum_cardinality: 1
+  selected_attributes:
+    range: SelectedAttribute
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    minimum_cardinality: 1
+  logical_attribute_ref:
+    range: LogicalAttribute
+    inlined: false
+    required: true
+  transformation_mapping_ref:
+    range: Mapping
+    inlined: false

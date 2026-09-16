@@ -1,0 +1,104 @@
+element_id: mdms:model/trading/1.0.0
+name: trading_solution_model
+title: Модель данных торгового решения
+description: Черновой пример модели одного ИТ-решения.
+lifecycle_status: draft
+api_version: mdms.moex/v0.1
+model_version: 1.0.0
+solution_ref: eam:solution/TRADING
+conceptual_entities:
+  - element_id: mdms:concept/Client
+    name: Client
+    title: Клиент
+    description: Лицо или организация, взаимодействующая с компаниями Группы МБ.
+    lifecycle_status: active
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+domain_contexts:
+  - element_id: mdms:context/trading
+    name: TradingContext
+    title: Торговый контекст
+    description: Контекст торговых операций.
+    lifecycle_status: active
+    domain_ref: eam:domain/MARKETS
+    solution_ref: eam:solution/TRADING
+    namespace: https://data.moex.com/models/trading/
+logical_entities:
+  - element_id: mdms:logical/trading/Client
+    name: TradingClient
+    title: Клиент торгового решения
+    description: Локальное логическое представление клиента в торговом решении.
+    lifecycle_status: active
+    context_ref: mdms:context/trading
+    conceptual_entity_refs:
+      - mdms:concept/Client
+    solution_ref: eam:solution/TRADING
+    solution_data_role: producer
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    data_owner_ref: org:role/CLIENT_DATA_OWNER
+    governance_classification: confidential
+    sensitivity_term_refs:
+      - catalog:classification/PDN
+    attributes:
+      - element_id: mdms:logical/trading/Client/clientId
+        name: clientId
+        title: Идентификатор клиента
+        description: Уникальный идентификатор клиента в корпоративном контуре.
+        lifecycle_status: active
+        owner_entity_ref: mdms:logical/trading/Client
+        logical_type: identifier
+        required: true
+        multivalued: false
+        governance_classification: confidential
+      - element_id: mdms:logical/trading/Client/fullName
+        name: fullName
+        title: Полное наименование
+        description: Полное имя физического лица или наименование организации.
+        lifecycle_status: active
+        owner_entity_ref: mdms:logical/trading/Client
+        logical_type: string
+        required: true
+        multivalued: false
+        governance_classification: restricted
+        sensitivity_term_refs:
+          - catalog:classification/PDN
+    key_attribute_refs:
+      - mdms:logical/trading/Client/clientId
+physical_objects:
+  - element_id: mdms:physical/trading/client-topic
+    name: client_changed_topic
+    title: Поток изменений клиентов
+    description: Kafka topic с событиями изменения клиента.
+    lifecycle_status: active
+    solution_ref: eam:solution/TRADING
+    system_ref: eam:system/TRADING_CORE
+    object_kind: topic
+    qualified_name: trading.client.changed.v1
+    technology: Apache Kafka
+    native_schema_ref: https://schemas.moex.com/trading/client-changed/1.0.0
+    direction: outbound
+    physical_fields:
+      - element_id: mdms:physical/trading/client-topic/client_id
+        name: client_id
+        description: Физическое поле идентификатора клиента.
+        lifecycle_status: active
+        physical_object_ref: mdms:physical/trading/client-topic
+        native_name: client_id
+        native_type: string
+        required: true
+        schema_path: /payload/client_id
+mappings:
+  - element_id: mdms:mapping/trading/client-id
+    name: map_client_id
+    description: Соответствие логического идентификатора физическому полю события.
+    lifecycle_status: active
+    source_refs:
+      - mdms:logical/trading/Client/clientId
+    target_refs:
+      - mdms:physical/trading/client-topic/client_id
+    mapping_type: field_mapping
+    mapping_cardinality: one_to_one
+    approval_status: approved

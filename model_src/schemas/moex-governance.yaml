@@ -1,0 +1,156 @@
+id: https://data.moex.com/mdms/governance/v0.1
+name: moex_governance
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mdms: https://data.moex.com/mdms/
+imports:
+  - linkml:types
+  - moex-types
+  - moex-registries
+default_prefix: mdms
+default_range: string
+
+classes:
+  ClassificationAssignment:
+    description: Версионируемое назначение категории классификации элементу модели с основанием и периодом действия.
+    slots:
+      - assignment_id
+      - classified_element_ref
+      - classification_term_ref
+      - governance_classification
+      - classification_source
+      - classification_rationale
+      - valid_from
+      - valid_to
+      - approval_status
+
+  PolicyBinding:
+    description: Применение управляемой политики к элементу модели.
+    slots:
+      - policy_binding_id
+      - policy_target_ref
+      - policy_ref
+      - valid_from
+      - valid_to
+      - approval_status
+
+  HasLifecycle:
+    mixin: true
+    slots:
+      - lifecycle_status
+      - valid_from
+      - valid_to
+      - deprecated_by_ref
+
+  HasOwnership:
+    mixin: true
+    slots:
+      - data_owner_ref
+      - data_steward_ref
+      - owning_unit_ref
+
+  HasBusinessClassification:
+    mixin: true
+    description: Классификация роли и бизнес-значимости логической сущности.
+    slots:
+      - entity_type
+      - data_class
+      - business_importance
+
+  HasGovernanceClassification:
+    mixin: true
+    description: Базовая и специальная классификация чувствительности данных.
+    slots:
+      - governance_classification
+      - sensitivity_term_refs
+      - classification_source
+      - classification_rationale
+
+  HasPolicyBindings:
+    mixin: true
+    slots:
+      - policy_refs
+
+  HasProvenance:
+    mixin: true
+    slots:
+      - source_artifact_ref
+      - evidence_refs
+      - approval_status
+      - approved_by_ref
+      - approved_at
+
+slots:
+  assignment_id:
+    identifier: true
+    range: uriorcurie
+    required: true
+  classified_element_ref:
+    range: uriorcurie
+    required: true
+  classification_term_ref:
+    range: DataClassificationTerm
+    inlined: false
+  policy_binding_id:
+    identifier: true
+    range: uriorcurie
+    required: true
+  policy_target_ref:
+    range: uriorcurie
+    required: true
+  policy_ref:
+    range: Policy
+    inlined: false
+    required: true
+  lifecycle_status:
+    range: LifecycleStatusEnum
+    required: true
+  valid_from:
+    range: datetime
+  valid_to:
+    range: datetime
+  deprecated_by_ref:
+    range: uriorcurie
+  data_owner_ref:
+    range: Role
+    inlined: false
+  data_steward_ref:
+    range: Role
+    inlined: false
+  owning_unit_ref:
+    range: OrganizationUnit
+    inlined: false
+  entity_type:
+    range: EntityTypeEnum
+  data_class:
+    range: DataClassEnum
+  business_importance:
+    range: BusinessImportanceEnum
+  governance_classification:
+    range: GovernanceClassificationEnum
+  sensitivity_term_refs:
+    range: DataClassificationTerm
+    multivalued: true
+    inlined: false
+  classification_source:
+    range: string
+  classification_rationale:
+    range: string
+  policy_refs:
+    range: Policy
+    multivalued: true
+    inlined: false
+  source_artifact_ref:
+    range: uri
+  evidence_refs:
+    range: uri
+    multivalued: true
+  approval_status:
+    range: ApprovalStatusEnum
+  approved_by_ref:
+    range: Role
+    inlined: false
+  approved_at:
+    range: datetime

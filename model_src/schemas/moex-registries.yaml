@@ -1,0 +1,106 @@
+id: https://data.moex.com/mdms/registries/v0.1
+name: moex_registries
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mdms: https://data.moex.com/mdms/
+imports:
+  - linkml:types
+  - moex-types
+default_prefix: mdms
+default_range: string
+
+classes:
+  RegistryEntry:
+    abstract: true
+    description: Локальная ссылочная проекция записи внешней мастер-системы; не является мастер-копией справочника.
+    slots:
+      - registry_id
+      - registry_name
+      - registry_description
+      - master_system
+      - source_uri
+      - registry_status
+
+  ITSystem:
+    is_a: RegistryEntry
+    description: ИТ-система; мастер данных — EAM.
+
+  ITSolution:
+    is_a: RegistryEntry
+    description: ИТ-решение, объединяющее одну или несколько ИТ-систем; мастер данных — EAM.
+    slots:
+      - member_system_refs
+      - platform_ref
+
+  ITPlatform:
+    is_a: RegistryEntry
+    description: ИТ-платформа; мастер данных — EAM.
+
+  BusinessDomain:
+    is_a: RegistryEntry
+    description: Бизнес-домен или предметная область; мастер определяется архитектурным governance.
+    slots:
+      - parent_domain_ref
+
+  GlossaryTerm:
+    is_a: RegistryEntry
+    description: Термин корпоративного бизнес-глоссария.
+
+  OrganizationUnit:
+    is_a: RegistryEntry
+    description: Организационное подразделение.
+
+  Role:
+    is_a: RegistryEntry
+    description: Управляемая роль владельца, стюарда, потребителя или согласующего.
+
+  DataClassificationTerm:
+    is_a: RegistryEntry
+    description: Специальная категория чувствительности или регулирования, например ПДн или инсайдерская информация.
+
+  Policy:
+    is_a: RegistryEntry
+    description: Политика доступа, хранения, качества или архитектурный инвариант.
+
+  BusinessProcess:
+    is_a: RegistryEntry
+    description: Ссылка на бизнес-процесс или его шаг в BPMN-репозитории.
+
+  DataContractReference:
+    is_a: RegistryEntry
+    description: Ссылка на дата-контракт в корпоративном дата-каталоге.
+
+  IntegrationReference:
+    is_a: RegistryEntry
+    description: Ссылка на интеграцию в Clinkr.
+
+slots:
+  registry_id:
+    identifier: true
+    range: uriorcurie
+    required: true
+  registry_name:
+    range: string
+    required: true
+  registry_description:
+    range: string
+  master_system:
+    range: string
+    required: true
+  source_uri:
+    range: uri
+  registry_status:
+    range: LifecycleStatusEnum
+    required: true
+  member_system_refs:
+    range: ITSystem
+    multivalued: true
+    inlined: false
+  platform_ref:
+    range: ITPlatform
+    inlined: false
+  parent_domain_ref:
+    range: BusinessDomain
+    inlined: false
