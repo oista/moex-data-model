@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+.env
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Package outputs
+packages/ontology/output/
+**/output/
+
+# Local FIBO clone (do not commit upstream sources)
+fibo/
+packages/ontology/fibo/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store

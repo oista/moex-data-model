@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+
+  <owl:Ontology rdf:about="https://spec.edmcouncil.org/fibo/ontology/EXMP/ExampleModule/"/>
+
+  <owl:Class rdf:about="https://spec.edmcouncil.org/fibo/ontology/EXMP/ExampleModule/ExampleOnlyClass">
+    <rdfs:label xml:lang="en">Example Only Class</rdfs:label>
+    <skos:definition xml:lang="en">Should be skipped unless --include-examples.</skos:definition>
+  </owl:Class>
+
+</rdf:RDF>

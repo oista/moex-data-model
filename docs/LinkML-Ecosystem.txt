@@ -1,0 +1,62 @@
+Экосистема open-source инструментов
+Вокруг ядра linkml и linkml-runtime выросла достаточно широкая палитра из более чем 40 репозиториев в организации на GitHub. Разложу по стадиям жизненного цикла схемы, как это делает сама документация:
+
+Создание схемы
+
+linkml-model — метамодель и спецификация самого языка LinkML.
+
+schemasheets — авторинг схемы через Excel/Google Sheets вместо YAML напрямую.
+
+schema-automator — автогенерация LinkML-схемы из существующих артефактов (spreadsheets, JSON, OWL).
+
+linkml-project-copier / linkml-project-cookiecutter — шаблоны для скаффолдинга новых проектов.
+
+ontogpt — предлагает ontology mappings и value sets через промпты к LLM (GPT).
+
+Генерация и конвертация
+
+gen-python / gen-pydantic — генерация Python-классов и Pydantic-моделей.
+
+gen-rdf / gen-owl — генерация RDF-триплетов (RDFS, SKOS) и OWL-онтологий.
+
+gen-json-schema / gen-jsonld — JSON Schema и JSON-LD context.
+
+Плюс генераторы в SHACL, SQL DDL, TerminusDB, Excel, CSV, YAML, Pandera, Prefix, SSSOM.
+
+linkml-owl — превращает схему в шаблон для генерации OWL-онтологий из данных.
+
+Валидация и качество
+
+linkml-lint — проверка схемы на соответствие best practices.
+
+linkml-validate (пакет linkml.validator) — валидация данных против схемы, поддерживает плагины.
+
+Valve и Nanobot — Rust-инструменты для валидации и редактирования данных, обеспечивающие интероперабельность между фреймворками.
+
+Управление эволюцией схемы
+
+linkml-map — маппинг и трансформация между версиями схем или связанными моделями.
+
+linkml-store — слой абстракции между моделью данных и хранилищем (MongoDB, RDF, HDF5, triplestore), позволяет менять backend без изменения модели.
+
+koza — ETL-фреймворк трансформации данных для LinkML-моделей.
+
+sssom-py — тулкит для управления mappings (Simple Standard for Sharing Ontology Mappings), сам управляется LinkML-схемой.
+
+Альтернативные реализации runtime
+
+linkml-runtime (Python, основная реализация).
+
+linkml-scala — независимая Scala 3 реализация, кросс-платформенная (JVM/браузер), значительно быстрее Python-версии.
+
+linkml-java — runtime-библиотека для Java.
+
+Прочее в экосистеме
+
+Data Harmonizer — инструмент курации данных на основе онтологий, адаптируется под LinkML.
+
+Ontology Access Kit — Python-библиотека доступа к онтологиям и словарям.
+
+semantic-sql — SQL/SQLite-сборки OWL-онтологий.
+
+Интеграции с SOLR (индексация), SPARQL templates (генерация запросов), datalog-based reasoning, Svelte Flow (интерактивная визуализация).
