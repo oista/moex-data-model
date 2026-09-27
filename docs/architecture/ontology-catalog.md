@@ -1,0 +1,134 @@
+---
+status: Draft
+version: "0.1"
+normative: false
+supersedes: []
+superseded_by: MODELING_ARCHITECTURE.md
+---
+
+# Ontology Catalog
+
+**Норматив:** [MODELING_ARCHITECTURE.md](MODELING_ARCHITECTURE.md) (Proposed 0.2).  
+При расхождении побеждает нормативный документ.
+
+**Назначение:** read-only Ontology Catalog над референсными и локальными OWL-онтологиями. Модуль регистрирует версии релизов, индексирует сущности и связи и отдаёт единые read models для DAMS, глоссария и Publication Viewer. Это не редактор OWL и не triplestore.
+
+## Роли в ядре платформы
+
+| Роль | Экземпляр (этот этап) |
+|---|---|
+| `ModelingStandard` | OWL 2 |
+| `ReferenceSpecification` | FIBO release/profile; заглушки Corporate Ontology, PROV-O |
+| `SpecificationImplementation` | заглушки MOEX HR / MOEX Data / Application Ontology |
+
+Новых `OWL*` классов в [modeling-kernel.yaml](modeling-kernel.yaml) нет. Typed OWL body живёт только в provider-пакете.
+
+## Границы пакетов
+
+```text
+standard-owl
+    OWL/RDF syntax, imports, axioms, parsing
+             ↓
+ontology-catalog
+    референсные онтологии, сущности, связи, поиск
+             ↓
+semantic-mappings
+    связи с DAMS и глоссарием (LinkML + SSSOM + SKOS)
+             ↓
+publication / viewer
+    страницы, таблицы, дерево, карточка сущности
+```
+
+| Пакет | Вопрос | Текущий путь |
+|---|---|---|
+| `standard-owl` | как прочитать OWL | [packages/standard-owl](../../packages/standard-owl) |
+| `ontology-catalog` | какие онтологии и сущности доступны | [packages/ontology-catalog](../../packages/ontology-catalog) |
+| `semantic-mappings` | как связаны DAMS / glossary / ontology | [packages/semantic-mappings](../../packages/semantic-mappings) |
+| `packages/ontology` | совместимый CLI `ontology.fibo` → CSV | тонкий shim над `standard-owl` |
+
+`standard-owl` не знает про DAMS. `semantic-mappings` не знает про RDF-парсер. Viewer получает только read models / JSON-проекции и не интерпретирует RDF.
+
+## Объектная модель каталога
+
+Минимальные типы (Pydantic, frozen):
+
+- `OntologyRelease` — id, ontology/version IRI, title, version, source, digest, imports, status (`registered` / `indexed` / `invalid` / `deprecated`)
+- `OntologyEntity` — IRI, ontology_id, kind, label, definition, aliases, deprecated, replaced_by
+- `OntologyRelation` — subject, predicate, object, asserted, source_ontology
+- `SemanticBinding` — subject/object refs, predicate, justification, confidence, author, status, mapping_set_id
+
+`OntologyEntity` — read model над OWL-ресурсом, не полная сериализация аксиом. Аксиомы остаются внутри OWL provider.
+
+## Стек первого этапа
+
+| Компонент | Роль |
+|---|---|
+| OAK (oaklib) | основной `OntologyProvider`: lookup, labels, hierarchy, subgraphs |
+| RDFLib | offline parser и fallback для локальных RDF/XML / Turtle |
+| LinkML mappings | `class_uri`, `slot_uri`, `meaning`, `exact_mappings` / `close_mappings` / … |
+| SSSOM | managed mapping sets с provenance |
+| SKOS | бизнес-глоссарий как `Concept` / `ConceptScheme` (отдельно от `owl:Class`) |
+| SQLite | перестраиваемая search projection |
+
+Вне этапа: reasoner, SPARQL endpoint, Neo4j, OLS4, PostgreSQL, редактор OWL, `linkml-owl` как фундамент браузера.
+
+## Хранение
+
+```text
+Git descriptors + source release
+         ↓
+OAK / RDFLib ingestion
+         ↓
+SQLite search projection
+         ↓
+Ontology read models
+         ↓
+Publication Viewer / API
+```
+
+Канон — Git descriptor и зафиксированный upstream release. Индекс полностью перестраиваемый. RDF upstream в Git не коммитится.
+
+Дескрипторы на этом этапе: `model_src/ontologies/` (временный корень; целевой путь после vertical slice — `model-assets/…`).
+
+## Связи с DAMS и глоссарием
+
+| Ситуация | Механизм |
+|---|---|
+| Ontology entity — первичная семантика LinkML-класса | `class_uri` |
+| Ontology property — семантика слота | `slot_uri` |
+| Enum value обозначает concept | `meaning` |
+| Простое соответствие | LinkML `exact_mappings` / `close_mappings` / … |
+| Управляемое соответствие с автором и статусом | `SemanticBinding` (SSSOM) |
+| Связи между терминами глоссария | SKOS |
+
+DAMS-класс `Mapping` в `moex-core.yaml` остаётся соответствием conceptual / logical / physical внутри модели решения; он не заменяет SSSOM.
+
+`GlossaryTerm` в registries остаётся `RegistryEntry`. SKOS concept scheme — отдельная проекция; термин не становится `owl:Class` автоматически.
+
+## Publication Viewer
+
+UI потребляет только:
+
+- `OntologySummary`
+- `OntologyEntityCard`
+- `OntologyTreeNode`
+- `SemanticBindingView`
+
+Пять представлений: каталог релизов, поиск сущностей, иерархия (asserted predicate), карточка, backlinks. Сборка пишет JSON, совместимый с существующими секциями viewer (`glossary`, `tree`, `entity-table`). Новый runtime backend не требуется.
+
+## Первый инкремент
+
+1. FIBO exporter → адаптер внутри `standard-owl`.
+2. `OntologyRelease` / `OntologyEntity` / `OntologyRelation` + SQLite index.
+3. OAK (+ RDFLib fallback) для lookup и asserted hierarchy.
+4. FIBO как первая indexed reference ontology; остальные — `registered` stubs.
+5. Один SSSOM set `dams-fibo` и LinkML mapping extractor на фикстуре.
+6. SKOS concept scheme (маленький) без расширения DAMS schema.
+7. Preview JSON + `publish.yaml` во viewer.
+
+## Связанные документы
+
+- [MODELING_ARCHITECTURE.md](MODELING_ARCHITECTURE.md) — норматив
+- [app_model.md](app_model.md) — целевая раскладка пакетов
+- [viewer-decisions.md](viewer-decisions.md) — статический viewer, без RDF в UI
+- [linkml_architecture.md](linkml_architecture.md) — Workbench / Ontology Engine (gen-owl ≠ catalog)

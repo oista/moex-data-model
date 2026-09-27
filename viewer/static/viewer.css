@@ -82,6 +82,8 @@ body {
 .nav-group-btn:hover, .nav-item-btn:hover, .nav-section-btn:hover { background: var(--accent-soft); }
 .nav-item-btn.active, .nav-section-btn.active { background: var(--accent-soft); font-weight: 600; }
 .nav-group-children { margin-left: 12px; display: flex; flex-direction: column; gap: 1px; }
+/* Author display:flex beats UA [hidden]{display:none}; restore collapse. */
+.nav-group-children[hidden] { display: none; }
 .nav-kind {
   font-size: 10px; color: var(--muted); width: 14px; text-align: center;
   border: 1px solid var(--border); border-radius: 3px;
@@ -114,6 +116,24 @@ body {
 .spec-link:hover { border-color: var(--accent); }
 .spec-link.disabled { color: var(--muted); cursor: default; }
 .detail-slots { min-width: 100%; }
+
+.explorer-landing {
+  display: flex; flex-direction: column; gap: 14px;
+}
+.explorer-package {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+}
+.explorer-package h2 {
+  margin: 0 0 10px; font-size: 15px;
+  display: flex; gap: 10px; align-items: baseline;
+}
+.explorer-class-list {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
 
 .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .toolbar {

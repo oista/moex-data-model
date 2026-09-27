@@ -3,7 +3,7 @@ kind: publication_module
 version: "1"
 order: 100
 icon: "📐"
-title: DAMS
+title: MOEX standart
 description: "MOEX DAMS 0.1 reference specification (LinkML) — publication projection of the schema body"
 sections:
   - id: overview
@@ -23,6 +23,28 @@ sections:
       path: schemas/moex-dams.yaml
       select: classes
     groupby: schema
+
+  - id: classes
+    title: All classes
+    description: Flat class table (secondary; primary nav is Specification explorer)
+    type: entity-table
+    source:
+      format: linkml-yaml
+      path: schemas/moex-dams.yaml
+      select: classes
+    columns:
+      - name
+      - description
+      - is_a
+      - abstract
+      - mixins
+    filterable:
+      - is_a
+      - abstract
+    sort:
+      by: name
+      order: asc
+    default_collapsed: true
 
   - id: slots
     title: All slots

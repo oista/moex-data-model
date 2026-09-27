@@ -83,3 +83,31 @@ def test_repo_golden_three_modules():
     }
     dams = next(m for m in registry["modules"] if m["module_id"] == "moex:module:dams")
     assert "explorer" in dams["sections"]
+
+
+def test_nav_group_children_hidden_overrides_display_flex():
+    """display:flex on .nav-group-children must not defeat the hidden attribute."""
+    css = (Path(__file__).resolve().parents[1] / "static" / "viewer.css").read_text(
+        encoding="utf-8"
+    )
+    assert "display: flex" in css
+    assert ".nav-group-children[hidden]" in css
+    # Rule must set display:none so collapsed groups actually hide
+    idx = css.index(".nav-group-children[hidden]")
+    snippet = css[idx : idx + 80]
+    assert "display: none" in snippet
+
+
+def test_explorer_groups_not_in_search_index_and_module_title():
+    """Package groups are hierarchy-only; module title is MOEX standart."""
+    repo = Path(__file__).resolve().parents[2]
+    dist = repo / "viewer" / "dist"
+    build(repo, dist)
+    html = (dist / "index.html").read_text(encoding="utf-8")
+    assert "MOEX standart" in html
+    # Group ids must not appear as selectable search items
+    assert '"item_id": "group:' not in html and '"item_id":"group:' not in html
+    js = (repo / "viewer" / "static" / "viewer.js").read_text(encoding="utf-8")
+    assert "Package/group nodes are hierarchy-only" in js
+    # Collapsed-by-default: no auto-expand when openGroups is empty
+    assert "openGroups.size === 0" not in js

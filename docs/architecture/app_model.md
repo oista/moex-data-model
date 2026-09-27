@@ -88,8 +88,11 @@ LinkMLImplementationBody          # packages/standard-linkml
   └── LinkMLInstanceElement
 
 OpenAPIImplementationBody         # packages/standard-openapi (later)
-OWLImplementationBody             # packages/standard-owl (later)
+OWLImplementationBody             # packages/standard-owl
 ```
+
+Ontology Catalog (read models, не kernel): `OntologyRelease`, `OntologyEntity`, `OntologyRelation`, `SemanticBinding` — см. [ontology-catalog.md](ontology-catalog.md).  
+Совместимый CLI экспорта FIBO CSV пока живёт в `packages/ontology` как shim над `standard-owl`.
 
 Нет корневого класса `MetaModel`, объединяющего всё через наследование.
 
@@ -242,7 +245,9 @@ moex-data-model/
 │   │       └── public.py
 │   │
 │   ├── standard-openapi/            # позднее
-│   ├── standard-owl/                # позднее; сегодня packages/ontology — export tooling
+│   ├── standard-owl/                # OWL provider (parse / OAK); см. ontology-catalog.md
+│   ├── ontology-catalog/            # Ontology Catalog: releases, entities, search index
+│   ├── semantic-mappings/           # LinkML mappings + SSSOM + SKOS projections
 │   │
 │   ├── specification-dams/
 │   │   └── src/moex_dams/

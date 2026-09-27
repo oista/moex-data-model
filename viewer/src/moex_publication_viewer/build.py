@@ -105,16 +105,19 @@ def build_search_index(modules: list[PublicationModule]) -> list[dict]:
 
 
 def _index_item(index: list[dict], module_id: str, section_id: str, item) -> None:
-    index.append(
-        {
-            "kind": "item",
-            "module_id": module_id,
-            "section_id": section_id,
-            "item_id": item.id,
-            "title": item.title or item.id,
-            "description": item.description or "",
-        }
-    )
+    # Hierarchy-only group nodes are not selectable cards — skip search hits
+    attrs = item.attributes or {}
+    if attrs.get("kind") != "group":
+        index.append(
+            {
+                "kind": "item",
+                "module_id": module_id,
+                "section_id": section_id,
+                "item_id": item.id,
+                "title": item.title or item.id,
+                "description": item.description or "",
+            }
+        )
     for child in item.children:
         _index_item(index, module_id, section_id, child)
 

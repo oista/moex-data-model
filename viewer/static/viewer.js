@@ -74,7 +74,7 @@
   function findExplorerItem(section, itemId) {
     if (!section || !itemId) return null;
     for (const group of section.items || []) {
-      if (group.id === itemId) return { item: group, group: null };
+      // Package/group nodes are hierarchy-only — never open as a detail card
       for (const child of group.children || []) {
         if (child.id === itemId) return { item: child, group };
         for (const gc of child.children || []) {
@@ -132,9 +132,6 @@
           tree.className = "nav-explorer";
           (expl.items || []).forEach((group) => {
             const gId = group.id;
-            if (openGroups.size === 0 || focus?.expandAllGroups) {
-              openGroups.add(gId);
-            }
             // Keep group open if selected item is inside
             if (focus?.item && (group.children || []).some((c) => c.id === focus.item)) {
               openGroups.add(gId);
@@ -221,10 +218,7 @@
     }
 
     const expl = explorerSection(mod);
-    // Default: open all explorer groups on first visit to module
-    if (expl && openGroups.size === 0) {
-      (expl.items || []).forEach((g) => openGroups.add(g.id));
-    }
+    // Explorer groups stay collapsed by default (openGroups starts empty)
 
     selectedItemId = focus?.item || null;
     renderModuleNav(focus);
@@ -258,7 +252,7 @@
       }
     }
 
-    // Default landing for explorer module: intro + prompt
+    // Default landing for explorer module: package overview (not empty intro)
     if (expl) {
       crumb.textContent = mod.title;
       content.appendChild(crumb);
@@ -266,9 +260,43 @@
       header.className = "module-header";
       header.innerHTML = `<h1>${escapeHtml(mod.icon || "")} ${escapeHtml(mod.title)}</h1>
         <p class="muted">${escapeHtml(mod.description || "")}</p>
-        <p>Select a schema package class from the left to inspect the DAMS specification body
-        (expressed in LinkML). Groups mirror LinkML schema packages, not inheritance.</p>`;
+        <p>Пакеты схемы спецификации (тело LinkML). Выберите класс слева или ниже.</p>`;
       content.appendChild(header);
+
+      const grid = document.createElement("div");
+      grid.className = "explorer-landing";
+      (expl.items || []).forEach((group) => {
+        const panel = document.createElement("section");
+        panel.className = "explorer-package";
+        const kids = group.children || [];
+        const classes = kids.filter((c) => (c.attributes?.kind || "class") === "class");
+        const enums = kids.filter((c) => c.attributes?.kind === "enum");
+        panel.innerHTML = `<h2>${escapeHtml(group.title || group.id)}
+          <span class="muted">${classes.length} classes${enums.length ? ", " + enums.length + " enums" : ""}</span></h2>`;
+        const list = document.createElement("div");
+        list.className = "explorer-class-list";
+        kids.forEach((child) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "spec-link";
+          const kind = child.attributes?.kind || "class";
+          btn.textContent = (kind === "enum" ? "E · " : "") + (child.title || child.id);
+          btn.title = child.description || "";
+          btn.addEventListener("click", () => {
+            openGroups.add(group.id);
+            setHash({
+              module: shortModule(mod.module_id),
+              section: expl.id,
+              item: child.id,
+            });
+            showModule(mod.module_id, { section: expl.id, item: child.id });
+          });
+          list.appendChild(btn);
+        });
+        panel.appendChild(list);
+        grid.appendChild(panel);
+      });
+      content.appendChild(grid);
       return;
     }
 

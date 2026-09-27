@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+
+  <owl:Ontology rdf:about="https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/"/>
+
+  <!-- Same BusinessDay IRI also appears here (aggregation test) with extra label -->
+  <owl:Class rdf:about="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay">
+    <rdfs:label xml:lang="en">Business Day</rdfs:label>
+    <rdfs:label xml:lang="en">Trading Day</rdfs:label>
+    <skos:definition xml:lang="en">A day on which financial markets and banks are open for business.</skos:definition>
+    <skos:definition xml:lang="en">Also known as a trading day in some markets.</skos:definition>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson">
+    <rdfs:label xml:lang="en">Legal Person</rdfs:label>
+    <skos:definition xml:lang="en">An autonomous entity that is capable of having rights and obligations.</skos:definition>
+  </owl:Class>
+
+</rdf:RDF>

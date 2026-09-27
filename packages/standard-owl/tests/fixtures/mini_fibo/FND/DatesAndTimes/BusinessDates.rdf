@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rdf:RDF [
+  <!ENTITY owl "http://www.w3.org/2002/07/owl#">
+  <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#">
+  <!ENTITY skos "http://www.w3.org/2004/02/skos/core#">
+  <!ENTITY dcterms "http://purl.org/dc/terms/">
+  <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#">
+]>
+<rdf:RDF
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+  xmlns:dcterms="http://purl.org/dc/terms/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+
+  <owl:Ontology rdf:about="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/">
+    <owl:versionIRI rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/test"/>
+  </owl:Ontology>
+
+  <!-- Class with English + Russian labels and skos:definition -->
+  <owl:Class rdf:about="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay">
+    <rdfs:label xml:lang="en">Business Day</rdfs:label>
+    <rdfs:label xml:lang="ru">Рабочий день</rdfs:label>
+    <skos:definition xml:lang="en">A day on which financial markets and banks are open for business.</skos:definition>
+    <rdfs:subClassOf rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/Occurrences/OccurrenceKind"/>
+    <rdfs:subClassOf rdf:nodeID="restriction1"/>
+  </owl:Class>
+
+  <owl:Restriction rdf:nodeID="restriction1">
+    <owl:onProperty rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/hasBusinessDayAdjustment"/>
+    <owl:someValuesFrom rdf:resource="https://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Restriction>
+
+  <!-- Multiple English labels -->
+  <owl:Class rdf:about="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/CalendarPeriod">
+    <rdfs:label xml:lang="en">Calendar Period</rdfs:label>
+    <rdfs:label xml:lang="en">Calendar Interval</rdfs:label>
+    <skos:altLabel xml:lang="en">Time Span</skos:altLabel>
+    <skos:definition xml:lang="en">A contiguous span of calendar time.</skos:definition>
+  </owl:Class>
+
+  <!-- Definition fallback: dcterms:description only -->
+  <owl:Class rdf:about="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/SettlementDay">
+    <rdfs:label xml:lang="en">Settlement Day</rdfs:label>
+    <dcterms:description xml:lang="en">A day on which a settlement may occur.</dcterms:description>
+  </owl:Class>
+
+  <!-- Definition via scopeNote only -->
+  <owl:Class rdf:about="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/ScopeOnlyThing">
+    <rdfs:label>Scope Only Thing</rdfs:label>
+    <skos:scopeNote xml:lang="en">Note used as definition fallback.</skos:scopeNote>
+  </owl:Class>
+
+  <!-- No definition -->
+  <owl:Class rdf:about="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/UndocumentedThing">
+    <rdfs:label xml:lang="en">Undocumented Thing</rdfs:label>
+  </owl:Class>
+
+  <!-- Deprecated class with replacement -->
+  <owl:Class rdf:about="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/OldBusinessDay">
+    <rdfs:label xml:lang="en">Old Business Day</rdfs:label>
+    <skos:definition xml:lang="en">Deprecated synonym for Business Day.</skos:definition>
+    <owl:deprecated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</owl:deprecated>
+    <dcterms:isReplacedBy rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay"/>
+  </owl:Class>
+
+  <!-- Object property -->
+  <owl:ObjectProperty rdf:about="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/hasBusinessDayAdjustment">
+    <rdfs:label xml:lang="en">has business day adjustment</rdfs:label>
+    <skos:definition xml:lang="en">Relates a date convention to its business day adjustment.</skos:definition>
+  </owl:ObjectProperty>
+
+  <!-- Datatype property -->
+  <owl:DatatypeProperty rdf:about="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/hasCount">
+    <rdfs:label xml:lang="en">has count</rdfs:label>
+  </owl:DatatypeProperty>
+
+  <!-- Annotation property -->
+  <owl:AnnotationProperty rdf:about="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/adaptedFrom">
+    <rdfs:label xml:lang="en">adapted from</rdfs:label>
+  </owl:AnnotationProperty>
+
+  <!-- Named individual -->
+  <owl:NamedIndividual rdf:about="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/Monday">
+    <rdf:type rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay"/>
+    <rdfs:label xml:lang="en">Monday</rdfs:label>
+    <skos:definition xml:lang="en">The weekday Monday.</skos:definition>
+  </owl:NamedIndividual>
+
+  <!-- Hash-style IRI for local_name test -->
+  <owl:Class rdf:about="https://example.org/fibo#HashLocalName">
+    <rdfs:label xml:lang="en">Hash Local Name</rdfs:label>
+    <skos:definition xml:lang="en">Entity with fragment IRI.</skos:definition>
+  </owl:Class>
+
+</rdf:RDF>
