@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "moex-architecture-check"
+version = "0.1.0"
+description = "Mechanical checks for MOEX modeling architecture docs and kernel schema"
+requires-python = ">=3.11"
+dependencies = [
+    "PyYAML>=6.0,<7.0",
+    "linkml-runtime>=1.7,<2.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0,<9.0"]
+
+[project.scripts]
+moex-architecture-check = "architecture_check.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

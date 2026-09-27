@@ -1,8 +1,10 @@
 # MOEX Workbench Plan
 
-**Статус:** Draft
-**Версия:** 0.1
+**Статус:** Draft  
+**Версия:** 0.1  
 **Целевая версия приложения:** MVP 0.1
+
+> **Верхний канон архитектуры платформы:** [docs/architecture/MODELING_ARCHITECTURE.md](architecture/MODELING_ARCHITECTURE.md) (Proposed 0.2). Этот план ориентирован на Workbench MVP; деревья вроде `apps/web` и `model-core` ниже — исторический/Workbench-контур и не отменяют modeling kernel (`ModelingStandard` / `ReferenceSpecification` / `SpecificationImplementation`).
 
 ## Исходное состояние
 

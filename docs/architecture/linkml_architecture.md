@@ -1,8 +1,16 @@
+---
+status: Draft
+version: "0.1"
+normative: false
+supersedes: []
+superseded_by: MODELING_ARCHITECTURE.md
+---
+
 # MOEX Data Model Workbench
 
-**Статус:** Draft
-**Версия:** 0.1
-**Назначение:** целевая архитектура приложения для разработки, проверки, публикации и визуального редактирования моделей данных MOEX на основе LinkML.
+> **Не верхний уровень архитектуры.** Нормативный канон платформы — [MODELING_ARCHITECTURE.md](MODELING_ARCHITECTURE.md) (Proposed 0.2). Этот документ описывает Workbench и LinkML-based toolchain: LinkML — первый standard provider, DAMS — первая reference specification. ADR-001 «LinkML YAML — канонический формат» действует для DAMS-активов и LinkML toolchain, не для всей мультиформальной платформы.
+
+**Назначение:** целевая архитектура приложения для разработки, проверки, публикации и визуального редактирования моделей данных MOEX (LinkML как первый provider).
 
 ## Цели системы
 

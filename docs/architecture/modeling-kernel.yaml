@@ -1,0 +1,725 @@
+id: https://data.moex.com/modeling/kernel/v0.2
+name: moex_modeling_kernel
+title: MOEX Modeling Kernel
+version: 0.2.0
+description: >-
+  Core metamodel for modeling standards, reference specifications,
+  specification implementations, conformance, transformations and ModelUniverse.
+  Standard-specific bodies and element hierarchies live in provider schemas,
+  not in this kernel.
+license: Apache-2.0
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  moex: https://data.moex.com/modeling/
+  xsd: http://www.w3.org/2001/XMLSchema#
+
+default_prefix: moex
+default_range: string
+
+imports:
+  - linkml:types
+
+settings:
+  kernel_contract: standard-specification-implementation
+  extension_policy: standard-specific-bodies-live-in-provider-schemas
+
+classes:
+  KernelElement:
+    abstract: true
+    description: Base for immutable identified kernel objects.
+    slots:
+      - id
+      - name
+      - description
+      - annotations
+
+  VersionedKernelElement:
+    abstract: true
+    is_a: KernelElement
+    slots:
+      - version
+      - revision
+      - content_digest
+
+  AnnotationPair:
+    description: Key-value annotation attached to a kernel object.
+    slots:
+      - annotation_key
+      - annotation_value
+    slot_usage:
+      annotation_key:
+        required: true
+
+  ModelingStandard:
+    is_a: VersionedKernelElement
+    description: >-
+      A versioned modeling language, formalism or metamodel standard.
+      Processors (SDKs) are registered separately and are not the standard itself.
+    slots:
+      - standard_family
+      - specification_uri
+      - metamodel_uri
+      - default_dialect_uri
+      - semantic_regime
+      - capabilities
+      - media_types
+      - canonical_extensions
+      - processors
+    slot_usage:
+      standard_family:
+        required: true
+      specification_uri:
+        required: true
+      semantic_regime:
+        required: true
+
+  ProcessorDescriptor:
+    description: A concrete engine capable of processing a standard version.
+    slots:
+      - processor_id
+      - processor_name
+      - processor_version
+      - supported_standard
+      - processor_capabilities
+    slot_usage:
+      processor_id:
+        required: true
+      processor_name:
+        required: true
+
+  StandardRef:
+    description: >-
+      Reference to a modeling standard. Use version_constraint for accepted
+      ranges; pin standard_revision when an exact immutable coordinate is required
+      (invariant: specification references a registered standard revision).
+    slots:
+      - standard_id
+      - version_constraint
+      - standard_revision
+      - dialect_uri
+    slot_usage:
+      standard_id:
+        required: true
+      version_constraint:
+        required: true
+
+  SpecificationRef:
+    description: Exact immutable coordinate of a reference specification.
+    slots:
+      - specification_id
+      - specification_version
+      - specification_revision
+    slot_usage:
+      specification_id:
+        required: true
+      specification_version:
+        required: true
+      specification_revision:
+        required: true
+
+  ImplementationRef:
+    description: Exact immutable coordinate of a specification implementation.
+    slots:
+      - implementation_id
+      - implementation_revision
+    slot_usage:
+      implementation_id:
+        required: true
+      implementation_revision:
+        required: true
+
+  ReferenceSpecification:
+    is_a: VersionedKernelElement
+    description: >-
+      A normative domain or technical specification expressed in one primary
+      modeling standard. Instances (e.g. MOEX DAMS 0.1) are not subclasses of
+      this class.
+    slots:
+      - specification_kind
+      - expressed_in
+      - root_type
+      - normative_sources
+      - imported_specifications
+      - conformance_policy
+    slot_usage:
+      specification_kind:
+        required: true
+      expressed_in:
+        required: true
+      root_type:
+        required: true
+      conformance_policy:
+        required: true
+
+  ConformancePolicy:
+    description: Rules governing extensions and required conformance rule sets.
+    slots:
+      - conformance_level
+      - unknown_constructs_allowed
+      - extensions_namespace
+      - required_rule_sets
+
+  SpecificationImplementation:
+    is_a: VersionedKernelElement
+    description: >-
+      Concrete immutable envelope for a model body conforming to an exact
+      reference specification revision. Typed body and element hierarchy are
+      defined only in the matching provider schema (extension_policy).
+    slots:
+      - conforms_to
+      - implementation_kind
+      - lifecycle_status
+      - source
+      - provenance
+      - body_ref
+    slot_usage:
+      conforms_to:
+        required: true
+      implementation_kind:
+        required: true
+      source:
+        required: true
+
+  SourceDescriptor:
+    description: Authoritative source bundle descriptor resolved by an adapter.
+    slots:
+      - source_uri
+      - media_type
+      - source_root_type
+      - authoritative
+
+  ProvenanceRecord:
+    description: Origin and derivation metadata for an immutable asset.
+    slots:
+      - generated_from
+      - created_by
+      - created_at
+      - generator_id
+      - generator_version
+      - configuration_digest
+
+  SourceLocation:
+    description: Location of a diagnostic or element in a source asset.
+    slots:
+      - source_uri
+      - line
+      - column
+      - json_pointer
+
+  DiagnosticDetail:
+    description: Structured machine-readable detail for a diagnostic.
+    slots:
+      - detail_key
+      - detail_value
+    slot_usage:
+      detail_key:
+        required: true
+
+  Diagnostic:
+    description: Stable machine-readable conformance diagnostic.
+    slots:
+      - diagnostic_code
+      - severity
+      - conformance_phase
+      - subject_ref
+      - diagnostic_message
+      - source_location
+      - diagnostic_details
+    slot_usage:
+      diagnostic_code:
+        required: true
+      severity:
+        required: true
+      diagnostic_message:
+        required: true
+
+  ConformanceAssessment:
+    description: >-
+      Immutable result of checking an implementation against its coordinates
+      for a single phase or rule set. Does not inherit KernelElement.name
+      (assessment identity is id only).
+    slots:
+      - id
+      - description
+      - annotations
+      - assessed_implementation
+      - assessed_specification
+      - assessed_standard
+      - conformance_result
+      - diagnostics
+      - assessed_at
+    slot_usage:
+      id:
+        required: true
+      assessed_implementation:
+        required: true
+      assessed_specification:
+        required: true
+      assessed_standard:
+        required: true
+      conformance_result:
+        required: true
+
+  ConformanceReport:
+    description: >-
+      Aggregate immutable report for a full conformance pipeline run.
+      Contains one or more ConformanceAssessment entries.
+    slots:
+      - id
+      - description
+      - assessed_implementation
+      - assessed_specification
+      - assessed_standard
+      - overall_result
+      - assessments
+      - reported_at
+    slot_usage:
+      id:
+        required: true
+      assessed_implementation:
+        required: true
+      assessed_specification:
+        required: true
+      assessed_standard:
+        required: true
+      overall_result:
+        required: true
+
+  StandardMapping:
+    is_a: VersionedKernelElement
+    description: Explicit cross-standard transformation contract and semantic loss.
+    slots:
+      - source_standard
+      - target_standard
+      - source_specification
+      - target_specification
+      - transformation_kind
+      - mapping_rules_uri
+      - authoritative_source
+      - round_trip_supported
+      - preserved_semantics
+      - lost_semantics
+      - provenance
+    slot_usage:
+      source_standard:
+        required: true
+      target_standard:
+        required: true
+      transformation_kind:
+        required: true
+      mapping_rules_uri:
+        required: true
+      authoritative_source:
+        required: true
+
+  TypedRelation:
+    description: >-
+      Typed relation between immutable kernel objects.
+      conforms_to: implementation → specification.
+      expressed_in: specification → standard.
+      implements: implementation → external solution/system identity (e.g. ITSolution).
+      contains: parent asset → child element or nested asset.
+      imports: specification → specification.
+      maps_to / projects_to / generated_from: transformation and derivation edges.
+    slots:
+      - relation_kind
+      - relation_source
+      - relation_target
+      - relation_provenance
+    slot_usage:
+      relation_kind:
+        required: true
+      relation_source:
+        required: true
+      relation_target:
+        required: true
+
+  ModelUniverse:
+    description: Registry graph of standards, specifications and implementations.
+    tree_root: true
+    slots:
+      - standards
+      - specifications
+      - implementations
+      - assessments
+      - reports
+      - mappings
+      - relations
+
+slots:
+  id:
+    identifier: true
+    range: uriorcurie
+    required: true
+  name:
+    range: string
+    required: true
+  description:
+    range: string
+  annotations:
+    range: AnnotationPair
+    multivalued: true
+    inlined_as_list: true
+  version:
+    range: string
+    required: true
+  revision:
+    range: string
+    required: true
+  content_digest:
+    range: string
+    required: true
+    pattern: '^sha256:[0-9a-f]{64}$'
+
+  annotation_key:
+    range: string
+  annotation_value:
+    range: string
+
+  standard_family:
+    range: StandardFamily
+  specification_uri:
+    range: uri
+  metamodel_uri:
+    range: uri
+  default_dialect_uri:
+    range: uri
+  semantic_regime:
+    range: SemanticRegime
+  capabilities:
+    range: Capability
+    multivalued: true
+  media_types:
+    range: string
+    multivalued: true
+  canonical_extensions:
+    range: string
+    multivalued: true
+  processors:
+    range: ProcessorDescriptor
+    multivalued: true
+    inlined_as_list: true
+
+  processor_id:
+    range: uriorcurie
+  processor_name:
+    range: string
+  processor_version:
+    range: string
+  supported_standard:
+    range: StandardRef
+    inlined: true
+  processor_capabilities:
+    range: Capability
+    multivalued: true
+
+  standard_id:
+    range: uriorcurie
+  version_constraint:
+    range: string
+  standard_revision:
+    range: string
+    description: Exact standard revision when an immutable pin is required.
+  dialect_uri:
+    range: uri
+  specification_id:
+    range: uriorcurie
+  specification_version:
+    range: string
+  specification_revision:
+    range: string
+  implementation_id:
+    range: uriorcurie
+  implementation_revision:
+    range: string
+
+  specification_kind:
+    range: SpecificationKind
+  expressed_in:
+    range: StandardRef
+    inlined: true
+  root_type:
+    range: string
+    description: >-
+      Primary tree_root class of the normative specification schema
+      (for MOEX DAMS 0.1: MOEXModelRepository). Typical solution documents
+      may still centre on ModelPackage as the nested implementation document.
+  normative_sources:
+    range: uri
+    multivalued: true
+  imported_specifications:
+    range: SpecificationRef
+    multivalued: true
+    inlined_as_list: true
+  conformance_policy:
+    range: ConformancePolicy
+    inlined: true
+  conformance_level:
+    range: ConformanceLevel
+  unknown_constructs_allowed:
+    range: boolean
+  extensions_namespace:
+    range: uri
+  required_rule_sets:
+    range: string
+    multivalued: true
+
+  conforms_to:
+    range: SpecificationRef
+    inlined: true
+  implementation_kind:
+    range: StandardFamily
+  lifecycle_status:
+    range: LifecycleStatus
+  source:
+    range: SourceDescriptor
+    inlined: true
+  provenance:
+    range: ProvenanceRecord
+    inlined: true
+  body_ref:
+    range: uri
+    description: >-
+      Opaque reference to the provider-owned typed body. Resolved by the
+      standard provider; kernel never interprets body contents.
+
+  source_uri:
+    range: uri
+  media_type:
+    range: string
+  source_root_type:
+    range: string
+  authoritative:
+    range: boolean
+  generated_from:
+    range: uriorcurie
+    multivalued: true
+  created_by:
+    range: string
+  created_at:
+    range: datetime
+  generator_id:
+    range: string
+  generator_version:
+    range: string
+  configuration_digest:
+    range: string
+  line:
+    range: integer
+    minimum_value: 1
+  column:
+    range: integer
+    minimum_value: 1
+  json_pointer:
+    range: string
+
+  diagnostic_code:
+    range: string
+  severity:
+    range: DiagnosticSeverity
+  conformance_phase:
+    range: ConformancePhase
+  subject_ref:
+    range: uriorcurie
+  diagnostic_message:
+    range: string
+  diagnostic_details:
+    range: DiagnosticDetail
+    multivalued: true
+    inlined_as_list: true
+  detail_key:
+    range: string
+  detail_value:
+    range: string
+  assessed_implementation:
+    range: ImplementationRef
+    inlined: true
+  assessed_specification:
+    range: SpecificationRef
+    inlined: true
+  assessed_standard:
+    range: StandardRef
+    inlined: true
+  conformance_result:
+    range: ConformanceResult
+  diagnostics:
+    range: Diagnostic
+    multivalued: true
+    inlined_as_list: true
+  assessed_at:
+    range: datetime
+  overall_result:
+    range: ConformanceResult
+  assessments:
+    range: ConformanceAssessment
+    multivalued: true
+    inlined_as_list: true
+  reported_at:
+    range: datetime
+
+  source_standard:
+    range: StandardRef
+    inlined: true
+  target_standard:
+    range: StandardRef
+    inlined: true
+  source_specification:
+    range: SpecificationRef
+    inlined: true
+  target_specification:
+    range: SpecificationRef
+    inlined: true
+  transformation_kind:
+    range: TransformationKind
+  mapping_rules_uri:
+    range: uri
+  authoritative_source:
+    range: uri
+    description: URI of the authoritative side of the mapping (source or target).
+  round_trip_supported:
+    range: boolean
+  preserved_semantics:
+    range: string
+    multivalued: true
+  lost_semantics:
+    range: string
+    multivalued: true
+
+  relation_kind:
+    range: RelationKind
+  relation_source:
+    range: uriorcurie
+  relation_target:
+    range: uriorcurie
+  relation_provenance:
+    range: ProvenanceRecord
+    inlined: true
+
+  standards:
+    range: ModelingStandard
+    multivalued: true
+    inlined_as_list: true
+  specifications:
+    range: ReferenceSpecification
+    multivalued: true
+    inlined_as_list: true
+  implementations:
+    range: SpecificationImplementation
+    multivalued: true
+    inlined_as_list: true
+  reports:
+    range: ConformanceReport
+    multivalued: true
+    inlined_as_list: true
+  mappings:
+    range: StandardMapping
+    multivalued: true
+    inlined_as_list: true
+  relations:
+    range: TypedRelation
+    multivalued: true
+    inlined_as_list: true
+
+enums:
+  StandardFamily:
+    permissible_values:
+      linkml:
+      openapi:
+      owl:
+      json_schema:
+      shacl:
+      custom:
+
+  SemanticRegime:
+    permissible_values:
+      closed_world:
+      open_world:
+      mixed:
+
+  Capability:
+    permissible_values:
+      define_types:
+      validate_instances:
+      inheritance:
+      reasoning:
+      operations:
+      serialization:
+      code_generation:
+
+  SpecificationKind:
+    permissible_values:
+      data_model:
+      api_profile:
+      ontology:
+      data_contract:
+      quality_model:
+      validation_profile:
+
+  ConformanceLevel:
+    permissible_values:
+      exact:
+      profile:
+      extensible:
+
+  LifecycleStatus:
+    permissible_values:
+      draft:
+      review:
+      approved:
+      published:
+      deprecated:
+      retired:
+
+  DiagnosticSeverity:
+    permissible_values:
+      info:
+      warning:
+      error:
+      fatal:
+
+  ConformancePhase:
+    permissible_values:
+      source:
+      standard_syntax:
+      standard_semantics:
+      specification:
+      corporate_semantics:
+      external_references:
+      compatibility:
+      artifact_smoke_test:
+
+  ConformanceResult:
+    permissible_values:
+      conformant:
+      conformant_with_warnings:
+      non_conformant:
+      indeterminate:
+
+  TransformationKind:
+    permissible_values:
+      lossless:
+      lossy:
+      partial:
+      derived:
+
+  RelationKind:
+    permissible_values:
+      expressed_in:
+        description: specification → standard
+      conforms_to:
+        description: implementation → specification
+      imports:
+        description: specification → specification
+      contains:
+        description: parent asset → nested asset or element identity
+      implements:
+        description: >-
+          implementation → external solution or system identity
+          (e.g. ITSolution); not a synonym of conforms_to
+      maps_to:
+        description: source asset → target asset via StandardMapping
+      projects_to:
+        description: canonical asset → derived projection
+      generated_from:
+        description: derived artifact → authoritative implementation revision
