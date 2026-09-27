@@ -332,7 +332,7 @@ artifact:
 - Повторно сгенерировать существующие artifacts.
 - Сравнить результаты с файлами в `generated/`.
 - Проверить лицензии LinkML ecosystem и drawDB.
-- Зафиксировать ADR-001–ADR-012.
+- Зафиксировать ADR-001–ADR-012 (проекты: [docs/adr/](adr/README.md); приёмка = Proposed → Accepted).
 - Создать baseline CI.
 
 ### Результат

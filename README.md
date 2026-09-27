@@ -118,6 +118,7 @@ py -3.14 -m moex_model_cli publish --root .
 | [linkml_architecture.md](docs/architecture/linkml_architecture.md) | Draft — Workbench / LinkML toolchain |
 | [CHECKLIST.md](docs/architecture/CHECKLIST.md) | process gate для PR по architecture |
 | [IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) | Draft — Workbench MVP roadmap |
+| [docs/adr/](docs/adr/README.md) | Proposed — ADR-001–012 (Workbench / toolchain) |
 | [MOEX Data Model Specification v0.1](docs/MOEX%20Data%20Model%20Specification%20v0.1%20на%20основе%20LinkML.md) | спецификация DAMS на LinkML |
 
 ## Именование

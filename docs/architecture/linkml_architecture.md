@@ -688,17 +688,19 @@ Celery подходит как начальная реализация очер�
 
 ## Ключевые решения
 
+Проекты: [docs/adr/](../adr/README.md) (`status: Proposed`). При расхождении побеждает MODELING_ARCHITECTURE.
+
 | ADR | Решение |
 |---|---|
-| ADR-001 | LinkML YAML — канонический authoring format для DAMS-активов и LinkML toolchain (не для всей мультиформальной платформы; см. MODELING_ARCHITECTURE) |
-| ADR-002 | Git — источник опубликованных версий |
-| ADR-003 | PostgreSQL — operational и search projection |
-| ADR-004 | Модульный монолит вместо микросервисов |
-| ADR-005 | drawDB — изолированное self-hosted приложение |
-| ADR-006 | DBML — проекция, а не источник истины |
-| ADR-007 | Pydantic — API DTO, но не единственный validator |
-| ADR-008 | LinkML Map скрывается за provider interface |
-| ADR-009 | schema-automator используется только для draft import |
-| ADR-010 | OWL не применяется как основной механизм validation |
-| ADR-011 | Generated artifacts должны быть воспроизводимыми |
-| ADR-012 | Все изменения публикуются через semantic diff и review |
+| [ADR-001](../adr/ADR-001-linkml-yaml-canonical.md) | LinkML YAML — канонический authoring format для DAMS-активов и LinkML toolchain (не для всей мультиформальной платформы; см. MODELING_ARCHITECTURE) |
+| [ADR-002](../adr/ADR-002-git-published-source.md) | Git — источник опубликованных версий |
+| [ADR-003](../adr/ADR-003-postgres-operational.md) | PostgreSQL — operational и search projection |
+| [ADR-004](../adr/ADR-004-modular-monolith.md) | Модульный монолит вместо микросервисов |
+| [ADR-005](../adr/ADR-005-drawdb-isolated.md) | drawDB — изолированное self-hosted приложение |
+| [ADR-006](../adr/ADR-006-dbml-projection.md) | DBML — проекция, а не источник истины |
+| [ADR-007](../adr/ADR-007-pydantic-dto-not-validator.md) | Pydantic — API DTO, но не единственный validator |
+| [ADR-008](../adr/ADR-008-linkml-map-provider.md) | LinkML Map скрывается за provider interface |
+| [ADR-009](../adr/ADR-009-schema-automator-draft-only.md) | schema-automator используется только для draft import |
+| [ADR-010](../adr/ADR-010-owl-not-primary-validation.md) | OWL не применяется как основной механизм validation |
+| [ADR-011](../adr/ADR-011-reproducible-artifacts.md) | Generated artifacts должны быть воспроизводимыми |
+| [ADR-012](../adr/ADR-012-semantic-diff-review.md) | Все изменения публикуются через semantic diff и review |
