@@ -8,8 +8,7 @@ moex-model validate  → assess_implementation
 moex-model publish   → export_slice_projection
 ```
 
-The HTML viewer stays at repo-root `viewer/` (`apps/viewer` is still
-target-after-slice).
+Publication Viewer lives at [`apps/viewer/`](../viewer/).
 
 ## Commands
 
@@ -23,13 +22,14 @@ py -3.14 -m pip install -e "./packages/modeling-kernel" `
   -e "./apps/cli[dev]"
 
 py -3.14 -m moex_model_cli validate --root .
-py -3.14 -m moex_model_cli publish --root . --out model_src/examples/publications/vertical_slice.json
+py -3.14 -m moex_model_cli publish --root .
 ```
 
-Defaults (relative to `--root`):
+Defaults are resolved from asset envelopes (relative to `--root`):
 
-- schema: `model_src/schemas/moex-dams.yaml`
-- implementation: `model_src/examples/trading-solution-model.yaml`
+- specification: `model-assets/specifications/moex-dams/0.1/specification.yaml` → `schema_body`
+- implementation: `model-assets/implementations/solutions/trading-platform/implementation.yaml` → `implementation_body`
+- publish out: `model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json`
 
 ## Tests
 

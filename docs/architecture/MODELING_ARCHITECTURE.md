@@ -67,7 +67,7 @@ flowchart LR
 
 Для MOEX DAMS 0.1:
 
-- **spec root type** (`tree_root` схемы) — `MOEXModelRepository` ([model_src/schemas/moex-dams.yaml](../../model_src/schemas/moex-dams.yaml));
+- **spec root type** (`tree_root` схемы) — `MOEXModelRepository` ([moex-dams.yaml](../../model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml));
 - **типичный implementation document** решения — `ModelPackage` (conceptual / logical / physical entities), вложенный в repository при полной проверке.
 
 Vertical slice «trading-solution» работает с instance package; validate относительно полного среза идёт через repository wrapper.
@@ -394,17 +394,17 @@ generated/
 
 apps/
   cli/                    # есть: moex-model validate / publish
-  viewer/                 # сегодня: корневой viewer/
+  viewer/                 # есть: apps/viewer (Publication Viewer)
   api/                    # позднее
   worker/                 # позднее
 ```
 
 - `packages/` — исполняемый код.
-- `model-assets/` — управляемые model assets.
+- `model-assets/` — управляемые model assets (конверты + schema/instance bodies).
 - `generated/` — только воспроизводимые результаты.
 - `apps/` — inbound entry points.
 
-Физический перенос текущих файлов (`model_src/`, корневой `viewer/`, `packages/ontology/`) выполняется **после** внедрения вертикального среза; архитектурные identities не должны зависеть от временного пути файла. Целевое дерево в [app_model.md](app_model.md) — target-after-slice, не текущее состояние репозитория.
+Перенос `model_src/` → `model-assets/` и корневого `viewer/` → `apps/viewer` выполнен; таблица путей — [docs/migration/model-src-to-model-assets.md](../migration/model-src-to-model-assets.md). `packages/ontology/` остаётся shim над `standard-owl`. Дальнейшая детализация дерева — [app_model.md](app_model.md) (`target-after-slice`; still-later: `apps/api`, `git-adapter`, kernel `application/`).
 
 ## 13. Первый вертикальный срез
 

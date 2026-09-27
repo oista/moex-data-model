@@ -10,7 +10,10 @@ superseded_by: MODELING_ARCHITECTURE.md
 
 **Норматив:** [MODELING_ARCHITECTURE.md](MODELING_ARCHITECTURE.md) (Proposed 0.2).  
 При расхождении побеждает нормативный документ.  
-**Статус этого файла:** черновик целевой раскладки пакетов и provider object model **после** стабилизации первого вертикального среза (`target-after-slice`). Не описывает текущее дерево репозитория (`model_src/`, корневой `viewer/`, `packages/ontology/`).
+**Статус этого файла:** черновик целевой раскладки пакетов и provider object model (`target-after-slice`).  
+**Уже совпало с репо:** `model-assets/`, `generated/`, `apps/cli/`, `apps/viewer/`, пакеты slice (`modeling-kernel`, `standard-linkml`, `specification-dams`, `publication`), `standard-owl`, `ontology-catalog`.  
+**Still-later:** `apps/api`, `apps/worker`, `git-adapter`, `artifact-adapters`, kernel `application/commands|queries`, полный CLI (`standard`/`transform`/…).  
+`packages/ontology/` остаётся shim. Миграция путей: [docs/migration/model-src-to-model-assets.md](../migration/model-src-to-model-assets.md).
 
 ## Предметная модель: роли как экземпляры, не subclass
 
@@ -98,7 +101,7 @@ Ontology Catalog (read models, не kernel): `OntologyRelease`, `OntologyEntity`
 
 ## Целевая структура проекта (target-after-slice)
 
-Текущие пути (`model_src/schemas`, корневой `viewer/`, `packages/ontology`) остаются до миграции после vertical slice. Ниже — целевое дерево.
+Ниже — целевое дерево. Узлы без пометки «позднее» / «still-later» уже присутствуют в репозитории (иногда с меньшей детализацией файлов, чем в дереве).
 
 ```text
 moex-data-model/
@@ -121,7 +124,7 @@ moex-data-model/
 │   │       ├── bootstrap.py
 │   │       └── __main__.py
 │   │
-│   ├── viewer/                      # сегодня: корневой viewer/ (не переносить до slice)
+│   ├── viewer/                      # есть: apps/viewer
 │   │   └── src/moex_model_viewer/
 │   │       ├── routes/
 │   │       ├── templates/
@@ -300,7 +303,7 @@ moex-data-model/
 │   ├── specifications/
 │   │   ├── moex-dams/0.1/
 │   │   │   ├── specification.yaml
-│   │   │   ├── schemas/             # сегодня: model_src/schemas/
+│   │   │   ├── schemas/             # есть: model-assets/.../schemas/
 │   │   │   │   ├── moex-types.yaml
 │   │   │   │   ├── moex-registries.yaml
 │   │   │   │   ├── moex-governance.yaml

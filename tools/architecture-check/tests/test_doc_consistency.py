@@ -11,7 +11,15 @@ from architecture_check.doc_consistency import (
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 DOCS = REPO_ROOT / "docs" / "architecture"
-DAMS = REPO_ROOT / "model_src" / "schemas" / "moex-dams.yaml"
+DAMS = (
+    REPO_ROOT
+    / "model-assets"
+    / "specifications"
+    / "moex-dams"
+    / "0.1"
+    / "schemas"
+    / "moex-dams.yaml"
+)
 
 
 def test_real_docs_pass_consistency():

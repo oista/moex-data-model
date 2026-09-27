@@ -1,0 +1,18 @@
+# SpecificationImplementation descriptor (trading-platform demo)
+# Typed instance body is trading-solution-model.yaml (LinkML ModelPackage).
+id: moex:implementation:trading:1.0.0
+name: Trading solution model
+description: Demo DAMS ModelPackage for the first vertical slice
+version: "1.0.0"
+revision: "1.0.0"
+content_digest: "sha256:pending"
+conforms_to:
+  specification_id: moex:specification:moex-dams:0.1
+  specification_version: "0.1.0"
+  specification_revision: "0.1.0"
+implementation_kind: linkml
+lifecycle_status: draft
+body_ref: trading-solution-model.yaml
+# Relative paths from this file's directory
+implementation_body: trading-solution-model.yaml
+specification_envelope: ../../../specifications/moex-dams/0.1/specification.yaml

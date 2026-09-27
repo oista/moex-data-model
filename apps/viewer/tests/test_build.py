@@ -62,8 +62,8 @@ sections:
 
 def test_repo_golden_three_modules():
     """Build against the real repository root (golden smoke)."""
-    repo = Path(__file__).resolve().parents[2]
-    dist = repo / "viewer" / "dist"
+    repo = Path(__file__).resolve().parents[3]
+    dist = repo / "apps" / "viewer" / "dist"
     index = build(repo, dist)
     html = index.read_text(encoding="utf-8")
     for module_id in (
@@ -120,17 +120,19 @@ def test_nav_group_children_hidden_overrides_display_flex():
 
 def test_explorer_groups_not_in_search_index_and_module_title():
     """Package groups are hierarchy-only; module title is MOEX standart."""
-    repo = Path(__file__).resolve().parents[2]
-    dist = repo / "viewer" / "dist"
+    repo = Path(__file__).resolve().parents[3]
+    dist = repo / "apps" / "viewer" / "dist"
     build(repo, dist)
     html = (dist / "index.html").read_text(encoding="utf-8")
     assert "MOEX standart" in html
     # Group ids must not appear as selectable search items
     assert '"item_id": "group:' not in html and '"item_id":"group:' not in html
-    js = (repo / "viewer" / "static" / "viewer.js").read_text(encoding="utf-8")
+    js = (repo / "apps" / "viewer" / "static" / "viewer.js").read_text(encoding="utf-8")
     assert "Package/group nodes are hierarchy-only" in js
     # Collapsed-by-default: no auto-expand when openGroups is empty
     assert "openGroups.size === 0" not in js
-    # Class-level expressed_in removed from LinkML explorer (catalog may still label specs)
+    # Class-level expressed_in removed from LinkML explorer attributes
+    # (catalog labels and slice TypedRelation edges may still use the word).
     pub = html.split('id="publication-data"', 1)[1].split("</script>", 1)[0]
-    assert "expressed_in" not in pub
+    assert '"kind": "class"' in pub or '"kind":"class"' in pub
+    assert '"expressed_in":' not in pub and '"expressed_in" :' not in pub

@@ -1,10 +1,7 @@
 # moex-publication
 
 Read-model projection from the modeling vertical slice
-(`assess_implementation` → `PublicationModule` / static JSON for the root viewer).
-
-The HTML viewer stays at repo-root [`viewer/`](../../viewer/) until after the slice
-is stable (`apps/viewer` is target-after-slice only).
+(`assess_implementation` → `PublicationModule` / static JSON for [`apps/viewer`](../../apps/viewer/)).
 
 ## Export slice JSON for the viewer
 
@@ -15,10 +12,10 @@ py -3.14 -m pip install -e "./packages/modeling-kernel" `
   -e "./packages/publication[dev]"
 
 py -3.14 -m moex_publication.cli export-slice `
-  --schema model_src/schemas/moex-dams.yaml `
-  --implementation model_src/examples/trading-solution-model.yaml `
-  --out model_src/examples/publications/vertical_slice.json
+  --schema model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml `
+  --implementation model-assets/implementations/solutions/trading-platform/trading-solution-model.yaml `
+  --out model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json
 ```
 
-Manifest: [`model_src/examples/publish.yaml`](../../model_src/examples/publish.yaml)
+Manifest: [`publish.yaml`](../../model-assets/implementations/solutions/trading-platform/publish.yaml)
 includes sections that read this JSON.

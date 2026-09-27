@@ -3,7 +3,7 @@
 LinkML provider package for MOEX modeling.
 
 - **`LinkMLStandardProvider`** — `StandardProvider` with distinct `LinkMLSpecificationBody` (SchemaView) and `LinkMLImplementationBody` (instance YAML).
-- **ER-dictionary ingest** — Entities / Attributes / Relationships sheets → DAMS [`ModelPackage`](../../model_src/schemas/moex-core.yaml) + sidecar envelope.
+- **ER-dictionary ingest** — Entities / Attributes / Relationships sheets → DAMS [`ModelPackage`](../../model-assets/specifications/moex-dams/0.1/schemas/moex-core.yaml) + sidecar envelope.
 
 Depends on [`moex-modeling-kernel`](../modeling-kernel/).
 
@@ -46,7 +46,7 @@ packages/standard-linkml/.venv/Scripts/python -m pip install -e "./packages/stan
 packages/standard-linkml/.venv/Scripts/python -m moex_standard_linkml.ingest.cli ingest `
   --workbook path/to/model.xlsx `
   --profile packages/standard-linkml/templates/er-dictionary.profile.yaml `
-  --schema model_src/schemas/moex-dams.yaml `
+  --schema model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml `
   --out $env:TEMP/ingest-out
 ```
 

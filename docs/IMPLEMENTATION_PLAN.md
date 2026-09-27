@@ -80,7 +80,7 @@ moex-data-model/
 └── README.md
 ```
 
-Миграцию `model_src/` следует выполнить отдельным pull request с таблицей старых и новых путей, чтобы не потерять историю и ссылки.
+Миграция `model_src/` → `model-assets/` (+ `viewer/` → `apps/viewer`) выполнена: см. [docs/migration/model-src-to-model-assets.md](migration/model-src-to-model-assets.md). Целевое дерево Workbench ниже (`apps/web`, `model-core`) по-прежнему подчинено [MODELING_ARCHITECTURE.md](architecture/MODELING_ARCHITECTURE.md).
 
 ## Пакеты LinkML
 
@@ -334,6 +334,7 @@ artifact:
 - Проверить лицензии LinkML ecosystem и drawDB.
 - Зафиксировать ADR-001–ADR-012 (проекты: [docs/adr/](adr/README.md); приёмка = Proposed → Accepted).
 - Создать baseline CI.
+- **Target-after-slice layout:** миграция `model_src/` → `model-assets/`, `viewer/` → `apps/viewer`, конверты активов (сделано; см. [migration](migration/model-src-to-model-assets.md)). `make check` включает slice + architecture-check + lint/validate схем.
 
 ### Результат
 
@@ -806,7 +807,7 @@ class RegistryAdapter(Protocol):
 
 ### EPIC-01 Repository foundation
 
-- Перенести `model_src`.
+- Перенести `model_src` → `model-assets/` (сделано; см. docs/migration/).
 - Добавить build.
 - Добавить lockfiles.
 - Добавить validation pipeline.

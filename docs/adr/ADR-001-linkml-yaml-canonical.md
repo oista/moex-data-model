@@ -20,7 +20,7 @@ MODELING_ARCHITECTURE запрещает считать один формали�
 
 ## Decision
 
-Для **DAMS-активов и LinkML toolchain** канонический authoring format — **LinkML YAML** (схемы в `model_src/schemas/`, instances как `ModelPackage`).
+Для **DAMS-активов и LinkML toolchain** канонический authoring format — **LinkML YAML** (схемы в `model-assets/specifications/moex-dams/…/schemas/`, instances как `ModelPackage`).
 
 JSON Schema, Pydantic, DBML, RDF/OWL, SHACL, documentation и Publication Viewer — **производные** (`GENERATED_FROM` / read models). Правка производного формата не меняет опубликованный YAML напрямую: только controlled patch → validation → запись в канон.
 

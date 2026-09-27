@@ -72,7 +72,7 @@ def test_validate_conforms_to_must_be_specification():
 
 
 def test_load_repo_catalog():
-    repo = Path(__file__).resolve().parents[2]
+    repo = Path(__file__).resolve().parents[3]
     catalog = load_architecture_catalog(repo)
     assert catalog is not None
     by_id = {n.id: n for n in catalog.nodes}
@@ -85,7 +85,7 @@ def test_load_repo_catalog():
 
 
 def test_repo_catalog_passes_validation_with_modules():
-    repo = Path(__file__).resolve().parents[2]
+    repo = Path(__file__).resolve().parents[3]
     catalog = load_architecture_catalog(repo)
     assert catalog is not None
     module_ids = {

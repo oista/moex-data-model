@@ -19,8 +19,14 @@ from moex_ontology.domain.release import load_release_descriptors
 
 REPO = Path(__file__).resolve().parents[3]
 MINI_FIBO = REPO / "packages" / "standard-owl" / "tests" / "fixtures" / "mini_fibo"
-DESCRIPTORS = REPO / "model_src" / "ontologies"
-SSSOM = REPO / "model_src" / "mappings" / "dams-fibo.sssom.yaml"
+DESCRIPTORS = REPO / "model-assets" / "implementations" / "ontologies"
+SSSOM = (
+    REPO
+    / "model-assets"
+    / "transformations"
+    / "mappings"
+    / "dams-fibo.sssom.yaml"
+)
 
 LEGAL_PERSON = (
     "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson"

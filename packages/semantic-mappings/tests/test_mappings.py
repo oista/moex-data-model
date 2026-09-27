@@ -10,8 +10,20 @@ from moex_semantic_mappings.sssom_adapter import load_sssom_yaml
 
 REPO = Path(__file__).resolve().parents[3]
 FIXTURE_SCHEMA = Path(__file__).parent / "fixtures" / "mapped_schema.yaml"
-SSSOM = REPO / "model_src" / "mappings" / "dams-fibo.sssom.yaml"
-SKOS = REPO / "model_src" / "glossary" / "skos_concepts.yaml"
+SSSOM = (
+    REPO
+    / "model-assets"
+    / "transformations"
+    / "mappings"
+    / "dams-fibo.sssom.yaml"
+)
+SKOS = (
+    REPO
+    / "model-assets"
+    / "transformations"
+    / "glossary"
+    / "skos_concepts.yaml"
+)
 
 
 def test_load_sssom_dams_fibo():

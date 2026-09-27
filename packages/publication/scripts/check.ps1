@@ -55,11 +55,11 @@ try {
         -q
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-    $OutJson = Join-Path $RepoRoot "model_src/examples/publications/vertical_slice.json"
+    $OutJson = Join-Path $RepoRoot "model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json"
     Write-Host "Exporting slice projection → $OutJson"
     & $VenvPython -m moex_publication.cli export-slice `
-        --schema (Join-Path $RepoRoot "model_src/schemas/moex-dams.yaml") `
-        --implementation (Join-Path $RepoRoot "model_src/examples/trading-solution-model.yaml") `
+        --schema (Join-Path $RepoRoot "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml") `
+        --implementation (Join-Path $RepoRoot "model-assets/implementations/solutions/trading-platform/trading-solution-model.yaml") `
         --implementation-id "moex:implementation:trading:1.0.0" `
         --out $OutJson
     exit $LASTEXITCODE

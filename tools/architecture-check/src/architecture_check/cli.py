@@ -28,7 +28,15 @@ def main(argv: list[str] | None = None) -> int:
 
     kernel = root / "docs" / "architecture" / "modeling-kernel.yaml"
     docs_dir = root / "docs" / "architecture"
-    dams = root / "model_src" / "schemas" / "moex-dams.yaml"
+    dams = (
+        root
+        / "model-assets"
+        / "specifications"
+        / "moex-dams"
+        / "0.1"
+        / "schemas"
+        / "moex-dams.yaml"
+    )
 
     errors: list[str] = []
     if not kernel.is_file():

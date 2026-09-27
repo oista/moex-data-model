@@ -21,7 +21,7 @@ from moex_publication_viewer.validators import (
 )
 
 PACKAGE_DIR = Path(__file__).resolve().parent
-VIEWER_ROOT = PACKAGE_DIR.parent.parent  # viewer/
+VIEWER_ROOT = PACKAGE_DIR.parent.parent  # apps/viewer/
 
 
 def compile_modules(root: Path) -> list[PublicationModule]:
@@ -141,7 +141,7 @@ def _index_item(index: list[dict], module_id: str, section_id: str, item) -> Non
 
 
 def build(root: Path, dist_dir: Path | None = None) -> Path:
-    """Build viewer into dist_dir (default viewer/dist). Returns index.html path."""
+    """Build viewer into dist_dir (default apps/viewer/dist). Returns index.html path."""
     root = root.resolve()
     if dist_dir is None:
         dist_dir = VIEWER_ROOT / "dist"

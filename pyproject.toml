@@ -1,0 +1,10 @@
+[project]
+name = "moex-data-model-workspace"
+version = "0.1.0"
+description = "MOEX Data Model workspace marker (packages install via their own pyproject.toml)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -34,7 +34,10 @@ def build_parser() -> argparse.ArgumentParser:
         "--out",
         type=Path,
         default=None,
-        help="Output JSON path (default: model_src/examples/publications/vertical_slice.json)",
+        help=(
+            "Output JSON path (default: model-assets/implementations/"
+            "solutions/trading-platform/publications/vertical_slice.json)"
+        ),
     )
     return parser
 

@@ -18,11 +18,11 @@ From `packages/ontology-catalog`:
 
 ```bash
 python -m moex_ontology.cli rebuild \
-  --descriptors ../../model_src/ontologies \
+  --descriptors ../../model-assets/implementations/ontologies \
   --source ../standard-owl/tests/fixtures/mini_fibo \
   --db ./.data/ontology_index.sqlite \
   --preview-out ./publications \
-  --sssom ../../model_src/mappings/dams-fibo.sssom.yaml
+  --sssom ../../model-assets/transformations/mappings/dams-fibo.sssom.yaml
 ```
 
 `FND/Broken/Broken.rdf` in the mini fixture is intentional (parse-error tests); rebuild skips it and continues.

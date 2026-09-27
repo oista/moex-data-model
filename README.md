@@ -10,13 +10,13 @@
 |---|---|---|
 | **ModelingStandard** | формализм | LinkML |
 | **ReferenceSpecification** | норма / профиль на стандарте | MOEX DAMS 0.1 |
-| **SpecificationImplementation** | конкретная версионированная модель | trading-solution |
+| **SpecificationImplementation** | конкретная версионированная модель | trading-platform |
 
 Нормативный документ: [`docs/architecture/MODELING_ARCHITECTURE.md`](docs/architecture/MODELING_ARCHITECTURE.md) (Proposed 0.2).  
 Схема ядра: [`docs/architecture/modeling-kernel.yaml`](docs/architecture/modeling-kernel.yaml).  
 Чеклист ревью docs/architecture: [`docs/architecture/CHECKLIST.md`](docs/architecture/CHECKLIST.md).
 
-Workbench / LinkML toolchain описаны отдельно в [`docs/architecture/linkml_architecture.md`](docs/architecture/linkml_architecture.md) — это **не** верхний уровень архитектуры. Целевая раскладка пакетов после вертикального среза — [`docs/architecture/app_model.md`](docs/architecture/app_model.md) (`target-after-slice`).
+Workbench / LinkML toolchain описаны отдельно в [`docs/architecture/linkml_architecture.md`](docs/architecture/linkml_architecture.md) — это **не** верхний уровень архитектуры. Целевая раскладка пакетов — [`docs/architecture/app_model.md`](docs/architecture/app_model.md) (`target-after-slice`).
 
 ```text
 LinkML (standard)
@@ -31,19 +31,21 @@ Publication viewer, HTML, search index, drawDB и будущий Workbench — *
 
 | Путь | Роль сегодня |
 |---|---|
-| [`model_src/`](model_src/) | DAMS schemas + examples (временный путь до миграции в `model-assets/`) |
-| [`viewer/`](viewer/) | статический Publication Viewer (`publish.yaml` → `viewer/dist`) |
+| [`model-assets/`](model-assets/) | standards / specifications / implementations / transformations |
+| [`generated/`](generated/) | воспроизводимые артефакты (DAMS golden samples) |
+| [`apps/viewer/`](apps/viewer/) | статический Publication Viewer (`publish.yaml` → `apps/viewer/dist`) |
+| [`apps/cli/`](apps/cli/) | inbound CLI `moex-model` (`validate` / `publish`) |
 | [`packages/modeling-kernel/`](packages/modeling-kernel/) | envelopes + `StandardProvider` (TSpecBody ≠ TImplBody) |
 | [`packages/standard-linkml/`](packages/standard-linkml/) | LinkML provider + ER-dictionary ingest |
 | [`packages/specification-dams/`](packages/specification-dams/) | DAMS semantic rules, graph view, conformance |
 | [`packages/publication/`](packages/publication/) | slice → PublicationModule / viewer JSON |
-| [`apps/cli/`](apps/cli/) | inbound CLI `moex-model` (`validate` / `publish`) |
 | [`packages/ontology/`](packages/ontology/) | FIBO CSV shim над [`packages/standard-owl/`](packages/standard-owl/) |
 | [`tools/architecture-check/`](tools/architecture-check/) | механические проверки architecture pack |
 | [`docs/architecture/`](docs/architecture/) | нормативная архитектура и связанные черновики |
+| [`docs/migration/`](docs/migration/) | таблица переноса `model_src` → `model-assets` |
 | [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md) | план Workbench MVP (подчинён MODELING_ARCHITECTURE) |
 
-Физический перенос `model_src/` → `model-assets/` и корневого `viewer/` → `apps/viewer` — **после** стабилизации среза. Первый inbound adapter уже в [`apps/cli/`](apps/cli/).
+Миграция путей: [`docs/migration/model-src-to-model-assets.md`](docs/migration/model-src-to-model-assets.md).
 
 ## Быстрый старт
 
@@ -53,14 +55,14 @@ Publication viewer, HTML, search index, drawDB и будущий Workbench — *
 
 ```bash
 # из корня репозитория
-py -3.14 -m pip install -e "./viewer[dev]"
+py -3.14 -m pip install -e "./apps/viewer[dev]"
 py -3.14 -m moex_publication_viewer.cli build --root .
-# открыть viewer/dist/index.html
+# открыть apps/viewer/dist/index.html
 ```
 
 Или `make viewer` / `make viewer-check` (если установлен `make`; можно задать `PYTHON=py -3.14`).
 
-Новый раздел публикации: добавить `publish.yaml` рядом с источниками — без правок UI. Подробности: [`viewer/README.md`](viewer/README.md).
+Новый раздел публикации: добавить `publish.yaml` рядом с источниками — без правок UI. Подробности: [`apps/viewer/README.md`](apps/viewer/README.md).
 
 ### Проверка architecture pack
 
@@ -80,11 +82,11 @@ py -3.14 -m architecture_check.cli --root .
 
 ```bash
 pip install linkml
-cd model_src/schemas
+cd model-assets/specifications/moex-dams/0.1/schemas
 linkml-lint moex-dams.yaml
 ```
 
-Состав схем и примеры: [`model_src/README.md`](model_src/README.md).
+Или `make validate-schemas`. Состав схем: [`model-assets/specifications/moex-dams/0.1/README.md`](model-assets/specifications/moex-dams/0.1/README.md).
 
 ### Первый вертикальный срез и CLI
 
@@ -93,9 +95,9 @@ make check
 # или: powershell -NoProfile -File apps/cli/scripts/check.ps1
 ```
 
-Прогоняет kernel / LinkML provider / DAMS assess / publication / CLI и пишет
-[`model_src/examples/publications/vertical_slice.json`](model_src/examples/publications/vertical_slice.json)
-через `moex-model publish`. Секции viewer — в [`model_src/examples/publish.yaml`](model_src/examples/publish.yaml).
+Прогоняет kernel / LinkML provider / DAMS assess / publication / CLI, architecture-check, lint/validate схем и пишет
+[`model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json`](model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json)
+через `moex-model publish`.
 
 ```bash
 py -3.14 -m moex_model_cli validate --root .

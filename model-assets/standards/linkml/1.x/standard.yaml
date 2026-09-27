@@ -1,0 +1,22 @@
+# ModelingStandard descriptor (LinkML 1.x)
+# Kernel envelope coordinates — not a LinkML schema.
+id: moex:standard:linkml:1.x
+name: LinkML
+description: Modeling standard for DAMS schemas and ModelPackage instances
+version: "1.x"
+revision: "1.8"
+content_digest: "sha256:pending"
+standard_family: linkml
+specification_uri: https://w3id.org/linkml/
+metamodel_uri: https://w3id.org/linkml/meta
+semantic_regime: closed_world
+capabilities:
+  - validate
+  - generate
+  - map
+media_types:
+  - text/yaml
+  - application/ld+json
+canonical_extensions:
+  - .yaml
+  - .yml

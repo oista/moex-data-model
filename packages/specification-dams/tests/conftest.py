@@ -12,8 +12,23 @@ if sys.version_info < (3, 11):
     )
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-DAMS_SCHEMA = REPO_ROOT / "model_src" / "schemas" / "moex-dams.yaml"
-TRADING = REPO_ROOT / "model_src" / "examples" / "trading-solution-model.yaml"
+DAMS_SCHEMA = (
+    REPO_ROOT
+    / "model-assets"
+    / "specifications"
+    / "moex-dams"
+    / "0.1"
+    / "schemas"
+    / "moex-dams.yaml"
+)
+TRADING = (
+    REPO_ROOT
+    / "model-assets"
+    / "implementations"
+    / "solutions"
+    / "trading-platform"
+    / "trading-solution-model.yaml"
+)
 
 
 @pytest.fixture

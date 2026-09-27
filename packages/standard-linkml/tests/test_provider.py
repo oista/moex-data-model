@@ -13,8 +13,23 @@ from moex_standard_linkml.domain.body import (
 from moex_standard_linkml.provider import LinkMLStandardProvider
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-DAMS_SCHEMA = REPO_ROOT / "model_src" / "schemas" / "moex-dams.yaml"
-TRADING = REPO_ROOT / "model_src" / "examples" / "trading-solution-model.yaml"
+DAMS_SCHEMA = (
+    REPO_ROOT
+    / "model-assets"
+    / "specifications"
+    / "moex-dams"
+    / "0.1"
+    / "schemas"
+    / "moex-dams.yaml"
+)
+TRADING = (
+    REPO_ROOT
+    / "model-assets"
+    / "implementations"
+    / "solutions"
+    / "trading-platform"
+    / "trading-solution-model.yaml"
+)
 
 
 def test_load_specification_and_implementation_are_distinct_types() -> None:

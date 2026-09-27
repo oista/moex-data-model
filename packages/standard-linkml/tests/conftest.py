@@ -16,7 +16,15 @@ if sys.version_info < (3, 11):
 
 FIXTURE_DIR = Path(__file__).parent / "fixtures" / "er-dictionary"
 REPO_ROOT = Path(__file__).resolve().parents[3]
-DAMS_SCHEMA = REPO_ROOT / "model_src" / "schemas" / "moex-dams.yaml"
+DAMS_SCHEMA = (
+    REPO_ROOT
+    / "model-assets"
+    / "specifications"
+    / "moex-dams"
+    / "0.1"
+    / "schemas"
+    / "moex-dams.yaml"
+)
 
 
 @pytest.fixture

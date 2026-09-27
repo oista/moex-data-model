@@ -8,13 +8,34 @@ from pathlib import Path
 import pytest
 
 from moex_model_cli.__main__ import main
-from moex_model_cli.bootstrap import SlicePaths, find_repo_root
+from moex_model_cli.bootstrap import (
+    DEFAULT_IMPLEMENTATION_ENVELOPE,
+    DEFAULT_SPECIFICATION_ENVELOPE,
+    SlicePaths,
+    find_repo_root,
+    resolve_body_from_implementation_envelope,
+    resolve_schema_from_specification_envelope,
+)
 
 
 def test_find_repo_root(repo_root: Path) -> None:
     assert find_repo_root(repo_root) == repo_root
     nested = repo_root / "apps" / "cli"
     assert find_repo_root(nested) == repo_root
+
+
+def test_envelopes_resolve_schema_and_body(repo_root: Path) -> None:
+    spec_env = repo_root / DEFAULT_SPECIFICATION_ENVELOPE
+    impl_env = repo_root / DEFAULT_IMPLEMENTATION_ENVELOPE
+    assert spec_env.is_file()
+    assert impl_env.is_file()
+    schema = resolve_schema_from_specification_envelope(spec_env)
+    body = resolve_body_from_implementation_envelope(impl_env)
+    assert schema.name == "moex-dams.yaml"
+    assert body.name == "trading-solution-model.yaml"
+    paths = SlicePaths.resolve(root=repo_root)
+    assert paths.schema == schema
+    assert paths.implementation == body
 
 
 def test_validate_trading_solution(repo_root: Path, capsys: pytest.CaptureFixture[str]) -> None:

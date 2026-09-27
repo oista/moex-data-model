@@ -1,0 +1,20 @@
+# ReferenceSpecification descriptor (MOEX DAMS 0.1)
+# Normative schema body lives under schemas/; this file is the kernel envelope.
+id: moex:specification:moex-dams:0.1
+name: MOEX DAMS
+description: Corporate data model reference specification expressed in LinkML
+version: "0.1.0"
+revision: "0.1.0"
+content_digest: "sha256:pending"
+specification_kind: data_model
+expressed_in:
+  standard_id: moex:standard:linkml:1.x
+  version_constraint: ">=1.8,<2"
+root_type: MOEXModelRepository
+normative_sources:
+  - schemas/moex-dams.yaml
+imported_specifications: []
+conformance_policy: profile
+# Relative to this file's directory
+schema_body: schemas/moex-dams.yaml
+standard_envelope: ../../../standards/linkml/1.x/standard.yaml

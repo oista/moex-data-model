@@ -88,7 +88,7 @@ Publication Viewer / API
 
 Канон — Git descriptor и зафиксированный upstream release. Индекс полностью перестраиваемый. RDF upstream в Git не коммитится.
 
-Дескрипторы на этом этапе: `model_src/ontologies/` (временный корень; целевой путь после vertical slice — `model-assets/…`).
+Дескрипторы: `model-assets/implementations/ontologies/`.
 
 ## Связи с DAMS и глоссарием
 

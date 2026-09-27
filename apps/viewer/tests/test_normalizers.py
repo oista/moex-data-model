@@ -148,7 +148,7 @@ def test_linkml_explorer_groups_by_schema():
 
 
 def test_dams_explorer_real_schema():
-    repo = Path(__file__).resolve().parents[2]
+    repo = Path(__file__).resolve().parents[3]
     schema = (
         repo
         / "model-assets"

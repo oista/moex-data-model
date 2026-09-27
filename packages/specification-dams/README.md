@@ -14,8 +14,8 @@ py -3.14 -m pip install -e "./packages/modeling-kernel" `
   -e "./packages/specification-dams[dev]"
 
 py -3.14 -m moex_dams.cli assess `
-  --schema model_src/schemas/moex-dams.yaml `
-  --implementation model_src/examples/trading-solution-model.yaml
+  --schema model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml `
+  --implementation model-assets/implementations/solutions/trading-platform/trading-solution-model.yaml
 ```
 
 ## Tests

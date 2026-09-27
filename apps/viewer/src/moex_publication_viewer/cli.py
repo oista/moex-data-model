@@ -25,7 +25,7 @@ def main(argv: list[str] | None = None) -> int:
         "--dist",
         type=Path,
         default=None,
-        help="Output directory (default: viewer/dist)",
+        help="Output directory (default: apps/viewer/dist)",
     )
 
     check_p = sub.add_parser("check", help="Validate manifests and build")
