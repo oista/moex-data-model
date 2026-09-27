@@ -226,7 +226,6 @@ def _normalize_explorer(sv: SchemaView) -> list[PublicationItem]:
                 "from_schema": cls.from_schema,
                 "schema_key": schema_key,
                 "slots": _induced_slot_dicts(sv, name),
-                "expressed_in": "LinkML",
             },
         )
         by_schema.setdefault(schema_key, []).append(item)
@@ -255,7 +254,6 @@ def _normalize_explorer(sv: SchemaView) -> list[PublicationItem]:
                 "description": enum.description,
                 "from_schema": enum.from_schema,
                 "schema_key": schema_key,
-                "expressed_in": "LinkML",
             },
             children=children,
         )

@@ -1,5 +1,9 @@
 (() => {
   const modules = JSON.parse(document.getElementById("publication-data").textContent);
+  const catalogRaw = JSON.parse(
+    document.getElementById("architecture-catalog").textContent
+  );
+  const catalogNodes = (catalogRaw && catalogRaw.nodes) || [];
   const searchIndex = JSON.parse(document.getElementById("search-index").textContent);
 
   const moduleNav = document.getElementById("module-nav");
@@ -8,6 +12,7 @@
   const searchResults = document.getElementById("search-results");
 
   let currentModuleId = null;
+  let currentNodeId = null;
   let selectedItemId = null;
   const PAGE_SIZE = 100;
   const openGroups = new Set();
@@ -16,14 +21,16 @@
     const raw = (location.hash || "").replace(/^#/, "");
     const params = new URLSearchParams(raw);
     return {
+      node: params.get("node"),
       module: params.get("module"),
       section: params.get("section"),
       item: params.get("item"),
     };
   }
 
-  function setHash({ module, section, item }) {
+  function setHash({ node, module, section, item }) {
     const params = new URLSearchParams();
+    if (node) params.set("node", node);
     if (module) params.set("module", module);
     if (section) params.set("section", section);
     if (item) params.set("item", item);
@@ -31,6 +38,83 @@
     if (location.hash.replace(/^#/, "") !== next) {
       location.hash = next;
     }
+  }
+
+  function catalogNode(id) {
+    return catalogNodes.find((n) => n.id === id) || null;
+  }
+
+  function nodeForModule(moduleId) {
+    const full = moduleKey(moduleId);
+    return catalogNodes.find((n) => n.module_id === full) || null;
+  }
+
+  function implementationsOf(specId) {
+    return catalogNodes
+      .filter((n) => n.role === "specification_implementation" && n.conforms_to === specId)
+      .sort((a, b) => (a.order || 0) - (b.order || 0) || a.title.localeCompare(b.title));
+  }
+
+  function rootSpecifications() {
+    return catalogNodes
+      .filter((n) => n.role === "reference_specification")
+      .sort((a, b) => (a.order || 0) - (b.order || 0) || a.title.localeCompare(b.title));
+  }
+
+  function unattachedImplementations() {
+    return catalogNodes
+      .filter((n) => n.role === "specification_implementation" && !n.conforms_to)
+      .sort((a, b) => (a.order || 0) - (b.order || 0) || a.title.localeCompare(b.title));
+  }
+
+  function otherModules() {
+    const linked = new Set(
+      catalogNodes.map((n) => n.module_id).filter(Boolean)
+    );
+    return modules.filter((m) => !linked.has(m.module_id));
+  }
+
+  function defaultFocusForModule(mod) {
+    if (!mod) return {};
+    const expl = explorerSection(mod);
+    return {
+      section: expl ? expl.id : (mod.sections[0] && mod.sections[0].id) || null,
+    };
+  }
+
+  function navigateToNode(node, focus) {
+    currentNodeId = node.id;
+    if (node.module_id) {
+      const mod = modules.find((m) => m.module_id === node.module_id);
+      const f = focus || defaultFocusForModule(mod);
+      setHash({
+        node: node.id,
+        module: shortModule(node.module_id),
+        section: f.section || null,
+        item: f.item || null,
+      });
+      showModule(node.module_id, f);
+      return;
+    }
+    setHash({ node: node.id });
+    showCatalogCard(node);
+  }
+
+  function navigateToModule(moduleId, focus) {
+    const node = nodeForModule(moduleId);
+    if (node) {
+      navigateToNode(node, focus);
+      return;
+    }
+    currentNodeId = null;
+    const mod = modules.find((m) => m.module_id === moduleKey(moduleId));
+    const f = focus || defaultFocusForModule(mod);
+    setHash({
+      module: shortModule(moduleKey(moduleId)),
+      section: f.section || null,
+      item: f.item || null,
+    });
+    showModule(moduleId, f);
   }
 
   function moduleKey(moduleId) {
@@ -103,110 +187,368 @@
     return false;
   }
 
+  function appendPublicationSubtree(wrap, mod, focus) {
+    const expl = explorerSection(mod);
+    if (expl) {
+      const tree = document.createElement("div");
+      tree.className = "nav-explorer";
+      (expl.items || []).forEach((group) => {
+        const gId = group.id;
+        if (focus?.item && (group.children || []).some((c) => c.id === focus.item)) {
+          openGroups.add(gId);
+        }
+        const open = openGroups.has(gId);
+        const gWrap = document.createElement("div");
+        gWrap.className = "nav-group";
+        const gBtn = document.createElement("button");
+        gBtn.type = "button";
+        gBtn.className = "nav-group-btn";
+        gBtn.innerHTML = `<span class="tree-toggle">${open ? "▼" : "▶"}</span>
+          <span>${escapeHtml(group.title || group.id)}</span>
+          <span class="badge">${(group.children || []).length}</span>`;
+        const kids = document.createElement("div");
+        kids.className = "nav-group-children";
+        kids.hidden = !open;
+        gBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (openGroups.has(gId)) openGroups.delete(gId);
+          else openGroups.add(gId);
+          renderModuleNav({ item: selectedItemId });
+        });
+        (group.children || []).forEach((child) => {
+          const cBtn = document.createElement("button");
+          cBtn.type = "button";
+          cBtn.className =
+            "nav-item-btn" + (child.id === selectedItemId ? " active" : "");
+          const kind = child.attributes?.kind || "class";
+          cBtn.innerHTML = `<span class="nav-kind">${escapeHtml(kind === "enum" ? "E" : "C")}</span>
+            <span>${escapeHtml(child.title || child.id)}</span>`;
+          cBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const node = nodeForModule(mod.module_id);
+            setHash({
+              node: node ? node.id : null,
+              module: shortModule(mod.module_id),
+              section: expl.id,
+              item: child.id,
+            });
+            if (node) currentNodeId = node.id;
+            showModule(mod.module_id, { section: expl.id, item: child.id });
+          });
+          kids.appendChild(cBtn);
+        });
+        gWrap.appendChild(gBtn);
+        gWrap.appendChild(kids);
+        tree.appendChild(gWrap);
+      });
+      wrap.appendChild(tree);
+    }
+
+    const secondary = document.createElement("div");
+    secondary.className = "nav-secondary";
+    (mod.sections || [])
+      .filter((s) => s.type !== "explorer")
+      .forEach((sec) => {
+        const sBtn = document.createElement("button");
+        sBtn.type = "button";
+        sBtn.className =
+          "nav-section-btn" +
+          (focus?.section === sec.id && !focus?.item ? " active" : "");
+        sBtn.textContent = sec.title;
+        sBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          selectedItemId = null;
+          const node = nodeForModule(mod.module_id);
+          setHash({
+            node: node ? node.id : null,
+            module: shortModule(mod.module_id),
+            section: sec.id,
+          });
+          if (node) currentNodeId = node.id;
+          showModule(mod.module_id, { section: sec.id });
+        });
+        secondary.appendChild(sBtn);
+      });
+    if (secondary.childNodes.length) wrap.appendChild(secondary);
+  }
+
+  function makeCatalogBtn(node, { nested } = {}) {
+    const active = node.id === currentNodeId;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className =
+      (nested ? "nav-impl-btn" : "module-btn") + (active ? " active" : "");
+    const roleLabel =
+      node.role === "reference_specification" ? "Spec" : "Impl";
+    btn.innerHTML = `<span class="role-pill">${roleLabel}</span>
+      <span>${escapeHtml(node.title)}</span>
+      ${node.version ? `<span class="badge">${escapeHtml(node.version)}</span>` : ""}`;
+    btn.addEventListener("click", () => navigateToNode(node));
+    return btn;
+  }
+
   function renderModuleNav(focus) {
     moduleNav.innerHTML = "";
-    modules.forEach((mod) => {
+
+    if (!catalogNodes.length) {
+      modules.forEach((mod) => {
+        const wrap = document.createElement("div");
+        wrap.className = "nav-module";
+        const active = mod.module_id === currentModuleId;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "module-btn" + (active ? " active" : "");
+        btn.innerHTML = `<span class="module-icon">${escapeHtml(mod.icon || "📄")}</span>
+          <span>${escapeHtml(mod.title)}</span>
+          <span class="badge">${mod.sections.length}</span>`;
+        btn.addEventListener("click", () => navigateToModule(mod.module_id));
+        wrap.appendChild(btn);
+        if (active) appendPublicationSubtree(wrap, mod, focus);
+        moduleNav.appendChild(wrap);
+      });
+      return;
+    }
+
+    rootSpecifications().forEach((spec) => {
       const wrap = document.createElement("div");
       wrap.className = "nav-module";
-      const active = mod.module_id === currentModuleId;
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "module-btn" + (active ? " active" : "");
-      btn.innerHTML = `<span class="module-icon">${escapeHtml(mod.icon || "📄")}</span>
-        <span>${escapeHtml(mod.title)}</span>
-        <span class="badge">${mod.sections.length}</span>`;
-      btn.addEventListener("click", () => {
-        const expl = explorerSection(mod);
-        setHash({
-          module: shortModule(mod.module_id),
-          section: expl ? expl.id : (mod.sections[0] && mod.sections[0].id),
-        });
-        showModule(mod.module_id, { section: expl ? expl.id : null });
-      });
-      wrap.appendChild(btn);
+      wrap.appendChild(makeCatalogBtn(spec));
 
-      if (active) {
-        const expl = explorerSection(mod);
-        if (expl) {
-          const tree = document.createElement("div");
-          tree.className = "nav-explorer";
-          (expl.items || []).forEach((group) => {
-            const gId = group.id;
-            // Keep group open if selected item is inside
-            if (focus?.item && (group.children || []).some((c) => c.id === focus.item)) {
-              openGroups.add(gId);
-            }
-            const open = openGroups.has(gId);
-            const gWrap = document.createElement("div");
-            gWrap.className = "nav-group";
-            const gBtn = document.createElement("button");
-            gBtn.type = "button";
-            gBtn.className = "nav-group-btn";
-            gBtn.innerHTML = `<span class="tree-toggle">${open ? "▼" : "▶"}</span>
-              <span>${escapeHtml(group.title || group.id)}</span>
-              <span class="badge">${(group.children || []).length}</span>`;
-            const kids = document.createElement("div");
-            kids.className = "nav-group-children";
-            kids.hidden = !open;
-            gBtn.addEventListener("click", (e) => {
-              e.stopPropagation();
-              if (openGroups.has(gId)) openGroups.delete(gId);
-              else openGroups.add(gId);
-              renderModuleNav({ item: selectedItemId });
-            });
-            (group.children || []).forEach((child) => {
-              const cBtn = document.createElement("button");
-              cBtn.type = "button";
-              cBtn.className =
-                "nav-item-btn" + (child.id === selectedItemId ? " active" : "");
-              const kind = child.attributes?.kind || "class";
-              cBtn.innerHTML = `<span class="nav-kind">${escapeHtml(kind === "enum" ? "E" : "C")}</span>
-                <span>${escapeHtml(child.title || child.id)}</span>`;
-              cBtn.addEventListener("click", (e) => {
-                e.stopPropagation();
-                setHash({
-                  module: shortModule(mod.module_id),
-                  section: expl.id,
-                  item: child.id,
-                });
-                showModule(mod.module_id, { section: expl.id, item: child.id });
-              });
-              kids.appendChild(cBtn);
-            });
-            gWrap.appendChild(gBtn);
-            gWrap.appendChild(kids);
-            tree.appendChild(gWrap);
-          });
-          wrap.appendChild(tree);
-        }
+      const impls = implementationsOf(spec.id);
+      if (impls.length) {
+        const kids = document.createElement("div");
+        kids.className = "nav-impl-children";
+        impls.forEach((impl) => kids.appendChild(makeCatalogBtn(impl, { nested: true })));
+        wrap.appendChild(kids);
+      }
 
-        const secondary = document.createElement("div");
-        secondary.className = "nav-secondary";
-        (mod.sections || [])
-          .filter((s) => s.type !== "explorer")
-          .forEach((sec) => {
-            const sBtn = document.createElement("button");
-            sBtn.type = "button";
-            sBtn.className =
-              "nav-section-btn" +
-              (focus?.section === sec.id && !focus?.item ? " active" : "");
-            sBtn.textContent = sec.title;
-            sBtn.addEventListener("click", (e) => {
-              e.stopPropagation();
-              selectedItemId = null;
-              setHash({
-                module: shortModule(mod.module_id),
-                section: sec.id,
-              });
-              showModule(mod.module_id, { section: sec.id });
-            });
-            secondary.appendChild(sBtn);
-          });
-        wrap.appendChild(secondary);
+      const activeHere =
+        currentNodeId === spec.id ||
+        impls.some((i) => i.id === currentNodeId) ||
+        (spec.module_id && spec.module_id === currentModuleId);
+      if (activeHere && spec.module_id && currentNodeId === spec.id) {
+        const mod = modules.find((m) => m.module_id === spec.module_id);
+        if (mod) appendPublicationSubtree(wrap, mod, focus);
+      } else if (
+        activeHere &&
+        currentNodeId &&
+        catalogNode(currentNodeId)?.module_id === currentModuleId &&
+        catalogNode(currentNodeId)?.conforms_to === spec.id
+      ) {
+        const mod = modules.find((m) => m.module_id === currentModuleId);
+        if (mod) appendPublicationSubtree(wrap, mod, focus);
       }
 
       moduleNav.appendChild(wrap);
     });
+
+    const orphans = unattachedImplementations();
+    if (orphans.length) {
+      const label = document.createElement("div");
+      label.className = "nav-group-label muted";
+      label.textContent = "Implementations without specification";
+      moduleNav.appendChild(label);
+      orphans.forEach((impl) => {
+        const wrap = document.createElement("div");
+        wrap.className = "nav-module";
+        wrap.appendChild(makeCatalogBtn(impl));
+        if (currentNodeId === impl.id && impl.module_id) {
+          const mod = modules.find((m) => m.module_id === impl.module_id);
+          if (mod) appendPublicationSubtree(wrap, mod, focus);
+        }
+        moduleNav.appendChild(wrap);
+      });
+    }
+
+    const others = otherModules();
+    if (others.length) {
+      const label = document.createElement("div");
+      label.className = "nav-group-label muted";
+      label.textContent = "Other publications";
+      moduleNav.appendChild(label);
+      others.forEach((mod) => {
+        const wrap = document.createElement("div");
+        wrap.className = "nav-module";
+        const active = mod.module_id === currentModuleId && !currentNodeId;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "module-btn" + (active ? " active" : "");
+        btn.innerHTML = `<span class="module-icon">${escapeHtml(mod.icon || "📄")}</span>
+          <span>${escapeHtml(mod.title)}</span>
+          <span class="badge">${mod.sections.length}</span>`;
+        btn.addEventListener("click", () => navigateToModule(mod.module_id));
+        wrap.appendChild(btn);
+        if (mod.module_id === currentModuleId && !currentNodeId) {
+          appendPublicationSubtree(wrap, mod, focus);
+        }
+        moduleNav.appendChild(wrap);
+      });
+    }
+  }
+
+  function renderArchitectureCrumb(node) {
+    const crumb = document.createElement("div");
+    crumb.className = "breadcrumb";
+    if (!node) {
+      crumb.classList.add("muted");
+      return crumb;
+    }
+    const parts = [];
+    if (node.role === "specification_implementation" && node.conforms_to) {
+      const parent = catalogNode(node.conforms_to);
+      if (parent) {
+        const link = document.createElement("button");
+        link.type = "button";
+        link.className = "crumb-link";
+        link.textContent = parent.title;
+        link.addEventListener("click", () => navigateToNode(parent));
+        parts.push(link);
+      }
+    }
+    const current = document.createElement("span");
+    current.className = "muted";
+    current.textContent = node.title;
+    parts.push(current);
+
+    parts.forEach((el, i) => {
+      if (i > 0) {
+        const sep = document.createElement("span");
+        sep.className = "muted";
+        sep.textContent = " / ";
+        crumb.appendChild(sep);
+      }
+      crumb.appendChild(el);
+    });
+    return crumb;
+  }
+
+  function renderImplementationsBlock(spec) {
+    const block = document.createElement("section");
+    block.className = "arch-block";
+    const impls = implementationsOf(spec.id);
+    block.innerHTML = `<h2>Implementations</h2>`;
+    if (!impls.length) {
+      const empty = document.createElement("p");
+      empty.className = "muted";
+      empty.textContent = "No implementations registered for this specification.";
+      block.appendChild(empty);
+      return block;
+    }
+    const list = document.createElement("div");
+    list.className = "impl-list";
+    impls.forEach((impl) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "spec-link";
+      btn.innerHTML = `<strong>${escapeHtml(impl.title)}</strong>${
+        impl.version ? ` <span class="muted">${escapeHtml(impl.version)}</span>` : ""
+      }`;
+      btn.addEventListener("click", () => navigateToNode(impl));
+      list.appendChild(btn);
+    });
+    block.appendChild(list);
+    return block;
+  }
+
+  function findOntologyCatalogHit(nodeId) {
+    const catalogMod = modules.find((m) => m.module_id.includes("ontology-catalog"));
+    if (!catalogMod) return null;
+    for (const sec of catalogMod.sections || []) {
+      const hit = (sec.items || []).find((i) => i.id === nodeId);
+      if (hit) return { module: catalogMod, section: sec, item: hit };
+    }
+    return null;
+  }
+
+  function showCatalogCard(node) {
+    currentModuleId = null;
+    selectedItemId = null;
+    renderModuleNav();
+    content.innerHTML = "";
+    content.appendChild(renderArchitectureCrumb(node));
+
+    const card = document.createElement("article");
+    card.className = "detail-card";
+    const badges = [
+      `<span class="badge-pill">${
+        node.role === "reference_specification" ? "Specification" : "Implementation"
+      }</span>`,
+    ];
+    if (node.expressed_in) {
+      badges.push(
+        `<span class="badge-pill">expressed in ${escapeHtml(node.expressed_in)}</span>`
+      );
+    }
+    if (node.version) {
+      badges.push(`<span class="badge-pill">${escapeHtml(node.version)}</span>`);
+    }
+    card.innerHTML = `
+      <header class="detail-head">
+        <h1>${escapeHtml(node.title)}</h1>
+        <div class="badge-row">${badges.join("")}</div>
+        <p class="muted">${escapeHtml(node.id)}</p>
+      </header>
+      <p class="detail-desc">${escapeHtml(node.description || "No publication body for this node yet.")}</p>
+    `;
+    content.appendChild(card);
+
+    if (node.role === "reference_specification") {
+      content.appendChild(renderImplementationsBlock(node));
+    }
+
+    const hit = findOntologyCatalogHit(node.id);
+    if (hit) {
+      const linkBlock = document.createElement("section");
+      linkBlock.className = "arch-block";
+      linkBlock.innerHTML = `<h2>Related publication</h2>`;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "spec-link";
+      btn.textContent = `Open in ${hit.module.title}`;
+      btn.addEventListener("click", () => {
+        currentNodeId = null;
+        navigateToModule(hit.module.module_id, {
+          section: hit.section.id,
+          item: hit.item.id,
+        });
+      });
+      linkBlock.appendChild(btn);
+      content.appendChild(linkBlock);
+    }
+  }
+
+  function prependArchitectureChrome(mod, focus) {
+    const node =
+      (currentNodeId && catalogNode(currentNodeId)) || nodeForModule(mod.module_id);
+    if (!node) return null;
+
+    const chrome = document.createElement("div");
+    chrome.className = "arch-chrome";
+    chrome.appendChild(renderArchitectureCrumb(node));
+
+    const meta = document.createElement("div");
+    meta.className = "arch-meta";
+    const badges = [
+      `<span class="badge-pill">${
+        node.role === "reference_specification" ? "Specification" : "Implementation"
+      }</span>`,
+    ];
+    if (node.expressed_in) {
+      badges.push(
+        `<span class="badge-pill">expressed in ${escapeHtml(node.expressed_in)}</span>`
+      );
+    }
+    meta.innerHTML = `<div class="badge-row">${badges.join("")}</div>`;
+    chrome.appendChild(meta);
+
+    if (
+      node.role === "reference_specification" &&
+      !focus?.item &&
+      (!focus?.section || focus.section === explorerSection(mod)?.id)
+    ) {
+      chrome.appendChild(renderImplementationsBlock(node));
+    }
+    return chrome;
   }
 
   function showModule(moduleId, focus) {
@@ -217,13 +559,19 @@
       return;
     }
 
-    const expl = explorerSection(mod);
-    // Explorer groups stay collapsed by default (openGroups starts empty)
+    if (!currentNodeId || catalogNode(currentNodeId)?.module_id !== currentModuleId) {
+      const linked = nodeForModule(currentModuleId);
+      if (linked) currentNodeId = linked.id;
+    }
 
+    const expl = explorerSection(mod);
     selectedItemId = focus?.item || null;
     renderModuleNav(focus);
 
     content.innerHTML = "";
+    const chrome = prependArchitectureChrome(mod, focus);
+    if (chrome) content.appendChild(chrome);
+
     const crumb = document.createElement("div");
     crumb.className = "breadcrumb muted";
 
@@ -284,7 +632,9 @@
           btn.title = child.description || "";
           btn.addEventListener("click", () => {
             openGroups.add(group.id);
+            const node = nodeForModule(mod.module_id);
             setHash({
+              node: node ? node.id : null,
               module: shortModule(mod.module_id),
               section: expl.id,
               item: child.id,
@@ -339,9 +689,6 @@
     const badges = [];
     if (kind) badges.push(`<span class="badge-pill">${escapeHtml(kind)}</span>`);
     if (abstract) badges.push(`<span class="badge-pill">abstract</span>`);
-    if (item.attributes?.expressed_in) {
-      badges.push(`<span class="badge-pill">expressed in ${escapeHtml(item.attributes.expressed_in)}</span>`);
-    }
 
     card.innerHTML = `
       <header class="detail-head">
@@ -453,7 +800,9 @@
     btn.textContent = label ? `${label}: ${name}` : name;
     if (known.has(name)) {
       btn.addEventListener("click", () => {
+        const node = nodeForModule(mod.module_id);
         setHash({
+          node: node ? node.id : currentNodeId,
           module: shortModule(mod.module_id),
           section: expl.id,
           item: name,
@@ -473,7 +822,14 @@
     btn.className = "spec-link";
     btn.textContent = `FIBO: ${itemId}`;
     btn.addEventListener("click", () => {
-      setHash({ module: "fibo", section: "glossary", item: itemId });
+      const node = nodeForModule("moex:module:fibo");
+      currentNodeId = node ? node.id : null;
+      setHash({
+        node: node ? node.id : null,
+        module: "fibo",
+        section: "glossary",
+        item: itemId,
+      });
       showModule("moex:module:fibo", { section: "glossary", item: itemId });
     });
     return btn;
@@ -490,7 +846,11 @@
     head.innerHTML = `<h2>${escapeHtml(section.title)}</h2><span class="muted">${escapeHtml(section.type)}</span>`;
     head.addEventListener("click", () => {
       wrap.classList.toggle("collapsed");
-      setHash({ module: shortModule(mod.module_id), section: section.id });
+      setHash({
+        node: nodeForModule(mod.module_id)?.id || currentNodeId,
+        module: shortModule(mod.module_id),
+        section: section.id,
+      });
     });
     wrap.appendChild(head);
 
@@ -849,6 +1209,7 @@
           <div class="muted">${escapeHtml(item.id)}${domain ? " · " + escapeHtml(domain) : ""}</div>`;
         card.addEventListener("click", () => {
           setHash({
+            node: nodeForModule(mod.module_id)?.id || currentNodeId,
             module: shortModule(mod.module_id),
             section: section.id,
             item: item.id,
@@ -911,6 +1272,7 @@
       label.addEventListener("click", () => {
         showDetails(item, path.concat(item.title || item.id));
         setHash({
+          node: nodeForModule(mod.module_id)?.id || currentNodeId,
           module: shortModule(mod.module_id),
           section: section.id,
           item: item.id,
@@ -945,15 +1307,15 @@
       return;
     }
 
-    const groups = { module: [], section: [], item: [] };
+    const groups = { module: [], section: [], item: [], catalog: [] };
     hits.forEach((h) => groups[h.kind]?.push(h));
     searchResults.innerHTML = "";
-    ["module", "section", "item"].forEach((kind) => {
+    ["catalog", "module", "section", "item"].forEach((kind) => {
       if (!groups[kind].length) return;
       const title = document.createElement("div");
       title.className = "muted";
       title.style.padding = "6px 12px";
-      title.textContent = kind + "s";
+      title.textContent = kind === "catalog" ? "architecture" : kind + "s";
       searchResults.appendChild(title);
       groups[kind].forEach((h) => {
         const btn = document.createElement("button");
@@ -963,17 +1325,22 @@
           new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "ig"),
           "<mark>$1</mark>"
         );
-        btn.innerHTML = `${labeled}<div class="muted">${escapeHtml(h.module_id)}${
-          h.section_id ? " / " + escapeHtml(h.section_id) : ""
-        }</div>`;
+        const subtitle =
+          h.kind === "catalog"
+            ? h.node_id || ""
+            : `${h.module_id}${h.section_id ? " / " + h.section_id : ""}`;
+        btn.innerHTML = `${labeled}<div class="muted">${escapeHtml(subtitle)}</div>`;
         btn.addEventListener("click", () => {
           searchResults.classList.add("hidden");
-          setHash({
-            module: shortModule(h.module_id),
-            section: h.section_id || null,
-            item: h.item_id || null,
+          if (h.kind === "catalog" && h.node_id) {
+            const node = catalogNode(h.node_id);
+            if (node) navigateToNode(node);
+            return;
+          }
+          if (h.module_id) navigateToModule(h.module_id, {
+            section: h.section_id,
+            item: h.item_id,
           });
-          showModule(h.module_id, { section: h.section_id, item: h.item_id });
         });
         searchResults.appendChild(btn);
       });
@@ -1016,10 +1383,31 @@
   if (savedTheme) document.documentElement.dataset.theme = savedTheme;
 
   function applyRoute() {
-    const { module, section, item } = parseHash();
+    const { node, module, section, item } = parseHash();
+    if (node) {
+      const catalogEntry = catalogNode(node);
+      if (catalogEntry) {
+        currentNodeId = catalogEntry.id;
+        if (catalogEntry.module_id) {
+          showModule(catalogEntry.module_id, { section, item });
+        } else {
+          showCatalogCard(catalogEntry);
+        }
+        return;
+      }
+    }
     if (module) {
+      const linked = nodeForModule(moduleKey(module));
+      currentNodeId = linked ? linked.id : null;
       showModule(moduleKey(module), { section, item });
-    } else if (modules[0]) {
+      return;
+    }
+    const firstSpec = rootSpecifications()[0];
+    if (firstSpec) {
+      navigateToNode(firstSpec);
+      return;
+    }
+    if (modules[0]) {
       const expl = explorerSection(modules[0]);
       setHash({
         module: shortModule(modules[0].module_id),

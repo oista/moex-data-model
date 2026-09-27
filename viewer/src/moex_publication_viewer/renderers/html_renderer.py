@@ -8,6 +8,7 @@ from typing import Any
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from moex_publication_viewer.models.catalog_models import ArchitectureCatalog
 from moex_publication_viewer.models.publication_models import PublicationModule, PublicationSection
 
 SECTION_TEMPLATES = {
@@ -66,10 +67,34 @@ def modules_payload(modules: list[PublicationModule]) -> list[dict[str, Any]]:
     ]
 
 
+def catalog_payload(catalog: ArchitectureCatalog | None) -> dict[str, Any] | None:
+    if catalog is None:
+        return None
+    return {
+        "kind": catalog.kind,
+        "version": catalog.version,
+        "nodes": [
+            {
+                "id": n.id,
+                "role": n.role,
+                "title": n.title,
+                "version": n.version,
+                "expressed_in": n.expressed_in,
+                "conforms_to": n.conforms_to,
+                "module_id": n.module_id,
+                "order": n.order,
+                "description": n.description,
+            }
+            for n in catalog.nodes
+        ],
+    }
+
+
 def render_viewer(
     modules: list[PublicationModule],
     search_index: list[dict],
     viewer_root: Path,
+    catalog: ArchitectureCatalog | None = None,
 ) -> str:
     templates_dir = viewer_root / "templates"
     env = Environment(
@@ -82,6 +107,7 @@ def render_viewer(
     return template.render(
         modules=modules,
         modules_json=json.dumps(modules_payload(modules), ensure_ascii=False),
+        catalog_json=json.dumps(catalog_payload(catalog), ensure_ascii=False),
         search_index_json=json.dumps(search_index, ensure_ascii=False),
         section_templates=SECTION_TEMPLATES,
     )

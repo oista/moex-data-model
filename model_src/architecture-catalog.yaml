@@ -1,0 +1,61 @@
+# Architecture navigation catalog for Publication Viewer.
+# Roles: reference_specification | specification_implementation
+# ModelingStandard is intentionally omitted from the tree (label only via expressed_in).
+kind: architecture_catalog
+version: "1"
+nodes:
+  - id: moex-dams
+    role: reference_specification
+    title: MOEX DAMS
+    version: "0.1"
+    expressed_in: LinkML
+    module_id: moex:module:dams
+    order: 100
+
+  - id: trading-solution
+    role: specification_implementation
+    title: Trading solution (demo)
+    version: "1.0.0"
+    conforms_to: moex-dams
+    module_id: moex:module:trading-solution
+    order: 110
+
+  - id: moex:ontology:fibo
+    role: reference_specification
+    title: FIBO
+    version: master_2026Q2
+    expressed_in: OWL 2
+    module_id: moex:module:fibo
+    order: 200
+
+  - id: moex:ontology:corporate
+    role: reference_specification
+    title: Corporate Ontology
+    version: "0.0.0"
+    expressed_in: OWL 2
+    order: 210
+
+  - id: moex:ontology:prov-o
+    role: reference_specification
+    title: PROV-O Ontology
+    version: "2013-04-30"
+    expressed_in: OWL 2
+    order: 220
+
+  - id: moex:ontology:moex-hr
+    role: specification_implementation
+    title: MOEX HR Ontology
+    version: "0.0.0"
+    order: 300
+
+  - id: moex:ontology:moex-data
+    role: specification_implementation
+    title: MOEX Data Ontology
+    version: "0.0.0"
+    order: 310
+
+  - id: moex:ontology:application
+    role: specification_implementation
+    title: Application Ontology
+    version: "0.0.0"
+    order: 320

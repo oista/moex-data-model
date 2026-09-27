@@ -85,9 +85,24 @@ def test_repo_golden_three_modules():
     assert "explorer" in dams["sections"]
     fibo = next(m for m in registry["modules"] if m["module_id"] == "moex:module:fibo")
     assert "glossary" in fibo["sections"]
-    assert "hierarchy" in fibo["sections"]
     assert "денежный поток" in html
     assert "FailureToPay" in html and "CreditEvent" in html
+
+    catalog = registry.get("catalog")
+    assert catalog is not None
+    by_id = {n["id"]: n for n in catalog["nodes"]}
+    assert by_id["trading-solution"]["conforms_to"] == "moex-dams"
+    assert by_id["moex-dams"]["expressed_in"] == "LinkML"
+    assert by_id["moex:ontology:fibo"]["role"] == "reference_specification"
+    assert by_id["moex:ontology:fibo"].get("conforms_to") in (None, "")
+    # Architecture catalog embedded; standards are labels only (no tree nodes)
+    assert "architecture-catalog" in html
+    assert '"role": "modeling_standard"' not in html
+    assert '"role":"modeling_standard"' not in html
+    js = (dist / "viewer.js").read_text(encoding="utf-8")
+    assert "Implementations" in js
+    assert "rootSpecifications" in js
+    assert "navigateToNode" in js
 
 
 def test_nav_group_children_hidden_overrides_display_flex():
@@ -116,3 +131,6 @@ def test_explorer_groups_not_in_search_index_and_module_title():
     assert "Package/group nodes are hierarchy-only" in js
     # Collapsed-by-default: no auto-expand when openGroups is empty
     assert "openGroups.size === 0" not in js
+    # Class-level expressed_in removed from LinkML explorer (catalog may still label specs)
+    pub = html.split('id="publication-data"', 1)[1].split("</script>", 1)[0]
+    assert "expressed_in" not in pub

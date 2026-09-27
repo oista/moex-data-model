@@ -34,11 +34,23 @@ python -m moex_publication_viewer.cli build --root .
 
 Open `viewer/dist/index.html` in a browser (`file://` works).
 
+## Architecture navigation
+
+Sidebar order follows [`model_src/architecture-catalog.yaml`](../model_src/architecture-catalog.yaml):
+
+- **Reference specification** nodes (DAMS, FIBO, …)
+  - nested **Specification implementation** nodes (`conforms_to`)
+- Implementations without a parent specification
+- **Other publications** (modules not listed in the catalog, e.g. Ontology Catalog)
+
+`ModelingStandard` is not a tree level; specifications may carry an `expressed_in` label (LinkML, OWL 2).
+
 ## Add a module
 
 1. Place a `publish.yaml` next to your sources (`kind: publication_module`).
 2. Point `source.path` relative to the manifest directory.
-3. Re-run `make viewer`. The sidebar picks up the new module without UI code changes.
+3. Optionally register the module in `model_src/architecture-catalog.yaml` (`module_id`, `conforms_to` / `expressed_in`).
+4. Re-run `make viewer`. The sidebar picks up the new module without UI code changes.
 
 See `schema/publication-manifest.schema.json` for the contract.
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from moex_publication_viewer.manifest_loader import resolve_source_path
+from moex_publication_viewer.models.catalog_models import ArchitectureCatalog
 from moex_publication_viewer.models.manifest_models import PublicationManifest
 
 
@@ -49,6 +50,57 @@ def validate_manifests(
 
         if not manifest.sections:
             errors.append(f"{path}: module '{manifest.module_id}' has no sections")
+
+    if errors:
+        raise ValidationError(errors)
+
+
+def validate_architecture_catalog(
+    catalog: ArchitectureCatalog,
+    module_ids: set[str],
+    *,
+    catalog_path: Path | None = None,
+) -> None:
+    """Validate catalog ids, conforms_to targets, and module_id references."""
+    errors: list[str] = []
+    loc = str(catalog_path) if catalog_path else "architecture-catalog"
+    by_id: dict[str, object] = {}
+
+    for node in catalog.nodes:
+        if node.id in by_id:
+            errors.append(f"{loc}: duplicate node id '{node.id}'")
+        else:
+            by_id[node.id] = node
+
+        if node.module_id and node.module_id not in module_ids:
+            errors.append(
+                f"{loc}: node '{node.id}' references unknown module_id '{node.module_id}'"
+            )
+
+        if node.role == "reference_specification" and node.conforms_to:
+            errors.append(
+                f"{loc}: specification '{node.id}' must not set conforms_to"
+            )
+
+        if node.role == "specification_implementation" and node.expressed_in:
+            errors.append(
+                f"{loc}: implementation '{node.id}' must not set expressed_in "
+                "(use label on the specification)"
+            )
+
+    for node in catalog.nodes:
+        if not node.conforms_to:
+            continue
+        target = by_id.get(node.conforms_to)
+        if target is None:
+            errors.append(
+                f"{loc}: node '{node.id}' conforms_to unknown id '{node.conforms_to}'"
+            )
+        elif getattr(target, "role", None) != "reference_specification":
+            errors.append(
+                f"{loc}: node '{node.id}' conforms_to '{node.conforms_to}' "
+                "which is not a reference_specification"
+            )
 
     if errors:
         raise ValidationError(errors)

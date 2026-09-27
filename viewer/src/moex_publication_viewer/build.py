@@ -5,14 +5,20 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from moex_publication_viewer.catalog_loader import catalog_path, load_architecture_catalog
 from moex_publication_viewer.discovery import discover_manifest_paths
 from moex_publication_viewer.manifest_loader import load_manifest, resolve_source_path
+from moex_publication_viewer.models.catalog_models import ArchitectureCatalog
 from moex_publication_viewer.models.publication_models import PublicationModule
 from moex_publication_viewer.normalizers import get_normalizer
 from moex_publication_viewer.normalizers.base import NormalizeError
 from moex_publication_viewer.normalizers.linkml_normalizer import clear_schema_view_cache
 from moex_publication_viewer.renderers.html_renderer import render_viewer
-from moex_publication_viewer.validators import ValidationError, validate_manifests
+from moex_publication_viewer.validators import (
+    ValidationError,
+    validate_architecture_catalog,
+    validate_manifests,
+)
 
 PACKAGE_DIR = Path(__file__).resolve().parent
 VIEWER_ROOT = PACKAGE_DIR.parent.parent  # viewer/
@@ -78,6 +84,18 @@ def compile_modules(root: Path) -> list[PublicationModule]:
     return modules
 
 
+def compile_catalog(root: Path, modules: list[PublicationModule]) -> ArchitectureCatalog | None:
+    catalog = load_architecture_catalog(root)
+    if catalog is None:
+        return None
+    validate_architecture_catalog(
+        catalog,
+        {m.module_id for m in modules},
+        catalog_path=catalog_path(root),
+    )
+    return catalog
+
+
 def build_search_index(modules: list[PublicationModule]) -> list[dict]:
     index: list[dict] = []
     for mod in modules:
@@ -130,7 +148,19 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
     dist_dir.mkdir(parents=True, exist_ok=True)
 
     modules = compile_modules(root)
+    catalog = compile_catalog(root, modules)
     search_index = build_search_index(modules)
+    if catalog is not None:
+        for node in catalog.nodes:
+            search_index.append(
+                {
+                    "kind": "catalog",
+                    "node_id": node.id,
+                    "module_id": node.module_id or "",
+                    "title": node.title,
+                    "description": node.description or node.role,
+                }
+            )
 
     registry = {
         "modules": [
@@ -141,14 +171,33 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
                 "manifest_path": m.manifest_path,
             }
             for m in modules
-        ]
+        ],
+        "catalog": (
+            {
+                "nodes": [
+                    {
+                        "id": n.id,
+                        "role": n.role,
+                        "title": n.title,
+                        "version": n.version,
+                        "expressed_in": n.expressed_in,
+                        "conforms_to": n.conforms_to,
+                        "module_id": n.module_id,
+                        "order": n.order,
+                    }
+                    for n in catalog.nodes
+                ]
+            }
+            if catalog is not None
+            else None
+        ),
     }
     (dist_dir / "manifest_registry.json").write_text(
         json.dumps(registry, indent=2, ensure_ascii=False),
         encoding="utf-8",
     )
 
-    html = render_viewer(modules, search_index, VIEWER_ROOT)
+    html = render_viewer(modules, search_index, VIEWER_ROOT, catalog=catalog)
     index_path = dist_dir / "index.html"
     index_path.write_text(html, encoding="utf-8")
 

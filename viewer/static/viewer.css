@@ -90,6 +90,38 @@ body {
 }
 .nav-secondary { margin: 6px 0 0 8px; display: flex; flex-direction: column; gap: 2px; border-top: 1px solid var(--border); padding-top: 6px; }
 .nav-group-btn .badge { margin-left: auto; font-size: 10px; background: var(--border); border-radius: 999px; padding: 0 6px; }
+.nav-group-label { margin: 14px 8px 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+.nav-impl-children { margin: 2px 0 4px 14px; display: flex; flex-direction: column; gap: 2px; }
+.nav-impl-btn {
+  display: flex; align-items: center; gap: 6px;
+  width: 100%; text-align: left;
+  border: 0; background: transparent; color: var(--text);
+  padding: 5px 8px; border-radius: 6px; cursor: pointer; font-size: 13px;
+}
+.nav-impl-btn:hover { background: var(--accent-soft); }
+.nav-impl-btn.active { background: var(--accent-soft); font-weight: 600; }
+.role-pill {
+  font-size: 10px; color: var(--muted);
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 0 5px; flex-shrink: 0;
+}
+.arch-chrome { margin-bottom: 16px; }
+.arch-meta { margin: 8px 0 12px; }
+.arch-block {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 0 0 16px;
+  box-shadow: var(--shadow);
+}
+.arch-block h2 { margin: 0 0 10px; font-size: 15px; }
+.impl-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.crumb-link {
+  border: 0; background: transparent; color: var(--accent);
+  padding: 0; cursor: pointer; font-size: inherit;
+}
+.crumb-link:hover { text-decoration: underline; }
 
 .breadcrumb { margin-bottom: 12px; font-size: 12px; }
 .detail-card {

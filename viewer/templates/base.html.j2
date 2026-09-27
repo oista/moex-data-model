@@ -11,9 +11,9 @@
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-brand">
         <strong>MOEX Viewer</strong>
-        <span class="muted">publications</span>
+        <span class="muted">specifications</span>
       </div>
-      <nav class="module-nav" id="module-nav" aria-label="Modules"></nav>
+      <nav class="module-nav" id="module-nav" aria-label="Architecture"></nav>
     </aside>
 
     <div class="main">
@@ -37,6 +37,7 @@
   </div>
 
   <script id="publication-data" type="application/json">{{ modules_json | safe }}</script>
+  <script id="architecture-catalog" type="application/json">{{ catalog_json | safe }}</script>
   <script id="search-index" type="application/json">{{ search_index_json | safe }}</script>
   <script src="viewer.js"></script>
 </body>
