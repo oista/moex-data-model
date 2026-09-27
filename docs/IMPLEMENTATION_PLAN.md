@@ -336,6 +336,7 @@ artifact:
 - Создать baseline CI.
 - **Target-after-slice layout:** миграция `model_src/` → `model-assets/`, `viewer/` → `apps/viewer`, конверты активов (сделано; см. [migration](migration/model-src-to-model-assets.md)). `make check` включает slice + architecture-check + lint/validate схем.
 - **Roadmap phases 1–4 (2026-09-28):** (1) `make generate-contracts` → `moex_dams_contracts`; (2) `OWLStandardProvider`; (3) `packages/git-adapter` + CLI lint/compile/diagram/diff; (4) `apps/api` FastAPI + Alembic core tables + `infra/compose/postgres.yml` (SQLite smoke / Postgres compose).
+- **Stage 3 narrow-v2 (2026-09-28):** Alembic `0002` — `user_identity`, `role_binding`, `workspace_member`, `generation_job`, `generated_artifact`, `model_index`, `model_element_index`; ports `IdentityStore` / `JobStore` / `ModelIndexProvider`; HTTP workspaces + sync jobs (Idempotency-Key) + model-index rebuild/search; GitHub read-only `GitProvider` via `MOEX_GIT_PROVIDER`. Still out: OIDC, RLS, `diagram_layout`, `publication_request`, async workers.
 
 ### Результат
 
@@ -439,6 +440,8 @@ moex-model diagram model.yaml --profile logical --format dbml
 - Повторная генерация идентична побайтно либо отличается только явно разрешёнными полями.
 
 ## Этап 3. API и persistence
+
+**Progress (narrow-v2):** FastAPI + Alembic core/`0002`, ports + SQL adapters, workspace/job/index APIs, Idempotency-Key, DevAuth, GitHub **read-only** provider. Remaining: OIDC, domain authz/RLS, `diagram_layout`, `external_registry_cache`, `publication_request`, async workers, write GitHub.
 
 ### Задачи
 
