@@ -1,4 +1,4 @@
-# MOEX MDMS v0.1
+# MOEX DAMS v0.1
 
 Прототип метамодели описания корпоративной модели данных MOEX на LinkML.
 
@@ -11,7 +11,7 @@
 - `schemas/moex-integration.yaml` — проекция потоков из Clinkr и семантические bindings.
 - `schemas/moex-analytics.yaml` — опциональные метрики и измерения.
 - `schemas/moex-contract-binding.yaml` — модельная дочерняя спецификация дата-контракта.
-- `schemas/moex-mdms.yaml` — корневая схема.
+- `schemas/moex-dams.yaml` — корневая схема.
 - `examples/trading-solution-model.yaml` — пример артефакта модели решения.
 
 ## Проверка
@@ -19,8 +19,8 @@
 ```bash
 pip install linkml
 cd schemas
-linkml-lint moex-mdms.yaml
-gen-json-schema moex-mdms.yaml > ../generated/moex-mdms.schema.json
+linkml-lint moex-dams.yaml
+gen-json-schema moex-dams.yaml > ../generated/moex-dams.schema.json
 ```
 
 ## Статус

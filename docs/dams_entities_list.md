@@ -1,7 +1,7 @@
 
-# Сводный список сущностей MDMS (MOEX Data Model Specification)
+# Сводный список сущностей DAMS (MOEX Data Model Specification)
 
-## Группа 1. Ядро модели (MDMS Core) — три уровня
+## Группа 1. Ядро модели (DAMS Core) — три уровня
 
 1. ModelPackage — версионируемый пакет модели (домена или решения)
 2. ConceptualEntity — корпоративное понятие верхнего уровня

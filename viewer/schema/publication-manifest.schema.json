@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://data.moex.com/viewer/publication-manifest.schema.json",
+  "title": "PublicationManifest",
+  "type": "object",
+  "required": ["module_id", "kind", "title", "sections"],
+  "properties": {
+    "module_id": { "type": "string" },
+    "kind": { "const": "publication_module" },
+    "version": { "type": ["string", "integer"] },
+    "order": { "type": "integer" },
+    "icon": { "type": "string" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "sections": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/section" }
+    }
+  },
+  "$defs": {
+    "section": {
+      "type": "object",
+      "required": ["id", "title", "type", "source"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "type": {
+          "enum": [
+            "entity-table",
+            "enum-table",
+            "glossary",
+            "tree",
+            "markdown-doc",
+            "key-value"
+          ]
+        },
+        "source": {
+          "type": "object",
+          "required": ["format", "path"],
+          "properties": {
+            "format": {
+              "enum": ["yaml", "json", "csv", "markdown", "linkml-yaml"]
+            },
+            "path": { "type": "string" },
+            "select": { "type": "string" }
+          }
+        },
+        "columns": { "type": "array", "items": { "type": "string" } },
+        "filterable": { "type": "array", "items": { "type": "string" } },
+        "groupby": { "type": "string" },
+        "key_column": { "type": "string" },
+        "default_collapsed": { "type": "boolean" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "sort": {
+          "type": "object",
+          "properties": {
+            "by": { "type": "string" },
+            "order": { "enum": ["asc", "desc"] }
+          }
+        }
+      }
+    }
+  }
+}

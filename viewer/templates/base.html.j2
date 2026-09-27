@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MOEX Publication Viewer</title>
+  <link rel="stylesheet" href="viewer.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <strong>MOEX Viewer</strong>
+        <span class="muted">publications</span>
+      </div>
+      <nav class="module-nav" id="module-nav" aria-label="Modules"></nav>
+    </aside>
+
+    <div class="main">
+      <header class="toolbar">
+        <div class="search-wrap">
+          <input type="search" id="global-search" placeholder="Search modules, sections, items…" autocomplete="off" />
+          <div id="search-results" class="search-results hidden"></div>
+        </div>
+        <div class="toolbar-actions">
+          <button type="button" id="btn-expand" title="Expand all sections">Expand</button>
+          <button type="button" id="btn-collapse" title="Collapse all sections">Collapse</button>
+          <button type="button" id="btn-copy-link" title="Copy deep link">Copy link</button>
+          <button type="button" id="btn-theme" title="Toggle theme">Theme</button>
+        </div>
+      </header>
+
+      <main class="content" id="content">
+        <p class="muted">Select a module from the left.</p>
+      </main>
+    </div>
+  </div>
+
+  <script id="publication-data" type="application/json">{{ modules_json | safe }}</script>
+  <script id="search-index" type="application/json">{{ search_index_json | safe }}</script>
+  <script src="viewer.js"></script>
+</body>
+</html>

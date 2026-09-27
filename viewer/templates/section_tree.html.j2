@@ -1,0 +1,8 @@
+<div class="section" data-section-id="{{ section.id }}" data-section-type="tree">
+  <h2>{{ section.title }}</h2>
+  {% if section.description %}<p class="section-desc">{{ section.description }}</p>{% endif %}
+  <div class="tree-layout">
+    <div class="tree-nodes"></div>
+    <aside class="tree-details muted">Select a node</aside>
+  </div>
+</div>

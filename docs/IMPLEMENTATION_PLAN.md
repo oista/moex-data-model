@@ -41,7 +41,7 @@ moex-data-model/
 │   ├── git-provider/
 │   └── integration-adapters/
 ├── schemas/
-│   ├── mdms/
+│   ├── dams/
 │   ├── profiles/
 │   ├── policies/
 │   └── imports/
@@ -305,7 +305,7 @@ package.json → package-lock.json или pnpm-lock.yaml
 
 ```yaml
 artifact:
-  model_id: moex:mdms
+  model_id: moex:dams
   model_version: 0.1.0
   model_revision: 4f38c7...
   type: json-schema
@@ -393,7 +393,7 @@ Diagnostic:
 
 ### Критерии готовности
 
-- ModelGraph строится для всей MDMS.
+- ModelGraph строится для всей DAMS.
 - Идентификаторы не зависят от имени файла.
 - Ошибки имеют stable code.
 - API не возвращает internal LinkML runtime objects.
@@ -621,7 +621,7 @@ linkml → SHACL
 - Validation mappings.
 - Preview transformation.
 - Sample-based execution.
-- Migration mappings между версиями MDMS.
+- Migration mappings между версиями DAMS.
 - Audit source/target schema revisions.
 - Запрет unrestricted evaluation по умолчанию.
 - Allowlist функций expressions.

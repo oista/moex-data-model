@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////
-// MOEX Data Model Specification (MDMS) v0.1 - DBML metamodel
+// MOEX Data Model Specification (DAMS) v0.1 - DBML metamodel
 // Target: drawDB (open-source, self-hosted, drawdb.app)
 // Also compatible with dbdiagram.io free plan (no TableGroup used)
 //
@@ -25,7 +25,7 @@
 //   - nullable / optional FK -> plain column + separate top-level `Ref:` block
 //////////////////////////////////////////////////////////////////
 
-Project MOEX_MDMS_v0_1 {
+Project MOEX_DAMS_v0_1 {
   database_type: 'Metamodel (LinkML-derived)'
   Note: 'MOEX Data Model Specification v0.1. Kanonicheskaya metamodel dlya opisaniya korporativnoy modeli dannykh MOEX i modeley dannykh IT-resheniy. Bazovyy yazyk avtoringa - LinkML. Tsvetovoe kodirovanie: registries=amber, governance=gray, conceptual=purple, logical=blue, physical=green, mapping=teal, integration=red, contract-binding=pink, analytics=brown, root=indigo.'
 }
@@ -335,12 +335,12 @@ Table model_element [headercolor: #AB47BC] {
   description text [not null]
   lifecycle_status lifecycle_status_enum [not null, note: 'from mixin HasLifecycle']
   tags varchar
-  Note: 'ABSTRACT root class vsey metamodeli MDMS Core. Vse nizhe - is_a model_element.'
+  Note: 'ABSTRACT root class vsey metamodeli DAMS Core. Vse nizhe - is_a model_element.'
 }
 
 Table model_package [headercolor: #AB47BC] {
   element_id varchar [pk, ref: - model_element.element_id]
-  api_version varchar [not null, note: 'versiya metamodeli MDMS']
+  api_version varchar [not null, note: 'versiya metamodeli DAMS']
   model_version varchar [not null, note: 'SemVer paketa modeli']
   solution_ref varchar [note: 'nullable FK -> it_solution.registry_id, see Ref block']
   data_owner_ref varchar [note: 'nullable FK -> role.registry_id (mixin HasOwnership), see Ref block']
@@ -463,7 +463,7 @@ Table physical_object [headercolor: #0F9D58] {
   object_kind physical_object_kind_enum [not null]
   qualified_name varchar [not null]
   technology varchar [not null]
-  native_schema_ref varchar [not null, note: 'authoritative wire/DDL schema - ne kopiruetsya v MDMS']
+  native_schema_ref varchar [not null, note: 'authoritative wire/DDL schema - ne kopiruetsya v DAMS']
   direction flow_direction_enum [not null]
   Note: 'Kvant dannykh: tablitsa, topik, endpoint, fayl, dataset, pipeline...'
 }
@@ -573,7 +573,7 @@ Table dfeb_transformation_mapping [headercolor: #DB4437] {
 
 Table data_model_binding [headercolor: #F06292] {
   element_id varchar [pk, ref: - model_element.element_id]
-  specification_version varchar [not null, note: 'SemVer standarta MDMS-profilya kontrakta']
+  specification_version varchar [not null, note: 'SemVer standarta DAMS-profilya kontrakta']
   implementation_version varchar [not null, note: 'SemVer konkretnoy realizatsii']
   contract_ref varchar [note: 'nullable FK -> data_contract_reference.registry_id, see Ref block']
   integration_ref varchar [note: 'nullable FK -> integration_reference.registry_id, see Ref block']
@@ -696,7 +696,7 @@ Table repo_data_model_binding [headercolor: #5C6BC0] {
 //////////////////// NULLABLE / OPTIONAL RELATIONSHIPS ////////////////////
 // Declared as free-standing Ref blocks (not inline) so DBML-compliant renderers
 // (drawDB, dbdiagram.io) do not force NOT NULL on the referencing column -
-// these FKs are intentionally optional per MDMS semantics.
+// these FKs are intentionally optional per DAMS semantics.
 
 Ref: it_solution.platform_ref > it_platform.registry_id
 Ref: business_domain.parent_domain_ref > business_domain.registry_id

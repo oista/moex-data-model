@@ -1,4 +1,4 @@
-element_id: mdms:binding/DC-01425/1.0.0
+element_id: dams:binding/DC-01425/1.0.0
 name: client_contract_binding
 title: Модельная спецификация контракта DC-01425
 description: Неизменяемый срез модели данных для передачи изменений клиента.
@@ -12,26 +12,26 @@ model_package_ref: https://modelhub.moex.com/models/trading/1.0.0
 model_version: 1.0.0
 model_revision: 9f2c8ab
 selections:
-  - element_id: mdms:selection/DC-01425/Client
+  - element_id: dams:selection/DC-01425/Client
     name: client_selection
     description: Передаваемый срез сущности Клиент.
     lifecycle_status: active
     selected_entities:
-      - element_id: mdms:selected-entity/DC-01425/Client
+      - element_id: dams:selected-entity/DC-01425/Client
         name: selected_client
         description: Выбранная логическая сущность Клиент.
         lifecycle_status: active
-        logical_entity_ref: mdms:logical/trading/Client
+        logical_entity_ref: dams:logical/trading/Client
         physical_object_refs:
-          - mdms:physical/trading/client-topic
+          - dams:physical/trading/client-topic
         selected_attributes:
-          - element_id: mdms:selected-attribute/DC-01425/clientId
+          - element_id: dams:selected-attribute/DC-01425/clientId
             name: selected_client_id
             description: Выбранный идентификатор клиента.
             lifecycle_status: active
-            logical_attribute_ref: mdms:logical/trading/Client/clientId
+            logical_attribute_ref: dams:logical/trading/Client/clientId
             physical_field_refs:
-              - mdms:physical/trading/client-topic/client_id
+              - dams:physical/trading/client-topic/client_id
 compatibility_mode: backward
 integrity_digest: sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 generated_at: '2026-09-16T20:30:00+03:00'

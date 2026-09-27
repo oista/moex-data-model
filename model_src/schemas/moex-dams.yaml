@@ -1,10 +1,10 @@
-id: https://data.moex.com/mdms/v0.1
-name: moex_mdms
+id: https://data.moex.com/dams/v0.1
+name: moex_dams
 version: 0.1.0
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml: https://w3id.org/linkml/
-  mdms: https://data.moex.com/mdms/
+  dams: https://data.moex.com/dams/
 imports:
   - linkml:types
   - moex-types
@@ -14,7 +14,7 @@ imports:
   - moex-integration
   - moex-contract-binding
   - moex-analytics
-default_prefix: mdms
+default_prefix: dams
 default_range: string
 
 classes:

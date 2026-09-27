@@ -1,0 +1,67 @@
+module_id: moex:module:trading-solution
+kind: publication_module
+version: "1"
+order: 300
+icon: "🧩"
+title: Trading solution (demo)
+description: Example solution model instance for publication viewer demos
+sections:
+  - id: package
+    title: Package
+    type: key-value
+    source:
+      format: yaml
+      path: trading-solution-model.yaml
+
+  - id: conceptual
+    title: Conceptual entities
+    type: entity-table
+    source:
+      format: yaml
+      path: trading-solution-model.yaml
+      select: conceptual_entities
+    key_column: element_id
+    columns:
+      - name
+      - title
+      - description
+      - entity_type
+      - data_class
+    filterable:
+      - entity_type
+      - data_class
+
+  - id: logical
+    title: Logical entities
+    type: entity-table
+    source:
+      format: yaml
+      path: trading-solution-model.yaml
+      select: logical_entities
+    key_column: element_id
+    columns:
+      - name
+      - title
+      - description
+      - solution_data_role
+      - governance_classification
+    filterable:
+      - solution_data_role
+      - governance_classification
+
+  - id: physical
+    title: Physical objects
+    type: entity-table
+    source:
+      format: yaml
+      path: trading-solution-model.yaml
+      select: physical_objects
+    key_column: element_id
+    columns:
+      - name
+      - title
+      - description
+      - object_kind
+      - technology
+    filterable:
+      - object_kind

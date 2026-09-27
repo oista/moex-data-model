@@ -1,0 +1,12 @@
+{# Section shells are rendered client-side from JSON; these templates are kept for future SSR. #}
+<div class="section" data-section-id="{{ section.id }}" data-section-type="{{ section.type }}">
+  <h2>{{ section.title }}</h2>
+  {% if section.description %}<p class="section-desc">{{ section.description }}</p>{% endif %}
+  <div class="table-toolbar"></div>
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead><tr>{% for col in section.columns %}<th>{{ col }}</th>{% endfor %}</tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>

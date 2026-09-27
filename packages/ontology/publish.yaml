@@ -1,0 +1,29 @@
+# FIBO glossary publication (preview sample only — not the full mart).
+# Update packages/ontology/publications/fibo_glossary.preview.csv manually via PR.
+module_id: moex:module:fibo
+kind: publication_module
+version: "1"
+order: 200
+icon: "📚"
+title: FIBO Glossary
+description: Preview of FIBO class definitions for glossary mapping (committed sample)
+sections:
+  - id: glossary
+    title: Glossary (preview)
+    description: Sample terms from FND/BE/FBC/SEC/DER. Full export is gitignored under output/.
+    type: glossary
+    source:
+      format: csv
+      path: publications/fibo_glossary.preview.csv
+    key_column: local_name
+    columns:
+      - local_name
+      - label
+      - definition
+      - source_domain
+      - iri
+    filterable:
+      - source_domain
+    tags:
+      - fibo
+      - preview

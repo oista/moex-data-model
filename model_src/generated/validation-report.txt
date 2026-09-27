@@ -1,4 +1,4 @@
-MOEX MDMS v0.1 validation report
+MOEX DAMS v0.1 validation report
 
 1. All 8 LinkML schema modules parsed successfully.
 2. Root JSON Schema generated successfully.

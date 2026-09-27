@@ -25,7 +25,7 @@ moex-governance.yaml,HasPolicyBindings,,,
 moex-governance.yaml,HasProvenance,,,
 moex-integration.yaml,DataFlow,"Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr, а семантика — модели данных.",ModelElement,"HasOwnership,HasLifecycle"
 moex-integration.yaml,DataFlowEntityBinding,"Связь потока с логическими сущностями, атрибутами и физическими объектами модели решения.",ModelElement,
-moex-mdms.yaml,MOEXModelRepository,"Корневой контейнер для проверки набора моделей, ссылочных проекций справочников, потоков и контрактных bindings.",,
+moex-dams.yaml,MOEXModelRepository,"Корневой контейнер для проверки набора моделей, ссылочных проекций справочников, потоков и контрактных bindings.",,
 moex-registries.yaml,RegistryEntry,Локальная ссылочная проекция записи внешней мастер-системы; не является мастер-копией справочника.,,
 moex-registries.yaml,ITSystem,ИТ-система; мастер данных — EAM.,RegistryEntry,
 moex-registries.yaml,ITSolution,"ИТ-решение, объединяющее одну или несколько ИТ-систем; мастер данных — EAM.",RegistryEntry,

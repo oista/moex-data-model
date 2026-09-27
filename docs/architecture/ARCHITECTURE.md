@@ -447,7 +447,7 @@ DBML не может без потерь представить все возм�
 
 ### MOEX DBML profile
 
-Существующий файл `moex-mdms-drawdb-colored.dbml` уже задаёт цветовую кодировку слоёв, таблицы, enums и relationships. Его следует превратить из вручную поддерживаемого файла в golden sample для генератора.
+Существующий файл `moex-dams-drawdb-colored.dbml` уже задаёт цветовую кодировку слоёв, таблицы, enums и relationships. Его следует превратить из вручную поддерживаемого файла в golden sample для генератора.
 
 MOEX DBML profile должен поддерживать:
 

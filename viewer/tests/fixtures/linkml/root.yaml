@@ -1,0 +1,28 @@
+id: https://example.org/root
+name: root_schema
+prefixes:
+  linkml: https://w3id.org/linkml/
+  ex: https://example.org/
+imports:
+  - linkml:types
+  - child
+default_prefix: ex
+
+classes:
+  RootClass:
+    description: Root
+    slots:
+      - root_slot
+
+slots:
+  root_slot:
+    range: string
+    description: A slot
+
+enums:
+  ColorEnum:
+    permissible_values:
+      red:
+        description: Red
+      blue:
+        description: Blue

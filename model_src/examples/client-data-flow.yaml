@@ -1,4 +1,4 @@
-element_id: mdms:flow/INT-00421
+element_id: dams:flow/INT-00421
 name: client_change_flow
 title: Передача изменений клиента
 description: Проекция интеграции из Clinkr с привязкой к семантике модели торгового решения.
@@ -16,16 +16,16 @@ integration_class: EDA
 integration_channel: queue
 integration_spec_ref: https://clinkr.moex.com/specifications/INT-00421/asyncapi/2.3.0
 entity_bindings:
-  - element_id: mdms:flow-binding/INT-00421/Client
+  - element_id: dams:flow-binding/INT-00421/Client
     name: client_binding
     description: Семантическая привязка payload потока к логической сущности Клиент.
     lifecycle_status: active
-    flow_ref: mdms:flow/INT-00421
+    flow_ref: dams:flow/INT-00421
     source_model_ref: https://modelhub.moex.com/models/trading/1.0.0
-    logical_entity_ref: mdms:logical/trading/Client
+    logical_entity_ref: dams:logical/trading/Client
     logical_attribute_refs:
-      - mdms:logical/trading/Client/clientId
-      - mdms:logical/trading/Client/fullName
+      - dams:logical/trading/Client/clientId
+      - dams:logical/trading/Client/fullName
     physical_object_refs:
-      - mdms:physical/trading/client-topic
+      - dams:physical/trading/client-topic
     direction: outbound

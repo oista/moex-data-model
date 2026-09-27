@@ -1,0 +1,13 @@
+id: https://example.org/child
+name: child_schema
+prefixes:
+  linkml: https://w3id.org/linkml/
+  ex: https://example.org/
+imports:
+  - linkml:types
+default_prefix: ex
+
+classes:
+  ChildClass:
+    is_a: RootClass
+    description: Child of RootClass

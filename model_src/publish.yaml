@@ -1,0 +1,76 @@
+module_id: moex:module:dams
+kind: publication_module
+version: "1"
+order: 100
+icon: "📐"
+title: DAMS
+description: Data architecture metamodel (LinkML) and related artifacts
+sections:
+  - id: overview
+    title: Overview
+    description: Package README
+    type: markdown-doc
+    source:
+      format: markdown
+      path: README.md
+
+  - id: classes
+    title: Classes
+    description: Classes from the DAMS LinkML schema (imports resolved)
+    type: entity-table
+    source:
+      format: linkml-yaml
+      path: schemas/moex-dams.yaml
+      select: classes
+    columns:
+      - name
+      - description
+      - is_a
+      - abstract
+      - mixins
+    filterable:
+      - is_a
+      - abstract
+    sort:
+      by: name
+      order: asc
+
+  - id: slots
+    title: Slots
+    description: Slots from the DAMS LinkML schema
+    type: entity-table
+    source:
+      format: linkml-yaml
+      path: schemas/moex-dams.yaml
+      select: slots
+    columns:
+      - name
+      - description
+      - range
+      - required
+      - multivalued
+    filterable:
+      - range
+      - required
+
+  - id: enums
+    title: Enumerations
+    description: Enums and permissible values
+    type: enum-table
+    source:
+      format: linkml-yaml
+      path: schemas/moex-dams.yaml
+      select: enums
+    columns:
+      - name
+      - description
+
+  - id: class-tree
+    title: Class hierarchy
+    description: Classes arranged by is_a
+    type: tree
+    source:
+      format: linkml-yaml
+      path: schemas/moex-dams.yaml
+      select: classes
+    default_collapsed: false
