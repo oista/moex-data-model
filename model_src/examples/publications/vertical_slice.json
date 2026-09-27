@@ -1,0 +1,476 @@
+{
+  "summary": {
+    "overall_result": "conformant",
+    "implementation_id": "moex:implementation:trading:1.0.0",
+    "revision": "642a8aab9dde",
+    "content_digest": "sha256:642a8aab9dde70a2892fcf9690f41527d40b863efa2b05aa13bf8044bd520700",
+    "package_id": "dams:model/trading/1.0.0",
+    "node_count": 9,
+    "edge_count": 15,
+    "is_conformant": true
+  },
+  "nodes": [
+    {
+      "id": "dams:model/trading/1.0.0",
+      "name": "trading_solution_model",
+      "title": "Модель данных торгового решения",
+      "description": "Черновой пример модели одного ИТ-решения.",
+      "kind": "package"
+    },
+    {
+      "id": "dams:concept/Client",
+      "name": "Client",
+      "title": "Клиент",
+      "description": "Лицо или организация, взаимодействующая с компаниями Группы МБ.",
+      "kind": "conceptual_entity"
+    },
+    {
+      "id": "dams:context/trading",
+      "name": "TradingContext",
+      "title": "Торговый контекст",
+      "description": "Контекст торговых операций.",
+      "kind": "domain_context"
+    },
+    {
+      "id": "dams:logical/trading/Client",
+      "name": "TradingClient",
+      "title": "Клиент торгового решения",
+      "description": "Локальное логическое представление клиента в торговом решении.",
+      "kind": "logical_entity"
+    },
+    {
+      "id": "dams:logical/trading/Client/clientId",
+      "name": "clientId",
+      "title": "Идентификатор клиента",
+      "description": "Уникальный идентификатор клиента в корпоративном контуре.",
+      "kind": "attribute"
+    },
+    {
+      "id": "dams:logical/trading/Client/fullName",
+      "name": "fullName",
+      "title": "Полное наименование",
+      "description": "Полное имя физического лица или наименование организации.",
+      "kind": "attribute"
+    },
+    {
+      "id": "dams:physical/trading/client-topic",
+      "name": "client_changed_topic",
+      "title": "Поток изменений клиентов",
+      "description": "Kafka topic с событиями изменения клиента.",
+      "kind": "physical_object"
+    },
+    {
+      "id": "dams:physical/trading/client-topic/client_id",
+      "name": "client_id",
+      "title": null,
+      "description": "Физическое поле идентификатора клиента.",
+      "kind": "field"
+    },
+    {
+      "id": "dams:mapping/trading/client-id",
+      "name": "map_client_id",
+      "title": null,
+      "description": "Соответствие логического идентификатора физическому полю события.",
+      "kind": "mapping"
+    }
+  ],
+  "edges": [
+    {
+      "id": "dams:model/trading/1.0.0->dams:concept/Client:contains",
+      "source": "dams:model/trading/1.0.0",
+      "target": "dams:concept/Client",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:model/trading/1.0.0->dams:context/trading:contains",
+      "source": "dams:model/trading/1.0.0",
+      "target": "dams:context/trading",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:model/trading/1.0.0->dams:logical/trading/Client:contains",
+      "source": "dams:model/trading/1.0.0",
+      "target": "dams:logical/trading/Client",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:logical/trading/Client->dams:concept/Client:conceptual_ref",
+      "source": "dams:logical/trading/Client",
+      "target": "dams:concept/Client",
+      "kind": "conceptual_ref"
+    },
+    {
+      "id": "dams:logical/trading/Client->dams:context/trading:context_ref",
+      "source": "dams:logical/trading/Client",
+      "target": "dams:context/trading",
+      "kind": "context_ref"
+    },
+    {
+      "id": "dams:logical/trading/Client->dams:logical/trading/Client/clientId:contains",
+      "source": "dams:logical/trading/Client",
+      "target": "dams:logical/trading/Client/clientId",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:logical/trading/Client/clientId->dams:logical/trading/Client:owner_entity",
+      "source": "dams:logical/trading/Client/clientId",
+      "target": "dams:logical/trading/Client",
+      "kind": "owner_entity"
+    },
+    {
+      "id": "dams:logical/trading/Client->dams:logical/trading/Client/fullName:contains",
+      "source": "dams:logical/trading/Client",
+      "target": "dams:logical/trading/Client/fullName",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:logical/trading/Client/fullName->dams:logical/trading/Client:owner_entity",
+      "source": "dams:logical/trading/Client/fullName",
+      "target": "dams:logical/trading/Client",
+      "kind": "owner_entity"
+    },
+    {
+      "id": "dams:model/trading/1.0.0->dams:physical/trading/client-topic:contains",
+      "source": "dams:model/trading/1.0.0",
+      "target": "dams:physical/trading/client-topic",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:physical/trading/client-topic->dams:physical/trading/client-topic/client_id:contains",
+      "source": "dams:physical/trading/client-topic",
+      "target": "dams:physical/trading/client-topic/client_id",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:physical/trading/client-topic/client_id->dams:physical/trading/client-topic:physical_object_ref",
+      "source": "dams:physical/trading/client-topic/client_id",
+      "target": "dams:physical/trading/client-topic",
+      "kind": "physical_object_ref"
+    },
+    {
+      "id": "dams:model/trading/1.0.0->dams:mapping/trading/client-id:contains",
+      "source": "dams:model/trading/1.0.0",
+      "target": "dams:mapping/trading/client-id",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:mapping/trading/client-id->dams:logical/trading/Client/clientId:maps_to",
+      "source": "dams:mapping/trading/client-id",
+      "target": "dams:logical/trading/Client/clientId",
+      "kind": "maps_to"
+    },
+    {
+      "id": "dams:mapping/trading/client-id->dams:physical/trading/client-topic/client_id:maps_to",
+      "source": "dams:mapping/trading/client-id",
+      "target": "dams:physical/trading/client-topic/client_id",
+      "kind": "maps_to"
+    }
+  ],
+  "diagnostics": [],
+  "relations": [
+    {
+      "id": "expressed_in:0",
+      "kind": "expressed_in",
+      "source": "moex:spec:dams",
+      "target": "moex:standard:linkml"
+    },
+    {
+      "id": "conforms_to:1",
+      "kind": "conforms_to",
+      "source": "moex:implementation:trading:1.0.0",
+      "target": "moex:spec:dams"
+    },
+    {
+      "id": "implements:2",
+      "kind": "implements",
+      "source": "moex:implementation:trading:1.0.0",
+      "target": "eam:solution/TRADING"
+    }
+  ],
+  "module": {
+    "module_id": "moex:module:vertical-slice",
+    "title": "Vertical slice (trading)",
+    "description": "Conformance report and DamsModelGraphView projected from linkml → dams → trading-solution",
+    "icon": "📐",
+    "version": "1.0.0",
+    "order": 350,
+    "sections": [
+      {
+        "id": "summary",
+        "title": "Slice summary",
+        "description": null,
+        "type": "key-value",
+        "columns": [],
+        "filterable": [],
+        "items": [
+          {
+            "id": "overall_result",
+            "title": "overall_result",
+            "description": null,
+            "attributes": {
+              "value": "conformant"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "implementation_id",
+            "title": "implementation_id",
+            "description": null,
+            "attributes": {
+              "value": "moex:implementation:trading:1.0.0"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "revision",
+            "title": "revision",
+            "description": null,
+            "attributes": {
+              "value": "642a8aab9dde"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "content_digest",
+            "title": "content_digest",
+            "description": null,
+            "attributes": {
+              "value": "sha256:642a8aab9dde70a2892fcf9690f41527d40b863efa2b05aa13bf8044bd520700"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "nodes",
+            "title": "nodes",
+            "description": null,
+            "attributes": {
+              "value": 9
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "edges",
+            "title": "edges",
+            "description": null,
+            "attributes": {
+              "value": 15
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          }
+        ],
+        "content": null,
+        "tags": [],
+        "default_collapsed": false
+      },
+      {
+        "id": "graph-nodes",
+        "title": "Graph nodes",
+        "description": null,
+        "type": "entity-table",
+        "columns": [
+          "kind",
+          "name"
+        ],
+        "filterable": [
+          "kind"
+        ],
+        "items": [
+          {
+            "id": "dams:model/trading/1.0.0",
+            "title": "Модель данных торгового решения",
+            "description": "Черновой пример модели одного ИТ-решения.",
+            "attributes": {
+              "kind": "package",
+              "name": "trading_solution_model"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:concept/Client",
+            "title": "Клиент",
+            "description": "Лицо или организация, взаимодействующая с компаниями Группы МБ.",
+            "attributes": {
+              "kind": "conceptual_entity",
+              "name": "Client"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:context/trading",
+            "title": "Торговый контекст",
+            "description": "Контекст торговых операций.",
+            "attributes": {
+              "kind": "domain_context",
+              "name": "TradingContext"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:logical/trading/Client",
+            "title": "Клиент торгового решения",
+            "description": "Локальное логическое представление клиента в торговом решении.",
+            "attributes": {
+              "kind": "logical_entity",
+              "name": "TradingClient"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:logical/trading/Client/clientId",
+            "title": "Идентификатор клиента",
+            "description": "Уникальный идентификатор клиента в корпоративном контуре.",
+            "attributes": {
+              "kind": "attribute",
+              "name": "clientId"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:logical/trading/Client/fullName",
+            "title": "Полное наименование",
+            "description": "Полное имя физического лица или наименование организации.",
+            "attributes": {
+              "kind": "attribute",
+              "name": "fullName"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:physical/trading/client-topic",
+            "title": "Поток изменений клиентов",
+            "description": "Kafka topic с событиями изменения клиента.",
+            "attributes": {
+              "kind": "physical_object",
+              "name": "client_changed_topic"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:physical/trading/client-topic/client_id",
+            "title": "client_id",
+            "description": "Физическое поле идентификатора клиента.",
+            "attributes": {
+              "kind": "field",
+              "name": "client_id"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:mapping/trading/client-id",
+            "title": "map_client_id",
+            "description": "Соответствие логического идентификатора физическому полю события.",
+            "attributes": {
+              "kind": "mapping",
+              "name": "map_client_id"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          }
+        ],
+        "content": null,
+        "tags": [],
+        "default_collapsed": false
+      },
+      {
+        "id": "diagnostics",
+        "title": "Diagnostics",
+        "description": null,
+        "type": "entity-table",
+        "columns": [
+          "severity",
+          "phase",
+          "subject_ref"
+        ],
+        "filterable": [
+          "severity"
+        ],
+        "items": [],
+        "content": null,
+        "tags": [],
+        "default_collapsed": true
+      },
+      {
+        "id": "relations",
+        "title": "Universe relations",
+        "description": null,
+        "type": "entity-table",
+        "columns": [
+          "source",
+          "target"
+        ],
+        "filterable": [],
+        "items": [
+          {
+            "id": "expressed_in:moex:spec:dams->moex:standard:linkml",
+            "title": "expressed_in",
+            "description": null,
+            "attributes": {
+              "source": "moex:spec:dams",
+              "target": "moex:standard:linkml"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "conforms_to:moex:implementation:trading:1.0.0->moex:spec:dams",
+            "title": "conforms_to",
+            "description": null,
+            "attributes": {
+              "source": "moex:implementation:trading:1.0.0",
+              "target": "moex:spec:dams"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "implements:moex:implementation:trading:1.0.0->eam:solution/TRADING",
+            "title": "implements",
+            "description": null,
+            "attributes": {
+              "source": "moex:implementation:trading:1.0.0",
+              "target": "eam:solution/TRADING"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          }
+        ],
+        "content": null,
+        "tags": [],
+        "default_collapsed": false
+      }
+    ],
+    "manifest_path": null
+  }
+}

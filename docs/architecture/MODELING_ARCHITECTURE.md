@@ -377,7 +377,7 @@ packages/
   modeling-kernel/
   standard-linkml/
   standard-openapi/       # позднее
-  standard-owl/           # позднее
+  standard-owl/           # OWL provider (есть); ontology-catalog поверх
   specification-dams/
   publication/
 

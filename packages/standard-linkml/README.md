@@ -1,8 +1,11 @@
 # moex-standard-linkml
 
-LinkML provider package for MOEX modeling. **First module: ER-dictionary ingest.**
+LinkML provider package for MOEX modeling.
 
-Converts a relational model dictionary (Entities / Attributes / Relationships sheets in XLS or CSV) into a DAMS [`ModelPackage`](../../model_src/schemas/moex-core.yaml) YAML plus a sidecar `SpecificationImplementation` envelope.
+- **`LinkMLStandardProvider`** — `StandardProvider` with distinct `LinkMLSpecificationBody` (SchemaView) and `LinkMLImplementationBody` (instance YAML).
+- **ER-dictionary ingest** — Entities / Attributes / Relationships sheets → DAMS [`ModelPackage`](../../model_src/schemas/moex-core.yaml) + sidecar envelope.
+
+Depends on [`moex-modeling-kernel`](../modeling-kernel/).
 
 ## Why not schema-automator / schemasheets
 

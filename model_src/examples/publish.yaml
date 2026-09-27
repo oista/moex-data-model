@@ -65,3 +65,44 @@ sections:
       - technology
     filterable:
       - object_kind
+
+  # Projected from packages/publication (vertical slice: assess → graph → JSON)
+  - id: slice-summary
+    title: Vertical slice summary
+    description: Conformance + graph projection from moex-publication export-slice
+    type: key-value
+    source:
+      format: json
+      path: publications/vertical_slice.json
+      select: summary
+
+  - id: slice-nodes
+    title: Slice graph nodes
+    type: entity-table
+    source:
+      format: json
+      path: publications/vertical_slice.json
+      select: nodes
+    key_column: id
+    columns:
+      - kind
+      - name
+      - title
+      - description
+    filterable:
+      - kind
+
+  - id: slice-relations
+    title: Slice universe relations
+    type: entity-table
+    source:
+      format: json
+      path: publications/vertical_slice.json
+      select: relations
+    key_column: id
+    columns:
+      - kind
+      - source
+      - target
+    filterable:
+      - kind

@@ -33,7 +33,11 @@ Publication viewer, HTML, search index, drawDB и будущий Workbench — *
 |---|---|
 | [`model_src/`](model_src/) | DAMS schemas + examples (временный путь до миграции в `model-assets/`) |
 | [`viewer/`](viewer/) | статический Publication Viewer (`publish.yaml` → `viewer/dist`) |
-| [`packages/ontology/`](packages/ontology/) | FIBO/RDF export tooling (ещё не `standard-owl` package) |
+| [`packages/modeling-kernel/`](packages/modeling-kernel/) | envelopes + `StandardProvider` (TSpecBody ≠ TImplBody) |
+| [`packages/standard-linkml/`](packages/standard-linkml/) | LinkML provider + ER-dictionary ingest |
+| [`packages/specification-dams/`](packages/specification-dams/) | DAMS semantic rules, graph view, conformance |
+| [`packages/publication/`](packages/publication/) | slice → PublicationModule / viewer JSON |
+| [`packages/ontology/`](packages/ontology/) | FIBO CSV shim над [`packages/standard-owl/`](packages/standard-owl/) |
 | [`tools/architecture-check/`](tools/architecture-check/) | механические проверки architecture pack |
 | [`docs/architecture/`](docs/architecture/) | нормативная архитектура и связанные черновики |
 | [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md) | план Workbench MVP (подчинён MODELING_ARCHITECTURE) |
@@ -80,6 +84,17 @@ linkml-lint moex-dams.yaml
 ```
 
 Состав схем и примеры: [`model_src/README.md`](model_src/README.md).
+
+### Первый вертикальный срез
+
+```bash
+make vertical-slice-check
+# или: powershell -NoProfile -File packages/publication/scripts/check.ps1
+```
+
+Прогоняет kernel / LinkML provider / DAMS assess / publication export и пишет
+[`model_src/examples/publications/vertical_slice.json`](model_src/examples/publications/vertical_slice.json)
+для секций viewer в [`model_src/examples/publish.yaml`](model_src/examples/publish.yaml).
 
 ### FIBO glossary export (опционально)
 

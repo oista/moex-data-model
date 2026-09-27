@@ -3,24 +3,26 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "moex-standard-linkml"
+name = "moex-publication"
 version = "0.1.0"
-description = "LinkML provider: SchemaView/instance bodies, ER-dictionary ingest"
+description = "Publication read models projected from the modeling vertical slice"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "pydantic>=2.6,<3.0",
-    "PyYAML>=6.0,<7.0",
-    "openpyxl>=3.1,<4.0",
-    "linkml>=1.7,<2.0",
     "moex-modeling-kernel",
+    "moex-specification-dams",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0,<9.0", "moex-modeling-kernel[dev]"]
+dev = [
+    "pytest>=8.0,<9.0",
+    "moex-modeling-kernel[dev]",
+    "moex-specification-dams[dev]",
+]
 
 [project.scripts]
-moex-linkml = "moex_standard_linkml.ingest.cli:main"
+moex-publication = "moex_publication.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

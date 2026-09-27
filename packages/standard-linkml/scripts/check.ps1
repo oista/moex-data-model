@@ -35,9 +35,10 @@ try {
         & $base -m venv (Join-Path $PackageRoot ".venv")
     }
 
-    Write-Host "Installing moex-standard-linkml[dev] into .venv"
+    Write-Host "Installing moex-modeling-kernel + moex-standard-linkml[dev] into .venv"
     & $VenvPython -m pip install -U pip -q
-    & $VenvPython -m pip install -e "$PackageRoot[dev]" -q
+    $KernelRoot = Join-Path $RepoRoot "packages/modeling-kernel"
+    & $VenvPython -m pip install -e "$KernelRoot" -e "$PackageRoot[dev]" -q
 
     Write-Host "Running pytest"
     & $VenvPython -m pytest (Join-Path $PackageRoot "tests") -q
