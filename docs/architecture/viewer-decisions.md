@@ -1,3 +1,11 @@
+---
+status: Accepted
+version: "0.1"
+normative: false
+supersedes: []
+superseded_by: MODELING_ARCHITECTURE.md
+---
+
 # Viewer decisions (ADR)
 
 **Status:** Accepted  

@@ -1,0 +1,13 @@
+[
+  {
+    "id": "dams:concept/Client->https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson",
+    "title": "Client",
+    "description": "semapv:ManualMappingCuration",
+    "subject_id": "dams:concept/Client",
+    "predicate": "skos:closeMatch",
+    "object_id": "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson",
+    "object_label": "legal person",
+    "mapping_set_id": "moex:mappings:dams-fibo",
+    "status": "approved"
+  }
+]

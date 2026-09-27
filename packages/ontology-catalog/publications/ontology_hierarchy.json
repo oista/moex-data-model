@@ -1,0 +1,12 @@
+[
+  {
+    "id": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay",
+    "title": "Business Day",
+    "description": "A day on which financial markets and banks are open for business.",
+    "attributes": {
+      "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay",
+      "kind": "class"
+    },
+    "children": []
+  }
+]

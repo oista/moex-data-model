@@ -811,7 +811,9 @@
             (i.title || "").toLowerCase().includes(q) ||
             (i.description || "").toLowerCase().includes(q) ||
             (i.attributes?.label || "").toLowerCase().includes(q) ||
+            (i.attributes?.label_ru || "").toLowerCase().includes(q) ||
             (i.attributes?.definition || "").toLowerCase().includes(q) ||
+            (i.attributes?.definition_ru || "").toLowerCase().includes(q) ||
             (i.id || "").toLowerCase().includes(q)
         );
       }
@@ -835,11 +837,15 @@
         const card = document.createElement("div");
         card.className = "glossary-card";
         card.dataset.itemId = item.id;
-        const title = item.attributes?.label || item.title || item.id;
-        const def = item.attributes?.definition || item.description || "";
+        const en = item.attributes?.label || item.title || item.id;
+        const ru = (item.attributes?.label_ru || "").trim();
+        const title = ru ? `${en} (${ru})` : en;
+        const defEn = item.attributes?.definition || item.description || "";
+        const defRu = (item.attributes?.definition_ru || "").trim();
         const domain = item.attributes?.source_domain || "";
         card.innerHTML = `<h3>${escapeHtml(title)}</h3>
-          <p>${escapeHtml(def)}</p>
+          <p>${escapeHtml(defEn)}</p>
+          ${defRu ? `<p class="muted">${escapeHtml(defRu)}</p>` : ""}
           <div class="muted">${escapeHtml(item.id)}${domain ? " · " + escapeHtml(domain) : ""}</div>`;
         card.addEventListener("click", () => {
           setHash({

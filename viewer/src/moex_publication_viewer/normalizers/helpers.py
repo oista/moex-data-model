@@ -74,6 +74,30 @@ def records_to_items(
     return [PublicationItem(id="value", title=str(data))]
 
 
+def items_to_tree(
+    items: list[PublicationItem],
+    *,
+    parent_attr: str = "parent_local_name",
+) -> list[PublicationItem]:
+    """Nest flat items using attributes[parent_attr]; unknown/empty parent → root."""
+    by_id = {i.id: i for i in items}
+    children_map: dict[str, list[str]] = {i.id: [] for i in items}
+    roots: list[PublicationItem] = []
+    for item in items:
+        raw = (item.attributes or {}).get(parent_attr)
+        parent = str(raw).strip() if raw not in (None, "") else ""
+        if parent and parent in by_id and parent != item.id:
+            children_map[parent].append(item.id)
+        else:
+            roots.append(item)
+
+    def attach(node: PublicationItem) -> PublicationItem:
+        kids = [attach(by_id[cid]) for cid in sorted(children_map.get(node.id, []))]
+        return node.model_copy(update={"children": kids})
+
+    return [attach(r) for r in sorted(roots, key=lambda i: i.id)]
+
+
 def section_meta(section) -> dict[str, Any]:
     """Common PublicationSection fields from a ManifestSection."""
     sort = getattr(section, "sort", None)

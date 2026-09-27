@@ -1,0 +1,12 @@
+id: "moex:ontology:moex-hr"
+ontology_iri: "https://data.moex.com/ontology/hr/"
+version_iri: null
+title: "MOEX HR Ontology"
+version: "0.0.0"
+source_uri: "https://data.moex.com/ontology/hr/"
+revision: "stub"
+content_digest: "sha256:unindexed"
+license_uri: null
+imports: []
+status: registered
+role: implementation

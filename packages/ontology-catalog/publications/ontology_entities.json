@@ -1,0 +1,122 @@
+[
+  {
+    "id": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay",
+    "title": "Business Day",
+    "description": "A day on which financial markets and banks are open for business.",
+    "kind": "class",
+    "ontology_id": "moex:ontology:fibo",
+    "aliases": "Рабочий день",
+    "deprecated": false,
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay"
+  },
+  {
+    "id": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/CalendarPeriod",
+    "title": "Calendar Period | Calendar Interval",
+    "description": "A contiguous span of calendar time.",
+    "kind": "class",
+    "ontology_id": "moex:ontology:fibo",
+    "aliases": "Time Span",
+    "deprecated": false,
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/CalendarPeriod"
+  },
+  {
+    "id": "https://example.org/fibo#HashLocalName",
+    "title": "Hash Local Name",
+    "description": "Entity with fragment IRI.",
+    "kind": "class",
+    "ontology_id": "moex:ontology:fibo",
+    "aliases": "",
+    "deprecated": false,
+    "iri": "https://example.org/fibo#HashLocalName"
+  },
+  {
+    "id": "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson",
+    "title": "Legal Person",
+    "description": "An autonomous entity that is capable of having rights and obligations.",
+    "kind": "class",
+    "ontology_id": "moex:ontology:fibo",
+    "aliases": "",
+    "deprecated": false,
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson"
+  },
+  {
+    "id": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/Monday",
+    "title": "Monday",
+    "description": "The weekday Monday.",
+    "kind": "individual",
+    "ontology_id": "moex:ontology:fibo",
+    "aliases": "",
+    "deprecated": false,
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/Monday"
+  },
+  {
+    "id": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/OldBusinessDay",
+    "title": "Old Business Day",
+    "description": "Deprecated synonym for Business Day.",
+    "kind": "class",
+    "ontology_id": "moex:ontology:fibo",
+    "aliases": "",
+    "deprecated": true,
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/OldBusinessDay"
+  },
+  {
+    "id": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/ScopeOnlyThing",
+    "title": "Scope Only Thing",
+    "description": "Note used as definition fallback.",
+    "kind": "class",
+    "ontology_id": "moex:ontology:fibo",
+    "aliases": "",
+    "deprecated": false,
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/ScopeOnlyThing"
+  },
+  {
+    "id": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/SettlementDay",
+    "title": "Settlement Day",
+    "description": "A day on which a settlement may occur.",
+    "kind": "class",
+    "ontology_id": "moex:ontology:fibo",
+    "aliases": "",
+    "deprecated": false,
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/SettlementDay"
+  },
+  {
+    "id": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/UndocumentedThing",
+    "title": "Undocumented Thing",
+    "description": null,
+    "kind": "class",
+    "ontology_id": "moex:ontology:fibo",
+    "aliases": "",
+    "deprecated": false,
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/UndocumentedThing"
+  },
+  {
+    "id": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/adaptedFrom",
+    "title": "adapted from",
+    "description": null,
+    "kind": "annotation_property",
+    "ontology_id": "moex:ontology:fibo",
+    "aliases": "",
+    "deprecated": false,
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/adaptedFrom"
+  },
+  {
+    "id": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/hasBusinessDayAdjustment",
+    "title": "has business day adjustment",
+    "description": "Relates a date convention to its business day adjustment.",
+    "kind": "object_property",
+    "ontology_id": "moex:ontology:fibo",
+    "aliases": "",
+    "deprecated": false,
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/hasBusinessDayAdjustment"
+  },
+  {
+    "id": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/hasCount",
+    "title": "has count",
+    "description": null,
+    "kind": "data_property",
+    "ontology_id": "moex:ontology:fibo",
+    "aliases": "",
+    "deprecated": false,
+    "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/hasCount"
+  }
+]

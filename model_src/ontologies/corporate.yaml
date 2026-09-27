@@ -1,0 +1,12 @@
+id: "moex:ontology:corporate"
+ontology_iri: "https://data.moex.com/ontology/corporate/"
+version_iri: null
+title: "Corporate Ontology"
+version: "0.0.0"
+source_uri: "https://data.moex.com/ontology/corporate/"
+revision: "stub"
+content_digest: "sha256:unindexed"
+license_uri: null
+imports: []
+status: registered
+role: reference

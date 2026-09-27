@@ -1,0 +1,34 @@
+id: https://data.moex.com/fixtures/semantic-mappings/v0.1
+name: semantic_mappings_fixture
+version: 0.1.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  dams: https://data.moex.com/dams/
+  fibo-be-le-lp: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/
+  skos: http://www.w3.org/2004/02/skos/core#
+default_prefix: dams
+default_range: string
+
+classes:
+  MappedClient:
+    description: Fixture class with primary ontology semantics via class_uri.
+    class_uri: fibo-be-le-lp:LegalPerson
+    close_mappings:
+      - fibo-be-le-lp:LegalPerson
+    slots:
+      - client_name
+
+slots:
+  client_name:
+    description: Display name mapped to an ontology property.
+    slot_uri: https://spec.edmcouncil.org/fibo/ontology/FND/Relations/Relations/hasName
+    exact_mappings:
+      - skos:prefLabel
+
+enums:
+  PartyKind:
+    permissible_values:
+      legal_person:
+        meaning: fibo-be-le-lp:LegalPerson
+      natural_person:
+        meaning: https://spec.edmcouncil.org/fibo/ontology/FND/AgentsAndPeople/People/Person

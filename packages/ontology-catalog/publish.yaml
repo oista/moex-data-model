@@ -1,0 +1,109 @@
+# Ontology Catalog publication (preview from mini_fibo + SSSOM sample).
+# Regenerate: python -m moex_ontology.cli rebuild ... --preview-out publications
+module_id: moex:module:ontology-catalog
+kind: publication_module
+version: "1"
+order: 250
+icon: "🗺️"
+title: Ontology Catalog
+description: Reference ontology releases, entity search, hierarchy, cards, and DAMS backlinks (preview)
+sections:
+  - id: catalog
+    title: Ontology releases
+    description: Registered and indexed ontology releases
+    type: entity-table
+    source:
+      format: json
+      path: publications/ontology_catalog.json
+    key_column: id
+    columns:
+      - title
+      - version
+      - status
+      - role
+      - entity_count
+      - source_uri
+    filterable:
+      - status
+      - role
+    tags:
+      - ontology
+      - catalog
+
+  - id: entities
+    title: Entity search
+    description: Indexed ontology entities (mini_fibo preview)
+    type: glossary
+    source:
+      format: json
+      path: publications/ontology_entities.json
+    key_column: id
+    columns:
+      - title
+      - kind
+      - description
+      - ontology_id
+      - iri
+    filterable:
+      - kind
+      - ontology_id
+    tags:
+      - ontology
+      - search
+
+  - id: hierarchy
+    title: Class hierarchy
+    description: Asserted rdfs:subClassOf tree (preview root)
+    type: tree
+    source:
+      format: json
+      path: publications/ontology_hierarchy.json
+    key_column: id
+    tags:
+      - ontology
+      - hierarchy
+
+  - id: cards
+    title: Entity cards
+    description: Labels, parents/children, deprecation, backlink counts
+    type: entity-table
+    source:
+      format: json
+      path: publications/ontology_entity_cards.json
+    key_column: id
+    columns:
+      - title
+      - kind
+      - curie
+      - parents
+      - children
+      - deprecated
+      - backlinks
+    filterable:
+      - kind
+      - deprecated
+    tags:
+      - ontology
+      - card
+
+  - id: backlinks
+    title: Semantic backlinks
+    description: DAMS / glossary / SSSOM bindings pointing at ontology entities
+    type: entity-table
+    source:
+      format: json
+      path: publications/ontology_backlinks.json
+    key_column: id
+    columns:
+      - title
+      - predicate
+      - object_id
+      - object_label
+      - mapping_set_id
+      - status
+    filterable:
+      - mapping_set_id
+      - status
+    tags:
+      - ontology
+      - mappings

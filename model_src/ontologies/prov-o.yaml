@@ -1,0 +1,12 @@
+id: "moex:ontology:prov-o"
+ontology_iri: "http://www.w3.org/ns/prov#"
+version_iri: "http://www.w3.org/ns/prov-o#"
+title: "PROV-O Ontology"
+version: "2013-04-30"
+source_uri: "https://www.w3.org/TR/prov-o/"
+revision: "W3C-REC"
+content_digest: "sha256:unindexed"
+license_uri: "https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document"
+imports: []
+status: registered
+role: reference

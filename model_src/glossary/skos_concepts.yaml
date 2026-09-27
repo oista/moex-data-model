@@ -1,0 +1,27 @@
+# SKOS concept scheme projection for business glossary (not owl:Class).
+scheme_id: moex:glossary:core
+prefLabel: MOEX core business glossary (sample)
+concepts:
+  - id: glossary:Client
+    prefLabel: Клиент
+    altLabel:
+      - Client
+      - Customer
+    definition: Лицо или организация, взаимодействующая с компаниями Группы МБ.
+    broader: []
+    narrower: []
+    related:
+      - glossary:LegalEntity
+    mappings:
+      - dams:concept/Client
+  - id: glossary:LegalEntity
+    prefLabel: Юридическое лицо
+    altLabel:
+      - Legal entity
+    definition: Организация, признаваемая субъектом права.
+    broader: []
+    narrower: []
+    related:
+      - glossary:Client
+    mappings:
+      - https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson

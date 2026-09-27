@@ -1,3 +1,5 @@
-"""MOEX ontology utilities: RDF/OWL parsing and ontology adapters."""
+"""Compatibility shim: ontology.* re-exports moex_standard_owl."""
 
-__version__ = "0.1.0"
+from moex_standard_owl import __version__
+
+__all__ = ["__version__"]

@@ -1,0 +1,13 @@
+id: "moex:ontology:fibo"
+ontology_iri: "https://spec.edmcouncil.org/fibo/ontology/master/latest/"
+version_iri: "https://spec.edmcouncil.org/fibo/ontology/master/2026Q2/"
+title: "FIBO"
+version: "master_2026Q2"
+source_uri: "https://github.com/edmcouncil/fibo"
+revision: "master_2026Q2"
+content_digest: "sha256:preview-mini-fibo"
+license_uri: "https://opensource.org/licenses/MIT"
+imports: []
+status: registered
+role: reference
+local_source_hint: "packages/standard-owl/tests/fixtures/mini_fibo"

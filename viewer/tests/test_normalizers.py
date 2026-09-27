@@ -63,6 +63,29 @@ def test_csv_records(tmp_path: Path):
     assert out.items[0].description == "A def"
 
 
+def test_csv_tree_from_parent_local_name(tmp_path: Path):
+    p = tmp_path / "tree.csv"
+    p.write_text(
+        "local_name,label,parent_local_name\n"
+        "CreditEvent,credit event,\n"
+        "DefaultEvent,default event,CreditEvent\n"
+        "FailureToPay,failure to pay,DefaultEvent\n"
+        "Orphan,orphan,MissingParent\n",
+        encoding="utf-8",
+    )
+    sec = _section(
+        type="tree",
+        source={"format": "csv", "path": "tree.csv"},
+        key_column="local_name",
+    )
+    out = CsvNormalizer().normalize(sec, p)
+    roots = {i.id: i for i in out.items}
+    assert set(roots) == {"CreditEvent", "Orphan"}
+    credit = roots["CreditEvent"]
+    assert [c.id for c in credit.children] == ["DefaultEvent"]
+    assert [c.id for c in credit.children[0].children] == ["FailureToPay"]
+
+
 def test_markdown(tmp_path: Path):
     p = tmp_path / "doc.md"
     p.write_text("# Hello\n\nWorld", encoding="utf-8")

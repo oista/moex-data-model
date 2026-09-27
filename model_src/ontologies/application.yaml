@@ -1,0 +1,12 @@
+id: "moex:ontology:application"
+ontology_iri: "https://data.moex.com/ontology/application/"
+version_iri: null
+title: "Application Ontology"
+version: "0.0.0"
+source_uri: "https://data.moex.com/ontology/application/"
+revision: "stub"
+content_digest: "sha256:unindexed"
+license_uri: null
+imports: []
+status: registered
+role: implementation

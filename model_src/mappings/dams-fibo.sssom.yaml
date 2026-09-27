@@ -1,0 +1,16 @@
+mapping_set_id: moex:mappings:dams-fibo
+mapping_set_version: "1.0.0"
+license: https://creativecommons.org/licenses/by/4.0/
+
+mappings:
+  - subject_id: dams:concept/Client
+    subject_label: Client
+    subject_kind: dams_element
+    predicate_id: skos:closeMatch
+    object_id: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
+    object_label: legal person
+    object_kind: ontology_entity
+    mapping_justification: semapv:ManualMappingCuration
+    author_id: moex:role:domain-architect
+    confidence: 1.0
+    status: approved

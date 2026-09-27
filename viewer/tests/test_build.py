@@ -76,13 +76,18 @@ def test_repo_golden_three_modules():
     assert '"type": "explorer"' in html or '"type":"explorer"' in html
     registry = json.loads((dist / "manifest_registry.json").read_text(encoding="utf-8"))
     ids = {m["module_id"] for m in registry["modules"]}
-    assert ids == {
+    assert {
         "moex:module:dams",
         "moex:module:fibo",
         "moex:module:trading-solution",
-    }
+    }.issubset(ids)
     dams = next(m for m in registry["modules"] if m["module_id"] == "moex:module:dams")
     assert "explorer" in dams["sections"]
+    fibo = next(m for m in registry["modules"] if m["module_id"] == "moex:module:fibo")
+    assert "glossary" in fibo["sections"]
+    assert "hierarchy" in fibo["sections"]
+    assert "денежный поток" in html
+    assert "FailureToPay" in html and "CreditEvent" in html
 
 
 def test_nav_group_children_hidden_overrides_display_flex():

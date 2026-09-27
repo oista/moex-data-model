@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "moex-ontology-catalog"
+version = "0.1.0"
+description = "Ontology Catalog: releases, entities, search index, read models"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.6,<3.0",
+    "PyYAML>=6.0,<7.0",
+    "moex-standard-owl",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0,<9.0", "moex-standard-owl[dev]", "moex-semantic-mappings"]
+mappings = ["moex-semantic-mappings"]
+
+[project.scripts]
+moex-ontology-catalog = "moex_ontology.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

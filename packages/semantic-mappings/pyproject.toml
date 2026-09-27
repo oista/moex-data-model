@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "moex-semantic-mappings"
+version = "0.1.0"
+description = "LinkML mappings, SSSOM sets, and SKOS glossary projections for MOEX"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.6,<3.0",
+    "PyYAML>=6.0,<7.0",
+    "linkml-runtime>=1.7,<2.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0,<9.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

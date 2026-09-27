@@ -10,7 +10,7 @@ description: Preview of FIBO class definitions for glossary mapping (committed s
 sections:
   - id: glossary
     title: Glossary (preview)
-    description: Sample terms from FND/BE/FBC/SEC/DER. Full export is gitignored under output/.
+    description: Sample terms from FND/BE/FBC/SEC/DER with curated RU labels. Full export is gitignored under output/.
     type: glossary
     source:
       format: csv
@@ -19,7 +19,10 @@ sections:
     columns:
       - local_name
       - label
+      - label_ru
       - definition
+      - definition_ru
+      - parent_local_name
       - source_domain
       - iri
     filterable:
@@ -27,3 +30,16 @@ sections:
     tags:
       - fibo
       - preview
+
+  - id: hierarchy
+    title: Class hierarchy (preview)
+    description: Asserted rdfs:subClassOf among terms present in the preview sample (parent_local_name).
+    type: tree
+    source:
+      format: csv
+      path: publications/fibo_glossary.preview.csv
+    key_column: local_name
+    tags:
+      - fibo
+      - preview
+      - hierarchy

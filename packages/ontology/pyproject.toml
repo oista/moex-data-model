@@ -5,20 +5,18 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "moex-ontology"
 version = "0.1.0"
-description = "RDF/OWL ontology utilities and FIBO definition export for MOEX data model"
+description = "Compatibility shim: FIBO export CLI over moex-standard-owl"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "rdflib>=7.0,<8.0",
-    "pandas>=2.2,<3.0",
-    "openpyxl>=3.1,<4.0",
+    "moex-standard-owl",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0,<9.0"]
+dev = ["pytest>=8.0,<9.0", "moex-standard-owl[dev]"]
 
 [project.scripts]
-fibo-export = "ontology.fibo.cli:main"
+fibo-export = "moex_standard_owl.fibo.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

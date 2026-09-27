@@ -7,19 +7,19 @@ todos:
     status: completed
   - id: standard-owl
     content: "Пакет standard-owl: перенос парсера и FIBO CSV export, OAK rdflib adapter, import resolver, shim ontology.fibo"
-    status: in_progress
+    status: completed
   - id: catalog-index
     content: "Пакет ontology-catalog: OntologyRelease/Entity/Relation, SQLite-индекс, дескриптор FIBO и registered-заглушки"
-    status: pending
+    status: completed
   - id: oak-queries
     content: Use cases поиска, карточки и asserted-иерархии через порт OntologyProvider на mini_fibo
-    status: pending
+    status: completed
   - id: semantic-mappings
     content: SSSOM dams-fibo на dams:concept/Client, экстрактор LinkML mappings на фикстуре, SKOS concept scheme без смены GlossaryTerm
-    status: pending
+    status: completed
   - id: viewer-preview
     content: "Экспорт preview JSON и publish.yaml: каталог, поиск, дерево, карточка, backlinks через существующие секции viewer"
-    status: pending
+    status: completed
 isProject: false
 ---
 

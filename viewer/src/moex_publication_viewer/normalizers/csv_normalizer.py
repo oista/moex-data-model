@@ -8,7 +8,7 @@ from pathlib import Path
 from moex_publication_viewer.models.manifest_models import ManifestSection
 from moex_publication_viewer.models.publication_models import PublicationSection
 from moex_publication_viewer.normalizers.base import NormalizeError
-from moex_publication_viewer.normalizers.helpers import records_to_items, section_meta
+from moex_publication_viewer.normalizers.helpers import items_to_tree, records_to_items, section_meta
 
 
 class CsvNormalizer:
@@ -22,6 +22,8 @@ class CsvNormalizer:
             raise NormalizeError(f"cannot parse CSV {source_path}: {exc}") from exc
 
         items = records_to_items(rows, key_column=section.key_column)
+        if section.type == "tree":
+            items = items_to_tree(items)
         meta = section_meta(section)
         meta["columns"] = section.columns or headers
         return PublicationSection(**meta, items=items)
