@@ -82,6 +82,15 @@ class IndexElement:
     layer: str = ""
 
 
+@dataclass(frozen=True, slots=True)
+class DocumentRecord:
+    workspace_id: str
+    doc_key: str
+    content: str
+    base_digest: str
+    updated_by: str
+
+
 class IdentityStore(Protocol):
     def ensure_user(self, actor: str, display_name: str | None = None) -> UserRecord: ...
 
@@ -156,3 +165,17 @@ class ModelIndexProvider(Protocol):
 
 class AuditStore(Protocol):
     def record(self, action: str, actor: str, detail: str = "") -> None: ...
+
+
+class DocumentStore(Protocol):
+    def get(self, workspace_id: str, doc_key: str) -> DocumentRecord | None: ...
+
+    def upsert(
+        self,
+        *,
+        workspace_id: str,
+        doc_key: str,
+        content: str,
+        base_digest: str,
+        updated_by: str,
+    ) -> DocumentRecord: ...

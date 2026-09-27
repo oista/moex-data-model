@@ -53,6 +53,21 @@ class WorkspaceMember(Base):
     role: Mapped[str] = mapped_column(String(64), nullable=False, default="owner")
 
 
+class WorkspaceDocument(Base):
+    __tablename__ = "workspace_document"
+
+    workspace_id: Mapped[str] = mapped_column(
+        String(128), ForeignKey("workspace.id"), primary_key=True
+    )
+    doc_key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    content: Mapped[str] = mapped_column(Text, nullable=False)
+    base_digest: Mapped[str] = mapped_column(String(128), nullable=False, default="")
+    updated_by: Mapped[str] = mapped_column(String(128), nullable=False, default="dev")
+    updated_at: Mapped[str] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
 class ModelRevisionIndex(Base):
     __tablename__ = "model_revision_index"
 

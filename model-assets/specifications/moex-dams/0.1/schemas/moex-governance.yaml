@@ -38,6 +38,7 @@ classes:
 
   HasLifecycle:
     mixin: true
+    description: "Mixin жизненного цикла: статус, период действия и ссылка на заменяющий элемент."
     slots:
       - lifecycle_status
       - valid_from
@@ -46,6 +47,7 @@ classes:
 
   HasOwnership:
     mixin: true
+    description: "Mixin владения: data owner, data steward и организационное подразделение."
     slots:
       - data_owner_ref
       - data_steward_ref
@@ -70,11 +72,13 @@ classes:
 
   HasPolicyBindings:
     mixin: true
+    description: Mixin привязки управляемых политик к элементу модели.
     slots:
       - policy_refs
 
   HasProvenance:
     mixin: true
+    description: "Mixin происхождения и согласования: исходный артефакт, evidence, статус и согласующий."
     slots:
       - source_artifact_ref
       - evidence_refs

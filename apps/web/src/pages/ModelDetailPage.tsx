@@ -59,6 +59,7 @@ export function ModelDetailPage() {
           )}
         </div>
         <div className="row">
+          <Link to="/models/trading/edit">Edit YAML</Link>
           <Link to="/models/trading/validate">Run validation job</Link>
         </div>
       </div>

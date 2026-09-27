@@ -46,3 +46,17 @@ export type ElementHit = {
   layer: string;
   implementation_id: string;
 };
+
+export type ImplementationBody = {
+  content: string;
+  content_digest: string;
+  path: string;
+};
+
+export type WorkspaceDocument = {
+  workspace_id: string;
+  doc_key: string;
+  content: string;
+  base_digest: string;
+  updated_by: string;
+};

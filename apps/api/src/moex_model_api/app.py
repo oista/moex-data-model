@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import hashlib
+import tempfile
 from datetime import datetime, timezone
+from pathlib import Path
 from uuid import uuid4
 
 import yaml
@@ -18,6 +20,7 @@ from moex_model_api.auth import DevAuthMiddleware
 from moex_model_api.db.session import init_db, make_engine, session_factory
 from moex_model_api.db.stores import (
     SqlAuditStore,
+    SqlDocumentStore,
     SqlIdentityStore,
     SqlJobStore,
     SqlModelIndexProvider,
@@ -72,6 +75,26 @@ class JobCreate(BaseModel):
     kind: str = Field(pattern="^(validate|compile)$")
     workspace_id: str
     implementation_id: str = "moex:implementation:trading:1.0.0"
+    source: str = Field(default="published", pattern="^(published|draft)$")
+
+
+class ImplementationBodyOut(BaseModel):
+    content: str
+    content_digest: str
+    path: str
+
+
+class DocumentOut(BaseModel):
+    workspace_id: str
+    doc_key: str
+    content: str
+    base_digest: str
+    updated_by: str
+
+
+class DocumentPut(BaseModel):
+    content: str
+    base_digest: str = ""
 
 
 class JobOut(BaseModel):
@@ -114,9 +137,15 @@ def _now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
-def _fingerprint(kind: str, workspace_id: str, implementation_id: str) -> str:
-    raw = f"{kind}|{workspace_id}|{implementation_id}"
+def _fingerprint(
+    kind: str, workspace_id: str, implementation_id: str, source: str = "published"
+) -> str:
+    raw = f"{kind}|{workspace_id}|{implementation_id}|{source}"
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
+
+
+def _content_digest(text: str) -> str:
+    return "sha256:" + hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
 def create_app(*, database_url: str | None = None) -> FastAPI:
@@ -124,7 +153,7 @@ def create_app(*, database_url: str | None = None) -> FastAPI:
     init_db(engine)
     factory: sessionmaker[Session] = session_factory(engine)
 
-    app = FastAPI(title="MOEX Model API", version="0.2.0")
+    app = FastAPI(title="MOEX Model API", version="0.3.0")
     app.add_middleware(DevAuthMiddleware)
     app.state.engine = engine
     app.state.session_factory = factory
@@ -165,6 +194,24 @@ def create_app(*, database_url: str | None = None) -> FastAPI:
                 implementation_path=rel,
             )
         ]
+
+    @app.get(
+        "/implementations/trading/body",
+        response_model=ImplementationBodyOut,
+    )
+    def trading_body() -> ImplementationBodyOut:
+        root = find_repo_root()
+        paths = SlicePaths.resolve(root=root)
+        text = paths.implementation.read_text(encoding="utf-8")
+        try:
+            rel = paths.implementation.relative_to(paths.root).as_posix()
+        except ValueError:
+            rel = paths.implementation.as_posix()
+        return ImplementationBodyOut(
+            content=text,
+            content_digest=_content_digest(text),
+            path=rel,
+        )
 
     @app.get(
         "/implementations/trading/conformance",
@@ -251,6 +298,63 @@ def create_app(*, database_url: str | None = None) -> FastAPI:
             ],
         )
 
+    @app.get(
+        "/workspaces/{workspace_id}/documents/trading",
+        response_model=DocumentOut,
+    )
+    def get_trading_document(
+        workspace_id: str,
+        request: Request,
+        session: Session = Depends(get_session),
+    ) -> DocumentOut:
+        ensure_actor(request, session)
+        doc = SqlDocumentStore(session).get(workspace_id, "trading")
+        if doc is None:
+            raise HTTPException(status_code=404, detail="document not found")
+        return DocumentOut(
+            workspace_id=doc.workspace_id,
+            doc_key=doc.doc_key,
+            content=doc.content,
+            base_digest=doc.base_digest,
+            updated_by=doc.updated_by,
+        )
+
+    @app.put(
+        "/workspaces/{workspace_id}/documents/trading",
+        response_model=DocumentOut,
+    )
+    def put_trading_document(
+        workspace_id: str,
+        body: DocumentPut,
+        request: Request,
+        session: Session = Depends(get_session),
+    ) -> DocumentOut:
+        actor = ensure_actor(request, session)
+        workspaces = SqlWorkspaceStore(session)
+        if workspaces.get(workspace_id) is None:
+            workspaces.create(workspace_id, workspace_id)
+            workspaces.add_member(workspace_id, actor, role="owner")
+        else:
+            workspaces.add_member(workspace_id, actor, role="editor")
+        digest = body.base_digest or _content_digest(body.content)
+        doc = SqlDocumentStore(session).upsert(
+            workspace_id=workspace_id,
+            doc_key="trading",
+            content=body.content,
+            base_digest=digest,
+            updated_by=actor,
+        )
+        SqlAuditStore(session).record(
+            "document.put", actor, f"{workspace_id}:trading"
+        )
+        return DocumentOut(
+            workspace_id=doc.workspace_id,
+            doc_key=doc.doc_key,
+            content=doc.content,
+            base_digest=doc.base_digest,
+            updated_by=doc.updated_by,
+        )
+
     @app.post("/jobs", response_model=JobOut)
     def create_job(
         body: JobCreate,
@@ -259,9 +363,15 @@ def create_app(*, database_url: str | None = None) -> FastAPI:
         idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
     ) -> JobOut:
         actor = ensure_actor(request, session)
+        if body.kind == "compile" and body.source == "draft":
+            raise HTTPException(
+                status_code=400, detail="compile does not support source=draft"
+            )
         jobs = SqlJobStore(session)
         workspaces = SqlWorkspaceStore(session)
-        fp = _fingerprint(body.kind, body.workspace_id, body.implementation_id)
+        fp = _fingerprint(
+            body.kind, body.workspace_id, body.implementation_id, body.source
+        )
 
         if idempotency_key:
             prior = jobs.get_by_idempotency(idempotency_key)
@@ -303,12 +413,40 @@ def create_app(*, database_url: str | None = None) -> FastAPI:
         root = find_repo_root()
         paths = SlicePaths.resolve(root=root)
         finished = _now()
+        tmp_path: Path | None = None
+        summary = ""
+        status = "failed"
 
         try:
             if body.kind == "validate":
+                impl_path = paths.implementation
+                if body.source == "draft":
+                    draft = SqlDocumentStore(session).get(
+                        body.workspace_id, "trading"
+                    )
+                    if draft is None:
+                        jobs.update_status(
+                            job_id,
+                            "failed",
+                            result_summary="draft document missing",
+                            finished_at=finished,
+                        )
+                        raise HTTPException(
+                            status_code=400, detail="draft document missing"
+                        )
+                    tmp = tempfile.NamedTemporaryFile(
+                        mode="w",
+                        suffix=".yaml",
+                        encoding="utf-8",
+                        delete=False,
+                    )
+                    tmp.write(draft.content)
+                    tmp.close()
+                    tmp_path = Path(tmp.name)
+                    impl_path = tmp_path
                 result = assess_implementation(
                     schema_path=paths.schema,
-                    implementation_path=paths.implementation,
+                    implementation_path=impl_path,
                     implementation_id=body.implementation_id,
                 )
                 run_id = f"run:{uuid4().hex[:12]}"
@@ -337,7 +475,7 @@ def create_app(*, database_url: str | None = None) -> FastAPI:
                 )
                 summary = (
                     f"validate:{result.report.overall_result.value}"
-                    f" run={run_id} diags={len(diags)}"
+                    f" source={body.source} run={run_id} diags={len(diags)}"
                 )
                 status = "succeeded"
             else:
@@ -371,6 +509,18 @@ def create_app(*, database_url: str | None = None) -> FastAPI:
                 )
                 summary = f"compile:ok artifact={art_id}"
                 status = "succeeded"
+            updated = jobs.update_status(
+                job_id, status, result_summary=summary, finished_at=finished
+            )
+            return JobOut(
+                id=updated.id,
+                workspace_id=updated.workspace_id,
+                kind=updated.kind,
+                status=updated.status,
+                implementation_id=updated.implementation_id,
+                result_summary=updated.result_summary,
+                finished_at=updated.finished_at,
+            )
         except HTTPException:
             raise
         except Exception as exc:  # noqa: BLE001 — persist failure on job row
@@ -381,19 +531,9 @@ def create_app(*, database_url: str | None = None) -> FastAPI:
                 finished_at=finished,
             )
             raise HTTPException(status_code=500, detail=str(exc)) from exc
-
-        updated = jobs.update_status(
-            job_id, status, result_summary=summary, finished_at=finished
-        )
-        return JobOut(
-            id=updated.id,
-            workspace_id=updated.workspace_id,
-            kind=updated.kind,
-            status=updated.status,
-            implementation_id=updated.implementation_id,
-            result_summary=updated.result_summary,
-            finished_at=updated.finished_at,
-        )
+        finally:
+            if tmp_path is not None:
+                tmp_path.unlink(missing_ok=True)
 
     @app.get("/jobs/{job_id}", response_model=JobOut)
     def get_job(

@@ -197,6 +197,12 @@ th {
   border-top: 1px solid var(--line);
 }
 
+.editor-frame {
+  border: 1px solid var(--line);
+  background: #fff;
+  min-height: 60vh;
+}
+
 @media (max-width: 720px) {
   .shell {
     grid-template-columns: 1fr;

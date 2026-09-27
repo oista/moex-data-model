@@ -45,6 +45,10 @@ export const api = {
     request<import("./types").Conformance>(
       "/implementations/trading/conformance",
     ),
+  tradingBody: () =>
+    request<import("./types").ImplementationBody>(
+      "/implementations/trading/body",
+    ),
   listWorkspaces: () =>
     request<import("./types").Workspace[]>("/workspaces"),
   createWorkspace: (body: { id?: string; name: string }) =>
@@ -54,11 +58,27 @@ export const api = {
     }),
   getWorkspace: (id: string) =>
     request<import("./types").Workspace>(`/workspaces/${id}`),
+  getDocument: (workspaceId: string) =>
+    request<import("./types").WorkspaceDocument>(
+      `/workspaces/${workspaceId}/documents/trading`,
+    ),
+  putDocument: (
+    workspaceId: string,
+    body: { content: string; base_digest?: string },
+  ) =>
+    request<import("./types").WorkspaceDocument>(
+      `/workspaces/${workspaceId}/documents/trading`,
+      {
+        method: "PUT",
+        body: JSON.stringify(body),
+      },
+    ),
   createJob: (
     body: {
       kind: "validate" | "compile";
       workspace_id: string;
       implementation_id: string;
+      source?: "published" | "draft";
     },
     idempotencyKey?: string,
   ) => {

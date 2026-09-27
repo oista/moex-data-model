@@ -16,6 +16,7 @@ default_range: string
 classes:
   ModelElement:
     abstract: true
+    description: "Абстрактный корень иерархии элементов модели: общая идентичность (element_id), имя, описание и жизненный цикл."
     mixins:
       - HasLifecycle
     slots:

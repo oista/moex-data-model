@@ -103,6 +103,59 @@ def test_job_validate_idempotent(client: TestClient) -> None:
     assert got.json()["status"] == "succeeded"
 
 
+def test_trading_body(client: TestClient) -> None:
+    r = client.get("/implementations/trading/body")
+    assert r.status_code == 200
+    body = r.json()
+    assert "element_id:" in body["content"]
+    assert body["content_digest"].startswith("sha256:")
+    assert "trading" in body["path"]
+
+
+def test_workspace_document_put_get_and_validate_draft(client: TestClient) -> None:
+    headers = {"X-Moex-Actor": "editor"}
+    published = client.get("/implementations/trading/body").json()
+    content = published["content"].replace(
+        "Черновой пример модели одного ИТ-решения.",
+        "Черновой пример модели одного ИТ-решения (draft).",
+        1,
+    )
+    put = client.put(
+        "/workspaces/ws-edit/documents/trading",
+        json={"content": content, "base_digest": published["content_digest"]},
+        headers=headers,
+    )
+    assert put.status_code == 200
+    assert "draft" in put.json()["content"]
+
+    got = client.get(
+        "/workspaces/ws-edit/documents/trading",
+        headers=headers,
+    )
+    assert got.status_code == 200
+    assert got.json()["content"] == content
+
+    missing = client.get(
+        "/workspaces/ws-missing/documents/trading",
+        headers=headers,
+    )
+    assert missing.status_code == 404
+
+    job = client.post(
+        "/jobs",
+        json={
+            "kind": "validate",
+            "workspace_id": "ws-edit",
+            "implementation_id": "moex:implementation:trading:1.0.0",
+            "source": "draft",
+        },
+        headers={**headers, "Idempotency-Key": "idem-draft-1"},
+    )
+    assert job.status_code == 200
+    assert job.json()["status"] == "succeeded"
+    assert "source=draft" in job.json()["result_summary"]
+
+
 def test_model_index_rebuild_and_search(client: TestClient) -> None:
     headers = {"X-Moex-Actor": "carol"}
     r = client.post("/model-index/rebuild", headers=headers)

@@ -14,8 +14,9 @@ superseded_by: MODELING_ARCHITECTURE.md
 **Уже совпало с репо:** `model-assets/`, `generated/`, `apps/cli/`, `apps/viewer/`, пакеты slice (`modeling-kernel`, `standard-linkml`, `specification-dams`, `publication`), `standard-owl`, `ontology-catalog`.  
 **Уже совпало (roadmap 1–4):** `generated/contracts` (moex_dams_contracts), `OWLStandardProvider`, `packages/git-adapter`, CLI `lint|compile|diagram|diff|validate|publish` (+ stubs import/map), `apps/api` operational slice.  
 **Уже совпало (Stage 3 narrow-v2):** identity/members/jobs/artifacts/model_index tables + ports; workspace/job/index API + Idempotency-Key; GitHub read-only `GitProvider`.  
-**Уже совпало (Web Workbench MVP):** `apps/web` React/Vite shell — dashboard, workspaces, trading model page, validation job report (no Monaco/drawDB/OIDC).  
-**Still-later:** Monaco editors, entity forms, semantic diff, PR flow, `apps/worker`, CLI `import`/`map` real, OIDC, remaining Stage-3 tables (`diagram_layout`, `publication_request`, …).  
+**Уже совпало (Web Workbench MVP):** `apps/web` React/Vite shell — dashboard, workspaces, trading model page, validation job report.  
+**Уже совпало (Workbench editors):** Monaco YAML + `workspace_document` draft API + validate `source=draft`.  
+**Still-later:** entity forms, form↔YAML sync, semantic diff, PR flow, `apps/worker`, CLI `import`/`map` real, OIDC, remaining Stage-3 tables (`diagram_layout`, `publication_request`, …).  
 `packages/ontology/` остаётся shim. Миграция путей: [docs/migration/model-src-to-model-assets.md](../migration/model-src-to-model-assets.md).
 
 ## Предметная модель: роли как экземпляры, не subclass

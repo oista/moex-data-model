@@ -40,10 +40,12 @@ Dev header only: `X-Moex-Actor` (default `dev`). Upserts `user_identity` + `edit
 
 - `GET /health`
 - `GET /implementations` — known slice registry (trading)
+- `GET /implementations/trading/body` — published trading YAML text + digest
 - `GET /implementations/trading/conformance` — assess default trading-platform slice
 - `POST /validation-runs` — persist assessment into operational tables
 - `POST|GET /workspaces` / `GET /workspaces/{id}` — workspace lifecycle + members
-- `POST /jobs` (+ `Idempotency-Key`) / `GET /jobs/{id}` — sync validate|compile jobs
+- `GET|PUT /workspaces/{id}/documents/trading` — workspace draft YAML
+- `POST /jobs` (+ `Idempotency-Key`, `source=published|draft`) / `GET /jobs/{id}`
 - `POST /model-index/rebuild` / `GET /model-index/search?q=` — search projection
 
 ## Check

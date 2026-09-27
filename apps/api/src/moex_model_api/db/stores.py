@@ -9,6 +9,7 @@ from moex_model_api.db import models as orm
 from moex_model_api.ports import (
     ArtifactRecord,
     DiagnosticRecord,
+    DocumentRecord,
     ElementHit,
     IndexElement,
     JobRecord,
@@ -359,3 +360,58 @@ class SqlModelIndexProvider:
             )
             for el, idx in rows
         ]
+
+
+class SqlDocumentStore:
+    def __init__(self, session: Session) -> None:
+        self._session = session
+
+    def get(self, workspace_id: str, doc_key: str) -> DocumentRecord | None:
+        row = self._session.get(
+            orm.WorkspaceDocument,
+            {"workspace_id": workspace_id, "doc_key": doc_key},
+        )
+        if row is None:
+            return None
+        return DocumentRecord(
+            workspace_id=row.workspace_id,
+            doc_key=row.doc_key,
+            content=row.content,
+            base_digest=row.base_digest,
+            updated_by=row.updated_by,
+        )
+
+    def upsert(
+        self,
+        *,
+        workspace_id: str,
+        doc_key: str,
+        content: str,
+        base_digest: str,
+        updated_by: str,
+    ) -> DocumentRecord:
+        row = self._session.get(
+            orm.WorkspaceDocument,
+            {"workspace_id": workspace_id, "doc_key": doc_key},
+        )
+        if row is None:
+            row = orm.WorkspaceDocument(
+                workspace_id=workspace_id,
+                doc_key=doc_key,
+                content=content,
+                base_digest=base_digest,
+                updated_by=updated_by,
+            )
+            self._session.add(row)
+        else:
+            row.content = content
+            row.base_digest = base_digest
+            row.updated_by = updated_by
+        self._session.flush()
+        return DocumentRecord(
+            workspace_id=row.workspace_id,
+            doc_key=row.doc_key,
+            content=row.content,
+            base_digest=row.base_digest,
+            updated_by=row.updated_by,
+        )
