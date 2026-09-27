@@ -1,0 +1,2 @@
+name,source,target,mapping_type,mapping_cardinality
+map_client_id,TradingClient.clientId,client_changed_topic.client_id,field_mapping,one_to_one

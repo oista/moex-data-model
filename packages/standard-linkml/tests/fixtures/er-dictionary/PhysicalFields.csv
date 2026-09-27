@@ -1,0 +1,2 @@
+object,name,description,native_name,native_type,required,schema_path
+client_changed_topic,client_id,Физическое поле идентификатора клиента,client_id,string,true,/payload/client_id

@@ -1,2 +1,2 @@
 name,source,target,source_role,target_role,source_card,target_card,identifying
-TradeClient,Trade,Client,trades,client,0..*,1,false
+TradeClient,Trade,TradingClient,trades,client,0..*,1,false

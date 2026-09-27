@@ -17,6 +17,13 @@ conforms_to:
   specification_revision: "0.1.0"
 
 sheets:
+  conceptual:
+    sheet: Conceptual
+    required: false
+    columns:
+      name: name
+      title: title
+      description: description
   entities:
     sheet: Entities
     required: true
@@ -24,6 +31,7 @@ sheets:
       name: name
       title: title
       description: description
+      conceptual_ref: conceptual_ref
   attributes:
     sheet: Attributes
     required: true
@@ -47,6 +55,39 @@ sheets:
       source_card: source_card
       target_card: target_card
       identifying: identifying
+  physical_objects:
+    sheet: PhysicalObjects
+    required: false
+    columns:
+      name: name
+      title: title
+      description: description
+      object_kind: object_kind
+      qualified_name: qualified_name
+      technology: technology
+      system_ref: system_ref
+      direction: direction
+      native_schema_ref: native_schema_ref
+  physical_fields:
+    sheet: PhysicalFields
+    required: false
+    columns:
+      object: object
+      name: name
+      description: description
+      native_name: native_name
+      native_type: native_type
+      required: required
+      schema_path: schema_path
+  mappings:
+    sheet: Mappings
+    required: false
+    columns:
+      name: name
+      source: source
+      target: target
+      mapping_type: mapping_type
+      mapping_cardinality: mapping_cardinality
 
 defaults:
   lifecycle_status: draft

@@ -28,6 +28,19 @@ class SheetColumns(BaseModel):
     source_card: str | None = None
     target_card: str | None = None
     identifying: str | None = None
+    conceptual_ref: str | None = None
+    object: str | None = None
+    object_kind: str | None = None
+    qualified_name: str | None = None
+    technology: str | None = None
+    system_ref: str | None = None
+    direction: str | None = None
+    native_schema_ref: str | None = None
+    native_name: str | None = None
+    native_type: str | None = None
+    schema_path: str | None = None
+    mapping_type: str | None = None
+    mapping_cardinality: str | None = None
 
 
 class SheetSpec(BaseModel):
@@ -40,6 +53,10 @@ class SheetsConfig(BaseModel):
     entities: SheetSpec
     attributes: SheetSpec
     relationships: SheetSpec | None = None
+    conceptual: SheetSpec | None = None
+    physical_objects: SheetSpec | None = None
+    physical_fields: SheetSpec | None = None
+    mappings: SheetSpec | None = None
 
 
 class IngestDefaults(BaseModel):

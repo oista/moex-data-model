@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas generate-contracts api-check
+.PHONY: viewer viewer-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas generate-contracts api-check web-check
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -44,6 +44,9 @@ generate-contracts:
 #   powershell -NoProfile -File apps/cli/scripts/check.ps1
 api-check:
 	powershell -NoProfile -ExecutionPolicy Bypass -File apps/api/scripts/check.ps1
+
+web-check:
+	powershell -NoProfile -ExecutionPolicy Bypass -File apps/web/scripts/check.ps1
 
 check:
 	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/generate-contracts.ps1

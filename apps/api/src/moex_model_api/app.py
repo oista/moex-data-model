@@ -99,6 +99,13 @@ class ElementHitOut(BaseModel):
     implementation_id: str
 
 
+class ImplementationOut(BaseModel):
+    id: str
+    slug: str
+    title: str
+    implementation_path: str
+
+
 def _actor(request: Request) -> str:
     return str(getattr(request.state, "actor", "dev") or "dev")
 
@@ -141,6 +148,23 @@ def create_app(*, database_url: str | None = None) -> FastAPI:
     @app.get("/health")
     def health() -> dict[str, str]:
         return {"status": "ok"}
+
+    @app.get("/implementations", response_model=list[ImplementationOut])
+    def list_implementations() -> list[ImplementationOut]:
+        root = find_repo_root()
+        paths = SlicePaths.resolve(root=root)
+        try:
+            rel = paths.implementation.relative_to(paths.root).as_posix()
+        except ValueError:
+            rel = paths.implementation.as_posix()
+        return [
+            ImplementationOut(
+                id="moex:implementation:trading:1.0.0",
+                slug="trading",
+                title="Trading platform",
+                implementation_path=rel,
+            )
+        ]
 
     @app.get(
         "/implementations/trading/conformance",

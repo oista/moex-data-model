@@ -31,6 +31,10 @@ class WorkbookTables:
     entities: SheetTable
     attributes: SheetTable
     relationships: SheetTable | None
+    conceptual: SheetTable | None = None
+    physical_objects: SheetTable | None = None
+    physical_fields: SheetTable | None = None
+    mappings: SheetTable | None = None
     warnings: list[str] = field(default_factory=list)
 
 
@@ -57,29 +61,58 @@ def load_workbook_tables(
     attributes = _project_sheet(
         "attributes", profile.sheets.attributes, raw, warnings_all
     )
-    relationships: SheetTable | None = None
-    if profile.sheets.relationships is not None:
-        rel_spec = profile.sheets.relationships
-        if rel_spec.sheet in raw or rel_spec.required:
-            relationships = _project_sheet(
-                "relationships", rel_spec, raw, warnings_all
-            )
-        else:
-            relationships = SheetTable(
-                logical_name="relationships",
-                source_name=rel_spec.sheet,
-                rows=[],
-            )
-            warnings_all.append(
-                f"Optional sheet '{rel_spec.sheet}' not found; relationships empty"
-            )
+    relationships = _load_optional_sheet(
+        "relationships", profile.sheets.relationships, raw, warnings_all
+    )
+    conceptual = _load_optional_sheet(
+        "conceptual", profile.sheets.conceptual, raw, warnings_all
+    )
+    physical_objects = _load_optional_sheet(
+        "physical_objects", profile.sheets.physical_objects, raw, warnings_all
+    )
+    physical_fields = _load_optional_sheet(
+        "physical_fields", profile.sheets.physical_fields, raw, warnings_all
+    )
+    mappings = _load_optional_sheet(
+        "mappings", profile.sheets.mappings, raw, warnings_all
+    )
 
     return WorkbookTables(
         entities=entities,
         attributes=attributes,
         relationships=relationships,
+        conceptual=conceptual,
+        physical_objects=physical_objects,
+        physical_fields=physical_fields,
+        mappings=mappings,
         warnings=warnings_all,
     )
+
+
+def _load_optional_sheet(
+    logical_name: str,
+    spec: SheetSpec | None,
+    raw: dict[str, list[dict[str, Any]]],
+    warnings_all: list[str],
+) -> SheetTable | None:
+    if spec is None:
+        return None
+    if _sheet_present(spec.sheet, raw) or spec.required:
+        return _project_sheet(logical_name, spec, raw, warnings_all)
+    warnings_all.append(
+        f"Optional sheet '{spec.sheet}' not found; {logical_name} empty"
+    )
+    return SheetTable(
+        logical_name=logical_name,
+        source_name=spec.sheet,
+        rows=[],
+    )
+
+
+def _sheet_present(sheet: str, raw: dict[str, list[dict[str, Any]]]) -> bool:
+    if sheet in raw:
+        return True
+    return any(k.lower() == sheet.lower() for k in raw)
 
 
 def _load_xlsx(path: Path) -> dict[str, list[dict[str, Any]]]:
@@ -99,14 +132,16 @@ def _load_xlsx(path: Path) -> dict[str, list[dict[str, Any]]]:
                 result[sheet_name] = []
                 continue
             rows: list[dict[str, Any]] = []
-            for raw in rows_iter:
-                if raw is None or all(c is None or str(c).strip() == "" for c in raw):
+            for raw_row in rows_iter:
+                if raw_row is None or all(
+                    c is None or str(c).strip() == "" for c in raw_row
+                ):
                     continue
                 row: dict[str, Any] = {}
                 for i, key in enumerate(headers):
                     if not key:
                         continue
-                    val = raw[i] if i < len(raw) else None
+                    val = raw_row[i] if i < len(raw_row) else None
                     row[key] = _normalize_cell(val)
                 rows.append(row)
             result[sheet_name] = rows
@@ -138,7 +173,6 @@ def _load_csv_dir(directory: Path) -> dict[str, list[dict[str, Any]]]:
                         if k is not None and str(k).strip()
                     }
                 )
-            # Accept both stem and stem with spaces matching sheet names
             result[path.stem] = rows
     return result
 
@@ -150,7 +184,6 @@ def _project_sheet(
     warnings_all: list[str],
 ) -> SheetTable:
     if spec.sheet not in raw:
-        # CSV stem may match case-insensitively
         match = next(
             (k for k in raw if k.lower() == spec.sheet.lower()),
             None,
@@ -177,15 +210,12 @@ def _project_sheet(
     unknown: set[str] = set()
     projected: list[dict[str, Any]] = []
 
-    for idx, row in enumerate(source_rows, start=2):
+    for row in source_rows:
         for header in row:
             if header and header not in expected_headers:
                 unknown.add(header)
         projected.append(
-            {
-                logical: row.get(header)
-                for logical, header in col_map.items()
-            }
+            {logical: row.get(header) for logical, header in col_map.items()}
         )
 
     sheet_warnings: list[str] = []
@@ -243,7 +273,6 @@ def write_csv_dir_as_xlsx(
 ) -> Path:
     """Helper for tests: CSV stem → workbook sheet (optional rename)."""
     wb = Workbook()
-    # remove default sheet
     default = wb.active
     wb.remove(default)
     sheet_names = sheet_names or {}

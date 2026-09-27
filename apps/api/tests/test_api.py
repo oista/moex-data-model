@@ -20,6 +20,16 @@ def test_health(client: TestClient) -> None:
     assert r.json()["status"] == "ok"
 
 
+def test_list_implementations(client: TestClient) -> None:
+    r = client.get("/implementations")
+    assert r.status_code == 200
+    body = r.json()
+    assert len(body) == 1
+    assert body[0]["slug"] == "trading"
+    assert body[0]["id"] == "moex:implementation:trading:1.0.0"
+    assert "trading" in body[0]["implementation_path"]
+
+
 def test_trading_conformance(client: TestClient) -> None:
     r = client.get("/implementations/trading/conformance")
     assert r.status_code == 200

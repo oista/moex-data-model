@@ -489,6 +489,8 @@ audit_event
 
 ## Этап 4. Web Workbench
 
+**Progress (MVP shell):** `apps/web` React + Vite + TanStack Query поверх `apps/api` — dashboard, workspaces, model registry (`GET /implementations`), trading conformance + model-index search, sync validate job report, DevAuth actor bar. Out of this slice: Monaco/YAML editor, entity/attribute forms, semantic diff, publication/PR, drawDB, OIDC, i18n.
+
 ### Основные экраны
 
 - Dashboard.

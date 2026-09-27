@@ -39,6 +39,7 @@ Dev header only: `X-Moex-Actor` (default `dev`). Upserts `user_identity` + `edit
 ## Endpoints
 
 - `GET /health`
+- `GET /implementations` — known slice registry (trading)
 - `GET /implementations/trading/conformance` — assess default trading-platform slice
 - `POST /validation-runs` — persist assessment into operational tables
 - `POST|GET /workspaces` / `GET /workspaces/{id}` — workspace lifecycle + members

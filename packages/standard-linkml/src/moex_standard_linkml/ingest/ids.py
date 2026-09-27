@@ -47,3 +47,20 @@ def relationship_id(prefix: str, slug: str, rel_name: str) -> str:
 
 def package_id(prefix: str, slug: str, version: str) -> str:
     return f"{prefix}:model/{slugify(slug)}/{version}"
+
+
+def physical_object_id(prefix: str, slug: str, object_name: str) -> str:
+    return f"{prefix}:physical/{slugify(slug)}/{slugify(object_name)}"
+
+
+def physical_field_id(
+    prefix: str, slug: str, object_name: str, field_name: str
+) -> str:
+    return (
+        f"{prefix}:physical/{slugify(slug)}/"
+        f"{slugify(object_name)}/{slugify(field_name)}"
+    )
+
+
+def mapping_id(prefix: str, slug: str, mapping_name: str) -> str:
+    return f"{prefix}:mapping/{slugify(slug)}/{slugify(mapping_name)}"
