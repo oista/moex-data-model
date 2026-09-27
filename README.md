@@ -37,12 +37,13 @@ Publication viewer, HTML, search index, drawDB и будущий Workbench — *
 | [`packages/standard-linkml/`](packages/standard-linkml/) | LinkML provider + ER-dictionary ingest |
 | [`packages/specification-dams/`](packages/specification-dams/) | DAMS semantic rules, graph view, conformance |
 | [`packages/publication/`](packages/publication/) | slice → PublicationModule / viewer JSON |
+| [`apps/cli/`](apps/cli/) | inbound CLI `moex-model` (`validate` / `publish`) |
 | [`packages/ontology/`](packages/ontology/) | FIBO CSV shim над [`packages/standard-owl/`](packages/standard-owl/) |
 | [`tools/architecture-check/`](tools/architecture-check/) | механические проверки architecture pack |
 | [`docs/architecture/`](docs/architecture/) | нормативная архитектура и связанные черновики |
 | [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md) | план Workbench MVP (подчинён MODELING_ARCHITECTURE) |
 
-Физический перенос в целевое дерево (`packages/modeling-kernel`, `model-assets/`, `apps/…`) — **после** стабилизации первого вертикального среза.
+Физический перенос `model_src/` → `model-assets/` и корневого `viewer/` → `apps/viewer` — **после** стабилизации среза. Первый inbound adapter уже в [`apps/cli/`](apps/cli/).
 
 ## Быстрый старт
 
@@ -85,16 +86,23 @@ linkml-lint moex-dams.yaml
 
 Состав схем и примеры: [`model_src/README.md`](model_src/README.md).
 
-### Первый вертикальный срез
+### Первый вертикальный срез и CLI
 
 ```bash
-make vertical-slice-check
-# или: powershell -NoProfile -File packages/publication/scripts/check.ps1
+make check
+# или: powershell -NoProfile -File apps/cli/scripts/check.ps1
 ```
 
-Прогоняет kernel / LinkML provider / DAMS assess / publication export и пишет
+Прогоняет kernel / LinkML provider / DAMS assess / publication / CLI и пишет
 [`model_src/examples/publications/vertical_slice.json`](model_src/examples/publications/vertical_slice.json)
-для секций viewer в [`model_src/examples/publish.yaml`](model_src/examples/publish.yaml).
+через `moex-model publish`. Секции viewer — в [`model_src/examples/publish.yaml`](model_src/examples/publish.yaml).
+
+```bash
+py -3.14 -m moex_model_cli validate --root .
+py -3.14 -m moex_model_cli publish --root .
+```
+
+Пакетный срез без CLI: `make vertical-slice-check`.
 
 ### FIBO glossary export (опционально)
 

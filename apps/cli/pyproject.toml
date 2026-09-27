@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "moex-model-cli"
+version = "0.1.0"
+description = "Inbound CLI adapter for the MOEX modeling vertical slice"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "moex-modeling-kernel",
+    "moex-standard-linkml",
+    "moex-specification-dams",
+    "moex-publication",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0,<9.0",
+    "moex-modeling-kernel[dev]",
+    "moex-standard-linkml[dev]",
+    "moex-specification-dams[dev]",
+    "moex-publication[dev]",
+]
+
+[project.scripts]
+moex-model = "moex_model_cli.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

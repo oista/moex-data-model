@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check architecture-check linkml-ingest-check vertical-slice-check
+.PHONY: viewer viewer-check architecture-check linkml-ingest-check vertical-slice-check check
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -28,3 +28,8 @@ linkml-ingest-check:
 #   powershell -NoProfile -File packages/publication/scripts/check.ps1
 vertical-slice-check:
 	powershell -NoProfile -ExecutionPolicy Bypass -File packages/publication/scripts/check.ps1
+
+# Slice + inbound CLI (moex-model validate / publish). Without make:
+#   powershell -NoProfile -File apps/cli/scripts/check.ps1
+check:
+	powershell -NoProfile -ExecutionPolicy Bypass -File apps/cli/scripts/check.ps1

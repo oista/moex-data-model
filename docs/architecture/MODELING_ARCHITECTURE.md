@@ -393,8 +393,8 @@ generated/
   manifests/
 
 apps/
-  cli/
-  viewer/
+  cli/                    # есть: moex-model validate / publish
+  viewer/                 # сегодня: корневой viewer/
   api/                    # позднее
   worker/                 # позднее
 ```
