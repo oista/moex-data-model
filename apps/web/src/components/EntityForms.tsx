@@ -49,7 +49,8 @@ export function EntityForms({ workspaceId, content, onDocument }: Props) {
   const [attrType, setAttrType] = useState("string");
 
   const mutate = useMutation({
-    mutationFn: api.mutateDocument.bind(null, workspaceId),
+    mutationFn: (body: Parameters<typeof api.mutateDocument>[1]) =>
+      api.mutateDocument(workspaceId, body),
     onSuccess: onDocument,
   });
 

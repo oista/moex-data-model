@@ -45,6 +45,7 @@ Dev header only: `X-Moex-Actor` (default `dev`). Upserts `user_identity` + `edit
 - `POST /validation-runs` — persist assessment into operational tables
 - `POST|GET /workspaces` / `GET /workspaces/{id}` — workspace lifecycle + members
 - `GET|PUT /workspaces/{id}/documents/trading` — workspace draft YAML
+- `POST /workspaces/{id}/documents/trading/mutations` — add LogicalEntity / LogicalAttribute
 - `POST /jobs` (+ `Idempotency-Key`, `source=published|draft`) / `GET /jobs/{id}`
 - `POST /model-index/rebuild` / `GET /model-index/search?q=` — search projection
 

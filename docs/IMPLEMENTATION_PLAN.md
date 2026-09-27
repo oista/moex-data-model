@@ -489,7 +489,7 @@ audit_event
 
 ## Этап 4. Web Workbench
 
-**Progress (MVP shell + editors):** `apps/web` React + Vite + TanStack Query поверх `apps/api` — dashboard, workspaces, model registry, trading conformance + model-index search, validate job report, DevAuth actor bar; Monaco YAML editor + `workspace_document` draft + `source=draft` validate. Out: entity/attribute forms, form↔YAML sync, semantic diff, publication/PR, drawDB, OIDC, i18n.
+**Progress (MVP shell + editors + entity forms):** `apps/web` — dashboard/workspaces/models/validate; Monaco YAML + `workspace_document`; forms `add_logical_entity` / `add_logical_attribute` via `POST …/mutations` (ruamel). Out: full form↔YAML live sync, edit/delete, semantic diff, publication/PR, drawDB, OIDC, i18n.
 
 ### Основные экраны
 
