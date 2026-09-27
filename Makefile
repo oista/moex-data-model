@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check architecture-check
+.PHONY: viewer viewer-check architecture-check linkml-ingest-check
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON=py -3.14 architecture-check
 PYTHON ?= python
@@ -16,3 +16,7 @@ architecture-check:
 	$(PYTHON) -m pip install -e "./tools/architecture-check[dev]"
 	$(PYTHON) -m pytest tools/architecture-check/tests -q
 	$(PYTHON) -m architecture_check.cli --root .
+
+linkml-ingest-check:
+	$(PYTHON) -m pip install -e "./packages/standard-linkml[dev]"
+	$(PYTHON) -m pytest packages/standard-linkml/tests -q

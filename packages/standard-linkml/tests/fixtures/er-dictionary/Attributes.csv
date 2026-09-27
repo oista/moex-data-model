@@ -1,0 +1,7 @@
+entity,name,title,description,type,required,pk
+Client,clientId,Идентификатор клиента,Уникальный идентификатор клиента,UUID,true,true
+Client,fullName,Полное наименование,Имя или наименование,VARCHAR,true,false
+Trade,tradeId,Идентификатор сделки,Уникальный идентификатор сделки,UUID,true,true
+Trade,clientId,Клиент сделки,Ссылка на клиента,UUID,true,false
+Trade,quantity,Количество,Количество инструмента,DECIMAL,true,false
+Trade,tradeDate,Дата сделки,Дата заключения,DATE,false,false

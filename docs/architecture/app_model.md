@@ -224,9 +224,10 @@ moex-data-model/
 │   │       │
 │   │       └── public.py
 │   │
-│   ├── standard-linkml/
+│   ├── standard-linkml/             # первый модуль: ingest ER-словаря → ModelPackage
 │   │   └── src/moex_standard_linkml/
-│   │       ├── domain/
+│   │       ├── ingest/              # XLS/CSV dictionary → DAMS ModelPackage + envelope
+│   │       ├── domain/              # target-after-slice
 │   │       │   ├── body.py
 │   │       │   ├── elements.py
 │   │       │   └── references.py
@@ -372,6 +373,6 @@ moex-data-model/
 ## Заметки по границам
 
 - `specification-dams` владеет **rules + mappings + graph views**, не второй копией LinkML-классов DAMS.
-- `standard-linkml` владеет typed body / elements / SchemaView adapter.
+- `standard-linkml` владеет typed body / elements / SchemaView adapter; первый реализованный модуль — `ingest/` (ER-словарь XLS/CSV → DAMS `ModelPackage` + envelope).
 - `publication` — read model; не source of truth.
 - Добавление OpenAPI/OWL не меняет classes в `modeling-kernel.yaml` (`make architecture-check`).

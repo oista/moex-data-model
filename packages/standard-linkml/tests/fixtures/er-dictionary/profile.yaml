@@ -1,0 +1,66 @@
+name: er-dictionary-fixture
+solution_ref: eam:solution/PILOT
+solution_slug: pilot
+id_prefix: dams
+package_name: pilot_solution_model
+package_title: Pilot solution model
+package_description: Fixture ER dictionary for ingest tests
+model_version: "0.1.0"
+api_version: dams.moex/v0.1
+
+conforms_to:
+  specification_id: moex-dams
+  specification_version: "0.1"
+  specification_revision: "0.1.0"
+
+sheets:
+  entities:
+    sheet: Entities
+    required: true
+    columns:
+      name: name
+      title: title
+      description: description
+  attributes:
+    sheet: Attributes
+    required: true
+    columns:
+      entity: entity
+      name: name
+      title: title
+      description: description
+      type: type
+      required: required
+      pk: pk
+  relationships:
+    sheet: Relationships
+    required: false
+    columns:
+      name: name
+      source: source
+      target: target
+      source_role: source_role
+      target_role: target_role
+      source_card: source_card
+      target_card: target_card
+      identifying: identifying
+
+defaults:
+  lifecycle_status: draft
+  solution_data_role: producer
+  domain_ref: eam:domain/PILOT
+  namespace: https://data.moex.com/models/pilot/
+  entity_type: core
+  data_class: master_data
+  business_importance: medium
+  context_name: PilotContext
+  context_title: Pilot domain context
+  context_description: Auto-generated domain context for ingested logical entities
+
+type_map:
+  VARCHAR: string
+  UUID: identifier
+  DECIMAL: decimal
+  DATE: date
+  INTEGER: integer
+  BOOLEAN: boolean
