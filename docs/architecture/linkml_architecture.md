@@ -690,7 +690,7 @@ Celery подходит как начальная реализация очер�
 
 | ADR | Решение |
 |---|---|
-| ADR-001 | LinkML YAML — канонический формат |
+| ADR-001 | LinkML YAML — канонический authoring format для DAMS-активов и LinkML toolchain (не для всей мультиформальной платформы; см. MODELING_ARCHITECTURE) |
 | ADR-002 | Git — источник опубликованных версий |
 | ADR-003 | PostgreSQL — operational и search projection |
 | ADR-004 | Модульный монолит вместо микросервисов |

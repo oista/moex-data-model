@@ -2,6 +2,12 @@
 
 Static HTML viewer for published modeling artifacts in this repository.
 
+**Architecture role:** derived **read model** / publication builder over canonical Git assets.  
+It is not the modeling source of truth. Platform canon:
+[`docs/architecture/MODELING_ARCHITECTURE.md`](../docs/architecture/MODELING_ARCHITECTURE.md).
+Target package location after the vertical slice: `apps/viewer` / `packages/publication`
+(see [`docs/architecture/app_model.md`](../docs/architecture/app_model.md)); today the code lives at repo-root `viewer/`.
+
 ## Purpose
 
 - Discover every `publish.yaml` under the repo root
@@ -18,7 +24,7 @@ python -m venv .venv
 pip install -e ".[dev]"
 ```
 
-From repo root (after install):
+Requires Python 3.11+. From repo root (after install):
 
 ```bash
 make viewer

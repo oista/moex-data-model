@@ -64,7 +64,9 @@ moex-data-model/
 ├── generated/
 │   └── .gitkeep
 ├── docs/
-│   ├── ARCHITECTURE.md
+│   ├── architecture/
+│   │   ├── MODELING_ARCHITECTURE.md   # normative platform canon
+│   │   └── …
 │   ├── IMPLEMENTATION_PLAN.md
 │   └── adr/
 ├── infra/

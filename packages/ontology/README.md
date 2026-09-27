@@ -2,6 +2,12 @@
 
 Offline RDF/OWL utilities and FIBO definition export for glossary mapping and ontology-aware LLM context.
 
+**Architecture role today:** tooling under `packages/ontology/`.  
+This is **not** yet the target `packages/standard-owl` provider from
+[`docs/architecture/MODELING_ARCHITECTURE.md`](../../docs/architecture/MODELING_ARCHITECTURE.md) /
+[`docs/architecture/app_model.md`](../../docs/architecture/app_model.md). OWL as a first-class
+`ModelingStandard` lands after the LinkML → DAMS vertical slice stabilizes.
+
 ## Requirements
 
 - Python 3.11+ (on this machine: `py -3.14` or any 3.11+ launcher)
