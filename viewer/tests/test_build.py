@@ -72,8 +72,8 @@ def test_repo_golden_three_modules():
         "moex:module:trading-solution",
     ):
         assert module_id in html
-    assert "section=classes" not in html or True  # hash is client-side
-    assert '"id": "classes"' in html or "classes" in html
+    assert "LogicalEntity" in html
+    assert '"type": "explorer"' in html or '"type":"explorer"' in html
     registry = json.loads((dist / "manifest_registry.json").read_text(encoding="utf-8"))
     ids = {m["module_id"] for m in registry["modules"]}
     assert ids == {
@@ -81,3 +81,5 @@ def test_repo_golden_three_modules():
         "moex:module:fibo",
         "moex:module:trading-solution",
     }
+    dams = next(m for m in registry["modules"] if m["module_id"] == "moex:module:dams")
+    assert "explorer" in dams["sections"]

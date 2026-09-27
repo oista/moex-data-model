@@ -32,7 +32,8 @@
             "glossary",
             "tree",
             "markdown-doc",
-            "key-value"
+            "key-value",
+            "explorer"
           ]
         },
         "source": {

@@ -15,6 +15,26 @@ from moex_publication_viewer.normalizers.helpers import section_meta
 # Cache SchemaView per absolute path for one build process
 _VIEW_CACHE: dict[str, SchemaView] = {}
 
+# Display order and titles for DAMS schema packages (explorer groups)
+_SCHEMA_GROUP_META: dict[str, tuple[int, str]] = {
+    "moex_core": (10, "Core"),
+    "moex-core": (10, "Core"),
+    "moex_registries": (20, "Registries"),
+    "moex-registries": (20, "Registries"),
+    "moex_governance": (30, "Governance"),
+    "moex-governance": (30, "Governance"),
+    "moex_integration": (40, "Integration"),
+    "moex-integration": (40, "Integration"),
+    "moex_contract_binding": (50, "Contract binding"),
+    "moex-contract-binding": (50, "Contract binding"),
+    "moex_analytics": (60, "Analytics"),
+    "moex-analytics": (60, "Analytics"),
+    "moex_types": (70, "Types"),
+    "moex-types": (70, "Types"),
+    "moex_dams": (5, "Root"),
+    "moex-dams": (5, "Root"),
+}
+
 
 def get_schema_view(source_path: Path) -> SchemaView:
     key = str(source_path.resolve())
@@ -27,12 +47,48 @@ def clear_schema_view_cache() -> None:
     _VIEW_CACHE.clear()
 
 
-def _as_list(value: Any) -> list[Any]:
-    if value is None:
-        return []
-    if isinstance(value, list):
-        return value
-    return [value]
+def _group_title(schema_key: str) -> str:
+    if schema_key in _SCHEMA_GROUP_META:
+        return _SCHEMA_GROUP_META[schema_key][1]
+    # moex_foo / moex-foo → Foo
+    raw = schema_key.replace("moex_", "").replace("moex-", "").replace("_", " ").replace("-", " ")
+    return raw.title() if raw else schema_key
+
+
+def _group_order(schema_key: str) -> int:
+    if schema_key in _SCHEMA_GROUP_META:
+        return _SCHEMA_GROUP_META[schema_key][0]
+    return 500
+
+
+def _schema_key_for(sv: SchemaView, element_name: str) -> str:
+    try:
+        key = sv.in_schema(element_name)
+        if key:
+            return str(key)
+    except Exception:
+        pass
+    return "unknown"
+
+
+def _induced_slot_dicts(sv: SchemaView, class_name: str) -> list[dict[str, Any]]:
+    slots: list[dict[str, Any]] = []
+    try:
+        induced = sv.class_induced_slots(class_name)
+    except Exception:
+        return slots
+    for slot in induced:
+        slots.append(
+            {
+                "name": slot.name,
+                "description": slot.description,
+                "range": slot.range,
+                "required": bool(slot.required) if slot.required is not None else False,
+                "multivalued": bool(slot.multivalued) if slot.multivalued is not None else False,
+                "slot_uri": slot.slot_uri,
+            }
+        )
+    return slots
 
 
 def _normalize_classes(sv: SchemaView, as_tree: bool) -> list[PublicationItem]:
@@ -49,13 +105,14 @@ def _normalize_classes(sv: SchemaView, as_tree: bool) -> list[PublicationItem]:
                 "abstract": bool(cls.abstract) if cls.abstract is not None else False,
                 "mixins": list(cls.mixins or []),
                 "class_uri": cls.class_uri,
+                "from_schema": cls.from_schema,
+                "schema_key": _schema_key_for(sv, name),
             },
         )
 
     if not as_tree:
         return sorted(items_by_name.values(), key=lambda i: i.id)
 
-    # Build parent → children via is_a
     roots: list[PublicationItem] = []
     children_map: dict[str, list[str]] = {n: [] for n in items_by_name}
     for name, item in items_by_name.items():
@@ -116,7 +173,13 @@ def _normalize_enums(sv: SchemaView) -> list[PublicationItem]:
                 id=name,
                 title=name,
                 description=enum.description,
-                attributes={"name": name, "description": enum.description},
+                attributes={
+                    "name": name,
+                    "description": enum.description,
+                    "kind": "enum",
+                    "from_schema": enum.from_schema,
+                    "schema_key": _schema_key_for(sv, name),
+                },
                 children=children,
             )
         )
@@ -142,6 +205,84 @@ def _normalize_types(sv: SchemaView) -> list[PublicationItem]:
     return sorted(items, key=lambda i: i.id)
 
 
+def _normalize_explorer(sv: SchemaView) -> list[PublicationItem]:
+    """Group classes (and enums) by LinkML schema package — specification body projection."""
+    by_schema: dict[str, list[PublicationItem]] = {}
+
+    for name, cls in sv.all_classes().items():
+        schema_key = _schema_key_for(sv, name)
+        item = PublicationItem(
+            id=name,
+            title=name,
+            description=cls.description,
+            attributes={
+                "kind": "class",
+                "name": name,
+                "description": cls.description,
+                "is_a": cls.is_a,
+                "abstract": bool(cls.abstract) if cls.abstract is not None else False,
+                "mixins": list(cls.mixins or []),
+                "class_uri": cls.class_uri,
+                "from_schema": cls.from_schema,
+                "schema_key": schema_key,
+                "slots": _induced_slot_dicts(sv, name),
+                "expressed_in": "LinkML",
+            },
+        )
+        by_schema.setdefault(schema_key, []).append(item)
+
+    for name, enum in sv.all_enums().items():
+        schema_key = _schema_key_for(sv, name)
+        children: list[PublicationItem] = []
+        pvs = enum.permissible_values or {}
+        for value_name, pv in pvs.items():
+            desc = pv.description if pv is not None else None
+            children.append(
+                PublicationItem(
+                    id=f"{name}:{value_name}",
+                    title=str(value_name),
+                    description=desc,
+                    attributes={"name": str(value_name), "description": desc, "kind": "enum_value"},
+                )
+            )
+        item = PublicationItem(
+            id=name,
+            title=name,
+            description=enum.description,
+            attributes={
+                "kind": "enum",
+                "name": name,
+                "description": enum.description,
+                "from_schema": enum.from_schema,
+                "schema_key": schema_key,
+                "expressed_in": "LinkML",
+            },
+            children=children,
+        )
+        by_schema.setdefault(schema_key, []).append(item)
+
+    groups: list[PublicationItem] = []
+    for schema_key in sorted(by_schema.keys(), key=lambda k: (_group_order(k), k)):
+        # Skip linkml builtin types package if it appears
+        if schema_key.startswith("linkml"):
+            continue
+        children = sorted(by_schema[schema_key], key=lambda i: i.id)
+        groups.append(
+            PublicationItem(
+                id=f"group:{schema_key}",
+                title=_group_title(schema_key),
+                description=f"Schema package {schema_key}",
+                attributes={
+                    "kind": "group",
+                    "schema_key": schema_key,
+                    "name": schema_key,
+                },
+                children=children,
+            )
+        )
+    return groups
+
+
 class LinkmlNormalizer:
     def normalize(self, section: ManifestSection, source_path: Path) -> PublicationSection:
         select = section.source.select or "classes"
@@ -152,7 +293,10 @@ class LinkmlNormalizer:
 
         as_tree = section.type == "tree"
         try:
-            if select == "classes":
+            if section.type == "explorer":
+                items = _normalize_explorer(sv)
+                default_columns = ["name", "description", "kind"]
+            elif select == "classes":
                 items = _normalize_classes(sv, as_tree=as_tree)
                 default_columns = ["name", "description", "is_a", "abstract", "mixins"]
             elif select == "slots":

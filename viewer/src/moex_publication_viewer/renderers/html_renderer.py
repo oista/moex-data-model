@@ -17,6 +17,7 @@ SECTION_TEMPLATES = {
     "tree": "section_tree.html.j2",
     "markdown-doc": "section_markdown.html.j2",
     "key-value": "section_keyvalue.html.j2",
+    "explorer": "section_tree.html.j2",
 }
 
 

@@ -6,7 +6,7 @@
   --border: #d8dde3;
   --accent: #1f6feb;
   --accent-soft: #e8f0fe;
-  --sidebar-w: 260px;
+  --sidebar-w: 300px;
   --header-h: 56px;
   --danger: #b42318;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
@@ -70,6 +70,50 @@ body {
   font-size: 11px;
 }
 .module-icon { width: 1.2em; text-align: center; }
+
+.nav-module { margin-bottom: 8px; }
+.nav-explorer { margin: 4px 0 8px 8px; display: flex; flex-direction: column; gap: 2px; }
+.nav-group-btn, .nav-item-btn, .nav-section-btn {
+  display: flex; align-items: center; gap: 6px;
+  width: 100%; text-align: left;
+  border: 0; background: transparent; color: var(--text);
+  padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 13px;
+}
+.nav-group-btn:hover, .nav-item-btn:hover, .nav-section-btn:hover { background: var(--accent-soft); }
+.nav-item-btn.active, .nav-section-btn.active { background: var(--accent-soft); font-weight: 600; }
+.nav-group-children { margin-left: 12px; display: flex; flex-direction: column; gap: 1px; }
+.nav-kind {
+  font-size: 10px; color: var(--muted); width: 14px; text-align: center;
+  border: 1px solid var(--border); border-radius: 3px;
+}
+.nav-secondary { margin: 6px 0 0 8px; display: flex; flex-direction: column; gap: 2px; border-top: 1px solid var(--border); padding-top: 6px; }
+.nav-group-btn .badge { margin-left: auto; font-size: 10px; background: var(--border); border-radius: 999px; padding: 0 6px; }
+
+.breadcrumb { margin-bottom: 12px; font-size: 12px; }
+.detail-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 22px;
+  box-shadow: var(--shadow);
+}
+.detail-head h1 { margin: 0 0 8px; font-size: 22px; }
+.detail-desc { margin: 12px 0 20px; line-height: 1.5; }
+.detail-block { margin-top: 20px; }
+.detail-block h2 { font-size: 15px; margin: 0 0 10px; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+.badge-pill {
+  font-size: 11px; padding: 2px 8px; border-radius: 999px;
+  background: var(--accent-soft); border: 1px solid var(--border);
+}
+.link-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.spec-link {
+  border: 1px solid var(--border); background: var(--panel); color: var(--accent);
+  border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 13px;
+}
+.spec-link:hover { border-color: var(--accent); }
+.spec-link.disabled { color: var(--muted); cursor: default; }
+.detail-slots { min-width: 100%; }
 
 .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .toolbar {

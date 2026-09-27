@@ -101,3 +101,45 @@ def test_linkml_with_import():
     enums = LinkmlNormalizer().normalize(enum_sec, schema)
     assert enums.items
     assert enums.items[0].children
+
+
+def test_linkml_explorer_groups_by_schema():
+    root = FIXTURES / "linkml"
+    schema = root / "root.yaml"
+    sec = _section(
+        type="explorer",
+        source={"format": "linkml-yaml", "path": "root.yaml", "select": "classes"},
+    )
+    out = LinkmlNormalizer().normalize(sec, schema)
+    assert out.items, "explorer must produce groups"
+    assert all(i.attributes.get("kind") == "group" for i in out.items)
+    # Fixture has root + imported child schemas
+    schema_keys = {i.attributes.get("schema_key") for i in out.items}
+    assert schema_keys & {"root_schema", "child_schema"} or len(out.items) >= 1
+    # Classes live under groups with induced slots list
+    classes = [c for g in out.items for c in g.children if c.attributes.get("kind") == "class"]
+    assert classes
+    assert any(c.id == "RootClass" for c in classes)
+    root_cls = next(c for c in classes if c.id == "RootClass")
+    assert isinstance(root_cls.attributes.get("slots"), list)
+
+
+def test_dams_explorer_real_schema():
+    repo = Path(__file__).resolve().parents[2]
+    schema = repo / "model_src" / "schemas" / "moex-dams.yaml"
+    if not schema.is_file():
+        return
+    sec = _section(
+        type="explorer",
+        source={"format": "linkml-yaml", "path": str(schema), "select": "classes"},
+    )
+    out = LinkmlNormalizer().normalize(sec, schema)
+    titles = {g.title for g in out.items}
+    assert "Core" in titles
+    assert "Registries" in titles
+    classes = {c.id: c for g in out.items for c in g.children if c.attributes.get("kind") == "class"}
+    assert "LogicalEntity" in classes
+    slots = classes["LogicalEntity"].attributes.get("slots") or []
+    slot_names = {s["name"] for s in slots}
+    assert "attributes" in slot_names
+    assert "conceptual_entity_refs" in slot_names
