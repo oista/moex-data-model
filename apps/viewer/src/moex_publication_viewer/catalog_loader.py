@@ -8,7 +8,13 @@ import yaml
 
 from moex_publication_viewer.models.catalog_models import ArchitectureCatalog
 
-CATALOG_RELATIVE = Path("model_src") / "architecture-catalog.yaml"
+CATALOG_RELATIVE = (
+    Path("model-assets")
+    / "specifications"
+    / "moex-dams"
+    / "0.1"
+    / "architecture-catalog.yaml"
+)
 
 
 def catalog_path(root: Path) -> Path:

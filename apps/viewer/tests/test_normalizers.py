@@ -149,7 +149,15 @@ def test_linkml_explorer_groups_by_schema():
 
 def test_dams_explorer_real_schema():
     repo = Path(__file__).resolve().parents[2]
-    schema = repo / "model_src" / "schemas" / "moex-dams.yaml"
+    schema = (
+        repo
+        / "model-assets"
+        / "specifications"
+        / "moex-dams"
+        / "0.1"
+        / "schemas"
+        / "moex-dams.yaml"
+    )
     if not schema.is_file():
         return
     sec = _section(

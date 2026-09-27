@@ -98,8 +98,15 @@ def test_repo_catalog_passes_validation_with_modules():
 
 
 def test_tmp_catalog_roundtrip(tmp_path: Path):
-    (tmp_path / "model_src").mkdir()
-    path = tmp_path / "model_src" / "architecture-catalog.yaml"
+    catalog_dir = (
+        tmp_path
+        / "model-assets"
+        / "specifications"
+        / "moex-dams"
+        / "0.1"
+    )
+    catalog_dir.mkdir(parents=True)
+    path = catalog_dir / "architecture-catalog.yaml"
     path.write_text(
         yaml.dump(
             {
