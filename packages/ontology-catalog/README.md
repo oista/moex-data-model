@@ -14,13 +14,18 @@ cd ../ontology-catalog && pip install -e ".[dev]"
 
 ## Rebuild index (mini_fibo / local FIBO)
 
+From `packages/ontology-catalog`:
+
 ```bash
 python -m moex_ontology.cli rebuild \
   --descriptors ../../model_src/ontologies \
-  --source ../../packages/standard-owl/tests/fixtures/mini_fibo \
+  --source ../standard-owl/tests/fixtures/mini_fibo \
   --db ./.data/ontology_index.sqlite \
-  --preview-out ./publications
+  --preview-out ./publications \
+  --sssom ../../model_src/mappings/dams-fibo.sssom.yaml
 ```
+
+`FND/Broken/Broken.rdf` in the mini fixture is intentional (parse-error tests); rebuild skips it and continues.
 
 ## Tests
 

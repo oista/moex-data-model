@@ -203,7 +203,12 @@ def parse_rdf_file(
             exception_type=type(exc).__name__,
             exception_message=str(exc),
         )
-        logger.error("Failed to parse %s: %s: %s", module_path, type(exc).__name__, exc)
+        logger.warning(
+            "Failed to parse %s: %s: %s",
+            module_path,
+            type(exc).__name__,
+            exc,
+        )
         return [], err
 
     module_iri = _module_iris(graph)

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import argparse
-import json
+import logging
 import sys
 from pathlib import Path
 
@@ -17,6 +17,16 @@ from moex_ontology.application.list_ontologies import list_ontologies
 from moex_ontology.application.search_entities import search_entities
 from moex_ontology.domain.release import load_release_descriptors
 from moex_ontology.publication_export import export_preview_json
+
+
+def _configure_logging() -> None:
+    # stdout: PowerShell Stop preference treats stderr as terminating errors
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(levelname)s %(name)s: %(message)s",
+        stream=sys.stdout,
+        force=True,
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -97,6 +107,7 @@ def cmd_rebuild(args: argparse.Namespace) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
+    _configure_logging()
     parser = build_parser()
     args = parser.parse_args(argv)
     if args.command == "rebuild":
