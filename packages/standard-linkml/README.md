@@ -14,10 +14,23 @@ Converts a relational model dictionary (Entities / Attributes / Relationships sh
 
 `schema-automator` remains ADR-009 draft-only for schema bootstrap; it is **not** a dependency here.
 
+## Requirements
+
+- **Python 3.11+** (system `python` on many Windows hosts is 3.10 and will fail to install this package)
+
 ## Install
 
-```bash
-python -m pip install -e "./packages/standard-linkml[dev]"
+From repo root (recommended — creates package `.venv`):
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File packages/standard-linkml/scripts/check.ps1
+```
+
+Or manually:
+
+```powershell
+py -3.14 -m venv packages/standard-linkml/.venv
+packages/standard-linkml/.venv/Scripts/python -m pip install -e "./packages/standard-linkml[dev]"
 ```
 
 ## Ingest
@@ -26,12 +39,12 @@ python -m pip install -e "./packages/standard-linkml[dev]"
 2. Copy [`templates/er-dictionary.profile.yaml`](templates/er-dictionary.profile.yaml) and adjust sheet/column names, `solution_ref`, `solution_slug`, and `type_map` for your Excel.
 3. Run:
 
-```bash
-moex-linkml ingest \
-  --workbook path/to/model.xlsx \
-  --profile packages/standard-linkml/templates/er-dictionary.profile.yaml \
-  --schema model_src/schemas/moex-dams.yaml \
-  --out /tmp/ingest-out
+```powershell
+packages/standard-linkml/.venv/Scripts/python -m moex_standard_linkml.ingest.cli ingest `
+  --workbook path/to/model.xlsx `
+  --profile packages/standard-linkml/templates/er-dictionary.profile.yaml `
+  --schema model_src/schemas/moex-dams.yaml `
+  --out $env:TEMP/ingest-out
 ```
 
 Artifacts in `--out`:
@@ -50,10 +63,12 @@ Artifacts in `--out`:
 
 ## Tests
 
-```bash
+```powershell
+# preferred (venv + install + pytest)
+powershell -NoProfile -ExecutionPolicy Bypass -File packages/standard-linkml/scripts/check.ps1
+
+# or, if GNU make is available
 make linkml-ingest-check
-# or
-python -m pytest packages/standard-linkml/tests -q
 ```
 
 ## Success criteria (pilot)
