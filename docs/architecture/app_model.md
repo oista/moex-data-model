@@ -12,7 +12,8 @@ superseded_by: MODELING_ARCHITECTURE.md
 При расхождении побеждает нормативный документ.  
 **Статус этого файла:** черновик целевой раскладки пакетов и provider object model (`target-after-slice`).  
 **Уже совпало с репо:** `model-assets/`, `generated/`, `apps/cli/`, `apps/viewer/`, пакеты slice (`modeling-kernel`, `standard-linkml`, `specification-dams`, `publication`), `standard-owl`, `ontology-catalog`.  
-**Still-later:** `apps/api`, `apps/worker`, `git-adapter`, `artifact-adapters`, kernel `application/commands|queries`, полный CLI (`standard`/`transform`/…).  
+**Уже совпало (roadmap 1–4):** `generated/contracts` (moex_dams_contracts), `OWLStandardProvider`, `packages/git-adapter`, CLI `lint|compile|diagram|diff|validate|publish` (+ stubs import/map), `apps/api` operational slice.  
+**Still-later:** `apps/worker`, `artifact-adapters`, kernel `application/commands|queries`, CLI `import`/`map` real, OIDC, full Stage-3 tables.  
 `packages/ontology/` остаётся shim. Миграция путей: [docs/migration/model-src-to-model-assets.md](../migration/model-src-to-model-assets.md).
 
 ## Предметная модель: роли как экземпляры, не subclass

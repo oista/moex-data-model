@@ -37,9 +37,16 @@ try {
     $Linkml = Join-Path $RepoRoot "packages/standard-linkml"
     $Dams = Join-Path $RepoRoot "packages/specification-dams"
 
-    Write-Host "Installing vertical-slice packages into .venv"
+    $Contracts = Join-Path $RepoRoot "generated/contracts/moex-dams/0.1"
+    Write-Host "Ensuring DAMS contracts package"
     & $VenvPython -m pip install -U pip -q
+    & $VenvPython -m pip install -q "linkml>=1.8,<2"
+    & $VenvPython (Join-Path $RepoRoot "scripts/generate_contracts.py")
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+    Write-Host "Installing vertical-slice packages into .venv"
     & $VenvPython -m pip install `
+        -e "$Contracts" `
         -e "$Kernel" `
         -e "$Linkml" `
         -e "$Dams" `

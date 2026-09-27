@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "moex-dams-contracts"
+version = "0.1.0"
+description = "Generated Pydantic contracts for MOEX DAMS 0.1 (do not edit)"
+requires-python = ">=3.11"
+dependencies = ["pydantic>=2.6,<3.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

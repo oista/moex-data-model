@@ -81,6 +81,23 @@ def test_publish_writes_json(
     assert "wrote" in captured.out
 
 
+def test_lint_and_compile(repo_root: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    assert main(["lint", "--root", str(repo_root)]) == 0
+    assert "lint diagnostics=" in capsys.readouterr().out
+    assert main(["compile", "--root", str(repo_root)]) == 0
+    assert "contracts OK" in capsys.readouterr().out
+
+
+def test_diagram_and_import_stub(
+    repo_root: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    out = tmp_path / "out.dbml"
+    assert main(["diagram", "--root", str(repo_root), "--out", str(out)]) == 0
+    assert out.is_file()
+    assert main(["import", "--root", str(repo_root)]) == 2
+    assert "not implemented" in capsys.readouterr().out
+
+
 def test_missing_schema_fails_fast(repo_root: Path) -> None:
     missing = repo_root / "no-such-schema.yaml"
     paths = SlicePaths.resolve(root=repo_root, schema=missing)

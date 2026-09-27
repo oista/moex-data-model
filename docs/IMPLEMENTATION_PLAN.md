@@ -335,6 +335,7 @@ artifact:
 - Зафиксировать ADR-001–ADR-012 (проекты: [docs/adr/](adr/README.md); приёмка = Proposed → Accepted).
 - Создать baseline CI.
 - **Target-after-slice layout:** миграция `model_src/` → `model-assets/`, `viewer/` → `apps/viewer`, конверты активов (сделано; см. [migration](migration/model-src-to-model-assets.md)). `make check` включает slice + architecture-check + lint/validate схем.
+- **Roadmap phases 1–4 (2026-09-28):** (1) `make generate-contracts` → `moex_dams_contracts`; (2) `OWLStandardProvider`; (3) `packages/git-adapter` + CLI lint/compile/diagram/diff; (4) `apps/api` FastAPI + Alembic core tables + `infra/compose/postgres.yml` (SQLite smoke / Postgres compose).
 
 ### Результат
 

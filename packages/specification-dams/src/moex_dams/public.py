@@ -1,6 +1,7 @@
 """Public API for specification-dams."""
 
 from moex_dams.application.assess import SliceResult, assess_implementation
+from moex_dams.contracts import ModelPackage
 from moex_dams.domain.graph import (
     DamsModelGraphView,
     EdgeKind,
@@ -17,6 +18,7 @@ __all__ = [
     "EdgeKind",
     "GraphEdge",
     "GraphNode",
+    "ModelPackage",
     "NodeKind",
     "SliceResult",
     "assess_implementation",

@@ -34,7 +34,10 @@ Publication viewer, HTML, search index, drawDB и будущий Workbench — *
 | [`model-assets/`](model-assets/) | standards / specifications / implementations / transformations |
 | [`generated/`](generated/) | воспроизводимые артефакты (DAMS golden samples) |
 | [`apps/viewer/`](apps/viewer/) | статический Publication Viewer (`publish.yaml` → `apps/viewer/dist`) |
-| [`apps/cli/`](apps/cli/) | inbound CLI `moex-model` (`validate` / `publish`) |
+| [`apps/cli/`](apps/cli/) | inbound CLI `moex-model` (`validate` / `lint` / `compile` / `diagram` / `diff` / `publish`) |
+| [`apps/api/`](apps/api/) | FastAPI operational slice (conformance + validation runs) |
+| [`packages/git-adapter/`](packages/git-adapter/) | `GitProvider` + local git backend |
+| [`generated/contracts/`](generated/contracts/) | generated DAMS Pydantic (`moex_dams_contracts`) |
 | [`packages/modeling-kernel/`](packages/modeling-kernel/) | envelopes + `StandardProvider` (TSpecBody ≠ TImplBody) |
 | [`packages/standard-linkml/`](packages/standard-linkml/) | LinkML provider + ER-dictionary ingest |
 | [`packages/specification-dams/`](packages/specification-dams/) | DAMS semantic rules, graph view, conformance |

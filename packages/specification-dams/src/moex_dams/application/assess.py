@@ -34,6 +34,7 @@ from moex_standard_linkml.domain.body import (
 )
 from moex_standard_linkml.provider import LinkMLStandardProvider
 
+from moex_dams.contracts import ModelPackage
 from moex_dams.domain.graph import DamsModelGraphView
 from moex_dams.mappings.dams_to_graph import build_dams_graph
 from moex_dams.rules.references import check_references
@@ -84,6 +85,8 @@ def assess_implementation(
 
     spec_body = provider.load_specification_body(spec_ref, path=str(schema_path))
     impl_body = provider.load_implementation_body(impl_ref, path=str(implementation_path))
+    # Typed root path (generated contracts) — rules still use dict body for now.
+    typed_package = ModelPackage.model_validate(impl_body.data)
 
     now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     standard_ref = StandardRef(
@@ -129,17 +132,19 @@ def assess_implementation(
         reported_at=now,
     )
 
-    version = str(impl_body.data.get("model_version") or "0.0.0")
+    version = str(typed_package.model_version or "0.0.0")
     implementation = SpecificationImplementation(
         id=impl_id,
-        name=str(impl_body.data.get("name") or implementation_path.stem),
-        description=impl_body.data.get("description"),
+        name=str(typed_package.name or implementation_path.stem),
+        description=typed_package.description,
         version=version,
         revision=revision,
         content_digest=digest,
         conforms_to=spec_ref,
         implementation_kind=StandardFamily.LINKML,
-        lifecycle_status=_lifecycle(impl_body.data.get("lifecycle_status")),
+        lifecycle_status=_lifecycle(
+            getattr(typed_package.lifecycle_status, "value", typed_package.lifecycle_status)
+        ),
         source=SourceDescriptor(
             source_uri=implementation_path.resolve().as_uri(),
             media_type="application/yaml",

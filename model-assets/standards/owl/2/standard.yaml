@@ -1,0 +1,22 @@
+# ModelingStandard descriptor (OWL 2)
+id: moex:standard:owl:2
+name: OWL
+description: Web Ontology Language 2 — semantic publication and reasoning (not primary YAML validation)
+version: "2"
+revision: "2"
+content_digest: "sha256:pending"
+standard_family: owl
+specification_uri: https://www.w3.org/TR/owl2-overview/
+metamodel_uri: http://www.w3.org/2002/07/owl#
+semantic_regime: open_world
+capabilities:
+  - reason
+  - publish
+  - map
+media_types:
+  - application/rdf+xml
+  - text/turtle
+canonical_extensions:
+  - .rdf
+  - .owl
+  - .ttl

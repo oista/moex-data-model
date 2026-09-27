@@ -7,14 +7,19 @@ import sys
 from pathlib import Path
 
 from moex_model_cli.bootstrap import SlicePaths
+from moex_model_cli.commands.compile import run_compile
+from moex_model_cli.commands.diagram import run_diagram
+from moex_model_cli.commands.diff import run_diff
+from moex_model_cli.commands.lint import run_lint
 from moex_model_cli.commands.publish import run_publish
+from moex_model_cli.commands.stubs import run_not_implemented
 from moex_model_cli.commands.validate import run_validate
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="moex-model",
-        description="CLI adapter for the MOEX modeling vertical slice",
+        description="CLI adapter for the MOEX modeling platform",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -24,6 +29,32 @@ def build_parser() -> argparse.ArgumentParser:
     )
     _add_slice_args(validate)
     validate.add_argument("--json", action="store_true", help="Print ConformanceReport JSON")
+
+    lint = sub.add_parser("lint", help="LinkML validate + DAMS structural/reference rules")
+    _add_slice_args(lint)
+
+    compile_p = sub.add_parser("compile", help="Regenerate DAMS Pydantic contracts")
+    _add_slice_args(compile_p)
+    compile_p.add_argument(
+        "--json-schema",
+        action="store_true",
+        help="Also emit JSON Schema under generated/artifacts",
+    )
+
+    diagram = sub.add_parser("diagram", help="Export DBML golden sample for drawDB")
+    _add_slice_args(diagram)
+    diagram.add_argument("--out", type=Path, default=None)
+    diagram.add_argument("--profile", default="physical")
+
+    diff = sub.add_parser("diff", help="Unified diff of an asset between two git revisions")
+    _add_slice_args(diff)
+    diff.add_argument("--from", dest="from_ref", required=True)
+    diff.add_argument("--to", dest="to_ref", required=True)
+    diff.add_argument(
+        "--path",
+        default=None,
+        help="Repo-relative path (default: implementation YAML)",
+    )
 
     publish = sub.add_parser(
         "publish",
@@ -39,6 +70,11 @@ def build_parser() -> argparse.ArgumentParser:
             "solutions/trading-platform/publications/vertical_slice.json)"
         ),
     )
+
+    for name in ("import", "map"):
+        stub = sub.add_parser(name, help=f"Not implemented ({name})")
+        _add_slice_args(stub)
+
     return parser
 
 
@@ -59,26 +95,42 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     paths = SlicePaths.resolve(
         root=args.root,
-        schema=args.schema,
-        implementation=args.implementation,
+        schema=getattr(args, "schema", None),
+        implementation=getattr(args, "implementation", None),
     )
+
     if args.command == "validate":
         code, text = run_validate(
             paths,
             as_json=args.json,
             implementation_id=args.implementation_id,
         )
-        sys.stdout.write(text)
-        return code
-    if args.command == "publish":
+    elif args.command == "lint":
+        code, text = run_lint(paths)
+    elif args.command == "compile":
+        code, text = run_compile(paths, with_json_schema=args.json_schema)
+    elif args.command == "diagram":
+        code, text = run_diagram(paths, out=args.out, profile=args.profile)
+    elif args.command == "diff":
+        code, text = run_diff(
+            paths,
+            from_ref=args.from_ref,
+            to_ref=args.to_ref,
+            path=args.path,
+        )
+    elif args.command == "publish":
         code, text = run_publish(
             paths,
             out=args.out,
             implementation_id=args.implementation_id,
         )
-        sys.stdout.write(text)
-        return code
-    return 2
+    elif args.command in {"import", "map"}:
+        code, text = run_not_implemented(args.command)
+    else:
+        return 2
+
+    sys.stdout.write(text)
+    return code
 
 
 if __name__ == "__main__":

@@ -13,6 +13,7 @@ dependencies = [
     "moex-standard-linkml",
     "moex-specification-dams",
     "moex-publication",
+    "moex-git-adapter",
     "PyYAML>=6.0",
 ]
 

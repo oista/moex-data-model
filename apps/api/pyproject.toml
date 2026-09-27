@@ -3,27 +3,30 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "moex-specification-dams"
+name = "moex-model-api"
 version = "0.1.0"
-description = "DAMS specification module: semantic rules, graph view, conformance"
+description = "FastAPI inbound adapter — operational slice over modeling application layer"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "fastapi>=0.115,<1.0",
+    "uvicorn[standard]>=0.30,<1.0",
+    "sqlalchemy>=2.0,<3.0",
+    "alembic>=1.13,<2.0",
+    "psycopg[binary]>=3.1,<4.0",
     "pydantic>=2.6,<3.0",
     "moex-modeling-kernel",
+    "moex-specification-dams",
     "moex-standard-linkml",
-    "moex-dams-contracts",
+    "moex-git-adapter",
+    "moex-model-cli",
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=8.0,<9.0",
-    "moex-modeling-kernel[dev]",
-    "moex-standard-linkml[dev]",
-]
+dev = ["pytest>=8.0,<9.0", "httpx>=0.27,<1.0"]
 
 [project.scripts]
-moex-dams-assess = "moex_dams.cli:main"
+moex-api = "moex_model_api.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

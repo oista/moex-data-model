@@ -1,0 +1,11 @@
+{
+  "artifact_id": "moex:artifact:dams-contracts:0.1",
+  "generator": "gen-pydantic",
+  "generator_module": "linkml.generators.pydanticgen",
+  "schema_path": "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml",
+  "schema_digest": "sha256:e300de4914fd0836c3542c6e816c5e0f63ea62f4079241704e803bc8dd1579ba",
+  "output_path": "generated/contracts/moex-dams/0.1/src/moex_dams_contracts/__init__.py",
+  "content_digest": "sha256:f6e62aeccc12be11e9cb571bed2c4aeacefecac510c5f1befa2b401989932ea1",
+  "package": "moex-dams-contracts",
+  "generated_at": "2026-09-27T23:11:08.890736+00:00"
+}
