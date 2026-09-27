@@ -34,6 +34,7 @@ from moex_model_api.ports import (
     JobRecord,
     ValidationRunRecord,
 )
+from moex_model_api.yaml_mutate import MutationConflict, MutationError, apply_mutation
 
 
 class ConformanceResponse(BaseModel):
@@ -95,6 +96,13 @@ class DocumentOut(BaseModel):
 class DocumentPut(BaseModel):
     content: str
     base_digest: str = ""
+
+
+class MutationRequest(BaseModel):
+    op: str = Field(pattern="^(add_logical_entity|add_logical_attribute)$")
+    entity: dict | None = None
+    attribute: dict | None = None
+    owner_element_id: str | None = None
 
 
 class JobOut(BaseModel):
@@ -346,6 +354,63 @@ def create_app(*, database_url: str | None = None) -> FastAPI:
         )
         SqlAuditStore(session).record(
             "document.put", actor, f"{workspace_id}:trading"
+        )
+        return DocumentOut(
+            workspace_id=doc.workspace_id,
+            doc_key=doc.doc_key,
+            content=doc.content,
+            base_digest=doc.base_digest,
+            updated_by=doc.updated_by,
+        )
+
+    @app.post(
+        "/workspaces/{workspace_id}/documents/trading/mutations",
+        response_model=DocumentOut,
+    )
+    def mutate_trading_document(
+        workspace_id: str,
+        body: MutationRequest,
+        request: Request,
+        session: Session = Depends(get_session),
+    ) -> DocumentOut:
+        actor = ensure_actor(request, session)
+        workspaces = SqlWorkspaceStore(session)
+        docs = SqlDocumentStore(session)
+        if workspaces.get(workspace_id) is None:
+            workspaces.create(workspace_id, workspace_id)
+            workspaces.add_member(workspace_id, actor, role="owner")
+        else:
+            workspaces.add_member(workspace_id, actor, role="editor")
+
+        existing = docs.get(workspace_id, "trading")
+        root = find_repo_root()
+        paths = SlicePaths.resolve(root=root)
+        published = paths.implementation.read_text(encoding="utf-8")
+        published_digest = _content_digest(published)
+        if existing is None:
+            base_text = published
+            base_digest = published_digest
+        else:
+            base_text = existing.content
+            base_digest = existing.base_digest or published_digest
+
+        payload = body.model_dump()
+        try:
+            new_text = apply_mutation(base_text, payload)
+        except MutationConflict as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
+        except MutationError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+        doc = docs.upsert(
+            workspace_id=workspace_id,
+            doc_key="trading",
+            content=new_text,
+            base_digest=base_digest,
+            updated_by=actor,
+        )
+        SqlAuditStore(session).record(
+            "document.mutate", actor, f"{workspace_id}:trading:{body.op}"
         )
         return DocumentOut(
             workspace_id=doc.workspace_id,

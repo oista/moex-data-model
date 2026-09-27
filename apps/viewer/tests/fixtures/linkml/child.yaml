@@ -11,3 +11,10 @@ classes:
   ChildClass:
     is_a: RootClass
     description: Child of RootClass
+    slots:
+      - child_slot
+
+slots:
+  child_slot:
+    range: string
+    description: Local slot on ChildClass

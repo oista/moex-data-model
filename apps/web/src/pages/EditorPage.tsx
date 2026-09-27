@@ -3,7 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, setLastJobId } from "../api/client";
-import type { Job } from "../api/types";
+import type { Job, WorkspaceDocument } from "../api/types";
+import { EntityForms } from "../components/EntityForms";
 import { StatusBadge } from "../components/StatusBadge";
 
 const WS_ID = "ws-workbench";
@@ -92,12 +93,19 @@ export function EditorPage() {
     onSuccess: setJob,
   });
 
+  function onMutatedDocument(doc: WorkspaceDocument) {
+    setValue(doc.content);
+    setBaseDigest(doc.base_digest);
+    setSourceLabel("draft");
+    setDirty(false);
+  }
+
   return (
     <section>
       <h1>Edit trading YAML</h1>
       <p className="lede">
         Monaco draft in workspace <code>{WS_ID}</code>. Git published file is
-        not overwritten.
+        not overwritten. Forms apply controlled mutations to the draft.
       </p>
 
       <div className="row">
@@ -149,27 +157,36 @@ export function EditorPage() {
         </div>
       )}
 
-      <div className="editor-frame">
-        {loading ? (
-          <p>Loading…</p>
-        ) : (
-          <Editor
-            height="60vh"
-            defaultLanguage="yaml"
-            theme="vs-light"
-            value={value}
-            onChange={(next) => {
-              setValue(next ?? "");
-              setDirty(true);
-            }}
-            options={{
-              minimap: { enabled: false },
-              fontSize: 13,
-              wordWrap: "on",
-              scrollBeyondLastLine: false,
-            }}
+      <div className="editor-layout">
+        {!loading && (
+          <EntityForms
+            workspaceId={WS_ID}
+            content={value}
+            onDocument={onMutatedDocument}
           />
         )}
+        <div className="editor-frame">
+          {loading ? (
+            <p>Loading…</p>
+          ) : (
+            <Editor
+              height="60vh"
+              defaultLanguage="yaml"
+              theme="vs-light"
+              value={value}
+              onChange={(next) => {
+                setValue(next ?? "");
+                setDirty(true);
+              }}
+              options={{
+                minimap: { enabled: false },
+                fontSize: 13,
+                wordWrap: "on",
+                scrollBeyondLastLine: false,
+              }}
+            />
+          )}
+        </div>
       </div>
     </section>
   );

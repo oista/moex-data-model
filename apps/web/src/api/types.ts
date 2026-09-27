@@ -60,3 +60,26 @@ export type WorkspaceDocument = {
   base_digest: string;
   updated_by: string;
 };
+
+export type DocumentMutation =
+  | {
+      op: "add_logical_entity";
+      entity: {
+        element_id: string;
+        name: string;
+        title?: string;
+        description?: string;
+      };
+    }
+  | {
+      op: "add_logical_attribute";
+      owner_element_id: string;
+      attribute: {
+        element_id: string;
+        name: string;
+        logical_type: string;
+        title?: string;
+        description?: string;
+        required?: boolean;
+      };
+    };

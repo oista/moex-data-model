@@ -678,17 +678,39 @@
     }
   }
 
+  function yesBlank(value) {
+    return value ? "yes" : "";
+  }
+
+  function appendMetaRow(dl, term, valueNode) {
+    if (valueNode == null || valueNode === "") return;
+    const dt = document.createElement("dt");
+    dt.textContent = term;
+    const dd = document.createElement("dd");
+    if (typeof valueNode === "string") {
+      dd.textContent = valueNode;
+    } else {
+      dd.appendChild(valueNode);
+    }
+    dl.appendChild(dt);
+    dl.appendChild(dd);
+  }
+
   function renderExplorerDetail(mod, expl, item, group) {
     const card = document.createElement("article");
     card.className = "detail-card";
     const kind = item.attributes?.kind || "class";
     const abstract = item.attributes?.abstract;
+    const isMixin = item.attributes?.mixin;
+    const treeRoot = item.attributes?.tree_root;
     const fromSchema = item.attributes?.from_schema || item.attributes?.schema_key || "";
     const known = collectExplorerIds(expl);
 
     const badges = [];
     if (kind) badges.push(`<span class="badge-pill">${escapeHtml(kind)}</span>`);
     if (abstract) badges.push(`<span class="badge-pill">abstract</span>`);
+    if (isMixin) badges.push(`<span class="badge-pill">mixin</span>`);
+    if (treeRoot) badges.push(`<span class="badge-pill">tree_root</span>`);
 
     card.innerHTML = `
       <header class="detail-head">
@@ -700,6 +722,28 @@
     `;
 
     if (kind === "class") {
+      const meta = document.createElement("section");
+      meta.className = "detail-block";
+      meta.innerHTML = `<h2>LinkML</h2>`;
+      const dl = document.createElement("dl");
+      dl.className = "detail-meta";
+      const classUri = item.attributes?.class_uri;
+      if (classUri) {
+        const uriSpan = document.createElement("code");
+        uriSpan.textContent = classUri;
+        appendMetaRow(dl, "class_uri", uriSpan);
+      }
+      if (item.attributes?.from_schema) {
+        appendMetaRow(dl, "from_schema", String(item.attributes.from_schema));
+      }
+      if (item.attributes?.schema_key) {
+        appendMetaRow(dl, "schema_key", String(item.attributes.schema_key));
+      }
+      if (dl.children.length) {
+        meta.appendChild(dl);
+        card.appendChild(meta);
+      }
+
       const inh = document.createElement("section");
       inh.className = "detail-block";
       inh.innerHTML = `<h2>Inheritance</h2>`;
@@ -708,14 +752,15 @@
       const isA = item.attributes?.is_a;
       if (isA) {
         list.appendChild(makeSpecLink(mod, expl, isA, known, "is_a"));
+      } else if (isMixin) {
+        list.appendChild(document.createTextNode("mixin (no is_a)"));
       } else {
-        list.appendChild(document.createTextNode("No parent (root / mixin)"));
+        list.appendChild(document.createTextNode("No parent"));
       }
       const mixins = item.attributes?.mixins || [];
       if (mixins.length) {
         const mLabel = document.createElement("div");
-        mLabel.className = "muted";
-        mLabel.style.marginTop = "8px";
+        mLabel.className = "muted mixin-label";
         mLabel.textContent = "mixins:";
         list.appendChild(mLabel);
         mixins.forEach((m) => list.appendChild(makeSpecLink(mod, expl, m, known, "mixin")));
@@ -723,17 +768,42 @@
       inh.appendChild(list);
       card.appendChild(inh);
 
+      const declared = item.attributes?.declared_slots || [];
+      const inlineAttrs = item.attributes?.attributes_inline || [];
+      const declaredBlock = document.createElement("section");
+      declaredBlock.className = "detail-block";
+      declaredBlock.innerHTML = `<h2>declared slots</h2>`;
+      if (!declared.length && !inlineAttrs.length) {
+        declaredBlock.innerHTML += `<p class="muted">None (all slots inherited).</p>`;
+      } else {
+        const ul = document.createElement("ul");
+        ul.className = "detail-name-list";
+        declared.forEach((name) => {
+          const li = document.createElement("li");
+          li.innerHTML = `<code>${escapeHtml(name)}</code>`;
+          ul.appendChild(li);
+        });
+        inlineAttrs.forEach((name) => {
+          const li = document.createElement("li");
+          li.innerHTML = `<code>${escapeHtml(name)}</code> <span class="muted">attributes</span>`;
+          ul.appendChild(li);
+        });
+        declaredBlock.appendChild(ul);
+      }
+      card.appendChild(declaredBlock);
+
       const slots = item.attributes?.slots || [];
       const slotBlock = document.createElement("section");
       slotBlock.className = "detail-block";
-      slotBlock.innerHTML = `<h2>Slots (${slots.length})</h2>`;
+      slotBlock.innerHTML = `<h2>Slots (induced) (${slots.length})</h2>`;
       if (!slots.length) {
         slotBlock.innerHTML += `<p class="muted">No induced slots.</p>`;
       } else {
         const table = document.createElement("table");
         table.className = "data-table detail-slots";
         table.innerHTML = `<thead><tr>
-          <th>name</th><th>range</th><th>required</th><th>multivalued</th><th>description</th>
+          <th>name</th><th>range</th><th>required</th><th>multivalued</th>
+          <th>identifier</th><th>inlined</th><th>inherited</th><th>description</th>
         </tr></thead>`;
         const tbody = document.createElement("tbody");
         slots.forEach((slot) => {
@@ -746,7 +816,6 @@
           } else {
             rangeTd.textContent = slot.range || "";
           }
-          // glossary_term_refs: show slot name; if FIBO has matching terms user navigates via search
           const nameTd = document.createElement("td");
           nameTd.textContent = slot.name || "";
           if (slot.name === "glossary_term_refs") {
@@ -755,12 +824,13 @@
           }
           tr.appendChild(nameTd);
           tr.appendChild(rangeTd);
-          const req = document.createElement("td");
-          req.textContent = slot.required ? "yes" : "";
-          tr.appendChild(req);
-          const multi = document.createElement("td");
-          multi.textContent = slot.multivalued ? "yes" : "";
-          tr.appendChild(multi);
+          [["required", slot.required], ["multivalued", slot.multivalued],
+           ["identifier", slot.identifier], ["inlined", slot.inlined],
+           ["inherited", slot.inherited]].forEach(([, flag]) => {
+            const td = document.createElement("td");
+            td.textContent = yesBlank(flag);
+            tr.appendChild(td);
+          });
           const desc = document.createElement("td");
           desc.textContent = slot.description || "";
           tr.appendChild(desc);
@@ -773,6 +843,34 @@
         slotBlock.appendChild(scroll);
       }
       card.appendChild(slotBlock);
+
+      const slotUsage = item.attributes?.slot_usage || {};
+      const usageNames = Object.keys(slotUsage);
+      if (usageNames.length) {
+        const usageBlock = document.createElement("section");
+        usageBlock.className = "detail-block";
+        usageBlock.innerHTML = `<h2>slot_usage</h2>`;
+        const table = document.createElement("table");
+        table.className = "data-table detail-slots";
+        table.innerHTML = `<thead><tr><th>slot</th><th>overrides</th></tr></thead>`;
+        const tbody = document.createElement("tbody");
+        usageNames.sort().forEach((slotName) => {
+          const tr = document.createElement("tr");
+          const nameTd = document.createElement("td");
+          nameTd.innerHTML = `<code>${escapeHtml(slotName)}</code>`;
+          const ovTd = document.createElement("td");
+          ovTd.innerHTML = `<code>${escapeHtml(JSON.stringify(slotUsage[slotName]))}</code>`;
+          tr.appendChild(nameTd);
+          tr.appendChild(ovTd);
+          tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+        const scroll = document.createElement("div");
+        scroll.className = "table-scroll";
+        scroll.appendChild(table);
+        usageBlock.appendChild(scroll);
+        card.appendChild(usageBlock);
+      }
     }
 
     if (kind === "enum") {

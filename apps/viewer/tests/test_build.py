@@ -74,6 +74,8 @@ def test_repo_golden_three_modules():
         assert module_id in html
     assert "LogicalEntity" in html
     assert '"type": "explorer"' in html or '"type":"explorer"' in html
+    assert '"tree_root": true' in html or '"tree_root":true' in html
+    assert '"mixin": true' in html or '"mixin":true' in html
     registry = json.loads((dist / "manifest_registry.json").read_text(encoding="utf-8"))
     ids = {m["module_id"] for m in registry["modules"]}
     assert {

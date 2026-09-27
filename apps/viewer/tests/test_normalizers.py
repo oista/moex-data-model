@@ -145,6 +145,17 @@ def test_linkml_explorer_groups_by_schema():
     assert any(c.id == "RootClass" for c in classes)
     root_cls = next(c for c in classes if c.id == "RootClass")
     assert isinstance(root_cls.attributes.get("slots"), list)
+    assert root_cls.attributes.get("declared_slots") == ["root_slot"]
+    root_slots = {s["name"]: s for s in root_cls.attributes["slots"]}
+    assert root_slots["root_slot"]["inherited"] is False
+
+    child_cls = next(c for c in classes if c.id == "ChildClass")
+    assert child_cls.attributes.get("is_a") == "RootClass"
+    assert child_cls.attributes.get("declared_slots") == ["child_slot"]
+    child_slots = {s["name"]: s for s in child_cls.attributes.get("slots") or []}
+    assert "root_slot" in child_slots
+    assert child_slots["root_slot"]["inherited"] is True
+    assert child_slots["child_slot"]["inherited"] is False
 
 
 def test_dams_explorer_real_schema():
@@ -174,3 +185,11 @@ def test_dams_explorer_real_schema():
     slot_names = {s["name"] for s in slots}
     assert "attributes" in slot_names
     assert "conceptual_entity_refs" in slot_names
+    assert any(s.get("inherited") for s in slots)
+
+    repo_cls = classes["MOEXModelRepository"]
+    assert repo_cls.attributes.get("tree_root") is True
+
+    lifecycle = classes["HasLifecycle"]
+    assert lifecycle.attributes.get("mixin") is True
+    assert lifecycle.attributes.get("is_a") in (None, "")

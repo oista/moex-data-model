@@ -73,6 +73,17 @@ export const api = {
         body: JSON.stringify(body),
       },
     ),
+  mutateDocument: (
+    workspaceId: string,
+    body: import("./types").DocumentMutation,
+  ) =>
+    request<import("./types").WorkspaceDocument>(
+      `/workspaces/${workspaceId}/documents/trading/mutations`,
+      {
+        method: "POST",
+        body: JSON.stringify(body),
+      },
+    ),
   createJob: (
     body: {
       kind: "validate" | "compile";

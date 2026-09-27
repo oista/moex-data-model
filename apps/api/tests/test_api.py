@@ -112,6 +112,76 @@ def test_trading_body(client: TestClient) -> None:
     assert "trading" in body["path"]
 
 
+def test_document_mutations_seed_and_conflict(client: TestClient) -> None:
+    headers = {"X-Moex-Actor": "mutator"}
+    published_path = client.get("/implementations/trading/body").json()["path"]
+    from moex_model_cli.bootstrap import find_repo_root
+
+    pub_file = find_repo_root() / published_path
+    before = pub_file.read_text(encoding="utf-8")
+
+    r = client.post(
+        "/workspaces/ws-mut/documents/trading/mutations",
+        json={
+            "op": "add_logical_entity",
+            "entity": {
+                "element_id": "dams:logical/trading/OrderBook",
+                "name": "OrderBook",
+                "title": "Order book",
+            },
+        },
+        headers=headers,
+    )
+    assert r.status_code == 200
+    assert "dams:logical/trading/OrderBook" in r.json()["content"]
+
+    attr = client.post(
+        "/workspaces/ws-mut/documents/trading/mutations",
+        json={
+            "op": "add_logical_attribute",
+            "owner_element_id": "dams:logical/trading/Client",
+            "attribute": {
+                "element_id": "dams:logical/trading/Client/nickname",
+                "name": "nickname",
+                "logical_type": "string",
+                "required": False,
+            },
+        },
+        headers=headers,
+    )
+    assert attr.status_code == 200
+    assert "dams:logical/trading/Client/nickname" in attr.json()["content"]
+
+    dup = client.post(
+        "/workspaces/ws-mut/documents/trading/mutations",
+        json={
+            "op": "add_logical_entity",
+            "entity": {
+                "element_id": "dams:logical/trading/OrderBook",
+                "name": "OrderBook2",
+            },
+        },
+        headers=headers,
+    )
+    assert dup.status_code == 409
+
+    after = pub_file.read_text(encoding="utf-8")
+    assert after == before
+
+    job = client.post(
+        "/jobs",
+        json={
+            "kind": "validate",
+            "workspace_id": "ws-mut",
+            "implementation_id": "moex:implementation:trading:1.0.0",
+            "source": "draft",
+        },
+        headers={**headers, "Idempotency-Key": "idem-mut-validate"},
+    )
+    assert job.status_code == 200
+    assert job.json()["status"] == "succeeded"
+
+
 def test_workspace_document_put_get_and_validate_draft(client: TestClient) -> None:
     headers = {"X-Moex-Actor": "editor"}
     published = client.get("/implementations/trading/body").json()

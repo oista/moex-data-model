@@ -16,6 +16,7 @@ dependencies = [
     "psycopg[binary]>=3.1,<4.0",
     "pydantic>=2.6,<3.0",
     "PyYAML>=6.0,<7.0",
+    "ruamel.yaml>=0.18,<0.19",
     "moex-modeling-kernel",
     "moex-specification-dams",
     "moex-standard-linkml",

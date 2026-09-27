@@ -71,8 +71,76 @@ def _schema_key_for(sv: SchemaView, element_name: str) -> str:
     return "unknown"
 
 
+_SLOT_USAGE_FIELDS = (
+    "required",
+    "range",
+    "multivalued",
+    "inlined",
+    "inlined_as_list",
+    "identifier",
+    "minimum_cardinality",
+    "maximum_cardinality",
+    "description",
+)
+
+
+def _declared_slot_names(cls: Any) -> list[str]:
+    names: list[str] = []
+    for slot_name in cls.slots or []:
+        names.append(str(slot_name))
+    return names
+
+
+def _attributes_inline_names(cls: Any) -> list[str]:
+    attrs = getattr(cls, "attributes", None) or {}
+    return [str(name) for name in attrs.keys()]
+
+
+def _declared_slot_set(cls: Any) -> set[str]:
+    return set(_declared_slot_names(cls)) | set(_attributes_inline_names(cls))
+
+
+def _compact_slot_usage(cls: Any) -> dict[str, dict[str, Any]]:
+    usage = getattr(cls, "slot_usage", None) or {}
+    out: dict[str, dict[str, Any]] = {}
+    for slot_name, override in usage.items():
+        if override is None:
+            continue
+        compact: dict[str, Any] = {}
+        for field in _SLOT_USAGE_FIELDS:
+            value = getattr(override, field, None)
+            if value is not None and value != [] and value != {}:
+                compact[field] = value
+        if compact:
+            out[str(slot_name)] = compact
+    return out
+
+
+def _class_identity_attrs(sv: SchemaView, name: str, cls: Any) -> dict[str, Any]:
+    return {
+        "name": name,
+        "description": cls.description,
+        "is_a": cls.is_a,
+        "abstract": bool(cls.abstract) if cls.abstract is not None else False,
+        "mixin": bool(cls.mixin) if getattr(cls, "mixin", None) is not None else False,
+        "mixins": list(cls.mixins or []),
+        "tree_root": bool(getattr(cls, "tree_root", False)),
+        "class_uri": cls.class_uri,
+        "from_schema": cls.from_schema,
+        "schema_key": _schema_key_for(sv, name),
+        "declared_slots": _declared_slot_names(cls),
+        "attributes_inline": _attributes_inline_names(cls),
+        "slot_usage": _compact_slot_usage(cls),
+    }
+
+
 def _induced_slot_dicts(sv: SchemaView, class_name: str) -> list[dict[str, Any]]:
     slots: list[dict[str, Any]] = []
+    try:
+        cls = sv.get_class(class_name)
+    except Exception:
+        cls = None
+    declared = _declared_slot_set(cls) if cls is not None else set()
     try:
         induced = sv.class_induced_slots(class_name)
     except Exception:
@@ -85,6 +153,16 @@ def _induced_slot_dicts(sv: SchemaView, class_name: str) -> list[dict[str, Any]]
                 "range": slot.range,
                 "required": bool(slot.required) if slot.required is not None else False,
                 "multivalued": bool(slot.multivalued) if slot.multivalued is not None else False,
+                "identifier": bool(slot.identifier) if getattr(slot, "identifier", None) is not None else False,
+                "inlined": bool(slot.inlined) if getattr(slot, "inlined", None) is not None else False,
+                "inlined_as_list": (
+                    bool(slot.inlined_as_list)
+                    if getattr(slot, "inlined_as_list", None) is not None
+                    else False
+                ),
+                "minimum_cardinality": getattr(slot, "minimum_cardinality", None),
+                "maximum_cardinality": getattr(slot, "maximum_cardinality", None),
+                "inherited": slot.name not in declared,
                 "slot_uri": slot.slot_uri,
             }
         )
@@ -98,16 +176,7 @@ def _normalize_classes(sv: SchemaView, as_tree: bool) -> list[PublicationItem]:
             id=name,
             title=name,
             description=cls.description,
-            attributes={
-                "name": name,
-                "description": cls.description,
-                "is_a": cls.is_a,
-                "abstract": bool(cls.abstract) if cls.abstract is not None else False,
-                "mixins": list(cls.mixins or []),
-                "class_uri": cls.class_uri,
-                "from_schema": cls.from_schema,
-                "schema_key": _schema_key_for(sv, name),
-            },
+            attributes=_class_identity_attrs(sv, name, cls),
         )
 
     if not as_tree:
@@ -211,22 +280,14 @@ def _normalize_explorer(sv: SchemaView) -> list[PublicationItem]:
 
     for name, cls in sv.all_classes().items():
         schema_key = _schema_key_for(sv, name)
+        attrs = _class_identity_attrs(sv, name, cls)
+        attrs["kind"] = "class"
+        attrs["slots"] = _induced_slot_dicts(sv, name)
         item = PublicationItem(
             id=name,
             title=name,
             description=cls.description,
-            attributes={
-                "kind": "class",
-                "name": name,
-                "description": cls.description,
-                "is_a": cls.is_a,
-                "abstract": bool(cls.abstract) if cls.abstract is not None else False,
-                "mixins": list(cls.mixins or []),
-                "class_uri": cls.class_uri,
-                "from_schema": cls.from_schema,
-                "schema_key": schema_key,
-                "slots": _induced_slot_dicts(sv, name),
-            },
+            attributes=attrs,
         )
         by_schema.setdefault(schema_key, []).append(item)
 
