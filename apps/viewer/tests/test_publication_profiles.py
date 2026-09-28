@@ -112,7 +112,7 @@ def test_wrap_linkml_specification_roots_nests_packages_under_classes():
     assert roots[1].children[0].id == "group:moex_dsp"
 
 
-def test_publication_contract_coverage_warns_on_missing_satisfies(tmp_path: Path):
+def test_publication_contract_coverage_hard_fails_on_missing_satisfies(tmp_path: Path):
     root = tmp_path
     dams = root / "model-assets" / "specifications" / "moex-dams" / "0.1"
     dams.mkdir(parents=True)
@@ -123,10 +123,49 @@ profiles:
   - id: demo-profile
     requirements:
       - id: dams:logical-entities
+        kind: required-section
         obligation: required
+        accepted_section_kinds: [classes]
+        accepted_renderers: [entity-table]
       - id: dams:overview
+        kind: required-section
         obligation: required
+        accepted_section_kinds: [overview]
+        accepted_renderers: [markdown-doc]
 """,
+        encoding="utf-8",
+    )
+    pub = root / "impl"
+    pub.mkdir()
+    (pub / "README.md").write_text("# hi\n", encoding="utf-8")
+    manifest_path = pub / "publish.yaml"
+    import yaml
+
+    manifest_path.write_text(
+        yaml.safe_dump(
+            {
+                "module_id": "moex:module:x",
+                "kind": "publication_module",
+                "title": "X",
+                "profile": "implementation",
+                "implements": [
+                    {
+                        "specification_ref": "moex-dams@0.1",
+                        "profile_ref": "demo-profile",
+                    }
+                ],
+                "sections": [
+                    {
+                        "id": "overview",
+                        "title": "O",
+                        "kind": "overview",
+                        "type": "markdown-doc",
+                        "satisfies": ["dams:overview"],
+                        "source": {"format": "markdown", "path": "README.md"},
+                    }
+                ],
+            }
+        ),
         encoding="utf-8",
     )
     module = PublicationModule(
@@ -149,13 +188,14 @@ profiles:
                 content="x",
             )
         ],
-        manifest_path="x/publish.yaml",
+        manifest_path=str(manifest_path),
     )
-    warnings = check_publication_contract_coverage([module], root)
-    assert any("dams:logical-entities" in w for w in warnings)
-    assert not any(
-        "missing satisfies coverage" in w and "dams:overview" in w for w in warnings
-    )
+    from moex_publication_viewer.validators import ValidationError
+    import pytest
+
+    with pytest.raises(ValidationError) as exc:
+        check_publication_contract_coverage([module], root)
+    assert any("logical-entities" in e for e in exc.value.errors)
 
 
 def test_publication_contract_ok_when_satisfied(tmp_path: Path):
@@ -169,8 +209,50 @@ profiles:
   - id: demo-profile
     requirements:
       - id: dams:logical-entities
+        kind: required-section
+        obligation: required
+        accepted_section_kinds: [classes]
+        accepted_renderers: [entity-table]
+      - id: dams:declared-binding
+        kind: required-binding
         obligation: required
 """,
+        encoding="utf-8",
+    )
+    pub = root / "impl"
+    pub.mkdir()
+    (pub / "model.yaml").write_text("logical_entities: [{element_id: e1}]\n", encoding="utf-8")
+    import yaml
+
+    manifest_path = pub / "publish.yaml"
+    manifest_path.write_text(
+        yaml.safe_dump(
+            {
+                "module_id": "moex:module:x",
+                "kind": "publication_module",
+                "title": "X",
+                "implements": [
+                    {
+                        "specification_ref": "moex-dams@0.1",
+                        "profile_ref": "demo-profile",
+                    }
+                ],
+                "sections": [
+                    {
+                        "id": "logical",
+                        "title": "L",
+                        "kind": "classes",
+                        "type": "entity-table",
+                        "satisfies": ["dams:logical-entities"],
+                        "source": {
+                            "format": "yaml",
+                            "path": "model.yaml",
+                            "select": "logical_entities",
+                        },
+                    }
+                ],
+            }
+        ),
         encoding="utf-8",
     )
     module = PublicationModule(
@@ -188,5 +270,6 @@ profiles:
                 satisfies=["dams:logical-entities"],
             )
         ],
+        manifest_path=str(manifest_path),
     )
     assert check_publication_contract_coverage([module], root) == []

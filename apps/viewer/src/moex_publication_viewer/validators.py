@@ -6,8 +6,6 @@ import logging
 from pathlib import Path
 from typing import Any
 
-import yaml
-
 from moex_publication_viewer.manifest_loader import resolve_source_path
 from moex_publication_viewer.models.catalog_models import ArchitectureCatalog
 from moex_publication_viewer.models.manifest_models import PublicationManifest
@@ -112,122 +110,38 @@ def check_publication_profiles(modules: list[PublicationModule]) -> list[str]:
 
 
 def _spec_asset_dir(root: Path, specification_ref: str) -> Path | None:
-    """Resolve moex-dams@0.1 → model-assets/specifications/moex-dams/0.1."""
-    ref = specification_ref.strip()
-    if "@" in ref:
-        name, version = ref.split("@", 1)
-    else:
-        name, version = ref, "0.1"
-    name = name.strip()
-    version = version.strip()
-    candidates = [
-        root / "model-assets" / "specifications" / name / version,
-        root / "specifications" / name / version,
-    ]
-    for c in candidates:
-        if c.is_dir():
-            return c
-    alt = name.replace("_", "-")
-    for c in (
-        root / "model-assets" / "specifications" / alt / version,
-        root / "specifications" / alt / version,
-    ):
-        if c.is_dir():
-            return c
-    return None
+    from moex_publication_viewer.publication_contract import spec_asset_dir
+
+    return spec_asset_dir(root, specification_ref)
 
 
 def _load_publication_requirements(path: Path) -> dict[str, Any] | None:
-    if not path.is_file():
-        return None
-    data = yaml.safe_load(path.read_text(encoding="utf-8"))
-    return data if isinstance(data, dict) else None
+    from moex_publication_viewer.publication_contract import load_publication_requirements
+
+    return load_publication_requirements(path)
 
 
 def _collect_required_ids(
     doc: dict[str, Any],
     profile_id: str,
 ) -> list[str]:
-    """Collect required requirement ids for profile + parent chain."""
-    profiles = {
-        p.get("id"): p
-        for p in (doc.get("profiles") or [])
-        if isinstance(p, dict) and p.get("id")
-    }
-    collected: list[str] = []
-    seen_profiles: set[str] = set()
-    current: str | None = profile_id
-    while current and current not in seen_profiles:
-        seen_profiles.add(current)
-        prof = profiles.get(current)
-        if prof is None:
-            break
-        for req in prof.get("requirements") or []:
-            if not isinstance(req, dict):
-                continue
-            obligation = req.get("obligation") or "required"
-            if obligation != "required":
-                continue
-            rid = req.get("id")
-            if isinstance(rid, str):
-                collected.append(rid)
-        parent = prof.get("parent_profile_ref")
-        current = parent if isinstance(parent, str) else None
-    return collected
+    from moex_publication_viewer.publication_contract import collect_required_ids
+
+    return collect_required_ids(doc, profile_id)
 
 
 def check_publication_contract_coverage(
     modules: list[PublicationModule],
     root: Path,
+    *,
+    hard_fail: bool = True,
 ) -> list[str]:
-    """Soft ADR-019 checks: inherited required requirements must appear in satisfies."""
-    warnings: list[str] = []
-    req_cache: dict[Path, dict[str, Any] | None] = {}
+    """ADR-019 phase 2: assess contracts; required failures raise when hard_fail."""
+    from moex_publication_viewer.publication_contract import run_publication_contracts
 
-    for module in modules:
-        implements = module.implements or []
-        if not implements:
-            continue
-        covered: set[str] = set()
-        for section in module.sections:
-            for sid in section.satisfies or []:
-                if isinstance(sid, str):
-                    covered.add(sid)
-
-        loc = module.manifest_path or module.module_id
-        for impl in implements:
-            if not isinstance(impl, dict):
-                continue
-            spec_ref = impl.get("specification_ref")
-            profile_ref = impl.get("profile_ref")
-            if not isinstance(spec_ref, str) or not isinstance(profile_ref, str):
-                continue
-            asset_dir = _spec_asset_dir(root, spec_ref)
-            if asset_dir is None:
-                warnings.append(
-                    f"{loc}: implements {spec_ref} but specification asset dir not found"
-                )
-                continue
-            req_path = asset_dir / "publication-requirements.yaml"
-            if req_path not in req_cache:
-                req_cache[req_path] = _load_publication_requirements(req_path)
-            doc = req_cache[req_path]
-            if doc is None:
-                warnings.append(
-                    f"{loc}: implements profile '{profile_ref}' but missing "
-                    f"{req_path.name} under {asset_dir}"
-                )
-                continue
-            required_ids = _collect_required_ids(doc, profile_ref)
-            missing = [r for r in required_ids if r not in covered]
-            if missing:
-                warnings.append(
-                    f"{loc}: publication contract '{profile_ref}' missing satisfies "
-                    f"coverage: {', '.join(missing)}"
-                )
-
-    for w in warnings:
-        logger.warning("%s", w)
+    _reports, warnings = run_publication_contracts(
+        modules, root, hard_fail=hard_fail, dist_dir=None
+    )
     return warnings
 
 

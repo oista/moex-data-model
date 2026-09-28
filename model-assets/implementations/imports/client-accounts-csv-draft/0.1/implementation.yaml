@@ -1,0 +1,14 @@
+# Envelope stub — SpecificationImplementation (CSV draft via DSP inference)
+id: moex:implementation:client-accounts-csv-draft:0.1
+name: client_accounts_csv_draft
+title: DSP — Client Accounts CSV (draft)
+description: >
+  Inferred DAMS logical/physical draft from a CSV import pipeline.
+  Semantic assertions are inferred until owner review.
+conforms_to: moex-dams@0.1
+implementation_kind: model_package
+lifecycle_status: draft
+conformance_status: draft-conformant
+semantic_assertion_status: inferred
+approval_status: pending-review
+body_ref: draft-model.yaml

@@ -33,6 +33,17 @@ nodes:
     order: 110
     description: Demo IT-solution model conforming to DAMS (Trading solution).
 
+  - id: client-accounts-csv-draft
+    role: specification_implementation
+    title: DSP — Client Accounts CSV (draft)
+    version: "0.1"
+    conforms_to: moex-dams
+    module_id: moex:module:client-accounts-csv-draft
+    order: 120
+    description: >
+      Inferred DAMS draft from CSV import (draft-conformant). Local publication
+      modules cover dams-logical-and-physical via satisfies (ADR-019 phase 2).
+
   - id: moex-fibo-profile
     role: reference_specification
     title: edmc.fibo

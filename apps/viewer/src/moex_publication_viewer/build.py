@@ -19,11 +19,11 @@ from moex_publication_viewer.normalizers.linkml_normalizer import clear_schema_v
 from moex_publication_viewer.renderers.html_renderer import render_viewer
 from moex_publication_viewer.validators import (
     ValidationError,
-    check_publication_contract_coverage,
     check_publication_profiles,
     validate_architecture_catalog,
     validate_manifests,
 )
+from moex_publication_viewer.publication_contract import run_publication_contracts
 from moex_publication_viewer.publication_profiles import get_renderer_mode
 
 PACKAGE_DIR = Path(__file__).resolve().parent
@@ -34,7 +34,12 @@ FIBO_PROFILE_MODULE_ID = "moex:module:fibo-profile"
 FIBO_PROFILE_CATALOG_SPEC_ID = "moex-fibo-profile"
 
 
-def compile_modules(root: Path) -> list[PublicationModule]:
+def compile_modules(
+    root: Path,
+    *,
+    enforce_publication_contract: bool = False,
+    dist_dir: Path | None = None,
+) -> list[PublicationModule]:
     clear_schema_view_cache()
     paths = discover_manifest_paths(root)
     pairs = []
@@ -90,6 +95,7 @@ def compile_modules(root: Path) -> list[PublicationModule]:
                 implements=[
                     ref.model_dump(exclude_none=True) for ref in manifest.implements
                 ],
+                conformance_status=getattr(manifest, "conformance_status", None),
                 sections=sections,
                 manifest_path=str(path),
             )
@@ -100,7 +106,10 @@ def compile_modules(root: Path) -> list[PublicationModule]:
 
     modules.sort(key=lambda m: (m.order, m.title))
     check_publication_profiles(modules)
-    check_publication_contract_coverage(modules, root)
+    if enforce_publication_contract:
+        run_publication_contracts(
+            modules, root, hard_fail=True, dist_dir=dist_dir
+        )
     return modules
 
 
@@ -279,7 +288,9 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
         dist_dir = VIEWER_ROOT / "dist"
     dist_dir.mkdir(parents=True, exist_ok=True)
 
-    modules = compile_modules(root)
+    modules = compile_modules(
+        root, enforce_publication_contract=True, dist_dir=dist_dir
+    )
     catalog = compile_catalog(root, modules)
     enrich_dams_explorer_implementations(modules, catalog)
     enrich_fibo_explorer_implementations(modules, catalog)

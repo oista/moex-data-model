@@ -1,0 +1,55 @@
+element_id: dams:model/client-accounts-csv/0.1-draft
+name: client_accounts_csv_draft
+title: Client Accounts CSV (inferred draft)
+description: Draft model inferred from client_accounts.csv via DSP.
+lifecycle_status: draft
+api_version: dams.moex/v0.1
+model_version: 0.1-draft
+solution_ref: eam:solution/CLIENT_ACCOUNTS_IMPORT
+logical_entities:
+  - element_id: dams:logical/csv-draft/ClientAccount
+    name: ClientAccount
+    title: Клиентский счёт (inferred)
+    description: Предлагаемая логическая сущность по колонкам CSV.
+    lifecycle_status: draft
+    solution_data_role: producer
+    governance_classification: confidential
+    attributes:
+      - element_id: dams:logical/csv-draft/ClientAccount/accountId
+        name: accountId
+        title: Идентификатор счёта
+        logical_type: identifier
+        required: true
+      - element_id: dams:logical/csv-draft/ClientAccount/clientName
+        name: clientName
+        title: Имя клиента
+        logical_type: string
+        required: true
+physical_objects:
+  - element_id: dams:physical/csv-draft/client_accounts_csv
+    name: client_accounts_csv
+    title: client_accounts.csv
+    description: Исходный CSV-файл импорта.
+    object_kind: file
+    technology: CSV
+    physical_fields:
+      - element_id: dams:physical/csv-draft/client_accounts_csv/account_id
+        name: account_id
+        native_name: account_id
+        native_type: string
+        required: true
+      - element_id: dams:physical/csv-draft/client_accounts_csv/client_name
+        name: client_name
+        native_name: client_name
+        native_type: string
+        required: true
+mappings:
+  - element_id: dams:mapping/csv-draft/account-id
+    name: map_account_id
+    description: CSV account_id → logical accountId
+    mapping_type: field_mapping
+    source_refs:
+      - dams:logical/csv-draft/ClientAccount/accountId
+    target_refs:
+      - dams:physical/csv-draft/client_accounts_csv/account_id
+    approval_status: pending-review

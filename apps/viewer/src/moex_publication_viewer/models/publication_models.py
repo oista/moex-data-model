@@ -45,6 +45,7 @@ class PublicationModule(BaseModel):
     order: int = 1000
     profile: str | None = None
     implements: list[dict[str, Any]] = Field(default_factory=list)
+    conformance_status: str | None = None
     sections: list[PublicationSection] = Field(default_factory=list)
     manifest_path: str | None = None
 

@@ -1,0 +1,109 @@
+{
+  "id": "pubconf:moex:module:client-accounts-csv-draft:dams-logical-and-physical",
+  "title": "DSP — Client Accounts CSV",
+  "description": "Publication contract assessment for dams-logical-and-physical against moex-dams@0.1",
+  "implementation_ref": "moex:module:client-accounts-csv-draft",
+  "reference_specification_ref": "moex-dams@0.1",
+  "profile_ref": "dams-logical-and-physical",
+  "overall_publication_status": "draft-conformant",
+  "requirement_results": [
+    {
+      "requirement_ref": "dams:overview",
+      "covered": true,
+      "covering_section_ids": [
+        "dsp-overview"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:conformance",
+      "covered": true,
+      "covering_section_ids": [
+        "conformance-report"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:logical-entities",
+      "covered": true,
+      "covering_section_ids": [
+        "inferred-logical-model"
+      ],
+      "result_status": "pass",
+      "result_message": "semantic count=1 (>= 1); inferred-logical-model: 1",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:logical-attributes",
+      "covered": true,
+      "covering_section_ids": [
+        "inferred-logical-model"
+      ],
+      "result_status": "pass",
+      "result_message": "semantic count=2 (>= 1); inferred-logical-model: 2",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:relationships",
+      "covered": true,
+      "covering_section_ids": [
+        "inferred-logical-model"
+      ],
+      "result_status": "pass",
+      "result_message": "semantic count=0 (>= 0); inferred-logical-model: 0",
+      "obligation": "recommended"
+    },
+    {
+      "requirement_ref": "dams:declared-binding",
+      "covered": true,
+      "covering_section_ids": [],
+      "result_status": "pass",
+      "result_message": "implements moex-dams@0.1",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:physical-objects",
+      "covered": true,
+      "covering_section_ids": [
+        "csv-physical-profile"
+      ],
+      "result_status": "pass",
+      "result_message": "semantic count=1 (>= 1); csv-physical-profile: 1",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:physical-fields",
+      "covered": true,
+      "covering_section_ids": [
+        "csv-physical-profile"
+      ],
+      "result_status": "pass",
+      "result_message": "semantic count=2 (>= 0); csv-physical-profile: 2",
+      "obligation": "recommended"
+    },
+    {
+      "requirement_ref": "dams:physical-mappings",
+      "covered": true,
+      "covering_section_ids": [
+        "inferred-mappings"
+      ],
+      "result_status": "pass",
+      "result_message": "semantic count=1 (>= 1); inferred-mappings: 1",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:draft-evidence",
+      "covered": true,
+      "covering_section_ids": [
+        "inference-evidence"
+      ],
+      "result_status": "pass",
+      "result_message": "evidence fields present in inference-evidence",
+      "obligation": "recommended"
+    }
+  ]
+}

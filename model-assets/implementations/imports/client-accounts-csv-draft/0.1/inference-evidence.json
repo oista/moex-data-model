@@ -1,0 +1,8 @@
+{
+  "source_uri": "file://imports/client_accounts.csv",
+  "source_checksum": "sha256:demo000000000000000000000000000000000000000000000000000000000001",
+  "profile_timestamp": "2026-09-28T10:00:00Z",
+  "inference_method": "schema-automator-csv-draft",
+  "confidence": 0.72,
+  "notes": "Demo evidence payload for ADR-019 phase 2 CSV-draft Impl."
+}

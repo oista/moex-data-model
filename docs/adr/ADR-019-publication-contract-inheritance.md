@@ -90,9 +90,9 @@ ADR-016 remains the closed vocabulary of section **kinds** and the **base** Prof
 
 Base profile `implementation` still requires kinds `overview` and `conformance`. Inherited DAMS requirements (e.g. `logical-entities`) are additional obligations when the Impl declares a conformance profile against DAMS.
 
-### 7. Soft validation first
+### 7. Soft vs hard validation
 
-Missing required coverage / present forbidden → **warnings** in this iteration (same posture as ADR-016). Hard CI failure and full instance scanning of semantic types are deferred.
+Phase 1 used soft warnings for missing `satisfies` coverage. **Phase 2** escalates **required** publication-contract failures (missing coverage, failed semantic-content / binding / evidence) to build/`viewer-check` hard fail. Recommended gaps stay warnings. ADR-016 ProfileSpec kind checks remain soft.
 
 ### 8. Viewer navigation consequence
 
@@ -108,6 +108,7 @@ Player metamodel `moex.dsp` documents the DSP shell (`linkml-specification`); it
 - Impl `publish.yaml` sections carry `kind` and `satisfies` when a reference contract applies.
 - DSP glossary and Cursor publication rule document `satisfies`.
 - Kernel body conformance and publication-contract conformance stay separate reports.
+- **Phase 2:** viewer build/`make viewer-check` runs a semantic-content publication contract checker; **required** failures are hard errors. Each Impl with `implements` writes `publications/publication_conformance.json`; dist gets `publication_conformance_index.json`. Statuses: `conformant` | `partially-conformant` | `draft-conformant`.
 
 ## Alternatives rejected
 

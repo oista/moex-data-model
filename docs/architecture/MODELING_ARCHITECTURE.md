@@ -499,6 +499,8 @@ Publication Viewer и `publish.yaml` — производные проекции
 
 Статусы publication-слоя: `conformant` \| `partially-conformant` \| `draft-conformant` (для generated/inferred default — `draft-conformant`).
 
+**Фаза 2 (исполняется в Publication Viewer):** checker проверяет не только наличие `satisfies`, но и semantic-content source (`expected_semantic_types` / `min_occurs`), пишет `PublicationConformanceReport` JSON рядом с Impl и в `apps/viewer/dist/publication_conformance_index.json`. Обязательные (required) нарушения — hard-fail `make viewer-check` / GHA; recommended остаются warnings. ADR-016 ProfileSpec kinds по-прежнему soft.
+
 ### Формула
 
 ```text

@@ -95,6 +95,9 @@ class PublicationManifest(BaseModel):
     description: str | None = None
     profile: PublicationProfileId | None = None
     implements: list[ImplementsRef] = Field(default_factory=list)
+    conformance_status: str | None = None
+    semantic_assertion_status: str | None = None
+    approval_status: str | None = None
     sections: list[ManifestSection] = Field(default_factory=list)
 
     @field_validator("version", mode="before")

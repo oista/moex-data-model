@@ -1,0 +1,103 @@
+# DSP CSV draft — publication module (ADR-019 phase 2)
+module_id: moex:module:client-accounts-csv-draft
+kind: publication_module
+version: "1"
+order: 320
+icon: "📄"
+title: DSP — Client Accounts CSV
+description: >
+  Draft DAMS implementation inferred from CSV. Local modules differ from DAMS
+  Spec modules; coverage is via satisfies (publication contract).
+profile: implementation
+conformance_status: draft-conformant
+semantic_assertion_status: inferred
+approval_status: pending-review
+implements:
+  - specification_ref: moex-dams@0.1
+    profile_ref: dams-logical-and-physical
+    conformance_target: draft
+sections:
+  - id: dsp-overview
+    title: Обзор импорта
+    kind: overview
+    type: markdown-doc
+    satisfies:
+      - dams:overview
+      - implementation:overview
+    source:
+      format: markdown
+      path: README.md
+
+  - id: inferred-logical-model
+    title: Предлагаемая логическая модель
+    kind: classes
+    type: entity-table
+    satisfies:
+      - dams:logical-entities
+      - dams:logical-attributes
+      - dams:relationships
+    source:
+      format: yaml
+      path: draft-model.yaml
+      select: logical_entities
+    key_column: element_id
+    columns:
+      - name
+      - title
+      - description
+
+  - id: csv-physical-profile
+    title: Физический профиль CSV
+    kind: bindings
+    type: entity-table
+    satisfies:
+      - dams:physical-objects
+      - dams:physical-fields
+    source:
+      format: yaml
+      path: draft-model.yaml
+      select: physical_objects
+    key_column: element_id
+    columns:
+      - name
+      - title
+      - object_kind
+      - technology
+
+  - id: inferred-mappings
+    title: Привязки физического и логического слоёв
+    kind: bindings
+    type: entity-table
+    satisfies:
+      - dams:physical-mappings
+    source:
+      format: yaml
+      path: draft-model.yaml
+      select: mappings
+    key_column: element_id
+    columns:
+      - name
+      - description
+      - mapping_type
+
+  - id: inference-evidence
+    title: Основания и уверенность выводов
+    kind: source
+    type: key-value
+    satisfies:
+      - dams:draft-evidence
+    source:
+      format: json
+      path: inference-evidence.json
+
+  - id: conformance-report
+    title: Соответствие DAMS
+    kind: conformance
+    type: key-value
+    satisfies:
+      - dams:conformance
+      - implementation:conformance
+      - dams:declared-binding
+    source:
+      format: json
+      path: publications/conformance.json

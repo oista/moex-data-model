@@ -1,0 +1,9 @@
+{
+  "overall_result": "draft-conformant",
+  "implementation_id": "moex:implementation:client-accounts-csv-draft:0.1",
+  "conformance_target": "draft",
+  "semantic_assertion_status": "inferred",
+  "approval_status": "pending-review",
+  "is_conformant": false,
+  "note": "Structurally covers dams-logical-and-physical; content pending review."
+}

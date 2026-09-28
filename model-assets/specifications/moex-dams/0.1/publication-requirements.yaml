@@ -109,3 +109,16 @@ profiles:
         accepted_renderers: [mapping-table, entity-detail, entity-table]
         inherited_from: dams-logical-and-physical
         applies_when: "when physical objects are present"
+
+      - id: dams:draft-evidence
+        kind: required-evidence
+        semantic_capability: inference-evidence
+        obligation: recommended
+        min_occurs: 0
+        required_fields:
+          - source_uri
+          - source_checksum
+          - confidence
+        accepted_section_kinds: [source, conformance, overview]
+        accepted_renderers: [key-value, markdown-doc]
+        inherited_from: dams-logical-and-physical
