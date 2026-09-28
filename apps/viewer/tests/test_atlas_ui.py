@@ -41,7 +41,7 @@ sections:
     dist = tmp_path / "out"
     index = build(tmp_path, dist)
     html = index.read_text(encoding="utf-8")
-    assert "MOEX Model Explorer" in html
+    assert "Data Specification Player" in html
     assert 'id="viewer-css"' in html
     assert 'id="viewer-js"' in html
     assert 'href="viewer.css"' not in html

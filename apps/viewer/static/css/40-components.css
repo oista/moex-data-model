@@ -1,5 +1,4 @@
 /* Components migrated from pre-Atlas viewer.css */
-.sidebar-brand { display: flex; flex-direction: column; gap: 2px; margin-bottom: 16px; padding: 0 8px; }
 .muted { color: var(--muted); font-size: 12px; }
 
 .module-nav { display: flex; flex-direction: column; gap: 4px; }
@@ -26,6 +25,12 @@
 .module-icon { width: 1.2em; text-align: center; }
 
 .nav-module { margin-bottom: 8px; }
+.nav-module + .nav-module {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-subtle);
+}
+.nav-spec-title { font-weight: 700; }
 .nav-explorer { margin: 4px 0 8px 8px; display: flex; flex-direction: column; gap: 2px; }
 .nav-explorer .nav-tree-node { display: flex; flex-direction: column; gap: 2px; }
 .nav-explorer .nav-tree-row { display: flex; align-items: center; gap: 2px; }
@@ -115,9 +120,24 @@
 .nav-catalog-row .module-btn { flex: 1; min-width: 0; }
 .nav-catalog-body { margin: 2px 0 4px 10px; }
 .role-pill {
-  font-size: 10px; color: var(--muted);
-  border: 1px solid var(--border); border-radius: 4px;
-  padding: 0 5px; flex-shrink: 0;
+  font-size: 10px;
+  line-height: 16px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0 5px;
+  flex-shrink: 0;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+.role-pill--spec {
+  color: var(--brand-active);
+  background: var(--brand-soft);
+  border-color: color-mix(in srgb, var(--brand) 40%, var(--border));
+}
+.role-pill--impl {
+  color: var(--text-secondary);
+  background: var(--surface-3);
+  border-color: var(--border-default);
 }
 .arch-chrome { margin-bottom: 16px; }
 .arch-meta { margin: 8px 0 12px; }

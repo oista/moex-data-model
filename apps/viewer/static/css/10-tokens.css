@@ -21,6 +21,7 @@
   --brand-hover: #b91118;
   --brand-active: #950d13;
   --brand-soft: #fcebed;
+  --brand-panel: #e02530;
 
   --link: #315da8;
   --focus: #d71920;
@@ -114,6 +115,7 @@
   --brand-hover: #ff7379;
   --brand-active: #e54750;
   --brand-soft: rgba(255, 90, 97, 0.13);
+  --brand-panel: #ef3a44;
 
   --link: #8eb4f0;
   --focus: #ff6b72;

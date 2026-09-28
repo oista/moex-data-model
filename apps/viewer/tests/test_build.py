@@ -183,7 +183,7 @@ def test_explorer_groups_selectable_cards_not_in_search_and_module_title():
     build(repo, dist)
     html = (dist / "index.html").read_text(encoding="utf-8")
     assert "moex.dams" in html
-    assert "MOEX Model Explorer" in html
+    assert "Data Specification Player" in html
     assert "data-ui=\"sidebar\"" in html or "data-ui='sidebar'" in html
     assert "data-viewer-version" in html
     assert "--brand:" in html or "--brand :" in html

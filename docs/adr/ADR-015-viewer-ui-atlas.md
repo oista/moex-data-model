@@ -78,7 +78,7 @@ Viewer остаётся лёгким статическим представле
 
 Sidebar и topbar закреплены. Один основной vertical scroll в content; дерево скроллится отдельно.
 
-Бренд в UI: **MOEX Model Explorer**.
+Бренд в UI: **Data Specification Player**.
 
 ### 5. Информационная архитектура
 

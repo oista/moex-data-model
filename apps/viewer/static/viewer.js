@@ -738,8 +738,14 @@
     btn.className = "module-btn" + (selected ? " active" : "");
     const roleLabel =
       node.role === "reference_specification" ? "Spec" : "Impl";
-    btn.innerHTML = `<span class="role-pill">${roleLabel}</span>
-      <span>${escapeHtml(node.title)}</span>
+    const roleClass =
+      node.role === "reference_specification"
+        ? "role-pill role-pill--spec"
+        : "role-pill role-pill--impl";
+    const titleClass =
+      node.role === "reference_specification" ? "nav-spec-title" : "";
+    btn.innerHTML = `<span class="${roleClass}">${roleLabel}</span>
+      <span class="${titleClass}">${escapeHtml(node.title)}</span>
       ${node.version ? `<span class="badge">${escapeHtml(node.version)}</span>` : ""}`;
     btn.addEventListener("click", () => {
       if (

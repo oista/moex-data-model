@@ -70,6 +70,7 @@ svg {
   --brand-hover: #b91118;
   --brand-active: #950d13;
   --brand-soft: #fcebed;
+  --brand-panel: #e02530;
 
   --link: #315da8;
   --focus: #d71920;
@@ -163,6 +164,7 @@ svg {
   --brand-hover: #ff7379;
   --brand-active: #e54750;
   --brand-soft: rgba(255, 90, 97, 0.13);
+  --brand-panel: #ef3a44;
 
   --link: #8eb4f0;
   --focus: #ff6b72;
@@ -327,7 +329,7 @@ a {
   flex-shrink: 0;
   background: var(--surface-1);
   border-right: 1px solid var(--border-subtle);
-  padding: var(--space-4) var(--space-3);
+  padding: 0;
   position: sticky;
   top: 0;
   height: 100vh;
@@ -338,15 +340,39 @@ a {
 .sidebar-brand {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 2px;
-  margin-bottom: var(--space-4);
-  padding: 0 var(--space-2);
+  box-sizing: border-box;
+  height: var(--header-h);
+  margin: 0;
+  padding: 0 var(--space-4);
+  background: var(--brand-panel);
+  color: #ffffff;
+  border-bottom: 1px solid color-mix(in srgb, #000 12%, var(--brand-panel));
 }
 
 .sidebar-brand strong {
   font-size: var(--font-body);
   font-weight: 650;
   letter-spacing: -0.01em;
+  color: #ffffff;
+  line-height: var(--line-compact);
+}
+
+.sidebar-brand .muted {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.sidebar > .tree-filter,
+.sidebar > .module-nav {
+  margin-left: var(--space-3);
+  margin-right: var(--space-3);
+}
+
+.sidebar > .tree-filter {
+  width: calc(100% - 2 * var(--space-3));
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-3);
 }
 
 .sidebar-resize {
@@ -509,8 +535,7 @@ a {
 }
 
 .tree-filter {
-  width: 100%;
-  margin: 0 0 var(--space-3);
+  box-sizing: border-box;
   padding: 6px 10px;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
@@ -554,7 +579,6 @@ a {
 
 /* === 40-components.css === */
 /* Components migrated from pre-Atlas viewer.css */
-.sidebar-brand { display: flex; flex-direction: column; gap: 2px; margin-bottom: 16px; padding: 0 8px; }
 .muted { color: var(--muted); font-size: 12px; }
 
 .module-nav { display: flex; flex-direction: column; gap: 4px; }
@@ -581,6 +605,12 @@ a {
 .module-icon { width: 1.2em; text-align: center; }
 
 .nav-module { margin-bottom: 8px; }
+.nav-module + .nav-module {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-subtle);
+}
+.nav-spec-title { font-weight: 700; }
 .nav-explorer { margin: 4px 0 8px 8px; display: flex; flex-direction: column; gap: 2px; }
 .nav-explorer .nav-tree-node { display: flex; flex-direction: column; gap: 2px; }
 .nav-explorer .nav-tree-row { display: flex; align-items: center; gap: 2px; }
@@ -670,9 +700,24 @@ a {
 .nav-catalog-row .module-btn { flex: 1; min-width: 0; }
 .nav-catalog-body { margin: 2px 0 4px 10px; }
 .role-pill {
-  font-size: 10px; color: var(--muted);
-  border: 1px solid var(--border); border-radius: 4px;
-  padding: 0 5px; flex-shrink: 0;
+  font-size: 10px;
+  line-height: 16px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0 5px;
+  flex-shrink: 0;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+.role-pill--spec {
+  color: var(--brand-active);
+  background: var(--brand-soft);
+  border-color: color-mix(in srgb, var(--brand) 40%, var(--border));
+}
+.role-pill--impl {
+  color: var(--text-secondary);
+  background: var(--surface-3);
+  border-color: var(--border-default);
 }
 .arch-chrome { margin-bottom: 16px; }
 .arch-meta { margin: 8px 0 12px; }

@@ -38,7 +38,7 @@ def test_build_strips_emoji_from_nav_html():
     dist = repo / "apps" / "viewer" / "dist"
     index = build(repo, dist)
     html = index.read_text(encoding="utf-8")
-    assert "MOEX Model Explorer" in html
+    assert "Data Specification Player" in html
     assert "function mountTabs" in html
     assert 'id="search-shortcut-kbd"' in html
     # Emoji icons from publish.yaml must not appear as module-icon content

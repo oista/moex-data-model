@@ -1,4 +1,4 @@
-# MOEX Model Explorer
+# Data Specification Player
 
 Static HTML player for published modeling artifacts in this repository
 (**MOEX Atlas** visual system — see [`docs/adr/ADR-015-viewer-ui-atlas.md`](../../docs/adr/ADR-015-viewer-ui-atlas.md)).

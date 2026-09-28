@@ -59,6 +59,6 @@ IRI, paths и identifiers сокращаются (middle ellipsis), полное
 
 ## Именование в UI
 
-- Продукт: **MOEX Model Explorer**
+- Продукт: **Data Specification Player**
 - Концепция: **MOEX Atlas**
 - Артефакт сборки: `apps/viewer/dist/index.html`
