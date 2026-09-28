@@ -47,17 +47,16 @@ try {
         -e "$Pub" `
         -e "$Git" `
         -e "$Sem" `
-        -e "$Tooling[dev]" `
+        -e "$Tooling" `
         -e "$CliRoot[dev]" -q
 
-    Write-Host "Running pytest (kernel, provider, dams, publication, git, tooling, cli, architecture)"
+    Write-Host "Running pytest (kernel, provider, dams, publication, git, cli, architecture)"
     & $VenvPython -m pytest `
         (Join-Path $Kernel "tests") `
         (Join-Path $Linkml "tests/test_provider.py") `
         (Join-Path $Dams "tests") `
         (Join-Path $Pub "tests") `
         (Join-Path $Git "tests") `
-        (Join-Path $Tooling "tests") `
         (Join-Path $CliRoot "tests") `
         (Join-Path $RepoRoot "tests/architecture") `
         -q

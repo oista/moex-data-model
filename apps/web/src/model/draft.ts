@@ -27,6 +27,6 @@ export function serializeDraftYaml(data: Record<string, unknown>): string {
   return yaml.dump(data, {
     lineWidth: 120,
     noRefs: true,
-    sortingKeys: false,
+    sortKeys: false,
   });
 }

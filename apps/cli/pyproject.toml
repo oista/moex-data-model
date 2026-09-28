@@ -30,7 +30,7 @@ dev = [
     "moex-specification-dams[dev]",
     "moex-publication[dev]",
     "moex-semantic-mappings[dev]",
-    "moex-linkml-tooling[dev]",
+    "moex-linkml-tooling",
 ]
 
 [project.scripts]
