@@ -33,6 +33,8 @@ drawDB разворачивается как **отдельное self-hosted fr
 - Нужен `DrawDbProjectionService` и round-trip тесты (IMPLEMENTATION_PLAN этап 5) — после стабилизации graph/diff.
 - Замена editor не должна трогать kernel.
 
+**MVP landed (2026-09-28):** `apps/drawdb` (pinned upstream + overlay), `packages/drawdb-adapter`, API diagram session/submit/apply, Workbench Diagram page. PR automation N/A.
+
 ## Alternatives
 
 | Alternative | Почему нет |

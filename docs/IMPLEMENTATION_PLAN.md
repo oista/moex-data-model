@@ -538,6 +538,8 @@ audit_event
 
 ## Этап 5. drawDB MVP
 
+**Progress (2026-09-28 Stage 5 MVP):** `packages/drawdb-adapter` (parse DBML → ModelPatch → apply); extended `moex_dams.projection.dbml` Relationships/FK Refs; API diagram session + `diagram_layout` (Alembic `0006`); `apps/drawdb` pin + postMessage overlay + compose; Workbench `/models/trading/diagram` with semantic-diff confirm before apply. Out: deep drawDB internal JSON sync, OIDC, conceptual round-trip.
+
 ### Задачи
 
 - Зафиксировать upstream revision drawDB.
