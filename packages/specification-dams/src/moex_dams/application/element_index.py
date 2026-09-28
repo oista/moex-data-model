@@ -1,0 +1,75 @@
+"""Unified searchable element index for DAMS ModelPackage instances."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Any
+
+
+@dataclass(frozen=True, slots=True)
+class ElementIndexEntry:
+    element_id: str
+    element_kind: str
+    name: str
+    layer: str
+
+
+_LIST_KINDS: tuple[tuple[str, str, str], ...] = (
+    ("conceptual_entities", "ConceptualEntity", "conceptual"),
+    ("logical_entities", "LogicalEntity", "logical"),
+    ("physical_objects", "PhysicalObject", "physical"),
+    ("mappings", "Mapping", "mapping"),
+)
+
+
+def build_element_index(data: dict[str, Any]) -> list[ElementIndexEntry]:
+    """Build a stable element_id index from a ModelPackage dict."""
+    out: list[ElementIndexEntry] = []
+    root_id = str(data.get("element_id") or "")
+    if root_id:
+        out.append(
+            ElementIndexEntry(
+                element_id=root_id,
+                element_kind="ModelPackage",
+                name=str(data.get("name") or ""),
+                layer="package",
+            )
+        )
+    for key, kind, layer in _LIST_KINDS:
+        items = data.get(key) or []
+        if not isinstance(items, list):
+            continue
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            eid = item.get("element_id")
+            if not eid:
+                continue
+            out.append(
+                ElementIndexEntry(
+                    element_id=str(eid),
+                    element_kind=kind,
+                    name=str(item.get("name") or ""),
+                    layer=layer,
+                )
+            )
+            nested_lists = (
+                ("attributes", "LogicalAttribute"),
+                ("physical_fields", "PhysicalField"),
+                ("fields", "PhysicalField"),
+            )
+            for nested_key, nested_kind in nested_lists:
+                attrs = item.get(nested_key) or []
+                if not isinstance(attrs, list):
+                    continue
+                for nested in attrs:
+                    if isinstance(nested, dict) and nested.get("element_id"):
+                        out.append(
+                            ElementIndexEntry(
+                                element_id=str(nested["element_id"]),
+                                element_kind=nested_kind,
+                                name=str(nested.get("name") or ""),
+                                layer=layer,
+                            )
+                        )
+    return out
