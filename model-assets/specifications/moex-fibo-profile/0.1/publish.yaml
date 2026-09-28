@@ -1,0 +1,29 @@
+module_id: moex:module:fibo-profile
+kind: publication_module
+version: "1"
+order: 195
+icon: "📘"
+title: FIBO profile
+description: >
+  Organizational metamodel of FIBO (domains, modules, ontology headers,
+  IRI and annotation conventions). Domain classes live under the FIBO release module.
+sections:
+  - id: overview
+    title: Overview
+    description: Profile README
+    type: markdown-doc
+    source:
+      format: markdown
+      path: README.md
+
+  - id: explorer
+    title: Profile explorer
+    description: Domains, modules, ontology documents, IRI patterns, annotation requirements
+    type: explorer
+    source:
+      format: json
+      path: publications/fibo_profile_explorer.json
+    tags:
+      - fibo
+      - fibo-profile
+      - ontology

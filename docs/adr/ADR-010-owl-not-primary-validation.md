@@ -45,4 +45,4 @@ OWL/open-world и LinkML closed-world constraints отвечают на разн
 
 ## Related
 
-- ADR-001, ADR-007, ADR-011
+- ADR-001, ADR-007, ADR-011, [ADR-014](ADR-014-fibo-profile-metamodel.md) (FIBO profile vs release content)

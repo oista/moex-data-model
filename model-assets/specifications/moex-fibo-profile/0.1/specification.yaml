@@ -1,0 +1,24 @@
+# ReferenceSpecification descriptor — FIBO ontology profile (metamodel)
+# Normative structure: metamodel/*.yaml. Domain owl:Class content is a separate Impl.
+id: moex:specification:moex-fibo-profile:0.1
+name: FIBO ontology profile
+description: >
+  Lean organizational metamodel for FIBO (domains, modules, ontology headers,
+  IRI/annotation conventions) per EDM Council ONTOLOGY_GUIDE. Not the domain class index.
+version: "0.1.0"
+revision: "0.1.0"
+content_digest: "sha256:preview-fibo-profile"
+specification_kind: ontology_profile
+profile_kind: fibo
+expressed_in:
+  standard_id: moex:standard:owl:2
+  version_constraint: ">=2.0"
+root_type: FiboSpecificationBody
+normative_sources:
+  - metamodel/fibo-architecture.yaml
+  - metamodel/annotation-profile.yaml
+  - metamodel/iri-patterns.yaml
+imported_specifications: []
+conformance_policy: profile
+metamodel_dir: metamodel
+standard_envelope: ../../../standards/owl/2/standard.yaml

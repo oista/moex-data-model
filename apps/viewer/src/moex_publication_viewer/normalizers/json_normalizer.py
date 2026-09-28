@@ -8,6 +8,10 @@ from pathlib import Path
 from moex_publication_viewer.models.manifest_models import ManifestSection
 from moex_publication_viewer.models.publication_models import PublicationItem, PublicationSection
 from moex_publication_viewer.normalizers.base import NormalizeError
+from moex_publication_viewer.normalizers.fibo_explorer_roots import (
+    is_fibo_profile_section,
+    wrap_fibo_explorer_roots,
+)
 from moex_publication_viewer.normalizers.helpers import records_to_items, section_meta, select_path
 
 
@@ -30,5 +34,8 @@ class JsonNormalizer:
             ]
         else:
             items = records_to_items(selected, key_column=section.key_column)
+
+        if section.type == "explorer" and is_fibo_profile_section(section.tags):
+            items = wrap_fibo_explorer_roots(items)
 
         return PublicationSection(**section_meta(section), items=items)

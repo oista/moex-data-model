@@ -364,3 +364,32 @@ def test_dams_explorer_real_schema():
     lifecycle = classes["HasLifecycle"]
     assert lifecycle.attributes.get("mixin") is True
     assert lifecycle.attributes.get("is_a") in (None, "")
+
+
+def test_json_fibo_profile_explorer_wraps_roots(tmp_path: Path):
+    repo = Path(__file__).resolve().parents[3]
+    src = (
+        repo
+        / "model-assets"
+        / "specifications"
+        / "moex-fibo-profile"
+        / "0.1"
+        / "publications"
+        / "fibo_profile_explorer.json"
+    )
+    p = tmp_path / "fibo_profile_explorer.json"
+    p.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+    sec = _section(
+        type="explorer",
+        source={"format": "json", "path": "fibo_profile_explorer.json"},
+        tags=["fibo-profile", "ontology"],
+    )
+    out = JsonNormalizer().normalize(sec, p)
+    ids = [i.id for i in out.items]
+    assert ids[0] == "group:fibo-overview"
+    assert "group:fibo-metamodel" in ids
+    assert "group:fibo-patterns" in ids
+    assert "group:fibo-annotations" in ids
+    assert ids[-1] == "group:implementations"
+    meta = next(i for i in out.items if i.id == "group:fibo-metamodel")
+    assert any(c.id == "domain:FND" for c in meta.children)

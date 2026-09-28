@@ -69,6 +69,7 @@ def test_repo_golden_three_modules():
     for module_id in (
         "moex:module:dams",
         "moex:module:fibo",
+        "moex:module:fibo-profile",
         "moex:module:trading-solution",
     ):
         assert module_id in html
@@ -94,6 +95,7 @@ def test_repo_golden_three_modules():
     assert {
         "moex:module:dams",
         "moex:module:fibo",
+        "moex:module:fibo-profile",
         "moex:module:trading-solution",
     }.issubset(ids)
     dams = next(m for m in registry["modules"] if m["module_id"] == "moex:module:dams")
@@ -105,6 +107,15 @@ def test_repo_golden_three_modules():
     assert "денежный поток" in html
     assert "FailureToPay" in html and "CreditEvent" in html
 
+    profile = next(m for m in registry["modules"] if m["module_id"] == "moex:module:fibo-profile")
+    assert "explorer" in profile["sections"]
+    assert "group:fibo-metamodel" in html
+    assert "group:fibo-patterns" in html
+    assert "group:fibo-annotations" in html
+    assert "group:fibo-overview" in html
+    assert "domain:FND" in html
+    assert "onto:BusinessDates" in html
+
     cat = next(m for m in registry["modules"] if "ontology-catalog" in m["module_id"])
     assert "explorer" in cat["sections"]
     assert "group:moex:ontology:fibo" in html
@@ -115,8 +126,9 @@ def test_repo_golden_three_modules():
     by_id = {n["id"]: n for n in catalog["nodes"]}
     assert by_id["trading-solution"]["conforms_to"] == "moex-dams"
     assert by_id["moex-dams"]["expressed_in"] == "LinkML"
-    assert by_id["moex:ontology:fibo"]["role"] == "reference_specification"
-    assert by_id["moex:ontology:fibo"].get("conforms_to") in (None, "")
+    assert by_id["moex-fibo-profile"]["role"] == "reference_specification"
+    assert by_id["moex:ontology:fibo"]["role"] == "specification_implementation"
+    assert by_id["moex:ontology:fibo"]["conforms_to"] == "moex-fibo-profile"
     # Architecture catalog embedded; standards are labels only (no tree nodes)
     assert "architecture-catalog" in html
     assert '"role": "modeling_standard"' not in html

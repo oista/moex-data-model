@@ -18,8 +18,10 @@ superseded_by: MODELING_ARCHITECTURE.md
 | Роль | Экземпляр (этот этап) |
 |---|---|
 | `ModelingStandard` | OWL 2 |
-| `ReferenceSpecification` | FIBO release/profile; заглушки Corporate Ontology, PROV-O |
-| `SpecificationImplementation` | заглушки MOEX HR / MOEX Data / Application Ontology |
+| `ReferenceSpecification` | **FIBO ontology profile** (`moex-fibo-profile` — domains/modules/headers/annotation conventions); stubs Corporate Ontology, PROV-O |
+| `SpecificationImplementation` | **FIBO release content** (`moex:ontology:fibo` preview glossary / entity index); stubs MOEX HR / MOEX Data / Application Ontology |
+
+See [ADR-014](../adr/ADR-014-fibo-profile-metamodel.md): profile = Spec metamodel; release entities = Impl read models. ADR-010 still applies (OWL not primary YAML validation).
 
 Новых `OWL*` классов в [modeling-kernel.yaml](modeling-kernel.yaml) нет. Typed OWL body живёт только в provider-пакете.
 
@@ -129,6 +131,7 @@ UI потребляет только:
 ## Связанные документы
 
 - [MODELING_ARCHITECTURE.md](MODELING_ARCHITECTURE.md) — норматив
+- [ADR-014](../adr/ADR-014-fibo-profile-metamodel.md) — FIBO profile vs release content
 - [app_model.md](app_model.md) — целевая раскладка пакетов
 - [viewer-decisions.md](viewer-decisions.md) — статический viewer, без RDF в UI
 - [linkml_architecture.md](linkml_architecture.md) — Workbench / Ontology Engine (gen-owl ≠ catalog)

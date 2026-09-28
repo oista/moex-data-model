@@ -1,0 +1,32 @@
+# Required annotations from FIBO ONTOLOGY_GUIDE (subset for profile structure).
+requirements:
+  - id: onto-label
+    annotation_property: rdfs:label
+    applies_to: ontology_header
+    required: true
+    description: Spelled-out English name of the ontology.
+  - id: onto-abstract
+    annotation_property: dct:abstract
+    applies_to: ontology_header
+    required: true
+    description: Short description of the ontology.
+  - id: onto-license
+    annotation_property: dct:license
+    applies_to: ontology_header
+    required: true
+    description: License (FIBO uses MIT).
+  - id: onto-copyright
+    annotation_property: sm:copyright
+    applies_to: ontology_header
+    required: true
+    description: Copyright statement (EDM Council / OMG as applicable).
+  - id: element-label
+    annotation_property: rdfs:label
+    applies_to: element
+    required: true
+    description: Natural-language label for every class, property, and individual.
+  - id: element-definition
+    annotation_property: skos:definition
+    applies_to: element
+    required: true
+    description: ISO 704-style definition (not rdfs:comment for first-class elements).

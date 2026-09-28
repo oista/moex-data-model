@@ -78,7 +78,11 @@ def test_load_repo_catalog():
     by_id = {n.id: n for n in catalog.nodes}
     assert "moex-dams" in by_id
     assert by_id["trading-solution"].conforms_to == "moex-dams"
-    assert by_id["moex:ontology:fibo"].role == "reference_specification"
+    assert by_id["moex-dams"].role == "reference_specification"
+    assert by_id["moex-fibo-profile"].role == "reference_specification"
+    assert by_id["moex-fibo-profile"].module_id == "moex:module:fibo-profile"
+    assert by_id["moex:ontology:fibo"].role == "specification_implementation"
+    assert by_id["moex:ontology:fibo"].conforms_to == "moex-fibo-profile"
     # Empty ontology stubs are not shown in the architecture tree
     assert "moex:ontology:corporate" not in by_id
     assert "moex:ontology:prov-o" not in by_id
@@ -96,6 +100,7 @@ def test_repo_catalog_passes_validation_with_modules():
     module_ids = {
         "moex:module:dams",
         "moex:module:fibo",
+        "moex:module:fibo-profile",
         "moex:module:trading-solution",
         "moex:module:ontology-catalog",
     }

@@ -27,6 +27,8 @@ PACKAGE_DIR = Path(__file__).resolve().parent
 VIEWER_ROOT = PACKAGE_DIR.parent.parent  # apps/viewer/
 DAMS_MODULE_ID = "moex:module:dams"
 DAMS_CATALOG_SPEC_ID = "moex-dams"
+FIBO_PROFILE_MODULE_ID = "moex:module:fibo-profile"
+FIBO_PROFILE_CATALOG_SPEC_ID = "moex-fibo-profile"
 
 
 def compile_modules(root: Path) -> list[PublicationModule]:
@@ -164,6 +166,55 @@ def enrich_dams_explorer_implementations(
     impls_root.children = children
 
 
+def enrich_fibo_explorer_implementations(
+    modules: list[PublicationModule],
+    catalog: ArchitectureCatalog | None,
+) -> None:
+    """Fill group:implementations under FIBO profile explorer from architecture catalog."""
+    if catalog is None:
+        return
+    profile = next((m for m in modules if m.module_id == FIBO_PROFILE_MODULE_ID), None)
+    if profile is None:
+        return
+    explorer = next((s for s in profile.sections if s.type == "explorer"), None)
+    if explorer is None:
+        return
+    impl_nodes = [
+        n
+        for n in catalog.nodes
+        if n.role == "specification_implementation"
+        and n.conforms_to == FIBO_PROFILE_CATALOG_SPEC_ID
+    ]
+    impl_nodes.sort(key=lambda n: (n.order, n.title))
+    children = [
+        PublicationItem(
+            id=n.id,
+            title=n.title,
+            description=n.description,
+            attributes={
+                "kind": "implementation_ref",
+                "catalog_node_id": n.id,
+                "module_id": n.module_id,
+                "version": n.version,
+                "conforms_to": n.conforms_to,
+            },
+        )
+        for n in impl_nodes
+    ]
+    impls_root = next(
+        (i for i in explorer.items if i.id == "group:implementations"),
+        None,
+    )
+    if impls_root is None:
+        return
+
+    attrs = dict(impls_root.attributes or {})
+    attrs["member_ids"] = [c.id for c in children]
+    attrs["impl_count"] = len(children)
+    impls_root.attributes = attrs
+    impls_root.children = children
+
+
 def build_search_index(modules: list[PublicationModule]) -> list[dict]:
     index: list[dict] = []
     for mod in modules:
@@ -218,6 +269,7 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
     modules = compile_modules(root)
     catalog = compile_catalog(root, modules)
     enrich_dams_explorer_implementations(modules, catalog)
+    enrich_fibo_explorer_implementations(modules, catalog)
     search_index = build_search_index(modules)
     if catalog is not None:
         for node in catalog.nodes:

@@ -6,6 +6,18 @@ from moex_standard_owl.adapters.import_resolver import LocalImportResolver
 from moex_standard_owl.adapters.rdflib_adapter import RdflibOntologyAdapter
 from moex_standard_owl.domain.body import OWLImplementationBody, OWLSpecificationBody
 from moex_standard_owl.domain.elements import OWLElement, OWLElementKind
+from moex_standard_owl.domain.fibo_metamodel import (
+    FiboAnnotationRequirement,
+    FiboDomain,
+    FiboElementKind,
+    FiboIriPattern,
+    FiboModule,
+    FiboOntologyDocument,
+    FiboPrefixPattern,
+    FiboSpecificationBody,
+    fibo_body_to_explorer_records,
+    load_fibo_specification_body,
+)
 from moex_standard_owl.models import AggregatedEntity, EntityOccurrence, ParseError
 from moex_standard_owl.provider import OntologyProvider, try_get_oak_adapter
 from moex_standard_owl.rdf_parser import local_name_from_iri, parse_rdf_file
@@ -14,6 +26,14 @@ from moex_standard_owl.standard_provider import OWLStandardProvider, as_standard
 __all__ = [
     "AggregatedEntity",
     "EntityOccurrence",
+    "FiboAnnotationRequirement",
+    "FiboDomain",
+    "FiboElementKind",
+    "FiboIriPattern",
+    "FiboModule",
+    "FiboOntologyDocument",
+    "FiboPrefixPattern",
+    "FiboSpecificationBody",
     "LocalImportResolver",
     "OWLElement",
     "OWLElementKind",
@@ -24,6 +44,8 @@ __all__ = [
     "ParseError",
     "RdflibOntologyAdapter",
     "as_standard_provider",
+    "fibo_body_to_explorer_records",
+    "load_fibo_specification_body",
     "local_name_from_iri",
     "parse_rdf_file",
     "try_get_oak_adapter",

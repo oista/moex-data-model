@@ -1,0 +1,18 @@
+# IRI and prefix templates from FIBO ONTOLOGY_GUIDE §FIBO standard IRI format.
+iri_patterns:
+  - id: resource-iri
+    name: Resource IRI
+    template: >-
+      https://spec.edmcouncil.org/fibo/ontology/<domain>/<module>/.../<ontology>/<resource>
+    description: Non-versioned resource IRI pattern.
+  - id: version-iri
+    name: Version IRI
+    template: >-
+      https://spec.edmcouncil.org/fibo/ontology/<domain>/YYYYMMDD/<module>/.../<ontology>/
+    description: Version IRI revised with agreed ontology changes.
+
+prefix_patterns:
+  - id: fibo-prefix
+    name: Namespace prefix
+    template: fibo-<domain>-<module>-...-<ontology>
+    description: Lower-case alpha segments separated by dashes.

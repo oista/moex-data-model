@@ -20,10 +20,18 @@ nodes:
     module_id: moex:module:trading-solution
     order: 110
 
-  - id: moex:ontology:fibo
+  - id: moex-fibo-profile
     role: reference_specification
-    title: FIBO
-    version: master_2026Q2
+    title: FIBO profile
+    version: "0.1"
     expressed_in: OWL 2
-    module_id: moex:module:fibo
+    module_id: moex:module:fibo-profile
     order: 200
+
+  - id: moex:ontology:fibo
+    role: specification_implementation
+    title: FIBO release (preview)
+    version: master_2026Q2
+    conforms_to: moex-fibo-profile
+    module_id: moex:module:fibo
+    order: 210

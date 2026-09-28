@@ -1,0 +1,225 @@
+[
+  {
+    "id": "group:fibo-metamodel",
+    "title": "Metamodel",
+    "description": "FIBO domains, modules, and ontology document headers.",
+    "attributes": {
+      "kind": "group",
+      "section_root": "metamodel",
+      "purpose": "Organizational structure of the FIBO ontology profile.",
+      "structure_why": "Domains → modules → ontology documents (ONTOLOGY_GUIDE).",
+      "member_ids": [
+        "domain:FND",
+        "domain:BE"
+      ]
+    },
+    "children": [
+      {
+        "id": "domain:FND",
+        "title": "FND",
+        "description": "Foundations",
+        "attributes": {
+          "kind": "fibo_domain",
+          "iri_segment": "FND",
+          "purpose": "Foundational concepts shared across FIBO domains."
+        },
+        "children": [
+          {
+            "id": "module:FND/DatesAndTimes",
+            "title": "Dates and Times",
+            "description": "Calendars, business days, and temporal foundations.",
+            "attributes": {
+              "kind": "fibo_module",
+              "domain_code": "FND",
+              "path_segments": [
+                "DatesAndTimes"
+              ]
+            },
+            "children": [
+              {
+                "id": "onto:BusinessDates",
+                "title": "Business Dates",
+                "description": "Ontology of business days and calendar periods (preview fixture).",
+                "attributes": {
+                  "kind": "ontology_document",
+                  "ontology_iri": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/",
+                  "version_iri": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/test",
+                  "maturity": "provisional",
+                  "abbreviation": "fibo-fnd-dt-bd",
+                  "filename": "BusinessDates.rdf",
+                  "imports": [],
+                  "module_id": "FND/DatesAndTimes"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "domain:BE",
+        "title": "BE",
+        "description": "Business Entities",
+        "attributes": {
+          "kind": "fibo_domain",
+          "iri_segment": "BE",
+          "purpose": "Legal and organizational entities."
+        },
+        "children": [
+          {
+            "id": "module:BE/LegalEntities",
+            "title": "Legal Entities",
+            "description": "Legal persons and related entity concepts.",
+            "attributes": {
+              "kind": "fibo_module",
+              "domain_code": "BE",
+              "path_segments": [
+                "LegalEntities"
+              ]
+            },
+            "children": [
+              {
+                "id": "onto:LegalPersons",
+                "title": "Legal Persons",
+                "description": "Ontology of legal persons (preview fixture).",
+                "attributes": {
+                  "kind": "ontology_document",
+                  "ontology_iri": "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/",
+                  "version_iri": null,
+                  "maturity": "provisional",
+                  "abbreviation": "fibo-be-le-lp",
+                  "filename": "LegalPersons.rdf",
+                  "imports": [],
+                  "module_id": "BE/LegalEntities"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "group:fibo-patterns",
+    "title": "IRI and prefixes",
+    "description": "FIBO IRI and namespace prefix templates.",
+    "attributes": {
+      "kind": "group",
+      "section_root": "patterns",
+      "purpose": "Canonical IRI and prefix patterns from ONTOLOGY_GUIDE.",
+      "member_ids": [
+        "iri:resource-iri",
+        "iri:version-iri",
+        "prefix:fibo-prefix"
+      ]
+    },
+    "children": [
+      {
+        "id": "iri:resource-iri",
+        "title": "Resource IRI",
+        "description": "Non-versioned resource IRI pattern.",
+        "attributes": {
+          "kind": "iri_pattern",
+          "template": "https://spec.edmcouncil.org/fibo/ontology/<domain>/<module>/.../<ontology>/<resource>"
+        }
+      },
+      {
+        "id": "iri:version-iri",
+        "title": "Version IRI",
+        "description": "Version IRI revised with agreed ontology changes.",
+        "attributes": {
+          "kind": "iri_pattern",
+          "template": "https://spec.edmcouncil.org/fibo/ontology/<domain>/YYYYMMDD/<module>/.../<ontology>/"
+        }
+      },
+      {
+        "id": "prefix:fibo-prefix",
+        "title": "Namespace prefix",
+        "description": "Lower-case alpha segments separated by dashes.",
+        "attributes": {
+          "kind": "prefix_pattern",
+          "template": "fibo-<domain>-<module>-...-<ontology>"
+        }
+      }
+    ]
+  },
+  {
+    "id": "group:fibo-annotations",
+    "title": "Annotation profile",
+    "description": "Required ontology header and element annotations.",
+    "attributes": {
+      "kind": "group",
+      "section_root": "annotations",
+      "purpose": "Minimum metadata for published FIBO ontologies and elements.",
+      "member_ids": [
+        "ann:onto-label",
+        "ann:onto-abstract",
+        "ann:onto-license",
+        "ann:onto-copyright",
+        "ann:element-label",
+        "ann:element-definition"
+      ]
+    },
+    "children": [
+      {
+        "id": "ann:onto-label",
+        "title": "rdfs:label",
+        "description": "Spelled-out English name of the ontology.",
+        "attributes": {
+          "kind": "annotation_requirement",
+          "applies_to": "ontology_header",
+          "required": true
+        }
+      },
+      {
+        "id": "ann:onto-abstract",
+        "title": "dct:abstract",
+        "description": "Short description of the ontology.",
+        "attributes": {
+          "kind": "annotation_requirement",
+          "applies_to": "ontology_header",
+          "required": true
+        }
+      },
+      {
+        "id": "ann:onto-license",
+        "title": "dct:license",
+        "description": "License (FIBO uses MIT).",
+        "attributes": {
+          "kind": "annotation_requirement",
+          "applies_to": "ontology_header",
+          "required": true
+        }
+      },
+      {
+        "id": "ann:onto-copyright",
+        "title": "sm:copyright",
+        "description": "Copyright statement (EDM Council / OMG as applicable).",
+        "attributes": {
+          "kind": "annotation_requirement",
+          "applies_to": "ontology_header",
+          "required": true
+        }
+      },
+      {
+        "id": "ann:element-label",
+        "title": "rdfs:label",
+        "description": "Natural-language label for every class, property, and individual.",
+        "attributes": {
+          "kind": "annotation_requirement",
+          "applies_to": "element",
+          "required": true
+        }
+      },
+      {
+        "id": "ann:element-definition",
+        "title": "skos:definition",
+        "description": "ISO 704-style definition (not rdfs:comment for first-class elements).",
+        "attributes": {
+          "kind": "annotation_requirement",
+          "applies_to": "element",
+          "required": true
+        }
+      }
+    ]
+  }
+]

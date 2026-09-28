@@ -6,7 +6,7 @@ version: "1"
 order: 200
 icon: "📚"
 title: FIBO Glossary
-description: Preview of FIBO class definitions for glossary mapping (committed sample)
+description: Preview of FIBO class definitions for glossary mapping (committed sample; release content / Impl)
 sections:
   - id: explorer
     title: Class explorer

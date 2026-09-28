@@ -6,7 +6,7 @@ supersedes: []
 superseded_by: MODELING_ARCHITECTURE.md
 ---
 
-# ADR index (001–012)
+# ADR index (001–014)
 
 **Status:** Proposed drafts  
 **Date:** 2026-09-28  
@@ -30,6 +30,8 @@ Viewer-решения живут отдельно: [viewer-decisions.md](../arch
 | [ADR-010](ADR-010-owl-not-primary-validation.md) | OWL не основной validation | действует (каталог read-only) |
 | [ADR-011](ADR-011-reproducible-artifacts.md) | Generated artifacts воспроизводимы | Stage 0: `requirements-linkml.txt` + `compare-golden` (contracts/JSON Schema); полный matrix — этап 6 |
 | [ADR-012](ADR-012-semantic-diff-review.md) | Публикация через semantic diff и review | Workbench; CLI + API preview + Web Review changes; PR attach — нет |
+| [ADR-013](ADR-013-specification-requirements-catalog.md) | Каталог требований к спецификации в DAMS LinkML | DAMS explorer «Требования» |
+| [ADR-014](ADR-014-fibo-profile-metamodel.md) | FIBO profile = Spec; release entities = Impl | metamodel YAML + Pydantic; catalog Spec/Impl split |
 
 ## Как принимать
 

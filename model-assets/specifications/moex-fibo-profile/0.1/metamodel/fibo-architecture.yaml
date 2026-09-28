@@ -1,0 +1,47 @@
+# Mini FIBO architecture skeleton (FND + BE) aligned with mini_fibo fixtures.
+domains:
+  - code: FND
+    title: Foundations
+    iri_segment: FND
+    description: Foundational concepts shared across FIBO domains.
+  - code: BE
+    title: Business Entities
+    iri_segment: BE
+    description: Legal and organizational entities.
+
+modules:
+  - id: FND/DatesAndTimes
+    domain_code: FND
+    title: Dates and Times
+    path_segments: [DatesAndTimes]
+    description: Calendars, business days, and temporal foundations.
+  - id: BE/LegalEntities
+    domain_code: BE
+    title: Legal Entities
+    path_segments: [LegalEntities]
+    description: Legal persons and related entity concepts.
+
+documents:
+  - id: BusinessDates
+    module_id: FND/DatesAndTimes
+    ontology_iri: https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/
+    version_iri: https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/test
+    label: Business Dates
+    abstract: Ontology of business days and calendar periods (preview fixture).
+    license: https://opensource.org/licenses/MIT
+    copyright: Copyright (c) EDM Council
+    maturity: provisional
+    abbreviation: fibo-fnd-dt-bd
+    filename: BusinessDates.rdf
+    imports: []
+  - id: LegalPersons
+    module_id: BE/LegalEntities
+    ontology_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/
+    label: Legal Persons
+    abstract: Ontology of legal persons (preview fixture).
+    license: https://opensource.org/licenses/MIT
+    copyright: Copyright (c) EDM Council
+    maturity: provisional
+    abbreviation: fibo-be-le-lp
+    filename: LegalPersons.rdf
+    imports: []

@@ -18,6 +18,10 @@ from rdflib import OWL, RDF, RDFS
 from moex_standard_owl.adapters.rdflib_adapter import RdflibOntologyAdapter
 from moex_standard_owl.domain.body import OWLImplementationBody, OWLSpecificationBody
 from moex_standard_owl.domain.elements import OWLElement, OWLElementKind
+from moex_standard_owl.domain.fibo_metamodel import (
+    FiboSpecificationBody,
+    load_fibo_specification_body,
+)
 from moex_standard_owl.rdf_parser import local_name_from_iri, parse_rdf_file
 
 
@@ -25,7 +29,8 @@ class OWLStandardProvider:
     """
     Concrete StandardProvider for OWL/RDF.
 
-    - specification body: OntologyRelease descriptor YAML
+    - specification body: OntologyRelease descriptor YAML, or FIBO profile
+      (`profile_kind: fibo` → ``FiboSpecificationBody``)
     - implementation body: local RDF directory (RDFLib parse)
     - validate_standard: parse diagnostics only (ADR-010 — no reasoner gate)
     """
@@ -37,15 +42,17 @@ class OWLStandardProvider:
         specification: SpecificationRef,
         *,
         path: str,
-    ) -> OWLSpecificationBody:
+    ) -> OWLSpecificationBody | FiboSpecificationBody:
         descriptor = Path(path)
         data = yaml.safe_load(descriptor.read_text(encoding="utf-8")) or {}
         if not isinstance(data, dict):
             raise ValueError(f"OWL specification descriptor must be a mapping: {descriptor}")
+        _ = specification
+        if data.get("profile_kind") == "fibo" or data.get("metamodel_dir"):
+            return load_fibo_specification_body(descriptor.resolve().parent)
         imports = data.get("imports") or []
         if not isinstance(imports, list):
             imports = []
-        _ = specification
         return OWLSpecificationBody(
             descriptor_path=str(descriptor.resolve()),
             ontology_id=str(data.get("id") or specification.specification_id),
