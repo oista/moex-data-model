@@ -1,6 +1,7 @@
 """Normalizer snapshot-style tests."""
 
 from pathlib import Path
+import json
 
 import yaml
 
@@ -120,6 +121,70 @@ def test_csv_explorer_groups_by_domain_and_nests_parents(tmp_path: Path):
     # Cross parent RootA is other domain → treat as root in BE
     be_ids = {c.id for c in be.children}
     assert be_ids == {"RootB", "Cross"}
+
+
+def test_json_explorer_loads_nested_groups(tmp_path: Path):
+    """Pre-nested ontology_explorer.json must keep groups and child trees."""
+    payload = [
+        {
+            "id": "group:moex:ontology:fibo",
+            "title": "fibo",
+            "description": "Ontology moex:ontology:fibo",
+            "attributes": {
+                "kind": "group",
+                "ontology_id": "moex:ontology:fibo",
+                "purpose": "Indexed entities",
+                "class_count": 2,
+                "enum_count": 0,
+            },
+            "children": [
+                {
+                    "id": "https://ex/Parent",
+                    "title": "Parent",
+                    "description": "parent class",
+                    "attributes": {
+                        "kind": "class",
+                        "iri": "https://ex/Parent",
+                        "parent_ref": "",
+                        "stub": True,
+                    },
+                    "children": [
+                        {
+                            "id": "https://ex/Child",
+                            "title": "Child",
+                            "description": "child class",
+                            "attributes": {
+                                "kind": "class",
+                                "iri": "https://ex/Child",
+                                "parent_ref": "https://ex/Parent",
+                                "definition_ru": "потомок",
+                            },
+                            "children": [],
+                        }
+                    ],
+                }
+            ],
+        }
+    ]
+    p = tmp_path / "ontology_explorer.json"
+    p.write_text(json.dumps(payload), encoding="utf-8")
+    sec = _section(
+        type="explorer",
+        source={"format": "json", "path": "ontology_explorer.json"},
+        tags=["ontology", "catalog"],
+    )
+    out = JsonNormalizer().normalize(sec, p)
+    assert out.type == "explorer"
+    assert len(out.items) == 1
+    group = out.items[0]
+    assert group.id == "group:moex:ontology:fibo"
+    assert group.attributes.get("kind") == "group"
+    assert group.attributes.get("ontology_id") == "moex:ontology:fibo"
+    assert [c.id for c in group.children] == ["https://ex/Parent"]
+    parent = group.children[0]
+    assert parent.attributes.get("stub") is True
+    assert [c.id for c in parent.children] == ["https://ex/Child"]
+    assert parent.children[0].attributes.get("definition_ru") == "потомок"
 
 
 def test_markdown(tmp_path: Path):

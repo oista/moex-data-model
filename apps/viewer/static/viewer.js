@@ -1056,11 +1056,16 @@
       const structureWhy = item.attributes?.structure_why || "";
       const classCount = item.attributes?.class_count ?? 0;
       const enumCount = item.attributes?.enum_count ?? 0;
+      const groupBadge = item.attributes?.ontology_id
+        ? "ontology"
+        : item.attributes?.source_domain
+          ? "domain"
+          : "package";
       card.innerHTML = `
         <header class="detail-head">
           <h1>${escapeHtml(item.title || item.id)}</h1>
-          <div class="badge-row"><span class="badge-pill">package</span></div>
-          <p class="muted">${escapeHtml(item.attributes?.source_file || item.attributes?.schema_key || "")}</p>
+          <div class="badge-row"><span class="badge-pill">${groupBadge}</span></div>
+          <p class="muted">${escapeHtml(item.attributes?.source_file || item.attributes?.schema_key || item.attributes?.ontology_id || item.attributes?.source_domain || "")}</p>
         </header>
       `;
 
@@ -1424,7 +1429,7 @@
       case "explorer":
         body.insertAdjacentHTML(
           "beforeend",
-          `<p class="muted">Use the left sidebar to explore schema packages.</p>`
+          `<p class="muted">Use the left sidebar to explore this module.</p>`
         );
         break;
       default:

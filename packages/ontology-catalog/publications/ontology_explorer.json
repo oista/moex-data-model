@@ -54,27 +54,6 @@
         "children": []
       },
       {
-        "id": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay",
-        "title": "Business Day",
-        "description": "A day on which financial markets and banks are open for business.",
-        "attributes": {
-          "kind": "class",
-          "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay",
-          "curie": "BusinessDay",
-          "ontology_id": "moex:ontology:fibo",
-          "aliases": "Рабочий день",
-          "parents": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/Occurrences/OccurrenceKind",
-          "children": "",
-          "domain": "",
-          "range": "",
-          "deprecated": false,
-          "replaced_by": null,
-          "backlinks": 0,
-          "parent_ref": ""
-        },
-        "children": []
-      },
-      {
         "id": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/CalendarPeriod",
         "title": "Calendar Period | Calendar Interval",
         "description": "A contiguous span of calendar time.",
@@ -262,6 +241,50 @@
           "parent_ref": ""
         },
         "children": []
+      },
+      {
+        "id": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/Occurrences/OccurrenceKind",
+        "title": "OccurrenceKind",
+        "description": "",
+        "attributes": {
+          "kind": "class",
+          "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/Occurrences/OccurrenceKind",
+          "curie": "OccurrenceKind",
+          "ontology_id": "moex:ontology:fibo",
+          "aliases": "",
+          "parents": "",
+          "children": "",
+          "domain": "",
+          "range": "",
+          "deprecated": false,
+          "replaced_by": null,
+          "backlinks": 0,
+          "parent_ref": "",
+          "stub": true
+        },
+        "children": [
+          {
+            "id": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay",
+            "title": "Business Day",
+            "description": "A day on which financial markets and banks are open for business.",
+            "attributes": {
+              "kind": "class",
+              "iri": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay",
+              "curie": "BusinessDay",
+              "ontology_id": "moex:ontology:fibo",
+              "aliases": "Рабочий день",
+              "parents": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/Occurrences/OccurrenceKind",
+              "children": "",
+              "domain": "",
+              "range": "",
+              "deprecated": false,
+              "replaced_by": null,
+              "backlinks": 0,
+              "parent_ref": "https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/Occurrences/OccurrenceKind"
+            },
+            "children": []
+          }
+        ]
       }
     ]
   }

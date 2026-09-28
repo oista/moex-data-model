@@ -146,19 +146,26 @@ def _entities_to_explorer(
     provider: OntologyProviderPort | None = None,
     bindings: SemanticBindingRepositoryPort | None = None,
 ) -> list[dict[str, Any]]:
-    """Group entities by ontology_id; nest classes by in-ontology parent IRI."""
+    """Group entities by ontology_id; nest classes by parent IRI (stubs for external parents)."""
     by_ontology: dict[str, list[dict[str, Any]]] = {}
     iris_by_ontology: dict[str, set[str]] = {}
     for e in entities:
         iris_by_ontology.setdefault(e.ontology_id, set()).add(e.iri)
 
+    stub_parents: dict[str, set[str]] = {}
     for e in entities:
         card = get_entity(index, e.iri, provider=provider, bindings=bindings)
         if card is None:
             continue
         onto_iris = iris_by_ontology.get(card.ontology_id, set())
         in_onto_parents = [p for p in card.parents if p in onto_iris and p != card.iri]
-        parent_ref = in_onto_parents[0] if in_onto_parents else ""
+        if in_onto_parents:
+            parent_ref = in_onto_parents[0]
+        else:
+            external = next((p for p in card.parents if p and p != card.iri), "")
+            parent_ref = external
+            if parent_ref:
+                stub_parents.setdefault(card.ontology_id, set()).add(parent_ref)
         backlinks = (
             len(card.related_model_elements)
             + len(card.related_glossary_terms)
@@ -187,11 +194,25 @@ def _entities_to_explorer(
         }
         by_ontology.setdefault(card.ontology_id, []).append(row)
 
+    for ontology_id, parents in stub_parents.items():
+        rows = by_ontology.setdefault(ontology_id, [])
+        existing = {r["id"] for r in rows}
+        for parent_iri in sorted(parents):
+            if parent_iri in existing:
+                continue
+            rows.append(_stub_explorer_node(parent_iri, ontology_id))
+            existing.add(parent_iri)
+
     groups: list[dict[str, Any]] = []
     for ontology_id in sorted(by_ontology.keys()):
         rows = by_ontology[ontology_id]
         tree = _nest_by_parent_ref(rows)
-        class_count = sum(1 for r in rows if (r.get("attributes") or {}).get("kind") == "class")
+        class_count = sum(
+            1
+            for r in rows
+            if (r.get("attributes") or {}).get("kind") == "class"
+            and not (r.get("attributes") or {}).get("stub")
+        )
         groups.append(
             {
                 "id": f"group:{ontology_id}",
@@ -208,6 +229,33 @@ def _entities_to_explorer(
             }
         )
     return groups
+
+
+def _stub_explorer_node(iri: str, ontology_id: str) -> dict[str, Any]:
+    """Minimal parent node so nesting works when the parent is outside the index."""
+    local = iri.rsplit("/", 1)[-1].rsplit("#", 1)[-1] or iri
+    return {
+        "id": iri,
+        "title": local,
+        "description": "",
+        "attributes": {
+            "kind": "class",
+            "iri": iri,
+            "curie": local,
+            "ontology_id": ontology_id,
+            "aliases": "",
+            "parents": "",
+            "children": "",
+            "domain": "",
+            "range": "",
+            "deprecated": False,
+            "replaced_by": None,
+            "backlinks": 0,
+            "parent_ref": "",
+            "stub": True,
+        },
+        "children": [],
+    }
 
 
 def _nest_by_parent_ref(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:

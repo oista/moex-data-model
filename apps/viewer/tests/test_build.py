@@ -95,13 +95,10 @@ def test_repo_golden_three_modules():
     assert "денежный поток" in html
     assert "FailureToPay" in html and "CreditEvent" in html
 
-    cat = next(
-        (m for m in registry["modules"] if "ontology-catalog" in m["module_id"]),
-        None,
-    )
-    if cat is not None:
-        assert "explorer" in cat["sections"]
-        assert "group:moex:ontology:fibo" in html or "ontology_explorer" in html
+    cat = next(m for m in registry["modules"] if "ontology-catalog" in m["module_id"])
+    assert "explorer" in cat["sections"]
+    assert "group:moex:ontology:fibo" in html
+    assert "OccurrenceKind" in html
 
     catalog = registry.get("catalog")
     assert catalog is not None
@@ -136,16 +133,18 @@ def test_nav_group_children_hidden_overrides_display_flex():
 
 
 def test_explorer_groups_selectable_cards_not_in_search_and_module_title():
-    """Package groups open as cards; stay out of search index; module title is MOEX standart."""
+    """Package groups open as cards; stay out of search index; module title is MOEX standard."""
     repo = Path(__file__).resolve().parents[3]
     dist = repo / "apps" / "viewer" / "dist"
     build(repo, dist)
     html = (dist / "index.html").read_text(encoding="utf-8")
-    assert "MOEX standart" in html
+    assert "MOEX standard" in html
     # Group ids must not appear as selectable search items
     assert '"item_id": "group:' not in html and '"item_id":"group:' not in html
     js = (repo / "apps" / "viewer" / "static" / "viewer.js").read_text(encoding="utf-8")
     assert "kind === \"group\"" in js or "kind === 'group'" in js
+    assert "groupBadge" in js or '?"ontology"' in js or "? \"ontology\"" in js
+    assert "explore this module" in js
     assert "structure_why" in html
     # Collapsed-by-default: no auto-expand when openGroups is empty
     assert "openGroups.size === 0" not in js

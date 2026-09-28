@@ -101,8 +101,10 @@ def test_export_explorer_groups_and_nests(tmp_path: Path):
 
     day = find(fibo["children"], BUSINESS_DAY)
     kind = find(fibo["children"], OCCURRENCE_KIND)
-    if day is not None and kind is not None:
-        assert any(c["id"] == BUSINESS_DAY for c in kind.get("children") or [])
+    assert kind is not None, "external parent OccurrenceKind must appear as stub/root"
+    assert day is not None, "BusinessDay must be in explorer tree"
+    assert any(c["id"] == BUSINESS_DAY for c in kind.get("children") or [])
+    assert day.get("attributes", {}).get("parent_ref") == OCCURRENCE_KIND
     index.close()
 
 
