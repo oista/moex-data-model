@@ -4,22 +4,22 @@ overview: "DAMS-style explorer for Spec ontologies (FIBO then Ontology Catalog):
 todos:
   - id: csv-domain-explorer
     content: "items_to_domain_explorer + CSV normalizer type explorer + tests"
-    status: pending
+    status: completed
   - id: fibo-manifest
     content: "FIBO publish.yaml explorer section + build smoke"
-    status: pending
+    status: completed
   - id: nested-nav
     content: "Deep find/collect + nested nav-explorer in viewer.js"
-    status: pending
+    status: completed
   - id: ontology-card
     content: "renderOntologyExplorerDetail with max fields + definitions"
-    status: pending
+    status: completed
   - id: catalog-export
     content: "ontology_explorer.json export + catalog publish.yaml explorer"
-    status: pending
+    status: completed
   - id: e2e-verify
     content: "pytest + build-viewer + manual Spec checklist"
-    status: pending
+    status: completed
 isProject: false
 ---
 

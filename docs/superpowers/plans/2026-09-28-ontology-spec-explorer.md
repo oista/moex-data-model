@@ -1,6 +1,6 @@
 # Ontology Spec explorer Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Give Spec ontology modules (FIBO first, Ontology Catalog second) a DAMS-style `explorer`: domain folders in the left nav, nested `subClassOf` trees, and rich class cards with definitions in the main pane — without removing existing glossary/hierarchy/cards/backlinks sections.
 
@@ -47,7 +47,7 @@
 - Consumes: existing `PublicationItem`, `items_to_tree` pattern, `records_to_items`
 - Produces: `items_to_domain_explorer(items, *, domain_attr="source_domain", parent_attr="parent_local_name") -> list[PublicationItem]` where each root has `attributes.kind == "group"` and nested class children
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Add to `apps/viewer/tests/test_normalizers.py`:
 
@@ -88,13 +88,13 @@ def test_csv_explorer_groups_by_domain_and_nests_parents(tmp_path: Path):
     assert be_ids == {"RootB", "Cross"}
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `python -m pytest apps/viewer/tests/test_normalizers.py::test_csv_explorer_groups_by_domain_and_nests_parents -v`
 
 Expected: FAIL (explorer path not implemented / no groups)
 
-- [ ] **Step 3: Implement helper + CSV branch**
+- [x] **Step 3: Implement helper + CSV branch**
 
 In `helpers.py` add:
 
@@ -156,13 +156,13 @@ In `csv_normalizer.py` after `records_to_items`:
 
 (Prefer a top-level import of `items_to_domain_explorer` next to `items_to_tree` instead of inline import.)
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `python -m pytest apps/viewer/tests/test_normalizers.py::test_csv_explorer_groups_by_domain_and_nests_parents -v`
 
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/viewer/src/moex_publication_viewer/normalizers/helpers.py \
@@ -183,7 +183,7 @@ git commit -m "feat(viewer): CSV explorer groups by domain with nested parents"
 - Consumes: Task 1 CSV explorer normalization
 - Produces: FIBO module section `id: explorer`, `type: explorer`, same preview CSV
 
-- [ ] **Step 1: Add section to publish.yaml**
+- [x] **Step 1: Add section to publish.yaml**
 
 Insert as the **first** section (so explorer is primary), keep glossary + hierarchy:
 
@@ -202,7 +202,7 @@ Insert as the **first** section (so explorer is primary), keep glossary + hierar
       - ontology
 ```
 
-- [ ] **Step 2: Extend build smoke asserts**
+- [x] **Step 2: Extend build smoke asserts**
 
 In `test_build_tmp_repo` / golden path that loads real FIBO (same place as `assert "glossary" in fibo["sections"]`):
 
@@ -211,7 +211,7 @@ In `test_build_tmp_repo` / golden path that loads real FIBO (same place as `asse
     assert "group:FND" in html or "group:BE" in html
 ```
 
-- [ ] **Step 3: Run tests**
+- [x] **Step 3: Run tests**
 
 Run:
 
@@ -221,7 +221,7 @@ python -m pytest apps/viewer/tests/test_normalizers.py apps/viewer/tests/test_bu
 
 Expected: PASS (build embeds FIBO explorer groups)
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add packages/ontology/publish.yaml apps/viewer/tests/test_build.py
@@ -241,7 +241,7 @@ git commit -m "feat(fibo): add ontology explorer section to publication manifest
 - Consumes: explorer items with `group → class → class…` depth
 - Produces: sidebar that expands/collapses nested class nodes; hash still `#…&section=explorer&item=<id>`
 
-- [ ] **Step 1: Deep find + collect**
+- [x] **Step 1: Deep find + collect**
 
 Replace shallow walks with recursive helpers:
 
@@ -279,7 +279,7 @@ Replace shallow walks with recursive helpers:
 
 Update `makeSpecLink` / inheritance links to keep working with deep ids (already use `collectExplorerIds`).
 
-- [ ] **Step 2: Recursive nav under each group**
+- [x] **Step 2: Recursive nav under each group**
 
 In `appendPublicationSubtree`, when rendering `group.children`, do not assume leaves. For each child:
 
@@ -305,7 +305,7 @@ Minimal recursive renderer sketch:
 
 Keep DAMS behaviour: groups with only flat class/enum children still work (depth 0 under group).
 
-- [ ] **Step 3: CSS for nested nav**
+- [x] **Step 3: CSS for nested nav**
 
 Add if missing:
 
@@ -315,7 +315,7 @@ Add if missing:
 .nav-explorer .nav-tree-children[hidden] { display: none; }
 ```
 
-- [ ] **Step 4: Smoke test**
+- [x] **Step 4: Smoke test**
 
 In `test_build.py` or a small JS-presence assert:
 
@@ -328,7 +328,7 @@ Run: `python -m pytest apps/viewer/tests/test_build.py -q`
 
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/viewer/static/viewer.js apps/viewer/static/viewer.css apps/viewer/tests/test_build.py
@@ -347,7 +347,7 @@ git commit -m "feat(viewer): nested ontology trees in explorer sidebar"
 - Consumes: explorer item with ontology attributes (`iri` and/or section tags `ontology`/`fibo`)
 - Produces: main-pane card with definitions + metadata; DAMS path unchanged when `iri` absent and LinkML slots present
 
-- [ ] **Step 1: Detection helper**
+- [x] **Step 1: Detection helper**
 
 ```javascript
   function isOntologyExplorerItem(item, section) {
@@ -359,7 +359,7 @@ git commit -m "feat(viewer): nested ontology trees in explorer sidebar"
 
 At start of class rendering in `renderExplorerDetail` (after group branch), if `isOntologyExplorerItem(item, expl)` and `kind !== "enum"`, call `renderOntologyExplorerDetail(mod, expl, item)` and return.
 
-- [ ] **Step 2: Implement `renderOntologyExplorerDetail`**
+- [x] **Step 2: Implement `renderOntologyExplorerDetail`**
 
 Render `article.detail-card` with:
 
@@ -374,11 +374,11 @@ Render `article.detail-card` with:
 
 Do **not** render LinkML slots table for ontology items.
 
-- [ ] **Step 3: Domain group card**
+- [x] **Step 3: Domain group card**
 
 Existing `kind === "group"` branch already shows purpose + members. For ontology groups, member list should include nested roots (top-level children only is OK) with chips that navigate by id. Ensure `purpose` from Task 1 shows. No DAMS `structure_why` required.
 
-- [ ] **Step 4: Manual + smoke**
+- [x] **Step 4: Manual + smoke**
 
 Rebuild viewer:
 
@@ -394,7 +394,7 @@ Add assert:
     assert "renderOntologyExplorerDetail" in js or "definition_ru" in js
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/viewer/static/viewer.js apps/viewer/static/viewer.css
@@ -415,7 +415,7 @@ git commit -m "feat(viewer): rich ontology class cards in explorer"
 - Consumes: `get_entity`, `get_hierarchy`, `list_entities`, `OntologyEntityCard`
 - Produces: JSON array of group `PublicationItem`-shaped dicts for `JsonNormalizer` + `type: explorer`
 
-- [ ] **Step 1: Export function**
+- [x] **Step 1: Export function**
 
 In `publication_export.py`, build nested explorer:
 
@@ -433,11 +433,11 @@ def _entities_to_explorer(entities, *, index, provider, bindings) -> list[dict[s
 
 Call from `export_preview_json` and add to `written`.
 
-- [ ] **Step 2: Regenerate preview JSON**
+- [x] **Step 2: Regenerate preview JSON**
 
 Run the package’s existing rebuild/export CLI (same command used for other `publications/*.json` — check `packages/ontology-catalog/README.md` / `publish.yaml` header). Commit updated `ontology_explorer.json`.
 
-- [ ] **Step 3: Manifest section**
+- [x] **Step 3: Manifest section**
 
 ```yaml
   - id: explorer
@@ -455,11 +455,11 @@ Run the package’s existing rebuild/export CLI (same command used for other `pu
 
 Place first among sections; keep catalog/entities/hierarchy/cards/backlinks.
 
-- [ ] **Step 4: JsonNormalizer**
+- [x] **Step 4: JsonNormalizer**
 
 No special-case required if JSON is already nested group dicts with `children` — `records_to_items` / `dict_to_item` already recurse. Verify with a tiny unit test loading fixture JSON as `type: explorer`.
 
-- [ ] **Step 5: Build smoke**
+- [x] **Step 5: Build smoke**
 
 ```python
     # if ontology-catalog module present in registry:
@@ -472,7 +472,7 @@ Run: `python -m pytest apps/viewer/tests -q`
 
 Expected: PASS
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add packages/ontology-catalog/src/moex_ontology/publication_export.py \
@@ -488,7 +488,7 @@ git commit -m "feat(ontology-catalog): export explorer JSON for Spec viewer"
 
 **Files:** none new (verify only)
 
-- [ ] **Step 1: Full viewer tests**
+- [x] **Step 1: Full viewer tests**
 
 ```bash
 python -m pytest apps/viewer/tests -q
@@ -496,7 +496,7 @@ python -m pytest apps/viewer/tests -q
 
 Expected: all PASS
 
-- [ ] **Step 2: Rebuild dist**
+- [x] **Step 2: Rebuild dist**
 
 ```bash
 python -m moex_publication_viewer.cli build --root .
@@ -504,7 +504,7 @@ python -m moex_publication_viewer.cli build --root .
 
 Expected: exit 0; `apps/viewer/dist/index.html` contains `group:FND` and FIBO explorer section
 
-- [ ] **Step 3: Manual checklist**
+- [x] **Step 3: Manual checklist**
 
 1. Spec → FIBO → explorer domain folder opens purpose card  
 2. Nested class under parent selectable  
@@ -513,7 +513,7 @@ Expected: exit 0; `apps/viewer/dist/index.html` contains `group:FND` and FIBO ex
 5. Spec → Ontology Catalog → explorer (after Task 5)  
 6. DAMS explorer still flat packages + LinkML slots card  
 
-- [ ] **Step 4: Commit** only if dist is tracked and intentionally updated; otherwise leave dist untracked per repo convention.
+- [x] **Step 4: Commit** only if dist is tracked and intentionally updated; otherwise leave dist untracked per repo convention.
 
 ---
 

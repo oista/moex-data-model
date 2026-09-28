@@ -21,3 +21,22 @@ jobs:
       # pwsh is preinstalled on ubuntu-latest; Makefile selects it via OS!=Windows_NT
       - name: Stage 0 make check
         run: make check
+
+  # Viewer + ontology packages stay outside Stage 0 gate (heavier / separate deps)
+  viewer-and-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - name: Install make
+        run: sudo apt-get update && sudo apt-get install -y make
+
+      - name: Ontology packages pytest
+        run: make packages-check
+
+      - name: Viewer pytest + check
+        run: make viewer-check

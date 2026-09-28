@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples generate-contracts compare-golden api-check web-check
+.PHONY: viewer viewer-check packages-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples generate-contracts compare-golden api-check web-check
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -13,6 +13,10 @@ else
 endif
 
 VIEWER := apps/viewer
+KERNEL := packages/modeling-kernel
+OWL := packages/standard-owl
+MAPPINGS := packages/semantic-mappings
+CATALOG := packages/ontology-catalog
 
 viewer:
 	$(PYTHON) -m pip install -e "./$(VIEWER)[dev]"
@@ -22,6 +26,11 @@ viewer-check:
 	$(PYTHON) -m pip install -e "./$(VIEWER)[dev]"
 	$(PYTHON) -m pytest $(VIEWER)/tests -q
 	$(PYTHON) -m moex_publication_viewer.cli check --root .
+
+# Ontology stack pytest (outside Stage 0 make check; gated in GHA viewer-and-packages)
+packages-check:
+	$(PYTHON) -m pip install -e "./$(KERNEL)" -e "./$(OWL)" -e "./$(MAPPINGS)" -e "./$(CATALOG)" pytest
+	$(PYTHON) -m pytest $(OWL)/tests $(MAPPINGS)/tests $(CATALOG)/tests -q
 
 architecture-check:
 	$(PYTHON) -m pip install -e "./tools/architecture-check[dev]"

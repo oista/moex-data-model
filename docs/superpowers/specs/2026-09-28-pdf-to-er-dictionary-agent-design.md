@@ -1,8 +1,10 @@
 # PDF → ER-dictionary agent (instruction + model contract)
 
-**Status:** draft for review  
+**Status:** delivered (agent docs)  
 **Date:** 2026-09-28  
 **Project:** moex-data-model
+
+Delivered artifacts: [`docs/agents/pdf-to-er-dictionary.md`](../../agents/pdf-to-er-dictionary.md), [`docs/agents/er-dictionary-model-contract.md`](../../agents/er-dictionary-model-contract.md). Runtime fills (`gaps.md`, OKITA CSVs) remain per-run agent output.
 
 ## Problem
 
