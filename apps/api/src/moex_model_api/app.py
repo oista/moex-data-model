@@ -796,9 +796,9 @@ def create_app(
             session_id=session_id,
             rejected=[
                 DiagramRejectedOut(
-                    code=r.code.value if hasattr(r.code, "value") else str(r["code"]),
-                    message=r.message if hasattr(r, "message") else r["message"],
-                    path=r.path if hasattr(r, "path") else r.get("path"),
+                    code=r.code.value,
+                    message=r.message,
+                    path=r.path,
                 )
                 for r in patch.rejected
             ],

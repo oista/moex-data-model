@@ -548,3 +548,110 @@ def test_model_index_rebuild_and_search(client: TestClient) -> None:
     hits = search.json()
     assert hits
     assert any("Client" in h["element_id"] or "Client" in h["name"] for h in hits)
+
+
+def test_diagram_open_submit_apply(client: TestClient) -> None:
+    headers = {"X-Moex-Actor": "diagrammer"}
+    client.post(
+        "/workspaces",
+        json={"id": "ws-diagram", "name": "Diagram WS"},
+        headers=headers,
+    )
+    pub = client.get("/implementations/trading/body", headers=headers)
+    assert pub.status_code == 200
+    content = pub.json()["content"]
+    client.put(
+        "/workspaces/ws-diagram/documents/trading",
+        json={"content": content, "base_digest": pub.json()["content_digest"]},
+        headers=headers,
+    )
+
+    opened = client.post(
+        "/workspaces/ws-diagram/diagrams",
+        json={"profile": "logical"},
+        headers=headers,
+    )
+    assert opened.status_code == 200, opened.text
+    session_id = opened.json()["session_id"]
+    dbml = opened.json()["dbml"]
+    assert "Table" in dbml
+
+    marker = None
+    for line in dbml.splitlines():
+        stripped = line.strip()
+        # column line with note setting (not Table/Project Note:)
+        if (
+            "note:" in stripped.lower()
+            and not stripped.lower().startswith("note:")
+            and " " in stripped
+        ):
+            marker = line
+            break
+    assert marker is not None
+    dbml2 = dbml.replace(marker, marker + "\n  diagramExtra string", 1)
+
+    submitted = client.post(
+        f"/workspaces/ws-diagram/diagrams/{session_id}/submit",
+        json={"dbml": dbml2},
+        headers=headers,
+    )
+    assert submitted.status_code == 200, submitted.text
+    body = submitted.json()
+    assert body["op_count"] >= 1
+    assert body["rejected"] == []
+
+    applied = client.post(
+        f"/workspaces/ws-diagram/diagrams/{session_id}/apply",
+        headers=headers,
+    )
+    assert applied.status_code == 200, applied.text
+    assert "diagramExtra" in applied.json()["content"]
+
+    layout = client.put(
+        f"/workspaces/ws-diagram/diagrams/{session_id}/layout",
+        json={
+            "nodes": {"dams:logical/x": {"x": 1, "y": 2}},
+            "model_revision": "draft",
+        },
+        headers=headers,
+    )
+    assert layout.status_code == 200
+    assert layout.json()["nodes"]["dams:logical/x"]["x"] == 1
+
+
+def test_diagram_reject_element_id_strip(client: TestClient) -> None:
+    import re
+
+    headers = {"X-Moex-Actor": "diagrammer2"}
+    client.post(
+        "/workspaces",
+        json={"id": "ws-diagram2", "name": "Diagram WS2"},
+        headers=headers,
+    )
+    pub = client.get("/implementations/trading/body", headers=headers)
+    content = pub.json()["content"]
+    client.put(
+        "/workspaces/ws-diagram2/documents/trading",
+        json={"content": content, "base_digest": pub.json()["content_digest"]},
+        headers=headers,
+    )
+    opened = client.post(
+        "/workspaces/ws-diagram2/diagrams",
+        json={"profile": "logical"},
+        headers=headers,
+    )
+    dbml = opened.json()["dbml"]
+    session_id = opened.json()["session_id"]
+    bad = re.sub(r"element_id=[^;'\s]+;?\s*", "", dbml, count=1)
+    submitted = client.post(
+        f"/workspaces/ws-diagram2/diagrams/{session_id}/submit",
+        json={"dbml": bad},
+        headers=headers,
+    )
+    assert submitted.status_code == 200
+    if submitted.json()["rejected"]:
+        applied = client.post(
+            f"/workspaces/ws-diagram2/diagrams/{session_id}/apply",
+            headers=headers,
+        )
+        assert applied.status_code == 400

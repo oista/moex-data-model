@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>MOEX drawDB bridge (static fallback)</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #121212;
+        color: #eee;
+        font-family: system-ui, sans-serif;
+      }
+      main {
+        padding: 1.5rem;
+        max-width: 720px;
+      }
+      code {
+        background: #333;
+        padding: 0.1em 0.3em;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>MOEX drawDB bridge</h1>
+      <p>
+        Static fallback when the full drawDB image is not running. Use the
+        floating panel (bottom-right) for <code>postMessage</code> DBML
+        import/export with Workbench.
+      </p>
+      <p>
+        Full editor: <code>docker compose -f infra/compose/drawdb.yml up -d --build</code>
+      </p>
+    </main>
+    <script src="./moex-bridge.js"></script>
+  </body>
+</html>

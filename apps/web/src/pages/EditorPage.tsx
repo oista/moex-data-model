@@ -247,6 +247,7 @@ export function EditorPage() {
           Publish draft
         </button>
         <Link to="/models/trading">Back to model</Link>
+        <Link to="/models/trading/diagram?profile=logical">Open diagram</Link>
         {sourceLabel && (
           <span className="badge neutral">loaded: {sourceLabel}</span>
         )}

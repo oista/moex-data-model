@@ -1,0 +1,11 @@
+# Optional local drawDB (ADR-005). Not required for API unit tests.
+services:
+  drawdb:
+    build:
+      context: ../../apps/drawdb
+      dockerfile: Dockerfile
+      args:
+        UPSTREAM_SHA: e918bf1b457fd56bd756d5d2565c178c52b9fa7f
+    ports:
+      - "5174:80"
+    restart: unless-stopped

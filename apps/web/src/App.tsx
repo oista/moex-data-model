@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { DashboardPage } from "./pages/DashboardPage";
+import { DiagramPage } from "./pages/DiagramPage";
 import { EditorPage } from "./pages/EditorPage";
 import { ModelDetailPage } from "./pages/ModelDetailPage";
 import { ModelsPage } from "./pages/ModelsPage";
@@ -15,6 +16,7 @@ export function App() {
         <Route path="workspaces" element={<WorkspacesPage />} />
         <Route path="models" element={<ModelsPage />} />
         <Route path="models/trading/edit" element={<EditorPage />} />
+        <Route path="models/trading/diagram" element={<DiagramPage />} />
         <Route path="models/:slug" element={<ModelDetailPage />} />
         <Route path="models/:slug/validate" element={<ValidationPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />

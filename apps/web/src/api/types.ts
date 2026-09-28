@@ -223,3 +223,30 @@ export type JobArtifact = {
   path_or_uri: string;
   content_digest: string;
 };
+
+export type DiagramSession = {
+  session_id: string;
+  workspace_id: string;
+  profile: string;
+  dbml: string;
+};
+
+export type DiagramRejected = {
+  code: string;
+  message: string;
+  path: string | null;
+};
+
+export type DiagramSubmitResult = {
+  session_id: string;
+  rejected: DiagramRejected[];
+  op_count: number;
+  semantic_diff: SemanticDiffReport;
+};
+
+export type DiagramApplyResult = {
+  workspace_id: string;
+  doc_key: string;
+  content: string;
+  base_digest: string;
+};

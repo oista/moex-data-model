@@ -33,6 +33,7 @@ try {
         -e (Join-Path $RepoRoot "packages/specification-dams") `
         -e (Join-Path $RepoRoot "packages/publication") `
         -e (Join-Path $RepoRoot "packages/git-adapter") `
+        -e (Join-Path $RepoRoot "packages/drawdb-adapter") `
         -e (Join-Path $RepoRoot "apps/cli") `
         -e "$ApiRoot[dev]" -q
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

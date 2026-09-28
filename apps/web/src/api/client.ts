@@ -153,4 +153,47 @@ export const api = {
     request<import("./types").ElementHit[]>(
       `/model-index/search?q=${encodeURIComponent(q)}`,
     ),
+  openDiagram: (
+    workspaceId: string,
+    profile: "logical" | "physical" = "logical",
+  ) =>
+    request<import("./types").DiagramSession>(
+      `/workspaces/${workspaceId}/diagrams`,
+      {
+        method: "POST",
+        body: JSON.stringify({ profile }),
+      },
+    ),
+  getDiagram: (workspaceId: string, sessionId: string) =>
+    request<import("./types").DiagramSession>(
+      `/workspaces/${workspaceId}/diagrams/${sessionId}`,
+    ),
+  submitDiagram: (workspaceId: string, sessionId: string, dbml: string) =>
+    request<import("./types").DiagramSubmitResult>(
+      `/workspaces/${workspaceId}/diagrams/${sessionId}/submit`,
+      {
+        method: "POST",
+        body: JSON.stringify({ dbml }),
+      },
+    ),
+  applyDiagram: (workspaceId: string, sessionId: string) =>
+    request<import("./types").DiagramApplyResult>(
+      `/workspaces/${workspaceId}/diagrams/${sessionId}/apply`,
+      { method: "POST" },
+    ),
+  putDiagramLayout: (
+    workspaceId: string,
+    sessionId: string,
+    body: { nodes: Record<string, { x: number; y: number }>; model_revision?: string },
+  ) =>
+    request<{
+      diagram_id: string;
+      workspace_id: string;
+      profile: string;
+      model_revision: string;
+      nodes: Record<string, { x: number; y: number }>;
+    }>(`/workspaces/${workspaceId}/diagrams/${sessionId}/layout`, {
+      method: "PUT",
+      body: JSON.stringify(body),
+    }),
 };
