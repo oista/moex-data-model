@@ -169,6 +169,113 @@ def add_logical_attribute(
     attrs.append(row)
 
 
+_ENTITY_PATCH_KEYS = frozenset(
+    {
+        "name",
+        "title",
+        "description",
+        "lifecycle_status",
+        "context_ref",
+        "solution_data_role",
+    }
+)
+_ATTR_PATCH_KEYS = frozenset(
+    {
+        "name",
+        "title",
+        "description",
+        "logical_type",
+        "required",
+        "multivalued",
+        "lifecycle_status",
+    }
+)
+
+
+def _find_logical_entity(
+    data: CommentedMap, element_id: str
+) -> tuple[int, CommentedMap | dict[str, Any]]:
+    eid = str(element_id or "").strip()
+    if not eid:
+        raise MutationError("element_id is required")
+    entities = data.get("logical_entities") or []
+    if not isinstance(entities, list):
+        raise MutationError("logical_entities missing")
+    for idx, item in enumerate(entities):
+        if isinstance(item, dict) and str(item.get("element_id")) == eid:
+            return idx, item
+    raise MutationError(f"logical entity not found: {eid}")
+
+
+def _find_logical_attribute(
+    data: CommentedMap, element_id: str
+) -> tuple[CommentedMap | dict[str, Any], int, CommentedMap | dict[str, Any]]:
+    eid = str(element_id or "").strip()
+    if not eid:
+        raise MutationError("element_id is required")
+    entities = data.get("logical_entities") or []
+    if not isinstance(entities, list):
+        raise MutationError("logical_entities missing")
+    for entity in entities:
+        if not isinstance(entity, dict):
+            continue
+        attrs = entity.get("attributes") or []
+        if not isinstance(attrs, list):
+            continue
+        for idx, attr in enumerate(attrs):
+            if isinstance(attr, dict) and str(attr.get("element_id")) == eid:
+                return entity, idx, attr
+    raise MutationError(f"logical attribute not found: {eid}")
+
+
+def _apply_patch(
+    target: CommentedMap | dict[str, Any],
+    patch: dict[str, Any],
+    allowed: frozenset[str],
+) -> None:
+    if not patch:
+        raise MutationError("patch must be a non-empty object")
+    if "element_id" in patch:
+        raise MutationError("element_id cannot be changed via patch")
+    applied = False
+    for key, value in patch.items():
+        if key not in allowed:
+            raise MutationError(f"unsupported patch key: {key}")
+        if key in {"required", "multivalued"}:
+            target[key] = bool(value)
+        else:
+            target[key] = value
+        applied = True
+    if not applied:
+        raise MutationError("patch must be a non-empty object")
+
+
+def update_logical_entity(
+    data: CommentedMap, element_id: str, patch: dict[str, Any]
+) -> None:
+    _, entity = _find_logical_entity(data, element_id)
+    _apply_patch(entity, patch or {}, _ENTITY_PATCH_KEYS)
+
+
+def delete_logical_entity(data: CommentedMap, element_id: str) -> None:
+    idx, _ = _find_logical_entity(data, element_id)
+    entities = data["logical_entities"]
+    del entities[idx]
+
+
+def update_logical_attribute(
+    data: CommentedMap, element_id: str, patch: dict[str, Any]
+) -> None:
+    _, _, attr = _find_logical_attribute(data, element_id)
+    _apply_patch(attr, patch or {}, _ATTR_PATCH_KEYS)
+
+
+def delete_logical_attribute(data: CommentedMap, element_id: str) -> None:
+    entity, idx, _ = _find_logical_attribute(data, element_id)
+    attrs = entity["attributes"]
+    del attrs[idx]
+
+
 def apply_mutation(text: str, payload: dict[str, Any]) -> str:
     data = load_yaml(text)
     op = payload.get("op")
@@ -180,6 +287,22 @@ def apply_mutation(text: str, payload: dict[str, Any]) -> str:
             str(payload.get("owner_element_id") or ""),
             payload.get("attribute") or {},
         )
+    elif op == "update_logical_entity":
+        update_logical_entity(
+            data,
+            str(payload.get("element_id") or ""),
+            payload.get("patch") or {},
+        )
+    elif op == "delete_logical_entity":
+        delete_logical_entity(data, str(payload.get("element_id") or ""))
+    elif op == "update_logical_attribute":
+        update_logical_attribute(
+            data,
+            str(payload.get("element_id") or ""),
+            payload.get("patch") or {},
+        )
+    elif op == "delete_logical_attribute":
+        delete_logical_attribute(data, str(payload.get("element_id") or ""))
     else:
         raise MutationError(f"unsupported op: {op!r}")
     return dump_yaml(data)

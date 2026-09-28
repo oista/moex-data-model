@@ -82,6 +82,39 @@ export type DocumentMutation =
         description?: string;
         required?: boolean;
       };
+    }
+  | {
+      op: "update_logical_entity";
+      element_id: string;
+      patch: {
+        name?: string;
+        title?: string;
+        description?: string;
+        lifecycle_status?: string;
+        context_ref?: string;
+        solution_data_role?: string;
+      };
+    }
+  | {
+      op: "delete_logical_entity";
+      element_id: string;
+    }
+  | {
+      op: "update_logical_attribute";
+      element_id: string;
+      patch: {
+        name?: string;
+        title?: string;
+        description?: string;
+        logical_type?: string;
+        required?: boolean;
+        multivalued?: boolean;
+        lifecycle_status?: string;
+      };
+    }
+  | {
+      op: "delete_logical_attribute";
+      element_id: string;
     };
 
 export type Publication = {

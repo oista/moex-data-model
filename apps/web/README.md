@@ -2,7 +2,7 @@
 
 Web Workbench MVP (Stage 4 slice): React + Vite UI over `apps/api`.
 
-No Monaco, drawDB, or OIDC in this MVP.
+Monaco YAML editor + entity forms (add/update/delete LogicalEntity/Attribute). No drawDB or OIDC yet.
 
 ## Dev
 

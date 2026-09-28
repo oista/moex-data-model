@@ -238,6 +238,25 @@ th {
 .entity-list li {
   padding: 0.25rem 0;
   border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.entity-select {
+  border: none;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  padding: 0.15rem 0;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.entity-select.active {
+  font-weight: 600;
+  color: var(--accent, #0b5fff);
 }
 
 .form-block {
@@ -256,7 +275,8 @@ th {
 }
 
 .form-block input,
-.form-block select {
+.form-block select,
+.form-block textarea {
   font: inherit;
   border: 1px solid var(--line);
   background: #fff;

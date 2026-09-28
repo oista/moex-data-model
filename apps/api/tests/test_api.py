@@ -223,6 +223,54 @@ def test_document_mutations_seed_and_conflict(client: TestClient) -> None:
     assert job.json()["status"] == "succeeded"
 
 
+def test_document_mutations_update_and_delete(client: TestClient) -> None:
+    headers = {"X-Moex-Actor": "mutator-edit"}
+    upd = client.post(
+        "/workspaces/ws-mut-edit/documents/trading/mutations",
+        json={
+            "op": "update_logical_entity",
+            "element_id": "dams:logical/trading/Client",
+            "patch": {"title": "Client (edited)"},
+        },
+        headers=headers,
+    )
+    assert upd.status_code == 200
+    assert "Client (edited)" in upd.json()["content"]
+
+    del_attr = client.post(
+        "/workspaces/ws-mut-edit/documents/trading/mutations",
+        json={
+            "op": "delete_logical_attribute",
+            "element_id": "dams:logical/trading/Client/fullName",
+        },
+        headers=headers,
+    )
+    assert del_attr.status_code == 200
+    assert "dams:logical/trading/Client/fullName" not in del_attr.json()["content"]
+
+    del_ent = client.post(
+        "/workspaces/ws-mut-edit/documents/trading/mutations",
+        json={
+            "op": "delete_logical_entity",
+            "element_id": "dams:logical/trading/Client",
+        },
+        headers=headers,
+    )
+    assert del_ent.status_code == 200
+    assert "element_id: dams:logical/trading/Client\n" not in del_ent.json()["content"]
+
+    missing = client.post(
+        "/workspaces/ws-mut-edit/documents/trading/mutations",
+        json={
+            "op": "update_logical_entity",
+            "element_id": "dams:logical/trading/Missing",
+            "patch": {"name": "X"},
+        },
+        headers=headers,
+    )
+    assert missing.status_code == 400
+
+
 def test_workspace_document_put_get_and_validate_draft(client: TestClient) -> None:
     headers = {"X-Moex-Actor": "editor"}
     published = client.get("/implementations/trading/body").json()

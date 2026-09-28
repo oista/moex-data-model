@@ -103,10 +103,18 @@ class DocumentPut(BaseModel):
 
 
 class MutationRequest(BaseModel):
-    op: str = Field(pattern="^(add_logical_entity|add_logical_attribute)$")
+    op: str = Field(
+        pattern=(
+            "^(add_logical_entity|add_logical_attribute|"
+            "update_logical_entity|delete_logical_entity|"
+            "update_logical_attribute|delete_logical_attribute)$"
+        )
+    )
     entity: dict | None = None
     attribute: dict | None = None
     owner_element_id: str | None = None
+    element_id: str | None = None
+    patch: dict | None = None
 
 
 class PublicationCreate(BaseModel):

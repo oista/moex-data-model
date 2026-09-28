@@ -119,6 +119,20 @@ export function EditorPage() {
     setDirty(false);
   }
 
+  const ensureSaved = useCallback(async () => {
+    if (!dirty) return;
+    const doc = await api.putDocument(WS_ID, {
+      content: value,
+      base_digest: baseDigest,
+    });
+    setBaseDigest(doc.base_digest);
+    setSourceLabel("draft");
+    setDirty(false);
+  }, [dirty, value, baseDigest]);
+
+  const formsBusy =
+    loading || save.isPending || validate.isPending || publish.isPending;
+
   return (
     <section>
       <h1>Edit trading YAML</h1>
@@ -210,6 +224,8 @@ export function EditorPage() {
             workspaceId={WS_ID}
             content={value}
             onDocument={onMutatedDocument}
+            onBeforeMutate={ensureSaved}
+            disabled={formsBusy}
           />
         )}
         <div className="editor-frame">

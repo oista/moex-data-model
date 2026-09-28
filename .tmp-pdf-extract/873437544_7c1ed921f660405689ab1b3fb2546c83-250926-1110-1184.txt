@@ -1,0 +1,617 @@
+RES v1.5 - Часть 1: Глоссарий, Данные, Контекст, 
+Принципы, Компоненты
+ 
+Глоссарий
+1.1. Общие термины платформы UCD
+1.2. Термины предметной области
+Данные
+2.1. Модель предметной области
+2.2. Концептуальная модель данных
+2.3. Логическая модель данных
+Принципы построения архитектуры
+3.1. Архитектурные принципы
+3.2. Технологические принципы
+3.3. Стандарты и регламенты
+Контекст решения
+4.1. Контекстная диаграмма системы RES
+4.2. Состав решения
+Компонентная архитектура
+5.1. Контейнерная диаграмма (агрегированная)
+5.2. Компонентный состав (агрегированный)
+5.3. Интерфейсы (агрегированные)
+Глоссарий
+1.1. Общие термины платформы UCD
+Понятие Сокращение Определение Ссылка на 
+источник
+Unified Customer 
+Data
+UCD Платформа обслуживания клиентов и инструментов мидл-офиса B2B Домены Мидл-
+офиса
+Мидл-офис - Система поддержки бизнес-процессов между фронт- и бэк-офисом Внутренний 
+стандарт
+EAM ID - Уникальный идентификатор системы/компонента в корпоративной 
+архитектуре
+EAM Product
+MCDB Master Client Database Главная клиентская база данных (ЕКБД) Документация 
+MCDB
+ЕКБД - Единая информационно-расчетная база данных Регламент ЕКБД
+xBPM Business Process 
+Management
+Платформа управления бизнес-процессами на базе Camunda Документация xBPM
+1.2. Термины предметной области
+Понятие Сокращение Определение Ссылка на источник
+Организация ЮЛ Юридическое лицо, зарегистрированное в соответствии с 
+законодательством РФ
+ГК РФ, ст. 48
+Персона ФЛ Физическое лицо, зарегистрированное в системе 152-ФЗ
+KYC Know Your Customer Процедура идентификации и проверки клиента Внутренние регламенты МОEX
+КИК Controlled Foreign 
+Company
+Контролируемая иностранная компания Налоговый кодекс РФ
+ПДн - Персональные данные в соответствии с 152-ФЗ 152-ФЗ
+Тайна связи - Конфиденциальная информация о передаче данных между 
+системами
+Регламент ИБ
+Общая 
+информация
+- Информация, не относящаяся к ПДн или тайнам Регламент ИБ
+Лицензия - Разрешительный документ, предоставляющий право на 
+осуществление деятельности
+Федеральный закон "О 
+лицензировании"
+Выгодоприобре
+татель
+- Организация, получающая выгоду от деятельности другой 
+организации
+Внутренний регламент
+ФПД Фактический получатель 
+дохода
+Организация, фактически получающая доход от операций Внутренний регламент
+ДИДН Tax check Проверка налогового статуса контрагента Внутренний регламент
+FATCA Foreign Account Tax 
+Compliance Act
+Закон о соблюдении налоговых обязательств по иностранным 
+счетам
+IRS
+MDM Master Data Management Система управления нормативно-справочной информацией https://wiki.moex.com
+ПОДД Подозрительный Статус клиента, требующий дополнительной проверки Регламент СБ
+МВК Межведомственная 
+комиссия
+Комиссия по контролю за движением капитала Федеральный закон 115-ФЗ
+ФРОМУ - Перечень организаций, связанных с экстремизмом Росфинмониторинг
+ЦФА Цифровые финансовые 
+активы
+Инструменты рынка ЦФА Федеральный закон 259-ФЗ
+ЕИО Единый исполнительный 
+орган
+Орган управления организации Гражданский кодекс РФ
+Сотрудник - Физическое лицо, работающее в организации midex-ucd-employees
+Полномочие - Право сотрудника на совершение действий midex-ucd-employees
+Доверенность - Документ, подтверждающий полномочия ucd-documents
+Риск - Вероятность наступления неблагоприятного события Внутренний стандарт
+Допуск к рынку - Право организации осуществлять операции на конкретном 
+рынке
+Положение о допуске
+Тип участника - Категория участника торгов (UK, UK-UT) Регламент торгов
+Рынок - Сегмент торговой площадки (фондовый, валютный и т.д.) Правила торгов
+Статус рынка - Текущее состояние рынка (активен, закрыт, перерыв) Регламент
+Соглашение - Договор между клиентом и платформой о предоставлении услуг ГК РФ
+Заявление - Документ, выражающий волеизъявление клиента на 
+совершение действий
+Внутренний регламент UCD
+---
+Данные
+2.1. Модель предметной области
+Модель предметной области (Domain Model)
+Модель предметной области описывает:
+бизнес-сущности предметной области, атрибуты и связи между ними, без привязки к реализации
+категории информации, к которым относятся данные сущностей (ПДн, разные виды тайн и др). Категоризация 
+информации проводится в соответствии с регламентом компании
+Основные бизнес-сущности системы RES:
+Сущность Сервис Категория 
+информации
+Описание
+Организация ucd-organization-service Общая Юридическое лицо с реквизитами (ИНН, 
+КПП, ОГРН)
+Персона ucd-person-service ПДн Физическое лицо с персональными 
+данными
+Сотрудник midex-ucd-employees ПДн Физическое лицо, работающее в 
+организации
+Должность midex-ucd-employees Общая Позиция сотрудника в организационной 
+структуре
+Полномочие midex-ucd-employees Общая Право сотрудника на совершение 
+действий
+Доверенность ucd-documents Общая Документ, подтверждающий полномочия
+Лицензия ucd-licence-service Общая Разрешительный документ организации
+Выгодоприобретатель ucd-information-service ПДн Организация, получающая выгоду от 
+деятельности
+ФПД ucd-information-service ПДн Фактический получатель дохода
+Уставный капитал ucd-information-service ПДн Сумма вкладов участников общества
+Проверка KYC ucd-organizations-kyc-check, ed-kyc-check ПДн Результат проверки клиента
+Оценка риска midex-risk-av ПДн Результат оценки риска клиента
+Параметры риска midex-risk-av Общая Настройки и параметры для расчета 
+рисков
+Допуск к рынку ed-market-info-service Общая Право организации торговать на рынке
+Тип участника ed-market-info-service Общая Категория участника торгов
+Статус рынка ed-market-info-service Общая Текущее состояние рынка
+Соглашение ucd-agreements-facade ПДн Договор между организацией и 
+платформой
+Заявление ucd-agreements-facade ПДн Запрос организации на совершение 
+действий
+Документ ucd-agreements-facade, ucd-documents ПДн Официальный документ организации
+Уведомление КИК bp-ucd-organization-cfc-service Общая Запрос на рассылку уведомлений об 
+изменении флага КИК
+Уведомление о признаке 
+недружественности
+bp-ucd-organization-friendly-sign-service Общая Запрос на рассылку уведомлений
+Процесс Camunda BPM сервисы Общая Экземпляр бизнес-процесса
+Санкционный список ucd-sanctions-mdm-lists-service, ucd-
+sanctions-filtering-service
+Общая Списки организаций под санкциями
+Прочие данные ucd-other-data-service ПДн Дополнительные данные об организациях
+2.2. Концептуальная модель данных
+`
+2.3. Логическая модель данных
+#### 2.3.1. Состав бизнес-сущностей (агрегированный)
+Бизнес-сущность Сервис Категория 
+информации
+Контекст
+Organization ucd-organization-service Общая UCD Platform
+Person ucd-person-service ПДн UCD Platform
+Employee midex-ucd-employees ПДн Управление сотрудниками
+Position midex-ucd-employees Общая Организационная структура
+Authorization midex-ucd-employees Общая Полномочия сотрудников
+Document ucd-documents, ucd-agreements-facade ПДн Документооборот
+DocumentType ucd-documents Общая Справочники
+Licence ucd-licence-service Общая Лицензирование
+AuthCapital ucd-information-service ПДн Сведения об организации
+ProfiterContract ucd-information-service ПДн Договоры с 
+выгодоприобретателями
+ProfiterContractDoc ucd-information-service ПДн Документы договоров
+ActualProfitRecipient ucd-information-service ПДн Фактические получатели дохода
+FpdRelationType ucd-information-service Общая Справочники типов
+OrganizationType ucd-information-service Общая Справочники типов
+KYCCheck ucd-organizations-kyc-check, ed-kyc-check ПДн Проверки клиентов
+CheckList ed-kyc-check Общая Перечни проверок
+CheckResult ed-kyc-check ПДн Результаты проверок
+RequestLog ed-kyc-check Тайна связи Журналы запросов
+VerificationInfo ed-kyc-check Тайна связи Верифицированная информация
+RiskAssessment midex-risk-av ПДн Оценки рисков
+RiskParameters midex-risk-av Общая Параметры расчета рисков
+RiskLevel midex-risk-av ПДн Уровни рисков
+RiskFactor midex-risk-av Общая Факторы риска
+RiskHistory midex-risk-av ПДн История изменений рисков
+MarketAccess ed-market-info-service Общая Допуски к рынкам
+Market ed-market-info-service Общая Справочник рынков
+ParticipantType ed-market-info-service Общая Типы участников торгов
+MarketStatus ed-market-info-service Общая Статусы рынков
+Agreement ucd-agreements-facade ПДн Соглашения с клиентами
+Application ucd-agreements-facade ПДн Заявления клиентов
+OrganizationsCfcChangesNotifica
+tionDto
+bp-ucd-organization-cfc-service Общая Уведомления об изменении КИК
+OrganizationsCfcMonitoringNotifi
+cationDto
+bp-ucd-organization-cfc-service Общая Уведомления о мониторинге КИК
+NotificationRequest bp-ucd-organization-friendly-sign-service Общая Уведомления о признаке 
+недружественности
+ProcessInstance BPM сервисы Общая Экземпляры процессов Camunda
+SanctionList ucd-sanctions-mdm-lists-service, ucd-sanctions-
+filtering-service
+Общая Санкционные списки
+OtherData ucd-other-data-service ПДн Прочие данные организаций
+#### 2.3.2. Атрибуты ключевых бизнес-сущностей
+Organization (Организация)
+Атрибут Тип Ограничения Обязательность Описание
+id bigint > 0 Да Уникальный идентификатор (MCDB ID)
+inn string 10-12 символов Да ИНН организации
+kpp string 9 символов Нет КПП организации
+ogrn string 13-15 цифр Нет ОГРН организации
+fullName string 1-1000 символов Да Полное наименование
+shortName string 1-255 символов Нет Краткое наименование
+typeId bigint FK  OrganizationType Да Тип организации
+Person (Персона)
+Атрибут Тип Ограничения Обязательность Описание
+id uuid - Да Уникальный идентификатор
+inn string 10-12 цифр Да ИНН физического лица
+snils string 11 цифр Да СНИЛС
+fullName string 1-255 символов Да ФИО
+birthDate date - Нет Дата рождения
+Employee (Сотрудник)
+Атрибут Тип Ограничения Обязательность Описание
+id uuid - Да Уникальный идентификатор
+inn string 10-12 цифр Да ИНН физического лица
+snils string 11 цифр Да СНИЛС
+full_name string 1-255 символов Да Полное наименование
+hire_date date - Нет Дата приема на работу
+termination_date date - Нет Дата увольнения
+status enum active/terminated Да Статус сотрудника
+Licence (Лицензия)
+Атрибут Тип Ограничения Обязательность Описание
+id uuid - Да Уникальный идентификатор лицензии
+organisationId uuid - Да Ссылка на организацию
+licenceType string Max 50 символов Да Вид лицензии (справочник)
+number string Max 100 символов Да Номер лицензии
+issueDate date - Да Дата выдачи
+expiryDate date >= issueDate Да Дата окончания действия
+issuerAuthority string Max 255 символов Да Наименование выдавшего органа
+status enum ACTIVE, EXPIRED, CANCELLED Да Текущий статус
+RiskAssessment (Оценка риска)
+Атрибут Тип Ограничения Обязательность Описание
+id uuid - Да Уникальный идентификатор оценки
+clientId uuid - Да Идентификатор клиента
+assessmentDate datetime - Да Дата проведения оценки
+riskScore decimal 0.00-100.00 Да Числовое значение риска
+riskLevel string 50 символов Да Уровень риска (LOW/MEDIUM/HIGH/CRITICAL)
+status string 20 символов Да Статус оценки (ACTIVE/ARCHIVED)
+validFrom datetime - Нет Начало действия оценки
+validTo datetime - Нет Окончание действия оценки
+createdBy string 100 символов Да Автор оценки
+modifiedAt datetime - Нет Дата последнего изменения
+MarketAccess (Допуск к рынку)
+Атрибут Тип Ограничения Обязательность Описание
+id bigint > 0 Да Уникальный идентификатор допуска
+organizationId bigint > 0 Да Ссылка на организацию
+marketId bigint > 0 Да Ссылка на рынок
+accessModeId integer 1-10 Да Режим доступа (2 - допущен, 4 - приостановлен)
+validFrom localdate - Да Дата начала действия допуска
+validTo localdate - Нет Дата окончания действия допуска
+---
+Принципы построения архитектуры
+3.1. Архитектурные принципы
+Микросервисная архитектура:
+Сервисы RES являются частью платформы UCD (Unified Customer Data)
+Каждый сервис отвечает за свою предметную область (Single Responsibility)
+Независимое развертывание и масштабирование сервисов
+API-First:
+Все функции доступны через REST API
+Использование OpenAPI/Swagger для документирования
+Версионирование API (v1, v2, etc.)
+Событийная интеграция (Event-Driven):
+Использование JMS (Apache ActiveMQ Artemis) для асинхронной передачи событий
+Публикация событий об изменениях данных (создание, обновление, удаление)
+Подписка на события от других сервисов
+Stateless:
+Сервисы не хранят состояние между запросами
+Все данные хранятся в базах данных или кэше
+Database per Service:
+Изолированная схема БД для каждого сервиса
+PostgreSQL 13+ для большинства сервисов
+Oracle 19c для некоторых сервисов (ed-market-info-service, ucd-agreements-facade)
+Централизованная аутентификация:
+Keycloak OAuth2/OIDC для всех сервисов платформы
+Валидация токенов через Keycloak
+Ролевая модель доступа
+Observability:
+Полная наблюдаемость через метрики Prometheus
+Распределенная трассировка (Spring Cloud Sleuth)
+Централизованное логирование (ELK Stack)
+3.2. Технологические принципы
+Java 15/17: Основной язык программирования
+Spring Boot 2.x/3.x: Основной фреймворк
+Camunda BPM 7.13: Движок бизнес-процессов для BPM сервисов
+Spring Security + Keycloak: Аутентификация и авторизация
+SpringDoc OpenAPI: Документирование API
+PostgreSQL 13/Oracle 19c: Системы хранения данных
+Apache ActiveMQ Artemis: Брокер сообщений JMS
+Spring Cloud OpenFeign: HTTP клиент для внешних вызовов
+MapStruct: Маппинг DTO
+Lombok: Утилиты для кода
+Maven 3.x: Система сборки
+Docker/Kubernetes: Контейнеризация и оркестрация
+3.3. Стандарты и регламенты
+Стандарт Java-разработки МОEX
+REST API Guidelines МОEX
+Политика информационной безопасности
+Регламент категоризации информации
+Стандарт интеграции через JMS
+---
+Контекст решения
+4.1. Контекстная диаграмма системы RES
+`mermaid
+C4Context
+title Контекстная диаграмма системы RES v1.5
+Enterprise_Boundary(moex, "МОEX") {
+Enterprise_Boundary(ucd_platform, "Система Учёт клиентов") {
+Person(back_office, "Back-office", "Сотрудники back-office")
+Person(front_office, "Front-office", "Сотрудники front-office")
+Person(client, "Клиент", "Внешний клиент платформы")
+Person(analyst, "Аналитик СБ", "Сотрудник службы безопасности")
+System_Boundary(core_services, "Базовые сервисы") {
+System(person_svc, "ucd-person-service\n(100869-001)", "Данные физических лиц")
+System(org_svc, "ucd-organization-service\n(100869-002)", "Данные организаций")
+System(info_svc, "ucd-information-service\n(100869-XXX)", "Сведения об организациях")
+System(documents_svc, "ucd-documents\n(100869-004)", "Документы организаций")
+}
+System_Boundary(kyc_risk, "KYC и управление рисками") {
+System(kyc_check_svc, "ucd-organizations-kyc-check\n(100869-008)", "KYC проверки организаций")
+System(ed_kyc_svc, "ed-kyc-check\n(100869-016)", "Категоризация KYC")
+System(risk_svc, "midex-risk-av\n(100869-005)", "Управление рисками")
+System(sanctions_mdm_svc, "ucd-sanctions-mdm-lists-service\n(100869-XXX)", "Санкционные списки MDM")
+System(sanctions_filter_svc, "ucd-sanctions-filtering-service\n(100869-XXX)", "Фильтрация санкций")
+}
+System_Boundary(employees, "Сотрудники и полномочия") {
+System(employees_svc, "midex-ucd-employees\n(100869-011)", "Управление сотрудниками")
+System(licence_svc, "ucd-licence-service\n(100869-015)", "Лицензии организаций")
+}
+System_Boundary(agreements, "Соглашения и доступы") {
+System(agreements_facade, "ucd-agreements-facade\n(100869-012)", "Фасад соглашений и документов")
+System(market_info_svc, "ed-market-info-service\n(100869-XXX)", "Допуски к рынкам")
+}
+System_Boundary(bpm, "Бизнес-процессы") {
+System(cfc_svc, "bp-ucd-organization-cfc-service\n(100869-XXX)", "Уведомления КИК")
+System(friendly_sign_svc, "bp-ucd-organization-friendly-sign-service\n(100869-022)", "Уведомления о признаке 
+недружественности")
+}
+System_Boundary(other, "Прочие сервисы") {
+System(other_data_svc, "ucd-other-data-service\n(100869-XXX)", "Прочие данные организаций")
+System(regcard_importer, "ucd-regcard-importer-prototype\n(100869-XXX)", "Импорт регистрационных карточек")
+}
+SystemDb(artemis, "Apache ActiveMQ Artemis\n(100501)", "Шина сообщений")
+SystemDb(postgresql, "PostgreSQL 13", "Базы данных сервисов")
+SystemDb(oracle, "Oracle 19c", "Базы данных сервисов")
+}
+System(mcdb, "MCDB Monolith\n(1042)", "Единая клиентская база данных")
+System(mdm, "MDM", "Система управления нормативно-справочной информацией")
+System(sed, "СЭД", "Система электронного документооборота")
+System(crm, "Siebel CRM\n(PRO.228)", "Внешняя CRM система")
+System(window, "Единое окно РТК\n(PRO.138)", "Внешняя система")
+System(cfa, "ЦФА", "Система цифровых финансовых активов")
+Rel(back_office, employees_svc, "Управляет сотрудниками")
+Rel(front_office, market_info_svc, "Получает допуски к рынкам")
+Rel(client, agreements_facade, "Получает документы")
+Rel(analyst, risk_svc, "Просматривает риски")
+Rel(analyst, ed_kyc_svc, "Проверяет KYC")
+Rel(person_svc, org_svc, "Обмен данными")
+Rel(org_svc, info_svc, "Предоставляет данные")
+Rel(info_svc, documents_svc, "Связанные данные")
+Rel(kyc_check_svc, ed_kyc_svc, "Синхронизация проверок")
+Rel(risk_svc, person_svc, "Запрос данных клиентов")
+Rel(risk_svc, org_svc, "Запрос данных организаций")
+Rel(employees_svc, person_svc, "Запрос данных ФЛ")
+Rel(licence_svc, org_svc, "Запрос данных ЮЛ")
+Rel(agreements_facade, org_svc, "Предоставляет данные")
+Rel(market_info_svc, person_svc, "Запрос данных")
+Rel(cfc_svc, org_svc, "Запуск процессов")
+Rel(friendly_sign_svc, org_svc, "Запуск процессов")
+Rel(other_data_svc, org_svc, "Дополнительные данные")
+Rel(regcard_importer, mcdb, "Импорт данных")
+Rel(person_svc, artemis, "Публикация событий")
+Rel(org_svc, artemis, "Публикация событий")
+Rel(risk_svc, artemis, "Публикация событий")
+Rel(ed_kyc_svc, artemis, "Публикация результатов")
+Rel(person_svc, postgresql, "Хранение данных")
+Rel(org_svc, postgresql, "Хранение данных")
+Rel(risk_svc, postgresql, "Хранение данных")
+Rel(agreements_facade, oracle, "Хранение данных")
+Rel(market_info_svc, oracle, "Хранение данных")
+Rel(org_svc, mcdb, "Синхронизация данных")
+Rel(info_svc, mdm, "Получение справочников")
+Rel(employees_svc, sed, "Проверка полномочий")
+Rel(risk_svc, crm, "Интеграция")
+Rel(risk_svc, window, "Интеграция")
+Rel(ed_kyc_svc, cfa, "Передача результатов")
+}
+UpdateElementStyle(person_svc, $bgColor="#438dd5", $fontColor="#ffffff")
+UpdateElementStyle(org_svc, $bgColor="#438dd5", $fontColor="#ffffff")
+UpdateElementStyle(risk_svc, $bgColor="#438dd5", $fontColor="#ffffff")
+UpdateElementStyle(artemis, $shape="queue")
+UpdateElementStyle(postgresql, $shape="cylinder")
+UpdateElementStyle(oracle, $shape="cylinder")
+UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="2")
+`
+Формат для Confluence:
+`
+trueКонтекст RES v1.5.drawiofalseautotoptrue18001200
+`
+4.2. Состав решения
+Список сервисов RES v1.5:
+№ Система EAM ID Описание Статус
+Базовые сервисы
+1 ucd-person-service 100869-
+001
+Сервис данных физических лиц  В prod
+2 ucd-organization-service 100869-
+002
+Сервис данных организаций  В prod
+3 ucd-information-service 100869-
+XXX
+Сведения об организациях, выгодоприобретателях, 
+ФПД
+ В 
+разработке
+4 ucd-documents 100869-
+004
+Документы организаций  В prod
+KYC и управление 
+рисками
+5 ucd-organizations-kyc-check 100869-
+008
+KYC проверки организаций  В prod
+6 ed-kyc-check 100869-
+016
+Категоризация KYC (первичная по MDM)  В prod
+7 midex-risk-av 100869-
+005
+Управление рисками клиентов  В 
+разработке
+8 ucd-sanctions-mdm-lists-service 100869-
+XXX
+Санкционные списки из MDM  В 
+разработке
+9 ucd-sanctions-filtering-service 100869-
+XXX
+Фильтрация по санкционным спискам  В 
+разработке
+Сотрудники и 
+полномочия
+10 midex-ucd-employees 100869-
+011
+Управление сотрудниками организаций  В 
+разработке
+11 ucd-licence-service 100869-
+015
+Лицензии организаций  В 
+разработке
+Соглашения и доступы
+12 ucd-agreements-facade 100869-
+012
+Фасад соглашений и документов  В prod
+13 ed-market-info-service 100869-
+XXX
+Допуски к рынкам, статусы рынков  В 
+разработке
+Бизнес-процессы
+14 bp-ucd-organization-cfc-service 100869-
+XXX
+Обработчик уведомлений КИК  В prod
+15 bp-ucd-organization-friendly-sign-
+service
+100869-
+022
+Уведомления о признаке недружественности  В prod
+Прочие сервисы
+16 ucd-other-data-service 100869-
+XXX
+Прочие данные организаций  В 
+разработке
+17 ucd-regcard-importer-prototype 100869-
+XXX
+Импорт регистрационных карточек (prototype)  Prototype
+Внешние системы
+18 MCDB Monolith 1042 Единая клиентская база данных (ЕКБД)  В prod
+19 MDM TBD Система управления нормативно-справочной 
+информацией
+ В prod
+20 Apache ActiveMQ Artemis 100501 Шина сообщений  В prod
+21 Keycloak TBD Система аутентификации OAuth2/OIDC  В prod
+22 СЭД TBD Система электронного документооборота  В prod
+23 Siebel CRM PRO.228 Внешняя CRM система  В prod
+24 Единое окно РТК PRO.138 Внешняя система  В prod
+25 ЦФА TBD Система цифровых финансовых активов  В prod
+---
+Компонентная архитектура
+5.1. Контейнерная диаграмма (агрегированная)
+`mermaid
+C4Container
+title Контейнерная диаграмма платформы RES v1.5
+Enterprise_Boundary(k8s_cluster, "Kubernetes Cluster") {
+Person(back_office, "Back-office", "Сотрудник back-office")
+Person(front_office, "Front-office", "Сотрудник front-office")
+Person(client, "Клиент")
+Person(analyst, "Аналитик СБ")
+Container_Boundary(person_svc, "ucd-person-service") {
+Container(person_api, "REST API", "Spring Boot", "Контроллеры")
+Container(person_service, "Service Layer", "Spring Service", "Бизнес-логика")
+ContainerDb(person_db, "PostgreSQL", "Database", "Данные ФЛ")
+}
+Container_Boundary(org_svc, "ucd-organization-service") {
+Container(org_api, "REST API", "Spring Boot", "Контроллеры")
+Container(org_service, "Service Layer", "Spring Service", "Бизнес-логика")
+ContainerDb(org_db, "PostgreSQL", "Database", "Данные ЮЛ")
+}
+Container_Boundary(risk_svc, "midex-risk-av") {
+Container(risk_api, "REST API", "Spring Boot", "Контроллеры")
+Container(risk_jms_consumer, "JMS Consumer", "Spring JMS", "Обработка событий")
+Container(risk_jms_producer, "JMS Producer", "Spring JMS", "Публикация событий")
+ContainerDb(risk_db, "PostgreSQL", "Database", "Оценки рисков")
+}
+Container_Boundary(kyc_svc, "ed-kyc-check") {
+Container(kyc_api, "REST API", "Spring Boot", "Контроллеры")
+Container(kyc_core, "Business Logic", "Spring Service", "Проверки KYC")
+ContainerDb(kyc_db, "PostgreSQL", "Database", "Результаты проверок")
+}
+Container_Boundary(employees_svc, "midex-ucd-employees") {
+Container(employees_api, "REST API", "Spring Boot", "Контроллеры")
+Container(employees_service, "Service Layer", "Spring Service", "Бизнес-логика")
+ContainerDb(employees_db, "PostgreSQL", "Database", "Данные сотрудников")
+}
+Container_Boundary(bpm_svc, "BPM сервисы") {
+Container(cfc_api, "REST API", "Spring Boot + Camunda", "Уведомления КИК")
+Container(friendly_api, "REST API", "Spring Boot + Camunda", "Уведомления о признаке недружественности")
+}
+Container(artemis, "Apache ActiveMQ Artemis", "Message Broker", "Шина сообщений JMS")
+}
+Container_Ext(mcdb, "MCDB Monolith", "1042", "Система-источник")
+Container_Ext(mdm, "MDM", "TBD", "Справочники")
+Container_Ext(sed, "СЭД", "TBD", "Документооборот")
+Container_Ext(crm, "Siebel CRM", "PRO.228", "CRM система")
+Container_Ext(window, "Единое окно РТК", "PRO.138", "Внешняя система")
+Container_Ext(cfa, "ЦФА", "TBD", "Система ЦФА")
+Rel(back_office, employees_api, "Управление сотрудниками")
+Rel(front_office, org_api, "Запрос данных организаций")
+Rel(client, person_api, "Запрос данных ФЛ")
+Rel(analyst, risk_api, "Просмотр рисков")
+Rel(analyst, kyc_api, "Проверки KYC")
+Rel(person_api, person_service, "Вызов методов")
+Rel(person_service, person_db, "JDBC")
+Rel(org_api, org_service, "Вызов методов")
+Rel(org_service, org_db, "JDBC")
+Rel(risk_api, risk_db, "JDBC")
+Rel(kyc_api, kyc_core, "Вызов методов")
+Rel(kyc_core, kyc_db, "JDBC")
+Rel(risk_jms_consumer, artemis, "Слушает события")
+Rel(risk_jms_producer, artemis, "Публикует события")
+Rel(kyc_core, artemis, "Публикует результаты")
+Rel(person_api, mcdb, "Синхронизация")
+Rel(org_api, mcdb, "Синхронизация")
+Rel(kyc_api, mdm, "Получение справочников")
+Rel(employees_api, sed, "Проверка полномочий")
+Rel(risk_api, crm, "Интеграция")
+Rel(risk_api, window, "Интеграция")
+Rel(kyc_api, cfa, "Передача результатов")
+UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="2")
+`
+Формат для Confluence:
+`
+trueКонтейнер RES v1.5.drawiofalseautotoptrue18001200
+`
+5.2. Компонентный состав (агрегированный)
+Типовые компоненты сервисов RES:
+Компонент Роль/Назначение Технологии
+REST API Layer Предоставление REST endpoints Java 17, Spring Boot 3.x, Spring Web, SpringDoc OpenAPI
+Service Layer Бизнес-логика Java 17, Spring Service, Lombok
+Repository Layer Доступ к данным Spring Data JDBC, Spring JDBC
+JMS Consumer Обработка входящих событий Spring JMS, Apache ActiveMQ Artemis
+JMS Producer Публикация событий Spring JMS, Apache ActiveMQ Artemis
+Security Module Аутентификация и авторизация Spring Security, Keycloak OAuth2
+Monitoring Module Метрики и наблюдаемость Spring Boot Actuator, Micrometer, Prometheus
+Camunda BPM Движок бизнес-процессов Camunda BPM 7.13.0 (для BPM сервисов)
+Database Хранение данных PostgreSQL 13 / Oracle 19c
+UI Layer Пользовательский интерфейс React 18, xBPM Forms (для BPM сервисов)
+5.3. Интерфейсы (агрегированные)
+Предоставляемые API:
+Сервис Интерфейс Тип Описание
+ucd-person-service GET /api/v1/persons/{id} REST Получение данных ФЛ
+POST /api/v1/persons REST Создание ФЛ
+PUT /api/v1/persons/{id} REST Обновление ФЛ
+ucd-organization-service GET /api/v1/organizations/{id} REST Получение данных ЮЛ
+POST /api/v1/organizations REST Создание ЮЛ
+PUT /api/v1/organizations/{id} REST Обновление ЮЛ
+midex-risk-av GET /api/v1/risks REST Список оценок рисков
+POST /api/v1/risks/calculate REST Расчет риска
+GET /api/v1/clients/{clientId}/risks REST Риски клиента
+ed-kyc-check GET /api/verification REST Получение проверок
+GET /api/verification/run REST Запуск проверки
+POST /api/manual-verification/save REST Сохранение ручной проверки
+ucd-agreements-facade GET /organizations/{orgId}/documents REST Документы организации
+ucd-licence-service GET /api/v1/licences/{id} REST Получение лицензии
+POST /api/v1/licences REST Создание лицензии
+midex-ucd-employees POST /api/employees REST Создание сотрудника
+GET /api/employees/{id} REST Получение сотрудника
+bp-ucd-organization-cfc-service POST /organizations/cfc-changes REST Запуск процесса КИК
+POST /organizations/cfc-monitoring REST Запуск процесса мониторинга
+bp-ucd-organization-friendly-sign-service POST /organizations/friendly-sign-changes REST Запуск процесса уведомлений
+POST /organizations/friendly-sign-changes/{taskId}/complete REST Подтверждение задачи
+ed-market-info-service GET /getMarketStatus/{orgId} REST Статус рынка
+GET /api/v1/organizations/{id}/accesses REST Допуски организации
+Требуемые API:
+Сервис Интерфейс Тип Описание
+Все сервисы GET /api/v1/persons/{id} REST ucd-person-service
+Все сервисы GET /api/v1/organizations/{id} REST ucd-organization-service
+Все сервисы OAuth2 Token Validation OAuth2 Keycloak
+midex-risk-av topic/ucd/client/created JMS События клиентов
+midex-risk-av topic/ucd/client/updated JMS Обновления клиентов
+ed-kyc-check topic/from/ed-kyc/checkResult JMS Результаты проверок
+BPM сервисы MailingApi.sendStandard() Feign Отправка уведомлений
+---

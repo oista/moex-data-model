@@ -1,0 +1,398 @@
+1.  
+2.  
+3.  
+4.  
+5.  
+6.  
+7.  
+8.  
+9.  
+10.  
+11.  
+12.  
+Docsvision Database Connector - Описание методов
+Docsvision Database Connector API
+Версия: 1.82.0
+: Сервер https://icdb-dev.drksis.moex.com/docsvision-database-connector
+: Bearer Token (JWT)Аутентификация
+Содержание
+Сотрудники
+Бумажные доверенности
+Доверенности МЧД
+Организации
+Данные КБД
+Статусы документов
+Входящие документы
+Документы
+Справочники
+Единый справочник
+ППР документы
+Прочие endpoints
+1. Сотрудники
+1.1 Поиск сотрудника (POST /api/v1/employees/search-one)
+Описание: Универсальный поиск сотрудника по одному из параметров: RowID, ID 1С, accountName или email.
+Request Body ( ):EmployeeSearchDto
+Поле Тип Описание Пример
+rowId uuid Идентификатор записи в Docsvision8b282044-3612-4659-bfeb-a6bd83f31806
+id1c uuid Идентификатор сотрудника в 1С 5667dfb7-ec95-4369-819e-52328b7d908a
+accountName string Имя учётной записи AD nt_d\ivanov.ii
+email string Электронная почта ivanov.ii@moex.com
+Response ( ):EmployeeReadDto
+Поле Тип Описание
+rowId uuid Идентификатор записи в Docsvision
+id1c uuid Идентификатор сотрудника в 1С
+accountName string Имя учётной записи AD
+email string Электронная почта
+1.2 Поиск по имени учётной записи (POST /api/v1/employees/find-by-account-name)
+Описание: Поиск сотрудника по имени учётной записи Active Directory.
+Request Body ( ):AccountNameSearchDto
+Поле Тип Обязательно Описание
+accountName string Да Имя учётной записи AD
+Response:  (см. выше)EmployeeReadDto
+1.3 Поиск по ID 1С (GET /api/v1/employees/id1c/{id1c})
+Описание: Поиск сотрудника по идентификатору в системе 1С.
+Path Parameters:
+Параметр Тип Обязательно Описание
+id1c uuid Да Идентификатор сотрудника в 1С
+Response:  (см. выше)EmployeeReadDto
+2. Бумажные доверенности
+2.1 Получить все (GET /api/v1/paper-attorney)
+Описание: Получить список всех бумажных доверенностей.
+Response ( ):SearchResponsePaperAttorneyDto
+{
+  "content": [
+    {
+      "document_id": "uuid",
+      "status_id": "uuid",
+      "status": "string",
+      "last_update_date": "date-time",
+      "registration_number": "string",
+      "topic": "string",
+      "authorities": "string",
+      "additional_authority": "string",
+      "attorney_type": "string",
+      "internal_attorney_id": "uuid",
+      "external_attorney_name": "string",
+      "type_contracts": "int32",
+      "contract_authorization_no_limit": "boolean",
+      "contract_authorization_limit": "number",
+      "closing_docs_authorization_no_limit": "boolean",
+      "closing_docs_authorization_limit": "number",
+      "right_of_sub_delegation": "boolean",
+      "notarial_certification_required": "boolean",
+      "valid_from": "date-time",
+      "valid_until": "date-time",
+      "legal_entity_id": "uuid"
+    }
+  ]
+}
+2.2 Получить с фильтрацией (GET /api/v1/paper-attorney/filtered)
+Описание: Получить бумажные доверенности с возможностью фильтрации по дате, статусу и типу.
+Query Parameters:
+Параметр Тип Обязательно Описание
+startDate date-time Нет Дата начала периода
+endDate date-time Нет Дата окончания периода
+statusId array[uuid] Нет Идентификаторы статусов
+attorneyType string Нет Тип доверенности
+Response:  (см. выше)SearchResponsePaperAttorneyDto
+3. Доверенности МЧД
+3.1 Получить все (GET /api/v1/emchd-attorney)
+Описание: Получить список всех доверенностей машиночитаемой доверенности (МЧД).
+Response ( ):SearchResponseEmchdAttorneyDto
+Поле Тип Описание
+document_id uuid Идентификатор документа
+status_id uuid Идентификатор статуса
+status string Статус
+last_update_date date-time Дата последнего обновления
+registration_number string Регистрационный номер
+authorities string Полномочия
+internal_attorney_id uuid Внутренний идентификатор доверенности
+valid_from date-time Дата начала действия
+valid_until date-time Дата окончания действия
+legal_entity_id uuid Идентификатор юридического лица
+unique_number string Уникальный номер
+contract_authorization_no_limit boolean Неограниченные полномочия по договорам
+contract_authorization_limit number Лимит полномочий по договорам
+closing_docs_authorization_no_limit boolean Неограниченные полномочия по закрывающим документам
+closing_docs_authorization_limit number Лимит по закрывающим документам
+right_of_sub_delegation boolean Право передоверия
+notarial_certification_required boolean Требуется нотариальное удостоверение
+3.2 Получить с фильтрацией (GET /api/v1/emchd-attorney/filtered)
+Query Parameters: Аналогично  (startDate, endDate, statusId, attorneyType)./api/v1/paper-attorney/filtered
+Response:  (см. выше)SearchResponseEmchdAttorneyDto
+4. Организации
+4.1 Поиск по RowID (GET /api/v1/organizations/by-row-id/{rowId})
+Description: Найти организацию по идентификатору RowID в Docsvision.
+Path Parameters:
+Параметр Тип Обязательно Описание
+rowId uuid Да Идентификатор записи в Docsvision
+Response ( ):OrganizationReadDto
+Поле Тип Описание
+rowId uuid Идентификатор записи в Docsvision
+mdmId uuid Идентификатор в MDM
+name string Наименование организации
+inn string ИНН
+kpp string КПП
+ogrn string ОГРН
+isClient boolean Является ли клиентом
+4.2 Поиск по MDM ID (GET /api/v1/organizations/by-mdm-id/{mdmId})
+Path Parameters:
+Параметр Тип Обязательно Описание
+mdmId uuid Да Идентификатор в справочнике MDM
+Response:  (см. выше)OrganizationReadDto
+4.3 Поиск отправителя документа (GET /api/v1/organizations/by-document/{instanceId})
+Description: Найти организацию-отправителя документа.
+Path Parameters:
+Параметр Тип Обязательно Описание
+instanceId uuid Да Идентификатор экземпляра документа
+Response:  (см. выше)OrganizationReadDto
+5. Данные КБД
+5.1 Неотправленные клиентские договоры (GET /api/v1/kbd/unsent-client-contracts)
+Description: Получить список клиентских договоров, готовых к отправке в КБД.
+Response ( ):SearchResponseUnsentKbdClientContractsDto
+Поле Тип Описание Пример
+cardId uuid Внутренний ID документа в ЕСЭД 550e8400-e29b-41d4-a716-446655440000
+lkuDocumentId int32 Идентификатор документа в ЛКУ 12345
+documentTypeId int32 Тип документа КБД 1
+sedRegNumber string Регистрационный номер в ЕСЭД -2024-001234
+sedRegDate date-time Дата регистрации в ЕСЭД
+contractDate date-time Дата подписания/заключения договора
+contractNumber string Номер договора  125/2024
+author string AD логин автора nt_d\ivanov.ii
+organizationMdmId uuid Идентификатор организации в MDM
+organizationInn string ИНН организации 7707083893
+organizationName string Наименование организации  
+channelId uuid ID канала поступления (PAPER/LKU)
+dvSyncStatus int32 Статус синхронизации (1 = готов) 1
+bankAccountNumber string Номер банковского счёта 40702810000000000000
+attachments array Список вложенных файлов (NuxeoAttachment)
+5.2 Тип договора по DocumentTypeKbd (GET /api/v1/kbd/contract-types/{documentTypeKbd})
+Description: Возвращает RowID типа договорного документа по его идентификатору в КБД.
+Path Parameters:
+Параметр Тип Обязательно Описание
+documentTypeKbd int32 Да Идентификатор типа документа в КБД
+Response ( ):SearchResponseContractTypeDto
+Поле Тип Описание
+rowId uuid Идентификатор записи в Docsvision
+name string Наименование типа договора
+documentTypeKbd int32 Идентификатор типа документа в КБД
+6. Статусы документов
+6.1 Получить статусы (GET /api/v1/instance-status)
+Description: Возвращает статусы документов из БД Docsvision, обновлённые после указанного времени. Используется для 
+синхронизации статусов между сервисами.
+Query Parameters:
+Параметр Тип Обязательно Описание
+lastUpdateddate-
+time Да Время последнего обновления (ISO DateTime). Возвращает все записи, обновленные после 
+этого времени.
+Response (массив ):InstanceStatusDto
+Поле Тип Описание
+id uuid Идентификатор
+lastupdated date-time Дата последнего обновления
+doctype string Тип документа
+status string Статус
+7. Входящие документы
+7.1 Фильтрация (GET /api/v1/incoming-documents/filter)
+Description: Фильтрация входящих документов.
+Query Parameters:
+Параметр Тип Обязательно Описание
+filter IncomingDocumentFilterDto Да Объект фильтра
+Filter Object ( ):IncomingDocumentFilterDto
+Поле Тип Описание
+responsDepartmentIds array[uuid] Идентификаторы ответственных подразделений
+acquaintanceEmails array[string] Email для ознакомления
+tasksBlockEmails array[string] Email для блокировки задач
+performerEmployeeEmails array[string] Email исполнителей
+state uuid Состояние
+startDate date-time Дата начала
+endDate date-time Дата окончания
+Response (массив ):CardInstanceIdDto
+Поле Тип Описание
+instanceId uuid Идентификатор экземпляра карточки
+8. Документы
+8.1 Получить по виду и состоянию (GET /api/v1/documents)
+Description: Получить документы по виду (KindId) и состоянию (StateId).
+Query Parameters:
+Параметр Тип Обязательно Описание
+kindId uuid Да Идентификатор вида документа
+stateId uuid Да Идентификатор состояния
+Response ( ):SearchResponseBasicDocumentInfoDto
+Поле Тип Описание
+cardId uuid Идентификатор карточки
+responsDepartmentId uuid Идентификатор ответственного подразделения
+title string Название документа
+attachments array Список вложений (NuxeoAttachment)
+8.2 Вложения документа (GET /api/v1/documents/{documentId}/attachments)
+Description: Получить вложения документа.
+Path Parameters:
+Параметр Тип Обязательно Описание
+documentId uuid Да Идентификатор документа
+Query Parameters:
+Параметр Тип Обязательно Описание
+fileType int32 Нет Тип файла
+Response ( ):SearchResponseDocumentAttachmentDto
+Поле Тип Описание
+fileName string Имя файла
+nuxeoId uuid Идентификатор файла в Nuxeo
+main boolean Является ли основным
+hasSignature boolean Наличие электронной подписи
+fileId uuid Идентификатор файла в Docsvision
+8.3 Отправляемые вложения (GET /api/v1/documents/{documentId}/sending-attachments)
+Description: Получить вложения документа для отправки.
+Path Parameters:
+Параметр Тип Обязательно Описание
+documentId uuid Да Идентификатор документа
+Response ( ):SearchResponseNuxeoAttachment
+Поле Тип Описание
+fileName string Имя файла
+nuxeoId uuid Идентификатор в Nuxeo
+main boolean Является ли основным
+8.4 Готовые к авторегистрации (GET /api/v1/documents/ready-for-auto-registration)
+Description: Получить документы, готовые к автоматической регистрации.
+Response ( ):SearchResponseAutoRegistrationReadyDocumentDto
+Поле Тип Описание
+documentId uuid Идентификатор документа
+kindId uuid Идентификатор вида
+documentState.stateId uuid Идентификатор состояния
+documentState.regNumber string Регистрационный номер
+documentState.visualizationPresent boolean Наличие визуализации
+9. Справочники
+9.1 Шаблоны с ключевыми словами (GET /api/v1/directories/templates/with-keywords)
+Description: Получить шаблоны, у которых заполнены ключевые слова.
+Query Parameters:
+Параметр Тип Обязательно Описание
+dictionaryParentId uuid Да Идентификатор родительской записи справочника
+Response (массив ):DirectoryTemplateItemDto
+Поле Тип Описание
+id string Идентификатор
+name string Наименование
+keywords string Ключевые слова
+9.2 Рубрики (GET /api/v1/directories/rubrics)
+Response (массив ):DirectoryItemDto
+Поле Тип Описание
+id string Идентификатор
+name string Наименование
+9.3 Типы документов (GET /api/v1/directories/document-types)
+Response (массив ):DirectoryItemDto
+Поле Тип Описание
+id string Идентификатор
+name string Наименование
+9.4 Все маппинги indoc (GET /api/v1/directories/document-types/all-indoc-mappings)
+Response (массив ):SimpleIndocDocumentTypeDto
+Поле Тип Описание
+id uuid Идентификатор
+name string Наименование
+documentTypeIndoc string Тип документа indoc
+9.5 Тип документа по мнемокоду (GET /api/v1/directories/document-subtypes/indoc-
+mnemocode/{mnemocode})
+Path Parameters:
+Параметр Тип Обязательно Описание
+mnemocode string Да Мнемокод типа документа
+Response ( ):IndocDocumentTypeDto
+Поле Тип Описание
+id uuid Идентификатор
+name string Наименование
+documentTypeIndoc string Тип документа indoc
+responsDepartmentId uuid Идентификатор ответственного подразделения
+9.6 Типы доставки (GET /api/v1/directories/delivery-types)
+Response (массив )DirectoryItemDto
+9.7 Компании (GET /api/v1/directories/companies)
+Response (массив )DirectoryItemDto
+10. Единый справочник
+10.1 Статусы (GET /api/v1/dictionary/statuses)
+Description: Возвращает статусы из Единого справочника. Если identifier не передан — возвращает все записи.
+Query Parameters:
+Параметр Тип Обязательно Описание
+identifier string Нет UUID или мнемокод статуса
+Response ( ):ResponseWrapperStatusDto
+Поле Тип Описание
+payload array Список статусов
+StatusDto:
+Поле Тип Описание
+id uuid Идентификатор
+name string Наименование
+engName string Английское наименование
+mnemocode string Мнемокод
+10.2 Записи по мнемокоду (GET /api/v1/dictionary/items/by-mnemocode/{mnemocode})
+Description: Возвращает записи Единого справочника по мнемокоду (поиск по всему справочнику).
+Path Parameters:
+Параметр Тип Обязательно Описание
+mnemocode string Да Мнемокод записи
+Response ( ):SearchResponseStatusDto
+Поле Тип Описание
+content array Список записей (StatusDto)
+10.3 Типы входящих документов (GET /api/v1/dictionary/incoming-document-types)
+Description: Возвращает типы входящих документов из Единого справочника.
+Query Parameters:
+Параметр Тип Обязательно Описание
+identifier string Нет UUID или мнемокод типа
+Response:  (см. выше)ResponseWrapperStatusDto
+11. ППР документы
+11.1 СКИД (GET /api/v1/ppr/skid)
+Description: Получить все документы ППР (поручения, предложения, распоряжения).
+Response ( ):SearchResponsePprDocumentDto
+Поле Тип Описание
+documentId uuid Идентификатор документа
+registrationNumber string Регистрационный номер
+registrationDate date-time Дата регистрации
+basis string Основание
+assignmentDescription string Описание поручения
+deadlineDate date-time Срок исполнения
+stateId uuid Идентификатор состояния
+controlRemovingStatusId uuid Статус снятия контроля
+controlRemovingBasis string Основание снятия контроля
+receiver object Получатель (PprEmployee)
+taskCompletedDate date-time Дата завершения задачи
+cardUrl string URL карточки
+createdDate date-time Дата создания
+updatedDate date-time Дата обновления
+PprEmployee:
+Поле Тип Описание
+id uuid Идентификатор
+email string Email
+fullName string Полное имя
+12. Прочие endpoints
+12.1 Отправленные в Гарант (GET /api/v1/vnd/sent-to-garant)
+Response: Массив uuid — список ID документов, отправленных в Гарант.
+12.2 Отправленные в ИИ (GET /api/v1/vnd/sent-to-ai)
+Response: Массив uuid — список ID документов, отправленных в ИИ.
+12.3 Неотправленные входящие клиентские документы (GET /api/v1/indoc/unsent-indoc-
+client-documents)
+Response ( ):SearchResponseUnsentIndocClientDocumentDto
+Поле Тип Описание
+cardId uuid Идентификатор карточки
+responsDepartmentId uuid Ответственное подразделение
+kindId uuid Вид документа
+stateId uuid Состояние
+deliveryTypeId uuid Тип доставки
+documentTypeId uuid Тип документа
+documentTypeName string Наименование типа документа
+documentTypeNameIndoc string Тип indoc
+comment1, comment2 string Комментарии
+incomingNumber string Входящий номер
+organizationId uuid Идентификатор организации
+senderId uuid Идентификатор отправителя
+firstName, , lastName middleName string ФИО
+deliveryDate date-time Дата доставки
+shortName, fullName string Краткое/полное наименование
+inn, kpp string ИНН/КПП
+icdbId string ID в ICDB
+mdmId uuid ID в MDM
+lastUpdated date-time Дата обновления
+attachments array Вложения
+Схемы данных (краткая сводка)
+Схема Назначение
+EmployeeSearchDto Поиск сотрудника
+EmployeeReadDto Данные сотрудника
+PaperAttorneyDto Бумажная доверенность
+EmchdAttorneyDto Доверенность МЧД
+OrganizationReadDto Организация
+UnsentKbdClientContractsDto Неотправленный клиентский договор
+ContractTypeDto Тип договора КБД
+InstanceStatusDto Статус документа
+IncomingDocumentFilterDto Фильтр входящих документов
+BasicDocumentInfoDto Базовая информация о документе
+DocumentAttachmentDto Вложение документа
+DirectoryItemDto Элемент справочника
+StatusDto Статус из справочника
+PprDocumentDto ППР документ
