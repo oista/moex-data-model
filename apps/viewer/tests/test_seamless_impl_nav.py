@@ -8,12 +8,15 @@ import pytest
 import yaml
 
 from moex_publication_viewer.build import (
+    assert_impl_section_nav_coverage,
     attach_impl_section_nav_children,
     compile_catalog,
     compile_modules,
     enrich_dams_explorer_implementations,
     enrich_fibo_explorer_implementations,
+    impl_nav_section_ids,
     impl_section_nav_children,
+    module_section_ids,
 )
 from moex_publication_viewer.catalog_loader import load_architecture_catalog
 from moex_publication_viewer.models.catalog_models import ArchitectureCatalog, CatalogNode
@@ -140,6 +143,39 @@ def test_repo_dams_dsp_includes_classes_explorer_section_ref() -> None:
     assert classes.attributes.get("target_module_id") == "moex:module:dsp"
     # section leaf only — no class-tree expansion under Impl
     assert classes.children == []
+
+
+def test_repo_impl_section_nav_covers_all_module_sections() -> None:
+    """Golden: every Impl under DAMS/FIBO nests exactly its PublicationSections."""
+    modules = compile_modules(REPO, enforce_publication_contract=False)
+    catalog = compile_catalog(REPO, modules)
+    enrich_dams_explorer_implementations(modules, catalog)
+    enrich_fibo_explorer_implementations(modules, catalog)
+
+    by_id = {m.module_id: m for m in modules}
+    checked = 0
+    for host_id in (DAMS_MODULE, FIBO_PROFILE):
+        host = by_id.get(host_id)
+        if host is None:
+            continue
+        explorer = next((s for s in host.sections if s.type == "explorer"), None)
+        if explorer is None:
+            continue
+        impls = next(
+            (i for i in explorer.items if i.id == "group:implementations"), None
+        )
+        if impls is None:
+            continue
+        for ref in impls.children or []:
+            if (ref.attributes or {}).get("kind") != "implementation_ref":
+                continue
+            mid = (ref.attributes or {}).get("module_id")
+            if not mid or mid not in by_id:
+                continue
+            assert_impl_section_nav_coverage(ref, modules)
+            assert impl_nav_section_ids(ref) == module_section_ids(by_id[mid])
+            checked += 1
+    assert checked >= 2, "expected at least DAMS and FIBO Impl nests"
 
 
 def test_catalog_gate_passes_repo() -> None:

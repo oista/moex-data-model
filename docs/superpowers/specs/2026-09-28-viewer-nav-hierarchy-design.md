@@ -110,6 +110,9 @@ Composition (build-time + client):
 - Each `implementation_ref` may carry build-time `section_ref` children
   (`id: implnav:{catalog_id}:{section_id}`, `target_module_id`) — section-level
   nest only, not the full Impl class tree.
+- Under `implementation_ref`, emit one `section_ref` per Impl `PublicationSection`
+  (including `type: explorer`). Do not nest explorer `items`. Omitting explorer
+  hides kinds that live only as explorer (e.g. moex.dsp Classes).
 
 ## Interaction matrix
 

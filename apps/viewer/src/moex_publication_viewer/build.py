@@ -171,6 +171,46 @@ def impl_section_nav_children(
     return children
 
 
+def module_section_ids(mod: PublicationModule | None) -> set[str]:
+    """Ids of all top-level PublicationSection on a module."""
+    if mod is None:
+        return set()
+    return {s.id for s in mod.sections}
+
+
+def impl_nav_section_ids(ref: PublicationItem) -> set[str]:
+    """section_id values of section_ref children under an implementation_ref."""
+    ids: set[str] = set()
+    for child in ref.children or []:
+        attrs = child.attributes or {}
+        if attrs.get("kind") != "section_ref":
+            continue
+        sid = attrs.get("section_id")
+        if isinstance(sid, str) and sid:
+            ids.add(sid)
+    return ids
+
+
+def assert_impl_section_nav_coverage(
+    ref: PublicationItem,
+    modules: list[PublicationModule],
+) -> None:
+    """Assert implementation_ref nests exactly the module's PublicationSections."""
+    mid = (ref.attributes or {}).get("module_id")
+    mod = _module_by_id(modules, mid if isinstance(mid, str) else None)
+    expected = module_section_ids(mod)
+    actual = impl_nav_section_ids(ref)
+    assert actual == expected, (
+        f"implementation_ref {ref.id!r} (module={mid!r}): "
+        f"nav section_ids {sorted(actual)} != module sections {sorted(expected)}"
+    )
+    for child in ref.children or []:
+        assert (child.attributes or {}).get("kind") == "section_ref"
+        assert child.children == [], (
+            f"{child.id}: explorer/class tree must not nest under Impl section_ref"
+        )
+
+
 def attach_impl_section_nav_children(
     refs: list[PublicationItem],
     modules: list[PublicationModule],
