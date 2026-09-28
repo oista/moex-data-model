@@ -22,14 +22,15 @@ class PublicationSection(BaseModel):
     title: str
     description: str | None = None
     type: str
-    role: str | None = None
+    kind: str | None = None
+    renderer_mode: str | None = None
     columns: list[str] = Field(default_factory=list)
     filterable: list[str] = Field(default_factory=list)
     groupby: str | None = None
     sort_by: str | None = None
     sort_order: str = "asc"
     items: list[PublicationItem] = Field(default_factory=list)
-    content: str | None = None  # markdown / html body for markdown-doc
+    content: str | None = None
     tags: list[str] = Field(default_factory=list)
     default_collapsed: bool = False
 
@@ -41,7 +42,7 @@ class PublicationModule(BaseModel):
     icon: str | None = None
     version: str | None = None
     order: int = 1000
-    modeling_standard: str | None = None
+    profile: str | None = None
     sections: list[PublicationSection] = Field(default_factory=list)
     manifest_path: str | None = None
 

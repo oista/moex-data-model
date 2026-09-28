@@ -248,13 +248,13 @@ def fibo_body_to_explorer_records(body: FiboSpecificationBody) -> list[dict[str,
         )
 
     metamodel_root = {
-        "id": "group:fibo-metamodel",
-        "title": "Metamodel",
+        "id": "group:fibo-domains",
+        "title": "Domains and modules",
         "description": "FIBO domains, modules, and ontology document headers.",
         "attributes": {
             "kind": "group",
-            "section_root": "metamodel",
-            "purpose": "Organizational structure of the FIBO ontology profile.",
+            "section_root": "taxonomy-domains",
+            "purpose": "Organizational taxonomy of the FIBO ontology profile.",
             "structure_why": "Domains → modules → ontology documents (ONTOLOGY_GUIDE).",
             "member_ids": [c["id"] for c in domain_children],
         },

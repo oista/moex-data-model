@@ -110,10 +110,15 @@ def test_repo_golden_three_modules():
 
     profile = next(m for m in registry["modules"] if m["module_id"] == "moex:module:fibo-profile")
     assert "explorer" in profile["sections"]
-    assert "group:fibo-metamodel" in html
+    assert profile.get("profile") == "ontology"
+    assert "group:taxonomy" in html
+    assert "group:glossary" in html
+    assert "group:overview" in html
+    assert "group:fibo-domains" in html
     assert "group:fibo-patterns" in html
     assert "group:fibo-annotations" in html
-    assert "group:fibo-overview" in html
+    assert "group:fibo-metamodel" not in html
+    assert "group:fibo-overview" not in html
     assert "domain:FND" in html
     assert "onto:BusinessDates" in html
 

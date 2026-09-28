@@ -153,6 +153,7 @@ def section_meta(section) -> dict[str, Any]:
         "title": section.title,
         "description": section.description,
         "type": section.type,
+        "kind": getattr(section, "kind", None),
         "columns": section.columns,
         "filterable": section.filterable,
         "groupby": section.groupby,

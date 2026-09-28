@@ -390,10 +390,12 @@ def test_json_fibo_profile_explorer_wraps_roots(tmp_path: Path):
     )
     out = JsonNormalizer().normalize(sec, p)
     ids = [i.id for i in out.items]
-    assert ids[0] == "group:fibo-overview"
-    assert "group:fibo-metamodel" in ids
-    assert "group:fibo-patterns" in ids
-    assert "group:fibo-annotations" in ids
+    assert ids[0] == "group:overview"
+    assert "group:taxonomy" in ids
+    assert "group:glossary" in ids
+    assert "group:classes" in ids
+    assert "group:identity" in ids
     assert ids[-1] == "group:implementations"
-    meta = next(i for i in out.items if i.id == "group:fibo-metamodel")
-    assert any(c.id == "domain:FND" for c in meta.children)
+    tax = next(i for i in out.items if i.id == "group:taxonomy")
+    assert any(c.id == "group:fibo-domains" for c in tax.children)
+    assert any(c.id == "domain:FND" for c in tax.children[0].children)

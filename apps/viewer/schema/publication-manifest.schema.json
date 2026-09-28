@@ -12,10 +12,10 @@
     "icon": { "type": "string" },
     "title": { "type": "string" },
     "description": { "type": "string" },
-    "modeling_standard": {
+    "profile": {
       "type": "string",
-      "enum": ["linkml", "openapi", "owl", "json_schema", "shacl", "custom"],
-      "description": "ModelingStandardFamily; selects PublicationProfile for role checks"
+      "enum": ["linkml-specification", "ontology", "implementation"],
+      "description": "PublicationProfileId (ADR-016); selects ProfileSpec"
     },
     "sections": {
       "type": "array",
@@ -30,17 +30,23 @@
         "id": { "type": "string" },
         "title": { "type": "string" },
         "description": { "type": "string" },
-        "role": {
+        "kind": {
           "type": "string",
           "enum": [
             "overview",
             "classes",
-            "specification",
+            "slots",
+            "enumerations",
+            "schema-files",
+            "taxonomy",
             "glossary",
-            "requirements",
-            "implementations"
+            "identity",
+            "bindings",
+            "data-flows",
+            "conformance",
+            "source"
           ],
-          "description": "PublicationSectionRole (semantic); orthogonal to type (SectionKind render)"
+          "description": "PublicationSectionKind (semantic); orthogonal to type (SectionKind render)"
         },
         "type": {
           "enum": [

@@ -345,7 +345,7 @@ def wrap_dams_explorer_roots(
         attributes={
             "kind": "group",
             "section_root": "classes",
-            "purpose": "Навигация по классам и enum спецификации по пакетам схемы.",
+            "purpose": "Навигация по классам и enum (renderer data-structure, ADR-016 linkml-specification).",
             "structure_why": "Пакеты соответствуют LinkML-модулям DAMS; классы — тело TSpecBody.",
             "class_count": class_count,
             "enum_count": sum(
@@ -366,7 +366,7 @@ def wrap_dams_explorer_roots(
         description="Нормативные YAML-файлы эталона DAMS.",
         attributes={
             "kind": "group",
-            "section_root": "spec-files",
+            "section_root": "schema-files",
             "purpose": "Просмотр envelope и схем, составляющих reference specification.",
             "structure_why": "specification.yaml — дескриптор; schemas/* — нормативное тело LinkML.",
             "class_count": 0,

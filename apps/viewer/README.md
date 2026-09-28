@@ -48,9 +48,10 @@ Sidebar order follows [`architecture-catalog.yaml`](../../model-assets/specifica
 ## Add a module
 
 1. Place a `publish.yaml` next to your sources (`kind: publication_module`).
-2. Point `source.path` relative to the manifest directory.
-3. Optionally register the module in `architecture-catalog.yaml` (`module_id`, `conforms_to` / `expressed_in`).
-4. Re-run `make viewer`. The sidebar picks up the new module without UI code changes.
+2. Set **`profile:`** (`linkml-specification` | `ontology` | `implementation`) and section **`kind:`** values from `PublicationSectionKind` ([ADR-016](../../docs/adr/ADR-016-publication-section-kinds-and-profiles.md)).
+3. Point `source.path` relative to the manifest directory (`type:` remains the render/wire format).
+4. Optionally register the module in `architecture-catalog.yaml` (`module_id`, `conforms_to` / `expressed_in`).
+5. Re-run `make viewer`. The sidebar picks up the new module without UI code changes.
 
 See `schema/publication-manifest.schema.json` for the contract.
 

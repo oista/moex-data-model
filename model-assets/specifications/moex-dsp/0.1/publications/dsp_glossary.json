@@ -30,27 +30,15 @@
     "kind": "class"
   },
   {
-    "id": "Specification",
-    "title": "Specification",
-    "description": "Нормативное или справочное описание предметной области либо профиля моделирования, доступное для чтения в плеере.",
-    "kind": "concept"
-  },
-  {
-    "id": "Implementation",
-    "title": "Implementation",
-    "description": "Конкретная публикация или выпуск, который соответствует эталонной спецификации (демо-решение, релиз онтологии, метамодель плеера).",
-    "kind": "concept"
-  },
-  {
     "id": "PublicationModule",
     "title": "Publication module",
-    "description": "Публикуемый модуль контента: открытый набор экземпляров разделов одного пакета. Список module_id не закрыт enum’ом.",
+    "description": "Публикуемый модуль контента: открытый набор экземпляров разделов. Список module_id не закрыт enum’ом. См. ADR-016.",
     "kind": "class"
   },
   {
     "id": "PublicationSection",
     "title": "Publication section",
-    "description": "Экземпляр раздела модуля: имеет семантическую роль (PublicationSectionRole) и вид представления (SectionKind).",
+    "description": "Экземпляр раздела: semantic kind (PublicationSectionKind) и render type (SectionKind) ортогональны.",
     "kind": "class"
   },
   {
@@ -62,7 +50,7 @@
   {
     "id": "PublicationProfile",
     "title": "Publication profile",
-    "description": "Профиль обязательных ролей разделов для семьи ModelingStandardFamily. LinkML: overview, classes, specification, glossary. OWL: overview, classes, glossary. requirements и implementations — опциональны.",
+    "description": "ProfileSpec: required / recommended / forbidden PublicationSectionKind для profile id (linkml-specification, ontology, implementation). ADR-016.",
     "kind": "class"
   },
   {
@@ -80,79 +68,103 @@
   {
     "id": "ModelingStandard",
     "title": "Modeling standard",
-    "description": "Язык или стандарт моделирования (версия/ревизия — экземпляры). Закрытый словарь семей — ModelingStandardFamily.",
+    "description": "Язык или стандарт моделирования (версия/ревизия — экземпляры). Не путать с publication profile.",
     "kind": "class"
   },
   {
     "id": "ModelingStandardFamily",
     "title": "Modeling standard family",
-    "description": "Закрытый enum семей стандартов: linkml, openapi, owl, json_schema, shacl, custom (выровнен с kernel StandardFamily).",
+    "description": "Закрытый enum семей стандартов (метка языка). Ключ профиля публикации — PublicationProfileId.",
     "kind": "enum"
   },
   {
-    "id": "PublicationSectionRole",
-    "title": "Publication section role",
-    "description": "Закрытый словарь семантических ролей раздела: overview, classes, specification, glossary, requirements, implementations. Не путать с SectionKind.",
+    "id": "PublicationProfileId",
+    "title": "Publication profile id",
+    "description": "linkml-specification | ontology | implementation — выбирает ProfileSpec.",
+    "kind": "enum"
+  },
+  {
+    "id": "PublicationSectionKind",
+    "title": "Publication section kind",
+    "description": "Закрытый семантический словарь разделов (overview, classes, taxonomy, glossary, …). ADR-016. taxonomy ≠ classes.",
     "kind": "enum"
   },
   {
     "id": "SectionKind",
-    "title": "Section kind",
-    "description": "Вид представления (render) раздела: explorer, glossary, markdown_doc, entity_table и др. Ортогонален PublicationSectionRole.",
+    "title": "Section kind (render)",
+    "description": "Вид представления (render/wire): explorer, glossary, markdown_doc, entity_table и др. Manifest field type. Ортогонален PublicationSectionKind.",
     "kind": "enum"
   },
   {
     "id": "Overview",
     "title": "Overview",
-    "description": "Роль overview: вводный раздел модуля — общее описание пакета.",
+    "description": "Kind overview: вводный раздел модуля.",
     "kind": "section"
   },
   {
     "id": "Classes",
     "title": "Classes",
-    "description": "Роль classes: иерархия классов спецификации или профиля (единое имя UI — «Классы», в т.ч. для онтологий).",
+    "description": "Kind classes: типы/концепции. Renderer: data-structure (LinkML) или ontology-list (ontology profile).",
     "kind": "section"
   },
   {
-    "id": "Specification",
-    "title": "Specification",
-    "description": "Роль specification: нормативные исходные файлы эталона (обязательна для LinkML-профиля).",
+    "id": "Taxonomy",
+    "title": "Taxonomy",
+    "description": "Kind taxonomy: иерархия как primary nav для онтологий. Forbidden на linkml-specification. ADR-016.",
+    "kind": "section"
+  },
+  {
+    "id": "SchemaFiles",
+    "title": "Schema files",
+    "description": "Kind schema-files: нормативные исходные файлы эталона (LinkML).",
     "kind": "section"
   },
   {
     "id": "Glossary",
     "title": "Glossary",
-    "description": "Роль glossary: термины и определения для читателя.",
+    "description": "Kind glossary: термины и определения.",
+    "kind": "section"
+  },
+  {
+    "id": "Identity",
+    "title": "Identity",
+    "description": "Kind identity: IRI, URI, source namespace (recommended на ontology).",
     "kind": "section"
   },
   {
     "id": "DeepLink",
     "title": "Deep link",
-    "description": "Ссылка на конкретный модуль, раздел или элемент в плеере, которую можно открыть или скопировать.",
+    "description": "Ссылка на конкретный модуль, раздел или элемент в плеере.",
     "kind": "concept"
   },
   {
     "id": "ConformsTo",
     "title": "Conforms to",
-    "description": "Отношение «реализация соответствует эталонной спецификации»; в навигации задаёт вложенность под головным пакетом.",
+    "description": "Отношение «реализация соответствует эталонной спецификации».",
     "kind": "relation"
   },
   {
     "id": "MoexDams",
     "title": "moex.dams",
-    "description": "Эталонная спецификация корпоративной модели данных MOEX (DAMS), головной пакет в навигации плеера.",
+    "description": "Эталонная спецификация корпоративной модели данных MOEX (DAMS).",
     "kind": "package"
   },
   {
     "id": "MoexDsp",
     "title": "moex.dsp",
-    "description": "Пакет метамодели Data Specification Player: описание каталога, модулей публикации и разделов.",
+    "description": "Пакет метамодели Data Specification Player.",
     "kind": "package"
   },
   {
     "id": "EdmcFibo",
     "title": "edmc.fibo",
-    "description": "Эталонный профиль FIBO (организационная структура онтологии) в навигации плеера.",
+    "description": "Эталонный профиль FIBO в навигации плеера (profile ontology).",
     "kind": "package"
+  },
+  {
+    "id": "ADR016",
+    "title": "ADR-016",
+    "description": "Publication section kinds and profiles: taxonomy vs classes, ProfileSpec, renderer modes.",
+    "kind": "concept"
   }
 ]

@@ -1,46 +1,85 @@
-"""Publication profiles: mandatory PublicationSectionRole per ModelingStandardFamily."""
+"""Publication profiles (ADR-016): ProfileSpec + renderer mode."""
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Literal
 
-ModelingStandardFamily = Literal[
-    "linkml",
-    "openapi",
-    "owl",
-    "json_schema",
-    "shacl",
-    "custom",
+PublicationProfileId = Literal[
+    "linkml-specification",
+    "ontology",
+    "implementation",
 ]
 
-PublicationSectionRole = Literal[
+PublicationSectionKind = Literal[
     "overview",
     "classes",
-    "specification",
+    "slots",
+    "enumerations",
+    "schema-files",
+    "taxonomy",
     "glossary",
-    "requirements",
-    "implementations",
+    "identity",
+    "bindings",
+    "data-flows",
+    "conformance",
+    "source",
 ]
 
-# Canonical profiles (DSP PublicationProfile). Optional roles may appear beyond these.
-REQUIRED_ROLES: dict[str, frozenset[str]] = {
-    "linkml": frozenset({"overview", "classes", "specification", "glossary"}),
-    "owl": frozenset({"overview", "classes", "glossary"}),
+
+@dataclass(frozen=True)
+class ProfileSpec:
+    required: frozenset[str]
+    recommended: frozenset[str]
+    forbidden: frozenset[str]
+
+
+PROFILES: dict[str, ProfileSpec] = {
+    "linkml-specification": ProfileSpec(
+        required=frozenset({"overview", "classes", "schema-files"}),
+        recommended=frozenset({"enumerations", "slots"}),
+        forbidden=frozenset({"taxonomy"}),
+    ),
+    "ontology": ProfileSpec(
+        required=frozenset({"overview", "taxonomy", "glossary"}),
+        recommended=frozenset({"classes", "identity"}),
+        forbidden=frozenset({"schema-files", "enumerations", "slots"}),
+    ),
+    "implementation": ProfileSpec(
+        required=frozenset({"overview", "conformance"}),
+        recommended=frozenset({"bindings", "data-flows"}),
+        forbidden=frozenset({"taxonomy"}),
+    ),
 }
 
-# Explorer group section_root → PublicationSectionRole
-SECTION_ROOT_TO_ROLE: dict[str, str] = {
+# Explorer group section_root → PublicationSectionKind
+SECTION_ROOT_TO_KIND: dict[str, str] = {
     "overview": "overview",
     "classes": "classes",
-    "spec-files": "specification",
-    "specification": "specification",
+    "spec-files": "schema-files",
+    "schema-files": "schema-files",
+    "taxonomy": "taxonomy",
     "glossary": "glossary",
-    "requirements": "requirements",
-    "implementations": "implementations",
+    "identity": "identity",
+    "slots": "slots",
+    "enumerations": "enumerations",
+    "conformance": "conformance",
+    "bindings": "bindings",
+    "data-flows": "data-flows",
+    "source": "source",
 }
 
 
-def required_roles_for(standard: str | None) -> frozenset[str] | None:
-    if not standard:
+def get_renderer_mode(section_kind: str, profile: str | None) -> str:
+    """Return renderer mode for a semantic section kind under a profile."""
+    if section_kind == "classes":
+        if profile == "ontology":
+            return "ontology-list"
+        return "data-structure"
+    return section_kind
+
+
+def profile_spec(profile: str | None) -> ProfileSpec | None:
+    if not profile:
         return None
-    return REQUIRED_ROLES.get(standard)
+    return PROFILES.get(profile)

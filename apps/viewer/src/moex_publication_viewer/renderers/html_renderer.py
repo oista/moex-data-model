@@ -41,6 +41,8 @@ def section_payload(section: PublicationSection) -> dict[str, Any]:
         "title": section.title,
         "description": section.description,
         "type": section.type,
+        "kind": section.kind,
+        "renderer_mode": section.renderer_mode,
         "columns": section.columns,
         "filterable": section.filterable,
         "groupby": section.groupby,
@@ -62,6 +64,7 @@ def modules_payload(modules: list[PublicationModule]) -> list[dict[str, Any]]:
             "icon": m.icon,
             "version": m.version,
             "order": m.order,
+            "profile": m.profile,
             "sections": [section_payload(s) for s in m.sections],
         }
         for m in modules

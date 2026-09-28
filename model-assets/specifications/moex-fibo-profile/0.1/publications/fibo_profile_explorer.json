@@ -5,8 +5,8 @@
     "description": "FIBO domains, modules, and ontology document headers.",
     "attributes": {
       "kind": "group",
-      "section_root": "classes-domains",
-      "purpose": "Organizational class hierarchy of the FIBO ontology profile.",
+      "section_root": "taxonomy-domains",
+      "purpose": "Organizational taxonomy of the FIBO ontology profile.",
       "structure_why": "Domains → modules → ontology documents (ONTOLOGY_GUIDE).",
       "member_ids": [
         "domain:FND",

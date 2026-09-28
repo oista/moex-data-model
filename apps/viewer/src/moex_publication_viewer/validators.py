@@ -2,11 +2,19 @@
 
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 
 from moex_publication_viewer.manifest_loader import resolve_source_path
 from moex_publication_viewer.models.catalog_models import ArchitectureCatalog
 from moex_publication_viewer.models.manifest_models import PublicationManifest
+from moex_publication_viewer.models.publication_models import PublicationModule
+from moex_publication_viewer.publication_profiles import (
+    SECTION_ROOT_TO_KIND,
+    profile_spec,
+)
+
+logger = logging.getLogger(__name__)
 
 
 class ValidationError(Exception):
@@ -53,6 +61,51 @@ def validate_manifests(
 
     if errors:
         raise ValidationError(errors)
+
+
+def _collect_module_kinds(module: PublicationModule) -> set[str]:
+    kinds: set[str] = set()
+    for section in module.sections:
+        if section.kind:
+            kinds.add(section.kind)
+        if section.type == "explorer":
+            for item in section.items:
+                root = (item.attributes or {}).get("section_root")
+                if isinstance(root, str) and root in SECTION_ROOT_TO_KIND:
+                    kinds.add(SECTION_ROOT_TO_KIND[root])
+    return kinds
+
+
+def check_publication_profiles(modules: list[PublicationModule]) -> list[str]:
+    """Soft ProfileSpec checks (ADR-016). Returns warnings; does not raise."""
+    warnings: list[str] = []
+    for module in modules:
+        spec = profile_spec(module.profile)
+        if spec is None:
+            continue
+        present = _collect_module_kinds(module)
+        loc = module.manifest_path or module.module_id
+        missing_req = sorted(spec.required - present)
+        if missing_req:
+            warnings.append(
+                f"{loc}: profile '{module.profile}' missing required kinds: "
+                f"{', '.join(missing_req)}"
+            )
+        forbidden_hit = sorted(spec.forbidden & present)
+        if forbidden_hit:
+            warnings.append(
+                f"{loc}: profile '{module.profile}' has forbidden kinds: "
+                f"{', '.join(forbidden_hit)}"
+            )
+        missing_rec = sorted(spec.recommended - present)
+        if missing_rec:
+            warnings.append(
+                f"{loc}: profile '{module.profile}' missing recommended kinds: "
+                f"{', '.join(missing_rec)}"
+            )
+    for w in warnings:
+        logger.warning("%s", w)
+    return warnings
 
 
 def validate_architecture_catalog(

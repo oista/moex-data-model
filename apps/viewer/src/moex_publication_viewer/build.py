@@ -19,9 +19,11 @@ from moex_publication_viewer.normalizers.linkml_normalizer import clear_schema_v
 from moex_publication_viewer.renderers.html_renderer import render_viewer
 from moex_publication_viewer.validators import (
     ValidationError,
+    check_publication_profiles,
     validate_architecture_catalog,
     validate_manifests,
 )
+from moex_publication_viewer.publication_profiles import get_renderer_mode
 
 PACKAGE_DIR = Path(__file__).resolve().parent
 VIEWER_ROOT = PACKAGE_DIR.parent.parent  # apps/viewer/
@@ -69,6 +71,10 @@ def compile_modules(root: Path) -> list[PublicationModule]:
                     f"(source: {source_path})"
                 )
                 continue
+            if pub_section.kind:
+                pub_section.renderer_mode = get_renderer_mode(
+                    pub_section.kind, manifest.profile
+                )
             sections.append(pub_section)
 
         modules.append(
@@ -79,6 +85,7 @@ def compile_modules(root: Path) -> list[PublicationModule]:
                 icon=manifest.icon,
                 version=manifest.version,
                 order=manifest.order,
+                profile=manifest.profile,
                 sections=sections,
                 manifest_path=str(path),
             )
@@ -88,6 +95,7 @@ def compile_modules(root: Path) -> list[PublicationModule]:
         raise ValidationError(errors)
 
     modules.sort(key=lambda m: (m.order, m.title))
+    check_publication_profiles(modules)
     return modules
 
 
@@ -288,6 +296,7 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
             {
                 "module_id": m.module_id,
                 "title": m.title,
+                "profile": m.profile,
                 "sections": [s.id for s in m.sections],
                 "manifest_path": m.manifest_path,
             }

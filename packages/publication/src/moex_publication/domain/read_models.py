@@ -26,7 +26,8 @@ class PublicationSection(BaseModel):
     title: str
     description: str | None = None
     type: str
-    role: str | None = None
+    kind: str | None = None
+    renderer_mode: str | None = None
     columns: tuple[str, ...] = ()
     filterable: tuple[str, ...] = ()
     items: tuple[PublicationItem, ...] = ()
@@ -44,7 +45,7 @@ class PublicationModule(BaseModel):
     icon: str | None = None
     version: str | None = None
     order: int = 1000
-    modeling_standard: str | None = None
+    profile: str | None = None
     sections: tuple[PublicationSection, ...] = ()
     manifest_path: str | None = None
 
