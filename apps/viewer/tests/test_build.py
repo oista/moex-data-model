@@ -155,12 +155,15 @@ def test_nav_group_children_hidden_overrides_display_flex():
 
 
 def test_explorer_groups_selectable_cards_not_in_search_and_module_title():
-    """Package groups open as cards; stay out of search index; module title is MOEX standard."""
+    """Package groups open as cards; stay out of search index; module title is moex.dams."""
     repo = Path(__file__).resolve().parents[3]
     dist = repo / "apps" / "viewer" / "dist"
     build(repo, dist)
     html = (dist / "index.html").read_text(encoding="utf-8")
-    assert "MOEX standard" in html
+    assert "moex.dams" in html
+    assert "Data Specification Player" in html
+    assert "moex.dsp" in html
+    assert "edmc.fibo" in html
     # Group ids must not appear as selectable search items
     assert '"item_id": "group:' not in html and '"item_id":"group:' not in html
     js = (repo / "apps" / "viewer" / "static" / "viewer.js").read_text(encoding="utf-8")

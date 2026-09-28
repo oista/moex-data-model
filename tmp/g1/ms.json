@@ -1,0 +1,11 @@
+{
+  "artifact_id": "moex:artifact:dams-shacl:0.1",
+  "generator": "gen-shacl",
+  "generator_module": "linkml.generators.shaclgen",
+  "generator_version": "1.11.1",
+  "schema_path": "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml",
+  "schema_digest": "sha256:f43c17b53a696566cfe6c915e1591a0078645bdc09e50ffc3e0e2146b1b92c77",
+  "output_path": "tmp/g1/s.ttl",
+  "content_digest": "sha256:07eca10baccdb6460b91c3b63c8742178bba973812ba5df3509e801025add0ae",
+  "generated_at": "2026-09-28T03:38:27.932366+00:00"
+}

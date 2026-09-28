@@ -3,7 +3,7 @@ kind: publication_module
 version: "1"
 order: 100
 icon: "📐"
-title: MOEX standard
+title: moex.dams
 description: "MOEX DAMS 0.1 reference specification (LinkML) — publication projection of the schema body"
 sections:
   - id: overview

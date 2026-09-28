@@ -1,0 +1,177 @@
+id: https://data.moex.com/dsp/v0.1
+name: moex_dsp
+version: 0.1.0
+title: moex.dsp
+description: >
+  Metamodel of Data Specification Player — how specifications, publications,
+  and navigation are projected for reading (not the domain data model itself).
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  dsp: https://data.moex.com/dsp/
+imports:
+  - linkml:types
+default_prefix: dsp
+default_range: string
+
+classes:
+  NamedElement:
+    abstract: true
+    description: >
+      Абстрактный именованный элемент метамодели плеера: стабильный идентификатор,
+      отображаемое имя и описание для читателя.
+    slots:
+      - element_id
+      - title
+      - description
+
+  ArchitectureCatalog:
+    is_a: NamedElement
+    description: >
+      Навигационное дерево головных спецификаций и их реализаций, из которого
+      строится боковая панель Data Specification Player.
+    slots:
+      - catalog_version
+      - nodes
+
+  CatalogNode:
+    abstract: true
+    is_a: NamedElement
+    description: >
+      Узел архитектурного каталога: либо эталонная спецификация, либо реализация,
+      согласованная с эталоном.
+    slots:
+      - version
+      - modeling_language
+      - module_id
+
+  ReferenceSpecification:
+    is_a: CatalogNode
+    description: >
+      Головной эталонный пакет (например moex.dams или edmc.fibo): нормативное
+      описание, к которому могут относиться реализации.
+    slots:
+      - implementations
+
+  SpecificationImplementation:
+    is_a: CatalogNode
+    description: >
+      Публикация, которая соответствует (conforms to) эталонной спецификации
+      и показывается вложенной под ней в навигации.
+    slots:
+      - conforms_to
+
+  PublicationModule:
+    is_a: NamedElement
+    description: >
+      Публикуемый модуль контента: набор разделов (Overview, Classes, Glossary и др.),
+      собранный из манифеста публикации.
+    slots:
+      - version
+      - module_id
+      - sections
+
+  PublicationSection:
+    is_a: NamedElement
+    description: >
+      Раздел модуля публикации с определённым видом представления
+      (обозреватель классов, глоссарий, документ Overview и т.п.).
+    slots:
+      - section_kind
+      - items
+
+  PublicationItem:
+    is_a: NamedElement
+    description: >
+      Элемент содержимого раздела: класс, термин глоссария, узел дерева или
+      иной читаемый объект внутри раздела.
+    slots:
+      - children
+
+  ModelingStandard:
+    is_a: NamedElement
+    description: >
+      Язык или стандарт моделирования, в котором выражена спецификация
+      (например LinkML или OWL). В каталоге отображается как метка языка модели.
+
+slots:
+  element_id:
+    identifier: true
+    range: uriorcurie
+    required: true
+    description: Стабильный идентификатор элемента.
+  title:
+    range: string
+    description: Отображаемое имя для читателя.
+  description:
+    range: string
+    description: Краткое описание смысла элемента.
+  catalog_version:
+    range: string
+    description: Версия схемы архитектурного каталога.
+  nodes:
+    range: CatalogNode
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Узлы навигационного дерева каталога.
+  version:
+    range: string
+    description: Версия спецификации, реализации или модуля публикации.
+  modeling_language:
+    range: string
+    description: >
+      Язык моделирования, в котором выражен узел (соответствует метке языка
+      в архитектурном каталоге).
+  module_id:
+    range: uriorcurie
+    description: Идентификатор связанного модуля публикации.
+  implementations:
+    range: SpecificationImplementation
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Реализации, относящиеся к этой эталонной спецификации.
+  conforms_to:
+    range: ReferenceSpecification
+    description: Эталонная спецификация, которой соответствует реализация.
+  sections:
+    range: PublicationSection
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Разделы модуля публикации.
+  section_kind:
+    range: SectionKind
+    description: Вид представления раздела для читателя.
+  items:
+    range: PublicationItem
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Элементы содержимого раздела.
+  children:
+    range: PublicationItem
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Вложенные элементы (иерархия классов или терминов).
+
+enums:
+  SectionKind:
+    description: Виды разделов публикации в Data Specification Player.
+    permissible_values:
+      explorer:
+        description: Иерархический обозреватель классов или структурных групп.
+      glossary:
+        description: Глоссарий терминов с определениями.
+      markdown_doc:
+        description: Обзорный документ (Overview) в виде текста.
+      entity_table:
+        description: Табличный перечень сущностей или атрибутов.
+      enum_table:
+        description: Табличный перечень перечислений.
+      tree:
+        description: Дерево отношений (например иерархия классов).
+      key_value:
+        description: Пары ключ–значение для компактных сведений.

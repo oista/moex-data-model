@@ -1,0 +1,11 @@
+{
+  "artifact_id": "moex:artifact:dams-dbml:0.1",
+  "generator": "gen-dbml",
+  "generator_module": "linkml.generators.dbmlgen",
+  "generator_version": "1.11.1",
+  "schema_path": "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml",
+  "schema_digest": "sha256:f43c17b53a696566cfe6c915e1591a0078645bdc09e50ffc3e0e2146b1b92c77",
+  "output_path": "generated/artifacts/moex-dams/0.1/moex-dams.dbml",
+  "content_digest": "sha256:649d8e42f3a72ef4adc1cea34aefa261215f11318973993b0ccb43849b47c7e1",
+  "generated_at": "2026-09-28T03:37:45.528553+00:00"
+}

@@ -25,6 +25,17 @@
     
 
         
+      ConceptualEntity : data_class
+        
+          
+    
+        
+        
+        ConceptualEntity --> "0..1" DataClassEnum : data_class
+        click DataClassEnum href "../DataClassEnum"
+    
+
+        
       ConceptualEntity : data_owner_ref
         
           

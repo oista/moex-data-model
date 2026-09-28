@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check packages-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples generate-contracts compare-golden api-check web-check drawdb-up drawdb-adapter-check
+.PHONY: viewer viewer-check packages-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples generate-contracts generate-artifacts compare-golden api-check web-check drawdb-up drawdb-adapter-check
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -71,7 +71,11 @@ validate-examples:
 generate-contracts:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/generate-contracts.ps1
 
-# Digest check: committed contracts (+ json-schema if present) vs regenerate
+# gen-owl / gen-shacl / gen-dbml / mermaid → generated/artifacts/moex-dams/0.1
+generate-artifacts:
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/generate-artifacts.ps1
+
+# Digest check: contracts + json-schema + owl/shacl/dbml/mermaid vs regenerate
 compare-golden:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/compare-golden.ps1
 

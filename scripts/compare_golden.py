@@ -1,4 +1,4 @@
-"""Compare regenerable golden artifacts (contracts + optional JSON Schema)."""
+"""Compare regenerable golden artifacts (contracts + JSON Schema + Stage 6 matrix)."""
 
 from __future__ import annotations
 
@@ -23,9 +23,30 @@ SCHEMA = (
     / "moex-dams.yaml"
 )
 
+sys.path.insert(0, str(REPO / "scripts"))
+from generate_artifacts import (  # noqa: E402
+    DBML_MANIFEST,
+    DBML_PATH,
+    MERMAID_DIR,
+    MERMAID_MANIFEST,
+    OWL_MANIFEST,
+    OWL_PATH,
+    SHACL_MANIFEST,
+    SHACL_PATH,
+    generate_dbml,
+    generate_mermaid,
+    generate_owl,
+    generate_shacl,
+    mermaid_tree_digest,
+)
+
 
 def _sha256_file(path: Path) -> str:
     return "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _lf_text(path: Path) -> str:
+    return path.read_text(encoding="utf-8").replace("\r\n", "\n")
 
 
 def _compare_contracts() -> list[str]:
@@ -52,8 +73,6 @@ def _compare_contracts() -> list[str]:
             f"  actual={actual}"
         )
 
-    # Regenerate into temp; compare digest only (ignore generated_at).
-    sys.path.insert(0, str(REPO / "scripts"))
     from generate_contracts import generate  # noqa: WPS433
 
     with tempfile.TemporaryDirectory(prefix="moex-golden-contracts-") as tmp:
@@ -68,7 +87,6 @@ def _compare_contracts() -> list[str]:
                 f"  regenerated={regen_digest}\n"
                 f"  temp={init_py}"
             )
-        # Also require regen matches committed bytes when digests equal expected.
         if regen_digest == expected and init_py.read_bytes() != committed.read_bytes():
             errors.append(
                 "contracts regenerate digest matches but bytes differ from committed file"
@@ -90,7 +108,6 @@ def _compare_json_schema() -> list[str]:
         text = JsonSchemaGenerator(str(SCHEMA)).serialize()
         dest.write_text(text, encoding="utf-8")
         if dest.read_bytes() != JSON_SCHEMA.read_bytes():
-            # Normalize line endings for cross-platform compare.
             left = dest.read_text(encoding="utf-8").replace("\r\n", "\n")
             right = JSON_SCHEMA.read_text(encoding="utf-8").replace("\r\n", "\n")
             if left != right:
@@ -103,14 +120,187 @@ def _compare_json_schema() -> list[str]:
     return errors
 
 
+def _compare_single_file(
+    *,
+    name: str,
+    manifest_path: Path,
+    committed_path: Path,
+    regenerate,
+) -> list[str]:
+    errors: list[str] = []
+    if not manifest_path.is_file():
+        return [f"missing {name} manifest: {manifest_path}"]
+    if not committed_path.is_file():
+        return [f"missing committed {name} artifact: {committed_path}"]
+
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    expected = manifest.get("content_digest")
+    if not expected:
+        return [f"{name} manifest missing content_digest"]
+
+    actual = _sha256_file(committed_path)
+    # Prefer LF-normalized digest when platform may rewrite newlines.
+    committed_text = _lf_text(committed_path)
+    committed_digest = "sha256:" + hashlib.sha256(
+        committed_text.encode("utf-8")
+    ).hexdigest()
+    if committed_digest != expected and actual != expected:
+        errors.append(
+            f"{name} digest mismatch vs manifest:\n"
+            f"  file={committed_path.as_posix()}\n"
+            f"  expected={expected}\n"
+            f"  actual={committed_digest}"
+        )
+
+    with tempfile.TemporaryDirectory(prefix=f"moex-golden-{name}-") as tmp:
+        tmp_path = Path(tmp)
+        out = tmp_path / committed_path.name
+        tmp_manifest = tmp_path / "manifest.json"
+        regen_digest = regenerate(out_path=out, manifest_path=tmp_manifest)
+        if regen_digest != expected:
+            errors.append(
+                f"{name} regenerate digest mismatch:\n"
+                f"  expected={expected}\n"
+                f"  regenerated={regen_digest}"
+            )
+        else:
+            left = _lf_text(out)
+            right = committed_text
+            if left != right:
+                errors.append(
+                    f"{name} regenerate digest matches but text differs from committed"
+                )
+
+    return errors
+
+
+def _smoke_rdf(path: Path, *, name: str) -> list[str]:
+    try:
+        from rdflib import Graph
+
+        Graph().parse(path.as_posix(), format="turtle")
+    except Exception as exc:  # noqa: BLE001 — surface parse failures to CI
+        return [f"{name} rdflib parse failed: {exc}"]
+    return []
+
+
+def _smoke_dbml(path: Path) -> list[str]:
+    data = path.read_bytes()
+    if b"Table " not in data:
+        return [f"dbml smoke: missing 'Table ' in {path.as_posix()}"]
+    return []
+
+
+def _smoke_mermaid(directory: Path) -> list[str]:
+    errors: list[str] = []
+    files = sorted(directory.glob("*.md"))
+    if not files:
+        return [f"mermaid smoke: no *.md under {directory.as_posix()}"]
+    for path in files:
+        text = path.read_text(encoding="utf-8")
+        if "```mermaid" not in text and "```{mermaid}" not in text:
+            errors.append(f"mermaid smoke: no mermaid fence in {path.name}")
+    return errors
+
+
+def _compare_owl() -> list[str]:
+    errors = _compare_single_file(
+        name="owl",
+        manifest_path=OWL_MANIFEST,
+        committed_path=OWL_PATH,
+        regenerate=generate_owl,
+    )
+    if not errors:
+        errors.extend(_smoke_rdf(OWL_PATH, name="owl"))
+    return errors
+
+
+def _compare_shacl() -> list[str]:
+    errors = _compare_single_file(
+        name="shacl",
+        manifest_path=SHACL_MANIFEST,
+        committed_path=SHACL_PATH,
+        regenerate=generate_shacl,
+    )
+    if not errors:
+        errors.extend(_smoke_rdf(SHACL_PATH, name="shacl"))
+    return errors
+
+
+def _compare_dbml() -> list[str]:
+    errors = _compare_single_file(
+        name="dbml",
+        manifest_path=DBML_MANIFEST,
+        committed_path=DBML_PATH,
+        regenerate=generate_dbml,
+    )
+    if not errors:
+        errors.extend(_smoke_dbml(DBML_PATH))
+    return errors
+
+
+def _compare_mermaid() -> list[str]:
+    errors: list[str] = []
+    if not MERMAID_MANIFEST.is_file():
+        return [f"missing mermaid manifest: {MERMAID_MANIFEST}"]
+    if not MERMAID_DIR.is_dir():
+        return [f"missing mermaid directory: {MERMAID_DIR}"]
+
+    manifest = json.loads(MERMAID_MANIFEST.read_text(encoding="utf-8"))
+    expected = manifest.get("content_digest")
+    if not expected:
+        return ["mermaid manifest missing content_digest"]
+
+    actual = mermaid_tree_digest(MERMAID_DIR)
+    if actual != expected:
+        errors.append(
+            f"mermaid digest mismatch vs manifest:\n"
+            f"  dir={MERMAID_DIR.as_posix()}\n"
+            f"  expected={expected}\n"
+            f"  actual={actual}"
+        )
+
+    with tempfile.TemporaryDirectory(prefix="moex-golden-mermaid-") as tmp:
+        tmp_dir = Path(tmp) / "diagrams"
+        tmp_manifest = Path(tmp) / "manifest.json"
+        regen_digest = generate_mermaid(out_dir=tmp_dir, manifest_path=tmp_manifest)
+        if regen_digest != expected:
+            errors.append(
+                f"mermaid regenerate digest mismatch:\n"
+                f"  expected={expected}\n"
+                f"  regenerated={regen_digest}"
+            )
+
+    if not errors:
+        errors.extend(_smoke_mermaid(MERMAID_DIR))
+    return errors
+
+
 def main() -> int:
+    parts = ["contracts"]
     errors = _compare_contracts() + _compare_json_schema()
+    if JSON_SCHEMA.is_file():
+        parts.append("json-schema")
+
+    for name, fn in (
+        ("owl", _compare_owl),
+        ("shacl", _compare_shacl),
+        ("dbml", _compare_dbml),
+        ("mermaid", _compare_mermaid),
+    ):
+        chunk = fn()
+        errors.extend(chunk)
+        if not chunk or all("missing" not in e for e in chunk):
+            # Always list target once present in repo after Stage 6 baseline.
+            if (REPO / "generated" / "manifests" / f"moex-dams-{name}.json").is_file():
+                parts.append(name)
+
     if errors:
         for err in errors:
             print(err, file=sys.stderr)
         print(f"compare-golden FAILED ({len(errors)} issue(s))", file=sys.stderr)
         return 1
-    print("compare-golden OK (contracts" + (", json-schema" if JSON_SCHEMA.is_file() else "") + ")")
+    print("compare-golden OK (" + ", ".join(parts) + ")")
     return 0
 
 

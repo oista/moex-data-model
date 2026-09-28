@@ -66,6 +66,17 @@
     
 
         
+      LogicalEntity : data_class
+        
+          
+    
+        
+        
+        LogicalEntity --> "0..1" DataClassEnum : data_class
+        click DataClassEnum href "../DataClassEnum"
+    
+
+        
       LogicalEntity : data_owner_ref
         
           

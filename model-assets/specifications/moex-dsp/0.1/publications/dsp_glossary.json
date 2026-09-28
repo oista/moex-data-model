@@ -1,0 +1,134 @@
+[
+  {
+    "id": "DataSpecificationPlayer",
+    "title": "Data Specification Player",
+    "description": "Приложение для просмотра опубликованных спецификаций и реализаций: навигация по каталогу, разделы модулей и поиск по содержимому.",
+    "kind": "product"
+  },
+  {
+    "id": "Publication",
+    "title": "Publication",
+    "description": "Готовый к чтению срез модельных артефактов: модули, разделы и элементы, собранные из манифестов публикации.",
+    "kind": "concept"
+  },
+  {
+    "id": "ArchitectureCatalog",
+    "title": "Architecture catalog",
+    "description": "Навигационное дерево головных спецификаций и их реализаций, из которого строится боковая панель плеера.",
+    "kind": "class"
+  },
+  {
+    "id": "ReferenceSpecification",
+    "title": "Reference specification",
+    "description": "Эталонный пакет нормативного описания (например moex.dams или edmc.fibo), к которому могут относиться реализации.",
+    "kind": "class"
+  },
+  {
+    "id": "SpecificationImplementation",
+    "title": "Specification implementation",
+    "description": "Публикация, согласованная с эталонной спецификацией и показываемая вложенной под ней в навигации.",
+    "kind": "class"
+  },
+  {
+    "id": "Specification",
+    "title": "Specification",
+    "description": "Нормативное или справочное описание предметной области либо профиля моделирования, доступное для чтения в плеере.",
+    "kind": "concept"
+  },
+  {
+    "id": "Implementation",
+    "title": "Implementation",
+    "description": "Конкретная публикация или выпуск, который соответствует эталонной спецификации (демо-решение, релиз онтологии, метамодель плеера).",
+    "kind": "concept"
+  },
+  {
+    "id": "PublicationModule",
+    "title": "Publication module",
+    "description": "Публикуемый модуль контента: набор разделов одного пакета (Overview, Classes, Glossary и др.).",
+    "kind": "class"
+  },
+  {
+    "id": "PublicationSection",
+    "title": "Publication section",
+    "description": "Раздел модуля с определённым видом представления для читателя (обозреватель, глоссарий, обзорный документ и т.п.).",
+    "kind": "class"
+  },
+  {
+    "id": "PublicationItem",
+    "title": "Publication item",
+    "description": "Элемент содержимого раздела: класс, термин глоссария, узел дерева или иной читаемый объект.",
+    "kind": "class"
+  },
+  {
+    "id": "NamedElement",
+    "title": "Named element",
+    "description": "Абстрактный именованный элемент метамодели: идентификатор, отображаемое имя и описание.",
+    "kind": "class"
+  },
+  {
+    "id": "CatalogNode",
+    "title": "Catalog node",
+    "description": "Узел архитектурного каталога: либо эталонная спецификация, либо реализация.",
+    "kind": "class"
+  },
+  {
+    "id": "ModelingStandard",
+    "title": "Modeling standard",
+    "description": "Язык или стандарт моделирования, в котором выражена спецификация (например LinkML или OWL).",
+    "kind": "class"
+  },
+  {
+    "id": "SectionKind",
+    "title": "Section kind",
+    "description": "Вид раздела публикации: обозреватель классов, глоссарий, обзорный документ, таблица сущностей и др.",
+    "kind": "enum"
+  },
+  {
+    "id": "Overview",
+    "title": "Overview",
+    "description": "Вводный раздел модуля: общее описание пакета и его роли в архитектуре публикаций.",
+    "kind": "section"
+  },
+  {
+    "id": "Classes",
+    "title": "Classes",
+    "description": "Раздел с типизированной иерархией классов метамодели или спецификации.",
+    "kind": "section"
+  },
+  {
+    "id": "Glossary",
+    "title": "Glossary",
+    "description": "Раздел с терминами и определениями для читателя, без сугубо технических деталей реализации.",
+    "kind": "section"
+  },
+  {
+    "id": "DeepLink",
+    "title": "Deep link",
+    "description": "Ссылка на конкретный модуль, раздел или элемент в плеере, которую можно открыть или скопировать.",
+    "kind": "concept"
+  },
+  {
+    "id": "ConformsTo",
+    "title": "Conforms to",
+    "description": "Отношение «реализация соответствует эталонной спецификации»; в навигации задаёт вложенность под головным пакетом.",
+    "kind": "relation"
+  },
+  {
+    "id": "MoexDams",
+    "title": "moex.dams",
+    "description": "Эталонная спецификация корпоративной модели данных MOEX (DAMS), головной пакет в навигации плеера.",
+    "kind": "package"
+  },
+  {
+    "id": "MoexDsp",
+    "title": "moex.dsp",
+    "description": "Пакет метамодели Data Specification Player: описание каталога, модулей публикации и разделов.",
+    "kind": "package"
+  },
+  {
+    "id": "EdmcFibo",
+    "title": "edmc.fibo",
+    "description": "Эталонный профиль FIBO (организационная структура онтологии) в навигации плеера.",
+    "kind": "package"
+  }
+]

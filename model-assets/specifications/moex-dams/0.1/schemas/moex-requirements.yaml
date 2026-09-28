@@ -49,6 +49,7 @@ classes:
 
 slots:
   check_id:
+    identifier: true
     range: string
     required: true
   kind:

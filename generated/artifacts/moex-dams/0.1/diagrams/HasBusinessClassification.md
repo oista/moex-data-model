@@ -21,6 +21,17 @@
     
 
         
+      HasBusinessClassification : data_class
+        
+          
+    
+        
+        
+        HasBusinessClassification --> "0..1" DataClassEnum : data_class
+        click DataClassEnum href "../DataClassEnum"
+    
+
+        
       HasBusinessClassification : entity_type
         
           

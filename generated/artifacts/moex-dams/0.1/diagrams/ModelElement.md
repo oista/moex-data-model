@@ -43,6 +43,8 @@
         click Metric href "../Metric"
       ModelElement <|-- Dimension
         click Dimension href "../Dimension"
+      ModelElement <|-- SpecificationRequirement
+        click SpecificationRequirement href "../SpecificationRequirement"
       
 
       ModelElement : aliases

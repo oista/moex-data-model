@@ -3,7 +3,7 @@ kind: publication_module
 version: "1"
 order: 195
 icon: "📘"
-title: FIBO profile
+title: edmc.fibo
 description: >
   Organizational metamodel of FIBO (domains, modules, ontology headers,
   IRI and annotation conventions). Domain classes live under the FIBO release module.

@@ -1,0 +1,48 @@
+module_id: moex:module:dsp
+kind: publication_module
+version: "1"
+order: 105
+icon: "▶️"
+title: moex.dsp
+description: >
+  Metamodel of Data Specification Player — how architecture catalog, publication
+  modules, sections and items are projected for reading.
+sections:
+  - id: overview
+    title: Overview
+    description: What Data Specification Player is and how moex.dsp fits under moex.dams
+    type: markdown-doc
+    source:
+      format: markdown
+      path: README.md
+
+  - id: explorer
+    title: Classes
+    description: Typed class hierarchy of the player publication metamodel
+    type: explorer
+    source:
+      format: linkml-yaml
+      path: schemas/moex-dsp.yaml
+      select: classes
+    groupby: schema
+    tags:
+      - dsp
+
+  - id: glossary
+    title: Glossary
+    description: Business-facing terms of the Data Specification Player metamodel
+    type: glossary
+    source:
+      format: json
+      path: publications/dsp_glossary.json
+    key_column: id
+    columns:
+      - id
+      - title
+      - description
+      - kind
+    filterable:
+      - kind
+    tags:
+      - dsp
+      - glossary

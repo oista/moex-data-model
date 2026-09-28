@@ -6,11 +6,21 @@ version: "1"
 nodes:
   - id: moex-dams
     role: reference_specification
-    title: MOEX DAMS
+    title: moex.dams
     version: "0.1"
     expressed_in: LinkML
     module_id: moex:module:dams
     order: 100
+
+  - id: moex-dsp
+    role: specification_implementation
+    title: moex.dsp
+    version: "0.1"
+    expressed_in: LinkML
+    conforms_to: moex-dams
+    module_id: moex:module:dsp
+    order: 105
+    description: Metamodel of Data Specification Player (publication projection)
 
   - id: trading-solution
     role: specification_implementation
@@ -22,7 +32,7 @@ nodes:
 
   - id: moex-fibo-profile
     role: reference_specification
-    title: FIBO profile
+    title: edmc.fibo
     version: "0.1"
     expressed_in: OWL 2
     module_id: moex:module:fibo-profile

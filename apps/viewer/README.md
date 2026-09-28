@@ -1,6 +1,6 @@
-# MOEX Publication Viewer
+# Data Specification Player
 
-Static HTML viewer for published modeling artifacts in this repository.
+Static HTML player for published modeling artifacts in this repository.
 
 **Architecture role:** derived **read model** / publication builder over canonical Git assets.  
 It is not the modeling source of truth. Platform canon:
