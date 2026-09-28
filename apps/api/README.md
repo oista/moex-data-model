@@ -13,6 +13,7 @@ py -3.14 -m pip install -e "./apps/api[dev]" `
   -e "./packages/standard-linkml" `
   -e "./packages/specification-dams" `
   -e "./packages/git-adapter" `
+  -e "./packages/external-sources" `
   -e "./apps/cli"
 py -3.14 -m moex_model_api
 # http://127.0.0.1:8000/docs

@@ -26,6 +26,7 @@ py -3.14 -m pip install -e "./generated/contracts/moex-dams/0.1" `
   -e "./packages/specification-dams" `
   -e "./packages/semantic-mappings" `
   -e "./packages/linkml-tooling[map,automator]" `
+  -e "./packages/external-sources" `
   -e "./packages/publication" `
   -e "./apps/cli[dev]"
 
