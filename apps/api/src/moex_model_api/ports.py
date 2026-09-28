@@ -41,6 +41,11 @@ class DiagnosticRecord:
     code: str
     severity: str
     message: str
+    path: str | None = None
+    element_id: str | None = None
+    source: str | None = None
+    line: int | None = None
+    suggestion: str | None = None
 
 
 @dataclass(frozen=True, slots=True)

@@ -14,6 +14,7 @@ class NodeKind(str, Enum):
     PHYSICAL_OBJECT = "physical_object"
     DOMAIN_CONTEXT = "domain_context"
     MAPPING = "mapping"
+    RELATIONSHIP = "relationship"
     ATTRIBUTE = "attribute"
     FIELD = "field"
 
@@ -25,6 +26,7 @@ class EdgeKind(str, Enum):
     MAPS_TO = "maps_to"
     OWNER_ENTITY = "owner_entity"
     PHYSICAL_OBJECT_REF = "physical_object_ref"
+    RELATES_TO = "relates_to"
 
 
 class GraphNode(BaseModel):

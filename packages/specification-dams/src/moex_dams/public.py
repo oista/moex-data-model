@@ -2,6 +2,13 @@
 
 from moex_dams.application.assess import SliceResult, assess_implementation
 from moex_dams.application.diff import diff_graphs, diff_implementations
+from moex_dams.application.element_index import ElementIndexEntry, build_element_index
+from moex_dams.application.repository import DamsAssetRepository
+from moex_dams.application.rules_runner import (
+    RuleSet,
+    default_dams_rule_sets,
+    run_rule_sets,
+)
 from moex_dams.contracts import ModelPackage
 from moex_dams.domain.graph import (
     DamsModelGraphView,
@@ -15,17 +22,23 @@ from moex_dams.rules.references import check_references
 from moex_dams.rules.structural import check_structural
 
 __all__ = [
+    "DamsAssetRepository",
     "DamsModelGraphView",
     "EdgeKind",
+    "ElementIndexEntry",
     "GraphEdge",
     "GraphNode",
     "ModelPackage",
     "NodeKind",
+    "RuleSet",
     "SliceResult",
     "assess_implementation",
     "build_dams_graph",
+    "build_element_index",
     "check_references",
     "check_structural",
+    "default_dams_rule_sets",
     "diff_graphs",
     "diff_implementations",
+    "run_rule_sets",
 ]

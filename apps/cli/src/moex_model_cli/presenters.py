@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+import json
+
+from moex_modeling import diagnostic_to_wire
+
 from moex_dams.application.assess import SliceResult
 
 
@@ -26,4 +30,12 @@ def format_validate_text(result: SliceResult) -> str:
 
 
 def format_validate_json(result: SliceResult) -> str:
-    return result.report.model_dump_json(indent=2) + "\n"
+    """Report JSON with diagnostics remapped to IMPLEMENTATION_PLAN wire shape."""
+    payload = json.loads(result.report.model_dump_json())
+    for i, assessment in enumerate(result.report.assessments):
+        payload["assessments"][i]["diagnostics"] = [
+            diagnostic_to_wire(d) for d in assessment.diagnostics
+        ]
+    payload["package_id"] = result.graph.package_id
+    payload["implementation_id"] = result.implementation.id
+    return json.dumps(payload, indent=2) + "\n"

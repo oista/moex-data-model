@@ -20,6 +20,8 @@ superseded_by: MODELING_ARCHITECTURE.md
 **Уже совпало (Stage 3 narrow-v3):** `publication_request` + publish API + GitHub write / local branch+stub review into this repo.  
 **Already shipped (Semantic diff preview):** kernel `SemanticDiffReport`; `moex-model semantic-diff`; `POST /workspaces/{id}/semantic-diff`; Web **Review changes**.
 
+**Already shipped (Stage 1 residual):** `SchemaRepository` + `DamsAssetRepository`; `diagnostic_to_wire` in CLI/API validation diagnostics; `build_element_index` shared with API model-index; `DamsModelGraphView` includes `relationships`.
+
 **Still-later:** live field-level Monaco↔form binding, merge automation / PR attach, `apps/worker`, CLI `import`/`map` real, OIDC, `diagram_layout` / `external_registry_cache`.
 `packages/ontology/` остаётся shim. Миграция путей: [docs/migration/model-src-to-model-assets.md](../migration/model-src-to-model-assets.md).
 

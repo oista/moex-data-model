@@ -156,6 +156,11 @@ class SqlValidationRunStore:
                     code=d.code,
                     severity=d.severity,
                     message=d.message,
+                    path=d.path,
+                    element_id=d.element_id,
+                    source=d.source,
+                    line=d.line,
+                    suggestion=d.suggestion,
                 )
             )
         self._session.add(

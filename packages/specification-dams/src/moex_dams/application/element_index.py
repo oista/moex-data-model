@@ -19,6 +19,7 @@ _LIST_KINDS: tuple[tuple[str, str, str], ...] = (
     ("logical_entities", "LogicalEntity", "logical"),
     ("physical_objects", "PhysicalObject", "physical"),
     ("mappings", "Mapping", "mapping"),
+    ("relationships", "Relationship", "logical"),
 )
 
 

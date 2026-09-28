@@ -128,6 +128,40 @@ def build_dams_graph(body: LinkMLImplementationBody) -> DamsModelGraphView:
     add_entity("logical_entities", NodeKind.LOGICAL_ENTITY)
     add_entity("physical_objects", NodeKind.PHYSICAL_OBJECT)
 
+    for item in data.get("relationships") or []:
+        if not isinstance(item, dict):
+            continue
+        rid = item.get("element_id")
+        if not rid:
+            continue
+        rid = str(rid)
+        nodes.append(
+            GraphNode(
+                id=rid,
+                kind=NodeKind.RELATIONSHIP,
+                name=item.get("name"),
+                title=item.get("title"),
+                description=item.get("description"),
+            )
+        )
+        edges.append(GraphEdge(source=package_id, target=rid, kind=EdgeKind.CONTAINS))
+        if item.get("source_entity_ref"):
+            edges.append(
+                GraphEdge(
+                    source=rid,
+                    target=str(item["source_entity_ref"]),
+                    kind=EdgeKind.RELATES_TO,
+                )
+            )
+        if item.get("target_entity_ref"):
+            edges.append(
+                GraphEdge(
+                    source=rid,
+                    target=str(item["target_entity_ref"]),
+                    kind=EdgeKind.RELATES_TO,
+                )
+            )
+
     for item in data.get("mappings") or []:
         if not isinstance(item, dict):
             continue
@@ -174,6 +208,7 @@ def package_index(data: dict[str, Any]) -> dict[str, dict[str, Any]]:
         "physical_objects",
         "domain_contexts",
         "mappings",
+        "relationships",
     ):
         for item in data.get(collection) or []:
             if isinstance(item, dict) and item.get("element_id"):

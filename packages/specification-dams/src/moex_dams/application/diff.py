@@ -12,8 +12,8 @@ from moex_modeling import (
     SemanticChange,
     SemanticDiffReport,
 )
-from moex_standard_linkml.provider import LinkMLStandardProvider
 
+from moex_dams.application.repository import DamsAssetRepository
 from moex_dams.domain.graph import (
     DamsModelGraphView,
     EdgeKind,
@@ -34,10 +34,13 @@ _SKIP_KEYS = frozenset(
         "physical_objects",
         "domain_contexts",
         "mappings",
+        "relationships",
         "conceptual_entity_refs",
         "key_attribute_refs",
         "source_refs",
         "target_refs",
+        "source_entity_ref",
+        "target_entity_ref",
         "sensitivity_term_refs",
     }
 )
@@ -47,6 +50,7 @@ _REF_EDGE_KINDS = frozenset(
         EdgeKind.MAPS_TO,
         EdgeKind.CONCEPTUAL_REF,
         EdgeKind.PHYSICAL_OBJECT_REF,
+        EdgeKind.RELATES_TO,
     }
 )
 
@@ -65,7 +69,7 @@ def diff_implementations(
     schema_path = Path(schema_path)
     left_path = Path(left_path)
     right_path = Path(right_path)
-    provider = LinkMLStandardProvider(
+    repo = DamsAssetRepository(
         default_schema_path=schema_path,
         default_target_class="ModelPackage",
     )
@@ -77,8 +81,8 @@ def diff_implementations(
         implementation_id=f"moex:implementation:{right_path.stem}",
         implementation_revision="right",
     )
-    left_body = provider.load_implementation_body(left_ref, path=str(left_path))
-    right_body = provider.load_implementation_body(right_ref, path=str(right_path))
+    left_body = repo.load_implementation(left_ref, path=left_path)
+    right_body = repo.load_implementation(right_ref, path=right_path)
     left_graph = build_dams_graph(left_body)
     right_graph = build_dams_graph(right_body)
     return diff_graphs(

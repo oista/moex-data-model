@@ -11,7 +11,6 @@ from moex_modeling import (
     ConformanceAssessment,
     ConformancePhase,
     ConformanceReport,
-    ConformanceResult,
     Diagnostic,
     ImplementationRef,
     LifecycleStatus,
@@ -32,17 +31,17 @@ from moex_standard_linkml.domain.body import (
     LinkMLImplementationBody,
     LinkMLSpecificationBody,
 )
-from moex_standard_linkml.provider import LinkMLStandardProvider
 
+from moex_dams.application.repository import (
+    DAMS_SPEC_ID,
+    DAMS_VERSION,
+    LINKML_STANDARD_ID,
+    DamsAssetRepository,
+)
+from moex_dams.application.rules_runner import default_dams_rule_sets, run_rule_sets
 from moex_dams.contracts import ModelPackage
 from moex_dams.domain.graph import DamsModelGraphView
 from moex_dams.mappings.dams_to_graph import build_dams_graph
-from moex_dams.rules.references import check_references
-from moex_dams.rules.structural import check_structural
-
-LINKML_STANDARD_ID = "moex:standard:linkml"
-DAMS_SPEC_ID = "moex:spec:dams"
-DAMS_VERSION = "0.1.0"
 
 
 @dataclass(frozen=True)
@@ -63,7 +62,7 @@ def assess_implementation(
 ) -> SliceResult:
     schema_path = Path(schema_path)
     implementation_path = Path(implementation_path)
-    provider = LinkMLStandardProvider(
+    repo = DamsAssetRepository(
         default_schema_path=schema_path,
         default_target_class="ModelPackage",
     )
@@ -83,8 +82,8 @@ def assess_implementation(
         implementation_revision=revision,
     )
 
-    spec_body = provider.load_specification_body(spec_ref, path=str(schema_path))
-    impl_body = provider.load_implementation_body(impl_ref, path=str(implementation_path))
+    spec_body = repo.load_specification(spec_ref)
+    impl_body = repo.load_implementation(impl_ref, path=implementation_path)
     # Typed root path (generated contracts) — rules still use dict body for now.
     typed_package = ModelPackage.model_validate(impl_body.data)
 
@@ -95,31 +94,43 @@ def assess_implementation(
         standard_revision="1.x",
     )
 
-    linkml_diags = provider.validate_standard(impl_body)
-    structural_diags = check_structural(impl_body)
-    reference_diags = check_references(impl_body)
-    all_diags = linkml_diags + structural_diags + reference_diags
+    rule_results = run_rule_sets(impl_body, default_dams_rule_sets(repo))
+    all_diags: tuple[Diagnostic, ...] = ()
+    assessments_list: list[ConformanceAssessment] = []
+    # Preserve legacy two-bucket report: syntax vs corporate semantics.
+    syntax_diags: list[Diagnostic] = []
+    corporate_diags: list[Diagnostic] = []
+    for rule_set, diags in rule_results:
+        all_diags = all_diags + diags
+        if rule_set.phase is ConformancePhase.STANDARD_SYNTAX:
+            syntax_diags.extend(diags)
+        else:
+            corporate_diags.extend(diags)
 
-    assessments = (
+    assessments_list.append(
         _assessment(
             "assessment:standard-syntax",
             impl_ref,
             spec_ref,
             standard_ref,
-            linkml_diags,
+            tuple(syntax_diags),
             now,
             phase=ConformancePhase.STANDARD_SYNTAX,
-        ),
+        )
+    )
+    assessments_list.append(
         _assessment(
             "assessment:corporate-semantics",
             impl_ref,
             spec_ref,
             standard_ref,
-            structural_diags + reference_diags,
+            tuple(corporate_diags),
             now,
             phase=ConformancePhase.CORPORATE_SEMANTICS,
-        ),
+        )
     )
+    assessments = tuple(assessments_list)
+
     overall = summarize_result(all_diags)
     report = ConformanceReport(
         id=f"report:{impl_id}:{revision}",

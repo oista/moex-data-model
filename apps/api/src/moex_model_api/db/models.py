@@ -101,6 +101,11 @@ class ValidationDiagnostic(Base):
     code: Mapped[str] = mapped_column(String(128), nullable=False)
     severity: Mapped[str] = mapped_column(String(32), nullable=False)
     message: Mapped[str] = mapped_column(Text, nullable=False)
+    path: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    element_id: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    source: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    line: Mapped[int | None] = mapped_column(nullable=True)
+    suggestion: Mapped[str | None] = mapped_column(Text, nullable=True)
     run: Mapped[ValidationRun] = relationship(back_populates="diagnostics")
 
 

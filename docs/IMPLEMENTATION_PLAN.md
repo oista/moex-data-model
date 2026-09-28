@@ -375,7 +375,7 @@ Toolchain bump: обновить [`requirements-linkml.txt`](../requirements-lin
 
 ## Этап 1. Model Core
 
-**Progress (semantic diff):** `DamsModelGraphView` + `diff_graphs` / `diff_implementations` classify changes by `element_id` (ADR-012 CLI slice). Full `SchemaRepository` / unified ModelGraph API still deferred.
+**Progress (2026-09-28 residual):** `SchemaRepository` Protocol + `DamsAssetRepository` wired into `assess_implementation` / `diff_implementations`; `ConformanceRuleRunner` + `diagnostic_to_wire` in CLI/API; unified `build_element_index`; `DamsModelGraphView` covers ModelPackage collections including `relationships`. «ModelGraph для DAMS» = bounded `DamsModelGraphView` (MODELING_ARCHITECTURE §8), not a kernel abstract class. Deferred: CURIE/URI resolver, repository-root (`MOEXModelRepository`) graph, abstract kernel `ModelGraph`, separate `SchemaLoader`/`ModelInstanceLoader` types.
 
 ### Задачи
 

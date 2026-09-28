@@ -31,10 +31,10 @@ from moex_model_api.db.stores import (
     SqlValidationRunStore,
     SqlWorkspaceStore,
 )
+from moex_model_api.diagnostics import diagnostic_record
 from moex_model_api.indexing import elements_from_package
 from moex_model_api.ports import (
     ArtifactRecord,
-    DiagnosticRecord,
     JobRecord,
     PublicationRecord,
     ValidationRunRecord,
@@ -791,17 +791,10 @@ def create_app(
                     implementation_id=body.implementation_id,
                 )
                 run_id = f"run:{uuid4().hex[:12]}"
-                diags: list[DiagnosticRecord] = []
+                diags = []
                 for assessment in result.report.assessments:
                     for d in assessment.diagnostics:
-                        diags.append(
-                            DiagnosticRecord(
-                                run_id=run_id,
-                                code=d.diagnostic_code,
-                                severity=d.severity.value,
-                                message=d.diagnostic_message,
-                            )
-                        )
+                        diags.append(diagnostic_record(run_id, d))
                 SqlValidationRunStore(session).save_run(
                     ValidationRunRecord(
                         id=run_id,
@@ -964,17 +957,10 @@ def create_app(
         )
         SqlWorkspaceStore(session).ensure_workspace(body.workspace_id, body.workspace_id)
         run_id = f"run:{uuid4().hex[:12]}"
-        diags: list[DiagnosticRecord] = []
+        diags = []
         for assessment in result.report.assessments:
             for d in assessment.diagnostics:
-                diags.append(
-                    DiagnosticRecord(
-                        run_id=run_id,
-                        code=d.diagnostic_code,
-                        severity=d.severity.value,
-                        message=d.diagnostic_message,
-                    )
-                )
+                diags.append(diagnostic_record(run_id, d))
         record = ValidationRunRecord(
             id=run_id,
             implementation_id=result.implementation.id,
