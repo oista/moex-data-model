@@ -36,7 +36,8 @@ def test_js_has_tabs_and_icon_helpers():
 def test_js_nav_folds_orphan_sections_and_opens_focused_tables():
     """Impl modules must not bolt secondary strips; focused tables open expanded."""
     assert "function collectNestedSectionIds" in JS
-    assert "group:module-sections" in JS
+    assert 'id: "group:overview"' in JS or "group:overview" in JS
+    assert "Разделы" not in JS
     assert "forceOpen: true" in JS
     subtree = JS.split("function appendPublicationSubtree")[1].split(
         "function appendCatalogNav"

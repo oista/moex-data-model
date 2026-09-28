@@ -1,12 +1,13 @@
 ---
-description: New PublicationModule must declare profile and PublicationSectionKind (ADR-016)
+description: New PublicationModule must declare profile, kinds, and satisfies when a reference contract applies (ADR-016 / ADR-019)
 globs:
   - "**/publish.yaml"
   - "model-assets/specifications/**/publications/**"
+  - "model-assets/**/publication-requirements.yaml"
   - "apps/viewer/src/moex_publication_viewer/**"
 ---
 
-# Publication modules (ADR-016)
+# Publication modules (ADR-016 / ADR-019)
 
 When adding or editing a `PublicationModule` (`publish.yaml`):
 
@@ -19,5 +20,7 @@ When adding or editing a `PublicationModule` (`publish.yaml`):
    - `implementation`: required overview, conformance; forbidden taxonomy
 5. One kind `classes` — renderer mode comes from profile (`data-structure` vs `ontology-list`). Do **not** add `OWL Classes` / `SHACL Classes` kinds.
 6. `taxonomy` is a **separate** kind (primary nav for ontologies), not a view flag on `classes`.
+7. **ADR-019:** Implementations that claim a reference Spec with inherited `PublicationRequirement`s must set **`satisfies:`** on covering sections (requirement ids). Do not copy reference module ids/files one-to-one. Aggregation and decomposition of `satisfies` are allowed; semantic substitution is not.
+8. Player metamodel docs (`moex.dsp`) use `profile: linkml-specification` and do **not** need dams:logical-entities `satisfies`.
 
-See: [docs/adr/ADR-016-publication-section-kinds-and-profiles.md](docs/adr/ADR-016-publication-section-kinds-and-profiles.md), [model-assets/specifications/moex-dsp/0.1/README.md](model-assets/specifications/moex-dsp/0.1/README.md).
+See: [ADR-016](docs/adr/ADR-016-publication-section-kinds-and-profiles.md), [ADR-019](docs/adr/ADR-019-publication-contract-inheritance.md), [DSP README](model-assets/specifications/moex-dsp/0.1/README.md).

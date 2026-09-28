@@ -6,12 +6,12 @@ supersedes: []
 superseded_by: []
 ---
 
-# ADR-014: FIBO profile — ReferenceSpecification; release entities — SpecificationImplementation
+# ADR-014: FIBO profile — ReferenceSpecification; domain content outside Spec explorer
 
 **Date:** 2026-09-28  
 **Status:** Proposed  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-007](ADR-007-pydantic-dto-not-validator.md), [ADR-017](ADR-017-external-specification-source-sync.md), [ADR-018](ADR-018-ontology-application-implementation.md)  
+**Related:** [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-007](ADR-007-pydantic-dto-not-validator.md), [ADR-017](ADR-017-external-specification-source-sync.md), [ADR-018](ADR-018-ontology-application-implementation.md), [ADR-019](ADR-019-publication-contract-inheritance.md)  
 **Design:** [2026-09-28-fibo-metamodel-profile-design.md](../superpowers/specs/2026-09-28-fibo-metamodel-profile-design.md)
 
 ## Context

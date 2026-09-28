@@ -11,7 +11,7 @@ superseded_by: []
 **Date:** 2026-09-28  
 **Status:** Proposed  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [ADR-014](ADR-014-fibo-profile-metamodel.md), [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-015](ADR-015-viewer-ui-atlas.md)  
+**Related:** [ADR-014](ADR-014-fibo-profile-metamodel.md), [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-015](ADR-015-viewer-ui-atlas.md), [ADR-019](ADR-019-publication-contract-inheritance.md)  
 **Schema:** [moex-dsp.yaml](../../model-assets/specifications/moex-dsp/0.1/schemas/moex-dsp.yaml)
 
 ## Context
@@ -71,3 +71,4 @@ Publication Viewer already showed this split poorly: DAMS used a «Классы�
 - ADR-014 — FIBO profile as ReferenceSpecification; release as Implementation
 - ADR-010 — OWL not primary validation
 - ADR-015 — Viewer UI atlas (presentation layer)
+- ADR-019 — Publication contract inheritance (`satisfies` / inherited requirements; does not supersede this ADR)

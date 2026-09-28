@@ -437,6 +437,7 @@ linkml@1.x
 10. Read model не изменяет domain state.
 11. Domain/Application не импортируют concrete infrastructure SDK.
 12. Добавление нового стандарта не меняет существующие providers, handlers и classes `modeling-kernel.yaml`.
+13. Реализация reference specification наследует обязательства publication profile (через `satisfies` → `PublicationRequirement`), а не идентичность `PublicationModule` (см. §17, ADR-019).
 
 ## 15. Правило расширения
 
@@ -469,3 +470,41 @@ linkml@1.x
 - IAM/RBAC.
 
 Старый [linkml_architecture.md](linkml_architecture.md) остаётся полезным как проектирование Workbench и LinkML-based toolchain, но **не является** верхним уровнем архитектуры (`normative: false`). LinkML — первый standard provider, DAMS — первая reference specification, Workbench — приложение над общим modeling kernel.
+
+## 17. Publication contract inheritance
+
+Publication Viewer и `publish.yaml` — производные проекции (§16). Тем не менее у проекции есть **нормативный контракт покрытия**: реализация эталона наследует не файлы и имена модулей, а обязательства publication profile. Норматив: [ADR-019](../adr/ADR-019-publication-contract-inheritance.md); метамодель — [moex-dsp](../../model-assets/specifications/moex-dsp/0.1/schemas/moex-dsp.yaml). Базовые kinds / ProfileSpec типа артефакта — [ADR-016](../adr/ADR-016-publication-section-kinds-and-profiles.md).
+
+### Три уровня (не смешивать)
+
+| Уровень | Что наследуется / задаётся | Пример |
+|---|---|---|
+| Семантический контракт | Обязательные информационные разделы и их смысл | «Виден logical model», «есть mappings к physical» |
+| Publication profile | Минимальный набор publication capabilities | overview, conformance, entities, mappings, source-artifacts |
+| Локальный manifest | Конкретные modules, пути, renderer, заголовки | `inferred-logical-model`, `csv-input-profile` |
+
+### Профиль типа vs контракт эталона
+
+1. **Базовый профиль артефакта** (`publication_profile: implementation` \| `ontology` \| `linkml-specification`) — ADR-016 ProfileSpec: required / recommended / forbidden **kinds** для любого артефакта данного типа.
+2. **Унаследованные требования эталона** появляются через `conforms_to` / `implements` и conformance profile эталона (например `dams-logical-and-physical`). Эталон перечисляет `PublicationRequirement` (capability, cardinality, accepted renderers, expected semantic types) — **не** требование создать файл с тем же id.
+
+Локальные `PublicationSection` связываются с требованиями через `satisfies`. Допустимы агрегация (один section → много requirements) и декомпозиция (много sections → один requirement при `1..*`). Запрещена семантическая подмена (title/`satisfies` без валидного semantic source).
+
+### Два отчёта соответствия
+
+| Отчёт | Где | Что проверяет |
+|---|---|---|
+| Kernel `ConformanceAssessment` / `ConformanceReport` | modeling-kernel | Тело модели vs Spec (LinkML/DAMS rules, …) |
+| `PublicationConformanceReport` | DSP | Покрытие `PublicationRequirement` секциями публикации |
+
+Статусы publication-слоя: `conformant` \| `partially-conformant` \| `draft-conformant` (для generated/inferred default — `draft-conformant`).
+
+### Формула
+
+```text
+∀ r ∈ Required(P_reference): ∃ s ∈ Sections(I) | s ⊨ r
+```
+
+не `Modules(I) = Modules(ReferenceSpecification)`.
+
+Инвариант §14.13 фиксирует это для всех реализаций, включая специализированные (DSP draft CSV, FIBO application ontology, OpenAPI profile, Data Contract).

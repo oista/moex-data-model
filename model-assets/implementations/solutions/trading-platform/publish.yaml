@@ -4,17 +4,29 @@ version: "1"
 order: 300
 icon: "🧩"
 title: Trading solution (demo)
+profile: implementation
 description: Example solution model instance for publication viewer demos
+# Declares coverage of DAMS publication contract (ADR-019).
+# conformance_profile: dams-logical-and-physical
+implements:
+  - specification_ref: moex-dams@0.1
+    profile_ref: dams-logical-and-physical
+    conformance_target: draft
 sections:
   - id: package
     title: Package
+    kind: overview
     type: key-value
+    satisfies:
+      - dams:overview
+      - implementation:overview
     source:
       format: yaml
       path: trading-solution-model.yaml
 
   - id: conceptual
     title: Conceptual entities
+    kind: classes
     type: entity-table
     source:
       format: yaml
@@ -33,7 +45,12 @@ sections:
 
   - id: logical
     title: Logical entities
+    kind: classes
     type: entity-table
+    satisfies:
+      - dams:logical-entities
+      - dams:logical-attributes
+      - dams:relationships
     source:
       format: yaml
       path: trading-solution-model.yaml
@@ -51,7 +68,11 @@ sections:
 
   - id: physical
     title: Physical objects
+    kind: bindings
     type: entity-table
+    satisfies:
+      - dams:physical-objects
+      - dams:physical-fields
     source:
       format: yaml
       path: trading-solution-model.yaml
@@ -70,7 +91,12 @@ sections:
   - id: slice-summary
     title: Vertical slice summary
     description: Conformance + graph projection from moex-publication export-slice
+    kind: conformance
     type: key-value
+    satisfies:
+      - dams:conformance
+      - implementation:conformance
+      - dams:declared-binding
     source:
       format: json
       path: publications/vertical_slice.json
@@ -78,7 +104,10 @@ sections:
 
   - id: slice-nodes
     title: Slice graph nodes
+    kind: bindings
     type: entity-table
+    satisfies:
+      - dams:physical-mappings
     source:
       format: json
       path: publications/vertical_slice.json
@@ -94,6 +123,7 @@ sections:
 
   - id: slice-relations
     title: Slice universe relations
+    kind: data-flows
     type: entity-table
     source:
       format: json

@@ -59,6 +59,7 @@ class ManifestSection(BaseModel):
     type: SectionType
     source: SourceSpec
     kind: PublicationSectionKind | None = None
+    satisfies: list[str] = Field(default_factory=list)
     columns: list[str] = Field(default_factory=list)
     filterable: list[str] = Field(default_factory=list)
     groupby: str | None = None
@@ -76,6 +77,14 @@ class ManifestSection(BaseModel):
         return data
 
 
+class ImplementsRef(BaseModel):
+    """Reference Spec / conformance profile this module claims (ADR-019)."""
+
+    specification_ref: str
+    profile_ref: str | None = None
+    conformance_target: str | None = None
+
+
 class PublicationManifest(BaseModel):
     module_id: str
     kind: Literal["publication_module"] = "publication_module"
@@ -85,6 +94,7 @@ class PublicationManifest(BaseModel):
     title: str
     description: str | None = None
     profile: PublicationProfileId | None = None
+    implements: list[ImplementsRef] = Field(default_factory=list)
     sections: list[ManifestSection] = Field(default_factory=list)
 
     @field_validator("version", mode="before")

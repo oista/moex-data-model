@@ -1,14 +1,22 @@
-"""Tests for ADR-016 publication profiles."""
+"""Tests for ADR-016 publication profiles and ADR-019 contract coverage."""
 
 from __future__ import annotations
+
+from pathlib import Path
 
 from moex_publication_viewer.models.publication_models import (
     PublicationItem,
     PublicationModule,
     PublicationSection,
 )
+from moex_publication_viewer.normalizers.linkml_spec_roots import (
+    wrap_linkml_specification_roots,
+)
 from moex_publication_viewer.publication_profiles import get_renderer_mode, profile_spec
-from moex_publication_viewer.validators import check_publication_profiles
+from moex_publication_viewer.validators import (
+    check_publication_contract_coverage,
+    check_publication_profiles,
+)
 
 
 def test_renderer_mode_classes_by_profile():
@@ -88,3 +96,97 @@ def test_check_ok_when_explorer_roots_cover_kinds():
     )
     warnings = check_publication_profiles([module])
     assert not any("missing required" in w for w in warnings)
+
+
+def test_wrap_linkml_specification_roots_nests_packages_under_classes():
+    pkg = PublicationItem(
+        id="group:moex_dsp",
+        title="Dsp",
+        attributes={"kind": "group", "class_count": 2, "enum_count": 1},
+        children=[PublicationItem(id="NamedElement", title="NamedElement")],
+    )
+    roots = wrap_linkml_specification_roots([pkg])
+    assert [r.id for r in roots] == ["group:overview", "group:classes"]
+    assert roots[0].attributes.get("section_root") == "overview"
+    assert roots[1].attributes.get("section_root") == "classes"
+    assert roots[1].children[0].id == "group:moex_dsp"
+
+
+def test_publication_contract_coverage_warns_on_missing_satisfies(tmp_path: Path):
+    root = tmp_path
+    dams = root / "model-assets" / "specifications" / "moex-dams" / "0.1"
+    dams.mkdir(parents=True)
+    (dams / "publication-requirements.yaml").write_text(
+        """
+version: "0.1"
+profiles:
+  - id: demo-profile
+    requirements:
+      - id: dams:logical-entities
+        obligation: required
+      - id: dams:overview
+        obligation: required
+""",
+        encoding="utf-8",
+    )
+    module = PublicationModule(
+        module_id="moex:module:x",
+        title="X",
+        profile="implementation",
+        implements=[
+            {
+                "specification_ref": "moex-dams@0.1",
+                "profile_ref": "demo-profile",
+            }
+        ],
+        sections=[
+            PublicationSection(
+                id="overview",
+                title="O",
+                type="markdown-doc",
+                kind="overview",
+                satisfies=["dams:overview"],
+                content="x",
+            )
+        ],
+        manifest_path="x/publish.yaml",
+    )
+    warnings = check_publication_contract_coverage([module], root)
+    assert any("dams:logical-entities" in w for w in warnings)
+    assert not any(
+        "missing satisfies coverage" in w and "dams:overview" in w for w in warnings
+    )
+
+
+def test_publication_contract_ok_when_satisfied(tmp_path: Path):
+    root = tmp_path
+    dams = root / "model-assets" / "specifications" / "moex-dams" / "0.1"
+    dams.mkdir(parents=True)
+    (dams / "publication-requirements.yaml").write_text(
+        """
+version: "0.1"
+profiles:
+  - id: demo-profile
+    requirements:
+      - id: dams:logical-entities
+        obligation: required
+""",
+        encoding="utf-8",
+    )
+    module = PublicationModule(
+        module_id="moex:module:x",
+        title="X",
+        implements=[
+            {"specification_ref": "moex-dams@0.1", "profile_ref": "demo-profile"}
+        ],
+        sections=[
+            PublicationSection(
+                id="logical",
+                title="L",
+                type="entity-table",
+                kind="classes",
+                satisfies=["dams:logical-entities"],
+            )
+        ],
+    )
+    assert check_publication_contract_coverage([module], root) == []

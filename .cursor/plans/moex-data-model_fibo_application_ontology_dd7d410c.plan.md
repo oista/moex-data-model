@@ -16,7 +16,7 @@ todos:
     status: completed
   - id: provider-dto
     content: Add OntologyApplicationDescriptor + loader tests in standard-owl
-    status: in_progress
+    status: completed
 isProject: false
 ---
 

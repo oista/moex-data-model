@@ -5,7 +5,8 @@ title: moex.dsp
 description: >
   Metamodel of Data Specification Player — how specifications, publications,
   and navigation are projected for reading (not the domain data model itself).
-  See ADR-016 for PublicationSectionKind and publication profiles.
+  See ADR-016 for PublicationSectionKind and publication profiles;
+  ADR-019 for publication contract inheritance (PublicationRequirement / satisfies).
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml: https://w3id.org/linkml/
@@ -79,9 +80,11 @@ classes:
     description: >
       Экземпляр раздела модуля: семантический kind (PublicationSectionKind)
       и вид представления SectionKind (render/wire) ортогональны (ADR-016).
+      satisfies связывает раздел с PublicationRequirement (ADR-019).
     slots:
       - publication_section_kind
       - section_kind
+      - satisfies
       - items
 
   PublicationItem:
@@ -92,16 +95,63 @@ classes:
     slots:
       - children
 
+  PublicationRequirement:
+    is_a: NamedElement
+    description: >
+      Обязательство publication contract: capability, которую реализация
+      должна покрыть секциями через satisfies (ADR-019). Не требует
+      одноимённого PublicationModule у эталона.
+    slots:
+      - requirement_id
+      - requirement_kind
+      - semantic_capability
+      - obligation
+      - min_occurs
+      - max_occurs
+      - accepted_section_kinds
+      - accepted_renderers
+      - expected_semantic_types
+      - applies_when
+      - inherited_from
+      - applies_to_profile
+
   PublicationProfile:
     is_a: NamedElement
     description: >
       ProfileSpec публикации: required / recommended / forbidden
-      PublicationSectionKind для данного PublicationProfileId (ADR-016).
+      PublicationSectionKind (ADR-016) плюс список PublicationRequirement
+      и опциональный parent_profile_ref (ADR-019).
     slots:
       - profile_id
+      - applies_to
+      - parent_profile_ref
       - required_kinds
       - recommended_kinds
       - forbidden_kinds
+      - requirements
+
+  RequirementResult:
+    is_a: NamedElement
+    description: >
+      Результат проверки одного PublicationRequirement в publication-слойном отчёте.
+    slots:
+      - requirement_ref
+      - covered
+      - covering_section_ids
+      - result_status
+      - result_message
+
+  PublicationConformanceReport:
+    is_a: NamedElement
+    description: >
+      Агрегированный отчёт покрытия publication requirements реализацией.
+      Не путать с kernel ConformanceReport (семантика тела модели).
+    slots:
+      - implementation_ref
+      - reference_specification_ref
+      - profile_ref
+      - overall_publication_status
+      - requirement_results
 
   ModelingStandard:
     is_a: NamedElement
@@ -192,6 +242,97 @@ slots:
     range: PublicationSectionKind
     multivalued: true
     description: Запрещённые виды разделов для этого профиля.
+  satisfies:
+    range: PublicationRequirement
+    multivalued: true
+    description: >
+      PublicationRequirement, которые этот раздел покрывает (ADR-019).
+      Допустима агрегация (один section → много requirements).
+  requirement_id:
+    range: uriorcurie
+    description: Стабильный id требования (например dams:logical-entities).
+  requirement_kind:
+    range: PublicationRequirementKind
+    description: Тип проверки требования (section / semantic-content / binding / evidence).
+  semantic_capability:
+    range: string
+    description: Краткий идентификатор capability (overview, logical-entities, …).
+  obligation:
+    range: PublicationObligation
+    description: required | recommended | forbidden.
+  min_occurs:
+    range: integer
+    description: Минимальное число покрывающих секций (по умолчанию 1 для required).
+  max_occurs:
+    range: integer
+    description: Максимум покрывающих секций; отсутствие = без верхней границы.
+  accepted_section_kinds:
+    range: PublicationSectionKind
+    multivalued: true
+    description: Допустимые PublicationSectionKind для покрытия.
+  accepted_renderers:
+    range: string
+    multivalued: true
+    description: Допустимые renderer / manifest type значения.
+  expected_semantic_types:
+    range: string
+    multivalued: true
+    description: Ожидаемые типы сущностей в источнике (LogicalEntity, …).
+  applies_when:
+    range: string
+    description: Условие применимости (свободный текст / выражение для checker).
+  inherited_from:
+    range: uriorcurie
+    description: Id родительского requirement / профиля, от которого унаследовано.
+  applies_to_profile:
+    range: PublicationProfileId
+    description: Базовый PublicationProfileId, к которому применяется требование.
+  applies_to:
+    range: string
+    description: Вид артефакта / SpecificationKind, к которому относится профиль.
+  parent_profile_ref:
+    range: uriorcurie
+    description: Ссылка на родительский PublicationProfile (наследование requirements).
+  requirements:
+    range: PublicationRequirement
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Список PublicationRequirement профиля.
+  requirement_ref:
+    range: uriorcurie
+    description: Id проверенного PublicationRequirement.
+  covered:
+    range: boolean
+    description: Покрыто ли требование хотя бы одной секцией.
+  covering_section_ids:
+    range: uriorcurie
+    multivalued: true
+    description: Id секций, заявивших satisfies на это требование.
+  result_status:
+    range: PublicationConformanceStatus
+    description: Статус по одному требованию.
+  result_message:
+    range: string
+    description: Человекочитаемое пояснение результата.
+  implementation_ref:
+    range: uriorcurie
+    description: Id реализации, для которой собран отчёт.
+  reference_specification_ref:
+    range: uriorcurie
+    description: Id эталонной спецификации.
+  profile_ref:
+    range: uriorcurie
+    description: Id conformance / publication profile, по которому проверяли.
+  overall_publication_status:
+    range: PublicationConformanceStatus
+    description: Итоговый статус publication-слойного отчёта.
+  requirement_results:
+    range: RequirementResult
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Результаты по каждому требованию.
 
 enums:
   ModelingStandardFamily:
@@ -275,3 +416,36 @@ enums:
         description: Дерево отношений.
       key_value:
         description: Пары ключ–значение.
+
+  PublicationRequirementKind:
+    description: Виды PublicationRequirement (ADR-019).
+    permissible_values:
+      required-section:
+        description: В публикации покрыта обязательная capability (секция с satisfies).
+      required-semantic-content:
+        description: В источнике есть сущности ожидаемых semantic types.
+      required-binding:
+        description: Явная связь реализации с эталоном (implements / conforms_to).
+      required-evidence:
+        description: Доказательство происхождения / соответствия (provenance fields).
+
+  PublicationObligation:
+    description: Сила обязательства требования.
+    permissible_values:
+      required:
+        description: Обязательно для conformance.
+      recommended:
+        description: Рекомендуется; отсутствие — soft warning.
+      forbidden:
+        description: Не должно присутствовать в публикации данного профиля.
+
+  PublicationConformanceStatus:
+    description: >
+      Статус publication-слойного conformance (не kernel ConformanceResult).
+    permissible_values:
+      conformant:
+        description: Все mandatory requirements покрыты и опубликованы.
+      partially-conformant:
+        description: Каркас соблюдён; часть аспектов намеренно отсутствует или N/A.
+      draft-conformant:
+        description: Структурно покрывает профиль; содержание inferred / не утверждено.

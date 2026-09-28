@@ -236,12 +236,22 @@ def test_linkml_explorer_groups_by_schema():
     )
     out = LinkmlNormalizer().normalize(sec, schema)
     assert out.items, "explorer must produce groups"
-    assert all(i.attributes.get("kind") == "group" for i in out.items)
+    assert [i.id for i in out.items[:2]] == ["group:overview", "group:classes"]
+    assert out.items[0].attributes.get("section_root") == "overview"
+    assert out.items[1].attributes.get("section_root") == "classes"
+    package_groups = out.items[1].children
+    assert package_groups
+    assert all(i.attributes.get("kind") == "group" for i in package_groups)
     # Fixture has root + imported child schemas
-    schema_keys = {i.attributes.get("schema_key") for i in out.items}
-    assert schema_keys & {"root_schema", "child_schema"} or len(out.items) >= 1
-    # Classes live under groups with induced slots list
-    classes = [c for g in out.items for c in g.children if c.attributes.get("kind") == "class"]
+    schema_keys = {i.attributes.get("schema_key") for i in package_groups}
+    assert schema_keys & {"root_schema", "child_schema"} or len(package_groups) >= 1
+    # Classes live under schema packages under Classes root
+    classes = [
+        c
+        for g in package_groups
+        for c in g.children
+        if c.attributes.get("kind") == "class"
+    ]
     assert classes
     assert any(c.id == "RootClass" for c in classes)
     root_cls = next(c for c in classes if c.id == "RootClass")

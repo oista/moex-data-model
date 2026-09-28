@@ -38,7 +38,7 @@
   {
     "id": "PublicationSection",
     "title": "Publication section",
-    "description": "Экземпляр раздела: semantic kind (PublicationSectionKind) и render type (SectionKind) ортогональны.",
+    "description": "Экземпляр раздела: semantic kind (PublicationSectionKind) и render type (SectionKind) ортогональны; satisfies → PublicationRequirement (ADR-019).",
     "kind": "class"
   },
   {
@@ -50,8 +50,32 @@
   {
     "id": "PublicationProfile",
     "title": "Publication profile",
-    "description": "ProfileSpec: required / recommended / forbidden PublicationSectionKind для profile id (linkml-specification, ontology, implementation). ADR-016.",
+    "description": "ProfileSpec: required / recommended / forbidden kinds (ADR-016) плюс PublicationRequirement и parent_profile_ref (ADR-019).",
     "kind": "class"
+  },
+  {
+    "id": "PublicationRequirement",
+    "title": "Publication requirement",
+    "description": "Обязательство publication contract: capability эталона, покрываемая секциями через satisfies. Не тождество имён модулей.",
+    "kind": "class"
+  },
+  {
+    "id": "PublicationConformanceReport",
+    "title": "Publication conformance report",
+    "description": "Отчёт покрытия PublicationRequirement. Отдельно от kernel ConformanceReport.",
+    "kind": "class"
+  },
+  {
+    "id": "RequirementResult",
+    "title": "Requirement result",
+    "description": "Результат проверки одного PublicationRequirement в publication-слойном отчёте.",
+    "kind": "class"
+  },
+  {
+    "id": "Satisfies",
+    "title": "Satisfies",
+    "description": "Связь PublicationSection → PublicationRequirement: локальный раздел покрывает capability контракта.",
+    "kind": "relation"
   },
   {
     "id": "NamedElement",
@@ -87,6 +111,24 @@
     "id": "PublicationSectionKind",
     "title": "Publication section kind",
     "description": "Закрытый семантический словарь разделов (overview, classes, taxonomy, glossary, …). ADR-016. taxonomy ≠ classes.",
+    "kind": "enum"
+  },
+  {
+    "id": "PublicationRequirementKind",
+    "title": "Publication requirement kind",
+    "description": "required-section | required-semantic-content | required-binding | required-evidence (ADR-019).",
+    "kind": "enum"
+  },
+  {
+    "id": "PublicationObligation",
+    "title": "Publication obligation",
+    "description": "required | recommended | forbidden для PublicationRequirement.",
+    "kind": "enum"
+  },
+  {
+    "id": "PublicationConformanceStatus",
+    "title": "Publication conformance status",
+    "description": "conformant | partially-conformant | draft-conformant (publication layer; not kernel ConformanceResult).",
     "kind": "enum"
   },
   {
@@ -165,6 +207,12 @@
     "id": "ADR016",
     "title": "ADR-016",
     "description": "Publication section kinds and profiles: taxonomy vs classes, ProfileSpec, renderer modes.",
+    "kind": "concept"
+  },
+  {
+    "id": "ADR019",
+    "title": "ADR-019",
+    "description": "Publication contract inheritance: satisfies, PublicationRequirement, not module identity copy.",
     "kind": "concept"
   }
 ]

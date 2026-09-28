@@ -11,7 +11,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 **Date:** 2026-09-28  
 **Status:** Proposed 0.1  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [viewer-decisions.md](../architecture/viewer-decisions.md), [viewer-atlas design principles](../design/viewer-atlas/README.md)
+**Related:** [viewer-decisions.md](../architecture/viewer-decisions.md), [viewer-atlas design principles](../design/viewer-atlas/README.md), [ADR-016](ADR-016-publication-section-kinds-and-profiles.md), [ADR-019](ADR-019-publication-contract-inheritance.md)
 
 **Назначение:** дизайн-стандарт и ТЗ на переработку интерфейса статического MOEX Publication Viewer.  
 **Целевой артефакт:** один автономный `apps/viewer/dist/index.html`.  

@@ -6,7 +6,7 @@ supersedes: []
 superseded_by: MODELING_ARCHITECTURE.md
 ---
 
-# ADR index (001–018)
+# ADR index (001–019)
 
 **Status:** Proposed drafts  
 **Date:** 2026-09-28  
@@ -36,6 +36,7 @@ Viewer-решения живут отдельно: [viewer-decisions.md](../arch
 | [ADR-016](ADR-016-publication-section-kinds-and-profiles.md) | Publication section kinds and profiles | Proposed; DSP ProfileSpec |
 | [ADR-017](ADR-017-external-specification-source-sync.md) | External specification source sync | Proposed; SpecificationSource + ROBOT/git adapters |
 | [ADR-018](ADR-018-ontology-application-implementation.md) | OWL SpecImpl = application / extension ontology | Proposed; moex-fibo-application three-artifact body |
+| [ADR-019](ADR-019-publication-contract-inheritance.md) | Publication contract inheritance | Proposed; satisfies / PublicationRequirement (DSP) |
 
 ## Как принимать
 

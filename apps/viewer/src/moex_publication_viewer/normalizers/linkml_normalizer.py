@@ -15,6 +15,9 @@ from moex_publication_viewer.normalizers.dams_explorer_roots import (
     wrap_dams_explorer_roots,
 )
 from moex_publication_viewer.normalizers.helpers import section_meta
+from moex_publication_viewer.normalizers.linkml_spec_roots import (
+    wrap_linkml_specification_roots,
+)
 
 # Cache SchemaView per absolute path for one build process
 _VIEW_CACHE: dict[str, SchemaView] = {}
@@ -112,6 +115,14 @@ _SCHEMA_GROUP_META_BASE: dict[str, tuple[int, str, str, str, str]] = {
         "Частые корпоративные vocabulary позже уйдут в term/value-set references; здесь "
         "остаются только архитектурно стабильные шкалы.",
         "moex-types.yaml",
+    ),
+    "moex_dsp": (
+        80,
+        "Player metamodel",
+        "Классы и enum метамодели Data Specification Player (каталог, модули, профили, "
+        "publication contract).",
+        "Отдельный schema package документации оболочки публикации; не тело DAMS.",
+        "moex-dsp.yaml",
     ),
 }
 
@@ -474,6 +485,8 @@ class LinkmlNormalizer:
                     items = wrap_dams_explorer_roots(
                         items, source_path.resolve().parent.parent
                     )
+                else:
+                    items = wrap_linkml_specification_roots(items)
                 default_columns = ["name", "description", "kind"]
             elif select == "classes":
                 items = _normalize_classes(sv, as_tree=as_tree)

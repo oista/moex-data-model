@@ -480,11 +480,11 @@
               : g
           );
         } else {
-          openGroups.add("group:module-sections");
+          openGroups.add("group:overview");
           explorerItems = [
             {
-              id: "group:module-sections",
-              title: "Разделы",
+              id: "group:overview",
+              title: "Overview",
               description: "Publication sections for this module.",
               attributes: {
                 kind: "group",

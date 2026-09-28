@@ -19,6 +19,7 @@ from moex_publication_viewer.normalizers.linkml_normalizer import clear_schema_v
 from moex_publication_viewer.renderers.html_renderer import render_viewer
 from moex_publication_viewer.validators import (
     ValidationError,
+    check_publication_contract_coverage,
     check_publication_profiles,
     validate_architecture_catalog,
     validate_manifests,
@@ -86,6 +87,9 @@ def compile_modules(root: Path) -> list[PublicationModule]:
                 version=manifest.version,
                 order=manifest.order,
                 profile=manifest.profile,
+                implements=[
+                    ref.model_dump(exclude_none=True) for ref in manifest.implements
+                ],
                 sections=sections,
                 manifest_path=str(path),
             )
@@ -96,6 +100,7 @@ def compile_modules(root: Path) -> list[PublicationModule]:
 
     modules.sort(key=lambda m: (m.order, m.title))
     check_publication_profiles(modules)
+    check_publication_contract_coverage(modules, root)
     return modules
 
 

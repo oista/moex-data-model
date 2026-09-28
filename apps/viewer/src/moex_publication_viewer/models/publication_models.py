@@ -24,6 +24,7 @@ class PublicationSection(BaseModel):
     type: str
     kind: str | None = None
     renderer_mode: str | None = None
+    satisfies: list[str] = Field(default_factory=list)
     columns: list[str] = Field(default_factory=list)
     filterable: list[str] = Field(default_factory=list)
     groupby: str | None = None
@@ -43,6 +44,7 @@ class PublicationModule(BaseModel):
     version: str | None = None
     order: int = 1000
     profile: str | None = None
+    implements: list[dict[str, Any]] = Field(default_factory=list)
     sections: list[PublicationSection] = Field(default_factory=list)
     manifest_path: str | None = None
 

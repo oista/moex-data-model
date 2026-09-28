@@ -1,0 +1,111 @@
+# DAMS publication requirements (ADR-019)
+# Inherited by SpecificationImplementation modules that declare a DAMS conformance profile.
+# Coverage is via PublicationSection.satisfies — not by copying module ids/files.
+
+version: "0.1"
+specification_ref: moex-dams@0.1
+
+profiles:
+  - id: dams-logical-modeling
+    title: DAMS logical modeling publication
+    applies_to: implementation
+    parent_profile_ref: implementation
+    description: >
+      Minimal publication contract for implementations of DAMS logical modeling:
+      entities, attributes, relationships must be visible; physical layer optional.
+    requirements:
+      - id: dams:overview
+        kind: required-section
+        semantic_capability: overview
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [overview]
+        accepted_renderers: [markdown-doc, overview, key-value]
+        applies_to_profile: implementation
+
+      - id: dams:conformance
+        kind: required-section
+        semantic_capability: conformance
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [conformance]
+        accepted_renderers: [key-value, entity-table, conformance]
+        applies_to_profile: implementation
+
+      - id: dams:logical-entities
+        kind: required-semantic-content
+        semantic_capability: logical-entities
+        obligation: required
+        min_occurs: 1
+        expected_semantic_types: [LogicalEntity]
+        accepted_section_kinds: [classes, bindings]
+        accepted_renderers: [entity-table, entity-detail, schema-tree, explorer]
+        inherited_from: dams-logical-modeling
+
+      - id: dams:logical-attributes
+        kind: required-semantic-content
+        semantic_capability: logical-attributes
+        obligation: required
+        min_occurs: 1
+        expected_semantic_types: [LogicalAttribute]
+        accepted_section_kinds: [slots, classes, bindings]
+        accepted_renderers: [properties-table, entity-table, entity-detail]
+        inherited_from: dams-logical-modeling
+
+      - id: dams:relationships
+        kind: required-semantic-content
+        semantic_capability: relationships
+        obligation: recommended
+        min_occurs: 0
+        expected_semantic_types: [Relationship]
+        accepted_section_kinds: [classes, bindings, data-flows]
+        accepted_renderers: [relationship-graph, entity-table]
+        inherited_from: dams-logical-modeling
+
+      - id: dams:declared-binding
+        kind: required-binding
+        semantic_capability: implements
+        obligation: required
+        min_occurs: 1
+        applies_to_profile: implementation
+
+  - id: dams-logical-and-physical
+    title: DAMS logical and physical publication
+    applies_to: implementation
+    parent_profile_ref: dams-logical-modeling
+    description: >
+      Extends logical-modeling with physical objects, fields, and mappings.
+    requirements:
+      - id: dams:physical-objects
+        kind: required-semantic-content
+        semantic_capability: physical-objects
+        obligation: required
+        min_occurs: 1
+        expected_semantic_types: [PhysicalObject]
+        accepted_section_kinds: [classes, bindings, source]
+        accepted_renderers: [entity-table, entity-detail]
+        inherited_from: dams-logical-and-physical
+        applies_when: "when physical layer is in scope"
+
+      - id: dams:physical-fields
+        kind: required-semantic-content
+        semantic_capability: physical-fields
+        obligation: recommended
+        min_occurs: 0
+        expected_semantic_types: [PhysicalField]
+        accepted_section_kinds: [slots, classes, bindings]
+        accepted_renderers: [properties-table, entity-table]
+        inherited_from: dams-logical-and-physical
+
+      - id: dams:physical-mappings
+        kind: required-semantic-content
+        semantic_capability: physical-mappings
+        obligation: required
+        min_occurs: 1
+        expected_semantic_types:
+          - EntityPhysicalMapping
+          - AttributePhysicalMapping
+        accepted_section_kinds: [bindings]
+        accepted_renderers: [mapping-table, entity-detail, entity-table]
+        inherited_from: dams-logical-and-physical
+        applies_when: "when physical objects are present"

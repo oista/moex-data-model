@@ -4,6 +4,7 @@ version: "1"
 order: 105
 icon: "▶️"
 title: moex.dsp
+profile: linkml-specification
 description: >
   Metamodel of Data Specification Player — how architecture catalog, publication
   modules, sections and items are projected for reading.
@@ -11,6 +12,7 @@ sections:
   - id: overview
     title: Overview
     description: What Data Specification Player is and how moex.dsp fits under moex.dams
+    kind: overview
     type: markdown-doc
     source:
       format: markdown
@@ -19,6 +21,7 @@ sections:
   - id: explorer
     title: Classes
     description: Typed class hierarchy of the player publication metamodel
+    kind: classes
     type: explorer
     source:
       format: linkml-yaml
@@ -31,6 +34,7 @@ sections:
   - id: glossary
     title: Glossary
     description: Business-facing terms of the Data Specification Player metamodel
+    kind: glossary
     type: glossary
     source:
       format: json
