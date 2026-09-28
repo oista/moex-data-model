@@ -191,6 +191,7 @@ def test_map_sssom_and_extract(
 def test_map_transform_preview(
     repo_root: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
+    pytest.importorskip("linkml_map")
     transform = repo_root / "model-assets" / "transformations" / "person-rename-code.yaml"
     sample = (
         repo_root
@@ -219,6 +220,7 @@ def test_map_transform_preview(
 def test_import_json_schema_draft(
     repo_root: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
+    pytest.importorskip("schema_automator")
     source = (
         repo_root
         / "packages"
