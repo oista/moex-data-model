@@ -277,10 +277,11 @@ def test_dams_explorer_real_schema():
         source={"format": "linkml-yaml", "path": str(schema), "select": "classes"},
     )
     out = LinkmlNormalizer().normalize(sec, schema)
-    assert [g.id for g in out.items[:4]] == [
+    assert [g.id for g in out.items[:5]] == [
         "group:overview",
         "group:classes",
         "group:spec-files",
+        "group:requirements",
         "group:implementations",
     ]
     overview = out.items[0]
@@ -305,6 +306,7 @@ def test_dams_explorer_real_schema():
     titles = {g.title for g in classes_root.children}
     assert "Core" in titles
     assert "Registries" in titles
+    assert "Requirements" in titles
     by_title = {g.title: g for g in classes_root.children}
     core = by_title["Core"]
     assert "Schema package" not in (core.description or "")
@@ -347,9 +349,18 @@ def test_dams_explorer_real_schema():
     assert "specification_kind" in (envelope.attributes.get("text") or "")
     assert "file:schemas/moex-dams.yaml" in (envelope.attributes.get("refs_out") or [])
 
+    req_root = next(g for g in out.items if g.id == "group:requirements")
+    assert {c.id for c in req_root.children} == {
+        "group:requirements-list",
+        "group:requirements-min-spec",
+    }
+    list_group = next(c for c in req_root.children if c.id == "group:requirements-list")
+    assert any(c.attributes.get("code") == "GEN-001" for c in list_group.children)
+
     impls_root = next(g for g in out.items if g.id == "group:implementations")
     assert impls_root.children == []  # filled at build time
 
+    assert "SpecificationRequirement" in classes
     lifecycle = classes["HasLifecycle"]
     assert lifecycle.attributes.get("mixin") is True
     assert lifecycle.attributes.get("is_a") in (None, "")
