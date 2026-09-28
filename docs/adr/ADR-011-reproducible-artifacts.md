@@ -25,7 +25,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 - Недетерминированные поля (timestamps) отключаются или нормализуются.
 - Lockfile фиксирует LinkML ecosystem; обновление toolchain — отдельный PR с объяснением golden diff.
 
-На текущем срезе: `SpecificationImplementation.content_digest` и envelope `revision` от digest; publication JSON пересобирается `moex-model publish` (с fail-closed `publish_gate`). **CI `compare-golden`** сверяет regenerable contracts, `moex-dams.schema.json`, OWL, SHACL, `moex-dams.dbml` (не colored sample), Mermaid, gen-python, gen-doc, gen-rdf и release-bundle index (`moex-dams-bundle.json`) с pinned `requirements-linkml.txt`. OWL/SHACL/RDF digests используют ground triples (без blank nodes); RDF additionally strips volatile `generation_date`; Python strips `# Generation date:` comments. Ещё вне golden: drawDB import, colored DBML sample.
+На текущем срезе: `SpecificationImplementation.content_digest` и envelope `revision` от digest; publication JSON пересобирается `moex-model publish` (с fail-closed `publish_gate`). **CI `compare-golden`** сверяет regenerable contracts, `moex-dams.schema.json`, OWL, SHACL, `moex-dams.dbml` (не colored sample), Mermaid, gen-python, gen-doc, gen-rdf и release-bundle index (`moex-dams-bundle.json`) с pinned `requirements-linkml.txt`. OWL/SHACL/RDF digests используют ground triples (без blank nodes); RDF additionally strips volatile `generation_date`; Python strips `# Generation date:` comments. **gen-doc** хранит в git только `docs/index.md` + `docs/README.md` (`git_policy: index_subset`); полный tree проверяется regen→digest в `compare-golden`, не on-disk digest в publish_gate. Ещё вне golden: полный drawDB editor import (bridge smoke — Playwright), colored DBML sample.
 
 ## Consequences
 

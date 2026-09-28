@@ -16,5 +16,6 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: false,
+    exclude: ["**/node_modules/**", "**/e2e/**", "**/dist/**"],
   },
 });

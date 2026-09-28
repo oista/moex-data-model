@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check packages-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check drawdb-up drawdb-adapter-check publish-gate
+.PHONY: viewer viewer-check packages-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -94,6 +94,10 @@ api-check:
 
 web-check:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File apps/web/scripts/check.ps1
+
+# Playwright Chromium smoke: Diagram page ↔ drawDB static-bridge postMessage
+web-e2e:
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File apps/web/scripts/e2e.ps1
 
 # Stage 0 gate: contracts → slice tests → schemas → examples → golden
 check:

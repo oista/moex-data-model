@@ -8,5 +8,8 @@
 | `moex-dams.dbml` | Regenerable LinkML `gen-dbml` output (golden) |
 | `moex-dams-drawdb-colored.dbml` | **Curated** drawDB sample with header colors — **not** in `compare-golden` |
 | `diagrams/*.md` | Regenerable Mermaid class diagrams |
+| `python/moex_dams.py` | Regenerable gen-python |
+| `docs/` | Regenerable gen-doc — **git:** only `index.md` + `README.md`; full tree after `make generate-artifacts` |
+| `moex-dams.rdf.ttl` | Regenerable gen-rdf |
 
 Regenerate: `make generate-artifacts` or `moex-model compile --artifacts`.

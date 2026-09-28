@@ -341,7 +341,7 @@ artifact:
 - **Semantic diff CLI (2026-09-28):** kernel `SemanticDiffReport` / `ChangeCategory`; `specification-dams.diff_implementations`; `moex-model semantic-diff` (Git refs + `--left`/`--right`, `--json`, exit 1 on breaking).
 - **Semantic diff API + Web preview (2026-09-28):** `POST /workspaces/{id}/semantic-diff` (published vs draft); Workbench **Review changes** panel. PR attach still out.
 - **Stage 0 foundation CI (2026-09-28):** `requirements-linkml.txt` (exact pins; `uv.lock` deferred), `.python-version` 3.12, `.linkmllint.yaml`, `validate-examples`, `compare-golden` (contracts + JSON Schema + OWL/SHACL/DBML/Mermaid), `.github/workflows/check.yml`.
-- **Stage 6 golden matrix (2026-09-28):** `make generate-artifacts` / `moex-model compile --artifacts` → OWL, SHACL, regenerable `moex-dams.dbml`, Mermaid, Python, Doc, RDF + manifests; in `compare-golden`. Colored `moex-dams-drawdb-colored.dbml` remains curated sample (not golden). Still open: drawDB import check (release bundle + publish gate = modeling-depth D–E).
+- **Stage 6 golden matrix (2026-09-28):** `make generate-artifacts` / `moex-model compile --artifacts` → OWL, SHACL, regenerable `moex-dams.dbml`, Mermaid, Python, Doc, RDF + manifests; in `compare-golden`. Colored `moex-dams-drawdb-colored.dbml` remains curated sample (not golden). gen-doc git = index_subset; Playwright bridge smoke via `make web-e2e`. Still open: full upstream drawDB editor import.
 - **Viewer + ontology packages CI (2026-09-28):** GHA job `viewer-and-packages` runs `make packages-check` (standard-owl / semantic-mappings / ontology-catalog) and `make viewer-check` alongside Stage 0 `make check`.
 - **Workbench CI (2026-09-28):** GHA job `workbench-check` runs `make drawdb-adapter-check`, `make api-check`, `make web-check`.
 - **PDF→ER agent docs (2026-09-28):** playbook + model contract under [`docs/agents/`](agents/); design status delivered. Filling runs still write fixture CSVs + `gaps.md` at runtime.
@@ -605,7 +605,7 @@ LinkML A
 
 ## Этап 6. Generators
 
-**Progress (2026-09-28 + modeling depth):** OWL / SHACL / regenerable DBML (`moex-dams.dbml`) / Mermaid / gen-python / gen-doc / gen-rdf in `make generate-artifacts` + `compare-golden` + `moex-model compile --artifacts`. Release bundle index (`moex-dams-bundle.json`, `compile --bundle`) and fail-closed publish gate (`scripts/publish_gate.py`) on CLI publish + API `POST /publications`. Contracts + JSON Schema already golden. Curated colored DBML sample stays out of golden. Still open: drawDB import check.
+**Progress (2026-09-28 + modeling depth + P3):** OWL / SHACL / regenerable DBML (`moex-dams.dbml`) / Mermaid / gen-python / gen-doc / gen-rdf in `make generate-artifacts` + `compare-golden` + `moex-model compile --artifacts`. Release bundle index (`moex-dams-bundle.json`, `compile --bundle`) and fail-closed publish gate (`scripts/publish_gate.py`) on CLI publish + API `POST /publications`. Contracts + JSON Schema already golden. Curated colored DBML sample stays out of golden. **gen-doc:** git tracks only `docs/index.md` + `docs/README.md`; full tree regenerable / golden via regen digest. **drawDB:** Playwright bridge smoke (`make web-e2e`) via static-bridge; full upstream editor import still open.
 
 ### Обязательные pipelines
 

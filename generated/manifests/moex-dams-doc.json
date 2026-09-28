@@ -7,5 +7,8 @@
   "schema_digest": "sha256:a3fd63d36db81fea87bbe23fd89c0c61fd1feeaf381bcb71bed5570552cb4609",
   "output_path": "generated/artifacts/moex-dams/0.1/docs",
   "content_digest": "sha256:9f722d56da4897b1394f6dbb2e80c2b089730d9cd95bbb890f9ff3bc09aa40e5",
-  "generated_at": "2026-09-28T05:22:35.267257+00:00"
+  "generated_at": "2026-09-28T06:39:23.107057+00:00",
+  "generator_options": {
+    "git_policy": "index_subset"
+  }
 }

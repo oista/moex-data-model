@@ -136,9 +136,12 @@ def verify_publish_gate(
         ("dbml", paths["dbml_manifest"], paths["dbml"], False, False, False),
         ("mermaid", paths["mermaid_manifest"], paths["mermaid"], False, False, False),
         ("python", paths["python_manifest"], paths["python"], False, False, True),
-        ("doc", paths["doc_manifest"], paths["doc"], False, False, False),
         ("rdf", paths["rdf_manifest"], paths["rdf"], True, True, False),
     )
+    # doc: git keeps index_subset only — digest of on-disk tree is not compared;
+    # full-tree reproducibility is enforced by compare-golden (regen → digest).
+    if not paths["doc_manifest"].is_file():
+        errors.append("publish-gate: missing doc manifest")
     for name, man, art, rdf, volatile, strip_date in checks:
         errors.extend(
             _check_manifest_file(

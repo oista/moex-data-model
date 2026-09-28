@@ -68,3 +68,12 @@ jobs:
 
       - name: Web test + build
         run: make web-check
+
+      - name: Install Playwright Chromium
+        working-directory: apps/web
+        run: npx playwright install --with-deps chromium
+
+      - name: drawDB bridge e2e
+        run: make web-e2e
+        env:
+          CI: true

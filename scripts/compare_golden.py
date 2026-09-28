@@ -41,7 +41,6 @@ from generate_artifacts import (  # noqa: E402
     RDF_PATH,
     SHACL_MANIFEST,
     SHACL_PATH,
-    directory_tree_digest,
     generate_dbml,
     generate_doc,
     generate_json_schema,
@@ -302,14 +301,22 @@ def _smoke_python(path: Path) -> list[str]:
 
 
 def _smoke_doc(directory: Path) -> list[str]:
+    import re
+
     if not directory.is_dir():
         return [f"doc smoke: missing directory {directory.as_posix()}"]
-    files = list(directory.rglob("*.md"))
+    files = [p for p in directory.rglob("*.md") if p.name != "README.md"]
     if not files:
         return [f"doc smoke: no *.md under {directory.as_posix()}"]
     index = directory / "index.md"
     if not index.is_file() or not index.read_text(encoding="utf-8").strip():
         return ["doc smoke: missing or empty index.md"]
+    body = index.read_text(encoding="utf-8")
+    match = re.search(r"\]\(([^)\s#]+\.md)\)", body)
+    if match:
+        linked = match.group(1)
+        if not (directory / linked).is_file():
+            return [f"doc smoke: index links to missing {linked}"]
     return []
 
 
@@ -327,25 +334,19 @@ def _compare_python() -> list[str]:
 
 
 def _compare_doc() -> list[str]:
+    """Doc golden is regen→digest only (git keeps index_subset, not full tree)."""
     errors: list[str] = []
     if not DOC_MANIFEST.is_file():
         return [f"missing doc manifest: {DOC_MANIFEST}"]
-    if not DOC_DIR.is_dir():
-        return [f"missing doc directory: {DOC_DIR}"]
+    # Committed checkout may only have index.md + README.md (git_policy index_subset).
+    index = DOC_DIR / "index.md"
+    if not index.is_file() or not index.read_text(encoding="utf-8").strip():
+        return ["doc smoke: missing or empty committed index.md"]
 
     manifest = json.loads(DOC_MANIFEST.read_text(encoding="utf-8"))
     expected = manifest.get("content_digest")
     if not expected:
         return ["doc manifest missing content_digest"]
-
-    actual = directory_tree_digest(DOC_DIR)
-    if actual != expected:
-        errors.append(
-            f"doc digest mismatch vs manifest:\n"
-            f"  dir={DOC_DIR.as_posix()}\n"
-            f"  expected={expected}\n"
-            f"  actual={actual}"
-        )
 
     with tempfile.TemporaryDirectory(prefix="moex-golden-doc-") as tmp:
         tmp_dir = Path(tmp) / "docs"
@@ -357,9 +358,8 @@ def _compare_doc() -> list[str]:
                 f"  expected={expected}\n"
                 f"  regenerated={regen_digest}"
             )
-
-    if not errors:
-        errors.extend(_smoke_doc(DOC_DIR))
+        if not errors:
+            errors.extend(_smoke_doc(tmp_dir))
     return errors
 
 

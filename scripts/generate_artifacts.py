@@ -385,6 +385,18 @@ def generate_python(
     )
     return digest
 
+_DOC_README = """# DAMS gen-doc (LinkML)
+
+Full Markdown set is produced by `make generate-artifacts` (or `moex-model compile --artifacts`).
+
+**Git policy (`index_subset`):** only this `README.md` and `index.md` are committed.
+Other `*.md` files are gitignored; regenerate locally or in CI for the full tree.
+The golden `content_digest` in `generated/manifests/moex-dams-doc.json` covers the **full** generated tree (this README is written after digest and is not part of it).
+
+Before `make generate-bundle` with staging, run a full doc generate so the staged bundle includes all pages.
+"""
+
+
 def generate_doc(
     *, out_dir: Path = DOC_DIR, manifest_path: Path = DOC_MANIFEST
 ) -> str:
@@ -409,7 +421,11 @@ def generate_doc(
             body += "\n"
         path.write_text(body, encoding="utf-8", newline="\n")
 
+    # Digest is DocGenerator output only; policy README is git-tracked but not golden.
     digest = directory_tree_digest(out_dir)
+    readme = out_dir / "README.md"
+    readme.write_text(_DOC_README.rstrip() + "\n", encoding="utf-8", newline="\n")
+
     try:
         out_rel = out_dir.relative_to(REPO).as_posix()
     except ValueError:
@@ -421,6 +437,7 @@ def generate_doc(
         generator_module="linkml.generators.docgen",
         output_path=out_rel,
         content_digest=digest,
+        generator_options={"git_policy": "index_subset"},
     )
     return digest
 

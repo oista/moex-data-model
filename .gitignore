@@ -24,6 +24,11 @@ packages/ontology/output/
 # Staged release bundle tree (index manifest under generated/manifests/ is committed)
 generated/bundles/
 
+# gen-doc full tree is regenerable; only index + policy README are tracked (P3)
+generated/artifacts/moex-dams/0.1/docs/*
+!generated/artifacts/moex-dams/0.1/docs/index.md
+!generated/artifacts/moex-dams/0.1/docs/README.md
+
 # Local FIBO clone (do not commit upstream sources).
 # Use anchored paths so Python packages named fibo/ are not ignored.
 /fibo/
