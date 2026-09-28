@@ -466,23 +466,113 @@ def wrap_dams_explorer_roots(
             model_example_group,
         ],
     )
+
+    pub_req_path = spec_dir / "publication-requirements.yaml"
+    pub_req_count = 0
+    if pub_req_path.is_file():
+        from moex_publication_viewer.normalizers.helpers import (
+            flatten_publication_requirements,
+        )
+
+        try:
+            pub_data = yaml.safe_load(pub_req_path.read_text(encoding="utf-8"))
+        except Exception:
+            pub_data = None
+        pub_req_count = len(flatten_publication_requirements(pub_data))
+
+    pub_list_group = PublicationItem(
+        id="group:requirements-publication-list",
+        title="Требования публикации",
+        description="PublicationRequirement из publication-requirements.yaml (ADR-019).",
+        attributes={
+            "kind": "group",
+            "section_root": "requirements-publication-list",
+            "purpose": (
+                "Обязательства publication profile эталона: "
+                "что Impl должен покрыть через satisfies."
+            ),
+            "requirement_count": pub_req_count,
+            "member_ids": ["section:publication-requirements"],
+        },
+        children=[
+            _section_ref("publication-requirements", "Требования публикации"),
+        ],
+    )
+    pub_spec_files: list[PublicationItem] = []
+    if pub_req_path.is_file():
+        text = pub_req_path.read_text(encoding="utf-8")
+        _, description, _ = _read_yaml_meta(pub_req_path)
+        pub_spec_files.append(
+            PublicationItem(
+                id=_file_item_id("publication-requirements.yaml"),
+                title="publication-requirements.yaml",
+                description=description
+                or "DAMS publication requirements (ADR-019).",
+                attributes={
+                    "kind": "source_file",
+                    "path": "publication-requirements.yaml",
+                    "version": "0.1",
+                    "description": description
+                    or "DAMS publication requirements (ADR-019).",
+                    "text": text,
+                    "refs_out": [],
+                    "refs_in": [],
+                },
+            )
+        )
+    pub_spec_group = PublicationItem(
+        id="group:requirements-publication-spec",
+        title="Спецификация",
+        description="Исходный YAML publication requirements эталона DAMS.",
+        attributes={
+            "kind": "group",
+            "section_root": "requirements-publication-spec",
+            "purpose": "Raw source publication-requirements.yaml (ADR-019).",
+            "file_count": len(pub_spec_files),
+            "member_ids": [f.id for f in pub_spec_files],
+        },
+        children=pub_spec_files,
+    )
+    publication_group = PublicationItem(
+        id="group:requirements-publication",
+        title="Публикация",
+        description="Требования к публикации реализаций эталона (ADR-019).",
+        attributes={
+            "kind": "group",
+            "section_root": "requirements-publication",
+            "purpose": (
+                "Контракт публикации: список PublicationRequirement и исходный YAML."
+            ),
+            "structure_why": (
+                "Требования публикации — flatten profiles[].requirements "
+                "(entity-table); спецификация — raw publication-requirements.yaml."
+            ),
+            "requirement_count": pub_req_count,
+            "file_count": len(pub_spec_files),
+            "member_ids": [pub_list_group.id, pub_spec_group.id],
+        },
+        children=[pub_list_group, pub_spec_group],
+    )
     requirements_root = PublicationItem(
         id="group:requirements",
         title="Требования",
-        description="Требования к моделям по уровням применения (ADR-013).",
+        description="Требования к моделям и к публикации по уровням применения.",
         attributes={
             "kind": "group",
             "section_root": "requirements",
             "purpose": "Каталог нормативных требований и связанные проекции.",
             "structure_why": (
-                "Сейчас один уровень — ИТ-решения; внутри: список требований, "
-                "required-only схема, скелет и пример ModelPackage."
+                "ИТ-решения (ADR-013): модель данных решения; "
+                "Публикация (ADR-019): обязательства publication profile для Impl."
             ),
-            "requirement_count": len(req_items),
-            "file_count": len(min_files) + len(skeleton_files) + len(example_files),
-            "member_ids": [it_solutions_group.id],
+            "requirement_count": len(req_items) + pub_req_count,
+            "file_count": len(min_files)
+            + len(skeleton_files)
+            + len(example_files)
+            + len(pub_spec_files),
+            "member_ids": [it_solutions_group.id, publication_group.id],
         },
-        children=[it_solutions_group],
+        children=[it_solutions_group, publication_group],
     )
 
     # Placeholder; build.py fills children from architecture catalog.

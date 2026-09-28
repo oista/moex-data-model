@@ -724,7 +724,9 @@
         } else if (
           sectionRoot === "requirements" ||
           sectionRoot === "requirements-it-solutions" ||
-          sectionRoot === "requirements-list"
+          sectionRoot === "requirements-list" ||
+          sectionRoot === "requirements-publication" ||
+          sectionRoot === "requirements-publication-list"
         ) {
           badgeCount =
             group.attributes?.requirement_count ??
@@ -739,7 +741,8 @@
         } else if (
           sectionRoot === "requirements-min-spec" ||
           sectionRoot === "requirements-model-spec" ||
-          sectionRoot === "requirements-model-example"
+          sectionRoot === "requirements-model-example" ||
+          sectionRoot === "requirements-publication-spec"
         ) {
           badgeCount =
             group.attributes?.file_count ?? (group.children || []).length;
@@ -2067,7 +2070,10 @@
         sectionRoot === "requirements-min-spec" ||
         sectionRoot === "requirements-it-solutions" ||
         sectionRoot === "requirements-model-spec" ||
-        sectionRoot === "requirements-model-example"
+        sectionRoot === "requirements-model-example" ||
+        sectionRoot === "requirements-publication" ||
+        sectionRoot === "requirements-publication-list" ||
+        sectionRoot === "requirements-publication-spec"
       ) {
         if (item.attributes?.requirement_count != null) {
           appendMetaRow(

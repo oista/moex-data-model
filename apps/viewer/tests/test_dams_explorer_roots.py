@@ -74,13 +74,22 @@ def test_wrap_roots_placeholder_implementations(tmp_path: Path):
     assert roots[1].children[0].id == "group:pkg"
     assert roots[2].children
     assert roots[3].id == "group:requirements"
-    assert {c.id for c in roots[3].children} == {"group:requirements-it-solutions"}
+    assert {c.id for c in roots[3].children} == {
+        "group:requirements-it-solutions",
+        "group:requirements-publication",
+    }
     it = roots[3].children[0]
+    assert it.id == "group:requirements-it-solutions"
     assert {c.id for c in it.children} == {
         "group:requirements-list",
         "group:requirements-min-spec",
         "group:requirements-model-spec",
         "group:requirements-model-example",
+    }
+    pub = next(c for c in roots[3].children if c.id == "group:requirements-publication")
+    assert {c.id for c in pub.children} == {
+        "group:requirements-publication-list",
+        "group:requirements-publication-spec",
     }
     assert roots[4].children == []
 
@@ -94,6 +103,10 @@ def test_wrap_roots_loads_requirements_catalog():
     )
     roots = wrap_dams_explorer_roots([pkg], DAMS_SPEC)
     req_root = next(r for r in roots if r.id == "group:requirements")
+    assert {c.id for c in req_root.children} == {
+        "group:requirements-it-solutions",
+        "group:requirements-publication",
+    }
     assert req_root.children[0].id == "group:requirements-it-solutions"
     assert req_root.children[0].title == "ИТ-решения"
     it = req_root.children[0]
@@ -134,6 +147,30 @@ def test_wrap_roots_loads_requirements_catalog():
         "file:requirements/examples/it-solution-model.example.yaml"
     )
     assert "example_min_solution_model" in (example.children[0].attributes.get("text") or "")
+
+    pub = next(
+        c for c in req_root.children if c.id == "group:requirements-publication"
+    )
+    assert pub.title == "Публикация"
+    pub_list = next(
+        c for c in pub.children if c.id == "group:requirements-publication-list"
+    )
+    assert pub_list.title == "Требования публикации"
+    assert pub_list.attributes.get("requirement_count", 0) >= 1
+    assert any(
+        (c.attributes or {}).get("section_id") == "publication-requirements"
+        for c in pub_list.children
+    )
+    pub_spec = next(
+        c for c in pub.children if c.id == "group:requirements-publication-spec"
+    )
+    assert pub_spec.title == "Спецификация"
+    assert any(
+        c.id == "file:publication-requirements.yaml" for c in pub_spec.children
+    )
+    assert "dams-logical-modeling" in (
+        pub_spec.children[0].attributes.get("text") or ""
+    )
 
 
 def test_minimal_schema_projection_has_required_slots():

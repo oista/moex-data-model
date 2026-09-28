@@ -19,6 +19,45 @@ def select_path(data: Any, select: str | None) -> Any:
     return current
 
 
+def flatten_publication_requirements(data: Any) -> list[dict[str, Any]]:
+    """Flatten ADR-019 ``profiles[].requirements`` into entity-table rows.
+
+    Columns: id, name, description, profile, required (obligation mapped).
+    """
+    if not isinstance(data, dict):
+        return []
+    rows: list[dict[str, Any]] = []
+    for prof in data.get("profiles") or []:
+        if not isinstance(prof, dict):
+            continue
+        profile_id = str(prof.get("id") or "")
+        for req in prof.get("requirements") or []:
+            if not isinstance(req, dict):
+                continue
+            req_id = str(req.get("id") or "")
+            if not req_id:
+                continue
+            obligation = str(req.get("obligation") or "required")
+            if obligation not in ("required", "recommended"):
+                obligation = "required"
+            name = req.get("title") or req.get("name") or req_id
+            description = (
+                req.get("description")
+                or req.get("semantic_capability")
+                or ""
+            )
+            rows.append(
+                {
+                    "id": req_id,
+                    "name": str(name),
+                    "description": str(description) if description else "",
+                    "profile": profile_id,
+                    "required": obligation,
+                }
+            )
+    return rows
+
+
 def dict_to_item(
     record: dict[str, Any],
     *,

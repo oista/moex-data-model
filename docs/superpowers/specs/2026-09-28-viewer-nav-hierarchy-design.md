@@ -52,6 +52,14 @@ Spec moex.dams                         ← select + toggle
 ├─ Классы
 ├─ Спецификация
 ├─ Требования
+│  ├─ ИТ-решения
+│  │  ├─ Требования к модели
+│  │  ├─ Спецификация требований
+│  │  ├─ Спецификация модели
+│  │  └─ Пример модели
+│  └─ Публикация                       ← ADR-019 publication-requirements.yaml
+│     ├─ Требования публикации         ← entity-table (flattened)
+│     └─ Спецификация                  ← source_file raw YAML
 └─ Реализации                          ← only place for Impls
    ├─ moex.dsp                         ← expandable implementation_ref
    │  └─ (section_refs → target module)

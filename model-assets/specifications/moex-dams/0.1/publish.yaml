@@ -100,3 +100,28 @@ sections:
       - name
       - description
     default_collapsed: true
+
+  - id: publication-requirements
+    title: Требования публикации
+    description: >
+      PublicationRequirement из publication-requirements.yaml (ADR-019).
+      Inherited by Spec implementations via satisfies.
+    type: entity-table
+    kind: source
+    source:
+      format: yaml
+      path: publication-requirements.yaml
+      select: flattened_requirements
+    columns:
+      - id
+      - name
+      - description
+      - profile
+      - required
+    filterable:
+      - profile
+      - required
+    sort:
+      by: id
+      order: asc
+    default_collapsed: true

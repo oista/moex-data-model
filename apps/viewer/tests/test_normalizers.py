@@ -39,6 +39,76 @@ def test_yaml_list_of_dicts(tmp_path: Path):
     assert out.items[0].title == "A"
 
 
+def test_yaml_flattened_publication_requirements(tmp_path: Path):
+    from moex_publication_viewer.normalizers.helpers import (
+        flatten_publication_requirements,
+    )
+
+    raw = {
+        "profiles": [
+            {
+                "id": "dams-logical-modeling",
+                "requirements": [
+                    {
+                        "id": "dams:overview",
+                        "title": "Overview",
+                        "description": "Must publish overview",
+                        "obligation": "required",
+                        "semantic_capability": "overview",
+                    },
+                    {
+                        "id": "dams:relationships",
+                        "obligation": "recommended",
+                        "semantic_capability": "relationships",
+                    },
+                ],
+            },
+            {
+                "id": "dams-logical-and-physical",
+                "requirements": [
+                    {
+                        "id": "dams:physical-objects",
+                        "obligation": "required",
+                        "semantic_capability": "physical-objects",
+                    },
+                ],
+            },
+        ]
+    }
+    rows = flatten_publication_requirements(raw)
+    assert len(rows) == 3
+    by_id = {r["id"]: r for r in rows}
+    assert by_id["dams:overview"]["name"] == "Overview"
+    assert by_id["dams:overview"]["profile"] == "dams-logical-modeling"
+    assert by_id["dams:overview"]["required"] == "required"
+    assert by_id["dams:relationships"]["required"] == "recommended"
+    assert by_id["dams:relationships"]["name"] == "dams:relationships"
+    assert by_id["dams:physical-objects"]["profile"] == "dams-logical-and-physical"
+
+    p = tmp_path / "publication-requirements.yaml"
+    p.write_text(yaml.dump(raw), encoding="utf-8")
+    sec = _section(
+        id="publication-requirements",
+        source={
+            "format": "yaml",
+            "path": "publication-requirements.yaml",
+            "select": "flattened_requirements",
+        },
+        columns=["id", "name", "description", "profile", "required"],
+    )
+    out = YamlNormalizer().normalize(sec, p)
+    assert len(out.items) == 3
+    assert {i.id for i in out.items} == {
+        "dams:overview",
+        "dams:relationships",
+        "dams:physical-objects",
+    }
+    overview = next(i for i in out.items if i.id == "dams:overview")
+    assert overview.title == "Overview"
+    assert overview.attributes.get("profile") == "dams-logical-modeling"
+    assert overview.attributes.get("required") == "required"
+
+
 def test_json_key_value(tmp_path: Path):
     p = tmp_path / "data.json"
     p.write_text('{"title": "T", "version": "1.0"}', encoding="utf-8")
@@ -360,8 +430,11 @@ def test_dams_explorer_real_schema():
     assert "file:schemas/moex-dams.yaml" in (envelope.attributes.get("refs_out") or [])
 
     req_root = next(g for g in out.items if g.id == "group:requirements")
-    assert {c.id for c in req_root.children} == {"group:requirements-it-solutions"}
-    it = req_root.children[0]
+    assert {c.id for c in req_root.children} == {
+        "group:requirements-it-solutions",
+        "group:requirements-publication",
+    }
+    it = next(c for c in req_root.children if c.id == "group:requirements-it-solutions")
     assert {c.id for c in it.children} == {
         "group:requirements-list",
         "group:requirements-min-spec",
@@ -370,6 +443,14 @@ def test_dams_explorer_real_schema():
     }
     list_group = next(c for c in it.children if c.id == "group:requirements-list")
     assert any(c.attributes.get("code") == "GEN-001" for c in list_group.children)
+
+    pub = next(
+        c for c in req_root.children if c.id == "group:requirements-publication"
+    )
+    assert {c.id for c in pub.children} == {
+        "group:requirements-publication-list",
+        "group:requirements-publication-spec",
+    }
 
     impls_root = next(g for g in out.items if g.id == "group:implementations")
     assert impls_root.children == []  # filled at build time
