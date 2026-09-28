@@ -1,0 +1,102 @@
+id: https://data.moex.com/dams/requirements/v0.1
+name: moex_requirements
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  dams: https://data.moex.com/dams/
+imports:
+  - linkml:types
+  - moex-types
+  - moex-core
+default_prefix: dams
+default_range: string
+
+classes:
+  FormalCheck:
+    description: >-
+      Одна машиночитаемая проверка требования. Kind выровнен с LinkML
+      constraints и DAMS reference/structural diagnostics; assess wiring
+      может появиться позже.
+    slots:
+      - check_id
+      - kind
+      - target_class
+      - target_slot
+      - target_path
+      - severity
+      - diagnostic_code
+      - expression
+
+  SpecificationRequirement:
+    is_a: ModelElement
+    description: >-
+      Нормативное требование к модели, соответствующей reference specification
+      (каталог для уровня ИТ-решения и др.).
+    slots:
+      - code
+      - requirement_level
+      - requirement_section
+      - statement
+      - formal_checks
+
+  RequirementCatalog:
+    description: Контейнер инстансов SpecificationRequirement вне ModelPackage.
+    slots:
+      - catalog_id
+      - name
+      - requirements
+
+slots:
+  check_id:
+    range: string
+    required: true
+  kind:
+    range: FormalCheckKindEnum
+    required: true
+  target_class:
+    range: string
+    description: Имя класса LinkML (например LogicalEntity).
+  target_slot:
+    range: string
+  target_path:
+    range: string
+    description: JSON Pointer или path hint в теле ModelPackage.
+  severity:
+    range: CheckSeverityEnum
+    required: true
+  diagnostic_code:
+    range: string
+    description: Мост к DAMS-STRUCT-* / DAMS-REF-* / будущим DAMS-REQ-*.
+  expression:
+    range: string
+    description: Свободная LinkML-ish заметка при kind=custom.
+  code:
+    range: string
+    required: true
+    pattern: '^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$'
+  requirement_level:
+    range: RequirementLevelEnum
+    required: true
+  requirement_section:
+    range: RequirementSectionEnum
+    required: true
+  statement:
+    range: string
+    required: true
+    description: Развёрнутая формулировка требования на понятном языке.
+  formal_checks:
+    range: FormalCheck
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    minimum_cardinality: 1
+  catalog_id:
+    identifier: true
+    range: uriorcurie
+    required: true
+  requirements:
+    range: SpecificationRequirement
+    multivalued: true
+    inlined: true
+    inlined_as_list: true

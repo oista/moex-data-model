@@ -30,6 +30,8 @@ DBML — **derived projection** (`GENERATED_FROM`) из каноническог
 - Запрет «экспортировали DBML и заменили YAML».
 - Нужны round-trip golden tests, когда появится adapter.
 
+**MVP landed (2026-09-28):** adapter round-trip + Workbench confirm via semantic diff before workspace apply. Metamodel DBML golden regen remains Stage 6.
+
 ## Alternatives
 
 | Alternative | Почему нет |

@@ -94,6 +94,15 @@ _SCHEMA_GROUP_META_BASE: dict[str, tuple[int, str, str, str, str]] = {
         "онтологию.",
         "moex-analytics.yaml",
     ),
+    "moex_requirements": (
+        65,
+        "Requirements",
+        "Каталог нормативных требований к модели ИТ-решения: код раздела, формулировка и "
+        "формальные проверки (ADR-013).",
+        "Выделен отдельно от core: требования описывают, что должно выполняться при "
+        "валидации ModelPackage, а не являются элементами тела решения.",
+        "moex-requirements.yaml",
+    ),
     "moex_types": (
         70,
         "Types",

@@ -397,6 +397,7 @@
         if (kind === "enum") mark = "E";
         else if (kind === "individual") mark = "I";
         else if (kind === "source_file") mark = "F";
+        else if (kind === "requirement") mark = "T";
         else if (kind === "implementation_ref") mark = "R";
         else if (kind === "section_ref") mark = "S";
         else if (kind === "group") mark = "G";
@@ -483,6 +484,17 @@
         if (sectionRoot === "spec-files") {
           badgeCount =
             group.attributes?.file_count ?? (group.children || []).length;
+        } else if (sectionRoot === "requirements") {
+          badgeCount =
+            group.attributes?.requirement_count ??
+            (group.children || []).reduce(
+              (n, c) =>
+                n +
+                ((c.attributes?.kind === "requirement"
+                  ? 1
+                  : (c.children || []).length) || 0),
+              0
+            );
         } else if (sectionRoot === "implementations") {
           badgeCount =
             group.attributes?.impl_count ?? (group.children || []).length;
@@ -1240,6 +1252,77 @@
     return root;
   }
 
+  function renderRequirementDetail(item) {
+    const card = document.createElement("article");
+    card.className = "detail-card requirement-card";
+    const attrs = item.attributes || {};
+    const code = attrs.code || item.title || item.id;
+    const level = attrs.requirement_level || "";
+    const section = attrs.requirement_section || "";
+    const title = attrs.title || attrs.name || "";
+    card.innerHTML = `
+      <header class="detail-head">
+        <h1>${escapeHtml(String(code))}</h1>
+        <div class="badge-row">
+          <span class="badge-pill">requirement</span>
+          ${section ? `<span class="badge-pill">${escapeHtml(String(section))}</span>` : ""}
+          ${level ? `<span class="badge-pill">${escapeHtml(String(level))}</span>` : ""}
+        </div>
+        <p class="muted">${escapeHtml(title)}</p>
+      </header>
+      <section class="detail-block">
+        <h2>Формулировка</h2>
+        <p class="detail-desc requirement-statement">${escapeHtml(attrs.statement || "—")}</p>
+      </section>
+    `;
+
+    const checks = Array.isArray(attrs.formal_checks) ? attrs.formal_checks : [];
+    const checkBlock = document.createElement("section");
+    checkBlock.className = "detail-block";
+    checkBlock.innerHTML = `<h2>Формальные проверки (${checks.length})</h2>`;
+    if (!checks.length) {
+      checkBlock.innerHTML += `<p class="muted">Нет проверок.</p>`;
+    } else {
+      const table = document.createElement("table");
+      table.className = "data-table requirement-checks";
+      table.innerHTML = `<thead><tr>
+        <th>check_id</th><th>kind</th><th>target</th><th>severity</th><th>diagnostic</th>
+      </tr></thead>`;
+      const tbody = document.createElement("tbody");
+      checks.forEach((ch) => {
+        const tr = document.createElement("tr");
+        const target = [ch.target_class, ch.target_slot, ch.target_path]
+          .filter(Boolean)
+          .join(" · ");
+        tr.innerHTML = `
+          <td><code>${escapeHtml(String(ch.check_id || ""))}</code></td>
+          <td>${escapeHtml(String(ch.kind || ""))}</td>
+          <td>${escapeHtml(target)}</td>
+          <td>${escapeHtml(String(ch.severity || ""))}</td>
+          <td><code>${escapeHtml(String(ch.diagnostic_code || ""))}</code></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+      checkBlock.appendChild(table);
+    }
+    card.appendChild(checkBlock);
+
+    const meta = document.createElement("section");
+    meta.className = "detail-block";
+    meta.innerHTML = `<h2>Метаданные</h2>`;
+    const dl = document.createElement("dl");
+    dl.className = "detail-meta";
+    if (attrs.element_id) appendMetaRow(dl, "element_id", String(attrs.element_id));
+    if (attrs.lifecycle_status) {
+      appendMetaRow(dl, "lifecycle_status", String(attrs.lifecycle_status));
+    }
+    if (attrs.description) appendMetaRow(dl, "description", String(attrs.description));
+    meta.appendChild(dl);
+    card.appendChild(meta);
+    return card;
+  }
+
   function renderSourceFileDetail(mod, expl, item) {
     const card = document.createElement("article");
     card.className = "detail-card";
@@ -1341,6 +1424,9 @@
     if (kind === "source_file") {
       return renderSourceFileDetail(mod, expl, item);
     }
+    if (kind === "requirement") {
+      return renderRequirementDetail(item);
+    }
     if (kind === "implementation_ref") {
       return renderImplementationRefDetail(item);
     }
@@ -1397,6 +1483,31 @@
           "files",
           String(item.attributes?.file_count ?? (item.children || []).length)
         );
+      } else if (sectionRoot === "requirements") {
+        appendMetaRow(
+          dl,
+          "requirements",
+          String(item.attributes?.requirement_count ?? 0)
+        );
+        appendMetaRow(
+          dl,
+          "minimal_files",
+          String(item.attributes?.file_count ?? 0)
+        );
+      } else if (
+        sectionRoot === "requirements-list" ||
+        sectionRoot === "requirements-min-spec"
+      ) {
+        if (item.attributes?.requirement_count != null) {
+          appendMetaRow(
+            dl,
+            "requirements",
+            String(item.attributes.requirement_count)
+          );
+        }
+        if (item.attributes?.file_count != null) {
+          appendMetaRow(dl, "files", String(item.attributes.file_count));
+        }
       } else if (sectionRoot === "implementations") {
         appendMetaRow(
           dl,
@@ -1433,6 +1544,12 @@
               <span>${escapeHtml(child.title || child.id)}</span>`;
           } else if (childKind === "enum") {
             btn.innerHTML = `<span class="nav-kind">E</span>
+              <span>${escapeHtml(child.title || child.id)}</span>`;
+          } else if (childKind === "requirement") {
+            btn.innerHTML = `<span class="nav-kind">T</span>
+              <span>${escapeHtml(child.title || child.id)}</span>`;
+          } else if (childKind === "source_file") {
+            btn.innerHTML = `<span class="nav-kind">F</span>
               <span>${escapeHtml(child.title || child.id)}</span>`;
           } else {
             btn.textContent = child.title || child.id;

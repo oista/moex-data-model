@@ -251,6 +251,74 @@ class EnforcementResultEnum(str, Enum):
     not_applicable = "not_applicable"
 
 
+class RequirementLevelEnum(str, Enum):
+    """
+    Уровень применения требования к спецификации.
+    """
+    conceptual_model = "conceptual_model"
+    """
+    Концептуальная модель
+    """
+    it_solution = "it_solution"
+    """
+    ИТ-решение
+    """
+    it_system = "it_system"
+    """
+    ИТ-система
+    """
+
+
+class RequirementSectionEnum(str, Enum):
+    """
+    Раздел каталога требований (трёхбуквенный код в code).
+    """
+    LDM = "LDM"
+    """
+    Логическая модель
+    """
+    PDM = "PDM"
+    """
+    Физическая модель
+    """
+    REF = "REF"
+    """
+    Связи сущностей
+    """
+    ATR = "ATR"
+    """
+    Атрибуты
+    """
+    FLW = "FLW"
+    """
+    Потоки данных
+    """
+    CLS = "CLS"
+    """
+    Классификация данных
+    """
+    GEN = "GEN"
+    """
+    Общие требования
+    """
+
+
+class FormalCheckKindEnum(str, Enum):
+    """
+    Вид формальной проверки в нотации, близкой к LinkML constraints.
+    """
+    slot_required = "slot_required"
+    slot_min_cardinality = "slot_min_cardinality"
+    ref_resolves = "ref_resolves"
+    key_subset = "key_subset"
+    custom = "custom"
+
+
+class CheckSeverityEnum(str, Enum):
+    error = "error"
+    warning = "warning"
+
+
 
 class RegistryEntry(ConfiguredBaseModel):
     """
@@ -961,6 +1029,64 @@ class Dimension(ModelElement):
     deprecated_by_ref: Optional[str] = Field(default=None)
 
 
+class FormalCheck(ConfiguredBaseModel):
+    """
+    Одна машиночитаемая проверка требования. Kind выровнен с LinkML constraints и DAMS reference/structural diagnostics; assess wiring может появиться позже.
+    """
+    check_id: str = Field(default=...)
+    kind: FormalCheckKindEnum = Field(default=...)
+    target_class: Optional[str] = Field(default=None, description="""Имя класса LinkML (например LogicalEntity).""")
+    target_slot: Optional[str] = Field(default=None)
+    target_path: Optional[str] = Field(default=None, description="""JSON Pointer или path hint в теле ModelPackage.""")
+    severity: CheckSeverityEnum = Field(default=...)
+    diagnostic_code: Optional[str] = Field(default=None, description="""Мост к DAMS-STRUCT-* / DAMS-REF-* / будущим DAMS-REQ-*.""")
+    expression: Optional[str] = Field(default=None, description="""Свободная LinkML-ish заметка при kind=custom.""")
+
+
+class SpecificationRequirement(ModelElement):
+    """
+    Нормативное требование к модели, соответствующей reference specification (каталог для уровня ИТ-решения и др.).
+    """
+    code: str = Field(default=...)
+    requirement_level: RequirementLevelEnum = Field(default=...)
+    requirement_section: RequirementSectionEnum = Field(default=...)
+    statement: str = Field(default=..., description="""Развёрнутая формулировка требования на понятном языке.""")
+    formal_checks: Optional[list[FormalCheck]] = Field(default=None, min_length=1)
+    element_id: str = Field(default=...)
+    name: str = Field(default=...)
+    title: Optional[str] = Field(default=None)
+    description: str = Field(default=...)
+    aliases: Optional[list[str]] = Field(default=None)
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+
+    @field_validator('code')
+    def pattern_code(cls, v):
+        pattern=re.compile(r"^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$")
+        if isinstance(v, list):
+            for element in v:
+                if isinstance(element, str) and not pattern.match(element):
+                    err_msg = f"Invalid code format: {element}"
+                    raise ValueError(err_msg)
+        elif isinstance(v, str) and not pattern.match(v):
+            err_msg = f"Invalid code format: {v}"
+            raise ValueError(err_msg)
+        return v
+
+
+class RequirementCatalog(ConfiguredBaseModel):
+    """
+    Контейнер инстансов SpecificationRequirement вне ModelPackage.
+    """
+    catalog_id: str = Field(default=...)
+    name: str = Field(default=...)
+    requirements: Optional[list[SpecificationRequirement]] = Field(default=None)
+
+
 class MOEXModelRepository(ConfiguredBaseModel):
     """
     Корневой контейнер для проверки набора моделей, ссылочных проекций справочников, потоков и контрактных bindings.
@@ -1017,4 +1143,7 @@ SelectedEntity.model_rebuild()
 SelectedAttribute.model_rebuild()
 Metric.model_rebuild()
 Dimension.model_rebuild()
+FormalCheck.model_rebuild()
+SpecificationRequirement.model_rebuild()
+RequirementCatalog.model_rebuild()
 MOEXModelRepository.model_rebuild()

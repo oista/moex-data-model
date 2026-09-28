@@ -1,0 +1,217 @@
+catalog_id: dams:req-catalog/it-solution/0.1
+name: it_solution_requirements
+requirements:
+  - element_id: dams:req/GEN-001
+    name: model_package_identity
+    title: Идентичность пакета модели
+    description: Обязательные поля корня ModelPackage.
+    lifecycle_status: active
+    code: GEN-001
+    requirement_level: it_solution
+    requirement_section: GEN
+    statement: >-
+      У каждой модели ИТ-решения должен быть стабильный идентификатор пакета,
+      человекочитаемое имя, краткое описание, статус жизненного цикла, версия
+      API схемы и семантическая версия модели (например 1.0.0). Без этих полей
+      пакет не принимается валидатором.
+    formal_checks:
+      - check_id: GEN-001.c1
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: element_id
+        severity: error
+        diagnostic_code: DAMS-STRUCT-001
+      - check_id: GEN-001.c2
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: name
+        severity: error
+        diagnostic_code: DAMS-STRUCT-002
+      - check_id: GEN-001.c3
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: description
+        severity: error
+      - check_id: GEN-001.c4
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: lifecycle_status
+        severity: error
+      - check_id: GEN-001.c5
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: api_version
+        severity: error
+      - check_id: GEN-001.c6
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: model_version
+        severity: error
+
+  - element_id: dams:req/LDM-001
+    name: logical_entity_context
+    title: Логическая сущность в контексте
+    description: Обязательные поля LogicalEntity.
+    lifecycle_status: active
+    code: LDM-001
+    requirement_level: it_solution
+    requirement_section: LDM
+    statement: >-
+      Каждая логическая сущность должна быть привязана к доменному контексту
+      модели и указать роль данных решения (производитель, потребитель или
+      посредник). Ссылка на контекст должна указывать на контекст, описанный
+      в том же пакете модели.
+    formal_checks:
+      - check_id: LDM-001.c1
+        kind: slot_required
+        target_class: LogicalEntity
+        target_slot: context_ref
+        severity: error
+      - check_id: LDM-001.c2
+        kind: slot_required
+        target_class: LogicalEntity
+        target_slot: solution_data_role
+        severity: error
+      - check_id: LDM-001.c3
+        kind: ref_resolves
+        target_class: LogicalEntity
+        target_slot: context_ref
+        target_path: /logical_entities/*/context_ref
+        severity: error
+        diagnostic_code: DAMS-REF-002
+
+  - element_id: dams:req/ATR-001
+    name: logical_attribute_core
+    title: Обязательные свойства атрибута
+    description: Обязательные поля LogicalAttribute.
+    lifecycle_status: active
+    code: ATR-001
+    requirement_level: it_solution
+    requirement_section: ATR
+    statement: >-
+      У каждого логического атрибута должны быть указаны владеющая сущность,
+      логический тип данных, признак обязательности заполнения и признак
+      множественности. Атрибут без типа или без явной обязательности не
+      проходит проверку.
+    formal_checks:
+      - check_id: ATR-001.c1
+        kind: slot_required
+        target_class: LogicalAttribute
+        target_slot: owner_entity_ref
+        severity: error
+      - check_id: ATR-001.c2
+        kind: slot_required
+        target_class: LogicalAttribute
+        target_slot: logical_type
+        severity: error
+      - check_id: ATR-001.c3
+        kind: slot_required
+        target_class: LogicalAttribute
+        target_slot: required
+        severity: error
+      - check_id: ATR-001.c4
+        kind: slot_required
+        target_class: LogicalAttribute
+        target_slot: multivalued
+        severity: error
+
+  - element_id: dams:req/REF-001
+    name: relationship_endpoints
+    title: Концы связи сущностей
+    description: Обязательные концы Relationship и разрешимость ссылок.
+    lifecycle_status: active
+    code: REF-001
+    requirement_level: it_solution
+    requirement_section: REF
+    statement: >-
+      Именованная связь между сущностями должна явно указывать исходную и
+      целевую сущность. Обе ссылки должны указывать на элементы, присутствующие
+      в том же пакете модели (не «висячие» идентификаторы).
+    formal_checks:
+      - check_id: REF-001.c1
+        kind: slot_required
+        target_class: Relationship
+        target_slot: source_entity_ref
+        severity: error
+      - check_id: REF-001.c2
+        kind: slot_required
+        target_class: Relationship
+        target_slot: target_entity_ref
+        severity: error
+      - check_id: REF-001.c3
+        kind: ref_resolves
+        target_class: Relationship
+        target_slot: source_entity_ref
+        severity: error
+        diagnostic_code: DAMS-REF-005
+      - check_id: REF-001.c4
+        kind: ref_resolves
+        target_class: Relationship
+        target_slot: target_entity_ref
+        severity: error
+        diagnostic_code: DAMS-REF-006
+
+  - element_id: dams:req/PDM-001
+    name: physical_object_and_mapping
+    title: Физический объект и соответствие
+    description: Обязательные поля PhysicalObject/PhysicalField и Mapping.
+    lifecycle_status: active
+    code: PDM-001
+    requirement_level: it_solution
+    requirement_section: PDM
+    statement: >-
+      Физический объект (таблица, топик, API и т.п.) должен указать систему,
+      вид объекта, квалифицированное имя, технологию, ссылку на нативную схему
+      и направление потока. Каждое физическое поле — имя и тип в нативной
+      системе, признак обязательности и ссылку на свой объект. Соответствие
+      (mapping) должно иметь тип, кардинальность и хотя бы один источник и
+      одну цель, которые существуют в пакете.
+    formal_checks:
+      - check_id: PDM-001.c1
+        kind: slot_required
+        target_class: PhysicalObject
+        target_slot: system_ref
+        severity: error
+      - check_id: PDM-001.c2
+        kind: slot_required
+        target_class: PhysicalObject
+        target_slot: object_kind
+        severity: error
+      - check_id: PDM-001.c3
+        kind: slot_required
+        target_class: PhysicalObject
+        target_slot: qualified_name
+        severity: error
+      - check_id: PDM-001.c4
+        kind: slot_required
+        target_class: PhysicalObject
+        target_slot: technology
+        severity: error
+      - check_id: PDM-001.c5
+        kind: slot_required
+        target_class: PhysicalObject
+        target_slot: native_schema_ref
+        severity: error
+      - check_id: PDM-001.c6
+        kind: slot_required
+        target_class: PhysicalObject
+        target_slot: direction
+        severity: error
+      - check_id: PDM-001.c7
+        kind: slot_min_cardinality
+        target_class: Mapping
+        target_slot: source_refs
+        severity: error
+        diagnostic_code: DAMS-REF-003
+      - check_id: PDM-001.c8
+        kind: slot_min_cardinality
+        target_class: Mapping
+        target_slot: target_refs
+        severity: error
+        diagnostic_code: DAMS-REF-003
+      - check_id: PDM-001.c9
+        kind: ref_resolves
+        target_class: Mapping
+        target_path: /mappings/*/source_refs|/mappings/*/target_refs
+        severity: error
+        diagnostic_code: DAMS-REF-004

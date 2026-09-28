@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import tempfile
 from datetime import datetime, timezone
+from io import StringIO
 from pathlib import Path
 from uuid import uuid4
 
@@ -12,10 +14,12 @@ import yaml
 from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, Field
+from ruamel.yaml import YAML
 from sqlalchemy.orm import Session, sessionmaker
 
 from moex_dams.application.assess import assess_implementation
 from moex_dams.application.diff import diff_implementations
+from moex_drawdb import DrawDbProjectionService
 from moex_git import FileChange, make_git_provider
 from moex_git.ports import GitProvider
 from moex_model_cli.bootstrap import SlicePaths, find_repo_root
@@ -43,9 +47,6 @@ from moex_model_api.ports import (
     ValidationRunRecord,
 )
 from moex_model_api.yaml_mutate import MutationConflict, MutationError, apply_mutation
-from moex_drawdb import DrawDbProjectionService
-from ruamel.yaml import YAML
-from io import StringIO
 
 
 class ConformanceResponse(BaseModel):
@@ -703,8 +704,6 @@ def create_app(
         if ds is None or ds.workspace_id != workspace_id:
             raise HTTPException(status_code=404, detail="diagram session not found")
         diagram_id = f"moex:diagram:{workspace_id}:{ds.profile}"
-        import json
-
         nodes_json = json.dumps(body.nodes, sort_keys=True)
         row = session.get(orm.DiagramLayout, diagram_id)
         if row is None:

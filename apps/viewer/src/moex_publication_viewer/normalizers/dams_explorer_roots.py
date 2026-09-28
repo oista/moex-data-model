@@ -167,11 +167,86 @@ def _section_ref(section_id: str, title: str) -> PublicationItem:
     )
 
 
+def _load_requirement_items(spec_dir: Path) -> list[PublicationItem]:
+    """Load SpecificationRequirement instances from requirements catalog YAML."""
+    catalog_path = spec_dir / "requirements" / "it-solution-requirements.yaml"
+    if not catalog_path.is_file():
+        return []
+    data = yaml.safe_load(catalog_path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        return []
+    items: list[PublicationItem] = []
+    for req in data.get("requirements") or []:
+        if not isinstance(req, dict):
+            continue
+        code = str(req.get("code") or "")
+        if not code:
+            continue
+        items.append(
+            PublicationItem(
+                id=f"req:{code}",
+                title=code,
+                description=req.get("title") or req.get("name"),
+                attributes={
+                    "kind": "requirement",
+                    "code": code,
+                    "name": req.get("name"),
+                    "title": req.get("title"),
+                    "requirement_level": req.get("requirement_level"),
+                    "requirement_section": req.get("requirement_section"),
+                    "statement": req.get("statement"),
+                    "description": req.get("description"),
+                    "lifecycle_status": req.get("lifecycle_status"),
+                    "formal_checks": req.get("formal_checks") or [],
+                    "element_id": req.get("element_id"),
+                },
+            )
+        )
+    return items
+
+
+def _build_minimal_spec_file_items(spec_dir: Path) -> list[PublicationItem]:
+    """Derived required-only schema as source_file cards."""
+    from linkml_runtime.utils.schemaview import SchemaView
+
+    from moex_publication_viewer.normalizers.minimal_schema_projection import (
+        project_required_only_schema,
+    )
+
+    schema_path = spec_dir / "schemas" / "moex-dams.yaml"
+    if not schema_path.is_file():
+        return []
+    sv = SchemaView(str(schema_path))
+    projected = project_required_only_schema(sv)
+    items: list[PublicationItem] = []
+    for rel, text in projected.items():
+        items.append(
+            PublicationItem(
+                id=_file_item_id(rel),
+                title=Path(rel).name,
+                description="Required-only DAMS schema projection",
+                attributes={
+                    "kind": "source_file",
+                    "path": rel,
+                    "version": "0.1.0",
+                    "description": (
+                        "Derived required-only projection "
+                        "(required / minimum_cardinality≥1 slots)."
+                    ),
+                    "text": text,
+                    "refs_out": [],
+                    "refs_in": [],
+                },
+            )
+        )
+    return items
+
+
 def wrap_dams_explorer_roots(
     package_groups: list[PublicationItem],
     spec_dir: Path,
 ) -> list[PublicationItem]:
-    """Wrap under Overview / Классы / Спецификация (Реализации injected at build)."""
+    """Wrap under Overview / Классы / Спецификация / Требования / Реализации."""
     overview_root = PublicationItem(
         id="group:overview",
         title="Overview",
@@ -241,6 +316,53 @@ def wrap_dams_explorer_roots(
         children=file_items,
     )
 
+    req_items = _load_requirement_items(spec_dir)
+    list_group = PublicationItem(
+        id="group:requirements-list",
+        title="ИТ-решение: список",
+        description="Каталог требований уровня ИТ-решение.",
+        attributes={
+            "kind": "group",
+            "section_root": "requirements-list",
+            "purpose": "Пункты требований к модели ИТ-решения с формальными проверками.",
+            "requirement_count": len(req_items),
+            "member_ids": [r.id for r in req_items],
+        },
+        children=req_items,
+    )
+    min_files = _build_minimal_spec_file_items(spec_dir)
+    min_spec_group = PublicationItem(
+        id="group:requirements-min-spec",
+        title="ИТ-решение: спецификация",
+        description="Минимальный required-only срез схемы DAMS.",
+        attributes={
+            "kind": "group",
+            "section_root": "requirements-min-spec",
+            "purpose": "Тот же шаблон, что «Спецификация», но только обязательные слоты.",
+            "file_count": len(min_files),
+            "member_ids": [f.id for f in min_files],
+        },
+        children=min_files,
+    )
+    requirements_root = PublicationItem(
+        id="group:requirements",
+        title="Требования",
+        description="Каталог требований и минимальная спецификация для ИТ-решения.",
+        attributes={
+            "kind": "group",
+            "section_root": "requirements",
+            "purpose": "Нормативные требования (ADR-013) и required-only проекция схемы.",
+            "structure_why": (
+                "Список — инстансы SpecificationRequirement; "
+                "минимальная спецификация — derived YAML для валидационного минимума."
+            ),
+            "requirement_count": len(req_items),
+            "file_count": len(min_files),
+            "member_ids": [list_group.id, min_spec_group.id],
+        },
+        children=[list_group, min_spec_group],
+    )
+
     # Placeholder; build.py fills children from architecture catalog.
     impls_root = PublicationItem(
         id="group:implementations",
@@ -257,4 +379,4 @@ def wrap_dams_explorer_roots(
         },
         children=[],
     )
-    return [overview_root, classes_root, files_root, impls_root]
+    return [overview_root, classes_root, files_root, requirements_root, impls_root]

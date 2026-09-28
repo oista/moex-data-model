@@ -2,7 +2,7 @@
 
 Web Workbench MVP (Stage 4 slice): React + Vite UI over `apps/api`.
 
-Monaco YAML editor + entity forms (add/update/delete LogicalEntity/Attribute). No drawDB or OIDC yet.
+Monaco YAML editor + entity/relationship/mapping forms. Diagram page embeds drawDB (ADR-005) via `VITE_DRAWDB_URL` (default `http://localhost:5174`). No OIDC yet.
 
 ## Dev
 
@@ -40,4 +40,5 @@ Set **Actor** in the sidebar (`X-Moex-Actor`).
 | `/models` | Implementation registry |
 | `/models/trading` | Conformance + model-index search |
 | `/models/trading/edit` | Monaco YAML + entity forms + draft + Review changes + Publish draft |
+| `/models/trading/diagram` | drawDB iframe + DBML submit/apply (`?profile=logical\|physical`) |
 | `/models/trading/validate` | Sync validate job report |

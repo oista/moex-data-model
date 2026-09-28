@@ -22,8 +22,8 @@ Viewer-решения живут отдельно: [viewer-decisions.md](../arch
 | [ADR-002](ADR-002-git-published-source.md) | Git — источник опубликованных версий | действует |
 | [ADR-003](ADR-003-postgres-operational.md) | PostgreSQL — операционное хранилище и поисковая проекция | Workbench, ещё нет кода |
 | [ADR-004](ADR-004-modular-monolith.md) | Модульный монолит | действует (packages + apps/cli) |
-| [ADR-005](ADR-005-drawdb-isolated.md) | drawDB — изолированное self-hosted приложение | Workbench, ещё нет кода |
-| [ADR-006](ADR-006-dbml-projection.md) | DBML — проекция, не source of truth | действует как принцип |
+| [ADR-005](ADR-005-drawdb-isolated.md) | drawDB — изолированное self-hosted приложение | MVP: `apps/drawdb` + adapter + API/UI |
+| [ADR-006](ADR-006-dbml-projection.md) | DBML — проекция, не source of truth | действует; Stage 5 round-trip MVP |
 | [ADR-007](ADR-007-pydantic-dto-not-validator.md) | Pydantic — API DTO, не единственный validator | действует |
 | [ADR-008](ADR-008-linkml-map-provider.md) | LinkML Map за provider interface | Workbench / mappings, ещё нет кода |
 | [ADR-009](ADR-009-schema-automator-draft-only.md) | schema-automator только draft import | действует (ingest не использует) |

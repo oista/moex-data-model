@@ -206,6 +206,16 @@ body {
   flex-shrink: 0;
 }
 .detail-desc { margin: 12px 0 20px; line-height: 1.5; }
+.requirement-statement { white-space: pre-wrap; max-width: 52rem; }
+.requirement-checks { width: 100%; border-collapse: collapse; font-size: 13px; }
+.requirement-checks th,
+.requirement-checks td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.requirement-checks th { color: var(--muted); font-weight: 600; }
 .detail-block { margin-top: 20px; }
 .detail-block h2 { font-size: 15px; margin: 0 0 10px; }
 .badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }

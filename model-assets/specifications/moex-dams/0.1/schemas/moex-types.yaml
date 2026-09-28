@@ -160,3 +160,41 @@ enums:
       warn:
       fail:
       not_applicable:
+  RequirementLevelEnum:
+    description: Уровень применения требования к спецификации.
+    permissible_values:
+      conceptual_model:
+        description: Концептуальная модель
+      it_solution:
+        description: ИТ-решение
+      it_system:
+        description: ИТ-система
+  RequirementSectionEnum:
+    description: Раздел каталога требований (трёхбуквенный код в code).
+    permissible_values:
+      LDM:
+        description: Логическая модель
+      PDM:
+        description: Физическая модель
+      REF:
+        description: Связи сущностей
+      ATR:
+        description: Атрибуты
+      FLW:
+        description: Потоки данных
+      CLS:
+        description: Классификация данных
+      GEN:
+        description: Общие требования
+  FormalCheckKindEnum:
+    description: Вид формальной проверки в нотации, близкой к LinkML constraints.
+    permissible_values:
+      slot_required:
+      slot_min_cardinality:
+      ref_resolves:
+      key_subset:
+      custom:
+  CheckSeverityEnum:
+    permissible_values:
+      error:
+      warning:

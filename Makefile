@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check packages-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples generate-contracts compare-golden api-check web-check
+.PHONY: viewer viewer-check packages-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples generate-contracts compare-golden api-check web-check drawdb-up drawdb-adapter-check
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -17,6 +17,8 @@ KERNEL := packages/modeling-kernel
 OWL := packages/standard-owl
 MAPPINGS := packages/semantic-mappings
 CATALOG := packages/ontology-catalog
+DRAWDB_ADAPTER := packages/drawdb-adapter
+DAMS := packages/specification-dams
 
 viewer:
 	$(PYTHON) -m pip install -e "./$(VIEWER)[dev]"
@@ -29,8 +31,16 @@ viewer-check:
 
 # Ontology stack pytest (outside Stage 0 make check; gated in GHA viewer-and-packages)
 packages-check:
-	$(PYTHON) -m pip install -e "./$(KERNEL)" -e "./$(OWL)" -e "./$(MAPPINGS)" -e "./$(CATALOG)" pytest
-	$(PYTHON) -m pytest $(OWL)/tests $(MAPPINGS)/tests $(CATALOG)/tests -q
+	$(PYTHON) -m pip install -e "./generated/contracts/moex-dams/0.1" -e "./$(KERNEL)" -e "./packages/standard-linkml" -e "./$(DAMS)" -e "./$(DRAWDB_ADAPTER)" -e "./$(OWL)" -e "./$(MAPPINGS)" -e "./$(CATALOG)" pytest PyYAML
+	$(PYTHON) -m pytest $(OWL)/tests $(MAPPINGS)/tests $(CATALOG)/tests $(DRAWDB_ADAPTER)/tests $(DAMS)/tests/test_dbml_projection.py -q
+
+drawdb-adapter-check:
+	$(PYTHON) -m pip install -e "./generated/contracts/moex-dams/0.1" -e "./$(KERNEL)" -e "./packages/standard-linkml" -e "./$(DAMS)" -e "./$(DRAWDB_ADAPTER)[dev]" pytest
+	$(PYTHON) -m pytest $(DRAWDB_ADAPTER)/tests $(DAMS)/tests/test_dbml_projection.py -q
+
+# Local drawDB image (optional; not on Stage 0 PR gate)
+drawdb-up:
+	docker compose -f infra/compose/drawdb.yml up -d --build
 
 architecture-check:
 	$(PYTHON) -m pip install -e "./tools/architecture-check[dev]"
