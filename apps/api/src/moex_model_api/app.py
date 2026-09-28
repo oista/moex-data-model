@@ -11,7 +11,7 @@ from pathlib import Path
 from uuid import uuid4
 
 import yaml
-from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response
+from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, Request, Response, UploadFile
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, Field
 from ruamel.yaml import YAML
@@ -177,6 +177,9 @@ class JobOut(BaseModel):
     implementation_id: str
     result_summary: str
     finished_at: str | None = None
+
+
+IMPORT_MAX_BYTES = 2 * 1024 * 1024
 
 
 class ArtifactOut(BaseModel):
@@ -441,6 +444,169 @@ def create_app(
                 WorkspaceMemberOut(user_id=m.user_id, role=m.role) for m in members
             ],
         )
+
+    @app.post(
+        "/workspaces/{workspace_id}/imports",
+        response_model=JobOut,
+    )
+    async def create_import_draft(
+        workspace_id: str,
+        request: Request,
+        session: Session = Depends(get_session),
+        file: UploadFile = File(...),
+        source_type: str = Form(...),
+        name: str | None = Form(default=None),
+        idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+    ) -> JobOut:
+        """schema-automator → generated-draft job (ADR-009). Never publishes."""
+        actor = ensure_actor(request, session)
+        allowed = {"json_schema", "sql", "csv", "rdf"}
+        if source_type not in allowed:
+            raise HTTPException(
+                status_code=400,
+                detail=f"source_type must be one of: {', '.join(sorted(allowed))}",
+            )
+
+        try:
+            from moex_linkml_tooling.import_engine import SchemaAutomatorImportEngine
+            from moex_modeling.shared.enums import DiagnosticSeverity
+        except ImportError as exc:
+            raise HTTPException(
+                status_code=503,
+                detail="moex-linkml-tooling[automator] is required for imports",
+            ) from exc
+
+        raw = await file.read()
+        if len(raw) > IMPORT_MAX_BYTES:
+            raise HTTPException(
+                status_code=413,
+                detail=f"upload exceeds {IMPORT_MAX_BYTES} bytes",
+            )
+        if not raw:
+            raise HTTPException(status_code=400, detail="empty upload")
+
+        jobs = SqlJobStore(session)
+        workspaces = SqlWorkspaceStore(session)
+        digest_src = "sha256:" + hashlib.sha256(raw).hexdigest()
+        fp = _fingerprint("import_draft", workspace_id, source_type, digest_src)
+
+        if idempotency_key:
+            prior = jobs.get_by_idempotency(idempotency_key)
+            if prior is not None:
+                if prior.payload_fingerprint != fp:
+                    raise HTTPException(
+                        status_code=409,
+                        detail="idempotency key reused with different payload",
+                    )
+                return JobOut(
+                    id=prior.id,
+                    workspace_id=prior.workspace_id,
+                    kind=prior.kind,
+                    status=prior.status,
+                    implementation_id=prior.implementation_id,
+                    result_summary=prior.result_summary,
+                    finished_at=prior.finished_at,
+                )
+
+        if workspaces.get(workspace_id) is None:
+            workspaces.create(workspace_id, workspace_id)
+            workspaces.add_member(workspace_id, actor, role="owner")
+        else:
+            workspaces.add_member(workspace_id, actor, role="editor")
+
+        job_id = f"job:{uuid4().hex[:12]}"
+        jobs.create_job(
+            JobRecord(
+                id=job_id,
+                workspace_id=workspace_id,
+                kind="import_draft",
+                status="running",
+                implementation_id="moex:import:draft",
+                idempotency_key=idempotency_key,
+                payload_fingerprint=fp,
+                result_summary="",
+            )
+        )
+        SqlAuditStore(session).record("import.create", actor, job_id)
+
+        root = find_repo_root()
+        out_dir = root / "generated" / "imports"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        suffix = Path(file.filename or "upload.bin").suffix or ".bin"
+        tmp_source = Path(tempfile.mkdtemp()) / f"upload{suffix}"
+        tmp_source.write_bytes(raw)
+
+        finished = _now()
+        try:
+            engine = SchemaAutomatorImportEngine()
+            manifest = engine.run_import(
+                tmp_source,
+                source_type,
+                out_dir,
+                options={
+                    "job_id": job_id.removeprefix("job:"),
+                    "name": name or Path(file.filename or "imported").stem,
+                },
+            )
+            job_dir = out_dir / manifest.job_id
+            # Prefer stable job_id folder matching DB job when possible
+            artifact_specs = [
+                ("import-source", job_dir / manifest.source_path),
+                ("import-job-json", job_dir / "job.json"),
+                ("import-inferred-schema", job_dir / "inferred-schema.yaml"),
+                ("import-diagnostics", job_dir / "diagnostics.json"),
+            ]
+            for kind, path in artifact_specs:
+                if not path.is_file():
+                    continue
+                rel = path.relative_to(root).as_posix()
+                art_digest = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+                jobs.attach_artifact(
+                    ArtifactRecord(
+                        id=f"art:{uuid4().hex[:12]}",
+                        job_id=job_id,
+                        kind=kind,
+                        path_or_uri=rel,
+                        content_digest=art_digest,
+                    )
+                )
+
+            fatal = any(
+                d.severity in {DiagnosticSeverity.ERROR, DiagnosticSeverity.FATAL}
+                for d in manifest.diagnostics
+            )
+            status = "failed" if fatal else "succeeded"
+            summary = (
+                f"import_draft status={manifest.status} "
+                f"diagnostics={len(manifest.diagnostics)} "
+                f"dir=generated/imports/{manifest.job_id}"
+            )
+            updated = jobs.update_status(
+                job_id, status, result_summary=summary, finished_at=finished
+            )
+            return JobOut(
+                id=updated.id,
+                workspace_id=updated.workspace_id,
+                kind=updated.kind,
+                status=updated.status,
+                implementation_id=updated.implementation_id,
+                result_summary=updated.result_summary,
+                finished_at=updated.finished_at,
+            )
+        except Exception as exc:  # noqa: BLE001
+            jobs.update_status(
+                job_id,
+                "failed",
+                result_summary=str(exc)[:2000],
+                finished_at=finished,
+            )
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+        finally:
+            tmp_source.unlink(missing_ok=True)
+            try:
+                tmp_source.parent.rmdir()
+            except OSError:
+                pass
 
     @app.get(
         "/workspaces/{workspace_id}/documents/trading",

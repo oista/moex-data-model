@@ -65,18 +65,20 @@ classes:
     is_a: NamedElement
     description: >
       Публикуемый модуль контента: набор разделов (Overview, Classes, Glossary и др.),
-      собранный из манифеста публикации.
+      собранный из манифеста публикации. Набор module_id открыт.
     slots:
       - version
       - module_id
+      - modeling_standard
       - sections
 
   PublicationSection:
     is_a: NamedElement
     description: >
-      Раздел модуля публикации с определённым видом представления
-      (обозреватель классов, глоссарий, документ Overview и т.п.).
+      Экземпляр раздела модуля публикации: семантическая роль (section_role)
+      и вид представления (section_kind) ортогональны.
     slots:
+      - section_role
       - section_kind
       - items
 
@@ -88,11 +90,22 @@ classes:
     slots:
       - children
 
+  PublicationProfile:
+    is_a: NamedElement
+    description: >
+      Профиль публикации для семьи стандарта моделирования: фиксирует
+      обязательные семантические роли разделов (PublicationSectionRole).
+      Опциональные роли (requirements, implementations) допускаются сверх минимума.
+    slots:
+      - standard
+      - required_roles
+
   ModelingStandard:
     is_a: NamedElement
     description: >
       Язык или стандарт моделирования, в котором выражена спецификация
-      (например LinkML или OWL). В каталоге отображается как метка языка модели.
+      (версия/ревизия — экземпляры вне закрытого enum семьи). В каталоге
+      отображается как метка языка модели; закрытый словарь семей — ModelingStandardFamily.
 
 slots:
   element_id:
@@ -119,13 +132,16 @@ slots:
     range: string
     description: Версия спецификации, реализации или модуля публикации.
   modeling_language:
-    range: string
+    range: ModelingStandardFamily
     description: >
-      Язык моделирования, в котором выражен узел (соответствует метке языка
-      в архитектурном каталоге).
+      Семья языка моделирования узла каталога (выровнено с kernel StandardFamily).
   module_id:
     range: uriorcurie
     description: Идентификатор связанного модуля публикации.
+  modeling_standard:
+    range: ModelingStandardFamily
+    description: >
+      Семья стандарта, по которой выбирается PublicationProfile для модуля.
   implementations:
     range: SpecificationImplementation
     multivalued: true
@@ -141,9 +157,13 @@ slots:
     inlined: true
     inlined_as_list: true
     description: Разделы модуля публикации.
+  section_role:
+    range: PublicationSectionRole
+    description: >
+      Семантическая роль раздела (Overview, Classes, Glossary, …) — закрытый словарь.
   section_kind:
     range: SectionKind
-    description: Вид представления раздела для читателя.
+    description: Вид представления (render) раздела для читателя — ортогонален роли.
   items:
     range: PublicationItem
     multivalued: true
@@ -156,17 +176,63 @@ slots:
     inlined: true
     inlined_as_list: true
     description: Вложенные элементы (иерархия классов или терминов).
+  standard:
+    range: ModelingStandardFamily
+    required: true
+    description: Семья стандарта, для которой задан профиль.
+  required_roles:
+    range: PublicationSectionRole
+    multivalued: true
+    required: true
+    description: Обязательные семантические роли разделов профиля.
 
 enums:
+  ModelingStandardFamily:
+    description: >
+      Закрытый словарь семей стандартов моделирования (выровнен с kernel StandardFamily).
+      Конкретные version/revision — экземпляры ModelingStandard, не значения enum.
+    permissible_values:
+      linkml:
+        description: LinkML schema language.
+      openapi:
+        description: OpenAPI specification family.
+      owl:
+        description: OWL / ontology family (в т.ч. FIBO profile).
+      json_schema:
+        description: JSON Schema family.
+      shacl:
+        description: SHACL shapes family.
+      custom:
+        description: Корпоративный или непрофильный формализм.
+
+  PublicationSectionRole:
+    description: >
+      Семантические роли разделов публикации (закрытый словарь). Не путать с SectionKind (render).
+    permissible_values:
+      overview:
+        description: Вводный обзор пакета (README / markdown Overview).
+      classes:
+        description: Иерархия классов спецификации или профиля (единое имя UI — «Классы»).
+      specification:
+        description: Нормативные исходные файлы спецификации (YAML/схемы).
+      glossary:
+        description: Глоссарий терминов с определениями.
+      requirements:
+        description: Опционально — каталог нормативных требований.
+      implementations:
+        description: Опционально — зарегистрированные реализации (conforms_to).
+
   SectionKind:
-    description: Виды разделов публикации в Data Specification Player.
+    description: >
+      Виды представления (render) раздела в Data Specification Player.
+      Ортогональны PublicationSectionRole.
     permissible_values:
       explorer:
         description: Иерархический обозреватель классов или структурных групп.
       glossary:
-        description: Глоссарий терминов с определениями.
+        description: Глоссарий терминов с определениями (render).
       markdown_doc:
-        description: Обзорный документ (Overview) в виде текста.
+        description: Обзорный документ в виде текста.
       entity_table:
         description: Табличный перечень сущностей или атрибутов.
       enum_table:

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "DAMS",
+    "title": "DAMS",
+    "description": "MOEX Data Model Specification — эталонная LinkML-спецификация корпоративной модели данных.",
+    "kind": "package"
+  },
+  {
+    "id": "ModelElement",
+    "title": "Model element",
+    "description": "Базовый поименованный элемент модели данных в DAMS.",
+    "kind": "class"
+  },
+  {
+    "id": "LogicalEntity",
+    "title": "Logical entity",
+    "description": "Логическая сущность предметной области в модели ИТ-решения.",
+    "kind": "class"
+  },
+  {
+    "id": "ModelPackage",
+    "title": "Model package",
+    "description": "Пакет модели реализации, согласованной с DAMS.",
+    "kind": "class"
+  },
+  {
+    "id": "SpecificationRequirement",
+    "title": "Specification requirement",
+    "description": "Нормативное требование к модели данных ИТ-решения.",
+    "kind": "concept"
+  }
+]

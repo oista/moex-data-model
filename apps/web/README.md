@@ -44,6 +44,7 @@ Playwright bridge smoke (static-bridge + Diagram page, API mocked):
 |------|---------|
 | `/` | Dashboard (health + last job) |
 | `/workspaces` | List / create workspaces |
+| `/workspaces/:workspaceId/import` | Stage 7b schema-automator import wizard (`generated-draft`) |
 | `/models` | Implementation registry |
 | `/models/trading` | Conformance + model-index search |
 | `/models/trading/edit` | Monaco YAML + entity forms + draft + Review changes + Publish draft |

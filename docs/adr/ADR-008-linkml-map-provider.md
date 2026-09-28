@@ -1,5 +1,5 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
 normative: false
 supersedes: []
@@ -9,7 +9,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 # ADR-008: LinkML Map скрывается за provider interface
 
 **Date:** 2026-09-28  
-**Status:** Proposed  
+**Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md) §10  
 **Workbench detail:** [linkml_architecture.md](../architecture/linkml_architecture.md) «Mapping Engine»
 
@@ -17,15 +17,15 @@ superseded_by: MODELING_ARCHITECTURE.md
 
 `linkml-map` нужен для импорта внешних структур, миграций DAMS и профилей, но API нестабилен, SQL backend покрывает подмножество, expressions опасны без sandbox. Прямые импорты в application handlers привяжут домен к конкретной версии пакета.
 
-На срезе §13 mapping engine **не реализован**. Есть kernel `StandardMapping` (provenance, semantic loss) и пакет `semantic-mappings` (SSSOM/SKOS), это другой контур, чем `linkml-map`.
+На срезе Stage 7 / 7b: порт `MappingProvider` в modeling-kernel; адаптер `LinkmlMapProvider` в `packages/linkml-tooling` — default **ObjectTransformer**, opt-in **SQL** via `SQLCompiler` + SQLite (`backend=sql` / CLI `--backend sql`). SQL path rejects `expr:` (`MAP-SQL-001`). Conformance: [`packages/linkml-tooling/tests/test_sql_backend_conformance.py`](../../packages/linkml-tooling/tests/test_sql_backend_conformance.py) (identity + rename fixtures must match ObjectTransformer). SSSOM / LinkML extract остаются в `semantic-mappings` (другой контур).
 
 ## Decision
 
-Когда появится transformation pipeline:
+Transformation pipeline:
 
 - Прикладной код зависит от **`MappingProvider`** (port), не от `linkml-map` напрямую.
-- Transformation specs живут в Git; production transformer — Python `ObjectTransformer`; SQL backend — только после отдельного conformance-теста.
-- Unrestricted evaluation выражений **запрещён** по умолчанию (allowlist + isolation).
+- Transformation specs живут в Git; default transformer — Python `ObjectTransformer`; SQL backend — только с проходящим conformance-suite (см. выше).
+- Unrestricted evaluation выражений **запрещён** по умолчанию (allowlist + isolation); SQL backend не поддерживает `expr:`.
 - Mapping обязан фиксировать preserved/lost semantics, round-trip, authoritative source, provenance.
 
 `linkml-map` — optional controlled dependency, pinned в lockfile.

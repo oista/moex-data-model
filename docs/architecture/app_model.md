@@ -24,7 +24,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 
 **Already shipped (Stage 1 residual):** `SchemaRepository` + `DamsAssetRepository`; `diagnostic_to_wire` in CLI/API validation diagnostics; `build_element_index` shared with API model-index; `DamsModelGraphView` includes `relationships`.
 
-**Still-later:** live field-level Monaco↔form binding, merge automation / PR attach, `apps/worker`, OIDC, domain authz/RLS, `external_registry_cache`, async workers; Stage 1 leftovers (repository-root graph, SchemaLoader types); Stage 7 linkml-map / schema-automator.
+**Still-later:** live field-level Monaco↔form binding, merge automation / PR attach, `apps/worker`, OIDC, domain authz/RLS, `external_registry_cache`, async workers; Stage 1 leftovers (repository-root graph, SchemaLoader types); auto-promote import draft→ModelPackage; live EAM/Clinkr adapters.
 `packages/ontology/` остаётся shim. Миграция путей: [docs/migration/model-src-to-model-assets.md](../migration/model-src-to-model-assets.md).
 
 ## Предметная модель: роли как экземпляры, не subclass

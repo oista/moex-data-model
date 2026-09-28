@@ -1,0 +1,16 @@
+{
+  "job_id": "9b8e12ab0eeb",
+  "status": "generated-draft",
+  "source_type": "json_schema",
+  "source_path": "source.json",
+  "source_digest": "sha256:0cc797070324491c77c99541e2dc5889b7fa985fc28b4b93bd07c0fe9e8abdff",
+  "params": {
+    "source_type": "json_schema",
+    "original_source": "C:\\Users\\bons1\\AppData\\Local\\Temp\\tmpdt668hr6\\upload.json",
+    "name": "MiniPerson"
+  },
+  "inferred_schema_path": "inferred-schema.yaml",
+  "diagnostics": [],
+  "repro_command": "moex-model import --source-type json_schema --source C:\\Users\\bons1\\AppData\\Local\\Temp\\tmpdt668hr6\\upload.json --out C:\\Users\\bons1\\IdeaProjects\\moex-data-model\\generated\\imports",
+  "created_at": "2026-09-28T07:46:07Z"
+}

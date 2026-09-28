@@ -196,6 +196,12 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="With --transform: sample path for transform_sample",
     )
+    map_p.add_argument(
+        "--backend",
+        default="object",
+        choices=["object", "sql"],
+        help="With --transform: object (default ObjectTransformer) or sql (SQLCompiler)",
+    )
     map_p.add_argument("--json", action="store_true", help="Print bindings/result as JSON")
 
     return parser
@@ -288,6 +294,7 @@ def main(argv: list[str] | None = None) -> int:
             preview=args.preview,
             sample=args.sample,
             as_json=args.json,
+            backend=getattr(args, "backend", "object"),
         )
     else:
         return 2

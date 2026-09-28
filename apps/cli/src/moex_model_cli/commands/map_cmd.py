@@ -20,6 +20,7 @@ def run_map(
     preview: Path | None = None,
     sample: Path | None = None,
     as_json: bool = False,
+    backend: str = "object",
 ) -> tuple[int, str]:
     modes = [
         sssom is not None,
@@ -34,12 +35,15 @@ def run_map(
         )
 
     if transform is not None:
+        if backend not in {"object", "sql"}:
+            return 2, f"moex-model map: unknown --backend {backend!r} (object|sql)\n"
         return _run_transform(
             paths,
             transform=transform,
             preview=preview,
             sample=sample,
             as_json=as_json,
+            backend=backend,  # type: ignore[arg-type]
         )
 
     if preview is not None or sample is not None:
@@ -108,6 +112,7 @@ def _run_transform(
     preview: Path | None,
     sample: Path | None,
     as_json: bool,
+    backend: str = "object",
 ) -> tuple[int, str]:
     if (preview is None) == (sample is None):
         if preview is not None and sample is not None:
@@ -136,9 +141,9 @@ def _run_transform(
     if not sample_resolved.is_file():
         return 1, f"sample not found: {sample_resolved}\n"
 
-    provider = LinkmlMapProvider()
+    provider = LinkmlMapProvider(backend=backend)  # type: ignore[arg-type]
     if preview is not None:
-        result = provider.preview(spec, sample_resolved)
+        result = provider.preview(spec, sample_resolved, backend=backend)  # type: ignore[arg-type]
         payload = result.model_dump(mode="json")
         fatal = any(
             d.severity in {DiagnosticSeverity.ERROR, DiagnosticSeverity.FATAL}
@@ -148,7 +153,7 @@ def _run_transform(
             json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
             if as_json
             else (
-                f"map transform preview spec={result.spec.spec_id} "
+                f"map transform preview backend={backend} spec={result.spec.spec_id} "
                 f"src={result.spec.source_schema_revision} "
                 f"tgt={result.spec.target_schema_revision} "
                 f"preserved={len(result.preserved_semantics)} "
@@ -158,7 +163,9 @@ def _run_transform(
         )
         return (1 if fatal else 0), text
 
-    result = provider.transform_sample(spec, sample_resolved)
+    result = provider.transform_sample(
+        spec, sample_resolved, backend=backend  # type: ignore[arg-type]
+    )
     fatal = any(
         d.severity in {DiagnosticSeverity.ERROR, DiagnosticSeverity.FATAL}
         for d in result.diagnostics
@@ -169,7 +176,7 @@ def _run_transform(
         ) + "\n"
     return (
         (1 if fatal else 0),
-        f"map transform sample spec={result.spec.spec_id} "
+        f"map transform sample backend={backend} spec={result.spec.spec_id} "
         f"keys={sorted(result.output.keys())} "
         f"diagnostics={len(result.diagnostics)}\n",
     )

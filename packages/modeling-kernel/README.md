@@ -17,6 +17,7 @@ py -3.14 -m pip install -e "./packages/modeling-kernel[dev]"
 - Conformance: `Diagnostic`, `ConformanceAssessment`, `ConformanceReport`
 - Registry: `ModelUniverse`, `TypedRelation`
 - Protocol: `StandardProvider[TSpecBody, TImplBody, TElement]` with **distinct** body type parameters
+- Ports: `SchemaRepository`, `MappingProvider`, `ImportDraftEngine` (Stage 7)
 
 Fitness test (must stay green once this package exists):
 

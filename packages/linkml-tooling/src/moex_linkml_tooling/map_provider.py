@@ -1,10 +1,11 @@
-"""LinkmlMapProvider — ObjectTransformer behind MappingProvider (ADR-008)."""
+"""LinkmlMapProvider — ObjectTransformer + optional SQL backend (ADR-008)."""
 
 from __future__ import annotations
 
-import re
+import sqlite3
+import tempfile
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import yaml
 
@@ -15,6 +16,8 @@ from moex_modeling.mapping.public import (
     TransformSpecMeta,
 )
 from moex_modeling.shared.enums import DiagnosticSeverity, TransformationKind
+
+MapBackend = Literal["object", "sql"]
 
 _MOEX_KEYS = {
     "moex_spec_id",
@@ -29,8 +32,6 @@ _MOEX_KEYS = {
     "moex_target_schema",
     "moex",
 }
-
-_EXPR_RE = re.compile(r"\bexpr\s*:", re.IGNORECASE)
 
 
 def _as_source_type(value: Any) -> TransformationKind:
@@ -85,18 +86,47 @@ def _load_sample(path: Path) -> dict[str, Any]:
         data = json.loads(text)
     if not isinstance(data, dict):
         raise ValueError(f"sample must be a mapping: {path}")
-    # Optional wrapper: {class: Person, object: {...}}
     if "object" in data and isinstance(data["object"], dict):
         return data
     return {"class": data.get("class") or data.get("source_type"), "object": data}
 
 
+def _write_body(spec_path: Path, raw: dict[str, Any], body: dict[str, Any]) -> Path:
+    if set(raw.keys()) - _MOEX_KEYS != set(body.keys()) or "moex" in raw:
+        tmp = Path(tempfile.mkdtemp()) / "transform_body.yaml"
+        tmp.write_text(
+            yaml.safe_dump(body, sort_keys=False, allow_unicode=True),
+            encoding="utf-8",
+        )
+        return tmp
+    return spec_path
+
+
+def _infer_source_class(body: dict[str, Any], sample_class: Any) -> str:
+    if sample_class is not None:
+        return str(sample_class)
+    derivations = body.get("class_derivations") or {}
+    if len(derivations) == 1:
+        only = next(iter(derivations.values()))
+        return str(
+            (only.get("populated_from") if isinstance(only, dict) else None)
+            or next(iter(derivations))
+        )
+    raise ValueError("sample must include 'class' for multi-class specs")
+
+
+def _sql_quote_ident(name: str) -> str:
+    if not name.replace("_", "").isalnum():
+        raise ValueError(f"unsafe SQL identifier: {name!r}")
+    return name
+
+
 class LinkmlMapProvider:
     """
-    MappingProvider implementation using linkml-map ObjectTransformer only.
+    MappingProvider implementation using linkml-map.
 
-    Expression allowlist is empty by default; unrestricted_eval is never enabled
-    on the transformer unless explicitly allowed *and* every expr is allowlisted.
+    Default backend is ObjectTransformer. SQL backend uses SQLCompiler + SQLite
+    and only supports populated_from slot mappings (no expr).
     """
 
     def __init__(
@@ -104,9 +134,11 @@ class LinkmlMapProvider:
         *,
         expression_allowlist: frozenset[str] | None = None,
         allow_unrestricted_eval: bool = False,
+        backend: MapBackend = "object",
     ) -> None:
         self._expression_allowlist = expression_allowlist or frozenset()
         self._allow_unrestricted_eval = allow_unrestricted_eval
+        self._backend: MapBackend = backend
 
     def load_spec_meta(self, spec_path: Path) -> TransformSpecMeta:
         raw = _load_yaml(spec_path)
@@ -146,7 +178,18 @@ class LinkmlMapProvider:
         _moex, body = _split_moex(raw)
         exprs = _collect_expr_strings(body)
         if exprs:
-            if not meta.allow_unrestricted_eval:
+            if self._backend == "sql":
+                diagnostics.append(
+                    Diagnostic(
+                        diagnostic_code="MAP-SQL-001",
+                        severity=DiagnosticSeverity.ERROR,
+                        diagnostic_message=(
+                            "SQL backend does not support expr: "
+                            f"({len(exprs)} expression(s))"
+                        ),
+                    )
+                )
+            elif not meta.allow_unrestricted_eval:
                 diagnostics.append(
                     Diagnostic(
                         diagnostic_code="MAP-EXPR-001",
@@ -180,9 +223,21 @@ class LinkmlMapProvider:
             )
         return diagnostics
 
-    def preview(self, spec_path: Path, sample_path: Path) -> MappingPreview:
+    def preview(
+        self,
+        spec_path: Path,
+        sample_path: Path,
+        *,
+        backend: MapBackend | None = None,
+    ) -> MappingPreview:
         meta = self.load_spec_meta(spec_path)
-        diags = self.validate_spec(spec_path)
+        be = backend or self._backend
+        prev = self._backend
+        self._backend = be
+        try:
+            diags = self.validate_spec(spec_path)
+        finally:
+            self._backend = prev
         if any(
             d.severity in {DiagnosticSeverity.ERROR, DiagnosticSeverity.FATAL}
             for d in diags
@@ -193,7 +248,7 @@ class LinkmlMapProvider:
         preserved = tuple(moex.get("preserved_semantics") or ())
         lost = tuple(moex.get("lost_semantics") or ())
         try:
-            result = self.transform_sample(spec_path, sample_path)
+            result = self.transform_sample(spec_path, sample_path, backend=be)
             return MappingPreview(
                 spec=meta,
                 preserved_semantics=preserved or result.preserved_semantics,
@@ -216,15 +271,74 @@ class LinkmlMapProvider:
                 ),
             )
 
-    def transform_sample(self, spec_path: Path, sample_path: Path) -> MappingResult:
-        meta = self.load_spec_meta(spec_path)
-        diags = self.validate_spec(spec_path)
-        if any(
-            d.severity in {DiagnosticSeverity.ERROR, DiagnosticSeverity.FATAL}
-            for d in diags
-        ):
-            return MappingResult(spec=meta, diagnostics=tuple(diags))
+    def transform_sample(
+        self,
+        spec_path: Path,
+        sample_path: Path,
+        *,
+        backend: MapBackend | None = None,
+    ) -> MappingResult:
+        be = backend or self._backend
+        prev = self._backend
+        self._backend = be
+        try:
+            meta = self.load_spec_meta(spec_path)
+            diags = self.validate_spec(spec_path)
+            if any(
+                d.severity in {DiagnosticSeverity.ERROR, DiagnosticSeverity.FATAL}
+                for d in diags
+            ):
+                return MappingResult(spec=meta, diagnostics=tuple(diags))
 
+            raw = _load_yaml(spec_path)
+            moex, body = _split_moex(raw)
+            preserved = tuple(str(x) for x in (moex.get("preserved_semantics") or ()))
+            lost = tuple(str(x) for x in (moex.get("lost_semantics") or ()))
+            sample = _load_sample(sample_path)
+            obj = sample["object"]
+            if not isinstance(obj, dict):
+                raise ValueError("sample object must be a mapping")
+            source_class = _infer_source_class(body, sample.get("class"))
+            body_path = _write_body(spec_path, raw, body)
+
+            if be == "sql":
+                mapped = self._transform_sql(
+                    spec_path=spec_path,
+                    moex=moex,
+                    body=body,
+                    body_path=body_path,
+                    source_class=source_class,
+                    obj=obj,
+                )
+            else:
+                mapped = self._transform_object(
+                    moex=moex,
+                    body_path=body_path,
+                    source_class=source_class,
+                    obj=obj,
+                    spec_path=spec_path,
+                )
+
+            return MappingResult(
+                spec=meta,
+                output=mapped,
+                preserved_semantics=preserved,
+                lost_semantics=lost,
+                diagnostics=tuple(diags),
+                round_trip_ok=None,
+            )
+        finally:
+            self._backend = prev
+
+    def _transform_object(
+        self,
+        *,
+        moex: dict[str, Any],
+        body_path: Path,
+        source_class: str,
+        obj: dict[str, Any],
+        spec_path: Path,
+    ) -> dict[str, Any]:
         try:
             from linkml_map.transformer.object_transformer import ObjectTransformer
         except ImportError as exc:  # pragma: no cover
@@ -232,42 +346,6 @@ class LinkmlMapProvider:
                 "linkml-map is required for LinkmlMapProvider; "
                 "install moex-linkml-tooling[map]"
             ) from exc
-
-        raw = _load_yaml(spec_path)
-        moex, body = _split_moex(raw)
-        preserved = tuple(str(x) for x in (moex.get("preserved_semantics") or ()))
-        lost = tuple(str(x) for x in (moex.get("lost_semantics") or ()))
-
-        sample = _load_sample(sample_path)
-        source_class = sample.get("class")
-        obj = sample["object"]
-        if not isinstance(obj, dict):
-            raise ValueError("sample object must be a mapping")
-        if source_class is None:
-            # Infer single class_derivation populated_from
-            derivations = body.get("class_derivations") or {}
-            if len(derivations) == 1:
-                only = next(iter(derivations.values()))
-                source_class = (
-                    only.get("populated_from")
-                    if isinstance(only, dict)
-                    else None
-                ) or next(iter(derivations))
-            else:
-                raise ValueError("sample must include 'class' for multi-class specs")
-
-        # Write body-only temp? ObjectTransformer can load from path; write sibling.
-        body_path = spec_path
-        # Prefer loading original if body is top-level compatible; else temp stripped file.
-        if set(raw.keys()) - _MOEX_KEYS != set(body.keys()) or "moex" in raw:
-            import tempfile
-
-            tmp = Path(tempfile.mkdtemp()) / "transform_body.yaml"
-            tmp.write_text(
-                yaml.safe_dump(body, sort_keys=False, allow_unicode=True),
-                encoding="utf-8",
-            )
-            body_path = tmp
 
         ot = ObjectTransformer(unrestricted_eval=False)
         source_schema = moex.get("source_schema")
@@ -277,19 +355,105 @@ class LinkmlMapProvider:
                 schema_path = (spec_path.parent / schema_path).resolve()
             ot.load_source_schema(str(schema_path))
         ot.load_transformer_specification(body_path)
-
         mapped = ot.map_object(obj, str(source_class))
         if not isinstance(mapped, dict):
             mapped = dict(mapped) if mapped is not None else {}
+        return mapped
 
-        return MappingResult(
-            spec=meta,
-            output=mapped,
-            preserved_semantics=preserved,
-            lost_semantics=lost,
-            diagnostics=tuple(diags),
-            round_trip_ok=None,
+    def _transform_sql(
+        self,
+        *,
+        spec_path: Path,
+        moex: dict[str, Any],
+        body: dict[str, Any],
+        body_path: Path,
+        source_class: str,
+        obj: dict[str, Any],
+    ) -> dict[str, Any]:
+        try:
+            from linkml_map.compiler.sql_compiler import SQLCompiler
+            from linkml_map.transformer.object_transformer import ObjectTransformer
+        except ImportError as exc:  # pragma: no cover
+            raise ImportError(
+                "linkml-map is required for SQL backend; "
+                "install moex-linkml-tooling[map]"
+            ) from exc
+
+        if _collect_expr_strings(body):
+            raise ValueError("SQL backend rejects specs with expr:")
+
+        ot = ObjectTransformer(unrestricted_eval=False)
+        source_schema = moex.get("source_schema")
+        if source_schema:
+            schema_path = Path(str(source_schema))
+            if not schema_path.is_absolute():
+                schema_path = (spec_path.parent / schema_path).resolve()
+            ot.load_source_schema(str(schema_path))
+        ot.load_transformer_specification(body_path)
+        if ot.specification is None:
+            raise ValueError("failed to load transformation specification")
+
+        sc = SQLCompiler(source_schemaview=ot.source_schemaview)
+        sc.new_table_when_transforming = False
+        compiled = sc.compile(ot.specification)
+        sql_text = (compiled.serialization or "").strip()
+        if not sql_text:
+            raise ValueError("SQLCompiler produced empty SQL")
+
+        derivations = body.get("class_derivations") or {}
+        if len(derivations) != 1:
+            raise ValueError("SQL backend MVP supports exactly one class_derivation")
+        target_class, cd = next(iter(derivations.items()))
+        if not isinstance(cd, dict):
+            raise ValueError("invalid class_derivation")
+        populated_from = str(cd.get("populated_from") or target_class)
+        slot_derivations = cd.get("slot_derivations") or {}
+        target_cols = [
+            str(slot)
+            for slot, sd in slot_derivations.items()
+            if not (isinstance(sd, dict) and sd.get("hide"))
+        ]
+        if not target_cols:
+            raise ValueError("no target columns in slot_derivations")
+
+        src_table = _sql_quote_ident(f"{populated_from}__src")
+        tgt_table = _sql_quote_ident(str(target_class))
+        source_cols = sorted(obj.keys())
+
+        # Rewrite INSERT … FROM <populated_from> → FROM src; INSERT INTO target
+        rewritten = sql_text
+        rewritten = rewritten.replace(
+            f"INSERT INTO {target_class}",
+            f"INSERT INTO {tgt_table}",
         )
+        rewritten = rewritten.replace(
+            f" FROM {populated_from}",
+            f" FROM {src_table}",
+        )
+        if "INSERT INTO" not in rewritten.upper():
+            raise ValueError(f"unexpected SQLCompiler output: {sql_text!r}")
+
+        conn = sqlite3.connect(":memory:")
+        try:
+            src_defs = ", ".join(f"{_sql_quote_ident(c)} TEXT" for c in source_cols)
+            conn.execute(f"CREATE TABLE {src_table} ({src_defs})")
+            placeholders = ", ".join("?" for _ in source_cols)
+            col_list = ", ".join(_sql_quote_ident(c) for c in source_cols)
+            conn.execute(
+                f"INSERT INTO {src_table} ({col_list}) VALUES ({placeholders})",
+                [None if obj[c] is None else str(obj[c]) for c in source_cols],
+            )
+            tgt_defs = ", ".join(f"{_sql_quote_ident(c)} TEXT" for c in target_cols)
+            conn.execute(f"CREATE TABLE {tgt_table} ({tgt_defs})")
+            conn.executescript(rewritten)
+            cur = conn.execute(f"SELECT * FROM {tgt_table}")
+            row = cur.fetchone()
+            if row is None:
+                return {}
+            colnames = [d[0] for d in cur.description]
+            return {colnames[i]: row[i] for i in range(len(colnames))}
+        finally:
+            conn.close()
 
 
-__all__ = ["LinkmlMapProvider"]
+__all__ = ["LinkmlMapProvider", "MapBackend"]

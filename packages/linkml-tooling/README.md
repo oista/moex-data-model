@@ -21,3 +21,7 @@ Drafts always get `status: generated-draft` and are never auto-published.
 ## Expression policy (map)
 
 `unrestricted_eval` is always false on ObjectTransformer. Specs containing `expr:` fail validation unless `moex.allow_unrestricted_eval: true` **and** every expression string is on the provider allowlist (default allowlist is empty → all expr rejected).
+
+## SQL backend (`backend=sql`)
+
+Uses `linkml_map.compiler.sql_compiler.SQLCompiler` + in-memory SQLite. Only `populated_from` slot mappings; `expr:` → `MAP-SQL-001`. Conformance suite: `tests/test_sql_backend_conformance.py`.

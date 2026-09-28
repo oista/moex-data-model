@@ -5,11 +5,13 @@ order: 100
 icon: "📐"
 title: moex.dams
 description: "MOEX DAMS 0.1 reference specification (LinkML) — publication projection of the schema body"
+modeling_standard: linkml
 sections:
   - id: overview
     title: Overview
     description: Package README
     type: markdown-doc
+    role: overview
     source:
       format: markdown
       path: README.md
@@ -18,11 +20,29 @@ sections:
     title: Specification explorer
     description: Schema packages and classes of the DAMS reference specification (TSpecBody projection)
     type: explorer
+    role: classes
     source:
       format: linkml-yaml
       path: schemas/moex-dams.yaml
       select: classes
     groupby: schema
+
+  - id: glossary
+    title: Glossary
+    description: Key DAMS terms for readers
+    type: glossary
+    role: glossary
+    source:
+      format: json
+      path: publications/dams_glossary.json
+    key_column: id
+    columns:
+      - id
+      - title
+      - description
+      - kind
+    filterable:
+      - kind
 
   - id: classes
     title: All classes

@@ -44,19 +44,25 @@
   {
     "id": "PublicationModule",
     "title": "Publication module",
-    "description": "Публикуемый модуль контента: набор разделов одного пакета (Overview, Classes, Glossary и др.).",
+    "description": "Публикуемый модуль контента: открытый набор экземпляров разделов одного пакета. Список module_id не закрыт enum’ом.",
     "kind": "class"
   },
   {
     "id": "PublicationSection",
     "title": "Publication section",
-    "description": "Раздел модуля с определённым видом представления для читателя (обозреватель, глоссарий, обзорный документ и т.п.).",
+    "description": "Экземпляр раздела модуля: имеет семантическую роль (PublicationSectionRole) и вид представления (SectionKind).",
     "kind": "class"
   },
   {
     "id": "PublicationItem",
     "title": "Publication item",
     "description": "Элемент содержимого раздела: класс, термин глоссария, узел дерева или иной читаемый объект.",
+    "kind": "class"
+  },
+  {
+    "id": "PublicationProfile",
+    "title": "Publication profile",
+    "description": "Профиль обязательных ролей разделов для семьи ModelingStandardFamily. LinkML: overview, classes, specification, glossary. OWL: overview, classes, glossary. requirements и implementations — опциональны.",
     "kind": "class"
   },
   {
@@ -74,31 +80,49 @@
   {
     "id": "ModelingStandard",
     "title": "Modeling standard",
-    "description": "Язык или стандарт моделирования, в котором выражена спецификация (например LinkML или OWL).",
+    "description": "Язык или стандарт моделирования (версия/ревизия — экземпляры). Закрытый словарь семей — ModelingStandardFamily.",
     "kind": "class"
+  },
+  {
+    "id": "ModelingStandardFamily",
+    "title": "Modeling standard family",
+    "description": "Закрытый enum семей стандартов: linkml, openapi, owl, json_schema, shacl, custom (выровнен с kernel StandardFamily).",
+    "kind": "enum"
+  },
+  {
+    "id": "PublicationSectionRole",
+    "title": "Publication section role",
+    "description": "Закрытый словарь семантических ролей раздела: overview, classes, specification, glossary, requirements, implementations. Не путать с SectionKind.",
+    "kind": "enum"
   },
   {
     "id": "SectionKind",
     "title": "Section kind",
-    "description": "Вид раздела публикации: обозреватель классов, глоссарий, обзорный документ, таблица сущностей и др.",
+    "description": "Вид представления (render) раздела: explorer, glossary, markdown_doc, entity_table и др. Ортогонален PublicationSectionRole.",
     "kind": "enum"
   },
   {
     "id": "Overview",
     "title": "Overview",
-    "description": "Вводный раздел модуля: общее описание пакета и его роли в архитектуре публикаций.",
+    "description": "Роль overview: вводный раздел модуля — общее описание пакета.",
     "kind": "section"
   },
   {
     "id": "Classes",
     "title": "Classes",
-    "description": "Раздел с типизированной иерархией классов метамодели или спецификации.",
+    "description": "Роль classes: иерархия классов спецификации или профиля (единое имя UI — «Классы», в т.ч. для онтологий).",
+    "kind": "section"
+  },
+  {
+    "id": "Specification",
+    "title": "Specification",
+    "description": "Роль specification: нормативные исходные файлы эталона (обязательна для LinkML-профиля).",
     "kind": "section"
   },
   {
     "id": "Glossary",
     "title": "Glossary",
-    "description": "Раздел с терминами и определениями для читателя, без сугубо технических деталей реализации.",
+    "description": "Роль glossary: термины и определения для читателя.",
     "kind": "section"
   },
   {

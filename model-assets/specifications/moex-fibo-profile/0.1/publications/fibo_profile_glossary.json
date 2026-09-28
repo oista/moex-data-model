@@ -1,0 +1,32 @@
+[
+  {
+    "id": "FiboDomain",
+    "title": "FIBO domain",
+    "description": "Верхний организационный сегмент FIBO (например FND, BE).",
+    "kind": "concept"
+  },
+  {
+    "id": "FiboModule",
+    "title": "FIBO module",
+    "description": "Модуль внутри домена: группа онтологических документов.",
+    "kind": "concept"
+  },
+  {
+    "id": "OntologyDocument",
+    "title": "Ontology document",
+    "description": "Отдельный RDF/OWL документ профиля с IRI, version IRI и аннотациями.",
+    "kind": "concept"
+  },
+  {
+    "id": "ResourceIri",
+    "title": "Resource IRI",
+    "description": "Канонический неверсионированный IRI ресурса FIBO.",
+    "kind": "concept"
+  },
+  {
+    "id": "SkosDefinition",
+    "title": "skos:definition",
+    "description": "Обязательное ISO 704-определение для первоклассных элементов FIBO.",
+    "kind": "annotation"
+  }
+]

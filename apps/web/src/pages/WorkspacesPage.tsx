@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
 import { api } from "../api/client";
 
 export function WorkspacesPage() {
@@ -49,6 +50,7 @@ export function WorkspacesPage() {
               <th>Id</th>
               <th>Name</th>
               <th>Members</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -60,6 +62,9 @@ export function WorkspacesPage() {
                 <td>{ws.name}</td>
                 <td>
                   {ws.members.map((m) => `${m.user_id}(${m.role})`).join(", ")}
+                </td>
+                <td>
+                  <Link to={`/workspaces/${ws.id}/import`}>Import wizard</Link>
                 </td>
               </tr>
             ))}

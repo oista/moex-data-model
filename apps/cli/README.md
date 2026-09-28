@@ -5,10 +5,10 @@ publish call `specification-dams` and `publication` application handlers.
 
 ```text
 moex-model validate       → assess_implementation
-moex-model publish        → export_slice_projection
+moex-model publish        → export_slice_projection (+ refuse generated-draft)
 moex-model diagram        → ModelPackage → DBML (+ sidecar manifest)
-moex-model import         → ER-dictionary ingest (standard-linkml)
-moex-model map            → SSSOM load / LinkML binding extract
+moex-model import         → ER-dictionary ingest OR schema-automator draft
+moex-model map            → SSSOM / LinkML extract / linkml-map transform
 moex-model semantic-diff  → diff_implementations
 ```
 
@@ -19,10 +19,12 @@ Publication Viewer lives at [`apps/viewer/`](../viewer/).
 From repo root, after install:
 
 ```powershell
-py -3.14 -m pip install -e "./packages/modeling-kernel" `
+py -3.14 -m pip install -e "./generated/contracts/moex-dams/0.1" `
+  -e "./packages/modeling-kernel" `
   -e "./packages/standard-linkml" `
   -e "./packages/specification-dams" `
   -e "./packages/semantic-mappings" `
+  -e "./packages/linkml-tooling[map,automator]" `
   -e "./packages/publication" `
   -e "./apps/cli[dev]"
 
@@ -30,11 +32,23 @@ py -3.14 -m moex_model_cli validate --root .
 py -3.14 -m moex_model_cli publish --root .
 py -3.14 -m moex_model_cli diagram --root . --profile logical --out generated/artifacts/diagrams/trading-logical.dbml
 py -3.14 -m moex_model_cli map --root . --sssom model-assets/transformations/mappings/dams-fibo.sssom.yaml
+py -3.14 -m moex_model_cli map --root . `
+  --transform model-assets/transformations/person-rename-code.yaml `
+  --preview packages/linkml-tooling/tests/fixtures/person_sample.json
+py -3.14 -m moex_model_cli map --root . `
+  --transform model-assets/transformations/person-rename-code.yaml `
+  --sample packages/linkml-tooling/tests/fixtures/person_sample.json `
+  --backend sql
 py -3.14 -m moex_model_cli import `
   --workbook packages/standard-linkml/tests/fixtures/er-dictionary `
   --profile packages/standard-linkml/tests/fixtures/er-dictionary/profile.yaml `
   --out generated/import-pilot `
   --skip-validate
+py -3.14 -m moex_model_cli import `
+  --source-type json_schema `
+  --source packages/linkml-tooling/tests/fixtures/mini.schema.json `
+  --out generated/imports `
+  --name MiniPerson
 ```
 
 Defaults are resolved from asset envelopes (relative to `--root`):
@@ -43,8 +57,18 @@ Defaults are resolved from asset envelopes (relative to `--root`):
 - implementation: `model-assets/implementations/solutions/trading-platform/implementation.yaml` → `implementation_body`
 - publish out: `model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json`
 
-`import` is ER-dictionary → ModelPackage only (ADR-009); schema-automator wizard is Stage 7.  
-`map` loads SSSOM / extracts LinkML bindings (ADR-008); `linkml-map` engine is Stage 7.
+`import`:
+
+- ER-dictionary → ModelPackage (`--workbook` / `--profile` / `--out`)
+- schema-automator → `generated-draft` under `--out/<job_id>/` (`--source-type` / `--source` / `--out`); never auto-published (ADR-009)
+
+`map`:
+
+- `--sssom` / `--extract-schema` (semantic-mappings)
+- `--transform` + `--preview`|`--sample` via `LinkmlMapProvider` (ADR-008)
+- `--backend object` (default) or `--backend sql` (SQLCompiler + SQLite; no `expr:`)
+
+Workbench import wizard: `/workspaces/:workspaceId/import` (Stage 7b).
 
 ## Tests
 

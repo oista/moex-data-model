@@ -145,6 +145,37 @@ export const api = {
     }
     return res.text();
   },
+  createImportDraft: async (
+    workspaceId: string,
+    body: {
+      file: File;
+      source_type: "json_schema" | "sql" | "csv" | "rdf";
+      name?: string;
+    },
+    idempotencyKey?: string,
+  ) => {
+    const headers = new Headers();
+    headers.set("X-Moex-Actor", getActor());
+    if (idempotencyKey) {
+      headers.set("Idempotency-Key", idempotencyKey);
+    }
+    const form = new FormData();
+    form.append("file", body.file);
+    form.append("source_type", body.source_type);
+    if (body.name) {
+      form.append("name", body.name);
+    }
+    const res = await fetch(`/api/workspaces/${workspaceId}/imports`, {
+      method: "POST",
+      headers,
+      body: form,
+    });
+    if (!res.ok) {
+      const detail = await res.text();
+      throw new Error(`${res.status} ${res.statusText}: ${detail}`);
+    }
+    return (await res.json()) as import("./types").Job;
+  },
   rebuildIndex: () =>
     request<import("./types").ModelIndexRebuild>("/model-index/rebuild", {
       method: "POST",

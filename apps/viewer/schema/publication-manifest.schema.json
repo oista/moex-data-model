@@ -12,6 +12,11 @@
     "icon": { "type": "string" },
     "title": { "type": "string" },
     "description": { "type": "string" },
+    "modeling_standard": {
+      "type": "string",
+      "enum": ["linkml", "openapi", "owl", "json_schema", "shacl", "custom"],
+      "description": "ModelingStandardFamily; selects PublicationProfile for role checks"
+    },
     "sections": {
       "type": "array",
       "items": { "$ref": "#/$defs/section" }
@@ -25,6 +30,18 @@
         "id": { "type": "string" },
         "title": { "type": "string" },
         "description": { "type": "string" },
+        "role": {
+          "type": "string",
+          "enum": [
+            "overview",
+            "classes",
+            "specification",
+            "glossary",
+            "requirements",
+            "implementations"
+          ],
+          "description": "PublicationSectionRole (semantic); orthogonal to type (SectionKind render)"
+        },
         "type": {
           "enum": [
             "entity-table",

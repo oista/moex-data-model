@@ -418,7 +418,7 @@ Diagnostic:
 
 ## Этап 2. Compiler CLI
 
-**Progress:** Stage 2 CLI surface closed (thin): `validate` / `lint` / `compile` / `diagram` (ModelPackage→DBML) / `diff` / `publish` / `semantic-diff` / **`import`** (ER-dictionary ingest facade) / **`map`** (SSSOM + LinkML extract). Stage 7 still owns schema-automator wizard and `linkml-map` engine (ADR-008/009).
+**Progress:** Stage 2 CLI surface closed (thin): `validate` / `lint` / `compile` / `diagram` (ModelPackage→DBML) / `diff` / `publish` / `semantic-diff` / **`import`** (ER-dictionary ingest + schema-automator draft) / **`map`** (SSSOM + LinkML extract + linkml-map transform, object|sql backend). Workbench import wizard is Stage 7b (landed).
 
 До web-приложения необходимо сделать стабильный CLI.
 
@@ -640,6 +640,8 @@ linkml → SHACL
 - Все outputs доступны как единый release bundle.
 
 ## Этап 7. Mapping и импорт
+
+**Progress (2026-09-28, CLI-first + 7b):** Kernel ports `MappingProvider` + `ImportDraftEngine` in `packages/modeling-kernel`. Adapters in `packages/linkml-tooling` (`LinkmlMapProvider` / `SchemaAutomatorImportEngine`, optional extras `[map]` / `[automator]`). CLI: `map --transform --preview|--sample` (`--backend object|sql`); `import --source-type json_schema|sql|csv|rdf --source …`. Transform specs under `model-assets/transformations/`. Import jobs write `generated/imports/<job_id>/` with `status: generated-draft`; publish_gate refuses that tree. **Stage 7b:** Workbench `/workspaces/:id/import` wizard + `POST /workspaces/{id}/imports`; SQL map backend via `SQLCompiler` + SQLite with conformance tests (`test_sql_backend_conformance.py`). ADR-008/009 Accepted. **Still deferred:** auto-promote draft→ModelPackage, live EAM/Clinkr adapters.
 
 ### LinkML Map
 

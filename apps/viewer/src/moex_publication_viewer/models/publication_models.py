@@ -22,6 +22,7 @@ class PublicationSection(BaseModel):
     title: str
     description: str | None = None
     type: str
+    role: str | None = None
     columns: list[str] = Field(default_factory=list)
     filterable: list[str] = Field(default_factory=list)
     groupby: str | None = None
@@ -40,6 +41,7 @@ class PublicationModule(BaseModel):
     icon: str | None = None
     version: str | None = None
     order: int = 1000
+    modeling_standard: str | None = None
     sections: list[PublicationSection] = Field(default_factory=list)
     manifest_path: str | None = None
 

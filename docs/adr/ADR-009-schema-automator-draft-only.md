@@ -1,5 +1,5 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
 normative: false
 supersedes: []
@@ -9,7 +9,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 # ADR-009: schema-automator используется только для draft import
 
 **Date:** 2026-09-28  
-**Status:** Proposed  
+**Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Workbench detail:** [linkml_architecture.md](../architecture/linkml_architecture.md) «Import Engine»
 
@@ -17,7 +17,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 
 Нужен bootstrap из JSON Schema, SQL, CSV/RDF. `schema-automator` официально экспериментальный. Автопубликация inferred schema сломает identity, descriptions и registry links.
 
-Пилот ER-словаря в `standard-linkml` ingest выдаёт **DAMS ModelPackage instance**, не draft schema; `schema-automator` туда **не** входит.
+Пилот ER-словаря в `standard-linkml` ingest выдаёт **DAMS ModelPackage instance**, не draft schema; `schema-automator` туда **не** входит. Stage 7 CLI: `ImportDraftEngine` + `SchemaAutomatorImportEngine` → `generated/imports/<job_id>/` со статусом `generated-draft`; publish gate отказывает.
 
 ## Decision
 

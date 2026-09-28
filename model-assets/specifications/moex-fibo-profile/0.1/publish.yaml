@@ -5,13 +5,15 @@ order: 195
 icon: "📘"
 title: edmc.fibo
 description: >
-  Organizational metamodel of FIBO (domains, modules, ontology headers,
+  Organizational profile of FIBO (domains, modules, ontology headers,
   IRI and annotation conventions). Domain classes live under the FIBO release module.
+modeling_standard: owl
 sections:
   - id: overview
     title: Overview
     description: Profile README
     type: markdown-doc
+    role: overview
     source:
       format: markdown
       path: README.md
@@ -20,6 +22,7 @@ sections:
     title: Profile explorer
     description: Domains, modules, ontology documents, IRI patterns, annotation requirements
     type: explorer
+    role: classes
     source:
       format: json
       path: publications/fibo_profile_explorer.json
@@ -27,3 +30,23 @@ sections:
       - fibo
       - fibo-profile
       - ontology
+
+  - id: glossary
+    title: Glossary
+    description: Profile terms (domains, modules, IRI and annotation conventions)
+    type: glossary
+    role: glossary
+    source:
+      format: json
+      path: publications/fibo_profile_glossary.json
+    key_column: id
+    columns:
+      - id
+      - title
+      - description
+      - kind
+    filterable:
+      - kind
+    tags:
+      - fibo
+      - glossary
