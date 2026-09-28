@@ -415,36 +415,110 @@
     return false;
   }
 
+  function collectNestedSectionIds(nodes, out) {
+    const ids = out || new Set();
+    (nodes || []).forEach((node) => {
+      const a = node.attributes || {};
+      if (a.section_id) ids.add(a.section_id);
+      if (Array.isArray(a.member_ids)) {
+        a.member_ids.forEach((mid) => {
+          if (typeof mid !== "string") return;
+          if (mid.startsWith("section:")) ids.add(mid.slice("section:".length));
+          else if (!mid.includes(":")) ids.add(mid);
+        });
+      }
+      collectNestedSectionIds(node.children, ids);
+    });
+    return ids;
+  }
+
   function appendPublicationSubtree(wrap, mod, focus) {
     const expl = explorerSection(mod);
-    const nestedSectionIds = new Set();
-    if (expl) {
-      (expl.items || []).forEach((g) => {
-        if (g.attributes?.section_root === "overview") {
-          nestedSectionIds.add(g.attributes.section_id || "overview");
-          (g.children || []).forEach((c) => {
-            if (c.attributes?.section_id) {
-              nestedSectionIds.add(c.attributes.section_id);
-            }
-          });
-        }
-      });
-    }
+    const nestedSectionIds = expl
+      ? collectNestedSectionIds(expl.items)
+      : new Set();
+    const orphanSections = (mod.sections || []).filter(
+      (s) => s.type !== "explorer" && !nestedSectionIds.has(s.id)
+    );
 
     if (expl) {
       const tree = document.createElement("div");
       tree.className = "nav-explorer";
+
+      // Fold publication sections not already linked from explorer into a
+      // top-level Overview group (no flat .nav-secondary orphans).
+      let explorerItems = expl.items || [];
+      if (orphanSections.length) {
+        const overviewExisting = explorerItems.find(
+          (g) => g.attributes?.section_root === "overview"
+        );
+        const orphanRefs = orphanSections.map((sec) => ({
+          id: `section:${sec.id}`,
+          title: sec.title,
+          description: sec.description || `Open publication section «${sec.title}».`,
+          attributes: {
+            kind: "section_ref",
+            section_id: sec.id,
+            description: sec.description || `Open publication section «${sec.title}».`,
+          },
+          children: [],
+        }));
+        orphanRefs.forEach((r) => nestedSectionIds.add(r.attributes.section_id));
+        if (overviewExisting) {
+          const mergedKids = [
+            ...(overviewExisting.children || []),
+            ...orphanRefs.filter(
+              (r) =>
+                !(overviewExisting.children || []).some(
+                  (c) => c.attributes?.section_id === r.attributes.section_id
+                )
+            ),
+          ];
+          explorerItems = explorerItems.map((g) =>
+            g.id === overviewExisting.id
+              ? { ...g, children: mergedKids }
+              : g
+          );
+        } else {
+          openGroups.add("group:module-sections");
+          explorerItems = [
+            {
+              id: "group:module-sections",
+              title: "Разделы",
+              description: "Publication sections for this module.",
+              attributes: {
+                kind: "group",
+                section_root: "overview",
+                purpose: "Sections not otherwise nested under the explorer.",
+                member_ids: orphanRefs.map((r) => r.id),
+              },
+              children: orphanRefs,
+            },
+            ...explorerItems,
+          ];
+        }
+      }
 
       if (
         focus?.section &&
         !focus?.item &&
         nestedSectionIds.has(focus.section)
       ) {
-        openGroups.add("group:overview");
+        const overviewGroup = explorerItems.find(
+          (g) =>
+            g.attributes?.section_root === "overview" ||
+            (g.children || []).some(
+              (c) => c.attributes?.section_id === focus.section
+            )
+        );
+        if (overviewGroup) openGroups.add(overviewGroup.id);
+        else openGroups.add("group:overview");
       }
 
       if (focus?.item) {
-        const focused = findExplorerItem(expl, focus.item);
+        const focused =
+          findExplorerItem({ items: explorerItems }, focus.item) ||
+          findExplorerItem(expl, focus.item);
         if (focused) {
           // Open ancestors/group so the selected item is visible; do not
           // force-open the item itself (label click toggles children).
@@ -468,14 +542,16 @@
       }
 
       function openExplorerItem(itemId) {
-        const found = findExplorerItem(expl, itemId);
+        const found =
+          findExplorerItem({ items: explorerItems }, itemId) ||
+          findExplorerItem(expl, itemId);
         const attrs = found?.item?.attributes || {};
         if (
           attrs.kind === "section_ref" ||
           attrs.section_root === "overview"
         ) {
           if (attrs.section_id) {
-            openGroups.add("group:overview");
+            if (found?.group) openGroups.add(found.group.id);
             openPublicationSection(attrs.section_id);
             return;
           }
@@ -578,14 +654,14 @@
         parentEl.appendChild(wrapNode);
       }
 
-      (expl.items || []).forEach((group) => {
+      explorerItems.forEach((group) => {
         const gId = group.id;
         // Default: open Классы when no focus and no section root yet expanded
         if (
           !focus?.item &&
           !focus?.section &&
           gId === "group:classes" &&
-          !(expl.items || []).some((g) => openGroups.has(g.id))
+          !explorerItems.some((g) => openGroups.has(g.id))
         ) {
           openGroups.add(gId);
         }
@@ -674,34 +750,36 @@
         tree.appendChild(gWrap);
       });
       wrap.appendChild(tree);
+      return;
     }
 
-    const secondary = document.createElement("div");
-    secondary.className = "nav-secondary";
-    (mod.sections || [])
-      .filter((s) => s.type !== "explorer" && !nestedSectionIds.has(s.id))
-      .forEach((sec) => {
+    // No explorer: sections are the primary tree (not a bolted secondary strip)
+    if (orphanSections.length) {
+      const tree = document.createElement("div");
+      tree.className = "nav-explorer";
+      orphanSections.forEach((sec) => {
         const sBtn = document.createElement("button");
         sBtn.type = "button";
         sBtn.className =
           "nav-section-btn" +
           (focus?.section === sec.id && !focus?.item ? " active" : "");
+        sBtn.setAttribute("data-tree-node", "");
         sBtn.textContent = sec.title;
         sBtn.addEventListener("click", (e) => {
           e.stopPropagation();
           selectedItemId = null;
           const node = nodeForModule(mod.module_id);
           if (node) currentNodeId = node.id;
-          // Hash only — hashchange → applyRoute → showModule (avoid double render)
           setHash({
             node: node ? node.id : null,
             module: shortModule(mod.module_id),
             section: sec.id,
           });
         });
-        secondary.appendChild(sBtn);
+        tree.appendChild(sBtn);
       });
-    if (secondary.childNodes.length) wrap.appendChild(secondary);
+      wrap.appendChild(tree);
+    }
   }
 
   function appendCatalogNav(parentEl, node, focus) {
@@ -1188,7 +1266,7 @@
       if (section && section.type !== "explorer") {
         crumb.textContent = `${mod.title} / ${section.title}`;
         content.appendChild(crumb);
-        content.appendChild(renderSection(mod, section));
+        content.appendChild(renderSection(mod, section, { forceOpen: true }));
         if (focus.item) highlightItem(content, focus.item);
         return;
       }
@@ -2387,9 +2465,11 @@
     return btn;
   }
 
-  function renderSection(mod, section) {
+  function renderSection(mod, section, opts) {
+    const forceOpen = !!(opts && opts.forceOpen);
     const wrap = document.createElement("section");
-    wrap.className = "section" + (section.default_collapsed ? " collapsed" : "");
+    wrap.className =
+      "section" + (section.default_collapsed && !forceOpen ? " collapsed" : "");
     wrap.dataset.sectionId = section.id;
     wrap.dataset.sectionType = section.type;
 

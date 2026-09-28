@@ -12,8 +12,8 @@
   border-radius: var(--radius-md);
   cursor: pointer;
 }
+.module-btn.active { background: var(--selection-bg); border-color: transparent; box-shadow: inset 2px 0 0 var(--border-strong); }
 .module-btn:hover { background: var(--surface-3); }
-.module-btn.active { background: var(--selection-bg); border-color: transparent; box-shadow: inset 2px 0 0 var(--brand); }
 .module-btn .badge {
   margin-left: auto;
   background: var(--border);
@@ -44,7 +44,7 @@
   padding: 4px 8px; border-radius: var(--radius-sm); cursor: pointer; font-size: 13px;
 }
 .nav-group-btn:hover, .nav-item-btn:hover, .nav-section-btn:hover { background: var(--surface-3); }
-.nav-group-btn.active, .nav-item-btn.active, .nav-section-btn.active { background: var(--selection-bg); font-weight: 600; box-shadow: inset 2px 0 0 var(--brand); color: var(--text-primary); }
+.nav-group-btn.active, .nav-item-btn.active, .nav-section-btn.active { background: var(--selection-bg); font-weight: 600; box-shadow: inset 2px 0 0 var(--border-strong); color: var(--text-primary); }
 .package-title-link {
   border: 0;
   background: transparent;
@@ -130,9 +130,9 @@
   letter-spacing: 0.02em;
 }
 .role-pill--spec {
-  color: var(--brand-active);
-  background: var(--brand-soft);
-  border-color: color-mix(in srgb, var(--brand) 40%, var(--border));
+  color: #ffffff;
+  background: var(--brand-active);
+  border-color: var(--brand-active);
 }
 .role-pill--impl {
   color: var(--text-secondary);

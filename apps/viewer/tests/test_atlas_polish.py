@@ -33,6 +33,28 @@ def test_js_has_tabs_and_icon_helpers():
     assert "Type to search classes" in JS
 
 
+def test_js_nav_folds_orphan_sections_and_opens_focused_tables():
+    """Impl modules must not bolt secondary strips; focused tables open expanded."""
+    assert "function collectNestedSectionIds" in JS
+    assert "group:module-sections" in JS
+    assert "forceOpen: true" in JS
+    subtree = JS.split("function appendPublicationSubtree")[1].split(
+        "function appendCatalogNav"
+    )[0]
+    assert 'className = "nav-secondary"' not in subtree
+    assert "opts && opts.forceOpen" in JS
+
+
+def test_css_active_gray_and_spec_pill_dark():
+    css = assemble_css()
+    assert "--selection-bg: #eef0f3" in css
+    assert "box-shadow: inset 2px 0 0 var(--border-strong)" in css
+    assert ".role-pill--spec" in css
+    pill = css.split(".role-pill--spec")[1][:200]
+    assert "background: var(--brand-active)" in pill
+    assert "color: #ffffff" in pill
+
+
 def test_build_strips_emoji_from_nav_html():
     repo = Path(__file__).resolve().parents[3]
     dist = repo / "apps" / "viewer" / "dist"
