@@ -4,7 +4,7 @@ overview: Ввести обобщённую governance-модель ExternalSpec
 todos:
   - id: adr-020-dsp-kinds
     content: ADR-020 + amend ADR-016 kinds; extend moex-dsp.yaml / manifest Literals / ProfileSpec notes; index README
-    status: pending
+    status: in_progress
   - id: alignment-schema
     content: Create moex-external-alignment Spec + LinkML schema (classes, enums, nested structures)
     status: pending
