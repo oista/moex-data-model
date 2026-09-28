@@ -77,6 +77,8 @@ type Props = {
   content: string;
   onDocument: (doc: WorkspaceDocument) => void;
   onBeforeMutate?: () => Promise<void>;
+  onOptimisticOp?: (op: DocumentMutation) => void;
+  onOptimisticRollback?: () => void;
   disabled?: boolean;
   focusElementId?: string | null;
 };
@@ -86,6 +88,8 @@ export function EntityForms({
   content,
   onDocument,
   onBeforeMutate,
+  onOptimisticOp,
+  onOptimisticRollback,
   disabled = false,
   focusElementId = null,
 }: Props) {
@@ -154,8 +158,24 @@ export function EntityForms({
         return;
       }
     }
-    setEditAttrId(null);
-  }, [selected?.element_id, pendingAttrFocus]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (editAttrId) {
+      const attr = selected.attributes.find((a) => a.element_id === editAttrId);
+      if (attr) {
+        setEditAttrName(attr.name);
+        setEditAttrType(attr.logical_type);
+        setEditAttrRequired(attr.required);
+        return;
+      }
+      setEditAttrId(null);
+    }
+  }, [
+    selected?.element_id,
+    selected?.name,
+    selected?.title,
+    selected?.description,
+    selected?.attributes,
+    pendingAttrFocus,
+  ]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [entityId, setEntityId] = useState("dams:logical/trading/NewEntity");
   const [entityName, setEntityName] = useState("NewEntity");
@@ -170,9 +190,11 @@ export function EntityForms({
       if (onBeforeMutate) {
         await onBeforeMutate();
       }
+      onOptimisticOp?.(body);
       return api.mutateDocument(workspaceId, body);
     },
     onSuccess: onDocument,
+    onError: () => onOptimisticRollback?.(),
   });
 
   const busy = disabled || mutate.isPending;

@@ -336,3 +336,100 @@ def test_duplicate_relationship_and_mapping_conflict() -> None:
                 },
             },
         )
+
+def test_add_update_delete_physical_object_and_field() -> None:
+    out = apply_mutation(
+        SAMPLE,
+        {
+            "op": "add_physical_object",
+            "physical_object": {
+                "element_id": "dams:physical/trading/orders",
+                "name": "orders_table",
+                "title": "Orders",
+                "object_kind": "table",
+            },
+        },
+    )
+    data = load_yaml(out)
+    objs = data["physical_objects"]
+    assert any(o["element_id"] == "dams:physical/trading/orders" for o in objs)
+
+    out2 = apply_mutation(
+        out,
+        {
+            "op": "add_physical_field",
+            "owner_element_id": "dams:physical/trading/orders",
+            "physical_field": {
+                "element_id": "dams:physical/trading/orders/id",
+                "name": "id",
+                "native_type": "uuid",
+                "required": True,
+            },
+        },
+    )
+    data2 = load_yaml(out2)
+    obj = next(
+        o
+        for o in data2["physical_objects"]
+        if o["element_id"] == "dams:physical/trading/orders"
+    )
+    assert obj["physical_fields"][0]["native_type"] == "uuid"
+
+    out3 = apply_mutation(
+        out2,
+        {
+            "op": "update_physical_object",
+            "element_id": "dams:physical/trading/orders",
+            "patch": {"title": "Orders Table", "object_kind": "table"},
+        },
+    )
+    data3 = load_yaml(out3)
+    obj3 = next(
+        o
+        for o in data3["physical_objects"]
+        if o["element_id"] == "dams:physical/trading/orders"
+    )
+    assert obj3["title"] == "Orders Table"
+
+    out4 = apply_mutation(
+        out3,
+        {
+            "op": "update_physical_field",
+            "element_id": "dams:physical/trading/orders/id",
+            "patch": {"nullable": False, "native_type": "varchar"},
+        },
+    )
+    data4 = load_yaml(out4)
+    obj4 = next(
+        o
+        for o in data4["physical_objects"]
+        if o["element_id"] == "dams:physical/trading/orders"
+    )
+    assert obj4["physical_fields"][0]["native_type"] == "varchar"
+    assert obj4["physical_fields"][0]["nullable"] is False
+
+    out5 = apply_mutation(
+        out4,
+        {
+            "op": "delete_physical_field",
+            "element_id": "dams:physical/trading/orders/id",
+        },
+    )
+    data5 = load_yaml(out5)
+    obj5 = next(
+        o
+        for o in data5["physical_objects"]
+        if o["element_id"] == "dams:physical/trading/orders"
+    )
+    assert list(obj5.get("physical_fields") or []) == []
+
+    out6 = apply_mutation(
+        out5,
+        {
+            "op": "delete_physical_object",
+            "element_id": "dams:physical/trading/orders",
+        },
+    )
+    data6 = load_yaml(out6)
+    ids = [o["element_id"] for o in data6.get("physical_objects") or []]
+    assert "dams:physical/trading/orders" not in ids

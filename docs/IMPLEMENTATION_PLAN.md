@@ -502,7 +502,7 @@ audit_event
 
 ## Этап 4. Web Workbench
 
-**Progress (Stage 4 Web close-out 2026-09-28):** `apps/web` — dashboard/workspaces/models/validate; Monaco YAML + `workspace_document`; forms add/update/delete LogicalEntity/LogicalAttribute **and** Relationship/Mapping via `POST …/mutations`; Model explorer tree; **Review changes** semantic-diff preview; Compile job + artifact list/preview (`GET /jobs/{id}/artifacts`). Out: live field-level Monaco↔form binding, drawDB, OIDC, i18n, physical-object editors.
+**Progress (Stage 4 Web close-out 2026-09-28 + Workbench UX):** `apps/web` — dashboard/workspaces/models/validate; Monaco YAML + `workspace_document`; shared `useModelDraft` with optimistic form→Monaco YAML mutate mirror (`yamlMutate.ts`) + debounce PUT; forms add/update/delete LogicalEntity/LogicalAttribute, Relationship/Mapping, **and PhysicalObject/PhysicalField** via `POST …/mutations`; Model explorer tree (Physical tab focus); **Review changes** semantic-diff preview; Compile job + artifact list/preview (`GET /jobs/{id}/artifacts`). Out: deep Monaco JSON Schema diagnostics, OIDC, i18n.
 
 ### Основные экраны
 
@@ -540,7 +540,7 @@ audit_event
 
 ## Этап 5. drawDB MVP
 
-**Progress (2026-09-28 Stage 5 MVP):** `packages/drawdb-adapter` (parse DBML → ModelPatch → apply); extended `moex_dams.projection.dbml` Relationships/FK Refs; API diagram session + `diagram_layout` (Alembic `0006`); `apps/drawdb` pin + postMessage overlay + compose; Workbench `/models/trading/diagram` with semantic-diff confirm before apply. Out: deep drawDB internal JSON sync, OIDC, conceptual round-trip.
+**Progress (2026-09-28 Stage 5 MVP + deepen):** `packages/drawdb-adapter` (parse DBML → ModelPatch → apply); extended `moex_dams.projection.dbml` Relationships/FK Refs; API diagram session + `diagram_layout` (Alembic `0006`); `apps/drawdb` pin + postMessage overlay + compose; Workbench `/models/trading/diagram` with **Logical | Physical** profile toggle, rejected-ops panel, semantic-diff confirm before apply, editor link after apply; physical golden identity + add-field round-trip tests; conceptual ids asserted unchanged after logical apply. Out: deep drawDB internal JSON sync, OIDC, conceptual edit round-trip.
 
 ### Задачи
 

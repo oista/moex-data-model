@@ -1,15 +1,22 @@
 import { EntityForms } from "./EntityForms";
 import { MappingForms } from "./MappingForms";
+import { PhysicalForms } from "./PhysicalForms";
 import { RelationshipForms } from "./RelationshipForms";
-import type { WorkspaceDocument } from "../api/types";
+import type { DocumentMutation, WorkspaceDocument } from "../api/types";
 
-export type FormsTab = "entities" | "relationships" | "mappings";
+export type FormsTab =
+  | "entities"
+  | "relationships"
+  | "mappings"
+  | "physical";
 
 type Props = {
   workspaceId: string;
   content: string;
   onDocument: (doc: WorkspaceDocument) => void;
   onBeforeMutate?: () => Promise<void>;
+  onOptimisticOp?: (op: DocumentMutation) => void;
+  onOptimisticRollback?: () => void;
   disabled?: boolean;
   activeTab: FormsTab;
   onTabChange: (tab: FormsTab) => void;
@@ -21,11 +28,24 @@ export function ModelFormsPanel({
   content,
   onDocument,
   onBeforeMutate,
+  onOptimisticOp,
+  onOptimisticRollback,
   disabled = false,
   activeTab,
   onTabChange,
   focusElementId = null,
 }: Props) {
+  const formProps = {
+    workspaceId,
+    content,
+    onDocument,
+    onBeforeMutate,
+    onOptimisticOp,
+    onOptimisticRollback,
+    disabled,
+    focusElementId,
+  };
+
   return (
     <div className="model-forms-panel" data-testid="model-forms-panel">
       <div className="form-tabs" role="tablist" data-testid="form-tabs">
@@ -34,6 +54,7 @@ export function ModelFormsPanel({
             ["entities", "Entities"],
             ["relationships", "Relationships"],
             ["mappings", "Mappings"],
+            ["physical", "Physical"],
           ] as const
         ).map(([id, label]) => (
           <button
@@ -50,36 +71,10 @@ export function ModelFormsPanel({
           </button>
         ))}
       </div>
-      {activeTab === "entities" && (
-        <EntityForms
-          workspaceId={workspaceId}
-          content={content}
-          onDocument={onDocument}
-          onBeforeMutate={onBeforeMutate}
-          disabled={disabled}
-          focusElementId={focusElementId}
-        />
-      )}
-      {activeTab === "relationships" && (
-        <RelationshipForms
-          workspaceId={workspaceId}
-          content={content}
-          onDocument={onDocument}
-          onBeforeMutate={onBeforeMutate}
-          disabled={disabled}
-          focusElementId={focusElementId}
-        />
-      )}
-      {activeTab === "mappings" && (
-        <MappingForms
-          workspaceId={workspaceId}
-          content={content}
-          onDocument={onDocument}
-          onBeforeMutate={onBeforeMutate}
-          disabled={disabled}
-          focusElementId={focusElementId}
-        />
-      )}
+      {activeTab === "entities" && <EntityForms {...formProps} />}
+      {activeTab === "relationships" && <RelationshipForms {...formProps} />}
+      {activeTab === "mappings" && <MappingForms {...formProps} />}
+      {activeTab === "physical" && <PhysicalForms {...formProps} />}
     </div>
   );
 }

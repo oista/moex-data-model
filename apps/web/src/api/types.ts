@@ -185,6 +185,75 @@ export type DocumentMutation =
   | {
       op: "delete_mapping";
       element_id: string;
+    }
+  | {
+      op: "add_physical_object";
+      physical_object: {
+        element_id: string;
+        name: string;
+        title?: string;
+        description?: string;
+        lifecycle_status?: string;
+        object_kind?: string;
+        logical_entity_ref?: string;
+        qualified_name?: string;
+        technology?: string;
+      };
+    }
+  | {
+      op: "update_physical_object";
+      element_id: string;
+      patch: {
+        name?: string;
+        title?: string;
+        description?: string;
+        lifecycle_status?: string;
+        object_kind?: string;
+        logical_entity_ref?: string;
+        qualified_name?: string;
+        technology?: string;
+        system_ref?: string;
+        direction?: string;
+      };
+    }
+  | {
+      op: "delete_physical_object";
+      element_id: string;
+    }
+  | {
+      op: "add_physical_field";
+      owner_element_id: string;
+      physical_field: {
+        element_id: string;
+        name: string;
+        native_type: string;
+        description?: string;
+        lifecycle_status?: string;
+        native_name?: string;
+        required?: boolean;
+        nullable?: boolean;
+        logical_attribute_ref?: string;
+      };
+    }
+  | {
+      op: "update_physical_field";
+      element_id: string;
+      patch: {
+        name?: string;
+        title?: string;
+        description?: string;
+        lifecycle_status?: string;
+        native_name?: string;
+        native_type?: string;
+        required?: boolean;
+        nullable?: boolean;
+        logical_attribute_ref?: string;
+        schema_path?: string;
+      };
+    }
+  | {
+      op: "delete_physical_field";
+      element_id: string;
     };
 
 export type Publication = {

@@ -69,6 +69,28 @@ MINI = {
             "mapping_cardinality": "one_to_one",
         }
     ],
+    "physical_objects": [
+        {
+            "element_id": "dams:physical/mini/client_tbl",
+            "name": "client_tbl",
+            "title": "Client table",
+            "object_kind": "table",
+            "physical_fields": [
+                {
+                    "element_id": "dams:physical/mini/client_tbl/client_id",
+                    "name": "client_id",
+                    "native_type": "varchar",
+                    "required": True,
+                },
+                {
+                    "element_id": "dams:physical/mini/client_tbl/full_name",
+                    "name": "full_name",
+                    "native_type": "varchar",
+                    "required": False,
+                },
+            ],
+        }
+    ],
 }
 
 
@@ -130,3 +152,47 @@ def test_reject_element_id_rewrite() -> None:
     )
     _merged, patch = svc.from_dbml(MINI, bad, profile="logical")
     assert any(r.code is RejectCode.ELEMENT_ID_REWRITE for r in patch.rejected)
+
+
+def test_conceptual_entities_survive_logical_apply() -> None:
+    svc = DrawDbProjectionService()
+    dbml = svc.to_dbml(MINI, profile="logical")
+    merged, patch = svc.from_dbml(MINI, dbml, profile="logical")
+    assert not patch.rejected
+    assert merged["conceptual_entities"][0]["element_id"] == "dams:concept/mini/Client"
+    assert merged["conceptual_entities"][0]["name"] == "ClientConcept"
+
+
+def test_physical_identity_round_trip() -> None:
+    svc = DrawDbProjectionService()
+    dbml = svc.to_dbml(MINI, profile="physical")
+    assert "client_tbl" in dbml
+    merged, patch = svc.from_dbml(MINI, dbml, profile="physical")
+    assert not patch.rejected
+    ids = {o["element_id"] for o in merged["physical_objects"]}
+    assert "dams:physical/mini/client_tbl" in ids
+    # conceptual layer untouched by physical apply
+    assert merged["conceptual_entities"][0]["element_id"] == "dams:concept/mini/Client"
+    assert any(
+        e["element_id"] == "dams:logical/mini/Client"
+        for e in merged["logical_entities"]
+    )
+
+
+def test_physical_add_field_produces_op() -> None:
+    svc = DrawDbProjectionService()
+    dbml = svc.to_dbml(MINI, profile="physical")
+    marker = "full_name varchar [note: 'dams:physical/mini/client_tbl/full_name']"
+    if marker not in dbml:
+        # tolerate alternate note formatting from projector
+        marker = "full_name"
+        assert marker in dbml
+        # inject after first full_name column occurrence inside table
+        idx = dbml.find(marker)
+        assert idx >= 0
+        line_end = dbml.find("\n", idx)
+        dbml2 = dbml[:line_end] + "\n  nickname varchar" + dbml[line_end:]
+    else:
+        dbml2 = dbml.replace(marker, marker + "\n  nickname varchar", 1)
+    _merged, patch = svc.from_dbml(MINI, dbml2, profile="physical")
+    assert any(o.kind is PatchOpKind.ADD_FIELD for o in patch.ops)

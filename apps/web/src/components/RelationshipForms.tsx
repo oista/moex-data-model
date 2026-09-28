@@ -18,6 +18,8 @@ type Props = {
   content: string;
   onDocument: (doc: WorkspaceDocument) => void;
   onBeforeMutate?: () => Promise<void>;
+  onOptimisticOp?: (op: DocumentMutation) => void;
+  onOptimisticRollback?: () => void;
   disabled?: boolean;
   focusElementId?: string | null;
 };
@@ -70,6 +72,8 @@ export function RelationshipForms({
   content,
   onDocument,
   onBeforeMutate,
+  onOptimisticOp,
+  onOptimisticRollback,
   disabled = false,
   focusElementId = null,
 }: Props) {
@@ -115,7 +119,14 @@ export function RelationshipForms({
     setEditDescription(selected.description);
     setEditSource(selected.source_entity_ref);
     setEditTarget(selected.target_entity_ref);
-  }, [selected?.element_id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [
+    selected?.element_id,
+    selected?.name,
+    selected?.title,
+    selected?.description,
+    selected?.source_entity_ref,
+    selected?.target_entity_ref,
+  ]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [newId, setNewId] = useState("dams:rel/trading/NewRel");
   const [newName, setNewName] = useState("new_rel");
@@ -126,9 +137,11 @@ export function RelationshipForms({
   const mutate = useMutation({
     mutationFn: async (body: DocumentMutation) => {
       if (onBeforeMutate) await onBeforeMutate();
+      onOptimisticOp?.(body);
       return api.mutateDocument(workspaceId, body);
     },
     onSuccess: onDocument,
+    onError: () => onOptimisticRollback?.(),
   });
 
   const busy = disabled || mutate.isPending;

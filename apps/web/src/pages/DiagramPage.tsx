@@ -24,7 +24,7 @@ function categoryBadgeClass(category: string): string {
 }
 
 export function DiagramPage() {
-  const [params] = useSearchParams();
+  const [params, setParams] = useSearchParams();
   const profile =
     params.get("profile") === "physical" ? "physical" : "logical";
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -37,6 +37,12 @@ export function DiagramPage() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [applied, setApplied] = useState(false);
+
+  const setProfile = (next: "logical" | "physical") => {
+    const nextParams = new URLSearchParams(params);
+    nextParams.set("profile", next);
+    setParams(nextParams, { replace: true });
+  };
 
   const openSession = useCallback(async () => {
     setError(null);
@@ -145,7 +151,35 @@ export function DiagramPage() {
   return (
     <div className="diagram-page">
       <header className="page-header">
-        <h1>Diagram ({profile})</h1>
+        <h1>Diagram</h1>
+        <div
+          className="row"
+          role="group"
+          aria-label="Projection profile"
+          data-testid="profile-toggle"
+        >
+          <button
+            type="button"
+            className={profile === "logical" ? "primary" : undefined}
+            aria-pressed={profile === "logical"}
+            data-testid="profile-logical"
+            onClick={() => setProfile("logical")}
+            disabled={busy}
+          >
+            Logical
+          </button>
+          <button
+            type="button"
+            className={profile === "physical" ? "primary" : undefined}
+            aria-pressed={profile === "physical"}
+            data-testid="profile-physical"
+            onClick={() => setProfile("physical")}
+            disabled={busy}
+          >
+            Physical
+          </button>
+          <span className="badge neutral">profile: {profile}</span>
+        </div>
         <div className="actions">
           <button type="button" onClick={() => void openSession()} disabled={busy}>
             Reload projection
@@ -171,14 +205,35 @@ export function DiagramPage() {
           >
             Confirm apply
           </button>
-          <Link to="/models/trading/edit">Back to editor</Link>
-          <Link to={`/models/trading/diagram?profile=${profile === "logical" ? "physical" : "logical"}`}>
-            Switch to {profile === "logical" ? "physical" : "logical"}
-          </Link>
+          <Link to="/models/trading/edit?reload=1">Open editor</Link>
         </div>
       </header>
       {error && <p className="error">{error}</p>}
-      {applied && <p className="ok">Applied to workspace draft.</p>}
+      {applied && (
+        <p className="ok" data-testid="diagram-applied">
+          Applied to workspace draft.{" "}
+          <Link to="/models/trading/edit?reload=1">Open editor</Link> to review
+          the updated YAML.
+        </p>
+      )}
+      {submitResult && (submitResult.rejected?.length ?? 0) > 0 && (
+        <div className="panel" data-testid="diagram-rejected">
+          <strong>Rejected operations</strong>
+          <ul>
+            {submitResult.rejected.map((r, i) => (
+              <li key={i}>
+                <span className="badge bad">{r.code}</span> {r.message}
+                {r.path ? (
+                  <>
+                    {" "}
+                    <code>{r.path}</code>
+                  </>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className="diagram-layout">
         <iframe
           ref={iframeRef}
@@ -202,7 +257,7 @@ export function DiagramPage() {
                 {submitResult.rejected.length}
               </p>
               {submitResult.rejected.length > 0 && (
-                <ul>
+                <ul data-testid="rejected-list">
                   {submitResult.rejected.map((r, i) => (
                     <li key={i}>
                       <span className="badge bad">{r.code}</span> {r.message}

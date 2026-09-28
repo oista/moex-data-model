@@ -153,7 +153,7 @@ function parseTree(content: string): { groups: Group[]; error: string | null } {
               id: String(e.element_id),
               label: String(e.name || e.element_id),
               kind: "physical_object" as const,
-              tab: null,
+              tab: "physical" as FormsTab,
               children: fields
                 .filter(
                   (f): f is Record<string, unknown> =>
@@ -164,7 +164,7 @@ function parseTree(content: string): { groups: Group[]; error: string | null } {
                   id: String(f.element_id),
                   label: String(f.name || f.element_id),
                   kind: "physical_field" as const,
-                  tab: null,
+                  tab: "physical" as FormsTab,
                 })),
             };
           }),

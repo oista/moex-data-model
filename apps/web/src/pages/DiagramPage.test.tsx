@@ -1,7 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { DiagramPage } from "./DiagramPage";
+import { api } from "../api/client";
 
 vi.mock("../api/client", () => ({
   api: {
@@ -26,7 +27,7 @@ describe("DiagramPage", () => {
     vi.clearAllMocks();
   });
 
-  it("renders diagram chrome and iframe", async () => {
+  it("renders diagram chrome, profile toggle, and iframe", async () => {
     render(
       <MemoryRouter initialEntries={["/models/trading/diagram"]}>
         <DiagramPage />
@@ -35,5 +36,26 @@ describe("DiagramPage", () => {
     expect(await screen.findByRole("heading", { name: /Diagram/i })).toBeTruthy();
     expect(screen.getByTitle("drawDB")).toBeTruthy();
     expect(screen.getByRole("button", { name: /Submit for review/i })).toBeTruthy();
+    expect(screen.getByTestId("profile-toggle")).toBeTruthy();
+    expect(screen.getByTestId("profile-logical")).toBeTruthy();
+    expect(screen.getByTestId("profile-physical")).toBeTruthy();
+  });
+
+  it("opens session with physical profile from query", async () => {
+    vi.mocked(api.openDiagram).mockResolvedValueOnce({
+      session_id: "sess-phys",
+      workspace_id: "ws-workbench",
+      profile: "physical",
+      dbml: "Table Phys {}",
+    });
+    render(
+      <MemoryRouter initialEntries={["/models/trading/diagram?profile=physical"]}>
+        <DiagramPage />
+      </MemoryRouter>,
+    );
+    await waitFor(() => {
+      expect(api.openDiagram).toHaveBeenCalledWith("ws-workbench", "physical");
+    });
+    expect(screen.getByText(/profile: physical/i)).toBeTruthy();
   });
 });

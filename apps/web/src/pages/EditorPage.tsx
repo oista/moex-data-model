@@ -1,14 +1,9 @@
 import Editor from "@monaco-editor/react";
 import { useMutation } from "@tanstack/react-query";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { api, setLastJobId } from "../api/client";
-import type {
-  Job,
-  Publication,
-  SemanticDiffReport,
-  WorkspaceDocument,
-} from "../api/types";
+import type { Job, Publication, SemanticDiffReport } from "../api/types";
 import {
   ModelFormsPanel,
   type FormsTab,
@@ -19,6 +14,7 @@ import {
 } from "../components/ModelExplorer";
 import { ArtifactsPanel } from "../components/ArtifactsPanel";
 import { StatusBadge } from "../components/StatusBadge";
+import { useModelDraft } from "../model/useModelDraft";
 
 const WS_ID = "ws-workbench";
 const IMPL = "moex:implementation:trading:1.0.0";
@@ -35,77 +31,36 @@ function categoryBadgeClass(category: string): string {
 }
 
 export function EditorPage() {
-  const [value, setValue] = useState("");
-  const [baseDigest, setBaseDigest] = useState("");
-  const [dirty, setDirty] = useState(false);
-  const [sourceLabel, setSourceLabel] = useState<"draft" | "published" | "">("");
-  const [loadError, setLoadError] = useState<string | null>(null);
+  const draft = useModelDraft(WS_ID);
   const [job, setJob] = useState<Job | null>(null);
   const [publication, setPublication] = useState<Publication | null>(null);
   const [diff, setDiff] = useState<SemanticDiffReport | null>(null);
-  const [loading, setLoading] = useState(true);
   const [formsTab, setFormsTab] = useState<FormsTab>("entities");
   const [focusElementId, setFocusElementId] = useState<string | null>(null);
-
-  const load = useCallback(async () => {
-    setLoading(true);
-    setLoadError(null);
-    try {
-      await api.createWorkspace({ id: WS_ID, name: "Workbench" });
-      try {
-        const draft = await api.getDocument(WS_ID);
-        setValue(draft.content);
-        setBaseDigest(draft.base_digest);
-        setSourceLabel("draft");
-      } catch {
-        const published = await api.tradingBody();
-        setValue(published.content);
-        setBaseDigest(published.content_digest);
-        setSourceLabel("published");
-      }
-      setDirty(false);
-    } catch (err) {
-      setLoadError((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    void load();
-  }, [load]);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const save = useMutation({
-    mutationFn: () =>
-      api.putDocument(WS_ID, { content: value, base_digest: baseDigest }),
-    onSuccess: (doc) => {
-      setBaseDigest(doc.base_digest);
-      setSourceLabel("draft");
-      setDirty(false);
-    },
+    mutationFn: () => draft.putNow(),
+    onError: (err) => setSaveError((err as Error).message),
+    onSuccess: () => setSaveError(null),
   });
 
   const reloadPublished = useMutation({
     mutationFn: async () => {
-      if (dirty && !window.confirm("Discard unsaved changes?")) {
+      if (draft.dirty && !window.confirm("Discard unsaved changes?")) {
         return null;
       }
       return api.tradingBody();
     },
     onSuccess: (body) => {
       if (!body) return;
-      setValue(body.content);
-      setBaseDigest(body.content_digest);
-      setSourceLabel("published");
-      setDirty(false);
+      draft.discardToPublished(body.content, body.content_digest);
     },
   });
 
   const validate = useMutation({
     mutationFn: async () => {
-      await api.putDocument(WS_ID, { content: value, base_digest: baseDigest });
-      setDirty(false);
-      setSourceLabel("draft");
+      await draft.putNow();
       const result = await api.createJob(
         {
           kind: "validate",
@@ -140,9 +95,7 @@ export function EditorPage() {
 
   const reviewChanges = useMutation({
     mutationFn: async () => {
-      await api.putDocument(WS_ID, { content: value, base_digest: baseDigest });
-      setDirty(false);
-      setSourceLabel("draft");
+      await draft.putNow();
       return api.previewSemanticDiff(WS_ID);
     },
     onSuccess: setDiff,
@@ -150,9 +103,7 @@ export function EditorPage() {
 
   const publish = useMutation({
     mutationFn: async () => {
-      await api.putDocument(WS_ID, { content: value, base_digest: baseDigest });
-      setDirty(false);
-      setSourceLabel("draft");
+      await draft.putNow();
       return api.createPublication(
         {
           workspace_id: WS_ID,
@@ -166,67 +117,48 @@ export function EditorPage() {
     onSuccess: setPublication,
   });
 
-  function onMutatedDocument(doc: WorkspaceDocument) {
-    setValue(doc.content);
-    setBaseDigest(doc.base_digest);
-    setSourceLabel("draft");
-    setDirty(false);
-  }
-
-  const ensureSaved = useCallback(async () => {
-    if (!dirty) return;
-    const doc = await api.putDocument(WS_ID, {
-      content: value,
-      base_digest: baseDigest,
-    });
-    setBaseDigest(doc.base_digest);
-    setSourceLabel("draft");
-    setDirty(false);
-  }, [dirty, value, baseDigest]);
-
   const formsBusy =
-    loading ||
     save.isPending ||
     validate.isPending ||
-    compile.isPending ||
     reviewChanges.isPending ||
     publish.isPending;
 
+  const formsDisabled = formsBusy || Boolean(draft.parseError);
+
   return (
     <section>
-      <h1>Edit trading YAML</h1>
+      <h1>Model editor</h1>
       <p className="lede">
-        Monaco draft in workspace <code>{WS_ID}</code>. Git published file is
-        not overwritten. Forms apply controlled mutations to the draft.
+        Edit workspace draft YAML, validate/compile via jobs, review semantic
+        diff, or publish a GitHub review from the draft.
       </p>
-
-      <div className="row">
+      <div className="actions">
         <button
           type="button"
           className="primary"
           onClick={() => save.mutate()}
-          disabled={loading || save.isPending || !value}
+          disabled={draft.loading || save.isPending || !draft.dirty}
         >
           Save draft
         </button>
         <button
           type="button"
           onClick={() => reloadPublished.mutate()}
-          disabled={loading || reloadPublished.isPending}
+          disabled={draft.loading || reloadPublished.isPending}
         >
           Reload published
         </button>
         <button
           type="button"
           onClick={() => validate.mutate()}
-          disabled={loading || validate.isPending || !value}
+          disabled={draft.loading || validate.isPending || !draft.content}
         >
           Validate draft
         </button>
         <button
           type="button"
           onClick={() => compile.mutate()}
-          disabled={loading || compile.isPending}
+          disabled={draft.loading || compile.isPending}
           data-testid="compile-job"
         >
           Compile
@@ -234,7 +166,7 @@ export function EditorPage() {
         <button
           type="button"
           onClick={() => reviewChanges.mutate()}
-          disabled={loading || reviewChanges.isPending || !value}
+          disabled={draft.loading || reviewChanges.isPending || !draft.content}
           data-testid="review-changes"
         >
           Review changes
@@ -242,21 +174,29 @@ export function EditorPage() {
         <button
           type="button"
           onClick={() => publish.mutate()}
-          disabled={loading || publish.isPending || !value}
+          disabled={draft.loading || publish.isPending || !draft.content}
         >
           Publish draft
         </button>
         <Link to="/models/trading">Back to model</Link>
         <Link to="/models/trading/diagram?profile=logical">Open diagram</Link>
-        {sourceLabel && (
-          <span className="badge neutral">loaded: {sourceLabel}</span>
+        {draft.sourceLabel && (
+          <span className="badge neutral">loaded: {draft.sourceLabel}</span>
         )}
-        {dirty && <span className="badge neutral">unsaved</span>}
+        {draft.dirty && <span className="badge neutral">unsaved</span>}
       </div>
 
-      {loadError && <p className="error">{loadError}</p>}
-      {save.isError && (
-        <p className="error">{(save.error as Error).message}</p>
+      {draft.loadError && <p className="error">{draft.loadError}</p>}
+      {draft.parseError && (
+        <p className="error" data-testid="draft-parse-error">
+          YAML parse error — forms disabled until YAML is valid:{" "}
+          {draft.parseError}
+        </p>
+      )}
+      {(save.isError || saveError) && (
+        <p className="error">
+          {saveError || (save.error as Error).message}
+        </p>
       )}
       {validate.isError && (
         <p className="error">{(validate.error as Error).message}</p>
@@ -345,10 +285,10 @@ export function EditorPage() {
       )}
 
       <div className="editor-layout">
-        {!loading && (
+        {!draft.loading && (
           <div className="editor-sidebar">
             <ModelExplorer
-              content={value}
+              content={draft.content}
               selectedId={focusElementId}
               onSelect={(sel: ExplorerSelect) => {
                 setFocusElementId(sel.elementId);
@@ -357,10 +297,12 @@ export function EditorPage() {
             />
             <ModelFormsPanel
               workspaceId={WS_ID}
-              content={value}
-              onDocument={onMutatedDocument}
-              onBeforeMutate={ensureSaved}
-              disabled={formsBusy}
+              content={draft.content}
+              onDocument={draft.replaceFromServer}
+              onBeforeMutate={draft.ensureSaved}
+              onOptimisticOp={draft.applyLocalOp}
+              onOptimisticRollback={draft.rollbackOptimistic}
+              disabled={formsDisabled}
               activeTab={formsTab}
               onTabChange={setFormsTab}
               focusElementId={focusElementId}
@@ -368,17 +310,16 @@ export function EditorPage() {
           </div>
         )}
         <div className="editor-frame">
-          {loading ? (
+          {draft.loading ? (
             <p>Loading…</p>
           ) : (
             <Editor
               height="60vh"
               defaultLanguage="yaml"
               theme="vs-light"
-              value={value}
+              value={draft.content}
               onChange={(next) => {
-                setValue(next ?? "");
-                setDirty(true);
+                draft.setContentFromMonaco(next ?? "");
               }}
               options={{
                 minimap: { enabled: false },

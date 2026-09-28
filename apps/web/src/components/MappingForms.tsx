@@ -20,6 +20,8 @@ type Props = {
   content: string;
   onDocument: (doc: WorkspaceDocument) => void;
   onBeforeMutate?: () => Promise<void>;
+  onOptimisticOp?: (op: DocumentMutation) => void;
+  onOptimisticRollback?: () => void;
   disabled?: boolean;
   focusElementId?: string | null;
 };
@@ -122,6 +124,8 @@ export function MappingForms({
   content,
   onDocument,
   onBeforeMutate,
+  onOptimisticOp,
+  onOptimisticRollback,
   disabled = false,
   focusElementId = null,
 }: Props) {
@@ -167,7 +171,16 @@ export function MappingForms({
     setEditTargets(refsToText(selected.target_refs));
     setEditType(selected.mapping_type);
     setEditCard(selected.mapping_cardinality);
-  }, [selected?.element_id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [
+    selected?.element_id,
+    selected?.name,
+    selected?.title,
+    selected?.description,
+    selected?.mapping_type,
+    selected?.mapping_cardinality,
+    selected?.source_refs,
+    selected?.target_refs,
+  ]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [newId, setNewId] = useState("dams:mapping/trading/new");
   const [newName, setNewName] = useState("map_new");
@@ -180,9 +193,11 @@ export function MappingForms({
   const mutate = useMutation({
     mutationFn: async (body: DocumentMutation) => {
       if (onBeforeMutate) await onBeforeMutate();
+      onOptimisticOp?.(body);
       return api.mutateDocument(workspaceId, body);
     },
     onSuccess: onDocument,
+    onError: () => onOptimisticRollback?.(),
   });
 
   const busy = disabled || mutate.isPending;

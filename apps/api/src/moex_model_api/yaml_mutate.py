@@ -274,7 +274,7 @@ _CARDINALITY_KEYS = frozenset(
     }
 )
 _BOOL_PATCH_KEYS = frozenset(
-    {"required", "multivalued", "identifying", "associative"}
+    {"required", "multivalued", "identifying", "associative", "nullable"}
 )
 
 
@@ -464,6 +464,167 @@ def delete_mapping(data: CommentedMap, element_id: str) -> None:
     del seq[idx]
 
 
+_PHYSICAL_OBJECT_PATCH_KEYS = frozenset(
+    {
+        "name",
+        "title",
+        "description",
+        "lifecycle_status",
+        "object_kind",
+        "logical_entity_ref",
+        "qualified_name",
+        "technology",
+        "system_ref",
+        "direction",
+    }
+)
+_PHYSICAL_FIELD_PATCH_KEYS = frozenset(
+    {
+        "name",
+        "title",
+        "description",
+        "lifecycle_status",
+        "native_name",
+        "native_type",
+        "required",
+        "nullable",
+        "logical_attribute_ref",
+        "schema_path",
+    }
+)
+
+
+def _find_physical_object(
+    data: CommentedMap, element_id: str
+) -> tuple[int, CommentedMap | dict[str, Any]]:
+    return _find_top_level_item(
+        data, "physical_objects", element_id, "physical object"
+    )
+
+
+def _find_physical_field(
+    data: CommentedMap, element_id: str
+) -> tuple[CommentedMap | dict[str, Any], int, CommentedMap | dict[str, Any]]:
+    eid = str(element_id or "").strip()
+    if not eid:
+        raise MutationError("element_id is required")
+    objects = data.get("physical_objects") or []
+    if not isinstance(objects, list):
+        raise MutationError("physical_objects missing")
+    for obj in objects:
+        if not isinstance(obj, dict):
+            continue
+        fields = obj.get("physical_fields") or []
+        if not isinstance(fields, list):
+            continue
+        for idx, field in enumerate(fields):
+            if isinstance(field, dict) and str(field.get("element_id")) == eid:
+                return obj, idx, field
+    raise MutationError(f"physical field not found: {eid}")
+
+
+def add_physical_object(data: CommentedMap, obj: dict[str, Any]) -> None:
+    eid = str(obj.get("element_id") or "").strip()
+    name = str(obj.get("name") or "").strip()
+    if not eid or not name:
+        raise MutationError("element_id and name are required")
+    if eid in _collect_ids(data):
+        raise MutationConflict(f"duplicate element_id: {eid}")
+
+    row = CommentedMap()
+    row["element_id"] = eid
+    row["name"] = name
+    row["title"] = str(obj.get("title") or name)
+    row["description"] = str(
+        obj.get("description") or f"Physical object {name} (workbench draft)."
+    )
+    row["lifecycle_status"] = str(obj.get("lifecycle_status") or "draft")
+    row["object_kind"] = str(obj.get("object_kind") or "table")
+    for key in (
+        "logical_entity_ref",
+        "qualified_name",
+        "technology",
+        "system_ref",
+        "direction",
+        "solution_ref",
+        "native_schema_ref",
+    ):
+        if obj.get(key) is not None:
+            row[key] = str(obj[key])
+    row["physical_fields"] = CommentedSeq()
+    seq = _ensure_seq(data, "physical_objects")
+    seq.append(row)
+
+
+def update_physical_object(
+    data: CommentedMap, element_id: str, patch: dict[str, Any]
+) -> None:
+    _, item = _find_physical_object(data, element_id)
+    _apply_patch(item, patch or {}, _PHYSICAL_OBJECT_PATCH_KEYS)
+
+
+def delete_physical_object(data: CommentedMap, element_id: str) -> None:
+    idx, _ = _find_physical_object(data, element_id)
+    seq = data["physical_objects"]
+    del seq[idx]
+
+
+def add_physical_field(
+    data: CommentedMap,
+    owner_element_id: str,
+    field: dict[str, Any],
+) -> None:
+    owner = str(owner_element_id or "").strip()
+    eid = str(field.get("element_id") or "").strip()
+    name = str(field.get("name") or "").strip()
+    native_type = str(field.get("native_type") or "").strip()
+    if not owner or not eid or not name or not native_type:
+        raise MutationError(
+            "owner_element_id, element_id, name, and native_type are required"
+        )
+    if eid in _collect_ids(data):
+        raise MutationConflict(f"duplicate element_id: {eid}")
+
+    _, target = _find_physical_object(data, owner)
+    if "physical_fields" not in target or target["physical_fields"] is None:
+        target["physical_fields"] = CommentedSeq()
+    fields = target["physical_fields"]
+    if not isinstance(fields, CommentedSeq):
+        target["physical_fields"] = CommentedSeq(list(fields) if fields else [])
+        fields = target["physical_fields"]
+
+    row = CommentedMap()
+    row["element_id"] = eid
+    row["name"] = name
+    row["description"] = str(
+        field.get("description") or f"Physical field {name} (workbench draft)."
+    )
+    row["lifecycle_status"] = str(field.get("lifecycle_status") or "draft")
+    row["physical_object_ref"] = str(field.get("physical_object_ref") or owner)
+    row["native_name"] = str(field.get("native_name") or name)
+    row["native_type"] = native_type
+    row["required"] = bool(field.get("required", False))
+    if "nullable" in field and field["nullable"] is not None:
+        row["nullable"] = bool(field["nullable"])
+    if field.get("logical_attribute_ref"):
+        row["logical_attribute_ref"] = str(field["logical_attribute_ref"])
+    if field.get("schema_path"):
+        row["schema_path"] = str(field["schema_path"])
+    fields.append(row)
+
+
+def update_physical_field(
+    data: CommentedMap, element_id: str, patch: dict[str, Any]
+) -> None:
+    _, _, field = _find_physical_field(data, element_id)
+    _apply_patch(field, patch or {}, _PHYSICAL_FIELD_PATCH_KEYS)
+
+def delete_physical_field(data: CommentedMap, element_id: str) -> None:
+    obj, idx, _ = _find_physical_field(data, element_id)
+    fields = obj["physical_fields"]
+    del fields[idx]
+
+
 def apply_mutation(text: str, payload: dict[str, Any]) -> str:
     data = load_yaml(text)
     op = payload.get("op")
@@ -511,6 +672,30 @@ def apply_mutation(text: str, payload: dict[str, Any]) -> str:
         )
     elif op == "delete_mapping":
         delete_mapping(data, str(payload.get("element_id") or ""))
+    elif op == "add_physical_object":
+        add_physical_object(data, payload.get("physical_object") or {})
+    elif op == "update_physical_object":
+        update_physical_object(
+            data,
+            str(payload.get("element_id") or ""),
+            payload.get("patch") or {},
+        )
+    elif op == "delete_physical_object":
+        delete_physical_object(data, str(payload.get("element_id") or ""))
+    elif op == "add_physical_field":
+        add_physical_field(
+            data,
+            str(payload.get("owner_element_id") or ""),
+            payload.get("physical_field") or {},
+        )
+    elif op == "update_physical_field":
+        update_physical_field(
+            data,
+            str(payload.get("element_id") or ""),
+            payload.get("patch") or {},
+        )
+    elif op == "delete_physical_field":
+        delete_physical_field(data, str(payload.get("element_id") or ""))
     else:
         raise MutationError(f"unsupported op: {op!r}")
     return dump_yaml(data)

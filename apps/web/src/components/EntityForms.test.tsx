@@ -197,4 +197,58 @@ describe("EntityForms", () => {
     await waitFor(() => expect(onBeforeMutate).toHaveBeenCalled());
     await waitFor(() => expect(onDocument).toHaveBeenCalled());
   });
+
+  it("applies optimistic op before fetch resolves", async () => {
+    const onDocument = vi.fn();
+    const onOptimisticOp = vi.fn();
+    let resolveFetch: (v: unknown) => void = () => {};
+    const fetchMock = vi.fn(
+      () =>
+        new Promise((resolve) => {
+          resolveFetch = resolve;
+        }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const qc = new QueryClient({
+      defaultOptions: { mutations: { retry: false } },
+    });
+    render(
+      <QueryClientProvider client={qc}>
+        <EntityForms
+          workspaceId="ws-workbench"
+          content={SAMPLE}
+          onDocument={onDocument}
+          onOptimisticOp={onOptimisticOp}
+        />
+      </QueryClientProvider>,
+    );
+
+    const form = screen.getByTestId("edit-entity-form");
+    fireEvent.change(within(form).getByDisplayValue("Client"), {
+      target: { value: "Client Optimistic" },
+    });
+    fireEvent.click(within(form).getByRole("button", { name: /^save entity$/i }));
+
+    await waitFor(() => expect(onOptimisticOp).toHaveBeenCalled());
+    expect(onDocument).not.toHaveBeenCalled();
+    expect(onOptimisticOp.mock.calls[0][0]).toMatchObject({
+      op: "update_logical_entity",
+      element_id: "dams:logical/trading/Client",
+      patch: { title: "Client Optimistic" },
+    });
+
+    resolveFetch({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        workspace_id: "ws-workbench",
+        doc_key: "trading",
+        content: SAMPLE.replace("title: Client", "title: Client Optimistic"),
+        base_digest: "sha256:x",
+        updated_by: "dev",
+      }),
+    });
+    await waitFor(() => expect(onDocument).toHaveBeenCalled());
+  });
 });

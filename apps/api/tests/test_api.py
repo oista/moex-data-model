@@ -384,6 +384,74 @@ def test_document_mutations_relationship_and_mapping(client: TestClient) -> None
     assert "dams:rel/trading/Client-Self" not in del_rel.json()["content"]
 
 
+def test_document_mutations_physical_object_and_field(client: TestClient) -> None:
+    headers = {"X-Moex-Actor": "editor"}
+    add_obj = client.post(
+        "/workspaces/ws-mut-phys/documents/trading/mutations",
+        json={
+            "op": "add_physical_object",
+            "physical_object": {
+                "element_id": "dams:physical/trading/wb-orders",
+                "name": "wb_orders",
+                "object_kind": "table",
+            },
+        },
+        headers=headers,
+    )
+    assert add_obj.status_code == 200
+    assert "dams:physical/trading/wb-orders" in add_obj.json()["content"]
+
+    add_field = client.post(
+        "/workspaces/ws-mut-phys/documents/trading/mutations",
+        json={
+            "op": "add_physical_field",
+            "owner_element_id": "dams:physical/trading/wb-orders",
+            "physical_field": {
+                "element_id": "dams:physical/trading/wb-orders/id",
+                "name": "id",
+                "native_type": "uuid",
+            },
+        },
+        headers=headers,
+    )
+    assert add_field.status_code == 200
+    assert "dams:physical/trading/wb-orders/id" in add_field.json()["content"]
+
+    upd = client.post(
+        "/workspaces/ws-mut-phys/documents/trading/mutations",
+        json={
+            "op": "update_physical_object",
+            "element_id": "dams:physical/trading/wb-orders",
+            "patch": {"title": "WB Orders"},
+        },
+        headers=headers,
+    )
+    assert upd.status_code == 200
+    assert "WB Orders" in upd.json()["content"]
+
+    del_field = client.post(
+        "/workspaces/ws-mut-phys/documents/trading/mutations",
+        json={
+            "op": "delete_physical_field",
+            "element_id": "dams:physical/trading/wb-orders/id",
+        },
+        headers=headers,
+    )
+    assert del_field.status_code == 200
+    assert "dams:physical/trading/wb-orders/id" not in del_field.json()["content"]
+
+    del_obj = client.post(
+        "/workspaces/ws-mut-phys/documents/trading/mutations",
+        json={
+            "op": "delete_physical_object",
+            "element_id": "dams:physical/trading/wb-orders",
+        },
+        headers=headers,
+    )
+    assert del_obj.status_code == 200
+    assert "dams:physical/trading/wb-orders" not in del_obj.json()["content"]
+
+
 def test_workspace_document_put_get_and_validate_draft(client: TestClient) -> None:
     headers = {"X-Moex-Actor": "editor"}
     published = client.get("/implementations/trading/body").json()
