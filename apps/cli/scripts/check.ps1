@@ -29,6 +29,7 @@ try {
     $Pub = Join-Path $RepoRoot "packages/publication"
     $Git = Join-Path $RepoRoot "packages/git-adapter"
     $Sem = Join-Path $RepoRoot "packages/semantic-mappings"
+    $Tooling = Join-Path $RepoRoot "packages/linkml-tooling"
 
     $Contracts = Join-Path $RepoRoot "generated/contracts/moex-dams/0.1"
     Write-Host "Ensuring DAMS contracts package (Python: $VenvPython)"
@@ -46,15 +47,17 @@ try {
         -e "$Pub" `
         -e "$Git" `
         -e "$Sem" `
+        -e "$Tooling[dev]" `
         -e "$CliRoot[dev]" -q
 
-    Write-Host "Running pytest (kernel, provider, dams, publication, git, cli, architecture)"
+    Write-Host "Running pytest (kernel, provider, dams, publication, git, tooling, cli, architecture)"
     & $VenvPython -m pytest `
         (Join-Path $Kernel "tests") `
         (Join-Path $Linkml "tests/test_provider.py") `
         (Join-Path $Dams "tests") `
         (Join-Path $Pub "tests") `
         (Join-Path $Git "tests") `
+        (Join-Path $Tooling "tests") `
         (Join-Path $CliRoot "tests") `
         (Join-Path $RepoRoot "tests/architecture") `
         -q
