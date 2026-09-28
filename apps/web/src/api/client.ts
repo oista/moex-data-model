@@ -84,6 +84,27 @@ export const api = {
         body: JSON.stringify(body),
       },
     ),
+  createPublication: (
+    body: {
+      workspace_id: string;
+      implementation_id?: string;
+      title?: string;
+      base_ref?: string;
+    },
+    idempotencyKey?: string,
+  ) => {
+    const headers: Record<string, string> = {};
+    if (idempotencyKey) {
+      headers["Idempotency-Key"] = idempotencyKey;
+    }
+    return request<import("./types").Publication>("/publications", {
+      method: "POST",
+      headers,
+      body: JSON.stringify(body),
+    });
+  },
+  getPublication: (id: string) =>
+    request<import("./types").Publication>(`/publications/${id}`),
   createJob: (
     body: {
       kind: "validate" | "compile";

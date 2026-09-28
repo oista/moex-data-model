@@ -39,5 +39,5 @@ Set **Actor** in the sidebar (`X-Moex-Actor`).
 | `/workspaces` | List / create workspaces |
 | `/models` | Implementation registry |
 | `/models/trading` | Conformance + model-index search |
-| `/models/trading/edit` | Monaco YAML + entity/attribute forms + workspace draft |
+| `/models/trading/edit` | Monaco YAML + entity forms + draft + Publish draft |
 | `/models/trading/validate` | Sync validate job report |

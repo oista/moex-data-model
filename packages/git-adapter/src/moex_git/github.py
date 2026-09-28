@@ -1,4 +1,4 @@
-"""Read-only GitHub GitProvider via REST (writes remain unsupported)."""
+"""GitHub GitProvider via REST (read + write for Stage 3 narrow-v3)."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from moex_git.ports import FileChange, ReviewRef
 
 
 class GitHubGitProvider:
-    """GitProvider backed by GitHub Contents/Commits API (read methods only)."""
+    """GitProvider backed by GitHub Contents / Git Data / Pulls APIs."""
 
     def __init__(
         self,
@@ -21,9 +21,15 @@ class GitHubGitProvider:
         repo: str | None = None,
         api_base: str = "https://api.github.com",
         client: httpx.Client | None = None,
+        base_branch: str | None = None,
     ) -> None:
         self.token = token or os.environ.get("MOEX_GITHUB_TOKEN")
         self.repo = repo or os.environ.get("MOEX_GITHUB_REPO")
+        self.base_branch = (
+            base_branch
+            or os.environ.get("MOEX_GITHUB_BASE")
+            or "main"
+        )
         if not self.repo or "/" not in self.repo:
             raise ValueError(
                 "MOEX_GITHUB_REPO must be set as owner/name "
@@ -47,6 +53,16 @@ class GitHubGitProvider:
 
     def _get(self, path: str, **params: Any) -> Any:
         resp = self._client.get(path, params=params or None)
+        resp.raise_for_status()
+        return resp.json()
+
+    def _post(self, path: str, json: dict[str, Any]) -> Any:
+        resp = self._client.post(path, json=json)
+        resp.raise_for_status()
+        return resp.json()
+
+    def _patch(self, path: str, json: dict[str, Any]) -> Any:
+        resp = self._client.patch(path, json=json)
         resp.raise_for_status()
         return resp.json()
 
@@ -80,18 +96,69 @@ class GitHubGitProvider:
         return tuple(str(item["sha"]) for item in data if item.get("sha"))
 
     def create_branch(self, base_revision: str, branch_name: str) -> None:
-        raise NotImplementedError(
-            "GitHubGitProvider.create_branch: write path not implemented"
+        sha = self.resolve_revision(base_revision)
+        self._post(
+            f"/repos/{self.repo}/git/refs",
+            {"ref": f"refs/heads/{branch_name}", "sha": sha},
         )
 
     def commit_files(self, branch_name: str, files: list[FileChange]) -> str:
-        raise NotImplementedError(
-            "GitHubGitProvider.commit_files: write path not implemented"
+        if not files:
+            raise ValueError("commit_files requires at least one file")
+        ref = self._get(f"/repos/{self.repo}/git/ref/heads/{branch_name}")
+        base_commit_sha = ref["object"]["sha"]
+        base_commit = self._get(f"/repos/{self.repo}/git/commits/{base_commit_sha}")
+        base_tree_sha = base_commit["tree"]["sha"]
+
+        tree_items: list[dict[str, str]] = []
+        for change in files:
+            blob = self._post(
+                f"/repos/{self.repo}/git/blobs",
+                {
+                    "content": base64.b64encode(change.content).decode("ascii"),
+                    "encoding": "base64",
+                },
+            )
+            tree_items.append(
+                {
+                    "path": change.path,
+                    "mode": change.mode or "100644",
+                    "type": "blob",
+                    "sha": blob["sha"],
+                }
+            )
+        tree = self._post(
+            f"/repos/{self.repo}/git/trees",
+            {"base_tree": base_tree_sha, "tree": tree_items},
         )
+        commit = self._post(
+            f"/repos/{self.repo}/git/commits",
+            {
+                "message": f"moex-git: update {len(files)} file(s)",
+                "tree": tree["sha"],
+                "parents": [base_commit_sha],
+            },
+        )
+        new_sha = str(commit["sha"])
+        self._patch(
+            f"/repos/{self.repo}/git/refs/heads/{branch_name}",
+            {"sha": new_sha, "force": False},
+        )
+        return new_sha
 
     def create_review(self, branch_name: str, title: str) -> ReviewRef:
-        raise NotImplementedError(
-            "GitHubGitProvider.create_review: write path not implemented"
+        pr = self._post(
+            f"/repos/{self.repo}/pulls",
+            {
+                "title": title,
+                "head": branch_name,
+                "base": self.base_branch,
+                "body": "Created by MOEX Workbench publication.",
+            },
+        )
+        return ReviewRef(
+            url=str(pr.get("html_url") or ""),
+            identifier=str(pr.get("number") or pr.get("id") or ""),
         )
 
 

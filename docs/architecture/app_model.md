@@ -17,7 +17,8 @@ superseded_by: MODELING_ARCHITECTURE.md
 **Уже совпало (Web Workbench MVP):** `apps/web` React/Vite shell — dashboard, workspaces, trading model page, validation job report.  
 **Уже совпало (Workbench editors):** Monaco YAML + `workspace_document` draft API + validate `source=draft`.  
 **Уже совпало (Entity form slice):** controlled mutations add LogicalEntity/LogicalAttribute into draft.  
-**Still-later:** live form↔YAML sync, edit/delete, semantic diff, PR flow, `apps/worker`, CLI `import`/`map` real, OIDC, remaining Stage-3 tables (`diagram_layout`, `publication_request`, …).  
+**Уже совпало (Stage 3 narrow-v3):** `publication_request` + publish API + GitHub write / local branch+stub review into this repo.  
+**Still-later:** live form↔YAML sync, edit/delete, semantic diff UI, merge automation, `apps/worker`, CLI `import`/`map` real, OIDC, `diagram_layout` / `external_registry_cache`.  
 `packages/ontology/` остаётся shim. Миграция путей: [docs/migration/model-src-to-model-assets.md](../migration/model-src-to-model-assets.md).
 
 ## Предметная модель: роли как экземпляры, не subclass

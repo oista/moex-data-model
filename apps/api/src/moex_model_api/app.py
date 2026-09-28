@@ -14,6 +14,8 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session, sessionmaker
 
 from moex_dams.application.assess import assess_implementation
+from moex_git import FileChange, make_git_provider
+from moex_git.ports import GitProvider
 from moex_model_cli.bootstrap import SlicePaths, find_repo_root
 from moex_model_cli.commands.compile import run_compile
 from moex_model_api.auth import DevAuthMiddleware
@@ -24,6 +26,7 @@ from moex_model_api.db.stores import (
     SqlIdentityStore,
     SqlJobStore,
     SqlModelIndexProvider,
+    SqlPublicationStore,
     SqlValidationRunStore,
     SqlWorkspaceStore,
 )
@@ -32,6 +35,7 @@ from moex_model_api.ports import (
     ArtifactRecord,
     DiagnosticRecord,
     JobRecord,
+    PublicationRecord,
     ValidationRunRecord,
 )
 from moex_model_api.yaml_mutate import MutationConflict, MutationError, apply_mutation
@@ -105,6 +109,25 @@ class MutationRequest(BaseModel):
     owner_element_id: str | None = None
 
 
+class PublicationCreate(BaseModel):
+    workspace_id: str
+    implementation_id: str = "moex:implementation:trading:1.0.0"
+    title: str = "Workbench publish trading draft"
+    base_ref: str = "HEAD"
+
+
+class PublicationOut(BaseModel):
+    id: str
+    workspace_id: str
+    implementation_id: str
+    branch_name: str
+    base_revision: str
+    commit_sha: str
+    review_url: str
+    review_id: str
+    status: str
+
+
 class JobOut(BaseModel):
     id: str
     workspace_id: str
@@ -156,15 +179,29 @@ def _content_digest(text: str) -> str:
     return "sha256:" + hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def create_app(*, database_url: str | None = None) -> FastAPI:
+def _publication_fingerprint(
+    workspace_id: str, implementation_id: str, content: str
+) -> str:
+    raw = f"{workspace_id}|{implementation_id}|{_content_digest(content)}"
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
+
+
+def create_app(
+    *,
+    database_url: str | None = None,
+    git_provider: GitProvider | None = None,
+) -> FastAPI:
     engine = make_engine(database_url)
     init_db(engine)
     factory: sessionmaker[Session] = session_factory(engine)
 
-    app = FastAPI(title="MOEX Model API", version="0.3.0")
+    app = FastAPI(title="MOEX Model API", version="0.4.0")
     app.add_middleware(DevAuthMiddleware)
     app.state.engine = engine
     app.state.session_factory = factory
+    app.state.git_provider = git_provider or make_git_provider(
+        repo_root=find_repo_root()
+    )
 
     def get_session():
         session = factory()
@@ -419,6 +456,160 @@ def create_app(*, database_url: str | None = None) -> FastAPI:
             base_digest=doc.base_digest,
             updated_by=doc.updated_by,
         )
+
+    def _publication_out(row: PublicationRecord) -> PublicationOut:
+        return PublicationOut(
+            id=row.id,
+            workspace_id=row.workspace_id,
+            implementation_id=row.implementation_id,
+            branch_name=row.branch_name,
+            base_revision=row.base_revision,
+            commit_sha=row.commit_sha,
+            review_url=row.review_url,
+            review_id=row.review_id,
+            status=row.status,
+        )
+
+    @app.post("/publications", response_model=PublicationOut)
+    def create_publication(
+        body: PublicationCreate,
+        request: Request,
+        session: Session = Depends(get_session),
+        idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+    ) -> PublicationOut:
+        actor = ensure_actor(request, session)
+        workspaces = SqlWorkspaceStore(session)
+        docs = SqlDocumentStore(session)
+        pubs = SqlPublicationStore(session)
+
+        draft = docs.get(body.workspace_id, "trading")
+        if draft is None:
+            raise HTTPException(status_code=400, detail="draft document missing")
+
+        fp = _publication_fingerprint(
+            body.workspace_id, body.implementation_id, draft.content
+        )
+        if idempotency_key:
+            prior = pubs.get_by_idempotency(idempotency_key)
+            if prior is not None:
+                if prior.payload_fingerprint != fp:
+                    raise HTTPException(
+                        status_code=409,
+                        detail="idempotency key reused with different payload",
+                    )
+                return _publication_out(prior)
+
+        if workspaces.get(body.workspace_id) is None:
+            raise HTTPException(status_code=404, detail="workspace not found")
+
+        root = find_repo_root()
+        paths = SlicePaths.resolve(root=root)
+        tmp_path: Path | None = None
+        try:
+            tmp = tempfile.NamedTemporaryFile(
+                mode="w", suffix=".yaml", encoding="utf-8", delete=False
+            )
+            tmp.write(draft.content)
+            tmp.close()
+            tmp_path = Path(tmp.name)
+            result = assess_implementation(
+                schema_path=paths.schema,
+                implementation_path=tmp_path,
+                implementation_id=body.implementation_id,
+            )
+        finally:
+            if tmp_path is not None:
+                tmp_path.unlink(missing_ok=True)
+
+        if not result.report.is_conformant:
+            raise HTTPException(
+                status_code=422,
+                detail=(
+                    "draft is not conformant; "
+                    f"overall={result.report.overall_result.value}"
+                ),
+            )
+
+        try:
+            rel = paths.implementation.relative_to(paths.root).as_posix()
+        except ValueError:
+            rel = paths.implementation.name
+
+        git: GitProvider = request.app.state.git_provider
+        base_revision = git.resolve_revision(body.base_ref)
+        short = uuid4().hex[:8]
+        branch_name = f"workbench/publish-{short}"
+        pub_id = f"pub:{short}"
+
+        try:
+            git.create_branch(base_revision, branch_name)
+            commit_sha = git.commit_files(
+                branch_name,
+                [
+                    FileChange(
+                        path=rel,
+                        content=draft.content.encode("utf-8"),
+                    )
+                ],
+            )
+            review = git.create_review(branch_name, body.title)
+            status = "submitted"
+        except Exception as exc:  # noqa: BLE001
+            failed = PublicationRecord(
+                id=pub_id,
+                workspace_id=body.workspace_id,
+                implementation_id=body.implementation_id,
+                doc_key="trading",
+                branch_name=branch_name,
+                base_revision=base_revision,
+                commit_sha="",
+                review_url="",
+                review_id="",
+                status="failed",
+                actor=actor,
+                idempotency_key=idempotency_key,
+                payload_fingerprint=fp,
+            )
+            pubs.create(failed)
+            SqlAuditStore(session).record(
+                "publication.failed", actor, f"{pub_id}:{exc}"
+            )
+            raise HTTPException(
+                status_code=500, detail=f"publication failed: {exc}"
+            ) from exc
+
+        row = PublicationRecord(
+            id=pub_id,
+            workspace_id=body.workspace_id,
+            implementation_id=body.implementation_id,
+            doc_key="trading",
+            branch_name=branch_name,
+            base_revision=base_revision,
+            commit_sha=commit_sha,
+            review_url=review.url,
+            review_id=review.identifier,
+            status=status,
+            actor=actor,
+            idempotency_key=idempotency_key,
+            payload_fingerprint=fp,
+        )
+        pubs.create(row)
+        SqlAuditStore(session).record(
+            "publication.submit", actor, f"{pub_id}:{branch_name}"
+        )
+        return _publication_out(row)
+
+    @app.get("/publications/{publication_id}", response_model=PublicationOut)
+    def get_publication(
+        publication_id: str,
+        request: Request,
+        session: Session = Depends(get_session),
+    ) -> PublicationOut:
+        ensure_actor(request, session)
+        row = SqlPublicationStore(session).get(publication_id)
+        if row is None:
+            raise HTTPException(status_code=404, detail="publication not found")
+        return _publication_out(row)
 
     @app.post("/jobs", response_model=JobOut)
     def create_job(

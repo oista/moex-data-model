@@ -2,15 +2,56 @@
 
 from __future__ import annotations
 
+import subprocess
+from pathlib import Path
+
 import pytest
 from fastapi.testclient import TestClient
 
+from moex_git import LocalGitProvider
 from moex_model_api.app import create_app
 
 
 @pytest.fixture()
 def client() -> TestClient:
     with TestClient(create_app(database_url="sqlite:///:memory:")) as c:
+        yield c
+
+
+@pytest.fixture()
+def temp_git_repo(tmp_path: Path) -> Path:
+    root = tmp_path / "gitrepo"
+    root.mkdir()
+    subprocess.run(["git", "init"], cwd=root, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "config", "user.email", "test@example.com"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "Test"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+    )
+    (root / "README.md").write_text("init\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=root, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", "init"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+    )
+    return root
+
+
+@pytest.fixture()
+def publish_client(temp_git_repo: Path) -> TestClient:
+    git = LocalGitProvider(temp_git_repo)
+    with TestClient(
+        create_app(database_url="sqlite:///:memory:", git_provider=git)
+    ) as c:
         yield c
 
 
@@ -224,6 +265,59 @@ def test_workspace_document_put_get_and_validate_draft(client: TestClient) -> No
     assert job.status_code == 200
     assert job.json()["status"] == "succeeded"
     assert "source=draft" in job.json()["result_summary"]
+
+
+def test_publication_from_draft_idempotent(
+    publish_client: TestClient, temp_git_repo: Path
+) -> None:
+    headers = {"X-Moex-Actor": "publisher"}
+    published = publish_client.get("/implementations/trading/body").json()
+    put = publish_client.put(
+        "/workspaces/ws-pub/documents/trading",
+        json={
+            "content": published["content"],
+            "base_digest": published["content_digest"],
+        },
+        headers=headers,
+    )
+    assert put.status_code == 200
+
+    payload = {
+        "workspace_id": "ws-pub",
+        "implementation_id": "moex:implementation:trading:1.0.0",
+        "title": "Publish trading",
+        "base_ref": "HEAD",
+    }
+    r1 = publish_client.post(
+        "/publications",
+        json=payload,
+        headers={**headers, "Idempotency-Key": "idem-pub-1"},
+    )
+    assert r1.status_code == 200, r1.text
+    body = r1.json()
+    assert body["status"] == "submitted"
+    assert body["commit_sha"]
+    assert body["review_url"].startswith("local://review/")
+    assert body["branch_name"].startswith("workbench/publish-")
+
+    # File written only in temp repo, not necessarily under real model-assets path
+    written = list(temp_git_repo.rglob("*.yaml"))
+    assert written
+
+    r2 = publish_client.post(
+        "/publications",
+        json=payload,
+        headers={**headers, "Idempotency-Key": "idem-pub-1"},
+    )
+    assert r2.status_code == 200
+    assert r2.json()["id"] == body["id"]
+
+    got = publish_client.get(
+        f"/publications/{body['id']}",
+        headers=headers,
+    )
+    assert got.status_code == 200
+    assert got.json()["commit_sha"] == body["commit_sha"]
 
 
 def test_model_index_rebuild_and_search(client: TestClient) -> None:

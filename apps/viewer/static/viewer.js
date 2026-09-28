@@ -5,6 +5,61 @@
   );
   const catalogNodes = (catalogRaw && catalogRaw.nodes) || [];
   const searchIndex = JSON.parse(document.getElementById("search-index").textContent);
+  const viewerConfig = (() => {
+    const el = document.getElementById("viewer-config");
+    if (!el) return {};
+    try {
+      return JSON.parse(el.textContent);
+    } catch {
+      return {};
+    }
+  })();
+
+  const DEFAULT_CLASS_COLORS = {
+    roles: { plain: "#3d8f6e", mixin: "#3d6eb5", abstract: "#2e8fad" },
+    corner: { has_mixins: "#3d6eb5" },
+  };
+  const classKindColors = {
+    roles: {
+      ...DEFAULT_CLASS_COLORS.roles,
+      ...(viewerConfig.class_kind_colors?.roles || {}),
+    },
+    corner: {
+      ...DEFAULT_CLASS_COLORS.corner,
+      ...(viewerConfig.class_kind_colors?.corner || {}),
+    },
+  };
+
+  (function applyClassKindCssVars() {
+    const root = document.documentElement;
+    root.style.setProperty("--class-color-plain", classKindColors.roles.plain);
+    root.style.setProperty("--class-color-mixin", classKindColors.roles.mixin);
+    root.style.setProperty("--class-color-abstract", classKindColors.roles.abstract);
+    root.style.setProperty(
+      "--class-color-has-mixins",
+      classKindColors.corner.has_mixins || classKindColors.roles.mixin
+    );
+  })();
+
+  function classRole(attrs) {
+    if (!attrs || attrs.kind === "enum") return null;
+    if (attrs.mixin) return "mixin";
+    if (attrs.abstract) return "abstract";
+    return "plain";
+  }
+
+  function classHasMixins(attrs) {
+    const mixins = attrs?.mixins;
+    return Array.isArray(mixins) && mixins.length > 0;
+  }
+
+  function classKindClassNames(attrs) {
+    const role = classRole(attrs);
+    if (!role) return "";
+    let cls = `kind-${role}`;
+    if (classHasMixins(attrs)) cls += " has-mixins-corner";
+    return cls;
+  }
 
   const moduleNav = document.getElementById("module-nav");
   const content = document.getElementById("content");
@@ -221,7 +276,9 @@
           cBtn.className =
             "nav-item-btn" + (child.id === selectedItemId ? " active" : "");
           const kind = child.attributes?.kind || "class";
-          cBtn.innerHTML = `<span class="nav-kind">${escapeHtml(kind === "enum" ? "E" : "C")}</span>
+          const kindClasses =
+            kind === "class" ? classKindClassNames(child.attributes) : "";
+          cBtn.innerHTML = `<span class="nav-kind ${kindClasses}">${escapeHtml(kind === "enum" ? "E" : "C")}</span>
             <span>${escapeHtml(child.title || child.id)}</span>`;
           cBtn.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -626,9 +683,18 @@
         kids.forEach((child) => {
           const btn = document.createElement("button");
           btn.type = "button";
-          btn.className = "spec-link";
           const kind = child.attributes?.kind || "class";
-          btn.textContent = (kind === "enum" ? "E · " : "") + (child.title || child.id);
+          const role = kind === "class" ? classRole(child.attributes) : null;
+          btn.className = "spec-link explorer-chip" + (role ? ` kind-${role}` : "");
+          if (kind === "class") {
+            btn.innerHTML = `<span class="nav-kind ${classKindClassNames(child.attributes)}">C</span>
+              <span>${escapeHtml(child.title || child.id)}</span>`;
+          } else if (kind === "enum") {
+            btn.innerHTML = `<span class="nav-kind">E</span>
+              <span>${escapeHtml(child.title || child.id)}</span>`;
+          } else {
+            btn.textContent = child.title || child.id;
+          }
           btn.title = child.description || "";
           btn.addEventListener("click", () => {
             openGroups.add(group.id);
@@ -712,9 +778,20 @@
     if (isMixin) badges.push(`<span class="badge-pill">mixin</span>`);
     if (treeRoot) badges.push(`<span class="badge-pill">tree_root</span>`);
 
+    const role = kind === "class" ? classRole(item.attributes) : null;
+    const titleClass = role
+      ? `class-title-colored kind-${role}`
+      : "";
+    const titleBadge =
+      kind === "class"
+        ? `<span class="nav-kind ${classKindClassNames(item.attributes)}" aria-hidden="true">C</span> `
+        : kind === "enum"
+          ? `<span class="nav-kind" aria-hidden="true">E</span> `
+          : "";
+
     card.innerHTML = `
       <header class="detail-head">
-        <h1>${escapeHtml(item.title || item.id)}</h1>
+        <h1 class="${titleClass}">${titleBadge}${escapeHtml(item.title || item.id)}</h1>
         <div class="badge-row">${badges.join("")}</div>
         <p class="muted">${escapeHtml(fromSchema)}</p>
       </header>

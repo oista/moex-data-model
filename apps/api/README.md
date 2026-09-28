@@ -31,10 +31,11 @@ py -3.14 -m moex_model_api
 
 Dev header only: `X-Moex-Actor` (default `dev`). Upserts `user_identity` + `editor` role on first write. OIDC later.
 
-## Git provider
+## Git provider / publication
 
-- `MOEX_GIT_PROVIDER=local` (default) → `LocalGitProvider`
-- `MOEX_GIT_PROVIDER=github` → read-only GitHub REST (`MOEX_GITHUB_TOKEN`, `MOEX_GITHUB_REPO=owner/name`)
+- `MOEX_GIT_PROVIDER=local` (default) → branch/commit in this repo working tree; review URL `local://…`
+- `MOEX_GIT_PROVIDER=github` → GitHub REST writes + PR (`MOEX_GITHUB_TOKEN`, `MOEX_GITHUB_REPO=owner/moex-data-model`, `MOEX_GITHUB_BASE=main`)
+- Publish target is **this** repository (trading YAML under `model-assets/…`)
 
 ## Endpoints
 
@@ -46,6 +47,7 @@ Dev header only: `X-Moex-Actor` (default `dev`). Upserts `user_identity` + `edit
 - `POST|GET /workspaces` / `GET /workspaces/{id}` — workspace lifecycle + members
 - `GET|PUT /workspaces/{id}/documents/trading` — workspace draft YAML
 - `POST /workspaces/{id}/documents/trading/mutations` — add LogicalEntity / LogicalAttribute
+- `POST /publications` / `GET /publications/{id}` — draft → branch/commit/review (+ Idempotency-Key)
 - `POST /jobs` (+ `Idempotency-Key`, `source=published|draft`) / `GET /jobs/{id}`
 - `POST /model-index/rebuild` / `GET /model-index/search?q=` — search projection
 

@@ -179,3 +179,28 @@ class DocumentStore(Protocol):
         base_digest: str,
         updated_by: str,
     ) -> DocumentRecord: ...
+
+
+@dataclass(frozen=True, slots=True)
+class PublicationRecord:
+    id: str
+    workspace_id: str
+    implementation_id: str
+    doc_key: str
+    branch_name: str
+    base_revision: str
+    commit_sha: str
+    review_url: str
+    review_id: str
+    status: str
+    actor: str
+    idempotency_key: str | None
+    payload_fingerprint: str
+
+
+class PublicationStore(Protocol):
+    def create(self, row: PublicationRecord) -> PublicationRecord: ...
+
+    def get(self, publication_id: str) -> PublicationRecord | None: ...
+
+    def get_by_idempotency(self, key: str) -> PublicationRecord | None: ...

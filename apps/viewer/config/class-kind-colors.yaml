@@ -1,0 +1,10 @@
+# Class kind colors for Publication Viewer explorer (C) badges and card titles.
+# Roles: primary fill/border/text. Corner: marker when class declares mixins.
+
+roles:
+  plain: "#3d8f6e"      # sage green — concrete class without mixin role
+  mixin: "#3d6eb5"      # steel blue — mixin class
+  abstract: "#2e8fad"   # teal cyan — abstract class
+
+corner:
+  has_mixins: "#3d6eb5" # same family as mixin; blue triangle on (C)

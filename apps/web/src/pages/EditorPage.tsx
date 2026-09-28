@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, setLastJobId } from "../api/client";
-import type { Job, WorkspaceDocument } from "../api/types";
+import type { Job, Publication, WorkspaceDocument } from "../api/types";
 import { EntityForms } from "../components/EntityForms";
 import { StatusBadge } from "../components/StatusBadge";
 
@@ -17,6 +17,7 @@ export function EditorPage() {
   const [sourceLabel, setSourceLabel] = useState<"draft" | "published" | "">("");
   const [loadError, setLoadError] = useState<string | null>(null);
   const [job, setJob] = useState<Job | null>(null);
+  const [publication, setPublication] = useState<Publication | null>(null);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
@@ -93,6 +94,24 @@ export function EditorPage() {
     onSuccess: setJob,
   });
 
+  const publish = useMutation({
+    mutationFn: async () => {
+      await api.putDocument(WS_ID, { content: value, base_digest: baseDigest });
+      setDirty(false);
+      setSourceLabel("draft");
+      return api.createPublication(
+        {
+          workspace_id: WS_ID,
+          implementation_id: IMPL,
+          title: "Workbench publish trading draft",
+          base_ref: "HEAD",
+        },
+        `publish-${Date.now()}`,
+      );
+    },
+    onSuccess: setPublication,
+  });
+
   function onMutatedDocument(doc: WorkspaceDocument) {
     setValue(doc.content);
     setBaseDigest(doc.base_digest);
@@ -131,6 +150,13 @@ export function EditorPage() {
         >
           Validate draft
         </button>
+        <button
+          type="button"
+          onClick={() => publish.mutate()}
+          disabled={loading || publish.isPending || !value}
+        >
+          Publish draft
+        </button>
         <Link to="/models/trading">Back to model</Link>
         {sourceLabel && (
           <span className="badge neutral">loaded: {sourceLabel}</span>
@@ -145,6 +171,9 @@ export function EditorPage() {
       {validate.isError && (
         <p className="error">{(validate.error as Error).message}</p>
       )}
+      {publish.isError && (
+        <p className="error">{(publish.error as Error).message}</p>
+      )}
 
       {job && (
         <div className="panel">
@@ -154,6 +183,24 @@ export function EditorPage() {
             <StatusBadge status={job.status} />
           </div>
           <p>{job.result_summary}</p>
+        </div>
+      )}
+
+      {publication && (
+        <div className="panel" data-testid="publication-result">
+          <div className="row">
+            <strong>Publication</strong>
+            <code>{publication.id}</code>
+            <StatusBadge status={publication.status} />
+          </div>
+          <p className="lede" style={{ marginBottom: "0.35rem" }}>
+            Branch <code>{publication.branch_name}</code> · commit{" "}
+            <code>{publication.commit_sha.slice(0, 12)}</code>
+          </p>
+          <p>
+            Review:{" "}
+            <a href={publication.review_url}>{publication.review_url}</a>
+          </p>
         </div>
       )}
 

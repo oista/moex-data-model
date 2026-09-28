@@ -178,3 +178,30 @@ class AuditEvent(Base):
     created_at: Mapped[str] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
+
+
+class PublicationRequest(Base):
+    __tablename__ = "publication_request"
+
+    id: Mapped[str] = mapped_column(String(128), primary_key=True)
+    workspace_id: Mapped[str] = mapped_column(
+        String(128), ForeignKey("workspace.id"), nullable=False
+    )
+    implementation_id: Mapped[str] = mapped_column(String(256), nullable=False)
+    doc_key: Mapped[str] = mapped_column(String(64), nullable=False, default="trading")
+    branch_name: Mapped[str] = mapped_column(String(256), nullable=False)
+    base_revision: Mapped[str] = mapped_column(String(128), nullable=False)
+    commit_sha: Mapped[str] = mapped_column(String(128), nullable=False, default="")
+    review_url: Mapped[str] = mapped_column(String(512), nullable=False, default="")
+    review_id: Mapped[str] = mapped_column(String(256), nullable=False, default="")
+    status: Mapped[str] = mapped_column(String(64), nullable=False)
+    actor: Mapped[str] = mapped_column(String(128), nullable=False, default="dev")
+    idempotency_key: Mapped[str | None] = mapped_column(
+        String(256), unique=True, nullable=True
+    )
+    payload_fingerprint: Mapped[str] = mapped_column(
+        String(128), nullable=False, default=""
+    )
+    created_at: Mapped[str] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )

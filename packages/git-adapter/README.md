@@ -23,9 +23,11 @@ git = LocalGitProvider(repo_root)
 data = git.get_file("HEAD", "README.md")
 ```
 
-## GitHub (read-only)
+## GitHub
 
-`GitHubGitProvider` uses GitHub REST (`httpx`) for `get_file` / `resolve_revision` /
-`list_revisions`. Writes raise `NotImplementedError`.
+`GitHubGitProvider` uses GitHub REST (`httpx`) for read and write:
 
-Env: `MOEX_GITHUB_TOKEN`, `MOEX_GITHUB_REPO=owner/name`.
+- read: `get_file` / `resolve_revision` / `list_revisions`
+- write: `create_branch` / `commit_files` / `create_review` (opens PR)
+
+Env: `MOEX_GITHUB_TOKEN`, `MOEX_GITHUB_REPO=owner/name`, `MOEX_GITHUB_BASE=main`.

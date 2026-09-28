@@ -8,6 +8,7 @@ from typing import Any
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from moex_publication_viewer.config_loader import load_viewer_config
 from moex_publication_viewer.models.catalog_models import ArchitectureCatalog
 from moex_publication_viewer.models.publication_models import PublicationModule, PublicationSection
 
@@ -104,10 +105,12 @@ def render_viewer(
     env.globals["section_template"] = lambda t: SECTION_TEMPLATES.get(t, "section_table.html.j2")
 
     template = env.get_template("base.html.j2")
+    viewer_config = load_viewer_config(viewer_root)
     return template.render(
         modules=modules,
         modules_json=json.dumps(modules_payload(modules), ensure_ascii=False),
         catalog_json=json.dumps(catalog_payload(catalog), ensure_ascii=False),
         search_index_json=json.dumps(search_index, ensure_ascii=False),
+        viewer_config_json=json.dumps(viewer_config, ensure_ascii=False),
         section_templates=SECTION_TEMPLATES,
     )

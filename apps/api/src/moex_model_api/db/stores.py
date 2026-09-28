@@ -13,6 +13,7 @@ from moex_model_api.ports import (
     ElementHit,
     IndexElement,
     JobRecord,
+    PublicationRecord,
     UserRecord,
     ValidationRunRecord,
     WorkspaceMemberRecord,
@@ -414,4 +415,60 @@ class SqlDocumentStore:
             content=row.content,
             base_digest=row.base_digest,
             updated_by=row.updated_by,
+        )
+
+
+class SqlPublicationStore:
+    def __init__(self, session: Session) -> None:
+        self._session = session
+
+    def create(self, row: PublicationRecord) -> PublicationRecord:
+        self._session.add(
+            orm.PublicationRequest(
+                id=row.id,
+                workspace_id=row.workspace_id,
+                implementation_id=row.implementation_id,
+                doc_key=row.doc_key,
+                branch_name=row.branch_name,
+                base_revision=row.base_revision,
+                commit_sha=row.commit_sha,
+                review_url=row.review_url,
+                review_id=row.review_id,
+                status=row.status,
+                actor=row.actor,
+                idempotency_key=row.idempotency_key,
+                payload_fingerprint=row.payload_fingerprint,
+            )
+        )
+        self._session.flush()
+        return row
+
+    def get(self, publication_id: str) -> PublicationRecord | None:
+        row = self._session.get(orm.PublicationRequest, publication_id)
+        return None if row is None else self._to_record(row)
+
+    def get_by_idempotency(self, key: str) -> PublicationRecord | None:
+        row = self._session.scalars(
+            select(orm.PublicationRequest).where(
+                orm.PublicationRequest.idempotency_key == key
+            )
+        ).first()
+        return None if row is None else self._to_record(row)
+
+    @staticmethod
+    def _to_record(row: orm.PublicationRequest) -> PublicationRecord:
+        return PublicationRecord(
+            id=row.id,
+            workspace_id=row.workspace_id,
+            implementation_id=row.implementation_id,
+            doc_key=row.doc_key,
+            branch_name=row.branch_name,
+            base_revision=row.base_revision,
+            commit_sha=row.commit_sha,
+            review_url=row.review_url,
+            review_id=row.review_id,
+            status=row.status,
+            actor=row.actor,
+            idempotency_key=row.idempotency_key,
+            payload_fingerprint=row.payload_fingerprint,
         )

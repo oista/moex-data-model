@@ -83,3 +83,15 @@ export type DocumentMutation =
         required?: boolean;
       };
     };
+
+export type Publication = {
+  id: string;
+  workspace_id: string;
+  implementation_id: string;
+  branch_name: string;
+  base_revision: string;
+  commit_sha: string;
+  review_url: string;
+  review_id: string;
+  status: string;
+};
