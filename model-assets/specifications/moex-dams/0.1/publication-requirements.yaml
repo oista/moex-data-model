@@ -32,6 +32,20 @@ profiles:
         accepted_renderers: [key-value, entity-table, conformance]
         applies_to_profile: implementation
 
+      - id: dams:classes
+        kind: required-section
+        semantic_capability: classes
+        title: Classes section
+        description: >
+          Implementation must publish at least one section of kind classes
+          (logical model structure / entity catalog visible in the viewer).
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [classes]
+        accepted_renderers: [entity-table, entity-detail, schema-tree, explorer]
+        applies_to_profile: implementation
+        inherited_from: dams-logical-modeling
+
       - id: dams:logical-entities
         kind: required-semantic-content
         semantic_capability: logical-entities

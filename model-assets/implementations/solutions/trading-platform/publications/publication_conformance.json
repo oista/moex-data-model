@@ -28,6 +28,16 @@
       "obligation": "required"
     },
     {
+      "requirement_ref": "dams:classes",
+      "covered": true,
+      "covering_section_ids": [
+        "logical"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
       "requirement_ref": "dams:logical-entities",
       "covered": true,
       "covering_section_ids": [
