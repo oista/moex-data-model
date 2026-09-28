@@ -455,6 +455,41 @@ body {
 }
 .markdown-body code { font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
 
+.yaml-fold {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  padding: 0.5rem 0.65rem;
+  overflow-x: auto;
+  max-height: 70vh;
+  overflow-y: auto;
+  border-radius: 6px;
+}
+.yaml-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  white-space: pre;
+}
+.yaml-fold-toggle,
+.yaml-fold-spacer {
+  flex: 0 0 1.1rem;
+  width: 1.1rem;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+  font-size: 11px;
+  line-height: 1.45;
+}
+.yaml-fold-spacer { cursor: default; text-align: center; }
+.yaml-fold code { font-family: inherit; font-size: inherit; }
+.yaml-key { color: #0b5fff; font-weight: 600; }
+.yaml-fold-block { margin-left: 0.25rem; }
+
 @media (max-width: 900px) {
   .app { flex-direction: column; }
   .sidebar { width: 100%; height: auto; position: relative; }

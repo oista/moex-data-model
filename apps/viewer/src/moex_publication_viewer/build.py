@@ -9,7 +9,10 @@ from moex_publication_viewer.catalog_loader import catalog_path, load_architectu
 from moex_publication_viewer.discovery import discover_manifest_paths
 from moex_publication_viewer.manifest_loader import load_manifest, resolve_source_path
 from moex_publication_viewer.models.catalog_models import ArchitectureCatalog
-from moex_publication_viewer.models.publication_models import PublicationModule
+from moex_publication_viewer.models.publication_models import (
+    PublicationItem,
+    PublicationModule,
+)
 from moex_publication_viewer.normalizers import get_normalizer
 from moex_publication_viewer.normalizers.base import NormalizeError
 from moex_publication_viewer.normalizers.linkml_normalizer import clear_schema_view_cache
@@ -22,6 +25,8 @@ from moex_publication_viewer.validators import (
 
 PACKAGE_DIR = Path(__file__).resolve().parent
 VIEWER_ROOT = PACKAGE_DIR.parent.parent  # apps/viewer/
+DAMS_MODULE_ID = "moex:module:dams"
+DAMS_CATALOG_SPEC_ID = "moex-dams"
 
 
 def compile_modules(root: Path) -> list[PublicationModule]:
@@ -96,6 +101,69 @@ def compile_catalog(root: Path, modules: list[PublicationModule]) -> Architectur
     return catalog
 
 
+def enrich_dams_explorer_implementations(
+    modules: list[PublicationModule],
+    catalog: ArchitectureCatalog | None,
+) -> None:
+    """Fill group:implementations under DAMS explorer from architecture catalog."""
+    if catalog is None:
+        return
+    dams = next((m for m in modules if m.module_id == DAMS_MODULE_ID), None)
+    if dams is None:
+        return
+    explorer = next((s for s in dams.sections if s.type == "explorer"), None)
+    if explorer is None:
+        return
+    impl_nodes = [
+        n
+        for n in catalog.nodes
+        if n.role == "specification_implementation" and n.conforms_to == DAMS_CATALOG_SPEC_ID
+    ]
+    impl_nodes.sort(key=lambda n: (n.order, n.title))
+    children = [
+        PublicationItem(
+            id=n.id,
+            title=n.title,
+            description=n.description,
+            attributes={
+                "kind": "implementation_ref",
+                "catalog_node_id": n.id,
+                "module_id": n.module_id,
+                "version": n.version,
+                "conforms_to": n.conforms_to,
+            },
+        )
+        for n in impl_nodes
+    ]
+    impls_root = next(
+        (i for i in explorer.items if i.id == "group:implementations"),
+        None,
+    )
+    if impls_root is None:
+        impls_root = PublicationItem(
+            id="group:implementations",
+            title="Реализации",
+            description="Specification implementations, registered against DAMS.",
+            attributes={
+                "kind": "group",
+                "section_root": "implementations",
+                "purpose": "Переход к зарегистрированным реализациям (conforms_to DAMS).",
+                "structure_why": "Список из architecture-catalog; тела живут в своих модулях.",
+                "class_count": 0,
+                "enum_count": 0,
+                "member_ids": [],
+            },
+            children=[],
+        )
+        explorer.items = list(explorer.items) + [impls_root]
+
+    attrs = dict(impls_root.attributes or {})
+    attrs["member_ids"] = [c.id for c in children]
+    attrs["impl_count"] = len(children)
+    impls_root.attributes = attrs
+    impls_root.children = children
+
+
 def build_search_index(modules: list[PublicationModule]) -> list[dict]:
     index: list[dict] = []
     for mod in modules:
@@ -149,6 +217,7 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
 
     modules = compile_modules(root)
     catalog = compile_catalog(root, modules)
+    enrich_dams_explorer_implementations(modules, catalog)
     search_index = build_search_index(modules)
     if catalog is not None:
         for node in catalog.nodes:
