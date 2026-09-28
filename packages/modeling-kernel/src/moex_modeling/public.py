@@ -1,5 +1,6 @@
 """Stable public API for moex-modeling-kernel."""
 
+from moex_modeling.assets.public import SchemaRepository
 from moex_modeling.changes.domain import (
     ChangeCategory,
     SemanticChange,
@@ -11,6 +12,7 @@ from moex_modeling.conformance.domain import (
     Diagnostic,
     summarize_result,
 )
+from moex_modeling.conformance.wire import diagnostic_to_wire
 from moex_modeling.implementations.domain import SpecificationImplementation
 from moex_modeling.shared.enums import (
     ConformancePhase,
@@ -61,6 +63,7 @@ __all__ = [
     "ProvenanceRecord",
     "ReferenceSpecification",
     "RelationKind",
+    "SchemaRepository",
     "SemanticChange",
     "SemanticDiffReport",
     "SourceDescriptor",
@@ -76,5 +79,6 @@ __all__ = [
     "TSpecBody",
     "TransformationKind",
     "TypedRelation",
+    "diagnostic_to_wire",
     "summarize_result",
 ]
