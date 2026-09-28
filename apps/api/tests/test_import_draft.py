@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+
 from fastapi.testclient import TestClient
 
 from moex_model_cli.bootstrap import find_repo_root
@@ -41,6 +43,7 @@ def test_import_draft_json_schema(client: TestClient) -> None:
     kinds = {a["kind"] for a in arts.json()}
     assert "import-inferred-schema" in kinds
     assert "import-job-json" in kinds
+    assert "import-enrich-checklist" in kinds
     inferred = next(a for a in arts.json() if a["kind"] == "import-inferred-schema")
     content = client.get(
         f"/jobs/{job_id}/artifacts/{inferred['id']}/content",
@@ -48,6 +51,18 @@ def test_import_draft_json_schema(client: TestClient) -> None:
     )
     assert content.status_code == 200
     assert "name" in content.text.lower() or "MiniPerson" in content.text
+    checklist = next(a for a in arts.json() if a["kind"] == "import-enrich-checklist")
+    cl_content = client.get(
+        f"/jobs/{job_id}/artifacts/{checklist['id']}/content",
+        headers=headers,
+    )
+    assert cl_content.status_code == 200
+    cl_items = json.loads(cl_content.text)
+    assert isinstance(cl_items, list)
+    assert any(
+        isinstance(i, dict) and str(i.get("code", "")).startswith("IMPORT-ENRICH-")
+        for i in cl_items
+    )
     job_path = root / inferred["path_or_uri"]
     errors = refuse_generated_draft(root=root, candidate=job_path.parent)
     assert errors

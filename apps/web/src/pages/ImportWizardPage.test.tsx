@@ -55,6 +55,13 @@ describe("ImportWizardPage", () => {
               path_or_uri: "generated/imports/x/inferred-schema.yaml",
               content_digest: "sha256:b",
             },
+            {
+              id: "art:enrich",
+              job_id: "job:import1",
+              kind: "import-enrich-checklist",
+              path_or_uri: "generated/imports/x/enrich-checklist.json",
+              content_digest: "sha256:c",
+            },
           ],
         };
       }
@@ -77,6 +84,29 @@ describe("ImportWizardPage", () => {
           ok: true,
           status: 200,
           text: async () => "name: MiniPerson\nclasses: {}\n",
+        };
+      }
+      if (url.includes("/artifacts/art:enrich/content")) {
+        return {
+          ok: true,
+          status: 200,
+          text: async () =>
+            JSON.stringify([
+              {
+                code: "IMPORT-ENRICH-DESC",
+                severity: "warning",
+                path: "classes.Person",
+                message: "class Person is missing a description",
+                field: "description",
+              },
+              {
+                code: "IMPORT-ENRICH-RANGE",
+                severity: "warning",
+                path: "classes.Person.slots.name",
+                message: "weak range",
+                field: "range",
+              },
+            ]),
         };
       }
       if (url.includes("/documents/trading") && init?.method === "PUT") {
@@ -137,6 +167,13 @@ describe("ImportWizardPage", () => {
     expect(screen.getByTestId("import-diagnostics").textContent).toContain(
       "IMPORT-UNCERTAIN-001",
     );
+    expect(screen.getByTestId("enrich-checklist").textContent).toContain(
+      "IMPORT-ENRICH-DESC",
+    );
+    expect(screen.getByTestId("enrich-checklist").textContent).toContain(
+      "IMPORT-ENRICH-RANGE",
+    );
+    expect(screen.getByTestId("enrich-monaco-link")).toBeTruthy();
 
     fireEvent.click(screen.getByTestId("open-as-draft"));
     await waitFor(() =>

@@ -1,0 +1,28 @@
+moex:
+  spec_id: moex:transform:dams-logical-entity-rename-kind:0.1
+  source_schema_revision: dams-0.1-slice
+  target_schema_revision: dams-0.1-next-slice
+  transformation_kind: partial
+  description: >
+    Fixture migration — rename LogicalEntity.entity_type to
+    LogicalEntity.logical_entity_kind (DAMS slice, not a released 0.2).
+  preserved_semantics:
+    - LogicalEntity.name
+    - LogicalEntity.description
+  lost_semantics:
+    - LogicalEntity.entity_type
+  source_schema: schemas/dams_logical_entity_source.yaml
+  target_schema: schemas/dams_logical_entity_target.yaml
+
+id: https://data.moex.com/models/transforms/dams-logical-entity-rename-kind
+title: DAMS LogicalEntity entity_type → logical_entity_kind
+class_derivations:
+  LogicalEntity:
+    populated_from: LogicalEntity
+    slot_derivations:
+      name:
+        populated_from: name
+      description:
+        populated_from: description
+      logical_entity_kind:
+        populated_from: entity_type

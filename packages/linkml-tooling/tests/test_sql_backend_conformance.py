@@ -15,12 +15,26 @@ FIXTURES = Path(__file__).parent / "fixtures"
 
 
 @pytest.mark.parametrize(
-    "spec_name",
-    ["person-identity.yaml", "person-rename-code.yaml"],
+    "spec_name,sample_name",
+    [
+        ("person-identity.yaml", "person_sample.json"),
+        ("person-rename-code.yaml", "person_sample.json"),
+        (
+            "dams-logical-entity-rename-kind.yaml",
+            None,  # sample lives under model-assets
+        ),
+    ],
 )
-def test_sql_matches_object_transformer(spec_name: str) -> None:
+def test_sql_matches_object_transformer(
+    spec_name: str, sample_name: str | None
+) -> None:
     spec = TRANSFORMS / spec_name
-    sample = FIXTURES / "person_sample.json"
+    if sample_name is None:
+        sample = (
+            TRANSFORMS / "samples" / "dams_logical_entity_sample.json"
+        )
+    else:
+        sample = FIXTURES / sample_name
     obj_provider = LinkmlMapProvider(backend="object")
     sql_provider = LinkmlMapProvider(backend="sql")
     obj_result = obj_provider.transform_sample(spec, sample)

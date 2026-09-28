@@ -1,0 +1,5 @@
+{
+  "name": "TradeOrder",
+  "description": "Client trade order",
+  "entity_type": "core"
+}

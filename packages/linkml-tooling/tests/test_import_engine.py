@@ -31,8 +31,12 @@ def test_json_schema_import_draft(engine: SchemaAutomatorImportEngine, tmp_path:
     assert (job_dir / "source.json").is_file() or list(job_dir.glob("source*"))
     assert (job_dir / "inferred-schema.yaml").is_file()
     assert (job_dir / "diagnostics.json").is_file()
+    assert (job_dir / "enrich-checklist.json").is_file()
     text = (job_dir / "inferred-schema.yaml").read_text(encoding="utf-8")
     assert "MiniPerson" in text or "name" in text
+    assert any(
+        d.diagnostic_code == "IMPORT-ENRICH-SUMMARY" for d in manifest.diagnostics
+    )
 
 
 def test_sql_import_draft(engine: SchemaAutomatorImportEngine, tmp_path: Path) -> None:

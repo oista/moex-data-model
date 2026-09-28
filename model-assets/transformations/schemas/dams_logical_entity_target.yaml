@@ -1,0 +1,22 @@
+id: https://data.moex.com/models/fixtures/dams-logical-entity-tgt
+name: dams_logical_entity_target
+title: DAMS LogicalEntity slice (0.1-next fixture target)
+description: >
+  Target slice after renaming entity_type → logical_entity_kind.
+prefixes:
+  damsfix: https://data.moex.com/models/fixtures/
+default_prefix: damsfix
+classes:
+  LogicalEntity:
+    description: Logical entity in a solution model (fixture slice).
+    attributes:
+      name:
+        range: string
+        description: Entity name
+        required: true
+      description:
+        range: string
+        description: Human-readable description
+      logical_entity_kind:
+        range: string
+        description: Entity classification (was entity_type)

@@ -1,0 +1,37 @@
+[
+  {
+    "code": "IMPORT-ENRICH-DESC",
+    "severity": "warning",
+    "path": "classes.MiniPerson",
+    "message": "class MiniPerson is missing a description",
+    "field": "description"
+  },
+  {
+    "code": "IMPORT-ENRICH-ID",
+    "severity": "warning",
+    "path": "classes.MiniPerson",
+    "message": "class MiniPerson lacks class_uri and an identifier-ish slot",
+    "field": "id"
+  },
+  {
+    "code": "IMPORT-ENRICH-DESC",
+    "severity": "warning",
+    "path": "classes.MiniPerson.slots.name",
+    "message": "slot MiniPerson.name is missing a description",
+    "field": "description"
+  },
+  {
+    "code": "IMPORT-ENRICH-RANGE",
+    "severity": "warning",
+    "path": "classes.MiniPerson.slots.name",
+    "message": "slot MiniPerson.name has weak range (None); refine type",
+    "field": "range"
+  },
+  {
+    "code": "IMPORT-ENRICH-DESC",
+    "severity": "warning",
+    "path": "classes.MiniPerson.slots.age",
+    "message": "slot MiniPerson.age is missing a description",
+    "field": "description"
+  }
+]

@@ -555,6 +555,7 @@ def create_app(
                 ("import-job-json", job_dir / "job.json"),
                 ("import-inferred-schema", job_dir / "inferred-schema.yaml"),
                 ("import-diagnostics", job_dir / "diagnostics.json"),
+                ("import-enrich-checklist", job_dir / "enrich-checklist.json"),
             ]
             for kind, path in artifact_specs:
                 if not path.is_file():

@@ -14,6 +14,11 @@ from typing import Any
 
 import yaml
 
+from moex_linkml_tooling.enrich_checklist import (
+    build_enrich_checklist,
+    checklist_summary_diagnostics,
+    checklist_to_jsonable,
+)
 from moex_modeling.conformance.domain import Diagnostic
 from moex_modeling.import_draft.public import (
     GENERATED_DRAFT_STATUS,
@@ -130,6 +135,19 @@ class SchemaAutomatorImportEngine:
                         ),
                     )
                 )
+            enrich_items = build_enrich_checklist(schema_text)
+            checklist_path = job_dir / "enrich-checklist.json"
+            checklist_path.write_text(
+                json.dumps(
+                    checklist_to_jsonable(enrich_items),
+                    indent=2,
+                    ensure_ascii=False,
+                )
+                + "\n",
+                encoding="utf-8",
+                newline="\n",
+            )
+            diagnostics.extend(checklist_summary_diagnostics(enrich_items))
 
         diag_path = job_dir / "diagnostics.json"
         diag_path.write_text(

@@ -13,12 +13,23 @@ type DiagnosticRow = {
   diagnostic_message?: string;
 };
 
+type EnrichItem = {
+  code?: string;
+  severity?: string;
+  path?: string;
+  message?: string;
+  field?: string;
+};
+
+const ENRICH_FIELDS = ["id", "description", "range", "registry_link"] as const;
+
 export function ImportWizardPage() {
   const { workspaceId = "ws-workbench" } = useParams();
   const [sourceType, setSourceType] = useState<SourceType>("json_schema");
   const [file, setFile] = useState<File | null>(null);
   const [job, setJob] = useState<Job | null>(null);
   const [diagnostics, setDiagnostics] = useState<DiagnosticRow[]>([]);
+  const [enrichItems, setEnrichItems] = useState<EnrichItem[]>([]);
   const [inferred, setInferred] = useState<string>("");
   const [draftOpened, setDraftOpened] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,6 +45,7 @@ export function ImportWizardPage() {
       const arts = await api.listJobArtifacts(created.id);
       const diagArt = arts.find((a) => a.kind === "import-diagnostics");
       const schemaArt = arts.find((a) => a.kind === "import-inferred-schema");
+      const enrichArt = arts.find((a) => a.kind === "import-enrich-checklist");
       let diags: DiagnosticRow[] = [];
       if (diagArt) {
         const text = await api.getArtifactContent(created.id, diagArt.id);
@@ -43,12 +55,18 @@ export function ImportWizardPage() {
       if (schemaArt) {
         schemaText = await api.getArtifactContent(created.id, schemaArt.id);
       }
-      return { created, arts, diags, schemaText };
+      let checklist: EnrichItem[] = [];
+      if (enrichArt) {
+        const text = await api.getArtifactContent(created.id, enrichArt.id);
+        checklist = JSON.parse(text) as EnrichItem[];
+      }
+      return { created, arts, diags, schemaText, checklist };
     },
     onSuccess: (data) => {
       setJob(data.created);
       setDiagnostics(data.diags);
       setInferred(data.schemaText);
+      setEnrichItems(data.checklist);
       setDraftOpened(false);
       setError(null);
     },
@@ -86,6 +104,18 @@ export function ImportWizardPage() {
       ),
     [diagnostics],
   );
+
+  const enrichByField = useMemo(() => {
+    const groups: Record<string, EnrichItem[]> = {};
+    for (const field of ENRICH_FIELDS) {
+      groups[field] = enrichItems.filter((i) => i.field === field);
+    }
+    const other = enrichItems.filter(
+      (i) => !ENRICH_FIELDS.includes(i.field as (typeof ENRICH_FIELDS)[number]),
+    );
+    if (other.length) groups.other = other;
+    return groups;
+  }, [enrichItems]);
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -173,6 +203,32 @@ export function ImportWizardPage() {
                 </li>
               ))}
             </ul>
+          )}
+          {enrichItems.length > 0 && (
+            <div className="panel" data-testid="enrich-panel">
+              <h2>Enrich checklist</h2>
+              <p className="lede">
+                Advisory gaps (IDs, descriptions, ranges, registry links). Edit
+                in Monaco — checklist does not auto-publish.
+              </p>
+              <ul data-testid="enrich-checklist">
+                {Object.entries(enrichByField).map(([field, items]) =>
+                  items.length === 0
+                    ? null
+                    : items.map((item, i) => (
+                        <li key={`${field}-${i}`}>
+                          <strong>{field}</strong> [{item.code}] {item.path}:{" "}
+                          {item.message}
+                        </li>
+                      )),
+                )}
+              </ul>
+              <p>
+                <Link to="/models/trading/edit" data-testid="enrich-monaco-link">
+                  Open Monaco to enrich
+                </Link>
+              </p>
+            </div>
           )}
           {inferred && (
             <pre

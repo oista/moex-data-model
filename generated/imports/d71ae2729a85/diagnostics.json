@@ -1,0 +1,11 @@
+[
+  {
+    "diagnostic_code": "IMPORT-ENRICH-SUMMARY",
+    "severity": "warning",
+    "diagnostic_message": "enrich checklist: 5 item(s) (description=3, id=1, range=1); refine IDs, descriptions, ranges, and registry links in Monaco",
+    "conformance_phase": null,
+    "subject_ref": null,
+    "source_location": null,
+    "diagnostic_details": []
+  }
+]

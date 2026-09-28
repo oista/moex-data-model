@@ -19,6 +19,7 @@ class ImportSourceType(str, Enum):
 
 
 GENERATED_DRAFT_STATUS = "generated-draft"
+WORKSPACE_DRAFT_STATUS = "workspace-draft"
 
 
 class ImportJobManifest(BaseModel):
@@ -43,6 +44,22 @@ class ImportJobManifest(BaseModel):
     created_at: str | None = None
 
 
+class ImportPromoteResult(BaseModel):
+    """Workspace-only promote outcome (ADR-009). Does not publish."""
+
+    model_config = ConfigDict(
+        extra="forbid",
+        frozen=True,
+        strict=True,
+        validate_default=True,
+    )
+
+    status: str = WORKSPACE_DRAFT_STATUS
+    target_profile_id: str
+    import_job_id: str
+    document_digest: str
+
+
 @runtime_checkable
 class ImportDraftEngine(Protocol):
     """
@@ -63,7 +80,9 @@ class ImportDraftEngine(Protocol):
 
 __all__ = [
     "GENERATED_DRAFT_STATUS",
+    "WORKSPACE_DRAFT_STATUS",
     "ImportDraftEngine",
     "ImportJobManifest",
+    "ImportPromoteResult",
     "ImportSourceType",
 ]

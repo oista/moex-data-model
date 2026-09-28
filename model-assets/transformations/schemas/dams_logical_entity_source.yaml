@@ -1,0 +1,23 @@
+id: https://data.moex.com/models/fixtures/dams-logical-entity-src
+name: dams_logical_entity_source
+title: DAMS LogicalEntity slice (0.1 fixture source)
+description: >
+  Minimal standalone slice mimicking DAMS LogicalEntity identity slots for
+  Stage 7 migration tests. Not the full moex-dams specification.
+prefixes:
+  damsfix: https://data.moex.com/models/fixtures/
+default_prefix: damsfix
+classes:
+  LogicalEntity:
+    description: Logical entity in a solution model (fixture slice).
+    attributes:
+      name:
+        range: string
+        description: Entity name
+        required: true
+      description:
+        range: string
+        description: Human-readable description
+      entity_type:
+        range: string
+        description: Entity classification (renamed in 0.1-next slice)
