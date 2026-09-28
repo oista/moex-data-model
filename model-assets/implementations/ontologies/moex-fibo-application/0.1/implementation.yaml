@@ -1,0 +1,19 @@
+# SpecificationImplementation descriptor — MOEX FIBO application ontology
+# Body: metamodel/*.ttl (import + extension + mapping). See ADR-018.
+id: moex:implementation:moex-fibo-application:0.1
+name: MOEX FIBO application ontology
+description: >
+  Governed MOEX application / extension ontology over a pinned FIBO extract.
+  Not a subset copy of FIBO; owns MOEX namespace, extension axioms, and DAMS bridge.
+version: "0.1.0"
+revision: "0.1.0"
+content_digest: "sha256:preview-moex-fibo-application"
+conforms_to:
+  specification_id: moex:specification:moex-fibo-profile:0.1
+  specification_version: "0.1.0"
+  specification_revision: "0.1.0"
+implementation_kind: owl
+lifecycle_status: draft
+body_ref: ontology-application.yaml
+implementation_body: ontology-application.yaml
+specification_envelope: ../../../specifications/moex-fibo-profile/0.1/specification.yaml

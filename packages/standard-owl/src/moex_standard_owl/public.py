@@ -18,6 +18,10 @@ from moex_standard_owl.domain.fibo_metamodel import (
     fibo_body_to_explorer_records,
     load_fibo_specification_body,
 )
+from moex_standard_owl.domain.ontology_application import (
+    OntologyApplicationDescriptor,
+    load_ontology_application_descriptor,
+)
 from moex_standard_owl.models import AggregatedEntity, EntityOccurrence, ParseError
 from moex_standard_owl.provider import OntologyProvider, try_get_oak_adapter
 from moex_standard_owl.rdf_parser import local_name_from_iri, parse_rdf_file
@@ -40,12 +44,14 @@ __all__ = [
     "OWLImplementationBody",
     "OWLSpecificationBody",
     "OWLStandardProvider",
+    "OntologyApplicationDescriptor",
     "OntologyProvider",
     "ParseError",
     "RdflibOntologyAdapter",
     "as_standard_provider",
     "fibo_body_to_explorer_records",
     "load_fibo_specification_body",
+    "load_ontology_application_descriptor",
     "local_name_from_iri",
     "parse_rdf_file",
     "try_get_oak_adapter",

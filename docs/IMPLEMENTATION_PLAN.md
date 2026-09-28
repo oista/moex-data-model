@@ -641,7 +641,7 @@ linkml → SHACL
 
 ## Этап 7. Mapping и импорт
 
-**Progress (2026-09-28, CLI-first + 7b + enrich/migrations):** Kernel ports `MappingProvider` + `ImportDraftEngine` in `packages/modeling-kernel`. Adapters in `packages/linkml-tooling` (`LinkmlMapProvider` / `SchemaAutomatorImportEngine`, optional extras `[map]` / `[automator]`). CLI: `map --transform --preview|--sample` (`--backend object|sql`); `import --source-type json_schema|sql|csv|rdf --source …`. Transform specs under `model-assets/transformations/` including DAMS LogicalEntity slice migration (`dams-0.1-slice` → `dams-0.1-next-slice`). Import jobs write `generated/imports/<job_id>/` with `status: generated-draft`, `enrich-checklist.json`, and publish_gate refuses that tree. **Stage 7b:** Workbench `/workspaces/:id/import` wizard + enrich checklist panel (Monaco edits) + `POST /workspaces/{id}/imports`; SQL map backend via `SQLCompiler` + SQLite with conformance tests (`test_sql_backend_conformance.py`). ADR-008/009 Accepted. **Still deferred:** gated promote draft→workspace-draft, full enrich forms, real DAMS 0.2, map Workbench UI, live EAM/Clinkr adapters.
+**Progress (2026-09-28, CLI-first + 7b + enrich/migrations):** Kernel ports `MappingProvider` + `ImportDraftEngine` in `packages/modeling-kernel`. Adapters in `packages/linkml-tooling` (`LinkmlMapProvider` / `SchemaAutomatorImportEngine`, optional extras `[map]` / `[automator]`). CLI: `map --transform --preview|--sample` (`--backend object|sql`); `import --source-type json_schema|sql|csv|rdf --source …`. Transform specs under `model-assets/transformations/`: DAMS slice migrations closed for Stage 7 — LogicalEntity identity + rename (`entity_type`→`logical_entity_kind`), LogicalAttribute rename (`logical_type`→`attribute_type`), revision tags `dams-0.1-slice` / `dams-0.1-next-slice`; `validate_spec` enforces `MAP-SPEC-003`/`004` schema paths on unequal revisions. Import jobs write `generated/imports/<job_id>/` with `status: generated-draft`, `enrich-checklist.json`, and publish_gate refuses that tree. **Stage 7b:** Workbench `/workspaces/:id/import` wizard + enrich checklist panel (Monaco edits) + `POST /workspaces/{id}/imports`; SQL map backend via `SQLCompiler` + SQLite with conformance tests (`test_sql_backend_conformance.py`). ADR-008/009 Accepted. **Still deferred:** gated promote draft→workspace-draft, full enrich forms, real DAMS 0.2 specification tree, map Workbench UI, live EAM/Clinkr adapters.
 
 ### LinkML Map
 
@@ -651,7 +651,7 @@ linkml → SHACL
 - Validation mappings.
 - Preview transformation.
 - Sample-based execution.
-- Migration mappings между версиями DAMS.
+- Migration mappings между версиями DAMS (закрыто slice-фикстурами; released 0.2 deferred).
 - Audit source/target schema revisions.
 - Запрет unrestricted evaluation по умолчанию.
 - Allowlist функций expressions.

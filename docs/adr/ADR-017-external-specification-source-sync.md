@@ -11,7 +11,7 @@ superseded_by: []
 **Date:** 2026-09-28  
 **Status:** Proposed  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [ADR-002](ADR-002-git-published-source.md), [ADR-009](ADR-009-schema-automator-draft-only.md), [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-012](ADR-012-semantic-diff-review.md), [ADR-014](ADR-014-fibo-profile-metamodel.md)
+**Related:** [ADR-002](ADR-002-git-published-source.md), [ADR-009](ADR-009-schema-automator-draft-only.md), [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-012](ADR-012-semantic-diff-review.md), [ADR-014](ADR-014-fibo-profile-metamodel.md), [ADR-018](ADR-018-ontology-application-implementation.md)
 
 ## Context
 
@@ -33,7 +33,7 @@ ADR-014 already separates the FIBO **profile** (`moex-fibo-profile`) from releas
 ## Consequences
 
 - CLI: `moex-model source list|sync|diff`.
-- Catalog/viewer continue to consume Impl content separately; wiring extract modules into ontology-catalog rebuild is a later step.
+- Catalog/viewer continue to consume content separately; extracts feed application-ontology Impl as a dependency (ADR-018), not as SpecImpl themselves. Wiring extract modules into ontology-catalog rebuild is a later step.
 - schema-automator remains only on `moex-model import` (ADR-009).
 
 ## Alternatives
@@ -47,6 +47,6 @@ ADR-014 already separates the FIBO **profile** (`moex-fibo-profile`) from releas
 
 ## Related
 
-- ADR-002, ADR-009, ADR-010, ADR-012, ADR-014
+- ADR-002, ADR-009, ADR-010, ADR-012, ADR-014, ADR-018
 - Package: `packages/external-sources`
 - Layout: `model-assets/external-sources/`

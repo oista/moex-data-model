@@ -1,0 +1,28 @@
+moex:
+  spec_id: moex:transform:dams-logical-attribute-rename-type:0.1
+  source_schema_revision: dams-0.1-slice
+  target_schema_revision: dams-0.1-next-slice
+  transformation_kind: partial
+  description: >
+    Fixture migration — rename LogicalAttribute.logical_type to
+    LogicalAttribute.attribute_type (DAMS slice, not a released 0.2).
+  preserved_semantics:
+    - LogicalAttribute.name
+    - LogicalAttribute.description
+  lost_semantics:
+    - LogicalAttribute.logical_type
+  source_schema: schemas/dams_logical_attribute_source.yaml
+  target_schema: schemas/dams_logical_attribute_target.yaml
+
+id: https://data.moex.com/models/transforms/dams-logical-attribute-rename-type
+title: DAMS LogicalAttribute logical_type → attribute_type
+class_derivations:
+  LogicalAttribute:
+    populated_from: LogicalAttribute
+    slot_derivations:
+      name:
+        populated_from: name
+      description:
+        populated_from: description
+      attribute_type:
+        populated_from: logical_type

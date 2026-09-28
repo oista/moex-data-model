@@ -1,0 +1,19 @@
+# Bridge: DAMS entities ↔ FIBO / MOEX extension (ADR-018).
+# Managed SSSOM set also lives at model-assets/transformations/mappings/dams-fibo.sssom.yaml.
+
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dams: <https://data.moex.com/dams/concept/> .
+@prefix fibo-be-le-lp: <https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/> .
+@prefix moex-map: <https://data.moex.com/ontology/fibo-ext/mapping/> .
+
+moex-map: a owl:Ontology ;
+    rdfs:label "MOEX DAMS–FIBO mapping bridge"@en ;
+    owl:versionInfo "0.1.0" ;
+    owl:imports <https://data.moex.com/ontology/fibo-ext/> .
+
+dams:Client a owl:Class ;
+    rdfs:label "Client"@en ;
+    skos:closeMatch fibo-be-le-lp:LegalPerson .

@@ -1,12 +1,15 @@
+# Deprecated catalog stub — superseded by moex-fibo-application (ADR-018).
+# Prefer: model-assets/implementations/ontologies/moex-fibo-application/0.1/
 id: "moex:ontology:application"
-ontology_iri: "https://data.moex.com/ontology/application/"
+ontology_iri: "https://data.moex.com/ontology/fibo-ext/"
 version_iri: null
-title: "Application Ontology"
+title: "Application Ontology (deprecated stub)"
 version: "0.0.0"
-source_uri: "https://data.moex.com/ontology/application/"
-revision: "stub"
+source_uri: "https://data.moex.com/ontology/fibo-ext/"
+revision: "stub-deprecated"
 content_digest: "sha256:unindexed"
 license_uri: null
 imports: []
-status: registered
+status: deprecated
 role: implementation
+local_source_hint: "model-assets/implementations/ontologies/moex-fibo-application/0.1"

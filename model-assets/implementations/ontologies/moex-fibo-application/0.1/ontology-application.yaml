@@ -1,0 +1,11 @@
+# Provider descriptor for OWL application ontology (ADR-018).
+# Paths are relative to this file's directory unless noted.
+id: moex:implementation:moex-fibo-application:0.1
+namespace_iri: https://data.moex.com/ontology/fibo-ext/
+conformance_level: FIBO Extension Conformant
+seed_ref: ../../../../external-sources/fibo/seeds/moex-core.txt
+imported_module_ref: metamodel/fibo-import-module.ttl
+extension_ref: metamodel/moex-fibo-extension.ttl
+mapping_ref: metamodel/moex-dams-fibo-mapping.ttl
+sssom_ref: ../../../../transformations/mappings/dams-fibo.sssom.yaml
+external_source_id: fibo

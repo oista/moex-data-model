@@ -1,0 +1,22 @@
+id: https://data.moex.com/models/fixtures/dams-logical-attribute-tgt
+name: dams_logical_attribute_target
+title: DAMS LogicalAttribute slice (0.1-next fixture target)
+description: >
+  Target slice after renaming logical_type → attribute_type.
+prefixes:
+  damsfix: https://data.moex.com/models/fixtures/
+default_prefix: damsfix
+classes:
+  LogicalAttribute:
+    description: Logical attribute on an entity (fixture slice).
+    attributes:
+      name:
+        range: string
+        description: Attribute name
+        required: true
+      description:
+        range: string
+        description: Human-readable description
+      attribute_type:
+        range: string
+        description: Logical type (was logical_type)

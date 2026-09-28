@@ -1,0 +1,5 @@
+{
+  "name": "orderId",
+  "description": "Client order identifier",
+  "logical_type": "string"
+}

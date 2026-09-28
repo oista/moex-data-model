@@ -102,10 +102,24 @@ def test_repo_catalog_passes_validation_with_modules():
         "moex:module:dsp",
         "moex:module:fibo",
         "moex:module:fibo-profile",
+        "moex:module:fibo-application",
         "moex:module:trading-solution",
         "moex:module:ontology-catalog",
     }
     validate_architecture_catalog(catalog, module_ids)
+
+
+def test_repo_catalog_includes_fibo_application_impl():
+    repo = Path(__file__).resolve().parents[3]
+    catalog = load_architecture_catalog(repo)
+    assert catalog is not None
+    by_id = {n.id: n for n in catalog.nodes}
+    assert by_id["moex-fibo-application"].role == "specification_implementation"
+    assert by_id["moex-fibo-application"].conforms_to == "moex-fibo-profile"
+    assert by_id["moex-fibo-application"].module_id == "moex:module:fibo-application"
+    assert "upstream" in (by_id["moex:ontology:fibo"].description or "").lower() or (
+        "preview index" in (by_id["moex:ontology:fibo"].title or "").lower()
+    )
 
 
 def test_tmp_catalog_roundtrip(tmp_path: Path):

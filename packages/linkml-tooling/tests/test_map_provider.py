@@ -48,6 +48,10 @@ def test_rename_transform_revisions(provider: LinkmlMapProvider) -> None:
 
 
 def test_expr_rejected_by_default(provider: LinkmlMapProvider, tmp_path: Path) -> None:
+    src = tmp_path / "src.yaml"
+    tgt = tmp_path / "tgt.yaml"
+    src.write_text("id: http://example.org/src\nname: src\n", encoding="utf-8")
+    tgt.write_text("id: http://example.org/tgt\nname: tgt\n", encoding="utf-8")
     spec = tmp_path / "bad.yaml"
     spec.write_text(
         """
@@ -55,6 +59,8 @@ moex:
   spec_id: bad
   source_schema_revision: a
   target_schema_revision: b
+  source_schema: src.yaml
+  target_schema: tgt.yaml
 id: bad
 class_derivations:
   Person:
@@ -67,3 +73,90 @@ class_derivations:
     )
     diags = provider.validate_spec(spec)
     assert any(d.diagnostic_code == "MAP-EXPR-001" for d in diags)
+
+
+def test_migration_requires_both_schema_paths(
+    provider: LinkmlMapProvider, tmp_path: Path
+) -> None:
+    spec = tmp_path / "mig.yaml"
+    spec.write_text(
+        """
+moex:
+  spec_id: mig
+  source_schema_revision: dams-0.1-slice
+  target_schema_revision: dams-0.1-next-slice
+id: mig
+class_derivations:
+  LogicalEntity:
+    populated_from: LogicalEntity
+    slot_derivations:
+      name:
+        populated_from: name
+""",
+        encoding="utf-8",
+    )
+    diags = provider.validate_spec(spec)
+    codes = [d.diagnostic_code for d in diags]
+    assert codes.count("MAP-SPEC-003") == 2
+
+
+def test_migration_missing_target_schema_only(
+    provider: LinkmlMapProvider, tmp_path: Path
+) -> None:
+    src = tmp_path / "src.yaml"
+    src.write_text("id: http://example.org/src\nname: src\n", encoding="utf-8")
+    spec = tmp_path / "mig.yaml"
+    spec.write_text(
+        """
+moex:
+  spec_id: mig
+  source_schema_revision: a
+  target_schema_revision: b
+  source_schema: src.yaml
+id: mig
+class_derivations:
+  Person:
+    populated_from: Person
+""",
+        encoding="utf-8",
+    )
+    diags = provider.validate_spec(spec)
+    assert any(d.diagnostic_code == "MAP-SPEC-003" for d in diags)
+    assert any("target_schema" in d.diagnostic_message for d in diags)
+
+
+def test_schema_path_not_found(
+    provider: LinkmlMapProvider, tmp_path: Path
+) -> None:
+    spec = tmp_path / "mig.yaml"
+    spec.write_text(
+        """
+moex:
+  spec_id: mig
+  source_schema_revision: a
+  target_schema_revision: b
+  source_schema: missing_src.yaml
+  target_schema: missing_tgt.yaml
+id: mig
+class_derivations:
+  Person:
+    populated_from: Person
+""",
+        encoding="utf-8",
+    )
+    diags = provider.validate_spec(spec)
+    assert sum(1 for d in diags if d.diagnostic_code == "MAP-SPEC-004") == 2
+
+
+def test_identity_equal_revisions_need_not_declare_target(
+    provider: LinkmlMapProvider,
+) -> None:
+    """Equal revisions: source_schema optional for path rule; person-identity OK."""
+    diags = provider.validate_spec(TRANSFORMS / "person-identity.yaml")
+    assert not any(
+        d.diagnostic_code in {"MAP-SPEC-003", "MAP-SPEC-004"} for d in diags
+    )
+    assert not any(
+        d.severity in {DiagnosticSeverity.ERROR, DiagnosticSeverity.FATAL}
+        for d in diags
+    )

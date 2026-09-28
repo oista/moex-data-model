@@ -9,6 +9,7 @@ moex:
   lost_semantics:
     - Person.legacy_code
   source_schema: schemas/person_source.yaml
+  target_schema: schemas/person_target.yaml
 
 id: https://example.org/moex/transforms/person-rename-code
 title: Person rename legacy_code to code

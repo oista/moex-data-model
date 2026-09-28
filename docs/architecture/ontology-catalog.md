@@ -19,9 +19,10 @@ superseded_by: MODELING_ARCHITECTURE.md
 |---|---|
 | `ModelingStandard` | OWL 2 |
 | `ReferenceSpecification` | **FIBO ontology profile** (`moex-fibo-profile` — domains/modules/headers/annotation conventions); stubs Corporate Ontology, PROV-O |
-| `SpecificationImplementation` | **FIBO release content** (`moex:ontology:fibo` preview glossary / entity index); stubs MOEX HR / MOEX Data / Application Ontology |
+| Upstream index (catalog) | **FIBO release** (`moex:ontology:fibo` — preview glossary / entity index); not a governed SpecImpl |
+| `SpecificationImplementation` | **MOEX FIBO application ontology** (`moex-fibo-application` — imported module + extension + DAMS mapping); stubs MOEX HR / MOEX Data |
 
-See [ADR-014](../adr/ADR-014-fibo-profile-metamodel.md): profile = Spec metamodel; release entities = Impl read models. ADR-010 still applies (OWL not primary YAML validation).
+See [ADR-014](../adr/ADR-014-fibo-profile-metamodel.md): profile = Spec metamodel. See [ADR-018](../adr/ADR-018-ontology-application-implementation.md): governed OWL Impl = application / extension ontology; upstream release index ≠ SpecImpl. ADR-010 still applies (OWL not primary YAML validation).
 
 Новых `OWL*` классов в [modeling-kernel.yaml](modeling-kernel.yaml) нет. Typed OWL body живёт только в provider-пакете.
 

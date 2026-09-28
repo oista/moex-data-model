@@ -6,7 +6,7 @@ supersedes: []
 superseded_by: MODELING_ARCHITECTURE.md
 ---
 
-# ADR index (001–017)
+# ADR index (001–018)
 
 **Status:** Proposed drafts  
 **Date:** 2026-09-28  
@@ -31,10 +31,11 @@ Viewer-решения живут отдельно: [viewer-decisions.md](../arch
 | [ADR-011](ADR-011-reproducible-artifacts.md) | Generated artifacts воспроизводимы | Stage 0: `requirements-linkml.txt` + `compare-golden` (contracts/JSON Schema); полный matrix — этап 6 |
 | [ADR-012](ADR-012-semantic-diff-review.md) | Публикация через semantic diff и review | Workbench; CLI + API preview + Web Review changes; PR attach — нет |
 | [ADR-013](ADR-013-specification-requirements-catalog.md) | Каталог требований к спецификации в DAMS LinkML | DAMS explorer «Требования» |
-| [ADR-014](ADR-014-fibo-profile-metamodel.md) | FIBO profile = Spec; release entities = Impl | metamodel YAML + Pydantic; catalog Spec/Impl split |
+| [ADR-014](ADR-014-fibo-profile-metamodel.md) | FIBO profile = Spec; content ≠ profile metamodel | metamodel YAML + Pydantic; refined by ADR-018 |
 | [ADR-015](ADR-015-viewer-ui-atlas.md) | MOEX Atlas — UI/UX стандарт Publication Viewer | Proposed; visual redesign apps/viewer |
 | [ADR-016](ADR-016-publication-section-kinds-and-profiles.md) | Publication section kinds and profiles | Proposed; DSP ProfileSpec |
 | [ADR-017](ADR-017-external-specification-source-sync.md) | External specification source sync | Proposed; SpecificationSource + ROBOT/git adapters |
+| [ADR-018](ADR-018-ontology-application-implementation.md) | OWL SpecImpl = application / extension ontology | Proposed; moex-fibo-application three-artifact body |
 
 ## Как принимать
 

@@ -1,0 +1,19 @@
+# MOEX FIBO extension ontology (ADR-018).
+# Local namespace additions over the pinned FIBO import module.
+
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix moex-fibo-ext: <https://data.moex.com/ontology/fibo-ext/> .
+@prefix fibo-be-le-lp: <https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/> .
+
+moex-fibo-ext: a owl:Ontology ;
+    rdfs:label "MOEX FIBO extension"@en ;
+    owl:versionInfo "0.1.0" ;
+    owl:imports <https://data.moex.com/ontology/fibo-ext/imports/fibo-module/> .
+
+moex-fibo-ext:ExchangeParticipant a owl:Class ;
+    rdfs:label "exchange participant"@en ;
+    skos:definition "A legal person that participates in exchange trading under MOEX rules."@en ;
+    rdfs:subClassOf fibo-be-le-lp:LegalPerson .

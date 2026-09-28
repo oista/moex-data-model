@@ -11,7 +11,7 @@ superseded_by: []
 **Date:** 2026-09-28  
 **Status:** Proposed  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-007](ADR-007-pydantic-dto-not-validator.md)  
+**Related:** [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-007](ADR-007-pydantic-dto-not-validator.md), [ADR-017](ADR-017-external-specification-source-sync.md), [ADR-018](ADR-018-ontology-application-implementation.md)  
 **Design:** [2026-09-28-fibo-metamodel-profile-design.md](../superpowers/specs/2026-09-28-fibo-metamodel-profile-design.md)
 
 ## Context
@@ -23,16 +23,16 @@ EDM Council documents the organizational and terminology conventions in [ONTOLOG
 ## Decision
 
 - **FIBO profile** (`moex-fibo-profile`) is a `ReferenceSpecification` expressed in OWL 2. Its body is a lean Pydantic metamodel (`FiboDomain`, `FiboModule`, `FiboOntologyDocument`, IRI/prefix patterns, `FiboAnnotationRequirement`) loaded from YAML under `model-assets/specifications/moex-fibo-profile/`.
-- **FIBO release content** (glossary, class explorer, `AggregatedEntity` / catalog entities) is a `SpecificationImplementation` that `conforms_to` the profile. Domain classes are not the metamodel.
+- **Domain classes are not the metamodel.** Publication: Spec module explorer = metamodel tree; subject-domain class rows come from release/index or application-ontology content, not from the profile YAML.
 - Conventions come from ONTOLOGY_GUIDE (ontology header, IRI format, naming/labels, required annotations). We do **not** model full OWL 2 DL axioms or port onto-viewer.
 - Pydantic models are DTOs / structural forms (ADR-007). OWL reasoner remains out of the primary validation path (ADR-010).
-- Publication: Spec module explorer = metamodel tree; Impl module = subject-domain classes.
+- **Refinement (ADR-018):** upstream FIBO release/index (`moex:ontology:fibo`) is a catalog read model, **not** the governed `SpecificationImplementation`. The governed OWL Impl is the MOEX **application / extension ontology** (`moex-fibo-application`: imported module + extension + mapping).
 
 ## Consequences
 
-- `architecture-catalog.yaml` splits FIBO into Spec + Impl nodes with two publication modules.
-- ADR-010 stays in force; this ADR only clarifies Spec vs Impl for FIBO.
-- Ontology Catalog release descriptors (`moex:ontology:fibo`) remain read models of release content; the profile is a separate specification asset.
+- `architecture-catalog.yaml` splits FIBO into Spec (profile), upstream index, and application-ontology Impl (ADR-018).
+- ADR-010 stays in force; this ADR clarifies Spec vs content for FIBO; ADR-018 clarifies which content is the governed Impl.
+- Ontology Catalog release descriptors (`moex:ontology:fibo`) remain read models of upstream release content; the profile is a separate specification asset.
 
 ## Alternatives
 
@@ -45,3 +45,4 @@ EDM Council documents the organizational and terminology conventions in [ONTOLOG
 ## Related
 
 - ADR-007, ADR-010, ADR-013 (parallel Spec-body enrichment for DAMS requirements)
+- ADR-017 (external extract pin), ADR-018 (application ontology as SpecImpl)

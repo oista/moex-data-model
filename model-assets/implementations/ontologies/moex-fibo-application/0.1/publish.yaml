@@ -1,0 +1,30 @@
+# Publication stub for architecture-catalog module_id (ADR-018).
+# Full three-artifact explorer is out of scope for MVP.
+module_id: moex:module:fibo-application
+kind: publication_module
+version: "1"
+order: 220
+icon: "🔗"
+title: MOEX FIBO application ontology
+description: >
+  Governed MOEX application / extension ontology over a pinned FIBO extract
+  (imported module + extension + DAMS mapping). ADR-018.
+profile: implementation
+sections:
+  - id: overview
+    title: Overview
+    description: Application ontology layout and governance
+    type: markdown-doc
+    kind: overview
+    source:
+      format: markdown
+      path: README.md
+
+  - id: conformance
+    title: Conformance
+    description: Extension conformance level, seed and artifact refs
+    type: key-value
+    kind: conformance
+    source:
+      format: yaml
+      path: ontology-application.yaml

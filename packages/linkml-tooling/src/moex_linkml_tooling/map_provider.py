@@ -121,6 +121,74 @@ def _sql_quote_ident(name: str) -> str:
     return name
 
 
+def _resolve_schema_path(spec_path: Path, relative: str) -> Path:
+    """Resolve schema path relative to the transform YAML directory."""
+    candidate = Path(relative)
+    if candidate.is_absolute():
+        return candidate
+    return (spec_path.parent / candidate).resolve()
+
+
+def _validate_schema_paths(
+    *,
+    spec_path: Path,
+    moex: dict[str, Any],
+    source_revision: str,
+    target_revision: str,
+) -> list[Diagnostic]:
+    """
+    Audit source_schema / target_schema paths.
+
+    When revisions differ (migration), both paths are required.
+    Declared paths must resolve to existing files (relative to the spec).
+    """
+    diagnostics: list[Diagnostic] = []
+    source_rel = moex.get("source_schema")
+    target_rel = moex.get("target_schema")
+    migration = source_revision != target_revision
+
+    if migration:
+        if not source_rel:
+            diagnostics.append(
+                Diagnostic(
+                    diagnostic_code="MAP-SPEC-003",
+                    severity=DiagnosticSeverity.ERROR,
+                    diagnostic_message=(
+                        "migration requires moex.source_schema "
+                        f"(revisions {source_revision!r} → {target_revision!r})"
+                    ),
+                )
+            )
+        if not target_rel:
+            diagnostics.append(
+                Diagnostic(
+                    diagnostic_code="MAP-SPEC-003",
+                    severity=DiagnosticSeverity.ERROR,
+                    diagnostic_message=(
+                        "migration requires moex.target_schema "
+                        f"(revisions {source_revision!r} → {target_revision!r})"
+                    ),
+                )
+            )
+
+    for label, rel in (("source_schema", source_rel), ("target_schema", target_rel)):
+        if not rel:
+            continue
+        resolved = _resolve_schema_path(spec_path, str(rel))
+        if not resolved.is_file():
+            diagnostics.append(
+                Diagnostic(
+                    diagnostic_code="MAP-SPEC-004",
+                    severity=DiagnosticSeverity.ERROR,
+                    diagnostic_message=(
+                        f"moex.{label} does not resolve to a file: {rel!r} "
+                        f"(looked at {resolved})"
+                    ),
+                )
+            )
+    return diagnostics
+
+
 class LinkmlMapProvider:
     """
     MappingProvider implementation using linkml-map.
@@ -221,6 +289,14 @@ class LinkmlMapProvider:
                     diagnostic_message="missing class_derivations",
                 )
             )
+        diagnostics.extend(
+            _validate_schema_paths(
+                spec_path=spec_path,
+                moex=_moex,
+                source_revision=meta.source_schema_revision,
+                target_revision=meta.target_schema_revision,
+            )
+        )
         return diagnostics
 
     def preview(

@@ -1,0 +1,23 @@
+id: https://data.moex.com/models/fixtures/dams-logical-attribute-src
+name: dams_logical_attribute_source
+title: DAMS LogicalAttribute slice (0.1 fixture source)
+description: >
+  Minimal standalone slice mimicking DAMS LogicalAttribute identity slots for
+  Stage 7 migration tests. Not the full moex-dams specification.
+prefixes:
+  damsfix: https://data.moex.com/models/fixtures/
+default_prefix: damsfix
+classes:
+  LogicalAttribute:
+    description: Logical attribute on an entity (fixture slice).
+    attributes:
+      name:
+        range: string
+        description: Attribute name
+        required: true
+      description:
+        range: string
+        description: Human-readable description
+      logical_type:
+        range: string
+        description: Logical type (renamed in 0.1-next slice)

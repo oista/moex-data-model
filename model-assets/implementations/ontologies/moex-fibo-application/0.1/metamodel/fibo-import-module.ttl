@@ -1,0 +1,22 @@
+# Stub pinned FIBO import module (ADR-018).
+# MVP: minimal seed slice; replace/sync from model-assets/external-sources/fibo (ADR-017).
+# Read-only upstream content — do not add MOEX axioms here.
+
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix fibo-be-le-lp: <https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/> .
+@prefix fibo-be-le-fbo: <https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/FormalBusinessOrganizations/> .
+
+<https://data.moex.com/ontology/fibo-ext/imports/fibo-module/> a owl:Ontology ;
+    rdfs:label "MOEX pinned FIBO import module (stub)"@en ;
+    owl:versionInfo "0.1.0-stub" .
+
+fibo-be-le-fbo:FormalOrganization a owl:Class ;
+    rdfs:label "formal organization"@en .
+
+fibo-be-le-lp:LegalPerson a owl:Class ;
+    rdfs:label "legal person"@en ;
+    skos:definition "An autonomous entity that is capable of having rights and obligations."@en ;
+    rdfs:subClassOf fibo-be-le-fbo:FormalOrganization .

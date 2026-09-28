@@ -42,13 +42,26 @@ nodes:
     order: 200
     description: >
       FIBO organizational metamodel profile - reference specification for
-      ontology release content (not domain classes).
+      ontology conventions (not domain classes, not MOEX application ontology).
 
   - id: moex:ontology:fibo
     role: specification_implementation
-    title: FIBO release (preview)
+    title: FIBO release (preview index)
     version: master_2026Q2
     conforms_to: moex-fibo-profile
     module_id: moex:module:fibo
     order: 210
-    description: FIBO release glossary and class hierarchy (preview export).
+    description: >
+      Upstream FIBO release glossary/class hierarchy (catalog preview index).
+      Not the governed application ontology — see moex-fibo-application (ADR-018).
+
+  - id: moex-fibo-application
+    role: specification_implementation
+    title: MOEX FIBO application ontology
+    version: "0.1.0"
+    conforms_to: moex-fibo-profile
+    module_id: moex:module:fibo-application
+    order: 220
+    description: >
+      Governed MOEX application / extension ontology (imported FIBO module +
+      MOEX extension + DAMS mapping bridge). ADR-018.

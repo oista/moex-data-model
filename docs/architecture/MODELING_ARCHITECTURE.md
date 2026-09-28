@@ -98,7 +98,8 @@ order-service/openapi.yaml      → SpecificationImplementation
 ```text
 OWL 2                           → ModelingStandard
 MOEX/FIBO ontology profile      → ReferenceSpecification
-Trading domain ontology        → SpecificationImplementation
+MOEX FIBO application ontology  → SpecificationImplementation
+  (import module + extension + mapping; ADR-018)
 ```
 
 ```text

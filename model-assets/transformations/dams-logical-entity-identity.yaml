@@ -1,0 +1,26 @@
+moex:
+  spec_id: moex:transform:dams-logical-entity-identity:0.1
+  source_schema_revision: dams-0.1-slice
+  target_schema_revision: dams-0.1-slice
+  transformation_kind: lossless
+  description: >
+    Lossless identity for DAMS LogicalEntity slice (equal revisions).
+  preserved_semantics:
+    - LogicalEntity.name
+    - LogicalEntity.description
+    - LogicalEntity.entity_type
+  lost_semantics: []
+  source_schema: schemas/dams_logical_entity_source.yaml
+
+id: https://data.moex.com/models/transforms/dams-logical-entity-identity
+title: DAMS LogicalEntity identity
+class_derivations:
+  LogicalEntity:
+    populated_from: LogicalEntity
+    slot_derivations:
+      name:
+        populated_from: name
+      description:
+        populated_from: description
+      entity_type:
+        populated_from: entity_type
