@@ -185,6 +185,22 @@ class AuditEvent(Base):
     )
 
 
+class DiagramLayout(Base):
+    __tablename__ = "diagram_layout"
+
+    diagram_id: Mapped[str] = mapped_column(String(256), primary_key=True)
+    workspace_id: Mapped[str] = mapped_column(
+        String(128), ForeignKey("workspace.id"), nullable=False
+    )
+    implementation_id: Mapped[str] = mapped_column(String(256), nullable=False)
+    profile: Mapped[str] = mapped_column(String(32), nullable=False)
+    model_revision: Mapped[str] = mapped_column(String(128), nullable=False, default="")
+    nodes_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+    updated_at: Mapped[str] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
 class PublicationRequest(Base):
     __tablename__ = "publication_request"
 

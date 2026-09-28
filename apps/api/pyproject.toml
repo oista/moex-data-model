@@ -22,6 +22,7 @@ dependencies = [
     "moex-standard-linkml",
     "moex-git-adapter",
     "moex-model-cli",
+    "moex-drawdb-adapter",
 ]
 
 [project.optional-dependencies]

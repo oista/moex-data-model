@@ -21,6 +21,7 @@ from moex_git.ports import GitProvider
 from moex_model_cli.bootstrap import SlicePaths, find_repo_root
 from moex_model_cli.commands.compile import run_compile
 from moex_model_api.auth import DevAuthMiddleware
+from moex_model_api.db import models as orm
 from moex_model_api.db.session import init_db, make_engine, session_factory
 from moex_model_api.db.stores import (
     SqlAuditStore,
@@ -33,6 +34,7 @@ from moex_model_api.db.stores import (
     SqlWorkspaceStore,
 )
 from moex_model_api.diagnostics import diagnostic_record
+from moex_model_api.diagram_sessions import DiagramSession, DiagramSessionStore
 from moex_model_api.indexing import elements_from_package
 from moex_model_api.ports import (
     ArtifactRecord,
@@ -41,6 +43,9 @@ from moex_model_api.ports import (
     ValidationRunRecord,
 )
 from moex_model_api.yaml_mutate import MutationConflict, MutationError, apply_mutation
+from moex_drawdb import DrawDbProjectionService
+from ruamel.yaml import YAML
+from io import StringIO
 
 
 class ConformanceResponse(BaseModel):
@@ -192,6 +197,54 @@ class ElementHitOut(BaseModel):
     implementation_id: str
 
 
+class DiagramCreate(BaseModel):
+    profile: str = Field(default="logical", pattern="^(logical|physical)$")
+
+
+class DiagramSessionOut(BaseModel):
+    session_id: str
+    workspace_id: str
+    profile: str
+    dbml: str
+
+
+class DiagramLayoutPut(BaseModel):
+    nodes: dict[str, dict] = Field(default_factory=dict)
+    model_revision: str = ""
+
+
+class DiagramLayoutOut(BaseModel):
+    diagram_id: str
+    workspace_id: str
+    profile: str
+    model_revision: str
+    nodes: dict[str, dict]
+
+
+class DiagramSubmit(BaseModel):
+    dbml: str
+
+
+class DiagramRejectedOut(BaseModel):
+    code: str
+    message: str
+    path: str | None = None
+
+
+class DiagramSubmitOut(BaseModel):
+    session_id: str
+    rejected: list[DiagramRejectedOut]
+    op_count: int
+    semantic_diff: SemanticDiffOut
+
+
+class DiagramApplyOut(BaseModel):
+    workspace_id: str
+    doc_key: str
+    content: str
+    base_digest: str
+
+
 class ImplementationOut(BaseModel):
     id: str
     slug: str
@@ -234,13 +287,15 @@ def create_app(
     init_db(engine)
     factory: sessionmaker[Session] = session_factory(engine)
 
-    app = FastAPI(title="MOEX Model API", version="0.4.0")
+    app = FastAPI(title="MOEX Model API", version="0.5.0")
     app.add_middleware(DevAuthMiddleware)
     app.state.engine = engine
     app.state.session_factory = factory
     app.state.git_provider = git_provider or make_git_provider(
         repo_root=find_repo_root()
     )
+    app.state.diagram_sessions = DiagramSessionStore()
+    app.state.drawdb = DrawDbProjectionService()
 
     def get_session():
         session = factory()
@@ -553,6 +608,267 @@ def create_app(
             ],
             has_breaking=report.has_breaking,
             counts=report.counts_by_category(),
+        )
+
+    def _draft_yaml(workspace_id: str, session: Session) -> str:
+        draft = SqlDocumentStore(session).get(workspace_id, "trading")
+        if draft is not None:
+            return draft.content
+        root = find_repo_root()
+        paths = SlicePaths.resolve(root=root)
+        return paths.implementation.read_text(encoding="utf-8")
+
+    def _dump_yaml(data: dict) -> str:
+        y = YAML()
+        y.preserve_quotes = True
+        buf = StringIO()
+        y.dump(data, buf)
+        return buf.getvalue()
+
+    @app.post(
+        "/workspaces/{workspace_id}/diagrams",
+        response_model=DiagramSessionOut,
+    )
+    def open_diagram(
+        workspace_id: str,
+        body: DiagramCreate,
+        request: Request,
+        session: Session = Depends(get_session),
+    ) -> DiagramSessionOut:
+        actor = ensure_actor(request, session)
+        workspaces = SqlWorkspaceStore(session)
+        if workspaces.get(workspace_id) is None:
+            workspaces.create(workspace_id, workspace_id)
+            workspaces.add_member(workspace_id, actor, role="owner")
+        yaml_text = _draft_yaml(workspace_id, session)
+        data = yaml.safe_load(yaml_text)
+        if not isinstance(data, dict):
+            raise HTTPException(status_code=400, detail="draft is not a mapping")
+        profile = body.profile  # type: ignore[assignment]
+        dbml = app.state.drawdb.to_dbml(data, profile=profile)
+        sid = str(uuid4())
+        app.state.diagram_sessions.put(
+            DiagramSession(
+                session_id=sid,
+                workspace_id=workspace_id,
+                profile=profile,
+                dbml=dbml,
+                base_yaml=yaml_text,
+            )
+        )
+        SqlAuditStore(session).record(
+            "diagram.open", actor, f"{workspace_id}:{profile}:{sid}"
+        )
+        return DiagramSessionOut(
+            session_id=sid,
+            workspace_id=workspace_id,
+            profile=profile,
+            dbml=dbml,
+        )
+
+    @app.get(
+        "/workspaces/{workspace_id}/diagrams/{session_id}",
+        response_model=DiagramSessionOut,
+    )
+    def get_diagram(
+        workspace_id: str,
+        session_id: str,
+        request: Request,
+        session: Session = Depends(get_session),
+    ) -> DiagramSessionOut:
+        ensure_actor(request, session)
+        ds = app.state.diagram_sessions.get(session_id)
+        if ds is None or ds.workspace_id != workspace_id:
+            raise HTTPException(status_code=404, detail="diagram session not found")
+        return DiagramSessionOut(
+            session_id=ds.session_id,
+            workspace_id=ds.workspace_id,
+            profile=ds.profile,
+            dbml=ds.dbml,
+        )
+
+    @app.put(
+        "/workspaces/{workspace_id}/diagrams/{session_id}/layout",
+        response_model=DiagramLayoutOut,
+    )
+    def put_diagram_layout(
+        workspace_id: str,
+        session_id: str,
+        body: DiagramLayoutPut,
+        request: Request,
+        session: Session = Depends(get_session),
+    ) -> DiagramLayoutOut:
+        actor = ensure_actor(request, session)
+        ds = app.state.diagram_sessions.get(session_id)
+        if ds is None or ds.workspace_id != workspace_id:
+            raise HTTPException(status_code=404, detail="diagram session not found")
+        diagram_id = f"moex:diagram:{workspace_id}:{ds.profile}"
+        import json
+
+        nodes_json = json.dumps(body.nodes, sort_keys=True)
+        row = session.get(orm.DiagramLayout, diagram_id)
+        if row is None:
+            row = orm.DiagramLayout(
+                diagram_id=diagram_id,
+                workspace_id=workspace_id,
+                implementation_id="moex:implementation:trading:1.0.0",
+                profile=ds.profile,
+                model_revision=body.model_revision,
+                nodes_json=nodes_json,
+            )
+            session.add(row)
+        else:
+            row.nodes_json = nodes_json
+            row.model_revision = body.model_revision
+        session.flush()
+        SqlAuditStore(session).record(
+            "diagram.layout", actor, diagram_id
+        )
+        return DiagramLayoutOut(
+            diagram_id=diagram_id,
+            workspace_id=workspace_id,
+            profile=ds.profile,
+            model_revision=body.model_revision,
+            nodes=body.nodes,
+        )
+
+    @app.post(
+        "/workspaces/{workspace_id}/diagrams/{session_id}/submit",
+        response_model=DiagramSubmitOut,
+    )
+    def submit_diagram(
+        workspace_id: str,
+        session_id: str,
+        body: DiagramSubmit,
+        request: Request,
+        session: Session = Depends(get_session),
+    ) -> DiagramSubmitOut:
+        actor = ensure_actor(request, session)
+        ds = app.state.diagram_sessions.get(session_id)
+        if ds is None or ds.workspace_id != workspace_id:
+            raise HTTPException(status_code=404, detail="diagram session not found")
+        base = yaml.safe_load(ds.base_yaml)
+        if not isinstance(base, dict):
+            raise HTTPException(status_code=400, detail="base yaml invalid")
+        merged, patch = app.state.drawdb.from_dbml(
+            base, body.dbml, profile=ds.profile
+        )
+        merged_yaml = _dump_yaml(merged)
+        ds.dbml = body.dbml
+        ds.last_merged_yaml = merged_yaml
+        ds.last_patch = patch.model_dump()
+        ds.last_rejected = [r.model_dump() for r in patch.rejected]
+        app.state.diagram_sessions.put(ds)
+
+        root = find_repo_root()
+        paths = SlicePaths.resolve(root=root)
+        left_tmp = right_tmp = None
+        try:
+            left = tempfile.NamedTemporaryFile(
+                mode="w", suffix=".yaml", encoding="utf-8", delete=False
+            )
+            left.write(ds.base_yaml)
+            left.close()
+            left_tmp = Path(left.name)
+            right = tempfile.NamedTemporaryFile(
+                mode="w", suffix=".yaml", encoding="utf-8", delete=False
+            )
+            right.write(merged_yaml)
+            right.close()
+            right_tmp = Path(right.name)
+            report = diff_implementations(
+                schema_path=paths.schema,
+                left_path=left_tmp,
+                right_path=right_tmp,
+                base_label="diagram-base",
+                target_label=f"diagram:{session_id}",
+            )
+        finally:
+            if left_tmp is not None:
+                left_tmp.unlink(missing_ok=True)
+            if right_tmp is not None:
+                right_tmp.unlink(missing_ok=True)
+
+        SqlAuditStore(session).record(
+            "diagram.submit", actor, f"{workspace_id}:{session_id}"
+        )
+        return DiagramSubmitOut(
+            session_id=session_id,
+            rejected=[
+                DiagramRejectedOut(
+                    code=r.code.value if hasattr(r.code, "value") else str(r["code"]),
+                    message=r.message if hasattr(r, "message") else r["message"],
+                    path=r.path if hasattr(r, "path") else r.get("path"),
+                )
+                for r in patch.rejected
+            ],
+            op_count=len(patch.ops),
+            semantic_diff=SemanticDiffOut(
+                id=report.id,
+                base_label=report.base_label,
+                target_label=report.target_label,
+                changes=[
+                    SemanticDiffChangeOut(
+                        change_code=c.change_code,
+                        category=c.category.value,
+                        subject_ref=c.subject_ref,
+                        message=c.message,
+                        path=c.path,
+                    )
+                    for c in report.changes
+                ],
+                has_breaking=report.has_breaking,
+                counts=report.counts_by_category(),
+            ),
+        )
+
+    @app.post(
+        "/workspaces/{workspace_id}/diagrams/{session_id}/apply",
+        response_model=DiagramApplyOut,
+    )
+    def apply_diagram(
+        workspace_id: str,
+        session_id: str,
+        request: Request,
+        session: Session = Depends(get_session),
+    ) -> DiagramApplyOut:
+        actor = ensure_actor(request, session)
+        ds = app.state.diagram_sessions.get(session_id)
+        if ds is None or ds.workspace_id != workspace_id:
+            raise HTTPException(status_code=404, detail="diagram session not found")
+        if not ds.last_merged_yaml:
+            raise HTTPException(
+                status_code=400, detail="submit diagram before apply"
+            )
+        if ds.last_rejected:
+            raise HTTPException(
+                status_code=400,
+                detail="cannot apply while rejected ops remain; fix DBML and re-submit",
+            )
+        root = find_repo_root()
+        paths = SlicePaths.resolve(root=root)
+        published = paths.implementation.read_text(encoding="utf-8")
+        published_digest = _content_digest(published)
+        docs = SqlDocumentStore(session)
+        existing = docs.get(workspace_id, "trading")
+        base_digest = (
+            existing.base_digest if existing is not None else published_digest
+        )
+        doc = docs.upsert(
+            workspace_id=workspace_id,
+            doc_key="trading",
+            content=ds.last_merged_yaml,
+            base_digest=base_digest,
+            updated_by=actor,
+        )
+        SqlAuditStore(session).record(
+            "diagram.apply", actor, f"{workspace_id}:{session_id}"
+        )
+        return DiagramApplyOut(
+            workspace_id=doc.workspace_id,
+            doc_key=doc.doc_key,
+            content=doc.content,
+            base_digest=doc.base_digest,
         )
 
     def _publication_out(row: PublicationRecord) -> PublicationOut:

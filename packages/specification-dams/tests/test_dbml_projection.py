@@ -33,6 +33,32 @@ MINI = {
                     "required": False,
                 },
             ],
+        },
+        {
+            "element_id": "dams:logical/mini/Account",
+            "name": "Account",
+            "attributes": [
+                {
+                    "element_id": "dams:logical/mini/Account/accountId",
+                    "name": "accountId",
+                    "logical_type": "identifier",
+                    "required": True,
+                },
+                {
+                    "element_id": "dams:logical/mini/Account/clientId",
+                    "name": "clientId",
+                    "logical_type": "identifier",
+                    "required": True,
+                },
+            ],
+        },
+    ],
+    "relationships": [
+        {
+            "element_id": "dams:rel/mini/Account-Client",
+            "name": "Account_owned_by_Client",
+            "source_entity_ref": "dams:logical/mini/Account",
+            "target_entity_ref": "dams:logical/mini/Client",
         }
     ],
     "physical_objects": [
@@ -49,14 +75,56 @@ MINI = {
                     "required": True,
                 }
             ],
-        }
+        },
+        {
+            "element_id": "dams:physical/mini/account_table",
+            "name": "account",
+            "object_kind": "table",
+            "physical_fields": [
+                {
+                    "element_id": "dams:physical/mini/account/id",
+                    "name": "id",
+                    "native_name": "id",
+                    "native_type": "uuid",
+                    "required": True,
+                },
+                {
+                    "element_id": "dams:physical/mini/account/client_id",
+                    "name": "client_id",
+                    "native_name": "client_id",
+                    "native_type": "uuid",
+                    "required": True,
+                },
+            ],
+        },
+        {
+            "element_id": "dams:physical/mini/client_table",
+            "name": "client",
+            "object_kind": "table",
+            "physical_fields": [
+                {
+                    "element_id": "dams:physical/mini/client/id",
+                    "name": "id",
+                    "native_name": "id",
+                    "native_type": "uuid",
+                    "required": True,
+                }
+            ],
+        },
     ],
     "mappings": [
         {
             "mapping_type": "field_mapping",
             "source_refs": ["dams:logical/mini/Client/clientId"],
             "target_refs": ["dams:physical/mini/client-topic/client_id"],
-        }
+        },
+        {
+            "element_id": "dams:map/mini/account-client-fk",
+            "name": "account_client_fk",
+            "mapping_type": "field_mapping",
+            "source_refs": ["dams:physical/mini/account/client_id"],
+            "target_refs": ["dams:physical/mini/client/id"],
+        },
     ],
 }
 
@@ -67,8 +135,10 @@ def test_logical_profile_emits_table_and_columns() -> None:
     assert "headercolor: #4285F4" in text
     assert "clientId identifier [not null" in text
     assert "fullName string" in text
-    # cross-layer mapping has only one end in logical index → no Ref
-    assert "Ref:" not in text
+    assert "Ref Account_owned_by_Client:" in text
+    assert "element_id=dams:rel/mini/Account-Client" in text
+    # cross-layer mapping has only one end in logical index → no field Ref
+    assert "client_changed_topic" not in text
 
 
 def test_physical_profile_notes_object_kind() -> None:
@@ -77,6 +147,9 @@ def test_physical_profile_notes_object_kind() -> None:
     assert "object_kind=topic" in text
     assert "headercolor: #0F9D58" in text
     assert "client_id string [not null" in text
+    assert "Ref account_client_fk:" in text
+    assert "account.client_id > client.id" in text
+    assert "element_id=dams:map/mini/account-client-fk" in text
 
 
 def test_write_dbml_artifact_writes_manifest(tmp_path: Path) -> None:

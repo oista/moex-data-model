@@ -91,6 +91,9 @@ def project_model_package_to_dbml(
 
     # element_id → (table_ident, column_ident)
     col_index: dict[str, tuple[str, str]] = {}
+    # entity/object element_id → (table_ident, default_column for Refs)
+    entity_table: dict[str, str] = {}
+    entity_default_col: dict[str, str] = {}
     table_names: set[str] = set()
 
     if profile == "logical":
@@ -105,14 +108,18 @@ def project_model_package_to_dbml(
                 tname = f"{base}_{n}"
                 n += 1
             table_names.add(tname)
+            eid = entity.get("element_id")
+            if eid:
+                entity_table[str(eid)] = tname
             note_bits = []
-            if entity.get("element_id"):
-                note_bits.append(f"element_id={entity['element_id']}")
+            if eid:
+                note_bits.append(f"element_id={eid}")
             if entity.get("title"):
                 note_bits.append(str(entity["title"]))
             lines.append(f"Table {tname} [headercolor: {color}] {{")
             if note_bits:
                 lines.append(f"  Note: '{_escape_note('; '.join(note_bits))}'")
+            default_col: str | None = None
             for attr in entity.get("attributes") or []:
                 if not isinstance(attr, dict):
                     continue
@@ -131,6 +138,12 @@ def project_model_package_to_dbml(
                 )
                 if aid:
                     col_index[str(aid)] = (tname, cname)
+                if default_col is None:
+                    default_col = cname
+                elif attr.get("logical_type") == "identifier":
+                    default_col = cname
+            if eid and default_col:
+                entity_default_col[str(eid)] = default_col
             lines.append("}")
             lines.append("")
     else:
@@ -144,14 +157,18 @@ def project_model_package_to_dbml(
                 tname = f"{base}_{n}"
                 n += 1
             table_names.add(tname)
+            oid = obj.get("element_id")
+            if oid:
+                entity_table[str(oid)] = tname
             kind = obj.get("object_kind") or "unknown"
             note_bits = [f"object_kind={kind}"]
-            if obj.get("element_id"):
-                note_bits.append(f"element_id={obj['element_id']}")
+            if oid:
+                note_bits.append(f"element_id={oid}")
             if obj.get("title"):
                 note_bits.append(str(obj["title"]))
             lines.append(f"Table {tname} [headercolor: {color}] {{")
             lines.append(f"  Note: '{_escape_note('; '.join(note_bits))}'")
+            default_col: str | None = None
             for field in obj.get("physical_fields") or []:
                 if not isinstance(field, dict):
                     continue
@@ -173,31 +190,77 @@ def project_model_package_to_dbml(
                 )
                 if fid:
                     col_index[str(fid)] = (tname, cname)
+                if default_col is None:
+                    default_col = cname
+            if oid and default_col:
+                entity_default_col[str(oid)] = default_col
             lines.append("}")
             lines.append("")
 
-    # Cross-layer field mappings → Ref when both ends are in this projection.
-    # Logical profile: only when both ends are logical attrs (rare).
-    # Physical profile: field_mapping logical→physical typically only has
-    # physical end in index; skip unless both present.
     refs: list[str] = []
+
+    # Logical relationships → named Refs (entity ends via default columns).
+    if profile == "logical":
+        for rel in data.get("relationships") or []:
+            if not isinstance(rel, dict):
+                continue
+            src_id = str(rel.get("source_entity_ref") or "")
+            tgt_id = str(rel.get("target_entity_ref") or "")
+            if (
+                src_id not in entity_table
+                or tgt_id not in entity_table
+                or src_id not in entity_default_col
+                or tgt_id not in entity_default_col
+            ):
+                continue
+            rname = _ident(rel.get("name"), fallback="rel")
+            rid = rel.get("element_id")
+            note = f" // element_id={rid}" if rid else ""
+            refs.append(
+                f"Ref {rname}: {entity_table[src_id]}.{entity_default_col[src_id]} "
+                f"> {entity_table[tgt_id]}.{entity_default_col[tgt_id]}{note}"
+            )
+
+    # Physical FKs: field_mapping when both ends are physical fields in index;
+    # also object-level mappings with both physical object ends (default cols).
     for mapping in data.get("mappings") or []:
         if not isinstance(mapping, dict):
             continue
-        if mapping.get("mapping_type") != "field_mapping":
-            continue
+        mtype = mapping.get("mapping_type")
         sources = [str(x) for x in (mapping.get("source_refs") or [])]
         targets = [str(x) for x in (mapping.get("target_refs") or [])]
-        for src in sources:
-            for tgt in targets:
-                if src not in col_index or tgt not in col_index:
-                    continue
-                st, sc = col_index[src]
-                tt, tc = col_index[tgt]
-                refs.append(f"Ref: {st}.{sc} > {tt}.{tc}")
+        mid = mapping.get("element_id")
+        mname = _ident(mapping.get("name"), fallback="map")
+        note = f" // element_id={mid}" if mid else ""
+
+        if mtype == "field_mapping":
+            for src in sources:
+                for tgt in targets:
+                    if src not in col_index or tgt not in col_index:
+                        continue
+                    st, sc = col_index[src]
+                    tt, tc = col_index[tgt]
+                    refs.append(f"Ref {mname}: {st}.{sc} > {tt}.{tc}{note}")
+        elif profile == "physical" and mtype in {
+            "object_mapping",
+            "entity_mapping",
+        }:
+            for src in sources:
+                for tgt in targets:
+                    if (
+                        src not in entity_table
+                        or tgt not in entity_table
+                        or src not in entity_default_col
+                        or tgt not in entity_default_col
+                    ):
+                        continue
+                    refs.append(
+                        f"Ref {mname}: {entity_table[src]}.{entity_default_col[src]} "
+                        f"> {entity_table[tgt]}.{entity_default_col[tgt]}{note}"
+                    )
 
     if refs:
-        lines.append("// field_mapping refs (both ends in projected profile)")
+        lines.append("// relationships / mappings as Refs")
         lines.extend(refs)
         lines.append("")
 
