@@ -33,8 +33,9 @@ LinkML нет класса «Requirement catalog»; `class.rules` / `slot.requir
   (kinds в духе LinkML constraints + опциональный `diagnostic_code`).
 - Подключение `formal_checks` к assess pipeline **отложено**; коды — мост к
   существующим диагностикам.
-- Viewer: корень «Требования» после «Спецификация» — список требований и
-  required-only проекция схемы в UI-шаблоне `source_file`.
+- Viewer: корень «Требования» после «Спецификация» — уровень «ИТ-решения» с
+  четырьмя вкладками: каталог требований, required-only схема, скелет
+  ModelPackage и кураторский пример.
 
 ## Consequences
 

@@ -1,0 +1,97 @@
+element_id: dams:model/example-min/1.0.0
+name: example_min_solution_model
+title: Минимальный пример модели ИТ-решения
+description: >-
+  Кураторский пример ModelPackage, заполняющий референсный скелет из
+  formal_checks каталога требований уровня ИТ-решения.
+lifecycle_status: draft
+api_version: dams.moex/v0.1
+model_version: 1.0.0
+solution_ref: eam:solution/EXAMPLE_MIN
+domain_contexts:
+  - element_id: dams:context/example-min
+    name: ExampleMinContext
+    title: Контекст минимального примера
+    description: Доменный контекст для демонстрационного пакета.
+    lifecycle_status: active
+    domain_ref: eam:domain/EXAMPLE
+    solution_ref: eam:solution/EXAMPLE_MIN
+    namespace: https://data.moex.com/models/example-min/
+logical_entities:
+  - element_id: dams:logical/example-min/Party
+    name: ExampleParty
+    title: Сторона
+    description: Минимальная логическая сущность примера.
+    lifecycle_status: active
+    context_ref: dams:context/example-min
+    solution_ref: eam:solution/EXAMPLE_MIN
+    solution_data_role: producer
+    attributes:
+      - element_id: dams:logical/example-min/Party/partyId
+        name: partyId
+        title: Идентификатор стороны
+        description: Стабильный идентификатор стороны в контуре решения.
+        lifecycle_status: active
+        owner_entity_ref: dams:logical/example-min/Party
+        logical_type: identifier
+        required: true
+        multivalued: false
+  - element_id: dams:logical/example-min/Account
+    name: ExampleAccount
+    title: Счёт
+    description: Вторая сущность для концов Relationship.
+    lifecycle_status: active
+    context_ref: dams:context/example-min
+    solution_ref: eam:solution/EXAMPLE_MIN
+    solution_data_role: consumer
+    attributes:
+      - element_id: dams:logical/example-min/Account/accountId
+        name: accountId
+        title: Идентификатор счёта
+        description: Идентификатор счёта.
+        lifecycle_status: active
+        owner_entity_ref: dams:logical/example-min/Account
+        logical_type: identifier
+        required: true
+        multivalued: false
+relationships:
+  - element_id: dams:rel/example-min/party-account
+    name: party_has_account
+    title: Сторона имеет счёт
+    description: Связь стороны со счётом (минимальный конец-к-концу пример).
+    lifecycle_status: active
+    source_entity_ref: dams:logical/example-min/Party
+    target_entity_ref: dams:logical/example-min/Account
+physical_objects:
+  - element_id: dams:physical/example-min/party-topic
+    name: party_changed_topic
+    title: Поток изменений стороны
+    description: Kafka topic с событиями изменения стороны.
+    lifecycle_status: active
+    solution_ref: eam:solution/EXAMPLE_MIN
+    system_ref: eam:system/EXAMPLE_CORE
+    object_kind: topic
+    qualified_name: example.party.changed.v1
+    technology: Apache Kafka
+    native_schema_ref: https://schemas.moex.com/example-min/party-changed/1.0.0
+    direction: outbound
+    physical_fields:
+      - element_id: dams:physical/example-min/party-topic/party_id
+        name: party_id
+        description: Физическое поле идентификатора стороны.
+        lifecycle_status: active
+        physical_object_ref: dams:physical/example-min/party-topic
+        native_name: party_id
+        native_type: string
+        required: true
+mappings:
+  - element_id: dams:mapping/example-min/party-id
+    name: map_party_id
+    description: Соответствие логического идентификатора физическому полю.
+    lifecycle_status: active
+    source_refs:
+      - dams:logical/example-min/Party/partyId
+    target_refs:
+      - dams:physical/example-min/party-topic/party_id
+    mapping_type: field_mapping
+    mapping_cardinality: one_to_one

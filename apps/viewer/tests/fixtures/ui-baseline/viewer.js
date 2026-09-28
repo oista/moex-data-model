@@ -484,7 +484,11 @@
         if (sectionRoot === "spec-files") {
           badgeCount =
             group.attributes?.file_count ?? (group.children || []).length;
-        } else if (sectionRoot === "requirements") {
+        } else if (
+          sectionRoot === "requirements" ||
+          sectionRoot === "requirements-it-solutions" ||
+          sectionRoot === "requirements-list"
+        ) {
           badgeCount =
             group.attributes?.requirement_count ??
             (group.children || []).reduce(
@@ -495,6 +499,13 @@
                   : (c.children || []).length) || 0),
               0
             );
+        } else if (
+          sectionRoot === "requirements-min-spec" ||
+          sectionRoot === "requirements-model-spec" ||
+          sectionRoot === "requirements-model-example"
+        ) {
+          badgeCount =
+            group.attributes?.file_count ?? (group.children || []).length;
         } else if (sectionRoot === "implementations") {
           badgeCount =
             group.attributes?.impl_count ?? (group.children || []).length;
@@ -1496,7 +1507,10 @@
         );
       } else if (
         sectionRoot === "requirements-list" ||
-        sectionRoot === "requirements-min-spec"
+        sectionRoot === "requirements-min-spec" ||
+        sectionRoot === "requirements-it-solutions" ||
+        sectionRoot === "requirements-model-spec" ||
+        sectionRoot === "requirements-model-example"
       ) {
         if (item.attributes?.requirement_count != null) {
           appendMetaRow(

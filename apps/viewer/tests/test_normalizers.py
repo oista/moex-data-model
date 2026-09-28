@@ -350,11 +350,15 @@ def test_dams_explorer_real_schema():
     assert "file:schemas/moex-dams.yaml" in (envelope.attributes.get("refs_out") or [])
 
     req_root = next(g for g in out.items if g.id == "group:requirements")
-    assert {c.id for c in req_root.children} == {
+    assert {c.id for c in req_root.children} == {"group:requirements-it-solutions"}
+    it = req_root.children[0]
+    assert {c.id for c in it.children} == {
         "group:requirements-list",
         "group:requirements-min-spec",
+        "group:requirements-model-spec",
+        "group:requirements-model-example",
     }
-    list_group = next(c for c in req_root.children if c.id == "group:requirements-list")
+    list_group = next(c for c in it.children if c.id == "group:requirements-list")
     assert any(c.attributes.get("code") == "GEN-001" for c in list_group.children)
 
     impls_root = next(g for g in out.items if g.id == "group:implementations")

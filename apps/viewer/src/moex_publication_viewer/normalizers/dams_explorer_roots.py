@@ -206,6 +206,33 @@ def _load_requirement_items(spec_dir: Path) -> list[PublicationItem]:
     return items
 
 
+def _source_file_items(
+    projected: dict[str, str],
+    *,
+    description: str,
+    version: str = "0.1.0",
+) -> list[PublicationItem]:
+    items: list[PublicationItem] = []
+    for rel, text in projected.items():
+        items.append(
+            PublicationItem(
+                id=_file_item_id(rel),
+                title=Path(rel).name,
+                description=description,
+                attributes={
+                    "kind": "source_file",
+                    "path": rel,
+                    "version": version,
+                    "description": description,
+                    "text": text,
+                    "refs_out": [],
+                    "refs_in": [],
+                },
+            )
+        )
+    return items
+
+
 def _build_minimal_spec_file_items(spec_dir: Path) -> list[PublicationItem]:
     """Derived required-only schema as source_file cards."""
     from linkml_runtime.utils.schemaview import SchemaView
@@ -219,21 +246,54 @@ def _build_minimal_spec_file_items(spec_dir: Path) -> list[PublicationItem]:
         return []
     sv = SchemaView(str(schema_path))
     projected = project_required_only_schema(sv)
+    return _source_file_items(
+        projected,
+        description=(
+            "Derived required-only projection "
+            "(required / minimum_cardinality≥1 slots)."
+        ),
+    )
+
+
+def _build_model_skeleton_file_items(spec_dir: Path) -> list[PublicationItem]:
+    """Derived ModelPackage skeleton from formal_checks."""
+    from moex_publication_viewer.normalizers.model_skeleton_projection import (
+        project_it_solution_model_skeleton,
+    )
+
+    catalog = spec_dir / "requirements" / "it-solution-requirements.yaml"
+    projected = project_it_solution_model_skeleton(catalog)
+    return _source_file_items(
+        projected,
+        description=(
+            "Derived ModelPackage skeleton from IT-solution formal_checks "
+            "(placeholders for required / ref_resolves slots)."
+        ),
+    )
+
+
+def _build_model_example_file_items(spec_dir: Path) -> list[PublicationItem]:
+    """Curated minimal ModelPackage example as source_file cards."""
+    examples_dir = spec_dir / "requirements" / "examples"
+    if not examples_dir.is_dir():
+        return []
     items: list[PublicationItem] = []
-    for rel, text in projected.items():
+    for path in sorted(examples_dir.glob("*.yaml")):
+        rel = f"requirements/examples/{path.name}"
+        text = path.read_text(encoding="utf-8")
+        _, description, _ = _read_yaml_meta(path)
         items.append(
             PublicationItem(
                 id=_file_item_id(rel),
-                title=Path(rel).name,
-                description="Required-only DAMS schema projection",
+                title=path.name,
+                description=description
+                or "Curated minimal ModelPackage example for IT-solution owners.",
                 attributes={
                     "kind": "source_file",
                     "path": rel,
                     "version": "0.1.0",
-                    "description": (
-                        "Derived required-only projection "
-                        "(required / minimum_cardinality≥1 slots)."
-                    ),
+                    "description": description
+                    or "Curated minimal ModelPackage example for IT-solution owners.",
                     "text": text,
                     "refs_out": [],
                     "refs_in": [],
@@ -320,8 +380,8 @@ def wrap_dams_explorer_roots(
     req_items = _load_requirement_items(spec_dir)
     list_group = PublicationItem(
         id="group:requirements-list",
-        title="ИТ-решение: список",
-        description="Каталог требований уровня ИТ-решение.",
+        title="Требования к модели",
+        description="Каталог требований к модели данных ИТ-решения.",
         attributes={
             "kind": "group",
             "section_root": "requirements-list",
@@ -334,8 +394,8 @@ def wrap_dams_explorer_roots(
     min_files = _build_minimal_spec_file_items(spec_dir)
     min_spec_group = PublicationItem(
         id="group:requirements-min-spec",
-        title="ИТ-решение: спецификация",
-        description="Минимальный required-only срез схемы DAMS.",
+        title="Спецификация требований",
+        description="Required-only срез схемы DAMS по обязательным слотам.",
         attributes={
             "kind": "group",
             "section_root": "requirements-min-spec",
@@ -345,23 +405,84 @@ def wrap_dams_explorer_roots(
         },
         children=min_files,
     )
+    skeleton_files = _build_model_skeleton_file_items(spec_dir)
+    model_spec_group = PublicationItem(
+        id="group:requirements-model-spec",
+        title="Спецификация модели",
+        description="Минимально допустимый скелет ModelPackage по formal_checks.",
+        attributes={
+            "kind": "group",
+            "section_root": "requirements-model-spec",
+            "purpose": (
+                "Референсная форма инстанса модели, которую владельцы решений "
+                "должны уметь заполнить."
+            ),
+            "file_count": len(skeleton_files),
+            "member_ids": [f.id for f in skeleton_files],
+        },
+        children=skeleton_files,
+    )
+    example_files = _build_model_example_file_items(spec_dir)
+    model_example_group = PublicationItem(
+        id="group:requirements-model-example",
+        title="Пример модели",
+        description="Кураторский пример ModelPackage по референсному скелету.",
+        attributes={
+            "kind": "group",
+            "section_root": "requirements-model-example",
+            "purpose": "Заполненный минимальный пример модели ИТ-решения.",
+            "file_count": len(example_files),
+            "member_ids": [f.id for f in example_files],
+        },
+        children=example_files,
+    )
+    it_solutions_group = PublicationItem(
+        id="group:requirements-it-solutions",
+        title="ИТ-решения",
+        description="Раздел описывает требования к модели данных ИТ-решений.",
+        attributes={
+            "kind": "group",
+            "section_root": "requirements-it-solutions",
+            "purpose": "Требования, схема, скелет и пример модели уровня ИТ-решения.",
+            "structure_why": (
+                "Требования к модели — каталог SpecificationRequirement; "
+                "спецификация требований — required-only LinkML; "
+                "спецификация модели — derived skeleton; "
+                "пример модели — curated ModelPackage."
+            ),
+            "requirement_count": len(req_items),
+            "file_count": len(min_files) + len(skeleton_files) + len(example_files),
+            "member_ids": [
+                list_group.id,
+                min_spec_group.id,
+                model_spec_group.id,
+                model_example_group.id,
+            ],
+        },
+        children=[
+            list_group,
+            min_spec_group,
+            model_spec_group,
+            model_example_group,
+        ],
+    )
     requirements_root = PublicationItem(
         id="group:requirements",
         title="Требования",
-        description="Каталог требований и минимальная спецификация для ИТ-решения.",
+        description="Требования к моделям по уровням применения (ADR-013).",
         attributes={
             "kind": "group",
             "section_root": "requirements",
-            "purpose": "Нормативные требования (ADR-013) и required-only проекция схемы.",
+            "purpose": "Каталог нормативных требований и связанные проекции.",
             "structure_why": (
-                "Список — инстансы SpecificationRequirement; "
-                "минимальная спецификация — derived YAML для валидационного минимума."
+                "Сейчас один уровень — ИТ-решения; внутри: список требований, "
+                "required-only схема, скелет и пример ModelPackage."
             ),
             "requirement_count": len(req_items),
-            "file_count": len(min_files),
-            "member_ids": [list_group.id, min_spec_group.id],
+            "file_count": len(min_files) + len(skeleton_files) + len(example_files),
+            "member_ids": [it_solutions_group.id],
         },
-        children=[list_group, min_spec_group],
+        children=[it_solutions_group],
     )
 
     # Placeholder; build.py fills children from architecture catalog.

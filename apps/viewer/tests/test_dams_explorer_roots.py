@@ -13,6 +13,9 @@ from moex_publication_viewer.models.publication_models import PublicationItem
 from moex_publication_viewer.normalizers.minimal_schema_projection import (
     project_required_only_schema,
 )
+from moex_publication_viewer.normalizers.model_skeleton_projection import (
+    project_it_solution_model_skeleton,
+)
 
 
 REPO = Path(__file__).resolve().parents[3]
@@ -71,9 +74,13 @@ def test_wrap_roots_placeholder_implementations(tmp_path: Path):
     assert roots[1].children[0].id == "group:pkg"
     assert roots[2].children
     assert roots[3].id == "group:requirements"
-    assert {c.id for c in roots[3].children} == {
+    assert {c.id for c in roots[3].children} == {"group:requirements-it-solutions"}
+    it = roots[3].children[0]
+    assert {c.id for c in it.children} == {
         "group:requirements-list",
         "group:requirements-min-spec",
+        "group:requirements-model-spec",
+        "group:requirements-model-example",
     }
     assert roots[4].children == []
 
@@ -87,7 +94,11 @@ def test_wrap_roots_loads_requirements_catalog():
     )
     roots = wrap_dams_explorer_roots([pkg], DAMS_SPEC)
     req_root = next(r for r in roots if r.id == "group:requirements")
-    list_group = next(c for c in req_root.children if c.id == "group:requirements-list")
+    assert req_root.children[0].id == "group:requirements-it-solutions"
+    assert req_root.children[0].title == "ИТ-решения"
+    it = req_root.children[0]
+    list_group = next(c for c in it.children if c.id == "group:requirements-list")
+    assert list_group.title == "Требования к модели"
     codes = {c.attributes.get("code") for c in list_group.children}
     assert "GEN-001" in codes
     assert "LDM-001" in codes
@@ -98,12 +109,31 @@ def test_wrap_roots_loads_requirements_catalog():
     assert all(c.attributes.get("statement") for c in list_group.children)
     assert all(c.attributes.get("formal_checks") for c in list_group.children)
 
-    min_group = next(
-        c for c in req_root.children if c.id == "group:requirements-min-spec"
-    )
+    min_group = next(c for c in it.children if c.id == "group:requirements-min-spec")
+    assert min_group.title == "Спецификация требований"
     assert min_group.children
     assert all(c.attributes.get("kind") == "source_file" for c in min_group.children)
     assert all("classes:" in (c.attributes.get("text") or "") for c in min_group.children)
+
+    model_spec = next(
+        c for c in it.children if c.id == "group:requirements-model-spec"
+    )
+    assert model_spec.title == "Спецификация модели"
+    assert model_spec.children
+    skel_text = model_spec.children[0].attributes.get("text") or ""
+    assert "element_id:" in skel_text
+    assert "logical_entities:" in skel_text
+    assert "<required>" in skel_text or "<must-resolve-in-package>" in skel_text
+
+    example = next(
+        c for c in it.children if c.id == "group:requirements-model-example"
+    )
+    assert example.title == "Пример модели"
+    assert example.children
+    assert example.children[0].id == (
+        "file:requirements/examples/it-solution-model.example.yaml"
+    )
+    assert "example_min_solution_model" in (example.children[0].attributes.get("text") or "")
 
 
 def test_minimal_schema_projection_has_required_slots():
@@ -117,3 +147,23 @@ def test_minimal_schema_projection_has_required_slots():
     assert "LogicalEntity" in text
     assert "SpecificationRequirement" in text
     assert "RequirementLevelEnum" in text
+
+
+def test_model_skeleton_projection_from_formal_checks():
+    catalog = DAMS_SPEC / "requirements" / "it-solution-requirements.yaml"
+    out = project_it_solution_model_skeleton(catalog)
+    assert "requirements/minimal/it-solution-model.skeleton.yaml" in out
+    text = out["requirements/minimal/it-solution-model.skeleton.yaml"]
+    assert "element_id:" in text
+    assert "api_version:" in text
+    assert "model_version:" in text
+    assert "logical_entities:" in text
+    assert "context_ref:" in text
+    assert "solution_data_role:" in text
+    assert "attributes:" in text
+    assert "owner_entity_ref:" in text
+    assert "relationships:" in text
+    assert "physical_objects:" in text
+    assert "mappings:" in text
+    assert "source_refs:" in text
+    assert "target_refs:" in text
