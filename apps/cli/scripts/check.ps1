@@ -5,32 +5,22 @@
 $ErrorActionPreference = "Stop"
 $CliRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 $RepoRoot = Resolve-Path (Join-Path $CliRoot "../..")
-$VenvPython = Join-Path $CliRoot ".venv/Scripts/python.exe"
-
-function Find-Python311 {
-    foreach ($ver in @("3.14", "3.13", "3.12", "3.11")) {
-        try {
-            $exe = & py "-$ver" -c "import sys; print(sys.executable)" 2>$null
-            if ($LASTEXITCODE -eq 0 -and $exe) { return $exe.Trim() }
-        } catch { }
-    }
-    $fallback = Get-Command python -ErrorAction SilentlyContinue
-    if ($fallback) {
-        & $fallback.Source -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)" 2>$null
-        if ($LASTEXITCODE -eq 0) { return $fallback.Source }
-    }
-    return $null
-}
+. (Join-Path $RepoRoot "scripts/lib.ps1")
 
 Push-Location $RepoRoot
 try {
-    if (-not (Test-Path $VenvPython)) {
+    $VenvPython = Resolve-VenvPython (Join-Path $CliRoot ".venv")
+    if (-not $VenvPython) {
         $base = Find-Python311
         if (-not $base) {
-            Write-Error "Python 3.11+ not found. Install Python 3.11+ or ensure 'py -3.14' works."
+            Write-Error "Python 3.11+ not found. Install Python 3.11+ or ensure 'py -3.14' / python3 works."
         }
         Write-Host "Creating venv with $base"
         & $base -m venv (Join-Path $CliRoot ".venv")
+        $VenvPython = Resolve-VenvPython (Join-Path $CliRoot ".venv")
+        if (-not $VenvPython) {
+            Write-Error "venv created but python executable not found under apps/cli/.venv"
+        }
     }
 
     $Kernel = Join-Path $RepoRoot "packages/modeling-kernel"
@@ -40,7 +30,7 @@ try {
     $Git = Join-Path $RepoRoot "packages/git-adapter"
 
     $Contracts = Join-Path $RepoRoot "generated/contracts/moex-dams/0.1"
-    Write-Host "Ensuring DAMS contracts package"
+    Write-Host "Ensuring DAMS contracts package (Python: $VenvPython)"
     & $VenvPython -m pip install -U pip -q
     & $VenvPython -m pip install -q -r (Join-Path $RepoRoot "requirements-linkml.txt")
     & $VenvPython (Join-Path $RepoRoot "scripts/generate_contracts.py")

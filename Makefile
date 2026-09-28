@@ -5,6 +5,13 @@
 # CI pin: .python-version (3.12). LinkML pin: requirements-linkml.txt
 PYTHON ?= python
 
+# Windows ships `powershell`; Ubuntu GHA / Linux typically has `pwsh`.
+ifeq ($(OS),Windows_NT)
+  PWSH ?= powershell
+else
+  PWSH ?= pwsh
+endif
+
 VIEWER := apps/viewer
 
 viewer:
@@ -24,44 +31,44 @@ architecture-check:
 # Uses package .venv (Python 3.11+). Without make:
 #   powershell -NoProfile -File packages/standard-linkml/scripts/check.ps1
 linkml-ingest-check:
-	powershell -NoProfile -ExecutionPolicy Bypass -File packages/standard-linkml/scripts/check.ps1
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File packages/standard-linkml/scripts/check.ps1
 
 # First vertical slice: kernel → linkml provider → dams rules → publication JSON
 # Without make:
 #   powershell -NoProfile -File packages/publication/scripts/check.ps1
 vertical-slice-check:
-	powershell -NoProfile -ExecutionPolicy Bypass -File packages/publication/scripts/check.ps1
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File packages/publication/scripts/check.ps1
 
 # linkml-lint + validate trading-solution (uses apps/cli .venv when present)
 validate-schemas:
-	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/validate-schemas.ps1
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/validate-schemas.ps1
 
 lint-schemas: validate-schemas
 
 validate-examples:
-	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/validate-examples.ps1
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/validate-examples.ps1
 
 # gen-pydantic → generated/contracts/moex-dams/0.1 (moex_dams_contracts)
 generate-contracts:
-	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/generate-contracts.ps1
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/generate-contracts.ps1
 
 # Digest check: committed contracts (+ json-schema if present) vs regenerate
 compare-golden:
-	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/compare-golden.ps1
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/compare-golden.ps1
 
 # Slice + CLI + architecture + schema lint/validate + path-layout guards.
 # Without make:
 #   powershell -NoProfile -File apps/cli/scripts/check.ps1
 api-check:
-	powershell -NoProfile -ExecutionPolicy Bypass -File apps/api/scripts/check.ps1
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File apps/api/scripts/check.ps1
 
 web-check:
-	powershell -NoProfile -ExecutionPolicy Bypass -File apps/web/scripts/check.ps1
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File apps/web/scripts/check.ps1
 
 # Stage 0 gate: contracts → slice tests → schemas → examples → golden
 check:
-	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/generate-contracts.ps1
-	powershell -NoProfile -ExecutionPolicy Bypass -File apps/cli/scripts/check.ps1
-	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/validate-schemas.ps1
-	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/validate-examples.ps1
-	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/compare-golden.ps1
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/generate-contracts.ps1
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File apps/cli/scripts/check.ps1
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/validate-schemas.ps1
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/validate-examples.ps1
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/compare-golden.ps1

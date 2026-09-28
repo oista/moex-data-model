@@ -84,23 +84,23 @@ py -3.14 -m architecture_check.cli --root .
 ### DAMS schemas
 
 ```bash
-pip install linkml
-cd model-assets/specifications/moex-dams/0.1/schemas
-linkml-lint moex-dams.yaml
+pip install -r requirements-linkml.txt
+# from repo root:
+linkml-lint --config .linkmllint.yaml model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml
 ```
 
 Или `make validate-schemas`. Состав схем: [`model-assets/specifications/moex-dams/0.1/README.md`](model-assets/specifications/moex-dams/0.1/README.md).
 
-### Первый вертикальный срез и CLI
+### Первый вертикальный срез и CLI (Stage 0)
 
 ```bash
 make check
-# или: powershell -NoProfile -File apps/cli/scripts/check.ps1
 ```
 
-Прогоняет kernel / LinkML provider / DAMS assess / publication / CLI, architecture-check, lint/validate схем и пишет
-[`model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json`](model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json)
-через `moex-model publish`.
+Порядок: `generate-contracts` → slice/CLI pytest (`apps/cli/scripts/check.ps1`) → `validate-schemas` → `validate-examples` → `compare-golden`.  
+Pin: [`requirements-linkml.txt`](requirements-linkml.txt), CI: [`.github/workflows/check.yml`](.github/workflows/check.yml) (Python из [`.python-version`](.python-version)).
+
+Пишет [`model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json`](model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json) через `moex-model publish`.
 
 ```bash
 py -3.14 -m moex_model_cli validate --root .

@@ -25,13 +25,13 @@ superseded_by: MODELING_ARCHITECTURE.md
 - Недетерминированные поля (timestamps) отключаются или нормализуются.
 - Lockfile фиксирует LinkML ecosystem; обновление toolchain — отдельный PR с объяснением golden diff.
 
-На текущем срезе: `SpecificationImplementation.content_digest` и envelope `revision` от digest; publication JSON пересобирается `moex-model publish`. Полный generator matrix (JSON Schema, OWL, …) — ещё Workbench этап 6.
+На текущем срезе: `SpecificationImplementation.content_digest` и envelope `revision` от digest; publication JSON пересобирается `moex-model publish`. **CI `compare-golden`** сверяет regenerable contracts (+ `moex-dams.schema.json`) с pinned `requirements-linkml.txt`; полный generator matrix (OWL, SHACL, DBML, …) — ещё Workbench этап 6.
 
 ## Consequences
 
-- CI later: generate + compare golden.
+- CI: generate + compare golden for contracts (Stage 0).
 - Viewer `dist/` gitignored — воспроизводится командой сборки.
-- Digest mismatch — ошибка публикации, не warning.
+- Digest mismatch — ошибка публикации / `compare-golden`, не warning.
 
 ## Alternatives
 

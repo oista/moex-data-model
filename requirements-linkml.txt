@@ -26,3 +26,4 @@ SQLAlchemy==2.1.1
 graphviz==0.21
 PyJSG==0.12.4
 PyShEx==0.9.0
+PyShexC==0.10.3.post1

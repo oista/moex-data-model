@@ -4,22 +4,22 @@ overview: "Закрыть Stage 0 без миграции на uv: pin LinkML ч
 todos:
   - id: pin-linkml
     content: Add requirements-linkml.txt + .python-version; switch generate/validate/check.ps1 to pip -r
-    status: in_progress
+    status: completed
   - id: linkmllint-config
     content: Add .linkmllint.yaml and wire validate-schemas.ps1 Linter to it
     status: completed
   - id: validate-examples
     content: Add scripts/validate-examples.ps1 + Makefile target (DataModelBinding/DataFlow; registries policy)
-    status: in_progress
+    status: completed
   - id: compare-golden
     content: Deterministic manifest fields + compare_golden.py/ps1 for contracts (+ json-schema if present); fold into make check
-    status: pending
+    status: completed
   - id: gha-workflow
     content: Add .github/workflows/check.yml (ubuntu 3.12 + make check)
-    status: pending
+    status: completed
   - id: docs-stage0
     content: Update IMPLEMENTATION_PLAN Stage 0, ADR-011 note, README make check list
-    status: pending
+    status: completed
 isProject: false
 ---
 

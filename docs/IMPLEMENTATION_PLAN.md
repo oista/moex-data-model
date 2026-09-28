@@ -339,6 +339,7 @@ artifact:
 - **Stage 3 narrow-v2 (2026-09-28):** Alembic `0002` — `user_identity`, `role_binding`, `workspace_member`, `generation_job`, `generated_artifact`, `model_index`, `model_element_index`; ports `IdentityStore` / `JobStore` / `ModelIndexProvider`; HTTP workspaces + sync jobs (Idempotency-Key) + model-index rebuild/search; GitHub read-only `GitProvider` via `MOEX_GIT_PROVIDER`.
 - **Stage 3 narrow-v3 (2026-09-28):** Alembic `0004` `publication_request`; GitHub write + local publish; `POST /publications` from workspace draft into this repo; Workbench Publish button.
 - **Semantic diff CLI (2026-09-28):** kernel `SemanticDiffReport` / `ChangeCategory`; `specification-dams.diff_implementations`; `moex-model semantic-diff` (Git refs + `--left`/`--right`, `--json`, exit 1 on breaking). API/UI/PR attach still out.
+- **Stage 0 foundation CI (2026-09-28):** `requirements-linkml.txt` (exact pins; `uv.lock` deferred), `.python-version` 3.12, `.linkmllint.yaml`, `validate-examples`, `compare-golden` (contracts + JSON Schema), `.github/workflows/check.yml`. Full OWL/SHACL/DBML golden matrix still Stage 6.
 
 ### Результат
 
@@ -351,14 +352,14 @@ make check
 должна выполнять:
 
 ```text
-validate-schemas
-lint-schemas
+generate-contracts
+test-python (apps/cli/scripts/check.ps1)
+validate-schemas / lint-schemas
 validate-examples
-test-semantic-rules
-generate
 compare-golden
-test-python
 ```
+
+Toolchain bump: обновить [`requirements-linkml.txt`](../requirements-linkml.txt), перегенерировать contracts (+ JSON Schema), закоммитить digests в одном PR.
 
 ### Критерии готовности
 

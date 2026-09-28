@@ -28,7 +28,7 @@ Viewer-решения живут отдельно: [viewer-decisions.md](../arch
 | [ADR-008](ADR-008-linkml-map-provider.md) | LinkML Map за provider interface | Workbench / mappings, ещё нет кода |
 | [ADR-009](ADR-009-schema-automator-draft-only.md) | schema-automator только draft import | действует (ingest не использует) |
 | [ADR-010](ADR-010-owl-not-primary-validation.md) | OWL не основной validation | действует (каталог read-only) |
-| [ADR-011](ADR-011-reproducible-artifacts.md) | Generated artifacts воспроизводимы | частично (digest на срезе) |
+| [ADR-011](ADR-011-reproducible-artifacts.md) | Generated artifacts воспроизводимы | Stage 0: `requirements-linkml.txt` + `compare-golden` (contracts/JSON Schema); полный matrix — этап 6 |
 | [ADR-012](ADR-012-semantic-diff-review.md) | Публикация через semantic diff и review | Workbench; CLI `semantic-diff` есть; API/UI/PR attach — нет |
 
 ## Как принимать

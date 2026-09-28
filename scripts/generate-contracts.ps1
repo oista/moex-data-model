@@ -4,24 +4,9 @@
 
 $ErrorActionPreference = "Stop"
 $RepoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
-$CliVenv = Join-Path $RepoRoot "apps/cli/.venv/Scripts/python.exe"
+. (Join-Path $PSScriptRoot "lib.ps1")
 
-function Find-Python311 {
-    foreach ($ver in @("3.14", "3.13", "3.12", "3.11")) {
-        try {
-            $exe = & py "-$ver" -c "import sys; print(sys.executable)" 2>$null
-            if ($LASTEXITCODE -eq 0 -and $exe) { return $exe.Trim() }
-        } catch { }
-    }
-    return $null
-}
-
-if (Test-Path $CliVenv) { $Python = $CliVenv }
-else {
-    $Python = Find-Python311
-    if (-not $Python) { Write-Error "Python 3.11+ not found" }
-}
-
+$Python = Resolve-RepoPython -RepoRoot $RepoRoot
 $env:PYTHONUTF8 = "1"
 $Req = Join-Path $RepoRoot "requirements-linkml.txt"
 & $Python -m pip install -q -r $Req
