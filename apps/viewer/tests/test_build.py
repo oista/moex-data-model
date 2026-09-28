@@ -140,6 +140,27 @@ def test_repo_golden_three_modules():
     assert "navigateToNode" in js
     assert "walkExplorerItems" in js
     assert "renderOntologyExplorerDetail" in js
+    assert "appendCatalogNav" in js
+    assert "nav-catalog-body" in js
+    assert "nav-impl-children" not in js
+    assert "makeCatalogBtn" not in js
+    # Spec↔Impl only under explorer group:implementations (not catalog siblings)
+    pub_raw = html.split('id="publication-data"', 1)[1].split(">", 1)[1].split(
+        "</script>", 1
+    )[0]
+    pub_modules = json.loads(pub_raw)
+    dams_pub = next(m for m in pub_modules if m["module_id"] == "moex:module:dams")
+    dams_expl = next(s for s in dams_pub["sections"] if s["type"] == "explorer")
+    impls_root = next(i for i in dams_expl["items"] if i["id"] == "group:implementations")
+    impl_ids = {c["id"] for c in impls_root.get("children") or []}
+    assert {"moex-dsp", "trading-solution"}.issubset(impl_ids)
+    assert all(
+        (c.get("attributes") or {}).get("kind") == "implementation_ref"
+        for c in impls_root.get("children") or []
+    )
+    assert by_id["moex-dams"].get("description")
+    assert by_id["trading-solution"].get("description")
+    assert by_id["moex-fibo-profile"].get("description")
 
 
 def test_nav_group_children_hidden_overrides_display_flex():
@@ -162,7 +183,11 @@ def test_explorer_groups_selectable_cards_not_in_search_and_module_title():
     build(repo, dist)
     html = (dist / "index.html").read_text(encoding="utf-8")
     assert "moex.dams" in html
-    assert "Data Specification Player" in html
+    assert "MOEX Model Explorer" in html
+    assert "data-ui=\"sidebar\"" in html or "data-ui='sidebar'" in html
+    assert "data-viewer-version" in html
+    assert "--brand:" in html or "--brand :" in html
+    assert "font-family: \"MOEX UI\"" in html or "font-family:\"MOEX UI\"" in html or "MOEX UI" in html
     assert "moex.dsp" in html
     assert "edmc.fibo" in html
     # Group ids must not appear as selectable search items
@@ -171,7 +196,14 @@ def test_explorer_groups_selectable_cards_not_in_search_and_module_title():
     assert "kind === \"group\"" in js or "kind === 'group'" in js
     assert "groupBadge" in js or '?"ontology"' in js or "? \"ontology\"" in js
     assert "explore this module" in js
+    assert "openSearchDialog" in js
     assert "structure_why" in html
+    # Autonomous HTML: styles and script inlined
+    assert "<style id=\"viewer-css\">" in html or "<style id='viewer-css'>" in html
+    assert "<script id=\"viewer-js\">" in html or "<script id='viewer-js'>" in html
+    assert 'href="viewer.css"' not in html
+    assert 'src="viewer.js"' not in html
+    assert "data:font/woff2;base64," in html
     # Collapsed-by-default: no auto-expand when openGroups is empty
     assert "openGroups.size === 0" not in js
     # Class-level expressed_in removed from LinkML explorer attributes

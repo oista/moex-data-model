@@ -1,6 +1,7 @@
-# Data Specification Player
+# MOEX Model Explorer
 
-Static HTML player for published modeling artifacts in this repository.
+Static HTML player for published modeling artifacts in this repository
+(**MOEX Atlas** visual system — see [`docs/adr/ADR-015-viewer-ui-atlas.md`](../../docs/adr/ADR-015-viewer-ui-atlas.md)).
 
 **Architecture role:** derived **read model** / publication builder over canonical Git assets.  
 It is not the modeling source of truth. Platform canon:
@@ -11,7 +12,7 @@ Package location: `apps/viewer` (see [`docs/architecture/app_model.md`](../../do
 
 - Discover every `publish.yaml` under the repo root
 - Normalize YAML / JSON / CSV / Markdown / LinkML into one publication model
-- Emit a single `apps/viewer/dist/index.html` (plus CSS/JS) with no backend
+- Emit a single autonomous `apps/viewer/dist/index.html` (CSS/JS/fonts inlined) with no backend
 
 ## Install
 

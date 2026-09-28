@@ -9,15 +9,15 @@ description = "Static HTML publication viewer for MOEX data model artifacts"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "pydantic>=2.6,<3.0",
-    "PyYAML>=6.0,<7.0",
-    "Jinja2>=3.1,<4.0",
-    "Markdown>=3.5,<4.0",
-    "linkml-runtime>=1.7,<2.0",
+    "pydantic==2.13.5",
+    "PyYAML==6.0.3",
+    "Jinja2==3.1.6",
+    "Markdown==3.10.3",
+    "linkml-runtime==1.11.1",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0,<9.0"]
+dev = ["pytest==8.4.2"]
 
 [project.scripts]
 moex-viewer = "moex_publication_viewer.cli:main"

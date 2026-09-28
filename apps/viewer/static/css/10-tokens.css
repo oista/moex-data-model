@@ -1,0 +1,141 @@
+/* MOEX Atlas — design tokens (ADR-015) */
+
+:root,
+[data-theme="light"] {
+  --app-bg: #f5f6f8;
+  --surface-1: #ffffff;
+  --surface-2: #fafbfc;
+  --surface-3: #f0f2f5;
+
+  --text-primary: #17191d;
+  --text-secondary: #545c68;
+  --text-tertiary: #7d8794;
+  --text-disabled: #a8afb9;
+  --text-inverse: #ffffff;
+
+  --border-subtle: rgba(18, 24, 33, 0.08);
+  --border-default: rgba(18, 24, 33, 0.13);
+  --border-strong: rgba(18, 24, 33, 0.22);
+
+  --brand: #d71920;
+  --brand-hover: #b91118;
+  --brand-active: #950d13;
+  --brand-soft: #fcebed;
+
+  --link: #315da8;
+  --focus: #d71920;
+
+  --success: #147d52;
+  --warning: #9b6300;
+  --danger: #bd1e2d;
+  --info: #315da8;
+
+  --code-bg: #f7f8fa;
+  --code-gutter: #eceff3;
+  --selection-bg: #fcebed;
+
+  --shadow-float:
+    0 1px 2px rgba(18, 24, 33, 0.05),
+    0 8px 24px rgba(18, 24, 33, 0.06);
+
+  /* Legacy aliases used by component rules */
+  --bg: var(--app-bg);
+  --panel: var(--surface-1);
+  --text: var(--text-primary);
+  --muted: var(--text-secondary);
+  --border: var(--border-default);
+  --accent: var(--brand);
+  --accent-soft: var(--brand-soft);
+  --shadow: 0 1px 2px rgba(18, 24, 33, 0.025);
+
+  --sidebar-w: 288px;
+  --sidebar-min: 240px;
+  --sidebar-max: 420px;
+  --header-h: 56px;
+  --content-max: 1180px;
+  --reading-max: 76ch;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 999px;
+
+  --duration-fast: 120ms;
+  --duration-default: 180ms;
+  --duration-slow: 260ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  --font-2xs: 11px;
+  --font-xs: 12px;
+  --font-sm: 13px;
+  --font-ui: 14px;
+  --font-body: 15px;
+  --font-lead: 16px;
+  --font-h3: 18px;
+  --font-h2: 22px;
+  --font-h1: 28px;
+
+  --line-compact: 1.25;
+  --line-ui: 1.4;
+  --line-body: 1.6;
+
+  --font-ui-family: "MOEX UI", "Segoe UI", Arial, sans-serif;
+  --font-code: "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+}
+
+[data-theme="dark"] {
+  --app-bg: #101216;
+  --surface-1: #171a20;
+  --surface-2: #1c2027;
+  --surface-3: #242a33;
+
+  --text-primary: #f1f3f5;
+  --text-secondary: #b4bbc5;
+  --text-tertiary: #858f9d;
+  --text-disabled: #606875;
+  --text-inverse: #121418;
+
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-default: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.20);
+
+  --brand: #ff5a61;
+  --brand-hover: #ff7379;
+  --brand-active: #e54750;
+  --brand-soft: rgba(255, 90, 97, 0.13);
+
+  --link: #8eb4f0;
+  --focus: #ff6b72;
+
+  --success: #56b98b;
+  --warning: #e2ae55;
+  --danger: #ff747e;
+  --info: #8eb4f0;
+
+  --code-bg: #12151a;
+  --code-gutter: #1b1f26;
+  --selection-bg: rgba(255, 90, 97, 0.12);
+
+  --shadow-float:
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 12px 36px rgba(0, 0, 0, 0.24);
+
+  --bg: var(--app-bg);
+  --panel: var(--surface-1);
+  --text: var(--text-primary);
+  --muted: var(--text-secondary);
+  --border: var(--border-default);
+  --accent: var(--brand);
+  --accent-soft: var(--brand-soft);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}

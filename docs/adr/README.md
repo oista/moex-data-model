@@ -6,7 +6,7 @@ supersedes: []
 superseded_by: MODELING_ARCHITECTURE.md
 ---
 
-# ADR index (001–014)
+# ADR index (001–015)
 
 **Status:** Proposed drafts  
 **Date:** 2026-09-28  
@@ -14,7 +14,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 
 Список решений из [linkml_architecture.md](../architecture/linkml_architecture.md) § «Ключевые решения». Это **проекты ADR**, не Accepted: при расхождении побеждает нормативный документ ядра.
 
-Viewer-решения живут отдельно: [viewer-decisions.md](../architecture/viewer-decisions.md).
+Viewer-решения живут отдельно: [viewer-decisions.md](../architecture/viewer-decisions.md). UI presentation — [ADR-015](ADR-015-viewer-ui-atlas.md) / [viewer-atlas](../design/viewer-atlas/README.md).
 
 | ADR | Title | Scope today |
 |---|---|---|
@@ -32,6 +32,7 @@ Viewer-решения живут отдельно: [viewer-decisions.md](../arch
 | [ADR-012](ADR-012-semantic-diff-review.md) | Публикация через semantic diff и review | Workbench; CLI + API preview + Web Review changes; PR attach — нет |
 | [ADR-013](ADR-013-specification-requirements-catalog.md) | Каталог требований к спецификации в DAMS LinkML | DAMS explorer «Требования» |
 | [ADR-014](ADR-014-fibo-profile-metamodel.md) | FIBO profile = Spec; release entities = Impl | metamodel YAML + Pydantic; catalog Spec/Impl split |
+| [ADR-015](ADR-015-viewer-ui-atlas.md) | MOEX Atlas — UI/UX стандарт Publication Viewer | Proposed; visual redesign apps/viewer |
 
 ## Как принимать
 

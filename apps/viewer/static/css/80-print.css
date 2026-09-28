@@ -1,0 +1,38 @@
+/* Print */
+
+@media print {
+  [data-ui="sidebar"],
+  .sidebar,
+  [data-ui="topbar"],
+  .toolbar,
+  [data-ui="search-dialog"],
+  .sidebar-backdrop,
+  .overflow-menu,
+  .no-print,
+  .btn-menu,
+  .topbar-actions {
+    display: none !important;
+  }
+
+  [data-ui="content"],
+  .content {
+    width: 100%;
+    max-width: none;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .content-card,
+  .detail-card,
+  .section {
+    break-inside: avoid;
+    box-shadow: none;
+    border-color: #ccc;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 11px;
+    color: #555;
+  }
+}

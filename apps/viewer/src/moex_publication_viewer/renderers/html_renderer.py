@@ -96,6 +96,9 @@ def render_viewer(
     search_index: list[dict],
     viewer_root: Path,
     catalog: ArchitectureCatalog | None = None,
+    *,
+    inline_css: str | None = None,
+    inline_js: str | None = None,
 ) -> str:
     templates_dir = viewer_root / "templates"
     env = Environment(
@@ -113,4 +116,6 @@ def render_viewer(
         search_index_json=json.dumps(search_index, ensure_ascii=False),
         viewer_config_json=json.dumps(viewer_config, ensure_ascii=False),
         section_templates=SECTION_TEMPLATES,
+        inline_css=inline_css,
+        inline_js=inline_js,
     )

@@ -305,6 +305,7 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
                         "conforms_to": n.conforms_to,
                         "module_id": n.module_id,
                         "order": n.order,
+                        "description": n.description,
                     }
                     for n in catalog.nodes
                 ]
@@ -318,14 +319,25 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
         encoding="utf-8",
     )
 
-    html = render_viewer(modules, search_index, VIEWER_ROOT, catalog=catalog)
+    from moex_publication_viewer.assets import assemble_css, assemble_js
+
+    css_text = assemble_css()
+    js_text = assemble_js()
+    # Keep static/viewer.css in sync for tests/tooling that read the layered bundle.
+    (VIEWER_ROOT / "static" / "viewer.css").write_text(css_text, encoding="utf-8")
+    html = render_viewer(
+        modules,
+        search_index,
+        VIEWER_ROOT,
+        catalog=catalog,
+        inline_css=css_text,
+        inline_js=js_text,
+    )
     index_path = dist_dir / "index.html"
     index_path.write_text(html, encoding="utf-8")
 
-    static_src = VIEWER_ROOT / "static"
-    for name in ("viewer.css", "viewer.js"):
-        src = static_src / name
-        if src.is_file():
-            (dist_dir / name).write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+    # Dev convenience copies (not required at runtime — HTML is autonomous).
+    (dist_dir / "viewer.css").write_text(css_text, encoding="utf-8")
+    (dist_dir / "viewer.js").write_text(js_text, encoding="utf-8")
 
     return index_path

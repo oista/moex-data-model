@@ -11,6 +11,9 @@ nodes:
     expressed_in: LinkML
     module_id: moex:module:dams
     order: 100
+    description: >
+      MOEX DAMS 0.1 reference specification (LinkML) - publication projection
+      of the schema body (TSpecBody).
 
   - id: moex-dsp
     role: specification_implementation
@@ -28,6 +31,7 @@ nodes:
     conforms_to: moex-dams
     module_id: moex:module:trading-solution
     order: 110
+    description: Demo IT-solution model conforming to DAMS (Trading solution).
 
   - id: moex-fibo-profile
     role: reference_specification
@@ -36,6 +40,9 @@ nodes:
     expressed_in: OWL 2
     module_id: moex:module:fibo-profile
     order: 200
+    description: >
+      FIBO organizational metamodel profile - reference specification for
+      ontology release content (not domain classes).
 
   - id: moex:ontology:fibo
     role: specification_implementation
@@ -44,3 +51,4 @@ nodes:
     conforms_to: moex-fibo-profile
     module_id: moex:module:fibo
     order: 210
+    description: FIBO release glossary and class hierarchy (preview export).

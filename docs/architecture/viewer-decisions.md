@@ -20,8 +20,8 @@ superseded_by: MODELING_ARCHITECTURE.md
 3. **Build pipeline is static.** No runtime backend, auth, or API for MVP.
 4. **HTML consumes only the normalized publication model** (`PublicationModule` / `PublicationSection` / `PublicationItem`).
 5. **MVP source formats:** `yaml`, `json`, `csv`, `markdown`, `linkml-yaml`. LinkML is loaded via `SchemaView` so imports resolve.
-6. **UI stack:** HTML5 + CSS variables + Vanilla JS. No React/Vite/AG Grid in MVP.
-7. **Search:** build-time index embedded in HTML; client-side filter/navigation. No Lunr/Elastic.
+6. **UI stack:** HTML5 + CSS variables + Vanilla JS. No React/Vite/AG Grid in MVP. **Presentation standard:** [ADR-015 MOEX Atlas](../adr/ADR-015-viewer-ui-atlas.md) and [design principles](../design/viewer-atlas/README.md) (surfaces, tokens, shell, a11y). Pipeline/manifest rules in this file still win over visual details.
+7. **Search:** build-time index embedded in HTML; client-side filter/navigation. No Lunr/Elastic. Atlas UX: command palette (`Ctrl/Cmd+K`), not a second information architecture.
 8. **Sections appear only via manifests**, never by editing frontend code for a new module.
 9. **`viewer/dist` is not committed** (covered by root `dist/` ignore). Publish via CI artifact / Pages later if needed.
 10. **Large tables:** data shipped as inline JSON; JS renders rows (sort/filter/pagination). Jinja does not emit thousands of `<tr>`.

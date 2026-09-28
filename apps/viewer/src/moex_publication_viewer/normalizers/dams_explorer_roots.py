@@ -159,10 +159,11 @@ def _section_ref(section_id: str, title: str) -> PublicationItem:
     return PublicationItem(
         id=f"section:{section_id}",
         title=title,
-        description=None,
+        description=f"Open publication section «{title}».",
         attributes={
             "kind": "section_ref",
             "section_id": section_id,
+            "description": f"Open publication section «{title}».",
         },
     )
 

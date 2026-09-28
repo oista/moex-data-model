@@ -137,50 +137,11 @@
     };
   }
 
-  function catalogOpenKey(nodeId) {
-    return `catalog:${nodeId}`;
-  }
-
-  function bodyModuleForCatalogNode(node) {
-    if (!node) return null;
-    if (node.role === "reference_specification") {
-      const cur = currentNodeId ? catalogNode(currentNodeId) : null;
-      if (cur?.conforms_to === node.id && cur.module_id) {
-        return modules.find((m) => m.module_id === cur.module_id) || null;
-      }
-      if (currentModuleId) {
-        const linked = nodeForModule(currentModuleId);
-        if (linked && (linked.id === node.id || linked.conforms_to === node.id)) {
-          return modules.find((m) => m.module_id === currentModuleId) || null;
-        }
-      }
-      if (node.module_id) {
-        return modules.find((m) => m.module_id === node.module_id) || null;
-      }
-      return null;
-    }
-    if (node.module_id) {
-      return modules.find((m) => m.module_id === node.module_id) || null;
-    }
-    return null;
-  }
-
   function navigateToNode(node, focus) {
     currentNodeId = node.id;
-    openGroups.add(catalogOpenKey(node.id));
-    if (node.role === "specification_implementation" && node.conforms_to) {
-      openGroups.add(catalogOpenKey(node.conforms_to));
-    }
     if (node.module_id) {
       const mod = modules.find((m) => m.module_id === node.module_id);
-      // Spec: identity landing (no section). Impl / explicit focus: module default.
-      let f = focus;
-      if (f === undefined) {
-        f =
-          node.role === "reference_specification"
-            ? {}
-            : defaultFocusForModule(mod);
-      }
+      const f = focus || defaultFocusForModule(mod);
       setHash({
         node: node.id,
         module: shortModule(node.module_id),
@@ -371,7 +332,18 @@
             return;
           }
         }
-        // implementation_ref: select item → description card (Open navigates)
+        if (attrs.kind === "implementation_ref") {
+          const catId = attrs.catalog_node_id || found.item.id;
+          const node = catalogNode(catId);
+          if (node) {
+            navigateToNode(node);
+            return;
+          }
+          if (attrs.module_id) {
+            navigateToModule(attrs.module_id);
+            return;
+          }
+        }
         const node = nodeForModule(mod.module_id);
         setHash({
           node: node ? node.id : null,
@@ -418,14 +390,6 @@
         label.className =
           "nav-item-btn" +
           (node.id === selectedItemId || sectionActive ? " active" : "");
-        label.setAttribute("data-tree-node", "");
-        label.setAttribute("data-node-id", node.id);
-        label.setAttribute("data-node-type", node.attributes?.kind || "class");
-        label.setAttribute("data-depth", String(depth || 0));
-        if (node.id === selectedItemId || sectionActive) {
-          label.setAttribute("aria-current", "page");
-        }
-        if (hasKids) label.setAttribute("aria-expanded", open ? "true" : "false");
         const kind = node.attributes?.kind || "class";
         const kindClasses =
           kind === "class" ? classKindClassNames(node.attributes) : "";
@@ -438,8 +402,7 @@
         else if (kind === "section_ref") mark = "S";
         else if (kind === "group") mark = "G";
         label.innerHTML = `<span class="nav-kind ${kindClasses}">${escapeHtml(mark)}</span>
-          <span class="tree-label">${escapeHtml(node.title || node.id)}</span>`;
-        label.title = node.title || node.id;
+          <span>${escapeHtml(node.title || node.id)}</span>`;
         label.addEventListener("click", (e) => {
           e.stopPropagation();
           if (hasKids) {
@@ -595,72 +558,19 @@
     if (secondary.childNodes.length) wrap.appendChild(secondary);
   }
 
-  function appendCatalogNav(parentEl, node, focus) {
-    const bodyMod = bodyModuleForCatalogNode(node);
-    const hasBody = !!bodyMod;
-    const cKey = catalogOpenKey(node.id);
-    const open = openGroups.has(cKey);
-    const selected =
-      node.id === currentNodeId && !selectedItemId;
-
-    const wrap = document.createElement("div");
-    wrap.className = "nav-module";
-
-    const row = document.createElement("div");
-    row.className = "nav-tree-row nav-catalog-row";
-
-    const toggle = document.createElement("button");
-    toggle.type = "button";
-    toggle.className = "tree-toggle";
-    toggle.textContent = hasBody ? (open ? "▼" : "▶") : "·";
-    toggle.addEventListener("click", (e) => {
-      e.stopPropagation();
-      if (!hasBody) return;
-      if (openGroups.has(cKey)) openGroups.delete(cKey);
-      else openGroups.add(cKey);
-      renderModuleNav({
-        item: selectedItemId,
-        section: focus?.section || null,
-      });
-    });
-
+  function makeCatalogBtn(node, { nested } = {}) {
+    const active = node.id === currentNodeId;
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className = "module-btn" + (selected ? " active" : "");
+    btn.className =
+      (nested ? "nav-impl-btn" : "module-btn") + (active ? " active" : "");
     const roleLabel =
       node.role === "reference_specification" ? "Spec" : "Impl";
     btn.innerHTML = `<span class="role-pill">${roleLabel}</span>
       <span>${escapeHtml(node.title)}</span>
       ${node.version ? `<span class="badge">${escapeHtml(node.version)}</span>` : ""}`;
-    btn.addEventListener("click", () => {
-      if (
-        hasBody &&
-        node.id === currentNodeId &&
-        !selectedItemId &&
-        openGroups.has(cKey)
-      ) {
-        openGroups.delete(cKey);
-        renderModuleNav({
-          item: selectedItemId,
-          section: focus?.section || null,
-        });
-        return;
-      }
-      if (hasBody) openGroups.add(cKey);
-      navigateToNode(node);
-    });
-
-    row.appendChild(toggle);
-    row.appendChild(btn);
-    wrap.appendChild(row);
-
-    if (open && bodyMod) {
-      const body = document.createElement("div");
-      body.className = "nav-catalog-body";
-      appendPublicationSubtree(body, bodyMod, focus);
-      wrap.appendChild(body);
-    }
-    parentEl.appendChild(wrap);
+    btn.addEventListener("click", () => navigateToNode(node));
+    return btn;
   }
 
   function renderModuleNav(focus) {
@@ -671,41 +581,51 @@
         const wrap = document.createElement("div");
         wrap.className = "nav-module";
         const active = mod.module_id === currentModuleId;
-        const mKey = `module:${mod.module_id}`;
-        const open = openGroups.has(mKey) || active;
-        const row = document.createElement("div");
-        row.className = "nav-tree-row nav-catalog-row";
-        const toggle = document.createElement("button");
-        toggle.type = "button";
-        toggle.className = "tree-toggle";
-        toggle.textContent = open ? "▼" : "▶";
-        toggle.addEventListener("click", (e) => {
-          e.stopPropagation();
-          if (openGroups.has(mKey)) openGroups.delete(mKey);
-          else openGroups.add(mKey);
-          renderModuleNav(focus);
-        });
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.className = "module-btn" + (active && !selectedItemId ? " active" : "");
+        btn.className = "module-btn" + (active ? " active" : "");
         btn.innerHTML = `<span class="module-icon">${escapeHtml(mod.icon || "📄")}</span>
           <span>${escapeHtml(mod.title)}</span>
           <span class="badge">${mod.sections.length}</span>`;
-        btn.addEventListener("click", () => {
-          openGroups.add(mKey);
-          navigateToModule(mod.module_id);
-        });
-        row.appendChild(toggle);
-        row.appendChild(btn);
-        wrap.appendChild(row);
-        if (open && active) appendPublicationSubtree(wrap, mod, focus);
+        btn.addEventListener("click", () => navigateToModule(mod.module_id));
+        wrap.appendChild(btn);
+        if (active) appendPublicationSubtree(wrap, mod, focus);
         moduleNav.appendChild(wrap);
       });
       return;
     }
 
     rootSpecifications().forEach((spec) => {
-      appendCatalogNav(moduleNav, spec, focus);
+      const wrap = document.createElement("div");
+      wrap.className = "nav-module";
+      wrap.appendChild(makeCatalogBtn(spec));
+
+      const impls = implementationsOf(spec.id);
+      if (impls.length) {
+        const kids = document.createElement("div");
+        kids.className = "nav-impl-children";
+        impls.forEach((impl) => kids.appendChild(makeCatalogBtn(impl, { nested: true })));
+        wrap.appendChild(kids);
+      }
+
+      const activeHere =
+        currentNodeId === spec.id ||
+        impls.some((i) => i.id === currentNodeId) ||
+        (spec.module_id && spec.module_id === currentModuleId);
+      if (activeHere && spec.module_id && currentNodeId === spec.id) {
+        const mod = modules.find((m) => m.module_id === spec.module_id);
+        if (mod) appendPublicationSubtree(wrap, mod, focus);
+      } else if (
+        activeHere &&
+        currentNodeId &&
+        catalogNode(currentNodeId)?.module_id === currentModuleId &&
+        catalogNode(currentNodeId)?.conforms_to === spec.id
+      ) {
+        const mod = modules.find((m) => m.module_id === currentModuleId);
+        if (mod) appendPublicationSubtree(wrap, mod, focus);
+      }
+
+      moduleNav.appendChild(wrap);
     });
 
     const orphans = unattachedImplementations();
@@ -714,7 +634,16 @@
       label.className = "nav-group-label muted";
       label.textContent = "Implementations without specification";
       moduleNav.appendChild(label);
-      orphans.forEach((impl) => appendCatalogNav(moduleNav, impl, focus));
+      orphans.forEach((impl) => {
+        const wrap = document.createElement("div");
+        wrap.className = "nav-module";
+        wrap.appendChild(makeCatalogBtn(impl));
+        if (currentNodeId === impl.id && impl.module_id) {
+          const mod = modules.find((m) => m.module_id === impl.module_id);
+          if (mod) appendPublicationSubtree(wrap, mod, focus);
+        }
+        moduleNav.appendChild(wrap);
+      });
     }
 
     const others = otherModules();
@@ -727,34 +656,17 @@
         const wrap = document.createElement("div");
         wrap.className = "nav-module";
         const active = mod.module_id === currentModuleId && !currentNodeId;
-        const mKey = `module:${mod.module_id}`;
-        const open = openGroups.has(mKey) || active;
-        const row = document.createElement("div");
-        row.className = "nav-tree-row nav-catalog-row";
-        const toggle = document.createElement("button");
-        toggle.type = "button";
-        toggle.className = "tree-toggle";
-        toggle.textContent = open ? "▼" : "▶";
-        toggle.addEventListener("click", (e) => {
-          e.stopPropagation();
-          if (openGroups.has(mKey)) openGroups.delete(mKey);
-          else openGroups.add(mKey);
-          renderModuleNav(focus);
-        });
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.className = "module-btn" + (active && !selectedItemId ? " active" : "");
+        btn.className = "module-btn" + (active ? " active" : "");
         btn.innerHTML = `<span class="module-icon">${escapeHtml(mod.icon || "📄")}</span>
           <span>${escapeHtml(mod.title)}</span>
           <span class="badge">${mod.sections.length}</span>`;
-        btn.addEventListener("click", () => {
-          openGroups.add(mKey);
-          navigateToModule(mod.module_id);
-        });
-        row.appendChild(toggle);
-        row.appendChild(btn);
-        wrap.appendChild(row);
-        if (open && active) appendPublicationSubtree(wrap, mod, focus);
+        btn.addEventListener("click", () => navigateToModule(mod.module_id));
+        wrap.appendChild(btn);
+        if (mod.module_id === currentModuleId && !currentNodeId) {
+          appendPublicationSubtree(wrap, mod, focus);
+        }
         moduleNav.appendChild(wrap);
       });
     }
@@ -837,13 +749,38 @@
   function showCatalogCard(node) {
     currentModuleId = null;
     selectedItemId = null;
-    openGroups.add(catalogOpenKey(node.id));
     renderModuleNav();
     content.innerHTML = "";
     content.appendChild(renderArchitectureCrumb(node));
-    const { card, block } = renderCatalogIdentityCard(node, null);
+
+    const card = document.createElement("article");
+    card.className = "detail-card";
+    const badges = [
+      `<span class="badge-pill">${
+        node.role === "reference_specification" ? "Specification" : "Implementation"
+      }</span>`,
+    ];
+    if (node.expressed_in) {
+      badges.push(
+        `<span class="badge-pill">expressed in ${escapeHtml(node.expressed_in)}</span>`
+      );
+    }
+    if (node.version) {
+      badges.push(`<span class="badge-pill">${escapeHtml(node.version)}</span>`);
+    }
+    card.innerHTML = `
+      <header class="detail-head">
+        <h1>${escapeHtml(node.title)}</h1>
+        <div class="badge-row">${badges.join("")}</div>
+        <p class="muted">${escapeHtml(node.id)}</p>
+      </header>
+      <p class="detail-desc">${escapeHtml(node.description || "No publication body for this node yet.")}</p>
+    `;
     content.appendChild(card);
-    if (block) content.appendChild(block);
+
+    if (node.role === "reference_specification") {
+      content.appendChild(renderImplementationsBlock(node));
+    }
 
     const hit = findOntologyCatalogHit(node.id);
     if (hit) {
@@ -893,8 +830,7 @@
     if (
       node.role === "reference_specification" &&
       !focus?.item &&
-      focus?.section &&
-      focus.section === explorerSection(mod)?.id
+      (!focus?.section || focus.section === explorerSection(mod)?.id)
     ) {
       chrome.appendChild(renderImplementationsBlock(node));
     }
@@ -914,14 +850,6 @@
       if (linked) currentNodeId = linked.id;
     }
 
-    const linkedNode = currentNodeId ? catalogNode(currentNodeId) : nodeForModule(currentModuleId);
-    if (linkedNode) {
-      openGroups.add(catalogOpenKey(linkedNode.id));
-      if (linkedNode.conforms_to) {
-        openGroups.add(catalogOpenKey(linkedNode.conforms_to));
-      }
-    }
-
     const expl = explorerSection(mod);
     selectedItemId = focus?.item || null;
     renderModuleNav(focus);
@@ -932,16 +860,6 @@
 
     const crumb = document.createElement("div");
     crumb.className = "breadcrumb muted";
-
-    // Catalog identity landing (Spec/Impl selected, no section/item focus)
-    if (linkedNode && !focus?.item && !focus?.section) {
-      crumb.textContent = linkedNode.title;
-      content.appendChild(crumb);
-      const { card, block } = renderCatalogIdentityCard(linkedNode, mod);
-      content.appendChild(card);
-      if (block) content.appendChild(block);
-      return;
-    }
 
     // Explorer item detail takes priority
     if (expl && focus?.item) {
@@ -985,24 +903,6 @@
         <p class="muted">${escapeHtml(mod.description || "")}</p>
         <p>${landingHint}</p>`;
       content.appendChild(header);
-
-      const kpi = document.createElement("div");
-      kpi.className = "kpi-strip";
-      const groups = expl.items || [];
-      const classTotal = groups.reduce(
-        (n, g) => n + (g.attributes?.class_count ?? countExplorerClasses(g)),
-        0
-      );
-      const enumTotal = groups.reduce((n, g) => {
-        const kids = g.children || [];
-        return n + kids.filter((c) => c.attributes?.kind === "enum").length;
-      }, 0);
-      kpi.innerHTML = `
-        <div class="kpi-card"><div class="kpi-value">${groups.length}</div><div class="kpi-label">Groups</div></div>
-        <div class="kpi-card"><div class="kpi-value">${classTotal}</div><div class="kpi-label">Classes</div></div>
-        <div class="kpi-card"><div class="kpi-value">${enumTotal}</div><div class="kpi-label">Enumerations</div></div>
-        <div class="kpi-card"><div class="kpi-value">${escapeHtml(mod.version || "—")}</div><div class="kpi-label">Version</div></div>`;
-      content.appendChild(kpi);
 
       const grid = document.createElement("div");
       grid.className = "explorer-landing";
@@ -1184,29 +1084,9 @@
     const dl = document.createElement("dl");
     dl.className = "detail-meta";
     if (attrs.iri) {
-      const wrap = document.createElement("span");
-      wrap.style.display = "inline-flex";
-      wrap.style.alignItems = "center";
-      wrap.style.gap = "8px";
-      wrap.style.minWidth = "0";
       const code = document.createElement("code");
-      code.className = "middle-ellipsis";
-      code.title = String(attrs.iri);
       code.textContent = String(attrs.iri);
-      const copyBtn = document.createElement("button");
-      copyBtn.type = "button";
-      copyBtn.className = "copy-btn";
-      copyBtn.setAttribute("aria-label", "Copy IRI");
-      copyBtn.textContent = "Copy";
-      copyBtn.addEventListener("click", () => {
-        navigator.clipboard?.writeText(String(attrs.iri)).then(
-          () => announce("IRI copied"),
-          () => announce("Copy failed")
-        );
-      });
-      wrap.appendChild(code);
-      wrap.appendChild(copyBtn);
-      appendMetaRow(dl, "iri", wrap);
+      appendMetaRow(dl, "iri", code);
     }
     if (attrs.curie) appendMetaRow(dl, "curie", String(attrs.curie));
     if (attrs.local_name) appendMetaRow(dl, "local_name", String(attrs.local_name));
@@ -1505,12 +1385,6 @@
     const card = document.createElement("article");
     card.className = "detail-card";
     const attrs = item.attributes || {};
-    const cat = catalogNode(attrs.catalog_node_id || item.id);
-    const desc =
-      item.description ||
-      attrs.description ||
-      cat?.description ||
-      `Registered implementation conforming to ${attrs.conforms_to || "specification"}.`;
     card.innerHTML = `
       <header class="detail-head">
         <h1>${escapeHtml(item.title || item.id)}</h1>
@@ -1520,7 +1394,7 @@
         </div>
         <p class="muted">${escapeHtml(attrs.catalog_node_id || item.id)}</p>
       </header>
-      <p class="detail-desc">${escapeHtml(desc)}</p>
+      <p class="detail-desc">Открыть модуль реализации (conforms_to ${escapeHtml(attrs.conforms_to || "")}).</p>
     `;
     const btn = document.createElement("button");
     btn.type = "button";
@@ -1532,50 +1406,14 @@
       else if (attrs.module_id) navigateToModule(attrs.module_id);
     });
     card.appendChild(btn);
+    // Auto-navigate when selected from tree (nav click already navigates);
+    // keep card for deep-links that land here.
     return card;
-  }
-
-  function renderCatalogIdentityCard(node, mod) {
-    const card = document.createElement("article");
-    card.className = "detail-card";
-    const badges = [
-      `<span class="badge-pill">${
-        node.role === "reference_specification" ? "Specification" : "Implementation"
-      }</span>`,
-    ];
-    if (node.expressed_in) {
-      badges.push(
-        `<span class="badge-pill">expressed in ${escapeHtml(node.expressed_in)}</span>`
-      );
-    }
-    if (node.version) {
-      badges.push(`<span class="badge-pill">${escapeHtml(node.version)}</span>`);
-    }
-    const desc =
-      node.description ||
-      mod?.description ||
-      "No description for this architecture node yet.";
-    card.innerHTML = `
-      <header class="detail-head">
-        <h1>${escapeHtml(node.title)}</h1>
-        <div class="badge-row">${badges.join("")}</div>
-        <p class="muted">${escapeHtml(node.id)}</p>
-      </header>
-      <p class="detail-desc">${escapeHtml(desc)}</p>
-    `;
-    if (node.role === "reference_specification") {
-      const block = renderImplementationsBlock(node);
-      return { card, block };
-    }
-    return { card, block: null };
   }
 
   function renderExplorerDetail(mod, expl, item, group) {
     const card = document.createElement("article");
-    card.className = "detail-card content-card";
-    card.setAttribute("data-publication-item", "");
-    card.setAttribute("data-item-id", item.id);
-    card.setAttribute("data-item-type", item.attributes?.kind || "class");
+    card.className = "detail-card";
     const kind = item.attributes?.kind || "class";
     const abstract = item.attributes?.abstract;
     const isMixin = item.attributes?.mixin;
@@ -2548,91 +2386,41 @@
     return layout;
   }
 
-  const searchDialog = document.getElementById("search-dialog");
-  const searchTrigger = document.getElementById("search-trigger");
-  const statusRegion = document.getElementById("status-region");
-  const sidebarEl = document.getElementById("sidebar");
-  const sidebarBackdrop = document.getElementById("sidebar-backdrop");
-  const overflowMenu = document.getElementById("overflow-menu");
-  let searchHitButtons = [];
-  let searchActiveIndex = -1;
-
-  function announce(msg) {
-    if (statusRegion) statusRegion.textContent = msg;
-  }
-
-  function openSearchDialog() {
-    if (!searchDialog) return;
-    searchDialog.hidden = false;
-    searchInput?.focus();
-    searchInput?.select?.();
-    runSearch(searchInput?.value || "");
-  }
-
-  function closeSearchDialog() {
-    if (!searchDialog) return;
-    searchDialog.hidden = true;
-    searchResults.classList.add("hidden");
-    searchActiveIndex = -1;
-    searchTrigger?.focus();
-  }
-
-  function setSidebarOpen(open) {
-    sidebarEl?.classList.toggle("is-open", open);
-    if (sidebarBackdrop) {
-      sidebarBackdrop.hidden = !open;
-      sidebarBackdrop.classList.toggle("is-open", open);
-    }
-  }
-
   function runSearch(q) {
     const query = q.trim().toLowerCase();
-    searchHitButtons = [];
-    searchActiveIndex = -1;
     if (!query) {
       searchResults.classList.add("hidden");
       searchResults.innerHTML = "";
-      announce("");
       return;
     }
     const hits = searchIndex
       .filter(
         (h) =>
           (h.title || "").toLowerCase().includes(query) ||
-          (h.description || "").toLowerCase().includes(query) ||
-          (h.item_id || "").toLowerCase().includes(query) ||
-          (h.node_id || "").toLowerCase().includes(query)
+          (h.description || "").toLowerCase().includes(query)
       )
-      .slice(0, 10);
+      .slice(0, 40);
 
     if (!hits.length) {
       searchResults.innerHTML = `<div class="search-hit muted">No results</div>`;
       searchResults.classList.remove("hidden");
-      announce("No results");
       return;
     }
 
     const groups = { module: [], section: [], item: [], catalog: [] };
     hits.forEach((h) => groups[h.kind]?.push(h));
     searchResults.innerHTML = "";
-    const labels = {
-      catalog: "Publications",
-      module: "Modules",
-      section: "Sections",
-      item: "Classes & terms",
-    };
     ["catalog", "module", "section", "item"].forEach((kind) => {
       if (!groups[kind].length) return;
       const title = document.createElement("div");
       title.className = "muted";
       title.style.padding = "6px 12px";
-      title.textContent = labels[kind] || kind;
+      title.textContent = kind === "catalog" ? "architecture" : kind + "s";
       searchResults.appendChild(title);
       groups[kind].forEach((h) => {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "search-hit";
-        btn.setAttribute("role", "option");
         const labeled = escapeHtml(h.title).replace(
           new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "ig"),
           "<mark>$1</mark>"
@@ -2643,7 +2431,7 @@
             : `${h.module_id}${h.section_id ? " / " + h.section_id : ""}`;
         btn.innerHTML = `${labeled}<div class="muted">${escapeHtml(subtitle)}</div>`;
         btn.addEventListener("click", () => {
-          closeSearchDialog();
+          searchResults.classList.add("hidden");
           if (h.kind === "catalog" && h.node_id) {
             const node = catalogNode(h.node_id);
             if (node) navigateToNode(node);
@@ -2655,69 +2443,17 @@
           });
         });
         searchResults.appendChild(btn);
-        searchHitButtons.push(btn);
       });
     });
     searchResults.classList.remove("hidden");
-    announce(`${hits.length} results`);
   }
 
-  function moveSearchSelection(delta) {
-    if (!searchHitButtons.length) return;
-    searchActiveIndex = (searchActiveIndex + delta + searchHitButtons.length) % searchHitButtons.length;
-    searchHitButtons.forEach((b, i) => {
-      b.setAttribute("aria-selected", i === searchActiveIndex ? "true" : "false");
-      if (i === searchActiveIndex) b.scrollIntoView({ block: "nearest" });
-    });
-  }
-
-  searchInput?.addEventListener("input", () => runSearch(searchInput.value));
-  searchInput?.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      moveSearchSelection(1);
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      moveSearchSelection(-1);
-    } else if (e.key === "Enter" && searchActiveIndex >= 0) {
-      e.preventDefault();
-      searchHitButtons[searchActiveIndex]?.click();
-    } else if (e.key === "Escape") {
-      e.preventDefault();
-      closeSearchDialog();
+  searchInput.addEventListener("input", () => runSearch(searchInput.value));
+  document.addEventListener("click", (e) => {
+    if (!searchResults.contains(e.target) && e.target !== searchInput) {
+      searchResults.classList.add("hidden");
     }
   });
-
-  searchTrigger?.addEventListener("click", () => openSearchDialog());
-  searchDialog?.addEventListener("click", (e) => {
-    if (e.target === searchDialog) closeSearchDialog();
-  });
-
-  document.addEventListener("keydown", (e) => {
-    const meta = e.metaKey || e.ctrlKey;
-    if (meta && e.key.toLowerCase() === "k") {
-      e.preventDefault();
-      openSearchDialog();
-      return;
-    }
-    if (e.key === "/" && !e.metaKey && !e.ctrlKey && !e.altKey) {
-      const tag = (e.target && e.target.tagName) || "";
-      if (tag === "INPUT" || tag === "TEXTAREA" || e.target?.isContentEditable) return;
-      e.preventDefault();
-      openSearchDialog();
-      return;
-    }
-    if (e.key === "Escape") {
-      if (searchDialog && !searchDialog.hidden) closeSearchDialog();
-      else setSidebarOpen(false);
-      if (overflowMenu) overflowMenu.hidden = true;
-    }
-  });
-
-  document.getElementById("btn-menu")?.addEventListener("click", () => {
-    setSidebarOpen(!sidebarEl?.classList.contains("is-open"));
-  });
-  sidebarBackdrop?.addEventListener("click", () => setSidebarOpen(false));
 
   document.getElementById("btn-theme").addEventListener("click", () => {
     const html = document.documentElement;
@@ -2734,63 +2470,13 @@
     }
     content.querySelectorAll(".section").forEach((s) => s.classList.remove("collapsed"));
   });
-  document.getElementById("btn-collapse")?.addEventListener("click", () => {
+  document.getElementById("btn-collapse").addEventListener("click", () => {
     openGroups.clear();
     renderModuleNav({ item: selectedItemId });
     content.querySelectorAll(".section").forEach((s) => s.classList.add("collapsed"));
-    if (overflowMenu) overflowMenu.hidden = true;
   });
-  document.getElementById("btn-copy-link")?.addEventListener("click", () => {
-    navigator.clipboard?.writeText(location.href).then(
-      () => announce("Link copied"),
-      () => announce("Copy failed")
-    );
-    if (overflowMenu) overflowMenu.hidden = true;
-  });
-  document.getElementById("btn-overflow")?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    if (!overflowMenu) return;
-    const open = overflowMenu.hidden;
-    overflowMenu.hidden = !open;
-    document.getElementById("btn-overflow")?.setAttribute("aria-expanded", open ? "true" : "false");
-  });
-  document.addEventListener("click", (e) => {
-    if (overflowMenu && !overflowMenu.hidden && !overflowMenu.contains(e.target) && e.target !== document.getElementById("btn-overflow")) {
-      overflowMenu.hidden = true;
-    }
-  });
-
-  const treeFilter = document.getElementById("tree-filter");
-  treeFilter?.addEventListener("input", () => {
-    const q = treeFilter.value.trim().toLowerCase();
-    moduleNav.querySelectorAll(".nav-item-btn, .nav-group-btn, .module-btn, .nav-section-btn").forEach((btn) => {
-      const text = (btn.textContent || "").toLowerCase();
-      const row = btn.closest(".nav-tree-row") || btn;
-      if (!q || text.includes(q)) {
-        row.style.display = "";
-        btn.style.display = "";
-      } else {
-        if (btn.classList.contains("nav-item-btn")) row.style.display = "none";
-        else btn.style.display = "none";
-      }
-    });
-  });
-
-  const resizeHandle = document.getElementById("sidebar-resize");
-  resizeHandle?.addEventListener("pointerdown", (e) => {
-    e.preventDefault();
-    const startX = e.clientX;
-    const startW = sidebarEl.getBoundingClientRect().width;
-    function onMove(ev) {
-      const next = Math.min(420, Math.max(240, startW + (ev.clientX - startX)));
-      document.documentElement.style.setProperty("--sidebar-w", `${next}px`);
-    }
-    function onUp() {
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerup", onUp);
-    }
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerup", onUp);
+  document.getElementById("btn-copy-link").addEventListener("click", () => {
+    navigator.clipboard?.writeText(location.href);
   });
 
   const savedTheme = localStorage.getItem("moex-viewer-theme");
