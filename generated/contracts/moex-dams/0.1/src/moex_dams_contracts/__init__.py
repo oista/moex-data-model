@@ -439,6 +439,9 @@ class PolicyBinding(ConfiguredBaseModel):
 
 
 class HasLifecycle(ConfiguredBaseModel):
+    """
+    Mixin жизненного цикла: статус, период действия и ссылка на заменяющий элемент.
+    """
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
@@ -446,6 +449,9 @@ class HasLifecycle(ConfiguredBaseModel):
 
 
 class HasOwnership(ConfiguredBaseModel):
+    """
+    Mixin владения: data owner, data steward и организационное подразделение.
+    """
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
@@ -471,10 +477,16 @@ class HasGovernanceClassification(ConfiguredBaseModel):
 
 
 class HasPolicyBindings(ConfiguredBaseModel):
+    """
+    Mixin привязки управляемых политик к элементу модели.
+    """
     policy_refs: Optional[list[str]] = Field(default=None)
 
 
 class HasProvenance(ConfiguredBaseModel):
+    """
+    Mixin происхождения и согласования: исходный артефакт, evidence, статус и согласующий.
+    """
     source_artifact_ref: Optional[str] = Field(default=None)
     evidence_refs: Optional[list[str]] = Field(default=None)
     approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
@@ -483,6 +495,9 @@ class HasProvenance(ConfiguredBaseModel):
 
 
 class ModelElement(HasLifecycle):
+    """
+    Абстрактный корень иерархии элементов модели: общая идентичность (element_id), имя, описание и жизненный цикл.
+    """
     element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)

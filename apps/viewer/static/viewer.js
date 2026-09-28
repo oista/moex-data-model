@@ -213,7 +213,7 @@
   function findExplorerItem(section, itemId) {
     if (!section || !itemId) return null;
     for (const group of section.items || []) {
-      // Package/group nodes are hierarchy-only — never open as a detail card
+      if (group.id === itemId) return { item: group, group: null };
       for (const child of group.children || []) {
         if (child.id === itemId) return { item: child, group };
         for (const gc of child.children || []) {
@@ -249,7 +249,10 @@
       tree.className = "nav-explorer";
       (expl.items || []).forEach((group) => {
         const gId = group.id;
-        if (focus?.item && (group.children || []).some((c) => c.id === focus.item)) {
+        if (
+          focus?.item === gId ||
+          (focus?.item && (group.children || []).some((c) => c.id === focus.item))
+        ) {
           openGroups.add(gId);
         }
         const open = openGroups.has(gId);
@@ -257,18 +260,40 @@
         gWrap.className = "nav-group";
         const gBtn = document.createElement("button");
         gBtn.type = "button";
-        gBtn.className = "nav-group-btn";
-        gBtn.innerHTML = `<span class="tree-toggle">${open ? "▼" : "▶"}</span>
-          <span>${escapeHtml(group.title || group.id)}</span>
-          <span class="badge">${(group.children || []).length}</span>`;
+        gBtn.className =
+          "nav-group-btn" + (gId === selectedItemId ? " active" : "");
+        const toggle = document.createElement("span");
+        toggle.className = "tree-toggle";
+        toggle.textContent = open ? "▼" : "▶";
+        toggle.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (openGroups.has(gId)) openGroups.delete(gId);
+          else openGroups.add(gId);
+          renderModuleNav({ item: selectedItemId });
+        });
+        const titleSpan = document.createElement("span");
+        titleSpan.textContent = group.title || group.id;
+        const badge = document.createElement("span");
+        badge.className = "badge";
+        badge.textContent = String((group.children || []).length);
+        gBtn.appendChild(toggle);
+        gBtn.appendChild(titleSpan);
+        gBtn.appendChild(badge);
         const kids = document.createElement("div");
         kids.className = "nav-group-children";
         kids.hidden = !open;
         gBtn.addEventListener("click", (e) => {
           e.stopPropagation();
-          if (openGroups.has(gId)) openGroups.delete(gId);
-          else openGroups.add(gId);
-          renderModuleNav({ item: selectedItemId });
+          openGroups.add(gId);
+          const node = nodeForModule(mod.module_id);
+          setHash({
+            node: node ? node.id : null,
+            module: shortModule(mod.module_id),
+            section: expl.id,
+            item: gId,
+          });
+          if (node) currentNodeId = node.id;
+          showModule(mod.module_id, { section: expl.id, item: gId });
         });
         (group.children || []).forEach((child) => {
           const cBtn = document.createElement("button");
@@ -677,8 +702,30 @@
         const kids = group.children || [];
         const classes = kids.filter((c) => (c.attributes?.kind || "class") === "class");
         const enums = kids.filter((c) => c.attributes?.kind === "enum");
-        panel.innerHTML = `<h2>${escapeHtml(group.title || group.id)}
-          <span class="muted">${classes.length} classes${enums.length ? ", " + enums.length + " enums" : ""}</span></h2>`;
+        const h2 = document.createElement("h2");
+        const titleBtn = document.createElement("button");
+        titleBtn.type = "button";
+        titleBtn.className = "package-title-link";
+        titleBtn.textContent = group.title || group.id;
+        titleBtn.title = group.attributes?.purpose || group.description || "";
+        titleBtn.addEventListener("click", () => {
+          openGroups.add(group.id);
+          const node = nodeForModule(mod.module_id);
+          setHash({
+            node: node ? node.id : null,
+            module: shortModule(mod.module_id),
+            section: expl.id,
+            item: group.id,
+          });
+          showModule(mod.module_id, { section: expl.id, item: group.id });
+        });
+        const countSpan = document.createElement("span");
+        countSpan.className = "muted";
+        countSpan.textContent = `${classes.length} classes${enums.length ? ", " + enums.length + " enums" : ""}`;
+        h2.appendChild(titleBtn);
+        h2.appendChild(document.createTextNode(" "));
+        h2.appendChild(countSpan);
+        panel.appendChild(h2);
         const list = document.createElement("div");
         list.className = "explorer-class-list";
         kids.forEach((child) => {
@@ -772,6 +819,93 @@
     const treeRoot = item.attributes?.tree_root;
     const fromSchema = item.attributes?.from_schema || item.attributes?.schema_key || "";
     const known = collectExplorerIds(expl);
+
+    if (kind === "group") {
+      const purpose = item.attributes?.purpose || item.description || "";
+      const structureWhy = item.attributes?.structure_why || "";
+      const classCount = item.attributes?.class_count ?? 0;
+      const enumCount = item.attributes?.enum_count ?? 0;
+      card.innerHTML = `
+        <header class="detail-head">
+          <h1>${escapeHtml(item.title || item.id)}</h1>
+          <div class="badge-row"><span class="badge-pill">package</span></div>
+          <p class="muted">${escapeHtml(item.attributes?.source_file || item.attributes?.schema_key || "")}</p>
+        </header>
+      `;
+
+      const purposeBlock = document.createElement("section");
+      purposeBlock.className = "detail-block";
+      purposeBlock.innerHTML = `<h2>Зачем</h2>
+        <p class="detail-desc">${escapeHtml(purpose || "No description.")}</p>`;
+      card.appendChild(purposeBlock);
+
+      if (structureWhy) {
+        const whyBlock = document.createElement("section");
+        whyBlock.className = "detail-block";
+        whyBlock.innerHTML = `<h2>Почему такая структура</h2>
+          <p class="detail-desc">${escapeHtml(structureWhy)}</p>`;
+        card.appendChild(whyBlock);
+      }
+
+      const meta = document.createElement("section");
+      meta.className = "detail-block";
+      meta.innerHTML = `<h2>Пакет</h2>`;
+      const dl = document.createElement("dl");
+      dl.className = "detail-meta";
+      if (item.attributes?.schema_key) {
+        appendMetaRow(dl, "schema_key", String(item.attributes.schema_key));
+      }
+      if (item.attributes?.source_file) {
+        appendMetaRow(dl, "source_file", String(item.attributes.source_file));
+      }
+      appendMetaRow(dl, "classes", String(classCount));
+      appendMetaRow(dl, "enums", String(enumCount));
+      meta.appendChild(dl);
+      card.appendChild(meta);
+
+      const members = item.children || [];
+      const memberBlock = document.createElement("section");
+      memberBlock.className = "detail-block";
+      memberBlock.innerHTML = `<h2>Состав (${members.length})</h2>`;
+      if (!members.length) {
+        memberBlock.innerHTML += `<p class="muted">Пустой пакет.</p>`;
+      } else {
+        const list = document.createElement("div");
+        list.className = "explorer-class-list";
+        members.forEach((child) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          const childKind = child.attributes?.kind || "class";
+          const role = childKind === "class" ? classRole(child.attributes) : null;
+          btn.className = "spec-link explorer-chip" + (role ? ` kind-${role}` : "");
+          if (childKind === "class") {
+            btn.innerHTML = `<span class="nav-kind ${classKindClassNames(child.attributes)}">C</span>
+              <span>${escapeHtml(child.title || child.id)}</span>`;
+          } else if (childKind === "enum") {
+            btn.innerHTML = `<span class="nav-kind">E</span>
+              <span>${escapeHtml(child.title || child.id)}</span>`;
+          } else {
+            btn.textContent = child.title || child.id;
+          }
+          btn.title = child.description || "";
+          btn.addEventListener("click", () => {
+            openGroups.add(item.id);
+            const node = nodeForModule(mod.module_id);
+            setHash({
+              node: node ? node.id : null,
+              module: shortModule(mod.module_id),
+              section: expl.id,
+              item: child.id,
+            });
+            showModule(mod.module_id, { section: expl.id, item: child.id });
+          });
+          list.appendChild(btn);
+        });
+        memberBlock.appendChild(list);
+      }
+      card.appendChild(memberBlock);
+      return card;
+    }
 
     const badges = [];
     if (kind) badges.push(`<span class="badge-pill">${escapeHtml(kind)}</span>`);

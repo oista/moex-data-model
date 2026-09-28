@@ -80,7 +80,17 @@ body {
   padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 13px;
 }
 .nav-group-btn:hover, .nav-item-btn:hover, .nav-section-btn:hover { background: var(--accent-soft); }
-.nav-item-btn.active, .nav-section-btn.active { background: var(--accent-soft); font-weight: 600; }
+.nav-group-btn.active, .nav-item-btn.active, .nav-section-btn.active { background: var(--accent-soft); font-weight: 600; }
+.package-title-link {
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+.package-title-link:hover { text-decoration: underline; }
 .nav-group-children { margin-left: 12px; display: flex; flex-direction: column; gap: 1px; }
 /* Author display:flex beats UA [hidden]{display:none}; restore collapse. */
 .nav-group-children[hidden] { display: none; }

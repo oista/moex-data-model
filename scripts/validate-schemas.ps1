@@ -36,42 +36,43 @@ if (Test-Path $CliVenv) {
 Write-Host "Using Python: $Python"
 $env:PYTHONUTF8 = "1"
 $env:PYTHONIOENCODING = "utf-8"
-& $Python -m pip install -q "linkml>=1.8,<2"
+$Req = Join-Path $RepoRoot "requirements-linkml.txt"
+& $Python -m pip install -q -r $Req
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Push-Location $RepoRoot
 try {
-    Write-Host "schema load (SchemaView) + linkml-lint"
+    Write-Host "schema load (SchemaView) + linkml-lint (.linkmllint.yaml)"
     & $Python -c @"
 from pathlib import Path
 import sys
+import yaml
 from linkml_runtime.utils.schemaview import SchemaView
 from linkml.linter.config.datamodel.config import RuleLevel
 from linkml.linter.linter import Linter
 
 schema = Path(r'$Schema')
-# Force UTF-8 for Windows consoles / cp1251 default
+config_path = Path(r'$RepoRoot') / '.linkmllint.yaml'
 sv = SchemaView(str(schema))
 assert sv.get_class('MOEXModelRepository') is not None
 print('SchemaView OK: classes=', len(sv.all_classes()))
 
-# Linter opens files with locale encoding; patch via temp utf-8 rewrite not needed
-# when PYTHONUTF8=1. Fall back to SchemaView-only if lint fails on encoding.
-try:
-    errors = []
-    for r in Linter().lint(str(schema)):
-        level = getattr(r, 'level', None)
-        msg = getattr(r, 'message', str(r))
-        rule = getattr(r, 'rule_name', '')
-        print(f'{level}: {msg} ({rule})')
-        if level == RuleLevel.error:
-            errors.append(r)
-    if errors:
-        raise SystemExit(1)
-    print('lint OK')
-except UnicodeDecodeError as exc:
-    print('lint skipped due to encoding:', exc, file=sys.stderr)
-    print('lint skipped (SchemaView already loaded)')
+config: dict = {}
+if config_path.is_file():
+    config = yaml.safe_load(config_path.read_text(encoding='utf-8')) or {}
+    print('lint config:', config_path.as_posix())
+
+errors = []
+for r in Linter(config).lint(str(schema)):
+    level = getattr(r, 'level', None)
+    msg = getattr(r, 'message', str(r))
+    rule = getattr(r, 'rule_name', '')
+    print(f'{level}: {msg} ({rule})')
+    if level == RuleLevel.error:
+        errors.append(r)
+if errors:
+    raise SystemExit(1)
+print('lint OK')
 "@
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

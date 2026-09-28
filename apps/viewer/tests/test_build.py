@@ -76,6 +76,9 @@ def test_repo_golden_three_modules():
     assert '"type": "explorer"' in html or '"type":"explorer"' in html
     assert '"tree_root": true' in html or '"tree_root":true' in html
     assert '"mixin": true' in html or '"mixin":true' in html
+    assert "group:moex_core" in html or "group:moex-core" in html
+    assert "structure_why" in html
+    assert "anti-shadow-master" in html or "проекци" in html
     registry = json.loads((dist / "manifest_registry.json").read_text(encoding="utf-8"))
     ids = {m["module_id"] for m in registry["modules"]}
     assert {
@@ -120,8 +123,8 @@ def test_nav_group_children_hidden_overrides_display_flex():
     assert "display: none" in snippet
 
 
-def test_explorer_groups_not_in_search_index_and_module_title():
-    """Package groups are hierarchy-only; module title is MOEX standart."""
+def test_explorer_groups_selectable_cards_not_in_search_and_module_title():
+    """Package groups open as cards; stay out of search index; module title is MOEX standart."""
     repo = Path(__file__).resolve().parents[3]
     dist = repo / "apps" / "viewer" / "dist"
     build(repo, dist)
@@ -130,11 +133,13 @@ def test_explorer_groups_not_in_search_index_and_module_title():
     # Group ids must not appear as selectable search items
     assert '"item_id": "group:' not in html and '"item_id":"group:' not in html
     js = (repo / "apps" / "viewer" / "static" / "viewer.js").read_text(encoding="utf-8")
-    assert "Package/group nodes are hierarchy-only" in js
+    assert "kind === \"group\"" in js or "kind === 'group'" in js
+    assert "structure_why" in html
     # Collapsed-by-default: no auto-expand when openGroups is empty
     assert "openGroups.size === 0" not in js
     # Class-level expressed_in removed from LinkML explorer attributes
     # (catalog labels and slice TypedRelation edges may still use the word).
     pub = html.split('id="publication-data"', 1)[1].split("</script>", 1)[0]
     assert '"kind": "class"' in pub or '"kind":"class"' in pub
+    assert '"kind": "group"' in pub or '"kind":"group"' in pub
     assert '"expressed_in":' not in pub and '"expressed_in" :' not in pub

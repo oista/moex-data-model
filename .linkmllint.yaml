@@ -1,0 +1,3 @@
+# LinkML linter config for DAMS schemas (Stage 0).
+# Recommended rules; errors fail CI. Warnings (e.g. missing descriptions) allowed.
+extends: recommended

@@ -1,6 +1,6 @@
-# Generate DAMS Pydantic contracts into generated/contracts/moex-dams/0.1
+# Regenerate contracts (temp) and compare digests to committed golden.
 # Usage from repo root:
-#   powershell -NoProfile -ExecutionPolicy Bypass -File scripts/generate-contracts.ps1
+#   powershell -NoProfile -ExecutionPolicy Bypass -File scripts/compare-golden.ps1
 
 $ErrorActionPreference = "Stop"
 $RepoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
@@ -13,6 +13,11 @@ function Find-Python311 {
             if ($LASTEXITCODE -eq 0 -and $exe) { return $exe.Trim() }
         } catch { }
     }
+    $fallback = Get-Command python -ErrorAction SilentlyContinue
+    if ($fallback) {
+        & $fallback.Source -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)" 2>$null
+        if ($LASTEXITCODE -eq 0) { return $fallback.Source }
+    }
     return $null
 }
 
@@ -22,16 +27,16 @@ else {
     if (-not $Python) { Write-Error "Python 3.11+ not found" }
 }
 
+Write-Host "Using Python: $Python"
 $env:PYTHONUTF8 = "1"
+$env:PYTHONIOENCODING = "utf-8"
 $Req = Join-Path $RepoRoot "requirements-linkml.txt"
 & $Python -m pip install -q -r $Req
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Push-Location $RepoRoot
 try {
-    & $Python (Join-Path $RepoRoot "scripts/generate_contracts.py")
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    & $Python -m pip install -q -e (Join-Path $RepoRoot "generated/contracts/moex-dams/0.1")
+    & $Python (Join-Path $RepoRoot "scripts/compare_golden.py")
     exit $LASTEXITCODE
 } finally {
     Pop-Location

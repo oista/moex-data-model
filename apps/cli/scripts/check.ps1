@@ -42,7 +42,7 @@ try {
     $Contracts = Join-Path $RepoRoot "generated/contracts/moex-dams/0.1"
     Write-Host "Ensuring DAMS contracts package"
     & $VenvPython -m pip install -U pip -q
-    & $VenvPython -m pip install -q "linkml>=1.8,<2"
+    & $VenvPython -m pip install -q -r (Join-Path $RepoRoot "requirements-linkml.txt")
     & $VenvPython (Join-Path $RepoRoot "scripts/generate_contracts.py")
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

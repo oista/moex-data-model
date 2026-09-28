@@ -15,25 +15,97 @@ from moex_publication_viewer.normalizers.helpers import section_meta
 # Cache SchemaView per absolute path for one build process
 _VIEW_CACHE: dict[str, SchemaView] = {}
 
-# Display order and titles for DAMS schema packages (explorer groups)
-_SCHEMA_GROUP_META: dict[str, tuple[int, str]] = {
-    "moex_core": (10, "Core"),
-    "moex-core": (10, "Core"),
-    "moex_registries": (20, "Registries"),
-    "moex-registries": (20, "Registries"),
-    "moex_governance": (30, "Governance"),
-    "moex-governance": (30, "Governance"),
-    "moex_integration": (40, "Integration"),
-    "moex-integration": (40, "Integration"),
-    "moex_contract_binding": (50, "Contract binding"),
-    "moex-contract-binding": (50, "Contract binding"),
-    "moex_analytics": (60, "Analytics"),
-    "moex-analytics": (60, "Analytics"),
-    "moex_types": (70, "Types"),
-    "moex-types": (70, "Types"),
-    "moex_dams": (5, "Root"),
-    "moex-dams": (5, "Root"),
+# Display order, titles and rationale for DAMS schema packages (explorer groups).
+# Texts grounded in MOEX DAMS v0.1 specification (modular composition + design principles).
+# Canonical keys use underscores; hyphen aliases are registered below.
+# Values: order, title, purpose, structure_why, source_file
+_SCHEMA_GROUP_META_BASE: dict[str, tuple[int, str, str, str, str]] = {
+    "moex_dams": (
+        5,
+        "Root",
+        "Корневая агрегирующая схема спецификации: точка сборки всех модулей DAMS и технический "
+        "tree_root (MOEXModelRepository) для совместной валидации моделей, справочных проекций, "
+        "потоков и contract bindings.",
+        "Отдельный root нужен, чтобы тело решения (ModelPackage) не смешивать с контейнером "
+        "интеграционных тестов/репозитория; imports связывают модули без дублирования классов.",
+        "moex-dams.yaml",
+    ),
+    "moex_core": (
+        10,
+        "Core",
+        "Ядро модели данных решения: conceptual / logical / physical уровни и явный Mapping "
+        "между ними — то, что отличает DAMS от «просто каталога таблиц».",
+        "Три уровня и Mapping вынесены в один пакет, потому что это единая предметная ось модели "
+        "(DAMS-F-003…005). Governance и registries подключены imports/mixins, но не живут здесь "
+        "как мастер-справочники — иначе ядро раздулось бы внешними системами.",
+        "moex-core.yaml",
+    ),
+    "moex_registries": (
+        20,
+        "Registries",
+        "Локальные ссылочные проекции внешних мастер-систем (EAM, glossary, roles, policies, "
+        "Clinkr, catalog), чтобы модель ссылалась на стабильные ID, не копируя справочники.",
+        "Выделен отдельно, потому что это не семантика данных решения, а anti-shadow-master "
+        "граница: RegistryEntry и наследники — проекции, не source of truth. Меняются с "
+        "интеграциями к EAM/Clinkr независимо от core.",
+        "moex-registries.yaml",
+    ),
+    "moex_governance": (
+        30,
+        "Governance",
+        "Сквозные правила владения, жизненного цикла, классификации, политик и provenance — "
+        "горизонтальные «грани», накладываемые на любые элементы модели.",
+        "Оформлен mixins плюс самостоятельными PolicyBinding и ClassificationAssignment, а не "
+        "полями только в LogicalEntity: одни и те же concerns нужны PhysicalObject, Mapping, "
+        "package. История классификации не должна теряться в inline-полях.",
+        "moex-governance.yaml",
+    ),
+    "moex_integration": (
+        40,
+        "Integration",
+        "Связать топологию интеграции (master в Clinkr) с семантикой модели: кто/что передаётся "
+        "на уровне logical/physical, без второй карточки интеграции.",
+        "DataFlow — проекция Clinkr; DataFlowEntityBinding — семантика передачи. Разделение "
+        "нужно, чтобы канал и системы оставались в Clinkr, а DAMS не дублировал интеграционный "
+        "source of truth.",
+        "moex-integration.yaml",
+    ),
+    "moex_contract_binding": (
+        50,
+        "Contract binding",
+        "Машиночитаемая модельная часть дата-контракта: immutable revision модели и точный "
+        "selection сущностей/атрибутов/физики, а не полная копия модели в контракте.",
+        "Контракт фиксирует факт и условия использования; модель — состав и смысл. Selection, "
+        "digest и compatibility вынесены сюда, чтобы wire-schema (OpenAPI/AsyncAPI) не стала "
+        "третьим независимым описанием той же структуры (DAMS-F-008).",
+        "moex-contract-binding.yaml",
+    ),
+    "moex_analytics": (
+        60,
+        "Analytics",
+        "Опциональный профиль метрик и измерений поверх логической модели (semantic layer), "
+        "без обязательности для базовой модели решения.",
+        "Отдельный пакет (DAMS-F-010): аналитика может эволюционировать и экспортироваться "
+        "независимо; метрики всегда ссылаются на logical elements, не создавая параллельную "
+        "онтологию.",
+        "moex-analytics.yaml",
+    ),
+    "moex_types": (
+        70,
+        "Types",
+        "Стабильные bootstrap-шкалы и технические типы (enums, SemVer, digest), общие для "
+        "всех модулей.",
+        "Вынесены внизу стека imports, чтобы core/governance не размножали локальные enum. "
+        "Частые корпоративные vocabulary позже уйдут в term/value-set references; здесь "
+        "остаются только архитектурно стабильные шкалы.",
+        "moex-types.yaml",
+    ),
 }
+
+_SCHEMA_GROUP_META: dict[str, tuple[int, str, str, str, str]] = {}
+for _key, _meta in _SCHEMA_GROUP_META_BASE.items():
+    _SCHEMA_GROUP_META[_key] = _meta
+    _SCHEMA_GROUP_META[_key.replace("_", "-")] = _meta
 
 
 def get_schema_view(source_path: Path) -> SchemaView:
@@ -50,7 +122,6 @@ def clear_schema_view_cache() -> None:
 def _group_title(schema_key: str) -> str:
     if schema_key in _SCHEMA_GROUP_META:
         return _SCHEMA_GROUP_META[schema_key][1]
-    # moex_foo / moex-foo → Foo
     raw = schema_key.replace("moex_", "").replace("moex-", "").replace("_", " ").replace("-", " ")
     return raw.title() if raw else schema_key
 
@@ -59,6 +130,28 @@ def _group_order(schema_key: str) -> int:
     if schema_key in _SCHEMA_GROUP_META:
         return _SCHEMA_GROUP_META[schema_key][0]
     return 500
+
+
+def _group_purpose(schema_key: str) -> str:
+    if schema_key in _SCHEMA_GROUP_META:
+        return _SCHEMA_GROUP_META[schema_key][2]
+    return f"Пакет схемы LinkML «{schema_key}» в составе спецификации."
+
+
+def _group_structure_why(schema_key: str) -> str:
+    if schema_key in _SCHEMA_GROUP_META:
+        return _SCHEMA_GROUP_META[schema_key][3]
+    return (
+        "Выделен как отдельный schema package для изоляции определений; "
+        "точный смысл границы задаётся спецификацией и imports."
+    )
+
+
+def _group_source_file(schema_key: str) -> str:
+    if schema_key in _SCHEMA_GROUP_META:
+        return _SCHEMA_GROUP_META[schema_key][4]
+    key = schema_key.replace("_", "-")
+    return f"{key}.yaml" if not key.endswith(".yaml") else key
 
 
 def _schema_key_for(sv: SchemaView, element_name: str) -> str:
@@ -326,15 +419,25 @@ def _normalize_explorer(sv: SchemaView) -> list[PublicationItem]:
         if schema_key.startswith("linkml"):
             continue
         children = sorted(by_schema[schema_key], key=lambda i: i.id)
+        class_count = sum(1 for c in children if (c.attributes or {}).get("kind") == "class")
+        enum_count = sum(1 for c in children if (c.attributes or {}).get("kind") == "enum")
+        purpose = _group_purpose(schema_key)
+        structure_why = _group_structure_why(schema_key)
         groups.append(
             PublicationItem(
                 id=f"group:{schema_key}",
                 title=_group_title(schema_key),
-                description=f"Schema package {schema_key}",
+                description=purpose,
                 attributes={
                     "kind": "group",
                     "schema_key": schema_key,
                     "name": schema_key,
+                    "purpose": purpose,
+                    "structure_why": structure_why,
+                    "source_file": _group_source_file(schema_key),
+                    "class_count": class_count,
+                    "enum_count": enum_count,
+                    "member_ids": [c.id for c in children],
                 },
                 children=children,
             )

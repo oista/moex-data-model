@@ -179,6 +179,23 @@ def test_dams_explorer_real_schema():
     titles = {g.title for g in out.items}
     assert "Core" in titles
     assert "Registries" in titles
+    by_title = {g.title: g for g in out.items}
+    core = by_title["Core"]
+    assert "Schema package" not in (core.description or "")
+    purpose = core.attributes.get("purpose") or ""
+    assert "conceptual" in purpose.lower() or "logical" in purpose.lower()
+    assert "physical" in purpose.lower()
+    assert "Mapping" in purpose or "mapping" in purpose.lower()
+    structure = core.attributes.get("structure_why") or ""
+    assert "DAMS-F-003" in structure or "уровн" in structure.lower()
+    assert (core.attributes.get("class_count") or 0) > 0
+    assert core.attributes.get("source_file") == "moex-core.yaml"
+
+    registries = by_title["Registries"]
+    reg_purpose = registries.attributes.get("purpose") or ""
+    assert "проекц" in reg_purpose.lower() or "projection" in reg_purpose.lower()
+    assert "не копируя" in reg_purpose.lower() or "справочник" in reg_purpose.lower()
+
     classes = {c.id: c for g in out.items for c in g.children if c.attributes.get("kind") == "class"}
     assert "LogicalEntity" in classes
     slots = classes["LogicalEntity"].attributes.get("slots") or []

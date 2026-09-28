@@ -1,0 +1,28 @@
+# Pinned LinkML toolchain for Stage 0 generate / lint / validate / golden compare.
+# Bump versions + regenerate contracts + commit digests in one PR.
+# Resolved from apps/cli .venv with linkml==1.11.1 (2026-09-28).
+linkml==1.11.1
+linkml-runtime==1.11.1
+prefixmaps==0.2.6
+rdflib==7.6.0
+PyYAML==6.0.3
+pydantic==2.13.5
+pydantic_core==2.46.5
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+click==8.5.0
+hbreader==0.9.1
+jsonasobj2==1.0.4
+watchdog==6.0.0
+Jinja2==3.1.6
+isodate==0.7.2
+python-dateutil==2.9.0.post0
+requests==2.34.2
+antlr4-python3-runtime==4.9.3
+prefixcommons==0.1.12
+parse==1.22.2
+openpyxl==3.1.5
+SQLAlchemy==2.1.1
+graphviz==0.21
+PyJSG==0.12.4
+PyShEx==0.9.0
