@@ -1,0 +1,12 @@
+id: http://example.org/moex/fixtures/person-src
+name: person_src
+prefixes:
+  ex: http://example.org/moex/fixtures/
+default_prefix: ex
+classes:
+  Person:
+    attributes:
+      name:
+        range: string
+      legacy_code:
+        range: string

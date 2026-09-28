@@ -531,10 +531,13 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     targets = tuple(args.only) if args.only else ALL_TARGETS
 
+    digests: dict[str, str] = {}
     try:
-        digests = generate(targets)
+        for target in targets:
+            digests.update(generate((target,)))
     except Exception as exc:
-        print(f"generate_artifacts failed: {exc}", file=sys.stderr)
+        failed = next((t for t in targets if t not in digests), "?")
+        print(f"generate_artifacts failed at {failed}: {exc}", file=sys.stderr)
         return 1
 
     for name, digest in digests.items():

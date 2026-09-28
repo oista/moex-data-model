@@ -10,7 +10,7 @@ from moex_publication.application.build_publication import (
     export_slice_projection,
 )
 from moex_model_cli.bootstrap import DEFAULT_SLICE_JSON, SlicePaths
-from moex_model_cli.gates.publish_gate import verify_publish_gate
+from moex_model_cli.gates.publish_gate import refuse_generated_draft, verify_publish_gate
 
 
 def run_publish(
@@ -21,15 +21,23 @@ def run_publish(
     skip_gate: bool = False,
 ) -> tuple[int, str]:
     lines: list[str] = []
-    if not skip_gate:
-        errors = verify_publish_gate(root=paths.root, refresh_bundle=False)
-        if errors:
-            return 1, "publish-gate FAILED\n" + "\n".join(errors) + "\n"
-        lines.append("publish-gate OK")
-
     out_path = out if out is not None else paths.root / DEFAULT_SLICE_JSON
     if not out_path.is_absolute():
         out_path = (paths.root / out_path).resolve()
+
+    draft_errors = refuse_generated_draft(root=paths.root, candidate=out_path)
+    if draft_errors:
+        return 1, "publish refused (generated-draft)\n" + "\n".join(draft_errors) + "\n"
+
+    if not skip_gate:
+        errors = verify_publish_gate(
+            root=paths.root,
+            refresh_bundle=False,
+            publish_target=out_path,
+        )
+        if errors:
+            return 1, "publish-gate FAILED\n" + "\n".join(errors) + "\n"
+        lines.append("publish-gate OK")
     result = export_slice_projection(
         schema_path=paths.schema,
         implementation_path=paths.implementation,

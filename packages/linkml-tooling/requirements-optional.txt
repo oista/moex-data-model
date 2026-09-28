@@ -1,0 +1,3 @@
+# Optional pins for Stage 7 adapters (not part of modeling-kernel).
+linkml-map==0.5.4
+schema-automator==0.5.7

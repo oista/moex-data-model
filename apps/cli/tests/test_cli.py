@@ -163,7 +163,7 @@ def test_map_sssom_and_extract(
     assert "bindings=1" in out
 
     assert main(["map", "--root", str(repo_root)]) == 2
-    assert "requires --sssom" in capsys.readouterr().out
+    assert "exactly one of" in capsys.readouterr().out
 
     fixture = (
         repo_root
@@ -186,6 +186,67 @@ def test_map_sssom_and_extract(
         == 0
     )
     assert "bindings=" in capsys.readouterr().out
+
+
+def test_map_transform_preview(
+    repo_root: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    transform = repo_root / "model-assets" / "transformations" / "person-rename-code.yaml"
+    sample = (
+        repo_root
+        / "packages"
+        / "linkml-tooling"
+        / "tests"
+        / "fixtures"
+        / "person_sample.json"
+    )
+    code = main(
+        [
+            "map",
+            "--root",
+            str(repo_root),
+            "--transform",
+            str(transform),
+            "--preview",
+            str(sample),
+        ]
+    )
+    out = capsys.readouterr().out
+    assert code == 0, out
+    assert "person-rename-code" in out or "transform preview" in out
+
+
+def test_import_json_schema_draft(
+    repo_root: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    source = (
+        repo_root
+        / "packages"
+        / "linkml-tooling"
+        / "tests"
+        / "fixtures"
+        / "mini.schema.json"
+    )
+    out = tmp_path / "imports"
+    code = main(
+        [
+            "import",
+            "--root",
+            str(repo_root),
+            "--source-type",
+            "json_schema",
+            "--source",
+            str(source),
+            "--out",
+            str(out),
+            "--name",
+            "MiniPerson",
+        ]
+    )
+    captured = capsys.readouterr()
+    assert code == 0, captured.out + captured.err
+    assert "generated-draft" in captured.out
+    assert any((out / d / "job.json").is_file() for d in out.iterdir() if d.is_dir())
 
 
 def test_missing_schema_fails_fast(repo_root: Path) -> None:

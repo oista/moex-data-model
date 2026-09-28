@@ -30,3 +30,28 @@ def test_publish_gate_fails_on_digest_mismatch() -> None:
         assert any("python digest mismatch" in e for e in errors)
     finally:
         manifest.write_text(orig, encoding="utf-8")
+
+
+def test_refuse_generated_draft_under_imports(tmp_path: Path) -> None:
+    from moex_model_cli.gates.publish_gate import refuse_generated_draft
+
+    root = tmp_path
+    job = root / "generated" / "imports" / "job-1"
+    job.mkdir(parents=True)
+    (job / "job.json").write_text(
+        json.dumps(
+            {
+                "job_id": "job-1",
+                "status": "generated-draft",
+                "source_type": "json_schema",
+                "source_path": "source.json",
+                "source_digest": "sha256:0",
+                "repro_command": "echo",
+            }
+        ),
+        encoding="utf-8",
+    )
+    errors = refuse_generated_draft(root=root, candidate=job / "out.json")
+    assert any("generated/imports" in e for e in errors)
+    errors2 = refuse_generated_draft(root=root, candidate=job)
+    assert any("generated-draft" in e for e in errors2)

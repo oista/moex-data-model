@@ -121,15 +121,59 @@ def _bundle_ok(root: Path, *, refresh_bundle: bool) -> list[str]:
     return []
 
 
+def refuse_generated_draft(
+    *,
+    root: Path,
+    candidate: Path | None = None,
+) -> list[str]:
+    """
+    Fail closed if a path is under generated/imports or is a generated-draft job.
+
+    Import drafts must never be published automatically (ADR-009 / Stage 7).
+    """
+    errors: list[str] = []
+    repo = root.resolve()
+    imports_root = (repo / "generated" / "imports").resolve()
+
+    if candidate is None:
+        return errors
+
+    path = candidate if candidate.is_absolute() else (repo / candidate).resolve()
+    try:
+        path.relative_to(imports_root)
+        errors.append(
+            f"publish-gate: refusing path under generated/imports (draft-only): {path}"
+        )
+    except ValueError:
+        pass
+
+    # job.json with generated-draft status
+    job_json = path if path.name == "job.json" else path / "job.json"
+    if job_json.is_file():
+        try:
+            data = json.loads(job_json.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            data = {}
+        if data.get("status") == "generated-draft":
+            errors.append(
+                f"publish-gate: refusing generated-draft import job: {job_json}"
+            )
+    return errors
+
+
 def verify_publish_gate(
     *,
     root: Path | None = None,
     refresh_bundle: bool = True,
+    publish_target: Path | None = None,
 ) -> list[str]:
     """Return error strings; empty list means gate passed."""
     repo = (root or find_repo_root()).resolve()
+    errors = refuse_generated_draft(root=repo, candidate=publish_target)
+    if errors:
+        return errors
+
     paths = artifact_paths(repo)
-    errors: list[str] = []
     checks = (
         ("owl", paths["owl_manifest"], paths["owl"], True, False, False),
         ("shacl", paths["shacl_manifest"], paths["shacl"], True, False, False),

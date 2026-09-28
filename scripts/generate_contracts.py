@@ -77,8 +77,9 @@ def generate(*, out_root: Path, manifest_path: Path) -> tuple[Path, str]:
     if "class ModelPackage" not in body:
         raise RuntimeError("generated output missing ModelPackage")
 
-    init_py.write_text(HEADER + body, encoding="utf-8")
-    pyproject.write_text(PYPROJECT_TOML, encoding="utf-8")
+    # Force LF so Windows/Linux CI digests match (Path.write_text defaults to os.linesep).
+    init_py.write_text(HEADER + body, encoding="utf-8", newline="\n")
+    pyproject.write_text(PYPROJECT_TOML, encoding="utf-8", newline="\n")
 
     digest = "sha256:" + hashlib.sha256(init_py.read_bytes()).hexdigest()
     schema_digest = "sha256:" + hashlib.sha256(SCHEMA.read_bytes()).hexdigest()
@@ -102,6 +103,7 @@ def generate(*, out_root: Path, manifest_path: Path) -> tuple[Path, str]:
     manifest_path.write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
+        newline="\n",
     )
     return init_py, digest
 

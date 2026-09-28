@@ -2,6 +2,18 @@
 
 from moex_modeling.assets.public import SchemaRepository
 from moex_modeling.identifiers.curie import CurieUriResolver
+from moex_modeling.import_draft.public import (
+    GENERATED_DRAFT_STATUS,
+    ImportDraftEngine,
+    ImportJobManifest,
+    ImportSourceType,
+)
+from moex_modeling.mapping.public import (
+    MappingPreview,
+    MappingProvider,
+    MappingResult,
+    TransformSpecMeta,
+)
 from moex_modeling.changes.domain import (
     ChangeCategory,
     SemanticChange,
@@ -57,9 +69,16 @@ __all__ = [
     "Diagnostic",
     "DiagnosticDetail",
     "DiagnosticSeverity",
+    "GENERATED_DRAFT_STATUS",
     "ImplementationRef",
+    "ImportDraftEngine",
+    "ImportJobManifest",
+    "ImportSourceType",
     "LifecycleStatus",
     "LoadedImplementation",
+    "MappingPreview",
+    "MappingProvider",
+    "MappingResult",
     "ModelUniverse",
     "ModelingStandard",
     "ProvenanceRecord",
@@ -79,6 +98,7 @@ __all__ = [
     "TElement",
     "TImplBody",
     "TSpecBody",
+    "TransformSpecMeta",
     "TransformationKind",
     "TypedRelation",
     "diagnostic_to_wire",

@@ -1,0 +1,22 @@
+moex:
+  spec_id: moex:transform:person-identity:0.1
+  source_schema_revision: fixture-person-src-0.1
+  target_schema_revision: fixture-person-src-0.1
+  transformation_kind: lossless
+  description: Identity mapping for Person (fixture)
+  preserved_semantics:
+    - Person.name
+    - Person.legacy_code
+  lost_semantics: []
+  source_schema: schemas/person_source.yaml
+
+id: https://example.org/moex/transforms/person-identity
+title: Person identity
+class_derivations:
+  Person:
+    populated_from: Person
+    slot_derivations:
+      name:
+        populated_from: name
+      legacy_code:
+        populated_from: legacy_code

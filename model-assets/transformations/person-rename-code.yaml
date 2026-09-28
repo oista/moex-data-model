@@ -1,0 +1,22 @@
+moex:
+  spec_id: moex:transform:person-rename-code:0.1
+  source_schema_revision: fixture-person-src-0.1
+  target_schema_revision: fixture-person-tgt-0.1
+  transformation_kind: partial
+  description: Rename Person.legacy_code to Person.code (fixture migration)
+  preserved_semantics:
+    - Person.name
+  lost_semantics:
+    - Person.legacy_code
+  source_schema: schemas/person_source.yaml
+
+id: https://example.org/moex/transforms/person-rename-code
+title: Person rename legacy_code to code
+class_derivations:
+  Person:
+    populated_from: Person
+    slot_derivations:
+      name:
+        populated_from: name
+      code:
+        populated_from: legacy_code

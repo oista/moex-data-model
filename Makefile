@@ -31,8 +31,8 @@ viewer-check:
 
 # Ontology stack pytest (outside Stage 0 make check; gated in GHA viewer-and-packages)
 packages-check:
-	$(PYTHON) -m pip install -e "./generated/contracts/moex-dams/0.1" -e "./$(KERNEL)" -e "./packages/standard-linkml" -e "./$(DAMS)" -e "./$(DRAWDB_ADAPTER)" -e "./$(OWL)" -e "./$(MAPPINGS)" -e "./$(CATALOG)" pytest PyYAML
-	$(PYTHON) -m pytest $(OWL)/tests $(MAPPINGS)/tests $(CATALOG)/tests $(DRAWDB_ADAPTER)/tests $(DAMS)/tests/test_dbml_projection.py -q
+	$(PYTHON) -m pip install -e "./generated/contracts/moex-dams/0.1" -e "./$(KERNEL)" -e "./packages/standard-linkml" -e "./$(DAMS)" -e "./$(DRAWDB_ADAPTER)" -e "./$(OWL)" -e "./$(MAPPINGS)" -e "./$(CATALOG)" -e "./packages/linkml-tooling[map,automator]" pytest PyYAML
+	$(PYTHON) -m pytest $(OWL)/tests $(MAPPINGS)/tests $(CATALOG)/tests $(DRAWDB_ADAPTER)/tests $(DAMS)/tests/test_dbml_projection.py packages/linkml-tooling/tests packages/modeling-kernel/tests/test_stage7_ports.py -q
 
 drawdb-adapter-check:
 	$(PYTHON) -m pip install -e "./generated/contracts/moex-dams/0.1" -e "./$(KERNEL)" -e "./packages/standard-linkml" -e "./$(DAMS)" -e "./$(DRAWDB_ADAPTER)[dev]" pytest

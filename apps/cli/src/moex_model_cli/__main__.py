@@ -118,43 +118,52 @@ def build_parser() -> argparse.ArgumentParser:
     import_p = sub.add_parser(
         "import",
         help=(
-            "ER-dictionary → ModelPackage draft "
-            "(schema-automator = Stage 7 / ADR-009)"
+            "ER-dictionary → ModelPackage, or schema-automator → generated-draft "
+            "(ADR-009)"
         ),
     )
     _add_slice_args(import_p)
     import_p.add_argument(
         "--workbook",
         type=Path,
-        required=True,
-        help="Path to .xlsx or directory of CSV sheets",
+        default=None,
+        help="Path to .xlsx or directory of CSV sheets (ER-dictionary mode)",
     )
     import_p.add_argument(
         "--profile",
         type=Path,
-        required=True,
+        default=None,
         dest="ingest_profile",
-        help="Ingest profile YAML",
+        help="Ingest profile YAML (ER-dictionary mode)",
     )
     import_p.add_argument(
         "--out",
         type=Path,
-        required=True,
-        help="Output directory for package/envelope/validation artifacts",
+        default=None,
+        help="Output directory (ER package or generated/imports parent)",
     )
     import_p.add_argument("--name", default=None, help="Artifact basename")
     import_p.add_argument(
         "--skip-validate",
         action="store_true",
-        help="Write artifacts without linkml-validate",
+        help="ER mode: write artifacts without linkml-validate",
+    )
+    import_p.add_argument(
+        "--source-type",
+        default=None,
+        choices=["json_schema", "sql", "csv", "rdf"],
+        help="schema-automator draft import (ADR-009)",
+    )
+    import_p.add_argument(
+        "--source",
+        type=Path,
+        default=None,
+        help="Source file for --source-type draft import",
     )
 
     map_p = sub.add_parser(
         "map",
-        help=(
-            "SSSOM load or LinkML binding extract "
-            "(linkml-map engine = Stage 7 / ADR-008)"
-        ),
+        help="SSSOM load, LinkML binding extract, or linkml-map transform (ADR-008)",
     )
     _add_slice_args(map_p)
     map_p.add_argument(
@@ -169,7 +178,25 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Extract class_uri / slot_uri / mappings from a LinkML schema",
     )
-    map_p.add_argument("--json", action="store_true", help="Print bindings as JSON")
+    map_p.add_argument(
+        "--transform",
+        type=Path,
+        default=None,
+        help="linkml-map transformation specification (MOEX envelope + body)",
+    )
+    map_p.add_argument(
+        "--preview",
+        type=Path,
+        default=None,
+        help="With --transform: sample path for preview",
+    )
+    map_p.add_argument(
+        "--sample",
+        type=Path,
+        default=None,
+        help="With --transform: sample path for transform_sample",
+    )
+    map_p.add_argument("--json", action="store_true", help="Print bindings/result as JSON")
 
     return parser
 
@@ -249,12 +276,17 @@ def main(argv: list[str] | None = None) -> int:
             name=args.name,
             skip_validate=args.skip_validate,
             schema=args.schema,
+            source_type=args.source_type,
+            source=args.source,
         )
     elif args.command == "map":
         code, text = run_map(
             paths,
             sssom=args.sssom,
             extract_schema=args.extract_schema,
+            transform=args.transform,
+            preview=args.preview,
+            sample=args.sample,
             as_json=args.json,
         )
     else:

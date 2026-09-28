@@ -1,0 +1,12 @@
+id: http://example.org/moex/fixtures/person-tgt
+name: person_tgt
+prefixes:
+  ex: http://example.org/moex/fixtures/
+default_prefix: ex
+classes:
+  Person:
+    attributes:
+      name:
+        range: string
+      code:
+        range: string
