@@ -316,13 +316,13 @@
           e.stopPropagation();
           selectedItemId = null;
           const node = nodeForModule(mod.module_id);
+          if (node) currentNodeId = node.id;
+          // Hash only — hashchange → applyRoute → showModule (avoid double render)
           setHash({
             node: node ? node.id : null,
             module: shortModule(mod.module_id),
             section: sec.id,
           });
-          if (node) currentNodeId = node.id;
-          showModule(mod.module_id, { section: sec.id });
         });
         secondary.appendChild(sBtn);
       });
@@ -653,6 +653,7 @@
         crumb.textContent = `${mod.title} / ${section.title}`;
         content.appendChild(crumb);
         content.appendChild(renderSection(mod, section));
+        if (focus.item) highlightItem(content, focus.item);
         return;
       }
     }
@@ -1020,12 +1021,9 @@
     head.className = "section-head";
     head.innerHTML = `<h2>${escapeHtml(section.title)}</h2><span class="muted">${escapeHtml(section.type)}</span>`;
     head.addEventListener("click", () => {
+      // Collapse only — do not setHash (would re-render and hide the body permanently
+      // when already focused on this section).
       wrap.classList.toggle("collapsed");
-      setHash({
-        node: nodeForModule(mod.module_id)?.id || currentNodeId,
-        module: shortModule(mod.module_id),
-        section: section.id,
-      });
     });
     wrap.appendChild(head);
 
@@ -1291,6 +1289,54 @@
     return [...cols].filter((c) => items.some((i) => cellValue(i, c)));
   }
 
+  function parentMeta(item, section) {
+    const raw =
+      (item.attributes?.parent_local_name || "").trim() ||
+      (item.attributes?.parents || "").trim().split(/\s*\|\s*/)[0] ||
+      "";
+    if (!raw) return null;
+    // Prefer local_name match; also allow full IRI id (catalog glossary)
+    const parentItem =
+      section.items.find((i) => i.id === raw) ||
+      section.items.find((i) => (i.attributes?.local_name || "") === raw) ||
+      section.items.find((i) => (i.attributes?.curie || "") === raw);
+    if (parentItem) {
+      return {
+        id: parentItem.id,
+        label: parentItem.attributes?.label || parentItem.title || parentItem.id,
+        inSection: true,
+      };
+    }
+    // External / not in preview: show local name only
+    const short = raw.includes("/") ? raw.replace(/\/$/, "").split("/").pop() : raw;
+    return { id: raw, label: short || raw, inSection: false };
+  }
+
+  function findTreePath(items, targetId, path) {
+    const trail = path || [];
+    for (const item of items || []) {
+      const next = trail.concat(item);
+      if (item.id === targetId) return next;
+      if (item.children && item.children.length) {
+        const found = findTreePath(item.children, targetId, next);
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+
+  function replaceHashQuiet({ node, module, section, item }) {
+    const params = new URLSearchParams();
+    if (node) params.set("node", node);
+    if (module) params.set("module", module);
+    if (section) params.set("section", section);
+    if (item) params.set("item", item);
+    const next = "#" + params.toString();
+    if (location.hash !== next) {
+      history.replaceState(null, "", next);
+    }
+  }
+
   function renderGlossary(mod, section) {
     const root = document.createElement("div");
     const toolbar = document.createElement("div");
@@ -1382,6 +1428,34 @@
           <p>${escapeHtml(defEn)}</p>
           ${defRu ? `<p class="muted">${escapeHtml(defRu)}</p>` : ""}
           <div class="muted">${escapeHtml(item.id)}${domain ? " · " + escapeHtml(domain) : ""}</div>`;
+        const parentRow = parentMeta(item, section);
+        if (parentRow) {
+          const parentLine = document.createElement("div");
+          parentLine.className = "glossary-parent";
+          parentLine.appendChild(document.createTextNode("extends "));
+          if (parentRow.inSection) {
+            const link = document.createElement("button");
+            link.type = "button";
+            link.className = "glossary-parent-link";
+            link.textContent = parentRow.label;
+            link.addEventListener("click", (e) => {
+              e.stopPropagation();
+              setHash({
+                node: nodeForModule(mod.module_id)?.id || currentNodeId,
+                module: shortModule(mod.module_id),
+                section: section.id,
+                item: parentRow.id,
+              });
+            });
+            parentLine.appendChild(link);
+          } else {
+            const span = document.createElement("span");
+            span.className = "muted";
+            span.textContent = parentRow.label;
+            parentLine.appendChild(span);
+          }
+          card.appendChild(parentLine);
+        }
         card.addEventListener("click", () => {
           setHash({
             node: nodeForModule(mod.module_id)?.id || currentNodeId,
@@ -1408,6 +1482,13 @@
     layout.appendChild(nodes);
     layout.appendChild(details);
 
+    const focusPath = selectedItemId
+      ? findTreePath(section.items, selectedItemId)
+      : null;
+    const expandIds = new Set(
+      focusPath ? focusPath.map((i) => i.id) : []
+    );
+
     function showDetails(item, path) {
       details.classList.remove("muted");
       details.innerHTML = `<h3>${escapeHtml(item.title || item.id)}</h3>
@@ -1418,8 +1499,9 @@
     function makeNode(item, depth, path) {
       const wrap = document.createElement("div");
       wrap.className = "tree-node";
+      wrap.dataset.itemId = item.id;
       const hasKids = item.children && item.children.length;
-      const open = depth < 2;
+      const open = depth < 2 || expandIds.has(item.id);
       const row = document.createElement("div");
       const toggle = document.createElement("button");
       toggle.type = "button";
@@ -1427,7 +1509,8 @@
       toggle.textContent = hasKids ? (open ? "▼" : "▶") : "·";
       const label = document.createElement("button");
       label.type = "button";
-      label.className = "tree-label";
+      label.className =
+        "tree-label" + (item.id === selectedItemId ? " active" : "");
       label.textContent = item.title || item.id;
       row.appendChild(toggle);
       row.appendChild(label);
@@ -1445,8 +1528,15 @@
         });
       }
       label.addEventListener("click", () => {
-        showDetails(item, path.concat(item.title || item.id));
-        setHash({
+        const crumbPath = path.concat(item.title || item.id);
+        showDetails(item, crumbPath);
+        selectedItemId = item.id;
+        nodes.querySelectorAll(".tree-label.active").forEach((el) => {
+          el.classList.remove("active");
+        });
+        label.classList.add("active");
+        // Update URL without hashchange → no full re-render / expand reset
+        replaceHashQuiet({
           node: nodeForModule(mod.module_id)?.id || currentNodeId,
           module: shortModule(mod.module_id),
           section: section.id,
@@ -1458,6 +1548,13 @@
     }
 
     section.items.forEach((item) => nodes.appendChild(makeNode(item, 0, [])));
+    if (focusPath && focusPath.length) {
+      const leaf = focusPath[focusPath.length - 1];
+      showDetails(
+        leaf,
+        focusPath.map((i) => i.title || i.id)
+      );
+    }
     return layout;
   }
 

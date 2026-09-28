@@ -1,6 +1,7 @@
 """Public API for specification-dams."""
 
 from moex_dams.application.assess import SliceResult, assess_implementation
+from moex_dams.application.diff import diff_graphs, diff_implementations
 from moex_dams.contracts import ModelPackage
 from moex_dams.domain.graph import (
     DamsModelGraphView,
@@ -25,4 +26,6 @@ __all__ = [
     "build_dams_graph",
     "check_references",
     "check_structural",
+    "diff_graphs",
+    "diff_implementations",
 ]

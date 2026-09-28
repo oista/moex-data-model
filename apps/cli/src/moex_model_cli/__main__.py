@@ -12,6 +12,7 @@ from moex_model_cli.commands.diagram import run_diagram
 from moex_model_cli.commands.diff import run_diff
 from moex_model_cli.commands.lint import run_lint
 from moex_model_cli.commands.publish import run_publish
+from moex_model_cli.commands.semantic_diff import run_semantic_diff
 from moex_model_cli.commands.stubs import run_not_implemented
 from moex_model_cli.commands.validate import run_validate
 
@@ -55,6 +56,22 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Repo-relative path (default: implementation YAML)",
     )
+
+    semantic = sub.add_parser(
+        "semantic-diff",
+        help="Classify DAMS ModelPackage changes (breaking / compatible / …)",
+    )
+    _add_slice_args(semantic)
+    semantic.add_argument("--from", dest="from_ref", default=None)
+    semantic.add_argument("--to", dest="to_ref", default=None)
+    semantic.add_argument(
+        "--path",
+        default=None,
+        help="Repo-relative path for Git mode (default: implementation YAML)",
+    )
+    semantic.add_argument("--left", type=Path, default=None, help="Base YAML file")
+    semantic.add_argument("--right", type=Path, default=None, help="Target YAML file")
+    semantic.add_argument("--json", action="store_true", help="Print SemanticDiffReport JSON")
 
     publish = sub.add_parser(
         "publish",
@@ -117,6 +134,16 @@ def main(argv: list[str] | None = None) -> int:
             from_ref=args.from_ref,
             to_ref=args.to_ref,
             path=args.path,
+        )
+    elif args.command == "semantic-diff":
+        code, text = run_semantic_diff(
+            paths,
+            from_ref=args.from_ref,
+            to_ref=args.to_ref,
+            path=args.path,
+            left=args.left,
+            right=args.right,
+            as_json=args.json,
         )
     elif args.command == "publish":
         code, text = run_publish(

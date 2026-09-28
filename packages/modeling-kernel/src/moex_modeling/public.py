@@ -1,5 +1,10 @@
 """Stable public API for moex-modeling-kernel."""
 
+from moex_modeling.changes.domain import (
+    ChangeCategory,
+    SemanticChange,
+    SemanticDiffReport,
+)
 from moex_modeling.conformance.domain import (
     ConformanceAssessment,
     ConformanceReport,
@@ -40,6 +45,7 @@ from moex_modeling.universe.domain import ModelUniverse, TypedRelation
 
 __all__ = [
     "AnnotationPair",
+    "ChangeCategory",
     "ConformanceAssessment",
     "ConformancePhase",
     "ConformanceReport",
@@ -55,6 +61,8 @@ __all__ = [
     "ProvenanceRecord",
     "ReferenceSpecification",
     "RelationKind",
+    "SemanticChange",
+    "SemanticDiffReport",
     "SourceDescriptor",
     "SourceLocation",
     "SpecificationImplementation",

@@ -338,6 +338,7 @@ artifact:
 - **Roadmap phases 1–4 (2026-09-28):** (1) `make generate-contracts` → `moex_dams_contracts`; (2) `OWLStandardProvider`; (3) `packages/git-adapter` + CLI lint/compile/diagram/diff; (4) `apps/api` FastAPI + Alembic core tables + `infra/compose/postgres.yml` (SQLite smoke / Postgres compose).
 - **Stage 3 narrow-v2 (2026-09-28):** Alembic `0002` — `user_identity`, `role_binding`, `workspace_member`, `generation_job`, `generated_artifact`, `model_index`, `model_element_index`; ports `IdentityStore` / `JobStore` / `ModelIndexProvider`; HTTP workspaces + sync jobs (Idempotency-Key) + model-index rebuild/search; GitHub read-only `GitProvider` via `MOEX_GIT_PROVIDER`.
 - **Stage 3 narrow-v3 (2026-09-28):** Alembic `0004` `publication_request`; GitHub write + local publish; `POST /publications` from workspace draft into this repo; Workbench Publish button.
+- **Semantic diff CLI (2026-09-28):** kernel `SemanticDiffReport` / `ChangeCategory`; `specification-dams.diff_implementations`; `moex-model semantic-diff` (Git refs + `--left`/`--right`, `--json`, exit 1 on breaking). API/UI/PR attach still out.
 
 ### Результат
 
@@ -369,6 +370,8 @@ test-python
 - CI работает на чистом checkout.
 
 ## Этап 1. Model Core
+
+**Progress (semantic diff):** `DamsModelGraphView` + `diff_graphs` / `diff_implementations` classify changes by `element_id` (ADR-012 CLI slice). Full `SchemaRepository` / unified ModelGraph API still deferred.
 
 ### Задачи
 
@@ -409,6 +412,8 @@ Diagnostic:
 
 ## Этап 2. Compiler CLI
 
+**Progress:** `validate` / `lint` / `compile` / `diagram` / `diff` (textual) / `publish` / **`semantic-diff`** done. `import` / `map` remain stubs.
+
 До web-приложения необходимо сделать стабильный CLI.
 
 ### Команды
@@ -418,6 +423,7 @@ moex-model validate
 moex-model lint
 moex-model compile
 moex-model diff
+moex-model semantic-diff
 moex-model import
 moex-model map
 moex-model diagram

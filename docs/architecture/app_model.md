@@ -18,6 +18,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 **Уже совпало (Workbench editors):** Monaco YAML + `workspace_document` draft API + validate `source=draft`.  
 **Уже совпало (Entity form slice):** controlled mutations add LogicalEntity/LogicalAttribute into draft.  
 **Уже совпало (Stage 3 narrow-v3):** `publication_request` + publish API + GitHub write / local branch+stub review into this repo.  
+**Уже совпало (Semantic diff CLI):** kernel `SemanticDiffReport`; `moex-model semantic-diff` + `diff_implementations`.  
 **Still-later:** live form↔YAML sync, edit/delete, semantic diff UI, merge automation, `apps/worker`, CLI `import`/`map` real, OIDC, `diagram_layout` / `external_registry_cache`.  
 `packages/ontology/` остаётся shim. Миграция путей: [docs/migration/model-src-to-model-assets.md](../migration/model-src-to-model-assets.md).
 

@@ -104,3 +104,88 @@ def test_missing_schema_fails_fast(repo_root: Path) -> None:
     assert not paths.schema.is_file()
     with pytest.raises(FileNotFoundError):
         main(["validate", "--root", str(repo_root), "--schema", str(missing)])
+
+
+def test_semantic_diff_identical_exit_0(
+    repo_root: Path,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    trading = (
+        repo_root
+        / "model-assets"
+        / "implementations"
+        / "solutions"
+        / "trading-platform"
+        / "trading-solution-model.yaml"
+    )
+    left = tmp_path / "left.yaml"
+    right = tmp_path / "right.yaml"
+    text = trading.read_text(encoding="utf-8")
+    left.write_text(text, encoding="utf-8")
+    right.write_text(text, encoding="utf-8")
+    code = main(
+        [
+            "semantic-diff",
+            "--root",
+            str(repo_root),
+            "--left",
+            str(left),
+            "--right",
+            str(right),
+            "--json",
+        ]
+    )
+    captured = capsys.readouterr()
+    assert code == 0
+    payload = json.loads(captured.out)
+    assert payload["changes"] == []
+
+
+def test_semantic_diff_breaking_exit_1(
+    repo_root: Path,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    import yaml
+
+    trading = (
+        repo_root
+        / "model-assets"
+        / "implementations"
+        / "solutions"
+        / "trading-platform"
+        / "trading-solution-model.yaml"
+    )
+    left = tmp_path / "left.yaml"
+    right = tmp_path / "right.yaml"
+    left.write_text(trading.read_text(encoding="utf-8"), encoding="utf-8")
+    data = yaml.safe_load(trading.read_text(encoding="utf-8"))
+    for entity in data["logical_entities"]:
+        if entity.get("element_id") == "dams:logical/trading/Client":
+            entity["attributes"] = [
+                a
+                for a in entity["attributes"]
+                if a.get("element_id") != "dams:logical/trading/Client/fullName"
+            ]
+    right.write_text(
+        yaml.safe_dump(data, sort_keys=False, allow_unicode=True),
+        encoding="utf-8",
+    )
+    code = main(
+        [
+            "semantic-diff",
+            "--root",
+            str(repo_root),
+            "--left",
+            str(left),
+            "--right",
+            str(right),
+            "--json",
+        ]
+    )
+    captured = capsys.readouterr()
+    assert code == 1
+    payload = json.loads(captured.out)
+    categories = {c["category"] for c in payload["changes"]}
+    assert "breaking" in categories
