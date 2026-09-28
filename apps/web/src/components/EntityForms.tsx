@@ -78,6 +78,7 @@ type Props = {
   onDocument: (doc: WorkspaceDocument) => void;
   onBeforeMutate?: () => Promise<void>;
   disabled?: boolean;
+  focusElementId?: string | null;
 };
 
 export function EntityForms({
@@ -86,6 +87,7 @@ export function EntityForms({
   onDocument,
   onBeforeMutate,
   disabled = false,
+  focusElementId = null,
 }: Props) {
   const { entities, error: parseError } = useMemo(
     () => parseEntities(content),
@@ -95,12 +97,6 @@ export function EntityForms({
   const selected =
     entities.find((e) => e.element_id === selectedId) ?? entities[0] ?? null;
 
-  useEffect(() => {
-    if (selected && selected.element_id !== selectedId) {
-      setSelectedId(selected.element_id);
-    }
-  }, [selected, selectedId]);
-
   const [editName, setEditName] = useState("");
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
@@ -108,6 +104,31 @@ export function EntityForms({
   const [editAttrName, setEditAttrName] = useState("");
   const [editAttrType, setEditAttrType] = useState("string");
   const [editAttrRequired, setEditAttrRequired] = useState(false);
+  const [pendingAttrFocus, setPendingAttrFocus] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!focusElementId) return;
+    const asEntity = entities.find((e) => e.element_id === focusElementId);
+    if (asEntity) {
+      setSelectedId(asEntity.element_id);
+      setPendingAttrFocus(null);
+      return;
+    }
+    for (const ent of entities) {
+      const attr = ent.attributes.find((a) => a.element_id === focusElementId);
+      if (attr) {
+        setSelectedId(ent.element_id);
+        setPendingAttrFocus(attr.element_id);
+        return;
+      }
+    }
+  }, [focusElementId, entities]);
+
+  useEffect(() => {
+    if (selected && selected.element_id !== selectedId) {
+      setSelectedId(selected.element_id);
+    }
+  }, [selected, selectedId]);
 
   useEffect(() => {
     if (!selected) {
@@ -120,8 +141,21 @@ export function EntityForms({
     setEditName(selected.name);
     setEditTitle(selected.title);
     setEditDescription(selected.description);
+    if (pendingAttrFocus) {
+      const attr = selected.attributes.find(
+        (a) => a.element_id === pendingAttrFocus,
+      );
+      if (attr) {
+        setEditAttrId(attr.element_id);
+        setEditAttrName(attr.name);
+        setEditAttrType(attr.logical_type);
+        setEditAttrRequired(attr.required);
+        setPendingAttrFocus(null);
+        return;
+      }
+    }
     setEditAttrId(null);
-  }, [selected?.element_id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [selected?.element_id, pendingAttrFocus]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [entityId, setEntityId] = useState("dams:logical/trading/NewEntity");
   const [entityName, setEntityName] = useState("NewEntity");

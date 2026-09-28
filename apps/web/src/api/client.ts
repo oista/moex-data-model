@@ -130,6 +130,21 @@ export const api = {
     });
   },
   getJob: (id: string) => request<import("./types").Job>(`/jobs/${id}`),
+  listJobArtifacts: (jobId: string) =>
+    request<import("./types").JobArtifact[]>(`/jobs/${jobId}/artifacts`),
+  getArtifactContent: async (jobId: string, artifactId: string) => {
+    const headers = new Headers();
+    headers.set("X-Moex-Actor", getActor());
+    const res = await fetch(
+      `/api/jobs/${jobId}/artifacts/${artifactId}/content`,
+      { headers },
+    );
+    if (!res.ok) {
+      const detail = await res.text();
+      throw new Error(`${res.status} ${res.statusText}: ${detail}`);
+    }
+    return res.text();
+  },
   rebuildIndex: () =>
     request<import("./types").ModelIndexRebuild>("/model-index/rebuild", {
       method: "POST",

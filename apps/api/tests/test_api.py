@@ -144,6 +144,43 @@ def test_job_validate_idempotent(client: TestClient) -> None:
     assert got.json()["status"] == "succeeded"
 
 
+def test_compile_job_lists_and_previews_artifacts(client: TestClient) -> None:
+    headers = {
+        "X-Moex-Actor": "compiler",
+        "Idempotency-Key": "idem-compile-art-1",
+    }
+    r = client.post(
+        "/jobs",
+        json={
+            "kind": "compile",
+            "workspace_id": "ws-compile",
+            "implementation_id": "moex:implementation:trading:1.0.0",
+            "source": "published",
+        },
+        headers=headers,
+    )
+    assert r.status_code == 200
+    assert r.json()["status"] == "succeeded"
+    job_id = r.json()["id"]
+
+    arts = client.get(
+        f"/jobs/{job_id}/artifacts",
+        headers={"X-Moex-Actor": "compiler"},
+    )
+    assert arts.status_code == 200
+    items = arts.json()
+    assert len(items) >= 1
+    assert items[0]["kind"] == "pydantic-contracts"
+    art_id = items[0]["id"]
+
+    content = client.get(
+        f"/jobs/{job_id}/artifacts/{art_id}/content",
+        headers={"X-Moex-Actor": "compiler"},
+    )
+    assert content.status_code == 200
+    assert "directory:" in content.text or "class " in content.text
+
+
 def test_trading_body(client: TestClient) -> None:
     r = client.get("/implementations/trading/body")
     assert r.status_code == 200
@@ -269,6 +306,81 @@ def test_document_mutations_update_and_delete(client: TestClient) -> None:
         headers=headers,
     )
     assert missing.status_code == 400
+
+
+def test_document_mutations_relationship_and_mapping(client: TestClient) -> None:
+    headers = {"X-Moex-Actor": "mutator-rel"}
+    rel = client.post(
+        "/workspaces/ws-mut-rel/documents/trading/mutations",
+        json={
+            "op": "add_relationship",
+            "relationship": {
+                "element_id": "dams:rel/trading/Client-Self",
+                "name": "client_self",
+                "description": "Self ref for test",
+                "lifecycle_status": "draft",
+                "source_entity_ref": "dams:logical/trading/Client",
+                "target_entity_ref": "dams:logical/trading/Client",
+            },
+        },
+        headers=headers,
+    )
+    assert rel.status_code == 200
+    assert "dams:rel/trading/Client-Self" in rel.json()["content"]
+
+    upd_rel = client.post(
+        "/workspaces/ws-mut-rel/documents/trading/mutations",
+        json={
+            "op": "update_relationship",
+            "element_id": "dams:rel/trading/Client-Self",
+            "patch": {"title": "Self"},
+        },
+        headers=headers,
+    )
+    assert upd_rel.status_code == 200
+    assert "title: Self" in upd_rel.json()["content"]
+
+    mapping = client.post(
+        "/workspaces/ws-mut-rel/documents/trading/mutations",
+        json={
+            "op": "add_mapping",
+            "mapping": {
+                "element_id": "dams:mapping/trading/wb-test",
+                "name": "map_wb_test",
+                "description": "Workbench test mapping",
+                "lifecycle_status": "draft",
+                "source_refs": ["dams:logical/trading/Client/clientId"],
+                "target_refs": ["dams:physical/trading/client-topic/client_id"],
+                "mapping_type": "field_mapping",
+                "mapping_cardinality": "one_to_one",
+            },
+        },
+        headers=headers,
+    )
+    assert mapping.status_code == 200
+    assert "dams:mapping/trading/wb-test" in mapping.json()["content"]
+
+    del_map = client.post(
+        "/workspaces/ws-mut-rel/documents/trading/mutations",
+        json={
+            "op": "delete_mapping",
+            "element_id": "dams:mapping/trading/wb-test",
+        },
+        headers=headers,
+    )
+    assert del_map.status_code == 200
+    assert "dams:mapping/trading/wb-test" not in del_map.json()["content"]
+
+    del_rel = client.post(
+        "/workspaces/ws-mut-rel/documents/trading/mutations",
+        json={
+            "op": "delete_relationship",
+            "element_id": "dams:rel/trading/Client-Self",
+        },
+        headers=headers,
+    )
+    assert del_rel.status_code == 200
+    assert "dams:rel/trading/Client-Self" not in del_rel.json()["content"]
 
 
 def test_workspace_document_put_get_and_validate_draft(client: TestClient) -> None:

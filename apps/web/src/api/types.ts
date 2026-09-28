@@ -115,6 +115,76 @@ export type DocumentMutation =
   | {
       op: "delete_logical_attribute";
       element_id: string;
+    }
+  | {
+      op: "add_relationship";
+      relationship: {
+        element_id: string;
+        name: string;
+        description: string;
+        lifecycle_status?: string;
+        source_entity_ref: string;
+        target_entity_ref: string;
+        title?: string;
+      };
+    }
+  | {
+      op: "update_relationship";
+      element_id: string;
+      patch: {
+        name?: string;
+        title?: string;
+        description?: string;
+        lifecycle_status?: string;
+        source_entity_ref?: string;
+        target_entity_ref?: string;
+        source_role?: string;
+        target_role?: string;
+        source_min_cardinality?: number;
+        source_max_cardinality?: number;
+        target_min_cardinality?: number;
+        target_max_cardinality?: number;
+        identifying?: boolean;
+        associative?: boolean;
+      };
+    }
+  | {
+      op: "delete_relationship";
+      element_id: string;
+    }
+  | {
+      op: "add_mapping";
+      mapping: {
+        element_id: string;
+        name: string;
+        description: string;
+        lifecycle_status?: string;
+        source_refs: string[];
+        target_refs: string[];
+        mapping_type: string;
+        mapping_cardinality: string;
+        title?: string;
+        transformation_expression?: string;
+      };
+    }
+  | {
+      op: "update_mapping";
+      element_id: string;
+      patch: {
+        name?: string;
+        title?: string;
+        description?: string;
+        lifecycle_status?: string;
+        source_refs?: string[];
+        target_refs?: string[];
+        mapping_type?: string;
+        mapping_cardinality?: string;
+        transformation_expression?: string;
+      };
+    }
+  | {
+      op: "delete_mapping";
+      element_id: string;
     };
 
 export type Publication = {
@@ -144,4 +214,12 @@ export type SemanticDiffReport = {
   changes: SemanticDiffChange[];
   has_breaking: boolean;
   counts: Record<string, number>;
+};
+
+export type JobArtifact = {
+  id: string;
+  job_id: string;
+  kind: string;
+  path_or_uri: string;
+  content_digest: string;
 };

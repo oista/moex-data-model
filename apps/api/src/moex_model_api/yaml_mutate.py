@@ -55,7 +55,13 @@ def _collect_ids(data: CommentedMap) -> set[str]:
     root = data.get("element_id")
     if root:
         ids.add(str(root))
-    for key in ("logical_entities", "physical_objects", "mappings", "conceptual_entities"):
+    for key in (
+        "logical_entities",
+        "physical_objects",
+        "mappings",
+        "relationships",
+        "conceptual_entities",
+    ):
         items = data.get(key) or []
         if not isinstance(items, list):
             continue
@@ -228,6 +234,50 @@ def _find_logical_attribute(
     raise MutationError(f"logical attribute not found: {eid}")
 
 
+_RELATIONSHIP_PATCH_KEYS = frozenset(
+    {
+        "name",
+        "title",
+        "description",
+        "lifecycle_status",
+        "source_entity_ref",
+        "target_entity_ref",
+        "source_role",
+        "target_role",
+        "source_min_cardinality",
+        "source_max_cardinality",
+        "target_min_cardinality",
+        "target_max_cardinality",
+        "identifying",
+        "associative",
+    }
+)
+_MAPPING_PATCH_KEYS = frozenset(
+    {
+        "name",
+        "title",
+        "description",
+        "lifecycle_status",
+        "source_refs",
+        "target_refs",
+        "mapping_type",
+        "mapping_cardinality",
+        "transformation_expression",
+    }
+)
+_CARDINALITY_KEYS = frozenset(
+    {
+        "source_min_cardinality",
+        "source_max_cardinality",
+        "target_min_cardinality",
+        "target_max_cardinality",
+    }
+)
+_BOOL_PATCH_KEYS = frozenset(
+    {"required", "multivalued", "identifying", "associative"}
+)
+
+
 def _apply_patch(
     target: CommentedMap | dict[str, Any],
     patch: dict[str, Any],
@@ -241,8 +291,14 @@ def _apply_patch(
     for key, value in patch.items():
         if key not in allowed:
             raise MutationError(f"unsupported patch key: {key}")
-        if key in {"required", "multivalued"}:
+        if key in _BOOL_PATCH_KEYS:
             target[key] = bool(value)
+        elif key in _CARDINALITY_KEYS:
+            target[key] = int(value) if value is not None else None
+        elif key in {"source_refs", "target_refs"}:
+            if not isinstance(value, list) or not value:
+                raise MutationError(f"{key} must be a non-empty list")
+            target[key] = list(value)
         else:
             target[key] = value
         applied = True
@@ -276,6 +332,138 @@ def delete_logical_attribute(data: CommentedMap, element_id: str) -> None:
     del attrs[idx]
 
 
+def _find_top_level_item(
+    data: CommentedMap, collection: str, element_id: str, label: str
+) -> tuple[int, CommentedMap | dict[str, Any]]:
+    eid = str(element_id or "").strip()
+    if not eid:
+        raise MutationError("element_id is required")
+    items = data.get(collection) or []
+    if not isinstance(items, list):
+        raise MutationError(f"{collection} missing")
+    for idx, item in enumerate(items):
+        if isinstance(item, dict) and str(item.get("element_id")) == eid:
+            return idx, item
+    raise MutationError(f"{label} not found: {eid}")
+
+
+def add_relationship(data: CommentedMap, relationship: dict[str, Any]) -> None:
+    eid = str(relationship.get("element_id") or "").strip()
+    name = str(relationship.get("name") or "").strip()
+    description = str(relationship.get("description") or "").strip()
+    source = str(relationship.get("source_entity_ref") or "").strip()
+    target = str(relationship.get("target_entity_ref") or "").strip()
+    if not eid or not name or not description or not source or not target:
+        raise MutationError(
+            "element_id, name, description, source_entity_ref, "
+            "and target_entity_ref are required"
+        )
+    if eid in _collect_ids(data):
+        raise MutationConflict(f"duplicate element_id: {eid}")
+
+    row = CommentedMap()
+    row["element_id"] = eid
+    row["name"] = name
+    row["title"] = str(relationship.get("title") or name)
+    row["description"] = description
+    row["lifecycle_status"] = str(relationship.get("lifecycle_status") or "draft")
+    row["source_entity_ref"] = source
+    row["target_entity_ref"] = target
+    for key in (
+        "source_role",
+        "target_role",
+        "source_min_cardinality",
+        "source_max_cardinality",
+        "target_min_cardinality",
+        "target_max_cardinality",
+        "identifying",
+        "associative",
+    ):
+        if key in relationship and relationship[key] is not None:
+            if key in _BOOL_PATCH_KEYS:
+                row[key] = bool(relationship[key])
+            elif key in _CARDINALITY_KEYS:
+                row[key] = int(relationship[key])
+            else:
+                row[key] = relationship[key]
+
+    seq = _ensure_seq(data, "relationships")
+    seq.append(row)
+
+
+def update_relationship(
+    data: CommentedMap, element_id: str, patch: dict[str, Any]
+) -> None:
+    _, item = _find_top_level_item(
+        data, "relationships", element_id, "relationship"
+    )
+    _apply_patch(item, patch or {}, _RELATIONSHIP_PATCH_KEYS)
+
+
+def delete_relationship(data: CommentedMap, element_id: str) -> None:
+    idx, _ = _find_top_level_item(
+        data, "relationships", element_id, "relationship"
+    )
+    seq = data["relationships"]
+    del seq[idx]
+
+
+def add_mapping(data: CommentedMap, mapping: dict[str, Any]) -> None:
+    eid = str(mapping.get("element_id") or "").strip()
+    name = str(mapping.get("name") or "").strip()
+    description = str(mapping.get("description") or "").strip()
+    mapping_type = str(mapping.get("mapping_type") or "").strip()
+    mapping_cardinality = str(mapping.get("mapping_cardinality") or "").strip()
+    source_refs = mapping.get("source_refs")
+    target_refs = mapping.get("target_refs")
+    if (
+        not eid
+        or not name
+        or not description
+        or not mapping_type
+        or not mapping_cardinality
+        or not isinstance(source_refs, list)
+        or not source_refs
+        or not isinstance(target_refs, list)
+        or not target_refs
+    ):
+        raise MutationError(
+            "element_id, name, description, source_refs, target_refs, "
+            "mapping_type, and mapping_cardinality are required"
+        )
+    if eid in _collect_ids(data):
+        raise MutationConflict(f"duplicate element_id: {eid}")
+
+    row = CommentedMap()
+    row["element_id"] = eid
+    row["name"] = name
+    row["title"] = str(mapping.get("title") or name)
+    row["description"] = description
+    row["lifecycle_status"] = str(mapping.get("lifecycle_status") or "draft")
+    row["source_refs"] = list(source_refs)
+    row["target_refs"] = list(target_refs)
+    row["mapping_type"] = mapping_type
+    row["mapping_cardinality"] = mapping_cardinality
+    if mapping.get("transformation_expression") is not None:
+        row["transformation_expression"] = str(mapping["transformation_expression"])
+
+    seq = _ensure_seq(data, "mappings")
+    seq.append(row)
+
+
+def update_mapping(
+    data: CommentedMap, element_id: str, patch: dict[str, Any]
+) -> None:
+    _, item = _find_top_level_item(data, "mappings", element_id, "mapping")
+    _apply_patch(item, patch or {}, _MAPPING_PATCH_KEYS)
+
+
+def delete_mapping(data: CommentedMap, element_id: str) -> None:
+    idx, _ = _find_top_level_item(data, "mappings", element_id, "mapping")
+    seq = data["mappings"]
+    del seq[idx]
+
+
 def apply_mutation(text: str, payload: dict[str, Any]) -> str:
     data = load_yaml(text)
     op = payload.get("op")
@@ -303,6 +491,26 @@ def apply_mutation(text: str, payload: dict[str, Any]) -> str:
         )
     elif op == "delete_logical_attribute":
         delete_logical_attribute(data, str(payload.get("element_id") or ""))
+    elif op == "add_relationship":
+        add_relationship(data, payload.get("relationship") or {})
+    elif op == "update_relationship":
+        update_relationship(
+            data,
+            str(payload.get("element_id") or ""),
+            payload.get("patch") or {},
+        )
+    elif op == "delete_relationship":
+        delete_relationship(data, str(payload.get("element_id") or ""))
+    elif op == "add_mapping":
+        add_mapping(data, payload.get("mapping") or {})
+    elif op == "update_mapping":
+        update_mapping(
+            data,
+            str(payload.get("element_id") or ""),
+            payload.get("patch") or {},
+        )
+    elif op == "delete_mapping":
+        delete_mapping(data, str(payload.get("element_id") or ""))
     else:
         raise MutationError(f"unsupported op: {op!r}")
     return dump_yaml(data)

@@ -9,7 +9,15 @@ import type {
   SemanticDiffReport,
   WorkspaceDocument,
 } from "../api/types";
-import { EntityForms } from "../components/EntityForms";
+import {
+  ModelFormsPanel,
+  type FormsTab,
+} from "../components/ModelFormsPanel";
+import {
+  ModelExplorer,
+  type ExplorerSelect,
+} from "../components/ModelExplorer";
+import { ArtifactsPanel } from "../components/ArtifactsPanel";
 import { StatusBadge } from "../components/StatusBadge";
 
 const WS_ID = "ws-workbench";
@@ -36,6 +44,8 @@ export function EditorPage() {
   const [publication, setPublication] = useState<Publication | null>(null);
   const [diff, setDiff] = useState<SemanticDiffReport | null>(null);
   const [loading, setLoading] = useState(true);
+  const [formsTab, setFormsTab] = useState<FormsTab>("entities");
+  const [focusElementId, setFocusElementId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -111,6 +121,23 @@ export function EditorPage() {
     onSuccess: setJob,
   });
 
+  const compile = useMutation({
+    mutationFn: async () => {
+      const result = await api.createJob(
+        {
+          kind: "compile",
+          workspace_id: WS_ID,
+          implementation_id: IMPL,
+          source: "published",
+        },
+        `compile-${Date.now()}`,
+      );
+      setLastJobId(result.id);
+      return api.getJob(result.id);
+    },
+    onSuccess: setJob,
+  });
+
   const reviewChanges = useMutation({
     mutationFn: async () => {
       await api.putDocument(WS_ID, { content: value, base_digest: baseDigest });
@@ -161,6 +188,7 @@ export function EditorPage() {
     loading ||
     save.isPending ||
     validate.isPending ||
+    compile.isPending ||
     reviewChanges.isPending ||
     publish.isPending;
 
@@ -197,6 +225,14 @@ export function EditorPage() {
         </button>
         <button
           type="button"
+          onClick={() => compile.mutate()}
+          disabled={loading || compile.isPending}
+          data-testid="compile-job"
+        >
+          Compile
+        </button>
+        <button
+          type="button"
           onClick={() => reviewChanges.mutate()}
           disabled={loading || reviewChanges.isPending || !value}
           data-testid="review-changes"
@@ -224,6 +260,9 @@ export function EditorPage() {
       {validate.isError && (
         <p className="error">{(validate.error as Error).message}</p>
       )}
+      {compile.isError && (
+        <p className="error">{(compile.error as Error).message}</p>
+      )}
       {reviewChanges.isError && (
         <p className="error">{(reviewChanges.error as Error).message}</p>
       )}
@@ -240,6 +279,10 @@ export function EditorPage() {
           </div>
           <p>{job.result_summary}</p>
         </div>
+      )}
+
+      {job?.kind === "compile" && job.status === "succeeded" && (
+        <ArtifactsPanel jobId={job.id} />
       )}
 
       {diff && (
@@ -302,13 +345,26 @@ export function EditorPage() {
 
       <div className="editor-layout">
         {!loading && (
-          <EntityForms
-            workspaceId={WS_ID}
-            content={value}
-            onDocument={onMutatedDocument}
-            onBeforeMutate={ensureSaved}
-            disabled={formsBusy}
-          />
+          <div className="editor-sidebar">
+            <ModelExplorer
+              content={value}
+              selectedId={focusElementId}
+              onSelect={(sel: ExplorerSelect) => {
+                setFocusElementId(sel.elementId);
+                if (sel.tab) setFormsTab(sel.tab);
+              }}
+            />
+            <ModelFormsPanel
+              workspaceId={WS_ID}
+              content={value}
+              onDocument={onMutatedDocument}
+              onBeforeMutate={ensureSaved}
+              disabled={formsBusy}
+              activeTab={formsTab}
+              onTabChange={setFormsTab}
+              focusElementId={focusElementId}
+            />
+          </div>
         )}
         <div className="editor-frame">
           {loading ? (

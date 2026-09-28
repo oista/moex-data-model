@@ -500,7 +500,7 @@ audit_event
 
 ## Этап 4. Web Workbench
 
-**Progress (MVP shell + editors + entity forms):** `apps/web` — dashboard/workspaces/models/validate; Monaco YAML + `workspace_document`; forms add/update/delete LogicalEntity/LogicalAttribute via `POST …/mutations` (ruamel); dirty Monaco auto-PUT before mutation; **Review changes** semantic-diff preview. Out: live field-level Monaco↔form binding, drawDB, OIDC, i18n.
+**Progress (Stage 4 Web close-out 2026-09-28):** `apps/web` — dashboard/workspaces/models/validate; Monaco YAML + `workspace_document`; forms add/update/delete LogicalEntity/LogicalAttribute **and** Relationship/Mapping via `POST …/mutations`; Model explorer tree; **Review changes** semantic-diff preview; Compile job + artifact list/preview (`GET /jobs/{id}/artifacts`). Out: live field-level Monaco↔form binding, drawDB, OIDC, i18n, physical-object editors.
 
 ### Основные экраны
 

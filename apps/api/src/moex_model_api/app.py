@@ -9,7 +9,8 @@ from pathlib import Path
 from uuid import uuid4
 
 import yaml
-from fastapi import Depends, FastAPI, Header, HTTPException, Request
+from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response
+from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -108,11 +109,15 @@ class MutationRequest(BaseModel):
         pattern=(
             "^(add_logical_entity|add_logical_attribute|"
             "update_logical_entity|delete_logical_entity|"
-            "update_logical_attribute|delete_logical_attribute)$"
+            "update_logical_attribute|delete_logical_attribute|"
+            "add_relationship|update_relationship|delete_relationship|"
+            "add_mapping|update_mapping|delete_mapping)$"
         )
     )
     entity: dict | None = None
     attribute: dict | None = None
+    relationship: dict | None = None
+    mapping: dict | None = None
     owner_element_id: str | None = None
     element_id: str | None = None
     patch: dict | None = None
@@ -162,6 +167,14 @@ class JobOut(BaseModel):
     implementation_id: str
     result_summary: str
     finished_at: str | None = None
+
+
+class ArtifactOut(BaseModel):
+    id: str
+    job_id: str
+    kind: str
+    path_or_uri: str
+    content_digest: str
 
 
 class ModelIndexRebuildOut(BaseModel):
@@ -888,6 +901,68 @@ def create_app(
             result_summary=job.result_summary,
             finished_at=job.finished_at,
         )
+
+    @app.get("/jobs/{job_id}/artifacts", response_model=list[ArtifactOut])
+    def list_job_artifacts(
+        job_id: str,
+        request: Request,
+        session: Session = Depends(get_session),
+    ) -> list[ArtifactOut]:
+        ensure_actor(request, session)
+        jobs = SqlJobStore(session)
+        if jobs.get_job(job_id) is None:
+            raise HTTPException(status_code=404, detail="job not found")
+        return [
+            ArtifactOut(
+                id=a.id,
+                job_id=a.job_id,
+                kind=a.kind,
+                path_or_uri=a.path_or_uri,
+                content_digest=a.content_digest,
+            )
+            for a in jobs.list_artifacts(job_id)
+        ]
+
+    @app.get("/jobs/{job_id}/artifacts/{artifact_id}/content")
+    def get_job_artifact_content(
+        job_id: str,
+        artifact_id: str,
+        request: Request,
+        session: Session = Depends(get_session),
+    ) -> Response:
+        ensure_actor(request, session)
+        jobs = SqlJobStore(session)
+        if jobs.get_job(job_id) is None:
+            raise HTTPException(status_code=404, detail="job not found")
+        artifacts = jobs.list_artifacts(job_id)
+        match = next((a for a in artifacts if a.id == artifact_id), None)
+        if match is None:
+            raise HTTPException(status_code=404, detail="artifact not found")
+
+        root = find_repo_root()
+        path = Path(match.path_or_uri)
+        if not path.is_absolute():
+            path = root / path
+        if path.is_file():
+            try:
+                text = path.read_text(encoding="utf-8")
+            except UnicodeDecodeError:
+                return Response(
+                    content=path.read_bytes(),
+                    media_type="application/octet-stream",
+                    headers={
+                        "Content-Disposition": f'attachment; filename="{path.name}"'
+                    },
+                )
+            return PlainTextResponse(text)
+        if path.is_dir():
+            lines = [f"# directory: {match.path_or_uri}"]
+            for child in sorted(path.rglob("*")):
+                if child.is_file():
+                    rel = child.relative_to(path).as_posix()
+                    lines.append(rel)
+            return PlainTextResponse("\n".join(lines) + "\n")
+        raise HTTPException(status_code=404, detail="artifact path not found on disk")
 
     @app.post("/model-index/rebuild", response_model=ModelIndexRebuildOut)
     def rebuild_model_index(
