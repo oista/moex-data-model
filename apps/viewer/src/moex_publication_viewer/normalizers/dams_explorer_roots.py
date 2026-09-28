@@ -155,11 +155,47 @@ def build_spec_file_items(spec_dir: Path) -> list[PublicationItem]:
     return items
 
 
+def _section_ref(section_id: str, title: str) -> PublicationItem:
+    return PublicationItem(
+        id=f"section:{section_id}",
+        title=title,
+        description=None,
+        attributes={
+            "kind": "section_ref",
+            "section_id": section_id,
+        },
+    )
+
+
 def wrap_dams_explorer_roots(
     package_groups: list[PublicationItem],
     spec_dir: Path,
 ) -> list[PublicationItem]:
-    """Wrap package groups under Классы / Спецификация (Реализации injected at build)."""
+    """Wrap under Overview / Классы / Спецификация (Реализации injected at build)."""
+    overview_root = PublicationItem(
+        id="group:overview",
+        title="Overview",
+        description="Package README and flat inventory tables.",
+        attributes={
+            "kind": "group",
+            "section_root": "overview",
+            "section_id": "overview",
+            "purpose": "Вход в спецификацию: описание пакета и полные таблицы.",
+            "member_ids": [
+                "section:overview",
+                "section:classes",
+                "section:slots",
+                "section:enums",
+            ],
+        },
+        children=[
+            _section_ref("overview", "Overview"),
+            _section_ref("classes", "All classes"),
+            _section_ref("slots", "All slots"),
+            _section_ref("enums", "All enumerations"),
+        ],
+    )
+
     class_count = sum(
         1
         for g in package_groups
@@ -221,4 +257,4 @@ def wrap_dams_explorer_roots(
         },
         children=[],
     )
-    return [classes_root, files_root, impls_root]
+    return [overview_root, classes_root, files_root, impls_root]

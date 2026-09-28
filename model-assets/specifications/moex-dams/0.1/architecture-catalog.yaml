@@ -27,35 +27,3 @@ nodes:
     expressed_in: OWL 2
     module_id: moex:module:fibo
     order: 200
-
-  - id: moex:ontology:corporate
-    role: reference_specification
-    title: Corporate Ontology
-    version: "0.0.0"
-    expressed_in: OWL 2
-    order: 210
-
-  - id: moex:ontology:prov-o
-    role: reference_specification
-    title: PROV-O Ontology
-    version: "2013-04-30"
-    expressed_in: OWL 2
-    order: 220
-
-  - id: moex:ontology:moex-hr
-    role: specification_implementation
-    title: MOEX HR Ontology
-    version: "0.0.0"
-    order: 300
-
-  - id: moex:ontology:moex-data
-    role: specification_implementation
-    title: MOEX Data Ontology
-    version: "0.0.0"
-    order: 310
-
-  - id: moex:ontology:application
-    role: specification_implementation
-    title: Application Ontology
-    version: "0.0.0"
-    order: 320

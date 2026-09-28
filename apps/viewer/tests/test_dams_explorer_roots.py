@@ -55,10 +55,13 @@ def test_wrap_roots_placeholder_implementations(tmp_path: Path):
     )
     roots = wrap_dams_explorer_roots([pkg], tmp_path)
     assert [r.id for r in roots] == [
+        "group:overview",
         "group:classes",
         "group:spec-files",
         "group:implementations",
     ]
-    assert roots[0].children[0].id == "group:pkg"
-    assert roots[1].children
-    assert roots[2].children == []
+    assert roots[0].attributes.get("section_root") == "overview"
+    assert all(c.attributes.get("kind") == "section_ref" for c in roots[0].children)
+    assert roots[1].children[0].id == "group:pkg"
+    assert roots[2].children
+    assert roots[3].children == []

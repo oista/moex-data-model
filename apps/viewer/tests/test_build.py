@@ -77,9 +77,12 @@ def test_repo_golden_three_modules():
     assert '"tree_root": true' in html or '"tree_root":true' in html
     assert '"mixin": true' in html or '"mixin":true' in html
     assert "group:moex_core" in html or "group:moex-core" in html
+    assert "group:overview" in html
     assert "group:classes" in html
     assert "group:spec-files" in html
     assert "group:implementations" in html
+    assert "section:classes" in html
+    assert '"kind": "section_ref"' in html or '"kind":"section_ref"' in html
     assert "file:specification.yaml" in html
     assert '"kind": "source_file"' in html or '"kind":"source_file"' in html
     assert '"kind": "implementation_ref"' in html or '"kind":"implementation_ref"' in html

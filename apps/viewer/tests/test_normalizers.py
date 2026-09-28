@@ -277,12 +277,30 @@ def test_dams_explorer_real_schema():
         source={"format": "linkml-yaml", "path": str(schema), "select": "classes"},
     )
     out = LinkmlNormalizer().normalize(sec, schema)
-    root_ids = {g.id for g in out.items}
-    assert root_ids == {
+    assert [g.id for g in out.items[:4]] == [
+        "group:overview",
         "group:classes",
         "group:spec-files",
         "group:implementations",
-    }
+    ]
+    overview = out.items[0]
+    assert overview.attributes.get("section_root") == "overview"
+    assert overview.attributes.get("section_id") == "overview"
+    kids = overview.children
+    assert [c.attributes.get("section_id") for c in kids] == [
+        "overview",
+        "classes",
+        "slots",
+        "enums",
+    ]
+    assert all(c.attributes.get("kind") == "section_ref" for c in kids)
+    assert [c.title for c in kids] == [
+        "Overview",
+        "All classes",
+        "All slots",
+        "All enumerations",
+    ]
+
     classes_root = next(g for g in out.items if g.id == "group:classes")
     titles = {g.title for g in classes_root.children}
     assert "Core" in titles

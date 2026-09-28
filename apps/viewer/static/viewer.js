@@ -269,9 +269,31 @@
 
   function appendPublicationSubtree(wrap, mod, focus) {
     const expl = explorerSection(mod);
+    const nestedSectionIds = new Set();
+    if (expl) {
+      (expl.items || []).forEach((g) => {
+        if (g.attributes?.section_root === "overview") {
+          nestedSectionIds.add(g.attributes.section_id || "overview");
+          (g.children || []).forEach((c) => {
+            if (c.attributes?.section_id) {
+              nestedSectionIds.add(c.attributes.section_id);
+            }
+          });
+        }
+      });
+    }
+
     if (expl) {
       const tree = document.createElement("div");
       tree.className = "nav-explorer";
+
+      if (
+        focus?.section &&
+        !focus?.item &&
+        nestedSectionIds.has(focus.section)
+      ) {
+        openGroups.add("group:overview");
+      }
 
       if (focus?.item) {
         const focused = findExplorerItem(expl, focus.item);
@@ -285,18 +307,40 @@
         }
       }
 
+      function openPublicationSection(sectionId) {
+        selectedItemId = null;
+        const node = nodeForModule(mod.module_id);
+        if (node) currentNodeId = node.id;
+        setHash({
+          node: node ? node.id : null,
+          module: shortModule(mod.module_id),
+          section: sectionId,
+        });
+        showModule(mod.module_id, { section: sectionId });
+      }
+
       function openExplorerItem(itemId) {
         const found = findExplorerItem(expl, itemId);
-        if (found?.item?.attributes?.kind === "implementation_ref") {
-          const catId =
-            found.item.attributes.catalog_node_id || found.item.id;
+        const attrs = found?.item?.attributes || {};
+        if (
+          attrs.kind === "section_ref" ||
+          attrs.section_root === "overview"
+        ) {
+          if (attrs.section_id) {
+            openGroups.add("group:overview");
+            openPublicationSection(attrs.section_id);
+            return;
+          }
+        }
+        if (attrs.kind === "implementation_ref") {
+          const catId = attrs.catalog_node_id || found.item.id;
           const node = catalogNode(catId);
           if (node) {
             navigateToNode(node);
             return;
           }
-          if (found.item.attributes.module_id) {
-            navigateToModule(found.item.attributes.module_id);
+          if (attrs.module_id) {
+            navigateToModule(attrs.module_id);
             return;
           }
         }
@@ -330,13 +374,22 @@
           if (!hasKids) return;
           if (openGroups.has(node.id)) openGroups.delete(node.id);
           else openGroups.add(node.id);
-          renderModuleNav({ item: selectedItemId, section: expl.id });
+          renderModuleNav({
+            item: selectedItemId,
+            section: focus?.section || expl.id,
+          });
         });
 
+        const sectionActive =
+          !focus?.item &&
+          !!focus?.section &&
+          node.attributes?.kind === "section_ref" &&
+          node.attributes?.section_id === focus.section;
         const label = document.createElement("button");
         label.type = "button";
         label.className =
-          "nav-item-btn" + (node.id === selectedItemId ? " active" : "");
+          "nav-item-btn" +
+          (node.id === selectedItemId || sectionActive ? " active" : "");
         const kind = node.attributes?.kind || "class";
         const kindClasses =
           kind === "class" ? classKindClassNames(node.attributes) : "";
@@ -345,6 +398,7 @@
         else if (kind === "individual") mark = "I";
         else if (kind === "source_file") mark = "F";
         else if (kind === "implementation_ref") mark = "R";
+        else if (kind === "section_ref") mark = "S";
         else if (kind === "group") mark = "G";
         label.innerHTML = `<span class="nav-kind ${kindClasses}">${escapeHtml(mark)}</span>
           <span>${escapeHtml(node.title || node.id)}</span>`;
@@ -382,6 +436,7 @@
         // Default: open Классы when no focus and no section root yet expanded
         if (
           !focus?.item &&
+          !focus?.section &&
           gId === "group:classes" &&
           !(expl.items || []).some((g) => openGroups.has(g.id))
         ) {
@@ -398,10 +453,15 @@
         const open = openGroups.has(gId);
         const gWrap = document.createElement("div");
         gWrap.className = "nav-group";
+        const overviewRootActive =
+          group.attributes?.section_root === "overview" &&
+          !focus?.item &&
+          focus?.section === "overview";
         const gBtn = document.createElement("button");
         gBtn.type = "button";
         gBtn.className =
-          "nav-group-btn" + (gId === selectedItemId ? " active" : "");
+          "nav-group-btn" +
+          (gId === selectedItemId || overviewRootActive ? " active" : "");
         const toggle = document.createElement("span");
         toggle.className = "tree-toggle";
         toggle.textContent = open ? "▼" : "▶";
@@ -409,7 +469,10 @@
           e.stopPropagation();
           if (openGroups.has(gId)) openGroups.delete(gId);
           else openGroups.add(gId);
-          renderModuleNav({ item: selectedItemId, section: expl.id });
+          renderModuleNav({
+            item: selectedItemId,
+            section: focus?.section || expl.id,
+          });
         });
         const titleSpan = document.createElement("span");
         titleSpan.textContent = group.title || group.id;
@@ -423,6 +486,8 @@
         } else if (sectionRoot === "implementations") {
           badgeCount =
             group.attributes?.impl_count ?? (group.children || []).length;
+        } else if (sectionRoot === "overview") {
+          badgeCount = (group.children || []).length;
         } else {
           badgeCount =
             group.attributes?.class_count ?? countExplorerClasses(group);
@@ -456,7 +521,7 @@
     const secondary = document.createElement("div");
     secondary.className = "nav-secondary";
     (mod.sections || [])
-      .filter((s) => s.type !== "explorer")
+      .filter((s) => s.type !== "explorer" && !nestedSectionIds.has(s.id))
       .forEach((sec) => {
         const sBtn = document.createElement("button");
         sBtn.type = "button";
