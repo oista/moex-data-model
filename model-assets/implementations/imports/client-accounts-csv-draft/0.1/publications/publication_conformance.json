@@ -76,6 +76,14 @@
       "obligation": "required"
     },
     {
+      "requirement_ref": "dams:model-assessment",
+      "covered": true,
+      "covering_section_ids": [],
+      "result_status": "pass",
+      "result_message": "covered by 0 section(s)",
+      "obligation": "recommended"
+    },
+    {
       "requirement_ref": "dams:physical-objects",
       "covered": true,
       "covering_section_ids": [

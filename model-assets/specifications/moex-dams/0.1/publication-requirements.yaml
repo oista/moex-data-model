@@ -83,6 +83,21 @@ profiles:
         min_occurs: 1
         applies_to_profile: implementation
 
+      - id: dams:model-assessment
+        kind: required-section
+        semantic_capability: model-assessment
+        title: Model assessment section
+        description: >
+          Recommended publication of body formal_checks results
+          (assessment:model-requirements). Presence of a model-assessment
+          (or conformance) section only — ADR-019 does not validate
+          identity_rule / ownership / mapping_coverage body fields.
+        obligation: recommended
+        min_occurs: 0
+        accepted_section_kinds: [model-assessment, conformance]
+        accepted_renderers: [entity-table, key-value, conformance]
+        applies_to_profile: implementation
+
   - id: dams-logical-and-physical
     title: DAMS logical and physical publication
     applies_to: implementation

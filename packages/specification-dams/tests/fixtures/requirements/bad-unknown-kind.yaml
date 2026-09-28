@@ -1,0 +1,23 @@
+catalog_id: dams:req-catalog/bad-unknown-kind/0.1
+name: bad_unknown_kind
+requirements:
+  - element_id: dams:req/GEN-900
+    name: bad_kind
+    title: Bad kind
+    description: Fixture
+    lifecycle_status: active
+    code: GEN-900
+    requirement_level: it_solution
+    requirement_section: GEN
+    statement: Тестовое требование с неизвестным видом проверки.
+    applies_to:
+      applicability_id: appl:GEN-900
+      applies_target_class: ModelPackage
+    formal_checks:
+      - check_id: GEN-900.c1
+        kind: not_a_real_kind
+        target_class: ModelPackage
+        target_slot: name
+        severity: error
+        diagnostic_code: DAMS-REQ-GEN-900.c1
+        remediation: Fix kind.

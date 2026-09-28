@@ -1,14 +1,14 @@
 {
   "summary": {
-    "overall_result": "conformant",
+    "overall_result": "conformant_with_warnings",
     "implementation_id": "moex:implementation:trading:1.0.0",
-    "revision": "72e0ff6f61b8",
-    "content_digest": "sha256:72e0ff6f61b84c85f8c17755a2a3b08a57e7195d960100ff1820a4eca6e946a4",
+    "revision": "e0963cb9e394",
+    "content_digest": "sha256:e0963cb9e394021178ee08aa09f088c88a04f3368484d4edcb98e67570364419",
     "package_id": "dams:model/trading/1.0.0",
-    "node_count": 10,
-    "edge_count": 19,
+    "node_count": 11,
+    "edge_count": 22,
     "is_conformant": true,
-    "bundle_digest": "sha256:919dc6f2538cd0352576d97e2a3039da23bedd47948b08e5bd655327217b8d0b"
+    "bundle_digest": "sha256:0e47a2c46a8ad370647588724c8f8d5f8abe0fce9fcc3d4592d66c8911749f81"
   },
   "nodes": [
     {
@@ -41,14 +41,14 @@
     },
     {
       "id": "dams:logical/trading/Client/clientId",
-      "name": "clientId",
+      "name": "client_id",
       "title": "Идентификатор клиента",
       "description": "Уникальный идентификатор клиента в корпоративном контуре.",
       "kind": "attribute"
     },
     {
       "id": "dams:logical/trading/Client/fullName",
-      "name": "fullName",
+      "name": "full_name",
       "title": "Полное наименование",
       "description": "Полное имя физического лица или наименование организации.",
       "kind": "attribute"
@@ -72,6 +72,13 @@
       "name": "realizes_TradingClient_LegalEntity",
       "title": null,
       "description": "Solution TradingClient realizes enterprise conceptual LegalEntity (ADR-021).\n",
+      "kind": "mapping"
+    },
+    {
+      "id": "dams:mapping/trading/client-entity-physical",
+      "name": "map_client_entity_to_topic",
+      "title": null,
+      "description": "Entity-level mapping TradingClient ↔ client_changed topic.",
       "kind": "mapping"
     },
     {
@@ -180,6 +187,24 @@
       "kind": "maps_to"
     },
     {
+      "id": "dams:model/trading/1.0.0->dams:mapping/trading/client-entity-physical:contains",
+      "source": "dams:model/trading/1.0.0",
+      "target": "dams:mapping/trading/client-entity-physical",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:mapping/trading/client-entity-physical->dams:physical/trading/client-topic:maps_to",
+      "source": "dams:mapping/trading/client-entity-physical",
+      "target": "dams:physical/trading/client-topic",
+      "kind": "maps_to"
+    },
+    {
+      "id": "dams:mapping/trading/client-entity-physical->dams:logical/trading/Client:maps_to",
+      "source": "dams:mapping/trading/client-entity-physical",
+      "target": "dams:logical/trading/Client",
+      "kind": "maps_to"
+    },
+    {
       "id": "dams:model/trading/1.0.0->dams:mapping/trading/client-id:contains",
       "source": "dams:model/trading/1.0.0",
       "target": "dams:mapping/trading/client-id",
@@ -198,7 +223,70 @@
       "kind": "maps_to"
     }
   ],
-  "diagnostics": [],
+  "diagnostics": [
+    {
+      "id": "DAMS-REQ-ATR-005.c2:0",
+      "code": "DAMS-REQ-ATR-005.c2",
+      "severity": "warning",
+      "phase": "corporate_semantics",
+      "message": "\"dams:logical/trading/Client/fullName\" uses mapping_coverage_status planned while lifecycle_status is active; planned is not a permanent bypass. Required by: Для логического атрибута, который считается подлежащим физической реализации в этом пакете (не помечен как планируемый, производный, унаследованный, неприменимый или только технический), должно быть задано соответствие физическому полю и/или правило вычисления, либо письменное обоснование отсутствия. Remediation: Для активных элементов замените planned на фактическое mapping или повысьте зрелость статуса. planned не постоянный обход.",
+      "subject_ref": "dams:logical/trading/Client/fullName"
+    },
+    {
+      "id": "DAMS-REQ-FLW-001.c1:1",
+      "code": "DAMS-REQ-FLW-001.c1",
+      "severity": "warning",
+      "phase": "corporate_semantics",
+      "message": "Package exposes integration-facing physical objects but has no data_flows section yet. Required by: Если решение предоставляет или получает данные за пределами своей границы, потоки данных и соответствия должны быть описаны явно. Remediation: При межрешенческих обменах добавьте описание потоков данных; иначе предупреждение можно игнорировать до калибровки.",
+      "subject_ref": "dams:model/trading/1.0.0"
+    },
+    {
+      "id": "DAMS-REQ-CLS-002.c1:2",
+      "code": "DAMS-REQ-CLS-002.c1",
+      "severity": "warning",
+      "phase": "corporate_semantics",
+      "message": "LogicalEntity \"dams:logical/trading/Client\" has governance confidential but no security_classification. Required by: Если к сущности применена повышенная классификация управления доступом, рекомендуется отдельно указать требуемый режим защиты данных. Remediation: Укажите security_classification (internal/confidential/restricted) для сущностей с confidential/restricted governance.",
+      "subject_ref": "dams:logical/trading/Client"
+    }
+  ],
+  "model_assessment": [
+    {
+      "id": "DAMS-REQ-ATR-005.c2:0",
+      "status": "warn",
+      "requirement_code": "ATR-005",
+      "statement": "Для логического атрибута, который считается подлежащим физической реализации в этом пакете (не помечен как планируемый, производный, унаследованный, неприменимый или только технический), должно быть задано соответствие физическому полю и/или правило вычисления, либо письменное обоснование отсутствия. Поле и правило вычисления могут быть указаны вместе. Статус «планируется» требует обоснования и не должен быть постоянным обходом для уже активных элементов.",
+      "subject": "dams:logical/trading/Client/fullName",
+      "finding": "\"dams:logical/trading/Client/fullName\" uses mapping_coverage_status planned while lifecycle_status is active; planned is not a permanent bypass.",
+      "severity": "warning",
+      "remediation": "Для активных элементов замените planned на фактическое mapping или повысьте зрелость статуса. planned не постоянный обход.",
+      "source_location": "dams:logical/trading/Client/fullName",
+      "diagnostic_code": "DAMS-REQ-ATR-005.c2"
+    },
+    {
+      "id": "DAMS-REQ-FLW-001.c1:1",
+      "status": "warn",
+      "requirement_code": "FLW-001",
+      "statement": "Если решение предоставляет или получает данные за пределами своей границы, потоки данных и соответствия должны быть описаны явно. На этапе первичной публикации отсутствие таких описаний отмечается как предупреждение.",
+      "subject": "dams:model/trading/1.0.0",
+      "finding": "Package exposes integration-facing physical objects but has no data_flows section yet.",
+      "severity": "warning",
+      "remediation": "При межрешенческих обменах добавьте описание потоков данных; иначе предупреждение можно игнорировать до калибровки.",
+      "source_location": "dams:model/trading/1.0.0",
+      "diagnostic_code": "DAMS-REQ-FLW-001.c1"
+    },
+    {
+      "id": "DAMS-REQ-CLS-002.c1:2",
+      "status": "warn",
+      "requirement_code": "CLS-002",
+      "statement": "Если к сущности применена повышенная классификация управления доступом, рекомендуется отдельно указать требуемый режим защиты данных. Это не заменяет классификацию управления и не смешивается с критичностью процесса.",
+      "subject": "dams:logical/trading/Client",
+      "finding": "LogicalEntity \"dams:logical/trading/Client\" has governance confidential but no security_classification.",
+      "severity": "warning",
+      "remediation": "Укажите security_classification (internal/confidential/restricted) для сущностей с confidential/restricted governance.",
+      "source_location": "dams:logical/trading/Client",
+      "diagnostic_code": "DAMS-REQ-CLS-002.c1"
+    }
+  ],
   "relations": [
     {
       "id": "expressed_in:0",
@@ -243,7 +331,7 @@
             "title": "overall_result",
             "description": null,
             "attributes": {
-              "value": "conformant"
+              "value": "conformant_with_warnings"
             },
             "children": [],
             "tags": [],
@@ -265,7 +353,7 @@
             "title": "revision",
             "description": null,
             "attributes": {
-              "value": "72e0ff6f61b8"
+              "value": "e0963cb9e394"
             },
             "children": [],
             "tags": [],
@@ -276,7 +364,7 @@
             "title": "content_digest",
             "description": null,
             "attributes": {
-              "value": "sha256:72e0ff6f61b84c85f8c17755a2a3b08a57e7195d960100ff1820a4eca6e946a4"
+              "value": "sha256:e0963cb9e394021178ee08aa09f088c88a04f3368484d4edcb98e67570364419"
             },
             "children": [],
             "tags": [],
@@ -287,7 +375,7 @@
             "title": "nodes",
             "description": null,
             "attributes": {
-              "value": 10
+              "value": 11
             },
             "children": [],
             "tags": [],
@@ -298,7 +386,7 @@
             "title": "edges",
             "description": null,
             "attributes": {
-              "value": 19
+              "value": 22
             },
             "children": [],
             "tags": [],
@@ -378,7 +466,7 @@
             "description": "Уникальный идентификатор клиента в корпоративном контуре.",
             "attributes": {
               "kind": "attribute",
-              "name": "clientId"
+              "name": "client_id"
             },
             "children": [],
             "tags": [],
@@ -390,7 +478,7 @@
             "description": "Полное имя физического лица или наименование организации.",
             "attributes": {
               "kind": "attribute",
-              "name": "fullName"
+              "name": "full_name"
             },
             "children": [],
             "tags": [],
@@ -433,6 +521,18 @@
             "source_ref": null
           },
           {
+            "id": "dams:mapping/trading/client-entity-physical",
+            "title": "map_client_entity_to_topic",
+            "description": "Entity-level mapping TradingClient ↔ client_changed topic.",
+            "attributes": {
+              "kind": "mapping",
+              "name": "map_client_entity_to_topic"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
             "id": "dams:mapping/trading/client-id",
             "title": "map_client_id",
             "description": "Соответствие логического идентификатора физическому полю события (mapsTo).",
@@ -464,10 +564,50 @@
         "filterable": [
           "severity"
         ],
-        "items": [],
+        "items": [
+          {
+            "id": "DAMS-REQ-ATR-005.c2:0",
+            "title": "DAMS-REQ-ATR-005.c2",
+            "description": "\"dams:logical/trading/Client/fullName\" uses mapping_coverage_status planned while lifecycle_status is active; planned is not a permanent bypass. Required by: Для логического атрибута, который считается подлежащим физической реализации в этом пакете (не помечен как планируемый, производный, унаследованный, неприменимый или только технический), должно быть задано соответствие физическому полю и/или правило вычисления, либо письменное обоснование отсутствия. Remediation: Для активных элементов замените planned на фактическое mapping или повысьте зрелость статуса. planned не постоянный обход.",
+            "attributes": {
+              "severity": "warning",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/trading/Client/fullName"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-REQ-FLW-001.c1:1",
+            "title": "DAMS-REQ-FLW-001.c1",
+            "description": "Package exposes integration-facing physical objects but has no data_flows section yet. Required by: Если решение предоставляет или получает данные за пределами своей границы, потоки данных и соответствия должны быть описаны явно. Remediation: При межрешенческих обменах добавьте описание потоков данных; иначе предупреждение можно игнорировать до калибровки.",
+            "attributes": {
+              "severity": "warning",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:model/trading/1.0.0"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-REQ-CLS-002.c1:2",
+            "title": "DAMS-REQ-CLS-002.c1",
+            "description": "LogicalEntity \"dams:logical/trading/Client\" has governance confidential but no security_classification. Required by: Если к сущности применена повышенная классификация управления доступом, рекомендуется отдельно указать требуемый режим защиты данных. Remediation: Укажите security_classification (internal/confidential/restricted) для сущностей с confidential/restricted governance.",
+            "attributes": {
+              "severity": "warning",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/trading/Client"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          }
+        ],
         "content": null,
         "tags": [],
-        "default_collapsed": true
+        "default_collapsed": false
       },
       {
         "id": "relations",

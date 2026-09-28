@@ -162,10 +162,18 @@ def test_wrap_roots_loads_requirements_catalog():
     assert list_group.title == "Требования к модели"
     codes = {c.attributes.get("code") for c in list_group.children}
     assert "GEN-001" in codes
+    assert "GEN-003" in codes
+    assert "GEN-004" in codes
     assert "LDM-001" in codes
+    assert "LDM-006" in codes
+    assert "LDM-007" in codes
     assert "ATR-001" in codes
+    assert "ATR-005" in codes
     assert "REF-001" in codes
+    assert "REF-002" in codes
     assert "PDM-001" in codes
+    assert "PDM-003" in codes
+    assert "CLS-001" in codes
     assert all(c.attributes.get("kind") == "requirement" for c in list_group.children)
     assert all(c.attributes.get("statement") for c in list_group.children)
     assert all(c.attributes.get("formal_checks") for c in list_group.children)
@@ -249,9 +257,6 @@ def test_model_skeleton_projection_from_formal_checks():
     assert "owner_entity_ref:" in text
     assert "relationships:" in text
     assert "physical_objects:" in text
-    assert "mappings:" in text
-    assert "source_refs:" in text
-    assert "target_refs:" in text
 
 
 def test_conceptual_model_skeleton_projection():

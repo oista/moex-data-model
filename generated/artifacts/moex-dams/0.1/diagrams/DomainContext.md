@@ -88,6 +88,8 @@
         
       DomainContext : namespace
         
+      DomainContext : ownership_inheritance_rule
+        
       DomainContext : owning_unit_ref
         
           

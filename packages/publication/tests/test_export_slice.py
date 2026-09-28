@@ -50,3 +50,11 @@ def test_export_slice_json(
     assert build_slice_projection(result)["summary"]["revision"] == data["summary"][
         "revision"
     ]
+    assert "model_assessment" in data
+    assert isinstance(data["model_assessment"], list)
+    for row in data["model_assessment"]:
+        assert row["status"] in ("pass", "fail", "warn")
+        assert "diagnostic_code" in row
+        assert row["diagnostic_code"].startswith("DAMS-REQ-") or row[
+            "diagnostic_code"
+        ].startswith("DAMS-")

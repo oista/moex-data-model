@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-09-28T15:17:09
+# Generation date: 2026-09-28T19:59:14
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -219,6 +219,10 @@ class MetricElementId(ModelElementElementId):
 
 
 class DimensionElementId(ModelElementElementId):
+    pass
+
+
+class RequirementApplicabilityApplicabilityId(extended_str):
     pass
 
 
@@ -809,6 +813,7 @@ class HasOwnership(YAMLRoot):
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
     data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
     owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+    ownership_inheritance_rule: Optional[str] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self.data_owner_ref is not None and not isinstance(self.data_owner_ref, RoleRegistryId):
@@ -819,6 +824,9 @@ class HasOwnership(YAMLRoot):
 
         if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
             self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
+
+        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
+            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
 
         super().__post_init__(**kwargs)
 
@@ -865,6 +873,7 @@ class HasGovernanceClassification(YAMLRoot):
     class_model_uri: ClassVar[URIRef] = DAMS.HasGovernanceClassification
 
     governance_classification: Optional[Union[str, "GovernanceClassificationEnum"]] = None
+    security_classification: Optional[Union[str, "SecurityClassificationEnum"]] = None
     sensitivity_term_refs: Optional[Union[Union[str, DataClassificationTermRegistryId], list[Union[str, DataClassificationTermRegistryId]]]] = empty_list()
     classification_source: Optional[str] = None
     classification_rationale: Optional[str] = None
@@ -872,6 +881,9 @@ class HasGovernanceClassification(YAMLRoot):
     def __post_init__(self, *_: str, **kwargs: Any):
         if self.governance_classification is not None and not isinstance(self.governance_classification, GovernanceClassificationEnum):
             self.governance_classification = GovernanceClassificationEnum(self.governance_classification)
+
+        if self.security_classification is not None and not isinstance(self.security_classification, SecurityClassificationEnum):
+            self.security_classification = SecurityClassificationEnum(self.security_classification)
 
         if not isinstance(self.sensitivity_term_refs, list):
             self.sensitivity_term_refs = [self.sensitivity_term_refs] if self.sensitivity_term_refs is not None else []
@@ -1052,6 +1064,7 @@ class ModelPackage(ModelElement):
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
     data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
     owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+    ownership_inheritance_rule: Optional[str] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
@@ -1107,6 +1120,9 @@ class ModelPackage(ModelElement):
         if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
             self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
 
+        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
+            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
+
         super().__post_init__(**kwargs)
 
 
@@ -1133,6 +1149,7 @@ class DomainContext(ModelElement):
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
     data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
     owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+    ownership_inheritance_rule: Optional[str] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
@@ -1166,6 +1183,9 @@ class DomainContext(ModelElement):
         if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
             self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
 
+        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
+            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
+
         super().__post_init__(**kwargs)
 
 
@@ -1190,6 +1210,7 @@ class ConceptualEntity(ModelElement):
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
     data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
     owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+    ownership_inheritance_rule: Optional[str] = None
     entity_type: Optional[Union[str, "EntityTypeEnum"]] = None
     data_class: Optional[Union[str, "DataClassEnum"]] = None
     business_importance: Optional[Union[str, "BusinessImportanceEnum"]] = None
@@ -1215,6 +1236,9 @@ class ConceptualEntity(ModelElement):
 
         if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
             self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
+
+        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
+            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
 
         if self.entity_type is not None and not isinstance(self.entity_type, EntityTypeEnum):
             self.entity_type = EntityTypeEnum(self.entity_type)
@@ -1251,13 +1275,20 @@ class LogicalEntity(ModelElement):
     attributes: Optional[Union[dict[Union[str, LogicalAttributeElementId], Union[dict, "LogicalAttribute"]], list[Union[dict, "LogicalAttribute"]]]] = empty_dict()
     key_attribute_refs: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
     invariant_refs: Optional[Union[Union[str, PolicyRegistryId], list[Union[str, PolicyRegistryId]]]] = empty_list()
+    identity_rule: Optional[str] = None
+    business_key_kind: Optional[Union[str, "BusinessKeyKindEnum"]] = None
+    conceptual_alignment_status: Optional[Union[str, "ConceptualAlignmentStatusEnum"]] = None
+    alignment_rationale: Optional[str] = None
+    isolation_rationale: Optional[str] = None
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
     data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
     owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+    ownership_inheritance_rule: Optional[str] = None
     entity_type: Optional[Union[str, "EntityTypeEnum"]] = None
     data_class: Optional[Union[str, "DataClassEnum"]] = None
     business_importance: Optional[Union[str, "BusinessImportanceEnum"]] = None
     governance_classification: Optional[Union[str, "GovernanceClassificationEnum"]] = None
+    security_classification: Optional[Union[str, "SecurityClassificationEnum"]] = None
     sensitivity_term_refs: Optional[Union[Union[str, DataClassificationTermRegistryId], list[Union[str, DataClassificationTermRegistryId]]]] = empty_list()
     classification_source: Optional[str] = None
     classification_rationale: Optional[str] = None
@@ -1296,6 +1327,21 @@ class LogicalEntity(ModelElement):
             self.invariant_refs = [self.invariant_refs] if self.invariant_refs is not None else []
         self.invariant_refs = [v if isinstance(v, PolicyRegistryId) else PolicyRegistryId(v) for v in self.invariant_refs]
 
+        if self.identity_rule is not None and not isinstance(self.identity_rule, str):
+            self.identity_rule = str(self.identity_rule)
+
+        if self.business_key_kind is not None and not isinstance(self.business_key_kind, BusinessKeyKindEnum):
+            self.business_key_kind = BusinessKeyKindEnum(self.business_key_kind)
+
+        if self.conceptual_alignment_status is not None and not isinstance(self.conceptual_alignment_status, ConceptualAlignmentStatusEnum):
+            self.conceptual_alignment_status = ConceptualAlignmentStatusEnum(self.conceptual_alignment_status)
+
+        if self.alignment_rationale is not None and not isinstance(self.alignment_rationale, str):
+            self.alignment_rationale = str(self.alignment_rationale)
+
+        if self.isolation_rationale is not None and not isinstance(self.isolation_rationale, str):
+            self.isolation_rationale = str(self.isolation_rationale)
+
         if self.data_owner_ref is not None and not isinstance(self.data_owner_ref, RoleRegistryId):
             self.data_owner_ref = RoleRegistryId(self.data_owner_ref)
 
@@ -1304,6 +1350,9 @@ class LogicalEntity(ModelElement):
 
         if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
             self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
+
+        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
+            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
 
         if self.entity_type is not None and not isinstance(self.entity_type, EntityTypeEnum):
             self.entity_type = EntityTypeEnum(self.entity_type)
@@ -1316,6 +1365,9 @@ class LogicalEntity(ModelElement):
 
         if self.governance_classification is not None and not isinstance(self.governance_classification, GovernanceClassificationEnum):
             self.governance_classification = GovernanceClassificationEnum(self.governance_classification)
+
+        if self.security_classification is not None and not isinstance(self.security_classification, SecurityClassificationEnum):
+            self.security_classification = SecurityClassificationEnum(self.security_classification)
 
         if not isinstance(self.sensitivity_term_refs, list):
             self.sensitivity_term_refs = [self.sensitivity_term_refs] if self.sensitivity_term_refs is not None else []
@@ -1360,7 +1412,14 @@ class LogicalAttribute(ModelElement):
     format_pattern: Optional[str] = None
     default_value: Optional[str] = None
     derived_expression: Optional[str] = None
+    mapping_coverage_status: Optional[Union[str, "MappingCoverageStatusEnum"]] = None
+    mapping_rationale: Optional[str] = None
+    unit_code: Optional[str] = None
+    currency_attribute_ref: Optional[Union[str, URIorCURIE]] = None
+    timezone_policy: Optional[str] = None
+    temporal_semantics: Optional[str] = None
     governance_classification: Optional[Union[str, "GovernanceClassificationEnum"]] = None
+    security_classification: Optional[Union[str, "SecurityClassificationEnum"]] = None
     sensitivity_term_refs: Optional[Union[Union[str, DataClassificationTermRegistryId], list[Union[str, DataClassificationTermRegistryId]]]] = empty_list()
     classification_source: Optional[str] = None
     classification_rationale: Optional[str] = None
@@ -1410,8 +1469,29 @@ class LogicalAttribute(ModelElement):
         if self.derived_expression is not None and not isinstance(self.derived_expression, str):
             self.derived_expression = str(self.derived_expression)
 
+        if self.mapping_coverage_status is not None and not isinstance(self.mapping_coverage_status, MappingCoverageStatusEnum):
+            self.mapping_coverage_status = MappingCoverageStatusEnum(self.mapping_coverage_status)
+
+        if self.mapping_rationale is not None and not isinstance(self.mapping_rationale, str):
+            self.mapping_rationale = str(self.mapping_rationale)
+
+        if self.unit_code is not None and not isinstance(self.unit_code, str):
+            self.unit_code = str(self.unit_code)
+
+        if self.currency_attribute_ref is not None and not isinstance(self.currency_attribute_ref, URIorCURIE):
+            self.currency_attribute_ref = URIorCURIE(self.currency_attribute_ref)
+
+        if self.timezone_policy is not None and not isinstance(self.timezone_policy, str):
+            self.timezone_policy = str(self.timezone_policy)
+
+        if self.temporal_semantics is not None and not isinstance(self.temporal_semantics, str):
+            self.temporal_semantics = str(self.temporal_semantics)
+
         if self.governance_classification is not None and not isinstance(self.governance_classification, GovernanceClassificationEnum):
             self.governance_classification = GovernanceClassificationEnum(self.governance_classification)
+
+        if self.security_classification is not None and not isinstance(self.security_classification, SecurityClassificationEnum):
+            self.security_classification = SecurityClassificationEnum(self.security_classification)
 
         if not isinstance(self.sensitivity_term_refs, list):
             self.sensitivity_term_refs = [self.sensitivity_term_refs] if self.sensitivity_term_refs is not None else []
@@ -1456,6 +1536,8 @@ class Relationship(ModelElement):
     target_max_cardinality: Optional[int] = None
     identifying: Optional[Union[bool, Bool]] = None
     associative: Optional[Union[bool, Bool]] = None
+    relationship_kind: Optional[Union[str, "RelationshipKindEnum"]] = None
+    cardinality_rationale: Optional[str] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
@@ -1497,6 +1579,12 @@ class Relationship(ModelElement):
         if self.associative is not None and not isinstance(self.associative, Bool):
             self.associative = Bool(self.associative)
 
+        if self.relationship_kind is not None and not isinstance(self.relationship_kind, RelationshipKindEnum):
+            self.relationship_kind = RelationshipKindEnum(self.relationship_kind)
+
+        if self.cardinality_rationale is not None and not isinstance(self.cardinality_rationale, str):
+            self.cardinality_rationale = str(self.cardinality_rationale)
+
         super().__post_init__(**kwargs)
 
 
@@ -1524,9 +1612,12 @@ class PhysicalObject(ModelElement):
     direction: Union[str, "FlowDirectionEnum"] = None
     solution_ref: Optional[Union[str, ITSolutionRegistryId]] = None
     physical_fields: Optional[Union[dict[Union[str, PhysicalFieldElementId], Union[dict, "PhysicalField"]], list[Union[dict, "PhysicalField"]]]] = empty_dict()
+    mapping_coverage_status: Optional[Union[str, "MappingCoverageStatusEnum"]] = None
+    mapping_rationale: Optional[str] = None
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
     data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
     owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+    ownership_inheritance_rule: Optional[str] = None
     policy_refs: Optional[Union[Union[str, PolicyRegistryId], list[Union[str, PolicyRegistryId]]]] = empty_list()
 
     def __post_init__(self, *_: str, **kwargs: Any):
@@ -1570,6 +1661,12 @@ class PhysicalObject(ModelElement):
 
         self._normalize_inlined_as_list(slot_name="physical_fields", slot_type=PhysicalField, key_name="element_id", keyed=True)
 
+        if self.mapping_coverage_status is not None and not isinstance(self.mapping_coverage_status, MappingCoverageStatusEnum):
+            self.mapping_coverage_status = MappingCoverageStatusEnum(self.mapping_coverage_status)
+
+        if self.mapping_rationale is not None and not isinstance(self.mapping_rationale, str):
+            self.mapping_rationale = str(self.mapping_rationale)
+
         if self.data_owner_ref is not None and not isinstance(self.data_owner_ref, RoleRegistryId):
             self.data_owner_ref = RoleRegistryId(self.data_owner_ref)
 
@@ -1578,6 +1675,9 @@ class PhysicalObject(ModelElement):
 
         if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
             self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
+
+        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
+            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
 
         if not isinstance(self.policy_refs, list):
             self.policy_refs = [self.policy_refs] if self.policy_refs is not None else []
@@ -1608,6 +1708,8 @@ class PhysicalField(ModelElement):
     required: Union[bool, Bool] = None
     ordinal_position: Optional[int] = None
     schema_path: Optional[str] = None
+    mapping_coverage_status: Optional[Union[str, "MappingCoverageStatusEnum"]] = None
+    mapping_rationale: Optional[str] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
@@ -1641,6 +1743,12 @@ class PhysicalField(ModelElement):
         if self.schema_path is not None and not isinstance(self.schema_path, str):
             self.schema_path = str(self.schema_path)
 
+        if self.mapping_coverage_status is not None and not isinstance(self.mapping_coverage_status, MappingCoverageStatusEnum):
+            self.mapping_coverage_status = MappingCoverageStatusEnum(self.mapping_coverage_status)
+
+        if self.mapping_rationale is not None and not isinstance(self.mapping_rationale, str):
+            self.mapping_rationale = str(self.mapping_rationale)
+
         super().__post_init__(**kwargs)
 
 
@@ -1648,8 +1756,8 @@ class PhysicalField(ModelElement):
 class Mapping(ModelElement):
     """
     Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual),
-    field_mapping/mapsTo (physical↔logical), aligns_with (enterprise↔external term). Not used for SpecImpl
-    implements/conforms_to.
+    entity_physical (PhysicalObject↔LogicalEntity), field_mapping/mapsTo (physical↔logical), aligns_with
+    (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -1771,6 +1879,7 @@ class DataFlow(ModelElement):
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
     data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
     owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+    ownership_inheritance_rule: Optional[str] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
@@ -1860,6 +1969,9 @@ class DataFlow(ModelElement):
 
         if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
             self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
+
+        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
+            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
 
         super().__post_init__(**kwargs)
 
@@ -1968,6 +2080,7 @@ class DataModelBinding(ModelElement):
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
     data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
     owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+    ownership_inheritance_rule: Optional[str] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
@@ -2050,6 +2163,9 @@ class DataModelBinding(ModelElement):
 
         if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
             self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
+
+        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
+            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
 
         super().__post_init__(**kwargs)
 
@@ -2190,6 +2306,7 @@ class Metric(ModelElement):
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
     data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
     owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+    ownership_inheritance_rule: Optional[str] = None
     policy_refs: Optional[Union[Union[str, PolicyRegistryId], list[Union[str, PolicyRegistryId]]]] = empty_list()
 
     def __post_init__(self, *_: str, **kwargs: Any):
@@ -2235,6 +2352,9 @@ class Metric(ModelElement):
         if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
             self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
 
+        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
+            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
+
         if not isinstance(self.policy_refs, list):
             self.policy_refs = [self.policy_refs] if self.policy_refs is not None else []
         self.policy_refs = [v if isinstance(v, PolicyRegistryId) else PolicyRegistryId(v) for v in self.policy_refs]
@@ -2279,10 +2399,54 @@ class Dimension(ModelElement):
 
 
 @dataclass(repr=False)
+class RequirementApplicability(YAMLRoot):
+    """
+    Область применимости требования (без graph queries): класс цели, профиль и уровень модели.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["RequirementApplicability"]
+    class_class_curie: ClassVar[str] = "dams:RequirementApplicability"
+    class_name: ClassVar[str] = "RequirementApplicability"
+    class_model_uri: ClassVar[URIRef] = DAMS.RequirementApplicability
+
+    applicability_id: Union[str, RequirementApplicabilityApplicabilityId] = None
+    applies_target_class: Optional[str] = None
+    applies_target_kinds: Optional[Union[str, list[str]]] = empty_list()
+    applies_implementation_scope: Optional[Union[str, "ImplementationScopeEnum"]] = None
+    applies_dams_model_level: Optional[Union[str, "DAMSModelLevelEnum"]] = None
+    applies_implementation_profile: Optional[Union[str, "ImplementationProfileEnum"]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.applicability_id):
+            self.MissingRequiredField("applicability_id")
+        if not isinstance(self.applicability_id, RequirementApplicabilityApplicabilityId):
+            self.applicability_id = RequirementApplicabilityApplicabilityId(self.applicability_id)
+
+        if self.applies_target_class is not None and not isinstance(self.applies_target_class, str):
+            self.applies_target_class = str(self.applies_target_class)
+
+        if not isinstance(self.applies_target_kinds, list):
+            self.applies_target_kinds = [self.applies_target_kinds] if self.applies_target_kinds is not None else []
+        self.applies_target_kinds = [v if isinstance(v, str) else str(v) for v in self.applies_target_kinds]
+
+        if self.applies_implementation_scope is not None and not isinstance(self.applies_implementation_scope, ImplementationScopeEnum):
+            self.applies_implementation_scope = ImplementationScopeEnum(self.applies_implementation_scope)
+
+        if self.applies_dams_model_level is not None and not isinstance(self.applies_dams_model_level, DAMSModelLevelEnum):
+            self.applies_dams_model_level = DAMSModelLevelEnum(self.applies_dams_model_level)
+
+        if self.applies_implementation_profile is not None and not isinstance(self.applies_implementation_profile, ImplementationProfileEnum):
+            self.applies_implementation_profile = ImplementationProfileEnum(self.applies_implementation_profile)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
 class FormalCheck(YAMLRoot):
     """
     Одна машиночитаемая проверка требования. Kind выровнен с LinkML constraints и DAMS reference/structural
-    diagnostics; assess wiring может появиться позже.
+    diagnostics. formal_checks — исполняемое подмножество нормы; исполняется assess (ADR-013).
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -2296,9 +2460,11 @@ class FormalCheck(YAMLRoot):
     severity: Union[str, "CheckSeverityEnum"] = None
     target_class: Optional[str] = None
     target_slot: Optional[str] = None
+    target_slots: Optional[Union[str, list[str]]] = empty_list()
     target_path: Optional[str] = None
     diagnostic_code: Optional[str] = None
     expression: Optional[str] = None
+    remediation: Optional[str] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.check_id):
@@ -2322,6 +2488,10 @@ class FormalCheck(YAMLRoot):
         if self.target_slot is not None and not isinstance(self.target_slot, str):
             self.target_slot = str(self.target_slot)
 
+        if not isinstance(self.target_slots, list):
+            self.target_slots = [self.target_slots] if self.target_slots is not None else []
+        self.target_slots = [v if isinstance(v, str) else str(v) for v in self.target_slots]
+
         if self.target_path is not None and not isinstance(self.target_path, str):
             self.target_path = str(self.target_path)
 
@@ -2330,6 +2500,9 @@ class FormalCheck(YAMLRoot):
 
         if self.expression is not None and not isinstance(self.expression, str):
             self.expression = str(self.expression)
+
+        if self.remediation is not None and not isinstance(self.remediation, str):
+            self.remediation = str(self.remediation)
 
         super().__post_init__(**kwargs)
 
@@ -2354,6 +2527,7 @@ class SpecificationRequirement(ModelElement):
     requirement_level: Union[str, "RequirementLevelEnum"] = None
     requirement_section: Union[str, "RequirementSectionEnum"] = None
     statement: str = None
+    applies_to: Optional[Union[dict, RequirementApplicability]] = None
     formal_checks: Optional[Union[dict[Union[str, FormalCheckCheckId], Union[dict, FormalCheck]], list[Union[dict, FormalCheck]]]] = empty_dict()
 
     def __post_init__(self, *_: str, **kwargs: Any):
@@ -2381,6 +2555,9 @@ class SpecificationRequirement(ModelElement):
             self.MissingRequiredField("statement")
         if not isinstance(self.statement, str):
             self.statement = str(self.statement)
+
+        if self.applies_to is not None and not isinstance(self.applies_to, RequirementApplicability):
+            self.applies_to = RequirementApplicability(**as_dict(self.applies_to))
 
         self._normalize_inlined_as_list(slot_name="formal_checks", slot_type=FormalCheck, key_name="check_id", keyed=True)
 
@@ -2461,10 +2638,16 @@ class EntityTypeEnum(EnumDefinitionImpl):
         description="Базовая сущность, создаваемая и управляемая решением.")
     derived = PermissibleValue(
         text="derived",
-        description="Производная сущность, вычисляемая или агрегируемая из других данных.")
+        description="""Результат вычисления, агрегации, трансформации или правила; обязательны derivation rule и sources (Wave 2).""")
     reference = PermissibleValue(
         text="reference",
         description="Справочная сущность или представление управляемого справочника.")
+    projection = PermissibleValue(
+        text="projection",
+        description="""Представление существующей сущности или набора сущностей для конкретного use case (API DTO, read model, витрина).""")
+    technical = PermissibleValue(
+        text="technical",
+        description="Не имеет самостоятельного бизнес-смысла вне технической реализации.")
 
     _defn = EnumDefinition(
         name="EntityTypeEnum",
@@ -2490,6 +2673,9 @@ class DataClassEnum(EnumDefinitionImpl):
     metadata = PermissibleValue(
         text="metadata",
         description="Метаданные.")
+    operational_data = PermissibleValue(
+        text="operational_data",
+        description="""Операционные данные — данные для непосредственного выполнения операций решения, не являющиеся master/reference, transactional событием, analytical результатом или metadata.""")
 
     _defn = EnumDefinition(
         name="DataClassEnum",
@@ -2497,13 +2683,138 @@ class DataClassEnum(EnumDefinitionImpl):
     )
 
 class BusinessImportanceEnum(EnumDefinitionImpl):
-
+    """
+    Важность сущности в модели решения (не criticality бизнес-процесса).
+    """
+    critical = PermissibleValue(text="critical")
     high = PermissibleValue(text="high")
     medium = PermissibleValue(text="medium")
     low = PermissibleValue(text="low")
 
     _defn = EnumDefinition(
         name="BusinessImportanceEnum",
+        description="Важность сущности в модели решения (не criticality бизнес-процесса).",
+    )
+
+class BusinessKeyKindEnum(EnumDefinitionImpl):
+    """
+    Характер бизнес-ключа логической сущности.
+    """
+    natural = PermissibleValue(
+        text="natural",
+        description="Устойчивый бизнес-идентификатор, независимый от технической реализации.")
+    composite = PermissibleValue(
+        text="composite",
+        description="Комбинация нескольких бизнес-атрибутов, уникальная в контексте.")
+    external = PermissibleValue(
+        text="external",
+        description="Идентификатор внешней системы, реестра или контрагента.")
+    local = PermissibleValue(
+        text="local",
+        description="Идентификатор, уникальный только в границе ИТ-решения или контекста.")
+    surrogate = PermissibleValue(
+        text="surrogate",
+        description="Технический ключ реализации; не заменяет identity_rule.")
+    derived = PermissibleValue(
+        text="derived",
+        description="Идентификатор, вычисляемый из других атрибутов по документированному правилу.")
+
+    _defn = EnumDefinition(
+        name="BusinessKeyKindEnum",
+        description="Характер бизнес-ключа логической сущности.",
+    )
+
+class ConceptualAlignmentStatusEnum(EnumDefinitionImpl):
+    """
+    Статус выравнивания логической сущности с корпоративным концептуальным уровнем.
+    """
+    aligned = PermissibleValue(
+        text="aligned",
+        description="Есть ссылка на одну или несколько концептуальных сущностей.")
+    pending = PermissibleValue(
+        text="pending",
+        description="Связь должна быть установлена, но пока не утверждена; rationale обязателен.")
+
+    _defn = EnumDefinition(
+        name="ConceptualAlignmentStatusEnum",
+        description="Статус выравнивания логической сущности с корпоративным концептуальным уровнем.",
+    )
+
+    @classmethod
+    def _addvals(cls):
+        setattr(cls, "local-only",
+            PermissibleValue(
+                text="local-only",
+                description="""Бизнес-смысл только в контексте данного решения; корпоративный аналог сейчас не требуется; rationale обязателен."""))
+        setattr(cls, "not-applicable",
+            PermissibleValue(
+                text="not-applicable",
+                description="""Сущность техническая/служебная и не относится к conceptual layer; допустимо только при entity_type technical."""))
+
+class MappingCoverageStatusEnum(EnumDefinitionImpl):
+    """
+    Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical). Не статус самой логической
+    модели.
+    """
+    mapped = PermissibleValue(
+        text="mapped",
+        description="Есть формальное mapping.")
+    derived = PermissibleValue(
+        text="derived",
+        description="Значение выводится из источников по documented expression.")
+    planned = PermissibleValue(
+        text="planned",
+        description="""Физическая реализация или mapping ещё не введены. Требует mapping_rationale; не постоянный обход для active артефактов.""")
+    inherited = PermissibleValue(
+        text="inherited",
+        description="Mapping наследуется/делегируется из родительского элемента.")
+
+    _defn = EnumDefinition(
+        name="MappingCoverageStatusEnum",
+        description="""Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical). Не статус самой логической модели.""",
+    )
+
+    @classmethod
+    def _addvals(cls):
+        setattr(cls, "technical-only",
+            PermissibleValue(
+                text="technical-only",
+                description="Поле/объект имеет только техническое назначение."))
+        setattr(cls, "not-applicable",
+            PermissibleValue(
+                text="not-applicable",
+                description="Mapping неприменим по характеру элемента."))
+
+class RelationshipKindEnum(EnumDefinitionImpl):
+    """
+    Тип логической связи (Wave 2).
+    """
+    association = PermissibleValue(text="association")
+    composition = PermissibleValue(text="composition")
+    aggregation = PermissibleValue(text="aggregation")
+    specialization = PermissibleValue(text="specialization")
+    reference = PermissibleValue(text="reference")
+    derivation = PermissibleValue(text="derivation")
+    realization = PermissibleValue(text="realization")
+    lineage = PermissibleValue(text="lineage")
+    event_participation = PermissibleValue(text="event_participation")
+
+    _defn = EnumDefinition(
+        name="RelationshipKindEnum",
+        description="Тип логической связи (Wave 2).",
+    )
+
+class SecurityClassificationEnum(EnumDefinitionImpl):
+    """
+    Режим защиты данных (Wave 2); ортогонален governance_classification.
+    """
+    internal = PermissibleValue(text="internal")
+    confidential = PermissibleValue(text="confidential")
+    restricted = PermissibleValue(text="restricted")
+
+    _defn = EnumDefinition(
+        name="SecurityClassificationEnum",
+        description="Режим защиты данных (Wave 2); ортогонален governance_classification.",
     )
 
 class GovernanceClassificationEnum(EnumDefinitionImpl):
@@ -2612,13 +2923,16 @@ class IntegrationLevelEnum(EnumDefinitionImpl):
 
 class MappingTypeEnum(EnumDefinitionImpl):
     """
-    Kind of Mapping assertion. realizes = solution element → enterprise conceptual; field_mapping = mapsTo (physical ↔
-    logical); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is
-    conforms_to / publication implements).
+    Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = PhysicalObject ↔
+    LogicalEntity; field_mapping = mapsTo (physical field ↔ logical attribute); aligns_with = enterprise conceptual ↔
+    external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).
     """
     semantic_equivalence = PermissibleValue(text="semantic_equivalence")
     specialization = PermissibleValue(text="specialization")
     implementation = PermissibleValue(text="implementation")
+    entity_physical = PermissibleValue(
+        text="entity_physical",
+        description="""Explicit entity-level link between PhysicalObject and LogicalEntity (PDM-003). Do not infer from field_mapping alone.""")
     field_mapping = PermissibleValue(
         text="field_mapping",
         description="Technical/structural mapsTo between physical and logical.")
@@ -2634,7 +2948,7 @@ class MappingTypeEnum(EnumDefinitionImpl):
 
     _defn = EnumDefinition(
         name="MappingTypeEnum",
-        description="""Kind of Mapping assertion. realizes = solution element → enterprise conceptual; field_mapping = mapsTo (physical ↔ logical); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).""",
+        description="""Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = PhysicalObject ↔ LogicalEntity; field_mapping = mapsTo (physical field ↔ logical attribute); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).""",
     )
 
 class ImplementationProfileEnum(EnumDefinitionImpl):
@@ -2803,6 +3117,12 @@ class FormalCheckKindEnum(EnumDefinitionImpl):
     slot_min_cardinality = PermissibleValue(text="slot_min_cardinality")
     ref_resolves = PermissibleValue(text="ref_resolves")
     key_subset = PermissibleValue(text="key_subset")
+    at_least_one_slots = PermissibleValue(
+        text="at_least_one_slots",
+        description="Хотя бы один из target_slots заполнен (override обоих допустим).")
+    conditional_branch = PermissibleValue(
+        text="conditional_branch",
+        description="""Фиксированный шаблон (имя в expression): status→slots, allowlist kinds, planned guard, semantic inclusion и т.п. Без произвольного mini-language.""")
     custom = PermissibleValue(text="custom")
 
     _defn = EnumDefinition(
@@ -2916,6 +3236,9 @@ slots.data_steward_ref = Slot(uri=DAMS.data_steward_ref, name="data_steward_ref"
 slots.owning_unit_ref = Slot(uri=DAMS.owning_unit_ref, name="owning_unit_ref", curie=DAMS.curie('owning_unit_ref'),
                    model_uri=DAMS.owning_unit_ref, domain=None, range=Optional[Union[str, OrganizationUnitRegistryId]])
 
+slots.ownership_inheritance_rule = Slot(uri=DAMS.ownership_inheritance_rule, name="ownership_inheritance_rule", curie=DAMS.curie('ownership_inheritance_rule'),
+                   model_uri=DAMS.ownership_inheritance_rule, domain=None, range=Optional[str])
+
 slots.entity_type = Slot(uri=DAMS.entity_type, name="entity_type", curie=DAMS.curie('entity_type'),
                    model_uri=DAMS.entity_type, domain=None, range=Optional[Union[str, "EntityTypeEnum"]])
 
@@ -2927,6 +3250,9 @@ slots.business_importance = Slot(uri=DAMS.business_importance, name="business_im
 
 slots.governance_classification = Slot(uri=DAMS.governance_classification, name="governance_classification", curie=DAMS.curie('governance_classification'),
                    model_uri=DAMS.governance_classification, domain=None, range=Optional[Union[str, "GovernanceClassificationEnum"]])
+
+slots.security_classification = Slot(uri=DAMS.security_classification, name="security_classification", curie=DAMS.curie('security_classification'),
+                   model_uri=DAMS.security_classification, domain=None, range=Optional[Union[str, "SecurityClassificationEnum"]])
 
 slots.sensitivity_term_refs = Slot(uri=DAMS.sensitivity_term_refs, name="sensitivity_term_refs", curie=DAMS.curie('sensitivity_term_refs'),
                    model_uri=DAMS.sensitivity_term_refs, domain=None, range=Optional[Union[Union[str, DataClassificationTermRegistryId], list[Union[str, DataClassificationTermRegistryId]]]])
@@ -3074,6 +3400,45 @@ slots.default_value = Slot(uri=DAMS.default_value, name="default_value", curie=D
 
 slots.derived_expression = Slot(uri=DAMS.derived_expression, name="derived_expression", curie=DAMS.curie('derived_expression'),
                    model_uri=DAMS.derived_expression, domain=None, range=Optional[str])
+
+slots.identity_rule = Slot(uri=DAMS.identity_rule, name="identity_rule", curie=DAMS.curie('identity_rule'),
+                   model_uri=DAMS.identity_rule, domain=None, range=Optional[str])
+
+slots.business_key_kind = Slot(uri=DAMS.business_key_kind, name="business_key_kind", curie=DAMS.curie('business_key_kind'),
+                   model_uri=DAMS.business_key_kind, domain=None, range=Optional[Union[str, "BusinessKeyKindEnum"]])
+
+slots.conceptual_alignment_status = Slot(uri=DAMS.conceptual_alignment_status, name="conceptual_alignment_status", curie=DAMS.curie('conceptual_alignment_status'),
+                   model_uri=DAMS.conceptual_alignment_status, domain=None, range=Optional[Union[str, "ConceptualAlignmentStatusEnum"]])
+
+slots.alignment_rationale = Slot(uri=DAMS.alignment_rationale, name="alignment_rationale", curie=DAMS.curie('alignment_rationale'),
+                   model_uri=DAMS.alignment_rationale, domain=None, range=Optional[str])
+
+slots.isolation_rationale = Slot(uri=DAMS.isolation_rationale, name="isolation_rationale", curie=DAMS.curie('isolation_rationale'),
+                   model_uri=DAMS.isolation_rationale, domain=None, range=Optional[str])
+
+slots.mapping_coverage_status = Slot(uri=DAMS.mapping_coverage_status, name="mapping_coverage_status", curie=DAMS.curie('mapping_coverage_status'),
+                   model_uri=DAMS.mapping_coverage_status, domain=None, range=Optional[Union[str, "MappingCoverageStatusEnum"]])
+
+slots.mapping_rationale = Slot(uri=DAMS.mapping_rationale, name="mapping_rationale", curie=DAMS.curie('mapping_rationale'),
+                   model_uri=DAMS.mapping_rationale, domain=None, range=Optional[str])
+
+slots.unit_code = Slot(uri=DAMS.unit_code, name="unit_code", curie=DAMS.curie('unit_code'),
+                   model_uri=DAMS.unit_code, domain=None, range=Optional[str])
+
+slots.currency_attribute_ref = Slot(uri=DAMS.currency_attribute_ref, name="currency_attribute_ref", curie=DAMS.curie('currency_attribute_ref'),
+                   model_uri=DAMS.currency_attribute_ref, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.timezone_policy = Slot(uri=DAMS.timezone_policy, name="timezone_policy", curie=DAMS.curie('timezone_policy'),
+                   model_uri=DAMS.timezone_policy, domain=None, range=Optional[str])
+
+slots.temporal_semantics = Slot(uri=DAMS.temporal_semantics, name="temporal_semantics", curie=DAMS.curie('temporal_semantics'),
+                   model_uri=DAMS.temporal_semantics, domain=None, range=Optional[str])
+
+slots.relationship_kind = Slot(uri=DAMS.relationship_kind, name="relationship_kind", curie=DAMS.curie('relationship_kind'),
+                   model_uri=DAMS.relationship_kind, domain=None, range=Optional[Union[str, "RelationshipKindEnum"]])
+
+slots.cardinality_rationale = Slot(uri=DAMS.cardinality_rationale, name="cardinality_rationale", curie=DAMS.curie('cardinality_rationale'),
+                   model_uri=DAMS.cardinality_rationale, domain=None, range=Optional[str])
 
 slots.source_entity_ref = Slot(uri=DAMS.source_entity_ref, name="source_entity_ref", curie=DAMS.curie('source_entity_ref'),
                    model_uri=DAMS.source_entity_ref, domain=None, range=Union[str, URIorCURIE])
@@ -3282,6 +3647,9 @@ slots.unit = Slot(uri=DAMS.unit, name="unit", curie=DAMS.curie('unit'),
 slots.filter_expression = Slot(uri=DAMS.filter_expression, name="filter_expression", curie=DAMS.curie('filter_expression'),
                    model_uri=DAMS.filter_expression, domain=None, range=Optional[str])
 
+slots.applicability_id = Slot(uri=DAMS.applicability_id, name="applicability_id", curie=DAMS.curie('applicability_id'),
+                   model_uri=DAMS.applicability_id, domain=None, range=URIRef)
+
 slots.check_id = Slot(uri=DAMS.check_id, name="check_id", curie=DAMS.curie('check_id'),
                    model_uri=DAMS.check_id, domain=None, range=URIRef)
 
@@ -3293,6 +3661,9 @@ slots.target_class = Slot(uri=DAMS.target_class, name="target_class", curie=DAMS
 
 slots.target_slot = Slot(uri=DAMS.target_slot, name="target_slot", curie=DAMS.curie('target_slot'),
                    model_uri=DAMS.target_slot, domain=None, range=Optional[str])
+
+slots.target_slots = Slot(uri=DAMS.target_slots, name="target_slots", curie=DAMS.curie('target_slots'),
+                   model_uri=DAMS.target_slots, domain=None, range=Optional[Union[str, list[str]]])
 
 slots.target_path = Slot(uri=DAMS.target_path, name="target_path", curie=DAMS.curie('target_path'),
                    model_uri=DAMS.target_path, domain=None, range=Optional[str])
@@ -3306,6 +3677,9 @@ slots.diagnostic_code = Slot(uri=DAMS.diagnostic_code, name="diagnostic_code", c
 slots.expression = Slot(uri=DAMS.expression, name="expression", curie=DAMS.curie('expression'),
                    model_uri=DAMS.expression, domain=None, range=Optional[str])
 
+slots.remediation = Slot(uri=DAMS.remediation, name="remediation", curie=DAMS.curie('remediation'),
+                   model_uri=DAMS.remediation, domain=None, range=Optional[str])
+
 slots.code = Slot(uri=DAMS.code, name="code", curie=DAMS.curie('code'),
                    model_uri=DAMS.code, domain=None, range=str,
                    pattern=re.compile(r'^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$'))
@@ -3318,6 +3692,24 @@ slots.requirement_section = Slot(uri=DAMS.requirement_section, name="requirement
 
 slots.statement = Slot(uri=DAMS.statement, name="statement", curie=DAMS.curie('statement'),
                    model_uri=DAMS.statement, domain=None, range=str)
+
+slots.applies_to = Slot(uri=DAMS.applies_to, name="applies_to", curie=DAMS.curie('applies_to'),
+                   model_uri=DAMS.applies_to, domain=None, range=Optional[Union[dict, RequirementApplicability]])
+
+slots.applies_target_class = Slot(uri=DAMS.applies_target_class, name="applies_target_class", curie=DAMS.curie('applies_target_class'),
+                   model_uri=DAMS.applies_target_class, domain=None, range=Optional[str])
+
+slots.applies_target_kinds = Slot(uri=DAMS.applies_target_kinds, name="applies_target_kinds", curie=DAMS.curie('applies_target_kinds'),
+                   model_uri=DAMS.applies_target_kinds, domain=None, range=Optional[Union[str, list[str]]])
+
+slots.applies_implementation_scope = Slot(uri=DAMS.applies_implementation_scope, name="applies_implementation_scope", curie=DAMS.curie('applies_implementation_scope'),
+                   model_uri=DAMS.applies_implementation_scope, domain=None, range=Optional[Union[str, "ImplementationScopeEnum"]])
+
+slots.applies_dams_model_level = Slot(uri=DAMS.applies_dams_model_level, name="applies_dams_model_level", curie=DAMS.curie('applies_dams_model_level'),
+                   model_uri=DAMS.applies_dams_model_level, domain=None, range=Optional[Union[str, "DAMSModelLevelEnum"]])
+
+slots.applies_implementation_profile = Slot(uri=DAMS.applies_implementation_profile, name="applies_implementation_profile", curie=DAMS.curie('applies_implementation_profile'),
+                   model_uri=DAMS.applies_implementation_profile, domain=None, range=Optional[Union[str, "ImplementationProfileEnum"]])
 
 slots.formal_checks = Slot(uri=DAMS.formal_checks, name="formal_checks", curie=DAMS.curie('formal_checks'),
                    model_uri=DAMS.formal_checks, domain=None, range=Optional[Union[dict[Union[str, FormalCheckCheckId], Union[dict, FormalCheck]], list[Union[dict, FormalCheck]]]])

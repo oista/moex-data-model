@@ -79,7 +79,7 @@ def default_dams_rule_sets(repo: DamsAssetRepository) -> tuple[RuleSet, ...]:
         ),
         RuleSet(
             phase=ConformancePhase.CORPORATE_SEMANTICS,
-            assessment_id="assessment:formal-requirements",
+            assessment_id="assessment:model-requirements",
             description="IT-solution requirements catalog formal_checks (ADR-013)",
             run=check_formal_requirements_for_repo,
         ),

@@ -156,6 +156,7 @@ Table HasOwnership {
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
+ownership_inheritance_rule varchar
 }
 
 Table HasBusinessClassification {
@@ -166,6 +167,7 @@ business_importance varchar
 
 Table HasGovernanceClassification {
 governance_classification varchar
+security_classification varchar
 sensitivity_term_refs varchar
 classification_source varchar
 classification_rationale varchar
@@ -225,6 +227,7 @@ mappings varchar
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
+ownership_inheritance_rule varchar
 }
 
 Table DomainContext {
@@ -246,6 +249,7 @@ business_process_refs varchar
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
+ownership_inheritance_rule varchar
 }
 
 Table ConceptualEntity {
@@ -265,6 +269,7 @@ key_attribute_refs varchar
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
+ownership_inheritance_rule varchar
 entity_type varchar
 data_class varchar
 business_importance varchar
@@ -289,13 +294,20 @@ solution_data_role varchar [not null]
 attributes varchar
 key_attribute_refs varchar
 invariant_refs varchar
+identity_rule varchar
+business_key_kind varchar
+conceptual_alignment_status varchar
+alignment_rationale varchar
+isolation_rationale varchar
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
+ownership_inheritance_rule varchar
 entity_type varchar
 data_class varchar
 business_importance varchar
 governance_classification varchar
+security_classification varchar
 sensitivity_term_refs varchar
 classification_source varchar
 classification_rationale varchar
@@ -324,7 +336,14 @@ value_set_ref varchar
 format_pattern varchar
 default_value varchar
 derived_expression varchar
+mapping_coverage_status varchar
+mapping_rationale varchar
+unit_code varchar
+currency_attribute_ref varchar
+timezone_policy varchar
+temporal_semantics varchar
 governance_classification varchar
+security_classification varchar
 sensitivity_term_refs varchar
 classification_source varchar
 classification_rationale varchar
@@ -353,6 +372,8 @@ target_min_cardinality int
 target_max_cardinality int
 identifying boolean
 associative boolean
+relationship_kind varchar
+cardinality_rationale varchar
 }
 
 Table PhysicalObject {
@@ -375,9 +396,12 @@ technology varchar [not null]
 native_schema_ref varchar [not null]
 direction varchar [not null]
 physical_fields varchar
+mapping_coverage_status varchar
+mapping_rationale varchar
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
+ownership_inheritance_rule varchar
 policy_refs varchar
 }
 
@@ -399,6 +423,8 @@ native_type varchar [not null]
 required boolean [not null]
 ordinal_position int
 schema_path varchar
+mapping_coverage_status varchar
+mapping_rationale varchar
 }
 
 Table Mapping {
@@ -455,6 +481,7 @@ entity_bindings varchar
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
+ownership_inheritance_rule varchar
 }
 
 Table DataFlowEntityBinding {
@@ -506,6 +533,7 @@ generated_at datetime [not null]
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
+ownership_inheritance_rule varchar
 }
 
 Table ModelSelection {
@@ -579,6 +607,7 @@ filter_expression varchar
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
+ownership_inheritance_rule varchar
 policy_refs varchar
 }
 
@@ -598,15 +627,26 @@ dimension_attribute_refs varchar
 grain_entity_refs varchar
 }
 
+Table RequirementApplicability {
+applicability_id varchar [not null, primary key]
+applies_target_class varchar
+applies_target_kinds varchar
+applies_implementation_scope varchar
+applies_dams_model_level varchar
+applies_implementation_profile varchar
+}
+
 Table FormalCheck {
 check_id varchar [not null, primary key]
 kind varchar [not null]
 target_class varchar
 target_slot varchar
+target_slots varchar
 target_path varchar
 severity varchar [not null]
 diagnostic_code varchar
 expression varchar
+remediation varchar
 }
 
 Table SpecificationRequirement {
@@ -625,6 +665,7 @@ code varchar [not null]
 requirement_level varchar [not null]
 requirement_section varchar [not null]
 statement varchar [not null]
+applies_to varchar
 formal_checks varchar
 }
 
@@ -759,6 +800,7 @@ Ref: Dimension.glossary_term_refs > GlossaryTerm.registry_id
 Ref: Dimension.dimension_attribute_refs > LogicalAttribute.element_id
 Ref: Dimension.grain_entity_refs > LogicalEntity.element_id
 Ref: SpecificationRequirement.glossary_term_refs > GlossaryTerm.registry_id
+Ref: SpecificationRequirement.applies_to > RequirementApplicability.applicability_id
 Ref: SpecificationRequirement.formal_checks > FormalCheck.check_id
 Ref: RequirementCatalog.requirements > SpecificationRequirement.element_id
 Ref: MOEXModelRepository.registry_entries > RegistryEntry.registry_id

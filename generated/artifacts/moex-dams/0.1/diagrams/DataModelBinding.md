@@ -113,6 +113,8 @@
         
       DataModelBinding : name
         
+      DataModelBinding : ownership_inheritance_rule
+        
       DataModelBinding : owning_unit_ref
         
           

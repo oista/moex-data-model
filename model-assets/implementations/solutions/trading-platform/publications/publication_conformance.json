@@ -76,6 +76,16 @@
       "obligation": "required"
     },
     {
+      "requirement_ref": "dams:model-assessment",
+      "covered": true,
+      "covering_section_ids": [
+        "model-assessment"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "recommended"
+    },
+    {
       "requirement_ref": "dams:physical-objects",
       "covered": true,
       "covering_section_ids": [
@@ -102,7 +112,7 @@
         "slice-nodes"
       ],
       "result_status": "pass",
-      "result_message": "semantic count=2 (>= 1); slice-nodes: 2",
+      "result_message": "semantic count=3 (>= 1); slice-nodes: 3",
       "obligation": "required"
     },
     {

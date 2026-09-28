@@ -168,6 +168,45 @@ def build_slice_projection(result: SliceResult) -> dict[str, Any]:
     bundle = _bundle_digest()
     if bundle:
         summary["bundle_digest"] = bundle
+
+    def _detail_map(d: Any) -> dict[str, str | None]:
+        return {
+            det.detail_key: det.detail_value
+            for det in (d.diagnostic_details or ())
+        }
+
+    model_req = next(
+        (a for a in report.assessments if a.id == "assessment:model-requirements"),
+        None,
+    )
+    model_assessment: list[dict[str, Any]] = []
+    if model_req is not None:
+        for i, d in enumerate(model_req.diagnostics):
+            details = _detail_map(d)
+            sev = d.severity.value if d.severity else "error"
+            status = "warn" if sev == "warning" else "fail"
+            loc = None
+            if d.source_location is not None:
+                loc = getattr(d.source_location, "json_pointer", None) or getattr(
+                    d.source_location, "source_uri", None
+                )
+            if not loc and d.subject_ref:
+                loc = d.subject_ref
+            model_assessment.append(
+                {
+                    "id": f"{d.diagnostic_code}:{i}",
+                    "status": status,
+                    "requirement_code": details.get("requirement_code"),
+                    "statement": details.get("statement"),
+                    "subject": d.subject_ref,
+                    "finding": details.get("finding") or d.diagnostic_message,
+                    "severity": sev,
+                    "remediation": details.get("remediation"),
+                    "source_location": loc,
+                    "diagnostic_code": d.diagnostic_code,
+                }
+            )
+
     return {
         "summary": summary,
         "nodes": [
@@ -202,6 +241,7 @@ def build_slice_projection(result: SliceResult) -> dict[str, Any]:
                 diag for a in report.assessments for diag in a.diagnostics
             )
         ],
+        "model_assessment": model_assessment,
         "relations": [
             {
                 "id": f"{r.relation_kind.value}:{i}",

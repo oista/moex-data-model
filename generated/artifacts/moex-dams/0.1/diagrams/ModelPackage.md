@@ -138,6 +138,8 @@
         
       ModelPackage : name
         
+      ModelPackage : ownership_inheritance_rule
+        
       ModelPackage : owning_unit_ref
         
           

@@ -37,6 +37,7 @@ PublicationSectionKind = Literal[
     "bindings",
     "data-flows",
     "conformance",
+    "model-assessment",
     "source",
     "external-specification-scope",
     "competency-questions",

@@ -1,0 +1,23 @@
+catalog_id: dams:req-catalog/bad-missing-statement/0.1
+name: bad_missing_statement
+requirements:
+  - element_id: dams:req/GEN-901
+    name: missing_statement
+    title: Missing statement
+    description: Fixture
+    lifecycle_status: active
+    code: GEN-901
+    requirement_level: it_solution
+    requirement_section: GEN
+    statement: "   "
+    applies_to:
+      applicability_id: appl:GEN-901
+      applies_target_class: ModelPackage
+    formal_checks:
+      - check_id: GEN-901.c1
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: name
+        severity: error
+        diagnostic_code: DAMS-REQ-GEN-901.c1
+        remediation: Add name.

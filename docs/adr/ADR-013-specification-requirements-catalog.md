@@ -44,6 +44,14 @@ LinkML нет класса «Requirement catalog»; `class.rules` / `slot.requir
   **publication-contract** (ADR-019) **+** schema validation.
   Body-assess не дублирует naming/presence-секций Viewer; ADR-019 не
   доказывает identity_rule или classification.
+- **Assess buckets:** `assessment:standard-syntax` |
+  `assessment:corporate-semantics` (structural/refs/ids/levels) |
+  `assessment:model-requirements` (только formal_checks / catalog).
+  Viewer section `kind: model-assessment` публикует только model-requirements.
+- **ADR-019 ≠ body assess:** publication contract проверяет presence /
+  `satisfies` / semantic types в секциях. Поля тела (`identity_rule`,
+  `ownership`, `mapping_coverage_status`, classification) валидирует
+  только formal_checks runner — не ADR-019.
 - Viewer: корень «Требования» — уровни «Концептуальная модель»,
   «ИТ-решения», «Публикация».
 
@@ -56,6 +64,7 @@ LinkML нет класса «Requirement catalog»; `class.rules` / `slot.requir
 | Identity rule | Error | Error | Error |
 | Entity/attribute/physical mappings (with declared exceptions) | Error | Error | Error |
 | Ref resolution / cardinality | Error | Error | Error |
+| Surrogate без `key_attribute_refs` (при наличии `identity_rule`) | Allowed | Warn/reject | Error after policy |
 | Naming | — | Warning | Error after baseline |
 | Atomicity | — | Warning | Selective error |
 | Currency/unit/timezone | — | Warning | Error by data class |
@@ -66,6 +75,14 @@ LinkML нет класса «Requirement catalog»; `class.rules` / `slot.requir
 
 `mapping_coverage_status: planned` требует `mapping_rationale` и **не** является
 постоянным обходом для `lifecycle_status: active` (Wave 1: warning).
+
+**Wave 1 surrogate policy:** `business_key_kind: surrogate` + `identity_rule`
+без `key_attribute_refs` остаётся allowed. **Wave 2 planned:** warn or reject
+surrogate without key refs (or stronger natural/composite policy).
+
+**Framework-only FormalCheckKindEnum values:** `slot_min_cardinality`,
+`key_subset` — capability of the runner; unused by the IT-solution catalog
+until needed. Do not remove from the enum.
 
 ## Consequences
 

@@ -42,7 +42,7 @@ def test_validate_trading_solution(repo_root: Path, capsys: pytest.CaptureFixtur
     code = main(["validate", "--root", str(repo_root)])
     captured = capsys.readouterr()
     assert code == 0
-    assert "overall=conformant" in captured.out
+    assert "overall=conformant_with_warnings" in captured.out
     assert "dams:model/trading/1.0.0" in captured.out
 
 
@@ -51,7 +51,7 @@ def test_validate_json(repo_root: Path, capsys: pytest.CaptureFixture[str]) -> N
     captured = capsys.readouterr()
     assert code == 0
     payload = json.loads(captured.out)
-    assert payload["overall_result"] == "conformant"
+    assert payload["overall_result"] == "conformant_with_warnings"
     assert payload["assessed_specification"]["specification_id"] == "moex:spec:dams"
 
 

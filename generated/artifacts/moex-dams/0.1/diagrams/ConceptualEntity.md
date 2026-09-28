@@ -101,6 +101,8 @@
         
       ConceptualEntity : name
         
+      ConceptualEntity : ownership_inheritance_rule
+        
       ConceptualEntity : owning_unit_ref
         
           

@@ -77,7 +77,7 @@ def test_trading_conformance(client: TestClient) -> None:
     assert r.status_code == 200
     body = r.json()
     assert body["is_conformant"] is True
-    assert body["overall_result"] == "conformant"
+    assert body["overall_result"] == "conformant_with_warnings"
 
 
 def test_validation_run_persisted(client: TestClient) -> None:
@@ -90,7 +90,7 @@ def test_validation_run_persisted(client: TestClient) -> None:
     run_id = r.json()["id"]
     g = client.get(f"/validation-runs/{run_id}")
     assert g.status_code == 200
-    assert g.json()["overall_result"] == "conformant"
+    assert g.json()["overall_result"] == "conformant_with_warnings"
 
 
 def test_workspace_create_and_list(client: TestClient) -> None:

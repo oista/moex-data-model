@@ -23,6 +23,7 @@ PublicationSectionKind = Literal[
     "bindings",
     "data-flows",
     "conformance",
+    "model-assessment",
     "source",
     "external-specification-scope",
     "competency-questions",
@@ -53,7 +54,7 @@ PROFILES: dict[str, ProfileSpec] = {
     ),
     "implementation": ProfileSpec(
         required=frozenset({"overview", "conformance"}),
-        recommended=frozenset({"bindings", "data-flows"}),
+        recommended=frozenset({"bindings", "data-flows", "model-assessment"}),
         forbidden=frozenset({"taxonomy"}),
     ),
 }
@@ -70,6 +71,7 @@ SECTION_ROOT_TO_KIND: dict[str, str] = {
     "slots": "slots",
     "enumerations": "enumerations",
     "conformance": "conformance",
+    "model-assessment": "model-assessment",
     "bindings": "bindings",
     "data-flows": "data-flows",
     "source": "source",

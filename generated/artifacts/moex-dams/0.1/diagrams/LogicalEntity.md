@@ -18,6 +18,8 @@
       
       LogicalEntity : aliases
         
+      LogicalEntity : alignment_rationale
+        
       LogicalEntity : attributes
         
           
@@ -40,9 +42,31 @@
     
 
         
+      LogicalEntity : business_key_kind
+        
+          
+    
+        
+        
+        LogicalEntity --> "0..1" BusinessKeyKindEnum : business_key_kind
+        click BusinessKeyKindEnum href "../BusinessKeyKindEnum"
+    
+
+        
       LogicalEntity : classification_rationale
         
       LogicalEntity : classification_source
+        
+      LogicalEntity : conceptual_alignment_status
+        
+          
+    
+        
+        
+        LogicalEntity --> "0..1" ConceptualAlignmentStatusEnum : conceptual_alignment_status
+        click ConceptualAlignmentStatusEnum href "../ConceptualAlignmentStatusEnum"
+    
+
         
       LogicalEntity : conceptual_entity_refs
         
@@ -138,6 +162,8 @@
     
 
         
+      LogicalEntity : identity_rule
+        
       LogicalEntity : invariant_refs
         
           
@@ -148,6 +174,8 @@
         click Policy href "../Policy"
     
 
+        
+      LogicalEntity : isolation_rationale
         
       LogicalEntity : key_attribute_refs
         
@@ -163,6 +191,8 @@
 
         
       LogicalEntity : name
+        
+      LogicalEntity : ownership_inheritance_rule
         
       LogicalEntity : owning_unit_ref
         
@@ -183,6 +213,17 @@
         
         LogicalEntity --> "*" Policy : policy_refs
         click Policy href "../Policy"
+    
+
+        
+      LogicalEntity : security_classification
+        
+          
+    
+        
+        
+        LogicalEntity --> "0..1" SecurityClassificationEnum : security_classification
+        click SecurityClassificationEnum href "../SecurityClassificationEnum"
     
 
         

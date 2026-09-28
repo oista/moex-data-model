@@ -380,3 +380,108 @@ def test_repo_trading_and_csv_draft_assess():
         r.result_status != "fail" or r.obligation != "required"
         for r in reports[0].requirement_results
     )
+
+
+def test_adr019_does_not_validate_body_identity_ownership_mapping(tmp_path: Path):
+    """ADR-019 is presence/satisfies only — missing body fields must not fail contract."""
+    root = tmp_path
+    dams = root / "model-assets" / "specifications" / "moex-dams" / "0.1"
+    dams.mkdir(parents=True)
+    (dams / "publication-requirements.yaml").write_text(
+        """
+version: "0.1"
+profiles:
+  - id: demo-profile
+    requirements:
+      - id: dams:logical-entities
+        kind: required-semantic-content
+        obligation: required
+        min_occurs: 1
+        expected_semantic_types: [LogicalEntity]
+        accepted_section_kinds: [classes]
+        accepted_renderers: [entity-table]
+      - id: dams:declared-binding
+        kind: required-binding
+        obligation: required
+""",
+        encoding="utf-8",
+    )
+    pub = root / "impl"
+    pub.mkdir()
+    # Minimal entity: no identity_rule, ownership, or mapping_coverage_status
+    body = {
+        "logical_entities": [
+            {
+                "element_id": "e1",
+                "name": "E1",
+                "attributes": [{"element_id": "a1", "name": "a1"}],
+            }
+        ]
+    }
+    (pub / "model.yaml").write_text(yaml.safe_dump(body), encoding="utf-8")
+    manifest_path = pub / "publish.yaml"
+    manifest_path.write_text(
+        yaml.safe_dump(
+            {
+                "module_id": "moex:module:body-gap",
+                "kind": "publication_module",
+                "title": "Body gap OK for ADR-019",
+                "profile": "implementation",
+                "implements": [
+                    {
+                        "specification_ref": "moex-dams@0.1",
+                        "profile_ref": "demo-profile",
+                    }
+                ],
+                "sections": [
+                    {
+                        "id": "logical",
+                        "title": "L",
+                        "kind": "classes",
+                        "type": "entity-table",
+                        "satisfies": ["dams:logical-entities"],
+                        "source": {
+                            "format": "yaml",
+                            "path": "model.yaml",
+                            "select": "logical_entities",
+                        },
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    module = PublicationModule(
+        module_id="moex:module:body-gap",
+        title="Body gap OK for ADR-019",
+        implements=[
+            {"specification_ref": "moex-dams@0.1", "profile_ref": "demo-profile"}
+        ],
+        sections=[
+            PublicationSection(
+                id="logical",
+                title="L",
+                type="entity-table",
+                kind="classes",
+                satisfies=["dams:logical-entities"],
+            )
+        ],
+        manifest_path=str(manifest_path),
+    )
+    reports, warnings = run_publication_contracts(
+        [module], root, hard_fail=True, dist_dir=None
+    )
+    assert len(reports) == 1
+    assert reports[0].overall_publication_status == "conformant"
+    assert warnings == []
+
+
+def test_model_assessment_section_kind_accepted():
+    section = ManifestSection(
+        id="model-assessment",
+        title="Оценка",
+        type="entity-table",
+        kind="model-assessment",
+        source=SourceSpec(format="json", path="publications/vertical_slice.json", select="model_assessment"),
+    )
+    assert section.kind == "model-assessment"

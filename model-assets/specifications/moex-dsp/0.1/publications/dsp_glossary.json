@@ -110,7 +110,7 @@
   {
     "id": "PublicationSectionKind",
     "title": "Publication section kind",
-    "description": "Закрытый семантический словарь разделов (overview, classes, taxonomy, glossary, …). ADR-016. taxonomy ≠ classes.",
+    "description": "Закрытый семантический словарь разделов (overview, classes, taxonomy, glossary, conformance, model-assessment, …). ADR-016. taxonomy ≠ classes. model-assessment ≠ conformance.",
     "kind": "enum"
   },
   {

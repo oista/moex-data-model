@@ -10,6 +10,17 @@
       
       SpecificationRequirement : aliases
         
+      SpecificationRequirement : applies_to
+        
+          
+    
+        
+        
+        SpecificationRequirement --> "0..1" RequirementApplicability : applies_to
+        click RequirementApplicability href "../RequirementApplicability"
+    
+
+        
       SpecificationRequirement : code
         
       SpecificationRequirement : deprecated_by_ref

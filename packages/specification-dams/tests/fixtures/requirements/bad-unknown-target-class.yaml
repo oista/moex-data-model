@@ -1,0 +1,23 @@
+catalog_id: dams:req-catalog/bad-unknown-target/0.1
+name: bad_unknown_target
+requirements:
+  - element_id: dams:req/GEN-904
+    name: bad_target
+    title: Bad target
+    description: Fixture
+    lifecycle_status: active
+    code: GEN-904
+    requirement_level: it_solution
+    requirement_section: GEN
+    statement: Требование с неизвестным целевым классом.
+    applies_to:
+      applicability_id: appl:GEN-904
+      applies_target_class: NotADamsClass
+    formal_checks:
+      - check_id: GEN-904.c1
+        kind: slot_required
+        target_class: NotADamsClass
+        target_slot: name
+        severity: error
+        diagnostic_code: DAMS-REQ-GEN-904.c1
+        remediation: Fix target.

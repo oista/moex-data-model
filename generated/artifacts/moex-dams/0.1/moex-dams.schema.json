@@ -57,13 +57,27 @@
             "type": "object"
         },
         "BusinessImportanceEnum": {
-            "description": "",
+            "description": "\u0412\u0430\u0436\u043d\u043e\u0441\u0442\u044c \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0438 \u0432 \u043c\u043e\u0434\u0435\u043b\u0438 \u0440\u0435\u0448\u0435\u043d\u0438\u044f (\u043d\u0435 criticality \u0431\u0438\u0437\u043d\u0435\u0441-\u043f\u0440\u043e\u0446\u0435\u0441\u0441\u0430).",
             "enum": [
+                "critical",
                 "high",
                 "medium",
                 "low"
             ],
             "title": "BusinessImportanceEnum",
+            "type": "string"
+        },
+        "BusinessKeyKindEnum": {
+            "description": "\u0425\u0430\u0440\u0430\u043a\u0442\u0435\u0440 \u0431\u0438\u0437\u043d\u0435\u0441-\u043a\u043b\u044e\u0447\u0430 \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u043e\u0439 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0438.",
+            "enum": [
+                "natural",
+                "composite",
+                "external",
+                "local",
+                "surrogate",
+                "derived"
+            ],
+            "title": "BusinessKeyKindEnum",
             "type": "string"
         },
         "BusinessProcess": {
@@ -181,6 +195,17 @@
             "title": "CompatibilityModeEnum",
             "type": "string"
         },
+        "ConceptualAlignmentStatusEnum": {
+            "description": "\u0421\u0442\u0430\u0442\u0443\u0441 \u0432\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u044f \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u043e\u0439 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0438 \u0441 \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u044b\u043c \u043a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u044b\u043c \u0443\u0440\u043e\u0432\u043d\u0435\u043c.",
+            "enum": [
+                "aligned",
+                "pending",
+                "local-only",
+                "not-applicable"
+            ],
+            "title": "ConceptualAlignmentStatusEnum",
+            "type": "string"
+        },
         "ConceptualEntity": {
             "additionalProperties": false,
             "description": "\u041a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u0435 \u0431\u0438\u0437\u043d\u0435\u0441-\u043f\u043e\u043d\u044f\u0442\u0438\u0435 \u0432\u0435\u0440\u0445\u043d\u0435\u0433\u043e \u0443\u0440\u043e\u0432\u043d\u044f, \u043d\u0435\u0437\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0435 \u043e\u0442 \u043a\u043e\u043d\u043a\u0440\u0435\u0442\u043d\u043e\u0439 \u0440\u0435\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u0438.",
@@ -251,6 +276,13 @@
                 "name": {
                     "type": "string"
                 },
+                "ownership_inheritance_rule": {
+                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "owning_unit_ref": {
                     "type": [
                         "string",
@@ -318,7 +350,8 @@
                 "master_data",
                 "transactional_data",
                 "analytical_data",
-                "metadata"
+                "metadata",
+                "operational_data"
             ],
             "title": "DataClassEnum",
             "type": "string"
@@ -483,6 +516,13 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "ownership_inheritance_rule": {
+                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "owning_unit_ref": {
                     "type": [
@@ -786,6 +826,13 @@
                 "name": {
                     "type": "string"
                 },
+                "ownership_inheritance_rule": {
+                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "owning_unit_ref": {
                     "type": [
                         "string",
@@ -1020,6 +1067,13 @@
                     "format": "uri",
                     "type": "string"
                 },
+                "ownership_inheritance_rule": {
+                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "owning_unit_ref": {
                     "type": [
                         "string",
@@ -1089,7 +1143,9 @@
             "enum": [
                 "core",
                 "derived",
-                "reference"
+                "reference",
+                "projection",
+                "technical"
             ],
             "title": "EntityTypeEnum",
             "type": "string"
@@ -1107,20 +1163,20 @@
         },
         "FormalCheck": {
             "additionalProperties": false,
-            "description": "\u041e\u0434\u043d\u0430 \u043c\u0430\u0448\u0438\u043d\u043e\u0447\u0438\u0442\u0430\u0435\u043c\u0430\u044f \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f. Kind \u0432\u044b\u0440\u043e\u0432\u043d\u0435\u043d \u0441 LinkML constraints \u0438 DAMS reference/structural diagnostics; assess wiring \u043c\u043e\u0436\u0435\u0442 \u043f\u043e\u044f\u0432\u0438\u0442\u044c\u0441\u044f \u043f\u043e\u0437\u0436\u0435.",
+            "description": "\u041e\u0434\u043d\u0430 \u043c\u0430\u0448\u0438\u043d\u043e\u0447\u0438\u0442\u0430\u0435\u043c\u0430\u044f \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f. Kind \u0432\u044b\u0440\u043e\u0432\u043d\u0435\u043d \u0441 LinkML constraints \u0438 DAMS reference/structural diagnostics. formal_checks \u2014 \u0438\u0441\u043f\u043e\u043b\u043d\u044f\u0435\u043c\u043e\u0435 \u043f\u043e\u0434\u043c\u043d\u043e\u0436\u0435\u0441\u0442\u0432\u043e \u043d\u043e\u0440\u043c\u044b; \u0438\u0441\u043f\u043e\u043b\u043d\u044f\u0435\u0442\u0441\u044f assess (ADR-013).",
             "properties": {
                 "check_id": {
                     "type": "string"
                 },
                 "diagnostic_code": {
-                    "description": "\u041c\u043e\u0441\u0442 \u043a DAMS-STRUCT-* / DAMS-REF-* / \u0431\u0443\u0434\u0443\u0449\u0438\u043c DAMS-REQ-*.",
+                    "description": "\u041c\u043e\u0441\u0442 \u043a DAMS-STRUCT-* / DAMS-REF-* / DAMS-REQ-*.",
                     "type": [
                         "string",
                         "null"
                     ]
                 },
                 "expression": {
-                    "description": "\u0421\u0432\u043e\u0431\u043e\u0434\u043d\u0430\u044f LinkML-ish \u0437\u0430\u043c\u0435\u0442\u043a\u0430 \u043f\u0440\u0438 kind=custom.",
+                    "description": "\u0418\u043c\u044f \u0444\u0438\u043a\u0441\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u043e\u0433\u043e \u0448\u0430\u0431\u043b\u043e\u043d\u0430 \u0434\u043b\u044f conditional_branch / custom (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 ldm006_alignment, planned_on_active_warning).\n",
                     "type": [
                         "string",
                         "null"
@@ -1128,6 +1184,13 @@
                 },
                 "kind": {
                     "$ref": "#/$defs/FormalCheckKindEnum"
+                },
+                "remediation": {
+                    "description": "Actionable remediation text for CI / Cursor / authors.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "severity": {
                     "$ref": "#/$defs/CheckSeverityEnum"
@@ -1151,6 +1214,16 @@
                         "string",
                         "null"
                     ]
+                },
+                "target_slots": {
+                    "description": "\u0421\u043f\u0438\u0441\u043e\u043a \u0441\u043b\u043e\u0442\u043e\u0432 \u0434\u043b\u044f kind=at_least_one_slots.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
                 }
             },
             "required": [
@@ -1168,6 +1241,8 @@
                 "slot_min_cardinality",
                 "ref_resolves",
                 "key_subset",
+                "at_least_one_slots",
+                "conditional_branch",
                 "custom"
             ],
             "title": "FormalCheckKindEnum",
@@ -1259,6 +1334,10 @@
                 "governance_classification": {
                     "$ref": "#/$defs/GovernanceClassificationEnum"
                 },
+                "security_classification": {
+                    "$ref": "#/$defs/SecurityClassificationEnum",
+                    "description": "\u0420\u0435\u0436\u0438\u043c \u0437\u0430\u0449\u0438\u0442\u044b (Wave 2); \u043e\u0440\u0442\u043e\u0433\u043e\u043d\u0430\u043b\u0435\u043d governance_classification."
+                },
                 "sensitivity_term_refs": {
                     "items": {
                         "type": "string"
@@ -1317,6 +1396,13 @@
                     ]
                 },
                 "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "ownership_inheritance_rule": {
+                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
                     "type": [
                         "string",
                         "null"
@@ -1648,6 +1734,13 @@
                         "null"
                     ]
                 },
+                "currency_attribute_ref": {
+                    "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u0430\u0442\u0440\u0438\u0431\u0443\u0442 \u0432\u0430\u043b\u044e\u0442\u044b \u0434\u043b\u044f \u0434\u0435\u043d\u0435\u0436\u043d\u043e\u0439 \u0432\u0435\u043b\u0438\u0447\u0438\u043d\u044b (Wave 2 soft).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "default_value": {
                     "type": [
                         "string",
@@ -1696,6 +1789,17 @@
                 "logical_type": {
                     "$ref": "#/$defs/LogicalDataTypeEnum"
                 },
+                "mapping_coverage_status": {
+                    "$ref": "#/$defs/MappingCoverageStatusEnum",
+                    "description": "\u0421\u0442\u0430\u0442\u0443\u0441 \u043f\u043e\u043a\u0440\u044b\u0442\u0438\u044f \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430 mapping\u2019\u043e\u043c \u043d\u0430 \u0441\u043e\u0441\u0435\u0434\u043d\u0435\u043c \u0443\u0440\u043e\u0432\u043d\u0435 \u043c\u043e\u0434\u0435\u043b\u0438 (logical \u2194 physical).\n"
+                },
+                "mapping_rationale": {
+                    "description": "\u041e\u0431\u043e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0434\u043b\u044f planned / technical-only / not-applicable / inherited.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "maximum_cardinality": {
                     "minimum": 1,
                     "type": [
@@ -1731,6 +1835,10 @@
                 "required": {
                     "type": "boolean"
                 },
+                "security_classification": {
+                    "$ref": "#/$defs/SecurityClassificationEnum",
+                    "description": "\u0420\u0435\u0436\u0438\u043c \u0437\u0430\u0449\u0438\u0442\u044b (Wave 2); \u043e\u0440\u0442\u043e\u0433\u043e\u043d\u0430\u043b\u0435\u043d governance_classification."
+                },
                 "sensitivity_term_refs": {
                     "items": {
                         "type": "string"
@@ -1749,7 +1857,28 @@
                         "null"
                     ]
                 },
+                "temporal_semantics": {
+                    "description": "\u0421\u0435\u043c\u0430\u043d\u0442\u0438\u043a\u0430 \u0434\u0430\u0442\u044b/\u0432\u0440\u0435\u043c\u0435\u043d\u0438 (Wave 2 soft).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "timezone_policy": {
+                    "description": "\u041f\u043e\u043b\u0438\u0442\u0438\u043a\u0430 \u0447\u0430\u0441\u043e\u0432\u043e\u0433\u043e \u043f\u043e\u044f\u0441\u0430 \u0434\u043b\u044f timestamp (Wave 2 soft).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "unit_code": {
+                    "description": "\u041a\u043e\u0434 \u0435\u0434\u0438\u043d\u0438\u0446\u044b \u0438\u0437\u043c\u0435\u0440\u0435\u043d\u0438\u044f (Wave 2 soft).",
                     "type": [
                         "string",
                         "null"
@@ -1821,6 +1950,13 @@
                         "null"
                     ]
                 },
+                "alignment_rationale": {
+                    "description": "\u041e\u0431\u043e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0441\u0442\u0430\u0442\u0443\u0441\u0430 \u0432\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u044f \u0441 \u043a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u044b\u043c \u0443\u0440\u043e\u0432\u043d\u0435\u043c.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "attributes": {
                     "items": {
                         "$ref": "#/$defs/LogicalAttribute"
@@ -1833,6 +1969,9 @@
                 "business_importance": {
                     "$ref": "#/$defs/BusinessImportanceEnum"
                 },
+                "business_key_kind": {
+                    "$ref": "#/$defs/BusinessKeyKindEnum"
+                },
                 "classification_rationale": {
                     "type": [
                         "string",
@@ -1844,6 +1983,9 @@
                         "string",
                         "null"
                     ]
+                },
+                "conceptual_alignment_status": {
+                    "$ref": "#/$defs/ConceptualAlignmentStatusEnum"
                 },
                 "conceptual_entity_refs": {
                     "items": {
@@ -1899,12 +2041,26 @@
                 "governance_classification": {
                     "$ref": "#/$defs/GovernanceClassificationEnum"
                 },
+                "identity_rule": {
+                    "description": "\u0414\u0435\u043b\u043e\u0432\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u0438\u0434\u0435\u043d\u0442\u0438\u0447\u043d\u043e\u0441\u0442\u0438 \u044d\u043a\u0437\u0435\u043c\u043f\u043b\u044f\u0440\u043e\u0432 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0438 \u0432 \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0435 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "invariant_refs": {
                     "items": {
                         "type": "string"
                     },
                     "type": [
                         "array",
+                        "null"
+                    ]
+                },
+                "isolation_rationale": {
+                    "description": "\u041e\u0431\u043e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0441\u0435\u043c\u0430\u043d\u0442\u0438\u0447\u0435\u0441\u043a\u043e\u0439 \u0438\u0437\u043e\u043b\u044f\u0446\u0438\u0438 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0438 (LDM-007).",
+                    "type": [
+                        "string",
                         "null"
                     ]
                 },
@@ -1923,6 +2079,13 @@
                 "name": {
                     "type": "string"
                 },
+                "ownership_inheritance_rule": {
+                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "owning_unit_ref": {
                     "type": [
                         "string",
@@ -1937,6 +2100,10 @@
                         "array",
                         "null"
                     ]
+                },
+                "security_classification": {
+                    "$ref": "#/$defs/SecurityClassificationEnum",
+                    "description": "\u0420\u0435\u0436\u0438\u043c \u0437\u0430\u0449\u0438\u0442\u044b (Wave 2); \u043e\u0440\u0442\u043e\u0433\u043e\u043d\u0430\u043b\u0435\u043d governance_classification."
                 },
                 "sensitivity_term_refs": {
                     "items": {
@@ -2085,7 +2252,7 @@
         },
         "Mapping": {
             "additionalProperties": false,
-            "description": "\u042f\u0432\u043d\u043e\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430\u043c\u0438. Discriminate via mapping_type: realizes (solution\u2192enterprise conceptual), field_mapping/mapsTo (physical\u2194logical), aligns_with (enterprise\u2194external term). Not used for SpecImpl implements/conforms_to.",
+            "description": "\u042f\u0432\u043d\u043e\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430\u043c\u0438. Discriminate via mapping_type: realizes (solution\u2192enterprise conceptual), entity_physical (PhysicalObject\u2194LogicalEntity), field_mapping/mapsTo (physical\u2194logical), aligns_with (enterprise\u2194external term). Not used for SpecImpl implements/conforms_to.",
             "properties": {
                 "aliases": {
                     "items": {
@@ -2255,12 +2422,26 @@
             "title": "MappingCardinalityEnum",
             "type": "string"
         },
+        "MappingCoverageStatusEnum": {
+            "description": "\u0421\u0442\u0430\u0442\u0443\u0441 \u043f\u043e\u043a\u0440\u044b\u0442\u0438\u044f \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430 mapping\u2019\u043e\u043c \u043d\u0430 \u0441\u043e\u0441\u0435\u0434\u043d\u0435\u043c \u0443\u0440\u043e\u0432\u043d\u0435 \u043c\u043e\u0434\u0435\u043b\u0438 (logical \u2194 physical). \u041d\u0435 \u0441\u0442\u0430\u0442\u0443\u0441 \u0441\u0430\u043c\u043e\u0439 \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u043e\u0439 \u043c\u043e\u0434\u0435\u043b\u0438.",
+            "enum": [
+                "mapped",
+                "derived",
+                "planned",
+                "inherited",
+                "technical-only",
+                "not-applicable"
+            ],
+            "title": "MappingCoverageStatusEnum",
+            "type": "string"
+        },
         "MappingTypeEnum": {
-            "description": "Kind of Mapping assertion. realizes = solution element \u2192 enterprise conceptual; field_mapping = mapsTo (physical \u2194 logical); aligns_with = enterprise conceptual \u2194 external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).",
+            "description": "Kind of Mapping assertion. realizes = solution element \u2192 enterprise conceptual; entity_physical = PhysicalObject \u2194 LogicalEntity; field_mapping = mapsTo (physical field \u2194 logical attribute); aligns_with = enterprise conceptual \u2194 external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).",
             "enum": [
                 "semantic_equivalence",
                 "specialization",
                 "implementation",
+                "entity_physical",
                 "field_mapping",
                 "transformation",
                 "aggregation",
@@ -2363,6 +2544,13 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "ownership_inheritance_rule": {
+                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "owning_unit_ref": {
                     "type": [
@@ -2640,6 +2828,13 @@
                 "name": {
                     "type": "string"
                 },
+                "ownership_inheritance_rule": {
+                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "owning_unit_ref": {
                     "type": [
                         "string",
@@ -2876,6 +3071,17 @@
                 "lifecycle_status": {
                     "$ref": "#/$defs/LifecycleStatusEnum"
                 },
+                "mapping_coverage_status": {
+                    "$ref": "#/$defs/MappingCoverageStatusEnum",
+                    "description": "\u0421\u0442\u0430\u0442\u0443\u0441 \u043f\u043e\u043a\u0440\u044b\u0442\u0438\u044f \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430 mapping\u2019\u043e\u043c \u043d\u0430 \u0441\u043e\u0441\u0435\u0434\u043d\u0435\u043c \u0443\u0440\u043e\u0432\u043d\u0435 \u043c\u043e\u0434\u0435\u043b\u0438 (logical \u2194 physical).\n"
+                },
+                "mapping_rationale": {
+                    "description": "\u041e\u0431\u043e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0434\u043b\u044f planned / technical-only / not-applicable / inherited.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "name": {
                     "type": "string"
                 },
@@ -2999,6 +3205,17 @@
                 "lifecycle_status": {
                     "$ref": "#/$defs/LifecycleStatusEnum"
                 },
+                "mapping_coverage_status": {
+                    "$ref": "#/$defs/MappingCoverageStatusEnum",
+                    "description": "\u0421\u0442\u0430\u0442\u0443\u0441 \u043f\u043e\u043a\u0440\u044b\u0442\u0438\u044f \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430 mapping\u2019\u043e\u043c \u043d\u0430 \u0441\u043e\u0441\u0435\u0434\u043d\u0435\u043c \u0443\u0440\u043e\u0432\u043d\u0435 \u043c\u043e\u0434\u0435\u043b\u0438 (logical \u2194 physical).\n"
+                },
+                "mapping_rationale": {
+                    "description": "\u041e\u0431\u043e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0434\u043b\u044f planned / technical-only / not-applicable / inherited.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "name": {
                     "type": "string"
                 },
@@ -3008,6 +3225,13 @@
                 },
                 "object_kind": {
                     "$ref": "#/$defs/PhysicalObjectKindEnum"
+                },
+                "ownership_inheritance_rule": {
+                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "owning_unit_ref": {
                     "type": [
@@ -3250,6 +3474,13 @@
                         "null"
                     ]
                 },
+                "cardinality_rationale": {
+                    "description": "\u041e\u0431\u043e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0438\u044f \u043a\u0430\u0440\u0434\u0438\u043d\u0430\u043b\u044c\u043d\u043e\u0441\u0442\u0438 \u0434\u043b\u044f draft/imported \u0441\u0432\u044f\u0437\u0435\u0439.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "deprecated_by_ref": {
                     "type": [
                         "string",
@@ -3282,6 +3513,10 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "relationship_kind": {
+                    "$ref": "#/$defs/RelationshipKindEnum",
+                    "description": "\u0422\u0438\u043f \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u043e\u0439 \u0441\u0432\u044f\u0437\u0438 (Wave 2)."
                 },
                 "source_entity_ref": {
                     "type": "string"
@@ -3368,6 +3603,63 @@
                 "lifecycle_status"
             ],
             "title": "Relationship",
+            "type": "object"
+        },
+        "RelationshipKindEnum": {
+            "description": "\u0422\u0438\u043f \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u043e\u0439 \u0441\u0432\u044f\u0437\u0438 (Wave 2).",
+            "enum": [
+                "association",
+                "composition",
+                "aggregation",
+                "specialization",
+                "reference",
+                "derivation",
+                "realization",
+                "lineage",
+                "event_participation"
+            ],
+            "title": "RelationshipKindEnum",
+            "type": "string"
+        },
+        "RequirementApplicability": {
+            "additionalProperties": false,
+            "description": "\u041e\u0431\u043b\u0430\u0441\u0442\u044c \u043f\u0440\u0438\u043c\u0435\u043d\u0438\u043c\u043e\u0441\u0442\u0438 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f (\u0431\u0435\u0437 graph queries): \u043a\u043b\u0430\u0441\u0441 \u0446\u0435\u043b\u0438, \u043f\u0440\u043e\u0444\u0438\u043b\u044c \u0438 \u0443\u0440\u043e\u0432\u0435\u043d\u044c \u043c\u043e\u0434\u0435\u043b\u0438.",
+            "properties": {
+                "applicability_id": {
+                    "description": "Stable id for applies_to blocks (e.g. appl:LDM-001).",
+                    "type": "string"
+                },
+                "applies_dams_model_level": {
+                    "$ref": "#/$defs/DAMSModelLevelEnum"
+                },
+                "applies_implementation_profile": {
+                    "$ref": "#/$defs/ImplementationProfileEnum"
+                },
+                "applies_implementation_scope": {
+                    "$ref": "#/$defs/ImplementationScopeEnum"
+                },
+                "applies_target_class": {
+                    "description": "\u0418\u043c\u044f \u043a\u043b\u0430\u0441\u0441\u0430 LinkML, \u043a \u044d\u043a\u0437\u0435\u043c\u043f\u043b\u044f\u0440\u0430\u043c \u043a\u043e\u0442\u043e\u0440\u043e\u0433\u043e \u043f\u0440\u0438\u043c\u0435\u043d\u044f\u0435\u0442\u0441\u044f \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u0435.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "applies_target_kinds": {
+                    "description": "\u041e\u043f\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u044b\u0439 allowlist object_kind / facet (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 table, topic).",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "applicability_id"
+            ],
+            "title": "RequirementApplicability",
             "type": "object"
         },
         "RequirementCatalog": {
@@ -3459,6 +3751,16 @@
             ],
             "title": "Role",
             "type": "object"
+        },
+        "SecurityClassificationEnum": {
+            "description": "\u0420\u0435\u0436\u0438\u043c \u0437\u0430\u0449\u0438\u0442\u044b \u0434\u0430\u043d\u043d\u044b\u0445 (Wave 2); \u043e\u0440\u0442\u043e\u0433\u043e\u043d\u0430\u043b\u0435\u043d governance_classification.",
+            "enum": [
+                "internal",
+                "confidential",
+                "restricted"
+            ],
+            "title": "SecurityClassificationEnum",
+            "type": "string"
         },
         "SelectedAttribute": {
             "additionalProperties": false,
@@ -3694,6 +3996,17 @@
                         "null"
                     ]
                 },
+                "applies_to": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/RequirementApplicability"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "\u041e\u0431\u043b\u0430\u0441\u0442\u044c \u043f\u0440\u0438\u043c\u0435\u043d\u0438\u043c\u043e\u0441\u0442\u0438 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f \u0434\u043b\u044f formal_checks runner."
+                },
                 "code": {
                     "pattern": "^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$",
                     "type": "string"
@@ -3742,7 +4055,7 @@
                     "$ref": "#/$defs/RequirementSectionEnum"
                 },
                 "statement": {
-                    "description": "\u0420\u0430\u0437\u0432\u0451\u0440\u043d\u0443\u0442\u0430\u044f \u0444\u043e\u0440\u043c\u0443\u043b\u0438\u0440\u043e\u0432\u043a\u0430 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f \u043d\u0430 \u043f\u043e\u043d\u044f\u0442\u043d\u043e\u043c \u044f\u0437\u044b\u043a\u0435.",
+                    "description": "\u041f\u043e\u043b\u043d\u0430\u044f \u043d\u043e\u0440\u043c\u0430\u0442\u0438\u0432\u043d\u0430\u044f \u0444\u043e\u0440\u043c\u0443\u043b\u0438\u0440\u043e\u0432\u043a\u0430 \u043d\u0430 \u0440\u0443\u0441\u0441\u043a\u043e\u043c \u0434\u043b\u044f \u0447\u0435\u043b\u043e\u0432\u0435\u043a\u0430: \u0431\u0435\u0437 \u0438\u043c\u0451\u043d LinkML-\u043a\u043b\u0430\u0441\u0441\u043e\u0432, \u0441\u043b\u043e\u0442\u043e\u0432, kinds \u043f\u0440\u043e\u0432\u0435\u0440\u043e\u043a \u0438 \u0441\u043b\u0435\u043d\u0433\u0430 \u043c\u0435\u0442\u0430\u043c\u043e\u0434\u0435\u043b\u0438.\n",
                     "type": "string"
                 },
                 "tags": {

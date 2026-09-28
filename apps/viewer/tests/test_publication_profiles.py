@@ -33,6 +33,13 @@ def test_profile_spec_ontology_forbids_schema_files():
     assert "taxonomy" in profile_spec("linkml-specification").forbidden
 
 
+def test_implementation_recommends_model_assessment():
+    spec = profile_spec("implementation")
+    assert spec is not None
+    assert "model-assessment" in spec.recommended
+    assert "model-assessment" not in spec.required
+
+
 def test_check_publication_profiles_soft_warnings():
     module = PublicationModule(
         module_id="moex:module:demo",

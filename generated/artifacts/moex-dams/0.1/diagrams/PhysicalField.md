@@ -38,6 +38,19 @@
     
 
         
+      PhysicalField : mapping_coverage_status
+        
+          
+    
+        
+        
+        PhysicalField --> "0..1" MappingCoverageStatusEnum : mapping_coverage_status
+        click MappingCoverageStatusEnum href "../MappingCoverageStatusEnum"
+    
+
+        
+      PhysicalField : mapping_rationale
+        
       PhysicalField : name
         
       PhysicalField : native_name

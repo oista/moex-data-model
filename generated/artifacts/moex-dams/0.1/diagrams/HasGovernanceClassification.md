@@ -25,6 +25,17 @@
     
 
         
+      HasGovernanceClassification : security_classification
+        
+          
+    
+        
+        
+        HasGovernanceClassification --> "0..1" SecurityClassificationEnum : security_classification
+        click SecurityClassificationEnum href "../SecurityClassificationEnum"
+    
+
+        
       HasGovernanceClassification : sensitivity_term_refs
         
           

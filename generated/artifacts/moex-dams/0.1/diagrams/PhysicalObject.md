@@ -75,6 +75,19 @@
     
 
         
+      PhysicalObject : mapping_coverage_status
+        
+          
+    
+        
+        
+        PhysicalObject --> "0..1" MappingCoverageStatusEnum : mapping_coverage_status
+        click MappingCoverageStatusEnum href "../MappingCoverageStatusEnum"
+    
+
+        
+      PhysicalObject : mapping_rationale
+        
       PhysicalObject : name
         
       PhysicalObject : native_schema_ref
@@ -89,6 +102,8 @@
         click PhysicalObjectKindEnum href "../PhysicalObjectKindEnum"
     
 
+        
+      PhysicalObject : ownership_inheritance_rule
         
       PhysicalObject : owning_unit_ref
         

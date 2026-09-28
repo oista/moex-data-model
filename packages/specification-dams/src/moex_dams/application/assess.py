@@ -97,13 +97,16 @@ def assess_implementation(
     rule_results = run_rule_sets(impl_body, default_dams_rule_sets(repo))
     all_diags: tuple[Diagnostic, ...] = ()
     assessments_list: list[ConformanceAssessment] = []
-    # Preserve legacy two-bucket report: syntax vs corporate semantics.
+    # Three-bucket report: syntax | corporate semantics | model-requirements (formal_checks).
     syntax_diags: list[Diagnostic] = []
     corporate_diags: list[Diagnostic] = []
+    model_req_diags: list[Diagnostic] = []
     for rule_set, diags in rule_results:
         all_diags = all_diags + diags
         if rule_set.phase is ConformancePhase.STANDARD_SYNTAX:
             syntax_diags.extend(diags)
+        elif rule_set.assessment_id == "assessment:model-requirements":
+            model_req_diags.extend(diags)
         else:
             corporate_diags.extend(diags)
 
@@ -125,6 +128,17 @@ def assess_implementation(
             spec_ref,
             standard_ref,
             tuple(corporate_diags),
+            now,
+            phase=ConformancePhase.CORPORATE_SEMANTICS,
+        )
+    )
+    assessments_list.append(
+        _assessment(
+            "assessment:model-requirements",
+            impl_ref,
+            spec_ref,
+            standard_ref,
+            tuple(model_req_diags),
             now,
             phase=ConformancePhase.CORPORATE_SEMANTICS,
         )

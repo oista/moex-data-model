@@ -50,6 +50,7 @@ Name: moex_dams
 | [PolicyBinding](PolicyBinding.md) | Применение управляемой политики к элементу модели |
 | [RegistryEntry](RegistryEntry.md) | Локальная ссылочная проекция записи внешней мастер-системы; не является масте... |
 | [Relationship](Relationship.md) | Именованная связь между логическими или концептуальными сущностями |
+| [RequirementApplicability](RequirementApplicability.md) | Область применимости требования (без graph queries): класс цели, профиль и ур... |
 | [RequirementCatalog](RequirementCatalog.md) | Контейнер инстансов SpecificationRequirement вне ModelPackage |
 | [Role](Role.md) | Управляемая роль владельца, стюарда, потребителя или согласующего |
 | [SelectedAttribute](SelectedAttribute.md) | Выбранный атрибут и соответствующее физическое поле payload, таблицы или сооб... |
@@ -64,7 +65,15 @@ Name: moex_dams
 | --- | --- |
 | [aggregation_function](aggregation_function.md) |  |
 | [aliases](aliases.md) |  |
+| [alignment_rationale](alignment_rationale.md) | Обоснование статуса выравнивания с концептуальным уровнем |
 | [api_version](api_version.md) |  |
+| [applicability_id](applicability_id.md) | Stable id for applies_to blocks (e |
+| [applies_dams_model_level](applies_dams_model_level.md) |  |
+| [applies_implementation_profile](applies_implementation_profile.md) |  |
+| [applies_implementation_scope](applies_implementation_scope.md) |  |
+| [applies_target_class](applies_target_class.md) | Имя класса LinkML, к экземплярам которого применяется требование |
+| [applies_target_kinds](applies_target_kinds.md) | Опциональный allowlist object_kind / facet (например table, topic) |
+| [applies_to](applies_to.md) | Область применимости требования для formal_checks runner |
 | [approval_status](approval_status.md) |  |
 | [approved_at](approved_at.md) |  |
 | [approved_by_ref](approved_by_ref.md) |  |
@@ -72,7 +81,9 @@ Name: moex_dams
 | [associative](associative.md) |  |
 | [attributes](attributes.md) |  |
 | [business_importance](business_importance.md) |  |
+| [business_key_kind](business_key_kind.md) |  |
 | [business_process_refs](business_process_refs.md) |  |
+| [cardinality_rationale](cardinality_rationale.md) | Обоснование отсутствия кардинальности для draft/imported связей |
 | [catalog_id](catalog_id.md) |  |
 | [check_id](check_id.md) |  |
 | [classification_assignments](classification_assignments.md) |  |
@@ -83,12 +94,14 @@ Name: moex_dams
 | [code](code.md) |  |
 | [compatibility_baseline_ref](compatibility_baseline_ref.md) |  |
 | [compatibility_mode](compatibility_mode.md) |  |
+| [conceptual_alignment_status](conceptual_alignment_status.md) |  |
 | [conceptual_entities](conceptual_entities.md) |  |
 | [conceptual_entity_refs](conceptual_entity_refs.md) |  |
 | [conceptual_implementation_ref](conceptual_implementation_ref.md) | Required for solution packages: reference to the enterprise-conceptual SpecIm... |
 | [confidence](confidence.md) |  |
 | [context_ref](context_ref.md) |  |
 | [contract_ref](contract_ref.md) |  |
+| [currency_attribute_ref](currency_attribute_ref.md) | Ссылка на атрибут валюты для денежной величины (Wave 2 soft) |
 | [data_class](data_class.md) |  |
 | [data_flows](data_flows.md) |  |
 | [data_model_bindings](data_model_bindings.md) |  |
@@ -98,7 +111,7 @@ Name: moex_dams
 | [deprecated_by_ref](deprecated_by_ref.md) |  |
 | [derived_expression](derived_expression.md) |  |
 | [description](description.md) |  |
-| [diagnostic_code](diagnostic_code.md) | Мост к DAMS-STRUCT-* / DAMS-REF-* / будущим DAMS-REQ-* |
+| [diagnostic_code](diagnostic_code.md) | Мост к DAMS-STRUCT-* / DAMS-REF-* / DAMS-REQ-* |
 | [dimension_attribute_refs](dimension_attribute_refs.md) |  |
 | [dimensions](dimensions.md) |  |
 | [direction](direction.md) |  |
@@ -109,7 +122,7 @@ Name: moex_dams
 | [entity_bindings](entity_bindings.md) |  |
 | [entity_type](entity_type.md) |  |
 | [evidence_refs](evidence_refs.md) |  |
-| [expression](expression.md) | Свободная LinkML-ish заметка при kind=custom |
+| [expression](expression.md) | Имя фиксированного шаблона для conditional_branch / custom (например ldm006_a... |
 | [filter_expression](filter_expression.md) |  |
 | [flow_ref](flow_ref.md) |  |
 | [formal_checks](formal_checks.md) |  |
@@ -119,6 +132,7 @@ Name: moex_dams
 | [governance_classification](governance_classification.md) |  |
 | [grain_entity_refs](grain_entity_refs.md) |  |
 | [identifying](identifying.md) |  |
+| [identity_rule](identity_rule.md) | Деловое правило идентичности экземпляров сущности в контексте ИТ-решения |
 | [implementation_scope](implementation_scope.md) | Body-level scope: enterprise (no solution_ref) or solution |
 | [implementation_version](implementation_version.md) |  |
 | [imports_refs](imports_refs.md) |  |
@@ -129,6 +143,7 @@ Name: moex_dams
 | [integration_spec_ref](integration_spec_ref.md) |  |
 | [integrity_digest](integrity_digest.md) |  |
 | [invariant_refs](invariant_refs.md) |  |
+| [isolation_rationale](isolation_rationale.md) | Обоснование семантической изоляции сущности (LDM-007) |
 | [key_attribute_refs](key_attribute_refs.md) |  |
 | [kind](kind.md) |  |
 | [lifecycle_status](lifecycle_status.md) |  |
@@ -138,6 +153,8 @@ Name: moex_dams
 | [logical_entity_ref](logical_entity_ref.md) |  |
 | [logical_type](logical_type.md) |  |
 | [mapping_cardinality](mapping_cardinality.md) |  |
+| [mapping_coverage_status](mapping_coverage_status.md) | Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ phys... |
+| [mapping_rationale](mapping_rationale.md) | Обоснование для planned / technical-only / not-applicable / inherited |
 | [mapping_type](mapping_type.md) |  |
 | [mappings](mappings.md) |  |
 | [master_system](master_system.md) |  |
@@ -160,6 +177,7 @@ Name: moex_dams
 | [object_kind](object_kind.md) |  |
 | [ordinal_position](ordinal_position.md) |  |
 | [owner_entity_ref](owner_entity_ref.md) |  |
+| [ownership_inheritance_rule](ownership_inheritance_rule.md) | Формальное правило наследования ответственности (owner/steward) от ИТ-решения... |
 | [owning_unit_ref](owning_unit_ref.md) |  |
 | [parent_concept_ref](parent_concept_ref.md) |  |
 | [parent_domain_ref](parent_domain_ref.md) |  |
@@ -180,13 +198,16 @@ Name: moex_dams
 | [registry_id](registry_id.md) |  |
 | [registry_name](registry_name.md) |  |
 | [registry_status](registry_status.md) |  |
+| [relationship_kind](relationship_kind.md) | Тип логической связи (Wave 2) |
 | [relationships](relationships.md) |  |
+| [remediation](remediation.md) | Actionable remediation text for CI / Cursor / authors |
 | [repository_id](repository_id.md) |  |
 | [required](required.md) |  |
 | [requirement_level](requirement_level.md) |  |
 | [requirement_section](requirement_section.md) |  |
 | [requirements](requirements.md) |  |
 | [schema_path](schema_path.md) |  |
+| [security_classification](security_classification.md) | Режим защиты (Wave 2); ортогонален governance_classification |
 | [selected_attributes](selected_attributes.md) |  |
 | [selected_entities](selected_entities.md) |  |
 | [selections](selections.md) |  |
@@ -206,7 +227,7 @@ Name: moex_dams
 | [source_system_ref](source_system_ref.md) |  |
 | [source_uri](source_uri.md) |  |
 | [specification_version](specification_version.md) |  |
-| [statement](statement.md) | Развёрнутая формулировка требования на понятном языке |
+| [statement](statement.md) | Полная нормативная формулировка на русском для человека: без имён LinkML-клас... |
 | [system_ref](system_ref.md) |  |
 | [tags](tags.md) |  |
 | [target_class](target_class.md) | Имя класса LinkML (например LogicalEntity) |
@@ -218,15 +239,19 @@ Name: moex_dams
 | [target_refs](target_refs.md) |  |
 | [target_role](target_role.md) |  |
 | [target_slot](target_slot.md) |  |
+| [target_slots](target_slots.md) | Список слотов для kind=at_least_one_slots |
 | [target_solution_ref](target_solution_ref.md) |  |
 | [target_system_ref](target_system_ref.md) |  |
 | [technology](technology.md) |  |
+| [temporal_semantics](temporal_semantics.md) | Семантика даты/времени (Wave 2 soft) |
+| [timezone_policy](timezone_policy.md) | Политика часового пояса для timestamp (Wave 2 soft) |
 | [title](title.md) |  |
 | [transformation_expression](transformation_expression.md) |  |
 | [transformation_mapping_ref](transformation_mapping_ref.md) |  |
 | [transformation_mapping_refs](transformation_mapping_refs.md) |  |
 | [transformation_ref](transformation_ref.md) |  |
 | [unit](unit.md) |  |
+| [unit_code](unit_code.md) | Код единицы измерения (Wave 2 soft) |
 | [valid_from](valid_from.md) |  |
 | [valid_to](valid_to.md) |  |
 | [value_set_ref](value_set_ref.md) |  |
@@ -237,9 +262,11 @@ Name: moex_dams
 | Enumeration | Description |
 | --- | --- |
 | [ApprovalStatusEnum](ApprovalStatusEnum.md) |  |
-| [BusinessImportanceEnum](BusinessImportanceEnum.md) |  |
+| [BusinessImportanceEnum](BusinessImportanceEnum.md) | Важность сущности в модели решения (не criticality бизнес-процесса) |
+| [BusinessKeyKindEnum](BusinessKeyKindEnum.md) | Характер бизнес-ключа логической сущности |
 | [CheckSeverityEnum](CheckSeverityEnum.md) |  |
 | [CompatibilityModeEnum](CompatibilityModeEnum.md) |  |
+| [ConceptualAlignmentStatusEnum](ConceptualAlignmentStatusEnum.md) | Статус выравнивания логической сущности с корпоративным концептуальным уровне... |
 | [DAMSModelLevelEnum](DAMSModelLevelEnum.md) | Package-level DAMS model layer (ADR-021) |
 | [DataClassEnum](DataClassEnum.md) | Класс данных для наследования модельной спецификацией дата-контракта; не совп... |
 | [EnforcementResultEnum](EnforcementResultEnum.md) |  |
@@ -255,11 +282,14 @@ Name: moex_dams
 | [LifecycleStatusEnum](LifecycleStatusEnum.md) |  |
 | [LogicalDataTypeEnum](LogicalDataTypeEnum.md) |  |
 | [MappingCardinalityEnum](MappingCardinalityEnum.md) |  |
+| [MappingCoverageStatusEnum](MappingCoverageStatusEnum.md) | Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ phys... |
 | [MappingTypeEnum](MappingTypeEnum.md) | Kind of Mapping assertion |
 | [ModelLevelEnum](ModelLevelEnum.md) |  |
 | [PhysicalObjectKindEnum](PhysicalObjectKindEnum.md) |  |
+| [RelationshipKindEnum](RelationshipKindEnum.md) | Тип логической связи (Wave 2) |
 | [RequirementLevelEnum](RequirementLevelEnum.md) | Уровень применения требования к спецификации |
 | [RequirementSectionEnum](RequirementSectionEnum.md) | Раздел каталога требований (трёхбуквенный код в code) |
+| [SecurityClassificationEnum](SecurityClassificationEnum.md) | Режим защиты данных (Wave 2); ортогонален governance_classification |
 | [SolutionDataRoleEnum](SolutionDataRoleEnum.md) |  |
 | [SpecificationKindEnum](SpecificationKindEnum.md) |  |
 

@@ -1284,6 +1284,7 @@ class RequirementApplicability(ConfiguredBaseModel):
     Область применимости требования (без graph queries): класс цели, профиль и уровень модели.
 
     """
+    applicability_id: str = Field(default=..., description="""Stable id for applies_to blocks (e.g. appl:LDM-001).""")
     applies_target_class: Optional[str] = Field(default=None, description="""Имя класса LinkML, к экземплярам которого применяется требование.""")
     applies_target_kinds: Optional[list[str]] = Field(default=None, description="""Опциональный allowlist object_kind / facet (например table, topic).""")
     applies_implementation_scope: Optional[ImplementationScopeEnum] = Field(default=None)

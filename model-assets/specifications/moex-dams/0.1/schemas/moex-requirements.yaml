@@ -18,6 +18,7 @@ classes:
       Область применимости требования (без graph queries): класс цели,
       профиль и уровень модели.
     slots:
+      - applicability_id
       - applies_target_class
       - applies_target_kinds
       - applies_implementation_scope
@@ -62,6 +63,11 @@ classes:
       - requirements
 
 slots:
+  applicability_id:
+    identifier: true
+    range: string
+    required: true
+    description: Stable id for applies_to blocks (e.g. appl:LDM-001).
   check_id:
     identifier: true
     range: string

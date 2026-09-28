@@ -20,15 +20,32 @@ Absence of `formal_checks` means human-review, not silent pass.
 
 ## Gate composition
 
-1. Schema / LinkML validation  
-2. Body assess (`formal_checks` + structural/refs)  
-3. Publication contract (ADR-019 — section presence / `satisfies`)
+1. Schema / LinkML validation (including catalog self-validation)
+2. Body assess — three buckets:
+   - `assessment:standard-syntax`
+   - `assessment:corporate-semantics` (structural / refs / ids / levels)
+   - `assessment:model-requirements` (IT-solution `formal_checks` only)
+3. Publication contract (ADR-019 — section presence / `satisfies` / semantic types)
+
+**ADR-019 ≠ body assess.** Missing `identity_rule`, `ownership`, or
+`mapping_coverage_status` on a model body does **not** fail the publication
+contract; those fields are enforced only by `formal_checks`.
+
+Viewer section `kind: model-assessment` (recommended on implementation
+profile) projects `model_assessment` rows from `assessment:model-requirements`.
 
 ## Mapping aliases (ADR-019)
 
 Publication profiles may list semantic types `EntityPhysicalMapping` /
 `AttributePhysicalMapping` as **viewer aliases**. Canonical LinkML class is
 `Mapping` with `mapping_type`: `entity_physical` | `field_mapping` | …
+
+## Wave 2 follow-ups
+
+- Reject or warn `business_key_kind: surrogate` without `key_attribute_refs`
+  even when `identity_rule` is present (Wave 1 allows this combination).
+- Framework-only check kinds `slot_min_cardinality` / `key_subset` remain in
+  `FormalCheckKindEnum` but unused by the catalog until needed.
 
 ## Severity
 

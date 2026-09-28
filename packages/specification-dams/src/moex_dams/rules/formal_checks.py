@@ -8,7 +8,12 @@ from typing import Any
 
 import yaml
 
-from moex_modeling import ConformancePhase, Diagnostic, DiagnosticSeverity
+from moex_modeling import (
+    ConformancePhase,
+    Diagnostic,
+    DiagnosticDetail,
+    DiagnosticSeverity,
+)
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
 # Data-carrying PhysicalObject kinds (GEN-004 / PDM-003 allowlist).
@@ -62,6 +67,7 @@ def _diag(
     subject: str | None,
     remediation: str | None = None,
     statement: str | None = None,
+    requirement_code: str | None = None,
 ) -> Diagnostic:
     parts = [message]
     if statement:
@@ -70,12 +76,38 @@ def _diag(
             parts.append(f"Required by: {short}.")
     if remediation:
         parts.append(f"Remediation: {remediation}")
+    details: list[DiagnosticDetail] = []
+    if requirement_code:
+        details.append(
+            DiagnosticDetail(
+                detail_key="requirement_code",
+                detail_value=str(requirement_code),
+            )
+        )
+    if statement and str(statement).strip():
+        details.append(
+            DiagnosticDetail(
+                detail_key="statement",
+                detail_value=str(statement).strip(),
+            )
+        )
+    if remediation and str(remediation).strip():
+        details.append(
+            DiagnosticDetail(
+                detail_key="remediation",
+                detail_value=str(remediation).strip(),
+            )
+        )
+    details.append(
+        DiagnosticDetail(detail_key="finding", detail_value=message)
+    )
     return Diagnostic(
         diagnostic_code=code,
         severity=severity,
         diagnostic_message=" ".join(parts),
         conformance_phase=ConformancePhase.CORPORATE_SEMANTICS,
         subject_ref=subject,
+        diagnostic_details=tuple(details),
     )
 
 
@@ -279,11 +311,13 @@ def _run_conditional(
     data: dict[str, Any],
     check: dict[str, Any],
     statement: str | None,
+    requirement_code: str | None = None,
 ) -> list[Diagnostic]:
     code = str(check.get("diagnostic_code") or check.get("check_id") or "DAMS-REQ")
     sev = _severity(check.get("severity"))
     rem = check.get("remediation")
     out: list[Diagnostic] = []
+    req_kw = {"requirement_code": requirement_code}
 
     if template == "implementation_scope_solution":
         if data.get("implementation_scope") != "solution":
@@ -295,6 +329,7 @@ def _run_conditional(
                     subject=subject,
                     remediation=rem,
                     statement=statement,
+                    **req_kw,
                 )
             )
         return out
@@ -309,6 +344,7 @@ def _run_conditional(
                     subject=subject,
                     remediation=rem,
                     statement=statement,
+                    **req_kw,
                 )
             )
         return out
@@ -333,6 +369,7 @@ def _run_conditional(
                         subject=subject,
                         remediation=rem,
                         statement=statement,
+                        requirement_code=requirement_code,
                     )
                 )
             return out
@@ -349,6 +386,7 @@ def _run_conditional(
                     subject=subject,
                     remediation=rem,
                     statement=statement,
+                    requirement_code=requirement_code,
                 )
             )
         return out
@@ -366,6 +404,7 @@ def _run_conditional(
                     subject=subject,
                     remediation=rem,
                     statement=statement,
+                    requirement_code=requirement_code,
                 )
             )
         kind = el.get("business_key_kind")
@@ -382,6 +421,7 @@ def _run_conditional(
                     subject=subject,
                     remediation=rem,
                     statement=statement,
+                    requirement_code=requirement_code,
                 )
             )
         elif kind == "surrogate" and not _filled(el.get("identity_rule")):
@@ -396,6 +436,7 @@ def _run_conditional(
                     subject=subject,
                     remediation=rem,
                     statement=statement,
+                    requirement_code=requirement_code,
                 )
             )
         elif kind == "surrogate" and not _filled(keys) and _filled(el.get("identity_rule")):
@@ -421,6 +462,7 @@ def _run_conditional(
                 subject=subject,
                 remediation=rem,
                 statement=statement,
+                requirement_code=requirement_code,
             )
         )
         return out
@@ -443,6 +485,7 @@ def _run_conditional(
                         subject=subject,
                         remediation=rem,
                         statement=statement,
+                        requirement_code=requirement_code,
                     )
                 )
             return out
@@ -459,6 +502,7 @@ def _run_conditional(
                         subject=subject,
                         remediation=rem,
                         statement=statement,
+                        requirement_code=requirement_code,
                     )
                 )
             return out
@@ -475,6 +519,7 @@ def _run_conditional(
                         subject=subject,
                         remediation=rem,
                         statement=statement,
+                        requirement_code=requirement_code,
                     )
                 )
             elif not _filled(rationale):
@@ -489,6 +534,7 @@ def _run_conditional(
                         subject=subject,
                         remediation=rem,
                         statement=statement,
+                        requirement_code=requirement_code,
                     )
                 )
             return out
@@ -505,6 +551,7 @@ def _run_conditional(
                     subject=subject,
                     remediation=rem,
                     statement=statement,
+                    requirement_code=requirement_code,
                 )
             )
         return out
@@ -540,6 +587,7 @@ def _run_conditional(
                     subject=subject,
                     remediation=rem,
                     statement=statement,
+                    requirement_code=requirement_code,
                 )
             )
         return out
@@ -571,6 +619,7 @@ def _run_conditional(
                             subject=subject,
                             remediation=rem,
                             statement=statement,
+                            requirement_code=requirement_code,
                         )
                     )
             elif status == "derived" and not (
@@ -587,6 +636,7 @@ def _run_conditional(
                         subject=subject,
                         remediation=rem,
                         statement=statement,
+                        requirement_code=requirement_code,
                     )
                 )
             return out
@@ -607,6 +657,7 @@ def _run_conditional(
                     subject=subject,
                     remediation=rem,
                     statement=statement,
+                    requirement_code=requirement_code,
                 )
             )
         return out
@@ -627,6 +678,7 @@ def _run_conditional(
                     subject=subject,
                     remediation=rem,
                     statement=statement,
+                    requirement_code=requirement_code,
                 )
             )
         return out
@@ -654,6 +706,7 @@ def _run_conditional(
                 subject=subject,
                 remediation=rem,
                 statement=statement,
+                requirement_code=requirement_code,
             )
         )
         return out
@@ -681,6 +734,7 @@ def _run_conditional(
                         subject=subject,
                         remediation=rem,
                         statement=statement,
+                        requirement_code=requirement_code,
                     )
                 )
             return out
@@ -700,6 +754,7 @@ def _run_conditional(
                 subject=subject,
                 remediation=rem,
                 statement=statement,
+                requirement_code=requirement_code,
             )
         )
         return out
@@ -720,6 +775,7 @@ def _run_conditional(
                     subject=subject,
                     remediation=rem,
                     statement=statement,
+                    requirement_code=requirement_code,
                 )
             )
         return out
@@ -737,6 +793,7 @@ def _run_conditional(
                     subject=subject,
                     remediation=rem,
                     statement=statement,
+                    requirement_code=requirement_code,
                 )
             )
         return out
@@ -762,6 +819,7 @@ def _run_conditional(
                         subject=subject,
                         remediation=rem,
                         statement=statement,
+                        requirement_code=requirement_code,
                     )
                 )
         return out
@@ -782,6 +840,7 @@ def _run_conditional(
                     subject=subject,
                     remediation=rem,
                     statement=statement,
+                    requirement_code=requirement_code,
                 )
             )
         return out
@@ -800,6 +859,7 @@ def _run_conditional(
                     subject=subject,
                     remediation=rem,
                     statement=statement,
+                    requirement_code=requirement_code,
                 )
             )
         return out
@@ -823,6 +883,7 @@ def _run_conditional(
                         subject=subject,
                         remediation=rem,
                         statement=statement,
+                        requirement_code=requirement_code,
                     )
                 )
         if ltype == "datetime" and not _filled(el.get("timezone_policy")):
@@ -836,6 +897,7 @@ def _run_conditional(
                     subject=subject,
                     remediation=rem,
                     statement=statement,
+                    requirement_code=requirement_code,
                 )
             )
         return out
@@ -849,6 +911,7 @@ def _run_conditional(
             subject=subject,
             remediation="Fix formal_checks expression to a supported template.",
             statement=statement,
+            requirement_code=requirement_code,
         )
     )
     return out
@@ -879,6 +942,9 @@ def check_formal_requirements(
         if not _applies(req, data):
             continue
         statement = req.get("statement")
+        requirement_code = req.get("code")
+        if requirement_code is not None:
+            requirement_code = str(requirement_code)
         applies = req.get("applies_to") if isinstance(req.get("applies_to"), dict) else {}
         target_class = str(
             (applies or {}).get("applies_target_class")
@@ -912,6 +978,7 @@ def check_formal_requirements(
                                 subject=subject,
                                 remediation=rem,
                                 statement=statement,
+                                requirement_code=requirement_code,
                             )
                         )
                 elif kind == "at_least_one_slots":
@@ -929,6 +996,7 @@ def check_formal_requirements(
                                 subject=subject,
                                 remediation=rem,
                                 statement=statement,
+                                requirement_code=requirement_code,
                             )
                         )
                 elif kind == "ref_resolves":
@@ -951,6 +1019,7 @@ def check_formal_requirements(
                                     subject=subject,
                                     remediation=rem,
                                     statement=statement,
+                                    requirement_code=requirement_code,
                                 )
                             )
                 elif kind == "slot_min_cardinality":
@@ -969,6 +1038,7 @@ def check_formal_requirements(
                                 subject=subject,
                                 remediation=rem,
                                 statement=statement,
+                                requirement_code=requirement_code,
                             )
                         )
                 elif kind == "conditional_branch":
@@ -981,6 +1051,7 @@ def check_formal_requirements(
                             data=data,
                             check=check,
                             statement=statement,
+                            requirement_code=requirement_code,
                         )
                     )
                 elif kind == "custom":

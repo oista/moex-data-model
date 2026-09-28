@@ -1,0 +1,43 @@
+catalog_id: dams:req-catalog/bad-duplicate-id/0.1
+name: bad_duplicate_id
+requirements:
+  - element_id: dams:req/GEN-902
+    name: first
+    title: First
+    description: Fixture
+    lifecycle_status: active
+    code: GEN-902
+    requirement_level: it_solution
+    requirement_section: GEN
+    statement: Первое требование с дублирующимся идентификатором.
+    applies_to:
+      applicability_id: appl:GEN-902
+      applies_target_class: ModelPackage
+    formal_checks:
+      - check_id: GEN-902.c1
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: name
+        severity: error
+        diagnostic_code: DAMS-REQ-GEN-902.c1
+        remediation: Add name.
+  - element_id: dams:req/GEN-902
+    name: second
+    title: Second
+    description: Fixture
+    lifecycle_status: active
+    code: GEN-903
+    requirement_level: it_solution
+    requirement_section: GEN
+    statement: Второе требование с тем же element_id.
+    applies_to:
+      applicability_id: appl:GEN-903
+      applies_target_class: ModelPackage
+    formal_checks:
+      - check_id: GEN-903.c1
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: name
+        severity: error
+        diagnostic_code: DAMS-REQ-GEN-903.c1
+        remediation: Add name.

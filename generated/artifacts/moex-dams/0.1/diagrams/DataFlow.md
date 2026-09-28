@@ -134,6 +134,8 @@
         
       DataFlow : name
         
+      DataFlow : ownership_inheritance_rule
+        
       DataFlow : owning_unit_ref
         
           

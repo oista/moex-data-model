@@ -12,6 +12,8 @@
         
       Relationship : associative
         
+      Relationship : cardinality_rationale
+        
       Relationship : deprecated_by_ref
         
       Relationship : description
@@ -43,6 +45,17 @@
 
         
       Relationship : name
+        
+      Relationship : relationship_kind
+        
+          
+    
+        
+        
+        Relationship --> "0..1" RelationshipKindEnum : relationship_kind
+        click RelationshipKindEnum href "../RelationshipKindEnum"
+    
+
         
       Relationship : source_entity_ref
         

@@ -139,3 +139,26 @@ sections:
       - target
     filterable:
       - kind
+
+  - id: model-assessment
+    title: Оценка соответствия требованиям модели
+    kind: model-assessment
+    type: entity-table
+    satisfies:
+      - dams:model-assessment
+    source:
+      format: json
+      path: publications/vertical_slice.json
+      select: model_assessment
+    key_column: id
+    columns:
+      - status
+      - requirement_code
+      - severity
+      - subject
+      - finding
+      - remediation
+    filterable:
+      - status
+      - severity
+      - requirement_code

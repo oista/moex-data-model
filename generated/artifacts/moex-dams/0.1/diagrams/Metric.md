@@ -105,6 +105,8 @@
         
       Metric : name
         
+      Metric : ownership_inheritance_rule
+        
       Metric : owning_unit_ref
         
           

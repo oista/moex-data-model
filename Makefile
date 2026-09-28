@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check packages-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate
+.PHONY: viewer viewer-check packages-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples validate-requirements generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -67,6 +67,9 @@ lint-schemas: validate-schemas
 validate-examples:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/validate-examples.ps1
 
+validate-requirements:
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/validate-requirements.ps1
+
 # gen-pydantic → generated/contracts/moex-dams/0.1 (moex_dams_contracts)
 generate-contracts:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/generate-contracts.ps1
@@ -105,4 +108,5 @@ check:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File apps/cli/scripts/check.ps1
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/validate-schemas.ps1
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/validate-examples.ps1
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/validate-requirements.ps1
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/compare-golden.ps1

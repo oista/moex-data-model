@@ -44,6 +44,8 @@
     
 
         
+      HasOwnership : ownership_inheritance_rule
+        
       HasOwnership : owning_unit_ref
         
           

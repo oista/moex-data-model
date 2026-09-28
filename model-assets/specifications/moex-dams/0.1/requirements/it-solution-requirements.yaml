@@ -1,845 +1,812 @@
 catalog_id: dams:req-catalog/it-solution/0.1
 name: it_solution_requirements
 requirements:
-  - element_id: dams:req/GEN-001
-    name: model_package_identity
-    title: Идентичность и ответственность пакета
-    description: Identity, version, lifecycle и ownership пакета модели.
-    lifecycle_status: active
-    code: GEN-001
-    requirement_level: it_solution
-    requirement_section: GEN
-    statement: >-
-      У пакета модели данных ИТ-решения должны быть стабильный идентификатор,
-      понятное название, описание, версия и статус жизненного цикла. Должен быть
-      указан ответственный за данные (владелец данных) либо явно описано, от какого
-      объекта наследуется эта ответственность (например от ИТ-решения или доменного
-      контекста). Локальное уточнение ответственности поверх правила наследования
-      допускается.
-    applies_to:
-      applies_target_class: ModelPackage
-      applies_implementation_scope: solution
-      applies_dams_model_level: solution
-    formal_checks:
-      - check_id: GEN-001.c1
-        kind: slot_required
-        target_class: ModelPackage
-        target_slot: element_id
-        severity: error
-        diagnostic_code: DAMS-STRUCT-001
-        remediation: Укажите стабильный element_id пакета модели.
-      - check_id: GEN-001.c2
-        kind: slot_required
-        target_class: ModelPackage
-        target_slot: name
-        severity: error
-        diagnostic_code: DAMS-STRUCT-002
-        remediation: Укажите техническое имя пакета (name).
-      - check_id: GEN-001.c3
-        kind: slot_required
-        target_class: ModelPackage
-        target_slot: description
-        severity: error
-        remediation: Добавьте краткое описание назначения пакета.
-      - check_id: GEN-001.c4
-        kind: slot_required
-        target_class: ModelPackage
-        target_slot: lifecycle_status
-        severity: error
-        remediation: Укажите lifecycle_status пакета (draft/active/…).
-      - check_id: GEN-001.c5
-        kind: slot_required
-        target_class: ModelPackage
-        target_slot: api_version
-        severity: error
-        remediation: Укажите api_version схемы.
-      - check_id: GEN-001.c6
-        kind: slot_required
-        target_class: ModelPackage
-        target_slot: model_version
-        severity: error
-        remediation: Укажите семантическую версию модели (model_version).
-      - check_id: GEN-001.c7
-        kind: at_least_one_slots
-        target_class: ModelPackage
-        target_slots:
-          - data_owner_ref
-          - ownership_inheritance_rule
-        severity: error
-        diagnostic_code: DAMS-REQ-GEN-001.c7
-        remediation: >-
-          Укажите data_owner_ref и/или ownership_inheritance_rule
-          (наследование от решения или контекста).
-
-  - element_id: dams:req/GEN-002
-    name: solution_binding
-    title: Привязка к ИТ-решению
-    description: Пакет уровня solution ссылается на ИТ-решение.
-    lifecycle_status: active
-    code: GEN-002
-    requirement_level: it_solution
-    requirement_section: GEN
-    statement: >-
-      Пакет модели конкретного ИТ-решения должен ссылаться на одно ИТ-решение
-      и быть помечен как модель уровня решения, а не как общекорпоративная
-      концептуальная модель.
-    applies_to:
-      applies_target_class: ModelPackage
-      applies_implementation_scope: solution
-    formal_checks:
-      - check_id: GEN-002.c1
-        kind: slot_required
-        target_class: ModelPackage
-        target_slot: solution_ref
-        severity: error
-        diagnostic_code: DAMS-REQ-GEN-002.c1
-        remediation: Укажите solution_ref на ИТ-решение из EAM.
-      - check_id: GEN-002.c2
-        kind: conditional_branch
-        target_class: ModelPackage
-        expression: implementation_scope_solution
-        severity: error
-        diagnostic_code: DAMS-REQ-GEN-002.c2
-        remediation: Установите implementation_scope в значение solution.
-
-  - element_id: dams:req/GEN-003
-    name: non_empty_model
-    title: Непустой состав модели
-    description: Пакет содержит logical или physical facet.
-    lifecycle_status: active
-    code: GEN-003
-    requirement_level: it_solution
-    requirement_section: GEN
-    statement: >-
-      Пакет модели ИТ-решения должен содержать хотя бы одну логическую сущность
-      или хотя бы один физический объект данных. Пустой пакет не допускается.
-    applies_to:
-      applies_target_class: ModelPackage
-      applies_implementation_scope: solution
-    formal_checks:
-      - check_id: GEN-003.c1
-        kind: conditional_branch
-        target_class: ModelPackage
-        expression: non_empty_logical_or_physical
-        severity: error
-        diagnostic_code: DAMS-REQ-GEN-003.c1
-        remediation: >-
-          Добавьте хотя бы одну логическую сущность или физический объект данных.
-
-  - element_id: dams:req/GEN-004
-    name: physical_object_semantic_link
-    title: Физические объекты связаны со смыслом
-    description: Data-carrying PhysicalObject имеет entity mapping или technical-only.
-    lifecycle_status: active
-    code: GEN-004
-    requirement_level: it_solution
-    requirement_section: GEN
-    statement: >-
-      Если в пакете описан физический объект, который сам несёт или предоставляет
-      данные (таблица, представление, файл, набор данных, конечная точка API,
-      топик/сообщение и т.п.), для него должно быть показано соответствие
-      логическому смыслу либо явно указано, что объект только технический/служебный,
-      с кратким обоснованием. Инфраструктурные контейнеры (экземпляр БД, пространство
-      имён схемы, бакет как контейнер, соединение, индекс и т.п.) этим требованием
-      не покрываются автоматически.
-    applies_to:
-      applies_target_class: PhysicalObject
-      applies_implementation_scope: solution
-      applies_target_kinds:
-        - table
-        - view
-        - file
-        - dataset
-        - api
-        - endpoint
-        - topic
-        - message
-        - queue
-        - payload
-    formal_checks:
-      - check_id: GEN-004.c1
-        kind: conditional_branch
-        target_class: PhysicalObject
-        expression: data_carrying_entity_mapping_or_technical
-        severity: error
-        diagnostic_code: DAMS-REQ-GEN-004.c1
-        remediation: >-
-          Добавьте Mapping типа entity_physical на логическую сущность либо
-          укажите mapping_coverage_status: technical-only и mapping_rationale.
-
-  - element_id: dams:req/LDM-001
-    name: logical_entity_context
-    title: Контекст и роль данных
-    description: Обязательные context_ref и solution_data_role.
-    lifecycle_status: active
-    code: LDM-001
-    requirement_level: it_solution
-    requirement_section: LDM
-    statement: >-
-      Каждая логическая сущность должна быть отнесена к доменному контексту внутри
-      пакета и к роли данных решения (создаёт/хранит, потребляет или посредничает).
-    applies_to:
-      applies_target_class: LogicalEntity
-      applies_implementation_scope: solution
-    formal_checks:
-      - check_id: LDM-001.c1
-        kind: slot_required
-        target_class: LogicalEntity
-        target_slot: context_ref
-        severity: error
-        remediation: Укажите context_ref на доменный контекст того же пакета.
-      - check_id: LDM-001.c2
-        kind: slot_required
-        target_class: LogicalEntity
-        target_slot: solution_data_role
-        severity: error
-        remediation: Укажите solution_data_role (producer/consumer/intermediary).
-      - check_id: LDM-001.c3
-        kind: ref_resolves
-        target_class: LogicalEntity
-        target_slot: context_ref
-        severity: error
-        diagnostic_code: DAMS-REF-002
-        remediation: Исправьте context_ref — ссылка должна указывать на контекст в пакете.
-
-  - element_id: dams:req/LDM-002
-    name: logical_entity_identity_ownership
-    title: Обозначение и ответственность сущности
-    description: title/name/description/lifecycle и ownership.
-    lifecycle_status: active
-    code: LDM-002
-    requirement_level: it_solution
-    requirement_section: LDM
-    statement: >-
-      У логической сущности должны быть русское бизнес-название, техническое имя,
-      однозначное определение, статус жизненного цикла и ответственный за данные
-      либо применимое правило наследования ответственности.
-    applies_to:
-      applies_target_class: LogicalEntity
-    formal_checks:
-      - check_id: LDM-002.c1
-        kind: slot_required
-        target_class: LogicalEntity
-        target_slot: title
-        severity: error
-        diagnostic_code: DAMS-REQ-LDM-002.c1
-        remediation: Укажите русское бизнес-название (title) в единственном числе.
-      - check_id: LDM-002.c2
-        kind: slot_required
-        target_class: LogicalEntity
-        target_slot: name
-        severity: error
-        remediation: Укажите техническое имя сущности (name).
-      - check_id: LDM-002.c3
-        kind: slot_required
-        target_class: LogicalEntity
-        target_slot: description
-        severity: error
-        remediation: Добавьте однозначное определение сущности.
-      - check_id: LDM-002.c4
-        kind: slot_required
-        target_class: LogicalEntity
-        target_slot: lifecycle_status
-        severity: error
-        remediation: Укажите lifecycle_status сущности.
-      - check_id: LDM-002.c5
-        kind: at_least_one_slots
-        target_class: LogicalEntity
-        target_slots:
-          - data_owner_ref
-          - data_steward_ref
-          - ownership_inheritance_rule
-        severity: error
-        diagnostic_code: DAMS-REQ-LDM-002.c5
-        remediation: >-
-          Укажите data_owner_ref, data_steward_ref и/или ownership_inheritance_rule.
-
-  - element_id: dams:req/LDM-003
-    name: logical_entity_classification
-    title: Классификация сущности
-    description: entity_type, data_class, business_importance, governance.
-    lifecycle_status: active
-    code: LDM-003
-    requirement_level: it_solution
-    requirement_section: LDM
-    statement: >-
-      Для логической сущности должны быть независимо указаны архитектурная роль,
-      природа данных, важность для бизнеса и базовая классификация управления
-      доступом/чувствительностью. Эти признаки не подменяют друг друга.
-    applies_to:
-      applies_target_class: LogicalEntity
-    formal_checks:
-      - check_id: LDM-003.c1
-        kind: slot_required
-        target_class: LogicalEntity
-        target_slot: entity_type
-        severity: error
-        diagnostic_code: DAMS-REQ-LDM-003.c1
-        remediation: Укажите архитектурную роль (entity_type).
-      - check_id: LDM-003.c2
-        kind: slot_required
-        target_class: LogicalEntity
-        target_slot: data_class
-        severity: error
-        remediation: Укажите природу данных (data_class).
-      - check_id: LDM-003.c3
-        kind: slot_required
-        target_class: LogicalEntity
-        target_slot: business_importance
-        severity: error
-        remediation: Укажите business_importance сущности.
-      - check_id: LDM-003.c4
-        kind: slot_required
-        target_class: LogicalEntity
-        target_slot: governance_classification
-        severity: error
-        remediation: Укажите governance_classification.
-
-  - element_id: dams:req/LDM-004
-    name: identity_rule_and_key
-    title: Правило идентичности
-    description: identity_rule и ключ; surrogate alone insufficient.
-    lifecycle_status: active
-    code: LDM-004
-    requirement_level: it_solution
-    requirement_section: LDM
-    statement: >-
-      Для логической сущности должно быть описано, по каким деловым признакам два
-      экземпляра считаются одним и тем же объектом, и указан характер ключа
-      (натуральный, составной, внешний, локальный, суррогатный, производный)
-      и/или состав ключевых атрибутов. Одного технического суррогатного ключа
-      без делового правила для нетехнической сущности недостаточно.
-    applies_to:
-      applies_target_class: LogicalEntity
-    formal_checks:
-      - check_id: LDM-004.c1
-        kind: conditional_branch
-        target_class: LogicalEntity
-        expression: ldm004_identity
-        severity: error
-        diagnostic_code: DAMS-REQ-LDM-004.c1
-        remediation: >-
-          Добавьте identity_rule и business_key_kind и/или key_attribute_refs.
-          Для нетехнической сущности одного surrogate недостаточно.
-
-  - element_id: dams:req/LDM-005
-    name: logical_entity_has_attributes
-    title: Наличие характеристик
-    description: ≥1 attribute unless technical with rationale.
-    lifecycle_status: active
-    code: LDM-005
-    requirement_level: it_solution
-    requirement_section: LDM
-    statement: >-
-      У логической сущности должен быть хотя бы один логический атрибут.
-      Исключение — техническая сущность с письменным обоснованием, почему
-      характеристик нет.
-    applies_to:
-      applies_target_class: LogicalEntity
-    formal_checks:
-      - check_id: LDM-005.c1
-        kind: conditional_branch
-        target_class: LogicalEntity
-        expression: ldm005_attributes
-        severity: error
-        diagnostic_code: DAMS-REQ-LDM-005.c1
-        remediation: >-
-          Добавьте хотя бы один атрибут либо для technical укажите
-          isolation_rationale или alignment_rationale.
-
-  - element_id: dams:req/LDM-006
-    name: conceptual_alignment
-    title: Связь с корпоративными понятиями
-    description: Status-driven conceptual alignment.
-    lifecycle_status: active
-    code: LDM-006
-    requirement_level: it_solution
-    requirement_section: LDM
-    statement: >-
-      Логическая сущность должна быть прослеживаемо связана с корпоративным
-      понятием либо иметь допустимый статус выравнивания с обоснованием:
-      «ожидает решения», «только локальный смысл» или «не применимо» (только для
-      технических сущностей). Ссылка на корпоративное понятие и пояснение характера
-      реализации могут присутствовать одновременно.
-    applies_to:
-      applies_target_class: LogicalEntity
-    formal_checks:
-      - check_id: LDM-006.c1
-        kind: conditional_branch
-        target_class: LogicalEntity
-        expression: ldm006_alignment
-        severity: error
-        diagnostic_code: DAMS-REQ-LDM-006.c1
-        remediation: >-
-          Укажите conceptual_entity_refs (aligned) либо conceptual_alignment_status
-          с alignment_rationale (pending/local-only; not-applicable только для technical).
-
-  - element_id: dams:req/LDM-007
-    name: semantic_inclusion
-    title: Семантическая включённость
-    description: Relationship / conceptual / isolation — не physical mapping alone.
-    lifecycle_status: active
-    code: LDM-007
-    requirement_level: it_solution
-    requirement_section: LDM
-    statement: >-
-      Нетехническая логическая сущность не должна быть изолированной: должна быть
-      связь с другой логической сущностью, либо выравнивание/реализация корпоративного
-      понятия, либо письменное обоснование изоляции. Одного только отображения на
-      таблицу/API недостаточно, чтобы считать сущность включённой в смысловую модель.
-    applies_to:
-      applies_target_class: LogicalEntity
-    formal_checks:
-      - check_id: LDM-007.c1
-        kind: conditional_branch
-        target_class: LogicalEntity
-        expression: ldm007_semantic_inclusion
-        severity: error
-        diagnostic_code: DAMS-REQ-LDM-007.c1
-        remediation: >-
-          Добавьте связь с другой сущностью, conceptual alignment/realizes
-          или isolation_rationale. Physical mapping сам по себе не достаточен.
-
-  - element_id: dams:req/ATR-001
-    name: logical_attribute_core
-    title: Основные свойства атрибута
-    description: owner, type, required, multivalued.
-    lifecycle_status: active
-    code: ATR-001
-    requirement_level: it_solution
-    requirement_section: ATR
-    statement: >-
-      У логического атрибута должны быть указаны владеющая сущность, логический тип,
-      обязательность заполнения и признак множественности.
-    applies_to:
-      applies_target_class: LogicalAttribute
-    formal_checks:
-      - check_id: ATR-001.c1
-        kind: slot_required
-        target_class: LogicalAttribute
-        target_slot: owner_entity_ref
-        severity: error
-        remediation: Укажите owner_entity_ref родительской сущности.
-      - check_id: ATR-001.c2
-        kind: slot_required
-        target_class: LogicalAttribute
-        target_slot: logical_type
-        severity: error
-        remediation: Укажите logical_type атрибута.
-      - check_id: ATR-001.c3
-        kind: slot_required
-        target_class: LogicalAttribute
-        target_slot: required
-        severity: error
-        remediation: Явно укажите обязательность (required).
-      - check_id: ATR-001.c4
-        kind: slot_required
-        target_class: LogicalAttribute
-        target_slot: multivalued
-        severity: error
-        remediation: Явно укажите признак множественности (multivalued).
-
-  - element_id: dams:req/ATR-002
-    name: attribute_naming
-    title: Именование атрибута
-    description: Wave 2 soft — lower_snake_case technical name.
-    lifecycle_status: active
-    code: ATR-002
-    requirement_level: it_solution
-    requirement_section: ATR
-    statement: >-
-      Техническое имя логического атрибута должно быть в стиле нижнего регистра
-      с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных,
-      длину поля или название таблицы.
-    applies_to:
-      applies_target_class: LogicalAttribute
-    formal_checks:
-      - check_id: ATR-002.c1
-        kind: conditional_branch
-        target_class: LogicalAttribute
-        expression: atr002_snake_case
-        severity: warning
-        diagnostic_code: DAMS-REQ-ATR-002.c1
-        remediation: Переименуйте name в lower_snake_case (например party_id).
-
-  - element_id: dams:req/ATR-005
-    name: attribute_physical_coverage
-    title: Отображение атрибута на реализацию
-    description: Mapping coverage for applicable attributes.
-    lifecycle_status: active
-    code: ATR-005
-    requirement_level: it_solution
-    requirement_section: ATR
-    statement: >-
-      Для логического атрибута, который считается подлежащим физической реализации
-      в этом пакете (не помечен как планируемый, производный, унаследованный,
-      неприменимый или только технический), должно быть задано соответствие
-      физическому полю и/или правило вычисления, либо письменное обоснование
-      отсутствия. Поле и правило вычисления могут быть указаны вместе. Статус
-      «планируется» требует обоснования и не должен быть постоянным обходом для
-      уже активных элементов.
-    applies_to:
-      applies_target_class: LogicalAttribute
-    formal_checks:
-      - check_id: ATR-005.c1
-        kind: conditional_branch
-        target_class: LogicalAttribute
-        expression: atr005_mapping_coverage
-        severity: error
-        diagnostic_code: DAMS-REQ-ATR-005.c1
-        remediation: >-
-          Добавьте field_mapping и/или derived_expression, либо укажите
-          mapping_coverage_status (planned/derived/inherited/technical-only/not-applicable)
-          с mapping_rationale при необходимости.
-      - check_id: ATR-005.c2
-        kind: conditional_branch
-        target_class: LogicalAttribute
-        expression: planned_on_active_warning
-        severity: warning
-        diagnostic_code: DAMS-REQ-ATR-005.c2
-        remediation: >-
-          Для активных элементов замените planned на фактическое mapping
-          или повысьте зрелость статуса. planned не постоянный обход.
-
-  - element_id: dams:req/REF-001
-    name: relationship_endpoints
-    title: Концы связи
-    description: source/target refs resolve.
-    lifecycle_status: active
-    code: REF-001
-    requirement_level: it_solution
-    requirement_section: REF
-    statement: >-
-      У логической связи должны быть явно указаны исходная и целевая сущности,
-      и обе ссылки должны указывать на сущности того же пакета.
-    applies_to:
-      applies_target_class: Relationship
-    formal_checks:
-      - check_id: REF-001.c1
-        kind: slot_required
-        target_class: Relationship
-        target_slot: source_entity_ref
-        severity: error
-        remediation: Укажите исходную сущность связи.
-      - check_id: REF-001.c2
-        kind: slot_required
-        target_class: Relationship
-        target_slot: target_entity_ref
-        severity: error
-        remediation: Укажите целевую сущность связи.
-      - check_id: REF-001.c3
-        kind: ref_resolves
-        target_class: Relationship
-        target_slot: source_entity_ref
-        severity: error
-        diagnostic_code: DAMS-REF-005
-        remediation: Исправьте source_entity_ref — сущность должна быть в пакете.
-      - check_id: REF-001.c4
-        kind: ref_resolves
-        target_class: Relationship
-        target_slot: target_entity_ref
-        severity: error
-        diagnostic_code: DAMS-REF-006
-        remediation: Исправьте target_entity_ref — сущность должна быть в пакете.
-
-  - element_id: dams:req/REF-002
-    name: relationship_cardinality
-    title: Кардинальность связи
-    description: Four cardinality slots when active.
-    lifecycle_status: active
-    code: REF-002
-    requirement_level: it_solution
-    requirement_section: REF
-    statement: >-
-      У активной логической связи должны быть заданы минимальная и максимальная
-      кардинальность с обеих сторон. Для черновика допускается незаполненность
-      только при соответствующем статусе жизненного цикла и кратком обосновании.
-    applies_to:
-      applies_target_class: Relationship
-    formal_checks:
-      - check_id: REF-002.c1
-        kind: conditional_branch
-        target_class: Relationship
-        expression: ref002_cardinality
-        severity: error
-        diagnostic_code: DAMS-REQ-REF-002.c1
-        remediation: >-
-          Задайте source/target min и max cardinality либо для draft укажите
-          cardinality_rationale.
-
-  - element_id: dams:req/PDM-001
-    name: physical_object_core
-    title: Основные свойства физического объекта
-    description: system, kind, name, technology, schema, lifecycle.
-    lifecycle_status: active
-    code: PDM-001
-    requirement_level: it_solution
-    requirement_section: PDM
-    statement: >-
-      У физического объекта данных должны быть указаны ИТ-система, вид объекта,
-      нативное имя/идентификатор, технология и ссылка на нативную схему или формат,
-      а также статус жизненного цикла.
-    applies_to:
-      applies_target_class: PhysicalObject
-    formal_checks:
-      - check_id: PDM-001.c1
-        kind: slot_required
-        target_class: PhysicalObject
-        target_slot: system_ref
-        severity: error
-        remediation: Укажите system_ref на ИТ-систему.
-      - check_id: PDM-001.c2
-        kind: slot_required
-        target_class: PhysicalObject
-        target_slot: object_kind
-        severity: error
-        remediation: Укажите вид физического объекта (object_kind).
-      - check_id: PDM-001.c3
-        kind: slot_required
-        target_class: PhysicalObject
-        target_slot: qualified_name
-        severity: error
-        remediation: Укажите квалифицированное нативное имя.
-      - check_id: PDM-001.c4
-        kind: slot_required
-        target_class: PhysicalObject
-        target_slot: technology
-        severity: error
-        remediation: Укажите технологию хранения/предоставления.
-      - check_id: PDM-001.c5
-        kind: slot_required
-        target_class: PhysicalObject
-        target_slot: native_schema_ref
-        severity: error
-        remediation: Укажите ссылку на нативную схему или формат.
-      - check_id: PDM-001.c6
-        kind: slot_required
-        target_class: PhysicalObject
-        target_slot: lifecycle_status
-        severity: error
-        remediation: Укажите lifecycle_status физического объекта.
-
-  - element_id: dams:req/PDM-002
-    name: physical_field_core
-    title: Основные свойства физического поля
-    description: parent, native name/type, required.
-    lifecycle_status: active
-    code: PDM-002
-    requirement_level: it_solution
-    requirement_section: PDM
-    statement: >-
-      У физического поля должны быть указаны родительский объект, нативное имя,
-      нативный тип и семантика обязательности (допустимость пустого значения).
-    applies_to:
-      applies_target_class: PhysicalField
-    formal_checks:
-      - check_id: PDM-002.c1
-        kind: slot_required
-        target_class: PhysicalField
-        target_slot: physical_object_ref
-        severity: error
-        remediation: Укажите physical_object_ref родительского объекта.
-      - check_id: PDM-002.c2
-        kind: slot_required
-        target_class: PhysicalField
-        target_slot: native_name
-        severity: error
-        remediation: Укажите native_name поля.
-      - check_id: PDM-002.c3
-        kind: slot_required
-        target_class: PhysicalField
-        target_slot: native_type
-        severity: error
-        remediation: Укажите native_type поля.
-      - check_id: PDM-002.c4
-        kind: slot_required
-        target_class: PhysicalField
-        target_slot: required
-        severity: error
-        remediation: Явно укажите required (nullable semantics).
-
-  - element_id: dams:req/PDM-003
-    name: entity_physical_mapping
-    title: Отображение сущности и физического объекта
-    description: Explicit entity_physical Mapping only.
-    lifecycle_status: active
-    code: PDM-003
-    requirement_level: it_solution
-    requirement_section: PDM
-    statement: >-
-      Для физического объекта, который несёт данные и не помечен как только
-      технический, должно существовать явное отображение уровня сущности на одну
-      или несколько логических сущностей. Наличие отображений отдельных полей само
-      по себе не засчитывается как доказательство на уровне объекта.
-    applies_to:
-      applies_target_class: PhysicalObject
-      applies_target_kinds:
-        - table
-        - view
-        - file
-        - dataset
-        - api
-        - endpoint
-        - topic
-        - message
-        - queue
-        - payload
-    formal_checks:
-      - check_id: PDM-003.c1
-        kind: conditional_branch
-        target_class: PhysicalObject
-        expression: pdm003_entity_physical
-        severity: error
-        diagnostic_code: DAMS-REQ-PDM-003.c1
-        remediation: >-
-          Добавьте Mapping с mapping_type entity_physical между этим объектом
-          и ≥1 логической сущностью, либо technical-only + mapping_rationale.
-
-  - element_id: dams:req/PDM-004
-    name: field_attribute_mapping
-    title: Отображение поля и атрибута
-    description: Field-level mapping or exception.
-    lifecycle_status: active
-    code: PDM-004
-    requirement_level: it_solution
-    requirement_section: PDM
-    statement: >-
-      Для физического поля, не помеченного как только техническое, должно быть
-      отображение на логический атрибут и/или правило преобразования, либо
-      письменное исключение. Источник-поле и выражение преобразования могут быть
-      указаны вместе.
-    applies_to:
-      applies_target_class: PhysicalField
-    formal_checks:
-      - check_id: PDM-004.c1
-        kind: conditional_branch
-        target_class: PhysicalField
-        expression: pdm004_field_mapping
-        severity: error
-        diagnostic_code: DAMS-REQ-PDM-004.c1
-        remediation: >-
-          Добавьте field_mapping (и при необходимости transformation_expression)
-          либо mapping_coverage_status с mapping_rationale.
-
-  - element_id: dams:req/CLS-001
-    name: classification_axes_independent
-    title: Независимость осей классификации
-    description: Wave 2 warning — entity_type vs data_class.
-    lifecycle_status: active
-    code: CLS-001
-    requirement_level: it_solution
-    requirement_section: CLS
-    statement: >-
-      Архитектурная роль сущности и природа данных — разные оси классификации
-      и должны заполняться независимо. Нельзя подменять одно другим.
-    applies_to:
-      applies_target_class: LogicalEntity
-    formal_checks:
-      - check_id: CLS-001.c1
-        kind: conditional_branch
-        target_class: LogicalEntity
-        expression: cls001_axes_present
-        severity: warning
-        diagnostic_code: DAMS-REQ-CLS-001.c1
-        remediation: Заполните и entity_type, и data_class отдельными значениями.
-
-  - element_id: dams:req/FLW-001
-    name: cross_solution_dataflow
-    title: Потоки через границы решений
-    description: Wave 2 soft — DataFlow when providing/consuming across solutions.
-    lifecycle_status: active
-    code: FLW-001
-    requirement_level: it_solution
-    requirement_section: FLW
-    statement: >-
-      Если решение предоставляет или получает данные за пределами своей границы,
-      потоки данных и соответствия должны быть описаны явно. На этапе первичной
-      публикации отсутствие таких описаний отмечается как предупреждение.
-    applies_to:
-      applies_target_class: ModelPackage
-      applies_implementation_scope: solution
-    formal_checks:
-      - check_id: FLW-001.c1
-        kind: conditional_branch
-        target_class: ModelPackage
-        expression: flw001_soft_presence
-        severity: warning
-        diagnostic_code: DAMS-REQ-FLW-001.c1
-        remediation: >-
-          При межрешенческих обменах добавьте описание потоков данных;
-          иначе предупреждение можно игнорировать до калибровки.
-
-  - element_id: dams:req/CLS-002
-    name: security_classification_soft
-    title: Режим защиты данных
-    description: Wave 2 warning — security_classification when governance is confidential/restricted.
-    lifecycle_status: active
-    code: CLS-002
-    requirement_level: it_solution
-    requirement_section: CLS
-    statement: >-
-      Если к сущности применена повышенная классификация управления доступом,
-      рекомендуется отдельно указать требуемый режим защиты данных. Это не
-      заменяет классификацию управления и не смешивается с критичностью процесса.
-    applies_to:
-      applies_target_class: LogicalEntity
-    formal_checks:
-      - check_id: CLS-002.c1
-        kind: conditional_branch
-        target_class: LogicalEntity
-        expression: cls002_security_soft
-        severity: warning
-        diagnostic_code: DAMS-REQ-CLS-002.c1
-        remediation: >-
-          Укажите security_classification (internal/confidential/restricted)
-          для сущностей с confidential/restricted governance.
-
-  - element_id: dams:req/REF-003
-    name: relationship_kind_soft
-    title: Тип логической связи
-    description: Wave 2 warning — relationship_kind recommended for active links.
-    lifecycle_status: active
-    code: REF-003
-    requirement_level: it_solution
-    requirement_section: REF
-    statement: >-
-      Для активной логической связи рекомендуется указать тип отношения
-      (ассоциация, композиция, ссылка на справочник и т.п.), чтобы отличать
-      смысловые связи от технических. На этапе первичной публикации отсутствие
-      типа отмечается предупреждением.
-    applies_to:
-      applies_target_class: Relationship
-    formal_checks:
-      - check_id: REF-003.c1
-        kind: conditional_branch
-        target_class: Relationship
-        expression: ref003_kind_soft
-        severity: warning
-        diagnostic_code: DAMS-REQ-REF-003.c1
-        remediation: Укажите relationship_kind для активной связи.
-
-  - element_id: dams:req/ATR-004
-    name: attribute_type_specific_soft
-    title: Дополнительные свойства по типу атрибута
-    description: Wave 2 warning — currency/unit/timezone when type implies them.
-    lifecycle_status: active
-    code: ATR-004
-    requirement_level: it_solution
-    requirement_section: ATR
-    statement: >-
-      Для денежных величин, количеств и отметок времени рекомендуется указать
-      валюту или ссылку на атрибут валюты, единицу измерения и политику
-      часового пояса соответственно. На этапе первичной публикации это
-      предупреждение, а не блокирующая ошибка.
-    applies_to:
-      applies_target_class: LogicalAttribute
-    formal_checks:
-      - check_id: ATR-004.c1
-        kind: conditional_branch
-        target_class: LogicalAttribute
-        expression: atr004_type_specific_soft
-        severity: warning
-        diagnostic_code: DAMS-REQ-ATR-004.c1
-        remediation: >-
-          Для decimal/datetime при необходимости добавьте currency_attribute_ref,
-          unit_code или timezone_policy.
+- element_id: dams:req/GEN-001
+  name: model_package_identity
+  title: Идентичность и ответственность пакета
+  description: Identity, version, lifecycle и ownership пакета модели.
+  lifecycle_status: active
+  code: GEN-001
+  requirement_level: it_solution
+  requirement_section: GEN
+  statement: У пакета модели данных ИТ-решения должны быть стабильный идентификатор, понятное название,
+    описание, версия и статус жизненного цикла. Должен быть указан ответственный за данные (владелец данных)
+    либо явно описано, от какого объекта наследуется эта ответственность (например от ИТ-решения или доменного
+    контекста). Локальное уточнение ответственности поверх правила наследования допускается.
+  applies_to:
+    applicability_id: appl:GEN-001
+    applies_target_class: ModelPackage
+    applies_implementation_scope: solution
+    applies_dams_model_level: solution
+  formal_checks:
+  - check_id: GEN-001.c1
+    kind: slot_required
+    target_class: ModelPackage
+    target_slot: element_id
+    severity: error
+    diagnostic_code: DAMS-STRUCT-001
+    remediation: Укажите стабильный element_id пакета модели.
+  - check_id: GEN-001.c2
+    kind: slot_required
+    target_class: ModelPackage
+    target_slot: name
+    severity: error
+    diagnostic_code: DAMS-STRUCT-002
+    remediation: Укажите техническое имя пакета (name).
+  - check_id: GEN-001.c3
+    kind: slot_required
+    target_class: ModelPackage
+    target_slot: description
+    severity: error
+    remediation: Добавьте краткое описание назначения пакета.
+    diagnostic_code: DAMS-REQ-GEN-001.c3
+  - check_id: GEN-001.c4
+    kind: slot_required
+    target_class: ModelPackage
+    target_slot: lifecycle_status
+    severity: error
+    remediation: Укажите lifecycle_status пакета (draft/active/…).
+    diagnostic_code: DAMS-REQ-GEN-001.c4
+  - check_id: GEN-001.c5
+    kind: slot_required
+    target_class: ModelPackage
+    target_slot: api_version
+    severity: error
+    remediation: Укажите api_version схемы.
+    diagnostic_code: DAMS-REQ-GEN-001.c5
+  - check_id: GEN-001.c6
+    kind: slot_required
+    target_class: ModelPackage
+    target_slot: model_version
+    severity: error
+    remediation: Укажите семантическую версию модели (model_version).
+    diagnostic_code: DAMS-REQ-GEN-001.c6
+  - check_id: GEN-001.c7
+    kind: at_least_one_slots
+    target_class: ModelPackage
+    target_slots:
+    - data_owner_ref
+    - ownership_inheritance_rule
+    severity: error
+    diagnostic_code: DAMS-REQ-GEN-001.c7
+    remediation: Укажите data_owner_ref и/или ownership_inheritance_rule (наследование от решения или
+      контекста).
+- element_id: dams:req/GEN-002
+  name: solution_binding
+  title: Привязка к ИТ-решению
+  description: Пакет уровня solution ссылается на ИТ-решение.
+  lifecycle_status: active
+  code: GEN-002
+  requirement_level: it_solution
+  requirement_section: GEN
+  statement: Пакет модели конкретного ИТ-решения должен ссылаться на одно ИТ-решение и быть помечен как
+    модель уровня решения, а не как общекорпоративная концептуальная модель.
+  applies_to:
+    applicability_id: appl:GEN-002
+    applies_target_class: ModelPackage
+  formal_checks:
+  - check_id: GEN-002.c1
+    kind: slot_required
+    target_class: ModelPackage
+    target_slot: solution_ref
+    severity: error
+    diagnostic_code: DAMS-REQ-GEN-002.c1
+    remediation: Укажите solution_ref на ИТ-решение из EAM.
+  - check_id: GEN-002.c2
+    kind: conditional_branch
+    target_class: ModelPackage
+    expression: implementation_scope_solution
+    severity: error
+    diagnostic_code: DAMS-REQ-GEN-002.c2
+    remediation: Установите implementation_scope в значение solution.
+- element_id: dams:req/GEN-003
+  name: non_empty_model
+  title: Непустой состав модели
+  description: Пакет содержит logical или physical facet.
+  lifecycle_status: active
+  code: GEN-003
+  requirement_level: it_solution
+  requirement_section: GEN
+  statement: Пакет модели ИТ-решения должен содержать хотя бы одну логическую сущность или хотя бы один
+    физический объект данных. Пустой пакет не допускается.
+  applies_to:
+    applicability_id: appl:GEN-003
+    applies_target_class: ModelPackage
+    applies_implementation_scope: solution
+  formal_checks:
+  - check_id: GEN-003.c1
+    kind: conditional_branch
+    target_class: ModelPackage
+    expression: non_empty_logical_or_physical
+    severity: error
+    diagnostic_code: DAMS-REQ-GEN-003.c1
+    remediation: Добавьте хотя бы одну логическую сущность или физический объект данных.
+- element_id: dams:req/GEN-004
+  name: physical_object_semantic_link
+  title: Физические объекты связаны со смыслом
+  description: Data-carrying PhysicalObject имеет entity mapping или technical-only.
+  lifecycle_status: active
+  code: GEN-004
+  requirement_level: it_solution
+  requirement_section: GEN
+  statement: Если в пакете описан физический объект, который сам несёт или предоставляет данные (таблица,
+    представление, файл, набор данных, конечная точка API, топик/сообщение и т.п.), для него должно быть
+    показано соответствие логическому смыслу либо явно указано, что объект только технический/служебный,
+    с кратким обоснованием. Инфраструктурные контейнеры (экземпляр БД, пространство имён схемы, бакет
+    как контейнер, соединение, индекс и т.п.) этим требованием не покрываются автоматически.
+  applies_to:
+    applicability_id: appl:GEN-004
+    applies_target_class: PhysicalObject
+    applies_implementation_scope: solution
+    applies_target_kinds:
+    - table
+    - view
+    - file
+    - dataset
+    - api
+    - endpoint
+    - topic
+    - message
+    - queue
+    - payload
+  formal_checks:
+  - check_id: GEN-004.c1
+    kind: conditional_branch
+    target_class: PhysicalObject
+    expression: data_carrying_entity_mapping_or_technical
+    severity: error
+    diagnostic_code: DAMS-REQ-GEN-004.c1
+    remediation: 'Добавьте Mapping типа entity_physical на логическую сущность либо укажите mapping_coverage_status:
+      technical-only и mapping_rationale.'
+- element_id: dams:req/LDM-001
+  name: logical_entity_context
+  title: Контекст и роль данных
+  description: Обязательные context_ref и solution_data_role.
+  lifecycle_status: active
+  code: LDM-001
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: Каждая логическая сущность должна быть отнесена к доменному контексту внутри пакета и к роли
+    данных решения (создаёт/хранит, потребляет или посредничает).
+  applies_to:
+    applicability_id: appl:LDM-001
+    applies_target_class: LogicalEntity
+    applies_implementation_scope: solution
+  formal_checks:
+  - check_id: LDM-001.c1
+    kind: slot_required
+    target_class: LogicalEntity
+    target_slot: context_ref
+    severity: error
+    remediation: Укажите context_ref на доменный контекст того же пакета.
+    diagnostic_code: DAMS-REQ-LDM-001.c1
+  - check_id: LDM-001.c2
+    kind: slot_required
+    target_class: LogicalEntity
+    target_slot: solution_data_role
+    severity: error
+    remediation: Укажите solution_data_role (producer/consumer/intermediary).
+    diagnostic_code: DAMS-REQ-LDM-001.c2
+  - check_id: LDM-001.c3
+    kind: ref_resolves
+    target_class: LogicalEntity
+    target_slot: context_ref
+    severity: error
+    diagnostic_code: DAMS-REF-002
+    remediation: Исправьте context_ref — ссылка должна указывать на контекст в пакете.
+- element_id: dams:req/LDM-002
+  name: logical_entity_identity_ownership
+  title: Обозначение и ответственность сущности
+  description: title/name/description/lifecycle и ownership.
+  lifecycle_status: active
+  code: LDM-002
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: У логической сущности должны быть русское бизнес-название, техническое имя, однозначное определение,
+    статус жизненного цикла и ответственный за данные либо применимое правило наследования ответственности.
+  applies_to:
+    applicability_id: appl:LDM-002
+    applies_target_class: LogicalEntity
+  formal_checks:
+  - check_id: LDM-002.c1
+    kind: slot_required
+    target_class: LogicalEntity
+    target_slot: title
+    severity: error
+    diagnostic_code: DAMS-REQ-LDM-002.c1
+    remediation: Укажите русское бизнес-название (title) в единственном числе.
+  - check_id: LDM-002.c2
+    kind: slot_required
+    target_class: LogicalEntity
+    target_slot: name
+    severity: error
+    remediation: Укажите техническое имя сущности (name).
+    diagnostic_code: DAMS-REQ-LDM-002.c2
+  - check_id: LDM-002.c3
+    kind: slot_required
+    target_class: LogicalEntity
+    target_slot: description
+    severity: error
+    remediation: Добавьте однозначное определение сущности.
+    diagnostic_code: DAMS-REQ-LDM-002.c3
+  - check_id: LDM-002.c4
+    kind: slot_required
+    target_class: LogicalEntity
+    target_slot: lifecycle_status
+    severity: error
+    remediation: Укажите lifecycle_status сущности.
+    diagnostic_code: DAMS-REQ-LDM-002.c4
+  - check_id: LDM-002.c5
+    kind: at_least_one_slots
+    target_class: LogicalEntity
+    target_slots:
+    - data_owner_ref
+    - data_steward_ref
+    - ownership_inheritance_rule
+    severity: error
+    diagnostic_code: DAMS-REQ-LDM-002.c5
+    remediation: Укажите data_owner_ref, data_steward_ref и/или ownership_inheritance_rule.
+- element_id: dams:req/LDM-003
+  name: logical_entity_classification
+  title: Классификация сущности
+  description: entity_type, data_class, business_importance, governance.
+  lifecycle_status: active
+  code: LDM-003
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: Для логической сущности должны быть независимо указаны архитектурная роль, природа данных,
+    важность для бизнеса и базовая классификация управления доступом/чувствительностью. Эти признаки не
+    подменяют друг друга.
+  applies_to:
+    applicability_id: appl:LDM-003
+    applies_target_class: LogicalEntity
+  formal_checks:
+  - check_id: LDM-003.c1
+    kind: slot_required
+    target_class: LogicalEntity
+    target_slot: entity_type
+    severity: error
+    diagnostic_code: DAMS-REQ-LDM-003.c1
+    remediation: Укажите архитектурную роль (entity_type).
+  - check_id: LDM-003.c2
+    kind: slot_required
+    target_class: LogicalEntity
+    target_slot: data_class
+    severity: error
+    remediation: Укажите природу данных (data_class).
+    diagnostic_code: DAMS-REQ-LDM-003.c2
+  - check_id: LDM-003.c3
+    kind: slot_required
+    target_class: LogicalEntity
+    target_slot: business_importance
+    severity: error
+    remediation: Укажите business_importance сущности.
+    diagnostic_code: DAMS-REQ-LDM-003.c3
+  - check_id: LDM-003.c4
+    kind: slot_required
+    target_class: LogicalEntity
+    target_slot: governance_classification
+    severity: error
+    remediation: Укажите governance_classification.
+    diagnostic_code: DAMS-REQ-LDM-003.c4
+- element_id: dams:req/LDM-004
+  name: identity_rule_and_key
+  title: Правило идентичности
+  description: identity_rule и ключ; surrogate alone insufficient.
+  lifecycle_status: active
+  code: LDM-004
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: Для логической сущности должно быть описано, по каким деловым признакам два экземпляра считаются
+    одним и тем же объектом, и указан характер ключа (натуральный, составной, внешний, локальный, суррогатный,
+    производный) и/или состав ключевых атрибутов. Одного технического суррогатного ключа без делового
+    правила для нетехнической сущности недостаточно.
+  applies_to:
+    applicability_id: appl:LDM-004
+    applies_target_class: LogicalEntity
+  formal_checks:
+  - check_id: LDM-004.c1
+    kind: conditional_branch
+    target_class: LogicalEntity
+    expression: ldm004_identity
+    severity: error
+    diagnostic_code: DAMS-REQ-LDM-004.c1
+    remediation: Добавьте identity_rule и business_key_kind и/или key_attribute_refs. Для нетехнической
+      сущности одного surrogate недостаточно.
+- element_id: dams:req/LDM-005
+  name: logical_entity_has_attributes
+  title: Наличие характеристик
+  description: ≥1 attribute unless technical with rationale.
+  lifecycle_status: active
+  code: LDM-005
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: У логической сущности должен быть хотя бы один логический атрибут. Исключение — техническая
+    сущность с письменным обоснованием, почему характеристик нет.
+  applies_to:
+    applicability_id: appl:LDM-005
+    applies_target_class: LogicalEntity
+  formal_checks:
+  - check_id: LDM-005.c1
+    kind: conditional_branch
+    target_class: LogicalEntity
+    expression: ldm005_attributes
+    severity: error
+    diagnostic_code: DAMS-REQ-LDM-005.c1
+    remediation: Добавьте хотя бы один атрибут либо для technical укажите isolation_rationale или alignment_rationale.
+- element_id: dams:req/LDM-006
+  name: conceptual_alignment
+  title: Связь с корпоративными понятиями
+  description: Status-driven conceptual alignment.
+  lifecycle_status: active
+  code: LDM-006
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: 'Логическая сущность должна быть прослеживаемо связана с корпоративным понятием либо иметь
+    допустимый статус выравнивания с обоснованием: «ожидает решения», «только локальный смысл» или «не
+    применимо» (только для технических сущностей). Ссылка на корпоративное понятие и пояснение характера
+    реализации могут присутствовать одновременно.'
+  applies_to:
+    applicability_id: appl:LDM-006
+    applies_target_class: LogicalEntity
+  formal_checks:
+  - check_id: LDM-006.c1
+    kind: conditional_branch
+    target_class: LogicalEntity
+    expression: ldm006_alignment
+    severity: error
+    diagnostic_code: DAMS-REQ-LDM-006.c1
+    remediation: Укажите conceptual_entity_refs (aligned) либо conceptual_alignment_status с alignment_rationale
+      (pending/local-only; not-applicable только для technical).
+- element_id: dams:req/LDM-007
+  name: semantic_inclusion
+  title: Семантическая включённость
+  description: Relationship / conceptual / isolation — не physical mapping alone.
+  lifecycle_status: active
+  code: LDM-007
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: 'Нетехническая логическая сущность не должна быть изолированной: должна быть связь с другой
+    логической сущностью, либо выравнивание/реализация корпоративного понятия, либо письменное обоснование
+    изоляции. Одного только отображения на таблицу/API недостаточно, чтобы считать сущность включённой
+    в смысловую модель.'
+  applies_to:
+    applicability_id: appl:LDM-007
+    applies_target_class: LogicalEntity
+  formal_checks:
+  - check_id: LDM-007.c1
+    kind: conditional_branch
+    target_class: LogicalEntity
+    expression: ldm007_semantic_inclusion
+    severity: error
+    diagnostic_code: DAMS-REQ-LDM-007.c1
+    remediation: Добавьте связь с другой сущностью, conceptual alignment/realizes или isolation_rationale.
+      Physical mapping сам по себе не достаточен.
+- element_id: dams:req/ATR-001
+  name: logical_attribute_core
+  title: Основные свойства атрибута
+  description: owner, type, required, multivalued.
+  lifecycle_status: active
+  code: ATR-001
+  requirement_level: it_solution
+  requirement_section: ATR
+  statement: У логического атрибута должны быть указаны владеющая сущность, логический тип, обязательность
+    заполнения и признак множественности.
+  applies_to:
+    applicability_id: appl:ATR-001
+    applies_target_class: LogicalAttribute
+  formal_checks:
+  - check_id: ATR-001.c1
+    kind: slot_required
+    target_class: LogicalAttribute
+    target_slot: owner_entity_ref
+    severity: error
+    remediation: Укажите owner_entity_ref родительской сущности.
+    diagnostic_code: DAMS-REQ-ATR-001.c1
+  - check_id: ATR-001.c2
+    kind: slot_required
+    target_class: LogicalAttribute
+    target_slot: logical_type
+    severity: error
+    remediation: Укажите logical_type атрибута.
+    diagnostic_code: DAMS-REQ-ATR-001.c2
+  - check_id: ATR-001.c3
+    kind: slot_required
+    target_class: LogicalAttribute
+    target_slot: required
+    severity: error
+    remediation: Явно укажите обязательность (required).
+    diagnostic_code: DAMS-REQ-ATR-001.c3
+  - check_id: ATR-001.c4
+    kind: slot_required
+    target_class: LogicalAttribute
+    target_slot: multivalued
+    severity: error
+    remediation: Явно укажите признак множественности (multivalued).
+    diagnostic_code: DAMS-REQ-ATR-001.c4
+- element_id: dams:req/ATR-002
+  name: attribute_naming
+  title: Именование атрибута
+  description: Wave 2 soft — lower_snake_case technical name.
+  lifecycle_status: active
+  code: ATR-002
+  requirement_level: it_solution
+  requirement_section: ATR
+  statement: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями
+    между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.
+  applies_to:
+    applicability_id: appl:ATR-002
+    applies_target_class: LogicalAttribute
+  formal_checks:
+  - check_id: ATR-002.c1
+    kind: conditional_branch
+    target_class: LogicalAttribute
+    expression: atr002_snake_case
+    severity: warning
+    diagnostic_code: DAMS-REQ-ATR-002.c1
+    remediation: Переименуйте name в lower_snake_case (например party_id).
+- element_id: dams:req/ATR-005
+  name: attribute_physical_coverage
+  title: Отображение атрибута на реализацию
+  description: Mapping coverage for applicable attributes.
+  lifecycle_status: active
+  code: ATR-005
+  requirement_level: it_solution
+  requirement_section: ATR
+  statement: Для логического атрибута, который считается подлежащим физической реализации в этом пакете
+    (не помечен как планируемый, производный, унаследованный, неприменимый или только технический), должно
+    быть задано соответствие физическому полю и/или правило вычисления, либо письменное обоснование отсутствия.
+    Поле и правило вычисления могут быть указаны вместе. Статус «планируется» требует обоснования и не
+    должен быть постоянным обходом для уже активных элементов.
+  applies_to:
+    applicability_id: appl:ATR-005
+    applies_target_class: LogicalAttribute
+  formal_checks:
+  - check_id: ATR-005.c1
+    kind: conditional_branch
+    target_class: LogicalAttribute
+    expression: atr005_mapping_coverage
+    severity: error
+    diagnostic_code: DAMS-REQ-ATR-005.c1
+    remediation: Добавьте field_mapping и/или derived_expression, либо укажите mapping_coverage_status
+      (planned/derived/inherited/technical-only/not-applicable) с mapping_rationale при необходимости.
+  - check_id: ATR-005.c2
+    kind: conditional_branch
+    target_class: LogicalAttribute
+    expression: planned_on_active_warning
+    severity: warning
+    diagnostic_code: DAMS-REQ-ATR-005.c2
+    remediation: Для активных элементов замените planned на фактическое mapping или повысьте зрелость
+      статуса. planned не постоянный обход.
+- element_id: dams:req/REF-001
+  name: relationship_endpoints
+  title: Концы связи
+  description: source/target refs resolve.
+  lifecycle_status: active
+  code: REF-001
+  requirement_level: it_solution
+  requirement_section: REF
+  statement: У логической связи должны быть явно указаны исходная и целевая сущности, и обе ссылки должны
+    указывать на сущности того же пакета.
+  applies_to:
+    applicability_id: appl:REF-001
+    applies_target_class: Relationship
+  formal_checks:
+  - check_id: REF-001.c1
+    kind: slot_required
+    target_class: Relationship
+    target_slot: source_entity_ref
+    severity: error
+    remediation: Укажите исходную сущность связи.
+    diagnostic_code: DAMS-REQ-REF-001.c1
+  - check_id: REF-001.c2
+    kind: slot_required
+    target_class: Relationship
+    target_slot: target_entity_ref
+    severity: error
+    remediation: Укажите целевую сущность связи.
+    diagnostic_code: DAMS-REQ-REF-001.c2
+  - check_id: REF-001.c3
+    kind: ref_resolves
+    target_class: Relationship
+    target_slot: source_entity_ref
+    severity: error
+    diagnostic_code: DAMS-REF-005
+    remediation: Исправьте source_entity_ref — сущность должна быть в пакете.
+  - check_id: REF-001.c4
+    kind: ref_resolves
+    target_class: Relationship
+    target_slot: target_entity_ref
+    severity: error
+    diagnostic_code: DAMS-REF-006
+    remediation: Исправьте target_entity_ref — сущность должна быть в пакете.
+- element_id: dams:req/REF-002
+  name: relationship_cardinality
+  title: Кардинальность связи
+  description: Four cardinality slots when active.
+  lifecycle_status: active
+  code: REF-002
+  requirement_level: it_solution
+  requirement_section: REF
+  statement: У активной логической связи должны быть заданы минимальная и максимальная кардинальность
+    с обеих сторон. Для черновика допускается незаполненность только при соответствующем статусе жизненного
+    цикла и кратком обосновании.
+  applies_to:
+    applicability_id: appl:REF-002
+    applies_target_class: Relationship
+  formal_checks:
+  - check_id: REF-002.c1
+    kind: conditional_branch
+    target_class: Relationship
+    expression: ref002_cardinality
+    severity: error
+    diagnostic_code: DAMS-REQ-REF-002.c1
+    remediation: Задайте source/target min и max cardinality либо для draft укажите cardinality_rationale.
+- element_id: dams:req/PDM-001
+  name: physical_object_core
+  title: Основные свойства физического объекта
+  description: system, kind, name, technology, schema, lifecycle.
+  lifecycle_status: active
+  code: PDM-001
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: У физического объекта данных должны быть указаны ИТ-система, вид объекта, нативное имя/идентификатор,
+    технология и ссылка на нативную схему или формат, а также статус жизненного цикла.
+  applies_to:
+    applicability_id: appl:PDM-001
+    applies_target_class: PhysicalObject
+  formal_checks:
+  - check_id: PDM-001.c1
+    kind: slot_required
+    target_class: PhysicalObject
+    target_slot: system_ref
+    severity: error
+    remediation: Укажите system_ref на ИТ-систему.
+    diagnostic_code: DAMS-REQ-PDM-001.c1
+  - check_id: PDM-001.c2
+    kind: slot_required
+    target_class: PhysicalObject
+    target_slot: object_kind
+    severity: error
+    remediation: Укажите вид физического объекта (object_kind).
+    diagnostic_code: DAMS-REQ-PDM-001.c2
+  - check_id: PDM-001.c3
+    kind: slot_required
+    target_class: PhysicalObject
+    target_slot: qualified_name
+    severity: error
+    remediation: Укажите квалифицированное нативное имя.
+    diagnostic_code: DAMS-REQ-PDM-001.c3
+  - check_id: PDM-001.c4
+    kind: slot_required
+    target_class: PhysicalObject
+    target_slot: technology
+    severity: error
+    remediation: Укажите технологию хранения/предоставления.
+    diagnostic_code: DAMS-REQ-PDM-001.c4
+  - check_id: PDM-001.c5
+    kind: slot_required
+    target_class: PhysicalObject
+    target_slot: native_schema_ref
+    severity: error
+    remediation: Укажите ссылку на нативную схему или формат.
+    diagnostic_code: DAMS-REQ-PDM-001.c5
+  - check_id: PDM-001.c6
+    kind: slot_required
+    target_class: PhysicalObject
+    target_slot: lifecycle_status
+    severity: error
+    remediation: Укажите lifecycle_status физического объекта.
+    diagnostic_code: DAMS-REQ-PDM-001.c6
+- element_id: dams:req/PDM-002
+  name: physical_field_core
+  title: Основные свойства физического поля
+  description: parent, native name/type, required.
+  lifecycle_status: active
+  code: PDM-002
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: У физического поля должны быть указаны родительский объект, нативное имя, нативный тип и
+    семантика обязательности (допустимость пустого значения).
+  applies_to:
+    applicability_id: appl:PDM-002
+    applies_target_class: PhysicalField
+  formal_checks:
+  - check_id: PDM-002.c1
+    kind: slot_required
+    target_class: PhysicalField
+    target_slot: physical_object_ref
+    severity: error
+    remediation: Укажите physical_object_ref родительского объекта.
+    diagnostic_code: DAMS-REQ-PDM-002.c1
+  - check_id: PDM-002.c2
+    kind: slot_required
+    target_class: PhysicalField
+    target_slot: native_name
+    severity: error
+    remediation: Укажите native_name поля.
+    diagnostic_code: DAMS-REQ-PDM-002.c2
+  - check_id: PDM-002.c3
+    kind: slot_required
+    target_class: PhysicalField
+    target_slot: native_type
+    severity: error
+    remediation: Укажите native_type поля.
+    diagnostic_code: DAMS-REQ-PDM-002.c3
+  - check_id: PDM-002.c4
+    kind: slot_required
+    target_class: PhysicalField
+    target_slot: required
+    severity: error
+    remediation: Явно укажите required (nullable semantics).
+    diagnostic_code: DAMS-REQ-PDM-002.c4
+- element_id: dams:req/PDM-003
+  name: entity_physical_mapping
+  title: Отображение сущности и физического объекта
+  description: Explicit entity_physical Mapping only.
+  lifecycle_status: active
+  code: PDM-003
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: Для физического объекта, который несёт данные и не помечен как только технический, должно
+    существовать явное отображение уровня сущности на одну или несколько логических сущностей. Наличие
+    отображений отдельных полей само по себе не засчитывается как доказательство на уровне объекта.
+  applies_to:
+    applicability_id: appl:PDM-003
+    applies_target_class: PhysicalObject
+    applies_target_kinds:
+    - table
+    - view
+    - file
+    - dataset
+    - api
+    - endpoint
+    - topic
+    - message
+    - queue
+    - payload
+  formal_checks:
+  - check_id: PDM-003.c1
+    kind: conditional_branch
+    target_class: PhysicalObject
+    expression: pdm003_entity_physical
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-003.c1
+    remediation: Добавьте Mapping с mapping_type entity_physical между этим объектом и ≥1 логической сущностью,
+      либо technical-only + mapping_rationale.
+- element_id: dams:req/PDM-004
+  name: field_attribute_mapping
+  title: Отображение поля и атрибута
+  description: Field-level mapping or exception.
+  lifecycle_status: active
+  code: PDM-004
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: Для физического поля, не помеченного как только техническое, должно быть отображение на логический
+    атрибут и/или правило преобразования, либо письменное исключение. Источник-поле и выражение преобразования
+    могут быть указаны вместе.
+  applies_to:
+    applicability_id: appl:PDM-004
+    applies_target_class: PhysicalField
+  formal_checks:
+  - check_id: PDM-004.c1
+    kind: conditional_branch
+    target_class: PhysicalField
+    expression: pdm004_field_mapping
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-004.c1
+    remediation: Добавьте field_mapping (и при необходимости transformation_expression) либо mapping_coverage_status
+      с mapping_rationale.
+- element_id: dams:req/CLS-001
+  name: classification_axes_independent
+  title: Независимость осей классификации
+  description: Wave 2 warning — entity_type vs data_class.
+  lifecycle_status: active
+  code: CLS-001
+  requirement_level: it_solution
+  requirement_section: CLS
+  statement: Архитектурная роль сущности и природа данных — разные оси классификации и должны заполняться
+    независимо. Нельзя подменять одно другим.
+  applies_to:
+    applicability_id: appl:CLS-001
+    applies_target_class: LogicalEntity
+  formal_checks:
+  - check_id: CLS-001.c1
+    kind: conditional_branch
+    target_class: LogicalEntity
+    expression: cls001_axes_present
+    severity: warning
+    diagnostic_code: DAMS-REQ-CLS-001.c1
+    remediation: Заполните и entity_type, и data_class отдельными значениями.
+- element_id: dams:req/FLW-001
+  name: cross_solution_dataflow
+  title: Потоки через границы решений
+  description: Wave 2 soft — DataFlow when providing/consuming across solutions.
+  lifecycle_status: active
+  code: FLW-001
+  requirement_level: it_solution
+  requirement_section: FLW
+  statement: Если решение предоставляет или получает данные за пределами своей границы, потоки данных
+    и соответствия должны быть описаны явно. На этапе первичной публикации отсутствие таких описаний отмечается
+    как предупреждение.
+  applies_to:
+    applicability_id: appl:FLW-001
+    applies_target_class: ModelPackage
+    applies_implementation_scope: solution
+  formal_checks:
+  - check_id: FLW-001.c1
+    kind: conditional_branch
+    target_class: ModelPackage
+    expression: flw001_soft_presence
+    severity: warning
+    diagnostic_code: DAMS-REQ-FLW-001.c1
+    remediation: При межрешенческих обменах добавьте описание потоков данных; иначе предупреждение можно
+      игнорировать до калибровки.
+- element_id: dams:req/CLS-002
+  name: security_classification_soft
+  title: Режим защиты данных
+  description: Wave 2 warning — security_classification when governance is confidential/restricted.
+  lifecycle_status: active
+  code: CLS-002
+  requirement_level: it_solution
+  requirement_section: CLS
+  statement: Если к сущности применена повышенная классификация управления доступом, рекомендуется отдельно
+    указать требуемый режим защиты данных. Это не заменяет классификацию управления и не смешивается с
+    критичностью процесса.
+  applies_to:
+    applicability_id: appl:CLS-002
+    applies_target_class: LogicalEntity
+  formal_checks:
+  - check_id: CLS-002.c1
+    kind: conditional_branch
+    target_class: LogicalEntity
+    expression: cls002_security_soft
+    severity: warning
+    diagnostic_code: DAMS-REQ-CLS-002.c1
+    remediation: Укажите security_classification (internal/confidential/restricted) для сущностей с confidential/restricted
+      governance.
+- element_id: dams:req/REF-003
+  name: relationship_kind_soft
+  title: Тип логической связи
+  description: Wave 2 warning — relationship_kind recommended for active links.
+  lifecycle_status: active
+  code: REF-003
+  requirement_level: it_solution
+  requirement_section: REF
+  statement: Для активной логической связи рекомендуется указать тип отношения (ассоциация, композиция,
+    ссылка на справочник и т.п.), чтобы отличать смысловые связи от технических. На этапе первичной публикации
+    отсутствие типа отмечается предупреждением.
+  applies_to:
+    applicability_id: appl:REF-003
+    applies_target_class: Relationship
+  formal_checks:
+  - check_id: REF-003.c1
+    kind: conditional_branch
+    target_class: Relationship
+    expression: ref003_kind_soft
+    severity: warning
+    diagnostic_code: DAMS-REQ-REF-003.c1
+    remediation: Укажите relationship_kind для активной связи.
+- element_id: dams:req/ATR-004
+  name: attribute_type_specific_soft
+  title: Дополнительные свойства по типу атрибута
+  description: Wave 2 warning — currency/unit/timezone when type implies them.
+  lifecycle_status: active
+  code: ATR-004
+  requirement_level: it_solution
+  requirement_section: ATR
+  statement: Для денежных величин, количеств и отметок времени рекомендуется указать валюту или ссылку
+    на атрибут валюты, единицу измерения и политику часового пояса соответственно. На этапе первичной
+    публикации это предупреждение, а не блокирующая ошибка.
+  applies_to:
+    applicability_id: appl:ATR-004
+    applies_target_class: LogicalAttribute
+  formal_checks:
+  - check_id: ATR-004.c1
+    kind: conditional_branch
+    target_class: LogicalAttribute
+    expression: atr004_type_specific_soft
+    severity: warning
+    diagnostic_code: DAMS-REQ-ATR-004.c1
+    remediation: Для decimal/datetime при необходимости добавьте currency_attribute_ref, unit_code или
+      timezone_policy.

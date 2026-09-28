@@ -18,6 +18,8 @@
         
       LogicalAttribute : classification_source
         
+      LogicalAttribute : currency_attribute_ref
+        
       LogicalAttribute : default_value
         
       LogicalAttribute : deprecated_by_ref
@@ -74,6 +76,19 @@
     
 
         
+      LogicalAttribute : mapping_coverage_status
+        
+          
+    
+        
+        
+        LogicalAttribute --> "0..1" MappingCoverageStatusEnum : mapping_coverage_status
+        click MappingCoverageStatusEnum href "../MappingCoverageStatusEnum"
+    
+
+        
+      LogicalAttribute : mapping_rationale
+        
       LogicalAttribute : maximum_cardinality
         
       LogicalAttribute : minimum_cardinality
@@ -106,6 +121,17 @@
         
       LogicalAttribute : required
         
+      LogicalAttribute : security_classification
+        
+          
+    
+        
+        
+        LogicalAttribute --> "0..1" SecurityClassificationEnum : security_classification
+        click SecurityClassificationEnum href "../SecurityClassificationEnum"
+    
+
+        
       LogicalAttribute : sensitivity_term_refs
         
           
@@ -119,7 +145,13 @@
         
       LogicalAttribute : tags
         
+      LogicalAttribute : temporal_semantics
+        
+      LogicalAttribute : timezone_policy
+        
       LogicalAttribute : title
+        
+      LogicalAttribute : unit_code
         
       LogicalAttribute : valid_from
         

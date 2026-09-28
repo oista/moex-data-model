@@ -22,6 +22,8 @@
     
 
         
+      FormalCheck : remediation
+        
       FormalCheck : severity
         
           
@@ -38,6 +40,8 @@
       FormalCheck : target_path
         
       FormalCheck : target_slot
+        
+      FormalCheck : target_slots
         
       
 ```

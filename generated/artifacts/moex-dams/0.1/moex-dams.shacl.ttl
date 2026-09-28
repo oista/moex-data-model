@@ -8,15 +8,15 @@ dams:HasBusinessClassification a sh:NodeShape ;
     rdfs:comment "Классификация роли и бизнес-значимости логической сущности." ;
     sh:closed false ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:in ( "core" "derived" "reference" ) ;
+    sh:property [ sh:in ( "core" "derived" "reference" "projection" "technical" ) ;
             sh:maxCount 1 ;
             sh:order 0 ;
             sh:path dams:entity_type ],
-        [ sh:in ( "reference_data" "master_data" "transactional_data" "analytical_data" "metadata" ) ;
+        [ sh:in ( "reference_data" "master_data" "transactional_data" "analytical_data" "metadata" "operational_data" ) ;
             sh:maxCount 1 ;
             sh:order 1 ;
             sh:path dams:data_class ],
-        [ sh:in ( "high" "medium" "low" ) ;
+        [ sh:in ( "critical" "high" "medium" "low" ) ;
             sh:maxCount 1 ;
             sh:order 2 ;
             sh:path dams:business_importance ] ;
@@ -26,20 +26,25 @@ dams:HasGovernanceClassification a sh:NodeShape ;
     rdfs:comment "Базовая и специальная классификация чувствительности данных." ;
     sh:closed false ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:string ;
+    sh:property [ sh:description "Режим защиты (Wave 2); ортогонален governance_classification." ;
+            sh:in ( "internal" "confidential" "restricted" ) ;
             sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path dams:security_classification ],
+        [ sh:class dams:DataClassificationTerm ;
+            sh:nodeKind sh:IRI ;
             sh:order 2 ;
-            sh:path dams:classification_source ],
+            sh:path dams:sensitivity_term_refs ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 3 ;
+            sh:path dams:classification_source ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
             sh:path dams:classification_rationale ],
-        [ sh:class dams:DataClassificationTerm ;
-            sh:nodeKind sh:IRI ;
-            sh:order 1 ;
-            sh:path dams:sensitivity_term_refs ],
         [ sh:in ( "public" "internal" "confidential" "restricted" ) ;
             sh:maxCount 1 ;
             sh:order 0 ;
@@ -50,12 +55,7 @@ dams:HasLifecycle a sh:NodeShape ;
     rdfs:comment "Mixin жизненного цикла: статус, период действия и ссылка на заменяющий элемент." ;
     sh:closed false ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path dams:valid_to ],
-        [ sh:maxCount 1 ;
+    sh:property [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 3 ;
             sh:path dams:deprecated_by_ref ],
@@ -64,6 +64,11 @@ dams:HasLifecycle a sh:NodeShape ;
             sh:minCount 1 ;
             sh:order 0 ;
             sh:path dams:lifecycle_status ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path dams:valid_to ],
         [ sh:datatype xsd:dateTime ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -78,13 +83,20 @@ dams:HasOwnership a sh:NodeShape ;
     sh:property [ sh:class dams:Role ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 1 ;
-            sh:path dams:data_steward_ref ],
+            sh:order 0 ;
+            sh:path dams:data_owner_ref ],
         [ sh:class dams:Role ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:data_owner_ref ],
+            sh:order 1 ;
+            sh:path dams:data_steward_ref ],
+        [ sh:datatype xsd:string ;
+            sh:description """Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""" ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path dams:ownership_inheritance_rule ],
         [ sh:class dams:OrganizationUnit ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
@@ -111,36 +123,32 @@ dams:HasProvenance a sh:NodeShape ;
             sh:nodeKind sh:IRI ;
             sh:order 3 ;
             sh:path dams:approved_by_ref ],
+        [ sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path dams:evidence_refs ],
         [ sh:in ( "proposed" "approved" "rejected" "superseded" ) ;
             sh:maxCount 1 ;
             sh:order 2 ;
             sh:path dams:approval_status ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path dams:source_artifact_ref ],
         [ sh:datatype xsd:dateTime ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 4 ;
-            sh:path dams:approved_at ],
-        [ sh:nodeKind sh:IRI ;
-            sh:order 1 ;
-            sh:path dams:evidence_refs ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:source_artifact_ref ] ;
+            sh:path dams:approved_at ] ;
     sh:targetClass dams:HasProvenance .
 
 dams:MOEXModelRepository a sh:NodeShape ;
     rdfs:comment "Корневой контейнер для проверки набора моделей, ссылочных проекций справочников, потоков и контрактных bindings." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:class dams:PolicyBinding ;
+    sh:property [ sh:class dams:RegistryEntry ;
             sh:nodeKind sh:IRI ;
-            sh:order 8 ;
-            sh:path dams:policy_bindings ],
-        [ sh:class dams:DataModelBinding ;
-            sh:nodeKind sh:IRI ;
-            sh:order 4 ;
-            sh:path dams:data_model_bindings ],
+            sh:order 1 ;
+            sh:path dams:registry_entries ],
         [ sh:class dams:Dimension ;
             sh:nodeKind sh:IRI ;
             sh:order 6 ;
@@ -153,34 +161,52 @@ dams:MOEXModelRepository a sh:NodeShape ;
             sh:nodeKind sh:IRI ;
             sh:order 2 ;
             sh:path dams:model_packages ],
-        [ sh:class dams:Metric ;
+        [ sh:class dams:DataFlow ;
             sh:nodeKind sh:IRI ;
-            sh:order 5 ;
-            sh:path dams:metrics ],
-        [ sh:class dams:RegistryEntry ;
-            sh:nodeKind sh:IRI ;
-            sh:order 1 ;
-            sh:path dams:registry_entries ],
+            sh:order 3 ;
+            sh:path dams:data_flows ],
         [ sh:class dams:ClassificationAssignment ;
             sh:nodeKind sh:IRI ;
             sh:order 7 ;
             sh:path dams:classification_assignments ],
-        [ sh:class dams:DataFlow ;
+        [ sh:class dams:PolicyBinding ;
             sh:nodeKind sh:IRI ;
-            sh:order 3 ;
-            sh:path dams:data_flows ] ;
+            sh:order 8 ;
+            sh:path dams:policy_bindings ],
+        [ sh:class dams:Metric ;
+            sh:nodeKind sh:IRI ;
+            sh:order 5 ;
+            sh:path dams:metrics ],
+        [ sh:class dams:DataModelBinding ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path dams:data_model_bindings ] ;
     sh:targetClass dams:MOEXModelRepository .
 
 dams:ModelElement a sh:NodeShape ;
     rdfs:comment "Абстрактный корень иерархии элементов модели: общая идентичность (element_id), имя, описание и жизненный цикл." ;
     sh:closed false ;
-    sh:ignoredProperties ( dams:flow_ref dams:logical_attribute_refs dams:grain_entity_refs dams:native_type dams:source_max_cardinality dams:default_value dams:transformation_mapping_refs dams:code dams:model_version dams:entity_type dams:qualified_name dams:compatibility_mode dams:metric_expression dams:integration_class dams:formal_checks dams:domain_refs dams:conceptual_implementation_ref dams:dimension_attribute_refs dams:target_role dams:owner_entity_ref dams:generated_at dams:target_refs dams:selected_attributes rdf:type dams:integration_ref dams:object_kind dams:conceptual_entity_refs dams:model_package_ref dams:imports_refs dams:classification_source dams:target_entity_ref dams:physical_field_refs dams:classification_rationale dams:technology dams:parent_concept_ref dams:source_artifact_ref dams:unit dams:native_schema_ref dams:data_steward_ref dams:derived_expression dams:context_ref dams:logical_type dams:domain_contexts dams:solution_data_role dams:source_system_ref dams:specification_version dams:mapping_cardinality dams:contract_ref dams:logical_entities dams:target_min_cardinality dams:relationships dams:value_set_ref dams:implementation_scope dams:physical_object_ref dams:data_owner_ref dams:confidence dams:governance_classification dams:physical_object_refs dams:format_pattern dams:ordinal_position dams:logical_attribute_ref dams:physical_objects dams:mappings dams:identifying dams:business_process_refs dams:requirement_level dams:maximum_cardinality dams:transformation_ref dams:source_refs dams:source_platform_ref dams:selected_entities dams:owning_unit_ref dams:source_role dams:system_ref dams:source_entity_ref dams:associative dams:multivalued dams:model_revision dams:physical_fields dams:target_platform_ref dams:key_attribute_refs dams:invariant_refs dams:data_class dams:native_name dams:approved_by_ref dams:target_system_ref dams:selections dams:transformation_mapping_ref dams:minimum_cardinality dams:aggregation_function dams:approved_at dams:integration_channel dams:compatibility_baseline_ref dams:integrity_digest dams:logical_entity_ref dams:solution_ref dams:api_version dams:implementation_version dams:integration_level dams:required dams:integration_spec_ref dams:source_min_cardinality dams:conceptual_entities dams:requirement_section dams:target_max_cardinality dams:source_model_ref dams:target_solution_ref dams:measure_attribute_refs dams:sensitivity_term_refs dams:filter_expression dams:source_solution_ref dams:direction dams:policy_refs dams:schema_path dams:statement dams:business_importance dams:evidence_refs dams:attributes dams:mapping_type dams:domain_ref dams:approval_status dams:namespace dams:transformation_expression dams:entity_bindings ) ;
+    sh:ignoredProperties ( dams:target_max_cardinality dams:compatibility_baseline_ref dams:invariant_refs dams:integration_channel dams:evidence_refs dams:native_name dams:integrity_digest dams:physical_field_refs dams:key_attribute_refs dams:grain_entity_refs dams:mapping_cardinality dams:source_refs dams:transformation_expression dams:classification_source dams:ordinal_position dams:transformation_ref dams:dimension_attribute_refs dams:data_owner_ref dams:solution_data_role dams:logical_entities dams:multivalued dams:relationship_kind dams:physical_object_refs dams:unit_code dams:integration_level dams:business_process_refs dams:solution_ref dams:identifying dams:conceptual_alignment_status dams:generated_at dams:implementation_version dams:source_artifact_ref dams:selected_attributes dams:formal_checks dams:attributes dams:approved_at dams:aggregation_function dams:source_system_ref dams:contract_ref dams:source_max_cardinality dams:confidence dams:data_steward_ref dams:specification_version dams:cardinality_rationale dams:domain_refs dams:schema_path dams:alignment_rationale dams:conceptual_entities dams:source_min_cardinality dams:measure_attribute_refs dams:integration_ref dams:model_package_ref dams:object_kind dams:currency_attribute_ref dams:domain_ref dams:logical_attribute_refs dams:statement dams:classification_rationale dams:identity_rule dams:context_ref dams:api_version dams:integration_class dams:temporal_semantics dams:requirement_section dams:target_min_cardinality dams:target_entity_ref rdf:type dams:governance_classification dams:policy_refs dams:model_revision dams:native_type dams:selections dams:technology dams:owning_unit_ref dams:filter_expression dams:format_pattern dams:relationships dams:value_set_ref dams:data_class dams:owner_entity_ref dams:target_system_ref dams:native_schema_ref dams:implementation_scope dams:conceptual_implementation_ref dams:logical_type dams:entity_bindings dams:code dams:transformation_mapping_ref dams:approved_by_ref dams:mapping_type dams:mapping_rationale dams:security_classification dams:isolation_rationale dams:logical_attribute_ref dams:timezone_policy dams:parent_concept_ref dams:direction dams:domain_contexts dams:business_key_kind dams:entity_type dams:derived_expression dams:business_importance dams:physical_object_ref dams:model_version dams:source_entity_ref dams:compatibility_mode dams:sensitivity_term_refs dams:imports_refs dams:source_solution_ref dams:approval_status dams:transformation_mapping_refs dams:namespace dams:physical_fields dams:applies_to dams:associative dams:mapping_coverage_status dams:source_platform_ref dams:ownership_inheritance_rule dams:physical_objects dams:source_role dams:logical_entity_ref dams:required dams:maximum_cardinality dams:unit dams:integration_spec_ref dams:requirement_level dams:target_role dams:source_model_ref dams:flow_ref dams:minimum_cardinality dams:target_solution_ref dams:target_refs dams:system_ref dams:selected_entities dams:metric_expression dams:default_value dams:target_platform_ref dams:conceptual_entity_refs dams:mappings dams:qualified_name ) ;
     sh:property [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 1 ;
             sh:path dams:name ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path dams:valid_to ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path dams:title ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path dams:tags ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -191,42 +217,28 @@ dams:ModelElement a sh:NodeShape ;
             sh:nodeKind sh:IRI ;
             sh:order 10 ;
             sh:path dams:deprecated_by_ref ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path dams:element_id ],
         [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:order 7 ;
             sh:path dams:lifecycle_status ],
         [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path dams:title ],
+            sh:order 4 ;
+            sh:path dams:aliases ],
         [ sh:class dams:GlossaryTerm ;
             sh:nodeKind sh:IRI ;
             sh:order 5 ;
             sh:path dams:glossary_term_refs ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:element_id ],
         [ sh:datatype xsd:dateTime ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 8 ;
-            sh:path dams:valid_from ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 4 ;
-            sh:path dams:aliases ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 9 ;
-            sh:path dams:valid_to ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 6 ;
-            sh:path dams:tags ] ;
+            sh:path dams:valid_from ] ;
     sh:targetClass dams:ModelElement .
 
 dams:RequirementCatalog a sh:NodeShape ;
@@ -237,32 +249,34 @@ dams:RequirementCatalog a sh:NodeShape ;
             sh:nodeKind sh:IRI ;
             sh:order 2 ;
             sh:path dams:requirements ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path dams:catalog_id ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 1 ;
-            sh:path dams:name ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:catalog_id ] ;
+            sh:path dams:name ] ;
     sh:targetClass dams:RequirementCatalog .
 
 dams:BusinessProcess a sh:NodeShape ;
     rdfs:comment "Ссылка на бизнес-процесс или его шаг в BPMN-репозитории." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:registry_id ],
-        [ sh:datatype xsd:string ;
+    sh:property [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 3 ;
             sh:path dams:master_system ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path dams:registry_name ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 4 ;
@@ -272,12 +286,10 @@ dams:BusinessProcess a sh:NodeShape ;
             sh:minCount 1 ;
             sh:order 5 ;
             sh:path dams:registry_status ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path dams:registry_name ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path dams:registry_id ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -289,35 +301,20 @@ dams:ClassificationAssignment a sh:NodeShape ;
     rdfs:comment "Версионируемое назначение категории классификации элементу модели с основанием и периодом действия." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:dateTime ;
+    sh:property [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 7 ;
-            sh:path dams:valid_to ],
+            sh:order 4 ;
+            sh:path dams:classification_source ],
+        [ sh:in ( "proposed" "approved" "rejected" "superseded" ) ;
+            sh:maxCount 1 ;
+            sh:order 8 ;
+            sh:path dams:approval_status ],
         [ sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 1 ;
             sh:path dams:classified_element_ref ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:assignment_id ],
-        [ sh:class dams:DataClassificationTerm ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 2 ;
-            sh:path dams:classification_term_ref ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 6 ;
-            sh:path dams:valid_from ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 4 ;
-            sh:path dams:classification_source ],
         [ sh:in ( "public" "internal" "confidential" "restricted" ) ;
             sh:maxCount 1 ;
             sh:order 3 ;
@@ -327,102 +324,117 @@ dams:ClassificationAssignment a sh:NodeShape ;
             sh:nodeKind sh:Literal ;
             sh:order 5 ;
             sh:path dams:classification_rationale ],
-        [ sh:in ( "proposed" "approved" "rejected" "superseded" ) ;
+        [ sh:class dams:DataClassificationTerm ;
             sh:maxCount 1 ;
-            sh:order 8 ;
-            sh:path dams:approval_status ] ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path dams:classification_term_ref ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path dams:valid_to ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path dams:valid_from ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path dams:assignment_id ] ;
     sh:targetClass dams:ClassificationAssignment .
 
 dams:DataFlowEntityBinding a sh:NodeShape ;
     rdfs:comment "Связь потока с логическими сущностями, атрибутами и физическими объектами модели решения." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:maxCount 1 ;
+    sh:property [ sh:in ( "inbound" "outbound" "internal" "bidirectional" ) ;
+            sh:maxCount 1 ;
             sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 1 ;
-            sh:path dams:source_model_ref ],
+            sh:order 7 ;
+            sh:path dams:direction ],
         [ sh:class dams:LogicalAttribute ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 3 ;
             sh:path dams:logical_attribute_refs ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 11 ;
-            sh:path dams:description ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 18 ;
-            sh:path dams:deprecated_by_ref ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 9 ;
-            sh:path dams:name ],
-        [ sh:class dams:Mapping ;
-            sh:nodeKind sh:IRI ;
-            sh:order 6 ;
-            sh:path dams:transformation_mapping_refs ],
-        [ sh:in ( "inbound" "outbound" "internal" "bidirectional" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 7 ;
-            sh:path dams:direction ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 14 ;
-            sh:path dams:tags ],
+            sh:order 8 ;
+            sh:path dams:element_id ],
         [ sh:class dams:DataFlow ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 0 ;
             sh:path dams:flow_ref ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 12 ;
-            sh:path dams:aliases ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 10 ;
-            sh:path dams:title ],
-        [ sh:class dams:PhysicalObject ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 4 ;
-            sh:path dams:physical_object_refs ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 8 ;
-            sh:path dams:element_id ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 15 ;
-            sh:path dams:lifecycle_status ],
-        [ sh:class dams:GlossaryTerm ;
-            sh:nodeKind sh:IRI ;
-            sh:order 13 ;
-            sh:path dams:glossary_term_refs ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 17 ;
-            sh:path dams:valid_to ],
-        [ sh:class dams:PhysicalField ;
-            sh:nodeKind sh:IRI ;
-            sh:order 5 ;
-            sh:path dams:physical_field_refs ],
         [ sh:datatype xsd:dateTime ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 16 ;
             sh:path dams:valid_from ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 15 ;
+            sh:path dams:lifecycle_status ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path dams:source_model_ref ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 12 ;
+            sh:path dams:aliases ],
+        [ sh:class dams:PhysicalField ;
+            sh:nodeKind sh:IRI ;
+            sh:order 5 ;
+            sh:path dams:physical_field_refs ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 14 ;
+            sh:path dams:tags ],
+        [ sh:class dams:Mapping ;
+            sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path dams:transformation_mapping_refs ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 17 ;
+            sh:path dams:valid_to ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 18 ;
+            sh:path dams:deprecated_by_ref ],
+        [ sh:class dams:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 13 ;
+            sh:path dams:glossary_term_refs ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path dams:name ],
+        [ sh:class dams:PhysicalObject ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path dams:physical_object_refs ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 11 ;
+            sh:path dams:description ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 10 ;
+            sh:path dams:title ],
         [ sh:class dams:LogicalEntity ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -439,43 +451,25 @@ dams:DataModelBinding a sh:NodeShape ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path dams:implementation_version ;
+            sh:pattern "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$" ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
             sh:order 22 ;
-            sh:path dams:description ],
+            sh:path dams:title ],
+        [ sh:class dams:IntegrationReference ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path dams:integration_ref ],
         [ sh:class dams:Role ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 16 ;
             sh:path dams:data_owner_ref ],
-        [ sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 4 ;
-            sh:path dams:model_package_ref ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 6 ;
-            sh:path dams:model_revision ],
-        [ sh:class dams:GlossaryTerm ;
-            sh:nodeKind sh:IRI ;
-            sh:order 24 ;
-            sh:path dams:glossary_term_refs ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 13 ;
-            sh:path dams:valid_from ],
-        [ sh:class dams:OrganizationUnit ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 18 ;
-            sh:path dams:owning_unit_ref ],
-        [ sh:class dams:DataContractReference ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 2 ;
-            sh:path dams:contract_ref ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -483,84 +477,46 @@ dams:DataModelBinding a sh:NodeShape ;
             sh:order 0 ;
             sh:path dams:specification_version ;
             sh:pattern "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$" ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 25 ;
-            sh:path dams:tags ],
-        [ sh:class dams:IntegrationReference ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 3 ;
-            sh:path dams:integration_ref ],
         [ sh:datatype xsd:dateTime ;
             sh:maxCount 1 ;
-            sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 11 ;
-            sh:path dams:generated_at ],
-        [ sh:in ( "backward" "forward" "full" "none" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 8 ;
-            sh:path dams:compatibility_mode ],
+            sh:order 13 ;
+            sh:path dams:valid_from ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 26 ;
+            sh:path dams:tags ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 10 ;
-            sh:path dams:integrity_digest ;
-            sh:pattern "^sha256:[a-fA-F0-9]{64}$" ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path dams:implementation_version ;
-            sh:pattern "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$" ],
-        [ sh:class dams:ModelSelection ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 7 ;
-            sh:path dams:selections ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 21 ;
-            sh:path dams:title ],
+            sh:order 23 ;
+            sh:path dams:description ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 15 ;
             sh:path dams:deprecated_by_ref ],
-        [ sh:class dams:Role ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 17 ;
-            sh:path dams:data_steward_ref ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 12 ;
-            sh:path dams:lifecycle_status ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 20 ;
-            sh:path dams:name ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 23 ;
-            sh:path dams:aliases ],
         [ sh:datatype xsd:dateTime ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 14 ;
             sh:path dams:valid_to ],
-        [ sh:maxCount 1 ;
+        [ sh:in ( "backward" "forward" "full" "none" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 8 ;
+            sh:path dams:compatibility_mode ],
+        [ sh:class dams:OrganizationUnit ;
+            sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 19 ;
-            sh:path dams:element_id ],
+            sh:order 18 ;
+            sh:path dams:owning_unit_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path dams:model_revision ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -570,42 +526,87 @@ dams:DataModelBinding a sh:NodeShape ;
             sh:pattern "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$" ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
+            sh:order 20 ;
+            sh:path dams:element_id ],
+        [ sh:class dams:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 17 ;
+            sh:path dams:data_steward_ref ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 11 ;
+            sh:path dams:generated_at ],
+        [ sh:class dams:DataContractReference ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path dams:contract_ref ],
+        [ sh:class dams:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 25 ;
+            sh:path dams:glossary_term_refs ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
             sh:order 9 ;
-            sh:path dams:compatibility_baseline_ref ] ;
+            sh:path dams:compatibility_baseline_ref ],
+        [ sh:class dams:ModelSelection ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 7 ;
+            sh:path dams:selections ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 24 ;
+            sh:path dams:aliases ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 12 ;
+            sh:path dams:lifecycle_status ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path dams:model_package_ref ],
+        [ sh:datatype xsd:string ;
+            sh:description """Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""" ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 19 ;
+            sh:path dams:ownership_inheritance_rule ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 21 ;
+            sh:path dams:name ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 10 ;
+            sh:path dams:integrity_digest ;
+            sh:pattern "^sha256:[a-fA-F0-9]{64}$" ] ;
     sh:targetClass dams:DataModelBinding .
 
 dams:Dimension a sh:NodeShape ;
     rdfs:comment "Переиспользуемое аналитическое измерение, связанное с логическими атрибутами." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 4 ;
-            sh:path dams:title ],
-        [ sh:maxCount 1 ;
+    sh:property [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 2 ;
-            sh:path dams:element_id ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 9 ;
-            sh:path dams:lifecycle_status ],
-        [ sh:class dams:LogicalAttribute ;
-            sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:dimension_attribute_refs ],
+            sh:order 12 ;
+            sh:path dams:deprecated_by_ref ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 3 ;
             sh:path dams:name ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 12 ;
-            sh:path dams:deprecated_by_ref ],
         [ sh:class dams:LogicalEntity ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
@@ -617,15 +618,33 @@ dams:Dimension a sh:NodeShape ;
             sh:nodeKind sh:Literal ;
             sh:order 5 ;
             sh:path dams:description ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 8 ;
-            sh:path dams:tags ],
         [ sh:datatype xsd:dateTime ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 11 ;
             sh:path dams:valid_to ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path dams:title ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 9 ;
+            sh:path dams:lifecycle_status ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path dams:aliases ],
+        [ sh:class dams:LogicalAttribute ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path dams:dimension_attribute_refs ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 8 ;
+            sh:path dams:tags ],
         [ sh:class dams:GlossaryTerm ;
             sh:nodeKind sh:IRI ;
             sh:order 7 ;
@@ -635,38 +654,31 @@ dams:Dimension a sh:NodeShape ;
             sh:nodeKind sh:Literal ;
             sh:order 10 ;
             sh:path dams:valid_from ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 6 ;
-            sh:path dams:aliases ] ;
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path dams:element_id ] ;
     sh:targetClass dams:Dimension .
 
 dams:FormalCheck a sh:NodeShape ;
-    rdfs:comment "Одна машиночитаемая проверка требования. Kind выровнен с LinkML constraints и DAMS reference/structural diagnostics; assess wiring может появиться позже." ;
+    rdfs:comment "Одна машиночитаемая проверка требования. Kind выровнен с LinkML constraints и DAMS reference/structural diagnostics. formal_checks — исполняемое подмножество нормы; исполняется assess (ADR-013)." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
     sh:property [ sh:datatype xsd:string ;
-            sh:description "Имя класса LinkML (например LogicalEntity)." ;
-            sh:maxCount 1 ;
+            sh:description "Список слотов для kind=at_least_one_slots." ;
             sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path dams:target_class ],
-        [ sh:in ( "slot_required" "slot_min_cardinality" "ref_resolves" "key_subset" "custom" ) ;
+            sh:order 4 ;
+            sh:path dams:target_slots ],
+        [ sh:in ( "slot_required" "slot_min_cardinality" "ref_resolves" "key_subset" "at_least_one_slots" "conditional_branch" "custom" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:order 1 ;
             sh:path dams:kind ],
         [ sh:datatype xsd:string ;
-            sh:description "Свободная LinkML-ish заметка при kind=custom." ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 7 ;
-            sh:path dams:expression ],
-        [ sh:in ( "error" "warning" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 5 ;
-            sh:path dams:severity ],
+            sh:order 3 ;
+            sh:path dams:target_slot ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -676,54 +688,60 @@ dams:FormalCheck a sh:NodeShape ;
             sh:description "JSON Pointer или path hint в теле ModelPackage." ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 4 ;
+            sh:order 5 ;
             sh:path dams:target_path ],
         [ sh:datatype xsd:string ;
-            sh:description "Мост к DAMS-STRUCT-* / DAMS-REF-* / будущим DAMS-REQ-*." ;
+            sh:description "Мост к DAMS-STRUCT-* / DAMS-REF-* / DAMS-REQ-*." ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 6 ;
+            sh:order 7 ;
             sh:path dams:diagnostic_code ],
         [ sh:datatype xsd:string ;
+            sh:description "Actionable remediation text for CI / Cursor / authors." ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 3 ;
-            sh:path dams:target_slot ] ;
+            sh:order 9 ;
+            sh:path dams:remediation ],
+        [ sh:datatype xsd:string ;
+            sh:description "Имя класса LinkML (например LogicalEntity)." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path dams:target_class ],
+        [ sh:in ( "error" "warning" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 6 ;
+            sh:path dams:severity ],
+        [ sh:datatype xsd:string ;
+            sh:description """Имя фиксированного шаблона для conditional_branch / custom (например ldm006_alignment, planned_on_active_warning).
+""" ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 8 ;
+            sh:path dams:expression ] ;
     sh:targetClass dams:FormalCheck .
 
 dams:Metric a sh:NodeShape ;
     rdfs:comment "Управляемое определение бизнес- или технической метрики; является опциональным аналитическим профилем." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 19 ;
-            sh:path dams:valid_from ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 18 ;
-            sh:path dams:lifecycle_status ],
+    sh:property [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 22 ;
+            sh:path dams:deprecated_by_ref ],
         [ sh:class dams:GlossaryTerm ;
             sh:nodeKind sh:IRI ;
-            sh:order 16 ;
+            sh:order 17 ;
             sh:path dams:glossary_term_refs ],
         [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 6 ;
-            sh:path dams:filter_expression ],
-        [ sh:class dams:Role ;
-            sh:maxCount 1 ;
+            sh:order 18 ;
+            sh:path dams:tags ],
+        [ sh:class dams:LogicalAttribute ;
             sh:nodeKind sh:IRI ;
-            sh:order 7 ;
-            sh:path dams:data_owner_ref ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 5 ;
-            sh:path dams:unit ],
+            sh:order 3 ;
+            sh:path dams:dimension_attribute_refs ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -734,17 +752,78 @@ dams:Metric a sh:NodeShape ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 14 ;
-            sh:path dams:description ],
-        [ sh:class dams:Policy ;
-            sh:nodeKind sh:IRI ;
-            sh:order 10 ;
-            sh:path dams:policy_refs ],
+            sh:order 1 ;
+            sh:path dams:aggregation_function ],
         [ sh:datatype xsd:dateTime ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 20 ;
+            sh:path dams:valid_from ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 12 ;
+            sh:path dams:element_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path dams:filter_expression ],
+        [ sh:class dams:LogicalEntity ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path dams:grain_entity_refs ],
+        [ sh:class dams:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 7 ;
+            sh:path dams:data_owner_ref ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 16 ;
+            sh:path dams:aliases ],
+        [ sh:class dams:OrganizationUnit ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 9 ;
+            sh:path dams:owning_unit_ref ],
+        [ sh:class dams:LogicalAttribute ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path dams:measure_attribute_refs ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path dams:unit ],
+        [ sh:datatype xsd:string ;
+            sh:description """Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""" ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 10 ;
+            sh:path dams:ownership_inheritance_rule ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 19 ;
+            sh:path dams:lifecycle_status ],
+        [ sh:class dams:Policy ;
+            sh:nodeKind sh:IRI ;
+            sh:order 11 ;
+            sh:path dams:policy_refs ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 21 ;
             sh:path dams:valid_to ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 15 ;
+            sh:path dams:description ],
         [ sh:class dams:Role ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
@@ -752,56 +831,15 @@ dams:Metric a sh:NodeShape ;
             sh:path dams:data_steward_ref ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
-            sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path dams:aggregation_function ],
-        [ sh:class dams:LogicalAttribute ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 4 ;
-            sh:path dams:measure_attribute_refs ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 15 ;
-            sh:path dams:aliases ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 13 ;
+            sh:order 14 ;
             sh:path dams:title ],
         [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 17 ;
-            sh:path dams:tags ],
-        [ sh:class dams:LogicalAttribute ;
-            sh:nodeKind sh:IRI ;
-            sh:order 3 ;
-            sh:path dams:dimension_attribute_refs ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 11 ;
-            sh:path dams:element_id ],
-        [ sh:class dams:LogicalEntity ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 2 ;
-            sh:path dams:grain_entity_refs ],
-        [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 12 ;
-            sh:path dams:name ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 21 ;
-            sh:path dams:deprecated_by_ref ],
-        [ sh:class dams:OrganizationUnit ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 9 ;
-            sh:path dams:owning_unit_ref ] ;
+            sh:order 13 ;
+            sh:path dams:name ] ;
     sh:targetClass dams:Metric .
 
 dams:ModelPackage a sh:NodeShape ;
@@ -811,39 +849,120 @@ dams:ModelPackage a sh:NodeShape ;
     sh:ignoredProperties ( rdf:type ) ;
     sh:property [ sh:datatype xsd:string ;
             sh:nodeKind sh:Literal ;
-            sh:order 22 ;
-            sh:path dams:tags ],
-        [ sh:class dams:Relationship ;
+            sh:order 21 ;
+            sh:path dams:aliases ],
+        [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 10 ;
-            sh:path dams:relationships ],
-        [ sh:class dams:Role ;
+            sh:order 17 ;
+            sh:path dams:element_id ],
+        [ sh:class dams:PhysicalObject ;
+            sh:nodeKind sh:IRI ;
+            sh:order 11 ;
+            sh:path dams:physical_objects ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 27 ;
+            sh:path dams:deprecated_by_ref ],
+        [ sh:description """Required for solution packages: reference to the enterprise-conceptual SpecImpl / ModelPackage id (e.g. moex-enterprise-conceptual-model).
+""" ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 13 ;
-            sh:path dams:data_owner_ref ],
+            sh:order 3 ;
+            sh:path dams:conceptual_implementation_ref ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 0 ;
             sh:path dams:api_version ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 23 ;
+            sh:path dams:tags ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 18 ;
+            sh:path dams:name ],
+        [ sh:class dams:Mapping ;
+            sh:nodeKind sh:IRI ;
+            sh:order 12 ;
+            sh:path dams:mappings ],
+        [ sh:class dams:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 22 ;
+            sh:path dams:glossary_term_refs ],
+        [ sh:class dams:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 14 ;
+            sh:path dams:data_steward_ref ],
+        [ sh:class dams:Relationship ;
+            sh:nodeKind sh:IRI ;
+            sh:order 10 ;
+            sh:path dams:relationships ],
+        [ sh:class dams:ITSolution ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path dams:solution_ref ],
+        [ sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path dams:imports_refs ],
+        [ sh:class dams:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 13 ;
+            sh:path dams:data_owner_ref ],
         [ sh:class dams:BusinessDomain ;
             sh:nodeKind sh:IRI ;
             sh:order 5 ;
             sh:path dams:domain_refs ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 20 ;
-            sh:path dams:aliases ],
-        [ sh:class dams:LogicalEntity ;
+        [ sh:class dams:DomainContext ;
             sh:nodeKind sh:IRI ;
-            sh:order 9 ;
-            sh:path dams:logical_entities ],
+            sh:order 8 ;
+            sh:path dams:domain_contexts ],
+        [ sh:datatype xsd:string ;
+            sh:description """Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""" ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 16 ;
+            sh:path dams:ownership_inheritance_rule ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 25 ;
+            sh:path dams:valid_from ],
+        [ sh:class dams:OrganizationUnit ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 15 ;
+            sh:path dams:owning_unit_ref ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 24 ;
+            sh:path dams:lifecycle_status ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 26 ;
+            sh:path dams:valid_to ],
         [ sh:class dams:ConceptualEntity ;
             sh:nodeKind sh:IRI ;
             sh:order 7 ;
             sh:path dams:conceptual_entities ],
+        [ sh:class dams:LogicalEntity ;
+            sh:nodeKind sh:IRI ;
+            sh:order 9 ;
+            sh:path dams:logical_entities ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 19 ;
+            sh:path dams:title ],
         [ sh:description """Body-level scope: enterprise (no solution_ref) or solution. Must align with envelope dams_model_level when profile is dams-data-model.
 """ ;
             sh:in ( "enterprise" "solution" ) ;
@@ -854,132 +973,25 @@ dams:ModelPackage a sh:NodeShape ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 19 ;
+            sh:order 20 ;
             sh:path dams:description ],
-        [ sh:class dams:Role ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 14 ;
-            sh:path dams:data_steward_ref ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 25 ;
-            sh:path dams:valid_to ],
-        [ sh:description """Required for solution packages: reference to the enterprise-conceptual SpecImpl / ModelPackage id (e.g. moex-enterprise-conceptual-model).
-""" ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 3 ;
-            sh:path dams:conceptual_implementation_ref ],
-        [ sh:class dams:Mapping ;
-            sh:nodeKind sh:IRI ;
-            sh:order 12 ;
-            sh:path dams:mappings ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 23 ;
-            sh:path dams:lifecycle_status ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 17 ;
-            sh:path dams:name ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 26 ;
-            sh:path dams:deprecated_by_ref ],
-        [ sh:class dams:PhysicalObject ;
-            sh:nodeKind sh:IRI ;
-            sh:order 11 ;
-            sh:path dams:physical_objects ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 16 ;
-            sh:path dams:element_id ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 18 ;
-            sh:path dams:title ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 1 ;
             sh:path dams:model_version ;
-            sh:pattern "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$" ],
-        [ sh:nodeKind sh:IRI ;
-            sh:order 6 ;
-            sh:path dams:imports_refs ],
-        [ sh:class dams:GlossaryTerm ;
-            sh:nodeKind sh:IRI ;
-            sh:order 21 ;
-            sh:path dams:glossary_term_refs ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 24 ;
-            sh:path dams:valid_from ],
-        [ sh:class dams:OrganizationUnit ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 15 ;
-            sh:path dams:owning_unit_ref ],
-        [ sh:class dams:DomainContext ;
-            sh:nodeKind sh:IRI ;
-            sh:order 8 ;
-            sh:path dams:domain_contexts ],
-        [ sh:class dams:ITSolution ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 4 ;
-            sh:path dams:solution_ref ] ;
+            sh:pattern "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$" ] ;
     sh:targetClass dams:ModelPackage .
 
 dams:ModelSelection a sh:NodeShape ;
     rdfs:comment "Переиспользуемый набор выбранных сущностей, атрибутов и физических представлений." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
+    sh:property [ sh:datatype xsd:string ;
             sh:nodeKind sh:Literal ;
-            sh:order 10 ;
-            sh:path dams:valid_to ],
-        [ sh:class dams:GlossaryTerm ;
-            sh:nodeKind sh:IRI ;
-            sh:order 6 ;
-            sh:path dams:glossary_term_refs ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 3 ;
-            sh:path dams:title ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 8 ;
-            sh:path dams:lifecycle_status ],
-        [ sh:class dams:SelectedEntity ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:selected_entities ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 1 ;
-            sh:path dams:element_id ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 9 ;
-            sh:path dams:valid_from ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 7 ;
-            sh:path dams:tags ],
+            sh:order 5 ;
+            sh:path dams:aliases ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -987,19 +999,52 @@ dams:ModelSelection a sh:NodeShape ;
             sh:order 4 ;
             sh:path dams:description ],
         [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path dams:tags ],
+        [ sh:class dams:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path dams:glossary_term_refs ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 11 ;
+            sh:path dams:deprecated_by_ref ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path dams:valid_from ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path dams:element_id ],
+        [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 2 ;
             sh:path dams:name ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 11 ;
-            sh:path dams:deprecated_by_ref ],
-        [ sh:datatype xsd:string ;
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 5 ;
-            sh:path dams:aliases ] ;
+            sh:order 10 ;
+            sh:path dams:valid_to ],
+        [ sh:class dams:SelectedEntity ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path dams:selected_entities ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 8 ;
+            sh:path dams:lifecycle_status ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path dams:title ] ;
     sh:targetClass dams:ModelSelection .
 
 dams:PolicyBinding a sh:NodeShape ;
@@ -1010,11 +1055,6 @@ dams:PolicyBinding a sh:NodeShape ;
             sh:nodeKind sh:IRI ;
             sh:order 0 ;
             sh:path dams:policy_binding_id ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 3 ;
-            sh:path dams:valid_from ],
         [ sh:class dams:Policy ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -1026,6 +1066,11 @@ dams:PolicyBinding a sh:NodeShape ;
             sh:nodeKind sh:Literal ;
             sh:order 4 ;
             sh:path dams:valid_to ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path dams:valid_from ],
         [ sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
@@ -1040,7 +1085,7 @@ dams:PolicyBinding a sh:NodeShape ;
 dams:RegistryEntry a sh:NodeShape ;
     rdfs:comment "Локальная ссылочная проекция записи внешней мастер-системы; не является мастер-копией справочника." ;
     sh:closed false ;
-    sh:ignoredProperties ( rdf:type dams:platform_ref dams:member_system_refs dams:parent_domain_ref ) ;
+    sh:ignoredProperties ( dams:parent_domain_ref dams:platform_ref dams:member_system_refs rdf:type ) ;
     sh:property [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -1056,12 +1101,6 @@ dams:RegistryEntry a sh:NodeShape ;
             sh:nodeKind sh:IRI ;
             sh:order 4 ;
             sh:path dams:source_uri ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path dams:registry_name ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 0 ;
@@ -1070,61 +1109,89 @@ dams:RegistryEntry a sh:NodeShape ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:order 5 ;
-            sh:path dams:registry_status ] ;
+            sh:path dams:registry_status ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path dams:registry_name ] ;
     sh:targetClass dams:RegistryEntry .
 
 dams:Relationship a sh:NodeShape ;
     rdfs:comment "Именованная связь между логическими или концептуальными сущностями." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:maxCount 1 ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 14 ;
+            sh:path dams:title ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 20 ;
-            sh:path dams:deprecated_by_ref ],
+            sh:order 1 ;
+            sh:path dams:target_entity_ref ],
+        [ sh:description "Тип логической связи (Wave 2)." ;
+            sh:in ( "association" "composition" "aggregation" "specialization" "reference" "derivation" "realization" "lineage" "event_participation" ) ;
+            sh:maxCount 1 ;
+            sh:order 10 ;
+            sh:path dams:relationship_kind ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 13 ;
+            sh:path dams:name ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 19 ;
+            sh:path dams:lifecycle_status ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 21 ;
+            sh:path dams:valid_to ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 10 ;
-            sh:path dams:element_id ],
-        [ sh:class dams:GlossaryTerm ;
-            sh:nodeKind sh:IRI ;
+            sh:order 22 ;
+            sh:path dams:deprecated_by_ref ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minInclusive 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path dams:target_max_cardinality ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
             sh:order 15 ;
-            sh:path dams:glossary_term_refs ],
+            sh:path dams:description ],
         [ sh:datatype xsd:integer ;
             sh:maxCount 1 ;
             sh:minInclusive 0 ;
             sh:nodeKind sh:Literal ;
             sh:order 6 ;
             sh:path dams:target_min_cardinality ],
-        [ sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:source_entity_ref ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minInclusive 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path dams:source_max_cardinality ],
         [ sh:datatype xsd:integer ;
             sh:maxCount 1 ;
             sh:minInclusive 0 ;
             sh:nodeKind sh:Literal ;
             sh:order 4 ;
             sh:path dams:source_min_cardinality ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 14 ;
-            sh:path dams:aliases ],
-        [ sh:datatype xsd:string ;
+        [ sh:datatype xsd:boolean ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 12 ;
-            sh:path dams:title ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 16 ;
-            sh:path dams:tags ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 11 ;
-            sh:path dams:name ],
+            sh:order 9 ;
+            sh:path dams:associative ],
         [ sh:datatype xsd:boolean ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -1135,85 +1202,86 @@ dams:Relationship a sh:NodeShape ;
             sh:nodeKind sh:Literal ;
             sh:order 2 ;
             sh:path dams:source_role ],
-        [ sh:datatype xsd:boolean ;
+        [ sh:datatype xsd:string ;
+            sh:description "Обоснование отсутствия кардинальности для draft/imported связей." ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 9 ;
-            sh:path dams:associative ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 17 ;
-            sh:path dams:lifecycle_status ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 19 ;
-            sh:path dams:valid_to ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 18 ;
-            sh:path dams:valid_from ],
-        [ sh:datatype xsd:integer ;
-            sh:maxCount 1 ;
-            sh:minInclusive 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 5 ;
-            sh:path dams:source_max_cardinality ],
+            sh:order 11 ;
+            sh:path dams:cardinality_rationale ],
         [ sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 1 ;
-            sh:path dams:target_entity_ref ],
+            sh:order 0 ;
+            sh:path dams:source_entity_ref ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 20 ;
+            sh:path dams:valid_from ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 18 ;
+            sh:path dams:tags ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 16 ;
+            sh:path dams:aliases ],
+        [ sh:class dams:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 17 ;
+            sh:path dams:glossary_term_refs ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 12 ;
+            sh:path dams:element_id ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 3 ;
-            sh:path dams:target_role ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 13 ;
-            sh:path dams:description ],
-        [ sh:datatype xsd:integer ;
-            sh:maxCount 1 ;
-            sh:minInclusive 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 7 ;
-            sh:path dams:target_max_cardinality ] ;
+            sh:path dams:target_role ] ;
     sh:targetClass dams:Relationship .
+
+dams:RequirementApplicability a sh:NodeShape ;
+    rdfs:comment """Область применимости требования (без graph queries): класс цели, профиль и уровень модели.
+""" ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:description "Опциональный allowlist object_kind / facet (например table, topic)." ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path dams:applies_target_kinds ],
+        [ sh:in ( "dams-data-model" "ontology-application" "api-specification" "data-contract" "other" ) ;
+            sh:maxCount 1 ;
+            sh:order 5 ;
+            sh:path dams:applies_implementation_profile ],
+        [ sh:datatype xsd:string ;
+            sh:description "Имя класса LinkML, к экземплярам которого применяется требование." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path dams:applies_target_class ],
+        [ sh:in ( "enterprise-conceptual" "solution" ) ;
+            sh:maxCount 1 ;
+            sh:order 4 ;
+            sh:path dams:applies_dams_model_level ],
+        [ sh:in ( "enterprise" "solution" ) ;
+            sh:maxCount 1 ;
+            sh:order 3 ;
+            sh:path dams:applies_implementation_scope ],
+        [ sh:datatype xsd:string ;
+            sh:description "Stable id for applies_to blocks (e.g. appl:LDM-001)." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path dams:applicability_id ] ;
+    sh:targetClass dams:RequirementApplicability .
 
 dams:SelectedAttribute a sh:NodeShape ;
     rdfs:comment "Выбранный атрибут и соответствующее физическое поле payload, таблицы или сообщения." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 3 ;
-            sh:path dams:element_id ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 11 ;
-            sh:path dams:valid_from ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 6 ;
-            sh:path dams:description ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 7 ;
-            sh:path dams:aliases ],
-        [ sh:class dams:Mapping ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 2 ;
-            sh:path dams:transformation_mapping_ref ],
-        [ sh:class dams:LogicalAttribute ;
+    sh:property [ sh:class dams:LogicalAttribute ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
@@ -1223,75 +1291,127 @@ dams:SelectedAttribute a sh:NodeShape ;
             sh:nodeKind sh:Literal ;
             sh:order 9 ;
             sh:path dams:tags ],
-        [ sh:class dams:PhysicalField ;
-            sh:nodeKind sh:IRI ;
-            sh:order 1 ;
-            sh:path dams:physical_field_refs ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 5 ;
-            sh:path dams:title ],
-        [ sh:class dams:GlossaryTerm ;
-            sh:nodeKind sh:IRI ;
-            sh:order 8 ;
-            sh:path dams:glossary_term_refs ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 12 ;
-            sh:path dams:valid_to ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 4 ;
-            sh:path dams:name ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 13 ;
-            sh:path dams:deprecated_by_ref ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 10 ;
-            sh:path dams:lifecycle_status ] ;
-    sh:targetClass dams:SelectedAttribute .
-
-dams:SelectedEntity a sh:NodeShape ;
-    rdfs:comment "Выбранная для интеграции логическая сущность." ;
-    sh:closed true ;
-    sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 9 ;
-            sh:path dams:tags ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 7 ;
-            sh:path dams:aliases ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 3 ;
             sh:path dams:element_id ],
+        [ sh:class dams:Mapping ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path dams:transformation_mapping_ref ],
         [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path dams:aliases ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 4 ;
-            sh:path dams:name ],
+            sh:order 10 ;
+            sh:path dams:lifecycle_status ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 6 ;
             sh:path dams:description ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 13 ;
+            sh:path dams:deprecated_by_ref ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 12 ;
+            sh:path dams:valid_to ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 11 ;
+            sh:path dams:valid_from ],
+        [ sh:class dams:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 8 ;
+            sh:path dams:glossary_term_refs ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path dams:title ],
+        [ sh:class dams:PhysicalField ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path dams:physical_field_refs ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path dams:name ] ;
+    sh:targetClass dams:SelectedAttribute .
+
+dams:SelectedEntity a sh:NodeShape ;
+    rdfs:comment "Выбранная для интеграции логическая сущность." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:class dams:SelectedAttribute ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path dams:selected_attributes ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path dams:tags ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path dams:description ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path dams:title ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 12 ;
+            sh:path dams:valid_to ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path dams:aliases ],
+        [ sh:class dams:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 8 ;
+            sh:path dams:glossary_term_refs ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path dams:element_id ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 13 ;
+            sh:path dams:deprecated_by_ref ],
+        [ sh:class dams:PhysicalObject ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 2 ;
+            sh:path dams:physical_object_refs ],
         [ sh:class dams:LogicalEntity ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 0 ;
             sh:path dams:logical_entity_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path dams:name ],
         [ sh:datatype xsd:dateTime ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -1301,54 +1421,22 @@ dams:SelectedEntity a sh:NodeShape ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:order 10 ;
-            sh:path dams:lifecycle_status ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 5 ;
-            sh:path dams:title ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 13 ;
-            sh:path dams:deprecated_by_ref ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 12 ;
-            sh:path dams:valid_to ],
-        [ sh:class dams:GlossaryTerm ;
-            sh:nodeKind sh:IRI ;
-            sh:order 8 ;
-            sh:path dams:glossary_term_refs ],
-        [ sh:class dams:SelectedAttribute ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 1 ;
-            sh:path dams:selected_attributes ],
-        [ sh:class dams:PhysicalObject ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 2 ;
-            sh:path dams:physical_object_refs ] ;
+            sh:path dams:lifecycle_status ] ;
     sh:targetClass dams:SelectedEntity .
 
 dams:SpecificationRequirement a sh:NodeShape ;
     rdfs:comment "Нормативное требование к модели, соответствующей reference specification (каталог для уровня ИТ-решения и др.)." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:class dams:GlossaryTerm ;
-            sh:nodeKind sh:IRI ;
-            sh:order 10 ;
-            sh:path dams:glossary_term_refs ],
-        [ sh:datatype xsd:string ;
+    sh:property [ sh:class dams:RequirementApplicability ;
+            sh:description "Область применимости требования для formal_checks runner." ;
             sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 8 ;
-            sh:path dams:description ],
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path dams:applies_to ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 5 ;
+            sh:order 6 ;
             sh:path dams:element_id ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
@@ -1357,66 +1445,77 @@ dams:SpecificationRequirement a sh:NodeShape ;
             sh:order 0 ;
             sh:path dams:code ;
             sh:pattern "^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$" ],
-        [ sh:datatype xsd:string ;
-            sh:description "Развёрнутая формулировка требования на понятном языке." ;
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 3 ;
-            sh:path dams:statement ],
+            sh:order 13 ;
+            sh:path dams:lifecycle_status ],
+        [ sh:class dams:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 11 ;
+            sh:path dams:glossary_term_refs ],
         [ sh:in ( "conceptual_model" "it_solution" "it_system" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:order 1 ;
             sh:path dams:requirement_level ],
         [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 6 ;
-            sh:path dams:name ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
+            sh:order 12 ;
+            sh:path dams:tags ],
+        [ sh:datatype xsd:string ;
             sh:nodeKind sh:Literal ;
-            sh:order 13 ;
-            sh:path dams:valid_from ],
+            sh:order 10 ;
+            sh:path dams:aliases ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 7 ;
+            sh:order 8 ;
             sh:path dams:title ],
+        [ sh:class dams:FormalCheck ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 5 ;
+            sh:path dams:formal_checks ],
+        [ sh:datatype xsd:string ;
+            sh:description """Полная нормативная формулировка на русском для человека: без имён LinkML-классов, слотов, kinds проверок и сленга метамодели.
+""" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path dams:statement ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path dams:name ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 16 ;
+            sh:path dams:deprecated_by_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path dams:description ],
         [ sh:datatype xsd:dateTime ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 14 ;
+            sh:path dams:valid_from ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 15 ;
             sh:path dams:valid_to ],
         [ sh:in ( "LDM" "PDM" "REF" "ATR" "FLW" "CLS" "GEN" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:order 2 ;
-            sh:path dams:requirement_section ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 11 ;
-            sh:path dams:tags ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 12 ;
-            sh:path dams:lifecycle_status ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 15 ;
-            sh:path dams:deprecated_by_ref ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 9 ;
-            sh:path dams:aliases ],
-        [ sh:class dams:FormalCheck ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 4 ;
-            sh:path dams:formal_checks ] ;
+            sh:path dams:requirement_section ] ;
     sh:targetClass dams:SpecificationRequirement .
 
 dams:DataContractReference a sh:NodeShape ;
@@ -1424,6 +1523,25 @@ dams:DataContractReference a sh:NodeShape ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
     sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path dams:registry_description ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path dams:source_uri ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path dams:registry_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path dams:master_system ],
+        [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -1433,143 +1551,144 @@ dams:DataContractReference a sh:NodeShape ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:order 5 ;
-            sh:path dams:registry_status ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 4 ;
-            sh:path dams:source_uri ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 3 ;
-            sh:path dams:master_system ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:registry_id ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path dams:registry_description ] ;
+            sh:path dams:registry_status ] ;
     sh:targetClass dams:DataContractReference .
 
 dams:DataFlow a sh:NodeShape ;
     rdfs:comment "Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr, а семантика — модели данных." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:string ;
+    sh:property [ sh:class dams:ITSolution ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path dams:target_solution_ref ],
+        [ sh:class dams:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 14 ;
+            sh:path dams:data_steward_ref ],
+        [ sh:datatype xsd:string ;
+            sh:description """Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""" ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 22 ;
-            sh:path dams:title ],
+            sh:order 16 ;
+            sh:path dams:ownership_inheritance_rule ],
+        [ sh:class dams:DataFlowEntityBinding ;
+            sh:nodeKind sh:IRI ;
+            sh:order 12 ;
+            sh:path dams:entity_bindings ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 27 ;
+            sh:path dams:tags ],
         [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
-            sh:order 16 ;
+            sh:order 17 ;
             sh:path dams:lifecycle_status ],
-        [ sh:in ( "intraplatform" "interplatform" ) ;
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 25 ;
+            sh:path dams:aliases ],
+        [ sh:in ( "api" "queue" "database" "file" "other" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
-            sh:order 8 ;
-            sh:path dams:integration_level ],
+            sh:order 10 ;
+            sh:path dams:integration_channel ],
+        [ sh:class dams:OrganizationUnit ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 15 ;
+            sh:path dams:owning_unit_ref ],
         [ sh:class dams:GlossaryTerm ;
             sh:nodeKind sh:IRI ;
-            sh:order 25 ;
+            sh:order 26 ;
             sh:path dams:glossary_term_refs ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 21 ;
-            sh:path dams:name ],
-        [ sh:class dams:ITPlatform ;
+            sh:order 24 ;
+            sh:path dams:description ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 20 ;
+            sh:path dams:deprecated_by_ref ],
+        [ sh:datatype xsd:dateTime ;
             sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 6 ;
-            sh:path dams:source_platform_ref ],
-        [ sh:class dams:DataFlowEntityBinding ;
-            sh:nodeKind sh:IRI ;
-            sh:order 12 ;
-            sh:path dams:entity_bindings ],
-        [ sh:class dams:ITSystem ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 5 ;
-            sh:path dams:target_system_ref ],
-        [ sh:class dams:ITPlatform ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 7 ;
-            sh:path dams:target_platform_ref ],
+            sh:nodeKind sh:Literal ;
+            sh:order 18 ;
+            sh:path dams:valid_from ],
         [ sh:class dams:ITSystem ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 4 ;
             sh:path dams:source_system_ref ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 19 ;
-            sh:path dams:deprecated_by_ref ],
-        [ sh:class dams:ITSolution ;
+        [ sh:class dams:IntegrationReference ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 3 ;
-            sh:path dams:target_solution_ref ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 18 ;
-            sh:path dams:valid_to ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 26 ;
-            sh:path dams:tags ],
+            sh:order 0 ;
+            sh:path dams:integration_ref ],
         [ sh:class dams:ITSolution ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 2 ;
             sh:path dams:source_solution_ref ],
-        [ sh:class dams:OrganizationUnit ;
+        [ sh:class dams:DataContractReference ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 15 ;
-            sh:path dams:owning_unit_ref ],
-        [ sh:class dams:Role ;
+            sh:order 1 ;
+            sh:path dams:contract_ref ],
+        [ sh:class dams:ITSystem ;
             sh:maxCount 1 ;
+            sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 13 ;
-            sh:path dams:data_owner_ref ],
+            sh:order 5 ;
+            sh:path dams:target_system_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 23 ;
+            sh:path dams:title ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 19 ;
+            sh:path dams:valid_to ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 22 ;
+            sh:path dams:name ],
+        [ sh:in ( "intraplatform" "interplatform" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 8 ;
+            sh:path dams:integration_level ],
         [ sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 11 ;
             sh:path dams:integration_spec_ref ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 17 ;
-            sh:path dams:valid_from ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 24 ;
-            sh:path dams:aliases ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 20 ;
-            sh:path dams:element_id ],
-        [ sh:in ( "api" "queue" "database" "file" "other" ) ;
+        [ sh:class dams:ITPlatform ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
-            sh:order 10 ;
-            sh:path dams:integration_channel ],
+            sh:nodeKind sh:IRI ;
+            sh:order 7 ;
+            sh:path dams:target_platform_ref ],
+        [ sh:class dams:ITPlatform ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path dams:source_platform_ref ],
         [ sh:in ( "EAP" "EDA" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -1578,103 +1697,66 @@ dams:DataFlow a sh:NodeShape ;
         [ sh:class dams:Role ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 14 ;
-            sh:path dams:data_steward_ref ],
-        [ sh:class dams:IntegrationReference ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
+            sh:order 13 ;
+            sh:path dams:data_owner_ref ],
+        [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:integration_ref ],
-        [ sh:class dams:DataContractReference ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 1 ;
-            sh:path dams:contract_ref ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 23 ;
-            sh:path dams:description ] ;
+            sh:order 21 ;
+            sh:path dams:element_id ] ;
     sh:targetClass dams:DataFlow .
 
 dams:DomainContext a sh:NodeShape ;
     rdfs:comment "Ограниченный логический контекст с собственной терминологией и областью ответственности." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:class dams:OrganizationUnit ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 6 ;
-            sh:path dams:owning_unit_ref ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 7 ;
-            sh:path dams:element_id ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
+    sh:property [ sh:datatype xsd:string ;
             sh:nodeKind sh:Literal ;
+            sh:order 12 ;
+            sh:path dams:aliases ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
             sh:order 15 ;
-            sh:path dams:valid_from ],
+            sh:path dams:lifecycle_status ],
         [ sh:datatype xsd:dateTime ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 16 ;
-            sh:path dams:valid_to ],
+            sh:path dams:valid_from ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 18 ;
+            sh:path dams:deprecated_by_ref ],
+        [ sh:class dams:OrganizationUnit ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path dams:owning_unit_ref ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 10 ;
+            sh:order 11 ;
             sh:path dams:description ],
         [ sh:class dams:Role ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 5 ;
-            sh:path dams:data_steward_ref ],
+            sh:order 4 ;
+            sh:path dams:data_owner_ref ],
+        [ sh:class dams:ITSolution ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path dams:solution_ref ],
         [ sh:class dams:GlossaryTerm ;
             sh:nodeKind sh:IRI ;
-            sh:order 12 ;
+            sh:order 13 ;
             sh:path dams:glossary_term_refs ],
         [ sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 2 ;
             sh:path dams:namespace ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 9 ;
-            sh:path dams:title ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 14 ;
-            sh:path dams:lifecycle_status ],
-        [ sh:class dams:ITSolution ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 1 ;
-            sh:path dams:solution_ref ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 8 ;
-            sh:path dams:name ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 13 ;
-            sh:path dams:tags ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 11 ;
-            sh:path dams:aliases ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 17 ;
-            sh:path dams:deprecated_by_ref ],
         [ sh:class dams:BusinessProcess ;
             sh:nodeKind sh:IRI ;
             sh:order 3 ;
@@ -1682,8 +1764,39 @@ dams:DomainContext a sh:NodeShape ;
         [ sh:class dams:Role ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 4 ;
-            sh:path dams:data_owner_ref ],
+            sh:order 5 ;
+            sh:path dams:data_steward_ref ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 14 ;
+            sh:path dams:tags ],
+        [ sh:datatype xsd:string ;
+            sh:description """Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""" ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path dams:ownership_inheritance_rule ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 17 ;
+            sh:path dams:valid_to ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 8 ;
+            sh:path dams:element_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 10 ;
+            sh:path dams:title ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path dams:name ],
         [ sh:class dams:BusinessDomain ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -1696,12 +1809,10 @@ dams:IntegrationReference a sh:NodeShape ;
     rdfs:comment "Ссылка на интеграцию в Clinkr." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 3 ;
-            sh:path dams:master_system ],
+    sh:property [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path dams:registry_id ],
         [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -1709,23 +1820,25 @@ dams:IntegrationReference a sh:NodeShape ;
             sh:path dams:registry_status ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:registry_id ],
+            sh:order 4 ;
+            sh:path dams:source_uri ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 2 ;
             sh:path dams:registry_description ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 4 ;
-            sh:path dams:source_uri ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 1 ;
-            sh:path dams:registry_name ] ;
+            sh:path dams:registry_name ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path dams:master_system ] ;
     sh:targetClass dams:IntegrationReference .
 
 dams:BusinessDomain a sh:NodeShape ;
@@ -1737,250 +1850,246 @@ dams:BusinessDomain a sh:NodeShape ;
             sh:nodeKind sh:IRI ;
             sh:order 0 ;
             sh:path dams:parent_domain_ref ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 6 ;
-            sh:path dams:registry_status ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 2 ;
             sh:path dams:registry_name ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 3 ;
-            sh:path dams:registry_description ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 1 ;
             sh:path dams:registry_id ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 6 ;
+            sh:path dams:registry_status ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path dams:master_system ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 5 ;
             sh:path dams:source_uri ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
-            sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 4 ;
-            sh:path dams:master_system ] ;
+            sh:order 3 ;
+            sh:path dams:registry_description ] ;
     sh:targetClass dams:BusinessDomain .
 
 dams:ConceptualEntity a sh:NodeShape ;
     rdfs:comment "Корпоративное бизнес-понятие верхнего уровня, независимое от конкретной реализации." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:in ( "reference_data" "master_data" "transactional_data" "analytical_data" "metadata" ) ;
+    sh:property [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
-            sh:order 6 ;
-            sh:path dams:data_class ],
-        [ sh:in ( "high" "medium" "low" ) ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 12 ;
+            sh:path dams:description ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 17 ;
+            sh:path dams:valid_from ],
+        [ sh:class dams:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 14 ;
+            sh:path dams:glossary_term_refs ],
+        [ sh:in ( "reference_data" "master_data" "transactional_data" "analytical_data" "metadata" "operational_data" ) ;
             sh:maxCount 1 ;
             sh:order 7 ;
-            sh:path dams:business_importance ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 18 ;
-            sh:path dams:deprecated_by_ref ],
+            sh:path dams:data_class ],
         [ sh:class dams:ConceptualEntity ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 0 ;
             sh:path dams:parent_concept_ref ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 16 ;
-            sh:path dams:valid_from ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 12 ;
-            sh:path dams:aliases ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 10 ;
-            sh:path dams:title ],
-        [ sh:class dams:Role ;
+        [ sh:class dams:OrganizationUnit ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 3 ;
-            sh:path dams:data_steward_ref ],
+            sh:order 4 ;
+            sh:path dams:owning_unit_ref ],
         [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
-            sh:order 15 ;
+            sh:order 16 ;
             sh:path dams:lifecycle_status ],
-        [ sh:class dams:GlossaryTerm ;
+        [ sh:in ( "critical" "high" "medium" "low" ) ;
+            sh:maxCount 1 ;
+            sh:order 8 ;
+            sh:path dams:business_importance ],
+        [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 13 ;
-            sh:path dams:glossary_term_refs ],
+            sh:order 19 ;
+            sh:path dams:deprecated_by_ref ],
         [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 14 ;
-            sh:path dams:tags ],
+            sh:order 10 ;
+            sh:path dams:name ],
+        [ sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path dams:key_attribute_refs ],
         [ sh:class dams:Role ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 2 ;
             sh:path dams:data_owner_ref ],
         [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 9 ;
-            sh:path dams:name ],
+            sh:order 13 ;
+            sh:path dams:aliases ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
-            sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 11 ;
-            sh:path dams:description ],
-        [ sh:in ( "core" "derived" "reference" ) ;
-            sh:maxCount 1 ;
-            sh:order 5 ;
-            sh:path dams:entity_type ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 8 ;
-            sh:path dams:element_id ],
-        [ sh:nodeKind sh:IRI ;
-            sh:order 1 ;
-            sh:path dams:key_attribute_refs ],
-        [ sh:class dams:OrganizationUnit ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 4 ;
-            sh:path dams:owning_unit_ref ],
+            sh:path dams:title ],
         [ sh:datatype xsd:dateTime ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 17 ;
-            sh:path dams:valid_to ] ;
+            sh:order 18 ;
+            sh:path dams:valid_to ],
+        [ sh:datatype xsd:string ;
+            sh:description """Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""" ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path dams:ownership_inheritance_rule ],
+        [ sh:class dams:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path dams:data_steward_ref ],
+        [ sh:in ( "core" "derived" "reference" "projection" "technical" ) ;
+            sh:maxCount 1 ;
+            sh:order 6 ;
+            sh:path dams:entity_type ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 9 ;
+            sh:path dams:element_id ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 15 ;
+            sh:path dams:tags ] ;
     sh:targetClass dams:ConceptualEntity .
 
 dams:ITPlatform a sh:NodeShape ;
     rdfs:comment "ИТ-платформа; мастер данных — EAM." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:maxCount 1 ;
+    sh:property [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 5 ;
+            sh:path dams:registry_status ],
+        [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 4 ;
             sh:path dams:source_uri ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path dams:registry_name ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 0 ;
             sh:path dams:registry_id ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 3 ;
-            sh:path dams:master_system ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 2 ;
             sh:path dams:registry_description ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 5 ;
-            sh:path dams:registry_status ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path dams:registry_name ] ;
+            sh:order 3 ;
+            sh:path dams:master_system ] ;
     sh:targetClass dams:ITPlatform .
 
 dams:Mapping a sh:NodeShape ;
-    rdfs:comment """Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual), field_mapping/mapsTo (physical↔logical), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
+    rdfs:comment """Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (PhysicalObject↔LogicalEntity), field_mapping/mapsTo (physical↔logical), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
 """ ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 21 ;
-            sh:path dams:lifecycle_status ],
-        [ sh:datatype xsd:dateTime ;
+    sh:property [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 13 ;
-            sh:path dams:approved_at ],
-        [ sh:in ( "one_to_one" "one_to_many" "many_to_one" "many_to_many" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 3 ;
-            sh:path dams:mapping_cardinality ],
+            sh:order 5 ;
+            sh:path dams:transformation_expression ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 18 ;
+            sh:path dams:aliases ],
         [ sh:class dams:GlossaryTerm ;
             sh:nodeKind sh:IRI ;
             sh:order 19 ;
             sh:path dams:glossary_term_refs ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 9 ;
-            sh:path dams:source_artifact_ref ],
+            sh:order 4 ;
+            sh:path dams:transformation_ref ],
+        [ sh:in ( "semantic_equivalence" "specialization" "implementation" "entity_physical" "field_mapping" "transformation" "aggregation" "derivation" "realizes" "aligns_with" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 2 ;
+            sh:path dams:mapping_type ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 13 ;
+            sh:path dams:approved_at ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 8 ;
+            sh:path dams:valid_to ],
+        [ sh:in ( "proposed" "approved" "rejected" "superseded" ) ;
+            sh:maxCount 1 ;
+            sh:order 11 ;
+            sh:path dams:approval_status ],
+        [ sh:nodeKind sh:IRI ;
+            sh:order 10 ;
+            sh:path dams:evidence_refs ],
+        [ sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path dams:source_refs ],
+        [ sh:class dams:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 12 ;
+            sh:path dams:approved_by_ref ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 17 ;
             sh:path dams:description ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 7 ;
-            sh:path dams:valid_from ],
-        [ sh:in ( "proposed" "approved" "rejected" "superseded" ) ;
-            sh:maxCount 1 ;
-            sh:order 11 ;
-            sh:path dams:approval_status ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 8 ;
-            sh:path dams:valid_to ],
-        [ sh:in ( "semantic_equivalence" "specialization" "implementation" "field_mapping" "transformation" "aggregation" "derivation" "realizes" "aligns_with" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 2 ;
-            sh:path dams:mapping_type ],
-        [ sh:class dams:Role ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 12 ;
-            sh:path dams:approved_by_ref ],
-        [ sh:nodeKind sh:IRI ;
-            sh:order 10 ;
-            sh:path dams:evidence_refs ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 15 ;
-            sh:path dams:name ],
         [ sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 1 ;
             sh:path dams:target_refs ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 14 ;
-            sh:path dams:element_id ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 4 ;
-            sh:path dams:transformation_ref ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 18 ;
-            sh:path dams:aliases ],
+            sh:order 22 ;
+            sh:path dams:deprecated_by_ref ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 21 ;
+            sh:path dams:lifecycle_status ],
         [ sh:datatype xsd:decimal ;
             sh:maxCount 1 ;
             sh:maxInclusive 1 ;
@@ -1988,103 +2097,96 @@ dams:Mapping a sh:NodeShape ;
             sh:nodeKind sh:Literal ;
             sh:order 6 ;
             sh:path dams:confidence ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 5 ;
-            sh:path dams:transformation_expression ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 14 ;
+            sh:path dams:element_id ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 16 ;
             sh:path dams:title ],
+        [ sh:in ( "one_to_one" "one_to_many" "many_to_one" "many_to_many" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 3 ;
+            sh:path dams:mapping_cardinality ],
         [ sh:datatype xsd:string ;
             sh:nodeKind sh:Literal ;
             sh:order 20 ;
             sh:path dams:tags ],
-        [ sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:source_refs ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 22 ;
-            sh:path dams:deprecated_by_ref ] ;
+            sh:order 9 ;
+            sh:path dams:source_artifact_ref ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path dams:valid_from ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 15 ;
+            sh:path dams:name ] ;
     sh:targetClass dams:Mapping .
 
 dams:PhysicalField a sh:NodeShape ;
     rdfs:comment "Поле физического объекта; его семантика задаётся Mapping к LogicalAttribute." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:integer ;
-            sh:maxCount 1 ;
-            sh:minInclusive 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 4 ;
-            sh:path dams:ordinal_position ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 10 ;
-            sh:path dams:aliases ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 7 ;
-            sh:path dams:name ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 5 ;
-            sh:path dams:schema_path ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 8 ;
-            sh:path dams:title ],
-        [ sh:datatype xsd:string ;
-            sh:nodeKind sh:Literal ;
-            sh:order 12 ;
-            sh:path dams:tags ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 6 ;
-            sh:path dams:element_id ],
-        [ sh:class dams:GlossaryTerm ;
-            sh:nodeKind sh:IRI ;
-            sh:order 11 ;
-            sh:path dams:glossary_term_refs ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 15 ;
-            sh:path dams:valid_to ],
-        [ sh:datatype xsd:boolean ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 3 ;
-            sh:path dams:required ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
+    sh:property [ sh:datatype xsd:string ;
             sh:nodeKind sh:Literal ;
             sh:order 14 ;
-            sh:path dams:valid_from ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:path dams:tags ],
+        [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 13 ;
-            sh:path dams:lifecycle_status ],
+            sh:nodeKind sh:Literal ;
+            sh:order 10 ;
+            sh:path dams:title ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
+            sh:order 8 ;
+            sh:path dams:element_id ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
             sh:order 16 ;
+            sh:path dams:valid_from ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 18 ;
             sh:path dams:deprecated_by_ref ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path dams:native_name ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 15 ;
+            sh:path dams:lifecycle_status ],
+        [ sh:description """Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
+""" ;
+            sh:in ( "mapped" "derived" "planned" "inherited" "technical-only" "not-applicable" ) ;
+            sh:maxCount 1 ;
+            sh:order 6 ;
+            sh:path dams:mapping_coverage_status ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
             sh:order 9 ;
-            sh:path dams:description ],
+            sh:path dams:name ],
+        [ sh:datatype xsd:string ;
+            sh:description "Обоснование для planned / technical-only / not-applicable / inherited." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path dams:mapping_rationale ],
         [ sh:class dams:PhysicalObject ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -2095,31 +2197,65 @@ dams:PhysicalField a sh:NodeShape ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path dams:native_name ],
+            sh:order 2 ;
+            sh:path dams:native_type ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path dams:schema_path ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minInclusive 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path dams:ordinal_position ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 17 ;
+            sh:path dams:valid_to ],
+        [ sh:datatype xsd:boolean ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path dams:required ],
+        [ sh:class dams:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 13 ;
+            sh:path dams:glossary_term_refs ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path dams:native_type ] ;
+            sh:order 11 ;
+            sh:path dams:description ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 12 ;
+            sh:path dams:aliases ] ;
     sh:targetClass dams:PhysicalField .
 
 dams:DataClassificationTerm a sh:NodeShape ;
     rdfs:comment "Специальная категория чувствительности или регулирования, например ПДн или инсайдерская информация." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path dams:registry_name ],
+    sh:property [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path dams:source_uri ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 2 ;
             sh:path dams:registry_description ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path dams:registry_name ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -2134,36 +2270,21 @@ dams:DataClassificationTerm a sh:NodeShape ;
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 0 ;
-            sh:path dams:registry_id ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 4 ;
-            sh:path dams:source_uri ] ;
+            sh:path dams:registry_id ] ;
     sh:targetClass dams:DataClassificationTerm .
 
 dams:ITSystem a sh:NodeShape ;
     rdfs:comment "ИТ-система; мастер данных — EAM." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path dams:registry_description ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path dams:registry_name ],
+    sh:property [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path dams:source_uri ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 0 ;
             sh:path dams:registry_id ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 4 ;
-            sh:path dams:source_uri ],
         [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -2174,39 +2295,88 @@ dams:ITSystem a sh:NodeShape ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 3 ;
-            sh:path dams:master_system ] ;
+            sh:path dams:master_system ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path dams:registry_description ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path dams:registry_name ] ;
     sh:targetClass dams:ITSystem .
 
 dams:PhysicalObject a sh:NodeShape ;
     rdfs:comment "Квант данных или техническая точка публикации/потребления." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
+    sh:property [ sh:datatype xsd:string ;
             sh:nodeKind sh:Literal ;
-            sh:order 20 ;
-            sh:path dams:valid_from ],
-        [ sh:class dams:Role ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 8 ;
-            sh:path dams:data_owner_ref ],
-        [ sh:class dams:OrganizationUnit ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 10 ;
-            sh:path dams:owning_unit_ref ],
-        [ sh:datatype xsd:string ;
+            sh:order 19 ;
+            sh:path dams:aliases ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
+            sh:order 22 ;
+            sh:path dams:lifecycle_status ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 25 ;
+            sh:path dams:deprecated_by_ref ],
+        [ sh:datatype xsd:string ;
             sh:nodeKind sh:Literal ;
-            sh:order 13 ;
-            sh:path dams:name ],
+            sh:order 21 ;
+            sh:path dams:tags ],
+        [ sh:class dams:ITSystem ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path dams:system_ref ],
+        [ sh:description """Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
+""" ;
+            sh:in ( "mapped" "derived" "planned" "inherited" "technical-only" "not-applicable" ) ;
+            sh:maxCount 1 ;
+            sh:order 8 ;
+            sh:path dams:mapping_coverage_status ],
         [ sh:in ( "inbound" "outbound" "internal" "bidirectional" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:order 6 ;
             sh:path dams:direction ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 15 ;
+            sh:path dams:element_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 18 ;
+            sh:path dams:description ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 16 ;
+            sh:path dams:name ],
+        [ sh:class dams:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 10 ;
+            sh:path dams:data_owner_ref ],
+        [ sh:in ( "database" "schema" "table" "view" "column" "api" "endpoint" "payload" "topic" "queue" "message" "file" "dataset" "pipeline" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 2 ;
+            sh:path dams:object_kind ],
+        [ sh:class dams:PhysicalField ;
+            sh:nodeKind sh:IRI ;
+            sh:order 7 ;
+            sh:path dams:physical_fields ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -2215,114 +2385,94 @@ dams:PhysicalObject a sh:NodeShape ;
             sh:path dams:qualified_name ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 14 ;
-            sh:path dams:title ],
-        [ sh:class dams:Role ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 9 ;
-            sh:path dams:data_steward_ref ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 4 ;
             sh:path dams:technology ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 19 ;
-            sh:path dams:lifecycle_status ],
-        [ sh:in ( "database" "schema" "table" "view" "column" "api" "endpoint" "payload" "topic" "queue" "message" "file" "dataset" "pipeline" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 2 ;
-            sh:path dams:object_kind ],
         [ sh:datatype xsd:string ;
+            sh:description """Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""" ;
+            sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 18 ;
-            sh:path dams:tags ],
-        [ sh:class dams:GlossaryTerm ;
-            sh:nodeKind sh:IRI ;
-            sh:order 17 ;
-            sh:path dams:glossary_term_refs ],
-        [ sh:class dams:PhysicalField ;
-            sh:nodeKind sh:IRI ;
-            sh:order 7 ;
-            sh:path dams:physical_fields ],
-        [ sh:class dams:Policy ;
+            sh:order 13 ;
+            sh:path dams:ownership_inheritance_rule ],
+        [ sh:class dams:Role ;
+            sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 11 ;
+            sh:path dams:data_steward_ref ],
+        [ sh:class dams:Policy ;
+            sh:nodeKind sh:IRI ;
+            sh:order 14 ;
             sh:path dams:policy_refs ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 15 ;
-            sh:path dams:description ],
-        [ sh:class dams:ITSystem ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 1 ;
-            sh:path dams:system_ref ],
-        [ sh:class dams:ITSolution ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:solution_ref ],
         [ sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 5 ;
             sh:path dams:native_schema_ref ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 12 ;
-            sh:path dams:element_id ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 22 ;
-            sh:path dams:deprecated_by_ref ],
+        [ sh:datatype xsd:string ;
+            sh:description "Обоснование для planned / technical-only / not-applicable / inherited." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path dams:mapping_rationale ],
         [ sh:datatype xsd:dateTime ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 21 ;
+            sh:order 24 ;
             sh:path dams:valid_to ],
         [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 16 ;
-            sh:path dams:aliases ] ;
+            sh:order 17 ;
+            sh:path dams:title ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 23 ;
+            sh:path dams:valid_from ],
+        [ sh:class dams:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 20 ;
+            sh:path dams:glossary_term_refs ],
+        [ sh:class dams:OrganizationUnit ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 12 ;
+            sh:path dams:owning_unit_ref ],
+        [ sh:class dams:ITSolution ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path dams:solution_ref ] ;
     sh:targetClass dams:PhysicalObject .
 
 dams:ITSolution a sh:NodeShape ;
     rdfs:comment "ИТ-решение, объединяющее одну или несколько ИТ-систем; мастер данных — EAM." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:string ;
+    sh:property [ sh:class dams:ITSystem ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path dams:member_system_refs ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 7 ;
+            sh:path dams:registry_status ],
+        [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 4 ;
             sh:path dams:registry_description ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 2 ;
-            sh:path dams:registry_id ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 3 ;
-            sh:path dams:registry_name ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
             sh:order 6 ;
             sh:path dams:source_uri ],
-        [ sh:class dams:ITSystem ;
+        [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:member_system_refs ],
+            sh:order 2 ;
+            sh:path dams:registry_id ],
         [ sh:class dams:ITPlatform ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
@@ -2334,22 +2484,126 @@ dams:ITSolution a sh:NodeShape ;
             sh:nodeKind sh:Literal ;
             sh:order 5 ;
             sh:path dams:master_system ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+        [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
-            sh:order 7 ;
-            sh:path dams:registry_status ] ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path dams:registry_name ] ;
     sh:targetClass dams:ITSolution .
 
 dams:LogicalAttribute a sh:NodeShape ;
     rdfs:comment "Логический атрибут сущности с бизнес-смыслом, типом, обязательностью и классификацией." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 24 ;
+            sh:path dams:title ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 26 ;
+            sh:path dams:aliases ],
+        [ sh:datatype xsd:string ;
+            sh:description "Код единицы измерения (Wave 2 soft)." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 12 ;
+            sh:path dams:unit_code ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
-            sh:order 22 ;
+            sh:order 29 ;
             sh:path dams:lifecycle_status ],
+        [ sh:class dams:Policy ;
+            sh:nodeKind sh:IRI ;
+            sh:order 21 ;
+            sh:path dams:policy_refs ],
+        [ sh:in ( "public" "internal" "confidential" "restricted" ) ;
+            sh:maxCount 1 ;
+            sh:order 16 ;
+            sh:path dams:governance_classification ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minInclusive 0 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path dams:minimum_cardinality ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minInclusive 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path dams:maximum_cardinality ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 19 ;
+            sh:path dams:classification_source ],
+        [ sh:class dams:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 27 ;
+            sh:path dams:glossary_term_refs ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path dams:format_pattern ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 22 ;
+            sh:path dams:element_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 23 ;
+            sh:path dams:name ],
+        [ sh:description "Режим защиты (Wave 2); ортогонален governance_classification." ;
+            sh:in ( "internal" "confidential" "restricted" ) ;
+            sh:maxCount 1 ;
+            sh:order 17 ;
+            sh:path dams:security_classification ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 20 ;
+            sh:path dams:classification_rationale ],
+        [ sh:description """Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
+""" ;
+            sh:in ( "mapped" "derived" "planned" "inherited" "technical-only" "not-applicable" ) ;
+            sh:maxCount 1 ;
+            sh:order 10 ;
+            sh:path dams:mapping_coverage_status ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 30 ;
+            sh:path dams:valid_from ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 32 ;
+            sh:path dams:deprecated_by_ref ],
+        [ sh:class dams:DataClassificationTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 18 ;
+            sh:path dams:sensitivity_term_refs ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path dams:derived_expression ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path dams:value_set_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 25 ;
+            sh:path dams:description ],
         [ sh:class dams:LogicalEntity ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -2357,75 +2611,16 @@ dams:LogicalAttribute a sh:NodeShape ;
             sh:order 0 ;
             sh:path dams:owner_entity_ref ],
         [ sh:datatype xsd:string ;
+            sh:description "Обоснование для planned / technical-only / not-applicable / inherited." ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 9 ;
-            sh:path dams:derived_expression ],
-        [ sh:datatype xsd:boolean ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 3 ;
-            sh:path dams:multivalued ],
-        [ sh:in ( "public" "internal" "confidential" "restricted" ) ;
-            sh:maxCount 1 ;
-            sh:order 10 ;
-            sh:path dams:governance_classification ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 8 ;
-            sh:path dams:default_value ],
-        [ sh:class dams:GlossaryTerm ;
-            sh:nodeKind sh:IRI ;
-            sh:order 20 ;
-            sh:path dams:glossary_term_refs ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 18 ;
-            sh:path dams:description ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 16 ;
-            sh:path dams:name ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 7 ;
-            sh:path dams:format_pattern ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 17 ;
-            sh:path dams:title ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 25 ;
-            sh:path dams:deprecated_by_ref ],
-        [ sh:datatype xsd:boolean ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path dams:required ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 15 ;
-            sh:path dams:element_id ],
-        [ sh:datatype xsd:integer ;
-            sh:maxCount 1 ;
-            sh:minInclusive 0 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 4 ;
-            sh:path dams:minimum_cardinality ],
-        [ sh:class dams:DataClassificationTerm ;
-            sh:nodeKind sh:IRI ;
             sh:order 11 ;
-            sh:path dams:sensitivity_term_refs ],
+            sh:path dams:mapping_rationale ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 31 ;
+            sh:path dams:valid_to ],
         [ sh:in ( "string" "integer" "decimal" "boolean" "date" "datetime" "time" "binary" "identifier" "uri" "object" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -2434,219 +2629,254 @@ dams:LogicalAttribute a sh:NodeShape ;
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 12 ;
-            sh:path dams:classification_source ],
-        [ sh:datatype xsd:dateTime ;
+            sh:order 8 ;
+            sh:path dams:default_value ],
+        [ sh:datatype xsd:boolean ;
             sh:maxCount 1 ;
+            sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 24 ;
-            sh:path dams:valid_to ],
-        [ sh:datatype xsd:integer ;
-            sh:maxCount 1 ;
-            sh:minInclusive 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 5 ;
-            sh:path dams:maximum_cardinality ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 6 ;
-            sh:path dams:value_set_ref ],
-        [ sh:datatype xsd:dateTime ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 23 ;
-            sh:path dams:valid_from ],
+            sh:order 2 ;
+            sh:path dams:required ],
         [ sh:datatype xsd:string ;
             sh:nodeKind sh:Literal ;
-            sh:order 21 ;
+            sh:order 28 ;
             sh:path dams:tags ],
-        [ sh:class dams:Policy ;
+        [ sh:description "Ссылка на атрибут валюты для денежной величины (Wave 2 soft)." ;
+            sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 14 ;
-            sh:path dams:policy_refs ],
+            sh:order 13 ;
+            sh:path dams:currency_attribute_ref ],
+        [ sh:datatype xsd:boolean ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path dams:multivalued ],
         [ sh:datatype xsd:string ;
+            sh:description "Политика часового пояса для timestamp (Wave 2 soft)." ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 13 ;
-            sh:path dams:classification_rationale ],
+            sh:order 14 ;
+            sh:path dams:timezone_policy ],
         [ sh:datatype xsd:string ;
+            sh:description "Семантика даты/времени (Wave 2 soft)." ;
+            sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 19 ;
-            sh:path dams:aliases ] ;
+            sh:order 15 ;
+            sh:path dams:temporal_semantics ] ;
     sh:targetClass dams:LogicalAttribute .
 
 dams:LogicalEntity a sh:NodeShape ;
     rdfs:comment "Представление бизнес-сущности в доменном контексте и модели конкретного решения." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:class dams:GlossaryTerm ;
-            sh:nodeKind sh:IRI ;
-            sh:order 23 ;
-            sh:path dams:glossary_term_refs ],
-        [ sh:datatype xsd:string ;
+    sh:property [ sh:in ( "natural" "composite" "external" "local" "surrogate" "derived" ) ;
             sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 21 ;
-            sh:path dams:description ],
-        [ sh:class dams:Policy ;
-            sh:nodeKind sh:IRI ;
-            sh:order 6 ;
-            sh:path dams:invariant_refs ],
-        [ sh:datatype xsd:string ;
+            sh:order 8 ;
+            sh:path dams:business_key_kind ],
+        [ sh:in ( "aligned" "pending" "local-only" "not-applicable" ) ;
             sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 19 ;
-            sh:path dams:name ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 28 ;
-            sh:path dams:deprecated_by_ref ],
+            sh:order 9 ;
+            sh:path dams:conceptual_alignment_status ],
         [ sh:datatype xsd:string ;
             sh:nodeKind sh:Literal ;
-            sh:order 22 ;
+            sh:order 29 ;
             sh:path dams:aliases ],
         [ sh:class dams:DataClassificationTerm ;
             sh:nodeKind sh:IRI ;
-            sh:order 14 ;
+            sh:order 21 ;
             sh:path dams:sensitivity_term_refs ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
+            sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 20 ;
-            sh:path dams:title ],
+            sh:order 28 ;
+            sh:path dams:description ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 35 ;
+            sh:path dams:deprecated_by_ref ],
+        [ sh:datatype xsd:string ;
+            sh:description "Обоснование статуса выравнивания с концептуальным уровнем." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 10 ;
+            sh:path dams:alignment_rationale ],
+        [ sh:in ( "core" "derived" "reference" "projection" "technical" ) ;
+            sh:maxCount 1 ;
+            sh:order 16 ;
+            sh:path dams:entity_type ],
+        [ sh:in ( "public" "internal" "confidential" "restricted" ) ;
+            sh:maxCount 1 ;
+            sh:order 19 ;
+            sh:path dams:governance_classification ],
+        [ sh:class dams:OrganizationUnit ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 14 ;
+            sh:path dams:owning_unit_ref ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 23 ;
+            sh:path dams:classification_rationale ],
+        [ sh:nodeKind sh:IRI ;
+            sh:order 5 ;
+            sh:path dams:key_attribute_refs ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 26 ;
+            sh:path dams:name ],
+        [ sh:datatype xsd:string ;
+            sh:description "Обоснование семантической изоляции сущности (LDM-007)." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 11 ;
+            sh:path dams:isolation_rationale ],
         [ sh:class dams:ConceptualEntity ;
             sh:nodeKind sh:IRI ;
             sh:order 1 ;
             sh:path dams:conceptual_entity_refs ],
-        [ sh:in ( "producer" "consumer" "intermediary" ) ;
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
-            sh:order 3 ;
-            sh:path dams:solution_data_role ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 16 ;
-            sh:path dams:classification_rationale ],
-        [ sh:in ( "high" "medium" "low" ) ;
-            sh:maxCount 1 ;
-            sh:order 12 ;
-            sh:path dams:business_importance ],
-        [ sh:class dams:OrganizationUnit ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 9 ;
-            sh:path dams:owning_unit_ref ],
-        [ sh:in ( "reference_data" "master_data" "transactional_data" "analytical_data" "metadata" ) ;
-            sh:maxCount 1 ;
-            sh:order 11 ;
-            sh:path dams:data_class ],
+            sh:order 32 ;
+            sh:path dams:lifecycle_status ],
         [ sh:class dams:DomainContext ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 0 ;
             sh:path dams:context_ref ],
-        [ sh:class dams:Role ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 8 ;
-            sh:path dams:data_steward_ref ],
         [ sh:datatype xsd:string ;
+            sh:description """Деловое правило идентичности экземпляров сущности в контексте ИТ-решения.
+""" ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 15 ;
-            sh:path dams:classification_source ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 25 ;
-            sh:path dams:lifecycle_status ],
+            sh:order 7 ;
+            sh:path dams:identity_rule ],
         [ sh:datatype xsd:string ;
             sh:nodeKind sh:Literal ;
-            sh:order 24 ;
+            sh:order 31 ;
             sh:path dams:tags ],
         [ sh:class dams:Role ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 7 ;
+            sh:order 12 ;
             sh:path dams:data_owner_ref ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
+        [ sh:in ( "critical" "high" "medium" "low" ) ;
+            sh:maxCount 1 ;
             sh:order 18 ;
-            sh:path dams:element_id ],
-        [ sh:datatype xsd:dateTime ;
+            sh:path dams:business_importance ],
+        [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 26 ;
-            sh:path dams:valid_from ],
-        [ sh:datatype xsd:dateTime ;
+            sh:order 22 ;
+            sh:path dams:classification_source ],
+        [ sh:description "Режим защиты (Wave 2); ортогонален governance_classification." ;
+            sh:in ( "internal" "confidential" "restricted" ) ;
             sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 27 ;
-            sh:path dams:valid_to ],
-        [ sh:in ( "public" "internal" "confidential" "restricted" ) ;
-            sh:maxCount 1 ;
-            sh:order 13 ;
-            sh:path dams:governance_classification ],
-        [ sh:in ( "core" "derived" "reference" ) ;
-            sh:maxCount 1 ;
-            sh:order 10 ;
-            sh:path dams:entity_type ],
+            sh:order 20 ;
+            sh:path dams:security_classification ],
         [ sh:class dams:ITSolution ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 2 ;
             sh:path dams:solution_ref ],
+        [ sh:class dams:GlossaryTerm ;
+            sh:nodeKind sh:IRI ;
+            sh:order 30 ;
+            sh:path dams:glossary_term_refs ],
         [ sh:class dams:Policy ;
             sh:nodeKind sh:IRI ;
-            sh:order 17 ;
+            sh:order 24 ;
             sh:path dams:policy_refs ],
-        [ sh:nodeKind sh:IRI ;
-            sh:order 5 ;
-            sh:path dams:key_attribute_refs ],
+        [ sh:class dams:Role ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 13 ;
+            sh:path dams:data_steward_ref ],
+        [ sh:datatype xsd:string ;
+            sh:description """Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""" ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 15 ;
+            sh:path dams:ownership_inheritance_rule ],
+        [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 25 ;
+            sh:path dams:element_id ],
+        [ sh:class dams:Policy ;
+            sh:nodeKind sh:IRI ;
+            sh:order 6 ;
+            sh:path dams:invariant_refs ],
+        [ sh:in ( "producer" "consumer" "intermediary" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 3 ;
+            sh:path dams:solution_data_role ],
+        [ sh:in ( "reference_data" "master_data" "transactional_data" "analytical_data" "metadata" "operational_data" ) ;
+            sh:maxCount 1 ;
+            sh:order 17 ;
+            sh:path dams:data_class ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 33 ;
+            sh:path dams:valid_from ],
         [ sh:class dams:LogicalAttribute ;
             sh:nodeKind sh:IRI ;
             sh:order 4 ;
-            sh:path dams:attributes ] ;
+            sh:path dams:attributes ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 34 ;
+            sh:path dams:valid_to ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 27 ;
+            sh:path dams:title ] ;
     sh:targetClass dams:LogicalEntity .
 
 dams:Policy a sh:NodeShape ;
     rdfs:comment "Политика доступа, хранения, качества или архитектурный инвариант." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path dams:registry_description ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 3 ;
-            sh:path dams:master_system ],
+    sh:property [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path dams:registry_id ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 1 ;
             sh:path dams:registry_name ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path dams:master_system ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 4 ;
             sh:path dams:source_uri ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path dams:registry_description ],
         [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:order 5 ;
-            sh:path dams:registry_status ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:registry_id ] ;
+            sh:path dams:registry_status ] ;
     sh:targetClass dams:Policy .
 
 dams:OrganizationUnit a sh:NodeShape ;
@@ -2655,8 +2885,19 @@ dams:OrganizationUnit a sh:NodeShape ;
     sh:ignoredProperties ( rdf:type ) ;
     sh:property [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path dams:registry_id ],
+            sh:order 4 ;
+            sh:path dams:source_uri ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path dams:registry_description ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path dams:registry_name ],
         [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -2664,50 +2905,39 @@ dams:OrganizationUnit a sh:NodeShape ;
             sh:path dams:registry_status ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
-            sh:order 4 ;
-            sh:path dams:source_uri ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path dams:registry_name ],
+            sh:order 0 ;
+            sh:path dams:registry_id ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 3 ;
-            sh:path dams:master_system ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path dams:registry_description ] ;
+            sh:path dams:master_system ] ;
     sh:targetClass dams:OrganizationUnit .
 
 dams:GlossaryTerm a sh:NodeShape ;
     rdfs:comment "Термин корпоративного бизнес-глоссария." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:maxCount 1 ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path dams:registry_description ],
+        [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 4 ;
             sh:path dams:source_uri ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path dams:registry_name ],
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 0 ;
             sh:path dams:registry_id ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
+            sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path dams:registry_description ],
+            sh:order 1 ;
+            sh:path dams:registry_name ],
         [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -2725,7 +2955,27 @@ dams:Role a sh:NodeShape ;
     rdfs:comment "Управляемая роль владельца, стюарда, потребителя или согласующего." ;
     sh:closed true ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:string ;
+    sh:property [ sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path dams:source_uri ],
+        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 5 ;
+            sh:path dams:registry_status ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path dams:registry_description ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path dams:registry_name ],
+        [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -2734,26 +2984,6 @@ dams:Role a sh:NodeShape ;
         [ sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 0 ;
-            sh:path dams:registry_id ],
-        [ sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 4 ;
-            sh:path dams:source_uri ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path dams:registry_description ],
-        [ sh:in ( "draft" "active" "deprecated" "retired" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 5 ;
-            sh:path dams:registry_status ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path dams:registry_name ] ;
+            sh:path dams:registry_id ] ;
     sh:targetClass dams:Role .
 

@@ -41,6 +41,7 @@ def test_assess_uses_repository_not_bare_provider(
     )
     assert result.report.is_conformant
     sets = default_dams_rule_sets(DamsAssetRepository(default_schema_path=dams_schema))
-    assert len(sets) == 5
+    assert len(sets) == 6
     assert any(s.assessment_id == "assessment:identifiers" for s in sets)
     assert any(s.assessment_id == "assessment:dams-levels" for s in sets)
+    assert any(s.assessment_id == "assessment:model-requirements" for s in sets)

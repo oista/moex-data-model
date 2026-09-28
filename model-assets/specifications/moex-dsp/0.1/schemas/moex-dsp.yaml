@@ -394,6 +394,11 @@ enums:
         description: Потоки данных.
       conformance:
         description: Результаты валидации реализации.
+      model-assessment:
+        description: >
+          Оценка соответствия требованиям модели (it-solution formal_checks /
+          assessment:model-requirements). Не путать с conformance (LinkML +
+          structural) и с ADR-019 publication contract.
       source:
         description: Исходный код схемы.
       external-specification-scope:
