@@ -79,7 +79,12 @@ def test_load_repo_catalog():
     assert "moex-dams" in by_id
     assert by_id["trading-solution"].conforms_to == "moex-dams"
     assert by_id["moex:ontology:fibo"].role == "reference_specification"
-    assert by_id["moex:ontology:moex-hr"].conforms_to is None
+    # Empty ontology stubs are not shown in the architecture tree
+    assert "moex:ontology:corporate" not in by_id
+    assert "moex:ontology:prov-o" not in by_id
+    assert "moex:ontology:moex-hr" not in by_id
+    assert "moex:ontology:moex-data" not in by_id
+    assert "moex:ontology:application" not in by_id
     # No modeling_standard nodes in the tree catalog
     assert all(n.role != "modeling_standard" for n in catalog.nodes)
 

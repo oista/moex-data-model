@@ -276,13 +276,30 @@
       if (focus?.item) {
         const focused = findExplorerItem(expl, focus.item);
         if (focused) {
+          // Open ancestors/group so the selected item is visible; do not
+          // force-open the item itself (label click toggles children).
           (focused.ancestors || []).forEach((a) => openGroups.add(a.id));
-          if (focused.group) openGroups.add(focused.group.id);
-          openGroups.add(focused.item.id);
+          if (focused.group && focused.group.id !== focus.item) {
+            openGroups.add(focused.group.id);
+          }
         }
       }
 
       function openExplorerItem(itemId) {
+        const found = findExplorerItem(expl, itemId);
+        if (found?.item?.attributes?.kind === "implementation_ref") {
+          const catId =
+            found.item.attributes.catalog_node_id || found.item.id;
+          const node = catalogNode(catId);
+          if (node) {
+            navigateToNode(node);
+            return;
+          }
+          if (found.item.attributes.module_id) {
+            navigateToModule(found.item.attributes.module_id);
+            return;
+          }
+        }
         const node = nodeForModule(mod.module_id);
         setHash({
           node: node ? node.id : null,
@@ -323,13 +340,24 @@
         const kind = node.attributes?.kind || "class";
         const kindClasses =
           kind === "class" ? classKindClassNames(node.attributes) : "";
-        const mark =
-          kind === "enum" ? "E" : kind === "individual" ? "I" : "C";
+        let mark = "C";
+        if (kind === "enum") mark = "E";
+        else if (kind === "individual") mark = "I";
+        else if (kind === "source_file") mark = "F";
+        else if (kind === "implementation_ref") mark = "R";
+        else if (kind === "group") mark = "G";
         label.innerHTML = `<span class="nav-kind ${kindClasses}">${escapeHtml(mark)}</span>
           <span>${escapeHtml(node.title || node.id)}</span>`;
         label.addEventListener("click", (e) => {
           e.stopPropagation();
-          if (hasKids) openGroups.add(node.id);
+          if (hasKids) {
+            // Symmetric: first click expands, second click on same parent collapses
+            if (node.id === selectedItemId && openGroups.has(node.id)) {
+              openGroups.delete(node.id);
+            } else {
+              openGroups.add(node.id);
+            }
+          }
           openExplorerItem(node.id);
         });
 
@@ -351,7 +379,20 @@
 
       (expl.items || []).forEach((group) => {
         const gId = group.id;
-        if (focus?.item && descendantHasId(group, focus.item)) {
+        // Default: open Классы when no focus and no section root yet expanded
+        if (
+          !focus?.item &&
+          gId === "group:classes" &&
+          !(expl.items || []).some((g) => openGroups.has(g.id))
+        ) {
+          openGroups.add(gId);
+        }
+        // Auto-open only when a descendant is focused, not the group itself
+        if (
+          focus?.item &&
+          focus.item !== gId &&
+          descendantHasId(group, focus.item)
+        ) {
           openGroups.add(gId);
         }
         const open = openGroups.has(gId);
@@ -374,9 +415,19 @@
         titleSpan.textContent = group.title || group.id;
         const badge = document.createElement("span");
         badge.className = "badge";
-        const classCount =
-          group.attributes?.class_count ?? countExplorerClasses(group);
-        badge.textContent = String(classCount);
+        const sectionRoot = group.attributes?.section_root;
+        let badgeCount;
+        if (sectionRoot === "spec-files") {
+          badgeCount =
+            group.attributes?.file_count ?? (group.children || []).length;
+        } else if (sectionRoot === "implementations") {
+          badgeCount =
+            group.attributes?.impl_count ?? (group.children || []).length;
+        } else {
+          badgeCount =
+            group.attributes?.class_count ?? countExplorerClasses(group);
+        }
+        badge.textContent = String(badgeCount);
         gBtn.appendChild(toggle);
         gBtn.appendChild(titleSpan);
         gBtn.appendChild(badge);
@@ -385,7 +436,11 @@
         kids.hidden = !open;
         gBtn.addEventListener("click", (e) => {
           e.stopPropagation();
-          openGroups.add(gId);
+          if (gId === selectedItemId && openGroups.has(gId)) {
+            openGroups.delete(gId);
+          } else {
+            openGroups.add(gId);
+          }
           openExplorerItem(gId);
         });
         (group.children || []).forEach((child) => {
@@ -1041,6 +1096,173 @@
     return card;
   }
 
+  function highlightYamlLine(line) {
+    const m = line.match(/^(\s*)([^:#\s][^:]*)(:)(.*)$/);
+    if (m) {
+      return (
+        escapeHtml(m[1]) +
+        `<span class="yaml-key">${escapeHtml(m[2])}</span>` +
+        escapeHtml(m[3]) +
+        escapeHtml(m[4])
+      );
+    }
+    return escapeHtml(line);
+  }
+
+  function renderYamlFold(text) {
+    const root = document.createElement("div");
+    root.className = "yaml-fold";
+    const lines = String(text || "").split("\n");
+    const nodes = lines.map((line, index) => ({
+      line,
+      index,
+      indent: (line.match(/^ */)?.[0] || "").length,
+      children: [],
+    }));
+    const stack = [{ indent: -1, children: [] }];
+    nodes.forEach((node) => {
+      while (stack.length > 1 && node.indent <= stack[stack.length - 1].indent) {
+        stack.pop();
+      }
+      stack[stack.length - 1].children.push(node);
+      const trimmed = node.line.trim();
+      const canNest =
+        trimmed &&
+        !trimmed.startsWith("#") &&
+        /:\s*(#.*)?$/.test(trimmed) &&
+        !/: .+$/.test(trimmed.replace(/\s+#.*$/, ""));
+      if (canNest) stack.push(node);
+    });
+
+    function renderNodes(list, into) {
+      list.forEach((node) => {
+        const row = document.createElement("div");
+        row.className = "yaml-line";
+        const hasKids = node.children && node.children.length;
+        if (hasKids) {
+          const toggle = document.createElement("button");
+          toggle.type = "button";
+          toggle.className = "yaml-fold-toggle";
+          toggle.textContent = "−";
+          const block = document.createElement("div");
+          block.className = "yaml-fold-block";
+          toggle.addEventListener("click", () => {
+            const collapsed = block.hidden;
+            block.hidden = !collapsed;
+            toggle.textContent = collapsed ? "−" : "+";
+          });
+          row.appendChild(toggle);
+          const code = document.createElement("code");
+          code.innerHTML = highlightYamlLine(node.line);
+          row.appendChild(code);
+          into.appendChild(row);
+          renderNodes(node.children, block);
+          into.appendChild(block);
+        } else {
+          const spacer = document.createElement("span");
+          spacer.className = "yaml-fold-spacer";
+          spacer.textContent = "·";
+          row.appendChild(spacer);
+          const code = document.createElement("code");
+          code.innerHTML = highlightYamlLine(node.line);
+          row.appendChild(code);
+          into.appendChild(row);
+        }
+      });
+    }
+
+    renderNodes(stack[0].children, root);
+    return root;
+  }
+
+  function renderSourceFileDetail(mod, expl, item) {
+    const card = document.createElement("article");
+    card.className = "detail-card";
+    const attrs = item.attributes || {};
+    const version = attrs.version || "";
+    card.innerHTML = `
+      <header class="detail-head">
+        <h1>${escapeHtml(item.title || item.id)}</h1>
+        <div class="badge-row">
+          <span class="badge-pill">yaml</span>
+          ${version ? `<span class="badge-pill">${escapeHtml(String(version))}</span>` : ""}
+        </div>
+        <p class="muted">${escapeHtml(attrs.path || "")}</p>
+      </header>
+      <p class="detail-desc">${escapeHtml(attrs.description || item.description || "No description.")}</p>
+    `;
+
+    function refBlock(title, refs) {
+      const list = Array.isArray(refs) ? refs : [];
+      if (!list.length) return;
+      const sec = document.createElement("section");
+      sec.className = "detail-block";
+      sec.innerHTML = `<h2>${escapeHtml(title)}</h2>`;
+      const ul = document.createElement("div");
+      ul.className = "impl-list";
+      list.forEach((refId) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "spec-link";
+        const found = findExplorerItem(expl, refId);
+        btn.textContent = found?.item?.title || refId;
+        btn.addEventListener("click", () => {
+          const node = nodeForModule(mod.module_id);
+          setHash({
+            node: node ? node.id : null,
+            module: shortModule(mod.module_id),
+            section: expl.id,
+            item: refId,
+          });
+          showModule(mod.module_id, { section: expl.id, item: refId });
+        });
+        ul.appendChild(btn);
+      });
+      sec.appendChild(ul);
+      card.appendChild(sec);
+    }
+
+    refBlock("Ссылается на", attrs.refs_out);
+    refBlock("Ссылаются", attrs.refs_in);
+
+    const body = document.createElement("section");
+    body.className = "detail-block";
+    body.innerHTML = `<h2>Содержимое</h2>`;
+    body.appendChild(renderYamlFold(attrs.text || ""));
+    card.appendChild(body);
+    return card;
+  }
+
+  function renderImplementationRefDetail(item) {
+    const card = document.createElement("article");
+    card.className = "detail-card";
+    const attrs = item.attributes || {};
+    card.innerHTML = `
+      <header class="detail-head">
+        <h1>${escapeHtml(item.title || item.id)}</h1>
+        <div class="badge-row">
+          <span class="badge-pill">implementation</span>
+          ${attrs.version ? `<span class="badge-pill">${escapeHtml(String(attrs.version))}</span>` : ""}
+        </div>
+        <p class="muted">${escapeHtml(attrs.catalog_node_id || item.id)}</p>
+      </header>
+      <p class="detail-desc">Открыть модуль реализации (conforms_to ${escapeHtml(attrs.conforms_to || "")}).</p>
+    `;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "spec-link";
+    btn.textContent = "Open implementation";
+    btn.addEventListener("click", () => {
+      const node = catalogNode(attrs.catalog_node_id || item.id);
+      if (node) navigateToNode(node);
+      else if (attrs.module_id) navigateToModule(attrs.module_id);
+    });
+    card.appendChild(btn);
+    // Auto-navigate when selected from tree (nav click already navigates);
+    // keep card for deep-links that land here.
+    return card;
+  }
+
   function renderExplorerDetail(mod, expl, item, group) {
     const card = document.createElement("article");
     card.className = "detail-card";
@@ -1051,21 +1273,31 @@
     const fromSchema = item.attributes?.from_schema || item.attributes?.schema_key || "";
     const known = collectExplorerIds(expl);
 
+    if (kind === "source_file") {
+      return renderSourceFileDetail(mod, expl, item);
+    }
+    if (kind === "implementation_ref") {
+      return renderImplementationRefDetail(item);
+    }
+
     if (kind === "group") {
       const purpose = item.attributes?.purpose || item.description || "";
       const structureWhy = item.attributes?.structure_why || "";
       const classCount = item.attributes?.class_count ?? 0;
       const enumCount = item.attributes?.enum_count ?? 0;
-      const groupBadge = item.attributes?.ontology_id
-        ? "ontology"
-        : item.attributes?.source_domain
-          ? "domain"
-          : "package";
+      const sectionRoot = item.attributes?.section_root;
+      const groupBadge = sectionRoot
+        ? "section"
+        : item.attributes?.ontology_id
+          ? "ontology"
+          : item.attributes?.source_domain
+            ? "domain"
+            : "package";
       card.innerHTML = `
         <header class="detail-head">
           <h1>${escapeHtml(item.title || item.id)}</h1>
           <div class="badge-row"><span class="badge-pill">${groupBadge}</span></div>
-          <p class="muted">${escapeHtml(item.attributes?.source_file || item.attributes?.schema_key || item.attributes?.ontology_id || item.attributes?.source_domain || "")}</p>
+          <p class="muted">${escapeHtml(item.attributes?.source_file || item.attributes?.schema_key || item.attributes?.ontology_id || item.attributes?.source_domain || sectionRoot || "")}</p>
         </header>
       `;
 
@@ -1085,7 +1317,7 @@
 
       const meta = document.createElement("section");
       meta.className = "detail-block";
-      meta.innerHTML = `<h2>Пакет</h2>`;
+      meta.innerHTML = `<h2>${sectionRoot ? "Раздел" : "Пакет"}</h2>`;
       const dl = document.createElement("dl");
       dl.className = "detail-meta";
       if (item.attributes?.schema_key) {
@@ -1094,8 +1326,25 @@
       if (item.attributes?.source_file) {
         appendMetaRow(dl, "source_file", String(item.attributes.source_file));
       }
-      appendMetaRow(dl, "classes", String(classCount));
-      appendMetaRow(dl, "enums", String(enumCount));
+      if (sectionRoot === "spec-files") {
+        appendMetaRow(
+          dl,
+          "files",
+          String(item.attributes?.file_count ?? (item.children || []).length)
+        );
+      } else if (sectionRoot === "implementations") {
+        appendMetaRow(
+          dl,
+          "implementations",
+          String(item.attributes?.impl_count ?? (item.children || []).length)
+        );
+      } else if (!sectionRoot) {
+        appendMetaRow(dl, "classes", String(classCount));
+        appendMetaRow(dl, "enums", String(enumCount));
+      } else if (sectionRoot === "classes") {
+        appendMetaRow(dl, "classes", String(classCount));
+        appendMetaRow(dl, "enums", String(enumCount));
+      }
       meta.appendChild(dl);
       card.appendChild(meta);
 
@@ -1125,6 +1374,19 @@
           }
           btn.title = child.description || "";
           btn.addEventListener("click", () => {
+            if (child.attributes?.kind === "implementation_ref") {
+              const cat = catalogNode(
+                child.attributes.catalog_node_id || child.id
+              );
+              if (cat) {
+                navigateToNode(cat);
+                return;
+              }
+              if (child.attributes.module_id) {
+                navigateToModule(child.attributes.module_id);
+                return;
+              }
+            }
             openGroups.add(item.id);
             const node = nodeForModule(mod.module_id);
             setHash({
@@ -1902,6 +2164,16 @@
         });
       }
       label.addEventListener("click", () => {
+        if (hasKids) {
+          const currentlyOpen = !kids.hidden;
+          if (item.id === selectedItemId && currentlyOpen) {
+            kids.hidden = true;
+            toggle.textContent = "▶";
+          } else if (!currentlyOpen) {
+            kids.hidden = false;
+            toggle.textContent = "▼";
+          }
+        }
         const crumbPath = path.concat(item.title || item.id);
         showDetails(item, crumbPath);
         selectedItemId = item.id;

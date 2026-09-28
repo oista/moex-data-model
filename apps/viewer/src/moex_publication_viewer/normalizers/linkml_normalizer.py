@@ -10,6 +10,10 @@ from linkml_runtime.utils.schemaview import SchemaView
 from moex_publication_viewer.models.manifest_models import ManifestSection
 from moex_publication_viewer.models.publication_models import PublicationItem, PublicationSection
 from moex_publication_viewer.normalizers.base import NormalizeError
+from moex_publication_viewer.normalizers.dams_explorer_roots import (
+    is_dams_specification_dir,
+    wrap_dams_explorer_roots,
+)
 from moex_publication_viewer.normalizers.helpers import section_meta
 
 # Cache SchemaView per absolute path for one build process
@@ -457,6 +461,10 @@ class LinkmlNormalizer:
         try:
             if section.type == "explorer":
                 items = _normalize_explorer(sv)
+                if is_dams_specification_dir(source_path):
+                    items = wrap_dams_explorer_roots(
+                        items, source_path.resolve().parent.parent
+                    )
                 default_columns = ["name", "description", "kind"]
             elif select == "classes":
                 items = _normalize_classes(sv, as_tree=as_tree)
