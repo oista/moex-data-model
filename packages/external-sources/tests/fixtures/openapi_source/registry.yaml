@@ -1,0 +1,8 @@
+source_id: sample-openapi
+kind: api_spec
+adapter: git
+title: Sample OpenAPI (fixture)
+upstream_url: ../sample_spec_repo
+default_ref: HEAD
+artifact_glob: "*.yaml"
+license: https://opensource.org/licenses/MIT

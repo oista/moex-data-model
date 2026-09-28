@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "moex-external-sources"
+version = "0.1.0"
+description = "SpecificationSource adapters for external reference specs (ADR-017)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "moex-modeling-kernel",
+    "pydantic>=2.6,<3.0",
+    "PyYAML>=6.0,<7.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0,<9.0", "moex-modeling-kernel[dev]"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+    "requires_robot: needs ROBOT JAR / java on PATH",
+]

@@ -15,6 +15,7 @@ from moex_model_cli.commands.lint import run_lint
 from moex_model_cli.commands.map_cmd import run_map
 from moex_model_cli.commands.publish import run_publish
 from moex_model_cli.commands.semantic_diff import run_semantic_diff
+from moex_model_cli.commands.source_cmd import run_source
 from moex_model_cli.commands.validate import run_validate
 
 
@@ -204,6 +205,56 @@ def build_parser() -> argparse.ArgumentParser:
     )
     map_p.add_argument("--json", action="store_true", help="Print bindings/result as JSON")
 
+    source = sub.add_parser(
+        "source",
+        help="List / sync / diff external specification sources (ADR-017)",
+    )
+    source_sub = source.add_subparsers(dest="source_action", required=True)
+
+    source_list = source_sub.add_parser("list", help="List registered external sources")
+    _add_slice_args(source_list)
+    source_list.add_argument(
+        "--sources-dir",
+        type=Path,
+        default=None,
+        help="Override model-assets/external-sources",
+    )
+    source_list.add_argument("--json", action="store_true")
+
+    source_sync = source_sub.add_parser("sync", help="Fetch + materialize + lock a source")
+    _add_slice_args(source_sync)
+    source_sync.add_argument("source_id", help="Directory name under external-sources/")
+    source_sync.add_argument(
+        "--seed",
+        type=Path,
+        default=None,
+        help="Override seed term-file (ontology sources)",
+    )
+    source_sync.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Materialize without writing lockfile",
+    )
+    source_sync.add_argument(
+        "--sources-dir",
+        type=Path,
+        default=None,
+        help="Override model-assets/external-sources",
+    )
+    source_sync.add_argument("--json", action="store_true")
+
+    source_diff = source_sub.add_parser(
+        "diff",
+        help="Compare locked artifact to a fresh dry-run materialize",
+    )
+    _add_slice_args(source_diff)
+    source_diff.add_argument("source_id")
+    source_diff.add_argument("--from", dest="from_ref", default=None)
+    source_diff.add_argument("--to", dest="to_ref", default=None)
+    source_diff.add_argument("--seed", type=Path, default=None)
+    source_diff.add_argument("--sources-dir", type=Path, default=None)
+    source_diff.add_argument("--json", action="store_true")
+
     return parser
 
 
@@ -295,6 +346,18 @@ def main(argv: list[str] | None = None) -> int:
             sample=args.sample,
             as_json=args.json,
             backend=getattr(args, "backend", "object"),
+        )
+    elif args.command == "source":
+        code, text = run_source(
+            paths,
+            action=args.source_action,
+            source_id=getattr(args, "source_id", None),
+            seed=getattr(args, "seed", None),
+            dry_run=getattr(args, "dry_run", False),
+            as_json=getattr(args, "json", False),
+            sources_dir=getattr(args, "sources_dir", None),
+            from_ref=getattr(args, "from_ref", None),
+            to_ref=getattr(args, "to_ref", None),
         )
     else:
         return 2

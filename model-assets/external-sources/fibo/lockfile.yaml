@@ -1,0 +1,15 @@
+lock:
+  source_id: fibo
+  kind: ontology
+  upstream_ref: fixture-mini
+  content_hash: sha256:8a91acf477f1f1bab6d32a37981250b690ff8c5d86a5aafe64438f923b070233
+  synced_at: '2026-09-28T09:25:23Z'
+  extraction_method: BOT
+  seed_hash: sha256:f165860be19094c26d4dbd232ee0361dd53aad2ef68852a2e37a0caff31e3047
+  tool_versions:
+    robot: 1.9.5
+  artifact_path: modules/fibo-module.ttl
+notes: >
+  Synced from packages/external-sources mini_ontology fixture via fallback extract
+  (ROBOT not installed). Re-run `moex-model source sync fibo` with ROBOT_JAR set
+  for production-quality modules.

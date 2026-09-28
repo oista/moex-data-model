@@ -1,0 +1,2 @@
+# IRIs used by MOEX (see dams-fibo.sssom.yaml). Extend as mappings grow.
+https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson

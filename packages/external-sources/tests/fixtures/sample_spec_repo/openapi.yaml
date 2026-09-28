@@ -1,0 +1,11 @@
+openapi: "3.0.3"
+info:
+  title: Sample FIX-like API
+  version: "0.1.0"
+paths:
+  /ping:
+    get:
+      summary: Health
+      responses:
+        "200":
+          description: ok

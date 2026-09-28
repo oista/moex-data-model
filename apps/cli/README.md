@@ -10,6 +10,7 @@ moex-model diagram        → ModelPackage → DBML (+ sidecar manifest)
 moex-model import         → ER-dictionary ingest OR schema-automator draft
 moex-model map            → SSSOM / LinkML extract / linkml-map transform
 moex-model semantic-diff  → diff_implementations
+moex-model source         → list / sync / diff external sources (ADR-017)
 ```
 
 Publication Viewer lives at [`apps/viewer/`](../viewer/).

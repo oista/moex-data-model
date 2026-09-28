@@ -6,7 +6,7 @@ supersedes: []
 superseded_by: MODELING_ARCHITECTURE.md
 ---
 
-# ADR index (001–015)
+# ADR index (001–017)
 
 **Status:** Proposed drafts  
 **Date:** 2026-09-28  
@@ -33,6 +33,8 @@ Viewer-решения живут отдельно: [viewer-decisions.md](../arch
 | [ADR-013](ADR-013-specification-requirements-catalog.md) | Каталог требований к спецификации в DAMS LinkML | DAMS explorer «Требования» |
 | [ADR-014](ADR-014-fibo-profile-metamodel.md) | FIBO profile = Spec; release entities = Impl | metamodel YAML + Pydantic; catalog Spec/Impl split |
 | [ADR-015](ADR-015-viewer-ui-atlas.md) | MOEX Atlas — UI/UX стандарт Publication Viewer | Proposed; visual redesign apps/viewer |
+| [ADR-016](ADR-016-publication-section-kinds-and-profiles.md) | Publication section kinds and profiles | Proposed; DSP ProfileSpec |
+| [ADR-017](ADR-017-external-specification-source-sync.md) | External specification source sync | Proposed; SpecificationSource + ROBOT/git adapters |
 
 ## Как принимать
 

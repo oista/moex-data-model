@@ -1,0 +1,13 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix fibo-be-le-lp: <https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/> .
+
+fibo-be-le-lp:LegalPerson a owl:Class ;
+    rdfs:label "legal person" ;
+    rdfs:subClassOf fibo-be-le-lp:FormalOrganization .
+
+fibo-be-le-lp:FormalOrganization a owl:Class ;
+    rdfs:label "formal organization" .
+
+fibo-be-le-lp:UnrelatedThing a owl:Class ;
+    rdfs:label "unrelated" .

@@ -16,6 +16,7 @@ dependencies = [
     "moex-git-adapter",
     "moex-semantic-mappings",
     "moex-linkml-tooling",
+    "moex-external-sources",
     "PyYAML>=6.0",
 ]
 

@@ -1,0 +1,2 @@
+# Seed IRIs used by MOEX mappings (test)
+https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
