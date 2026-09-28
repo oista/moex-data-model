@@ -12,17 +12,19 @@ superseded_by: MODELING_ARCHITECTURE.md
 При расхождении побеждает нормативный документ.  
 **Статус этого файла:** черновик целевой раскладки пакетов и provider object model (`target-after-slice`).  
 **Уже совпало с репо:** `model-assets/`, `generated/`, `apps/cli/`, `apps/viewer/`, пакеты slice (`modeling-kernel`, `standard-linkml`, `specification-dams`, `publication`), `standard-owl`, `ontology-catalog`.  
-**Уже совпало (roadmap 1–4):** `generated/contracts` (moex_dams_contracts), `OWLStandardProvider`, `packages/git-adapter`, CLI `lint|compile|diagram|diff|validate|publish` (+ stubs import/map), `apps/api` operational slice.  
+**Уже совпало (roadmap 1–4):** `generated/contracts` (moex_dams_contracts), `OWLStandardProvider`, `packages/git-adapter`, CLI `lint|compile|diagram|diff|validate|publish|import|map|semantic-diff`, `apps/api` operational slice.  
 **Уже совпало (Stage 3 narrow-v2):** identity/members/jobs/artifacts/model_index tables + ports; workspace/job/index API + Idempotency-Key; GitHub read-only `GitProvider`.  
 **Уже совпало (Web Workbench MVP):** `apps/web` React/Vite shell — dashboard, workspaces, trading model page, validation job report.  
 **Уже совпало (Workbench editors):** Monaco YAML + `workspace_document` draft API + validate `source=draft`.  
 **Уже совпало (Entity form slice):** controlled mutations add/update/delete LogicalEntity/LogicalAttribute; dirty Monaco → PUT before mutation.  
 **Уже совпало (Stage 3 narrow-v3):** `publication_request` + publish API + GitHub write / local branch+stub review into this repo.  
-**Already shipped (Semantic diff preview):** kernel `SemanticDiffReport`; `moex-model semantic-diff`; `POST /workspaces/{id}/semantic-diff`; Web **Review changes**.
+**Already shipped (Semantic diff preview):** kernel `SemanticDiffReport`; `moex-model semantic-diff`; `POST /workspaces/{id}/semantic-diff`; Web **Review changes**.  
+**Already shipped (Stage 4/5 close-out):** relationship/mapping forms, Model explorer, artifacts panel, `packages/drawdb-adapter`, `apps/drawdb`, Alembic `diagram_layout` (`0006`), Workbench diagram page.  
+**Already shipped (Stage 6 golden matrix):** OWL/SHACL/`moex-dams.dbml`/Mermaid in `compare-golden` (+ contracts/JSON Schema).
 
 **Already shipped (Stage 1 residual):** `SchemaRepository` + `DamsAssetRepository`; `diagnostic_to_wire` in CLI/API validation diagnostics; `build_element_index` shared with API model-index; `DamsModelGraphView` includes `relationships`.
 
-**Still-later:** live field-level Monaco↔form binding, merge automation / PR attach, `apps/worker`, CLI `import`/`map` real, OIDC, `diagram_layout` / `external_registry_cache`.
+**Still-later:** live field-level Monaco↔form binding, merge automation / PR attach, `apps/worker`, OIDC, domain authz/RLS, `external_registry_cache`, async workers; Stage 1 leftovers (repository-root graph, SchemaLoader types); Stage 7 linkml-map / schema-automator.
 `packages/ontology/` остаётся shim. Миграция путей: [docs/migration/model-src-to-model-assets.md](../migration/model-src-to-model-assets.md).
 
 ## Предметная модель: роли как экземпляры, не subclass

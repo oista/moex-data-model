@@ -41,6 +41,10 @@ class DamsAssetRepository:
     def provider(self) -> LinkMLStandardProvider:
         return self._provider
 
+    @property
+    def default_schema_path(self) -> Path | None:
+        return self._default_schema_path
+
     def resolve_specification_path(self, specification: SpecificationRef) -> Path:
         if specification.specification_id != DAMS_SPEC_ID:
             raise ValueError(

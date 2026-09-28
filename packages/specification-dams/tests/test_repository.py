@@ -40,4 +40,6 @@ def test_assess_uses_repository_not_bare_provider(
         implementation_path=trading_solution,
     )
     assert result.report.is_conformant
-    assert len(default_dams_rule_sets(DamsAssetRepository(default_schema_path=dams_schema))) == 3
+    sets = default_dams_rule_sets(DamsAssetRepository(default_schema_path=dams_schema))
+    assert len(sets) == 4
+    assert any(s.assessment_id == "assessment:identifiers" for s in sets)

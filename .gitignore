@@ -21,6 +21,9 @@ htmlcov/
 packages/ontology/output/
 **/output/
 
+# Staged release bundle tree (index manifest under generated/manifests/ is committed)
+generated/bundles/
+
 # Local FIBO clone (do not commit upstream sources).
 # Use anchored paths so Python packages named fibo/ are not ignored.
 /fibo/

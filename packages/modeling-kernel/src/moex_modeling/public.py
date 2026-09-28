@@ -1,6 +1,7 @@
 """Stable public API for moex-modeling-kernel."""
 
 from moex_modeling.assets.public import SchemaRepository
+from moex_modeling.identifiers.curie import CurieUriResolver
 from moex_modeling.changes.domain import (
     ChangeCategory,
     SemanticChange,
@@ -52,6 +53,7 @@ __all__ = [
     "ConformancePhase",
     "ConformanceReport",
     "ConformanceResult",
+    "CurieUriResolver",
     "Diagnostic",
     "DiagnosticDetail",
     "DiagnosticSeverity",

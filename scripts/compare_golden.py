@@ -27,17 +27,28 @@ sys.path.insert(0, str(REPO / "scripts"))
 from generate_artifacts import (  # noqa: E402
     DBML_MANIFEST,
     DBML_PATH,
+    DOC_DIR,
+    DOC_MANIFEST,
     MERMAID_DIR,
     MERMAID_MANIFEST,
     OWL_MANIFEST,
     OWL_PATH,
+    PYTHON_MANIFEST,
+    PYTHON_PATH,
+    RDF_MANIFEST,
+    RDF_PATH,
     SHACL_MANIFEST,
     SHACL_PATH,
+    directory_tree_digest,
     generate_dbml,
+    generate_doc,
     generate_mermaid,
     generate_owl,
+    generate_python,
+    generate_rdf,
     generate_shacl,
     mermaid_tree_digest,
+    rdf_ground_digest,
 )
 
 
@@ -127,8 +138,10 @@ def _compare_single_file(
     committed_path: Path,
     regenerate,
     rdf: bool = False,
+    strip_volatile: bool = False,
+    strip_generation_date: bool = False,
 ) -> list[str]:
-    from generate_artifacts import rdf_ground_digest
+    from generate_artifacts import _strip_generation_date_lines
 
     errors: list[str] = []
     if not manifest_path.is_file():
@@ -143,7 +156,13 @@ def _compare_single_file(
 
     committed_text = _lf_text(committed_path)
     if rdf:
-        committed_digest = rdf_ground_digest(committed_text)
+        committed_digest = rdf_ground_digest(
+            committed_text, strip_volatile=strip_volatile
+        )
+    elif strip_generation_date:
+        committed_digest = "sha256:" + hashlib.sha256(
+            _strip_generation_date_lines(committed_text).encode("utf-8")
+        ).hexdigest()
     else:
         committed_digest = "sha256:" + hashlib.sha256(
             committed_text.encode("utf-8")
@@ -167,7 +186,7 @@ def _compare_single_file(
                 f"  expected={expected}\n"
                 f"  regenerated={regen_digest}"
             )
-        elif not rdf:
+        elif not rdf and not strip_generation_date:
             left = _lf_text(out)
             if left != committed_text:
                 errors.append(
@@ -281,6 +300,121 @@ def _compare_mermaid() -> list[str]:
     return errors
 
 
+def _smoke_python(path: Path) -> list[str]:
+    import py_compile
+
+    try:
+        py_compile.compile(str(path), doraise=True)
+    except Exception as exc:  # noqa: BLE001
+        return [f"python smoke: compile failed: {exc}"]
+    return []
+
+
+def _smoke_doc(directory: Path) -> list[str]:
+    if not directory.is_dir():
+        return [f"doc smoke: missing directory {directory.as_posix()}"]
+    files = list(directory.rglob("*.md"))
+    if not files:
+        return [f"doc smoke: no *.md under {directory.as_posix()}"]
+    index = directory / "index.md"
+    if not index.is_file() or not index.read_text(encoding="utf-8").strip():
+        return ["doc smoke: missing or empty index.md"]
+    return []
+
+
+def _compare_python() -> list[str]:
+    errors = _compare_single_file(
+        name="python",
+        manifest_path=PYTHON_MANIFEST,
+        committed_path=PYTHON_PATH,
+        regenerate=generate_python,
+        strip_generation_date=True,
+    )
+    if not errors:
+        errors.extend(_smoke_python(PYTHON_PATH))
+    return errors
+
+
+def _compare_doc() -> list[str]:
+    errors: list[str] = []
+    if not DOC_MANIFEST.is_file():
+        return [f"missing doc manifest: {DOC_MANIFEST}"]
+    if not DOC_DIR.is_dir():
+        return [f"missing doc directory: {DOC_DIR}"]
+
+    manifest = json.loads(DOC_MANIFEST.read_text(encoding="utf-8"))
+    expected = manifest.get("content_digest")
+    if not expected:
+        return ["doc manifest missing content_digest"]
+
+    actual = directory_tree_digest(DOC_DIR)
+    if actual != expected:
+        errors.append(
+            f"doc digest mismatch vs manifest:\n"
+            f"  dir={DOC_DIR.as_posix()}\n"
+            f"  expected={expected}\n"
+            f"  actual={actual}"
+        )
+
+    with tempfile.TemporaryDirectory(prefix="moex-golden-doc-") as tmp:
+        tmp_dir = Path(tmp) / "docs"
+        tmp_manifest = Path(tmp) / "manifest.json"
+        regen_digest = generate_doc(out_dir=tmp_dir, manifest_path=tmp_manifest)
+        if regen_digest != expected:
+            errors.append(
+                f"doc regenerate digest mismatch:\n"
+                f"  expected={expected}\n"
+                f"  regenerated={regen_digest}"
+            )
+
+    if not errors:
+        errors.extend(_smoke_doc(DOC_DIR))
+    return errors
+
+
+def _compare_rdf() -> list[str]:
+    errors = _compare_single_file(
+        name="rdf",
+        manifest_path=RDF_MANIFEST,
+        committed_path=RDF_PATH,
+        regenerate=generate_rdf,
+        rdf=True,
+        strip_volatile=True,
+    )
+    if not errors:
+        errors.extend(_smoke_rdf(RDF_PATH, name="rdf"))
+    return errors
+
+
+def _compare_bundle() -> list[str]:
+    from build_release_bundle import (
+        BUNDLE_MANIFEST,
+        bundle_index_digest,
+        collect_parts,
+    )
+
+    if not BUNDLE_MANIFEST.is_file():
+        return [f"missing bundle manifest: {BUNDLE_MANIFEST.as_posix()}"]
+    try:
+        parts = collect_parts()
+    except FileNotFoundError as exc:
+        return [f"bundle: {exc}"]
+
+    actual = bundle_index_digest(parts)
+    manifest = json.loads(BUNDLE_MANIFEST.read_text(encoding="utf-8"))
+    expected = manifest.get("content_digest")
+    if not expected:
+        return ["bundle manifest missing content_digest"]
+    if actual != expected:
+        return [
+            "bundle digest mismatch vs manifest:\n"
+            f"  expected={expected}\n"
+            f"  actual={actual}\n"
+            "  hint: run python scripts/build_release_bundle.py"
+        ]
+    return []
+
+
 def main() -> int:
     parts = ["contracts"]
     errors = _compare_contracts() + _compare_json_schema()
@@ -292,6 +426,9 @@ def main() -> int:
         ("shacl", _compare_shacl),
         ("dbml", _compare_dbml),
         ("mermaid", _compare_mermaid),
+        ("python", _compare_python),
+        ("doc", _compare_doc),
+        ("rdf", _compare_rdf),
     ):
         chunk = fn()
         errors.extend(chunk)
@@ -299,6 +436,13 @@ def main() -> int:
             # Always list target once present in repo after Stage 6 baseline.
             if (REPO / "generated" / "manifests" / f"moex-dams-{name}.json").is_file():
                 parts.append(name)
+
+    bundle_errors = _compare_bundle()
+    errors.extend(bundle_errors)
+    if not bundle_errors and (
+        REPO / "generated" / "manifests" / "moex-dams-bundle.json"
+    ).is_file():
+        parts.append("bundle")
 
     if errors:
         for err in errors:

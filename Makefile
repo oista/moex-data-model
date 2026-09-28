@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check packages-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples generate-contracts generate-artifacts compare-golden api-check web-check drawdb-up drawdb-adapter-check
+.PHONY: viewer viewer-check packages-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check drawdb-up drawdb-adapter-check publish-gate
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -71,11 +71,18 @@ validate-examples:
 generate-contracts:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/generate-contracts.ps1
 
-# gen-owl / gen-shacl / gen-dbml / mermaid → generated/artifacts/moex-dams/0.1
+# gen-owl / gen-shacl / gen-dbml / mermaid / python / doc / rdf → generated/artifacts
 generate-artifacts:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/generate-artifacts.ps1
 
-# Digest check: contracts + json-schema + owl/shacl/dbml/mermaid vs regenerate
+# Release bundle index (+ staged tree under generated/bundles/)
+generate-bundle:
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/build-release-bundle.ps1
+
+publish-gate:
+	$(PYTHON) scripts/publish_gate.py
+
+# Digest check: contracts + json-schema + Stage 6/7 artifact matrix + bundle vs regenerate
 compare-golden:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/compare-golden.ps1
 

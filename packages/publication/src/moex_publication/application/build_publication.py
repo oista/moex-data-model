@@ -137,22 +137,39 @@ def build_publication_module(result: SliceResult) -> PublicationModule:
     )
 
 
+def _bundle_digest() -> str | None:
+    """Best-effort read of committed DAMS release bundle digest."""
+    # …/packages/publication/src/moex_publication/application/this.py → repo root
+    root = Path(__file__).resolve().parents[5]
+    manifest = root / "generated" / "manifests" / "moex-dams-bundle.json"
+    if not manifest.is_file():
+        return None
+    try:
+        return json.loads(manifest.read_text(encoding="utf-8")).get("content_digest")
+    except (OSError, json.JSONDecodeError):
+        return None
+
+
 def build_slice_projection(result: SliceResult) -> dict[str, Any]:
     """Flat JSON projection for root viewer json_normalizer + select paths."""
     report = result.report
     graph = result.graph
     impl = result.implementation
+    summary = {
+        "overall_result": report.overall_result.value,
+        "implementation_id": impl.id,
+        "revision": impl.revision,
+        "content_digest": impl.content_digest,
+        "package_id": graph.package_id,
+        "node_count": len(graph.nodes),
+        "edge_count": len(graph.edges),
+        "is_conformant": report.is_conformant,
+    }
+    bundle = _bundle_digest()
+    if bundle:
+        summary["bundle_digest"] = bundle
     return {
-        "summary": {
-            "overall_result": report.overall_result.value,
-            "implementation_id": impl.id,
-            "revision": impl.revision,
-            "content_digest": impl.content_digest,
-            "package_id": graph.package_id,
-            "node_count": len(graph.nodes),
-            "edge_count": len(graph.edges),
-            "is_conformant": report.is_conformant,
-        },
+        "summary": summary,
         "nodes": [
             {
                 "id": n.id,

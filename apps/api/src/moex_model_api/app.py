@@ -917,6 +917,23 @@ def create_app(
 
         root = find_repo_root()
         paths = SlicePaths.resolve(root=root)
+
+        # Fail-closed: golden generators/bundle must be in sync before publish.
+        import sys as _sys
+
+        _sys.path.insert(0, str(root / "scripts"))
+        from publish_gate import verify_publish_gate  # noqa: WPS433
+
+        gate_errors = verify_publish_gate(refresh_bundle=False)
+        if gate_errors:
+            raise HTTPException(
+                status_code=422,
+                detail={
+                    "message": "publish-gate failed",
+                    "errors": gate_errors[:20],
+                },
+            )
+
         tmp_path: Path | None = None
         try:
             tmp = tempfile.NamedTemporaryFile(

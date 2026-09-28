@@ -1,4 +1,4 @@
-"""Generate regenerable DAMS LinkML artifacts: OWL, SHACL, DBML, Mermaid."""
+"""Generate regenerable DAMS LinkML artifacts: OWL, SHACL, DBML, Mermaid, Python, Doc, RDF."""
 
 from __future__ import annotations
 
@@ -30,11 +30,18 @@ OWL_PATH = ARTIFACTS_ROOT / "moex-dams.owl.ttl"
 SHACL_PATH = ARTIFACTS_ROOT / "moex-dams.shacl.ttl"
 DBML_PATH = ARTIFACTS_ROOT / "moex-dams.dbml"
 MERMAID_DIR = ARTIFACTS_ROOT / "diagrams"
+PYTHON_DIR = ARTIFACTS_ROOT / "python"
+PYTHON_PATH = PYTHON_DIR / "moex_dams.py"
+DOC_DIR = ARTIFACTS_ROOT / "docs"
+RDF_PATH = ARTIFACTS_ROOT / "moex-dams.rdf.ttl"
 
 OWL_MANIFEST = MANIFESTS / "moex-dams-owl.json"
 SHACL_MANIFEST = MANIFESTS / "moex-dams-shacl.json"
 DBML_MANIFEST = MANIFESTS / "moex-dams-dbml.json"
 MERMAID_MANIFEST = MANIFESTS / "moex-dams-mermaid.json"
+PYTHON_MANIFEST = MANIFESTS / "moex-dams-python.json"
+DOC_MANIFEST = MANIFESTS / "moex-dams-doc.json"
+RDF_MANIFEST = MANIFESTS / "moex-dams-rdf.json"
 
 OWL_OPTIONS = {
     "format": "ttl",
@@ -43,8 +50,13 @@ OWL_OPTIONS = {
     "consolidate_cardinality_axioms": True,
 }
 
-ALL_TARGETS = ("owl", "shacl", "dbml", "mermaid")
-
+ALL_TARGETS = ("owl", "shacl", "dbml", "mermaid", "python", "doc", "rdf")
+_VOLATILE_RDF_PREDICATES = frozenset(
+    {
+        "https://w3id.org/linkml/generation_date",
+        "http://www.w3.org/ns/prov#generatedAtTime",
+    }
+)
 
 def _linkml_version() -> str:
     try:
@@ -80,17 +92,38 @@ def schema_cwd() -> Iterator[str]:
         os.chdir(prev)
 
 
-def write_text_artifact(path: Path, text: str) -> str:
+def _strip_generation_date_lines(text: str) -> str:
+    """Drop LinkML '# Generation date: …' comment lines for stable digests."""
+    lines = [
+        line
+        for line in text.split("\n")
+        if not line.startswith("# Generation date:")
+    ]
+    return "\n".join(lines)
+
+
+def write_text_artifact(
+    path: Path, text: str, *, strip_generation_date: bool = False
+) -> str:
     """Write UTF-8 text with LF newlines; return content digest."""
     normalized = text.replace("\r\n", "\n")
     if not normalized.endswith("\n"):
         normalized += "\n"
+    digest_source = (
+        _strip_generation_date_lines(normalized)
+        if strip_generation_date
+        else normalized
+    )
+    digest = _sha256_text(digest_source)
     path.parent.mkdir(parents=True, exist_ok=True)
+    if path.is_file() and strip_generation_date:
+        existing = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        if _sha256_text(_strip_generation_date_lines(existing)) == digest:
+            return digest
     path.write_text(normalized, encoding="utf-8", newline="\n")
-    return _sha256_text(normalized)
+    return digest
 
-
-def rdf_ground_digest(text: str) -> str:
+def rdf_ground_digest(text: str, *, strip_volatile: bool = False) -> str:
     """Stable digest of non-blank-node triples (LinkML OWL/SHACL order varies)."""
     from rdflib import BNode, Graph
 
@@ -100,21 +133,25 @@ def rdf_ground_digest(text: str) -> str:
     for subj, pred, obj in graph:
         if isinstance(subj, BNode) or isinstance(obj, BNode):
             continue
+        if strip_volatile and str(pred) in _VOLATILE_RDF_PREDICATES:
+            continue
         lines.append(f"{subj.n3()} {pred.n3()} {obj.n3()} .")
     body = "\n".join(sorted(lines)) + "\n"
     return _sha256_bytes(body.encode("utf-8"))
 
 
-def write_rdf_artifact(path: Path, text: str) -> str:
+def write_rdf_artifact(
+    path: Path, text: str, *, strip_volatile: bool = False
+) -> str:
     """Write Turtle; keep existing bytes when ground-triple digest matches."""
     normalized = text.replace("\r\n", "\n")
     if not normalized.endswith("\n"):
         normalized += "\n"
-    digest = rdf_ground_digest(normalized)
+    digest = rdf_ground_digest(normalized, strip_volatile=strip_volatile)
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.is_file():
         existing = path.read_text(encoding="utf-8").replace("\r\n", "\n")
-        if rdf_ground_digest(existing) == digest:
+        if rdf_ground_digest(existing, strip_volatile=strip_volatile) == digest:
             return digest
     path.write_text(normalized, encoding="utf-8", newline="\n")
     return digest
@@ -133,6 +170,28 @@ def mermaid_tree_digest(directory: Path) -> str:
         h.update(b"\0")
     return "sha256:" + h.hexdigest()
 
+
+def directory_tree_digest(directory: Path) -> str:
+    """Stable digest over all files under directory (relative posix paths)."""
+    h = hashlib.sha256()
+    files = sorted(
+        (p for p in directory.rglob("*") if p.is_file()),
+        key=lambda p: p.relative_to(directory).as_posix().lower(),
+    )
+    for path in files:
+        rel = path.relative_to(directory).as_posix()
+        body = path.read_bytes()
+        # Normalize text newlines when content is UTF-8 text.
+        try:
+            text = body.decode("utf-8").replace("\r\n", "\n")
+            body = text.encode("utf-8")
+        except UnicodeDecodeError:
+            pass
+        h.update(rel.encode("utf-8"))
+        h.update(b"\0")
+        h.update(body)
+        h.update(b"\0")
+    return "sha256:" + h.hexdigest()
 
 def write_manifest(
     *,
@@ -276,6 +335,96 @@ def generate_mermaid(
     return digest
 
 
+def generate_python(
+    *, out_path: Path = PYTHON_PATH, manifest_path: Path = PYTHON_MANIFEST
+) -> str:
+    from linkml.generators.pythongen import PythonGenerator
+
+    with schema_cwd() as schema_name:
+        text = PythonGenerator(schema_name).serialize()
+    digest = write_text_artifact(out_path, text, strip_generation_date=True)
+    try:
+        out_rel = out_path.relative_to(REPO).as_posix()
+    except ValueError:
+        out_rel = out_path.as_posix()
+    write_manifest(
+        path=manifest_path,
+        artifact_id="moex:artifact:dams-python:0.1",
+        generator="gen-python",
+        generator_module="linkml.generators.pythongen",
+        output_path=out_rel,
+        content_digest=digest,
+        generator_options={"digest_mode": "strip_generation_date_comment"},
+    )
+    return digest
+
+def generate_doc(
+    *, out_dir: Path = DOC_DIR, manifest_path: Path = DOC_MANIFEST
+) -> str:
+    from linkml.generators.docgen import DocGenerator
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for old in out_dir.rglob("*"):
+        if old.is_file():
+            old.unlink()
+
+    with schema_cwd() as schema_name:
+        DocGenerator(schema_name, directory=str(out_dir)).serialize()
+
+    for path in out_dir.rglob("*"):
+        if not path.is_file():
+            continue
+        try:
+            body = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        except UnicodeDecodeError:
+            continue
+        if not body.endswith("\n"):
+            body += "\n"
+        path.write_text(body, encoding="utf-8", newline="\n")
+
+    digest = directory_tree_digest(out_dir)
+    try:
+        out_rel = out_dir.relative_to(REPO).as_posix()
+    except ValueError:
+        out_rel = out_dir.as_posix()
+    write_manifest(
+        path=manifest_path,
+        artifact_id="moex:artifact:dams-doc:0.1",
+        generator="gen-doc",
+        generator_module="linkml.generators.docgen",
+        output_path=out_rel,
+        content_digest=digest,
+    )
+    return digest
+
+
+def generate_rdf(
+    *, out_path: Path = RDF_PATH, manifest_path: Path = RDF_MANIFEST
+) -> str:
+    from linkml.generators.rdfgen import RDFGenerator
+
+    with schema_cwd() as schema_name:
+        text = RDFGenerator(schema_name).serialize()
+    digest = write_rdf_artifact(out_path, text, strip_volatile=True)
+    try:
+        out_rel = out_path.relative_to(REPO).as_posix()
+    except ValueError:
+        out_rel = out_path.as_posix()
+    write_manifest(
+        path=manifest_path,
+        artifact_id="moex:artifact:dams-rdf:0.1",
+        generator="gen-rdf",
+        generator_module="linkml.generators.rdfgen",
+        output_path=out_rel,
+        content_digest=digest,
+        generator_options={
+            "digest_mode": "rdf_ground_triples",
+            "strip_volatile": sorted(_VOLATILE_RDF_PREDICATES),
+        },
+    )
+    return digest
+
+
 def generate(targets: Sequence[str] = ALL_TARGETS) -> dict[str, str]:
     if not SCHEMA.is_file():
         raise FileNotFoundError(f"missing schema: {SCHEMA}")
@@ -289,10 +438,15 @@ def generate(targets: Sequence[str] = ALL_TARGETS) -> dict[str, str]:
             digests["dbml"] = generate_dbml()
         elif target == "mermaid":
             digests["mermaid"] = generate_mermaid()
+        elif target == "python":
+            digests["python"] = generate_python()
+        elif target == "doc":
+            digests["doc"] = generate_doc()
+        elif target == "rdf":
+            digests["rdf"] = generate_rdf()
         else:
             raise ValueError(f"unknown target: {target}")
     return digests
-
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)

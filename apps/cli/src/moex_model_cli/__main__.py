@@ -45,7 +45,15 @@ def build_parser() -> argparse.ArgumentParser:
     compile_p.add_argument(
         "--artifacts",
         action="store_true",
-        help="Also regenerate OWL/SHACL/DBML/Mermaid under generated/artifacts",
+        help=(
+            "Also regenerate OWL/SHACL/DBML/Mermaid/Python/Doc/RDF "
+            "under generated/artifacts"
+        ),
+    )
+    compile_p.add_argument(
+        "--bundle",
+        action="store_true",
+        help="Also rebuild the DAMS release bundle index (+ staged tree)",
     )
 
     diagram = sub.add_parser(
@@ -200,6 +208,7 @@ def main(argv: list[str] | None = None) -> int:
             paths,
             with_json_schema=args.json_schema,
             with_artifacts=args.artifacts,
+            with_bundle=args.bundle,
         )
     elif args.command == "diagram":
         code, text = run_diagram(

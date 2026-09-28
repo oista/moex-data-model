@@ -9,6 +9,7 @@ from moex_modeling import ConformancePhase, Diagnostic
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
 from moex_dams.application.repository import DamsAssetRepository
+from moex_dams.rules.identifiers import build_dams_curie_resolver, check_identifiers
 from moex_dams.rules.references import check_references
 from moex_dams.rules.structural import check_structural
 
@@ -29,10 +30,19 @@ def run_rule_sets(
 
 
 def default_dams_rule_sets(repo: DamsAssetRepository) -> tuple[RuleSet, ...]:
-    """Register LinkML validate + DAMS structural/reference rules."""
+    """Register LinkML validate + DAMS structural/reference/identifier rules."""
 
     def run_linkml(body: LinkMLImplementationBody) -> tuple[Diagnostic, ...]:
         return repo.validate_standard(body)
+
+    resolver = None
+    if repo.default_schema_path is not None:
+        resolver = build_dams_curie_resolver(repo.default_schema_path)
+
+    def run_identifiers(body: LinkMLImplementationBody) -> tuple[Diagnostic, ...]:
+        if resolver is None:
+            return ()
+        return check_identifiers(body, resolver=resolver)
 
     return (
         RuleSet(
@@ -52,5 +62,11 @@ def default_dams_rule_sets(repo: DamsAssetRepository) -> tuple[RuleSet, ...]:
             assessment_id="assessment:references",
             description="DAMS reference integrity rules",
             run=check_references,
+        ),
+        RuleSet(
+            phase=ConformancePhase.CORPORATE_SEMANTICS,
+            assessment_id="assessment:identifiers",
+            description="CURIE/URI prefix rules",
+            run=run_identifiers,
         ),
     )

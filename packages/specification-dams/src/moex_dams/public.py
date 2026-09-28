@@ -23,6 +23,10 @@ from moex_dams.projection.dbml import (
     project_model_package_to_dbml,
     write_dbml_artifact,
 )
+from moex_dams.rules.identifiers import (
+    build_dams_curie_resolver,
+    check_identifiers,
+)
 from moex_dams.rules.references import check_references
 from moex_dams.rules.structural import check_structural
 
@@ -39,8 +43,10 @@ __all__ = [
     "RuleSet",
     "SliceResult",
     "assess_implementation",
+    "build_dams_curie_resolver",
     "build_dams_graph",
     "build_element_index",
+    "check_identifiers",
     "check_references",
     "check_structural",
     "default_dams_rule_sets",

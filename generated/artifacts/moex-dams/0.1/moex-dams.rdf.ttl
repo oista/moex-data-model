@@ -1,0 +1,3138 @@
+@prefix dams: <https://data.moex.com/dams/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix linkml: <https://w3id.org/linkml/> .
+@prefix pav: <http://purl.org/pav/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+dams:moex_dams a linkml:SchemaDefinition ;
+    dcterms:license "https://www.apache.org/licenses/LICENSE-2.0" ;
+    pav:version "0.1.0" ;
+    sh:declare [ sh:namespace "https://w3id.org/linkml/"^^xsd:anyURI ;
+            sh:prefix "linkml" ],
+        [ sh:namespace "https://data.moex.com/dams/"^^xsd:anyURI ;
+            sh:prefix "dams" ] ;
+    linkml:classes dams:BusinessDomain,
+        dams:BusinessProcess,
+        dams:ClassificationAssignment,
+        dams:ConceptualEntity,
+        dams:DataClassificationTerm,
+        dams:DataContractReference,
+        dams:DataFlow,
+        dams:DataFlowEntityBinding,
+        dams:DataModelBinding,
+        dams:Dimension,
+        dams:DomainContext,
+        dams:FormalCheck,
+        dams:GlossaryTerm,
+        dams:HasBusinessClassification,
+        dams:HasGovernanceClassification,
+        dams:HasLifecycle,
+        dams:HasOwnership,
+        dams:HasPolicyBindings,
+        dams:HasProvenance,
+        dams:ITPlatform,
+        dams:ITSolution,
+        dams:ITSystem,
+        dams:IntegrationReference,
+        dams:LogicalAttribute,
+        dams:LogicalEntity,
+        dams:MOEXModelRepository,
+        dams:Mapping,
+        dams:Metric,
+        dams:ModelElement,
+        dams:ModelPackage,
+        dams:ModelSelection,
+        dams:OrganizationUnit,
+        dams:PhysicalField,
+        dams:PhysicalObject,
+        dams:Policy,
+        dams:PolicyBinding,
+        dams:RegistryEntry,
+        dams:Relationship,
+        dams:RequirementCatalog,
+        dams:Role,
+        dams:SelectedAttribute,
+        dams:SelectedEntity,
+        dams:SpecificationRequirement ;
+    linkml:default_prefix "dams" ;
+    linkml:default_range dams:string ;
+    linkml:enums dams:ApprovalStatusEnum,
+        dams:BusinessImportanceEnum,
+        dams:CheckSeverityEnum,
+        dams:CompatibilityModeEnum,
+        dams:DataClassEnum,
+        dams:EnforcementResultEnum,
+        dams:EntityTypeEnum,
+        dams:FlowDirectionEnum,
+        dams:FormalCheckKindEnum,
+        dams:GovernanceClassificationEnum,
+        dams:IntegrationChannelEnum,
+        dams:IntegrationClassEnum,
+        dams:IntegrationLevelEnum,
+        dams:LifecycleStatusEnum,
+        dams:LogicalDataTypeEnum,
+        dams:MappingCardinalityEnum,
+        dams:MappingTypeEnum,
+        dams:ModelLevelEnum,
+        dams:PhysicalObjectKindEnum,
+        dams:RequirementLevelEnum,
+        dams:RequirementSectionEnum,
+        dams:SolutionDataRoleEnum,
+        dams:SpecificationKindEnum ;
+    linkml:generation_date "2026-09-28T07:56:55"^^xsd:dateTime ;
+    linkml:id "https://data.moex.com/dams/v0.1"^^xsd:anyURI ;
+    linkml:imports "linkml:types"^^xsd:anyURI,
+        "moex-analytics"^^xsd:anyURI,
+        "moex-contract-binding"^^xsd:anyURI,
+        "moex-core"^^xsd:anyURI,
+        "moex-governance"^^xsd:anyURI,
+        "moex-integration"^^xsd:anyURI,
+        "moex-registries"^^xsd:anyURI,
+        "moex-requirements"^^xsd:anyURI,
+        "moex-types"^^xsd:anyURI ;
+    linkml:metamodel_version "1.11.0" ;
+    linkml:slots dams:aggregation_function,
+        dams:aliases,
+        dams:api_version,
+        dams:approval_status,
+        dams:approved_at,
+        dams:approved_by_ref,
+        dams:assignment_id,
+        dams:associative,
+        dams:attributes,
+        dams:business_importance,
+        dams:business_process_refs,
+        dams:catalog_id,
+        dams:check_id,
+        dams:classification_assignments,
+        dams:classification_rationale,
+        dams:classification_source,
+        dams:classification_term_ref,
+        dams:classified_element_ref,
+        dams:code,
+        dams:compatibility_baseline_ref,
+        dams:compatibility_mode,
+        dams:conceptual_entities,
+        dams:conceptual_entity_refs,
+        dams:confidence,
+        dams:context_ref,
+        dams:contract_ref,
+        dams:data_class,
+        dams:data_flows,
+        dams:data_model_bindings,
+        dams:data_owner_ref,
+        dams:data_steward_ref,
+        dams:default_value,
+        dams:deprecated_by_ref,
+        dams:derived_expression,
+        dams:description,
+        dams:diagnostic_code,
+        dams:dimension_attribute_refs,
+        dams:dimensions,
+        dams:direction,
+        dams:domain_contexts,
+        dams:domain_ref,
+        dams:domain_refs,
+        dams:element_id,
+        dams:entity_bindings,
+        dams:entity_type,
+        dams:evidence_refs,
+        dams:expression,
+        dams:filter_expression,
+        dams:flow_ref,
+        dams:formal_checks,
+        dams:format_pattern,
+        dams:generated_at,
+        dams:glossary_term_refs,
+        dams:governance_classification,
+        dams:grain_entity_refs,
+        dams:identifying,
+        dams:implementation_version,
+        dams:imports_refs,
+        dams:integration_channel,
+        dams:integration_class,
+        dams:integration_level,
+        dams:integration_ref,
+        dams:integration_spec_ref,
+        dams:integrity_digest,
+        dams:invariant_refs,
+        dams:key_attribute_refs,
+        dams:kind,
+        dams:lifecycle_status,
+        dams:logical_attribute_ref,
+        dams:logical_attribute_refs,
+        dams:logical_entities,
+        dams:logical_entity_ref,
+        dams:logical_type,
+        dams:mapping_cardinality,
+        dams:mapping_type,
+        dams:mappings,
+        dams:master_system,
+        dams:maximum_cardinality,
+        dams:measure_attribute_refs,
+        dams:member_system_refs,
+        dams:metric_expression,
+        dams:metrics,
+        dams:minimum_cardinality,
+        dams:model_package_ref,
+        dams:model_packages,
+        dams:model_revision,
+        dams:model_version,
+        dams:multivalued,
+        dams:name,
+        dams:namespace,
+        dams:native_name,
+        dams:native_schema_ref,
+        dams:native_type,
+        dams:object_kind,
+        dams:ordinal_position,
+        dams:owner_entity_ref,
+        dams:owning_unit_ref,
+        dams:parent_concept_ref,
+        dams:parent_domain_ref,
+        dams:physical_field_refs,
+        dams:physical_fields,
+        dams:physical_object_ref,
+        dams:physical_object_refs,
+        dams:physical_objects,
+        dams:platform_ref,
+        dams:policy_binding_id,
+        dams:policy_bindings,
+        dams:policy_ref,
+        dams:policy_refs,
+        dams:policy_target_ref,
+        dams:qualified_name,
+        dams:registry_description,
+        dams:registry_entries,
+        dams:registry_id,
+        dams:registry_name,
+        dams:registry_status,
+        dams:relationships,
+        dams:repository_id,
+        dams:required,
+        dams:requirement_level,
+        dams:requirement_section,
+        dams:requirements,
+        dams:schema_path,
+        dams:selected_attributes,
+        dams:selected_entities,
+        dams:selections,
+        dams:sensitivity_term_refs,
+        dams:severity,
+        dams:solution_data_role,
+        dams:solution_ref,
+        dams:source_artifact_ref,
+        dams:source_entity_ref,
+        dams:source_max_cardinality,
+        dams:source_min_cardinality,
+        dams:source_model_ref,
+        dams:source_platform_ref,
+        dams:source_refs,
+        dams:source_role,
+        dams:source_solution_ref,
+        dams:source_system_ref,
+        dams:source_uri,
+        dams:specification_version,
+        dams:statement,
+        dams:system_ref,
+        dams:tags,
+        dams:target_class,
+        dams:target_entity_ref,
+        dams:target_max_cardinality,
+        dams:target_min_cardinality,
+        dams:target_path,
+        dams:target_platform_ref,
+        dams:target_refs,
+        dams:target_role,
+        dams:target_slot,
+        dams:target_solution_ref,
+        dams:target_system_ref,
+        dams:technology,
+        dams:title,
+        dams:transformation_expression,
+        dams:transformation_mapping_ref,
+        dams:transformation_mapping_refs,
+        dams:transformation_ref,
+        dams:unit,
+        dams:valid_from,
+        dams:valid_to,
+        dams:value_set_ref ;
+    linkml:source_file "moex-dams.yaml" ;
+    linkml:source_file_date "2026-09-28T05:48:28"^^xsd:dateTime ;
+    linkml:source_file_size 1882 ;
+    linkml:types dams:SemVer,
+        dams:Sha256Digest,
+        dams:boolean,
+        dams:curie,
+        dams:date,
+        dams:date_or_datetime,
+        dams:datetime,
+        dams:decimal,
+        dams:double,
+        dams:float,
+        dams:integer,
+        dams:jsonpath,
+        dams:jsonpointer,
+        dams:ncname,
+        dams:nodeidentifier,
+        dams:objectidentifier,
+        dams:sparqlpath,
+        dams:string,
+        dams:time,
+        dams:uri,
+        dams:uriorcurie .
+
+dams:ATR linkml:description "Атрибуты" .
+
+dams:CLS linkml:description "Классификация данных" .
+
+dams:EnforcementResultEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/EnforcementResultEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:fail,
+        dams:not_applicable,
+        dams:pass,
+        dams:warn .
+
+dams:FLW linkml:description "Потоки данных" .
+
+dams:GEN linkml:description "Общие требования" .
+
+dams:LDM linkml:description "Логическая модель" .
+
+dams:ModelLevelEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/ModelLevelEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:conceptual,
+        dams:logical,
+        dams:physical .
+
+dams:PDM linkml:description "Физическая модель" .
+
+dams:REF linkml:description "Связи сущностей" .
+
+dams:SpecificationKindEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/SpecificationKindEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:data_model,
+        dams:data_quality,
+        dams:integration .
+
+dams:analytical_data linkml:description "Аналитические или производные наборы данных." .
+
+dams:conceptual_model linkml:description "Концептуальная модель" .
+
+dams:core linkml:description "Базовая сущность, создаваемая и управляемая решением." .
+
+dams:curie a linkml:TypeDefinition ;
+    dcterms:conformsTo "https://www.w3.org/TR/curie/" ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"curie\"." ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    skos:note "in RDF serializations this MUST be expanded to a URI",
+        "in non-RDF serializations MAY be serialized as the compact representation" ;
+    linkml:base "Curie" ;
+    linkml:definition_uri "https://w3id.org/linkml/Curie"^^xsd:anyURI ;
+    linkml:description "a compact URI" ;
+    linkml:imported_from "linkml:types" ;
+    linkml:repr "str" ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#string"^^xsd:anyURI .
+
+dams:date_or_datetime a linkml:TypeDefinition ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"date_or_datetime\"." ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    linkml:base "str" ;
+    linkml:definition_uri "https://w3id.org/linkml/DateOrDatetime"^^xsd:anyURI ;
+    linkml:description "Either a date or a datetime" ;
+    linkml:imported_from "linkml:types" ;
+    linkml:repr "str" ;
+    linkml:uri "https://w3id.org/linkml/DateOrDatetime"^^xsd:anyURI .
+
+dams:derived linkml:description "Производная сущность, вычисляемая или агрегируемая из других данных." .
+
+dams:double a linkml:TypeDefinition ;
+    skos:closeMatch "schema:Float"^^xsd:anyURI ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"double\"." ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    linkml:base "float" ;
+    linkml:definition_uri "https://w3id.org/linkml/Double"^^xsd:anyURI ;
+    linkml:description "A real number that conforms to the xsd:double specification" ;
+    linkml:imported_from "linkml:types" ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#double"^^xsd:anyURI .
+
+dams:float a linkml:TypeDefinition ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"float\"." ;
+    skos:exactMatch "schema:Float"^^xsd:anyURI ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    linkml:base "float" ;
+    linkml:definition_uri "https://w3id.org/linkml/Float"^^xsd:anyURI ;
+    linkml:description "A real number that conforms to the xsd:float specification" ;
+    linkml:imported_from "linkml:types" ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#float"^^xsd:anyURI .
+
+dams:it_solution linkml:description "ИТ-решение" .
+
+dams:it_system linkml:description "ИТ-система" .
+
+dams:jsonpath a linkml:TypeDefinition ;
+    dcterms:conformsTo "https://www.ietf.org/archive/id/draft-goessner-dispatch-jsonpath-00.html" ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"jsonpath\"." ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    linkml:base "str" ;
+    linkml:definition_uri "https://w3id.org/linkml/Jsonpath"^^xsd:anyURI ;
+    linkml:description "A string encoding a JSON Path. The value of the string MUST conform to JSON Point syntax and SHOULD dereference to zero or more valid objects within the current instance document when encoded in tree form." ;
+    linkml:imported_from "linkml:types" ;
+    linkml:repr "str" ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#string"^^xsd:anyURI .
+
+dams:jsonpointer a linkml:TypeDefinition ;
+    dcterms:conformsTo "https://datatracker.ietf.org/doc/html/rfc6901" ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"jsonpointer\"." ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    linkml:base "str" ;
+    linkml:definition_uri "https://w3id.org/linkml/Jsonpointer"^^xsd:anyURI ;
+    linkml:description "A string encoding a JSON Pointer. The value of the string MUST conform to JSON Point syntax and SHOULD dereference to a valid object within the current instance document when encoded in tree form." ;
+    linkml:imported_from "linkml:types" ;
+    linkml:repr "str" ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#string"^^xsd:anyURI .
+
+dams:master_data linkml:description "Мастер-данные." .
+
+dams:metadata linkml:description "Метаданные." .
+
+dams:ncname a linkml:TypeDefinition ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"ncname\"." ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    linkml:base "NCName" ;
+    linkml:definition_uri "https://w3id.org/linkml/Ncname"^^xsd:anyURI ;
+    linkml:description "Prefix part of CURIE" ;
+    linkml:imported_from "linkml:types" ;
+    linkml:repr "str" ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#string"^^xsd:anyURI .
+
+dams:nodeidentifier a linkml:TypeDefinition ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"nodeidentifier\"." ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    linkml:base "NodeIdentifier" ;
+    linkml:definition_uri "https://w3id.org/linkml/Nodeidentifier"^^xsd:anyURI ;
+    linkml:description "A URI, CURIE or BNODE that represents a node in a model." ;
+    linkml:imported_from "linkml:types" ;
+    linkml:repr "str" ;
+    linkml:uri "http://www.w3.org/ns/shex#nonLiteral"^^xsd:anyURI .
+
+dams:objectidentifier a linkml:TypeDefinition ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"objectidentifier\"." ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    skos:note "Used for inheritance and type checking" ;
+    linkml:base "ElementIdentifier" ;
+    linkml:definition_uri "https://w3id.org/linkml/Objectidentifier"^^xsd:anyURI ;
+    linkml:description "A URI or CURIE that represents an object in the model." ;
+    linkml:imported_from "linkml:types" ;
+    linkml:repr "str" ;
+    linkml:uri "http://www.w3.org/ns/shex#iri"^^xsd:anyURI .
+
+dams:reference linkml:description "Справочная сущность или представление управляемого справочника." .
+
+dams:reference_data linkml:description "Нормативно-справочная информация (НСИ)." .
+
+dams:sparqlpath a linkml:TypeDefinition ;
+    dcterms:conformsTo "https://www.w3.org/TR/sparql11-query/#propertypaths" ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"sparqlpath\"." ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    linkml:base "str" ;
+    linkml:definition_uri "https://w3id.org/linkml/Sparqlpath"^^xsd:anyURI ;
+    linkml:description "A string encoding a SPARQL Property Path. The value of the string MUST conform to SPARQL syntax and SHOULD dereference to zero or more valid objects within the current instance document when encoded as RDF." ;
+    linkml:imported_from "linkml:types" ;
+    linkml:repr "str" ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#string"^^xsd:anyURI .
+
+dams:transactional_data linkml:description "Транзакционные данные." .
+
+dams:ApprovalStatusEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/ApprovalStatusEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:approved,
+        dams:proposed,
+        dams:rejected,
+        dams:superseded .
+
+dams:BusinessImportanceEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/BusinessImportanceEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:high,
+        dams:low,
+        dams:medium .
+
+dams:BusinessProcess a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/BusinessProcess"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/BusinessProcess"^^xsd:anyURI ;
+    linkml:description "Ссылка на бизнес-процесс или его шаг в BPMN-репозитории." ;
+    linkml:is_a dams:RegistryEntry ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:master_system,
+        dams:registry_description,
+        dams:registry_id,
+        dams:registry_name,
+        dams:registry_status,
+        dams:source_uri .
+
+dams:CheckSeverityEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/CheckSeverityEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:error,
+        dams:warning .
+
+dams:CompatibilityModeEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/CompatibilityModeEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:backward,
+        dams:forward,
+        dams:full,
+        dams:none .
+
+dams:DataClassEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/DataClassEnum"^^xsd:anyURI ;
+    linkml:description "Класс данных для наследования модельной спецификацией дата-контракта; не совпадает с entity_type." ;
+    linkml:permissible_values dams:analytical_data,
+        dams:master_data,
+        dams:metadata,
+        dams:reference_data,
+        dams:transactional_data .
+
+dams:DataContractReference a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/DataContractReference"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/DataContractReference"^^xsd:anyURI ;
+    linkml:description "Ссылка на дата-контракт в корпоративном дата-каталоге." ;
+    linkml:is_a dams:RegistryEntry ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:master_system,
+        dams:registry_description,
+        dams:registry_id,
+        dams:registry_name,
+        dams:registry_status,
+        dams:source_uri .
+
+dams:EntityTypeEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/EntityTypeEnum"^^xsd:anyURI ;
+    linkml:description "Роль логической сущности в модели решения." ;
+    linkml:permissible_values dams:core,
+        dams:derived,
+        dams:reference .
+
+dams:FlowDirectionEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/FlowDirectionEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:bidirectional,
+        dams:inbound,
+        dams:internal,
+        dams:outbound .
+
+dams:FormalCheckKindEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/FormalCheckKindEnum"^^xsd:anyURI ;
+    linkml:description "Вид формальной проверки в нотации, близкой к LinkML constraints." ;
+    linkml:permissible_values dams:custom,
+        dams:key_subset,
+        dams:ref_resolves,
+        dams:slot_min_cardinality,
+        dams:slot_required .
+
+dams:GlossaryTerm a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/GlossaryTerm"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/GlossaryTerm"^^xsd:anyURI ;
+    linkml:description "Термин корпоративного бизнес-глоссария." ;
+    linkml:is_a dams:RegistryEntry ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:master_system,
+        dams:registry_description,
+        dams:registry_id,
+        dams:registry_name,
+        dams:registry_status,
+        dams:source_uri .
+
+dams:GovernanceClassificationEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/GovernanceClassificationEnum"^^xsd:anyURI ;
+    linkml:description "Базовая шкала ограничения доступа; специальные виды тайны задаются отдельными терминами классификации." ;
+    linkml:permissible_values dams:confidential,
+        dams:internal,
+        dams:public,
+        dams:restricted .
+
+dams:IntegrationChannelEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/IntegrationChannelEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:api,
+        dams:database,
+        dams:file,
+        dams:other,
+        dams:queue .
+
+dams:IntegrationClassEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/IntegrationClassEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:EAP,
+        dams:EDA .
+
+dams:IntegrationLevelEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/IntegrationLevelEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:interplatform,
+        dams:intraplatform .
+
+dams:IntegrationReference a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/IntegrationReference"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/IntegrationReference"^^xsd:anyURI ;
+    linkml:description "Ссылка на интеграцию в Clinkr." ;
+    linkml:is_a dams:RegistryEntry ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:master_system,
+        dams:registry_description,
+        dams:registry_id,
+        dams:registry_name,
+        dams:registry_status,
+        dams:source_uri .
+
+dams:LogicalDataTypeEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/LogicalDataTypeEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:binary,
+        dams:boolean,
+        dams:date,
+        dams:datetime,
+        dams:decimal,
+        dams:identifier,
+        dams:integer,
+        dams:object,
+        dams:string,
+        dams:time,
+        dams:uri .
+
+dams:MappingCardinalityEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/MappingCardinalityEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:many_to_many,
+        dams:many_to_one,
+        dams:one_to_many,
+        dams:one_to_one .
+
+dams:MappingTypeEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/MappingTypeEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:aggregation,
+        dams:derivation,
+        dams:field_mapping,
+        dams:implementation,
+        dams:semantic_equivalence,
+        dams:specialization,
+        dams:transformation .
+
+dams:OrganizationUnit a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/OrganizationUnit"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/OrganizationUnit"^^xsd:anyURI ;
+    linkml:description "Организационное подразделение." ;
+    linkml:is_a dams:RegistryEntry ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:master_system,
+        dams:registry_description,
+        dams:registry_id,
+        dams:registry_name,
+        dams:registry_status,
+        dams:source_uri .
+
+dams:PhysicalObjectKindEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/PhysicalObjectKindEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:api,
+        dams:column,
+        dams:database,
+        dams:dataset,
+        dams:endpoint,
+        dams:file,
+        dams:message,
+        dams:payload,
+        dams:pipeline,
+        dams:queue,
+        dams:schema,
+        dams:table,
+        dams:topic,
+        dams:view .
+
+dams:RequirementLevelEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/RequirementLevelEnum"^^xsd:anyURI ;
+    linkml:description "Уровень применения требования к спецификации." ;
+    linkml:permissible_values dams:conceptual_model,
+        dams:it_solution,
+        dams:it_system .
+
+dams:RequirementSectionEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/RequirementSectionEnum"^^xsd:anyURI ;
+    linkml:description "Раздел каталога требований (трёхбуквенный код в code)." ;
+    linkml:permissible_values dams:ATR,
+        dams:CLS,
+        dams:FLW,
+        dams:GEN,
+        dams:LDM,
+        dams:PDM,
+        dams:REF .
+
+dams:Sha256Digest a linkml:TypeDefinition ;
+    skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:base "str" ;
+    linkml:definition_uri "https://data.moex.com/dams/Sha256Digest"^^xsd:anyURI ;
+    linkml:pattern "^sha256:[a-fA-F0-9]{64}$" ;
+    linkml:typeof dams:string ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#string"^^xsd:anyURI .
+
+dams:SolutionDataRoleEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/SolutionDataRoleEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:consumer,
+        dams:intermediary,
+        dams:producer .
+
+dams:aggregation_function a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/analytics/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/aggregation_function"^^xsd:anyURI ;
+    linkml:domain_of dams:Metric ;
+    linkml:owner dams:Metric ;
+    linkml:range dams:string ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/aggregation_function"^^xsd:anyURI .
+
+dams:api_version a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/api_version"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelPackage ;
+    linkml:owner dams:ModelPackage ;
+    linkml:range dams:string ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/api_version"^^xsd:anyURI .
+
+dams:assignment_id a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/assignment_id"^^xsd:anyURI ;
+    linkml:domain_of dams:ClassificationAssignment ;
+    linkml:identifier true ;
+    linkml:owner dams:ClassificationAssignment ;
+    linkml:range dams:uriorcurie ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/assignment_id"^^xsd:anyURI .
+
+dams:associative a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/associative"^^xsd:anyURI ;
+    linkml:domain_of dams:Relationship ;
+    linkml:owner dams:Relationship ;
+    linkml:range dams:boolean ;
+    linkml:slot_uri "https://data.moex.com/dams/associative"^^xsd:anyURI .
+
+dams:attributes a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/attributes"^^xsd:anyURI ;
+    linkml:domain_of dams:LogicalEntity ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:LogicalEntity ;
+    linkml:range dams:LogicalAttribute ;
+    linkml:slot_uri "https://data.moex.com/dams/attributes"^^xsd:anyURI .
+
+dams:business_process_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/business_process_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:DomainContext ;
+    linkml:multivalued true ;
+    linkml:owner dams:DomainContext ;
+    linkml:range dams:BusinessProcess ;
+    linkml:slot_uri "https://data.moex.com/dams/business_process_refs"^^xsd:anyURI .
+
+dams:catalog_id a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/catalog_id"^^xsd:anyURI ;
+    linkml:domain_of dams:RequirementCatalog ;
+    linkml:identifier true ;
+    linkml:owner dams:RequirementCatalog ;
+    linkml:range dams:uriorcurie ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/catalog_id"^^xsd:anyURI .
+
+dams:check_id a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/check_id"^^xsd:anyURI ;
+    linkml:domain_of dams:FormalCheck ;
+    linkml:identifier true ;
+    linkml:owner dams:FormalCheck ;
+    linkml:range dams:string ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/check_id"^^xsd:anyURI .
+
+dams:classification_assignments a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/classification_assignments"^^xsd:anyURI ;
+    linkml:domain_of dams:MOEXModelRepository ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:MOEXModelRepository ;
+    linkml:range dams:ClassificationAssignment ;
+    linkml:slot_uri "https://data.moex.com/dams/classification_assignments"^^xsd:anyURI .
+
+dams:classification_term_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/classification_term_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:ClassificationAssignment ;
+    linkml:owner dams:ClassificationAssignment ;
+    linkml:range dams:DataClassificationTerm ;
+    linkml:slot_uri "https://data.moex.com/dams/classification_term_ref"^^xsd:anyURI .
+
+dams:classified_element_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/classified_element_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:ClassificationAssignment ;
+    linkml:owner dams:ClassificationAssignment ;
+    linkml:range dams:uriorcurie ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/classified_element_ref"^^xsd:anyURI .
+
+dams:code a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/code"^^xsd:anyURI ;
+    linkml:domain_of dams:SpecificationRequirement ;
+    linkml:owner dams:SpecificationRequirement ;
+    linkml:pattern "^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$" ;
+    linkml:range dams:string ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/code"^^xsd:anyURI .
+
+dams:compatibility_baseline_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/compatibility_baseline_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:DataModelBinding ;
+    linkml:owner dams:DataModelBinding ;
+    linkml:range dams:uri ;
+    linkml:slot_uri "https://data.moex.com/dams/compatibility_baseline_ref"^^xsd:anyURI .
+
+dams:compatibility_mode a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/compatibility_mode"^^xsd:anyURI ;
+    linkml:domain_of dams:DataModelBinding ;
+    linkml:owner dams:DataModelBinding ;
+    linkml:range dams:CompatibilityModeEnum ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/compatibility_mode"^^xsd:anyURI .
+
+dams:conceptual_entities a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/conceptual_entities"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelPackage ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:ModelPackage ;
+    linkml:range dams:ConceptualEntity ;
+    linkml:slot_uri "https://data.moex.com/dams/conceptual_entities"^^xsd:anyURI .
+
+dams:conceptual_entity_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/conceptual_entity_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:LogicalEntity ;
+    linkml:multivalued true ;
+    linkml:owner dams:LogicalEntity ;
+    linkml:range dams:ConceptualEntity ;
+    linkml:slot_uri "https://data.moex.com/dams/conceptual_entity_refs"^^xsd:anyURI .
+
+dams:confidence a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/confidence"^^xsd:anyURI ;
+    linkml:domain_of dams:Mapping ;
+    linkml:maximum_value "1"^^<https://w3id.org/linkml/@id> ;
+    linkml:minimum_value "0"^^<https://w3id.org/linkml/@id> ;
+    linkml:owner dams:Mapping ;
+    linkml:range dams:decimal ;
+    linkml:slot_uri "https://data.moex.com/dams/confidence"^^xsd:anyURI .
+
+dams:context_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/context_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:LogicalEntity ;
+    linkml:owner dams:LogicalEntity ;
+    linkml:range dams:DomainContext ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/context_ref"^^xsd:anyURI .
+
+dams:data_flows a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/data_flows"^^xsd:anyURI ;
+    linkml:domain_of dams:MOEXModelRepository ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:MOEXModelRepository ;
+    linkml:range dams:DataFlow ;
+    linkml:slot_uri "https://data.moex.com/dams/data_flows"^^xsd:anyURI .
+
+dams:data_model_bindings a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/data_model_bindings"^^xsd:anyURI ;
+    linkml:domain_of dams:MOEXModelRepository ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:MOEXModelRepository ;
+    linkml:range dams:DataModelBinding ;
+    linkml:slot_uri "https://data.moex.com/dams/data_model_bindings"^^xsd:anyURI .
+
+dams:date a linkml:TypeDefinition ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"date\".",
+        "URI is dateTime because OWL reasoners don't work with straight date or time" ;
+    skos:exactMatch "schema:Date"^^xsd:anyURI ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    linkml:base "XSDDate" ;
+    linkml:definition_uri "https://w3id.org/linkml/Date"^^xsd:anyURI ;
+    linkml:description "a date (year, month and day) in an idealized calendar" ;
+    linkml:imported_from "linkml:types" ;
+    linkml:repr "str" ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#date"^^xsd:anyURI .
+
+dams:default_value a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/default_value"^^xsd:anyURI ;
+    linkml:domain_of dams:LogicalAttribute ;
+    linkml:owner dams:LogicalAttribute ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/default_value"^^xsd:anyURI .
+
+dams:derived_expression a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/derived_expression"^^xsd:anyURI ;
+    linkml:domain_of dams:LogicalAttribute ;
+    linkml:owner dams:LogicalAttribute ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/derived_expression"^^xsd:anyURI .
+
+dams:diagnostic_code a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/diagnostic_code"^^xsd:anyURI ;
+    linkml:description "Мост к DAMS-STRUCT-* / DAMS-REF-* / будущим DAMS-REQ-*." ;
+    linkml:domain_of dams:FormalCheck ;
+    linkml:owner dams:FormalCheck ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/diagnostic_code"^^xsd:anyURI .
+
+dams:dimensions a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/dimensions"^^xsd:anyURI ;
+    linkml:domain_of dams:MOEXModelRepository ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:MOEXModelRepository ;
+    linkml:range dams:Dimension ;
+    linkml:slot_uri "https://data.moex.com/dams/dimensions"^^xsd:anyURI .
+
+dams:domain_contexts a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/domain_contexts"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelPackage ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:ModelPackage ;
+    linkml:range dams:DomainContext ;
+    linkml:slot_uri "https://data.moex.com/dams/domain_contexts"^^xsd:anyURI .
+
+dams:domain_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/domain_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:DomainContext ;
+    linkml:owner dams:DomainContext ;
+    linkml:range dams:BusinessDomain ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/domain_ref"^^xsd:anyURI .
+
+dams:domain_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/domain_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelPackage ;
+    linkml:multivalued true ;
+    linkml:owner dams:ModelPackage ;
+    linkml:range dams:BusinessDomain ;
+    linkml:slot_uri "https://data.moex.com/dams/domain_refs"^^xsd:anyURI .
+
+dams:entity_bindings a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/entity_bindings"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlow ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:DataFlow ;
+    linkml:range dams:DataFlowEntityBinding ;
+    linkml:slot_uri "https://data.moex.com/dams/entity_bindings"^^xsd:anyURI .
+
+dams:expression a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/expression"^^xsd:anyURI ;
+    linkml:description "Свободная LinkML-ish заметка при kind=custom." ;
+    linkml:domain_of dams:FormalCheck ;
+    linkml:owner dams:FormalCheck ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/expression"^^xsd:anyURI .
+
+dams:filter_expression a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/analytics/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/filter_expression"^^xsd:anyURI ;
+    linkml:domain_of dams:Metric ;
+    linkml:owner dams:Metric ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/filter_expression"^^xsd:anyURI .
+
+dams:flow_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/flow_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlowEntityBinding ;
+    linkml:owner dams:DataFlowEntityBinding ;
+    linkml:range dams:DataFlow ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/flow_ref"^^xsd:anyURI .
+
+dams:formal_checks a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/formal_checks"^^xsd:anyURI ;
+    linkml:domain_of dams:SpecificationRequirement ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:minimum_cardinality 1 ;
+    linkml:multivalued true ;
+    linkml:owner dams:SpecificationRequirement ;
+    linkml:range dams:FormalCheck ;
+    linkml:slot_uri "https://data.moex.com/dams/formal_checks"^^xsd:anyURI .
+
+dams:format_pattern a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/format_pattern"^^xsd:anyURI ;
+    linkml:domain_of dams:LogicalAttribute ;
+    linkml:owner dams:LogicalAttribute ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/format_pattern"^^xsd:anyURI .
+
+dams:generated_at a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/generated_at"^^xsd:anyURI ;
+    linkml:domain_of dams:DataModelBinding ;
+    linkml:owner dams:DataModelBinding ;
+    linkml:range dams:datetime ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/generated_at"^^xsd:anyURI .
+
+dams:identifying a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/identifying"^^xsd:anyURI ;
+    linkml:domain_of dams:Relationship ;
+    linkml:owner dams:Relationship ;
+    linkml:range dams:boolean ;
+    linkml:slot_uri "https://data.moex.com/dams/identifying"^^xsd:anyURI .
+
+dams:implementation_version a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/implementation_version"^^xsd:anyURI ;
+    linkml:domain_of dams:DataModelBinding ;
+    linkml:owner dams:DataModelBinding ;
+    linkml:range dams:SemVer ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/implementation_version"^^xsd:anyURI .
+
+dams:imports_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/imports_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelPackage ;
+    linkml:multivalued true ;
+    linkml:owner dams:ModelPackage ;
+    linkml:range dams:uri ;
+    linkml:slot_uri "https://data.moex.com/dams/imports_refs"^^xsd:anyURI .
+
+dams:integration_channel a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/integration_channel"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlow ;
+    linkml:owner dams:DataFlow ;
+    linkml:range dams:IntegrationChannelEnum ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/integration_channel"^^xsd:anyURI .
+
+dams:integration_class a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/integration_class"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlow ;
+    linkml:owner dams:DataFlow ;
+    linkml:range dams:IntegrationClassEnum ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/integration_class"^^xsd:anyURI .
+
+dams:integration_level a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/integration_level"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlow ;
+    linkml:owner dams:DataFlow ;
+    linkml:range dams:IntegrationLevelEnum ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/integration_level"^^xsd:anyURI .
+
+dams:integration_spec_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/integration_spec_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlow ;
+    linkml:owner dams:DataFlow ;
+    linkml:range dams:uri ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/integration_spec_ref"^^xsd:anyURI .
+
+dams:integrity_digest a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/integrity_digest"^^xsd:anyURI ;
+    linkml:domain_of dams:DataModelBinding ;
+    linkml:owner dams:DataModelBinding ;
+    linkml:range dams:Sha256Digest ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/integrity_digest"^^xsd:anyURI .
+
+dams:invariant_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/invariant_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:LogicalEntity ;
+    linkml:multivalued true ;
+    linkml:owner dams:LogicalEntity ;
+    linkml:range dams:Policy ;
+    linkml:slot_uri "https://data.moex.com/dams/invariant_refs"^^xsd:anyURI .
+
+dams:kind a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/kind"^^xsd:anyURI ;
+    linkml:domain_of dams:FormalCheck ;
+    linkml:owner dams:FormalCheck ;
+    linkml:range dams:FormalCheckKindEnum ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/kind"^^xsd:anyURI .
+
+dams:logical_attribute_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/logical_attribute_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:SelectedAttribute ;
+    linkml:owner dams:SelectedAttribute ;
+    linkml:range dams:LogicalAttribute ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/logical_attribute_ref"^^xsd:anyURI .
+
+dams:logical_attribute_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/logical_attribute_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlowEntityBinding ;
+    linkml:minimum_cardinality 1 ;
+    linkml:multivalued true ;
+    linkml:owner dams:DataFlowEntityBinding ;
+    linkml:range dams:LogicalAttribute ;
+    linkml:slot_uri "https://data.moex.com/dams/logical_attribute_refs"^^xsd:anyURI .
+
+dams:logical_entities a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/logical_entities"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelPackage ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:ModelPackage ;
+    linkml:range dams:LogicalEntity ;
+    linkml:slot_uri "https://data.moex.com/dams/logical_entities"^^xsd:anyURI .
+
+dams:logical_type a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/logical_type"^^xsd:anyURI ;
+    linkml:domain_of dams:LogicalAttribute ;
+    linkml:owner dams:LogicalAttribute ;
+    linkml:range dams:LogicalDataTypeEnum ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/logical_type"^^xsd:anyURI .
+
+dams:mapping_cardinality a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/mapping_cardinality"^^xsd:anyURI ;
+    linkml:domain_of dams:Mapping ;
+    linkml:owner dams:Mapping ;
+    linkml:range dams:MappingCardinalityEnum ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/mapping_cardinality"^^xsd:anyURI .
+
+dams:mapping_type a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/mapping_type"^^xsd:anyURI ;
+    linkml:domain_of dams:Mapping ;
+    linkml:owner dams:Mapping ;
+    linkml:range dams:MappingTypeEnum ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/mapping_type"^^xsd:anyURI .
+
+dams:mappings a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/mappings"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelPackage ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:ModelPackage ;
+    linkml:range dams:Mapping ;
+    linkml:slot_uri "https://data.moex.com/dams/mappings"^^xsd:anyURI .
+
+dams:maximum_cardinality a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/maximum_cardinality"^^xsd:anyURI ;
+    linkml:domain_of dams:LogicalAttribute ;
+    linkml:minimum_value "1"^^<https://w3id.org/linkml/@id> ;
+    linkml:owner dams:LogicalAttribute ;
+    linkml:range dams:integer ;
+    linkml:slot_uri "https://data.moex.com/dams/maximum_cardinality"^^xsd:anyURI .
+
+dams:measure_attribute_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/analytics/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/measure_attribute_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:Metric ;
+    linkml:minimum_cardinality 1 ;
+    linkml:multivalued true ;
+    linkml:owner dams:Metric ;
+    linkml:range dams:LogicalAttribute ;
+    linkml:slot_uri "https://data.moex.com/dams/measure_attribute_refs"^^xsd:anyURI .
+
+dams:member_system_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/member_system_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:ITSolution ;
+    linkml:multivalued true ;
+    linkml:owner dams:ITSolution ;
+    linkml:range dams:ITSystem ;
+    linkml:slot_uri "https://data.moex.com/dams/member_system_refs"^^xsd:anyURI .
+
+dams:metric_expression a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/analytics/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/metric_expression"^^xsd:anyURI ;
+    linkml:domain_of dams:Metric ;
+    linkml:owner dams:Metric ;
+    linkml:range dams:string ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/metric_expression"^^xsd:anyURI .
+
+dams:metrics a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/metrics"^^xsd:anyURI ;
+    linkml:domain_of dams:MOEXModelRepository ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:MOEXModelRepository ;
+    linkml:range dams:Metric ;
+    linkml:slot_uri "https://data.moex.com/dams/metrics"^^xsd:anyURI .
+
+dams:minimum_cardinality a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/minimum_cardinality"^^xsd:anyURI ;
+    linkml:domain_of dams:LogicalAttribute ;
+    linkml:minimum_value "0"^^<https://w3id.org/linkml/@id> ;
+    linkml:owner dams:LogicalAttribute ;
+    linkml:range dams:integer ;
+    linkml:slot_uri "https://data.moex.com/dams/minimum_cardinality"^^xsd:anyURI .
+
+dams:model_package_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/model_package_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:DataModelBinding ;
+    linkml:owner dams:DataModelBinding ;
+    linkml:range dams:uri ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/model_package_ref"^^xsd:anyURI .
+
+dams:model_packages a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/model_packages"^^xsd:anyURI ;
+    linkml:domain_of dams:MOEXModelRepository ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:MOEXModelRepository ;
+    linkml:range dams:ModelPackage ;
+    linkml:slot_uri "https://data.moex.com/dams/model_packages"^^xsd:anyURI .
+
+dams:model_revision a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/model_revision"^^xsd:anyURI ;
+    linkml:domain_of dams:DataModelBinding ;
+    linkml:owner dams:DataModelBinding ;
+    linkml:range dams:string ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/model_revision"^^xsd:anyURI .
+
+dams:multivalued a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/multivalued"^^xsd:anyURI ;
+    linkml:domain_of dams:LogicalAttribute ;
+    linkml:owner dams:LogicalAttribute ;
+    linkml:range dams:boolean ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/multivalued"^^xsd:anyURI .
+
+dams:namespace a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/namespace"^^xsd:anyURI ;
+    linkml:domain_of dams:DomainContext ;
+    linkml:owner dams:DomainContext ;
+    linkml:range dams:uri ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/namespace"^^xsd:anyURI .
+
+dams:native_name a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/native_name"^^xsd:anyURI ;
+    linkml:domain_of dams:PhysicalField ;
+    linkml:owner dams:PhysicalField ;
+    linkml:range dams:string ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/native_name"^^xsd:anyURI .
+
+dams:native_schema_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/native_schema_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:PhysicalObject ;
+    linkml:owner dams:PhysicalObject ;
+    linkml:range dams:uri ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/native_schema_ref"^^xsd:anyURI .
+
+dams:native_type a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/native_type"^^xsd:anyURI ;
+    linkml:domain_of dams:PhysicalField ;
+    linkml:owner dams:PhysicalField ;
+    linkml:range dams:string ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/native_type"^^xsd:anyURI .
+
+dams:object_kind a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/object_kind"^^xsd:anyURI ;
+    linkml:domain_of dams:PhysicalObject ;
+    linkml:owner dams:PhysicalObject ;
+    linkml:range dams:PhysicalObjectKindEnum ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/object_kind"^^xsd:anyURI .
+
+dams:ordinal_position a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/ordinal_position"^^xsd:anyURI ;
+    linkml:domain_of dams:PhysicalField ;
+    linkml:minimum_value "1"^^<https://w3id.org/linkml/@id> ;
+    linkml:owner dams:PhysicalField ;
+    linkml:range dams:integer ;
+    linkml:slot_uri "https://data.moex.com/dams/ordinal_position"^^xsd:anyURI .
+
+dams:owner_entity_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/owner_entity_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:LogicalAttribute ;
+    linkml:owner dams:LogicalAttribute ;
+    linkml:range dams:LogicalEntity ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/owner_entity_ref"^^xsd:anyURI .
+
+dams:parent_concept_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/parent_concept_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:ConceptualEntity ;
+    linkml:owner dams:ConceptualEntity ;
+    linkml:range dams:ConceptualEntity ;
+    linkml:slot_uri "https://data.moex.com/dams/parent_concept_ref"^^xsd:anyURI .
+
+dams:parent_domain_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/parent_domain_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:BusinessDomain ;
+    linkml:owner dams:BusinessDomain ;
+    linkml:range dams:BusinessDomain ;
+    linkml:slot_uri "https://data.moex.com/dams/parent_domain_ref"^^xsd:anyURI .
+
+dams:physical_fields a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/physical_fields"^^xsd:anyURI ;
+    linkml:domain_of dams:PhysicalObject ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:PhysicalObject ;
+    linkml:range dams:PhysicalField ;
+    linkml:slot_uri "https://data.moex.com/dams/physical_fields"^^xsd:anyURI .
+
+dams:physical_object_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/physical_object_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:PhysicalField ;
+    linkml:owner dams:PhysicalField ;
+    linkml:range dams:PhysicalObject ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/physical_object_ref"^^xsd:anyURI .
+
+dams:physical_objects a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/physical_objects"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelPackage ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:ModelPackage ;
+    linkml:range dams:PhysicalObject ;
+    linkml:slot_uri "https://data.moex.com/dams/physical_objects"^^xsd:anyURI .
+
+dams:platform_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/platform_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:ITSolution ;
+    linkml:owner dams:ITSolution ;
+    linkml:range dams:ITPlatform ;
+    linkml:slot_uri "https://data.moex.com/dams/platform_ref"^^xsd:anyURI .
+
+dams:policy_binding_id a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/policy_binding_id"^^xsd:anyURI ;
+    linkml:domain_of dams:PolicyBinding ;
+    linkml:identifier true ;
+    linkml:owner dams:PolicyBinding ;
+    linkml:range dams:uriorcurie ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/policy_binding_id"^^xsd:anyURI .
+
+dams:policy_bindings a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/policy_bindings"^^xsd:anyURI ;
+    linkml:domain_of dams:MOEXModelRepository ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:MOEXModelRepository ;
+    linkml:range dams:PolicyBinding ;
+    linkml:slot_uri "https://data.moex.com/dams/policy_bindings"^^xsd:anyURI .
+
+dams:policy_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/policy_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:PolicyBinding ;
+    linkml:owner dams:PolicyBinding ;
+    linkml:range dams:Policy ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/policy_ref"^^xsd:anyURI .
+
+dams:policy_target_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/policy_target_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:PolicyBinding ;
+    linkml:owner dams:PolicyBinding ;
+    linkml:range dams:uriorcurie ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/policy_target_ref"^^xsd:anyURI .
+
+dams:qualified_name a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/qualified_name"^^xsd:anyURI ;
+    linkml:domain_of dams:PhysicalObject ;
+    linkml:owner dams:PhysicalObject ;
+    linkml:range dams:string ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/qualified_name"^^xsd:anyURI .
+
+dams:registry_entries a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/registry_entries"^^xsd:anyURI ;
+    linkml:domain_of dams:MOEXModelRepository ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:MOEXModelRepository ;
+    linkml:range dams:RegistryEntry ;
+    linkml:slot_uri "https://data.moex.com/dams/registry_entries"^^xsd:anyURI .
+
+dams:relationships a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/relationships"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelPackage ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:ModelPackage ;
+    linkml:range dams:Relationship ;
+    linkml:slot_uri "https://data.moex.com/dams/relationships"^^xsd:anyURI .
+
+dams:repository_id a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/repository_id"^^xsd:anyURI ;
+    linkml:domain_of dams:MOEXModelRepository ;
+    linkml:identifier true ;
+    linkml:owner dams:MOEXModelRepository ;
+    linkml:range dams:uriorcurie ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/repository_id"^^xsd:anyURI .
+
+dams:requirement_level a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/requirement_level"^^xsd:anyURI ;
+    linkml:domain_of dams:SpecificationRequirement ;
+    linkml:owner dams:SpecificationRequirement ;
+    linkml:range dams:RequirementLevelEnum ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/requirement_level"^^xsd:anyURI .
+
+dams:requirement_section a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/requirement_section"^^xsd:anyURI ;
+    linkml:domain_of dams:SpecificationRequirement ;
+    linkml:owner dams:SpecificationRequirement ;
+    linkml:range dams:RequirementSectionEnum ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/requirement_section"^^xsd:anyURI .
+
+dams:requirements a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/requirements"^^xsd:anyURI ;
+    linkml:domain_of dams:RequirementCatalog ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:multivalued true ;
+    linkml:owner dams:RequirementCatalog ;
+    linkml:range dams:SpecificationRequirement ;
+    linkml:slot_uri "https://data.moex.com/dams/requirements"^^xsd:anyURI .
+
+dams:schema_path a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/schema_path"^^xsd:anyURI ;
+    linkml:domain_of dams:PhysicalField ;
+    linkml:owner dams:PhysicalField ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/schema_path"^^xsd:anyURI .
+
+dams:selected_attributes a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/selected_attributes"^^xsd:anyURI ;
+    linkml:domain_of dams:SelectedEntity ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:minimum_cardinality 1 ;
+    linkml:multivalued true ;
+    linkml:owner dams:SelectedEntity ;
+    linkml:range dams:SelectedAttribute ;
+    linkml:slot_uri "https://data.moex.com/dams/selected_attributes"^^xsd:anyURI .
+
+dams:selected_entities a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/selected_entities"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelSelection ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:minimum_cardinality 1 ;
+    linkml:multivalued true ;
+    linkml:owner dams:ModelSelection ;
+    linkml:range dams:SelectedEntity ;
+    linkml:slot_uri "https://data.moex.com/dams/selected_entities"^^xsd:anyURI .
+
+dams:selections a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/selections"^^xsd:anyURI ;
+    linkml:domain_of dams:DataModelBinding ;
+    linkml:inlined true ;
+    linkml:inlined_as_list true ;
+    linkml:minimum_cardinality 1 ;
+    linkml:multivalued true ;
+    linkml:owner dams:DataModelBinding ;
+    linkml:range dams:ModelSelection ;
+    linkml:slot_uri "https://data.moex.com/dams/selections"^^xsd:anyURI .
+
+dams:severity a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/severity"^^xsd:anyURI ;
+    linkml:domain_of dams:FormalCheck ;
+    linkml:owner dams:FormalCheck ;
+    linkml:range dams:CheckSeverityEnum ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/severity"^^xsd:anyURI .
+
+dams:solution_data_role a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/solution_data_role"^^xsd:anyURI ;
+    linkml:domain_of dams:LogicalEntity ;
+    linkml:owner dams:LogicalEntity ;
+    linkml:range dams:SolutionDataRoleEnum ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/solution_data_role"^^xsd:anyURI .
+
+dams:source_entity_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/source_entity_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:Relationship ;
+    linkml:owner dams:Relationship ;
+    linkml:range dams:uriorcurie ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/source_entity_ref"^^xsd:anyURI .
+
+dams:source_max_cardinality a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/source_max_cardinality"^^xsd:anyURI ;
+    linkml:domain_of dams:Relationship ;
+    linkml:minimum_value "1"^^<https://w3id.org/linkml/@id> ;
+    linkml:owner dams:Relationship ;
+    linkml:range dams:integer ;
+    linkml:slot_uri "https://data.moex.com/dams/source_max_cardinality"^^xsd:anyURI .
+
+dams:source_min_cardinality a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/source_min_cardinality"^^xsd:anyURI ;
+    linkml:domain_of dams:Relationship ;
+    linkml:minimum_value "0"^^<https://w3id.org/linkml/@id> ;
+    linkml:owner dams:Relationship ;
+    linkml:range dams:integer ;
+    linkml:slot_uri "https://data.moex.com/dams/source_min_cardinality"^^xsd:anyURI .
+
+dams:source_model_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/source_model_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlowEntityBinding ;
+    linkml:owner dams:DataFlowEntityBinding ;
+    linkml:range dams:uri ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/source_model_ref"^^xsd:anyURI .
+
+dams:source_platform_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/source_platform_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlow ;
+    linkml:owner dams:DataFlow ;
+    linkml:range dams:ITPlatform ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/source_platform_ref"^^xsd:anyURI .
+
+dams:source_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/source_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:Mapping ;
+    linkml:minimum_cardinality 1 ;
+    linkml:multivalued true ;
+    linkml:owner dams:Mapping ;
+    linkml:range dams:uriorcurie ;
+    linkml:slot_uri "https://data.moex.com/dams/source_refs"^^xsd:anyURI .
+
+dams:source_role a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/source_role"^^xsd:anyURI ;
+    linkml:domain_of dams:Relationship ;
+    linkml:owner dams:Relationship ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/source_role"^^xsd:anyURI .
+
+dams:source_solution_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/source_solution_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlow ;
+    linkml:owner dams:DataFlow ;
+    linkml:range dams:ITSolution ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/source_solution_ref"^^xsd:anyURI .
+
+dams:source_system_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/source_system_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlow ;
+    linkml:owner dams:DataFlow ;
+    linkml:range dams:ITSystem ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/source_system_ref"^^xsd:anyURI .
+
+dams:specification_version a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/specification_version"^^xsd:anyURI ;
+    linkml:domain_of dams:DataModelBinding ;
+    linkml:owner dams:DataModelBinding ;
+    linkml:range dams:SemVer ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/specification_version"^^xsd:anyURI .
+
+dams:statement a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/statement"^^xsd:anyURI ;
+    linkml:description "Развёрнутая формулировка требования на понятном языке." ;
+    linkml:domain_of dams:SpecificationRequirement ;
+    linkml:owner dams:SpecificationRequirement ;
+    linkml:range dams:string ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/statement"^^xsd:anyURI .
+
+dams:system_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/system_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:PhysicalObject ;
+    linkml:owner dams:PhysicalObject ;
+    linkml:range dams:ITSystem ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/system_ref"^^xsd:anyURI .
+
+dams:target_class a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/target_class"^^xsd:anyURI ;
+    linkml:description "Имя класса LinkML (например LogicalEntity)." ;
+    linkml:domain_of dams:FormalCheck ;
+    linkml:owner dams:FormalCheck ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/target_class"^^xsd:anyURI .
+
+dams:target_entity_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/target_entity_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:Relationship ;
+    linkml:owner dams:Relationship ;
+    linkml:range dams:uriorcurie ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/target_entity_ref"^^xsd:anyURI .
+
+dams:target_max_cardinality a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/target_max_cardinality"^^xsd:anyURI ;
+    linkml:domain_of dams:Relationship ;
+    linkml:minimum_value "1"^^<https://w3id.org/linkml/@id> ;
+    linkml:owner dams:Relationship ;
+    linkml:range dams:integer ;
+    linkml:slot_uri "https://data.moex.com/dams/target_max_cardinality"^^xsd:anyURI .
+
+dams:target_min_cardinality a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/target_min_cardinality"^^xsd:anyURI ;
+    linkml:domain_of dams:Relationship ;
+    linkml:minimum_value "0"^^<https://w3id.org/linkml/@id> ;
+    linkml:owner dams:Relationship ;
+    linkml:range dams:integer ;
+    linkml:slot_uri "https://data.moex.com/dams/target_min_cardinality"^^xsd:anyURI .
+
+dams:target_path a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/target_path"^^xsd:anyURI ;
+    linkml:description "JSON Pointer или path hint в теле ModelPackage." ;
+    linkml:domain_of dams:FormalCheck ;
+    linkml:owner dams:FormalCheck ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/target_path"^^xsd:anyURI .
+
+dams:target_platform_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/target_platform_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlow ;
+    linkml:owner dams:DataFlow ;
+    linkml:range dams:ITPlatform ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/target_platform_ref"^^xsd:anyURI .
+
+dams:target_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/target_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:Mapping ;
+    linkml:minimum_cardinality 1 ;
+    linkml:multivalued true ;
+    linkml:owner dams:Mapping ;
+    linkml:range dams:uriorcurie ;
+    linkml:slot_uri "https://data.moex.com/dams/target_refs"^^xsd:anyURI .
+
+dams:target_role a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/target_role"^^xsd:anyURI ;
+    linkml:domain_of dams:Relationship ;
+    linkml:owner dams:Relationship ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/target_role"^^xsd:anyURI .
+
+dams:target_slot a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/target_slot"^^xsd:anyURI ;
+    linkml:domain_of dams:FormalCheck ;
+    linkml:owner dams:FormalCheck ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/target_slot"^^xsd:anyURI .
+
+dams:target_solution_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/target_solution_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlow ;
+    linkml:owner dams:DataFlow ;
+    linkml:range dams:ITSolution ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/target_solution_ref"^^xsd:anyURI .
+
+dams:target_system_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/target_system_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlow ;
+    linkml:owner dams:DataFlow ;
+    linkml:range dams:ITSystem ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/target_system_ref"^^xsd:anyURI .
+
+dams:technology a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/technology"^^xsd:anyURI ;
+    linkml:domain_of dams:PhysicalObject ;
+    linkml:owner dams:PhysicalObject ;
+    linkml:range dams:string ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/technology"^^xsd:anyURI .
+
+dams:time a linkml:TypeDefinition ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"time\".",
+        "URI is dateTime because OWL reasoners do not work with straight date or time" ;
+    skos:exactMatch "schema:Time"^^xsd:anyURI ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    linkml:base "XSDTime" ;
+    linkml:definition_uri "https://w3id.org/linkml/Time"^^xsd:anyURI ;
+    linkml:description "A time object represents a (local) time of day, independent of any particular day" ;
+    linkml:imported_from "linkml:types" ;
+    linkml:repr "str" ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#time"^^xsd:anyURI .
+
+dams:transformation_expression a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/transformation_expression"^^xsd:anyURI ;
+    linkml:domain_of dams:Mapping ;
+    linkml:owner dams:Mapping ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/transformation_expression"^^xsd:anyURI .
+
+dams:transformation_mapping_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/transformation_mapping_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:SelectedAttribute ;
+    linkml:owner dams:SelectedAttribute ;
+    linkml:range dams:Mapping ;
+    linkml:slot_uri "https://data.moex.com/dams/transformation_mapping_ref"^^xsd:anyURI .
+
+dams:transformation_mapping_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/transformation_mapping_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlowEntityBinding ;
+    linkml:multivalued true ;
+    linkml:owner dams:DataFlowEntityBinding ;
+    linkml:range dams:Mapping ;
+    linkml:slot_uri "https://data.moex.com/dams/transformation_mapping_refs"^^xsd:anyURI .
+
+dams:transformation_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/transformation_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:Mapping ;
+    linkml:owner dams:Mapping ;
+    linkml:range dams:uri ;
+    linkml:slot_uri "https://data.moex.com/dams/transformation_ref"^^xsd:anyURI .
+
+dams:unit a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/analytics/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/unit"^^xsd:anyURI ;
+    linkml:domain_of dams:Metric ;
+    linkml:owner dams:Metric ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/unit"^^xsd:anyURI .
+
+dams:value_set_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/value_set_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:LogicalAttribute ;
+    linkml:owner dams:LogicalAttribute ;
+    linkml:range dams:uri ;
+    linkml:slot_uri "https://data.moex.com/dams/value_set_ref"^^xsd:anyURI .
+
+dams:DataClassificationTerm a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/DataClassificationTerm"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/DataClassificationTerm"^^xsd:anyURI ;
+    linkml:description "Специальная категория чувствительности или регулирования, например ПДн или инсайдерская информация." ;
+    linkml:is_a dams:RegistryEntry ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:master_system,
+        dams:registry_description,
+        dams:registry_id,
+        dams:registry_name,
+        dams:registry_status,
+        dams:source_uri .
+
+dams:LifecycleStatusEnum skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/LifecycleStatusEnum"^^xsd:anyURI ;
+    linkml:permissible_values dams:active,
+        dams:deprecated,
+        dams:draft,
+        dams:retired .
+
+dams:approved_at a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/approved_at"^^xsd:anyURI ;
+    linkml:domain_of dams:HasProvenance ;
+    linkml:owner dams:HasProvenance ;
+    linkml:range dams:datetime ;
+    linkml:slot_uri "https://data.moex.com/dams/approved_at"^^xsd:anyURI .
+
+dams:approved_by_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/approved_by_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:HasProvenance ;
+    linkml:owner dams:HasProvenance ;
+    linkml:range dams:Role ;
+    linkml:slot_uri "https://data.moex.com/dams/approved_by_ref"^^xsd:anyURI .
+
+dams:contract_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/contract_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlow,
+        dams:DataModelBinding ;
+    linkml:owner dams:DataModelBinding ;
+    linkml:range dams:DataContractReference ;
+    linkml:slot_uri "https://data.moex.com/dams/contract_ref"^^xsd:anyURI .
+
+dams:decimal a linkml:TypeDefinition ;
+    skos:broadMatch "schema:Number"^^xsd:anyURI ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"decimal\"." ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    linkml:base "Decimal" ;
+    linkml:definition_uri "https://w3id.org/linkml/Decimal"^^xsd:anyURI ;
+    linkml:description "A real number with arbitrary precision that conforms to the xsd:decimal specification" ;
+    linkml:imported_from "linkml:types" ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#decimal"^^xsd:anyURI .
+
+dams:dimension_attribute_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/analytics/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/dimension_attribute_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:Dimension,
+        dams:Metric ;
+    linkml:multivalued true ;
+    linkml:owner dams:Dimension ;
+    linkml:range dams:LogicalAttribute ;
+    linkml:slot_uri "https://data.moex.com/dams/dimension_attribute_refs"^^xsd:anyURI .
+
+dams:direction a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/direction"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlowEntityBinding,
+        dams:PhysicalObject ;
+    linkml:owner dams:DataFlowEntityBinding ;
+    linkml:range dams:FlowDirectionEnum ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/direction"^^xsd:anyURI .
+
+dams:evidence_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/evidence_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:HasProvenance ;
+    linkml:multivalued true ;
+    linkml:owner dams:HasProvenance ;
+    linkml:range dams:uri ;
+    linkml:slot_uri "https://data.moex.com/dams/evidence_refs"^^xsd:anyURI .
+
+dams:grain_entity_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/analytics/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/grain_entity_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:Dimension,
+        dams:Metric ;
+    linkml:minimum_cardinality 1 ;
+    linkml:multivalued true ;
+    linkml:owner dams:Dimension ;
+    linkml:range dams:LogicalEntity ;
+    linkml:slot_uri "https://data.moex.com/dams/grain_entity_refs"^^xsd:anyURI .
+
+dams:integration_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/integration_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlow,
+        dams:DataModelBinding ;
+    linkml:owner dams:DataModelBinding ;
+    linkml:range dams:IntegrationReference ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/integration_ref"^^xsd:anyURI .
+
+dams:key_attribute_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/key_attribute_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:ConceptualEntity,
+        dams:LogicalEntity ;
+    linkml:multivalued true ;
+    linkml:owner dams:LogicalEntity ;
+    linkml:range dams:uriorcurie ;
+    linkml:slot_uri "https://data.moex.com/dams/key_attribute_refs"^^xsd:anyURI .
+
+dams:logical_entity_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/logical_entity_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlowEntityBinding,
+        dams:SelectedEntity ;
+    linkml:owner dams:SelectedEntity ;
+    linkml:range dams:LogicalEntity ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/logical_entity_ref"^^xsd:anyURI .
+
+dams:model_version a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/model_version"^^xsd:anyURI ;
+    linkml:domain_of dams:DataModelBinding,
+        dams:ModelPackage ;
+    linkml:owner dams:DataModelBinding ;
+    linkml:range dams:SemVer ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/model_version"^^xsd:anyURI .
+
+dams:physical_field_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/physical_field_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlowEntityBinding,
+        dams:SelectedAttribute ;
+    linkml:multivalued true ;
+    linkml:owner dams:SelectedAttribute ;
+    linkml:range dams:PhysicalField ;
+    linkml:slot_uri "https://data.moex.com/dams/physical_field_refs"^^xsd:anyURI .
+
+dams:physical_object_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/physical_object_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:DataFlowEntityBinding,
+        dams:SelectedEntity ;
+    linkml:minimum_cardinality 1 ;
+    linkml:multivalued true ;
+    linkml:owner dams:SelectedEntity ;
+    linkml:range dams:PhysicalObject ;
+    linkml:slot_uri "https://data.moex.com/dams/physical_object_refs"^^xsd:anyURI .
+
+dams:required a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/required"^^xsd:anyURI ;
+    linkml:domain_of dams:LogicalAttribute,
+        dams:PhysicalField ;
+    linkml:owner dams:PhysicalField ;
+    linkml:range dams:boolean ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/required"^^xsd:anyURI .
+
+dams:source_artifact_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/source_artifact_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:HasProvenance ;
+    linkml:owner dams:HasProvenance ;
+    linkml:range dams:uri ;
+    linkml:slot_uri "https://data.moex.com/dams/source_artifact_ref"^^xsd:anyURI .
+
+dams:ITPlatform a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/ITPlatform"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/ITPlatform"^^xsd:anyURI ;
+    linkml:description "ИТ-платформа; мастер данных — EAM." ;
+    linkml:is_a dams:RegistryEntry ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:master_system,
+        dams:registry_description,
+        dams:registry_id,
+        dams:registry_name,
+        dams:registry_status,
+        dams:source_uri .
+
+dams:ModelSelection a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/ModelSelection"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/ModelSelection"^^xsd:anyURI ;
+    linkml:description "Переиспользуемый набор выбранных сущностей, атрибутов и физических представлений." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:element_id,
+        dams:glossary_term_refs,
+        dams:lifecycle_status,
+        dams:name,
+        dams:selected_entities,
+        dams:tags,
+        dams:title,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:Policy a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/Policy"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/Policy"^^xsd:anyURI ;
+    linkml:description "Политика доступа, хранения, качества или архитектурный инвариант." ;
+    linkml:is_a dams:RegistryEntry ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:master_system,
+        dams:registry_description,
+        dams:registry_id,
+        dams:registry_name,
+        dams:registry_status,
+        dams:source_uri .
+
+dams:Role a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/Role"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/Role"^^xsd:anyURI ;
+    linkml:description "Управляемая роль владельца, стюарда, потребителя или согласующего." ;
+    linkml:is_a dams:RegistryEntry ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:master_system,
+        dams:registry_description,
+        dams:registry_id,
+        dams:registry_name,
+        dams:registry_status,
+        dams:source_uri .
+
+dams:SemVer a linkml:TypeDefinition ;
+    skos:inScheme "https://data.moex.com/dams/types/v0.1"^^xsd:anyURI ;
+    linkml:base "str" ;
+    linkml:definition_uri "https://data.moex.com/dams/SemVer"^^xsd:anyURI ;
+    linkml:pattern "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$" ;
+    linkml:typeof dams:string ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#string"^^xsd:anyURI .
+
+dams:business_importance a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/business_importance"^^xsd:anyURI ;
+    linkml:domain_of dams:HasBusinessClassification ;
+    linkml:owner dams:HasBusinessClassification ;
+    linkml:range dams:BusinessImportanceEnum ;
+    linkml:slot_uri "https://data.moex.com/dams/business_importance"^^xsd:anyURI .
+
+dams:data_class a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/data_class"^^xsd:anyURI ;
+    linkml:domain_of dams:HasBusinessClassification ;
+    linkml:owner dams:HasBusinessClassification ;
+    linkml:range dams:DataClassEnum ;
+    linkml:slot_uri "https://data.moex.com/dams/data_class"^^xsd:anyURI .
+
+dams:entity_type a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/entity_type"^^xsd:anyURI ;
+    linkml:domain_of dams:HasBusinessClassification ;
+    linkml:owner dams:HasBusinessClassification ;
+    linkml:range dams:EntityTypeEnum ;
+    linkml:slot_uri "https://data.moex.com/dams/entity_type"^^xsd:anyURI .
+
+dams:sensitivity_term_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/sensitivity_term_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:HasGovernanceClassification ;
+    linkml:multivalued true ;
+    linkml:owner dams:HasGovernanceClassification ;
+    linkml:range dams:DataClassificationTerm ;
+    linkml:slot_uri "https://data.moex.com/dams/sensitivity_term_refs"^^xsd:anyURI .
+
+dams:ITSystem a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/ITSystem"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/ITSystem"^^xsd:anyURI ;
+    linkml:description "ИТ-система; мастер данных — EAM." ;
+    linkml:is_a dams:RegistryEntry ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:master_system,
+        dams:registry_description,
+        dams:registry_id,
+        dams:registry_name,
+        dams:registry_status,
+        dams:source_uri .
+
+dams:approval_status a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/approval_status"^^xsd:anyURI ;
+    linkml:domain_of dams:ClassificationAssignment,
+        dams:HasProvenance,
+        dams:PolicyBinding ;
+    linkml:owner dams:HasProvenance ;
+    linkml:range dams:ApprovalStatusEnum ;
+    linkml:slot_uri "https://data.moex.com/dams/approval_status"^^xsd:anyURI .
+
+dams:classification_rationale a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/classification_rationale"^^xsd:anyURI ;
+    linkml:domain_of dams:ClassificationAssignment,
+        dams:HasGovernanceClassification ;
+    linkml:owner dams:HasGovernanceClassification ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/classification_rationale"^^xsd:anyURI .
+
+dams:classification_source a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/classification_source"^^xsd:anyURI ;
+    linkml:domain_of dams:ClassificationAssignment,
+        dams:HasGovernanceClassification ;
+    linkml:owner dams:HasGovernanceClassification ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/classification_source"^^xsd:anyURI .
+
+dams:governance_classification a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/governance_classification"^^xsd:anyURI ;
+    linkml:domain_of dams:ClassificationAssignment,
+        dams:HasGovernanceClassification ;
+    linkml:owner dams:HasGovernanceClassification ;
+    linkml:range dams:GovernanceClassificationEnum ;
+    linkml:slot_uri "https://data.moex.com/dams/governance_classification"^^xsd:anyURI .
+
+dams:solution_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/solution_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:DomainContext,
+        dams:LogicalEntity,
+        dams:ModelPackage,
+        dams:PhysicalObject ;
+    linkml:owner dams:PhysicalObject ;
+    linkml:range dams:ITSolution ;
+    linkml:slot_uri "https://data.moex.com/dams/solution_ref"^^xsd:anyURI .
+
+dams:BusinessDomain a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/BusinessDomain"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/BusinessDomain"^^xsd:anyURI ;
+    linkml:description "Бизнес-домен или предметная область; мастер определяется архитектурным governance." ;
+    linkml:is_a dams:RegistryEntry ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:master_system,
+        dams:parent_domain_ref,
+        dams:registry_description,
+        dams:registry_id,
+        dams:registry_name,
+        dams:registry_status,
+        dams:source_uri .
+
+dams:Dimension a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/analytics/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/Dimension"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/Dimension"^^xsd:anyURI ;
+    linkml:description "Переиспользуемое аналитическое измерение, связанное с логическими атрибутами." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:dimension_attribute_refs,
+        dams:element_id,
+        dams:glossary_term_refs,
+        dams:grain_entity_refs,
+        dams:lifecycle_status,
+        dams:name,
+        dams:tags,
+        dams:title,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:boolean a linkml:TypeDefinition ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"boolean\"." ;
+    skos:exactMatch "schema:Boolean"^^xsd:anyURI ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    linkml:base "Bool" ;
+    linkml:definition_uri "https://w3id.org/linkml/Boolean"^^xsd:anyURI ;
+    linkml:description "A binary (true or false) value" ;
+    linkml:imported_from "linkml:types" ;
+    linkml:repr "bool" ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#boolean"^^xsd:anyURI .
+
+dams:datetime a linkml:TypeDefinition ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"datetime\"." ;
+    skos:exactMatch "schema:DateTime"^^xsd:anyURI ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    linkml:base "XSDDateTime" ;
+    linkml:definition_uri "https://w3id.org/linkml/Datetime"^^xsd:anyURI ;
+    linkml:description "The combination of a date and time" ;
+    linkml:imported_from "linkml:types" ;
+    linkml:repr "str" ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#dateTime"^^xsd:anyURI .
+
+dams:policy_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/policy_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:HasPolicyBindings ;
+    linkml:multivalued true ;
+    linkml:owner dams:HasPolicyBindings ;
+    linkml:range dams:Policy ;
+    linkml:slot_uri "https://data.moex.com/dams/policy_refs"^^xsd:anyURI .
+
+dams:ConceptualEntity a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/ConceptualEntity"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/ConceptualEntity"^^xsd:anyURI ;
+    linkml:description "Корпоративное бизнес-понятие верхнего уровня, независимое от конкретной реализации." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:mixins dams:HasBusinessClassification,
+        dams:HasOwnership ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:business_importance,
+        dams:data_class,
+        dams:data_owner_ref,
+        dams:data_steward_ref,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:element_id,
+        dams:entity_type,
+        dams:glossary_term_refs,
+        dams:key_attribute_refs,
+        dams:lifecycle_status,
+        dams:name,
+        dams:owning_unit_ref,
+        dams:parent_concept_ref,
+        dams:tags,
+        dams:title,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:HasPolicyBindings a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/HasPolicyBindings"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/HasPolicyBindings"^^xsd:anyURI ;
+    linkml:description "Mixin привязки управляемых политик к элементу модели." ;
+    linkml:mixin true ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:policy_refs .
+
+dams:RequirementCatalog a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/RequirementCatalog"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/RequirementCatalog"^^xsd:anyURI ;
+    linkml:description "Контейнер инстансов SpecificationRequirement вне ModelPackage." ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:catalog_id,
+        dams:name,
+        dams:requirements .
+
+dams:ITSolution a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/ITSolution"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/ITSolution"^^xsd:anyURI ;
+    linkml:description "ИТ-решение, объединяющее одну или несколько ИТ-систем; мастер данных — EAM." ;
+    linkml:is_a dams:RegistryEntry ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:master_system,
+        dams:member_system_refs,
+        dams:platform_ref,
+        dams:registry_description,
+        dams:registry_id,
+        dams:registry_name,
+        dams:registry_status,
+        dams:source_uri .
+
+dams:SelectedAttribute a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/SelectedAttribute"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/SelectedAttribute"^^xsd:anyURI ;
+    linkml:description "Выбранный атрибут и соответствующее физическое поле payload, таблицы или сообщения." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:element_id,
+        dams:glossary_term_refs,
+        dams:lifecycle_status,
+        dams:logical_attribute_ref,
+        dams:name,
+        dams:physical_field_refs,
+        dams:tags,
+        dams:title,
+        dams:transformation_mapping_ref,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:SelectedEntity a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/SelectedEntity"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/SelectedEntity"^^xsd:anyURI ;
+    linkml:description "Выбранная для интеграции логическая сущность." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:element_id,
+        dams:glossary_term_refs,
+        dams:lifecycle_status,
+        dams:logical_entity_ref,
+        dams:name,
+        dams:physical_object_refs,
+        dams:selected_attributes,
+        dams:tags,
+        dams:title,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:HasBusinessClassification a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/HasBusinessClassification"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/HasBusinessClassification"^^xsd:anyURI ;
+    linkml:description "Классификация роли и бизнес-значимости логической сущности." ;
+    linkml:mixin true ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:business_importance,
+        dams:data_class,
+        dams:entity_type .
+
+dams:integer a linkml:TypeDefinition ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"integer\"." ;
+    skos:exactMatch "schema:Integer"^^xsd:anyURI ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    linkml:base "int" ;
+    linkml:definition_uri "https://w3id.org/linkml/Integer"^^xsd:anyURI ;
+    linkml:description "An integer" ;
+    linkml:imported_from "linkml:types" ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#integer"^^xsd:anyURI .
+
+dams:DomainContext a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/DomainContext"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/DomainContext"^^xsd:anyURI ;
+    linkml:description "Ограниченный логический контекст с собственной терминологией и областью ответственности." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:mixins dams:HasOwnership ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:business_process_refs,
+        dams:data_owner_ref,
+        dams:data_steward_ref,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:domain_ref,
+        dams:element_id,
+        dams:glossary_term_refs,
+        dams:lifecycle_status,
+        dams:name,
+        dams:namespace,
+        dams:owning_unit_ref,
+        dams:solution_ref,
+        dams:tags,
+        dams:title,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:HasLifecycle a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/HasLifecycle"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/HasLifecycle"^^xsd:anyURI ;
+    linkml:description "Mixin жизненного цикла: статус, период действия и ссылка на заменяющий элемент." ;
+    linkml:mixin true ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:deprecated_by_ref,
+        dams:lifecycle_status,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:data_owner_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/data_owner_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:HasOwnership ;
+    linkml:owner dams:HasOwnership ;
+    linkml:range dams:Role ;
+    linkml:slot_uri "https://data.moex.com/dams/data_owner_ref"^^xsd:anyURI .
+
+dams:data_steward_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/data_steward_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:HasOwnership ;
+    linkml:owner dams:HasOwnership ;
+    linkml:range dams:Role ;
+    linkml:slot_uri "https://data.moex.com/dams/data_steward_ref"^^xsd:anyURI .
+
+dams:owning_unit_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/owning_unit_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:HasOwnership ;
+    linkml:owner dams:HasOwnership ;
+    linkml:range dams:OrganizationUnit ;
+    linkml:slot_uri "https://data.moex.com/dams/owning_unit_ref"^^xsd:anyURI .
+
+dams:HasGovernanceClassification a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/HasGovernanceClassification"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/HasGovernanceClassification"^^xsd:anyURI ;
+    linkml:description "Базовая и специальная классификация чувствительности данных." ;
+    linkml:mixin true ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:classification_rationale,
+        dams:classification_source,
+        dams:governance_classification,
+        dams:sensitivity_term_refs .
+
+dams:PolicyBinding a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/PolicyBinding"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/PolicyBinding"^^xsd:anyURI ;
+    linkml:description "Применение управляемой политики к элементу модели." ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:approval_status,
+        dams:policy_binding_id,
+        dams:policy_ref,
+        dams:policy_target_ref,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:HasProvenance a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/HasProvenance"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/HasProvenance"^^xsd:anyURI ;
+    linkml:description "Mixin происхождения и согласования: исходный артефакт, evidence, статус и согласующий." ;
+    linkml:mixin true ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:approval_status,
+        dams:approved_at,
+        dams:approved_by_ref,
+        dams:evidence_refs,
+        dams:source_artifact_ref .
+
+dams:SpecificationRequirement a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/SpecificationRequirement"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/SpecificationRequirement"^^xsd:anyURI ;
+    linkml:description "Нормативное требование к модели, соответствующей reference specification (каталог для уровня ИТ-решения и др.)." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:code,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:element_id,
+        dams:formal_checks,
+        dams:glossary_term_refs,
+        dams:lifecycle_status,
+        dams:name,
+        dams:requirement_level,
+        dams:requirement_section,
+        dams:statement,
+        dams:tags,
+        dams:title,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:ClassificationAssignment a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/ClassificationAssignment"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/ClassificationAssignment"^^xsd:anyURI ;
+    linkml:description "Версионируемое назначение категории классификации элементу модели с основанием и периодом действия." ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:approval_status,
+        dams:assignment_id,
+        dams:classification_rationale,
+        dams:classification_source,
+        dams:classification_term_ref,
+        dams:classified_element_ref,
+        dams:governance_classification,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:Metric a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/analytics/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/Metric"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/Metric"^^xsd:anyURI ;
+    linkml:description "Управляемое определение бизнес- или технической метрики; является опциональным аналитическим профилем." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:mixins dams:HasOwnership,
+        dams:HasPolicyBindings ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aggregation_function,
+        dams:aliases,
+        dams:data_owner_ref,
+        dams:data_steward_ref,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:dimension_attribute_refs,
+        dams:element_id,
+        dams:filter_expression,
+        dams:glossary_term_refs,
+        dams:grain_entity_refs,
+        dams:lifecycle_status,
+        dams:measure_attribute_refs,
+        dams:metric_expression,
+        dams:name,
+        dams:owning_unit_ref,
+        dams:policy_refs,
+        dams:tags,
+        dams:title,
+        dams:unit,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:master_system a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/master_system"^^xsd:anyURI ;
+    linkml:domain_of dams:RegistryEntry ;
+    linkml:owner dams:RegistryEntry ;
+    linkml:range dams:string ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/master_system"^^xsd:anyURI .
+
+dams:registry_description a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/registry_description"^^xsd:anyURI ;
+    linkml:domain_of dams:RegistryEntry ;
+    linkml:owner dams:RegistryEntry ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/registry_description"^^xsd:anyURI .
+
+dams:registry_id a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/registry_id"^^xsd:anyURI ;
+    linkml:domain_of dams:RegistryEntry ;
+    linkml:identifier true ;
+    linkml:owner dams:RegistryEntry ;
+    linkml:range dams:uriorcurie ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/registry_id"^^xsd:anyURI .
+
+dams:registry_name a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/registry_name"^^xsd:anyURI ;
+    linkml:domain_of dams:RegistryEntry ;
+    linkml:owner dams:RegistryEntry ;
+    linkml:range dams:string ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/registry_name"^^xsd:anyURI .
+
+dams:registry_status a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/registry_status"^^xsd:anyURI ;
+    linkml:domain_of dams:RegistryEntry ;
+    linkml:owner dams:RegistryEntry ;
+    linkml:range dams:LifecycleStatusEnum ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/registry_status"^^xsd:anyURI .
+
+dams:source_uri a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/source_uri"^^xsd:anyURI ;
+    linkml:domain_of dams:RegistryEntry ;
+    linkml:owner dams:RegistryEntry ;
+    linkml:range dams:uri ;
+    linkml:slot_uri "https://data.moex.com/dams/source_uri"^^xsd:anyURI .
+
+dams:uri a linkml:TypeDefinition ;
+    dcterms:conformsTo "https://www.ietf.org/rfc/rfc3987.txt" ;
+    skos:closeMatch "schema:URL"^^xsd:anyURI ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"uri\"." ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    skos:note "in RDF serializations a slot with range of uri is treated as a literal or type xsd:anyURI unless it is an identifier or a reference to an identifier, in which case it is translated directly to a node" ;
+    linkml:base "URI" ;
+    linkml:definition_uri "https://w3id.org/linkml/Uri"^^xsd:anyURI ;
+    linkml:description "a complete URI" ;
+    linkml:imported_from "linkml:types" ;
+    linkml:repr "str" ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#anyURI"^^xsd:anyURI .
+
+dams:DataFlowEntityBinding a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/DataFlowEntityBinding"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/DataFlowEntityBinding"^^xsd:anyURI ;
+    linkml:description "Связь потока с логическими сущностями, атрибутами и физическими объектами модели решения." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:direction,
+        dams:element_id,
+        dams:flow_ref,
+        dams:glossary_term_refs,
+        dams:lifecycle_status,
+        dams:logical_attribute_refs,
+        dams:logical_entity_ref,
+        dams:name,
+        dams:physical_field_refs,
+        dams:physical_object_refs,
+        dams:source_model_ref,
+        dams:tags,
+        dams:title,
+        dams:transformation_mapping_refs,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:HasOwnership a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/HasOwnership"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/HasOwnership"^^xsd:anyURI ;
+    linkml:description "Mixin владения: data owner, data steward и организационное подразделение." ;
+    linkml:mixin true ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:data_owner_ref,
+        dams:data_steward_ref,
+        dams:owning_unit_ref .
+
+dams:PhysicalField a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/PhysicalField"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/PhysicalField"^^xsd:anyURI ;
+    linkml:description "Поле физического объекта; его семантика задаётся Mapping к LogicalAttribute." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:element_id,
+        dams:glossary_term_refs,
+        dams:lifecycle_status,
+        dams:name,
+        dams:native_name,
+        dams:native_type,
+        dams:ordinal_position,
+        dams:physical_object_ref,
+        dams:required,
+        dams:schema_path,
+        dams:tags,
+        dams:title,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:uriorcurie a linkml:TypeDefinition ;
+    skos:editorialNote "If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"uriorcurie\"." ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    linkml:base "URIorCURIE" ;
+    linkml:definition_uri "https://w3id.org/linkml/Uriorcurie"^^xsd:anyURI ;
+    linkml:description "a URI or a CURIE" ;
+    linkml:imported_from "linkml:types" ;
+    linkml:repr "str" ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#anyURI"^^xsd:anyURI .
+
+dams:FormalCheck a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/requirements/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/FormalCheck"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/FormalCheck"^^xsd:anyURI ;
+    linkml:description "Одна машиночитаемая проверка требования. Kind выровнен с LinkML constraints и DAMS reference/structural diagnostics; assess wiring может появиться позже." ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:check_id,
+        dams:diagnostic_code,
+        dams:expression,
+        dams:kind,
+        dams:severity,
+        dams:target_class,
+        dams:target_path,
+        dams:target_slot .
+
+dams:LogicalEntity a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/LogicalEntity"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/LogicalEntity"^^xsd:anyURI ;
+    linkml:description "Представление бизнес-сущности в доменном контексте и модели конкретного решения." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:mixins dams:HasBusinessClassification,
+        dams:HasGovernanceClassification,
+        dams:HasOwnership,
+        dams:HasPolicyBindings ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:attributes,
+        dams:business_importance,
+        dams:classification_rationale,
+        dams:classification_source,
+        dams:conceptual_entity_refs,
+        dams:context_ref,
+        dams:data_class,
+        dams:data_owner_ref,
+        dams:data_steward_ref,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:element_id,
+        dams:entity_type,
+        dams:glossary_term_refs,
+        dams:governance_classification,
+        dams:invariant_refs,
+        dams:key_attribute_refs,
+        dams:lifecycle_status,
+        dams:name,
+        dams:owning_unit_ref,
+        dams:policy_refs,
+        dams:sensitivity_term_refs,
+        dams:solution_data_role,
+        dams:solution_ref,
+        dams:tags,
+        dams:title,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:MOEXModelRepository a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/MOEXModelRepository"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/MOEXModelRepository"^^xsd:anyURI ;
+    linkml:description "Корневой контейнер для проверки набора моделей, ссылочных проекций справочников, потоков и контрактных bindings." ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:classification_assignments,
+        dams:data_flows,
+        dams:data_model_bindings,
+        dams:dimensions,
+        dams:metrics,
+        dams:model_packages,
+        dams:policy_bindings,
+        dams:registry_entries,
+        dams:repository_id ;
+    linkml:tree_root true .
+
+dams:PhysicalObject a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/PhysicalObject"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/PhysicalObject"^^xsd:anyURI ;
+    linkml:description "Квант данных или техническая точка публикации/потребления." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:mixins dams:HasOwnership,
+        dams:HasPolicyBindings ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:data_owner_ref,
+        dams:data_steward_ref,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:direction,
+        dams:element_id,
+        dams:glossary_term_refs,
+        dams:lifecycle_status,
+        dams:name,
+        dams:native_schema_ref,
+        dams:object_kind,
+        dams:owning_unit_ref,
+        dams:physical_fields,
+        dams:policy_refs,
+        dams:qualified_name,
+        dams:solution_ref,
+        dams:system_ref,
+        dams:tags,
+        dams:technology,
+        dams:title,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:aliases a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/aliases"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelElement ;
+    linkml:multivalued true ;
+    linkml:owner dams:ModelElement ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/aliases"^^xsd:anyURI .
+
+dams:description a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/description"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelElement ;
+    linkml:owner dams:ModelElement ;
+    linkml:range dams:string ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/description"^^xsd:anyURI .
+
+dams:element_id a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/element_id"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelElement ;
+    linkml:identifier true ;
+    linkml:owner dams:ModelElement ;
+    linkml:range dams:uriorcurie ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/element_id"^^xsd:anyURI .
+
+dams:glossary_term_refs a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/glossary_term_refs"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelElement ;
+    linkml:multivalued true ;
+    linkml:owner dams:ModelElement ;
+    linkml:range dams:GlossaryTerm ;
+    linkml:slot_uri "https://data.moex.com/dams/glossary_term_refs"^^xsd:anyURI .
+
+dams:tags a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/tags"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelElement ;
+    linkml:multivalued true ;
+    linkml:owner dams:ModelElement ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/tags"^^xsd:anyURI .
+
+dams:title a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/title"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelElement ;
+    linkml:owner dams:ModelElement ;
+    linkml:range dams:string ;
+    linkml:slot_uri "https://data.moex.com/dams/title"^^xsd:anyURI .
+
+dams:deprecated_by_ref a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/deprecated_by_ref"^^xsd:anyURI ;
+    linkml:domain_of dams:HasLifecycle ;
+    linkml:owner dams:HasLifecycle ;
+    linkml:range dams:uriorcurie ;
+    linkml:slot_uri "https://data.moex.com/dams/deprecated_by_ref"^^xsd:anyURI .
+
+dams:lifecycle_status a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/lifecycle_status"^^xsd:anyURI ;
+    linkml:domain_of dams:HasLifecycle ;
+    linkml:owner dams:HasLifecycle ;
+    linkml:range dams:LifecycleStatusEnum ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/lifecycle_status"^^xsd:anyURI .
+
+dams:name a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/name"^^xsd:anyURI ;
+    linkml:domain_of dams:ModelElement,
+        dams:RequirementCatalog ;
+    linkml:owner dams:RequirementCatalog ;
+    linkml:range dams:string ;
+    linkml:required true ;
+    linkml:slot_uri "https://data.moex.com/dams/name"^^xsd:anyURI .
+
+dams:Mapping a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/Mapping"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/Mapping"^^xsd:anyURI ;
+    linkml:description "Явное соответствие между элементами концептуального, логического и физического уровней." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:mixins dams:HasProvenance ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:approval_status,
+        dams:approved_at,
+        dams:approved_by_ref,
+        dams:confidence,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:element_id,
+        dams:evidence_refs,
+        dams:glossary_term_refs,
+        dams:lifecycle_status,
+        dams:mapping_cardinality,
+        dams:mapping_type,
+        dams:name,
+        dams:source_artifact_ref,
+        dams:source_refs,
+        dams:tags,
+        dams:target_refs,
+        dams:title,
+        dams:transformation_expression,
+        dams:transformation_ref,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:ModelPackage a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/ModelPackage"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/ModelPackage"^^xsd:anyURI ;
+    linkml:description "Версионируемый артефакт модели данных одного ИТ-решения или корпоративной модели." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:mixins dams:HasOwnership ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:api_version,
+        dams:conceptual_entities,
+        dams:data_owner_ref,
+        dams:data_steward_ref,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:domain_contexts,
+        dams:domain_refs,
+        dams:element_id,
+        dams:glossary_term_refs,
+        dams:imports_refs,
+        dams:lifecycle_status,
+        dams:logical_entities,
+        dams:mappings,
+        dams:model_version,
+        dams:name,
+        dams:owning_unit_ref,
+        dams:physical_objects,
+        dams:relationships,
+        dams:solution_ref,
+        dams:tags,
+        dams:title,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:Relationship a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/Relationship"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/Relationship"^^xsd:anyURI ;
+    linkml:description "Именованная связь между логическими или концептуальными сущностями." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:associative,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:element_id,
+        dams:glossary_term_refs,
+        dams:identifying,
+        dams:lifecycle_status,
+        dams:name,
+        dams:source_entity_ref,
+        dams:source_max_cardinality,
+        dams:source_min_cardinality,
+        dams:source_role,
+        dams:tags,
+        dams:target_entity_ref,
+        dams:target_max_cardinality,
+        dams:target_min_cardinality,
+        dams:target_role,
+        dams:title,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:valid_from a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/valid_from"^^xsd:anyURI ;
+    linkml:domain_of dams:ClassificationAssignment,
+        dams:HasLifecycle,
+        dams:Mapping,
+        dams:PolicyBinding ;
+    linkml:owner dams:Mapping ;
+    linkml:range dams:datetime ;
+    linkml:slot_uri "https://data.moex.com/dams/valid_from"^^xsd:anyURI .
+
+dams:valid_to a linkml:SlotDefinition ;
+    skos:inScheme "https://data.moex.com/dams/governance/v0.1"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/valid_to"^^xsd:anyURI ;
+    linkml:domain_of dams:ClassificationAssignment,
+        dams:HasLifecycle,
+        dams:Mapping,
+        dams:PolicyBinding ;
+    linkml:owner dams:Mapping ;
+    linkml:range dams:datetime ;
+    linkml:slot_uri "https://data.moex.com/dams/valid_to"^^xsd:anyURI .
+
+dams:LogicalAttribute a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/LogicalAttribute"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/LogicalAttribute"^^xsd:anyURI ;
+    linkml:description "Логический атрибут сущности с бизнес-смыслом, типом, обязательностью и классификацией." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:mixins dams:HasGovernanceClassification,
+        dams:HasPolicyBindings ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:classification_rationale,
+        dams:classification_source,
+        dams:default_value,
+        dams:deprecated_by_ref,
+        dams:derived_expression,
+        dams:description,
+        dams:element_id,
+        dams:format_pattern,
+        dams:glossary_term_refs,
+        dams:governance_classification,
+        dams:lifecycle_status,
+        dams:logical_type,
+        dams:maximum_cardinality,
+        dams:minimum_cardinality,
+        dams:multivalued,
+        dams:name,
+        dams:owner_entity_ref,
+        dams:policy_refs,
+        dams:required,
+        dams:sensitivity_term_refs,
+        dams:tags,
+        dams:title,
+        dams:valid_from,
+        dams:valid_to,
+        dams:value_set_ref .
+
+dams:DataModelBinding a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/contract-binding/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/DataModelBinding"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/DataModelBinding"^^xsd:anyURI ;
+    linkml:description "Дочерняя модельная спецификация дата-контракта, фиксирующая неизменяемую ревизию модели и передаваемый срез." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:mixins dams:HasLifecycle,
+        dams:HasOwnership ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:compatibility_baseline_ref,
+        dams:compatibility_mode,
+        dams:contract_ref,
+        dams:data_owner_ref,
+        dams:data_steward_ref,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:element_id,
+        dams:generated_at,
+        dams:glossary_term_refs,
+        dams:implementation_version,
+        dams:integration_ref,
+        dams:integrity_digest,
+        dams:lifecycle_status,
+        dams:model_package_ref,
+        dams:model_revision,
+        dams:model_version,
+        dams:name,
+        dams:owning_unit_ref,
+        dams:selections,
+        dams:specification_version,
+        dams:tags,
+        dams:title,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:RegistryEntry a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/registries/v0.1"^^xsd:anyURI ;
+    linkml:abstract true ;
+    linkml:class_uri "https://data.moex.com/dams/RegistryEntry"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/RegistryEntry"^^xsd:anyURI ;
+    linkml:description "Локальная ссылочная проекция записи внешней мастер-системы; не является мастер-копией справочника." ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:master_system,
+        dams:registry_description,
+        dams:registry_id,
+        dams:registry_name,
+        dams:registry_status,
+        dams:source_uri .
+
+dams:DataFlow a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/integration/v0.1"^^xsd:anyURI ;
+    linkml:class_uri "https://data.moex.com/dams/DataFlow"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/DataFlow"^^xsd:anyURI ;
+    linkml:description "Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr, а семантика — модели данных." ;
+    linkml:is_a dams:ModelElement ;
+    linkml:mixins dams:HasLifecycle,
+        dams:HasOwnership ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:contract_ref,
+        dams:data_owner_ref,
+        dams:data_steward_ref,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:element_id,
+        dams:entity_bindings,
+        dams:glossary_term_refs,
+        dams:integration_channel,
+        dams:integration_class,
+        dams:integration_level,
+        dams:integration_ref,
+        dams:integration_spec_ref,
+        dams:lifecycle_status,
+        dams:name,
+        dams:owning_unit_ref,
+        dams:source_platform_ref,
+        dams:source_solution_ref,
+        dams:source_system_ref,
+        dams:tags,
+        dams:target_platform_ref,
+        dams:target_solution_ref,
+        dams:target_system_ref,
+        dams:title,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:ModelElement a linkml:ClassDefinition ;
+    skos:inScheme "https://data.moex.com/dams/core/v0.1"^^xsd:anyURI ;
+    linkml:abstract true ;
+    linkml:class_uri "https://data.moex.com/dams/ModelElement"^^xsd:anyURI ;
+    linkml:definition_uri "https://data.moex.com/dams/ModelElement"^^xsd:anyURI ;
+    linkml:description "Абстрактный корень иерархии элементов модели: общая идентичность (element_id), имя, описание и жизненный цикл." ;
+    linkml:mixins dams:HasLifecycle ;
+    linkml:slot_usage [ ] ;
+    linkml:slots dams:aliases,
+        dams:deprecated_by_ref,
+        dams:description,
+        dams:element_id,
+        dams:glossary_term_refs,
+        dams:lifecycle_status,
+        dams:name,
+        dams:tags,
+        dams:title,
+        dams:valid_from,
+        dams:valid_to .
+
+dams:string a linkml:TypeDefinition ;
+    skos:editorialNote "In RDF serializations, a slot with range of string is treated as a literal or type xsd:string. If you are authoring schemas in LinkML YAML, the type is referenced with the lower case \"string\"." ;
+    skos:exactMatch "schema:Text"^^xsd:anyURI ;
+    skos:inScheme "https://w3id.org/linkml/types"^^xsd:anyURI ;
+    linkml:base "str" ;
+    linkml:definition_uri "https://w3id.org/linkml/String"^^xsd:anyURI ;
+    linkml:description "A character string" ;
+    linkml:imported_from "linkml:types" ;
+    linkml:uri "http://www.w3.org/2001/XMLSchema#string"^^xsd:anyURI .

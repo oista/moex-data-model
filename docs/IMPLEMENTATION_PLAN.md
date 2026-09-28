@@ -341,8 +341,9 @@ artifact:
 - **Semantic diff CLI (2026-09-28):** kernel `SemanticDiffReport` / `ChangeCategory`; `specification-dams.diff_implementations`; `moex-model semantic-diff` (Git refs + `--left`/`--right`, `--json`, exit 1 on breaking).
 - **Semantic diff API + Web preview (2026-09-28):** `POST /workspaces/{id}/semantic-diff` (published vs draft); Workbench **Review changes** panel. PR attach still out.
 - **Stage 0 foundation CI (2026-09-28):** `requirements-linkml.txt` (exact pins; `uv.lock` deferred), `.python-version` 3.12, `.linkmllint.yaml`, `validate-examples`, `compare-golden` (contracts + JSON Schema + OWL/SHACL/DBML/Mermaid), `.github/workflows/check.yml`.
-- **Stage 6 golden matrix (2026-09-28):** `make generate-artifacts` / `moex-model compile --artifacts` → OWL, SHACL, regenerable `moex-dams.dbml`, Mermaid diagrams + manifests; in `compare-golden`. Colored `moex-dams-drawdb-colored.dbml` remains curated sample (not golden). Still open: gen-python, gen-doc, gen-rdf, drawDB import check, release bundle, publish gate.
+- **Stage 6 golden matrix (2026-09-28):** `make generate-artifacts` / `moex-model compile --artifacts` → OWL, SHACL, regenerable `moex-dams.dbml`, Mermaid, Python, Doc, RDF + manifests; in `compare-golden`. Colored `moex-dams-drawdb-colored.dbml` remains curated sample (not golden). Still open: drawDB import check (release bundle + publish gate = modeling-depth D–E).
 - **Viewer + ontology packages CI (2026-09-28):** GHA job `viewer-and-packages` runs `make packages-check` (standard-owl / semantic-mappings / ontology-catalog) and `make viewer-check` alongside Stage 0 `make check`.
+- **Workbench CI (2026-09-28):** GHA job `workbench-check` runs `make drawdb-adapter-check`, `make api-check`, `make web-check`.
 - **PDF→ER agent docs (2026-09-28):** playbook + model contract under [`docs/agents/`](agents/); design status delivered. Filling runs still write fixture CSVs + `gaps.md` at runtime.
 
 ### Результат
@@ -376,7 +377,7 @@ Toolchain bump: обновить [`requirements-linkml.txt`](../requirements-lin
 
 ## Этап 1. Model Core
 
-**Progress (2026-09-28 residual):** `SchemaRepository` Protocol + `DamsAssetRepository` wired into `assess_implementation` / `diff_implementations`; `ConformanceRuleRunner` + `diagnostic_to_wire` in CLI/API; unified `build_element_index`; `DamsModelGraphView` covers ModelPackage collections including `relationships`. «ModelGraph для DAMS» = bounded `DamsModelGraphView` (MODELING_ARCHITECTURE §8), not a kernel abstract class. Deferred: CURIE/URI resolver, repository-root (`MOEXModelRepository`) graph, abstract kernel `ModelGraph`, separate `SchemaLoader`/`ModelInstanceLoader` types.
+**Progress (2026-09-28 residual + CURIE):** `SchemaRepository` Protocol + `DamsAssetRepository` wired into `assess_implementation` / `diff_implementations`; `ConformanceRuleRunner` + `diagnostic_to_wire` in CLI/API; unified `build_element_index`; `DamsModelGraphView` covers ModelPackage collections including `relationships`; kernel `CurieUriResolver` + assess rule `MOEX-ID-001` (unknown CURIE prefix). «ModelGraph для DAMS» = bounded `DamsModelGraphView` (MODELING_ARCHITECTURE §8), not a kernel abstract class. Deferred: repository-root (`MOEXModelRepository`) graph, abstract kernel `ModelGraph`, separate `SchemaLoader`/`ModelInstanceLoader` types.
 
 ### Задачи
 
@@ -453,7 +454,7 @@ moex-model diagram model.yaml --profile logical --format dbml
 
 ## Этап 3. API и persistence
 
-**Progress (narrow-v2 + v3):** FastAPI + Alembic through `0004` (`publication_request`); workspace/job/index/document/mutation APIs; Idempotency-Key; DevAuth; GitHub **read+write** `GitProvider`; `POST /publications` draft→branch/commit/review into this repo. Remaining: OIDC, domain authz/RLS, `diagram_layout`, `external_registry_cache`, async workers.
+**Progress (narrow-v2 + v3 + diagram):** FastAPI + Alembic through `0006` (`diagram_layout`; also `0004` publication_request, `0005` diagnostic_wire); workspace/job/index/document/mutation/semantic-diff/diagram APIs; Idempotency-Key; DevAuth; GitHub **read+write** `GitProvider`; `POST /publications` draft→branch/commit/review into this repo. Remaining: OIDC, domain authz/RLS, `external_registry_cache`, async workers.
 
 ### Задачи
 
@@ -604,7 +605,7 @@ LinkML A
 
 ## Этап 6. Generators
 
-**Progress (2026-09-28):** OWL / SHACL / regenerable DBML (`moex-dams.dbml`) / Mermaid in `make generate-artifacts` + `compare-golden` + `moex-model compile --artifacts`. Contracts + JSON Schema already golden. Curated colored DBML sample stays out of golden. Still open: gen-python, gen-doc, separate RDF artifact, drawDB import check, unified release bundle, publish blocked on invalid generators.
+**Progress (2026-09-28 + modeling depth):** OWL / SHACL / regenerable DBML (`moex-dams.dbml`) / Mermaid / gen-python / gen-doc / gen-rdf in `make generate-artifacts` + `compare-golden` + `moex-model compile --artifacts`. Release bundle index (`moex-dams-bundle.json`, `compile --bundle`) and fail-closed publish gate (`scripts/publish_gate.py`) on CLI publish + API `POST /publications`. Contracts + JSON Schema already golden. Curated colored DBML sample stays out of golden. Still open: drawDB import check.
 
 ### Обязательные pipelines
 
