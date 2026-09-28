@@ -9,6 +9,7 @@ from moex_modeling import ConformancePhase, Diagnostic
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
 from moex_dams.application.repository import DamsAssetRepository
+from moex_dams.rules.dams_levels import check_dams_model_level
 from moex_dams.rules.identifiers import build_dams_curie_resolver, check_identifiers
 from moex_dams.rules.references import check_references
 from moex_dams.rules.structural import check_structural
@@ -68,5 +69,11 @@ def default_dams_rule_sets(repo: DamsAssetRepository) -> tuple[RuleSet, ...]:
             assessment_id="assessment:identifiers",
             description="CURIE/URI prefix rules",
             run=run_identifiers,
+        ),
+        RuleSet(
+            phase=ConformancePhase.CORPORATE_SEMANTICS,
+            assessment_id="assessment:dams-levels",
+            description="DAMS enterprise-conceptual / solution package rules",
+            run=check_dams_model_level,
         ),
     )

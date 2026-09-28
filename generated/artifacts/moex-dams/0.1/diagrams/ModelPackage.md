@@ -25,6 +25,8 @@
     
 
         
+      ModelPackage : conceptual_implementation_ref
+        
       ModelPackage : data_owner_ref
         
           
@@ -83,6 +85,17 @@
         
         ModelPackage --> "*" GlossaryTerm : glossary_term_refs
         click GlossaryTerm href "../GlossaryTerm"
+    
+
+        
+      ModelPackage : implementation_scope
+        
+          
+    
+        
+        
+        ModelPackage --> "0..1" ImplementationScopeEnum : implementation_scope
+        click ImplementationScopeEnum href "../ImplementationScopeEnum"
     
 
         

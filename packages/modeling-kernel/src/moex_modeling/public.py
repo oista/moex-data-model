@@ -43,10 +43,16 @@ from moex_modeling.conformance.domain import (
 )
 from moex_modeling.conformance.wire import diagnostic_to_wire
 from moex_modeling.implementations.domain import SpecificationImplementation
+from moex_modeling.implementations.profile import (
+    profile_validation_has_errors,
+    validate_implementation_profile,
+)
 from moex_modeling.shared.enums import (
     ConformancePhase,
     ConformanceResult,
+    DAMSModelLevel,
     DiagnosticSeverity,
+    ImplementationProfile,
     LifecycleStatus,
     RelationKind,
     SpecificationKind,
@@ -82,11 +88,13 @@ __all__ = [
     "ConformanceReport",
     "ConformanceResult",
     "CurieUriResolver",
+    "DAMSModelLevel",
     "Diagnostic",
     "DiagnosticDetail",
     "DiagnosticSeverity",
     "ExternalTermSelection",
     "GENERATED_DRAFT_STATUS",
+    "ImplementationProfile",
     "ImplementationRef",
     "ImportDraftEngine",
     "ImportJobManifest",
@@ -129,6 +137,8 @@ __all__ = [
     "TransformationKind",
     "TypedRelation",
     "diagnostic_to_wire",
+    "profile_validation_has_errors",
     "summarize_result",
+    "validate_implementation_profile",
     "validate_selection",
 ]

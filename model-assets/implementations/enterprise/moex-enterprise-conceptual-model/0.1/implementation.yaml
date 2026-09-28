@@ -1,0 +1,22 @@
+# SpecificationImplementation descriptor — MOEX enterprise conceptual model (ADR-021)
+id: moex:implementation:moex-enterprise-conceptual-model:0.1
+name: MOEX Enterprise Conceptual Model
+description: >
+  Canonical enterprise conceptual model for MOEX DAMS (Party & Trading
+  Participation slice). Source of truth for corporate business entities;
+  primary target for ExternalTermSelection alignsWith. Not a solution model,
+  not a FIBO import, not an ontology-application.
+version: "0.1.0"
+revision: "0.1.0"
+content_digest: "sha256:preview-moex-enterprise-conceptual-model"
+conforms_to:
+  specification_id: moex:specification:moex-dams:0.1
+  specification_version: "0.1.0"
+  specification_revision: "0.1.0"
+implementation_kind: linkml
+implementation_profile: dams-data-model
+dams_model_level: enterprise-conceptual
+lifecycle_status: draft
+body_ref: enterprise-conceptual-model.yaml
+implementation_body: enterprise-conceptual-model.yaml
+specification_envelope: ../../../specifications/moex-dams/0.1/specification.yaml

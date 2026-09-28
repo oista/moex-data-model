@@ -1,16 +1,23 @@
 element_id: dams:model/trading/1.0.0
 name: trading_solution_model
 title: Модель данных торгового решения
-description: Черновой пример модели одного ИТ-решения.
+description: >
+  Черновой пример модели одного ИТ-решения (dams-data-model / solution).
+  Local Client conceptual entity is transitional; canonical Party concepts
+  live in moex-enterprise-conceptual-model. TradingClient realizes LegalEntity.
 lifecycle_status: draft
 api_version: dams.moex/v0.1
 model_version: 1.0.0
+implementation_scope: solution
+conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
 solution_ref: eam:solution/TRADING
 conceptual_entities:
   - element_id: dams:concept/Client
     name: Client
     title: Клиент
-    description: Лицо или организация, взаимодействующая с компаниями Группы МБ.
+    description: >
+      Переходное локальное понятие решения. Canonical SoT —
+      dams:concept/LegalEntity в enterprise conceptual model.
     lifecycle_status: active
     entity_type: core
     data_class: master_data
@@ -33,6 +40,7 @@ logical_entities:
     context_ref: dams:context/trading
     conceptual_entity_refs:
       - dams:concept/Client
+      - dams:concept/LegalEntity
     solution_ref: eam:solution/TRADING
     solution_data_role: producer
     entity_type: core
@@ -91,9 +99,21 @@ physical_objects:
         required: true
         schema_path: /payload/client_id
 mappings:
+  - element_id: dams:mapping/trading/client-realizes-legal-entity
+    name: realizes_TradingClient_LegalEntity
+    description: >
+      Solution TradingClient realizes enterprise conceptual LegalEntity (ADR-021).
+    lifecycle_status: active
+    source_refs:
+      - dams:logical/trading/Client
+    target_refs:
+      - dams:concept/LegalEntity
+    mapping_type: realizes
+    mapping_cardinality: one_to_one
+    approval_status: proposed
   - element_id: dams:mapping/trading/client-id
     name: map_client_id
-    description: Соответствие логического идентификатора физическому полю события.
+    description: Соответствие логического идентификатора физическому полю события (mapsTo).
     lifecycle_status: active
     source_refs:
       - dams:logical/trading/Client/clientId

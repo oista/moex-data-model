@@ -1,5 +1,6 @@
 # SpecificationImplementation descriptor (trading-platform demo)
 # Typed instance body is trading-solution-model.yaml (LinkML ModelPackage).
+# ADR-021: dams-data-model / solution — realizes enterprise conceptual.
 id: moex:implementation:trading:1.0.0
 name: Trading solution model
 description: Demo DAMS ModelPackage for the first vertical slice
@@ -11,6 +12,8 @@ conforms_to:
   specification_version: "0.1.0"
   specification_revision: "0.1.0"
 implementation_kind: linkml
+implementation_profile: dams-data-model
+dams_model_level: solution
 lifecycle_status: draft
 body_ref: trading-solution-model.yaml
 # Relative paths from this file's directory

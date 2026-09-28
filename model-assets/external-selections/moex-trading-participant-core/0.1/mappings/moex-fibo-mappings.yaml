@@ -1,7 +1,7 @@
 # Mapping register sidecar (also inlined in selection.yaml)
 mappings:
   - id: map-legal-entity-close
-    local_concept_ref: moex:LegalEntity
+    local_concept_ref: dams:concept/LegalEntity
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
     relation: skos:closeMatch
     rationale: Confirmed close match from curated selection item fibo-legal-person.
@@ -10,7 +10,7 @@ mappings:
     selection_item_ref: fibo-legal-person
 
   - id: map-corporate-group-broad
-    local_concept_ref: moex:CorporateGroup
+    local_concept_ref: dams:concept/CorporateGroup
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/FormalBusinessOrganizations/FormalOrganization
     relation: skos:broadMatch
     rationale: FormalOrganization is broader than MOEX CorporateGroup.
@@ -19,7 +19,7 @@ mappings:
     selection_item_ref: fibo-formal-organization
 
   - id: map-registration-subclass
-    local_concept_ref: moex:RegistrationAction
+    local_concept_ref: dams:concept/RegistrationAction
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay
     relation: rdfs:subClassOf
     rationale: Candidate temporal dependency — pending review.
@@ -28,7 +28,7 @@ mappings:
     selection_item_ref: fibo-business-day
 
   - id: map-person-none
-    local_concept_ref: moex:TradingParticipation
+    local_concept_ref: dams:concept/TradingParticipation
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/AgentsAndPeople/People/Person
     relation: no-mapping
     rationale: Natural person deferred; trading participation maps via legal entity path.

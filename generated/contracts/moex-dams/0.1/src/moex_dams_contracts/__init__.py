@@ -215,13 +215,72 @@ class IntegrationLevelEnum(str, Enum):
 
 
 class MappingTypeEnum(str, Enum):
+    """
+    Kind of Mapping assertion. realizes = solution element → enterprise conceptual; field_mapping = mapsTo (physical ↔ logical); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).
+
+    """
     semantic_equivalence = "semantic_equivalence"
     specialization = "specialization"
     implementation = "implementation"
     field_mapping = "field_mapping"
+    """
+    Technical/structural mapsTo between physical and logical.
+    """
     transformation = "transformation"
     aggregation = "aggregation"
     derivation = "derivation"
+    realizes = "realizes"
+    """
+    Solution logical/concept realizes an enterprise conceptual entity.
+    """
+    aligns_with = "aligns_with"
+    """
+    Enterprise conceptual aligns with an external reference term.
+    """
+
+
+class ImplementationProfileEnum(str, Enum):
+    """
+    DAMS-side mirror of kernel ImplementationProfile for ModelPackage metadata. Package-level dams_model_level applies only to dams-data-model.
+
+    """
+    dams_data_model = "dams-data-model"
+    """
+    MOEX DAMS corporate data-model implementation.
+    """
+    ontology_application = "ontology-application"
+    """
+    Not a DAMS model Impl — ontology application profile.
+    """
+    api_specification = "api-specification"
+    data_contract = "data-contract"
+    other = "other"
+
+
+class DAMSModelLevelEnum(str, Enum):
+    """
+    Package-level DAMS model layer (ADR-021). Distinct from ModelLevelEnum (element conceptual/logical/physical). No domain-logical value.
+
+    """
+    enterprise_conceptual = "enterprise-conceptual"
+    """
+    Enterprise corporate conceptual model (solution-independent).
+    """
+    solution = "solution"
+    """
+    IT-solution model with local logical/physical facets.
+    """
+
+
+class ImplementationScopeEnum(str, Enum):
+    enterprise = "enterprise"
+    """
+    Enterprise-wide scope (no solution_ref).
+    """
+    solution = "solution"
+    """
+    Scoped to a specific IT solution.
+    """
 
 
 class MappingCardinalityEnum(str, Enum):
@@ -581,10 +640,15 @@ class ModelElement(HasLifecycle):
 
 class ModelPackage(ModelElement, HasOwnership):
     """
-    Версионируемый артефакт модели данных одного ИТ-решения или корпоративной модели.
+    Версионируемый артефакт модели данных: либо корпоративная conceptual модель (enterprise), либо модель конкретного ИТ-решения (solution). Package-level DAMS layer is dams_model_level on the SpecImpl envelope (ADR-021); implementation_scope here mirrors that body-level semantics.
+
     """
     api_version: str = Field(default=...)
     model_version: str = Field(default=...)
+    implementation_scope: Optional[ImplementationScopeEnum] = Field(default=None, description="""Body-level scope: enterprise (no solution_ref) or solution. Must align with envelope dams_model_level when profile is dams-data-model.
+""")
+    conceptual_implementation_ref: Optional[str] = Field(default=None, description="""Required for solution packages: reference to the enterprise-conceptual SpecImpl / ModelPackage id (e.g. moex-enterprise-conceptual-model).
+""")
     solution_ref: Optional[str] = Field(default=None)
     domain_refs: Optional[list[str]] = Field(default=None)
     imports_refs: Optional[list[str]] = Field(default=None)
@@ -807,7 +871,8 @@ class PhysicalField(ModelElement):
 
 class Mapping(ModelElement, HasProvenance):
     """
-    Явное соответствие между элементами концептуального, логического и физического уровней.
+    Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual), field_mapping/mapsTo (physical↔logical), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
+
     """
     source_refs: Optional[list[str]] = Field(default=None, min_length=1)
     target_refs: Optional[list[str]] = Field(default=None, min_length=1)

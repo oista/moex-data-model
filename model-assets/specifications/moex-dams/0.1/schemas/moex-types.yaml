@@ -129,14 +129,55 @@ enums:
       intraplatform:
       interplatform:
   MappingTypeEnum:
+    description: >
+      Kind of Mapping assertion. realizes = solution element → enterprise
+      conceptual; field_mapping = mapsTo (physical ↔ logical); aligns_with =
+      enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl
+      implements (that is conforms_to / publication implements).
     permissible_values:
       semantic_equivalence:
       specialization:
       implementation:
       field_mapping:
+        description: Technical/structural mapsTo between physical and logical.
       transformation:
       aggregation:
       derivation:
+      realizes:
+        description: Solution logical/concept realizes an enterprise conceptual entity.
+      aligns_with:
+        description: Enterprise conceptual aligns with an external reference term.
+
+  ImplementationProfileEnum:
+    description: >
+      DAMS-side mirror of kernel ImplementationProfile for ModelPackage metadata.
+      Package-level dams_model_level applies only to dams-data-model.
+    permissible_values:
+      dams-data-model:
+        description: MOEX DAMS corporate data-model implementation.
+      ontology-application:
+        description: Not a DAMS model Impl — ontology application profile.
+      api-specification:
+      data-contract:
+      other:
+
+  DAMSModelLevelEnum:
+    description: >
+      Package-level DAMS model layer (ADR-021). Distinct from ModelLevelEnum
+      (element conceptual/logical/physical). No domain-logical value.
+    permissible_values:
+      enterprise-conceptual:
+        description: Enterprise corporate conceptual model (solution-independent).
+      solution:
+        description: IT-solution model with local logical/physical facets.
+
+  ImplementationScopeEnum:
+    permissible_values:
+      enterprise:
+        description: Enterprise-wide scope (no solution_ref).
+      solution:
+        description: Scoped to a specific IT solution.
+
   MappingCardinalityEnum:
     permissible_values:
       one_to_one:

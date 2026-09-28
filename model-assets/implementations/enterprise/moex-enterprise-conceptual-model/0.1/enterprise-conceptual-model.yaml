@@ -1,0 +1,353 @@
+element_id: dams:model/enterprise-conceptual/0.1
+name: moex_enterprise_conceptual_model
+title: MOEX Enterprise Conceptual Model
+description: >
+  Единая корпоративная концептуальная модель MOEX (Party & Trading Participation).
+  TradingParticipation — reified relation entity, не подкласс LegalEntity.
+  Physical layer запрещён. ExternalTermSelection выравнивается сюда, не на
+  таблицы решений.
+lifecycle_status: draft
+api_version: dams.moex/v0.1
+model_version: 0.1.0
+implementation_scope: enterprise
+
+conceptual_entities:
+  - element_id: dams:concept/Organization
+    name: Organization
+    title: Организация
+    description: >
+      Организация как бизнес-актор (включая юридические лица и иные
+      организационные формы в корпоративном контексте МОЕХ).
+    lifecycle_status: active
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+
+  - element_id: dams:concept/LegalEntity
+    name: LegalEntity
+    title: Юридическое лицо
+    description: >
+      Юридическое лицо / формальная организация, субъект прав и обязанностей
+      в регуляторном и биржевом контексте.
+    lifecycle_status: active
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    parent_concept_ref: dams:concept/Organization
+
+  - element_id: dams:concept/CorporateGroup
+    name: CorporateGroup
+    title: Группа компаний
+    description: Группа компаний / холдинговая структура для членства LegalEntity.
+    lifecycle_status: active
+    entity_type: core
+    data_class: master_data
+    business_importance: medium
+
+  - element_id: dams:concept/OrganizationIdentifier
+    name: OrganizationIdentifier
+    title: Идентификатор организации
+    description: >
+      Идентификатор организации (LEI, ИНН, ОГРН, внутренний код участника и др.).
+      Значения типов — MOEX-local controlled vocabulary, не FIBO terms.
+    lifecycle_status: active
+    entity_type: core
+    data_class: reference_data
+    business_importance: high
+
+  - element_id: dams:concept/TradingParticipation
+    name: TradingParticipation
+    title: Участие в торгах
+    description: >
+      Reified отношение: LegalEntity участвует в торгах на площадке/секции
+      с собственным статусом, допуском, договором, счетами и документами.
+      Не моделируется как подкласс LegalEntity (одна организация — много участий).
+    lifecycle_status: active
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+
+  - element_id: dams:concept/TradingVenue
+    name: TradingVenue
+    title: Торговая площадка
+    description: Торговая площадка / рынок, к которому относится допуск.
+    lifecycle_status: active
+    entity_type: reference
+    data_class: reference_data
+    business_importance: high
+
+  - element_id: dams:concept/TradingSection
+    name: TradingSection
+    title: Торговая секция
+    description: Торговая секция / сегмент площадки (MOEX-local extension concept).
+    lifecycle_status: active
+    entity_type: reference
+    data_class: reference_data
+    business_importance: high
+
+  - element_id: dams:concept/Admission
+    name: Admission
+    title: Допуск к торгам
+    description: >
+      Решение/факт допуска LegalEntity к площадке или секции с lifecycle-статусом.
+      MOEX-local extension concept (no-mapping к FIBO по умолчанию).
+    lifecycle_status: active
+    entity_type: core
+    data_class: transactional_data
+    business_importance: high
+
+  - element_id: dams:concept/Agreement
+    name: Agreement
+    title: Соглашение
+    description: Договор или соглашение, регулирующее участие / допуск.
+    lifecycle_status: active
+    entity_type: core
+    data_class: transactional_data
+    business_importance: high
+
+  - element_id: dams:concept/AccountRelationship
+    name: AccountRelationship
+    title: Счётное отношение
+    description: >
+      Учётное/счётное отношение организации или участия (trading, clearing,
+      settlement и др.). MOEX-local extension concept.
+    lifecycle_status: active
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+
+  - element_id: dams:concept/RegistrationAction
+    name: RegistrationAction
+    title: Регистрационное действие
+    description: >
+      Действие, меняющее lifecycle организации или допуска (registration,
+      suspension, termination, …). MOEX-local extension concept.
+    lifecycle_status: active
+    entity_type: core
+    data_class: transactional_data
+    business_importance: high
+
+  - element_id: dams:concept/SupportingDocument
+    name: SupportingDocument
+    title: Подтверждающий документ
+    description: Документ/запись, подтверждающая допуск, действие или соглашение.
+    lifecycle_status: active
+    entity_type: core
+    data_class: transactional_data
+    business_importance: medium
+
+relationships:
+  - element_id: dams:rel/LegalEntity/memberOf
+    name: memberOf
+    title: memberOf
+    description: LegalEntity входит в CorporateGroup.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/LegalEntity
+    target_entity_ref: dams:concept/CorporateGroup
+    source_role: member
+    target_role: group
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+
+  - element_id: dams:rel/LegalEntity/identifiedBy
+    name: identifiedBy
+    title: identifiedBy
+    description: LegalEntity идентифицируется OrganizationIdentifier.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/LegalEntity
+    target_entity_ref: dams:concept/OrganizationIdentifier
+    source_role: identified
+    target_role: identifier
+    source_min_cardinality: 0
+    target_min_cardinality: 1
+    target_max_cardinality: 999
+
+  - element_id: dams:rel/LegalEntity/hasTradingParticipation
+    name: hasTradingParticipation
+    title: hasTradingParticipation
+    description: LegalEntity имеет одно или несколько TradingParticipation.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/LegalEntity
+    target_entity_ref: dams:concept/TradingParticipation
+    source_role: participant_org
+    target_role: participation
+    source_min_cardinality: 0
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+
+  - element_id: dams:rel/LegalEntity/hasAccountRelationship
+    name: hasAccountRelationship
+    title: hasAccountRelationship
+    description: LegalEntity имеет AccountRelationship.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/LegalEntity
+    target_entity_ref: dams:concept/AccountRelationship
+    source_role: party
+    target_role: account_rel
+    source_min_cardinality: 0
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+
+  - element_id: dams:rel/TradingParticipation/participant
+    name: participant
+    title: participant
+    description: TradingParticipation принадлежит LegalEntity.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingParticipation
+    target_entity_ref: dams:concept/LegalEntity
+    source_role: participation
+    target_role: participant
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 1
+    target_max_cardinality: 1
+    identifying: true
+
+  - element_id: dams:rel/TradingParticipation/admittedTo
+    name: admittedTo
+    title: admittedTo
+    description: Участие относится к TradingVenue.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingParticipation
+    target_entity_ref: dams:concept/TradingVenue
+    source_role: participation
+    target_role: venue
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 1
+    target_max_cardinality: 1
+
+  - element_id: dams:rel/TradingParticipation/appliesTo
+    name: appliesTo
+    title: appliesTo
+    description: Участие может применяться к TradingSection.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingParticipation
+    target_entity_ref: dams:concept/TradingSection
+    source_role: participation
+    target_role: section
+    source_min_cardinality: 0
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+
+  - element_id: dams:rel/TradingParticipation/hasAdmission
+    name: hasAdmission
+    title: hasAdmission
+    description: Участие связано с Admission.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingParticipation
+    target_entity_ref: dams:concept/Admission
+    source_role: participation
+    target_role: admission
+    source_min_cardinality: 0
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+
+  - element_id: dams:rel/TradingParticipation/governedBy
+    name: governedBy
+    title: governedBy
+    description: Участие регулируется Agreement.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingParticipation
+    target_entity_ref: dams:concept/Agreement
+    source_role: participation
+    target_role: agreement
+    source_min_cardinality: 0
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+
+  - element_id: dams:rel/TradingParticipation/evidencedBy
+    name: evidencedBy
+    title: evidencedBy
+    description: Участие подтверждается SupportingDocument.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingParticipation
+    target_entity_ref: dams:concept/SupportingDocument
+    source_role: participation
+    target_role: evidence
+    source_min_cardinality: 0
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+
+  - element_id: dams:rel/Admission/grantedTo
+    name: grantedTo
+    title: grantedTo
+    description: Admission выдан LegalEntity.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Admission
+    target_entity_ref: dams:concept/LegalEntity
+    source_role: admission
+    target_role: grantee
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 1
+    target_max_cardinality: 1
+
+  - element_id: dams:rel/Admission/grantsAccessToVenue
+    name: grantsAccessTo
+    title: grantsAccessTo (venue)
+    description: Admission даёт доступ к TradingVenue.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Admission
+    target_entity_ref: dams:concept/TradingVenue
+    source_role: admission
+    target_role: venue
+    source_min_cardinality: 0
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+
+  - element_id: dams:rel/Admission/basedOnAgreement
+    name: basedOn
+    title: basedOn (agreement)
+    description: Admission основан на Agreement.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Admission
+    target_entity_ref: dams:concept/Agreement
+    source_role: admission
+    target_role: basis
+    source_min_cardinality: 0
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+
+  - element_id: dams:rel/RegistrationAction/concernsLegalEntity
+    name: concerns
+    title: concerns (LegalEntity)
+    description: RegistrationAction касается LegalEntity.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/RegistrationAction
+    target_entity_ref: dams:concept/LegalEntity
+    source_role: action
+    target_role: subject
+    source_min_cardinality: 0
+    target_min_cardinality: 0
+    target_max_cardinality: 1
+
+  - element_id: dams:rel/RegistrationAction/evidencedBy
+    name: evidencedBy
+    title: evidencedBy
+    description: RegistrationAction подтверждается SupportingDocument.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/RegistrationAction
+    target_entity_ref: dams:concept/SupportingDocument
+    source_role: action
+    target_role: evidence
+    source_min_cardinality: 0
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+
+mappings:
+  - element_id: dams:mapping/align/LegalEntity-placeholder
+    name: align_LegalEntity_fibo
+    description: >
+      Candidate alignsWith to FIBO LegalPerson — governed in ExternalTermSelection
+      moex-trading-participant-core; recorded here as enterprise alignment stub.
+    lifecycle_status: draft
+    source_refs:
+      - dams:concept/LegalEntity
+    target_refs:
+      - https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
+    mapping_type: aligns_with
+    mapping_cardinality: one_to_one
+    approval_status: proposed

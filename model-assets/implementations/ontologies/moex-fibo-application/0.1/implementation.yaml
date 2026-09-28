@@ -1,5 +1,6 @@
 # SpecificationImplementation descriptor — MOEX FIBO application ontology
 # Body: metamodel/*.ttl (import + extension + mapping). See ADR-018.
+# ADR-021: ontology-application — no dams_model_level.
 id: moex:implementation:moex-fibo-application:0.1
 name: MOEX FIBO application ontology
 description: >
@@ -13,6 +14,7 @@ conforms_to:
   specification_version: "0.1.0"
   specification_revision: "0.1.0"
 implementation_kind: owl
+implementation_profile: ontology-application
 lifecycle_status: draft
 body_ref: ontology-application.yaml
 implementation_body: ontology-application.yaml

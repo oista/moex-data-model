@@ -1415,6 +1415,10 @@
     header.className = "module-header";
     header.innerHTML = `<h1>${escapeHtml(displayIcon(mod.icon) ? displayIcon(mod.icon) + " " : "")}${escapeHtml(mod.title)}</h1>
       <p class="muted">${escapeHtml(mod.description || "")}</p>`;
+    const chipRow = document.createElement("div");
+    chipRow.className = "module-meta-chips";
+    appendModuleProfileChips(chipRow, mod);
+    if (chipRow.childNodes.length) header.appendChild(chipRow);
     content.appendChild(header);
     mod.sections.forEach((section) => {
       content.appendChild(renderSection(mod, section));
@@ -1436,6 +1440,35 @@
       row.scrollIntoView({ behavior: "smooth", block: "center" });
       setTimeout(() => row.classList.remove("highlight"), 2500);
     }
+  }
+
+  function appendModuleProfileChips(container, mod) {
+    const chips = [];
+    if (mod.implementation_profile) {
+      chips.push(["implementation_profile", mod.implementation_profile]);
+    }
+    if (mod.dams_model_level) {
+      chips.push(["dams_model_level", mod.dams_model_level]);
+    }
+    if (mod.conformance_status) {
+      chips.push(["conformance", mod.conformance_status]);
+    }
+    chips.forEach(([kind, value]) => {
+      const span = document.createElement("span");
+      const slug = String(value).toLowerCase().replace(/[^a-z0-9-]+/g, "-");
+      span.className = `status-chip status-chip--${slug}`;
+      if (kind === "dams_model_level") {
+        span.classList.add("status-chip--dams-level");
+      }
+      if (kind === "implementation_profile") {
+        span.classList.add("status-chip--impl-profile");
+      }
+      if (String(value).toLowerCase() === "draft-conformant") {
+        span.classList.add("status-chip--draft-conformant");
+      }
+      span.textContent = `${kind}: ${value}`;
+      container.appendChild(span);
+    });
   }
 
   function yesBlank(value) {

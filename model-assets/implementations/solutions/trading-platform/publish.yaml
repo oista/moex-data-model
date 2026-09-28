@@ -6,11 +6,13 @@ icon: "🧩"
 title: Trading solution (demo)
 profile: implementation
 description: Example solution model instance for publication viewer demos
-# Declares coverage of DAMS publication contract (ADR-019).
-# conformance_profile: dams-logical-and-physical
+implementation_profile: dams-data-model
+dams_model_level: solution
+conformance_status: draft-conformant
+# Declares coverage of DAMS publication contract (ADR-019 / ADR-021).
 implements:
   - specification_ref: moex-dams@0.1
-    profile_ref: dams-logical-and-physical
+    profile_ref: dams-solution
     conformance_target: draft
 sections:
   - id: package

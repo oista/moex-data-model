@@ -37,10 +37,10 @@ Name: moex_dams
 | [ITSystem](ITSystem.md) | ИТ-система; мастер данных — EAM |
 | [LogicalAttribute](LogicalAttribute.md) | Логический атрибут сущности с бизнес-смыслом, типом, обязательностью и класси... |
 | [LogicalEntity](LogicalEntity.md) | Представление бизнес-сущности в доменном контексте и модели конкретного решен... |
-| [Mapping](Mapping.md) | Явное соответствие между элементами концептуального, логического и физическог... |
+| [Mapping](Mapping.md) | Явное соответствие между элементами |
 | [Metric](Metric.md) | Управляемое определение бизнес- или технической метрики; является опциональны... |
 | [ModelElement](ModelElement.md) | Абстрактный корень иерархии элементов модели: общая идентичность (element_id)... |
-| [ModelPackage](ModelPackage.md) | Версионируемый артефакт модели данных одного ИТ-решения или корпоративной мод... |
+| [ModelPackage](ModelPackage.md) | Версионируемый артефакт модели данных: либо корпоративная conceptual модель (... |
 | [ModelSelection](ModelSelection.md) | Переиспользуемый набор выбранных сущностей, атрибутов и физических представле... |
 | [MOEXModelRepository](MOEXModelRepository.md) | Корневой контейнер для проверки набора моделей, ссылочных проекций справочник... |
 | [OrganizationUnit](OrganizationUnit.md) | Организационное подразделение |
@@ -85,6 +85,7 @@ Name: moex_dams
 | [compatibility_mode](compatibility_mode.md) |  |
 | [conceptual_entities](conceptual_entities.md) |  |
 | [conceptual_entity_refs](conceptual_entity_refs.md) |  |
+| [conceptual_implementation_ref](conceptual_implementation_ref.md) | Required for solution packages: reference to the enterprise-conceptual SpecIm... |
 | [confidence](confidence.md) |  |
 | [context_ref](context_ref.md) |  |
 | [contract_ref](contract_ref.md) |  |
@@ -118,6 +119,7 @@ Name: moex_dams
 | [governance_classification](governance_classification.md) |  |
 | [grain_entity_refs](grain_entity_refs.md) |  |
 | [identifying](identifying.md) |  |
+| [implementation_scope](implementation_scope.md) | Body-level scope: enterprise (no solution_ref) or solution |
 | [implementation_version](implementation_version.md) |  |
 | [imports_refs](imports_refs.md) |  |
 | [integration_channel](integration_channel.md) |  |
@@ -238,19 +240,22 @@ Name: moex_dams
 | [BusinessImportanceEnum](BusinessImportanceEnum.md) |  |
 | [CheckSeverityEnum](CheckSeverityEnum.md) |  |
 | [CompatibilityModeEnum](CompatibilityModeEnum.md) |  |
+| [DAMSModelLevelEnum](DAMSModelLevelEnum.md) | Package-level DAMS model layer (ADR-021) |
 | [DataClassEnum](DataClassEnum.md) | Класс данных для наследования модельной спецификацией дата-контракта; не совп... |
 | [EnforcementResultEnum](EnforcementResultEnum.md) |  |
 | [EntityTypeEnum](EntityTypeEnum.md) | Роль логической сущности в модели решения |
 | [FlowDirectionEnum](FlowDirectionEnum.md) |  |
 | [FormalCheckKindEnum](FormalCheckKindEnum.md) | Вид формальной проверки в нотации, близкой к LinkML constraints |
 | [GovernanceClassificationEnum](GovernanceClassificationEnum.md) | Базовая шкала ограничения доступа; специальные виды тайны задаются отдельными... |
+| [ImplementationProfileEnum](ImplementationProfileEnum.md) | DAMS-side mirror of kernel ImplementationProfile for ModelPackage metadata |
+| [ImplementationScopeEnum](ImplementationScopeEnum.md) |  |
 | [IntegrationChannelEnum](IntegrationChannelEnum.md) |  |
 | [IntegrationClassEnum](IntegrationClassEnum.md) |  |
 | [IntegrationLevelEnum](IntegrationLevelEnum.md) |  |
 | [LifecycleStatusEnum](LifecycleStatusEnum.md) |  |
 | [LogicalDataTypeEnum](LogicalDataTypeEnum.md) |  |
 | [MappingCardinalityEnum](MappingCardinalityEnum.md) |  |
-| [MappingTypeEnum](MappingTypeEnum.md) |  |
+| [MappingTypeEnum](MappingTypeEnum.md) | Kind of Mapping assertion |
 | [ModelLevelEnum](ModelLevelEnum.md) |  |
 | [PhysicalObjectKindEnum](PhysicalObjectKindEnum.md) |  |
 | [RequirementLevelEnum](RequirementLevelEnum.md) | Уровень применения требования к спецификации |

@@ -33,13 +33,13 @@ FIBO_PROFILE = "moex:module:fibo-profile"
 FIBO_APP = "moex:module:fibo-application"
 
 
-def test_impl_section_nav_children_skips_explorer() -> None:
+def test_impl_section_nav_children_includes_explorer_as_section_leaf() -> None:
     mod = PublicationModule(
         module_id="moex:module:demo",
         title="Demo",
         sections=[
             PublicationSection(
-                id="explorer", title="E", type="explorer", items=[]
+                id="explorer", title="Classes", type="explorer", items=[]
             ),
             PublicationSection(
                 id="overview", title="Overview", type="markdown-doc", kind="overview"
@@ -54,11 +54,14 @@ def test_impl_section_nav_children_skips_explorer() -> None:
     )
     kids = impl_section_nav_children("demo-impl", mod)
     assert [c.id for c in kids] == [
+        "implnav:demo-impl:explorer",
         "implnav:demo-impl:overview",
         "implnav:demo-impl:conformance",
     ]
+    assert kids[0].title == "Classes"
     assert kids[0].attributes["target_module_id"] == "moex:module:demo"
-    assert kids[0].attributes["section_id"] == "overview"
+    assert kids[0].attributes["section_id"] == "explorer"
+    assert kids[0].children == []
 
 
 def test_attach_impl_section_nav_children() -> None:
@@ -117,6 +120,26 @@ def test_repo_dams_trading_has_nested_section_refs() -> None:
         c.attributes.get("target_module_id") == "moex:module:trading-solution"
         for c in trading.children
     )
+
+
+def test_repo_dams_dsp_includes_classes_explorer_section_ref() -> None:
+    """moex.dsp Classes is type=explorer; must still appear under Реализации."""
+    modules = compile_modules(REPO, enforce_publication_contract=False)
+    catalog = compile_catalog(REPO, modules)
+    enrich_dams_explorer_implementations(modules, catalog)
+    dams = next(m for m in modules if m.module_id == DAMS_MODULE)
+    explorer = next(s for s in dams.sections if s.type == "explorer")
+    impls = next(i for i in explorer.items if i.id == "group:implementations")
+    dsp = next(c for c in impls.children if c.id == "moex-dsp")
+    titles = {c.title for c in dsp.children}
+    assert "Overview" in titles
+    assert "Classes" in titles
+    assert "Glossary" in titles
+    classes = next(c for c in dsp.children if c.title == "Classes")
+    assert classes.attributes.get("section_id") == "explorer"
+    assert classes.attributes.get("target_module_id") == "moex:module:dsp"
+    # section leaf only — no class-tree expansion under Impl
+    assert classes.children == []
 
 
 def test_catalog_gate_passes_repo() -> None:

@@ -45,7 +45,7 @@ selected_terms:
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
     preferred_label: Legal Person
     upstream_module_ref: BE/LegalEntities/LegalPersons
-    local_concept_ref: moex:LegalEntity
+    local_concept_ref: dams:concept/LegalEntity
     candidate_relation: skos:closeMatch
     extraction_role: seed
     decision: accepted
@@ -61,7 +61,7 @@ selected_terms:
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/FormalBusinessOrganizations/FormalOrganization
     preferred_label: Formal Organization
     upstream_module_ref: BE/LegalEntities/FormalBusinessOrganizations
-    local_concept_ref: moex:CorporateGroup
+    local_concept_ref: dams:concept/CorporateGroup
     candidate_relation: skos:broadMatch
     extraction_role: seed
     decision: accepted
@@ -76,7 +76,7 @@ selected_terms:
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay
     preferred_label: Business Day
     upstream_module_ref: FND/DatesAndTimes/BusinessDates
-    local_concept_ref: moex:RegistrationAction
+    local_concept_ref: dams:concept/RegistrationAction
     candidate_relation: rdfs:subClassOf
     extraction_role: dependency
     decision: candidate
@@ -90,7 +90,7 @@ selected_terms:
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/Relations/Relations/hasName
     preferred_label: has name
     upstream_module_ref: FND/Relations/Relations
-    local_concept_ref: moex:OrganizationIdentifier
+    local_concept_ref: dams:concept/OrganizationIdentifier
     candidate_relation: skos:closeMatch
     extraction_role: dependency
     decision: candidate
@@ -115,7 +115,7 @@ selected_terms:
     upstream_iri: REPLACE_WITH_REAL_FIBO_IRI
     preferred_label: Agreement (placeholder)
     upstream_module_ref: REPLACE_WITH_REAL_MODULE
-    local_concept_ref: moex:Agreement
+    local_concept_ref: dams:concept/Agreement
     candidate_relation: skos:closeMatch
     extraction_role: seed
     decision: candidate
@@ -128,7 +128,7 @@ selected_terms:
     term_kind: owl-class
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/_placeholder/Account
     preferred_label: Account (placeholder)
-    local_concept_ref: moex:AccountRelationship
+    local_concept_ref: dams:concept/AccountRelationship
     candidate_relation: skos:narrowMatch
     extraction_role: reference-only
     decision: candidate
@@ -174,7 +174,7 @@ materialized_modules:
 
 mappings:
   - id: map-legal-entity-close
-    local_concept_ref: moex:LegalEntity
+    local_concept_ref: dams:concept/LegalEntity
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
     relation: skos:closeMatch
     rationale: Confirmed close match from curated selection item fibo-legal-person.
@@ -183,7 +183,7 @@ mappings:
     selection_item_ref: fibo-legal-person
 
   - id: map-corporate-group-broad
-    local_concept_ref: moex:CorporateGroup
+    local_concept_ref: dams:concept/CorporateGroup
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/FormalBusinessOrganizations/FormalOrganization
     relation: skos:broadMatch
     rationale: FormalOrganization is broader than MOEX CorporateGroup.
@@ -192,7 +192,7 @@ mappings:
     selection_item_ref: fibo-formal-organization
 
   - id: map-registration-subclass
-    local_concept_ref: moex:RegistrationAction
+    local_concept_ref: dams:concept/RegistrationAction
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay
     relation: rdfs:subClassOf
     rationale: >
@@ -203,7 +203,7 @@ mappings:
     selection_item_ref: fibo-business-day
 
   - id: map-person-none
-    local_concept_ref: moex:TradingParticipation
+    local_concept_ref: dams:concept/TradingParticipation
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/AgentsAndPeople/People/Person
     relation: no-mapping
     rationale: Natural person deferred; trading participation maps via legal entity path.

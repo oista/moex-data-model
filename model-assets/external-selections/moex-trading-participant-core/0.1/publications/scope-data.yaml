@@ -63,27 +63,27 @@ excluded_areas:
     rationale: Out of scope.
 
 local_concepts:
-  - id: moex:LegalEntity
+  - id: dams:concept/LegalEntity
     title: LegalEntity
-  - id: moex:CorporateGroup
+  - id: dams:concept/CorporateGroup
     title: CorporateGroup
-  - id: moex:OrganizationIdentifier
+  - id: dams:concept/OrganizationIdentifier
     title: OrganizationIdentifier
-  - id: moex:TradingParticipation
+  - id: dams:concept/TradingParticipation
     title: TradingParticipation
-  - id: moex:TradingVenue
+  - id: dams:concept/TradingVenue
     title: TradingVenue
-  - id: moex:TradingSection
+  - id: dams:concept/TradingSection
     title: TradingSection
-  - id: moex:Admission
+  - id: dams:concept/Admission
     title: Admission
-  - id: moex:Agreement
+  - id: dams:concept/Agreement
     title: Agreement
-  - id: moex:AccountRelationship
+  - id: dams:concept/AccountRelationship
     title: AccountRelationship
-  - id: moex:RegistrationAction
+  - id: dams:concept/RegistrationAction
     title: RegistrationAction
-  - id: moex:SupportingDocument
+  - id: dams:concept/SupportingDocument
     title: SupportingDocument
 
 business_capabilities:

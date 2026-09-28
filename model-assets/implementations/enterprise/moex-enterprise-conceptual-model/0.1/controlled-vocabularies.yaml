@@ -1,0 +1,212 @@
+# MOEX-local controlled vocabularies for Party & Trading Participation.
+# These are NOT FIBO terms. Provenance: moex-local managed vocabulary.
+vocabularies:
+  - id: moex:cv/TradingParticipationStatus
+    name: TradingParticipationStatus
+    title: Статус участия в торгах
+    title_en: Trading participation status
+    definition: Lifecycle status of a TradingParticipation instance.
+    provenance: moex-local
+    lifecycle_status: active
+    values:
+      - id: moex:cv/TradingParticipationStatus/pending
+        code: pending
+        label_ru: Ожидает
+        label_en: Pending
+        definition: Участие запрошено или ожидает активации.
+      - id: moex:cv/TradingParticipationStatus/active
+        code: active
+        label_ru: Активно
+        label_en: Active
+        definition: Участие действует.
+      - id: moex:cv/TradingParticipationStatus/suspended
+        code: suspended
+        label_ru: Приостановлено
+        label_en: Suspended
+        definition: Участие временно приостановлено.
+      - id: moex:cv/TradingParticipationStatus/terminated
+        code: terminated
+        label_ru: Прекращено
+        label_en: Terminated
+        definition: Участие прекращено.
+      - id: moex:cv/TradingParticipationStatus/expired
+        code: expired
+        label_ru: Истекло
+        label_en: Expired
+        definition: Срок действия участия истёк.
+
+  - id: moex:cv/AdmissionStatus
+    name: AdmissionStatus
+    title: Статус допуска
+    title_en: Admission status
+    definition: Lifecycle status of an Admission.
+    provenance: moex-local
+    lifecycle_status: active
+    values:
+      - id: moex:cv/AdmissionStatus/requested
+        code: requested
+        label_ru: Запрошен
+        label_en: Requested
+        definition: Допуск запрошен.
+      - id: moex:cv/AdmissionStatus/under-review
+        code: under-review
+        label_ru: На рассмотрении
+        label_en: Under review
+        definition: Допуск на рассмотрении.
+      - id: moex:cv/AdmissionStatus/granted
+        code: granted
+        label_ru: Предоставлен
+        label_en: Granted
+        definition: Допуск предоставлен.
+      - id: moex:cv/AdmissionStatus/suspended
+        code: suspended
+        label_ru: Приостановлен
+        label_en: Suspended
+        definition: Допуск приостановлен.
+      - id: moex:cv/AdmissionStatus/revoked
+        code: revoked
+        label_ru: Отозван
+        label_en: Revoked
+        definition: Допуск отозван.
+      - id: moex:cv/AdmissionStatus/expired
+        code: expired
+        label_ru: Истёк
+        label_en: Expired
+        definition: Срок допуска истёк.
+      - id: moex:cv/AdmissionStatus/rejected
+        code: rejected
+        label_ru: Отклонён
+        label_en: Rejected
+        definition: Допуск отклонён.
+
+  - id: moex:cv/RegistrationActionType
+    name: RegistrationActionType
+    title: Тип регистрационного действия
+    title_en: Registration action type
+    definition: Type of RegistrationAction.
+    provenance: moex-local
+    lifecycle_status: active
+    values:
+      - id: moex:cv/RegistrationActionType/registration
+        code: registration
+        label_ru: Регистрация
+        label_en: Registration
+        definition: Первичная регистрация.
+      - id: moex:cv/RegistrationActionType/change
+        code: change
+        label_ru: Изменение
+        label_en: Change
+        definition: Изменение сведений.
+      - id: moex:cv/RegistrationActionType/renewal
+        code: renewal
+        label_ru: Продление
+        label_en: Renewal
+        definition: Продление допуска/статуса.
+      - id: moex:cv/RegistrationActionType/suspension
+        code: suspension
+        label_ru: Приостановление
+        label_en: Suspension
+        definition: Приостановление.
+      - id: moex:cv/RegistrationActionType/reinstatement
+        code: reinstatement
+        label_ru: Восстановление
+        label_en: Reinstatement
+        definition: Восстановление после приостановки.
+      - id: moex:cv/RegistrationActionType/termination
+        code: termination
+        label_ru: Прекращение
+        label_en: Termination
+        definition: Прекращение.
+      - id: moex:cv/RegistrationActionType/withdrawal
+        code: withdrawal
+        label_ru: Отзыв заявления
+        label_en: Withdrawal
+        definition: Отзыв заявления.
+
+  - id: moex:cv/AccountRelationshipType
+    name: AccountRelationshipType
+    title: Тип счётного отношения
+    title_en: Account relationship type
+    definition: Type of AccountRelationship.
+    provenance: moex-local
+    lifecycle_status: active
+    values:
+      - id: moex:cv/AccountRelationshipType/trading
+        code: trading
+        label_ru: Торговый
+        label_en: Trading
+        definition: Торговый счёт / отношение.
+      - id: moex:cv/AccountRelationshipType/clearing
+        code: clearing
+        label_ru: Клиринговый
+        label_en: Clearing
+        definition: Клиринговое отношение.
+      - id: moex:cv/AccountRelationshipType/settlement
+        code: settlement
+        label_ru: Расчётный
+        label_en: Settlement
+        definition: Расчётное отношение.
+      - id: moex:cv/AccountRelationshipType/cash
+        code: cash
+        label_ru: Денежный
+        label_en: Cash
+        definition: Денежный счёт.
+      - id: moex:cv/AccountRelationshipType/custody
+        code: custody
+        label_ru: Депозитарный
+        label_en: Custody
+        definition: Депозитарное отношение.
+      - id: moex:cv/AccountRelationshipType/technical
+        code: technical
+        label_ru: Технический
+        label_en: Technical
+        definition: Технический счёт.
+      - id: moex:cv/AccountRelationshipType/other
+        code: other
+        label_ru: Прочее
+        label_en: Other
+        definition: Иной тип.
+
+  - id: moex:cv/OrganizationIdentifierType
+    name: OrganizationIdentifierType
+    title: Тип идентификатора организации
+    title_en: Organization identifier type
+    definition: Type of OrganizationIdentifier (MOEX-local; not FIBO).
+    provenance: moex-local
+    lifecycle_status: active
+    values:
+      - id: moex:cv/OrganizationIdentifierType/lei
+        code: lei
+        label_ru: LEI
+        label_en: LEI
+        definition: Legal Entity Identifier.
+      - id: moex:cv/OrganizationIdentifierType/inn
+        code: inn
+        label_ru: ИНН
+        label_en: INN
+        definition: Идентификационный номер налогоплательщика.
+      - id: moex:cv/OrganizationIdentifierType/kpp
+        code: kpp
+        label_ru: КПП
+        label_en: KPP
+        definition: Код причины постановки на учёт.
+      - id: moex:cv/OrganizationIdentifierType/ogrn
+        code: ogrn
+        label_ru: ОГРН
+        label_en: OGRN
+        definition: Основной государственный регистрационный номер.
+      - id: moex:cv/OrganizationIdentifierType/bic
+        code: bic
+        label_ru: БИК
+        label_en: BIC
+        definition: Банковский идентификационный код.
+      - id: moex:cv/OrganizationIdentifierType/internal-participant-code
+        code: internal-participant-code
+        label_ru: Внутренний код участника
+        label_en: Internal participant code
+        definition: Внутренний код участника МОЕХ.
+      - id: moex:cv/OrganizationIdentifierType/other
+        code: other
+        label_ru: Прочее
+        label_en: Other
+        definition: Иной тип идентификатора.

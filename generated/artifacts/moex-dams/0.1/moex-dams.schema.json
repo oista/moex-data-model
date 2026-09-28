@@ -302,6 +302,15 @@
             "title": "ConceptualEntity",
             "type": "object"
         },
+        "DAMSModelLevelEnum": {
+            "description": "Package-level DAMS model layer (ADR-021). Distinct from ModelLevelEnum (element conceptual/logical/physical). No domain-logical value.",
+            "enum": [
+                "enterprise-conceptual",
+                "solution"
+            ],
+            "title": "DAMSModelLevelEnum",
+            "type": "string"
+        },
         "DataClassEnum": {
             "description": "\u041a\u043b\u0430\u0441\u0441 \u0434\u0430\u043d\u043d\u044b\u0445 \u0434\u043b\u044f \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043c\u043e\u0434\u0435\u043b\u044c\u043d\u043e\u0439 \u0441\u043f\u0435\u0446\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u0435\u0439 \u0434\u0430\u0442\u0430-\u043a\u043e\u043d\u0442\u0440\u0430\u043a\u0442\u0430; \u043d\u0435 \u0441\u043e\u0432\u043f\u0430\u0434\u0430\u0435\u0442 \u0441 entity_type.",
             "enum": [
@@ -1513,6 +1522,27 @@
             "title": "ITSystem",
             "type": "object"
         },
+        "ImplementationProfileEnum": {
+            "description": "DAMS-side mirror of kernel ImplementationProfile for ModelPackage metadata. Package-level dams_model_level applies only to dams-data-model.",
+            "enum": [
+                "dams-data-model",
+                "ontology-application",
+                "api-specification",
+                "data-contract",
+                "other"
+            ],
+            "title": "ImplementationProfileEnum",
+            "type": "string"
+        },
+        "ImplementationScopeEnum": {
+            "description": "",
+            "enum": [
+                "enterprise",
+                "solution"
+            ],
+            "title": "ImplementationScopeEnum",
+            "type": "string"
+        },
         "IntegrationChannelEnum": {
             "description": "",
             "enum": [
@@ -2055,7 +2085,7 @@
         },
         "Mapping": {
             "additionalProperties": false,
-            "description": "\u042f\u0432\u043d\u043e\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430\u043c\u0438 \u043a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u043e\u0433\u043e, \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u043e\u0433\u043e \u0438 \u0444\u0438\u0437\u0438\u0447\u0435\u0441\u043a\u043e\u0433\u043e \u0443\u0440\u043e\u0432\u043d\u0435\u0439.",
+            "description": "\u042f\u0432\u043d\u043e\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430\u043c\u0438. Discriminate via mapping_type: realizes (solution\u2192enterprise conceptual), field_mapping/mapsTo (physical\u2194logical), aligns_with (enterprise\u2194external term). Not used for SpecImpl implements/conforms_to.",
             "properties": {
                 "aliases": {
                     "items": {
@@ -2226,7 +2256,7 @@
             "type": "string"
         },
         "MappingTypeEnum": {
-            "description": "",
+            "description": "Kind of Mapping assertion. realizes = solution element \u2192 enterprise conceptual; field_mapping = mapsTo (physical \u2194 logical); aligns_with = enterprise conceptual \u2194 external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).",
             "enum": [
                 "semantic_equivalence",
                 "specialization",
@@ -2234,7 +2264,9 @@
                 "field_mapping",
                 "transformation",
                 "aggregation",
-                "derivation"
+                "derivation",
+                "realizes",
+                "aligns_with"
             ],
             "title": "MappingTypeEnum",
             "type": "string"
@@ -2485,7 +2517,7 @@
         },
         "ModelPackage": {
             "additionalProperties": false,
-            "description": "\u0412\u0435\u0440\u0441\u0438\u043e\u043d\u0438\u0440\u0443\u0435\u043c\u044b\u0439 \u0430\u0440\u0442\u0435\u0444\u0430\u043a\u0442 \u043c\u043e\u0434\u0435\u043b\u0438 \u0434\u0430\u043d\u043d\u044b\u0445 \u043e\u0434\u043d\u043e\u0433\u043e \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f \u0438\u043b\u0438 \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u0439 \u043c\u043e\u0434\u0435\u043b\u0438.",
+            "description": "\u0412\u0435\u0440\u0441\u0438\u043e\u043d\u0438\u0440\u0443\u0435\u043c\u044b\u0439 \u0430\u0440\u0442\u0435\u0444\u0430\u043a\u0442 \u043c\u043e\u0434\u0435\u043b\u0438 \u0434\u0430\u043d\u043d\u044b\u0445: \u043b\u0438\u0431\u043e \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u0430\u044f conceptual \u043c\u043e\u0434\u0435\u043b\u044c (enterprise), \u043b\u0438\u0431\u043e \u043c\u043e\u0434\u0435\u043b\u044c \u043a\u043e\u043d\u043a\u0440\u0435\u0442\u043d\u043e\u0433\u043e \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f (solution). Package-level DAMS layer is dams_model_level on the SpecImpl envelope (ADR-021); implementation_scope here mirrors that body-level semantics.",
             "properties": {
                 "aliases": {
                     "items": {
@@ -2505,6 +2537,13 @@
                     },
                     "type": [
                         "array",
+                        "null"
+                    ]
+                },
+                "conceptual_implementation_ref": {
+                    "description": "Required for solution packages: reference to the enterprise-conceptual SpecImpl / ModelPackage id (e.g. moex-enterprise-conceptual-model).\n",
+                    "type": [
+                        "string",
                         "null"
                     ]
                 },
@@ -2558,6 +2597,10 @@
                         "array",
                         "null"
                     ]
+                },
+                "implementation_scope": {
+                    "$ref": "#/$defs/ImplementationScopeEnum",
+                    "description": "Body-level scope: enterprise (no solution_ref) or solution. Must align with envelope dams_model_level when profile is dams-data-model.\n"
                 },
                 "imports_refs": {
                     "items": {

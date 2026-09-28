@@ -166,6 +166,9 @@ classes:
       Concrete immutable envelope for a model body conforming to an exact
       reference specification revision. Typed body and element hierarchy are
       defined only in the matching provider schema (extension_policy).
+      Optional implementation_profile / dams_model_level specialize DAMS
+      data-model Impls (ADR-021); not applied to ontology-application or
+      external selection packages.
     slots:
       - conforms_to
       - implementation_kind
@@ -173,6 +176,8 @@ classes:
       - source
       - provenance
       - body_ref
+      - implementation_profile
+      - dams_model_level
     slot_usage:
       conforms_to:
         required: true
@@ -483,6 +488,17 @@ slots:
     description: >-
       Opaque reference to the provider-owned typed body. Resolved by the
       standard provider; kernel never interprets body contents.
+  implementation_profile:
+    range: ImplementationProfile
+    description: >-
+      Optional specialization discriminator (ADR-021). Orthogonal to
+      implementation_kind (StandardFamily) and ADR-016 publication profile.
+  dams_model_level:
+    range: DAMSModelLevel
+    description: >-
+      Package-level DAMS layer (enterprise-conceptual | solution). Required
+      only when implementation_profile is dams-data-model; forbidden otherwise.
+      Distinct from element-level ModelLevelEnum in DAMS schemas.
 
   source_uri:
     range: uri
@@ -630,6 +646,31 @@ enums:
       json_schema:
       shacl:
       custom:
+
+  ImplementationProfile:
+    description: >-
+      SpecificationImplementation specialization (ADR-021). Only dams-data-model
+      uses DAMSModelLevel.
+    permissible_values:
+      dams-data-model:
+        description: MOEX DAMS corporate data-model implementation.
+      ontology-application:
+        description: Application/extension ontology over an external OWL ontology.
+      api-specification:
+        description: OpenAPI/AsyncAPI profile or implementation.
+      data-contract:
+        description: Data-contract specification implementation.
+      other:
+        description: Other governed implementation profile.
+
+  DAMSModelLevel:
+    description: >-
+      Package-level DAMS model layer. Not element-level conceptual/logical/physical.
+    permissible_values:
+      enterprise-conceptual:
+        description: Enterprise corporate conceptual model (solution-independent).
+      solution:
+        description: IT-solution model with local logical/physical + realizes enterprise.
 
   SemanticRegime:
     permissible_values:

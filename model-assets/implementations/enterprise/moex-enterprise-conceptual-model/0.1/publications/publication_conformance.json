@@ -1,0 +1,79 @@
+{
+  "id": "pubconf:moex:module:enterprise-conceptual:dams-enterprise-conceptual",
+  "title": "MOEX Enterprise Conceptual Model",
+  "description": "Publication contract assessment for dams-enterprise-conceptual against moex-dams@0.1",
+  "implementation_ref": "moex:module:enterprise-conceptual",
+  "reference_specification_ref": "moex-dams@0.1",
+  "profile_ref": "dams-enterprise-conceptual",
+  "overall_publication_status": "draft-conformant",
+  "requirement_results": [
+    {
+      "requirement_ref": "dams:overview",
+      "covered": true,
+      "covering_section_ids": [
+        "overview"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:conformance",
+      "covered": true,
+      "covering_section_ids": [
+        "conformance"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:conceptual-entities",
+      "covered": true,
+      "covering_section_ids": [
+        "conceptual"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:relationships",
+      "covered": true,
+      "covering_section_ids": [
+        "relationships"
+      ],
+      "result_status": "pass",
+      "result_message": "semantic count=15 (>= 1); relationships: 15",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:vocabularies",
+      "covered": true,
+      "covering_section_ids": [
+        "vocabularies"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "recommended"
+    },
+    {
+      "requirement_ref": "dams:source",
+      "covered": true,
+      "covering_section_ids": [
+        "source"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:declared-binding",
+      "covered": true,
+      "covering_section_ids": [],
+      "result_status": "pass",
+      "result_message": "implements moex-dams@0.1",
+      "obligation": "required"
+    }
+  ]
+}

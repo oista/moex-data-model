@@ -97,6 +97,10 @@ def compile_modules(
                     ref.model_dump(exclude_none=True) for ref in manifest.implements
                 ],
                 conformance_status=getattr(manifest, "conformance_status", None),
+                implementation_profile=getattr(
+                    manifest, "implementation_profile", None
+                ),
+                dams_model_level=getattr(manifest, "dams_model_level", None),
                 sections=sections,
                 manifest_path=str(path),
             )
@@ -140,15 +144,14 @@ def impl_section_nav_children(
 ) -> list[PublicationItem]:
     """Build-time section_ref children for an implementation_ref (ADR seamless nav).
 
-    Only top-level publication sections (not explorer trees) so Spec nav stays
-    section-level under Реализации → Impl.
+    Emit one leaf per top-level publication section (including ``explorer``,
+    e.g. moex.dsp «Classes»). Do **not** expand explorer class trees here —
+    Spec nav under Реализации → Impl stays section-level.
     """
     if impl_module is None:
         return []
     children: list[PublicationItem] = []
     for sec in impl_module.sections:
-        if sec.type == "explorer":
-            continue
         children.append(
             PublicationItem(
                 id=f"implnav:{catalog_impl_id}:{sec.id}",

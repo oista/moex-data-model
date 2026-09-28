@@ -2,26 +2,27 @@
   "summary": {
     "overall_result": "conformant",
     "implementation_id": "moex:implementation:trading:1.0.0",
-    "revision": "642a8aab9dde",
-    "content_digest": "sha256:642a8aab9dde70a2892fcf9690f41527d40b863efa2b05aa13bf8044bd520700",
+    "revision": "72e0ff6f61b8",
+    "content_digest": "sha256:72e0ff6f61b84c85f8c17755a2a3b08a57e7195d960100ff1820a4eca6e946a4",
     "package_id": "dams:model/trading/1.0.0",
-    "node_count": 9,
-    "edge_count": 15,
-    "is_conformant": true
+    "node_count": 10,
+    "edge_count": 19,
+    "is_conformant": true,
+    "bundle_digest": "sha256:919dc6f2538cd0352576d97e2a3039da23bedd47948b08e5bd655327217b8d0b"
   },
   "nodes": [
     {
       "id": "dams:model/trading/1.0.0",
       "name": "trading_solution_model",
       "title": "Модель данных торгового решения",
-      "description": "Черновой пример модели одного ИТ-решения.",
+      "description": "Черновой пример модели одного ИТ-решения (dams-data-model / solution). Local Client conceptual entity is transitional; canonical Party concepts live in moex-enterprise-conceptual-model. TradingClient realizes LegalEntity.\n",
       "kind": "package"
     },
     {
       "id": "dams:concept/Client",
       "name": "Client",
       "title": "Клиент",
-      "description": "Лицо или организация, взаимодействующая с компаниями Группы МБ.",
+      "description": "Переходное локальное понятие решения. Canonical SoT — dams:concept/LegalEntity в enterprise conceptual model.\n",
       "kind": "conceptual_entity"
     },
     {
@@ -67,10 +68,17 @@
       "kind": "field"
     },
     {
+      "id": "dams:mapping/trading/client-realizes-legal-entity",
+      "name": "realizes_TradingClient_LegalEntity",
+      "title": null,
+      "description": "Solution TradingClient realizes enterprise conceptual LegalEntity (ADR-021).\n",
+      "kind": "mapping"
+    },
+    {
       "id": "dams:mapping/trading/client-id",
       "name": "map_client_id",
       "title": null,
-      "description": "Соответствие логического идентификатора физическому полю события.",
+      "description": "Соответствие логического идентификатора физическому полю события (mapsTo).",
       "kind": "mapping"
     }
   ],
@@ -97,6 +105,12 @@
       "id": "dams:logical/trading/Client->dams:concept/Client:conceptual_ref",
       "source": "dams:logical/trading/Client",
       "target": "dams:concept/Client",
+      "kind": "conceptual_ref"
+    },
+    {
+      "id": "dams:logical/trading/Client->dams:concept/LegalEntity:conceptual_ref",
+      "source": "dams:logical/trading/Client",
+      "target": "dams:concept/LegalEntity",
       "kind": "conceptual_ref"
     },
     {
@@ -148,6 +162,24 @@
       "kind": "physical_object_ref"
     },
     {
+      "id": "dams:model/trading/1.0.0->dams:mapping/trading/client-realizes-legal-entity:contains",
+      "source": "dams:model/trading/1.0.0",
+      "target": "dams:mapping/trading/client-realizes-legal-entity",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:mapping/trading/client-realizes-legal-entity->dams:logical/trading/Client:maps_to",
+      "source": "dams:mapping/trading/client-realizes-legal-entity",
+      "target": "dams:logical/trading/Client",
+      "kind": "maps_to"
+    },
+    {
+      "id": "dams:mapping/trading/client-realizes-legal-entity->dams:concept/LegalEntity:maps_to",
+      "source": "dams:mapping/trading/client-realizes-legal-entity",
+      "target": "dams:concept/LegalEntity",
+      "kind": "maps_to"
+    },
+    {
       "id": "dams:model/trading/1.0.0->dams:mapping/trading/client-id:contains",
       "source": "dams:model/trading/1.0.0",
       "target": "dams:mapping/trading/client-id",
@@ -194,12 +226,15 @@
     "icon": "📐",
     "version": "1.0.0",
     "order": 350,
+    "profile": null,
     "sections": [
       {
         "id": "summary",
         "title": "Slice summary",
         "description": null,
         "type": "key-value",
+        "kind": null,
+        "renderer_mode": null,
         "columns": [],
         "filterable": [],
         "items": [
@@ -230,7 +265,7 @@
             "title": "revision",
             "description": null,
             "attributes": {
-              "value": "642a8aab9dde"
+              "value": "72e0ff6f61b8"
             },
             "children": [],
             "tags": [],
@@ -241,7 +276,7 @@
             "title": "content_digest",
             "description": null,
             "attributes": {
-              "value": "sha256:642a8aab9dde70a2892fcf9690f41527d40b863efa2b05aa13bf8044bd520700"
+              "value": "sha256:72e0ff6f61b84c85f8c17755a2a3b08a57e7195d960100ff1820a4eca6e946a4"
             },
             "children": [],
             "tags": [],
@@ -252,7 +287,7 @@
             "title": "nodes",
             "description": null,
             "attributes": {
-              "value": 9
+              "value": 10
             },
             "children": [],
             "tags": [],
@@ -263,7 +298,7 @@
             "title": "edges",
             "description": null,
             "attributes": {
-              "value": 15
+              "value": 19
             },
             "children": [],
             "tags": [],
@@ -279,6 +314,8 @@
         "title": "Graph nodes",
         "description": null,
         "type": "entity-table",
+        "kind": null,
+        "renderer_mode": null,
         "columns": [
           "kind",
           "name"
@@ -290,7 +327,7 @@
           {
             "id": "dams:model/trading/1.0.0",
             "title": "Модель данных торгового решения",
-            "description": "Черновой пример модели одного ИТ-решения.",
+            "description": "Черновой пример модели одного ИТ-решения (dams-data-model / solution). Local Client conceptual entity is transitional; canonical Party concepts live in moex-enterprise-conceptual-model. TradingClient realizes LegalEntity.\n",
             "attributes": {
               "kind": "package",
               "name": "trading_solution_model"
@@ -302,7 +339,7 @@
           {
             "id": "dams:concept/Client",
             "title": "Клиент",
-            "description": "Лицо или организация, взаимодействующая с компаниями Группы МБ.",
+            "description": "Переходное локальное понятие решения. Canonical SoT — dams:concept/LegalEntity в enterprise conceptual model.\n",
             "attributes": {
               "kind": "conceptual_entity",
               "name": "Client"
@@ -384,9 +421,21 @@
             "source_ref": null
           },
           {
+            "id": "dams:mapping/trading/client-realizes-legal-entity",
+            "title": "realizes_TradingClient_LegalEntity",
+            "description": "Solution TradingClient realizes enterprise conceptual LegalEntity (ADR-021).\n",
+            "attributes": {
+              "kind": "mapping",
+              "name": "realizes_TradingClient_LegalEntity"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
             "id": "dams:mapping/trading/client-id",
             "title": "map_client_id",
-            "description": "Соответствие логического идентификатора физическому полю события.",
+            "description": "Соответствие логического идентификатора физическому полю события (mapsTo).",
             "attributes": {
               "kind": "mapping",
               "name": "map_client_id"
@@ -405,6 +454,8 @@
         "title": "Diagnostics",
         "description": null,
         "type": "entity-table",
+        "kind": null,
+        "renderer_mode": null,
         "columns": [
           "severity",
           "phase",
@@ -423,6 +474,8 @@
         "title": "Universe relations",
         "description": null,
         "type": "entity-table",
+        "kind": null,
+        "renderer_mode": null,
         "columns": [
           "source",
           "target"

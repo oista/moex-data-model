@@ -1,0 +1,139 @@
+# Enterprise conceptual model publication (ADR-021)
+module_id: moex:module:enterprise-conceptual
+kind: publication_module
+version: "1"
+order: 108
+icon: "🏛"
+title: MOEX Enterprise Conceptual Model
+description: >
+  Canonical enterprise conceptual model (Party & Trading Participation).
+  dams-data-model / enterprise-conceptual. Scope ≠ FIBO import.
+profile: implementation
+implementation_profile: dams-data-model
+dams_model_level: enterprise-conceptual
+conformance_status: draft-conformant
+implements:
+  - specification_ref: moex-dams@0.1
+    profile_ref: dams-enterprise-conceptual
+    conformance_target: draft
+sections:
+  - id: overview
+    title: Overview
+    kind: overview
+    type: markdown-doc
+    satisfies:
+      - dams:overview
+      - implementation:overview
+    source:
+      format: markdown
+      path: README.md
+
+  - id: conformance
+    title: Conformance
+    kind: conformance
+    type: key-value
+    satisfies:
+      - dams:conformance
+      - implementation:conformance
+      - dams:declared-binding
+    source:
+      format: yaml
+      path: publications/conformance.yaml
+
+  - id: conceptual
+    title: Conceptual entities
+    kind: classes
+    type: entity-table
+    satisfies:
+      - dams:conceptual-entities
+    source:
+      format: yaml
+      path: enterprise-conceptual-model.yaml
+      select: conceptual_entities
+    key_column: element_id
+    columns:
+      - name
+      - title
+      - description
+      - entity_type
+      - data_class
+      - business_importance
+    filterable:
+      - entity_type
+      - data_class
+
+  - id: relationships
+    title: Relationships
+    kind: classes
+    type: entity-table
+    satisfies:
+      - dams:relationships
+    source:
+      format: yaml
+      path: enterprise-conceptual-model.yaml
+      select: relationships
+    key_column: element_id
+    columns:
+      - name
+      - title
+      - description
+      - source_entity_ref
+      - target_entity_ref
+      - source_role
+      - target_role
+    filterable:
+      - source_entity_ref
+
+  - id: vocabularies
+    title: Controlled vocabularies
+    kind: enumerations
+    type: entity-table
+    satisfies:
+      - dams:vocabularies
+    source:
+      format: yaml
+      path: controlled-vocabularies.yaml
+      select: vocabularies
+    key_column: id
+    columns:
+      - name
+      - title
+      - title_en
+      - definition
+      - provenance
+      - lifecycle_status
+    filterable:
+      - provenance
+
+  - id: alignments
+    title: External alignments
+    kind: bindings
+    type: entity-table
+    source:
+      format: yaml
+      path: enterprise-conceptual-model.yaml
+      select: mappings
+    key_column: element_id
+    columns:
+      - name
+      - description
+      - mapping_type
+      - source_refs
+      - target_refs
+      - approval_status
+    filterable:
+      - mapping_type
+
+  - id: source
+    title: Source artifacts
+    kind: source
+    type: entity-table
+    satisfies:
+      - dams:source
+    source:
+      format: yaml
+      path: publications/sources.yaml
+      select: artifacts
+    columns:
+      - path
+      - role

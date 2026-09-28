@@ -136,3 +136,85 @@ profiles:
         accepted_section_kinds: [source, conformance, overview]
         accepted_renderers: [key-value, markdown-doc]
         inherited_from: dams-logical-and-physical
+
+  # Alias / preferred id for solution DAMS Impls (ADR-021). Same requirements
+  # as dams-logical-and-physical; use either profile_ref in publish.yaml.
+  - id: dams-solution
+    title: DAMS solution data-model publication
+    applies_to: implementation
+    parent_profile_ref: dams-logical-and-physical
+    description: >
+      Publication contract for dams-data-model + dams_model_level: solution.
+      Inherits logical + physical requirements; solution packages must also
+      declare conceptual_implementation_ref and realizes mappings in the body.
+
+  - id: dams-enterprise-conceptual
+    title: DAMS enterprise conceptual model publication
+    applies_to: implementation
+    parent_profile_ref: implementation
+    description: >
+      Publication contract for dams-data-model + enterprise-conceptual:
+      conceptual entities and relationships; physical layer forbidden.
+    requirements:
+      - id: dams:overview
+        kind: required-section
+        semantic_capability: overview
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [overview]
+        accepted_renderers: [markdown-doc, overview, key-value]
+        applies_to_profile: implementation
+
+      - id: dams:conformance
+        kind: required-section
+        semantic_capability: conformance
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [conformance]
+        accepted_renderers: [key-value, entity-table, conformance]
+        applies_to_profile: implementation
+
+      - id: dams:conceptual-entities
+        kind: required-section
+        semantic_capability: conceptual-entities
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [classes]
+        accepted_renderers: [entity-table, entity-detail, explorer]
+        expected_semantic_types: [ConceptualEntity]
+        applies_to_profile: implementation
+
+      - id: dams:relationships
+        kind: required-semantic-content
+        semantic_capability: relationships
+        obligation: required
+        min_occurs: 1
+        expected_semantic_types: [Relationship]
+        accepted_section_kinds: [classes, bindings, data-flows]
+        accepted_renderers: [relationship-graph, entity-table]
+        applies_to_profile: implementation
+
+      - id: dams:vocabularies
+        kind: required-section
+        semantic_capability: controlled-vocabularies
+        obligation: recommended
+        min_occurs: 0
+        accepted_section_kinds: [enumerations, glossary, classes]
+        accepted_renderers: [entity-table, entity-detail, glossary]
+        applies_to_profile: implementation
+
+      - id: dams:source
+        kind: required-section
+        semantic_capability: source
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [source]
+        accepted_renderers: [entity-table, key-value, markdown-doc]
+        applies_to_profile: implementation
+
+      - id: dams:declared-binding
+        kind: required-binding
+        semantic_capability: implements
+        obligation: required
+        min_occurs: 1
+        applies_to_profile: implementation

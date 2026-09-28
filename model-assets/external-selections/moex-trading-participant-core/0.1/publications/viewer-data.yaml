@@ -31,7 +31,7 @@ selected_terms:
     decision: accepted
     extraction_role: seed
     candidate_relation: skos:closeMatch
-    local_concept_ref: moex:LegalEntity
+    local_concept_ref: dams:concept/LegalEntity
     review_status: approved
     mapping_confirmed: true
   - id: fibo-formal-organization
@@ -43,7 +43,7 @@ selected_terms:
     decision: accepted
     extraction_role: seed
     candidate_relation: skos:broadMatch
-    local_concept_ref: moex:CorporateGroup
+    local_concept_ref: dams:concept/CorporateGroup
     review_status: approved
     mapping_confirmed: true
   - id: fibo-business-day
@@ -54,7 +54,7 @@ selected_terms:
     decision: candidate
     extraction_role: dependency
     candidate_relation: rdfs:subClassOf
-    local_concept_ref: moex:RegistrationAction
+    local_concept_ref: dams:concept/RegistrationAction
     review_status: pending
     mapping_confirmed: false
   - id: fibo-has-name
@@ -65,7 +65,7 @@ selected_terms:
     decision: candidate
     extraction_role: dependency
     candidate_relation: skos:closeMatch
-    local_concept_ref: moex:OrganizationIdentifier
+    local_concept_ref: dams:concept/OrganizationIdentifier
     review_status: pending
     mapping_confirmed: false
   - id: fibo-person
@@ -86,7 +86,7 @@ selected_terms:
     decision: candidate
     extraction_role: seed
     candidate_relation: skos:closeMatch
-    local_concept_ref: moex:Agreement
+    local_concept_ref: dams:concept/Agreement
     review_status: pending
     mapping_confirmed: false
   - id: fibo-placeholder-account
@@ -97,7 +97,7 @@ selected_terms:
     decision: candidate
     extraction_role: reference-only
     candidate_relation: skos:narrowMatch
-    local_concept_ref: moex:AccountRelationship
+    local_concept_ref: dams:concept/AccountRelationship
     review_status: pending
     mapping_confirmed: false
   - id: fibo-placeholder-listing-instrument
@@ -114,7 +114,7 @@ selected_terms:
 mappings:
   - id: map-legal-entity-close
     title: LegalEntity ↔ LegalPerson
-    local_concept_ref: moex:LegalEntity
+    local_concept_ref: dams:concept/LegalEntity
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
     relation: skos:closeMatch
     rationale: Confirmed close match from curated selection item fibo-legal-person.
@@ -123,7 +123,7 @@ mappings:
     mapping_confirmed: true
   - id: map-corporate-group-broad
     title: CorporateGroup ↔ FormalOrganization
-    local_concept_ref: moex:CorporateGroup
+    local_concept_ref: dams:concept/CorporateGroup
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/FormalBusinessOrganizations/FormalOrganization
     relation: skos:broadMatch
     rationale: FormalOrganization is broader than MOEX CorporateGroup.
@@ -132,7 +132,7 @@ mappings:
     mapping_confirmed: true
   - id: map-registration-subclass
     title: RegistrationAction ↔ BusinessDay (candidate)
-    local_concept_ref: moex:RegistrationAction
+    local_concept_ref: dams:concept/RegistrationAction
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay
     relation: rdfs:subClassOf
     rationale: Candidate temporal dependency — pending review.
@@ -141,7 +141,7 @@ mappings:
     mapping_confirmed: false
   - id: map-person-none
     title: TradingParticipation — no mapping to Person
-    local_concept_ref: moex:TradingParticipation
+    local_concept_ref: dams:concept/TradingParticipation
     upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/AgentsAndPeople/People/Person
     relation: no-mapping
     rationale: Natural person deferred; trading participation maps via legal entity path.

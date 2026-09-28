@@ -1,0 +1,9 @@
+artifacts:
+  - path: enterprise-conceptual-model.yaml
+    role: model-body
+  - path: controlled-vocabularies.yaml
+    role: controlled-vocabularies
+  - path: implementation.yaml
+    role: envelope
+  - path: publish.yaml
+    role: publication-manifest

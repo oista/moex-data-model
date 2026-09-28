@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-09-28T08:22:30
+# Generation date: 2026-09-28T15:17:09
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -1021,7 +1021,9 @@ class ModelElement(YAMLRoot):
 @dataclass(repr=False)
 class ModelPackage(ModelElement):
     """
-    Версионируемый артефакт модели данных одного ИТ-решения или корпоративной модели.
+    Версионируемый артефакт модели данных: либо корпоративная conceptual модель (enterprise), либо модель конкретного
+    ИТ-решения (solution). Package-level DAMS layer is dams_model_level on the SpecImpl envelope (ADR-021);
+    implementation_scope here mirrors that body-level semantics.
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -1036,6 +1038,8 @@ class ModelPackage(ModelElement):
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     api_version: str = None
     model_version: Union[str, SemVer] = None
+    implementation_scope: Optional[Union[str, "ImplementationScopeEnum"]] = None
+    conceptual_implementation_ref: Optional[Union[str, URIorCURIE]] = None
     solution_ref: Optional[Union[str, ITSolutionRegistryId]] = None
     domain_refs: Optional[Union[Union[str, BusinessDomainRegistryId], list[Union[str, BusinessDomainRegistryId]]]] = empty_list()
     imports_refs: Optional[Union[Union[str, URI], list[Union[str, URI]]]] = empty_list()
@@ -1064,6 +1068,12 @@ class ModelPackage(ModelElement):
             self.MissingRequiredField("model_version")
         if not isinstance(self.model_version, SemVer):
             self.model_version = SemVer(self.model_version)
+
+        if self.implementation_scope is not None and not isinstance(self.implementation_scope, ImplementationScopeEnum):
+            self.implementation_scope = ImplementationScopeEnum(self.implementation_scope)
+
+        if self.conceptual_implementation_ref is not None and not isinstance(self.conceptual_implementation_ref, URIorCURIE):
+            self.conceptual_implementation_ref = URIorCURIE(self.conceptual_implementation_ref)
 
         if self.solution_ref is not None and not isinstance(self.solution_ref, ITSolutionRegistryId):
             self.solution_ref = ITSolutionRegistryId(self.solution_ref)
@@ -1637,7 +1647,9 @@ class PhysicalField(ModelElement):
 @dataclass(repr=False)
 class Mapping(ModelElement):
     """
-    Явное соответствие между элементами концептуального, логического и физического уровней.
+    Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual),
+    field_mapping/mapsTo (physical↔logical), aligns_with (enterprise↔external term). Not used for SpecImpl
+    implements/conforms_to.
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -2599,17 +2611,91 @@ class IntegrationLevelEnum(EnumDefinitionImpl):
     )
 
 class MappingTypeEnum(EnumDefinitionImpl):
-
+    """
+    Kind of Mapping assertion. realizes = solution element → enterprise conceptual; field_mapping = mapsTo (physical ↔
+    logical); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is
+    conforms_to / publication implements).
+    """
     semantic_equivalence = PermissibleValue(text="semantic_equivalence")
     specialization = PermissibleValue(text="specialization")
     implementation = PermissibleValue(text="implementation")
-    field_mapping = PermissibleValue(text="field_mapping")
+    field_mapping = PermissibleValue(
+        text="field_mapping",
+        description="Technical/structural mapsTo between physical and logical.")
     transformation = PermissibleValue(text="transformation")
     aggregation = PermissibleValue(text="aggregation")
     derivation = PermissibleValue(text="derivation")
+    realizes = PermissibleValue(
+        text="realizes",
+        description="Solution logical/concept realizes an enterprise conceptual entity.")
+    aligns_with = PermissibleValue(
+        text="aligns_with",
+        description="Enterprise conceptual aligns with an external reference term.")
 
     _defn = EnumDefinition(
         name="MappingTypeEnum",
+        description="""Kind of Mapping assertion. realizes = solution element → enterprise conceptual; field_mapping = mapsTo (physical ↔ logical); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).""",
+    )
+
+class ImplementationProfileEnum(EnumDefinitionImpl):
+    """
+    DAMS-side mirror of kernel ImplementationProfile for ModelPackage metadata. Package-level dams_model_level applies
+    only to dams-data-model.
+    """
+    other = PermissibleValue(text="other")
+
+    _defn = EnumDefinition(
+        name="ImplementationProfileEnum",
+        description="""DAMS-side mirror of kernel ImplementationProfile for ModelPackage metadata. Package-level dams_model_level applies only to dams-data-model.""",
+    )
+
+    @classmethod
+    def _addvals(cls):
+        setattr(cls, "dams-data-model",
+            PermissibleValue(
+                text="dams-data-model",
+                description="MOEX DAMS corporate data-model implementation."))
+        setattr(cls, "ontology-application",
+            PermissibleValue(
+                text="ontology-application",
+                description="Not a DAMS model Impl — ontology application profile."))
+        setattr(cls, "api-specification",
+            PermissibleValue(text="api-specification"))
+        setattr(cls, "data-contract",
+            PermissibleValue(text="data-contract"))
+
+class DAMSModelLevelEnum(EnumDefinitionImpl):
+    """
+    Package-level DAMS model layer (ADR-021). Distinct from ModelLevelEnum (element conceptual/logical/physical). No
+    domain-logical value.
+    """
+    solution = PermissibleValue(
+        text="solution",
+        description="IT-solution model with local logical/physical facets.")
+
+    _defn = EnumDefinition(
+        name="DAMSModelLevelEnum",
+        description="""Package-level DAMS model layer (ADR-021). Distinct from ModelLevelEnum (element conceptual/logical/physical). No domain-logical value.""",
+    )
+
+    @classmethod
+    def _addvals(cls):
+        setattr(cls, "enterprise-conceptual",
+            PermissibleValue(
+                text="enterprise-conceptual",
+                description="Enterprise corporate conceptual model (solution-independent)."))
+
+class ImplementationScopeEnum(EnumDefinitionImpl):
+
+    enterprise = PermissibleValue(
+        text="enterprise",
+        description="Enterprise-wide scope (no solution_ref).")
+    solution = PermissibleValue(
+        text="solution",
+        description="Scoped to a specific IT solution.")
+
+    _defn = EnumDefinition(
+        name="ImplementationScopeEnum",
     )
 
 class MappingCardinalityEnum(EnumDefinitionImpl):
@@ -2895,6 +2981,12 @@ slots.api_version = Slot(uri=DAMS.api_version, name="api_version", curie=DAMS.cu
 
 slots.model_version = Slot(uri=DAMS.model_version, name="model_version", curie=DAMS.curie('model_version'),
                    model_uri=DAMS.model_version, domain=None, range=Union[str, SemVer])
+
+slots.implementation_scope = Slot(uri=DAMS.implementation_scope, name="implementation_scope", curie=DAMS.curie('implementation_scope'),
+                   model_uri=DAMS.implementation_scope, domain=None, range=Optional[Union[str, "ImplementationScopeEnum"]])
+
+slots.conceptual_implementation_ref = Slot(uri=DAMS.conceptual_implementation_ref, name="conceptual_implementation_ref", curie=DAMS.curie('conceptual_implementation_ref'),
+                   model_uri=DAMS.conceptual_implementation_ref, domain=None, range=Optional[Union[str, URIorCURIE]])
 
 slots.solution_ref = Slot(uri=DAMS.solution_ref, name="solution_ref", curie=DAMS.curie('solution_ref'),
                    model_uri=DAMS.solution_ref, domain=None, range=Optional[Union[str, ITSolutionRegistryId]])

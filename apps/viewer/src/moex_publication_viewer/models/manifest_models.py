@@ -104,6 +104,8 @@ class PublicationManifest(BaseModel):
     conformance_status: str | None = None
     semantic_assertion_status: str | None = None
     approval_status: str | None = None
+    implementation_profile: str | None = None
+    dams_model_level: str | None = None
     sections: list[ManifestSection] = Field(default_factory=list)
 
     @field_validator("version", mode="before")

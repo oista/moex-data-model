@@ -1,0 +1,8 @@
+conformance_status: draft-conformant
+semantic_assertion_status: partially-reviewed
+implementation_profile: dams-data-model
+dams_model_level: enterprise-conceptual
+publication_profile: dams-enterprise-conceptual
+notes: >
+  First enterprise conceptual slice for Party & Trading Participation.
+  FIBO mappings remain candidate/partially-reviewed via ExternalTermSelection.

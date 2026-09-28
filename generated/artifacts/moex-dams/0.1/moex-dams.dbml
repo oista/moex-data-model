@@ -211,6 +211,8 @@ valid_to datetime
 deprecated_by_ref varchar
 api_version varchar [not null]
 model_version varchar [not null]
+implementation_scope varchar
+conceptual_implementation_ref varchar
 solution_ref varchar
 domain_refs varchar
 imports_refs varchar

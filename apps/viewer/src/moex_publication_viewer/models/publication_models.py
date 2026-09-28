@@ -46,6 +46,8 @@ class PublicationModule(BaseModel):
     profile: str | None = None
     implements: list[dict[str, Any]] = Field(default_factory=list)
     conformance_status: str | None = None
+    implementation_profile: str | None = None
+    dams_model_level: str | None = None
     sections: list[PublicationSection] = Field(default_factory=list)
     manifest_path: str | None = None
 

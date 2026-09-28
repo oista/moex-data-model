@@ -32,10 +32,16 @@ classes:
     is_a: ModelElement
     mixins:
       - HasOwnership
-    description: Версионируемый артефакт модели данных одного ИТ-решения или корпоративной модели.
+    description: >
+      Версионируемый артефакт модели данных: либо корпоративная conceptual
+      модель (enterprise), либо модель конкретного ИТ-решения (solution).
+      Package-level DAMS layer is dams_model_level on the SpecImpl envelope
+      (ADR-021); implementation_scope here mirrors that body-level semantics.
     slots:
       - api_version
       - model_version
+      - implementation_scope
+      - conceptual_implementation_ref
       - solution_ref
       - domain_refs
       - imports_refs
@@ -148,7 +154,11 @@ classes:
     is_a: ModelElement
     mixins:
       - HasProvenance
-    description: Явное соответствие между элементами концептуального, логического и физического уровней.
+    description: >
+      Явное соответствие между элементами. Discriminate via mapping_type:
+      realizes (solution→enterprise conceptual), field_mapping/mapsTo
+      (physical↔logical), aligns_with (enterprise↔external term). Not used
+      for SpecImpl implements/conforms_to.
     slots:
       - source_refs
       - target_refs
@@ -189,6 +199,16 @@ slots:
   model_version:
     range: SemVer
     required: true
+  implementation_scope:
+    range: ImplementationScopeEnum
+    description: >
+      Body-level scope: enterprise (no solution_ref) or solution.
+      Must align with envelope dams_model_level when profile is dams-data-model.
+  conceptual_implementation_ref:
+    range: uriorcurie
+    description: >
+      Required for solution packages: reference to the enterprise-conceptual
+      SpecImpl / ModelPackage id (e.g. moex-enterprise-conceptual-model).
   solution_ref:
     range: ITSolution
     inlined: false

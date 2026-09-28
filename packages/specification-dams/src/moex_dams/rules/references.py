@@ -23,6 +23,27 @@ def check_references(body: LinkMLImplementationBody) -> tuple[Diagnostic, ...]:
     index = package_index(data)
     diagnostics: list[Diagnostic] = []
     source_uri = body.source_path or None
+    # Solution packages may realize enterprise conceptual entities that live
+    # outside this ModelPackage (ADR-021 conceptual_implementation_ref).
+    external_ok: set[str] = set()
+    if data.get("conceptual_implementation_ref"):
+        for mapping in data.get("mappings") or []:
+            if not isinstance(mapping, dict):
+                continue
+            if mapping.get("mapping_type") != "realizes":
+                continue
+            for ref in mapping.get("target_refs") or []:
+                external_ok.add(str(ref))
+        for entity in data.get("logical_entities") or []:
+            if not isinstance(entity, dict):
+                continue
+            for cref in entity.get("conceptual_entity_refs") or []:
+                s = str(cref)
+                if s.startswith("dams:concept/") and s in external_ok:
+                    continue
+                # Also allow dams:concept/* when enterprise ref is declared
+                if s.startswith("dams:concept/"):
+                    external_ok.add(s)
 
     def require(
         ref: str | None,
@@ -34,24 +55,26 @@ def check_references(body: LinkMLImplementationBody) -> tuple[Diagnostic, ...]:
     ) -> None:
         if not ref:
             return
-        if str(ref) not in index:
-            diagnostics.append(
-                Diagnostic(
-                    diagnostic_code=code,
-                    severity=DiagnosticSeverity.ERROR,
-                    diagnostic_message=f"Unresolved {label}: {ref}",
-                    conformance_phase=ConformancePhase.CORPORATE_SEMANTICS,
-                    subject_ref=subject,
-                    source_location=SourceLocation(
-                        source_uri=source_uri,
-                        json_pointer=_pointer(collection, subject or ""),
-                    )
-                    if subject
-                    else (
-                        SourceLocation(source_uri=source_uri) if source_uri else None
-                    ),
+        key = str(ref)
+        if key in index or key in external_ok:
+            return
+        diagnostics.append(
+            Diagnostic(
+                diagnostic_code=code,
+                severity=DiagnosticSeverity.ERROR,
+                diagnostic_message=f"Unresolved {label}: {ref}",
+                conformance_phase=ConformancePhase.CORPORATE_SEMANTICS,
+                subject_ref=subject,
+                source_location=SourceLocation(
+                    source_uri=source_uri,
+                    json_pointer=_pointer(collection, subject or ""),
                 )
+                if subject
+                else (
+                    SourceLocation(source_uri=source_uri) if source_uri else None
+                ),
             )
+        )
 
     for entity in data.get("logical_entities") or []:
         if not isinstance(entity, dict):
@@ -123,8 +146,18 @@ def check_references(body: LinkMLImplementationBody) -> tuple[Diagnostic, ...]:
                 )
             )
         for ref in list(sources) + list(targets):
+            sref = str(ref)
+            # External IRIs on aligns_with are intentional (ADR-021).
+            if (
+                mapping.get("mapping_type") == "aligns_with"
+                and (
+                    sref.startswith("http://")
+                    or sref.startswith("https://")
+                )
+            ):
+                continue
             require(
-                str(ref),
+                sref,
                 subject=mid,
                 collection="mappings",
                 code="DAMS-REF-004",

@@ -1305,6 +1305,27 @@ a {
   border-color: #9bb0d4;
 }
 
+.status-chip--draft-conformant {
+  color: #92400e;
+  background: #fef3c7;
+  border-color: #f59e0b;
+  font-weight: 700;
+}
+
+.status-chip--dams-level,
+.status-chip--impl-profile {
+  color: #075985;
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+}
+
+.module-meta-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+
 .iri-cell {
   display: inline-flex;
   align-items: center;

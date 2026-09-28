@@ -8,55 +8,55 @@
     {
       "path": "generated/contracts/moex-dams/0.1",
       "role": "contracts",
-      "content_digest": "sha256:181501ebd09ce034a193c576717917b07129d9938f86bc740d5c673cba2f55ac",
+      "content_digest": "sha256:afa09be82b2be98511a78fb2cafc32a38cd6b1e31d477cddfc8b0b0e7a4ea73d",
       "manifest_path": "generated/manifests/moex-dams-contracts.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/moex-dams.schema.json",
       "role": "json-schema",
-      "content_digest": "sha256:dc6c6900d4c6e2512f4b3ca95fbc1dfb4b819a822c8b139a6d0319ebb73dde01",
+      "content_digest": "sha256:6839bf58aa8c622b8dd31a32ba7d76013a9789db2ea65e2bf3b4032d043858c1",
       "manifest_path": "generated/manifests/moex-dams-json-schema.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/moex-dams.owl.ttl",
       "role": "owl",
-      "content_digest": "sha256:5316d45e453f0b3a7a4790fbf702bb9e0e3090f15d1997d1cc6f0783f02ccb01",
+      "content_digest": "sha256:eee4aba6dbda74f8b22d85e9c20305b23f09488b613346d967f7a25dace9ace5",
       "manifest_path": "generated/manifests/moex-dams-owl.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/moex-dams.shacl.ttl",
       "role": "shacl",
-      "content_digest": "sha256:f29b3f778e85d29c3996d4671f55bfb845e4c1fea254c95f588e505895c4277e",
+      "content_digest": "sha256:a4558a1577e089171f2bd1573d5aca5ceeee8e60e7412b04f265d6562295c8d9",
       "manifest_path": "generated/manifests/moex-dams-shacl.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/moex-dams.dbml",
       "role": "dbml",
-      "content_digest": "sha256:649d8e42f3a72ef4adc1cea34aefa261215f11318973993b0ccb43849b47c7e1",
+      "content_digest": "sha256:5088e99237ef8fb301d213195d69461e8392966465ecebc2d496a0ac0b568422",
       "manifest_path": "generated/manifests/moex-dams-dbml.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/diagrams",
       "role": "mermaid",
-      "content_digest": "sha256:083e86196ed5c29e1ca84310f4505cd5275fa4bb5c38130726e79aa1ccfb865d",
+      "content_digest": "sha256:a81ac5fbb9ecf86e83dc8a7625b1458243f44fc96fbd8d054398a4114448dc27",
       "manifest_path": "generated/manifests/moex-dams-mermaid.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/python/moex_dams.py",
       "role": "python",
-      "content_digest": "sha256:f0c3a703c9a81fafba95ee4af304bf2a44b0e0716bde997d217da596446725f8",
+      "content_digest": "sha256:5fc95c14d005dbf30901305ae063dec509dd8f6a1e72c305c5231decdaf52dec",
       "manifest_path": "generated/manifests/moex-dams-python.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/docs",
       "role": "doc",
-      "content_digest": "sha256:9f722d56da4897b1394f6dbb2e80c2b089730d9cd95bbb890f9ff3bc09aa40e5",
+      "content_digest": "sha256:54c4bd89b80d33236b52da9675f53c23ca1acbe52089592be0a65362a7dba93e",
       "manifest_path": "generated/manifests/moex-dams-doc.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/moex-dams.rdf.ttl",
       "role": "rdf",
-      "content_digest": "sha256:4e88d35845019ac1177999e6a9e1a448f955a9a45d9115462b2ab4db7a2debb8",
+      "content_digest": "sha256:3839d82ed8c48f34014728bd70782b2bbeff413df89140fa16f061bfa61a030d",
       "manifest_path": "generated/manifests/moex-dams-rdf.json"
     },
     {
@@ -65,6 +65,6 @@
       "content_digest": "sha256:142f4b53cd297311e8e33fd64e46ddaa1688289122e08441e5c9a5ac028efaf9"
     }
   ],
-  "content_digest": "sha256:4aced1e0e49a3c74dc3354a16d546b4b6565cfa8b0609b022fc0ace49370cfd4",
-  "generated_at": "2026-09-28T07:21:16.054794+00:00"
+  "content_digest": "sha256:919dc6f2538cd0352576d97e2a3039da23bedd47948b08e5bd655327217b8d0b",
+  "generated_at": "2026-09-28T12:19:02.574239+00:00"
 }

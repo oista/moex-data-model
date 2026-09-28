@@ -1,10 +1,10 @@
 {
-  "id": "pubconf:moex:module:trading-solution:dams-logical-and-physical",
+  "id": "pubconf:moex:module:trading-solution:dams-solution",
   "title": "Trading solution (demo)",
-  "description": "Publication contract assessment for dams-logical-and-physical against moex-dams@0.1",
+  "description": "Publication contract assessment for dams-solution against moex-dams@0.1",
   "implementation_ref": "moex:module:trading-solution",
   "reference_specification_ref": "moex-dams@0.1",
-  "profile_ref": "dams-logical-and-physical",
+  "profile_ref": "dams-solution",
   "overall_publication_status": "draft-conformant",
   "requirement_results": [
     {

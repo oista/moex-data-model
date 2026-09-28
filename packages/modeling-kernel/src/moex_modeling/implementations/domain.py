@@ -4,7 +4,12 @@ from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict
 
-from moex_modeling.shared.enums import LifecycleStatus, StandardFamily
+from moex_modeling.shared.enums import (
+    DAMSModelLevel,
+    ImplementationProfile,
+    LifecycleStatus,
+    StandardFamily,
+)
 from moex_modeling.shared.types import (
     AnnotationPair,
     ProvenanceRecord,
@@ -34,3 +39,7 @@ class SpecificationImplementation(BaseModel):
     source: SourceDescriptor
     provenance: ProvenanceRecord | None = None
     body_ref: str | None = None
+    # Orthogonal to implementation_kind (StandardFamily) and ADR-016 publish profile.
+    implementation_profile: ImplementationProfile | None = None
+    # Only valid when implementation_profile == dams-data-model (ADR-021).
+    dams_model_level: DAMSModelLevel | None = None

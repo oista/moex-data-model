@@ -34,7 +34,20 @@ nodes:
     conforms_to: moex-dams
     module_id: moex:module:trading-solution
     order: 110
-    description: Demo IT-solution model conforming to DAMS (Trading solution).
+    description: >
+      Demo IT-solution DAMS Impl (dams-data-model / solution). Realizes
+      enterprise conceptual entities; not the enterprise SoT.
+
+  - id: moex-enterprise-conceptual-model
+    role: specification_implementation
+    title: MOEX Enterprise Conceptual Model
+    version: "0.1.0"
+    conforms_to: moex-dams
+    module_id: moex:module:enterprise-conceptual
+    order: 108
+    description: >
+      Canonical enterprise-conceptual DAMS Impl (Party & Trading Participation).
+      Primary target for ExternalTermSelection alignsWith (ADR-021).
 
   - id: client-accounts-csv-draft
     role: specification_implementation

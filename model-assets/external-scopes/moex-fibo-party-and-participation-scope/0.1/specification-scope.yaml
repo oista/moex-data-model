@@ -56,14 +56,14 @@ excluded_areas:
     rationale: Business processes out of scope.
 
 local_concept_refs:
-  - moex:LegalEntity
-  - moex:CorporateGroup
-  - moex:OrganizationIdentifier
-  - moex:TradingParticipation
-  - moex:TradingVenue
-  - moex:TradingSection
-  - moex:Admission
-  - moex:Agreement
-  - moex:AccountRelationship
-  - moex:RegistrationAction
-  - moex:SupportingDocument
+  - dams:concept/LegalEntity
+  - dams:concept/CorporateGroup
+  - dams:concept/OrganizationIdentifier
+  - dams:concept/TradingParticipation
+  - dams:concept/TradingVenue
+  - dams:concept/TradingSection
+  - dams:concept/Admission
+  - dams:concept/Agreement
+  - dams:concept/AccountRelationship
+  - dams:concept/RegistrationAction
+  - dams:concept/SupportingDocument
