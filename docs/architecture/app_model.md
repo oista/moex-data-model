@@ -18,8 +18,9 @@ superseded_by: MODELING_ARCHITECTURE.md
 **Уже совпало (Workbench editors):** Monaco YAML + `workspace_document` draft API + validate `source=draft`.  
 **Уже совпало (Entity form slice):** controlled mutations add/update/delete LogicalEntity/LogicalAttribute; dirty Monaco → PUT before mutation.  
 **Уже совпало (Stage 3 narrow-v3):** `publication_request` + publish API + GitHub write / local branch+stub review into this repo.  
-**Уже совпало (Semantic diff CLI):** kernel `SemanticDiffReport`; `moex-model semantic-diff` + `diff_implementations`.  
-**Still-later:** live field-level Monaco↔form binding, semantic diff UI, merge automation, `apps/worker`, CLI `import`/`map` real, OIDC, `diagram_layout` / `external_registry_cache`.  
+**Already shipped (Semantic diff preview):** kernel `SemanticDiffReport`; `moex-model semantic-diff`; `POST /workspaces/{id}/semantic-diff`; Web **Review changes**.
+
+**Still-later:** live field-level Monaco↔form binding, merge automation / PR attach, `apps/worker`, CLI `import`/`map` real, OIDC, `diagram_layout` / `external_registry_cache`.
 `packages/ontology/` остаётся shim. Миграция путей: [docs/migration/model-src-to-model-assets.md](../migration/model-src-to-model-assets.md).
 
 ## Предметная модель: роли как экземпляры, не subclass

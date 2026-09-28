@@ -207,4 +207,122 @@ describe("EditorPage", () => {
       expect(mut).toBeTruthy();
     });
   });
+
+  it("saves draft then previews semantic diff", async () => {
+    const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
+      if (url === "/api/workspaces" && init?.method === "POST") {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            id: "ws-workbench",
+            name: "Workbench",
+            members: [],
+          }),
+        };
+      }
+      if (
+        url.includes("/documents/trading") &&
+        !url.includes("/mutations") &&
+        init?.method !== "PUT"
+      ) {
+        return {
+          ok: false,
+          status: 404,
+          statusText: "Not Found",
+          text: async () => "missing",
+        };
+      }
+      if (url === "/api/implementations/trading/body") {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            content: PUBLISHED,
+            content_digest: "sha256:pub",
+            path: "trading.yaml",
+          }),
+        };
+      }
+      if (url.includes("/documents/trading") && init?.method === "PUT") {
+        const body = JSON.parse(String(init.body));
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            workspace_id: "ws-workbench",
+            doc_key: "trading",
+            content: body.content,
+            base_digest: "sha256:saved",
+            updated_by: "dev",
+          }),
+        };
+      }
+      if (url.includes("/semantic-diff") && init?.method === "POST") {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            id: "semantic-diff:published:draft",
+            base_label: "published",
+            target_label: "draft:ws-workbench",
+            changes: [
+              {
+                change_code: "DAMS-DIFF-REMOVE",
+                category: "breaking",
+                subject_ref: "dams:logical/trading/Client/fullName",
+                message: "Removed attribute",
+                path: "logical_attribute",
+              },
+            ],
+            has_breaking: true,
+            counts: {
+              breaking: 1,
+              backward_compatible: 0,
+              governance: 0,
+              operational: 0,
+              non_breaking: 0,
+            },
+          }),
+        };
+      }
+      return {
+        ok: false,
+        status: 500,
+        statusText: "err",
+        text: async () => "unexpected",
+      };
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const qc = new QueryClient({
+      defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
+    });
+    render(
+      <QueryClientProvider client={qc}>
+        <MemoryRouter>
+          <EditorPage />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await waitFor(() => expect(screen.getByTestId("monaco")).toBeTruthy());
+    fireEvent.click(screen.getByTestId("review-changes"));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("semantic-diff-result")).toBeTruthy();
+    });
+    expect(screen.getByText(/breaking: 1/i)).toBeTruthy();
+    expect(screen.getByText(/DAMS-DIFF-REMOVE/)).toBeTruthy();
+
+    const put = fetchMock.mock.calls.find(
+      (c) => c[1]?.method === "PUT" && String(c[0]).includes("/documents/trading"),
+    );
+    expect(put).toBeTruthy();
+    const diffCall = fetchMock.mock.calls.find(
+      (c) =>
+        c[1]?.method === "POST" && String(c[0]).includes("/semantic-diff"),
+    );
+    expect(diffCall).toBeTruthy();
+  });
 });

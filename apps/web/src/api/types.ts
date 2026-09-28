@@ -128,3 +128,20 @@ export type Publication = {
   review_id: string;
   status: string;
 };
+
+export type SemanticDiffChange = {
+  change_code: string;
+  category: string;
+  subject_ref: string | null;
+  message: string;
+  path: string | null;
+};
+
+export type SemanticDiffReport = {
+  id: string;
+  base_label: string;
+  target_label: string;
+  changes: SemanticDiffChange[];
+  has_breaking: boolean;
+  counts: Record<string, number>;
+};

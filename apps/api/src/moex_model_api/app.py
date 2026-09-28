@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session, sessionmaker
 
 from moex_dams.application.assess import assess_implementation
+from moex_dams.application.diff import diff_implementations
 from moex_git import FileChange, make_git_provider
 from moex_git.ports import GitProvider
 from moex_model_cli.bootstrap import SlicePaths, find_repo_root
@@ -115,6 +116,23 @@ class MutationRequest(BaseModel):
     owner_element_id: str | None = None
     element_id: str | None = None
     patch: dict | None = None
+
+
+class SemanticDiffChangeOut(BaseModel):
+    change_code: str
+    category: str
+    subject_ref: str | None = None
+    message: str
+    path: str | None = None
+
+
+class SemanticDiffOut(BaseModel):
+    id: str
+    base_label: str
+    target_label: str
+    changes: list[SemanticDiffChangeOut]
+    has_breaking: bool
+    counts: dict[str, int]
 
 
 class PublicationCreate(BaseModel):
@@ -463,6 +481,65 @@ def create_app(
             content=doc.content,
             base_digest=doc.base_digest,
             updated_by=doc.updated_by,
+        )
+
+    @app.post(
+        "/workspaces/{workspace_id}/semantic-diff",
+        response_model=SemanticDiffOut,
+    )
+    def preview_semantic_diff(
+        workspace_id: str,
+        request: Request,
+        session: Session = Depends(get_session),
+    ) -> SemanticDiffOut:
+        """Compare published trading YAML (base) vs workspace draft (target)."""
+        actor = ensure_actor(request, session)
+        draft = SqlDocumentStore(session).get(workspace_id, "trading")
+        if draft is None:
+            raise HTTPException(status_code=400, detail="draft document missing")
+
+        root = find_repo_root()
+        paths = SlicePaths.resolve(root=root)
+        tmp_path: Path | None = None
+        try:
+            tmp = tempfile.NamedTemporaryFile(
+                mode="w", suffix=".yaml", encoding="utf-8", delete=False
+            )
+            tmp.write(draft.content)
+            tmp.close()
+            tmp_path = Path(tmp.name)
+            report = diff_implementations(
+                schema_path=paths.schema,
+                left_path=paths.implementation,
+                right_path=tmp_path,
+                base_label="published",
+                target_label=f"draft:{workspace_id}",
+            )
+        finally:
+            if tmp_path is not None:
+                tmp_path.unlink(missing_ok=True)
+
+        SqlAuditStore(session).record(
+            "semantic_diff.preview",
+            actor,
+            f"{workspace_id}:trading",
+        )
+        return SemanticDiffOut(
+            id=report.id,
+            base_label=report.base_label,
+            target_label=report.target_label,
+            changes=[
+                SemanticDiffChangeOut(
+                    change_code=c.change_code,
+                    category=c.category.value,
+                    subject_ref=c.subject_ref,
+                    message=c.message,
+                    path=c.path,
+                )
+                for c in report.changes
+            ],
+            has_breaking=report.has_breaking,
+            counts=report.counts_by_category(),
         )
 
     def _publication_out(row: PublicationRecord) -> PublicationOut:

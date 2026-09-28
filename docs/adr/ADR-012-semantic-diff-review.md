@@ -30,7 +30,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 
 Прямая запись в published branch без diff/review не допускается. Breaking changes требуют migration note / approval (IMPLEMENTATION_PLAN этап 10).
 
-На текущем срезе: `moex-model validate` / `assess` даёт `ConformanceReport`; **`moex-model semantic-diff`** и `specification-dams.diff_implementations` классифицируют изменения (breaking / compatible / governance / operational). **PR automation / API preview / web diff UI ещё нет.**
+На текущем срезе: `moex-model validate` / `assess` даёт `ConformanceReport`; **`moex-model semantic-diff`** и `specification-dams.diff_implementations` классифицируют изменения (breaking / compatible / governance / operational). **API preview** — `POST /workspaces/{id}/semantic-diff`; **Web** — кнопка Review changes на editor. **PR automation ещё нет.**
 
 ## Consequences
 

@@ -3,12 +3,28 @@ import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, setLastJobId } from "../api/client";
-import type { Job, Publication, WorkspaceDocument } from "../api/types";
+import type {
+  Job,
+  Publication,
+  SemanticDiffReport,
+  WorkspaceDocument,
+} from "../api/types";
 import { EntityForms } from "../components/EntityForms";
 import { StatusBadge } from "../components/StatusBadge";
 
 const WS_ID = "ws-workbench";
 const IMPL = "moex:implementation:trading:1.0.0";
+
+function categoryBadgeClass(category: string): string {
+  if (category === "breaking") return "badge bad";
+  if (
+    category === "backward_compatible" ||
+    category === "non_breaking"
+  ) {
+    return "badge ok";
+  }
+  return "badge neutral";
+}
 
 export function EditorPage() {
   const [value, setValue] = useState("");
@@ -18,6 +34,7 @@ export function EditorPage() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [job, setJob] = useState<Job | null>(null);
   const [publication, setPublication] = useState<Publication | null>(null);
+  const [diff, setDiff] = useState<SemanticDiffReport | null>(null);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
@@ -94,6 +111,16 @@ export function EditorPage() {
     onSuccess: setJob,
   });
 
+  const reviewChanges = useMutation({
+    mutationFn: async () => {
+      await api.putDocument(WS_ID, { content: value, base_digest: baseDigest });
+      setDirty(false);
+      setSourceLabel("draft");
+      return api.previewSemanticDiff(WS_ID);
+    },
+    onSuccess: setDiff,
+  });
+
   const publish = useMutation({
     mutationFn: async () => {
       await api.putDocument(WS_ID, { content: value, base_digest: baseDigest });
@@ -131,7 +158,11 @@ export function EditorPage() {
   }, [dirty, value, baseDigest]);
 
   const formsBusy =
-    loading || save.isPending || validate.isPending || publish.isPending;
+    loading ||
+    save.isPending ||
+    validate.isPending ||
+    reviewChanges.isPending ||
+    publish.isPending;
 
   return (
     <section>
@@ -166,6 +197,14 @@ export function EditorPage() {
         </button>
         <button
           type="button"
+          onClick={() => reviewChanges.mutate()}
+          disabled={loading || reviewChanges.isPending || !value}
+          data-testid="review-changes"
+        >
+          Review changes
+        </button>
+        <button
+          type="button"
           onClick={() => publish.mutate()}
           disabled={loading || publish.isPending || !value}
         >
@@ -185,6 +224,9 @@ export function EditorPage() {
       {validate.isError && (
         <p className="error">{(validate.error as Error).message}</p>
       )}
+      {reviewChanges.isError && (
+        <p className="error">{(reviewChanges.error as Error).message}</p>
+      )}
       {publish.isError && (
         <p className="error">{(publish.error as Error).message}</p>
       )}
@@ -197,6 +239,46 @@ export function EditorPage() {
             <StatusBadge status={job.status} />
           </div>
           <p>{job.result_summary}</p>
+        </div>
+      )}
+
+      {diff && (
+        <div className="panel" data-testid="semantic-diff-result">
+          <div className="row">
+            <strong>Semantic diff</strong>
+            <span className="badge neutral">
+              {diff.base_label} → {diff.target_label}
+            </span>
+            {diff.has_breaking ? (
+              <span className="badge bad">breaking</span>
+            ) : (
+              <span className="badge ok">no breaking</span>
+            )}
+          </div>
+          <p className="lede" style={{ marginBottom: "0.5rem" }}>
+            {diff.changes.length === 0
+              ? "No semantic changes versus published."
+              : Object.entries(diff.counts)
+                  .filter(([, n]) => n > 0)
+                  .map(([cat, n]) => `${cat}: ${n}`)
+                  .join(" · ")}
+          </p>
+          {diff.changes.length > 0 && (
+            <ul className="diff-list">
+              {diff.changes.map((change, idx) => (
+                <li key={`${change.change_code}-${change.subject_ref}-${idx}`}>
+                  <span className={categoryBadgeClass(change.category)}>
+                    {change.category}
+                  </span>{" "}
+                  <code>{change.change_code}</code>{" "}
+                  {change.subject_ref && (
+                    <code className="diff-subject">{change.subject_ref}</code>
+                  )}
+                  <div>{change.message}</div>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 

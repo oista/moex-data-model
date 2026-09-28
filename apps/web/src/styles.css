@@ -182,6 +182,25 @@ th {
   margin-bottom: 1rem;
 }
 
+.diff-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.diff-list li {
+  border-top: 1px solid var(--line);
+  padding-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.diff-subject {
+  color: var(--muted);
+}
+
 .model-list {
   list-style: none;
   padding: 0;
