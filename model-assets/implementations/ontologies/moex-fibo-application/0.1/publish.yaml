@@ -1,5 +1,5 @@
-# Publication stub for architecture-catalog module_id (ADR-018).
-# Full three-artifact explorer is out of scope for MVP.
+# Governed MOEX FIBO application ontology (ADR-018).
+# Publication contract: fibo-application-ontology (ADR-019).
 module_id: moex:module:fibo-application
 kind: publication_module
 version: "1"
@@ -10,12 +10,19 @@ description: >
   Governed MOEX application / extension ontology over a pinned FIBO extract
   (imported module + extension + DAMS mapping). ADR-018.
 profile: implementation
+implements:
+  - specification_ref: moex-fibo-profile@0.1
+    profile_ref: fibo-application-ontology
+    conformance_target: draft
 sections:
   - id: overview
     title: Overview
     description: Application ontology layout and governance
     type: markdown-doc
     kind: overview
+    satisfies:
+      - fibo:overview
+      - implementation:overview
     source:
       format: markdown
       path: README.md
@@ -25,6 +32,69 @@ sections:
     description: Extension conformance level, seed and artifact refs
     type: key-value
     kind: conformance
+    satisfies:
+      - fibo:conformance
+      - implementation:conformance
+      - fibo:declared-binding
     source:
       format: yaml
       path: ontology-application.yaml
+
+  - id: classes
+    title: Classes
+    description: Imported FIBO, MOEX extension, and mapping bridge classes
+    type: entity-table
+    kind: classes
+    satisfies:
+      - fibo:ontology-classes
+    source:
+      format: yaml
+      path: publications/classes.yaml
+      select: classes
+    key_column: id
+    columns:
+      - id
+      - title
+      - layer
+      - iri
+    filterable:
+      - layer
+
+  - id: bindings
+    title: Bindings
+    description: DAMS ↔ FIBO mapping bridge
+    type: entity-table
+    kind: bindings
+    satisfies:
+      - fibo:bindings
+    source:
+      format: yaml
+      path: publications/bindings.yaml
+      select: bindings
+    key_column: id
+    columns:
+      - id
+      - title
+      - predicate
+      - subject_id
+      - object_id
+
+  - id: source
+    title: Source artifacts
+    description: Three-layer TTL body (import + extension + mapping)
+    type: entity-table
+    kind: source
+    satisfies:
+      - fibo:source
+    source:
+      format: yaml
+      path: publications/sources.yaml
+      select: sources
+    key_column: id
+    columns:
+      - id
+      - title
+      - path
+      - layer
+    filterable:
+      - layer

@@ -1,0 +1,249 @@
+"""Seamless Spec→Impl nav nest + catalog publication-contract gate."""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+import pytest
+import yaml
+
+from moex_publication_viewer.build import (
+    attach_impl_section_nav_children,
+    compile_catalog,
+    compile_modules,
+    enrich_dams_explorer_implementations,
+    enrich_fibo_explorer_implementations,
+    impl_section_nav_children,
+)
+from moex_publication_viewer.catalog_loader import load_architecture_catalog
+from moex_publication_viewer.models.catalog_models import ArchitectureCatalog, CatalogNode
+from moex_publication_viewer.models.publication_models import (
+    PublicationItem,
+    PublicationModule,
+    PublicationSection,
+)
+from moex_publication_viewer.validators import (
+    ValidationError,
+    check_catalog_publication_contract_gate,
+)
+
+REPO = Path(__file__).resolve().parents[3]
+DAMS_MODULE = "moex:module:dams"
+FIBO_PROFILE = "moex:module:fibo-profile"
+FIBO_APP = "moex:module:fibo-application"
+
+
+def test_impl_section_nav_children_skips_explorer() -> None:
+    mod = PublicationModule(
+        module_id="moex:module:demo",
+        title="Demo",
+        sections=[
+            PublicationSection(
+                id="explorer", title="E", type="explorer", items=[]
+            ),
+            PublicationSection(
+                id="overview", title="Overview", type="markdown-doc", kind="overview"
+            ),
+            PublicationSection(
+                id="conformance",
+                title="Conformance",
+                type="key-value",
+                kind="conformance",
+            ),
+        ],
+    )
+    kids = impl_section_nav_children("demo-impl", mod)
+    assert [c.id for c in kids] == [
+        "implnav:demo-impl:overview",
+        "implnav:demo-impl:conformance",
+    ]
+    assert kids[0].attributes["target_module_id"] == "moex:module:demo"
+    assert kids[0].attributes["section_id"] == "overview"
+
+
+def test_attach_impl_section_nav_children() -> None:
+    modules = [
+        PublicationModule(
+            module_id="moex:module:x",
+            title="X",
+            sections=[
+                PublicationSection(
+                    id="overview", title="Overview", type="markdown-doc"
+                )
+            ],
+        )
+    ]
+    refs = [
+        PublicationItem(
+            id="x-impl",
+            title="X",
+            attributes={"kind": "implementation_ref", "module_id": "moex:module:x"},
+        )
+    ]
+    out = attach_impl_section_nav_children(refs, modules)
+    assert len(out[0].children) == 1
+    assert out[0].attributes["nav_section_count"] == 1
+
+
+def test_repo_fibo_impl_nested_under_implementations() -> None:
+    modules = compile_modules(REPO, enforce_publication_contract=False)
+    catalog = compile_catalog(REPO, modules)
+    enrich_fibo_explorer_implementations(modules, catalog)
+    profile = next(m for m in modules if m.module_id == FIBO_PROFILE)
+    explorer = next(s for s in profile.sections if s.type == "explorer")
+    impls = next(i for i in explorer.items if i.id == "group:implementations")
+    app = next(c for c in impls.children if c.id == "moex-fibo-application")
+    assert app.attributes.get("kind") == "implementation_ref"
+    assert app.children, "expected build-time section_ref children"
+    ids = {c.attributes.get("section_id") for c in app.children}
+    assert {"overview", "conformance", "classes", "bindings", "source"} <= ids
+    assert all(c.attributes.get("target_module_id") == FIBO_APP for c in app.children)
+    # Spec explorer roots remain (no body swap at build layer)
+    roots = {i.id for i in explorer.items}
+    assert "group:taxonomy" in roots or "group:overview" in roots
+    assert "group:implementations" in roots
+
+
+def test_repo_dams_trading_has_nested_section_refs() -> None:
+    modules = compile_modules(REPO, enforce_publication_contract=False)
+    catalog = compile_catalog(REPO, modules)
+    enrich_dams_explorer_implementations(modules, catalog)
+    dams = next(m for m in modules if m.module_id == DAMS_MODULE)
+    explorer = next(s for s in dams.sections if s.type == "explorer")
+    impls = next(i for i in explorer.items if i.id == "group:implementations")
+    trading = next(c for c in impls.children if c.id == "trading-solution")
+    assert trading.children
+    assert all(
+        c.attributes.get("target_module_id") == "moex:module:trading-solution"
+        for c in trading.children
+    )
+
+
+def test_catalog_gate_passes_repo() -> None:
+    modules = compile_modules(REPO, enforce_publication_contract=False)
+    catalog = load_architecture_catalog(REPO)
+    assert catalog is not None
+    check_catalog_publication_contract_gate(catalog, modules, REPO)
+
+
+def test_catalog_gate_fails_without_implements(tmp_path: Path) -> None:
+    catalog = ArchitectureCatalog(
+        nodes=[
+            CatalogNode(
+                id="spec-a",
+                role="reference_specification",
+                title="A",
+                version="0.1",
+                module_id="moex:module:a",
+            ),
+            CatalogNode(
+                id="impl-a",
+                role="specification_implementation",
+                title="Impl",
+                conforms_to="spec-a",
+                module_id="moex:module:impl-a",
+            ),
+        ]
+    )
+    # Spec requirements file present
+    spec_dir = tmp_path / "model-assets" / "specifications" / "spec-a" / "0.1"
+    spec_dir.mkdir(parents=True)
+    (spec_dir / "publication-requirements.yaml").write_text(
+        yaml.dump(
+            {
+                "version": "0.1",
+                "specification_ref": "spec-a@0.1",
+                "profiles": [{"id": "p", "requirements": []}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    modules = [
+        PublicationModule(
+            module_id="moex:module:impl-a",
+            title="Impl",
+            profile="implementation",
+            implements=[],
+            sections=[],
+        )
+    ]
+    with pytest.raises(ValidationError, match="missing implements"):
+        check_catalog_publication_contract_gate(catalog, modules, tmp_path)
+
+
+def test_catalog_gate_fails_without_requirements_file(tmp_path: Path) -> None:
+    catalog = ArchitectureCatalog(
+        nodes=[
+            CatalogNode(
+                id="spec-b",
+                role="reference_specification",
+                title="B",
+                version="0.1",
+            ),
+            CatalogNode(
+                id="impl-b",
+                role="specification_implementation",
+                title="Impl",
+                conforms_to="spec-b",
+                module_id="moex:module:impl-b",
+            ),
+        ]
+    )
+    modules = [
+        PublicationModule(
+            module_id="moex:module:impl-b",
+            title="Impl",
+            profile="implementation",
+            implements=[
+                {
+                    "specification_ref": "spec-b@0.1",
+                    "profile_ref": "p",
+                }
+            ],
+            sections=[],
+        )
+    ]
+    with pytest.raises(ValidationError, match="publication-requirements.yaml"):
+        check_catalog_publication_contract_gate(catalog, modules, tmp_path)
+
+
+def test_catalog_gate_exempt_skips_implements() -> None:
+    catalog = ArchitectureCatalog(
+        nodes=[
+            CatalogNode(
+                id="spec-c",
+                role="reference_specification",
+                title="C",
+                version="0.1",
+            ),
+            CatalogNode(
+                id="impl-c",
+                role="specification_implementation",
+                title="Preview",
+                conforms_to="spec-c",
+                module_id="moex:module:impl-c",
+                contract_exempt=True,
+            ),
+        ]
+    )
+    modules = [
+        PublicationModule(
+            module_id="moex:module:impl-c",
+            title="Preview",
+            profile="implementation",
+            implements=[],
+            sections=[],
+        )
+    ]
+    # No Spec requirements needed when only exempt Impls
+    check_catalog_publication_contract_gate(catalog, modules, Path("."))
+
+
+def test_viewer_js_drops_body_swap() -> None:
+    js = (REPO / "apps" / "viewer" / "static" / "viewer.js").read_text(
+        encoding="utf-8"
+    )
+    assert "never swap to Impl" in js or "seamless nest" in js
+    assert "Reveal sections" in js
+    assert "Open implementation" not in js
+    assert "target_module_id" in js

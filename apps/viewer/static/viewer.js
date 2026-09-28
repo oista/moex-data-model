@@ -143,17 +143,9 @@
 
   function bodyModuleForCatalogNode(node) {
     if (!node) return null;
+    // Spec body is always the Spec publication module — never swap to Impl
+    // (seamless nest: Impl sections live under implementation_ref children).
     if (node.role === "reference_specification") {
-      const cur = currentNodeId ? catalogNode(currentNodeId) : null;
-      if (cur?.conforms_to === node.id && cur.module_id) {
-        return modules.find((m) => m.module_id === cur.module_id) || null;
-      }
-      if (currentModuleId) {
-        const linked = nodeForModule(currentModuleId);
-        if (linked && (linked.id === node.id || linked.conforms_to === node.id)) {
-          return modules.find((m) => m.module_id === currentModuleId) || null;
-        }
-      }
       if (node.module_id) {
         return modules.find((m) => m.module_id === node.module_id) || null;
       }
@@ -170,6 +162,8 @@
     openGroups.add(catalogOpenKey(node.id));
     if (node.role === "specification_implementation" && node.conforms_to) {
       openGroups.add(catalogOpenKey(node.conforms_to));
+      openGroups.add("group:implementations");
+      openGroups.add(node.id);
     }
     if (node.module_id) {
       const mod = modules.find((m) => m.module_id === node.module_id);
@@ -529,16 +523,26 @@
         }
       }
 
-      function openPublicationSection(sectionId) {
+      function openPublicationSection(sectionId, targetModuleId) {
         selectedItemId = null;
-        const node = nodeForModule(mod.module_id);
+        const mid = targetModuleId || mod.module_id;
+        const node = nodeForModule(mid) || nodeForModule(mod.module_id);
         if (node) currentNodeId = node.id;
+        // Keep parent Spec expanded when opening a nested Impl section.
+        if (node?.conforms_to) {
+          openGroups.add(catalogOpenKey(node.conforms_to));
+        }
+        if (node?.role === "specification_implementation") {
+          openGroups.add(catalogOpenKey(node.id));
+          openGroups.add("group:implementations");
+          openGroups.add(node.id);
+        }
         setHash({
           node: node ? node.id : null,
-          module: shortModule(mod.module_id),
+          module: shortModule(mid),
           section: sectionId,
         });
-        showModule(mod.module_id, { section: sectionId });
+        showModule(mid, { section: sectionId });
       }
 
       function openExplorerItem(itemId) {
@@ -552,11 +556,22 @@
         ) {
           if (attrs.section_id) {
             if (found?.group) openGroups.add(found.group.id);
-            openPublicationSection(attrs.section_id);
+            // Expand parent implementation_ref when nested under it.
+            if (found?.ancestors) {
+              found.ancestors.forEach((a) => openGroups.add(a.id));
+            }
+            openPublicationSection(
+              attrs.section_id,
+              attrs.target_module_id || null
+            );
             return;
           }
         }
-        // implementation_ref: select item → description card (Open navigates)
+        // implementation_ref: select item → description card (expand children in tree)
+        if (attrs.kind === "implementation_ref") {
+          openGroups.add(itemId);
+          openGroups.add("group:implementations");
+        }
         const node = nodeForModule(mod.module_id);
         setHash({
           node: node ? node.id : null,
@@ -1875,27 +1890,54 @@
       attrs.description ||
       cat?.description ||
       `Registered implementation conforming to ${attrs.conforms_to || "specification"}.`;
+    const kidCount = (item.children || []).length;
     card.innerHTML = `
       <header class="detail-head">
         <h1>${escapeHtml(item.title || item.id)}</h1>
         <div class="badge-row">
           <span class="badge-pill">implementation</span>
           ${attrs.version ? `<span class="badge-pill">${escapeHtml(String(attrs.version))}</span>` : ""}
+          ${kidCount ? `<span class="badge-pill">${kidCount} sections</span>` : ""}
         </div>
         <p class="muted">${escapeHtml(attrs.catalog_node_id || item.id)}</p>
       </header>
       <p class="detail-desc">${escapeHtml(desc)}</p>
     `;
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "spec-link";
-    btn.textContent = "Open implementation";
-    btn.addEventListener("click", () => {
-      const node = catalogNode(attrs.catalog_node_id || item.id);
-      if (node) navigateToNode(node);
-      else if (attrs.module_id) navigateToModule(attrs.module_id);
-    });
-    card.appendChild(btn);
+    if (kidCount) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "spec-link";
+      btn.textContent = "Reveal sections";
+      btn.addEventListener("click", () => {
+        openGroups.add("group:implementations");
+        openGroups.add(item.id);
+        const first = item.children[0];
+        const targetMod =
+          first?.attributes?.target_module_id || attrs.module_id;
+        const sectionId =
+          first?.attributes?.section_id || first?.attributes?.target_section_id;
+        if (targetMod && sectionId) {
+          const node = catalogNode(attrs.catalog_node_id || item.id);
+          if (node?.conforms_to) {
+            openGroups.add(catalogOpenKey(node.conforms_to));
+          }
+          if (node) currentNodeId = node.id;
+          setHash({
+            node: node ? node.id : null,
+            module: shortModule(targetMod),
+            section: sectionId,
+          });
+          showModule(targetMod, { section: sectionId });
+          return;
+        }
+        renderModuleNav({
+          item: item.id,
+          section: explorerSection(modules.find((m) => m.module_id === currentModuleId))
+            ?.id,
+        });
+      });
+      card.appendChild(btn);
+    }
     return card;
   }
 
@@ -2086,17 +2128,21 @@
           btn.title = child.description || "";
           btn.addEventListener("click", () => {
             if (child.attributes?.kind === "implementation_ref") {
-              const cat = catalogNode(
-                child.attributes.catalog_node_id || child.id
-              );
-              if (cat) {
-                navigateToNode(cat);
-                return;
-              }
-              if (child.attributes.module_id) {
-                navigateToModule(child.attributes.module_id);
-                return;
-              }
+              openGroups.add(item.id);
+              openGroups.add(child.id);
+              const node = nodeForModule(mod.module_id);
+              setHash({
+                node: node ? node.id : null,
+                module: shortModule(mod.module_id),
+                section: expl.id,
+                item: child.id,
+              });
+              if (node) currentNodeId = node.id;
+              showModule(mod.module_id, {
+                section: expl.id,
+                item: child.id,
+              });
+              return;
             }
             openGroups.add(item.id);
             const node = nodeForModule(mod.module_id);

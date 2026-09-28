@@ -1,0 +1,14 @@
+# Source artifacts of the application ontology (three-layer body).
+sources:
+  - id: fibo-import-module
+    title: Pinned FIBO import module
+    path: metamodel/fibo-import-module.ttl
+    layer: imported_module
+  - id: moex-fibo-extension
+    title: MOEX FIBO extension
+    path: metamodel/moex-fibo-extension.ttl
+    layer: extension
+  - id: moex-dams-fibo-mapping
+    title: DAMS–FIBO mapping bridge
+    path: metamodel/moex-dams-fibo-mapping.ttl
+    layer: mapping

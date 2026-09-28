@@ -104,6 +104,7 @@ def test_repo_catalog_passes_validation_with_modules():
         "moex:module:fibo-profile",
         "moex:module:fibo-application",
         "moex:module:trading-solution",
+        "moex:module:client-accounts-csv-draft",
         "moex:module:ontology-catalog",
     }
     validate_architecture_catalog(catalog, module_ids)

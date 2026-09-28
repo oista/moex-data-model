@@ -1,0 +1,18 @@
+# Classes in MOEX FIBO application ontology stubs (ADR-018 / seamless nav).
+classes:
+  - id: FormalOrganization
+    title: formal organization
+    layer: imported_module
+    iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/FormalBusinessOrganizations/FormalOrganization
+  - id: LegalPerson
+    title: legal person
+    layer: imported_module
+    iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
+  - id: ExchangeParticipant
+    title: exchange participant
+    layer: extension
+    iri: https://data.moex.com/ontology/fibo-ext/ExchangeParticipant
+  - id: Client
+    title: Client
+    layer: mapping
+    iri: https://data.moex.com/dams/concept/Client

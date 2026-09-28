@@ -1,0 +1,67 @@
+# FIBO profile publication requirements (ADR-019)
+# Inherited by governed SpecificationImplementation modules (profile: implementation).
+
+version: "0.1"
+specification_ref: moex-fibo-profile@0.1
+
+profiles:
+  - id: fibo-application-ontology
+    title: MOEX FIBO application ontology publication
+    applies_to: implementation
+    parent_profile_ref: implementation
+    description: >
+      Publication contract for MOEX application / extension ontologies that
+      conform to moex-fibo-profile: overview, conformance, class index,
+      mapping bindings, and source artifacts (ADR-018 three-layer body).
+    requirements:
+      - id: fibo:overview
+        kind: required-section
+        semantic_capability: overview
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [overview]
+        accepted_renderers: [markdown-doc, overview, key-value]
+        applies_to_profile: implementation
+
+      - id: fibo:conformance
+        kind: required-section
+        semantic_capability: conformance
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [conformance]
+        accepted_renderers: [key-value, entity-table, conformance]
+        applies_to_profile: implementation
+
+      - id: fibo:ontology-classes
+        kind: required-section
+        semantic_capability: ontology-classes
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [classes]
+        accepted_renderers: [entity-table, explorer, ontology-list]
+        applies_to_profile: implementation
+
+      - id: fibo:bindings
+        kind: required-section
+        semantic_capability: bindings
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [bindings]
+        accepted_renderers: [entity-table, mapping-table, key-value]
+        applies_to_profile: implementation
+
+      - id: fibo:source
+        kind: required-section
+        semantic_capability: source
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [source]
+        accepted_renderers: [entity-table, key-value, markdown-doc]
+        applies_to_profile: implementation
+
+      - id: fibo:declared-binding
+        kind: required-binding
+        semantic_capability: implements
+        obligation: required
+        min_occurs: 1
+        applies_to_profile: implementation

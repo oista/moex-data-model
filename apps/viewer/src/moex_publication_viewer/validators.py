@@ -194,3 +194,93 @@ def validate_architecture_catalog(
 
     if errors:
         raise ValidationError(errors)
+
+
+def _spec_ref_name(specification_ref: str) -> str:
+    return specification_ref.split("@", 1)[0].strip()
+
+
+def check_catalog_publication_contract_gate(
+    catalog: ArchitectureCatalog,
+    modules: list[PublicationModule],
+    root: Path,
+) -> None:
+    """Hard-fail when catalog Spec/Impl miss publication-requirements or implements.
+
+    Spec gate: Spec with ≥1 non-exempt Impl (module_id set) must have
+    publication-requirements.yaml.
+    Impl gate: non-exempt catalog Impl whose publication module has
+    profile=implementation must declare implements pointing at parent Spec.
+    """
+    from moex_publication_viewer.publication_contract import (
+        load_publication_requirements,
+        spec_asset_dir,
+    )
+
+    errors: list[str] = []
+    by_id = {n.id: n for n in catalog.nodes}
+    modules_by_id = {m.module_id: m for m in modules}
+    specs_needing_reqs: set[str] = set()
+
+    for node in catalog.nodes:
+        if node.role != "specification_implementation":
+            continue
+        if node.contract_exempt or not node.module_id or not node.conforms_to:
+            continue
+        specs_needing_reqs.add(node.conforms_to)
+        mod = modules_by_id.get(node.module_id)
+        if mod is None:
+            continue
+        if mod.profile != "implementation":
+            continue
+        if not mod.implements:
+            errors.append(
+                f"catalog Impl '{node.id}' (module {node.module_id}, "
+                f"profile=implementation) missing implements: "
+                f"(parent Spec '{node.conforms_to}')"
+            )
+            continue
+        matched = [
+            i
+            for i in mod.implements
+            if isinstance(i, dict)
+            and _spec_ref_name(str(i.get("specification_ref") or "")) == node.conforms_to
+        ]
+        if not matched:
+            errors.append(
+                f"catalog Impl '{node.id}': implements must reference "
+                f"specification_ref for parent Spec '{node.conforms_to}'"
+            )
+            continue
+        for entry in matched:
+            pref = entry.get("profile_ref")
+            if not isinstance(pref, str) or not pref.strip():
+                errors.append(
+                    f"catalog Impl '{node.id}': implements entry missing profile_ref"
+                )
+
+    for spec_id in sorted(specs_needing_reqs):
+        spec_node = by_id.get(spec_id)
+        version = "0.1"
+        if spec_node and spec_node.version:
+            parts = str(spec_node.version).split(".")
+            version = f"{parts[0]}.{parts[1]}" if len(parts) >= 2 else parts[0]
+        asset = spec_asset_dir(root, f"{spec_id}@{version}")
+        if asset is None:
+            asset = spec_asset_dir(root, f"{spec_id}@0.1")
+        req_path = (asset / "publication-requirements.yaml") if asset else None
+        if req_path is None or not req_path.is_file():
+            errors.append(
+                f"Spec '{spec_id}' has governed catalog Impls but missing "
+                f"publication-requirements.yaml under specifications/{spec_id}/"
+            )
+            continue
+        doc = load_publication_requirements(req_path)
+        profiles = (doc or {}).get("profiles") if doc else None
+        if not isinstance(profiles, list) or not profiles:
+            errors.append(
+                f"Spec '{spec_id}': publication-requirements.yaml has no profiles"
+            )
+
+    if errors:
+        raise ValidationError(errors)

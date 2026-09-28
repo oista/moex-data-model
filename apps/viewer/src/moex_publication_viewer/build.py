@@ -19,6 +19,7 @@ from moex_publication_viewer.normalizers.linkml_normalizer import clear_schema_v
 from moex_publication_viewer.renderers.html_renderer import render_viewer
 from moex_publication_viewer.validators import (
     ValidationError,
+    check_catalog_publication_contract_gate,
     check_publication_profiles,
     validate_architecture_catalog,
     validate_manifests,
@@ -125,6 +126,74 @@ def compile_catalog(root: Path, modules: list[PublicationModule]) -> Architectur
     return catalog
 
 
+def _module_by_id(
+    modules: list[PublicationModule], module_id: str | None
+) -> PublicationModule | None:
+    if not module_id:
+        return None
+    return next((m for m in modules if m.module_id == module_id), None)
+
+
+def impl_section_nav_children(
+    catalog_impl_id: str,
+    impl_module: PublicationModule | None,
+) -> list[PublicationItem]:
+    """Build-time section_ref children for an implementation_ref (ADR seamless nav).
+
+    Only top-level publication sections (not explorer trees) so Spec nav stays
+    section-level under Реализации → Impl.
+    """
+    if impl_module is None:
+        return []
+    children: list[PublicationItem] = []
+    for sec in impl_module.sections:
+        if sec.type == "explorer":
+            continue
+        children.append(
+            PublicationItem(
+                id=f"implnav:{catalog_impl_id}:{sec.id}",
+                title=sec.title,
+                description=sec.description
+                or f"Open publication section «{sec.title}».",
+                attributes={
+                    "kind": "section_ref",
+                    "section_id": sec.id,
+                    "target_module_id": impl_module.module_id,
+                    "target_section_id": sec.id,
+                    "description": sec.description
+                    or f"Open publication section «{sec.title}».",
+                },
+            )
+        )
+    return children
+
+
+def attach_impl_section_nav_children(
+    refs: list[PublicationItem],
+    modules: list[PublicationModule],
+) -> list[PublicationItem]:
+    """Attach section_ref children onto each implementation_ref."""
+    out: list[PublicationItem] = []
+    for ref in refs:
+        attrs = dict(ref.attributes or {})
+        mid = attrs.get("module_id")
+        kids = impl_section_nav_children(ref.id, _module_by_id(modules, mid))
+        attrs["member_ids"] = [c.id for c in kids]
+        attrs["nav_section_count"] = len(kids)
+        out.append(
+            PublicationItem(
+                id=ref.id,
+                title=ref.title,
+                description=ref.description,
+                attributes=attrs,
+                children=kids,
+                tags=list(ref.tags or []),
+                source_ref=ref.source_ref,
+            )
+        )
+    return out
+
+
 def enrich_dams_explorer_implementations(
     modules: list[PublicationModule],
     catalog: ArchitectureCatalog | None,
@@ -159,6 +228,7 @@ def enrich_dams_explorer_implementations(
         )
         for n in impl_nodes
     ]
+    children = attach_impl_section_nav_children(children, modules)
     impls_root = next(
         (i for i in explorer.items if i.id == "group:implementations"),
         None,
@@ -223,6 +293,7 @@ def enrich_fibo_explorer_implementations(
         )
         for n in impl_nodes
     ]
+    children = attach_impl_section_nav_children(children, modules)
     impls_root = next(
         (i for i in explorer.items if i.id == "group:implementations"),
         None,
@@ -292,6 +363,8 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
         root, enforce_publication_contract=True, dist_dir=dist_dir
     )
     catalog = compile_catalog(root, modules)
+    if catalog is not None:
+        check_catalog_publication_contract_gate(catalog, modules, root)
     enrich_dams_explorer_implementations(modules, catalog)
     enrich_fibo_explorer_implementations(modules, catalog)
     search_index = build_search_index(modules)
@@ -331,6 +404,7 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
                         "module_id": n.module_id,
                         "order": n.order,
                         "description": n.description,
+                        "contract_exempt": n.contract_exempt,
                     }
                     for n in catalog.nodes
                 ]

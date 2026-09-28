@@ -20,6 +20,8 @@ class CatalogNode(BaseModel):
     module_id: str | None = None
     order: int = 1000
     description: str | None = None
+    # Upstream preview / non-governed catalog Impls skip ADR-019 contract gate.
+    contract_exempt: bool = False
 
     @field_validator("version", mode="before")
     @classmethod

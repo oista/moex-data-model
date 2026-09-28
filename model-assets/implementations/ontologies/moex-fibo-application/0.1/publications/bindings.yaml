@@ -1,0 +1,9 @@
+# Binding / mapping summary for publication (ADR-018).
+bindings:
+  - id: Client-LegalPerson
+    title: Client ↔ LegalPerson
+    predicate: skos:closeMatch
+    subject_id: https://data.moex.com/dams/concept/Client
+    object_id: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
+    source: metamodel/moex-dams-fibo-mapping.ttl
+    sssom_ref: ../../../../transformations/mappings/dams-fibo.sssom.yaml

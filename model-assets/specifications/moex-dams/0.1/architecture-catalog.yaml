@@ -22,7 +22,10 @@ nodes:
     conforms_to: moex-dams
     module_id: moex:module:dsp
     order: 105
-    description: Metamodel of Data Specification Player (publication projection)
+    contract_exempt: true
+    description: >
+      Metamodel of Data Specification Player (publication projection).
+      Not a DAMS logical-model Impl — publication profile is linkml-specification.
 
   - id: trading-solution
     role: specification_implementation
@@ -62,6 +65,7 @@ nodes:
     conforms_to: moex-fibo-profile
     module_id: moex:module:fibo
     order: 210
+    contract_exempt: true
     description: >
       Upstream FIBO release glossary/class hierarchy (catalog preview index).
       Not the governed application ontology — see moex-fibo-application (ADR-018).

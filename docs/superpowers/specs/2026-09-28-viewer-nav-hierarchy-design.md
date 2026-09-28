@@ -28,7 +28,7 @@ expand/collapse, and nodes without a selectable description card.
 | Active Impl body | Explorer of `currentModuleId` under its Spec parent; no sibling Impl list |
 | Secondary nav | Only sections not reachable via explorer `section_ref` / Overview nest |
 | Content Implementations block | Kept on Spec catalog/module landing cards; not duplicated as sidebar siblings |
-| `implementation_ref` click | Select → description card + explicit Open → Impl module |
+| `implementation_ref` click | Select → description card; expand nested section_refs (no Spec body swap) |
 
 ## Principles
 
@@ -53,21 +53,31 @@ Spec moex.dams                         ← select + toggle
 ├─ Спецификация
 ├─ Требования
 └─ Реализации                          ← only place for Impls
-   ├─ moex.dsp                         ← implementation_ref card → Open
+   ├─ moex.dsp                         ← expandable implementation_ref
+   │  └─ (section_refs → target module)
    └─ Trading solution
+      ├─ Package
+      ├─ Logical entities
+      └─ …
 
 Spec edmc.fibo
 ├─ Overview
 ├─ … metamodel groups …
 └─ Реализации
-   └─ FIBO release …
+   ├─ FIBO release (preview) …
+   └─ MOEX FIBO application ontology
+      ├─ Overview → fibo-application#overview
+      ├─ Conformance
+      └─ …
 
 Implementations without specification  ← orphans only
 Other publications                     ← modules not in catalog
 ```
 
-When an Impl module is open, breadcrumb/chrome keep Spec → Impl; sidebar body
-under that Spec is the Impl module explorer (not Spec explorer + Impl siblings).
+When an Impl section is open, breadcrumb keeps Spec → Impl; **sidebar body under
+that Spec stays the Spec explorer**. Impl sections are nested under the
+`implementation_ref` (build-time `section_ref` children with `target_module_id`).
+No Spec-body swap to the Impl module.
 
 ## Logical NavNode contract
 
@@ -89,6 +99,9 @@ Composition (build-time + client):
   `wrap_*_explorer_roots` + `enrich_*_explorer_implementations`).
 - Impl entries inside Spec = `kind: implementation_ref` children of
   `group:implementations`, not catalog buttons.
+- Each `implementation_ref` may carry build-time `section_ref` children
+  (`id: implnav:{catalog_id}:{section_id}`, `target_module_id`) — section-level
+  nest only, not the full Impl class tree.
 
 ## Interaction matrix
 
@@ -96,9 +109,9 @@ Composition (build-time + client):
 |------|--------------|--------|------------------|
 | Spec (catalog) | Spec description card (catalog \|\| module) | Toggles explorer body | Body stays under Spec |
 | Explorer `group` | Purpose / structure_why card | Toggle children | — |
-| `section_ref` | Opens target `PublicationSection` | N/A (leaf) | Hash `section=` |
+| `section_ref` | Opens target `PublicationSection` (`target_module_id` if set) | N/A (leaf) | Hash `module=` + `section=` |
 | Class / enum / file / requirement | Existing detail cards | Toggle if has kids | — |
-| `implementation_ref` | Impl description card + Open | N/A | Open → Impl module |
+| `implementation_ref` | Impl description card + Reveal sections | Toggle nested section_refs | Nested `section_ref` → Impl module section; Spec body unchanged |
 | Secondary section btn | That section | N/A | Hash `section=` |
 
 ## What was the “second menu”?

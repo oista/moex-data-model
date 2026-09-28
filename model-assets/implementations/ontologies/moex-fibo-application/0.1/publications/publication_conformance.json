@@ -1,0 +1,69 @@
+{
+  "id": "pubconf:moex:module:fibo-application:fibo-application-ontology",
+  "title": "MOEX FIBO application ontology",
+  "description": "Publication contract assessment for fibo-application-ontology against moex-fibo-profile@0.1",
+  "implementation_ref": "moex:module:fibo-application",
+  "reference_specification_ref": "moex-fibo-profile@0.1",
+  "profile_ref": "fibo-application-ontology",
+  "overall_publication_status": "draft-conformant",
+  "requirement_results": [
+    {
+      "requirement_ref": "fibo:overview",
+      "covered": true,
+      "covering_section_ids": [
+        "overview"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "fibo:conformance",
+      "covered": true,
+      "covering_section_ids": [
+        "conformance"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "fibo:ontology-classes",
+      "covered": true,
+      "covering_section_ids": [
+        "classes"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "fibo:bindings",
+      "covered": true,
+      "covering_section_ids": [
+        "bindings"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "fibo:source",
+      "covered": true,
+      "covering_section_ids": [
+        "source"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "fibo:declared-binding",
+      "covered": true,
+      "covering_section_ids": [],
+      "result_status": "pass",
+      "result_message": "implements moex-fibo-profile@0.1",
+      "obligation": "required"
+    }
+  ]
+}
