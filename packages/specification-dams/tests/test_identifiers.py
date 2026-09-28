@@ -18,6 +18,8 @@ def test_load_schema_prefix_map_has_dams(dams_schema: Path) -> None:
     prefixes, default = load_schema_prefix_map(dams_schema)
     assert "dams" in prefixes
     assert prefixes["dams"].startswith("https://")
+    assert "moex" in prefixes
+    assert prefixes["moex"].startswith("https://")
     assert default == "dams"
 
 

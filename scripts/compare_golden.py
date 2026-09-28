@@ -29,6 +29,8 @@ from generate_artifacts import (  # noqa: E402
     DBML_PATH,
     DOC_DIR,
     DOC_MANIFEST,
+    JSON_SCHEMA_MANIFEST,
+    JSON_SCHEMA_PATH,
     MERMAID_DIR,
     MERMAID_MANIFEST,
     OWL_MANIFEST,
@@ -42,6 +44,7 @@ from generate_artifacts import (  # noqa: E402
     directory_tree_digest,
     generate_dbml,
     generate_doc,
+    generate_json_schema,
     generate_mermaid,
     generate_owl,
     generate_python,
@@ -49,7 +52,10 @@ from generate_artifacts import (  # noqa: E402
     generate_shacl,
     mermaid_tree_digest,
     rdf_ground_digest,
+    strip_generation_date_lines,
 )
+
+JSON_SCHEMA = JSON_SCHEMA_PATH
 
 
 def _sha256_file(path: Path) -> str:
@@ -107,28 +113,15 @@ def _compare_contracts() -> list[str]:
 
 
 def _compare_json_schema() -> list[str]:
-    if not JSON_SCHEMA.is_file():
+    if not JSON_SCHEMA_MANIFEST.is_file() and not JSON_SCHEMA.is_file():
         print(f"skip json-schema golden (not present): {JSON_SCHEMA.as_posix()}")
         return []
-
-    from linkml.generators.jsonschemagen import JsonSchemaGenerator
-
-    errors: list[str] = []
-    with tempfile.TemporaryDirectory(prefix="moex-golden-jsonschema-") as tmp:
-        dest = Path(tmp) / "moex-dams.schema.json"
-        text = JsonSchemaGenerator(str(SCHEMA)).serialize()
-        dest.write_text(text, encoding="utf-8")
-        if dest.read_bytes() != JSON_SCHEMA.read_bytes():
-            left = dest.read_text(encoding="utf-8").replace("\r\n", "\n")
-            right = JSON_SCHEMA.read_text(encoding="utf-8").replace("\r\n", "\n")
-            if left != right:
-                errors.append(
-                    f"json-schema regenerate mismatch:\n"
-                    f"  committed={JSON_SCHEMA.as_posix()}\n"
-                    f"  regenerated digest={_sha256_file(dest)}\n"
-                    f"  committed digest={_sha256_file(JSON_SCHEMA)}"
-                )
-    return errors
+    return _compare_single_file(
+        name="json-schema",
+        manifest_path=JSON_SCHEMA_MANIFEST,
+        committed_path=JSON_SCHEMA,
+        regenerate=generate_json_schema,
+    )
 
 
 def _compare_single_file(
@@ -141,8 +134,6 @@ def _compare_single_file(
     strip_volatile: bool = False,
     strip_generation_date: bool = False,
 ) -> list[str]:
-    from generate_artifacts import _strip_generation_date_lines
-
     errors: list[str] = []
     if not manifest_path.is_file():
         return [f"missing {name} manifest: {manifest_path}"]
@@ -161,7 +152,7 @@ def _compare_single_file(
         )
     elif strip_generation_date:
         committed_digest = "sha256:" + hashlib.sha256(
-            _strip_generation_date_lines(committed_text).encode("utf-8")
+            strip_generation_date_lines(committed_text).encode("utf-8")
         ).hexdigest()
     else:
         committed_digest = "sha256:" + hashlib.sha256(

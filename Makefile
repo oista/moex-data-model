@@ -80,7 +80,7 @@ generate-bundle:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/build-release-bundle.ps1
 
 publish-gate:
-	$(PYTHON) scripts/publish_gate.py
+	$(PYTHON) -m moex_model_cli.gates.publish_gate
 
 # Digest check: contracts + json-schema + Stage 6/7 artifact matrix + bundle vs regenerate
 compare-golden:

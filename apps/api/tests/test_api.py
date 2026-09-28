@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import subprocess
 from pathlib import Path
 
@@ -534,6 +535,52 @@ def test_publication_from_draft_idempotent(
     )
     assert got.status_code == 200
     assert got.json()["commit_sha"] == body["commit_sha"]
+
+
+def test_publication_gate_rejects_bad_digest(
+    publish_client: TestClient,
+) -> None:
+    """Broken golden digest must fail-closed before Git publish."""
+    from moex_model_cli.bootstrap import find_repo_root
+    from moex_model_cli.gates.digests import artifact_paths
+
+    headers = {"X-Moex-Actor": "publisher"}
+    published = publish_client.get("/implementations/trading/body").json()
+    put = publish_client.put(
+        "/workspaces/ws-gate/documents/trading",
+        json={
+            "content": published["content"],
+            "base_digest": published["content_digest"],
+        },
+        headers=headers,
+    )
+    assert put.status_code == 200
+
+    paths = artifact_paths(find_repo_root())
+    manifest = paths["python_manifest"]
+    orig = manifest.read_text(encoding="utf-8")
+    data = json.loads(orig)
+    data["content_digest"] = "sha256:" + ("0" * 64)
+    manifest.write_text(
+        json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+    try:
+        r = publish_client.post(
+            "/publications",
+            json={
+                "workspace_id": "ws-gate",
+                "implementation_id": "moex:implementation:trading:1.0.0",
+                "title": "Should fail gate",
+                "base_ref": "HEAD",
+            },
+            headers={**headers, "Idempotency-Key": "idem-gate-fail"},
+        )
+        assert r.status_code == 422, r.text
+        detail = r.json()["detail"]
+        assert detail["message"] == "publish-gate failed"
+        assert any("digest mismatch" in e for e in detail["errors"])
+    finally:
+        manifest.write_text(orig, encoding="utf-8")
 
 
 def test_model_index_rebuild_and_search(client: TestClient) -> None:

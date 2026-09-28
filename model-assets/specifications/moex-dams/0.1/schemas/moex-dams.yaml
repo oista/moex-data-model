@@ -5,6 +5,7 @@ license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml: https://w3id.org/linkml/
   dams: https://data.moex.com/dams/
+  moex: https://data.moex.com/
 imports:
   - linkml:types
   - moex-types

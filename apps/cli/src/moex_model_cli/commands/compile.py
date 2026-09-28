@@ -30,7 +30,16 @@ def run_compile(
 
     lines = [out.rstrip(), "compile: contracts OK"]
     if with_json_schema:
-        schema = paths.schema
+        art_script = paths.root / "scripts" / "generate_artifacts.py"
+        gen = subprocess.run(
+            [sys.executable, str(art_script), "--only", "json-schema"],
+            cwd=paths.root,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+        if gen.returncode != 0:
+            return gen.returncode, out + (gen.stdout or "") + (gen.stderr or "")
         dest = (
             paths.root
             / "generated"
@@ -39,24 +48,6 @@ def run_compile(
             / "0.1"
             / "moex-dams.schema.json"
         )
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        gen = subprocess.run(
-            [
-                sys.executable,
-                "-c",
-                (
-                    "from linkml.generators.jsonschemagen import JsonSchemaGenerator; "
-                    f"open(r'{dest.as_posix()}','w',encoding='utf-8').write("
-                    f"JsonSchemaGenerator(r'{schema.as_posix()}').serialize())"
-                ),
-            ],
-            cwd=paths.root,
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-        )
-        if gen.returncode != 0:
-            return gen.returncode, out + (gen.stderr or "")
         lines.append(f"compile: json-schema → {dest.relative_to(paths.root)}")
 
     if with_artifacts:

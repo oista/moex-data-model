@@ -34,6 +34,7 @@ PYTHON_DIR = ARTIFACTS_ROOT / "python"
 PYTHON_PATH = PYTHON_DIR / "moex_dams.py"
 DOC_DIR = ARTIFACTS_ROOT / "docs"
 RDF_PATH = ARTIFACTS_ROOT / "moex-dams.rdf.ttl"
+JSON_SCHEMA_PATH = ARTIFACTS_ROOT / "moex-dams.schema.json"
 
 OWL_MANIFEST = MANIFESTS / "moex-dams-owl.json"
 SHACL_MANIFEST = MANIFESTS / "moex-dams-shacl.json"
@@ -42,6 +43,7 @@ MERMAID_MANIFEST = MANIFESTS / "moex-dams-mermaid.json"
 PYTHON_MANIFEST = MANIFESTS / "moex-dams-python.json"
 DOC_MANIFEST = MANIFESTS / "moex-dams-doc.json"
 RDF_MANIFEST = MANIFESTS / "moex-dams-rdf.json"
+JSON_SCHEMA_MANIFEST = MANIFESTS / "moex-dams-json-schema.json"
 
 OWL_OPTIONS = {
     "format": "ttl",
@@ -50,13 +52,29 @@ OWL_OPTIONS = {
     "consolidate_cardinality_axioms": True,
 }
 
-ALL_TARGETS = ("owl", "shacl", "dbml", "mermaid", "python", "doc", "rdf")
-_VOLATILE_RDF_PREDICATES = frozenset(
-    {
-        "https://w3id.org/linkml/generation_date",
-        "http://www.w3.org/ns/prov#generatedAtTime",
-    }
-)
+ALL_TARGETS = ("owl", "shacl", "dbml", "mermaid", "python", "doc", "rdf", "json-schema")
+
+try:
+    from moex_model_cli.gates.digests import (  # type: ignore
+        VOLATILE_RDF_PREDICATES as _VOLATILE_RDF_PREDICATES,
+        strip_generation_date_lines,
+    )
+except ImportError:  # scripts/ generate without editable CLI install
+
+    def strip_generation_date_lines(text: str) -> str:
+        lines = [
+            line
+            for line in text.split("\n")
+            if not line.startswith("# Generation date:")
+        ]
+        return "\n".join(lines)
+
+    _VOLATILE_RDF_PREDICATES = frozenset(
+        {
+            "https://w3id.org/linkml/generation_date",
+            "http://www.w3.org/ns/prov#generatedAtTime",
+        }
+    )
 
 def _linkml_version() -> str:
     try:
@@ -92,16 +110,6 @@ def schema_cwd() -> Iterator[str]:
         os.chdir(prev)
 
 
-def _strip_generation_date_lines(text: str) -> str:
-    """Drop LinkML '# Generation date: …' comment lines for stable digests."""
-    lines = [
-        line
-        for line in text.split("\n")
-        if not line.startswith("# Generation date:")
-    ]
-    return "\n".join(lines)
-
-
 def write_text_artifact(
     path: Path, text: str, *, strip_generation_date: bool = False
 ) -> str:
@@ -110,7 +118,7 @@ def write_text_artifact(
     if not normalized.endswith("\n"):
         normalized += "\n"
     digest_source = (
-        _strip_generation_date_lines(normalized)
+        strip_generation_date_lines(normalized)
         if strip_generation_date
         else normalized
     )
@@ -118,7 +126,7 @@ def write_text_artifact(
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.is_file() and strip_generation_date:
         existing = path.read_text(encoding="utf-8").replace("\r\n", "\n")
-        if _sha256_text(_strip_generation_date_lines(existing)) == digest:
+        if _sha256_text(strip_generation_date_lines(existing)) == digest:
             return digest
     path.write_text(normalized, encoding="utf-8", newline="\n")
     return digest
@@ -204,11 +212,30 @@ def write_manifest(
     generator_options: dict | None = None,
 ) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    generator_version = _linkml_version()
+    if path.is_file():
+        try:
+            existing = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            existing = {}
+        same = (
+            existing.get("artifact_id") == artifact_id
+            and existing.get("generator") == generator
+            and existing.get("generator_module") == generator_module
+            and existing.get("generator_version") == generator_version
+            and existing.get("schema_path") == schema_rel()
+            and existing.get("schema_digest") == schema_digest()
+            and existing.get("output_path") == output_path
+            and existing.get("content_digest") == content_digest
+            and existing.get("generator_options") == generator_options
+        )
+        if same:
+            return
     manifest: dict = {
         "artifact_id": artifact_id,
         "generator": generator,
         "generator_module": generator_module,
-        "generator_version": _linkml_version(),
+        "generator_version": generator_version,
         "schema_path": schema_rel(),
         "schema_digest": schema_digest(),
         "output_path": output_path,
@@ -425,6 +452,31 @@ def generate_rdf(
     return digest
 
 
+def generate_json_schema(
+    *,
+    out_path: Path = JSON_SCHEMA_PATH,
+    manifest_path: Path = JSON_SCHEMA_MANIFEST,
+) -> str:
+    from linkml.generators.jsonschemagen import JsonSchemaGenerator
+
+    with schema_cwd() as schema_name:
+        text = JsonSchemaGenerator(schema_name).serialize()
+    digest = write_text_artifact(out_path, text)
+    try:
+        out_rel = out_path.relative_to(REPO).as_posix()
+    except ValueError:
+        out_rel = out_path.as_posix()
+    write_manifest(
+        path=manifest_path,
+        artifact_id="moex:artifact:dams-json-schema:0.1",
+        generator="gen-json-schema",
+        generator_module="linkml.generators.jsonschemagen",
+        output_path=out_rel,
+        content_digest=digest,
+    )
+    return digest
+
+
 def generate(targets: Sequence[str] = ALL_TARGETS) -> dict[str, str]:
     if not SCHEMA.is_file():
         raise FileNotFoundError(f"missing schema: {SCHEMA}")
@@ -444,6 +496,8 @@ def generate(targets: Sequence[str] = ALL_TARGETS) -> dict[str, str]:
             digests["doc"] = generate_doc()
         elif target == "rdf":
             digests["rdf"] = generate_rdf()
+        elif target == "json-schema":
+            digests["json-schema"] = generate_json_schema()
         else:
             raise ValueError(f"unknown target: {target}")
     return digests

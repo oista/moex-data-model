@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import sys
+import json
 from pathlib import Path
 
 from moex_publication.application.build_publication import (
@@ -10,20 +10,7 @@ from moex_publication.application.build_publication import (
     export_slice_projection,
 )
 from moex_model_cli.bootstrap import DEFAULT_SLICE_JSON, SlicePaths
-
-
-def _run_publish_gate(root: Path) -> tuple[int, str]:
-    gate = root / "scripts" / "publish_gate.py"
-    if not gate.is_file():
-        return 1, f"publish-gate script missing: {gate}\n"
-    # Import in-process so API and CLI share the same checker.
-    sys.path.insert(0, str(root / "scripts"))
-    from publish_gate import verify_publish_gate  # noqa: WPS433
-
-    errors = verify_publish_gate(refresh_bundle=False)
-    if errors:
-        return 1, "publish-gate FAILED\n" + "\n".join(errors) + "\n"
-    return 0, "publish-gate OK\n"
+from moex_model_cli.gates.publish_gate import verify_publish_gate
 
 
 def run_publish(
@@ -35,10 +22,10 @@ def run_publish(
 ) -> tuple[int, str]:
     lines: list[str] = []
     if not skip_gate:
-        code, gate_text = _run_publish_gate(paths.root)
-        lines.append(gate_text.rstrip())
-        if code != 0:
-            return code, "\n".join(lines) + "\n"
+        errors = verify_publish_gate(root=paths.root, refresh_bundle=False)
+        if errors:
+            return 1, "publish-gate FAILED\n" + "\n".join(errors) + "\n"
+        lines.append("publish-gate OK")
 
     out_path = out if out is not None else paths.root / DEFAULT_SLICE_JSON
     if not out_path.is_absolute():
@@ -55,13 +42,10 @@ def run_publish(
         f"overall={result.report.overall_result.value}"
     )
     if result.report.is_conformant:
-        # Surface bundle digest for publication summary consumers.
         bundle_manifest = (
             paths.root / "generated" / "manifests" / "moex-dams-bundle.json"
         )
         if bundle_manifest.is_file():
-            import json
-
             digest = json.loads(bundle_manifest.read_text(encoding="utf-8")).get(
                 "content_digest"
             )

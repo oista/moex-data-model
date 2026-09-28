@@ -26,7 +26,7 @@ BUNDLE_PARTS: tuple[tuple[str, str, str | None], ...] = (
     (
         "generated/artifacts/moex-dams/0.1/moex-dams.schema.json",
         "json-schema",
-        None,
+        "generated/manifests/moex-dams-json-schema.json",
     ),
     (
         "generated/artifacts/moex-dams/0.1/moex-dams.owl.ttl",
@@ -148,16 +148,44 @@ def stage_bundle(parts: list[dict]) -> None:
 
 def build_bundle(*, stage: bool = True) -> dict:
     parts = collect_parts()
+    content_digest = bundle_index_digest(parts)
+    toolchain_digest = _sha256_path(REQUIREMENTS)
+    if BUNDLE_MANIFEST.is_file():
+        try:
+            existing = json.loads(BUNDLE_MANIFEST.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            existing = {}
+        existing_parts = existing.get("parts") or []
+        same_parts = [
+            {"role": p.get("role"), "content_digest": p.get("content_digest")}
+            for p in existing_parts
+        ]
+        new_parts = [
+            {"role": p["role"], "content_digest": p["content_digest"]} for p in parts
+        ]
+        if (
+            existing.get("content_digest") == content_digest
+            and existing.get("toolchain_digest") == toolchain_digest
+            and same_parts == new_parts
+        ):
+            if stage and not BUNDLE_DIR.exists():
+                stage_bundle(parts)
+                (BUNDLE_DIR / "BUNDLE.json").write_text(
+                    json.dumps(existing, indent=2, ensure_ascii=False) + "\n",
+                    encoding="utf-8",
+                )
+            return existing
+
     index = {
         "artifact_id": "moex:artifact:dams-bundle:0.1",
         "schema_path": (
             "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml"
         ),
         "toolchain_pin": "requirements-linkml.txt",
-        "toolchain_digest": _sha256_path(REQUIREMENTS),
+        "toolchain_digest": toolchain_digest,
         "bundle_dir": BUNDLE_DIR.relative_to(REPO).as_posix(),
         "parts": parts,
-        "content_digest": bundle_index_digest(parts),
+        "content_digest": content_digest,
         "generated_at": datetime.now(timezone.utc).isoformat(),
     }
     MANIFESTS.mkdir(parents=True, exist_ok=True)

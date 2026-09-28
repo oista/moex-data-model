@@ -18,11 +18,6 @@ from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
 from moex_dams.mappings.dams_to_graph import package_index
 
-# Implementation / envelope ids often use moex: even when schema default is dams.
-_EXTRA_PREFIXES = {
-    "moex": "https://data.moex.com/",
-}
-
 
 def load_schema_prefix_map(schema_path: Path | str) -> tuple[dict[str, str], str | None]:
     """Load prefixes + default_prefix from a LinkML schema YAML (top-level only)."""
@@ -52,9 +47,8 @@ def load_schema_prefix_map(schema_path: Path | str) -> tuple[dict[str, str], str
 
 def build_dams_curie_resolver(schema_path: Path | str) -> CurieUriResolver:
     prefixes, default_prefix = load_schema_prefix_map(schema_path)
-    merged = {**_EXTRA_PREFIXES, **prefixes}
     return CurieUriResolver.from_schema_prefixes(
-        merged, default_prefix=default_prefix
+        prefixes, default_prefix=default_prefix
     )
 
 

@@ -9,10 +9,12 @@
 dams:moex_dams a linkml:SchemaDefinition ;
     dcterms:license "https://www.apache.org/licenses/LICENSE-2.0" ;
     pav:version "0.1.0" ;
-    sh:declare [ sh:namespace "https://w3id.org/linkml/"^^xsd:anyURI ;
+    sh:declare [ sh:namespace "https://data.moex.com/dams/"^^xsd:anyURI ;
+            sh:prefix "dams" ],
+        [ sh:namespace "https://w3id.org/linkml/"^^xsd:anyURI ;
             sh:prefix "linkml" ],
-        [ sh:namespace "https://data.moex.com/dams/"^^xsd:anyURI ;
-            sh:prefix "dams" ] ;
+        [ sh:namespace "https://data.moex.com/"^^xsd:anyURI ;
+            sh:prefix "moex" ] ;
     linkml:classes dams:BusinessDomain,
         dams:BusinessProcess,
         dams:ClassificationAssignment,
@@ -81,7 +83,7 @@ dams:moex_dams a linkml:SchemaDefinition ;
         dams:RequirementSectionEnum,
         dams:SolutionDataRoleEnum,
         dams:SpecificationKindEnum ;
-    linkml:generation_date "2026-09-28T07:56:55"^^xsd:dateTime ;
+    linkml:generation_date "2026-09-28T08:22:35"^^xsd:dateTime ;
     linkml:id "https://data.moex.com/dams/v0.1"^^xsd:anyURI ;
     linkml:imports "linkml:types"^^xsd:anyURI,
         "moex-analytics"^^xsd:anyURI,
@@ -260,8 +262,8 @@ dams:moex_dams a linkml:SchemaDefinition ;
         dams:valid_to,
         dams:value_set_ref ;
     linkml:source_file "moex-dams.yaml" ;
-    linkml:source_file_date "2026-09-28T05:48:28"^^xsd:dateTime ;
-    linkml:source_file_size 1882 ;
+    linkml:source_file_date "2026-09-28T08:21:27"^^xsd:dateTime ;
+    linkml:source_file_size 1913 ;
     linkml:types dams:SemVer,
         dams:Sha256Digest,
         dams:boolean,

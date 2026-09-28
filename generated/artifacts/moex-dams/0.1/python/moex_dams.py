@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-09-28T07:56:51
+# Generation date: 2026-09-28T08:22:30
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -65,6 +65,7 @@ version = "0.1.0"
 # Namespaces
 DAMS = CurieNamespace('dams', 'https://data.moex.com/dams/')
 LINKML = CurieNamespace('linkml', 'https://w3id.org/linkml/')
+MOEX = CurieNamespace('moex', 'https://data.moex.com/')
 XSD = CurieNamespace('xsd', 'http://www.w3.org/2001/XMLSchema#')
 DEFAULT_ = DAMS
 

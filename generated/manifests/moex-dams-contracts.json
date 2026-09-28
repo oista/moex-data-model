@@ -4,9 +4,9 @@
   "generator_module": "linkml.generators.pydanticgen",
   "generator_version": "1.11.1",
   "schema_path": "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml",
-  "schema_digest": "sha256:f43c17b53a696566cfe6c915e1591a0078645bdc09e50ffc3e0e2146b1b92c77",
+  "schema_digest": "sha256:a3fd63d36db81fea87bbe23fd89c0c61fd1feeaf381bcb71bed5570552cb4609",
   "output_path": "generated/contracts/moex-dams/0.1/src/moex_dams_contracts/__init__.py",
   "content_digest": "sha256:2f12de05c3d1cf6222675a4766f9fe9601bafee16c94cb5c4228e31bdf84abb7",
   "package": "moex-dams-contracts",
-  "generated_at": "2026-09-28T05:07:16.238755+00:00"
+  "generated_at": "2026-09-28T05:22:26.553016+00:00"
 }

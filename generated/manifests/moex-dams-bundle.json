@@ -14,7 +14,8 @@
     {
       "path": "generated/artifacts/moex-dams/0.1/moex-dams.schema.json",
       "role": "json-schema",
-      "content_digest": "sha256:16c5c66032163e5358f3e3f367d2a6f6296c57eb137d883527e6f8b9a3063019"
+      "content_digest": "sha256:dc6c6900d4c6e2512f4b3ca95fbc1dfb4b819a822c8b139a6d0319ebb73dde01",
+      "manifest_path": "generated/manifests/moex-dams-json-schema.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/moex-dams.owl.ttl",
@@ -43,7 +44,7 @@
     {
       "path": "generated/artifacts/moex-dams/0.1/python/moex_dams.py",
       "role": "python",
-      "content_digest": "sha256:5857c14d88bc79c64a57cb2f7720657b348950e52e85aa209aceffc0102d61f5",
+      "content_digest": "sha256:f0c3a703c9a81fafba95ee4af304bf2a44b0e0716bde997d217da596446725f8",
       "manifest_path": "generated/manifests/moex-dams-python.json"
     },
     {
@@ -55,7 +56,7 @@
     {
       "path": "generated/artifacts/moex-dams/0.1/moex-dams.rdf.ttl",
       "role": "rdf",
-      "content_digest": "sha256:4dbc752c9c425e03143b94711135b151b63e6339a4038a4fcb4d3039ca63b366",
+      "content_digest": "sha256:9e98c012339d89667efa938a3d4c1faad3fb164e68f7951e1e196aa39430679b",
       "manifest_path": "generated/manifests/moex-dams-rdf.json"
     },
     {
@@ -64,6 +65,6 @@
       "content_digest": "sha256:142f4b53cd297311e8e33fd64e46ddaa1688289122e08441e5c9a5ac028efaf9"
     }
   ],
-  "content_digest": "sha256:3d62837f42438450dd3deb121b821cf524508ae4883c03e33444b67b12ce68ee",
-  "generated_at": "2026-09-28T05:07:09.825397+00:00"
+  "content_digest": "sha256:2f76ba06a4b6cae3e0775078c38f181ab78351bad0cb0db5ff55cb1a0acdc22f",
+  "generated_at": "2026-09-28T05:22:38.681888+00:00"
 }
