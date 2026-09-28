@@ -11,6 +11,10 @@ model_version: 1.0.0
 implementation_scope: solution
 conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
 solution_ref: eam:solution/TRADING
+data_owner_ref: org:role/CLIENT_DATA_OWNER
+ownership_inheritance_rule: >-
+  Ответственность за данные наследуется от ИТ-решения eam:solution/TRADING
+  при отсутствии локального override на сущности.
 conceptual_entities:
   - element_id: dams:concept/Client
     name: Client
@@ -48,11 +52,19 @@ logical_entities:
     business_importance: high
     data_owner_ref: org:role/CLIENT_DATA_OWNER
     governance_classification: confidential
+    conceptual_alignment_status: aligned
+    alignment_rationale: >
+      Локальная проекция LegalEntity для торгового контура; сохраняет ссылку
+      на корпоративное понятие и локальный Client.
+    identity_rule: >
+      Клиент торгового решения идентифицируется корпоративным идентификатором
+      клиента в контуре торговли.
+    business_key_kind: external
     sensitivity_term_refs:
       - catalog:classification/PDN
     attributes:
       - element_id: dams:logical/trading/Client/clientId
-        name: clientId
+        name: client_id
         title: Идентификатор клиента
         description: Уникальный идентификатор клиента в корпоративном контуре.
         lifecycle_status: active
@@ -61,8 +73,9 @@ logical_entities:
         required: true
         multivalued: false
         governance_classification: confidential
+        mapping_coverage_status: mapped
       - element_id: dams:logical/trading/Client/fullName
-        name: fullName
+        name: full_name
         title: Полное наименование
         description: Полное имя физического лица или наименование организации.
         lifecycle_status: active
@@ -71,6 +84,10 @@ logical_entities:
         required: true
         multivalued: false
         governance_classification: restricted
+        mapping_coverage_status: planned
+        mapping_rationale: >
+          Физическое поле полного наименования будет добавлено в схему события
+          в следующей ревизии топика.
         sensitivity_term_refs:
           - catalog:classification/PDN
     key_attribute_refs:
@@ -88,6 +105,7 @@ physical_objects:
     technology: Apache Kafka
     native_schema_ref: https://schemas.moex.com/trading/client-changed/1.0.0
     direction: outbound
+    mapping_coverage_status: mapped
     physical_fields:
       - element_id: dams:physical/trading/client-topic/client_id
         name: client_id
@@ -98,6 +116,7 @@ physical_objects:
         native_type: string
         required: true
         schema_path: /payload/client_id
+        mapping_coverage_status: mapped
 mappings:
   - element_id: dams:mapping/trading/client-realizes-legal-entity
     name: realizes_TradingClient_LegalEntity
@@ -111,6 +130,16 @@ mappings:
     mapping_type: realizes
     mapping_cardinality: one_to_one
     approval_status: proposed
+  - element_id: dams:mapping/trading/client-entity-physical
+    name: map_client_entity_to_topic
+    description: Entity-level mapping TradingClient ↔ client_changed topic.
+    lifecycle_status: active
+    source_refs:
+      - dams:physical/trading/client-topic
+    target_refs:
+      - dams:logical/trading/Client
+    mapping_type: entity_physical
+    mapping_cardinality: one_to_one
   - element_id: dams:mapping/trading/client-id
     name: map_client_id
     description: Соответствие логического идентификатора физическому полю события (mapsTo).

@@ -10,6 +10,7 @@ from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
 from moex_dams.application.repository import DamsAssetRepository
 from moex_dams.rules.dams_levels import check_dams_model_level
+from moex_dams.rules.formal_checks import check_formal_requirements_for_repo
 from moex_dams.rules.identifiers import build_dams_curie_resolver, check_identifiers
 from moex_dams.rules.references import check_references
 from moex_dams.rules.structural import check_structural
@@ -75,5 +76,11 @@ def default_dams_rule_sets(repo: DamsAssetRepository) -> tuple[RuleSet, ...]:
             assessment_id="assessment:dams-levels",
             description="DAMS enterprise-conceptual / solution package rules",
             run=check_dams_model_level,
+        ),
+        RuleSet(
+            phase=ConformancePhase.CORPORATE_SEMANTICS,
+            assessment_id="assessment:formal-requirements",
+            description="IT-solution requirements catalog formal_checks (ADR-013)",
+            run=check_formal_requirements_for_repo,
         ),
     )

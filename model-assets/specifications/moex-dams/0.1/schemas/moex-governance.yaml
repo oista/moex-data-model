@@ -52,6 +52,7 @@ classes:
       - data_owner_ref
       - data_steward_ref
       - owning_unit_ref
+      - ownership_inheritance_rule
 
   HasBusinessClassification:
     mixin: true
@@ -66,6 +67,7 @@ classes:
     description: Базовая и специальная классификация чувствительности данных.
     slots:
       - governance_classification
+      - security_classification
       - sensitivity_term_refs
       - classification_source
       - classification_rationale
@@ -126,6 +128,12 @@ slots:
   owning_unit_ref:
     range: OrganizationUnit
     inlined: false
+  ownership_inheritance_rule:
+    range: string
+    description: >
+      Формальное правило наследования ответственности (owner/steward)
+      от ИТ-решения, доменного контекста или другого governed artifact.
+      Может сочетаться с локальным data_owner_ref (override).
   entity_type:
     range: EntityTypeEnum
   data_class:
@@ -134,6 +142,9 @@ slots:
     range: BusinessImportanceEnum
   governance_classification:
     range: GovernanceClassificationEnum
+  security_classification:
+    range: SecurityClassificationEnum
+    description: Режим защиты (Wave 2); ортогонален governance_classification.
   sensitivity_term_refs:
     range: DataClassificationTerm
     multivalued: true

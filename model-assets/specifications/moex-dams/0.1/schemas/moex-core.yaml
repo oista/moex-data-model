@@ -89,6 +89,11 @@ classes:
       - attributes
       - key_attribute_refs
       - invariant_refs
+      - identity_rule
+      - business_key_kind
+      - conceptual_alignment_status
+      - alignment_rationale
+      - isolation_rationale
 
   LogicalAttribute:
     is_a: ModelElement
@@ -107,6 +112,12 @@ classes:
       - format_pattern
       - default_value
       - derived_expression
+      - mapping_coverage_status
+      - mapping_rationale
+      - unit_code
+      - currency_attribute_ref
+      - timezone_policy
+      - temporal_semantics
 
   Relationship:
     is_a: ModelElement
@@ -122,6 +133,8 @@ classes:
       - target_max_cardinality
       - identifying
       - associative
+      - relationship_kind
+      - cardinality_rationale
 
   PhysicalObject:
     is_a: ModelElement
@@ -138,6 +151,8 @@ classes:
       - native_schema_ref
       - direction
       - physical_fields
+      - mapping_coverage_status
+      - mapping_rationale
 
   PhysicalField:
     is_a: ModelElement
@@ -149,6 +164,8 @@ classes:
       - required
       - ordinal_position
       - schema_path
+      - mapping_coverage_status
+      - mapping_rationale
 
   Mapping:
     is_a: ModelElement
@@ -156,7 +173,8 @@ classes:
       - HasProvenance
     description: >
       Явное соответствие между элементами. Discriminate via mapping_type:
-      realizes (solution→enterprise conceptual), field_mapping/mapsTo
+      realizes (solution→enterprise conceptual), entity_physical
+      (PhysicalObject↔LogicalEntity), field_mapping/mapsTo
       (physical↔logical), aligns_with (enterprise↔external term). Not used
       for SpecImpl implements/conforms_to.
     slots:
@@ -313,6 +331,46 @@ slots:
     range: string
   derived_expression:
     range: string
+  identity_rule:
+    range: string
+    description: >
+      Деловое правило идентичности экземпляров сущности в контексте ИТ-решения.
+  business_key_kind:
+    range: BusinessKeyKindEnum
+  conceptual_alignment_status:
+    range: ConceptualAlignmentStatusEnum
+  alignment_rationale:
+    range: string
+    description: Обоснование статуса выравнивания с концептуальным уровнем.
+  isolation_rationale:
+    range: string
+    description: Обоснование семантической изоляции сущности (LDM-007).
+  mapping_coverage_status:
+    range: MappingCoverageStatusEnum
+    description: >
+      Статус покрытия элемента mapping’ом на соседнем уровне модели
+      (logical ↔ physical).
+  mapping_rationale:
+    range: string
+    description: Обоснование для planned / technical-only / not-applicable / inherited.
+  unit_code:
+    range: string
+    description: Код единицы измерения (Wave 2 soft).
+  currency_attribute_ref:
+    range: uriorcurie
+    description: Ссылка на атрибут валюты для денежной величины (Wave 2 soft).
+  timezone_policy:
+    range: string
+    description: Политика часового пояса для timestamp (Wave 2 soft).
+  temporal_semantics:
+    range: string
+    description: Семантика даты/времени (Wave 2 soft).
+  relationship_kind:
+    range: RelationshipKindEnum
+    description: Тип логической связи (Wave 2).
+  cardinality_rationale:
+    range: string
+    description: Обоснование отсутствия кардинальности для draft/imported связей.
   source_entity_ref:
     range: uriorcurie
     required: true

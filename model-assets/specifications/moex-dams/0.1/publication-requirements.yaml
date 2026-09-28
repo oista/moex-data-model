@@ -117,6 +117,8 @@ profiles:
         obligation: required
         min_occurs: 1
         expected_semantic_types:
+          # Viewer aliases; canonical LinkML class is Mapping
+          # (mapping_type: entity_physical | field_mapping | …).
           - EntityPhysicalMapping
           - AttributePhysicalMapping
         accepted_section_kinds: [bindings]

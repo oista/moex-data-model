@@ -45,9 +45,17 @@ enums:
       core:
         description: Базовая сущность, создаваемая и управляемая решением.
       derived:
-        description: Производная сущность, вычисляемая или агрегируемая из других данных.
+        description: >
+          Результат вычисления, агрегации, трансформации или правила;
+          обязательны derivation rule и sources (Wave 2).
       reference:
         description: Справочная сущность или представление управляемого справочника.
+      projection:
+        description: >
+          Представление существующей сущности или набора сущностей
+          для конкретного use case (API DTO, read model, витрина).
+      technical:
+        description: Не имеет самостоятельного бизнес-смысла вне технической реализации.
   DataClassEnum:
     description: Класс данных для наследования модельной спецификацией дата-контракта; не совпадает с entity_type.
     permissible_values:
@@ -61,11 +69,85 @@ enums:
         description: Аналитические или производные наборы данных.
       metadata:
         description: Метаданные.
+      operational_data:
+        description: >
+          Операционные данные — данные для непосредственного выполнения
+          операций решения, не являющиеся master/reference, transactional
+          событием, analytical результатом или metadata.
   BusinessImportanceEnum:
+    description: Важность сущности в модели решения (не criticality бизнес-процесса).
     permissible_values:
+      critical:
       high:
       medium:
       low:
+  BusinessKeyKindEnum:
+    description: Характер бизнес-ключа логической сущности.
+    permissible_values:
+      natural:
+        description: Устойчивый бизнес-идентификатор, независимый от технической реализации.
+      composite:
+        description: Комбинация нескольких бизнес-атрибутов, уникальная в контексте.
+      external:
+        description: Идентификатор внешней системы, реестра или контрагента.
+      local:
+        description: Идентификатор, уникальный только в границе ИТ-решения или контекста.
+      surrogate:
+        description: Технический ключ реализации; не заменяет identity_rule.
+      derived:
+        description: Идентификатор, вычисляемый из других атрибутов по документированному правилу.
+  ConceptualAlignmentStatusEnum:
+    description: Статус выравнивания логической сущности с корпоративным концептуальным уровнем.
+    permissible_values:
+      aligned:
+        description: Есть ссылка на одну или несколько концептуальных сущностей.
+      pending:
+        description: Связь должна быть установлена, но пока не утверждена; rationale обязателен.
+      local-only:
+        description: >
+          Бизнес-смысл только в контексте данного решения; корпоративный аналог
+          сейчас не требуется; rationale обязателен.
+      not-applicable:
+        description: >
+          Сущность техническая/служебная и не относится к conceptual layer;
+          допустимо только при entity_type technical.
+  MappingCoverageStatusEnum:
+    description: >
+      Статус покрытия элемента mapping’ом на соседнем уровне модели
+      (logical ↔ physical). Не статус самой логической модели.
+    permissible_values:
+      mapped:
+        description: Есть формальное mapping.
+      derived:
+        description: Значение выводится из источников по documented expression.
+      planned:
+        description: >
+          Физическая реализация или mapping ещё не введены.
+          Требует mapping_rationale; не постоянный обход для active артефактов.
+      inherited:
+        description: Mapping наследуется/делегируется из родительского элемента.
+      technical-only:
+        description: Поле/объект имеет только техническое назначение.
+      not-applicable:
+        description: Mapping неприменим по характеру элемента.
+  RelationshipKindEnum:
+    description: Тип логической связи (Wave 2).
+    permissible_values:
+      association:
+      composition:
+      aggregation:
+      specialization:
+      reference:
+      derivation:
+      realization:
+      lineage:
+      event_participation:
+  SecurityClassificationEnum:
+    description: Режим защиты данных (Wave 2); ортогонален governance_classification.
+    permissible_values:
+      internal:
+      confidential:
+      restricted:
   GovernanceClassificationEnum:
     description: Базовая шкала ограничения доступа; специальные виды тайны задаются отдельными терминами классификации.
     permissible_values:
@@ -131,13 +213,18 @@ enums:
   MappingTypeEnum:
     description: >
       Kind of Mapping assertion. realizes = solution element → enterprise
-      conceptual; field_mapping = mapsTo (physical ↔ logical); aligns_with =
+      conceptual; entity_physical = PhysicalObject ↔ LogicalEntity;
+      field_mapping = mapsTo (physical field ↔ logical attribute); aligns_with =
       enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl
       implements (that is conforms_to / publication implements).
     permissible_values:
       semantic_equivalence:
       specialization:
       implementation:
+      entity_physical:
+        description: >
+          Explicit entity-level link between PhysicalObject and LogicalEntity
+          (PDM-003). Do not infer from field_mapping alone.
       field_mapping:
         description: Technical/structural mapsTo between physical and logical.
       transformation:
@@ -234,6 +321,12 @@ enums:
       slot_min_cardinality:
       ref_resolves:
       key_subset:
+      at_least_one_slots:
+        description: Хотя бы один из target_slots заполнен (override обоих допустим).
+      conditional_branch:
+        description: >
+          Фиксированный шаблон (имя в expression): status→slots, allowlist kinds,
+          planned guard, semantic inclusion и т.п. Без произвольного mini-language.
       custom:
   CheckSeverityEnum:
     permissible_values:

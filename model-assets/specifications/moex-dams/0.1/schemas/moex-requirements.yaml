@@ -13,20 +13,33 @@ default_prefix: dams
 default_range: string
 
 classes:
+  RequirementApplicability:
+    description: >
+      Область применимости требования (без graph queries): класс цели,
+      профиль и уровень модели.
+    slots:
+      - applies_target_class
+      - applies_target_kinds
+      - applies_implementation_scope
+      - applies_dams_model_level
+      - applies_implementation_profile
+
   FormalCheck:
     description: >-
       Одна машиночитаемая проверка требования. Kind выровнен с LinkML
-      constraints и DAMS reference/structural diagnostics; assess wiring
-      может появиться позже.
+      constraints и DAMS reference/structural diagnostics. formal_checks —
+      исполняемое подмножество нормы; исполняется assess (ADR-013).
     slots:
       - check_id
       - kind
       - target_class
       - target_slot
+      - target_slots
       - target_path
       - severity
       - diagnostic_code
       - expression
+      - remediation
 
   SpecificationRequirement:
     is_a: ModelElement
@@ -38,6 +51,7 @@ classes:
       - requirement_level
       - requirement_section
       - statement
+      - applies_to
       - formal_checks
 
   RequirementCatalog:
@@ -60,6 +74,10 @@ slots:
     description: Имя класса LinkML (например LogicalEntity).
   target_slot:
     range: string
+  target_slots:
+    range: string
+    multivalued: true
+    description: Список слотов для kind=at_least_one_slots.
   target_path:
     range: string
     description: JSON Pointer или path hint в теле ModelPackage.
@@ -68,10 +86,15 @@ slots:
     required: true
   diagnostic_code:
     range: string
-    description: Мост к DAMS-STRUCT-* / DAMS-REF-* / будущим DAMS-REQ-*.
+    description: Мост к DAMS-STRUCT-* / DAMS-REF-* / DAMS-REQ-*.
   expression:
     range: string
-    description: Свободная LinkML-ish заметка при kind=custom.
+    description: >
+      Имя фиксированного шаблона для conditional_branch / custom
+      (например ldm006_alignment, planned_on_active_warning).
+  remediation:
+    range: string
+    description: Actionable remediation text for CI / Cursor / authors.
   code:
     range: string
     required: true
@@ -85,7 +108,26 @@ slots:
   statement:
     range: string
     required: true
-    description: Развёрнутая формулировка требования на понятном языке.
+    description: >
+      Полная нормативная формулировка на русском для человека: без имён
+      LinkML-классов, слотов, kinds проверок и сленга метамодели.
+  applies_to:
+    range: RequirementApplicability
+    inlined: true
+    description: Область применимости требования для formal_checks runner.
+  applies_target_class:
+    range: string
+    description: Имя класса LinkML, к экземплярам которого применяется требование.
+  applies_target_kinds:
+    range: string
+    multivalued: true
+    description: Опциональный allowlist object_kind / facet (например table, topic).
+  applies_implementation_scope:
+    range: ImplementationScopeEnum
+  applies_dams_model_level:
+    range: DAMSModelLevelEnum
+  applies_implementation_profile:
+    range: ImplementationProfileEnum
   formal_checks:
     range: FormalCheck
     multivalued: true

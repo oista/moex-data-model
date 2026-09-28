@@ -93,8 +93,19 @@ def project_model_skeleton_from_catalog(
                 "slot_required",
                 "slot_min_cardinality",
                 "ref_resolves",
+                "at_least_one_slots",
             ):
                 continue
+            if kind == "at_least_one_slots":
+                for s in check.get("target_slots") or []:
+                    slot = str(s)
+                    if not slot:
+                        continue
+                    slots = by_class.setdefault(target_class, {})
+                    if slot not in slots:
+                        slots[slot] = "slot_required"
+                continue
+            target_slot = str(check.get("target_slot") or "")
             if not target_slot and kind != "ref_resolves":
                 continue
             # ref_resolves without target_slot (path-only) — skip slot write

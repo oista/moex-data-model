@@ -27,6 +27,7 @@ from moex_dams.rules.identifiers import (
     build_dams_curie_resolver,
     check_identifiers,
 )
+from moex_dams.rules.formal_checks import check_formal_requirements
 from moex_dams.rules.references import check_references
 from moex_dams.rules.structural import check_structural
 
@@ -47,6 +48,7 @@ __all__ = [
     "build_dams_graph",
     "build_element_index",
     "check_identifiers",
+    "check_formal_requirements",
     "check_references",
     "check_structural",
     "default_dams_rule_sets",

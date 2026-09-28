@@ -38,10 +38,22 @@ _KIND_MARKERS: dict[str, frozenset[str]] = {
     "PhysicalObject": frozenset({"physical_object", "PhysicalObject"}),
     "PhysicalField": frozenset({"field", "PhysicalField", "physical_field"}),
     "EntityPhysicalMapping": frozenset(
-        {"mapping", "EntityPhysicalMapping", "maps_to", "entity_mapping"}
+        {
+            "mapping",
+            "EntityPhysicalMapping",
+            "maps_to",
+            "entity_mapping",
+            "entity_physical",
+        }
     ),
     "AttributePhysicalMapping": frozenset(
-        {"mapping", "AttributePhysicalMapping", "maps_to", "attribute_mapping", "field_mapping"}
+        {
+            "mapping",
+            "AttributePhysicalMapping",
+            "maps_to",
+            "attribute_mapping",
+            "field_mapping",
+        }
     ),
 }
 

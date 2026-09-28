@@ -102,11 +102,21 @@ class EntityTypeEnum(str, Enum):
     """
     derived = "derived"
     """
-    Производная сущность, вычисляемая или агрегируемая из других данных.
+    Результат вычисления, агрегации, трансформации или правила; обязательны derivation rule и sources (Wave 2).
+
     """
     reference = "reference"
     """
     Справочная сущность или представление управляемого справочника.
+    """
+    projection = "projection"
+    """
+    Представление существующей сущности или набора сущностей для конкретного use case (API DTO, read model, витрина).
+
+    """
+    technical = "technical"
+    """
+    Не имеет самостоятельного бизнес-смысла вне технической реализации.
     """
 
 
@@ -134,12 +144,131 @@ class DataClassEnum(str, Enum):
     """
     Метаданные.
     """
+    operational_data = "operational_data"
+    """
+    Операционные данные — данные для непосредственного выполнения операций решения, не являющиеся master/reference, transactional событием, analytical результатом или metadata.
+
+    """
 
 
 class BusinessImportanceEnum(str, Enum):
+    """
+    Важность сущности в модели решения (не criticality бизнес-процесса).
+    """
+    critical = "critical"
     high = "high"
     medium = "medium"
     low = "low"
+
+
+class BusinessKeyKindEnum(str, Enum):
+    """
+    Характер бизнес-ключа логической сущности.
+    """
+    natural = "natural"
+    """
+    Устойчивый бизнес-идентификатор, независимый от технической реализации.
+    """
+    composite = "composite"
+    """
+    Комбинация нескольких бизнес-атрибутов, уникальная в контексте.
+    """
+    external = "external"
+    """
+    Идентификатор внешней системы, реестра или контрагента.
+    """
+    local = "local"
+    """
+    Идентификатор, уникальный только в границе ИТ-решения или контекста.
+    """
+    surrogate = "surrogate"
+    """
+    Технический ключ реализации; не заменяет identity_rule.
+    """
+    derived = "derived"
+    """
+    Идентификатор, вычисляемый из других атрибутов по документированному правилу.
+    """
+
+
+class ConceptualAlignmentStatusEnum(str, Enum):
+    """
+    Статус выравнивания логической сущности с корпоративным концептуальным уровнем.
+    """
+    aligned = "aligned"
+    """
+    Есть ссылка на одну или несколько концептуальных сущностей.
+    """
+    pending = "pending"
+    """
+    Связь должна быть установлена, но пока не утверждена; rationale обязателен.
+    """
+    local_only = "local-only"
+    """
+    Бизнес-смысл только в контексте данного решения; корпоративный аналог сейчас не требуется; rationale обязателен.
+
+    """
+    not_applicable = "not-applicable"
+    """
+    Сущность техническая/служебная и не относится к conceptual layer; допустимо только при entity_type technical.
+
+    """
+
+
+class MappingCoverageStatusEnum(str, Enum):
+    """
+    Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical). Не статус самой логической модели.
+
+    """
+    mapped = "mapped"
+    """
+    Есть формальное mapping.
+    """
+    derived = "derived"
+    """
+    Значение выводится из источников по documented expression.
+    """
+    planned = "planned"
+    """
+    Физическая реализация или mapping ещё не введены. Требует mapping_rationale; не постоянный обход для active артефактов.
+
+    """
+    inherited = "inherited"
+    """
+    Mapping наследуется/делегируется из родительского элемента.
+    """
+    technical_only = "technical-only"
+    """
+    Поле/объект имеет только техническое назначение.
+    """
+    not_applicable = "not-applicable"
+    """
+    Mapping неприменим по характеру элемента.
+    """
+
+
+class RelationshipKindEnum(str, Enum):
+    """
+    Тип логической связи (Wave 2).
+    """
+    association = "association"
+    composition = "composition"
+    aggregation = "aggregation"
+    specialization = "specialization"
+    reference = "reference"
+    derivation = "derivation"
+    realization = "realization"
+    lineage = "lineage"
+    event_participation = "event_participation"
+
+
+class SecurityClassificationEnum(str, Enum):
+    """
+    Режим защиты данных (Wave 2); ортогонален governance_classification.
+    """
+    internal = "internal"
+    confidential = "confidential"
+    restricted = "restricted"
 
 
 class GovernanceClassificationEnum(str, Enum):
@@ -216,12 +345,17 @@ class IntegrationLevelEnum(str, Enum):
 
 class MappingTypeEnum(str, Enum):
     """
-    Kind of Mapping assertion. realizes = solution element → enterprise conceptual; field_mapping = mapsTo (physical ↔ logical); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).
+    Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = PhysicalObject ↔ LogicalEntity; field_mapping = mapsTo (physical field ↔ logical attribute); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).
 
     """
     semantic_equivalence = "semantic_equivalence"
     specialization = "specialization"
     implementation = "implementation"
+    entity_physical = "entity_physical"
+    """
+    Explicit entity-level link between PhysicalObject and LogicalEntity (PDM-003). Do not infer from field_mapping alone.
+
+    """
     field_mapping = "field_mapping"
     """
     Technical/structural mapsTo between physical and logical.
@@ -370,6 +504,15 @@ class FormalCheckKindEnum(str, Enum):
     slot_min_cardinality = "slot_min_cardinality"
     ref_resolves = "ref_resolves"
     key_subset = "key_subset"
+    at_least_one_slots = "at_least_one_slots"
+    """
+    Хотя бы один из target_slots заполнен (override обоих допустим).
+    """
+    conditional_branch = "conditional_branch"
+    """
+    Фиксированный шаблон (имя в expression): status→slots, allowlist kinds, planned guard, semantic inclusion и т.п. Без произвольного mini-language.
+
+    """
     custom = "custom"
 
 
@@ -582,6 +725,8 @@ class HasOwnership(ConfiguredBaseModel):
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""")
 
 
 class HasBusinessClassification(ConfiguredBaseModel):
@@ -598,6 +743,7 @@ class HasGovernanceClassification(ConfiguredBaseModel):
     Базовая и специальная классификация чувствительности данных.
     """
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
     sensitivity_term_refs: Optional[list[str]] = Field(default=None)
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
@@ -661,6 +807,8 @@ class ModelPackage(ModelElement, HasOwnership):
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""")
     element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
@@ -685,6 +833,8 @@ class DomainContext(ModelElement, HasOwnership):
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""")
     element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
@@ -707,6 +857,8 @@ class ConceptualEntity(ModelElement, HasBusinessClassification, HasOwnership):
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""")
     entity_type: Optional[EntityTypeEnum] = Field(default=None)
     data_class: Optional[DataClassEnum] = Field(default=None)
     business_importance: Optional[BusinessImportanceEnum] = Field(default=None)
@@ -734,13 +886,22 @@ class LogicalEntity(ModelElement, HasPolicyBindings, HasGovernanceClassification
     attributes: Optional[list[LogicalAttribute]] = Field(default=None)
     key_attribute_refs: Optional[list[str]] = Field(default=None)
     invariant_refs: Optional[list[str]] = Field(default=None)
+    identity_rule: Optional[str] = Field(default=None, description="""Деловое правило идентичности экземпляров сущности в контексте ИТ-решения.
+""")
+    business_key_kind: Optional[BusinessKeyKindEnum] = Field(default=None)
+    conceptual_alignment_status: Optional[ConceptualAlignmentStatusEnum] = Field(default=None)
+    alignment_rationale: Optional[str] = Field(default=None, description="""Обоснование статуса выравнивания с концептуальным уровнем.""")
+    isolation_rationale: Optional[str] = Field(default=None, description="""Обоснование семантической изоляции сущности (LDM-007).""")
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""")
     entity_type: Optional[EntityTypeEnum] = Field(default=None)
     data_class: Optional[DataClassEnum] = Field(default=None)
     business_importance: Optional[BusinessImportanceEnum] = Field(default=None)
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
     sensitivity_term_refs: Optional[list[str]] = Field(default=None)
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
@@ -772,7 +933,15 @@ class LogicalAttribute(ModelElement, HasPolicyBindings, HasGovernanceClassificat
     format_pattern: Optional[str] = Field(default=None)
     default_value: Optional[str] = Field(default=None)
     derived_expression: Optional[str] = Field(default=None)
+    mapping_coverage_status: Optional[MappingCoverageStatusEnum] = Field(default=None, description="""Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
+""")
+    mapping_rationale: Optional[str] = Field(default=None, description="""Обоснование для planned / technical-only / not-applicable / inherited.""")
+    unit_code: Optional[str] = Field(default=None, description="""Код единицы измерения (Wave 2 soft).""")
+    currency_attribute_ref: Optional[str] = Field(default=None, description="""Ссылка на атрибут валюты для денежной величины (Wave 2 soft).""")
+    timezone_policy: Optional[str] = Field(default=None, description="""Политика часового пояса для timestamp (Wave 2 soft).""")
+    temporal_semantics: Optional[str] = Field(default=None, description="""Семантика даты/времени (Wave 2 soft).""")
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
     sensitivity_term_refs: Optional[list[str]] = Field(default=None)
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
@@ -804,6 +973,8 @@ class Relationship(ModelElement):
     target_max_cardinality: Optional[int] = Field(default=None, ge=1)
     identifying: Optional[bool] = Field(default=None)
     associative: Optional[bool] = Field(default=None)
+    relationship_kind: Optional[RelationshipKindEnum] = Field(default=None, description="""Тип логической связи (Wave 2).""")
+    cardinality_rationale: Optional[str] = Field(default=None, description="""Обоснование отсутствия кардинальности для draft/imported связей.""")
     element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
@@ -829,9 +1000,14 @@ class PhysicalObject(ModelElement, HasPolicyBindings, HasOwnership):
     native_schema_ref: str = Field(default=...)
     direction: FlowDirectionEnum = Field(default=...)
     physical_fields: Optional[list[PhysicalField]] = Field(default=None)
+    mapping_coverage_status: Optional[MappingCoverageStatusEnum] = Field(default=None, description="""Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
+""")
+    mapping_rationale: Optional[str] = Field(default=None, description="""Обоснование для planned / technical-only / not-applicable / inherited.""")
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""")
     policy_refs: Optional[list[str]] = Field(default=None)
     element_id: str = Field(default=...)
     name: str = Field(default=...)
@@ -856,6 +1032,9 @@ class PhysicalField(ModelElement):
     required: bool = Field(default=...)
     ordinal_position: Optional[int] = Field(default=None, ge=1)
     schema_path: Optional[str] = Field(default=None)
+    mapping_coverage_status: Optional[MappingCoverageStatusEnum] = Field(default=None, description="""Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
+""")
+    mapping_rationale: Optional[str] = Field(default=None, description="""Обоснование для planned / technical-only / not-applicable / inherited.""")
     element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
@@ -871,7 +1050,7 @@ class PhysicalField(ModelElement):
 
 class Mapping(ModelElement, HasProvenance):
     """
-    Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual), field_mapping/mapsTo (physical↔logical), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
+    Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (PhysicalObject↔LogicalEntity), field_mapping/mapsTo (physical↔logical), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
 
     """
     source_refs: Optional[list[str]] = Field(default=None, min_length=1)
@@ -919,6 +1098,8 @@ class DataFlow(ModelElement, HasOwnership, HasLifecycle):
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""")
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
@@ -980,6 +1161,8 @@ class DataModelBinding(ModelElement, HasOwnership, HasLifecycle):
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""")
     element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
@@ -1061,6 +1244,8 @@ class Metric(ModelElement, HasPolicyBindings, HasOwnership):
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+""")
     policy_refs: Optional[list[str]] = Field(default=None)
     element_id: str = Field(default=...)
     name: str = Field(default=...)
@@ -1094,18 +1279,33 @@ class Dimension(ModelElement):
     deprecated_by_ref: Optional[str] = Field(default=None)
 
 
+class RequirementApplicability(ConfiguredBaseModel):
+    """
+    Область применимости требования (без graph queries): класс цели, профиль и уровень модели.
+
+    """
+    applies_target_class: Optional[str] = Field(default=None, description="""Имя класса LinkML, к экземплярам которого применяется требование.""")
+    applies_target_kinds: Optional[list[str]] = Field(default=None, description="""Опциональный allowlist object_kind / facet (например table, topic).""")
+    applies_implementation_scope: Optional[ImplementationScopeEnum] = Field(default=None)
+    applies_dams_model_level: Optional[DAMSModelLevelEnum] = Field(default=None)
+    applies_implementation_profile: Optional[ImplementationProfileEnum] = Field(default=None)
+
+
 class FormalCheck(ConfiguredBaseModel):
     """
-    Одна машиночитаемая проверка требования. Kind выровнен с LinkML constraints и DAMS reference/structural diagnostics; assess wiring может появиться позже.
+    Одна машиночитаемая проверка требования. Kind выровнен с LinkML constraints и DAMS reference/structural diagnostics. formal_checks — исполняемое подмножество нормы; исполняется assess (ADR-013).
     """
     check_id: str = Field(default=...)
     kind: FormalCheckKindEnum = Field(default=...)
     target_class: Optional[str] = Field(default=None, description="""Имя класса LinkML (например LogicalEntity).""")
     target_slot: Optional[str] = Field(default=None)
+    target_slots: Optional[list[str]] = Field(default=None, description="""Список слотов для kind=at_least_one_slots.""")
     target_path: Optional[str] = Field(default=None, description="""JSON Pointer или path hint в теле ModelPackage.""")
     severity: CheckSeverityEnum = Field(default=...)
-    diagnostic_code: Optional[str] = Field(default=None, description="""Мост к DAMS-STRUCT-* / DAMS-REF-* / будущим DAMS-REQ-*.""")
-    expression: Optional[str] = Field(default=None, description="""Свободная LinkML-ish заметка при kind=custom.""")
+    diagnostic_code: Optional[str] = Field(default=None, description="""Мост к DAMS-STRUCT-* / DAMS-REF-* / DAMS-REQ-*.""")
+    expression: Optional[str] = Field(default=None, description="""Имя фиксированного шаблона для conditional_branch / custom (например ldm006_alignment, planned_on_active_warning).
+""")
+    remediation: Optional[str] = Field(default=None, description="""Actionable remediation text for CI / Cursor / authors.""")
 
 
 class SpecificationRequirement(ModelElement):
@@ -1115,7 +1315,9 @@ class SpecificationRequirement(ModelElement):
     code: str = Field(default=...)
     requirement_level: RequirementLevelEnum = Field(default=...)
     requirement_section: RequirementSectionEnum = Field(default=...)
-    statement: str = Field(default=..., description="""Развёрнутая формулировка требования на понятном языке.""")
+    statement: str = Field(default=..., description="""Полная нормативная формулировка на русском для человека: без имён LinkML-классов, слотов, kinds проверок и сленга метамодели.
+""")
+    applies_to: Optional[RequirementApplicability] = Field(default=None, description="""Область применимости требования для formal_checks runner.""")
     formal_checks: Optional[list[FormalCheck]] = Field(default=None, min_length=1)
     element_id: str = Field(default=...)
     name: str = Field(default=...)
@@ -1208,6 +1410,7 @@ SelectedEntity.model_rebuild()
 SelectedAttribute.model_rebuild()
 Metric.model_rebuild()
 Dimension.model_rebuild()
+RequirementApplicability.model_rebuild()
 FormalCheck.model_rebuild()
 SpecificationRequirement.model_rebuild()
 RequirementCatalog.model_rebuild()
