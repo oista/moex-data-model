@@ -1,2 +1,2 @@
-# Seed IRIs used by MOEX mappings (test)
+# Counterparty / legal-entity terms used by MOEX (dams-fibo.sssom.yaml).
 https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson

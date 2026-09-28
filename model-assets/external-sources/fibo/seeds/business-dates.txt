@@ -1,0 +1,2 @@
+# Business calendar (moex-fibo-profile FND/BusinessDates).
+https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay

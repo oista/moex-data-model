@@ -1,15 +1,15 @@
 lock:
   source_id: fibo
   kind: ontology
-  upstream_ref: fixture-mini
-  content_hash: sha256:8a91acf477f1f1bab6d32a37981250b690ff8c5d86a5aafe64438f923b070233
-  synced_at: '2026-09-28T09:25:23Z'
+  upstream_ref: fixture-mini-2026Q2
+  content_hash: sha256:79c5235fd7a1964aa4895a3c66489ee1e37a8d74bf3658a962e584c11c5bdabc
+  synced_at: '2026-09-28T09:33:30Z'
   extraction_method: BOT
-  seed_hash: sha256:f165860be19094c26d4dbd232ee0361dd53aad2ef68852a2e37a0caff31e3047
+  seed_hash: sha256:f2d3df71a696868b96238a077de5eb6d0cc48926f63e47351ba544b05deaba16
   tool_versions:
     robot: 1.9.5
   artifact_path: modules/fibo-module.ttl
 notes: >
-  Synced from packages/external-sources mini_ontology fixture via fallback extract
-  (ROBOT not installed). Re-run `moex-model source sync fibo` with ROBOT_JAR set
-  for production-quality modules.
+  Test extract from mini_ontology: LegalPerson → FormalOrganization,
+  BusinessDay → OccurrenceKind (seeds/moex-core.txt). Fallback BOT-like
+  closure without ROBOT; re-sync with ROBOT_JAR for production modules.

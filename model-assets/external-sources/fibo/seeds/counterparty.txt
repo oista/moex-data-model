@@ -1,2 +1,2 @@
-# IRIs used by MOEX (see dams-fibo.sssom.yaml). Extend as mappings grow.
+# Counterparty / legal-entity terms (dams-fibo.sssom.yaml).
 https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson

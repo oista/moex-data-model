@@ -4,7 +4,7 @@ adapter: fibo
 title: FIBO (test fixture)
 upstream_url: ../mini_ontology
 default_ref: fixture
-default_seed: seeds/counterparty.txt
+default_seed: seeds/moex-core.txt
 extraction_method: BOT
 robot_version: "1.9.5"
 license: https://opensource.org/licenses/MIT

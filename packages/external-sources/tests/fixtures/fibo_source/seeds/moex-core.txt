@@ -1,0 +1,4 @@
+# Combined MOEX seed for fixture sync (counterparty + business calendar).
+# Prefer split files under seeds/ for authoring; this file is the sync default.
+https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
+https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay

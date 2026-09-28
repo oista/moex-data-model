@@ -5,9 +5,10 @@ title: FIBO modular extract (MOEX)
 description: >
   Seeded ROBOT extracts of EDM Council FIBO modules used by MOEX mappings.
   Do not vendor the full FIBO release into git (ADR-017).
+  Test upstream is packages/external-sources mini_ontology (LegalPerson + BusinessDay).
 upstream_url: ../../../packages/external-sources/tests/fixtures/mini_ontology
-default_ref: fixture-mini
-default_seed: seeds/counterparty.txt
+default_ref: fixture-mini-2026Q2
+default_seed: seeds/moex-core.txt
 extraction_method: BOT
 robot_version: "1.9.5"
 release_cadence: quarterly

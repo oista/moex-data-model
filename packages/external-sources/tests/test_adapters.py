@@ -22,9 +22,10 @@ def test_load_registry_and_seeds() -> None:
     reg = load_registry(FIXTURES / "fibo_source" / "registry.yaml")
     assert reg.source_id == "fibo"
     assert reg.kind == SourceKind.ONTOLOGY
-    iris = parse_seed_iris(FIXTURES / "fibo_source" / "seeds" / "counterparty.txt")
-    assert len(iris) == 1
+    iris = parse_seed_iris(FIXTURES / "fibo_source" / "seeds" / "moex-core.txt")
+    assert len(iris) == 2
     assert iris[0].endswith("LegalPerson")
+    assert iris[1].endswith("BusinessDay")
 
 
 def test_list_source_dirs(tmp_path: Path) -> None:
@@ -56,7 +57,12 @@ def test_fibo_sync_writes_module_and_lock(tmp_path: Path) -> None:
     assert entry.content_hash.startswith("sha256:")
     module = src / "modules" / "fibo-module.ttl"
     assert module.is_file()
-    assert "LegalPerson" in module.read_text(encoding="utf-8")
+    body = module.read_text(encoding="utf-8")
+    assert "LegalPerson" in body
+    assert "BusinessDay" in body
+    assert "FormalOrganization" in body
+    assert "OccurrenceKind" in body
+    assert "UnrelatedThing" not in body
     lock = load_lockfile(src / "lockfile.yaml")
     assert lock.lock.source_id == "fibo"
     assert prev is None
