@@ -105,6 +105,15 @@
             "title": "BusinessProcess",
             "type": "object"
         },
+        "CheckSeverityEnum": {
+            "description": "",
+            "enum": [
+                "error",
+                "warning"
+            ],
+            "title": "CheckSeverityEnum",
+            "type": "string"
+        },
         "ClassificationAssignment": {
             "additionalProperties": false,
             "description": "\u0412\u0435\u0440\u0441\u0438\u043e\u043d\u0438\u0440\u0443\u0435\u043c\u043e\u0435 \u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u0438 \u043a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u0438 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0443 \u043c\u043e\u0434\u0435\u043b\u0438 \u0441 \u043e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u0435\u043c \u0438 \u043f\u0435\u0440\u0438\u043e\u0434\u043e\u043c \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044f.",
@@ -1085,6 +1094,74 @@
                 "bidirectional"
             ],
             "title": "FlowDirectionEnum",
+            "type": "string"
+        },
+        "FormalCheck": {
+            "additionalProperties": false,
+            "description": "\u041e\u0434\u043d\u0430 \u043c\u0430\u0448\u0438\u043d\u043e\u0447\u0438\u0442\u0430\u0435\u043c\u0430\u044f \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f. Kind \u0432\u044b\u0440\u043e\u0432\u043d\u0435\u043d \u0441 LinkML constraints \u0438 DAMS reference/structural diagnostics; assess wiring \u043c\u043e\u0436\u0435\u0442 \u043f\u043e\u044f\u0432\u0438\u0442\u044c\u0441\u044f \u043f\u043e\u0437\u0436\u0435.",
+            "properties": {
+                "check_id": {
+                    "type": "string"
+                },
+                "diagnostic_code": {
+                    "description": "\u041c\u043e\u0441\u0442 \u043a DAMS-STRUCT-* / DAMS-REF-* / \u0431\u0443\u0434\u0443\u0449\u0438\u043c DAMS-REQ-*.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "expression": {
+                    "description": "\u0421\u0432\u043e\u0431\u043e\u0434\u043d\u0430\u044f LinkML-ish \u0437\u0430\u043c\u0435\u0442\u043a\u0430 \u043f\u0440\u0438 kind=custom.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "kind": {
+                    "$ref": "#/$defs/FormalCheckKindEnum"
+                },
+                "severity": {
+                    "$ref": "#/$defs/CheckSeverityEnum"
+                },
+                "target_class": {
+                    "description": "\u0418\u043c\u044f \u043a\u043b\u0430\u0441\u0441\u0430 LinkML (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 LogicalEntity).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "target_path": {
+                    "description": "JSON Pointer \u0438\u043b\u0438 path hint \u0432 \u0442\u0435\u043b\u0435 ModelPackage.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "target_slot": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "check_id",
+                "kind",
+                "severity"
+            ],
+            "title": "FormalCheck",
+            "type": "object"
+        },
+        "FormalCheckKindEnum": {
+            "description": "\u0412\u0438\u0434 \u0444\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0439 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0438 \u0432 \u043d\u043e\u0442\u0430\u0446\u0438\u0438, \u0431\u043b\u0438\u0437\u043a\u043e\u0439 \u043a LinkML constraints.",
+            "enum": [
+                "slot_required",
+                "slot_min_cardinality",
+                "ref_resolves",
+                "key_subset",
+                "custom"
+            ],
+            "title": "FormalCheckKindEnum",
             "type": "string"
         },
         "GlossaryTerm": {
@@ -3250,6 +3327,57 @@
             "title": "Relationship",
             "type": "object"
         },
+        "RequirementCatalog": {
+            "additionalProperties": false,
+            "description": "\u041a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440 \u0438\u043d\u0441\u0442\u0430\u043d\u0441\u043e\u0432 SpecificationRequirement \u0432\u043d\u0435 ModelPackage.",
+            "properties": {
+                "catalog_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "requirements": {
+                    "items": {
+                        "$ref": "#/$defs/SpecificationRequirement"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "catalog_id",
+                "name"
+            ],
+            "title": "RequirementCatalog",
+            "type": "object"
+        },
+        "RequirementLevelEnum": {
+            "description": "\u0423\u0440\u043e\u0432\u0435\u043d\u044c \u043f\u0440\u0438\u043c\u0435\u043d\u0435\u043d\u0438\u044f \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f \u043a \u0441\u043f\u0435\u0446\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u0438.",
+            "enum": [
+                "conceptual_model",
+                "it_solution",
+                "it_system"
+            ],
+            "title": "RequirementLevelEnum",
+            "type": "string"
+        },
+        "RequirementSectionEnum": {
+            "description": "\u0420\u0430\u0437\u0434\u0435\u043b \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u0439 (\u0442\u0440\u0451\u0445\u0431\u0443\u043a\u0432\u0435\u043d\u043d\u044b\u0439 \u043a\u043e\u0434 \u0432 code).",
+            "enum": [
+                "LDM",
+                "PDM",
+                "REF",
+                "ATR",
+                "FLW",
+                "CLS",
+                "GEN"
+            ],
+            "title": "RequirementSectionEnum",
+            "type": "string"
+        },
         "Role": {
             "additionalProperties": false,
             "description": "\u0423\u043f\u0440\u0430\u0432\u043b\u044f\u0435\u043c\u0430\u044f \u0440\u043e\u043b\u044c \u0432\u043b\u0430\u0434\u0435\u043b\u044c\u0446\u0430, \u0441\u0442\u044e\u0430\u0440\u0434\u0430, \u043f\u043e\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043b\u044f \u0438\u043b\u0438 \u0441\u043e\u0433\u043b\u0430\u0441\u0443\u044e\u0449\u0435\u0433\u043e.",
@@ -3509,6 +3637,113 @@
             ],
             "title": "SpecificationKindEnum",
             "type": "string"
+        },
+        "SpecificationRequirement": {
+            "additionalProperties": false,
+            "description": "\u041d\u043e\u0440\u043c\u0430\u0442\u0438\u0432\u043d\u043e\u0435 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u0435 \u043a \u043c\u043e\u0434\u0435\u043b\u0438, \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u044e\u0449\u0435\u0439 reference specification (\u043a\u0430\u0442\u0430\u043b\u043e\u0433 \u0434\u043b\u044f \u0443\u0440\u043e\u0432\u043d\u044f \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f \u0438 \u0434\u0440.).",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "code": {
+                    "pattern": "^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$",
+                    "type": "string"
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "formal_checks": {
+                    "items": {
+                        "$ref": "#/$defs/FormalCheck"
+                    },
+                    "minItems": 1,
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "requirement_level": {
+                    "$ref": "#/$defs/RequirementLevelEnum"
+                },
+                "requirement_section": {
+                    "$ref": "#/$defs/RequirementSectionEnum"
+                },
+                "statement": {
+                    "description": "\u0420\u0430\u0437\u0432\u0451\u0440\u043d\u0443\u0442\u0430\u044f \u0444\u043e\u0440\u043c\u0443\u043b\u0438\u0440\u043e\u0432\u043a\u0430 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f \u043d\u0430 \u043f\u043e\u043d\u044f\u0442\u043d\u043e\u043c \u044f\u0437\u044b\u043a\u0435.",
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "code",
+                "requirement_level",
+                "requirement_section",
+                "statement",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "SpecificationRequirement",
+            "type": "object"
         }
     },
     "$id": "https://data.moex.com/dams/v0.1",
