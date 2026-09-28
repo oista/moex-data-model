@@ -1,4 +1,4 @@
-"""Derive a ModelPackage-shaped skeleton YAML from IT-solution formal_checks."""
+"""Derive a ModelPackage-shaped skeleton YAML from requirements formal_checks."""
 
 from __future__ import annotations
 
@@ -57,11 +57,17 @@ def _node_at(root: dict[str, Any], path: tuple[str, ...]) -> dict[str, Any]:
     return node
 
 
-def project_it_solution_model_skeleton(catalog_path: Path) -> dict[str, str]:
+def project_model_skeleton_from_catalog(
+    catalog_path: Path,
+    *,
+    output_rel: str,
+    header_label: str,
+) -> dict[str, str]:
     """
-    Build a ModelPackage skeleton from formal_checks in the requirements catalog.
+    Build a ModelPackage skeleton from formal_checks in a requirements catalog.
 
     Returns mapping of relative path -> YAML text. Empty if catalog missing/invalid.
+    Skips ``custom`` checks (no instance slot to fill).
     """
     if not catalog_path.is_file():
         return {}
@@ -105,7 +111,7 @@ def project_it_solution_model_skeleton(catalog_path: Path) -> dict[str, str]:
                 node[slot] = _placeholder_for(kind, slot)
 
     header = (
-        "# Derived ModelPackage skeleton from IT-solution formal_checks.\n"
+        f"# Derived ModelPackage skeleton from {header_label} formal_checks.\n"
         "# Placeholders: <required> / <must-resolve-in-package>.\n"
         "# Not a LinkML schema — instance shape owners must satisfy.\n"
     )
@@ -116,4 +122,22 @@ def project_it_solution_model_skeleton(catalog_path: Path) -> dict[str, str]:
         default_flow_style=False,
         width=100,
     )
-    return {"requirements/minimal/it-solution-model.skeleton.yaml": text}
+    return {output_rel: text}
+
+
+def project_it_solution_model_skeleton(catalog_path: Path) -> dict[str, str]:
+    """IT-solution skeleton (backward-compatible entry point)."""
+    return project_model_skeleton_from_catalog(
+        catalog_path,
+        output_rel="requirements/minimal/it-solution-model.skeleton.yaml",
+        header_label="IT-solution",
+    )
+
+
+def project_conceptual_model_skeleton(catalog_path: Path) -> dict[str, str]:
+    """Enterprise-conceptual skeleton from conceptual-model requirements."""
+    return project_model_skeleton_from_catalog(
+        catalog_path,
+        output_rel="requirements/minimal/conceptual-model.skeleton.yaml",
+        header_label="conceptual-model",
+    )

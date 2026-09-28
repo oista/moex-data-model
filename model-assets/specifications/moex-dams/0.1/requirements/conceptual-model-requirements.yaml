@@ -1,0 +1,167 @@
+catalog_id: dams:req-catalog/conceptual-model/0.1
+name: conceptual_model_requirements
+requirements:
+  - element_id: dams:req/CM-GEN-001
+    name: conceptual_package_identity
+    title: Идентичность пакета концептуальной модели
+    description: Обязательные поля корня ModelPackage для enterprise-conceptual.
+    lifecycle_status: active
+    code: CM-GEN-001
+    requirement_level: conceptual_model
+    requirement_section: GEN
+    statement: >-
+      У каждой корпоративной концептуальной модели должен быть стабильный
+      идентификатор пакета, человекочитаемое имя, краткое описание, статус
+      жизненного цикла, версия API схемы и семантическая версия модели.
+      Без этих полей пакет не принимается валидатором.
+    formal_checks:
+      - check_id: CM-GEN-001.c1
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: element_id
+        severity: error
+        diagnostic_code: DAMS-STRUCT-001
+      - check_id: CM-GEN-001.c2
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: name
+        severity: error
+        diagnostic_code: DAMS-STRUCT-002
+      - check_id: CM-GEN-001.c3
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: description
+        severity: error
+      - check_id: CM-GEN-001.c4
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: lifecycle_status
+        severity: error
+      - check_id: CM-GEN-001.c5
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: api_version
+        severity: error
+      - check_id: CM-GEN-001.c6
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: model_version
+        severity: error
+
+  - element_id: dams:req/CM-GEN-002
+    name: conceptual_implementation_scope
+    title: Область enterprise-conceptual
+    description: >
+      Пакет концептуальной модели должен иметь implementation_scope: enterprise
+      и не ссылаться на конкретное ИТ-решение.
+    lifecycle_status: active
+    code: CM-GEN-002
+    requirement_level: conceptual_model
+    requirement_section: GEN
+    statement: >-
+      Корпоративная концептуальная модель (ADR-021) объявляет
+      implementation_scope = enterprise. Поле solution_ref должно отсутствовать:
+      модель не привязана к конкретному ИТ-решению.
+    formal_checks:
+      - check_id: CM-GEN-002.c1
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: implementation_scope
+        severity: error
+        diagnostic_code: DAMS-LEVEL-002
+
+  - element_id: dams:req/CM-CON-001
+    name: conceptual_entity_core
+    title: Концептуальная сущность
+    description: Обязательные поля ConceptualEntity.
+    lifecycle_status: active
+    code: CM-CON-001
+    requirement_level: conceptual_model
+    requirement_section: GEN
+    statement: >-
+      Каждая концептуальная сущность должна иметь стабильный element_id,
+      имя, описание и статус жизненного цикла. Концептуальный уровень —
+      source of truth для корпоративных бизнес-понятий (не таблиц решения).
+    formal_checks:
+      - check_id: CM-CON-001.c1
+        kind: slot_required
+        target_class: ConceptualEntity
+        target_slot: element_id
+        severity: error
+      - check_id: CM-CON-001.c2
+        kind: slot_required
+        target_class: ConceptualEntity
+        target_slot: name
+        severity: error
+      - check_id: CM-CON-001.c3
+        kind: slot_required
+        target_class: ConceptualEntity
+        target_slot: description
+        severity: error
+      - check_id: CM-CON-001.c4
+        kind: slot_required
+        target_class: ConceptualEntity
+        target_slot: lifecycle_status
+        severity: error
+
+  - element_id: dams:req/CM-REF-001
+    name: conceptual_relationship_endpoints
+    title: Концы связей концептуальных сущностей
+    description: Обязательные концы Relationship на концептуальном уровне.
+    lifecycle_status: active
+    code: CM-REF-001
+    requirement_level: conceptual_model
+    requirement_section: REF
+    statement: >-
+      Именованная связь между концептуальными сущностями должна явно указывать
+      исходную и целевую сущность. Обе ссылки должны указывать на элементы,
+      присутствующие в том же пакете модели.
+    formal_checks:
+      - check_id: CM-REF-001.c1
+        kind: slot_required
+        target_class: Relationship
+        target_slot: source_entity_ref
+        severity: error
+        diagnostic_code: DAMS-REF-005
+      - check_id: CM-REF-001.c2
+        kind: slot_required
+        target_class: Relationship
+        target_slot: target_entity_ref
+        severity: error
+        diagnostic_code: DAMS-REF-006
+      - check_id: CM-REF-001.c3
+        kind: ref_resolves
+        target_class: Relationship
+        target_slot: source_entity_ref
+        severity: error
+        diagnostic_code: DAMS-REF-005
+      - check_id: CM-REF-001.c4
+        kind: ref_resolves
+        target_class: Relationship
+        target_slot: target_entity_ref
+        severity: error
+        diagnostic_code: DAMS-REF-006
+
+  - element_id: dams:req/CM-PDM-000
+    name: conceptual_no_physical
+    title: Запрет физического слоя
+    description: >
+      Enterprise-conceptual пакет не содержит physical_objects (ADR-021).
+    lifecycle_status: active
+    code: CM-PDM-000
+    requirement_level: conceptual_model
+    requirement_section: PDM
+    statement: >-
+      В корпоративной концептуальной модели физические объекты (таблицы, топики,
+      API) запрещены. Физический слой описывается только в solution-реализациях,
+      которые realize концептуальные сущности.
+    formal_checks:
+      - check_id: CM-PDM-000.c1
+        kind: custom
+        target_class: ModelPackage
+        target_slot: physical_objects
+        severity: error
+        diagnostic_code: DAMS-LEVEL-003
+        description: >
+          physical_objects must be absent or empty for
+          implementation_scope: enterprise.

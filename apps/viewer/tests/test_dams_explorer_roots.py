@@ -75,11 +75,23 @@ def test_wrap_roots_placeholder_implementations(tmp_path: Path):
     assert roots[2].children
     assert roots[3].id == "group:requirements"
     assert {c.id for c in roots[3].children} == {
+        "group:requirements-conceptual",
         "group:requirements-it-solutions",
         "group:requirements-publication",
     }
-    it = roots[3].children[0]
-    assert it.id == "group:requirements-it-solutions"
+    conceptual = roots[3].children[0]
+    assert conceptual.id == "group:requirements-conceptual"
+    assert {c.id for c in conceptual.children} == {
+        "group:requirements-conceptual-list",
+        "group:requirements-conceptual-min-spec",
+        "group:requirements-conceptual-model-spec",
+    }
+    assert "group:requirements-conceptual-model-example" not in {
+        c.id for c in conceptual.children
+    }
+    it = next(
+        c for c in roots[3].children if c.id == "group:requirements-it-solutions"
+    )
     assert {c.id for c in it.children} == {
         "group:requirements-list",
         "group:requirements-min-spec",
@@ -104,12 +116,48 @@ def test_wrap_roots_loads_requirements_catalog():
     roots = wrap_dams_explorer_roots([pkg], DAMS_SPEC)
     req_root = next(r for r in roots if r.id == "group:requirements")
     assert {c.id for c in req_root.children} == {
+        "group:requirements-conceptual",
         "group:requirements-it-solutions",
         "group:requirements-publication",
     }
-    assert req_root.children[0].id == "group:requirements-it-solutions"
-    assert req_root.children[0].title == "ИТ-решения"
-    it = req_root.children[0]
+    assert req_root.children[0].id == "group:requirements-conceptual"
+    assert req_root.children[0].title == "Концептуальная модель"
+    conceptual = req_root.children[0]
+    assert {c.id for c in conceptual.children} == {
+        "group:requirements-conceptual-list",
+        "group:requirements-conceptual-min-spec",
+        "group:requirements-conceptual-model-spec",
+    }
+    assert all(
+        "example" not in c.id for c in conceptual.children
+    )
+    conceptual_list = next(
+        c for c in conceptual.children if c.id == "group:requirements-conceptual-list"
+    )
+    cm_codes = {c.attributes.get("code") for c in conceptual_list.children}
+    assert "CM-GEN-001" in cm_codes
+    assert "CM-CON-001" in cm_codes
+    assert "CM-REF-001" in cm_codes
+    assert "CM-PDM-000" in cm_codes
+    assert all(
+        c.attributes.get("requirement_level") == "conceptual_model"
+        for c in conceptual_list.children
+    )
+    conceptual_skel = next(
+        c
+        for c in conceptual.children
+        if c.id == "group:requirements-conceptual-model-spec"
+    )
+    assert conceptual_skel.children
+    cm_skel_text = conceptual_skel.children[0].attributes.get("text") or ""
+    assert "conceptual_entities:" in cm_skel_text
+    assert "relationships:" in cm_skel_text
+    assert "physical_objects:" not in cm_skel_text
+
+    it = next(
+        c for c in req_root.children if c.id == "group:requirements-it-solutions"
+    )
+    assert it.title == "ИТ-решения"
     list_group = next(c for c in it.children if c.id == "group:requirements-list")
     assert list_group.title == "Требования к модели"
     codes = {c.attributes.get("code") for c in list_group.children}
@@ -204,3 +252,19 @@ def test_model_skeleton_projection_from_formal_checks():
     assert "mappings:" in text
     assert "source_refs:" in text
     assert "target_refs:" in text
+
+
+def test_conceptual_model_skeleton_projection():
+    from moex_publication_viewer.normalizers.model_skeleton_projection import (
+        project_conceptual_model_skeleton,
+    )
+
+    catalog = DAMS_SPEC / "requirements" / "conceptual-model-requirements.yaml"
+    out = project_conceptual_model_skeleton(catalog)
+    assert "requirements/minimal/conceptual-model.skeleton.yaml" in out
+    text = out["requirements/minimal/conceptual-model.skeleton.yaml"]
+    assert "element_id:" in text
+    assert "implementation_scope:" in text
+    assert "conceptual_entities:" in text
+    assert "relationships:" in text
+    assert "physical_objects:" not in text

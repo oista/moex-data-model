@@ -168,9 +168,12 @@ def _section_ref(section_id: str, title: str) -> PublicationItem:
     )
 
 
-def _load_requirement_items(spec_dir: Path) -> list[PublicationItem]:
-    """Load SpecificationRequirement instances from requirements catalog YAML."""
-    catalog_path = spec_dir / "requirements" / "it-solution-requirements.yaml"
+def _load_requirement_items(
+    spec_dir: Path,
+    catalog_rel: str = "requirements/it-solution-requirements.yaml",
+) -> list[PublicationItem]:
+    """Load SpecificationRequirement instances from a requirements catalog YAML."""
+    catalog_path = spec_dir / catalog_rel
     if not catalog_path.is_file():
         return []
     data = yaml.safe_load(catalog_path.read_text(encoding="utf-8"))
@@ -256,7 +259,7 @@ def _build_minimal_spec_file_items(spec_dir: Path) -> list[PublicationItem]:
 
 
 def _build_model_skeleton_file_items(spec_dir: Path) -> list[PublicationItem]:
-    """Derived ModelPackage skeleton from formal_checks."""
+    """Derived ModelPackage skeleton from IT-solution formal_checks."""
     from moex_publication_viewer.normalizers.model_skeleton_projection import (
         project_it_solution_model_skeleton,
     )
@@ -267,6 +270,25 @@ def _build_model_skeleton_file_items(spec_dir: Path) -> list[PublicationItem]:
         projected,
         description=(
             "Derived ModelPackage skeleton from IT-solution formal_checks "
+            "(placeholders for required / ref_resolves slots)."
+        ),
+    )
+
+
+def _build_conceptual_model_skeleton_file_items(
+    spec_dir: Path,
+) -> list[PublicationItem]:
+    """Derived ModelPackage skeleton from conceptual-model formal_checks."""
+    from moex_publication_viewer.normalizers.model_skeleton_projection import (
+        project_conceptual_model_skeleton,
+    )
+
+    catalog = spec_dir / "requirements" / "conceptual-model-requirements.yaml"
+    projected = project_conceptual_model_skeleton(catalog)
+    return _source_file_items(
+        projected,
+        description=(
+            "Derived ModelPackage skeleton from conceptual-model formal_checks "
             "(placeholders for required / ref_resolves slots)."
         ),
     )
@@ -378,6 +400,10 @@ def wrap_dams_explorer_roots(
     )
 
     req_items = _load_requirement_items(spec_dir)
+    conceptual_req_items = _load_requirement_items(
+        spec_dir,
+        catalog_rel="requirements/conceptual-model-requirements.yaml",
+    )
     list_group = PublicationItem(
         id="group:requirements-list",
         title="Требования к модели",
@@ -391,6 +417,22 @@ def wrap_dams_explorer_roots(
         },
         children=req_items,
     )
+    conceptual_list_group = PublicationItem(
+        id="group:requirements-conceptual-list",
+        title="Требования к модели",
+        description="Каталог требований к корпоративной концептуальной модели.",
+        attributes={
+            "kind": "group",
+            "section_root": "requirements-conceptual-list",
+            "purpose": (
+                "Пункты требований к enterprise-conceptual модели "
+                "с формальными проверками (ADR-021)."
+            ),
+            "requirement_count": len(conceptual_req_items),
+            "member_ids": [r.id for r in conceptual_req_items],
+        },
+        children=conceptual_req_items,
+    )
     min_files = _build_minimal_spec_file_items(spec_dir)
     min_spec_group = PublicationItem(
         id="group:requirements-min-spec",
@@ -400,6 +442,22 @@ def wrap_dams_explorer_roots(
             "kind": "group",
             "section_root": "requirements-min-spec",
             "purpose": "Тот же шаблон, что «Спецификация», но только обязательные слоты.",
+            "file_count": len(min_files),
+            "member_ids": [f.id for f in min_files],
+        },
+        children=min_files,
+    )
+    conceptual_min_spec_group = PublicationItem(
+        id="group:requirements-conceptual-min-spec",
+        title="Спецификация требований",
+        description="Required-only срез схемы DAMS по обязательным слотам.",
+        attributes={
+            "kind": "group",
+            "section_root": "requirements-conceptual-min-spec",
+            "purpose": (
+                "Тот же шаблон, что «Спецификация», но только обязательные слоты "
+                "(общий schema projection для conceptual level)."
+            ),
             "file_count": len(min_files),
             "member_ids": [f.id for f in min_files],
         },
@@ -422,6 +480,25 @@ def wrap_dams_explorer_roots(
         },
         children=skeleton_files,
     )
+    conceptual_skeleton_files = _build_conceptual_model_skeleton_file_items(spec_dir)
+    conceptual_model_spec_group = PublicationItem(
+        id="group:requirements-conceptual-model-spec",
+        title="Спецификация модели",
+        description=(
+            "Минимально допустимый скелет enterprise-conceptual ModelPackage "
+            "по formal_checks."
+        ),
+        attributes={
+            "kind": "group",
+            "section_root": "requirements-conceptual-model-spec",
+            "purpose": (
+                "Референсная форма инстанса корпоративной концептуальной модели."
+            ),
+            "file_count": len(conceptual_skeleton_files),
+            "member_ids": [f.id for f in conceptual_skeleton_files],
+        },
+        children=conceptual_skeleton_files,
+    )
     example_files = _build_model_example_file_items(spec_dir)
     model_example_group = PublicationItem(
         id="group:requirements-model-example",
@@ -435,6 +512,40 @@ def wrap_dams_explorer_roots(
             "member_ids": [f.id for f in example_files],
         },
         children=example_files,
+    )
+    conceptual_group = PublicationItem(
+        id="group:requirements-conceptual",
+        title="Концептуальная модель",
+        description=(
+            "Раздел описывает требования к корпоративной концептуальной модели."
+        ),
+        attributes={
+            "kind": "group",
+            "section_root": "requirements-conceptual",
+            "purpose": (
+                "Требования, схема и скелет модели уровня enterprise-conceptual "
+                "(без примера модели)."
+            ),
+            "structure_why": (
+                "Требования к модели — каталог SpecificationRequirement "
+                "(requirement_level: conceptual_model); "
+                "спецификация требований — required-only LinkML; "
+                "спецификация модели — derived skeleton. "
+                "Пример модели на этом уровне не публикуется."
+            ),
+            "requirement_count": len(conceptual_req_items),
+            "file_count": len(min_files) + len(conceptual_skeleton_files),
+            "member_ids": [
+                conceptual_list_group.id,
+                conceptual_min_spec_group.id,
+                conceptual_model_spec_group.id,
+            ],
+        },
+        children=[
+            conceptual_list_group,
+            conceptual_min_spec_group,
+            conceptual_model_spec_group,
+        ],
     )
     it_solutions_group = PublicationItem(
         id="group:requirements-it-solutions",
@@ -562,17 +673,25 @@ def wrap_dams_explorer_roots(
             "section_root": "requirements",
             "purpose": "Каталог нормативных требований и связанные проекции.",
             "structure_why": (
+                "Концептуальная модель (ADR-021): enterprise-conceptual; "
                 "ИТ-решения (ADR-013): модель данных решения; "
                 "Публикация (ADR-019): обязательства publication profile для Impl."
             ),
-            "requirement_count": len(req_items) + pub_req_count,
+            "requirement_count": (
+                len(conceptual_req_items) + len(req_items) + pub_req_count
+            ),
             "file_count": len(min_files)
+            + len(conceptual_skeleton_files)
             + len(skeleton_files)
             + len(example_files)
             + len(pub_spec_files),
-            "member_ids": [it_solutions_group.id, publication_group.id],
+            "member_ids": [
+                conceptual_group.id,
+                it_solutions_group.id,
+                publication_group.id,
+            ],
         },
-        children=[it_solutions_group, publication_group],
+        children=[conceptual_group, it_solutions_group, publication_group],
     )
 
     # Placeholder; build.py fills children from architecture catalog.

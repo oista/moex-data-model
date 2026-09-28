@@ -723,6 +723,8 @@
             group.attributes?.file_count ?? (group.children || []).length;
         } else if (
           sectionRoot === "requirements" ||
+          sectionRoot === "requirements-conceptual" ||
+          sectionRoot === "requirements-conceptual-list" ||
           sectionRoot === "requirements-it-solutions" ||
           sectionRoot === "requirements-list" ||
           sectionRoot === "requirements-publication" ||
@@ -742,6 +744,8 @@
           sectionRoot === "requirements-min-spec" ||
           sectionRoot === "requirements-model-spec" ||
           sectionRoot === "requirements-model-example" ||
+          sectionRoot === "requirements-conceptual-min-spec" ||
+          sectionRoot === "requirements-conceptual-model-spec" ||
           sectionRoot === "requirements-publication-spec"
         ) {
           badgeCount =
@@ -2104,6 +2108,10 @@
         sectionRoot === "requirements-it-solutions" ||
         sectionRoot === "requirements-model-spec" ||
         sectionRoot === "requirements-model-example" ||
+        sectionRoot === "requirements-conceptual" ||
+        sectionRoot === "requirements-conceptual-list" ||
+        sectionRoot === "requirements-conceptual-min-spec" ||
+        sectionRoot === "requirements-conceptual-model-spec" ||
         sectionRoot === "requirements-publication" ||
         sectionRoot === "requirements-publication-list" ||
         sectionRoot === "requirements-publication-spec"

@@ -19,13 +19,13 @@ under «Спецификация», with human-readable statements and machine-o
 | Catalog instances | Separate YAML under `requirements/`, not inside a solution `ModelPackage` |
 | Formal checks | Structured kinds inspired by LinkML constraints + optional `diagnostic_code`; assess wiring deferred |
 | Explorer placement | New root «Требования» **after** «Спецификация», before «Реализации» |
-| Level group | «ИТ-решения» — requirements for IT-solution data models |
+| Level group | «Концептуальная модель» + «ИТ-решения» (+ «Публикация» ADR-019) |
 | List child | «Требования к модели» — requirement cards |
 | Req-schema child | «Спецификация требований» — required-only LinkML schema projection |
 | Model-spec child | «Спецификация модели» — derived `ModelPackage` skeleton from `formal_checks` |
-| Example child | «Пример модели» — curated minimal `ModelPackage` under `requirements/examples/` |
-| Requirement level (v0) | Always `it_solution` |
-| Codes | `{SECTION}-{NNN}` with SECTION ∈ LDM, PDM, REF, ATR, FLW, CLS, GEN |
+| Example child | «Пример модели» — curated example under ИТ-решения only (not conceptual) |
+| Requirement level | `conceptual_model` \| `it_solution` |
+| Codes | IT: `{SECTION}-{NNN}`; conceptual: `CM-{SECTION}-{NNN}` |
 
 ## UX
 
@@ -35,21 +35,39 @@ Specification explorer
 ├─ Классы
 ├─ Спецификация
 ├─ Требования
-│   └─ ИТ-решения
-│         ├─ Требования к модели
-│         │     └─ GEN-001, LDM-001, … (kind: requirement)
-│         ├─ Спецификация требований
-│         │     └─ minimal/*.required.yaml (kind: source_file)
-│         ├─ Спецификация модели
-│         │     └─ …/it-solution-model.skeleton.yaml (kind: source_file)
-│         └─ Пример модели
-│               └─ …/it-solution-model.example.yaml (kind: source_file)
+│   ├─ Концептуальная модель
+│   │     ├─ Требования к модели
+│   │     │     └─ CM-GEN-001, CM-CON-001, … (kind: requirement)
+│   │     ├─ Спецификация требований
+│   │     │     └─ minimal/*.required.yaml (kind: source_file)
+│   │     └─ Спецификация модели
+│   │           └─ …/conceptual-model.skeleton.yaml (kind: source_file)
+│   ├─ ИТ-решения
+│   │     ├─ Требования к модели
+│   │     │     └─ GEN-001, LDM-001, … (kind: requirement)
+│   │     ├─ Спецификация требований
+│   │     │     └─ minimal/*.required.yaml (kind: source_file)
+│   │     ├─ Спецификация модели
+│   │     │     └─ …/it-solution-model.skeleton.yaml (kind: source_file)
+│   │     └─ Пример модели
+│   │           └─ …/it-solution-model.example.yaml (kind: source_file)
+│   └─ Публикация
+│         ├─ Требования публикации
+│         └─ Спецификация
 └─ Реализации
 ```
 
 ## Data contract
 
 `wrap_dams_explorer_roots` emits five roots; `group:requirements` children:
+
+0. `group:requirements-conceptual` — enterprise-conceptual level (ADR-021). Children:
+
+   1. `group:requirements-conceptual-list` — items with `kind=requirement`,
+      `requirement_level=conceptual_model`
+   2. `group:requirements-conceptual-min-spec` — same required-only schema projection
+   3. `group:requirements-conceptual-model-spec` — skeleton from
+      `project_conceptual_model_skeleton` (no example child)
 
 1. `group:requirements-it-solutions` — level group; description: requirements for IT-solution data models. Children:
 
@@ -67,6 +85,6 @@ Specification explorer
 ## Out of scope
 
 - Wiring `formal_checks` into `moex-dams-assess`
-- UI filters for conceptual / IT-system levels
+- Curated conceptual-model example YAML
 - Changing full «Спецификация» file set
 - Ontology explorers
