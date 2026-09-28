@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Generated artifacts must stay LF so Windows/Linux digests match.
+generated/** text eol=lf

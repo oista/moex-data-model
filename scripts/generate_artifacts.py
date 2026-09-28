@@ -247,6 +247,7 @@ def write_manifest(
     path.write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
+        newline="\n",
     )
 
 
@@ -442,13 +443,72 @@ def generate_doc(
     return digest
 
 
+@contextmanager
+def offline_jsonld_context_fetch() -> Iterator[None]:
+    """Serve LinkML/DAMS JSON-LD contexts from disk — no HTTPS (CI/Docker SSL)."""
+    import io
+    import urllib.request
+    from email.message import Message
+    from urllib.response import addinfourl
+
+    from linkml import LOCAL_METAMODEL_LDCONTEXT_FILE
+    from linkml.generators.jsonldcontextgen import ContextGenerator
+
+    types_ctx = Path(LOCAL_METAMODEL_LDCONTEXT_FILE).parent / "types.context.jsonld"
+    schema_dir = SCHEMA.parent
+    cache: dict[str, bytes] = {}
+    if types_ctx.is_file():
+        cache["https://w3id.org/linkml/types.context.jsonld"] = types_ctx.read_bytes()
+
+    for yaml_path in sorted(schema_dir.glob("*.yaml")):
+        stem = yaml_path.stem
+        url = f"https://data.moex.com/dams/{stem}.context.jsonld"
+        body = ContextGenerator(str(yaml_path)).serialize()
+        cache[url] = body.encode("utf-8")
+
+    def local_urlopen(req, *args, **kwargs):  # noqa: ANN001
+        url = req.full_url if hasattr(req, "full_url") else str(req)
+        if url not in cache:
+            raise RuntimeError(
+                f"offline JSON-LD context miss: {url!r} "
+                f"(known={sorted(cache)!r})"
+            )
+        headers = Message()
+        headers["Content-Type"] = "application/ld+json"
+        return addinfourl(io.BytesIO(cache[url]), headers, url, code=200)
+
+    # rdflib.parser binds `_urlopen` at import — patch every alias that matters.
+    import rdflib._networking as net
+    import rdflib.parser as parser_mod
+
+    patches: list[tuple[object, str, object]] = [
+        (urllib.request, "urlopen", urllib.request.urlopen),
+        (net, "urlopen", getattr(net, "urlopen", None)),
+        (net, "_urlopen", net._urlopen),
+        (parser_mod, "_urlopen", parser_mod._urlopen),
+    ]
+    for mod, name, _prev in patches:
+        if _prev is not None:
+            setattr(mod, name, local_urlopen)
+    try:
+        yield
+    finally:
+        for mod, name, prev in patches:
+            if prev is not None:
+                setattr(mod, name, prev)
+
+
 def generate_rdf(
     *, out_path: Path = RDF_PATH, manifest_path: Path = RDF_MANIFEST
 ) -> str:
+    from linkml import LOCAL_METAMODEL_LDCONTEXT_FILE
     from linkml.generators.rdfgen import RDFGenerator
 
-    with schema_cwd() as schema_name:
-        text = RDFGenerator(schema_name).serialize()
+    # Local metamodel context + offline fetch for import *.context.jsonld URLs
+    # (rdflib otherwise hits HTTPS and fails under CI/Docker SSL interception).
+    local_ctx = [LOCAL_METAMODEL_LDCONTEXT_FILE]
+    with schema_cwd() as schema_name, offline_jsonld_context_fetch():
+        text = RDFGenerator(schema_name, context=local_ctx).serialize(context=local_ctx)
     digest = write_rdf_artifact(out_path, text, strip_volatile=True)
     try:
         out_rel = out_path.relative_to(REPO).as_posix()
@@ -464,6 +524,7 @@ def generate_rdf(
         generator_options={
             "digest_mode": "rdf_ground_triples",
             "strip_volatile": sorted(_VOLATILE_RDF_PREDICATES),
+            "offline_jsonld_contexts": True,
         },
     )
     return digest

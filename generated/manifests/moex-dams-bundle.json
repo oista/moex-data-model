@@ -8,7 +8,7 @@
     {
       "path": "generated/contracts/moex-dams/0.1",
       "role": "contracts",
-      "content_digest": "sha256:2f12de05c3d1cf6222675a4766f9fe9601bafee16c94cb5c4228e31bdf84abb7",
+      "content_digest": "sha256:181501ebd09ce034a193c576717917b07129d9938f86bc740d5c673cba2f55ac",
       "manifest_path": "generated/manifests/moex-dams-contracts.json"
     },
     {
@@ -56,7 +56,7 @@
     {
       "path": "generated/artifacts/moex-dams/0.1/moex-dams.rdf.ttl",
       "role": "rdf",
-      "content_digest": "sha256:9e98c012339d89667efa938a3d4c1faad3fb164e68f7951e1e196aa39430679b",
+      "content_digest": "sha256:4e88d35845019ac1177999e6a9e1a448f955a9a45d9115462b2ab4db7a2debb8",
       "manifest_path": "generated/manifests/moex-dams-rdf.json"
     },
     {
@@ -65,6 +65,6 @@
       "content_digest": "sha256:142f4b53cd297311e8e33fd64e46ddaa1688289122e08441e5c9a5ac028efaf9"
     }
   ],
-  "content_digest": "sha256:2f76ba06a4b6cae3e0775078c38f181ab78351bad0cb0db5ff55cb1a0acdc22f",
-  "generated_at": "2026-09-28T05:22:38.681888+00:00"
+  "content_digest": "sha256:4aced1e0e49a3c74dc3354a16d546b4b6565cfa8b0609b022fc0ace49370cfd4",
+  "generated_at": "2026-09-28T07:21:16.054794+00:00"
 }

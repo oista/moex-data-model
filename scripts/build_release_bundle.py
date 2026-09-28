@@ -173,6 +173,7 @@ def build_bundle(*, stage: bool = True) -> dict:
                 (BUNDLE_DIR / "BUNDLE.json").write_text(
                     json.dumps(existing, indent=2, ensure_ascii=False) + "\n",
                     encoding="utf-8",
+                    newline="\n",
                 )
             return existing
 
@@ -192,12 +193,14 @@ def build_bundle(*, stage: bool = True) -> dict:
     BUNDLE_MANIFEST.write_text(
         json.dumps(index, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
+        newline="\n",
     )
     if stage:
         stage_bundle(parts)
         (BUNDLE_DIR / "BUNDLE.json").write_text(
             json.dumps(index, indent=2, ensure_ascii=False) + "\n",
             encoding="utf-8",
+            newline="\n",
         )
     return index
 
