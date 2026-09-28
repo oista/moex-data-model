@@ -8,6 +8,19 @@ icon: "📚"
 title: FIBO Glossary
 description: Preview of FIBO class definitions for glossary mapping (committed sample)
 sections:
+  - id: explorer
+    title: Class explorer
+    description: Domains and asserted subClassOf tree (preview) with full class cards
+    type: explorer
+    source:
+      format: csv
+      path: publications/fibo_glossary.preview.csv
+    key_column: local_name
+    tags:
+      - fibo
+      - preview
+      - ontology
+
   - id: glossary
     title: Glossary (preview)
     description: Sample terms from FND/BE/FBC/SEC/DER with curated RU labels. Full export is gitignored under output/.

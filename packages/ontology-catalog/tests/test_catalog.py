@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from moex_standard_owl.adapters.rdflib_adapter import RdflibOntologyAdapter
@@ -73,6 +74,35 @@ def test_search_and_card_with_provider(tmp_path: Path):
     assert card is not None
     assert card.kind == "class"
     assert card.label is not None or card.curie == "LegalPerson"
+    index.close()
+
+
+def test_export_explorer_groups_and_nests(tmp_path: Path):
+    from moex_ontology.publication_export import export_preview_json
+
+    index, provider = _indexed(tmp_path)
+    out = tmp_path / "pub"
+    written = export_preview_json(out, index=index, provider=provider)
+    assert "explorer" in written
+    data = json.loads(written["explorer"].read_text(encoding="utf-8"))
+    assert data
+    assert all(g["attributes"]["kind"] == "group" for g in data)
+    fibo = next(g for g in data if g["id"] == "group:moex:ontology:fibo")
+    assert fibo["attributes"]["class_count"] > 0
+    # BusinessDay parents OccurrenceKind in mini_fibo when both indexed
+    def find(nodes, iri):
+        for n in nodes:
+            if n["id"] == iri:
+                return n
+            hit = find(n.get("children") or [], iri)
+            if hit:
+                return hit
+        return None
+
+    day = find(fibo["children"], BUSINESS_DAY)
+    kind = find(fibo["children"], OCCURRENCE_KIND)
+    if day is not None and kind is not None:
+        assert any(c["id"] == BUSINESS_DAY for c in kind.get("children") or [])
     index.close()
 
 

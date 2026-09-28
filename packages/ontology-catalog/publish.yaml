@@ -8,6 +8,18 @@ icon: "🗺️"
 title: Ontology Catalog
 description: Reference ontology releases, entity search, hierarchy, cards, and DAMS backlinks (preview)
 sections:
+  - id: explorer
+    title: Entity explorer
+    description: Ontologies and asserted class hierarchy with entity cards
+    type: explorer
+    source:
+      format: json
+      path: publications/ontology_explorer.json
+    key_column: id
+    tags:
+      - ontology
+      - catalog
+
   - id: catalog
     title: Ontology releases
     description: Registered and indexed ontology releases
