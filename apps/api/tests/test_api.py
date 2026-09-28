@@ -315,6 +315,62 @@ def test_workspace_document_put_get_and_validate_draft(client: TestClient) -> No
     assert "source=draft" in job.json()["result_summary"]
 
 
+def test_semantic_diff_preview_identical_and_breaking(client: TestClient) -> None:
+    headers = {"X-Moex-Actor": "diff-user"}
+    missing = client.post(
+        "/workspaces/ws-diff-missing/semantic-diff",
+        headers=headers,
+    )
+    assert missing.status_code == 400
+    assert "draft" in missing.json()["detail"]
+
+    published = client.get("/implementations/trading/body").json()
+    put = client.put(
+        "/workspaces/ws-diff/documents/trading",
+        json={
+            "content": published["content"],
+            "base_digest": published["content_digest"],
+        },
+        headers=headers,
+    )
+    assert put.status_code == 200
+
+    identical = client.post(
+        "/workspaces/ws-diff/semantic-diff",
+        headers=headers,
+    )
+    assert identical.status_code == 200
+    body = identical.json()
+    assert body["base_label"] == "published"
+    assert body["target_label"] == "draft:ws-diff"
+    assert body["has_breaking"] is False
+    assert body["changes"] == []
+    assert body["counts"]["breaking"] == 0
+
+    deleted = client.post(
+        "/workspaces/ws-diff/documents/trading/mutations",
+        json={
+            "op": "delete_logical_attribute",
+            "element_id": "dams:logical/trading/Client/fullName",
+        },
+        headers=headers,
+    )
+    assert deleted.status_code == 200
+
+    breaking = client.post(
+        "/workspaces/ws-diff/semantic-diff",
+        headers=headers,
+    )
+    assert breaking.status_code == 200
+    report = breaking.json()
+    assert report["has_breaking"] is True
+    assert report["counts"]["breaking"] >= 1
+    codes = {c["change_code"] for c in report["changes"]}
+    assert "DAMS-DIFF-REMOVE" in codes
+    subjects = {c["subject_ref"] for c in report["changes"]}
+    assert "dams:logical/trading/Client/fullName" in subjects
+
+
 def test_publication_from_draft_idempotent(
     publish_client: TestClient, temp_git_repo: Path
 ) -> None:

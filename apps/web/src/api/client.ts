@@ -103,6 +103,11 @@ export const api = {
       body: JSON.stringify(body),
     });
   },
+  previewSemanticDiff: (workspaceId: string) =>
+    request<import("./types").SemanticDiffReport>(
+      `/workspaces/${workspaceId}/semantic-diff`,
+      { method: "POST" },
+    ),
   getPublication: (id: string) =>
     request<import("./types").Publication>(`/publications/${id}`),
   createJob: (

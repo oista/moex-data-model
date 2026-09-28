@@ -338,7 +338,8 @@ artifact:
 - **Roadmap phases 1–4 (2026-09-28):** (1) `make generate-contracts` → `moex_dams_contracts`; (2) `OWLStandardProvider`; (3) `packages/git-adapter` + CLI lint/compile/diagram/diff; (4) `apps/api` FastAPI + Alembic core tables + `infra/compose/postgres.yml` (SQLite smoke / Postgres compose).
 - **Stage 3 narrow-v2 (2026-09-28):** Alembic `0002` — `user_identity`, `role_binding`, `workspace_member`, `generation_job`, `generated_artifact`, `model_index`, `model_element_index`; ports `IdentityStore` / `JobStore` / `ModelIndexProvider`; HTTP workspaces + sync jobs (Idempotency-Key) + model-index rebuild/search; GitHub read-only `GitProvider` via `MOEX_GIT_PROVIDER`.
 - **Stage 3 narrow-v3 (2026-09-28):** Alembic `0004` `publication_request`; GitHub write + local publish; `POST /publications` from workspace draft into this repo; Workbench Publish button.
-- **Semantic diff CLI (2026-09-28):** kernel `SemanticDiffReport` / `ChangeCategory`; `specification-dams.diff_implementations`; `moex-model semantic-diff` (Git refs + `--left`/`--right`, `--json`, exit 1 on breaking). API/UI/PR attach still out.
+- **Semantic diff CLI (2026-09-28):** kernel `SemanticDiffReport` / `ChangeCategory`; `specification-dams.diff_implementations`; `moex-model semantic-diff` (Git refs + `--left`/`--right`, `--json`, exit 1 on breaking).
+- **Semantic diff API + Web preview (2026-09-28):** `POST /workspaces/{id}/semantic-diff` (published vs draft); Workbench **Review changes** panel. PR attach still out.
 - **Stage 0 foundation CI (2026-09-28):** `requirements-linkml.txt` (exact pins; `uv.lock` deferred), `.python-version` 3.12, `.linkmllint.yaml`, `validate-examples`, `compare-golden` (contracts + JSON Schema), `.github/workflows/check.yml`. Full OWL/SHACL/DBML golden matrix still Stage 6.
 - **Viewer + ontology packages CI (2026-09-28):** GHA job `viewer-and-packages` runs `make packages-check` (standard-owl / semantic-mappings / ontology-catalog) and `make viewer-check` alongside Stage 0 `make check`.
 - **PDF→ER agent docs (2026-09-28):** playbook + model contract under [`docs/agents/`](agents/); design status delivered. Filling runs still write fixture CSVs + `gaps.md` at runtime.
@@ -499,7 +500,7 @@ audit_event
 
 ## Этап 4. Web Workbench
 
-**Progress (MVP shell + editors + entity forms):** `apps/web` — dashboard/workspaces/models/validate; Monaco YAML + `workspace_document`; forms add/update/delete LogicalEntity/LogicalAttribute via `POST …/mutations` (ruamel); dirty Monaco auto-PUT before mutation. Out: live field-level Monaco↔form binding, semantic diff UI, drawDB, OIDC, i18n.
+**Progress (MVP shell + editors + entity forms):** `apps/web` — dashboard/workspaces/models/validate; Monaco YAML + `workspace_document`; forms add/update/delete LogicalEntity/LogicalAttribute via `POST …/mutations` (ruamel); dirty Monaco auto-PUT before mutation; **Review changes** semantic-diff preview. Out: live field-level Monaco↔form binding, drawDB, OIDC, i18n.
 
 ### Основные экраны
 
