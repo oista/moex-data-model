@@ -233,6 +233,115 @@
       .replace(/"/g, "&quot;");
   }
 
+  function isEmojiIcon(value) {
+    const s = String(value ?? "");
+    if (!s) return false;
+    try {
+      return /\p{Extended_Pictographic}/u.test(s);
+    } catch {
+      return /[\uD800-\uDBFF][\uDC00-\uDFFF]/.test(s);
+    }
+  }
+
+  function displayIcon(icon, fallback = "") {
+    if (!icon || isEmojiIcon(icon)) return fallback;
+    return String(icon);
+  }
+
+  function chevronSvg(direction) {
+    if (direction === "down") {
+      return `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    }
+    return `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  }
+
+  function setTreeToggle(el, { open = false, leaf = false } = {}) {
+    el.className = "tree-toggle" + (leaf ? " is-leaf" : "");
+    el.type = "button";
+    if (leaf) {
+      el.innerHTML = "";
+      el.tabIndex = -1;
+      el.setAttribute("aria-hidden", "true");
+      return;
+    }
+    el.innerHTML = chevronSvg(open ? "down" : "right");
+    el.setAttribute("aria-hidden", "false");
+    el.setAttribute("aria-label", open ? "Collapse" : "Expand");
+  }
+
+  function shortcutModKey() {
+    const p = navigator.platform || "";
+    const ua = navigator.userAgent || "";
+    return /Mac|iPhone|iPad|iPod/i.test(p) || /Mac OS/i.test(ua) ? "⌘" : "Ctrl";
+  }
+
+  function mountTabs(container, tabs, { initial } = {}) {
+    const list = document.createElement("div");
+    list.className = "tabs";
+    list.setAttribute("role", "tablist");
+    const panels = document.createElement("div");
+    panels.className = "tabpanels";
+    let activeId = initial || tabs[0]?.id;
+    const tabButtons = [];
+
+    function select(id) {
+      activeId = id;
+      tabButtons.forEach((btn) => {
+        const on = btn.dataset.tabId === id;
+        btn.setAttribute("aria-selected", on ? "true" : "false");
+        btn.tabIndex = on ? 0 : -1;
+      });
+      panels.querySelectorAll("[data-tabpanel]").forEach((panel) => {
+        panel.hidden = panel.dataset.tabpanel !== id;
+      });
+    }
+
+    tabs.forEach((tab, index) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "tab";
+      btn.setAttribute("role", "tab");
+      btn.dataset.tabId = tab.id;
+      btn.id = `tab-${tab.id}`;
+      btn.setAttribute("aria-controls", `tabpanel-${tab.id}`);
+      const countHtml =
+        tab.count != null
+          ? ` <span class="tab-count">${escapeHtml(String(tab.count))}</span>`
+          : "";
+      btn.innerHTML = `${escapeHtml(tab.label)}${countHtml}`;
+      btn.addEventListener("click", () => select(tab.id));
+      btn.addEventListener("keydown", (e) => {
+        if (e.key !== "ArrowRight" && e.key !== "ArrowLeft" && e.key !== "Home" && e.key !== "End") {
+          return;
+        }
+        e.preventDefault();
+        let next = index;
+        if (e.key === "ArrowRight") next = (index + 1) % tabs.length;
+        if (e.key === "ArrowLeft") next = (index - 1 + tabs.length) % tabs.length;
+        if (e.key === "Home") next = 0;
+        if (e.key === "End") next = tabs.length - 1;
+        tabButtons[next].focus();
+        select(tabs[next].id);
+      });
+      tabButtons.push(btn);
+      list.appendChild(btn);
+
+      const panel = document.createElement("div");
+      panel.className = "tabpanel";
+      panel.setAttribute("role", "tabpanel");
+      panel.dataset.tabpanel = tab.id;
+      panel.id = `tabpanel-${tab.id}`;
+      panel.setAttribute("aria-labelledby", `tab-${tab.id}`);
+      tab.render(panel);
+      panels.appendChild(panel);
+    });
+
+    container.appendChild(list);
+    container.appendChild(panels);
+    select(activeId);
+    return { select, list, panels };
+  }
+
   function cellValue(item, col) {
     if (col === "id") return item.id;
     if (col === "title") return item.title ?? "";
@@ -388,7 +497,7 @@
         const open = openGroups.has(node.id);
         const wrapNode = document.createElement("div");
         wrapNode.className = "nav-tree-node";
-        if (depth) wrapNode.style.marginLeft = `${Math.min(depth, 6) * 8}px`;
+        wrapNode.style.setProperty("--tree-level", String(depth || 0));
 
         const row = document.createElement("div");
         row.className = "nav-tree-row";
@@ -396,7 +505,7 @@
         const toggle = document.createElement("button");
         toggle.type = "button";
         toggle.className = "tree-toggle";
-        toggle.textContent = hasKids ? (open ? "▼" : "▶") : "·";
+        setTreeToggle(toggle, { open, leaf: !hasKids });
         toggle.addEventListener("click", (e) => {
           e.stopPropagation();
           if (!hasKids) return;
@@ -502,7 +611,7 @@
           (gId === selectedItemId || overviewRootActive ? " active" : "");
         const toggle = document.createElement("span");
         toggle.className = "tree-toggle";
-        toggle.textContent = open ? "▼" : "▶";
+        setTreeToggle(toggle, { open, leaf: false });
         toggle.addEventListener("click", (e) => {
           e.stopPropagation();
           if (openGroups.has(gId)) openGroups.delete(gId);
@@ -612,7 +721,7 @@
     const toggle = document.createElement("button");
     toggle.type = "button";
     toggle.className = "tree-toggle";
-    toggle.textContent = hasBody ? (open ? "▼" : "▶") : "·";
+    setTreeToggle(toggle, { open, leaf: !hasBody });
     toggle.addEventListener("click", (e) => {
       e.stopPropagation();
       if (!hasBody) return;
@@ -678,7 +787,7 @@
         const toggle = document.createElement("button");
         toggle.type = "button";
         toggle.className = "tree-toggle";
-        toggle.textContent = open ? "▼" : "▶";
+        setTreeToggle(toggle, { open, leaf: false });
         toggle.addEventListener("click", (e) => {
           e.stopPropagation();
           if (openGroups.has(mKey)) openGroups.delete(mKey);
@@ -688,8 +797,7 @@
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "module-btn" + (active && !selectedItemId ? " active" : "");
-        btn.innerHTML = `<span class="module-icon">${escapeHtml(mod.icon || "📄")}</span>
-          <span>${escapeHtml(mod.title)}</span>
+        btn.innerHTML = `${displayIcon(mod.icon) ? `<span class="module-icon">${escapeHtml(displayIcon(mod.icon))}</span> ` : ""}<span>${escapeHtml(mod.title)}</span>
           <span class="badge">${mod.sections.length}</span>`;
         btn.addEventListener("click", () => {
           openGroups.add(mKey);
@@ -734,7 +842,7 @@
         const toggle = document.createElement("button");
         toggle.type = "button";
         toggle.className = "tree-toggle";
-        toggle.textContent = open ? "▼" : "▶";
+        setTreeToggle(toggle, { open, leaf: false });
         toggle.addEventListener("click", (e) => {
           e.stopPropagation();
           if (openGroups.has(mKey)) openGroups.delete(mKey);
@@ -744,8 +852,7 @@
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "module-btn" + (active && !selectedItemId ? " active" : "");
-        btn.innerHTML = `<span class="module-icon">${escapeHtml(mod.icon || "📄")}</span>
-          <span>${escapeHtml(mod.title)}</span>
+        btn.innerHTML = `${displayIcon(mod.icon) ? `<span class="module-icon">${escapeHtml(displayIcon(mod.icon))}</span> ` : ""}<span>${escapeHtml(mod.title)}</span>
           <span class="badge">${mod.sections.length}</span>`;
         btn.addEventListener("click", () => {
           openGroups.add(mKey);
@@ -758,6 +865,120 @@
         moduleNav.appendChild(wrap);
       });
     }
+    bindPublicationTreeKeyboard();
+  }
+
+  function visibleNavTargets() {
+    return Array.from(
+      moduleNav.querySelectorAll("[data-tree-node], .module-btn, .nav-group-btn, .nav-section-btn, .nav-impl-btn")
+    ).filter((el) => {
+      if (el.disabled) return false;
+      const style = window.getComputedStyle(el);
+      if (style.display === "none" || style.visibility === "hidden") return false;
+      let p = el.parentElement;
+      while (p && p !== moduleNav) {
+        if (p.hidden) return false;
+        p = p.parentElement;
+      }
+      return true;
+    });
+  }
+
+  function bindPublicationTreeKeyboard() {
+    const targets = visibleNavTargets();
+    targets.forEach((el, i) => {
+      el.tabIndex = i === 0 || el.classList.contains("active") || el.getAttribute("aria-current") === "page" ? 0 : -1;
+    });
+    const current =
+      targets.find((el) => el.getAttribute("aria-current") === "page" || el.classList.contains("active")) ||
+      targets[0];
+    if (current) {
+      targets.forEach((el) => {
+        el.tabIndex = el === current ? 0 : -1;
+      });
+    }
+
+    targets.forEach((el) => {
+      if (el.dataset.treeKeysBound === "1") return;
+      el.dataset.treeKeysBound = "1";
+      el.addEventListener("keydown", (e) => {
+        const list = visibleNavTargets();
+        const idx = list.indexOf(el);
+        if (idx < 0) return;
+
+        const focusAt = (i) => {
+          const next = list[i];
+          if (!next) return;
+          list.forEach((n) => {
+            n.tabIndex = -1;
+          });
+          next.tabIndex = 0;
+          next.focus();
+        };
+
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          focusAt(Math.min(list.length - 1, idx + 1));
+          return;
+        }
+        if (e.key === "ArrowUp") {
+          e.preventDefault();
+          focusAt(Math.max(0, idx - 1));
+          return;
+        }
+        if (e.key === "Home") {
+          e.preventDefault();
+          focusAt(0);
+          return;
+        }
+        if (e.key === "End") {
+          e.preventDefault();
+          focusAt(list.length - 1);
+          return;
+        }
+        if (e.key === "ArrowRight") {
+          e.preventDefault();
+          const toggle = el.closest(".nav-tree-row")?.querySelector(".tree-toggle:not(.is-leaf)");
+          if (toggle && el.getAttribute("aria-expanded") === "false") {
+            toggle.click();
+          } else {
+            focusAt(Math.min(list.length - 1, idx + 1));
+          }
+          return;
+        }
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          const toggle = el.closest(".nav-tree-row")?.querySelector(".tree-toggle:not(.is-leaf)");
+          if (toggle && el.getAttribute("aria-expanded") === "true") {
+            toggle.click();
+          } else {
+            const parentRow = el.closest(".nav-tree-node")?.parentElement?.closest(".nav-tree-node");
+            const parentBtn = parentRow?.querySelector("[data-tree-node], .nav-group-btn");
+            if (parentBtn) {
+              list.forEach((n) => {
+                n.tabIndex = -1;
+              });
+              parentBtn.tabIndex = 0;
+              parentBtn.focus();
+            }
+          }
+          return;
+        }
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          el.click();
+          // Selecting a leaf must not collapse its branch (handled in click handlers).
+          requestAnimationFrame(() => {
+            const h1 = content.querySelector("h1");
+            if (h1) {
+              h1.setAttribute("tabindex", "-1");
+              h1.focus();
+            }
+            announce(h1 ? h1.textContent.trim() : "Opened");
+          });
+        }
+      });
+    });
   }
 
   function renderArchitectureCrumb(node) {
@@ -875,20 +1096,18 @@
     chrome.className = "arch-chrome";
     chrome.appendChild(renderArchitectureCrumb(node));
 
-    const meta = document.createElement("div");
-    meta.className = "arch-meta";
-    const badges = [
-      `<span class="badge-pill">${
-        node.role === "reference_specification" ? "Specification" : "Implementation"
-      }</span>`,
-    ];
-    if (node.expressed_in) {
-      badges.push(
-        `<span class="badge-pill">expressed in ${escapeHtml(node.expressed_in)}</span>`
-      );
+    // When an object card is open, keep chrome to breadcrumb only (avoid badge duplication).
+    if (!focus?.item) {
+      const meta = document.createElement("div");
+      meta.className = "arch-meta muted";
+      const role =
+        node.role === "reference_specification" ? "Specification" : "Implementation";
+      const bits = [role];
+      if (node.expressed_in) bits.push(node.expressed_in);
+      if (node.version) bits.push(node.version);
+      meta.textContent = bits.join(" · ");
+      chrome.appendChild(meta);
     }
-    meta.innerHTML = `<div class="badge-row">${badges.join("")}</div>`;
-    chrome.appendChild(meta);
 
     if (
       node.role === "reference_specification" &&
@@ -981,7 +1200,7 @@
       const landingHint = ontoExpl
         ? "Домены и иерархия классов. Выберите класс слева или ниже."
         : "Пакеты схемы спецификации (тело LinkML). Выберите класс слева или ниже.";
-      header.innerHTML = `<h1>${escapeHtml(mod.icon || "")} ${escapeHtml(mod.title)}</h1>
+      header.innerHTML = `<h1>${escapeHtml(displayIcon(mod.icon) ? displayIcon(mod.icon) + " " : "")}${escapeHtml(mod.title)}</h1>
         <p class="muted">${escapeHtml(mod.description || "")}</p>
         <p>${landingHint}</p>`;
       content.appendChild(header);
@@ -1081,7 +1300,7 @@
     // Modules without explorer: show all sections (previous behaviour)
     const header = document.createElement("div");
     header.className = "module-header";
-    header.innerHTML = `<h1>${escapeHtml(mod.icon || "")} ${escapeHtml(mod.title)}</h1>
+    header.innerHTML = `<h1>${escapeHtml(displayIcon(mod.icon) ? displayIcon(mod.icon) + " " : "")}${escapeHtml(mod.title)}</h1>
       <p class="muted">${escapeHtml(mod.description || "")}</p>`;
     content.appendChild(header);
     mod.sections.forEach((section) => {
@@ -1141,7 +1360,10 @@
 
   function renderOntologyExplorerDetail(mod, expl, item) {
     const card = document.createElement("article");
-    card.className = "detail-card";
+    card.className = "detail-card content-card";
+    card.setAttribute("data-publication-item", "");
+    card.setAttribute("data-item-id", item.id);
+    card.setAttribute("data-item-type", item.attributes?.kind || "class");
     const attrs = item.attributes || {};
     const kind = attrs.kind || "class";
     const labelRu = attrs.label_ru || "";
@@ -1158,21 +1380,28 @@
     card.innerHTML = `
       <header class="detail-head">
         <h1>${escapeHtml(item.title || item.id)}${titleExtra}</h1>
-        <div class="badge-row">${badges.join("")}</div>
+        <div class="badge-row">${badges.slice(0, 3).join("")}</div>
         <p class="muted">${escapeHtml(attrs.source_domain || attrs.ontology_id || "")}</p>
       </header>
     `;
 
     const defBlock = document.createElement("section");
     defBlock.className = "detail-block";
+    defBlock.setAttribute("data-renderer", "definition");
     defBlock.innerHTML = `<h2>Definition</h2>`;
     const defEn = document.createElement("p");
     defEn.className = "detail-desc";
     defEn.textContent = item.description || attrs.definition || "No definition.";
     defBlock.appendChild(defEn);
     if (attrs.definition_ru) {
+      const ruHead = document.createElement("h3");
+      ruHead.className = "muted";
+      ruHead.style.fontSize = "var(--font-sm)";
+      ruHead.style.fontWeight = "600";
+      ruHead.textContent = "Русское определение";
+      defBlock.appendChild(ruHead);
       const defRu = document.createElement("p");
-      defRu.className = "detail-desc muted";
+      defRu.className = "detail-desc";
       defRu.textContent = String(attrs.definition_ru);
       defBlock.appendChild(defRu);
     }
@@ -1182,7 +1411,7 @@
     idBlock.className = "detail-block";
     idBlock.innerHTML = `<h2>Identity</h2>`;
     const dl = document.createElement("dl");
-    dl.className = "detail-meta";
+    dl.className = "detail-meta definition-list";
     if (attrs.iri) {
       const wrap = document.createElement("span");
       wrap.style.display = "inline-flex";
@@ -1445,14 +1674,19 @@
 
   function renderSourceFileDetail(mod, expl, item) {
     const card = document.createElement("article");
-    card.className = "detail-card";
+    card.className = "detail-card content-card";
+    card.setAttribute("data-publication-item", "");
+    card.setAttribute("data-item-id", item.id);
+    card.setAttribute("data-item-type", "source_file");
     const attrs = item.attributes || {};
     const version = attrs.version || "";
+    const refsOut = Array.isArray(attrs.refs_out) ? attrs.refs_out : [];
+    const refsIn = Array.isArray(attrs.refs_in) ? attrs.refs_in : [];
     card.innerHTML = `
       <header class="detail-head">
         <h1>${escapeHtml(item.title || item.id)}</h1>
         <div class="badge-row">
-          <span class="badge-pill">yaml</span>
+          <span class="badge-pill">YAML</span>
           ${version ? `<span class="badge-pill">${escapeHtml(String(version))}</span>` : ""}
         </div>
         <p class="muted">${escapeHtml(attrs.path || "")}</p>
@@ -1460,15 +1694,18 @@
       <p class="detail-desc">${escapeHtml(attrs.description || item.description || "No description.")}</p>
     `;
 
-    function refBlock(title, refs) {
-      const list = Array.isArray(refs) ? refs : [];
-      if (!list.length) return;
+    function fillRefList(container, title, refs) {
       const sec = document.createElement("section");
       sec.className = "detail-block";
-      sec.innerHTML = `<h2>${escapeHtml(title)}</h2>`;
+      sec.innerHTML = `<h2>${escapeHtml(title)} (${refs.length})</h2>`;
+      if (!refs.length) {
+        sec.innerHTML += `<p class="muted">None.</p>`;
+        container.appendChild(sec);
+        return;
+      }
       const ul = document.createElement("div");
       ul.className = "impl-list";
-      list.forEach((refId) => {
+      refs.forEach((refId) => {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "spec-link";
@@ -1487,17 +1724,49 @@
         ul.appendChild(btn);
       });
       sec.appendChild(ul);
-      card.appendChild(sec);
+      container.appendChild(sec);
     }
 
-    refBlock("Ссылается на", attrs.refs_out);
-    refBlock("Ссылаются", attrs.refs_in);
-
-    const body = document.createElement("section");
-    body.className = "detail-block";
-    body.innerHTML = `<h2>Содержимое</h2>`;
-    body.appendChild(renderYamlFold(attrs.text || ""));
-    card.appendChild(body);
+    mountTabs(card, [
+      {
+        id: "overview",
+        label: "Overview",
+        render(panel) {
+          const meta = document.createElement("section");
+          meta.className = "detail-block";
+          meta.innerHTML = `<h2>Identity</h2>`;
+          const dl = document.createElement("dl");
+          dl.className = "detail-meta definition-list";
+          if (attrs.path) appendMetaRow(dl, "path", String(attrs.path));
+          if (version) appendMetaRow(dl, "version", String(version));
+          appendMetaRow(dl, "imports", String(refsOut.length));
+          appendMetaRow(dl, "imported_by", String(refsIn.length));
+          meta.appendChild(dl);
+          panel.appendChild(meta);
+        },
+      },
+      {
+        id: "dependencies",
+        label: "Dependencies",
+        count: refsOut.length + refsIn.length,
+        render(panel) {
+          fillRefList(panel, "Imports", refsOut);
+          fillRefList(panel, "Imported by", refsIn);
+        },
+      },
+      {
+        id: "source",
+        label: "Source",
+        render(panel) {
+          const body = document.createElement("section");
+          body.className = "detail-block";
+          body.setAttribute("data-renderer", "source-code");
+          body.innerHTML = `<h2>Source</h2>`;
+          body.appendChild(renderYamlFold(attrs.text || ""));
+          panel.appendChild(body);
+        },
+      },
+    ], { initial: "overview" });
     return card;
   }
 
@@ -1753,16 +2022,14 @@
       return renderOntologyExplorerDetail(mod, expl, item);
     }
 
+
     const badges = [];
     if (kind) badges.push(`<span class="badge-pill">${escapeHtml(kind)}</span>`);
     if (abstract) badges.push(`<span class="badge-pill">abstract</span>`);
     if (isMixin) badges.push(`<span class="badge-pill">mixin</span>`);
-    if (treeRoot) badges.push(`<span class="badge-pill">tree_root</span>`);
+    // Keep at most 3 badges in the header row (ADR)
+    const headerBadges = badges.slice(0, 3);
 
-    const role = kind === "class" ? classRole(item.attributes) : null;
-    const titleClass = role
-      ? `class-title-colored kind-${role}`
-      : "";
     const titleBadge =
       kind === "class"
         ? `<span class="nav-kind ${classKindClassNames(item.attributes)}" aria-hidden="true">C</span> `
@@ -1772,178 +2039,301 @@
 
     card.innerHTML = `
       <header class="detail-head">
-        <h1 class="${titleClass}">${titleBadge}${escapeHtml(item.title || item.id)}</h1>
-        <div class="badge-row">${badges.join("")}</div>
+        <h1>${titleBadge}${escapeHtml(item.title || item.id)}</h1>
+        <div class="badge-row">${headerBadges.join("")}</div>
         <p class="muted">${escapeHtml(fromSchema)}</p>
       </header>
       <p class="detail-desc">${escapeHtml(item.description || "No description.")}</p>
     `;
 
-    if (kind === "class") {
-      const meta = document.createElement("section");
-      meta.className = "detail-block";
-      meta.innerHTML = `<h2>LinkML</h2>`;
+    function findSourceFileId() {
+      const key = item.attributes?.schema_key || item.attributes?.source_file || "";
+      if (!key) return null;
+      let hit = null;
+      walkExplorerItems(expl, (node) => {
+        if (hit) return;
+        if (node.attributes?.kind !== "source_file") return;
+        const path = String(node.attributes?.path || node.title || node.id);
+        if (
+          path.endsWith(key) ||
+          path.includes(key) ||
+          node.id.includes(key) ||
+          (node.title || "") === key
+        ) {
+          hit = node.id;
+        }
+      });
+      return hit;
+    }
+
+    function openSourceFile() {
+      const fileId = findSourceFileId();
+      if (!fileId) return;
+      const node = nodeForModule(mod.module_id);
+      setHash({
+        node: node ? node.id : null,
+        module: shortModule(mod.module_id),
+        section: expl.id,
+        item: fileId,
+      });
+      showModule(mod.module_id, { section: expl.id, item: fileId });
+    }
+
+    function renderSourceTab(panel) {
+      const fileId = findSourceFileId();
+      const sec = document.createElement("section");
+      sec.className = "detail-block";
+      sec.innerHTML = `<h2>Source</h2>`;
       const dl = document.createElement("dl");
-      dl.className = "detail-meta";
-      const classUri = item.attributes?.class_uri;
-      if (classUri) {
-        const uriSpan = document.createElement("code");
-        uriSpan.textContent = classUri;
-        appendMetaRow(dl, "class_uri", uriSpan);
+      dl.className = "detail-meta definition-list";
+      if (item.attributes?.schema_key) {
+        appendMetaRow(dl, "schema_key", String(item.attributes.schema_key));
       }
       if (item.attributes?.from_schema) {
         appendMetaRow(dl, "from_schema", String(item.attributes.from_schema));
       }
-      if (item.attributes?.schema_key) {
-        appendMetaRow(dl, "schema_key", String(item.attributes.schema_key));
+      if (item.attributes?.source_file) {
+        appendMetaRow(dl, "source_file", String(item.attributes.source_file));
       }
-      if (dl.children.length) {
-        meta.appendChild(dl);
-        card.appendChild(meta);
-      }
-
-      const inh = document.createElement("section");
-      inh.className = "detail-block";
-      inh.innerHTML = `<h2>Inheritance</h2>`;
-      const list = document.createElement("div");
-      list.className = "link-row";
-      const isA = item.attributes?.is_a;
-      if (isA) {
-        list.appendChild(makeSpecLink(mod, expl, isA, known, "is_a"));
-      } else if (isMixin) {
-        list.appendChild(document.createTextNode("mixin (no is_a)"));
+      sec.appendChild(dl);
+      if (fileId) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "spec-link";
+        btn.textContent = "Open specification file";
+        btn.addEventListener("click", openSourceFile);
+        sec.appendChild(btn);
       } else {
-        list.appendChild(document.createTextNode("No parent"));
+        const empty = document.createElement("p");
+        empty.className = "muted";
+        empty.textContent = "No linked specification file in this publication.";
+        sec.appendChild(empty);
       }
-      const mixins = item.attributes?.mixins || [];
-      if (mixins.length) {
-        const mLabel = document.createElement("div");
-        mLabel.className = "muted mixin-label";
-        mLabel.textContent = "mixins:";
-        list.appendChild(mLabel);
-        mixins.forEach((m) => list.appendChild(makeSpecLink(mod, expl, m, known, "mixin")));
-      }
-      inh.appendChild(list);
-      card.appendChild(inh);
+      panel.appendChild(sec);
+    }
 
-      const declared = item.attributes?.declared_slots || [];
-      const inlineAttrs = item.attributes?.attributes_inline || [];
-      const declaredBlock = document.createElement("section");
-      declaredBlock.className = "detail-block";
-      declaredBlock.innerHTML = `<h2>declared slots</h2>`;
-      if (!declared.length && !inlineAttrs.length) {
-        declaredBlock.innerHTML += `<p class="muted">None (all slots inherited).</p>`;
-      } else {
-        const ul = document.createElement("ul");
-        ul.className = "detail-name-list";
-        declared.forEach((name) => {
-          const li = document.createElement("li");
-          li.innerHTML = `<code>${escapeHtml(name)}</code>`;
-          ul.appendChild(li);
-        });
-        inlineAttrs.forEach((name) => {
-          const li = document.createElement("li");
-          li.innerHTML = `<code>${escapeHtml(name)}</code> <span class="muted">attributes</span>`;
-          ul.appendChild(li);
-        });
-        declaredBlock.appendChild(ul);
-      }
-      card.appendChild(declaredBlock);
-
+    if (kind === "class") {
       const slots = item.attributes?.slots || [];
-      const slotBlock = document.createElement("section");
-      slotBlock.className = "detail-block";
-      slotBlock.innerHTML = `<h2>Slots (induced) (${slots.length})</h2>`;
-      if (!slots.length) {
-        slotBlock.innerHTML += `<p class="muted">No induced slots.</p>`;
-      } else {
-        const table = document.createElement("table");
-        table.className = "data-table detail-slots";
-        table.innerHTML = `<thead><tr>
-          <th>name</th><th>range</th><th>required</th><th>multivalued</th>
-          <th>identifier</th><th>inlined</th><th>inherited</th><th>description</th>
-        </tr></thead>`;
-        const tbody = document.createElement("tbody");
-        slots.forEach((slot) => {
-          const tr = document.createElement("tr");
-          const rangeTd = document.createElement("td");
-          if (slot.range && known.has(slot.range)) {
-            rangeTd.appendChild(makeSpecLink(mod, expl, slot.range, known));
-          } else if (slot.name === "glossary_term_refs" && fiboItemExists(slot.range)) {
-            rangeTd.appendChild(makeFiboLink(slot.range));
-          } else {
-            rangeTd.textContent = slot.range || "";
-          }
-          const nameTd = document.createElement("td");
-          nameTd.textContent = slot.name || "";
-          if (slot.name === "glossary_term_refs") {
-            nameTd.innerHTML =
-              `${escapeHtml(slot.name)} <span class="muted">(ontology refs — link when id matches FIBO)</span>`;
-          }
-          tr.appendChild(nameTd);
-          tr.appendChild(rangeTd);
-          [["required", slot.required], ["multivalued", slot.multivalued],
-           ["identifier", slot.identifier], ["inlined", slot.inlined],
-           ["inherited", slot.inherited]].forEach(([, flag]) => {
-            const td = document.createElement("td");
-            td.textContent = yesBlank(flag);
-            tr.appendChild(td);
-          });
-          const desc = document.createElement("td");
-          desc.textContent = slot.description || "";
-          tr.appendChild(desc);
-          tbody.appendChild(tr);
-        });
-        table.appendChild(tbody);
-        const scroll = document.createElement("div");
-        scroll.className = "table-scroll";
-        scroll.appendChild(table);
-        slotBlock.appendChild(scroll);
-      }
-      card.appendChild(slotBlock);
+      const declared = new Set(item.attributes?.declared_slots || []);
+      (item.attributes?.attributes_inline || []).forEach((n) => declared.add(n));
 
-      const slotUsage = item.attributes?.slot_usage || {};
-      const usageNames = Object.keys(slotUsage);
-      if (usageNames.length) {
-        const usageBlock = document.createElement("section");
-        usageBlock.className = "detail-block";
-        usageBlock.innerHTML = `<h2>slot_usage</h2>`;
-        const table = document.createElement("table");
-        table.className = "data-table detail-slots";
-        table.innerHTML = `<thead><tr><th>slot</th><th>overrides</th></tr></thead>`;
-        const tbody = document.createElement("tbody");
-        usageNames.sort().forEach((slotName) => {
-          const tr = document.createElement("tr");
-          const nameTd = document.createElement("td");
-          nameTd.innerHTML = `<code>${escapeHtml(slotName)}</code>`;
-          const ovTd = document.createElement("td");
-          ovTd.innerHTML = `<code>${escapeHtml(JSON.stringify(slotUsage[slotName]))}</code>`;
-          tr.appendChild(nameTd);
-          tr.appendChild(ovTd);
-          tbody.appendChild(tr);
-        });
-        table.appendChild(tbody);
-        const scroll = document.createElement("div");
-        scroll.className = "table-scroll";
-        scroll.appendChild(table);
-        usageBlock.appendChild(scroll);
-        card.appendChild(usageBlock);
-      }
+      mountTabs(card, [
+        {
+          id: "overview",
+          label: "Overview",
+          render(panel) {
+            const def = document.createElement("section");
+            def.className = "detail-block";
+            def.setAttribute("data-renderer", "definition");
+            def.innerHTML = `<h2>Definition</h2>
+              <p class="detail-desc">${escapeHtml(item.description || "No description.")}</p>`;
+            panel.appendChild(def);
+
+            const meta = document.createElement("section");
+            meta.className = "detail-block";
+            meta.innerHTML = `<h2>Identity</h2>`;
+            const dl = document.createElement("dl");
+            dl.className = "detail-meta definition-list";
+            const classUri = item.attributes?.class_uri;
+            if (classUri) {
+              const uriSpan = document.createElement("code");
+              uriSpan.className = "middle-ellipsis";
+              uriSpan.title = classUri;
+              uriSpan.textContent = classUri;
+              appendMetaRow(dl, "class_uri", uriSpan);
+            }
+            if (item.attributes?.from_schema) {
+              appendMetaRow(dl, "package", String(item.attributes.from_schema));
+            }
+            if (item.attributes?.schema_key) {
+              appendMetaRow(dl, "schema_key", String(item.attributes.schema_key));
+            }
+            const isA = item.attributes?.is_a;
+            if (isA) {
+              const wrap = document.createElement("span");
+              wrap.appendChild(makeSpecLink(mod, expl, isA, known, "parent"));
+              appendMetaRow(dl, "parent", wrap);
+            } else if (isMixin) {
+              appendMetaRow(dl, "parent", "mixin (no is_a)");
+            }
+            meta.appendChild(dl);
+            panel.appendChild(meta);
+          },
+        },
+        {
+          id: "attributes",
+          label: "Attributes",
+          count: slots.length,
+          render(panel) {
+            const slotBlock = document.createElement("section");
+            slotBlock.className = "detail-block";
+            slotBlock.setAttribute("data-renderer", "properties-table");
+            slotBlock.innerHTML = `<h2>Attributes</h2>`;
+            if (!slots.length) {
+              slotBlock.innerHTML += `<p class="muted">No attributes defined for this class.</p>`;
+              panel.appendChild(slotBlock);
+              return;
+            }
+            const table = document.createElement("table");
+            table.className = "data-table detail-slots";
+            table.innerHTML = `<thead><tr>
+              <th>Attribute</th><th>Type</th><th>Required</th><th>Multiple</th>
+              <th>Declared</th><th>Description</th>
+            </tr></thead>`;
+            const tbody = document.createElement("tbody");
+            slots.forEach((slot) => {
+              const tr = document.createElement("tr");
+              const nameTd = document.createElement("td");
+              nameTd.textContent = slot.name || "";
+              const rangeTd = document.createElement("td");
+              if (slot.range && known.has(slot.range)) {
+                rangeTd.appendChild(makeSpecLink(mod, expl, slot.range, known));
+              } else if (slot.name === "glossary_term_refs" && fiboItemExists(slot.range)) {
+                rangeTd.appendChild(makeFiboLink(slot.range));
+              } else {
+                rangeTd.textContent = slot.range || "";
+              }
+              tr.appendChild(nameTd);
+              tr.appendChild(rangeTd);
+              [["required", slot.required], ["multivalued", slot.multivalued]].forEach(([, flag]) => {
+                const td = document.createElement("td");
+                td.textContent = yesBlank(flag) || "No";
+                tr.appendChild(td);
+              });
+              const declTd = document.createElement("td");
+              declTd.textContent = declared.has(slot.name) ? "Yes" : (slot.inherited ? "Inherited" : "");
+              tr.appendChild(declTd);
+              const desc = document.createElement("td");
+              desc.textContent = slot.description || "";
+              tr.appendChild(desc);
+              tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+            const scroll = document.createElement("div");
+            scroll.className = "table-scroll data-table-shell";
+            scroll.appendChild(table);
+            slotBlock.appendChild(scroll);
+            panel.appendChild(slotBlock);
+          },
+        },
+        {
+          id: "relations",
+          label: "Relations",
+          render(panel) {
+            const inh = document.createElement("section");
+            inh.className = "detail-block";
+            inh.innerHTML = `<h2>Inheritance</h2>`;
+            const list = document.createElement("div");
+            list.className = "link-row";
+            const isA = item.attributes?.is_a;
+            if (isA) {
+              list.appendChild(makeSpecLink(mod, expl, isA, known, "is_a"));
+            } else if (isMixin) {
+              list.appendChild(document.createTextNode("mixin (no is_a)"));
+            } else {
+              list.appendChild(document.createTextNode("No parent"));
+            }
+            const mixins = item.attributes?.mixins || [];
+            if (mixins.length) {
+              const mLabel = document.createElement("div");
+              mLabel.className = "muted mixin-label";
+              mLabel.textContent = "mixins:";
+              list.appendChild(mLabel);
+              mixins.forEach((m) => list.appendChild(makeSpecLink(mod, expl, m, known, "mixin")));
+            }
+            inh.appendChild(list);
+            panel.appendChild(inh);
+
+            const ranges = document.createElement("section");
+            ranges.className = "detail-block";
+            ranges.innerHTML = `<h2>Typed references</h2>`;
+            const row = document.createElement("div");
+            row.className = "link-row";
+            const seen = new Set();
+            slots.forEach((slot) => {
+              if (!slot.range || seen.has(slot.range)) return;
+              if (!known.has(slot.range) && !(slot.name === "glossary_term_refs" && fiboItemExists(slot.range))) {
+                return;
+              }
+              seen.add(slot.range);
+              if (known.has(slot.range)) {
+                row.appendChild(makeSpecLink(mod, expl, slot.range, known));
+              } else {
+                row.appendChild(makeFiboLink(slot.range));
+              }
+            });
+            if (!row.childNodes.length) {
+              ranges.innerHTML += `<p class="muted">No outbound type references.</p>`;
+            } else {
+              ranges.appendChild(row);
+            }
+            panel.appendChild(ranges);
+          },
+        },
+        {
+          id: "source",
+          label: "Source",
+          render: renderSourceTab,
+        },
+      ], { initial: "overview" });
+      return card;
     }
 
     if (kind === "enum") {
-      const vals = document.createElement("section");
-      vals.className = "detail-block";
-      vals.innerHTML = `<h2>Permissible values</h2>`;
-      const ul = document.createElement("ul");
-      (item.children || []).forEach((v) => {
-        const li = document.createElement("li");
-        li.innerHTML = `<strong>${escapeHtml(v.title || v.id)}</strong>
-          <span class="muted"> — ${escapeHtml(v.description || "")}</span>`;
-        ul.appendChild(li);
-      });
-      vals.appendChild(ul);
-      card.appendChild(vals);
+      const members = item.children || [];
+      mountTabs(card, [
+        {
+          id: "overview",
+          label: "Overview",
+          render(panel) {
+            const meta = document.createElement("section");
+            meta.className = "detail-block";
+            meta.innerHTML = `<h2>Identity</h2>`;
+            const dl = document.createElement("dl");
+            dl.className = "detail-meta definition-list";
+            if (item.attributes?.from_schema) {
+              appendMetaRow(dl, "package", String(item.attributes.from_schema));
+            }
+            if (item.attributes?.schema_key) {
+              appendMetaRow(dl, "schema_key", String(item.attributes.schema_key));
+            }
+            appendMetaRow(dl, "members", String(members.length));
+            meta.appendChild(dl);
+            panel.appendChild(meta);
+          },
+        },
+        {
+          id: "members",
+          label: "Members",
+          count: members.length,
+          render(panel) {
+            const vals = document.createElement("section");
+            vals.className = "detail-block";
+            vals.innerHTML = `<h2>Permissible values</h2>`;
+            if (!members.length) {
+              vals.innerHTML += `<p class="muted">No values defined.</p>`;
+              panel.appendChild(vals);
+              return;
+            }
+            const ul = document.createElement("ul");
+            ul.className = "detail-name-list";
+            members.forEach((v) => {
+              const li = document.createElement("li");
+              li.innerHTML = `<strong>${escapeHtml(v.title || v.id)}</strong>
+                <span class="muted"> — ${escapeHtml(v.description || "")}</span>`;
+              ul.appendChild(li);
+            });
+            vals.appendChild(ul);
+            panel.appendChild(vals);
+          },
+        },
+        {
+          id: "source",
+          label: "Source",
+          render: renderSourceTab,
+        },
+      ], { initial: "overview" });
+      return card;
     }
 
     return card;
@@ -2486,7 +2876,7 @@
       const toggle = document.createElement("button");
       toggle.type = "button";
       toggle.className = "tree-toggle";
-      toggle.textContent = hasKids ? (open ? "▼" : "▶") : "·";
+      setTreeToggle(toggle, { open, leaf: !hasKids });
       const label = document.createElement("button");
       label.type = "button";
       label.className =
@@ -2504,7 +2894,7 @@
         );
         toggle.addEventListener("click", () => {
           kids.hidden = !kids.hidden;
-          toggle.textContent = kids.hidden ? "▶" : "▼";
+          setTreeToggle(toggle, { open: !kids.hidden, leaf: false });
         });
       }
       label.addEventListener("click", () => {
@@ -2512,10 +2902,10 @@
           const currentlyOpen = !kids.hidden;
           if (item.id === selectedItemId && currentlyOpen) {
             kids.hidden = true;
-            toggle.textContent = "▶";
+            setTreeToggle(toggle, { open: false, leaf: false });
           } else if (!currentlyOpen) {
             kids.hidden = false;
-            toggle.textContent = "▼";
+            setTreeToggle(toggle, { open: true, leaf: false });
           }
         }
         const crumbPath = path.concat(item.title || item.id);
@@ -2561,12 +2951,39 @@
     if (statusRegion) statusRegion.textContent = msg;
   }
 
+  let searchFocusTrapHandler = null;
+
   function openSearchDialog() {
     if (!searchDialog) return;
     searchDialog.hidden = false;
     searchInput?.focus();
     searchInput?.select?.();
     runSearch(searchInput?.value || "");
+    if (searchFocusTrapHandler) {
+      searchDialog.removeEventListener("keydown", searchFocusTrapHandler);
+    }
+    searchFocusTrapHandler = (e) => {
+      if (e.key !== "Tab") return;
+      const panel = searchDialog.querySelector(".search-dialog-panel");
+      const focusables = panel
+        ? Array.from(
+            panel.querySelectorAll(
+              'input, button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
+            )
+          ).filter((el) => !el.hidden && el.offsetParent !== null)
+        : [];
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    searchDialog.addEventListener("keydown", searchFocusTrapHandler);
   }
 
   function closeSearchDialog() {
@@ -2574,6 +2991,10 @@
     searchDialog.hidden = true;
     searchResults.classList.add("hidden");
     searchActiveIndex = -1;
+    if (searchFocusTrapHandler) {
+      searchDialog.removeEventListener("keydown", searchFocusTrapHandler);
+      searchFocusTrapHandler = null;
+    }
     searchTrigger?.focus();
   }
 
@@ -2590,9 +3011,41 @@
     searchHitButtons = [];
     searchActiveIndex = -1;
     if (!query) {
-      searchResults.classList.add("hidden");
+      const starter = searchIndex.slice(0, 8);
       searchResults.innerHTML = "";
-      announce("");
+      const hint = document.createElement("div");
+      hint.className = "muted";
+      hint.style.padding = "10px 12px";
+      hint.textContent =
+        "Type to search classes, attributes, terms and files. Suggestions:";
+      searchResults.appendChild(hint);
+      starter.forEach((h) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "search-hit";
+        btn.setAttribute("role", "option");
+        btn.innerHTML = `${escapeHtml(h.title || h.item_id || h.node_id || "")}<div class="muted">${escapeHtml(
+          h.kind === "catalog" ? h.node_id || "" : h.module_id || ""
+        )}</div>`;
+        btn.addEventListener("click", () => {
+          closeSearchDialog();
+          if (h.kind === "catalog" && h.node_id) {
+            const node = catalogNode(h.node_id);
+            if (node) navigateToNode(node);
+            return;
+          }
+          if (h.module_id) {
+            navigateToModule(h.module_id, {
+              section: h.section_id,
+              item: h.item_id,
+            });
+          }
+        });
+        searchResults.appendChild(btn);
+        searchHitButtons.push(btn);
+      });
+      searchResults.classList.remove("hidden");
+      announce("Search suggestions");
       return;
     }
     const hits = searchIndex
@@ -2795,6 +3248,9 @@
 
   const savedTheme = localStorage.getItem("moex-viewer-theme");
   if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+
+  const shortcutKbd = document.getElementById("search-shortcut-kbd");
+  if (shortcutKbd) shortcutKbd.textContent = `${shortcutModKey()}+K`;
 
   function applyRoute() {
     const { node, module, section, item } = parseHash();
