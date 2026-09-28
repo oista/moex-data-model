@@ -77,6 +77,13 @@ def test_repo_golden_three_modules():
     assert '"tree_root": true' in html or '"tree_root":true' in html
     assert '"mixin": true' in html or '"mixin":true' in html
     assert "group:moex_core" in html or "group:moex-core" in html
+    assert "group:classes" in html
+    assert "group:spec-files" in html
+    assert "group:implementations" in html
+    assert "file:specification.yaml" in html
+    assert '"kind": "source_file"' in html or '"kind":"source_file"' in html
+    assert '"kind": "implementation_ref"' in html or '"kind":"implementation_ref"' in html
+    assert "renderYamlFold" in (dist / "viewer.js").read_text(encoding="utf-8")
     assert "structure_why" in html
     assert "anti-shadow-master" in html or "проекци" in html
     registry = json.loads((dist / "manifest_registry.json").read_text(encoding="utf-8"))

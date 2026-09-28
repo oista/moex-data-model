@@ -277,10 +277,17 @@ def test_dams_explorer_real_schema():
         source={"format": "linkml-yaml", "path": str(schema), "select": "classes"},
     )
     out = LinkmlNormalizer().normalize(sec, schema)
-    titles = {g.title for g in out.items}
+    root_ids = {g.id for g in out.items}
+    assert root_ids == {
+        "group:classes",
+        "group:spec-files",
+        "group:implementations",
+    }
+    classes_root = next(g for g in out.items if g.id == "group:classes")
+    titles = {g.title for g in classes_root.children}
     assert "Core" in titles
     assert "Registries" in titles
-    by_title = {g.title: g for g in out.items}
+    by_title = {g.title: g for g in classes_root.children}
     core = by_title["Core"]
     assert "Schema package" not in (core.description or "")
     purpose = core.attributes.get("purpose") or ""
@@ -297,7 +304,12 @@ def test_dams_explorer_real_schema():
     assert "проекц" in reg_purpose.lower() or "projection" in reg_purpose.lower()
     assert "не копируя" in reg_purpose.lower() or "справочник" in reg_purpose.lower()
 
-    classes = {c.id: c for g in out.items for c in g.children if c.attributes.get("kind") == "class"}
+    classes = {
+        c.id: c
+        for g in classes_root.children
+        for c in g.children
+        if c.attributes.get("kind") == "class"
+    }
     assert "LogicalEntity" in classes
     slots = classes["LogicalEntity"].attributes.get("slots") or []
     slot_names = {s["name"] for s in slots}
@@ -307,6 +319,18 @@ def test_dams_explorer_real_schema():
 
     repo_cls = classes["MOEXModelRepository"]
     assert repo_cls.attributes.get("tree_root") is True
+
+    files_root = next(g for g in out.items if g.id == "group:spec-files")
+    file_ids = {f.id for f in files_root.children}
+    assert "file:specification.yaml" in file_ids
+    assert "file:schemas/moex-core.yaml" in file_ids
+    envelope = next(f for f in files_root.children if f.id == "file:specification.yaml")
+    assert envelope.attributes.get("kind") == "source_file"
+    assert "specification_kind" in (envelope.attributes.get("text") or "")
+    assert "file:schemas/moex-dams.yaml" in (envelope.attributes.get("refs_out") or [])
+
+    impls_root = next(g for g in out.items if g.id == "group:implementations")
+    assert impls_root.children == []  # filled at build time
 
     lifecycle = classes["HasLifecycle"]
     assert lifecycle.attributes.get("mixin") is True
