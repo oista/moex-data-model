@@ -6,6 +6,7 @@ import { EditorPage } from "./pages/EditorPage";
 import { ImportWizardPage } from "./pages/ImportWizardPage";
 import { ModelDetailPage } from "./pages/ModelDetailPage";
 import { ModelsPage } from "./pages/ModelsPage";
+import { TransformPage } from "./pages/TransformPage";
 import { ValidationPage } from "./pages/ValidationPage";
 import { WorkspacesPage } from "./pages/WorkspacesPage";
 
@@ -18,6 +19,10 @@ export function App() {
         <Route
           path="workspaces/:workspaceId/import"
           element={<ImportWizardPage />}
+        />
+        <Route
+          path="workspaces/:workspaceId/transform"
+          element={<TransformPage />}
         />
         <Route path="models" element={<ModelsPage />} />
         <Route path="models/trading/edit" element={<EditorPage />} />

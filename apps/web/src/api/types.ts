@@ -319,3 +319,56 @@ export type DiagramApplyResult = {
   content: string;
   base_digest: string;
 };
+
+export type TransformSpecCatalogItem = {
+  rel_path: string;
+  spec_id: string;
+  source_schema_revision: string;
+  target_schema_revision: string;
+  transformation_kind: string;
+  description: string | null;
+};
+
+export type TransformSampleCatalogItem = {
+  rel_path: string;
+  name: string;
+};
+
+export type TransformCatalogWarning = {
+  rel_path: string;
+  message: string;
+};
+
+export type TransformCatalog = {
+  specs: TransformSpecCatalogItem[];
+  samples: TransformSampleCatalogItem[];
+  warnings: TransformCatalogWarning[];
+};
+
+export type TransformDiagnostic = {
+  diagnostic_code: string;
+  severity: string;
+  diagnostic_message: string;
+  subject_ref: string | null;
+};
+
+export type TransformSpecMeta = {
+  spec_id: string;
+  source_schema_revision: string;
+  target_schema_revision: string;
+  transformation_kind: string;
+  description: string | null;
+  allow_unrestricted_eval: boolean;
+};
+
+export type TransformRunResult = {
+  mode: "preview" | "sample" | string;
+  backend: "object" | "sql" | string;
+  spec: TransformSpecMeta;
+  preserved_semantics: string[];
+  lost_semantics: string[];
+  diagnostics: TransformDiagnostic[];
+  preview_payload: Record<string, unknown> | null;
+  output: Record<string, unknown> | null;
+  round_trip_ok: boolean | null;
+};

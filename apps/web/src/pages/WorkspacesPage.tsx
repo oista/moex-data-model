@@ -65,6 +65,8 @@ export function WorkspacesPage() {
                 </td>
                 <td>
                   <Link to={`/workspaces/${ws.id}/import`}>Import wizard</Link>
+                  {" · "}
+                  <Link to={`/workspaces/${ws.id}/transform`}>Transform</Link>
                 </td>
               </tr>
             ))}

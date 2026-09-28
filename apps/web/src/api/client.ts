@@ -227,4 +227,41 @@ export const api = {
       method: "PUT",
       body: JSON.stringify(body),
     }),
+  listTransforms: (workspaceId: string) =>
+    request<import("./types").TransformCatalog>(
+      `/workspaces/${workspaceId}/transforms`,
+    ),
+  runTransform: async (
+    workspaceId: string,
+    body: {
+      spec_rel: string;
+      mode: "preview" | "sample";
+      backend: "object" | "sql";
+      sample_rel?: string;
+      file?: File;
+    },
+  ) => {
+    const headers = new Headers();
+    headers.set("X-Moex-Actor", getActor());
+    const form = new FormData();
+    form.append("spec_rel", body.spec_rel);
+    form.append("mode", body.mode);
+    form.append("backend", body.backend);
+    if (body.sample_rel) {
+      form.append("sample_rel", body.sample_rel);
+    }
+    if (body.file) {
+      form.append("file", body.file);
+    }
+    const res = await fetch(`/api/workspaces/${workspaceId}/transforms/run`, {
+      method: "POST",
+      headers,
+      body: form,
+    });
+    if (!res.ok) {
+      const detail = await res.text();
+      throw new Error(`${res.status} ${res.statusText}: ${detail}`);
+    }
+    return (await res.json()) as import("./types").TransformRunResult;
+  },
 };

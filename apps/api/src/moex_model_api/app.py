@@ -46,6 +46,12 @@ from moex_model_api.ports import (
     PublicationRecord,
     ValidationRunRecord,
 )
+from moex_model_api.transform_catalog import (
+    list_samples,
+    list_specs,
+    resolve_sample_path,
+    resolve_spec_path,
+)
 from moex_model_api.yaml_mutate import MutationConflict, MutationError, apply_mutation
 
 
@@ -180,6 +186,59 @@ class JobOut(BaseModel):
 
 
 IMPORT_MAX_BYTES = 2 * 1024 * 1024
+
+
+class TransformSpecMetaOut(BaseModel):
+    spec_id: str
+    source_schema_revision: str
+    target_schema_revision: str
+    transformation_kind: str
+    description: str | None = None
+    allow_unrestricted_eval: bool = False
+
+
+class TransformSpecCatalogItem(BaseModel):
+    rel_path: str
+    spec_id: str
+    source_schema_revision: str
+    target_schema_revision: str
+    transformation_kind: str
+    description: str | None = None
+
+
+class TransformSampleCatalogItem(BaseModel):
+    rel_path: str
+    name: str
+
+
+class TransformCatalogWarning(BaseModel):
+    rel_path: str
+    message: str
+
+
+class TransformCatalogOut(BaseModel):
+    specs: list[TransformSpecCatalogItem]
+    samples: list[TransformSampleCatalogItem]
+    warnings: list[TransformCatalogWarning] = Field(default_factory=list)
+
+
+class TransformDiagnosticOut(BaseModel):
+    diagnostic_code: str
+    severity: str
+    diagnostic_message: str
+    subject_ref: str | None = None
+
+
+class TransformRunOut(BaseModel):
+    mode: str
+    backend: str
+    spec: TransformSpecMetaOut
+    preserved_semantics: list[str] = Field(default_factory=list)
+    lost_semantics: list[str] = Field(default_factory=list)
+    diagnostics: list[TransformDiagnosticOut] = Field(default_factory=list)
+    preview_payload: dict | None = None
+    output: dict | None = None
+    round_trip_ok: bool | None = None
 
 
 class ArtifactOut(BaseModel):
@@ -608,6 +667,218 @@ def create_app(
                 tmp_source.parent.rmdir()
             except OSError:
                 pass
+
+    def _ensure_workspace(workspace_id: str, actor: str, session: Session) -> None:
+        workspaces = SqlWorkspaceStore(session)
+        if workspaces.get(workspace_id) is None:
+            workspaces.create(workspace_id, workspace_id)
+            workspaces.add_member(workspace_id, actor, role="owner")
+        else:
+            workspaces.add_member(workspace_id, actor, role="editor")
+
+    @app.get(
+        "/workspaces/{workspace_id}/transforms",
+        response_model=TransformCatalogOut,
+    )
+    def list_workspace_transforms(
+        workspace_id: str,
+        request: Request,
+        session: Session = Depends(get_session),
+    ) -> TransformCatalogOut:
+        """Catalog of linkml-map specs + bundled samples (ADR-008)."""
+        actor = ensure_actor(request, session)
+        _ensure_workspace(workspace_id, actor, session)
+        root = find_repo_root()
+        specs, warnings = list_specs(root)
+        samples = list_samples(root)
+        return TransformCatalogOut(
+            specs=[
+                TransformSpecCatalogItem(
+                    rel_path=s.rel_path,
+                    spec_id=s.spec_id,
+                    source_schema_revision=s.source_schema_revision,
+                    target_schema_revision=s.target_schema_revision,
+                    transformation_kind=s.transformation_kind,
+                    description=s.description,
+                )
+                for s in specs
+            ],
+            samples=[
+                TransformSampleCatalogItem(rel_path=s.rel_path, name=s.name)
+                for s in samples
+            ],
+            warnings=[
+                TransformCatalogWarning(rel_path=w.rel_path, message=w.message)
+                for w in warnings
+            ],
+        )
+
+    @app.post(
+        "/workspaces/{workspace_id}/transforms/run",
+        response_model=TransformRunOut,
+    )
+    async def run_workspace_transform(
+        workspace_id: str,
+        request: Request,
+        session: Session = Depends(get_session),
+        spec_rel: str = Form(...),
+        mode: str = Form(...),
+        backend: str = Form(default="object"),
+        sample_rel: str | None = Form(default=None),
+        file: UploadFile | None = File(default=None),
+    ) -> TransformRunOut:
+        """preview|sample via LinkmlMapProvider — sync, no publish."""
+        actor = ensure_actor(request, session)
+        _ensure_workspace(workspace_id, actor, session)
+
+        if mode not in {"preview", "sample"}:
+            raise HTTPException(
+                status_code=400, detail="mode must be preview or sample"
+            )
+        if backend not in {"object", "sql"}:
+            raise HTTPException(
+                status_code=400, detail="backend must be object or sql"
+            )
+
+        has_rel = bool(sample_rel and sample_rel.strip())
+        has_file = file is not None and bool(file.filename)
+        if has_rel == has_file:
+            raise HTTPException(
+                status_code=400,
+                detail="provide exactly one of sample_rel or file",
+            )
+
+        try:
+            from moex_linkml_tooling.map_provider import LinkmlMapProvider
+        except ImportError as exc:
+            raise HTTPException(
+                status_code=503,
+                detail="moex-linkml-tooling[map] is required for transforms",
+            ) from exc
+
+        root = find_repo_root()
+        try:
+            spec_path = resolve_spec_path(root, spec_rel)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        except FileNotFoundError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+        tmp_sample: Path | None = None
+        try:
+            if has_rel:
+                assert sample_rel is not None
+                try:
+                    sample_path = resolve_sample_path(root, sample_rel.strip())
+                except ValueError as exc:
+                    raise HTTPException(status_code=400, detail=str(exc)) from exc
+                except FileNotFoundError as exc:
+                    raise HTTPException(status_code=400, detail=str(exc)) from exc
+            else:
+                assert file is not None
+                raw = await file.read()
+                if len(raw) > IMPORT_MAX_BYTES:
+                    raise HTTPException(
+                        status_code=413,
+                        detail=f"upload exceeds {IMPORT_MAX_BYTES} bytes",
+                    )
+                if not raw:
+                    raise HTTPException(status_code=400, detail="empty upload")
+                suffix = Path(file.filename or "sample.json").suffix or ".json"
+                tmp_sample = Path(tempfile.mkdtemp()) / f"sample{suffix}"
+                tmp_sample.write_bytes(raw)
+                sample_path = tmp_sample
+
+            provider = LinkmlMapProvider(backend=backend)  # type: ignore[arg-type]
+            try:
+                if mode == "preview":
+                    result = provider.preview(
+                        spec_path, sample_path, backend=backend  # type: ignore[arg-type]
+                    )
+                    SqlAuditStore(session).record(
+                        "map.transform",
+                        actor,
+                        f"{workspace_id}:{spec_rel}:preview:{backend}",
+                    )
+                    return TransformRunOut(
+                        mode=mode,
+                        backend=backend,
+                        spec=TransformSpecMetaOut(
+                            spec_id=result.spec.spec_id,
+                            source_schema_revision=result.spec.source_schema_revision,
+                            target_schema_revision=result.spec.target_schema_revision,
+                            transformation_kind=(
+                                result.spec.transformation_kind.value
+                                if hasattr(result.spec.transformation_kind, "value")
+                                else str(result.spec.transformation_kind)
+                            ),
+                            description=result.spec.description,
+                            allow_unrestricted_eval=result.spec.allow_unrestricted_eval,
+                        ),
+                        preserved_semantics=list(result.preserved_semantics),
+                        lost_semantics=list(result.lost_semantics),
+                        diagnostics=[
+                            TransformDiagnosticOut(
+                                diagnostic_code=d.diagnostic_code,
+                                severity=d.severity.value
+                                if hasattr(d.severity, "value")
+                                else str(d.severity),
+                                diagnostic_message=d.diagnostic_message,
+                                subject_ref=d.subject_ref,
+                            )
+                            for d in result.diagnostics
+                        ],
+                        preview_payload=dict(result.preview_payload),
+                    )
+
+                mapped = provider.transform_sample(
+                    spec_path, sample_path, backend=backend  # type: ignore[arg-type]
+                )
+                SqlAuditStore(session).record(
+                    "map.transform",
+                    actor,
+                    f"{workspace_id}:{spec_rel}:sample:{backend}",
+                )
+                return TransformRunOut(
+                    mode=mode,
+                    backend=backend,
+                    spec=TransformSpecMetaOut(
+                        spec_id=mapped.spec.spec_id,
+                        source_schema_revision=mapped.spec.source_schema_revision,
+                        target_schema_revision=mapped.spec.target_schema_revision,
+                        transformation_kind=(
+                            mapped.spec.transformation_kind.value
+                            if hasattr(mapped.spec.transformation_kind, "value")
+                            else str(mapped.spec.transformation_kind)
+                        ),
+                        description=mapped.spec.description,
+                        allow_unrestricted_eval=mapped.spec.allow_unrestricted_eval,
+                    ),
+                    preserved_semantics=list(mapped.preserved_semantics),
+                    lost_semantics=list(mapped.lost_semantics),
+                    diagnostics=[
+                        TransformDiagnosticOut(
+                            diagnostic_code=d.diagnostic_code,
+                            severity=d.severity.value
+                            if hasattr(d.severity, "value")
+                            else str(d.severity),
+                            diagnostic_message=d.diagnostic_message,
+                            subject_ref=d.subject_ref,
+                        )
+                        for d in mapped.diagnostics
+                    ],
+                    output=dict(mapped.output),
+                    round_trip_ok=mapped.round_trip_ok,
+                )
+            except ValueError as exc:
+                raise HTTPException(status_code=422, detail=str(exc)) from exc
+        finally:
+            if tmp_sample is not None:
+                tmp_sample.unlink(missing_ok=True)
+                try:
+                    tmp_sample.parent.rmdir()
+                except OSError:
+                    pass
 
     @app.get(
         "/workspaces/{workspace_id}/documents/trading",

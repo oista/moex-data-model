@@ -17,7 +17,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 
 `linkml-map` нужен для импорта внешних структур, миграций DAMS и профилей, но API нестабилен, SQL backend покрывает подмножество, expressions опасны без sandbox. Прямые импорты в application handlers привяжут домен к конкретной версии пакета.
 
-На срезе Stage 7 / 7b: порт `MappingProvider` в modeling-kernel; адаптер `LinkmlMapProvider` в `packages/linkml-tooling` — default **ObjectTransformer**, opt-in **SQL** via `SQLCompiler` + SQLite (`backend=sql` / CLI `--backend sql`). SQL path rejects `expr:` (`MAP-SQL-001`). Conformance: [`packages/linkml-tooling/tests/test_sql_backend_conformance.py`](../../packages/linkml-tooling/tests/test_sql_backend_conformance.py) (identity + rename fixtures must match ObjectTransformer). SSSOM / LinkML extract остаются в `semantic-mappings` (другой контур).
+На срезе Stage 7 / 7b: порт `MappingProvider` в modeling-kernel; адаптер `LinkmlMapProvider` в `packages/linkml-tooling` — default **ObjectTransformer**, opt-in **SQL** via `SQLCompiler` + SQLite (`backend=sql` / CLI `--backend sql`). SQL path rejects `expr:` (`MAP-SQL-001`). Conformance: [`packages/linkml-tooling/tests/test_sql_backend_conformance.py`](../../packages/linkml-tooling/tests/test_sql_backend_conformance.py) (identity + rename fixtures must match ObjectTransformer). Workbench: `GET/POST /workspaces/{id}/transforms` + `/workspaces/:id/transform` UI (sync preview|sample). SSSOM / LinkML extract остаются в `semantic-mappings` (другой контур).
 
 ## Decision
 
