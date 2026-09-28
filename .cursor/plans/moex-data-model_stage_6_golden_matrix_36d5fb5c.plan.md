@@ -13,13 +13,13 @@ todos:
     status: completed
   - id: extend-compare-golden
     content: Extend compare_golden.py with digest compare + rdflib/mermaid/dbml smoke
-    status: in_progress
+    status: completed
   - id: cli-compile-artifacts
     content: moex-model compile --artifacts + test
-    status: pending
+    status: completed
   - id: docs-stage6
     content: IMPLEMENTATION_PLAN + ADR-011 + README note
-    status: pending
+    status: completed
 isProject: false
 ---
 

@@ -88,6 +88,15 @@ def test_lint_and_compile(repo_root: Path, capsys: pytest.CaptureFixture[str]) -
     assert "contracts OK" in capsys.readouterr().out
 
 
+def test_compile_artifacts(repo_root: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    assert main(["compile", "--root", str(repo_root), "--artifacts"]) == 0
+    out = capsys.readouterr().out
+    assert "contracts OK" in out
+    assert "artifacts OK" in out
+    assert (repo_root / "generated" / "artifacts" / "moex-dams" / "0.1" / "moex-dams.dbml").is_file()
+    assert (repo_root / "generated" / "manifests" / "moex-dams-owl.json").is_file()
+
+
 def test_diagram_projects_logical(
     repo_root: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:

@@ -340,7 +340,8 @@ artifact:
 - **Stage 3 narrow-v3 (2026-09-28):** Alembic `0004` `publication_request`; GitHub write + local publish; `POST /publications` from workspace draft into this repo; Workbench Publish button.
 - **Semantic diff CLI (2026-09-28):** kernel `SemanticDiffReport` / `ChangeCategory`; `specification-dams.diff_implementations`; `moex-model semantic-diff` (Git refs + `--left`/`--right`, `--json`, exit 1 on breaking).
 - **Semantic diff API + Web preview (2026-09-28):** `POST /workspaces/{id}/semantic-diff` (published vs draft); Workbench **Review changes** panel. PR attach still out.
-- **Stage 0 foundation CI (2026-09-28):** `requirements-linkml.txt` (exact pins; `uv.lock` deferred), `.python-version` 3.12, `.linkmllint.yaml`, `validate-examples`, `compare-golden` (contracts + JSON Schema), `.github/workflows/check.yml`. Full OWL/SHACL/DBML golden matrix still Stage 6.
+- **Stage 0 foundation CI (2026-09-28):** `requirements-linkml.txt` (exact pins; `uv.lock` deferred), `.python-version` 3.12, `.linkmllint.yaml`, `validate-examples`, `compare-golden` (contracts + JSON Schema + OWL/SHACL/DBML/Mermaid), `.github/workflows/check.yml`.
+- **Stage 6 golden matrix (2026-09-28):** `make generate-artifacts` / `moex-model compile --artifacts` → OWL, SHACL, regenerable `moex-dams.dbml`, Mermaid diagrams + manifests; in `compare-golden`. Colored `moex-dams-drawdb-colored.dbml` remains curated sample (not golden). Still open: gen-python, gen-doc, gen-rdf, drawDB import check, release bundle, publish gate.
 - **Viewer + ontology packages CI (2026-09-28):** GHA job `viewer-and-packages` runs `make packages-check` (standard-owl / semantic-mappings / ontology-catalog) and `make viewer-check` alongside Stage 0 `make check`.
 - **PDF→ER agent docs (2026-09-28):** playbook + model contract under [`docs/agents/`](agents/); design status delivered. Filling runs still write fixture CSVs + `gaps.md` at runtime.
 
@@ -602,6 +603,8 @@ LinkML A
 - Повторная проекция стабильна.
 
 ## Этап 6. Generators
+
+**Progress (2026-09-28):** OWL / SHACL / regenerable DBML (`moex-dams.dbml`) / Mermaid in `make generate-artifacts` + `compare-golden` + `moex-model compile --artifacts`. Contracts + JSON Schema already golden. Curated colored DBML sample stays out of golden. Still open: gen-python, gen-doc, separate RDF artifact, drawDB import check, unified release bundle, publish blocked on invalid generators.
 
 ### Обязательные pipelines
 

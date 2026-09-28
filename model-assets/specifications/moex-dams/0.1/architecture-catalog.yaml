@@ -16,7 +16,6 @@ nodes:
     role: specification_implementation
     title: moex.dsp
     version: "0.1"
-    expressed_in: LinkML
     conforms_to: moex-dams
     module_id: moex:module:dsp
     order: 105

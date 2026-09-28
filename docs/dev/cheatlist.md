@@ -1,3 +1,6 @@
+# generate-artifacts (OWL / SHACL / DBML / Mermaid goldens)
+make generate-artifacts
+moex-model compile --root . --artifacts
 
 # html
 cd c:\Users\bons1\IdeaProjects\moex-data-model

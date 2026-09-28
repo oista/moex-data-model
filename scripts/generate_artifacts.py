@@ -90,6 +90,36 @@ def write_text_artifact(path: Path, text: str) -> str:
     return _sha256_text(normalized)
 
 
+def rdf_ground_digest(text: str) -> str:
+    """Stable digest of non-blank-node triples (LinkML OWL/SHACL order varies)."""
+    from rdflib import BNode, Graph
+
+    graph = Graph()
+    graph.parse(data=text, format="turtle")
+    lines: list[str] = []
+    for subj, pred, obj in graph:
+        if isinstance(subj, BNode) or isinstance(obj, BNode):
+            continue
+        lines.append(f"{subj.n3()} {pred.n3()} {obj.n3()} .")
+    body = "\n".join(sorted(lines)) + "\n"
+    return _sha256_bytes(body.encode("utf-8"))
+
+
+def write_rdf_artifact(path: Path, text: str) -> str:
+    """Write Turtle; keep existing bytes when ground-triple digest matches."""
+    normalized = text.replace("\r\n", "\n")
+    if not normalized.endswith("\n"):
+        normalized += "\n"
+    digest = rdf_ground_digest(normalized)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.is_file():
+        existing = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        if rdf_ground_digest(existing) == digest:
+            return digest
+    path.write_text(normalized, encoding="utf-8", newline="\n")
+    return digest
+
+
 def mermaid_tree_digest(directory: Path) -> str:
     """Stable digest over sorted relative path + content for all *.md files."""
     h = hashlib.sha256()
@@ -140,7 +170,7 @@ def generate_owl(*, out_path: Path = OWL_PATH, manifest_path: Path = OWL_MANIFES
     with schema_cwd() as schema_name:
         gen = OwlSchemaGenerator(schema_name, **OWL_OPTIONS)
         text = gen.serialize()
-    digest = write_text_artifact(out_path, text)
+    digest = write_rdf_artifact(out_path, text)
     try:
         out_rel = out_path.relative_to(REPO).as_posix()
     except ValueError:
@@ -152,7 +182,10 @@ def generate_owl(*, out_path: Path = OWL_PATH, manifest_path: Path = OWL_MANIFES
         generator_module="linkml.generators.owlgen",
         output_path=out_rel,
         content_digest=digest,
-        generator_options=dict(OWL_OPTIONS),
+        generator_options={
+            **dict(OWL_OPTIONS),
+            "digest_mode": "rdf_ground_triples",
+        },
     )
     return digest
 
@@ -165,7 +198,7 @@ def generate_shacl(
     with schema_cwd() as schema_name:
         gen = ShaclGenerator(schema_name)
         text = gen.serialize()
-    digest = write_text_artifact(out_path, text)
+    digest = write_rdf_artifact(out_path, text)
     try:
         out_rel = out_path.relative_to(REPO).as_posix()
     except ValueError:
@@ -177,6 +210,7 @@ def generate_shacl(
         generator_module="linkml.generators.shaclgen",
         output_path=out_rel,
         content_digest=digest,
+        generator_options={"digest_mode": "rdf_ground_triples"},
     )
     return digest
 

@@ -68,6 +68,7 @@ def test_repo_golden_three_modules():
     html = index.read_text(encoding="utf-8")
     for module_id in (
         "moex:module:dams",
+        "moex:module:dsp",
         "moex:module:fibo",
         "moex:module:fibo-profile",
         "moex:module:trading-solution",

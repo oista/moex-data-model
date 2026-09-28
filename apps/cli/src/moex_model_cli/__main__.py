@@ -42,6 +42,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Also emit JSON Schema under generated/artifacts",
     )
+    compile_p.add_argument(
+        "--artifacts",
+        action="store_true",
+        help="Also regenerate OWL/SHACL/DBML/Mermaid under generated/artifacts",
+    )
 
     diagram = sub.add_parser(
         "diagram",
@@ -191,7 +196,11 @@ def main(argv: list[str] | None = None) -> int:
     elif args.command == "lint":
         code, text = run_lint(paths)
     elif args.command == "compile":
-        code, text = run_compile(paths, with_json_schema=args.json_schema)
+        code, text = run_compile(
+            paths,
+            with_json_schema=args.json_schema,
+            with_artifacts=args.artifacts,
+        )
     elif args.command == "diagram":
         code, text = run_diagram(
             paths,

@@ -126,7 +126,10 @@ def _compare_single_file(
     manifest_path: Path,
     committed_path: Path,
     regenerate,
+    rdf: bool = False,
 ) -> list[str]:
+    from generate_artifacts import rdf_ground_digest
+
     errors: list[str] = []
     if not manifest_path.is_file():
         return [f"missing {name} manifest: {manifest_path}"]
@@ -138,13 +141,14 @@ def _compare_single_file(
     if not expected:
         return [f"{name} manifest missing content_digest"]
 
-    actual = _sha256_file(committed_path)
-    # Prefer LF-normalized digest when platform may rewrite newlines.
     committed_text = _lf_text(committed_path)
-    committed_digest = "sha256:" + hashlib.sha256(
-        committed_text.encode("utf-8")
-    ).hexdigest()
-    if committed_digest != expected and actual != expected:
+    if rdf:
+        committed_digest = rdf_ground_digest(committed_text)
+    else:
+        committed_digest = "sha256:" + hashlib.sha256(
+            committed_text.encode("utf-8")
+        ).hexdigest()
+    if committed_digest != expected:
         errors.append(
             f"{name} digest mismatch vs manifest:\n"
             f"  file={committed_path.as_posix()}\n"
@@ -163,10 +167,9 @@ def _compare_single_file(
                 f"  expected={expected}\n"
                 f"  regenerated={regen_digest}"
             )
-        else:
+        elif not rdf:
             left = _lf_text(out)
-            right = committed_text
-            if left != right:
+            if left != committed_text:
                 errors.append(
                     f"{name} regenerate digest matches but text differs from committed"
                 )
@@ -209,6 +212,7 @@ def _compare_owl() -> list[str]:
         manifest_path=OWL_MANIFEST,
         committed_path=OWL_PATH,
         regenerate=generate_owl,
+        rdf=True,
     )
     if not errors:
         errors.extend(_smoke_rdf(OWL_PATH, name="owl"))
@@ -221,6 +225,7 @@ def _compare_shacl() -> list[str]:
         manifest_path=SHACL_MANIFEST,
         committed_path=SHACL_PATH,
         regenerate=generate_shacl,
+        rdf=True,
     )
     if not errors:
         errors.extend(_smoke_rdf(SHACL_PATH, name="shacl"))

@@ -1,4 +1,4 @@
-"""compile — regenerate DAMS Pydantic contracts (+ optional json-schema)."""
+"""compile — regenerate DAMS Pydantic contracts (+ optional json-schema / artifacts)."""
 
 from __future__ import annotations
 
@@ -9,7 +9,12 @@ from pathlib import Path
 from moex_model_cli.bootstrap import SlicePaths
 
 
-def run_compile(paths: SlicePaths, *, with_json_schema: bool = False) -> tuple[int, str]:
+def run_compile(
+    paths: SlicePaths,
+    *,
+    with_json_schema: bool = False,
+    with_artifacts: bool = False,
+) -> tuple[int, str]:
     script = paths.root / "scripts" / "generate_contracts.py"
     proc = subprocess.run(
         [sys.executable, str(script)],
@@ -52,4 +57,20 @@ def run_compile(paths: SlicePaths, *, with_json_schema: bool = False) -> tuple[i
         if gen.returncode != 0:
             return gen.returncode, out + (gen.stderr or "")
         lines.append(f"compile: json-schema → {dest.relative_to(paths.root)}")
+
+    if with_artifacts:
+        art_script = paths.root / "scripts" / "generate_artifacts.py"
+        art = subprocess.run(
+            [sys.executable, str(art_script)],
+            cwd=paths.root,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+        art_out = (art.stdout or "") + (art.stderr or "")
+        if art.returncode != 0:
+            return art.returncode, "\n".join(lines) + "\n" + art_out
+        lines.append(art_out.rstrip())
+        lines.append("compile: artifacts OK (owl/shacl/dbml/mermaid)")
+
     return 0, "\n".join(lines) + "\n"

@@ -97,8 +97,17 @@ linkml-lint --config .linkmllint.yaml model-assets/specifications/moex-dams/0.1/
 make check
 ```
 
-Порядок: `generate-contracts` → slice/CLI pytest (`apps/cli/scripts/check.ps1`) → `validate-schemas` → `validate-examples` → `compare-golden`.  
+Порядок: `generate-contracts` → slice/CLI pytest (`apps/cli/scripts/check.ps1`) → `validate-schemas` → `validate-examples` → `compare-golden` (contracts, JSON Schema, OWL, SHACL, DBML, Mermaid).  
 Pin: [`requirements-linkml.txt`](requirements-linkml.txt), CI: [`.github/workflows/check.yml`](.github/workflows/check.yml) (Python из [`.python-version`](.python-version)).
+
+Регенерируемые артефакты схемы (кроме curated colored DBML):
+
+```bash
+make generate-artifacts
+# or: moex-model compile --root . --artifacts
+```
+
+Пишет OWL/SHACL/`moex-dams.dbml`/Mermaid под [`generated/artifacts/moex-dams/0.1/`](generated/artifacts/moex-dams/0.1/) + manifests. `moex-dams-drawdb-colored.dbml` — ручной drawDB sample, не в golden.
 
 Пишет [`model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json`](model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json) через `moex-model publish`.
 

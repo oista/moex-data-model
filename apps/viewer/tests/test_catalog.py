@@ -99,6 +99,7 @@ def test_repo_catalog_passes_validation_with_modules():
     assert catalog is not None
     module_ids = {
         "moex:module:dams",
+        "moex:module:dsp",
         "moex:module:fibo",
         "moex:module:fibo-profile",
         "moex:module:trading-solution",
