@@ -10,10 +10,11 @@ from moex_model_cli.bootstrap import SlicePaths
 from moex_model_cli.commands.compile import run_compile
 from moex_model_cli.commands.diagram import run_diagram
 from moex_model_cli.commands.diff import run_diff
+from moex_model_cli.commands.import_ import run_import
 from moex_model_cli.commands.lint import run_lint
+from moex_model_cli.commands.map_cmd import run_map
 from moex_model_cli.commands.publish import run_publish
 from moex_model_cli.commands.semantic_diff import run_semantic_diff
-from moex_model_cli.commands.stubs import run_not_implemented
 from moex_model_cli.commands.validate import run_validate
 
 
@@ -42,10 +43,23 @@ def build_parser() -> argparse.ArgumentParser:
         help="Also emit JSON Schema under generated/artifacts",
     )
 
-    diagram = sub.add_parser("diagram", help="Export DBML golden sample for drawDB")
+    diagram = sub.add_parser(
+        "diagram",
+        help="Project ModelPackage to DBML (logical/physical; ADR-006)",
+    )
     _add_slice_args(diagram)
     diagram.add_argument("--out", type=Path, default=None)
-    diagram.add_argument("--profile", default="physical")
+    diagram.add_argument(
+        "--profile",
+        default="logical",
+        help="Projection profile: logical (default) or physical",
+    )
+    diagram.add_argument(
+        "--format",
+        dest="fmt",
+        default="dbml",
+        help="Output format (only dbml)",
+    )
 
     diff = sub.add_parser("diff", help="Unified diff of an asset between two git revisions")
     _add_slice_args(diff)
@@ -88,9 +102,61 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
 
-    for name in ("import", "map"):
-        stub = sub.add_parser(name, help=f"Not implemented ({name})")
-        _add_slice_args(stub)
+    import_p = sub.add_parser(
+        "import",
+        help=(
+            "ER-dictionary → ModelPackage draft "
+            "(schema-automator = Stage 7 / ADR-009)"
+        ),
+    )
+    _add_slice_args(import_p)
+    import_p.add_argument(
+        "--workbook",
+        type=Path,
+        required=True,
+        help="Path to .xlsx or directory of CSV sheets",
+    )
+    import_p.add_argument(
+        "--profile",
+        type=Path,
+        required=True,
+        dest="ingest_profile",
+        help="Ingest profile YAML",
+    )
+    import_p.add_argument(
+        "--out",
+        type=Path,
+        required=True,
+        help="Output directory for package/envelope/validation artifacts",
+    )
+    import_p.add_argument("--name", default=None, help="Artifact basename")
+    import_p.add_argument(
+        "--skip-validate",
+        action="store_true",
+        help="Write artifacts without linkml-validate",
+    )
+
+    map_p = sub.add_parser(
+        "map",
+        help=(
+            "SSSOM load or LinkML binding extract "
+            "(linkml-map engine = Stage 7 / ADR-008)"
+        ),
+    )
+    _add_slice_args(map_p)
+    map_p.add_argument(
+        "--sssom",
+        type=Path,
+        default=None,
+        help="Load and summarize an SSSOM YAML mapping set",
+    )
+    map_p.add_argument(
+        "--extract-schema",
+        type=Path,
+        default=None,
+        help="Extract class_uri / slot_uri / mappings from a LinkML schema",
+    )
+    map_p.add_argument("--json", action="store_true", help="Print bindings as JSON")
 
     return parser
 
@@ -127,7 +193,12 @@ def main(argv: list[str] | None = None) -> int:
     elif args.command == "compile":
         code, text = run_compile(paths, with_json_schema=args.json_schema)
     elif args.command == "diagram":
-        code, text = run_diagram(paths, out=args.out, profile=args.profile)
+        code, text = run_diagram(
+            paths,
+            out=args.out,
+            profile=args.profile,
+            fmt=args.fmt,
+        )
     elif args.command == "diff":
         code, text = run_diff(
             paths,
@@ -151,8 +222,23 @@ def main(argv: list[str] | None = None) -> int:
             out=args.out,
             implementation_id=args.implementation_id,
         )
-    elif args.command in {"import", "map"}:
-        code, text = run_not_implemented(args.command)
+    elif args.command == "import":
+        code, text = run_import(
+            paths,
+            workbook=args.workbook,
+            profile=args.ingest_profile,
+            out=args.out,
+            name=args.name,
+            skip_validate=args.skip_validate,
+            schema=args.schema,
+        )
+    elif args.command == "map":
+        code, text = run_map(
+            paths,
+            sssom=args.sssom,
+            extract_schema=args.extract_schema,
+            as_json=args.json,
+        )
     else:
         return 2
 

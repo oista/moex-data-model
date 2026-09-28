@@ -416,7 +416,7 @@ Diagnostic:
 
 ## Этап 2. Compiler CLI
 
-**Progress:** `validate` / `lint` / `compile` / `diagram` / `diff` (textual) / `publish` / **`semantic-diff`** done. `import` / `map` remain stubs.
+**Progress:** Stage 2 CLI surface closed (thin): `validate` / `lint` / `compile` / `diagram` (ModelPackage→DBML) / `diff` / `publish` / `semantic-diff` / **`import`** (ER-dictionary ingest facade) / **`map`** (SSSOM + LinkML extract). Stage 7 still owns schema-automator wizard and `linkml-map` engine (ADR-008/009).
 
 До web-приложения необходимо сделать стабильный CLI.
 

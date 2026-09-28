@@ -14,6 +14,7 @@ dependencies = [
     "moex-specification-dams",
     "moex-publication",
     "moex-git-adapter",
+    "moex-semantic-mappings",
     "PyYAML>=6.0",
 ]
 
@@ -24,6 +25,7 @@ dev = [
     "moex-standard-linkml[dev]",
     "moex-specification-dams[dev]",
     "moex-publication[dev]",
+    "moex-semantic-mappings[dev]",
 ]
 
 [project.scripts]

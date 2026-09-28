@@ -88,14 +88,95 @@ def test_lint_and_compile(repo_root: Path, capsys: pytest.CaptureFixture[str]) -
     assert "contracts OK" in capsys.readouterr().out
 
 
-def test_diagram_and_import_stub(
+def test_diagram_projects_logical(
     repo_root: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     out = tmp_path / "out.dbml"
-    assert main(["diagram", "--root", str(repo_root), "--out", str(out)]) == 0
-    assert out.is_file()
-    assert main(["import", "--root", str(repo_root)]) == 2
-    assert "not implemented" in capsys.readouterr().out
+    assert main(
+        [
+            "diagram",
+            "--root",
+            str(repo_root),
+            "--profile",
+            "logical",
+            "--out",
+            str(out),
+        ]
+    ) == 0
+    text = out.read_text(encoding="utf-8")
+    assert "Table TradingClient" in text
+    assert "clientId" in text
+    assert (tmp_path / "out.dbml.manifest.json").is_file()
+    assert "digest=sha256:" in capsys.readouterr().out
+
+
+def test_import_er_dictionary_fixture(
+    repo_root: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    workbook = (
+        repo_root / "packages" / "standard-linkml" / "tests" / "fixtures" / "er-dictionary"
+    )
+    profile = workbook / "profile.yaml"
+    out = tmp_path / "ingest-out"
+    code = main(
+        [
+            "import",
+            "--root",
+            str(repo_root),
+            "--workbook",
+            str(workbook),
+            "--profile",
+            str(profile),
+            "--out",
+            str(out),
+            "--skip-validate",
+        ]
+    )
+    captured = capsys.readouterr()
+    assert code == 0, captured.out + captured.err
+    assert (out / "pilot_solution_model.package.yaml").is_file()
+    assert "import OK" in captured.out
+
+
+def test_map_sssom_and_extract(
+    repo_root: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    sssom = (
+        repo_root
+        / "model-assets"
+        / "transformations"
+        / "mappings"
+        / "dams-fibo.sssom.yaml"
+    )
+    assert main(["map", "--root", str(repo_root), "--sssom", str(sssom)]) == 0
+    out = capsys.readouterr().out
+    assert "moex:mappings:dams-fibo" in out
+    assert "bindings=1" in out
+
+    assert main(["map", "--root", str(repo_root)]) == 2
+    assert "requires --sssom" in capsys.readouterr().out
+
+    fixture = (
+        repo_root
+        / "packages"
+        / "semantic-mappings"
+        / "tests"
+        / "fixtures"
+        / "mapped_schema.yaml"
+    )
+    assert (
+        main(
+            [
+                "map",
+                "--root",
+                str(repo_root),
+                "--extract-schema",
+                str(fixture),
+            ]
+        )
+        == 0
+    )
+    assert "bindings=" in capsys.readouterr().out
 
 
 def test_missing_schema_fails_fast(repo_root: Path) -> None:

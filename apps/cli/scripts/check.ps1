@@ -28,6 +28,7 @@ try {
     $Dams = Join-Path $RepoRoot "packages/specification-dams"
     $Pub = Join-Path $RepoRoot "packages/publication"
     $Git = Join-Path $RepoRoot "packages/git-adapter"
+    $Sem = Join-Path $RepoRoot "packages/semantic-mappings"
 
     $Contracts = Join-Path $RepoRoot "generated/contracts/moex-dams/0.1"
     Write-Host "Ensuring DAMS contracts package (Python: $VenvPython)"
@@ -44,6 +45,7 @@ try {
         -e "$Dams" `
         -e "$Pub" `
         -e "$Git" `
+        -e "$Sem" `
         -e "$CliRoot[dev]" -q
 
     Write-Host "Running pytest (kernel, provider, dams, publication, git, cli, architecture)"

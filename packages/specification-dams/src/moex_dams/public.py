@@ -18,12 +18,18 @@ from moex_dams.domain.graph import (
     NodeKind,
 )
 from moex_dams.mappings.dams_to_graph import build_dams_graph
+from moex_dams.projection.dbml import (
+    DbmlManifest,
+    project_model_package_to_dbml,
+    write_dbml_artifact,
+)
 from moex_dams.rules.references import check_references
 from moex_dams.rules.structural import check_structural
 
 __all__ = [
     "DamsAssetRepository",
     "DamsModelGraphView",
+    "DbmlManifest",
     "EdgeKind",
     "ElementIndexEntry",
     "GraphEdge",
@@ -40,5 +46,7 @@ __all__ = [
     "default_dams_rule_sets",
     "diff_graphs",
     "diff_implementations",
+    "project_model_package_to_dbml",
     "run_rule_sets",
+    "write_dbml_artifact",
 ]
