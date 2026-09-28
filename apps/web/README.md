@@ -31,6 +31,13 @@ Set **Actor** in the sidebar (`X-Moex-Actor`).
 # or: make web-check
 ```
 
+Playwright bridge smoke (static-bridge + Diagram page, API mocked):
+
+```powershell
+.\apps\web\scripts\e2e.ps1
+# or: make web-e2e
+```
+
 ## Routes
 
 | Path | Purpose |

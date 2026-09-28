@@ -334,7 +334,7 @@ def _compare_python() -> list[str]:
 
 
 def _compare_doc() -> list[str]:
-    """Doc golden is regen→digest only (git keeps index_subset, not full tree)."""
+    """Doc golden is regen-to-digest only (git keeps index_subset, not full tree)."""
     errors: list[str] = []
     if not DOC_MANIFEST.is_file():
         return [f"missing doc manifest: {DOC_MANIFEST}"]

@@ -39,3 +39,8 @@ generated/artifacts/moex-dams/0.1/docs/*
 .vscode/
 *.swp
 .DS_Store
+
+# Playwright
+apps/web/test-results/
+apps/web/playwright-report/
+apps/web/blob-report/
