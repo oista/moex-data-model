@@ -73,6 +73,10 @@ body {
 
 .nav-module { margin-bottom: 8px; }
 .nav-explorer { margin: 4px 0 8px 8px; display: flex; flex-direction: column; gap: 2px; }
+.nav-explorer .nav-tree-node { display: flex; flex-direction: column; gap: 2px; }
+.nav-explorer .nav-tree-row { display: flex; align-items: center; gap: 2px; }
+.nav-explorer .nav-tree-children { display: flex; flex-direction: column; gap: 2px; }
+.nav-explorer .nav-tree-children[hidden] { display: none; }
 .nav-group-btn, .nav-item-btn, .nav-section-btn {
   display: flex; align-items: center; gap: 6px;
   width: 100%; text-align: left;

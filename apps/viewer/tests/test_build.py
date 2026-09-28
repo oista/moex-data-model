@@ -90,8 +90,18 @@ def test_repo_golden_three_modules():
     assert "explorer" in dams["sections"]
     fibo = next(m for m in registry["modules"] if m["module_id"] == "moex:module:fibo")
     assert "glossary" in fibo["sections"]
+    assert "explorer" in fibo["sections"]
+    assert "group:FND" in html or "group:BE" in html
     assert "денежный поток" in html
     assert "FailureToPay" in html and "CreditEvent" in html
+
+    cat = next(
+        (m for m in registry["modules"] if "ontology-catalog" in m["module_id"]),
+        None,
+    )
+    if cat is not None:
+        assert "explorer" in cat["sections"]
+        assert "group:moex:ontology:fibo" in html or "ontology_explorer" in html
 
     catalog = registry.get("catalog")
     assert catalog is not None
@@ -108,6 +118,8 @@ def test_repo_golden_three_modules():
     assert "Implementations" in js
     assert "rootSpecifications" in js
     assert "navigateToNode" in js
+    assert "walkExplorerItems" in js
+    assert "renderOntologyExplorerDetail" in js
 
 
 def test_nav_group_children_hidden_overrides_display_flex():

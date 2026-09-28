@@ -210,26 +210,51 @@
     return (mod.sections || []).find((s) => s.type === "explorer") || null;
   }
 
-  function findExplorerItem(section, itemId) {
-    if (!section || !itemId) return null;
-    for (const group of section.items || []) {
-      if (group.id === itemId) return { item: group, group: null };
-      for (const child of group.children || []) {
-        if (child.id === itemId) return { item: child, group };
-        for (const gc of child.children || []) {
-          if (gc.id === itemId) return { item: gc, group, parent: child };
-        }
+  function walkExplorerItems(section, visit) {
+    function walk(nodes, group, ancestors) {
+      for (const node of nodes || []) {
+        visit(node, group, ancestors);
+        const nextGroup =
+          node.attributes?.kind === "group" ? node : group;
+        walk(node.children, nextGroup, ancestors.concat(node));
       }
     }
-    return null;
+    walk(section?.items || [], null, []);
+  }
+
+  function findExplorerItem(section, itemId) {
+    if (!section || !itemId) return null;
+    let found = null;
+    walkExplorerItems(section, (node, group, ancestors) => {
+      if (node.id === itemId && !found) {
+        found = { item: node, group, ancestors };
+      }
+    });
+    return found;
   }
 
   function collectExplorerIds(section) {
     const ids = new Set();
-    (section.items || []).forEach((g) => {
-      (g.children || []).forEach((c) => ids.add(c.id));
+    walkExplorerItems(section, (node) => {
+      if (node.attributes?.kind !== "group") ids.add(node.id);
     });
     return ids;
+  }
+
+  function countExplorerClasses(node) {
+    let n = 0;
+    walkExplorerItems({ items: node.children || [] }, (child) => {
+      const k = child.attributes?.kind;
+      if (k === "group" || k === "enum_value") return;
+      n += 1;
+    });
+    return n;
+  }
+
+  function descendantHasId(node, itemId) {
+    if (!itemId || !node) return false;
+    if (node.id === itemId) return true;
+    return (node.children || []).some((c) => descendantHasId(c, itemId));
   }
 
   function fiboItemExists(itemId) {
@@ -247,12 +272,86 @@
     if (expl) {
       const tree = document.createElement("div");
       tree.className = "nav-explorer";
+
+      if (focus?.item) {
+        const focused = findExplorerItem(expl, focus.item);
+        if (focused) {
+          (focused.ancestors || []).forEach((a) => openGroups.add(a.id));
+          if (focused.group) openGroups.add(focused.group.id);
+          openGroups.add(focused.item.id);
+        }
+      }
+
+      function openExplorerItem(itemId) {
+        const node = nodeForModule(mod.module_id);
+        setHash({
+          node: node ? node.id : null,
+          module: shortModule(mod.module_id),
+          section: expl.id,
+          item: itemId,
+        });
+        if (node) currentNodeId = node.id;
+        showModule(mod.module_id, { section: expl.id, item: itemId });
+      }
+
+      function appendNavClassNode(parentEl, node, depth) {
+        const hasKids = node.children && node.children.length;
+        const open = openGroups.has(node.id);
+        const wrapNode = document.createElement("div");
+        wrapNode.className = "nav-tree-node";
+        if (depth) wrapNode.style.marginLeft = `${Math.min(depth, 6) * 8}px`;
+
+        const row = document.createElement("div");
+        row.className = "nav-tree-row";
+
+        const toggle = document.createElement("button");
+        toggle.type = "button";
+        toggle.className = "tree-toggle";
+        toggle.textContent = hasKids ? (open ? "▼" : "▶") : "·";
+        toggle.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (!hasKids) return;
+          if (openGroups.has(node.id)) openGroups.delete(node.id);
+          else openGroups.add(node.id);
+          renderModuleNav({ item: selectedItemId, section: expl.id });
+        });
+
+        const label = document.createElement("button");
+        label.type = "button";
+        label.className =
+          "nav-item-btn" + (node.id === selectedItemId ? " active" : "");
+        const kind = node.attributes?.kind || "class";
+        const kindClasses =
+          kind === "class" ? classKindClassNames(node.attributes) : "";
+        const mark =
+          kind === "enum" ? "E" : kind === "individual" ? "I" : "C";
+        label.innerHTML = `<span class="nav-kind ${kindClasses}">${escapeHtml(mark)}</span>
+          <span>${escapeHtml(node.title || node.id)}</span>`;
+        label.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (hasKids) openGroups.add(node.id);
+          openExplorerItem(node.id);
+        });
+
+        row.appendChild(toggle);
+        row.appendChild(label);
+        wrapNode.appendChild(row);
+
+        if (hasKids) {
+          const kids = document.createElement("div");
+          kids.className = "nav-tree-children";
+          kids.hidden = !open;
+          node.children.forEach((c) =>
+            appendNavClassNode(kids, c, depth + 1)
+          );
+          wrapNode.appendChild(kids);
+        }
+        parentEl.appendChild(wrapNode);
+      }
+
       (expl.items || []).forEach((group) => {
         const gId = group.id;
-        if (
-          focus?.item === gId ||
-          (focus?.item && (group.children || []).some((c) => c.id === focus.item))
-        ) {
+        if (focus?.item && descendantHasId(group, focus.item)) {
           openGroups.add(gId);
         }
         const open = openGroups.has(gId);
@@ -269,13 +368,15 @@
           e.stopPropagation();
           if (openGroups.has(gId)) openGroups.delete(gId);
           else openGroups.add(gId);
-          renderModuleNav({ item: selectedItemId });
+          renderModuleNav({ item: selectedItemId, section: expl.id });
         });
         const titleSpan = document.createElement("span");
         titleSpan.textContent = group.title || group.id;
         const badge = document.createElement("span");
         badge.className = "badge";
-        badge.textContent = String((group.children || []).length);
+        const classCount =
+          group.attributes?.class_count ?? countExplorerClasses(group);
+        badge.textContent = String(classCount);
         gBtn.appendChild(toggle);
         gBtn.appendChild(titleSpan);
         gBtn.appendChild(badge);
@@ -285,39 +386,10 @@
         gBtn.addEventListener("click", (e) => {
           e.stopPropagation();
           openGroups.add(gId);
-          const node = nodeForModule(mod.module_id);
-          setHash({
-            node: node ? node.id : null,
-            module: shortModule(mod.module_id),
-            section: expl.id,
-            item: gId,
-          });
-          if (node) currentNodeId = node.id;
-          showModule(mod.module_id, { section: expl.id, item: gId });
+          openExplorerItem(gId);
         });
         (group.children || []).forEach((child) => {
-          const cBtn = document.createElement("button");
-          cBtn.type = "button";
-          cBtn.className =
-            "nav-item-btn" + (child.id === selectedItemId ? " active" : "");
-          const kind = child.attributes?.kind || "class";
-          const kindClasses =
-            kind === "class" ? classKindClassNames(child.attributes) : "";
-          cBtn.innerHTML = `<span class="nav-kind ${kindClasses}">${escapeHtml(kind === "enum" ? "E" : "C")}</span>
-            <span>${escapeHtml(child.title || child.id)}</span>`;
-          cBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const node = nodeForModule(mod.module_id);
-            setHash({
-              node: node ? node.id : null,
-              module: shortModule(mod.module_id),
-              section: expl.id,
-              item: child.id,
-            });
-            if (node) currentNodeId = node.id;
-            showModule(mod.module_id, { section: expl.id, item: child.id });
-          });
-          kids.appendChild(cBtn);
+          appendNavClassNode(kids, child, 0);
         });
         gWrap.appendChild(gBtn);
         gWrap.appendChild(kids);
@@ -689,9 +761,15 @@
       content.appendChild(crumb);
       const header = document.createElement("div");
       header.className = "module-header";
+      const ontoExpl =
+        (expl.tags || []).includes("ontology") ||
+        (expl.tags || []).includes("fibo");
+      const landingHint = ontoExpl
+        ? "Домены и иерархия классов. Выберите класс слева или ниже."
+        : "Пакеты схемы спецификации (тело LinkML). Выберите класс слева или ниже.";
       header.innerHTML = `<h1>${escapeHtml(mod.icon || "")} ${escapeHtml(mod.title)}</h1>
         <p class="muted">${escapeHtml(mod.description || "")}</p>
-        <p>Пакеты схемы спецификации (тело LinkML). Выберите класс слева или ниже.</p>`;
+        <p>${landingHint}</p>`;
       content.appendChild(header);
 
       const grid = document.createElement("div");
@@ -721,7 +799,11 @@
         });
         const countSpan = document.createElement("span");
         countSpan.className = "muted";
-        countSpan.textContent = `${classes.length} classes${enums.length ? ", " + enums.length + " enums" : ""}`;
+        const totalClasses =
+          group.attributes?.class_count ?? countExplorerClasses(group);
+        countSpan.textContent = ontoExpl
+          ? `${totalClasses} classes`
+          : `${classes.length} classes${enums.length ? ", " + enums.length + " enums" : ""}`;
         h2.appendChild(titleBtn);
         h2.appendChild(document.createTextNode(" "));
         h2.appendChild(countSpan);
@@ -808,6 +890,155 @@
     }
     dl.appendChild(dt);
     dl.appendChild(dd);
+  }
+
+  function isOntologyExplorerItem(item, section) {
+    if (item?.attributes?.iri) return true;
+    const tags = section?.tags || [];
+    return tags.includes("ontology") || tags.includes("fibo");
+  }
+
+  function splitRefList(value) {
+    if (value == null || value === "") return [];
+    if (Array.isArray(value)) return value.map(String).filter(Boolean);
+    return String(value)
+      .split(/\s*\|\s*|\s*,\s*/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
+
+  function renderOntologyExplorerDetail(mod, expl, item) {
+    const card = document.createElement("article");
+    card.className = "detail-card";
+    const attrs = item.attributes || {};
+    const kind = attrs.kind || "class";
+    const labelRu = attrs.label_ru || "";
+    const aliases = attrs.aliases || "";
+    const aliasBit = labelRu || (typeof aliases === "string" ? aliases : "");
+    const titleExtra = aliasBit
+      ? ` <span class="muted">(${escapeHtml(String(aliasBit))})</span>`
+      : "";
+    const badges = [];
+    if (kind) badges.push(`<span class="badge-pill">${escapeHtml(kind)}</span>`);
+    if (attrs.deprecated === true || attrs.deprecated === "true") {
+      badges.push(`<span class="badge-pill">deprecated</span>`);
+    }
+    card.innerHTML = `
+      <header class="detail-head">
+        <h1>${escapeHtml(item.title || item.id)}${titleExtra}</h1>
+        <div class="badge-row">${badges.join("")}</div>
+        <p class="muted">${escapeHtml(attrs.source_domain || attrs.ontology_id || "")}</p>
+      </header>
+    `;
+
+    const defBlock = document.createElement("section");
+    defBlock.className = "detail-block";
+    defBlock.innerHTML = `<h2>Definition</h2>`;
+    const defEn = document.createElement("p");
+    defEn.className = "detail-desc";
+    defEn.textContent = item.description || attrs.definition || "No definition.";
+    defBlock.appendChild(defEn);
+    if (attrs.definition_ru) {
+      const defRu = document.createElement("p");
+      defRu.className = "detail-desc muted";
+      defRu.textContent = String(attrs.definition_ru);
+      defBlock.appendChild(defRu);
+    }
+    card.appendChild(defBlock);
+
+    const idBlock = document.createElement("section");
+    idBlock.className = "detail-block";
+    idBlock.innerHTML = `<h2>Identity</h2>`;
+    const dl = document.createElement("dl");
+    dl.className = "detail-meta";
+    if (attrs.iri) {
+      const code = document.createElement("code");
+      code.textContent = String(attrs.iri);
+      appendMetaRow(dl, "iri", code);
+    }
+    if (attrs.curie) appendMetaRow(dl, "curie", String(attrs.curie));
+    if (attrs.local_name) appendMetaRow(dl, "local_name", String(attrs.local_name));
+    if (attrs.source_domain) {
+      appendMetaRow(dl, "source_domain", String(attrs.source_domain));
+    }
+    if (attrs.ontology_id) {
+      appendMetaRow(dl, "ontology_id", String(attrs.ontology_id));
+    }
+    if (dl.children.length) {
+      idBlock.appendChild(dl);
+      card.appendChild(idBlock);
+    }
+
+    const known = collectExplorerIds(expl);
+    const parents = splitRefList(attrs.parents?.length ? attrs.parents : attrs.parent_local_name);
+    const children = splitRefList(attrs.children);
+    // Prefer live tree children when nested under explorer
+    const treeKids = (item.children || []).map((c) => c.id);
+    const childIds = treeKids.length ? treeKids : children;
+
+    const tax = document.createElement("section");
+    tax.className = "detail-block";
+    tax.innerHTML = `<h2>Taxonomy</h2>`;
+    const taxList = document.createElement("div");
+    taxList.className = "link-row";
+    if (parents.length) {
+      const pLabel = document.createElement("div");
+      pLabel.className = "muted mixin-label";
+      pLabel.textContent = "parents:";
+      taxList.appendChild(pLabel);
+      parents.forEach((p) =>
+        taxList.appendChild(makeSpecLink(mod, expl, p, known, "parent"))
+      );
+    } else {
+      taxList.appendChild(document.createTextNode("No parent in preview"));
+    }
+    if (childIds.length) {
+      const cLabel = document.createElement("div");
+      cLabel.className = "muted mixin-label";
+      cLabel.textContent = "children:";
+      taxList.appendChild(cLabel);
+      childIds.forEach((c) =>
+        taxList.appendChild(makeSpecLink(mod, expl, c, known, "child"))
+      );
+    }
+    tax.appendChild(taxList);
+    card.appendChild(tax);
+
+    const domains = splitRefList(attrs.domain);
+    const ranges = splitRefList(attrs.range);
+    if (domains.length || ranges.length) {
+      const prop = document.createElement("section");
+      prop.className = "detail-block";
+      prop.innerHTML = `<h2>Property</h2>`;
+      const pdl = document.createElement("dl");
+      pdl.className = "detail-meta";
+      if (domains.length) appendMetaRow(pdl, "domain", domains.join(", "));
+      if (ranges.length) appendMetaRow(pdl, "range", ranges.join(", "));
+      prop.appendChild(pdl);
+      card.appendChild(prop);
+    }
+
+    if (attrs.replaced_by) {
+      const life = document.createElement("section");
+      life.className = "detail-block";
+      life.innerHTML = `<h2>Lifecycle</h2>`;
+      const ldl = document.createElement("dl");
+      ldl.className = "detail-meta";
+      appendMetaRow(ldl, "replaced_by", String(attrs.replaced_by));
+      life.appendChild(ldl);
+      card.appendChild(life);
+    }
+
+    const bl = attrs.backlinks;
+    if (bl !== undefined && bl !== null && bl !== "" && bl !== 0 && bl !== "0") {
+      const back = document.createElement("section");
+      back.className = "detail-block";
+      back.innerHTML = `<h2>Backlinks</h2>
+        <p class="detail-desc">${escapeHtml(String(bl))}</p>`;
+      card.appendChild(back);
+    }
+
+    return card;
   }
 
   function renderExplorerDetail(mod, expl, item, group) {
@@ -905,6 +1136,10 @@
       }
       card.appendChild(memberBlock);
       return card;
+    }
+
+    if (kind !== "enum" && isOntologyExplorerItem(item, expl)) {
+      return renderOntologyExplorerDetail(mod, expl, item);
     }
 
     const badges = [];

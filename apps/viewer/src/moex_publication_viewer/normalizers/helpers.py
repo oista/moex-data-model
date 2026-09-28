@@ -29,7 +29,11 @@ def dict_to_item(
     item_id = str(record.get(key) or record.get("name") or record.get("title") or f"row-{index}")
     title = record.get("title") or record.get("label") or record.get("name")
     description = record.get("description") or record.get("definition")
-    attrs = {k: v for k, v in record.items() if k not in {"id", "title", "description", "children", "tags"}}
+    skip = {"id", "title", "description", "children", "tags", "attributes", "source_ref"}
+    attrs = {k: v for k, v in record.items() if k not in skip}
+    nested = record.get("attributes")
+    if isinstance(nested, dict):
+        attrs = {**attrs, **nested}
     tags = record.get("tags") or []
     if not isinstance(tags, list):
         tags = [str(tags)]
@@ -96,6 +100,49 @@ def items_to_tree(
         return node.model_copy(update={"children": kids})
 
     return [attach(r) for r in sorted(roots, key=lambda i: i.id)]
+
+
+def items_to_domain_explorer(
+    items: list[PublicationItem],
+    *,
+    domain_attr: str = "source_domain",
+    parent_attr: str = "parent_local_name",
+) -> list[PublicationItem]:
+    """Group flat items by domain_attr; nest by parent_attr within each domain."""
+    by_domain: dict[str, list[PublicationItem]] = {}
+    for item in items:
+        raw = (item.attributes or {}).get(domain_attr)
+        domain = str(raw).strip() if raw not in (None, "") else "unknown"
+        enriched = item.model_copy(
+            update={
+                "attributes": {
+                    **(item.attributes or {}),
+                    "kind": (item.attributes or {}).get("kind") or "class",
+                }
+            }
+        )
+        by_domain.setdefault(domain, []).append(enriched)
+
+    groups: list[PublicationItem] = []
+    for domain in sorted(by_domain.keys()):
+        domain_items = by_domain[domain]
+        tree = items_to_tree(domain_items, parent_attr=parent_attr)
+        groups.append(
+            PublicationItem(
+                id=f"group:{domain}",
+                title=domain,
+                description=f"Ontology domain {domain}",
+                attributes={
+                    "kind": "group",
+                    "source_domain": domain,
+                    "purpose": f"Classes in domain {domain} (preview).",
+                    "class_count": len(domain_items),
+                    "enum_count": 0,
+                },
+                children=tree,
+            )
+        )
+    return groups
 
 
 def section_meta(section) -> dict[str, Any]:

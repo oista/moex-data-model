@@ -86,6 +86,42 @@ def test_csv_tree_from_parent_local_name(tmp_path: Path):
     assert [c.id for c in credit.children[0].children] == ["FailureToPay"]
 
 
+def test_csv_explorer_groups_by_domain_and_nests_parents(tmp_path: Path):
+    p = tmp_path / "onto.csv"
+    p.write_text(
+        "local_name,label,definition,definition_ru,label_ru,parent_local_name,source_domain,iri\n"
+        "RootA,Root A,def A,опр A,Корень A,,FND,https://ex/RootA\n"
+        "ChildA,Child A,def CA,опр CA,Дитя A,RootA,FND,https://ex/ChildA\n"
+        "RootB,Root B,def B,,,,BE,https://ex/RootB\n"
+        "Cross,Cross,def X,,,RootA,BE,https://ex/Cross\n",
+        encoding="utf-8",
+    )
+    sec = _section(
+        type="explorer",
+        source={"format": "csv", "path": "onto.csv"},
+        key_column="local_name",
+        tags=["ontology", "fibo"],
+    )
+    out = CsvNormalizer().normalize(sec, p)
+    assert out.type == "explorer"
+    groups = {g.id: g for g in out.items}
+    assert set(groups) == {"group:FND", "group:BE"}
+    assert all(g.attributes.get("kind") == "group" for g in out.items)
+    fnd = groups["group:FND"]
+    assert fnd.title == "FND"
+    assert [c.id for c in fnd.children] == ["RootA"]
+    assert [c.id for c in fnd.children[0].children] == ["ChildA"]
+    child = fnd.children[0].children[0]
+    assert child.attributes.get("kind") == "class"
+    assert child.description == "def CA"
+    assert child.attributes.get("definition_ru") == "опр CA"
+    assert child.attributes.get("iri") == "https://ex/ChildA"
+    be = groups["group:BE"]
+    # Cross parent RootA is other domain → treat as root in BE
+    be_ids = {c.id for c in be.children}
+    assert be_ids == {"RootB", "Cross"}
+
+
 def test_markdown(tmp_path: Path):
     p = tmp_path / "doc.md"
     p.write_text("# Hello\n\nWorld", encoding="utf-8")
