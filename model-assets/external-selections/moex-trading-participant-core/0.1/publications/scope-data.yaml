@@ -1,0 +1,97 @@
+# Scope projection for viewer tables
+overview:
+  id: moex-fibo-party-and-participation-scope
+  title: MOEX Party and Trading Participation Scope
+  external_specification_ref: fibo@2026Q2
+  status: draft
+  owner: moex:role:domain-architect
+  domain_context: participant-and-admission
+  disclaimer: >
+    Scope is a search and interest boundary over an external specification.
+    Included areas (e.g. FIBO FND/BE) do not import those domains or select
+    all of their terms.
+
+included_areas:
+  - id: FND
+    code: FND
+    title: Foundations
+    kind: domain
+    relevance: immediate
+  - id: BE
+    code: BE
+    title: Business Entities
+    kind: domain
+    relevance: immediate
+  - id: FBC
+    code: FBC
+    title: Financial Business and Commerce
+    kind: domain
+    relevance: selective
+
+excluded_areas:
+  - id: SEC
+    code: SEC
+    title: Securities
+    rationale: Deferred until instruments, issuers, and listing are modeled.
+  - id: DER
+    code: DER
+    title: Derivatives
+    rationale: Out of scope.
+  - id: IND
+    code: IND
+    title: Indices
+    rationale: Out of scope.
+  - id: MD
+    code: MD
+    title: Market Data
+    rationale: Out of scope.
+  - id: CAE
+    code: CAE
+    title: Corporate Actions
+    rationale: Out of scope.
+  - id: CIV
+    code: CIV
+    title: Collective Investment Vehicles
+    rationale: Out of scope.
+  - id: LOAN
+    code: LOAN
+    title: Loans
+    rationale: Out of scope.
+  - id: BP
+    code: BP
+    title: Business Processes
+    rationale: Out of scope.
+
+local_concepts:
+  - id: moex:LegalEntity
+    title: LegalEntity
+  - id: moex:CorporateGroup
+    title: CorporateGroup
+  - id: moex:OrganizationIdentifier
+    title: OrganizationIdentifier
+  - id: moex:TradingParticipation
+    title: TradingParticipation
+  - id: moex:TradingVenue
+    title: TradingVenue
+  - id: moex:TradingSection
+    title: TradingSection
+  - id: moex:Admission
+    title: Admission
+  - id: moex:Agreement
+    title: Agreement
+  - id: moex:AccountRelationship
+    title: AccountRelationship
+  - id: moex:RegistrationAction
+    title: RegistrationAction
+  - id: moex:SupportingDocument
+    title: SupportingDocument
+
+business_capabilities:
+  - id: trading-participant-onboarding
+    title: trading-participant-onboarding
+  - id: admission-to-trading
+    title: admission-to-trading
+  - id: participant-reference-data
+    title: participant-reference-data
+  - id: account-and-agreement-registration
+    title: account-and-agreement-registration

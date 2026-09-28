@@ -1254,6 +1254,72 @@ a {
   color: var(--text-secondary);
 }
 
+.scope-disclaimer {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--brand);
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
+  line-height: 1.45;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  background: var(--surface-2);
+}
+
+.status-chip--accepted,
+.status-chip--approved {
+  color: #0b3d2e;
+  background: #d8f3e7;
+  border-color: #8fd4b5;
+}
+
+.status-chip--candidate,
+.status-chip--pending {
+  color: #3d2e0b;
+  background: #fff3cd;
+  border-color: #e0c36a;
+}
+
+.status-chip--rejected {
+  color: #4a1212;
+  background: #f8d7da;
+  border-color: #e0a0a6;
+}
+
+.status-chip--deferred,
+.status-chip--deprecated {
+  color: #1a2a4a;
+  background: #dce6f5;
+  border-color: #9bb0d4;
+}
+
+.iri-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.iri-ext-link {
+  color: var(--brand-active);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+
 
 /* === 60-utilities.css === */
 /* Utilities */

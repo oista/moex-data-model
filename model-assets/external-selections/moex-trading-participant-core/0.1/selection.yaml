@@ -1,0 +1,211 @@
+# ExternalTermSelection — MOEX Trading Participant Core (ADR-020)
+id: moex-trading-participant-core
+title: MOEX Trading Participant Core
+version: 0.1.0
+scope_ref: moex-fibo-party-and-participation-scope
+status: draft
+draft_only: true
+owner: moex:role:domain-architect
+
+selection_basis:
+  use_case: trading-participant-onboarding-and-admission
+  domain_context_ref: participant-and-admission
+  external_specification_ref: fibo@2026Q2
+
+competency_questions:
+  - id: CQ-TP-001
+    question: >
+      Какая организация или юридическое лицо является участником торгов
+      и в каком статусе оно допущено к конкретному рынку или секции?
+    use_case: trading-participant-onboarding-and-admission
+    status: active
+  - id: CQ-TP-002
+    question: >
+      Как определить принадлежность организации к группе компаний,
+      её роли, идентификаторы и регистрационные данные?
+    use_case: trading-participant-onboarding-and-admission
+    status: active
+  - id: CQ-TP-003
+    question: >
+      На основании какого договора, решения или документа организация
+      получила, изменила, приостановила или утратила допуск?
+    use_case: trading-participant-onboarding-and-admission
+    status: active
+  - id: CQ-TP-004
+    question: >
+      Какие учётные отношения и счета связаны с участником,
+      рынком, договором или допуском?
+    use_case: trading-participant-onboarding-and-admission
+    status: active
+
+selected_terms:
+  # Confirmed IRIs from repo seeds / SSSOM / fibo-architecture / mini_ontology
+  - id: fibo-legal-person
+    term_kind: owl-class
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
+    preferred_label: Legal Person
+    upstream_module_ref: BE/LegalEntities/LegalPersons
+    local_concept_ref: moex:LegalEntity
+    candidate_relation: skos:closeMatch
+    extraction_role: seed
+    decision: accepted
+    supports: [CQ-TP-001, CQ-TP-002]
+    rationale: >
+      Confirmed close match to MOEX LegalEntity (SSSOM Client↔LegalPerson pattern).
+      Do not assert owl:equivalentClass without separate approval.
+    review_status: approved
+    confidence: 0.9
+
+  - id: fibo-formal-organization
+    term_kind: owl-class
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/FormalBusinessOrganizations/FormalOrganization
+    preferred_label: Formal Organization
+    upstream_module_ref: BE/LegalEntities/FormalBusinessOrganizations
+    local_concept_ref: moex:CorporateGroup
+    candidate_relation: skos:broadMatch
+    extraction_role: seed
+    decision: accepted
+    supports: [CQ-TP-002]
+    rationale: >
+      Broader organizational construct; MOEX CorporateGroup is a specialization.
+    review_status: approved
+    confidence: 0.75
+
+  - id: fibo-business-day
+    term_kind: owl-class
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay
+    preferred_label: Business Day
+    upstream_module_ref: FND/DatesAndTimes/BusinessDates
+    local_concept_ref: moex:RegistrationAction
+    candidate_relation: rdfs:subClassOf
+    extraction_role: dependency
+    decision: candidate
+    supports: [CQ-TP-003]
+    rationale: Temporal foundation for registration/admission effective dates.
+    review_status: pending
+    draft_only: true
+
+  - id: fibo-has-name
+    term_kind: object-property
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/Relations/Relations/hasName
+    preferred_label: has name
+    upstream_module_ref: FND/Relations/Relations
+    local_concept_ref: moex:OrganizationIdentifier
+    candidate_relation: skos:closeMatch
+    extraction_role: dependency
+    decision: candidate
+    supports: [CQ-TP-002]
+    review_status: pending
+    draft_only: true
+
+  - id: fibo-person
+    term_kind: owl-class
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/AgentsAndPeople/People/Person
+    preferred_label: Person
+    upstream_module_ref: FND/AgentsAndPeople/People
+    candidate_relation: no-mapping
+    extraction_role: reference-only
+    decision: deferred
+    supports: [CQ-TP-002]
+    rationale: Natural persons deferred; focus is legal entities / organizations.
+    review_status: pending
+
+  - id: fibo-placeholder-agreement
+    term_kind: owl-class
+    upstream_iri: REPLACE_WITH_REAL_FIBO_IRI
+    preferred_label: Agreement (placeholder)
+    upstream_module_ref: REPLACE_WITH_REAL_MODULE
+    local_concept_ref: moex:Agreement
+    candidate_relation: skos:closeMatch
+    extraction_role: seed
+    decision: candidate
+    supports: [CQ-TP-003]
+    rationale: Placeholder until confirmed FIBO Agreement IRI is curated.
+    review_status: pending
+    draft_only: true
+
+  - id: fibo-placeholder-account
+    term_kind: owl-class
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/_placeholder/Account
+    preferred_label: Account (placeholder)
+    local_concept_ref: moex:AccountRelationship
+    candidate_relation: skos:narrowMatch
+    extraction_role: reference-only
+    decision: candidate
+    supports: [CQ-TP-004]
+    rationale: Placeholder; account relation mapping pending review.
+    review_status: pending
+
+  - id: fibo-placeholder-listing-instrument
+    term_kind: owl-class
+    upstream_iri: REPLACE_WITH_REAL_FIBO_IRI
+    preferred_label: Listed Security (placeholder)
+    candidate_relation: no-mapping
+    extraction_role: reference-only
+    decision: rejected
+    supports: [CQ-TP-001]
+    rationale: >
+      Out of party/participation scope; instruments/listing covered later (SEC).
+    review_status: rejected
+
+selection_rules:
+  default_mapping_relation: skos:closeMatch
+  owl_equivalent_class_requires_approval: true
+  require_rationale_for_accepted_term: true
+  require_competency_question_link: true
+  maximum_seed_terms: 25
+
+extraction_plan:
+  tool: robot
+  method: STAR
+  source_version_ref: fibo@2026Q2
+  seed_path: seeds/fibo-seed-terms.txt
+  output_path: planned/moex-trading-participant-core-module.ttl
+  output_status: planned
+  notes: >
+    Do not download or commit full FIBO. Run ROBOT extract via
+    `moex-model source sync fibo` when ready; this plan records intent only.
+
+materialized_modules:
+  - id: moex-trading-participant-core-module
+    path: planned/moex-trading-participant-core-module.ttl
+    status: planned
+    extraction_plan_ref: extraction-plan.yaml
+
+mappings:
+  - id: map-legal-entity-close
+    local_concept_ref: moex:LegalEntity
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
+    relation: skos:closeMatch
+    rationale: Confirmed close match from curated selection item fibo-legal-person.
+    confidence: 0.9
+    review_status: approved
+    selection_item_ref: fibo-legal-person
+
+  - id: map-corporate-group-broad
+    local_concept_ref: moex:CorporateGroup
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/FormalBusinessOrganizations/FormalOrganization
+    relation: skos:broadMatch
+    rationale: FormalOrganization is broader than MOEX CorporateGroup.
+    confidence: 0.75
+    review_status: approved
+    selection_item_ref: fibo-formal-organization
+
+  - id: map-registration-subclass
+    local_concept_ref: moex:RegistrationAction
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay
+    relation: rdfs:subClassOf
+    rationale: >
+      Candidate temporal dependency — not asserted as class hierarchy in OWL yet;
+      recorded for review (candidate mapping).
+    confidence: 0.4
+    review_status: pending
+    selection_item_ref: fibo-business-day
+
+  - id: map-person-none
+    local_concept_ref: moex:TradingParticipation
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/AgentsAndPeople/People/Person
+    relation: no-mapping
+    rationale: Natural person deferred; trading participation maps via legal entity path.
+    review_status: pending
+    selection_item_ref: fibo-person

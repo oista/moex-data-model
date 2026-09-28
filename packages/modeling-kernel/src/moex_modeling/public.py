@@ -12,6 +12,11 @@ from moex_modeling.external_sources.public import (
     SpecDiffChange,
     SpecificationSource,
 )
+from moex_modeling.external_alignment.public import (
+    ExternalTermSelection,
+    SelectionValidationReport,
+    validate_selection,
+)
 from moex_modeling.identifiers.curie import CurieUriResolver
 from moex_modeling.import_draft.public import (
     GENERATED_DRAFT_STATUS,
@@ -80,6 +85,7 @@ __all__ = [
     "Diagnostic",
     "DiagnosticDetail",
     "DiagnosticSeverity",
+    "ExternalTermSelection",
     "GENERATED_DRAFT_STATUS",
     "ImplementationRef",
     "ImportDraftEngine",
@@ -100,6 +106,7 @@ __all__ = [
     "ReferenceSpecification",
     "RelationKind",
     "SchemaRepository",
+    "SelectionValidationReport",
     "SemanticChange",
     "SemanticDiffReport",
     "SourceDescriptor",
@@ -123,4 +130,5 @@ __all__ = [
     "TypedRelation",
     "diagnostic_to_wire",
     "summarize_result",
+    "validate_selection",
 ]

@@ -11,7 +11,7 @@ superseded_by: []
 **Date:** 2026-09-28  
 **Status:** Proposed  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [ADR-002](ADR-002-git-published-source.md), [ADR-009](ADR-009-schema-automator-draft-only.md), [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-012](ADR-012-semantic-diff-review.md), [ADR-014](ADR-014-fibo-profile-metamodel.md), [ADR-018](ADR-018-ontology-application-implementation.md)
+**Related:** [ADR-002](ADR-002-git-published-source.md), [ADR-009](ADR-009-schema-automator-draft-only.md), [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-012](ADR-012-semantic-diff-review.md), [ADR-014](ADR-014-fibo-profile-metamodel.md), [ADR-018](ADR-018-ontology-application-implementation.md), [ADR-020](ADR-020-external-specification-scope-and-term-selection.md)
 
 ## Context
 

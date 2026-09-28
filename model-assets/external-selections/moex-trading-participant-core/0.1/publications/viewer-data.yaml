@@ -1,0 +1,174 @@
+# Projected rows for Publication Viewer entity-tables (from selection.yaml)
+competency_questions:
+  - id: CQ-TP-001
+    title: CQ-TP-001
+    question: Какая организация или юридическое лицо является участником торгов и в каком статусе оно допущено к конкретному рынку или секции?
+    use_case: trading-participant-onboarding-and-admission
+    status: active
+  - id: CQ-TP-002
+    title: CQ-TP-002
+    question: Как определить принадлежность организации к группе компаний, её роли, идентификаторы и регистрационные данные?
+    use_case: trading-participant-onboarding-and-admission
+    status: active
+  - id: CQ-TP-003
+    title: CQ-TP-003
+    question: На основании какого договора, решения или документа организация получила, изменила, приостановила или утратила допуск?
+    use_case: trading-participant-onboarding-and-admission
+    status: active
+  - id: CQ-TP-004
+    title: CQ-TP-004
+    question: Какие учётные отношения и счета связаны с участником, рынком, договором или допуском?
+    use_case: trading-participant-onboarding-and-admission
+    status: active
+
+selected_terms:
+  - id: fibo-legal-person
+    title: Legal Person
+    preferred_label: Legal Person
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
+    term_kind: owl-class
+    upstream_module_ref: BE/LegalEntities/LegalPersons
+    decision: accepted
+    extraction_role: seed
+    candidate_relation: skos:closeMatch
+    local_concept_ref: moex:LegalEntity
+    review_status: approved
+    mapping_confirmed: true
+  - id: fibo-formal-organization
+    title: Formal Organization
+    preferred_label: Formal Organization
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/FormalBusinessOrganizations/FormalOrganization
+    term_kind: owl-class
+    upstream_module_ref: BE/LegalEntities/FormalBusinessOrganizations
+    decision: accepted
+    extraction_role: seed
+    candidate_relation: skos:broadMatch
+    local_concept_ref: moex:CorporateGroup
+    review_status: approved
+    mapping_confirmed: true
+  - id: fibo-business-day
+    title: Business Day
+    preferred_label: Business Day
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay
+    term_kind: owl-class
+    decision: candidate
+    extraction_role: dependency
+    candidate_relation: rdfs:subClassOf
+    local_concept_ref: moex:RegistrationAction
+    review_status: pending
+    mapping_confirmed: false
+  - id: fibo-has-name
+    title: has name
+    preferred_label: has name
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/Relations/Relations/hasName
+    term_kind: object-property
+    decision: candidate
+    extraction_role: dependency
+    candidate_relation: skos:closeMatch
+    local_concept_ref: moex:OrganizationIdentifier
+    review_status: pending
+    mapping_confirmed: false
+  - id: fibo-person
+    title: Person
+    preferred_label: Person
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/AgentsAndPeople/People/Person
+    term_kind: owl-class
+    decision: deferred
+    extraction_role: reference-only
+    candidate_relation: no-mapping
+    review_status: pending
+    mapping_confirmed: false
+  - id: fibo-placeholder-agreement
+    title: Agreement (placeholder)
+    preferred_label: Agreement (placeholder)
+    upstream_iri: REPLACE_WITH_REAL_FIBO_IRI
+    term_kind: owl-class
+    decision: candidate
+    extraction_role: seed
+    candidate_relation: skos:closeMatch
+    local_concept_ref: moex:Agreement
+    review_status: pending
+    mapping_confirmed: false
+  - id: fibo-placeholder-account
+    title: Account (placeholder)
+    preferred_label: Account (placeholder)
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/_placeholder/Account
+    term_kind: owl-class
+    decision: candidate
+    extraction_role: reference-only
+    candidate_relation: skos:narrowMatch
+    local_concept_ref: moex:AccountRelationship
+    review_status: pending
+    mapping_confirmed: false
+  - id: fibo-placeholder-listing-instrument
+    title: Listed Security (placeholder)
+    preferred_label: Listed Security (placeholder)
+    upstream_iri: REPLACE_WITH_REAL_FIBO_IRI
+    term_kind: owl-class
+    decision: rejected
+    extraction_role: reference-only
+    candidate_relation: no-mapping
+    review_status: rejected
+    mapping_confirmed: false
+
+mappings:
+  - id: map-legal-entity-close
+    title: LegalEntity ↔ LegalPerson
+    local_concept_ref: moex:LegalEntity
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
+    relation: skos:closeMatch
+    rationale: Confirmed close match from curated selection item fibo-legal-person.
+    confidence: 0.9
+    review_status: approved
+    mapping_confirmed: true
+  - id: map-corporate-group-broad
+    title: CorporateGroup ↔ FormalOrganization
+    local_concept_ref: moex:CorporateGroup
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/FormalBusinessOrganizations/FormalOrganization
+    relation: skos:broadMatch
+    rationale: FormalOrganization is broader than MOEX CorporateGroup.
+    confidence: 0.75
+    review_status: approved
+    mapping_confirmed: true
+  - id: map-registration-subclass
+    title: RegistrationAction ↔ BusinessDay (candidate)
+    local_concept_ref: moex:RegistrationAction
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/BusinessDates/BusinessDay
+    relation: rdfs:subClassOf
+    rationale: Candidate temporal dependency — pending review.
+    confidence: 0.4
+    review_status: pending
+    mapping_confirmed: false
+  - id: map-person-none
+    title: TradingParticipation — no mapping to Person
+    local_concept_ref: moex:TradingParticipation
+    upstream_iri: https://spec.edmcouncil.org/fibo/ontology/FND/AgentsAndPeople/People/Person
+    relation: no-mapping
+    rationale: Natural person deferred; trading participation maps via legal entity path.
+    review_status: pending
+    mapping_confirmed: false
+
+extraction_provenance:
+  tool: robot
+  method: STAR
+  source_version_ref: fibo@2026Q2
+  seed_path: seeds/fibo-seed-terms.txt
+  seed_count: 2
+  output_path: planned/moex-trading-participant-core-module.ttl
+  materialization_status: planned
+  content_hash: null
+
+dependencies:
+  - id: moex-trading-participant-core-module
+    title: Planned ROBOT STAR module
+    path: planned/moex-trading-participant-core-module.ttl
+    status: planned
+    note: Not materialized — publication is draft-conformant
+
+conformance:
+  overall_publication_status: draft-conformant
+  materialization_status: planned
+  draft_only: true
+  note: >
+    Materialized module absent (planned). Selection is draft_only.
+    Structural publication requirements are covered; content pending approval.

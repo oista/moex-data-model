@@ -4,25 +4,25 @@ overview: Ввести обобщённую governance-модель ExternalSpec
 todos:
   - id: adr-020-dsp-kinds
     content: ADR-020 + amend ADR-016 kinds; extend moex-dsp.yaml / manifest Literals / ProfileSpec notes; index README
-    status: in_progress
+    status: completed
   - id: alignment-schema
     content: Create moex-external-alignment Spec + LinkML schema (classes, enums, nested structures)
-    status: pending
+    status: completed
   - id: kernel-validator
     content: Pydantic DTOs + invariants 1–10 + unit tests; seed draft_only rule documented
-    status: pending
+    status: completed
   - id: demo-assets
     content: external-sources versions/2026Q2 + external-scopes + external-selections demo YAMLs (confirmed IRI + placeholders)
-    status: pending
+    status: completed
   - id: pub-contract
     content: fibo-external-term-selection requirements + selection publish.yaml satisfies + catalog nodes
-    status: pending
+    status: completed
   - id: viewer-ui
     content: Nav groups, entity-table selects, status chips, IRI UX, scope disclaimer, draft-conformant report
-    status: pending
+    status: completed
   - id: cli-docs
     content: moex-model selection validate + ontology-catalog / README cross-links; viewer-check green
-    status: pending
+    status: completed
 isProject: false
 ---
 

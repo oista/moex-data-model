@@ -1,0 +1,7 @@
+files:
+  - id: moex-external-alignment
+    title: moex-external-alignment.yaml
+    path: schemas/moex-external-alignment.yaml
+  - id: specification
+    title: specification.yaml
+    path: specification.yaml

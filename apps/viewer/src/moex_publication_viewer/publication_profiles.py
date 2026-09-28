@@ -24,6 +24,12 @@ PublicationSectionKind = Literal[
     "data-flows",
     "conformance",
     "source",
+    "external-specification-scope",
+    "competency-questions",
+    "term-selection",
+    "mapping-table",
+    "dependency-list",
+    "extraction-provenance",
 ]
 
 
@@ -67,6 +73,12 @@ SECTION_ROOT_TO_KIND: dict[str, str] = {
     "bindings": "bindings",
     "data-flows": "data-flows",
     "source": "source",
+    "external-specification-scope": "external-specification-scope",
+    "competency-questions": "competency-questions",
+    "term-selection": "term-selection",
+    "mapping-table": "mapping-table",
+    "dependency-list": "dependency-list",
+    "extraction-provenance": "extraction-provenance",
 }
 
 

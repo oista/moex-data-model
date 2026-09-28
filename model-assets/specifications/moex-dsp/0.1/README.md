@@ -19,7 +19,7 @@
 | Specification implementation | Публикация, согласованная с эталоном (в т.ч. сам `moex.dsp` как shell docs) |
 | Publication module | Открытый набор экземпляров разделов; `profile` выбирает ProfileSpec |
 | Publication section | Экземпляр раздела: `kind` (семантика) + `type` (render/wire) + опционально `satisfies` |
-| PublicationSectionKind | Закрытый словарь: overview, classes, taxonomy, glossary, … |
+| PublicationSectionKind | Закрытый словарь: overview, classes, taxonomy, glossary, … + ADR-020 external-specification-scope, competency-questions, term-selection, mapping-table, dependency-list, extraction-provenance |
 | Publication profile | `linkml-specification` \| `ontology` \| `implementation` (ADR-016 base) |
 | Publication requirement | Обязательная capability контракта эталона (ADR-019); покрывается через `satisfies` |
 | Publication conformance report | Отчёт покрытия requirements (отдельно от kernel ConformanceReport) |

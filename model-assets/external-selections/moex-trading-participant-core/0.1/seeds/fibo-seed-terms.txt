@@ -1,0 +1,4 @@
+# Seed IRIs for planned ROBOT STAR extract (draft selection).
+# Confirmed IRIs only — placeholders are not seeds.
+https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
+https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/FormalBusinessOrganizations/FormalOrganization

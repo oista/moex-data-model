@@ -1,0 +1,11 @@
+# ExtractionPlan (sidecar) — ADR-020
+# Mirrors selection.yaml extraction_plan; ROBOT not auto-run on validate.
+tool: robot
+method: STAR
+source_version_ref: fibo@2026Q2
+seed_path: seeds/fibo-seed-terms.txt
+output_path: planned/moex-trading-participant-core-module.ttl
+output_status: planned
+notes: >
+  Planned STAR extract. Use moex-model source sync fibo with this seed when
+  materializing. Do not vendor the full FIBO release into git.

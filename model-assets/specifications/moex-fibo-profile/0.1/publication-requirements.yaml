@@ -1,4 +1,4 @@
-# FIBO profile publication requirements (ADR-019)
+# FIBO profile publication requirements (ADR-019 / ADR-020)
 # Inherited by governed SpecificationImplementation modules (profile: implementation).
 
 version: "0.1"
@@ -60,6 +60,94 @@ profiles:
         applies_to_profile: implementation
 
       - id: fibo:declared-binding
+        kind: required-binding
+        semantic_capability: implements
+        obligation: required
+        min_occurs: 1
+        applies_to_profile: implementation
+
+  - id: fibo-external-term-selection
+    title: MOEX external term selection publication
+    applies_to: implementation
+    parent_profile_ref: implementation
+    description: >
+      Publication contract for ExternalTermSelection packages (ADR-020):
+      scope boundary, competency questions, term table, mapping register,
+      and extraction provenance. Local section ids may differ; coverage via satisfies.
+    requirements:
+      - id: external:overview
+        kind: required-section
+        semantic_capability: overview
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [overview]
+        accepted_renderers: [markdown-doc, overview, key-value]
+        applies_to_profile: implementation
+
+      - id: external:conformance
+        kind: required-section
+        semantic_capability: conformance
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [conformance]
+        accepted_renderers: [key-value, entity-table, conformance]
+        applies_to_profile: implementation
+
+      - id: external:scope
+        kind: required-section
+        semantic_capability: external-specification-scope
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [external-specification-scope]
+        accepted_renderers: [markdown-doc, entity-table, key-value, explorer]
+        applies_to_profile: implementation
+
+      - id: external:competency-questions
+        kind: required-section
+        semantic_capability: competency-questions
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [competency-questions]
+        accepted_renderers: [entity-table, markdown-doc]
+        applies_to_profile: implementation
+
+      - id: external:term-selection
+        kind: required-section
+        semantic_capability: term-selection
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [term-selection]
+        accepted_renderers: [entity-table]
+        applies_to_profile: implementation
+
+      - id: external:mappings
+        kind: required-section
+        semantic_capability: external-term-mappings
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [mapping-table]
+        accepted_renderers: [entity-table, mapping-table]
+        applies_to_profile: implementation
+
+      - id: external:extraction-provenance
+        kind: required-section
+        semantic_capability: extraction-provenance
+        obligation: required
+        min_occurs: 1
+        accepted_section_kinds: [extraction-provenance]
+        accepted_renderers: [key-value, entity-table, markdown-doc]
+        applies_to_profile: implementation
+
+      - id: external:dependencies
+        kind: required-section
+        semantic_capability: materialized-external-module
+        obligation: recommended
+        min_occurs: 0
+        accepted_section_kinds: [dependency-list]
+        accepted_renderers: [entity-table, key-value]
+        applies_to_profile: implementation
+
+      - id: external:declared-binding
         kind: required-binding
         semantic_capability: implements
         obligation: required

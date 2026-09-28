@@ -1,0 +1,19 @@
+# ReferenceSpecification — External Specification Scope & Term Selection (ADR-020)
+id: moex:specification:moex-external-alignment:0.1
+name: MOEX External Alignment
+description: >
+  Governance metamodel for ExternalSpecification, ExternalSpecificationScope,
+  and ExternalTermSelection. Scope is a search boundary, not an import.
+version: "0.1.0"
+revision: "0.1.0"
+content_digest: "sha256:preview-external-alignment"
+specification_kind: ontology_profile
+profile_kind: external-alignment
+expressed_in:
+  standard_id: moex:standard:linkml:1.x
+  version_constraint: ">=1.0"
+root_type: ExternalTermSelection
+normative_sources:
+  - schemas/moex-external-alignment.yaml
+imported_specifications: []
+conformance_policy: profile

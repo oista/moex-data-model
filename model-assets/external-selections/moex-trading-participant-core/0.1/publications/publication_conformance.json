@@ -1,0 +1,100 @@
+{
+  "id": "pubconf:moex:module:trading-participant-core:fibo-external-term-selection",
+  "title": "MOEX Trading Participant Core",
+  "description": "Publication contract assessment for fibo-external-term-selection against moex-fibo-profile@0.1",
+  "implementation_ref": "moex:module:trading-participant-core",
+  "reference_specification_ref": "moex-fibo-profile@0.1",
+  "profile_ref": "fibo-external-term-selection",
+  "overall_publication_status": "draft-conformant",
+  "requirement_results": [
+    {
+      "requirement_ref": "external:overview",
+      "covered": true,
+      "covering_section_ids": [
+        "overview"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "external:conformance",
+      "covered": true,
+      "covering_section_ids": [
+        "conformance"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "external:scope",
+      "covered": true,
+      "covering_section_ids": [
+        "scope",
+        "scope-areas"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 2 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "external:competency-questions",
+      "covered": true,
+      "covering_section_ids": [
+        "competency-questions"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "external:term-selection",
+      "covered": true,
+      "covering_section_ids": [
+        "term-selection"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "external:mappings",
+      "covered": true,
+      "covering_section_ids": [
+        "mapping-register"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "external:extraction-provenance",
+      "covered": true,
+      "covering_section_ids": [
+        "extraction-provenance"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "external:dependencies",
+      "covered": true,
+      "covering_section_ids": [
+        "dependencies"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "recommended"
+    },
+    {
+      "requirement_ref": "external:declared-binding",
+      "covered": true,
+      "covering_section_ids": [],
+      "result_status": "pass",
+      "result_message": "implements moex-fibo-profile@0.1",
+      "obligation": "required"
+    }
+  ]
+}

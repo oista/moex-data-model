@@ -7,16 +7,6 @@ import sys
 from pathlib import Path
 
 from moex_model_cli.bootstrap import SlicePaths
-from moex_model_cli.commands.compile import run_compile
-from moex_model_cli.commands.diagram import run_diagram
-from moex_model_cli.commands.diff import run_diff
-from moex_model_cli.commands.import_ import run_import
-from moex_model_cli.commands.lint import run_lint
-from moex_model_cli.commands.map_cmd import run_map
-from moex_model_cli.commands.publish import run_publish
-from moex_model_cli.commands.semantic_diff import run_semantic_diff
-from moex_model_cli.commands.source_cmd import run_source
-from moex_model_cli.commands.validate import run_validate
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -255,6 +245,22 @@ def build_parser() -> argparse.ArgumentParser:
     source_diff.add_argument("--sources-dir", type=Path, default=None)
     source_diff.add_argument("--json", action="store_true")
 
+    selection = sub.add_parser(
+        "selection",
+        help="Validate ExternalTermSelection packages (ADR-020)",
+    )
+    selection_sub = selection.add_subparsers(dest="selection_action", required=True)
+    selection_validate = selection_sub.add_parser(
+        "validate",
+        help="Validate a selection.yaml against scope and ADR-020 invariants",
+    )
+    _add_slice_args(selection_validate)
+    selection_validate.add_argument(
+        "target",
+        help="selection id under external-selections/ or path to selection.yaml",
+    )
+    selection_validate.add_argument("--json", action="store_true")
+
     return parser
 
 
@@ -280,14 +286,20 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     if args.command == "validate":
+        from moex_model_cli.commands.validate import run_validate
+
         code, text = run_validate(
             paths,
             as_json=args.json,
             implementation_id=args.implementation_id,
         )
     elif args.command == "lint":
+        from moex_model_cli.commands.lint import run_lint
+
         code, text = run_lint(paths)
     elif args.command == "compile":
+        from moex_model_cli.commands.compile import run_compile
+
         code, text = run_compile(
             paths,
             with_json_schema=args.json_schema,
@@ -295,6 +307,8 @@ def main(argv: list[str] | None = None) -> int:
             with_bundle=args.bundle,
         )
     elif args.command == "diagram":
+        from moex_model_cli.commands.diagram import run_diagram
+
         code, text = run_diagram(
             paths,
             out=args.out,
@@ -302,6 +316,8 @@ def main(argv: list[str] | None = None) -> int:
             fmt=args.fmt,
         )
     elif args.command == "diff":
+        from moex_model_cli.commands.diff import run_diff
+
         code, text = run_diff(
             paths,
             from_ref=args.from_ref,
@@ -309,6 +325,8 @@ def main(argv: list[str] | None = None) -> int:
             path=args.path,
         )
     elif args.command == "semantic-diff":
+        from moex_model_cli.commands.semantic_diff import run_semantic_diff
+
         code, text = run_semantic_diff(
             paths,
             from_ref=args.from_ref,
@@ -319,12 +337,16 @@ def main(argv: list[str] | None = None) -> int:
             as_json=args.json,
         )
     elif args.command == "publish":
+        from moex_model_cli.commands.publish import run_publish
+
         code, text = run_publish(
             paths,
             out=args.out,
             implementation_id=args.implementation_id,
         )
     elif args.command == "import":
+        from moex_model_cli.commands.import_ import run_import
+
         code, text = run_import(
             paths,
             workbook=args.workbook,
@@ -337,6 +359,8 @@ def main(argv: list[str] | None = None) -> int:
             source=args.source,
         )
     elif args.command == "map":
+        from moex_model_cli.commands.map_cmd import run_map
+
         code, text = run_map(
             paths,
             sssom=args.sssom,
@@ -348,6 +372,8 @@ def main(argv: list[str] | None = None) -> int:
             backend=getattr(args, "backend", "object"),
         )
     elif args.command == "source":
+        from moex_model_cli.commands.source_cmd import run_source
+
         code, text = run_source(
             paths,
             action=args.source_action,
@@ -358,6 +384,14 @@ def main(argv: list[str] | None = None) -> int:
             sources_dir=getattr(args, "sources_dir", None),
             from_ref=getattr(args, "from_ref", None),
             to_ref=getattr(args, "to_ref", None),
+        )
+    elif args.command == "selection":
+        from moex_model_cli.commands.selection_cmd import run_selection_validate
+
+        code, text = run_selection_validate(
+            paths,
+            target=args.target,
+            as_json=getattr(args, "json", False),
         )
     else:
         return 2

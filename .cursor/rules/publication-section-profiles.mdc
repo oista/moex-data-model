@@ -12,7 +12,7 @@ globs:
 When adding or editing a `PublicationModule` (`publish.yaml`):
 
 1. Set **`profile:`** to one of `linkml-specification` | `ontology` | `implementation`.
-2. Give each section a semantic **`kind:`** from `PublicationSectionKind` (DSP / ADR-016). Do not invent ad-hoc kinds.
+2. Give each section a semantic **`kind:`** from `PublicationSectionKind` (DSP / ADR-016 / ADR-020). Do not invent ad-hoc kinds.
 3. Keep manifest **`type:`** as the render/wire format (`explorer`, `glossary`, `markdown-doc`, …) — orthogonal to `kind`.
 4. Respect ProfileSpec:
    - `linkml-specification`: required overview, classes, schema-files; **forbidden taxonomy**
@@ -22,5 +22,6 @@ When adding or editing a `PublicationModule` (`publish.yaml`):
 6. `taxonomy` is a **separate** kind (primary nav for ontologies), not a view flag on `classes`.
 7. **ADR-019:** Implementations that claim a reference Spec with inherited `PublicationRequirement`s must set **`satisfies:`** on covering sections (requirement ids). Do not copy reference module ids/files one-to-one. Aggregation and decomposition of `satisfies` are allowed; semantic substitution is not.
 8. Player metamodel docs (`moex.dsp`) use `profile: linkml-specification` and do **not** need dams:logical-entities `satisfies`.
+9. **ADR-020** selection publications may use kinds `external-specification-scope`, `competency-questions`, `term-selection`, `mapping-table`, `dependency-list`, `extraction-provenance` with profile `fibo-external-term-selection`.
 
-See: [ADR-016](docs/adr/ADR-016-publication-section-kinds-and-profiles.md), [ADR-019](docs/adr/ADR-019-publication-contract-inheritance.md), [DSP README](model-assets/specifications/moex-dsp/0.1/README.md).
+See: [ADR-016](docs/adr/ADR-016-publication-section-kinds-and-profiles.md), [ADR-019](docs/adr/ADR-019-publication-contract-inheritance.md), [ADR-020](docs/adr/ADR-020-external-specification-scope-and-term-selection.md), [DSP README](model-assets/specifications/moex-dsp/0.1/README.md).

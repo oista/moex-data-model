@@ -106,8 +106,22 @@ def test_repo_catalog_passes_validation_with_modules():
         "moex:module:trading-solution",
         "moex:module:client-accounts-csv-draft",
         "moex:module:ontology-catalog",
+        "moex:module:external-alignment",
+        "moex:module:trading-participant-core",
     }
     validate_architecture_catalog(catalog, module_ids)
+
+
+def test_repo_catalog_includes_external_alignment_nodes():
+    repo = Path(__file__).resolve().parents[3]
+    catalog = load_architecture_catalog(repo)
+    assert catalog is not None
+    by_id = {n.id: n for n in catalog.nodes}
+    assert by_id["moex-external-alignment"].role == "reference_specification"
+    assert by_id["moex-trading-participant-core"].module_id == (
+        "moex:module:trading-participant-core"
+    )
+    assert by_id["moex-fibo-party-scope"].conforms_to == "moex-external-alignment"
 
 
 def test_repo_catalog_includes_fibo_application_impl():

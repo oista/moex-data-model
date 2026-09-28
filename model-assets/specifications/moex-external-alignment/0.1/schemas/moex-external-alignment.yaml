@@ -1,0 +1,433 @@
+id: https://data.moex.com/external-alignment/v0.1
+name: moex_external_alignment
+version: 0.1.0
+title: moex.external-alignment
+description: >
+  Governance metamodel for External Specification Scope and Term Selection
+  (ADR-020). Distinguishes registered upstream specs, search scopes, and
+  reviewable term selections. Not an import of upstream domains.
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  xalign: https://data.moex.com/external-alignment/
+imports:
+  - linkml:types
+default_prefix: xalign
+default_range: string
+
+classes:
+  NamedAlignmentElement:
+    abstract: true
+    description: Named governance element with stable id and title.
+    slots:
+      - id
+      - title
+      - description
+
+  ExternalSpecification:
+    is_a: NamedAlignmentElement
+    description: >
+      Registered external reference specification (FIBO, OpenAPI, …).
+      Sync lifecycle lives under external-sources (ADR-017).
+    slots:
+      - name
+      - specification_kind
+      - modeling_standard_ref
+      - upstream
+
+  ExternalSpecificationVersion:
+    is_a: NamedAlignmentElement
+    description: Version pin of an ExternalSpecification.
+    slots:
+      - external_specification_ref
+      - release_ref
+      - modeling_standard_ref
+      - specification_kind
+      - upstream
+      - status
+
+  UpstreamLocator:
+    description: Upstream repository / release coordinates.
+    slots:
+      - repository_url
+      - release_ref
+      - license_url
+
+  ExternalSpecificationScope:
+    is_a: NamedAlignmentElement
+    description: >
+      Search and interest boundary over an external specification version.
+      Included areas do not import domains or select all terms.
+    slots:
+      - external_specification_ref
+      - status
+      - purpose
+      - domain_context_refs
+      - business_capabilities
+      - included_areas
+      - excluded_areas
+      - local_concept_refs
+      - owner
+      - draft_only
+
+  ExternalSpecificationArea:
+    description: Upstream domain / module / namespace area in a scope.
+    slots:
+      - area_kind
+      - code
+      - title
+      - relevance
+      - rationale
+
+  ExternalTermSelection:
+    is_a: NamedAlignmentElement
+    description: >
+      Versioned, reviewable set of upstream terms for a use case.
+      Source for seeds, extraction plans, mappings, and viewer.
+    slots:
+      - version
+      - scope_ref
+      - status
+      - draft_only
+      - selection_basis
+      - competency_questions
+      - selected_terms
+      - selection_rules
+      - extraction_plan
+      - materialized_modules
+      - mappings
+      - owner
+
+  SelectionBasis:
+    description: Use-case context for a term selection.
+    slots:
+      - use_case
+      - domain_context_ref
+      - external_specification_ref
+
+  CompetencyQuestion:
+    description: Competency question supporting term selection.
+    slots:
+      - id
+      - question
+      - use_case
+      - status
+
+  ExternalTermReference:
+    description: Pointer to an upstream term (IRI + kind + optional module).
+    slots:
+      - upstream_iri
+      - term_kind
+      - upstream_module_ref
+      - preferred_label
+
+  ExternalTermSelectionItem:
+    is_a: ExternalTermReference
+    description: One selected upstream term with decision and mapping intent.
+    slots:
+      - id
+      - local_concept_ref
+      - candidate_relation
+      - extraction_role
+      - decision
+      - supports
+      - rationale
+      - review_status
+      - confidence
+      - draft_only
+
+  SelectionReviewDecision:
+    description: Review metadata for a term or mapping assertion.
+    slots:
+      - decision
+      - review_status
+      - rationale
+      - reviewer
+      - reviewed_at
+
+  ExternalMappingAssertion:
+    description: Asserted mapping between MOEX concept and upstream term.
+    slots:
+      - id
+      - local_concept_ref
+      - upstream_iri
+      - relation
+      - rationale
+      - confidence
+      - review_status
+      - selection_item_ref
+
+  ExtractionPlan:
+    description: Planned extract (e.g. ROBOT STAR) — does not auto-run sync.
+    slots:
+      - tool
+      - method
+      - source_version_ref
+      - seed_path
+      - output_path
+      - output_status
+      - notes
+
+  MaterializedExternalModule:
+    description: Descriptor for an extracted module (planned or present).
+    slots:
+      - id
+      - path
+      - status
+      - content_hash
+      - extraction_plan_ref
+
+  SelectionRules:
+    description: Governance rules for a selection package.
+    slots:
+      - default_mapping_relation
+      - owl_equivalent_class_requires_approval
+      - require_rationale_for_accepted_term
+      - require_competency_question_link
+      - maximum_seed_terms
+
+slots:
+  id:
+    identifier: true
+    range: string
+    required: true
+  title:
+    range: string
+  description:
+    range: string
+  name:
+    range: string
+  specification_kind:
+    range: ExternalSpecificationKind
+  area_kind:
+    range: ExternalSpecificationAreaKind
+  modeling_standard_ref:
+    range: string
+  upstream:
+    range: UpstreamLocator
+    inlined: true
+  repository_url:
+    range: uri
+  release_ref:
+    range: string
+  license_url:
+    range: uri
+  external_specification_ref:
+    range: string
+    required: true
+    description: e.g. fibo@2026Q2
+  status:
+    range: string
+  purpose:
+    range: string
+  domain_context_refs:
+    range: string
+    multivalued: true
+  business_capabilities:
+    range: string
+    multivalued: true
+  included_areas:
+    range: ExternalSpecificationArea
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  excluded_areas:
+    range: ExternalSpecificationArea
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  local_concept_refs:
+    range: string
+    multivalued: true
+  owner:
+    range: string
+  draft_only:
+    range: boolean
+  code:
+    range: string
+  relevance:
+    range: string
+  rationale:
+    range: string
+  version:
+    range: string
+  scope_ref:
+    range: string
+    required: true
+  selection_basis:
+    range: SelectionBasis
+    inlined: true
+  use_case:
+    range: string
+  domain_context_ref:
+    range: string
+  competency_questions:
+    range: CompetencyQuestion
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    required: true
+  question:
+    range: string
+  selected_terms:
+    range: ExternalTermSelectionItem
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  selection_rules:
+    range: SelectionRules
+    inlined: true
+  extraction_plan:
+    range: ExtractionPlan
+    inlined: true
+  materialized_modules:
+    range: MaterializedExternalModule
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  mappings:
+    range: ExternalMappingAssertion
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  upstream_iri:
+    range: string
+    required: true
+  term_kind:
+    range: ExternalTermKind
+    required: true
+  upstream_module_ref:
+    range: string
+  preferred_label:
+    range: string
+  local_concept_ref:
+    range: string
+  candidate_relation:
+    range: ExternalMappingRelation
+  extraction_role:
+    range: ExtractionRole
+    required: true
+  decision:
+    range: ExternalSelectionDecision
+    required: true
+  supports:
+    range: string
+    multivalued: true
+    description: Competency question ids.
+  review_status:
+    range: ReviewStatus
+    required: true
+  confidence:
+    range: float
+  reviewer:
+    range: string
+  reviewed_at:
+    range: string
+  relation:
+    range: ExternalMappingRelation
+  selection_item_ref:
+    range: string
+  tool:
+    range: string
+  method:
+    range: string
+  source_version_ref:
+    range: string
+  seed_path:
+    range: string
+  output_path:
+    range: string
+  output_status:
+    range: string
+  notes:
+    range: string
+  path:
+    range: string
+  content_hash:
+    range: string
+  extraction_plan_ref:
+    range: string
+  default_mapping_relation:
+    range: ExternalMappingRelation
+  owl_equivalent_class_requires_approval:
+    range: boolean
+  require_rationale_for_accepted_term:
+    range: boolean
+  require_competency_question_link:
+    range: boolean
+  maximum_seed_terms:
+    range: integer
+
+enums:
+  ExternalSpecificationKind:
+    permissible_values:
+      ontology:
+        description: OWL/RDF ontology (maps to ADR-017 ontology).
+      api-specification:
+        description: OpenAPI / AsyncAPI style (maps to ADR-017 api_spec).
+      schema:
+        description: JSON Schema or similar (ADR-017 schema).
+      data-contract-standard:
+        description: Data contract standard (ADR-017 data_contract_standard).
+      reference-data-standard:
+        description: Reference-data / controlled vocabulary standard.
+      other:
+        description: Other external data-related standard.
+
+  ExternalSpecificationAreaKind:
+    permissible_values:
+      domain:
+      subdomain:
+      module:
+      ontology:
+      namespace:
+      package:
+      tag:
+      other:
+
+  ExternalTermKind:
+    permissible_values:
+      owl-class:
+      object-property:
+      datatype-property:
+      annotation-property:
+      individual:
+      api-operation:
+      schema:
+      schema-property:
+      enum-value:
+      glossary-term:
+      other:
+
+  ExternalSelectionDecision:
+    permissible_values:
+      candidate:
+      accepted:
+      rejected:
+      deferred:
+      deprecated:
+
+  ExtractionRole:
+    permissible_values:
+      seed:
+      dependency:
+      reference-only:
+
+  ExternalMappingRelation:
+    permissible_values:
+      skos:exactMatch:
+      skos:closeMatch:
+      skos:broadMatch:
+      skos:narrowMatch:
+      rdfs:subClassOf:
+      rdfs:subPropertyOf:
+      owl:equivalentClass:
+      owl:equivalentProperty:
+      no-mapping:
+
+  ReviewStatus:
+    permissible_values:
+      pending:
+      approved:
+      rejected:
+      superseded:

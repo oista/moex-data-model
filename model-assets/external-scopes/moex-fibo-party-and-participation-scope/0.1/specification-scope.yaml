@@ -1,0 +1,69 @@
+# ExternalSpecificationScope — MOEX Party and Trading Participation (ADR-020)
+id: moex-fibo-party-and-participation-scope
+title: MOEX Party and Trading Participation Scope
+external_specification_ref: fibo@2026Q2
+status: draft
+draft_only: true
+owner: moex:role:domain-architect
+
+purpose: >
+  Семантическое моделирование организаций и юридических лиц,
+  групп компаний, идентификаторов, ролей участников,
+  допусков к торгам, соглашений, счетов, регистрационных
+  действий и подтверждающих документов.
+
+domain_context_refs:
+  - participant-and-admission
+
+business_capabilities:
+  - trading-participant-onboarding
+  - admission-to-trading
+  - participant-reference-data
+  - account-and-agreement-registration
+
+included_areas:
+  - kind: domain
+    code: FND
+    title: Foundations
+    relevance: immediate
+  - kind: domain
+    code: BE
+    title: Business Entities
+    relevance: immediate
+  - kind: domain
+    code: FBC
+    title: Financial Business and Commerce
+    relevance: selective
+
+excluded_areas:
+  - code: SEC
+    rationale: >
+      Отложено до моделирования инструментов, выпусков,
+      эмитентов и листинга.
+  - code: DER
+    rationale: Derivatives out of scope for this package.
+  - code: IND
+    rationale: Indices out of scope.
+  - code: MD
+    rationale: Market data out of scope.
+  - code: CAE
+    rationale: Corporate actions out of scope.
+  - code: CIV
+    rationale: Collective investment vehicles out of scope.
+  - code: LOAN
+    rationale: Loans out of scope.
+  - code: BP
+    rationale: Business processes out of scope.
+
+local_concept_refs:
+  - moex:LegalEntity
+  - moex:CorporateGroup
+  - moex:OrganizationIdentifier
+  - moex:TradingParticipation
+  - moex:TradingVenue
+  - moex:TradingSection
+  - moex:Admission
+  - moex:Agreement
+  - moex:AccountRelationship
+  - moex:RegistrationAction
+  - moex:SupportingDocument

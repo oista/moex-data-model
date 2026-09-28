@@ -11,7 +11,7 @@ superseded_by: []
 **Date:** 2026-09-28  
 **Status:** Proposed  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-014](ADR-014-fibo-profile-metamodel.md), [ADR-017](ADR-017-external-specification-source-sync.md)
+**Related:** [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-014](ADR-014-fibo-profile-metamodel.md), [ADR-017](ADR-017-external-specification-source-sync.md), [ADR-020](ADR-020-external-specification-scope-and-term-selection.md)
 
 ## Context
 

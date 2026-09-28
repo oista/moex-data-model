@@ -1,0 +1,17 @@
+# ExternalSpecificationVersion — FIBO 2026Q2 pin (ADR-020 / ADR-017)
+id: fibo@2026Q2
+title: FIBO 2026Q2
+name: Financial Industry Business Ontology
+description: >
+  Version pin for EDM Council FIBO used by MOEX scopes and selections.
+  Sync materialization remains under external-sources (ADR-017); this file
+  is governance metadata only — it does not vendor the full release.
+external_specification_ref: fibo
+release_ref: 2026Q2
+modeling_standard_ref: owl2
+specification_kind: ontology
+status: draft
+upstream:
+  repository_url: https://github.com/edmcouncil/fibo
+  release_ref: 2026Q2
+  license_url: https://opensource.org/licenses/MIT

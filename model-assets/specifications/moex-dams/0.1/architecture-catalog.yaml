@@ -80,3 +80,48 @@ nodes:
     description: >
       Governed MOEX application / extension ontology (imported FIBO module +
       MOEX extension + DAMS mapping bridge). ADR-018.
+
+  - id: moex-external-alignment
+    role: reference_specification
+    title: moex.external-alignment
+    version: "0.1"
+    expressed_in: LinkML
+    module_id: moex:module:external-alignment
+    order: 225
+    description: >
+      Governance metamodel for ExternalSpecificationScope and
+      ExternalTermSelection (ADR-020). Not a domain import of FIBO.
+
+  - id: fibo-external-2026Q2
+    role: specification_implementation
+    title: FIBO external specification (2026Q2)
+    version: "2026Q2"
+    conforms_to: moex-external-alignment
+    module_id: moex:module:trading-participant-core
+    order: 228
+    contract_exempt: true
+    description: >
+      External Specifications › FIBO › 2026Q2 version pin (ADR-017/020).
+      Sync under model-assets/external-sources/fibo/; governance pin in versions/2026Q2.
+
+  - id: moex-fibo-party-scope
+    role: specification_implementation
+    title: MOEX Party and Trading Participation Scope
+    version: "0.1"
+    conforms_to: moex-external-alignment
+    module_id: moex:module:trading-participant-core
+    order: 229
+    contract_exempt: true
+    description: >
+      External Scopes › search/interest boundary over fibo@2026Q2 (not an import).
+
+  - id: moex-trading-participant-core
+    role: specification_implementation
+    title: MOEX Trading Participant Core
+    version: "0.1.0"
+    conforms_to: moex-fibo-profile
+    module_id: moex:module:trading-participant-core
+    order: 230
+    description: >
+      External Term Selections › curated FIBO terms for trading participant
+      onboarding (ADR-020). Publication profile fibo-external-term-selection.

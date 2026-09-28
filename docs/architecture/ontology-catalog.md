@@ -21,8 +21,9 @@ superseded_by: MODELING_ARCHITECTURE.md
 | `ReferenceSpecification` | **FIBO ontology profile** (`moex-fibo-profile` — domains/modules/headers/annotation conventions); stubs Corporate Ontology, PROV-O |
 | Upstream index (catalog) | **FIBO release** (`moex:ontology:fibo` — preview glossary / entity index); not a governed SpecImpl |
 | `SpecificationImplementation` | **MOEX FIBO application ontology** (`moex-fibo-application` — imported module + extension + DAMS mapping); stubs MOEX HR / MOEX Data |
+| External alignment (ADR-020) | **Scope** (`external-scopes/`) + **Term selection** (`external-selections/`) over pinned `external-sources/`; not an import of FIBO domains |
 
-See [ADR-014](../adr/ADR-014-fibo-profile-metamodel.md): profile = Spec metamodel. See [ADR-018](../adr/ADR-018-ontology-application-implementation.md): governed OWL Impl = application / extension ontology; upstream release index ≠ SpecImpl. ADR-010 still applies (OWL not primary YAML validation).
+See [ADR-014](../adr/ADR-014-fibo-profile-metamodel.md): profile = Spec metamodel. See [ADR-018](../adr/ADR-018-ontology-application-implementation.md): governed OWL Impl = application / extension ontology; upstream release index ≠ SpecImpl. See [ADR-020](../adr/ADR-020-external-specification-scope-and-term-selection.md): scope ≠ import; selection ≠ full domain. ADR-010 still applies (OWL not primary YAML validation).
 
 Новых `OWL*` классов в [modeling-kernel.yaml](modeling-kernel.yaml) нет. Typed OWL body живёт только в provider-пакете.
 

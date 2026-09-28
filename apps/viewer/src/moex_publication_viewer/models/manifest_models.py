@@ -38,6 +38,12 @@ PublicationSectionKind = Literal[
     "data-flows",
     "conformance",
     "source",
+    "external-specification-scope",
+    "competency-questions",
+    "term-selection",
+    "mapping-table",
+    "dependency-list",
+    "extraction-provenance",
 ]
 
 

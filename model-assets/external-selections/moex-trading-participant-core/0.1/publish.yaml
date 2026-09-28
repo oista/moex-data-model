@@ -1,0 +1,212 @@
+# External Term Selection publication (ADR-020)
+module_id: moex:module:trading-participant-core
+kind: publication_module
+version: "1"
+order: 230
+icon: "🎯"
+title: MOEX Trading Participant Core
+description: >
+  External term selection for trading participant onboarding and admission
+  over FIBO 2026Q2 (ADR-020). Scope ≠ import; mapping ≠ owl equivalence.
+profile: implementation
+implements:
+  - specification_ref: moex-fibo-profile@0.1
+    profile_ref: fibo-external-term-selection
+    conformance_target: draft
+sections:
+  - id: overview
+    title: Overview
+    description: Selection purpose and governance distinctions
+    type: markdown-doc
+    kind: overview
+    satisfies:
+      - external:overview
+      - implementation:overview
+    source:
+      format: markdown
+      path: README.md
+
+  - id: conformance
+    title: Conformance report
+    description: Publication contract status (draft-conformant when module planned)
+    type: key-value
+    kind: conformance
+    satisfies:
+      - external:conformance
+      - implementation:conformance
+      - external:declared-binding
+    source:
+      format: yaml
+      path: publications/viewer-data.yaml
+      select: conformance
+
+  - id: scope
+    title: External specification scope
+    description: >
+      Search boundary over FIBO — included/excluded areas are not an import.
+    type: markdown-doc
+    kind: external-specification-scope
+    satisfies:
+      - external:scope
+    source:
+      format: markdown
+      path: ../../../external-scopes/moex-fibo-party-and-participation-scope/0.1/README.md
+
+  - id: scope-areas
+    title: Included and excluded areas
+    description: FIBO domain codes in / out of search boundary
+    type: entity-table
+    kind: external-specification-scope
+    satisfies:
+      - external:scope
+    source:
+      format: yaml
+      path: publications/scope-data.yaml
+      select: included_areas
+    key_column: id
+    columns:
+      - code
+      - title
+      - kind
+      - relevance
+    filterable:
+      - kind
+      - relevance
+    tags:
+      - scope-areas
+
+  - id: excluded-areas
+    title: Excluded areas
+    description: FIBO domains deferred or out of scope
+    type: entity-table
+    kind: external-specification-scope
+    source:
+      format: yaml
+      path: publications/scope-data.yaml
+      select: excluded_areas
+    key_column: id
+    columns:
+      - code
+      - title
+      - rationale
+    tags:
+      - scope-areas
+
+  - id: local-concepts
+    title: Local MOEX concepts
+    description: Conceptual entities covered by the scope
+    type: entity-table
+    kind: external-specification-scope
+    source:
+      format: yaml
+      path: publications/scope-data.yaml
+      select: local_concepts
+    key_column: id
+    columns:
+      - id
+      - title
+
+  - id: competency-questions
+    title: Competency questions
+    description: Questions that justify selected terms
+    type: entity-table
+    kind: competency-questions
+    satisfies:
+      - external:competency-questions
+    source:
+      format: yaml
+      path: publications/viewer-data.yaml
+      select: competency_questions
+    key_column: id
+    columns:
+      - id
+      - question
+      - use_case
+      - status
+
+  - id: term-selection
+    title: Selected terms
+    description: Upstream terms with decision, role, and mapping intent
+    type: entity-table
+    kind: term-selection
+    satisfies:
+      - external:term-selection
+    source:
+      format: yaml
+      path: publications/viewer-data.yaml
+      select: selected_terms
+    key_column: id
+    columns:
+      - preferred_label
+      - upstream_iri
+      - term_kind
+      - upstream_module_ref
+      - decision
+      - extraction_role
+      - candidate_relation
+      - local_concept_ref
+      - review_status
+      - mapping_confirmed
+    filterable:
+      - decision
+      - extraction_role
+      - review_status
+      - term_kind
+
+  - id: mapping-register
+    title: Mapping register
+    description: MOEX ↔ upstream assertions (confirmed only when approved)
+    type: entity-table
+    kind: mapping-table
+    satisfies:
+      - external:mappings
+    source:
+      format: yaml
+      path: publications/viewer-data.yaml
+      select: mappings
+    key_column: id
+    columns:
+      - local_concept_ref
+      - upstream_iri
+      - relation
+      - rationale
+      - confidence
+      - review_status
+      - mapping_confirmed
+    filterable:
+      - relation
+      - review_status
+      - mapping_confirmed
+
+  - id: extraction-provenance
+    title: Extraction provenance
+    description: Planned ROBOT STAR extract (not auto-run)
+    type: key-value
+    kind: extraction-provenance
+    satisfies:
+      - external:extraction-provenance
+    source:
+      format: yaml
+      path: publications/viewer-data.yaml
+      select: extraction_provenance
+
+  - id: dependencies
+    title: Dependencies / materialized modules
+    description: Planned extract module status
+    type: entity-table
+    kind: dependency-list
+    satisfies:
+      - external:dependencies
+    source:
+      format: yaml
+      path: publications/viewer-data.yaml
+      select: dependencies
+    key_column: id
+    columns:
+      - id
+      - title
+      - path
+      - status
+      - note
+    filterable:
+      - status

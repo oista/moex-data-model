@@ -396,6 +396,22 @@ enums:
         description: Результаты валидации реализации.
       source:
         description: Исходный код схемы.
+      external-specification-scope:
+        description: >
+          Граница поиска/интереса по внешней спецификации (ADR-020).
+          Не означает импорт upstream domains.
+      competency-questions:
+        description: Competency questions, на которых основан term selection (ADR-020).
+      term-selection:
+        description: Таблица выбранных upstream-терминов и решений (ADR-020).
+      mapping-table:
+        description: >
+          Регистр mappings MOEX ↔ upstream из ExternalTermSelection (ADR-020).
+          Не путать с bindings реализации.
+      dependency-list:
+        description: Зависимости / materialized external modules (ADR-020).
+      extraction-provenance:
+        description: План и provenance extract (ROBOT и аналоги, ADR-020).
 
   SectionKind:
     description: >

@@ -31,7 +31,7 @@ Publication Viewer already showed this split poorly: DAMS used a «Классы�
 
 ## Decision
 
-1. **Closed enum `PublicationSectionKind`** lives in the DSP metamodel (not in `modeling-kernel.yaml`). Canonical values include: `overview`, `classes`, `slots`, `enumerations`, `schema-files`, `taxonomy`, `glossary`, `identity`, `bindings`, `data-flows`, `conformance`, `source`.
+1. **Closed enum `PublicationSectionKind`** lives in the DSP metamodel (not in `modeling-kernel.yaml`). Canonical values include: `overview`, `classes`, `slots`, `enumerations`, `schema-files`, `taxonomy`, `glossary`, `identity`, `bindings`, `data-flows`, `conformance`, `source`, and (ADR-020) `external-specification-scope`, `competency-questions`, `term-selection`, `mapping-table`, `dependency-list`, `extraction-provenance`.
 2. **`taxonomy` is a separate kind**, not a view mode of `classes`. For ontology publications it is the **primary navigation axis**. It must not be required (and is forbidden) on LinkML specification profiles where hierarchy is secondary.
 3. **One kind `classes`**, with **renderer mode selected by publication profile**:
    - `linkml-specification` → `data-structure` (table: name, is_a, slots, …)
@@ -72,3 +72,4 @@ Publication Viewer already showed this split poorly: DAMS used a «Классы�
 - ADR-010 — OWL not primary validation
 - ADR-015 — Viewer UI atlas (presentation layer)
 - ADR-019 — Publication contract inheritance (`satisfies` / inherited requirements; does not supersede this ADR)
+- ADR-020 — External Specification Scope and Term Selection (additive section kinds for selection publications)

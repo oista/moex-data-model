@@ -1,0 +1,47 @@
+# External Alignment metamodel publication (ADR-020)
+module_id: moex:module:external-alignment
+kind: publication_module
+version: "1"
+order: 225
+icon: "📐"
+title: moex.external-alignment
+description: >
+  Governance metamodel for ExternalSpecificationScope and ExternalTermSelection.
+profile: linkml-specification
+sections:
+  - id: overview
+    title: Overview
+    type: markdown-doc
+    kind: overview
+    source:
+      format: markdown
+      path: README.md
+
+  - id: classes
+    title: Alignment classes
+    description: LinkML classes for scope and term selection
+    type: entity-table
+    kind: classes
+    source:
+      format: linkml-yaml
+      path: schemas/moex-external-alignment.yaml
+      select: classes
+    key_column: name
+    columns:
+      - name
+      - description
+      - is_a
+
+  - id: schema-files
+    title: Schema source
+    type: entity-table
+    kind: schema-files
+    source:
+      format: yaml
+      path: publications/schema-files.yaml
+      select: files
+    key_column: id
+    columns:
+      - id
+      - title
+      - path

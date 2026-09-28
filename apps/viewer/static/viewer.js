@@ -2558,6 +2558,19 @@
       body.appendChild(d);
     }
 
+    if (
+      section.kind === "external-specification-scope" ||
+      (section.tags || []).includes("scope-areas")
+    ) {
+      const note = document.createElement("aside");
+      note.className = "scope-disclaimer";
+      note.setAttribute("role", "note");
+      note.textContent =
+        "Scope is a search and interest boundary over an external specification. " +
+        "Included areas (e.g. FIBO FND/BE) do not import those domains or select all of their terms.";
+      body.appendChild(note);
+    }
+
     switch (section.type) {
       case "markdown-doc":
         body.insertAdjacentHTML(
@@ -2600,6 +2613,90 @@
       dl.appendChild(dd);
     });
     return dl;
+  }
+
+  function shortIriLabel(iri) {
+    const s = String(iri || "");
+    if (!s) return "";
+    if (s === "REPLACE_WITH_REAL_FIBO_IRI") return "placeholder IRI";
+    const hash = s.lastIndexOf("#");
+    const slash = s.lastIndexOf("/");
+    const cut = Math.max(hash, slash);
+    if (cut >= 0 && cut < s.length - 1) return s.slice(cut + 1);
+    return s.length > 48 ? "…" + s.slice(-40) : s;
+  }
+
+  function isHttpUrl(value) {
+    try {
+      const u = new URL(String(value));
+      return u.protocol === "http:" || u.protocol === "https:";
+    } catch {
+      return false;
+    }
+  }
+
+  function statusChipClass(kind, value) {
+    const v = String(value || "").toLowerCase();
+    if (kind === "decision") {
+      if (v === "accepted") return "status-chip status-chip--accepted";
+      if (v === "rejected") return "status-chip status-chip--rejected";
+      if (v === "deferred") return "status-chip status-chip--deferred";
+      if (v === "deprecated") return "status-chip status-chip--deprecated";
+      return "status-chip status-chip--candidate";
+    }
+    if (kind === "review") {
+      if (v === "approved") return "status-chip status-chip--approved";
+      if (v === "rejected") return "status-chip status-chip--rejected";
+      if (v === "superseded") return "status-chip status-chip--deferred";
+      return "status-chip status-chip--pending";
+    }
+    if (kind === "mapping") {
+      if (v === "true" || v === "yes") return "status-chip status-chip--approved";
+      return "status-chip status-chip--candidate";
+    }
+    return "status-chip";
+  }
+
+  function formatTableCellHtml(col, raw, item) {
+    const attrs = item?.attributes || {};
+    if (col === "decision" || col === "review_status") {
+      const kind = col === "decision" ? "decision" : "review";
+      return `<span class="${statusChipClass(kind, raw)}" title="${escapeHtml(raw)}">${escapeHtml(
+        raw || "—"
+      )}</span>`;
+    }
+    if (col === "mapping_confirmed") {
+      const confirmed = String(raw).toLowerCase() === "true";
+      const label = confirmed ? "confirmed mapping" : "not confirmed";
+      return `<span class="${statusChipClass("mapping", String(confirmed))}" title="${escapeHtml(
+        label
+      )}">${escapeHtml(label)}</span>`;
+    }
+    if (col === "upstream_iri" || col === "iri" || /_iri$/.test(col)) {
+      const full = raw || String(attrs.upstream_iri || attrs.iri || "");
+      const short = shortIriLabel(full);
+      const link =
+        isHttpUrl(full) && !full.includes("_placeholder") && full !== "REPLACE_WITH_REAL_FIBO_IRI"
+          ? `<a class="iri-ext-link" href="${escapeHtml(full)}" target="_blank" rel="noopener noreferrer" title="Open IRI">↗</a>`
+          : "";
+      return `<span class="iri-cell"><code class="middle-ellipsis" title="${escapeHtml(
+        full
+      )}">${escapeHtml(short)}</code>
+        <span class="cell-actions">
+          <button type="button" class="copy-btn" data-copy="${escapeHtml(full)}" aria-label="Copy full IRI">copy</button>
+          ${link}
+        </span></span>`;
+    }
+    const long = raw.length > 160;
+    const text = long
+      ? `<span class="long-text clamped" data-full="${escapeHtml(raw)}">${escapeHtml(
+          raw.slice(0, 160)
+        )}…</span>
+         <button type="button" class="expand-btn">more</button>`
+      : `<span>${escapeHtml(raw)}</span>`;
+    return `${text}<span class="cell-actions"><button type="button" class="copy-btn" data-copy="${escapeHtml(
+      raw
+    )}">copy</button></span>`;
   }
 
   function renderTable(mod, section) {
@@ -2715,16 +2812,7 @@
           const cells = columns
             .map((c) => {
               const raw = cellValue(item, c);
-              const long = raw.length > 160;
-              const text = long
-                ? `<span class="long-text clamped" data-full="${escapeHtml(raw)}">${escapeHtml(
-                    raw.slice(0, 160)
-                  )}…</span>
-               <button type="button" class="expand-btn">more</button>`
-                : `<span>${escapeHtml(raw)}</span>`;
-              return `<td>${text}<span class="cell-actions"><button type="button" class="copy-btn" data-copy="${escapeHtml(
-                raw
-              )}">copy</button></span></td>`;
+              return `<td>${formatTableCellHtml(c, raw, item)}</td>`;
             })
             .join("");
           return `<tr data-item-id="${escapeHtml(item.id)}">${cells}</tr>`;

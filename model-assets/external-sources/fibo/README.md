@@ -14,6 +14,13 @@ not a full FIBO vendor tree (ADR-017).
 | `modules/*.ttl` | ROBOT / fallback extract output (committed) |
 | `lockfile.yaml` | Pinned upstream_ref + content/seed hashes |
 
+## Relation to scopes and selections (ADR-020)
+
+Version pin metadata: [`versions/2026Q2/`](versions/2026Q2/).
+Governance search boundaries and term selections live under
+[`external-scopes/`](../../external-scopes/) and
+[`external-selections/`](../../external-selections/) — not in this sync tree.
+
 ## Relation to `moex-fibo-profile`
 
 [`model-assets/specifications/moex-fibo-profile`](../../specifications/moex-fibo-profile) is the
