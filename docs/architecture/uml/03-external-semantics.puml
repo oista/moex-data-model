@@ -1,0 +1,150 @@
+@startuml 03-external-semantics
+title MOEX DAMS - External Semantics
+hide empty members
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+abstract class ModelElement {
+  +element_id : ElementId
+  +name : string
+  +lifecycle_status : LifecycleStatus [0..1]
+}
+note right of ModelElement : Все классы диаграммы\nнаследуют ModelElement\n(стрелки опущены).
+
+package "Внешняя спецификация" #F4CCCC {
+  class ExternalSpecification {
+    +kind : ExternalSpecificationKind
+    +upstream_ref : string
+    +license_ref : string [0..1]
+  }
+  class ExternalSpecificationVersion {
+    +upstream_version : string
+    +upstream_commit_or_tag : string [0..1]
+  }
+  class ExternalSourceLock {
+    +upstream_ref : string
+    +content_hash : string
+  }
+}
+
+package "Scope: граница поиска" #FFF2CC {
+  class ExternalSpecificationScope {
+    +purpose : string
+    +status : LifecycleStatus
+  }
+  class ExternalSpecificationArea {
+    +area_kind : ExternalSpecificationAreaKind
+    +code : string
+    +relevance : RelevanceStatus
+    +rationale : string [0..1]
+  }
+  class CompetencyQuestion {
+    +question : string
+  }
+}
+
+package "Selection: отбор терминов" #D9EAD3 {
+  class ExternalTermSelection {
+    +version : string
+    +status : LifecycleStatus
+  }
+  class ExternalTermSelectionItem {
+    +term_kind : ExternalTermKind
+    +decision : ExternalSelectionDecision
+    +extraction_role : ExtractionRole
+    +review_status : ReviewStatus
+    +rationale : string [0..1]
+  }
+  class ExternalTerm {
+    +iri : uri
+    +label : string [0..1]
+    +upstream_module_ref : string [0..1]
+  }
+  class ExternalMappingAssertion {
+    +mapping_relation : SemanticMappingRelation
+    +review_status : ReviewStatus
+    +rationale : string [0..1]
+  }
+  class ExtractionPlan {
+    +tool : string
+    +method : string
+    +seed_file_ref : string
+  }
+  class MaterializedExternalModule {
+    +content_hash : string [0..1]
+    +materialization_status : LifecycleStatus
+  }
+}
+
+package "Корпоративный семантический слой" #EADCF8 {
+  class EnterpriseConceptualModel {
+    +implementation_profile : dams-data-model
+    +dams_model_level : enterprise-conceptual
+  }
+  class ConceptualEntity {
+    +definition : string
+  }
+  class ExternalSemanticAlignment {
+    +relation : SemanticMappingRelation
+    +review_status : ReviewStatus
+  }
+  class OntologyApplication {
+    +implementation_profile : ontology-application
+    +namespace : uri [0..1]
+  }
+  class OntologyExtensionConcept {
+    +iri : uri
+    +label : string
+  }
+}
+
+package "Модели решений" #FCE5CD {
+  class SolutionDataModel {
+    +implementation_profile : dams-data-model
+    +dams_model_level : solution
+  }
+  class LogicalEntity {
+    +conceptual_alignment_status : AlignmentStatus
+  }
+  class DSPInferenceEvidence {
+    +inference_method : string
+    +confidence : decimal [0..1]
+  }
+}
+
+ExternalSpecification "1" *-- "1..*" ExternalSpecificationVersion : versions
+ExternalSpecificationVersion "1" --> "0..1" ExternalSourceLock : pinned by
+
+ExternalSpecification "1" o-- "0..*" ExternalSpecificationScope : scopes
+ExternalSpecificationScope "1" *-- "0..*" ExternalSpecificationArea : areas
+ExternalSpecificationScope "1" *-- "0..*" CompetencyQuestion : questions
+
+ExternalSpecificationScope "1" o-- "0..*" ExternalTermSelection : scope_ref
+ExternalSpecificationVersion "1" o-- "0..*" ExternalTermSelection : source version
+ExternalTermSelection "1" *-- "0..*" ExternalTermSelectionItem : items
+ExternalTermSelectionItem "0..*" --> "1" ExternalTerm : upstream term
+ExternalTermSelectionItem "0..*" --> "1..*" CompetencyQuestion : supports
+ExternalTermSelection "0..*" --> "0..1" ExtractionPlan : extraction plan
+ExtractionPlan "1" --> "0..*" MaterializedExternalModule : produces
+ExternalMappingAssertion "0..*" --> "1" ExternalTermSelectionItem : selected item
+ExternalMappingAssertion "0..*" --> "0..1" ConceptualEntity : conceptual target
+
+EnterpriseConceptualModel "1" *-- "0..*" ConceptualEntity : canonical concepts
+ConceptualEntity "1" --> "0..*" ExternalSemanticAlignment : aligns
+ExternalSemanticAlignment "0..*" --> "1" ExternalTerm : external term
+OntologyApplication "1" *-- "0..*" OntologyExtensionConcept : local OWL concepts
+OntologyApplication "0..*" --> "0..*" MaterializedExternalModule : imports
+OntologyExtensionConcept "0..*" ..> "0..*" ConceptualEntity : projects
+OntologyExtensionConcept "0..*" ..> "0..*" ExternalTerm : extends
+
+SolutionDataModel "0..*" --> "1" EnterpriseConceptualModel : conceptual implementation
+SolutionDataModel "1" *-- "0..*" LogicalEntity : logical model
+SolutionDataModel "1" *-- "0..1" DSPInferenceEvidence : DSP origin
+LogicalEntity "0..*" --> "0..*" ConceptualEntity : realizes
+
+note bottom of ExternalSpecificationScope : Scope ограничивает поиск\nи не означает импорт домена целиком.
+note bottom of ExternalTermSelection : Selection - управляемый набор терминов\nс решениями, review и ролью извлечения.
+note bottom of MaterializedExternalModule : Техническая зависимость,\nа не онтология MOEX.
+note bottom of OntologyApplication : Отдельный профиль,\nне уровень DAMS.
+@enduml

@@ -1,0 +1,686 @@
+@startuml MOEX_DAMS_Metamodel
+!theme plain
+hide empty members
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+skinparam packageStyle rectangle
+skinparam dpi 160
+
+title MOEX DAMS v0.1 — метамодель данных\nКонцептуальный, логический, физический и интеграционный уровни
+
+' ===============================================================
+' Общие типы и mixins
+' ===============================================================
+
+package "Общие элементы\nmoex-types / moex-core" #F5F5F5 {
+
+  abstract class IdentifiedElement <<abstract>> {
+    +element_id: ElementId [1]
+    +name: string [1]
+    +title: string [0..1]
+    +description: string [0..1]
+    +lifecycle_status: LifecycleStatus [0..1]
+  }
+
+  abstract class GovernedElement <<abstract>> {
+    +business_importance: BusinessImportance [0..1]
+    +governance_classification: GovernanceClassification [0..1]
+    +data_owner_ref: ActorRef [0..1]
+    +data_steward_ref: ActorRef [0..1]
+    +ownership_inheritance_rule: string [0..1]
+  }
+
+  abstract class ModelElement <<abstract>> {
+    +uri: uri [0..1]
+    +external_ids: ExternalIdentifier [0..*]
+    +tags: string [0..*]
+  }
+
+  note right of IdentifiedElement
+    Общая идентичность,
+    название, описание,
+    lifecycle.
+  end note
+
+  note right of GovernedElement
+    Общие governance-сведения:
+    owner/steward,
+    важность,
+    classification.
+  end note
+}
+
+IdentifiedElement <|-- ModelElement
+GovernedElement <|-- ModelElement
+
+' ===============================================================
+' Контейнер модели и реализации
+' ===============================================================
+
+package "Пакеты, спецификации и реализации" #E8F0FE {
+
+  class ModelingStandard {
+    +standard_id: string
+    +name: string
+    +version: string
+  }
+
+  class ReferenceSpecification {
+    +specification_id: string
+    +name: string
+    +version: string
+    +specification_kind: SpecificationKind
+  }
+
+  class SpecificationImplementation {
+    +implementation_id: string
+    +implementation_profile: ImplementationProfile
+    +dams_model_level: DAMSModelLevel [0..1]
+    +implementation_scope: ImplementationScope
+    +solution_ref: SolutionRef [0..1]
+    +conceptual_implementation_ref: ImplementationRef [0..1]
+  }
+
+  class ModelPackage {
+    +package_id: string
+    +version: string
+    +implementation_scope: ImplementationScope
+    +solution_ref: SolutionRef [0..1]
+  }
+
+  class ImplementationFacet {
+    +facet_id: string
+    +kind: ImplementationFacetKind
+    +source_artifact_ref: ArtifactRef [0..1]
+  }
+
+  class DomainContext {
+    +domain_context_id: string
+    +name: string
+    +description: string [0..1]
+  }
+
+  class ITSolution {
+    +solution_ref: string
+    +name: string
+  }
+
+  class ITSystem {
+    +system_ref: string
+    +name: string
+  }
+}
+
+ModelElement <|-- ModelingStandard
+ModelElement <|-- ReferenceSpecification
+ModelElement <|-- SpecificationImplementation
+ModelElement <|-- ModelPackage
+ModelElement <|-- DomainContext
+ModelElement <|-- ITSolution
+ModelElement <|-- ITSystem
+
+ModelingStandard "1" <-- "0..*" ReferenceSpecification : modeled with
+ReferenceSpecification "1" <-- "0..*" SpecificationImplementation : implements
+SpecificationImplementation "1" *-- "1..*" ModelPackage : contains
+SpecificationImplementation "1" *-- "0..*" ImplementationFacet : facets
+SpecificationImplementation "0..1" --> "1" ITSolution : solution_ref
+SpecificationImplementation "0..1" --> "0..1" SpecificationImplementation : conceptual implementation
+ITSolution "1" o-- "1..*" ITSystem : consists of
+
+note bottom of SpecificationImplementation
+  DAMS-specific levels:
+  - enterprise-conceptual
+  - solution
+
+  Другие profiles, например ontology-application,
+  API specification и data contract, не обязаны
+  иметь DAMS model level.
+end note
+
+' ===============================================================
+' Концептуальный уровень
+' ===============================================================
+
+package "Концептуальная модель\nEnterprise Conceptual Model" #FFF2CC {
+
+  class ConceptualEntity {
+    +definition: string
+    +conceptual_entity_type: ConceptualEntityType [0..1]
+    +business_term_ref: BusinessTermRef [0..1]
+    +external_alignment_status: AlignmentStatus [0..1]
+  }
+
+  class ConceptualAttribute {
+    +definition: string
+    +logical_range: LogicalType [0..1]
+    +is_key_property: boolean [0..1]
+  }
+
+  class ConceptualRelationship {
+    +relationship_name: string
+    +source_min_cardinality: Cardinality [0..1]
+    +source_max_cardinality: Cardinality [0..1]
+    +target_min_cardinality: Cardinality [0..1]
+    +target_max_cardinality: Cardinality [0..1]
+  }
+
+  class BusinessTerm {
+    +term_id: string
+    +preferred_label: string
+    +definition: string
+  }
+
+  class ExternalSemanticAlignment {
+    +alignment_id: string
+    +relation: SemanticMappingRelation
+    +review_status: ReviewStatus
+    +rationale: string [0..1]
+  }
+
+  class ExternalTerm {
+    +iri: uri
+    +label: string [0..1]
+    +term_kind: ExternalTermKind
+    +source_specification_ref: string
+  }
+}
+
+ModelElement <|-- ConceptualEntity
+ModelElement <|-- ConceptualAttribute
+ModelElement <|-- ConceptualRelationship
+ModelElement <|-- BusinessTerm
+ModelElement <|-- ExternalSemanticAlignment
+ModelElement <|-- ExternalTerm
+
+ConceptualEntity "1" *-- "0..*" ConceptualAttribute : attributes
+ConceptualEntity "1" --> "0..1" BusinessTerm : defined by
+ConceptualRelationship "1" --> "1" ConceptualEntity : source
+ConceptualRelationship "1" --> "1" ConceptualEntity : target
+ConceptualEntity "1" -- "0..*" ConceptualRelationship : participates in
+ConceptualEntity "1" --> "0..*" ExternalSemanticAlignment : aligns
+ExternalSemanticAlignment "1" --> "1" ExternalTerm : external term
+
+' ===============================================================
+' Логический уровень
+' ===============================================================
+
+package "Логическая модель\nSolution Logical Model" #D9EAD3 {
+
+  class LogicalEntity {
+    +entity_type: EntityType
+    +data_class: DataClass
+    +identity_rule: string [0..1]
+    +business_key_kind: BusinessKeyKind [0..1]
+    +key_attribute_refs: ElementRef [0..*]
+    +solution_data_role: SolutionDataRole [0..1]
+    +conceptual_alignment_status: AlignmentStatus [0..1]
+    +alignment_rationale: string [0..1]
+    +isolation_rationale: string [0..1]
+  }
+
+  class LogicalAttribute {
+    +logical_type: LogicalType
+    +required: boolean
+    +multivalued: boolean [0..1]
+    +mapping_coverage_status: MappingCoverageStatus [0..1]
+    +mapping_rationale: string [0..1]
+    +value_set_ref: ValueSetRef [0..1]
+    +unit_ref: UnitRef [0..1]
+    +currency_attribute_ref: ElementRef [0..1]
+  }
+
+  class Relationship {
+    +identifying: boolean [0..1]
+    +associative: boolean [0..1]
+    +source_min_cardinality: Cardinality [0..1]
+    +source_max_cardinality: Cardinality [0..1]
+    +target_min_cardinality: Cardinality [0..1]
+    +target_max_cardinality: Cardinality [0..1]
+  }
+
+  class ValueSet {
+    +value_set_id: string
+    +name: string
+    +governance_owner_ref: ActorRef [0..1]
+  }
+
+  class ValueSetValue {
+    +code: string
+    +label: string
+    +definition: string [0..1]
+  }
+}
+
+ModelElement <|-- LogicalEntity
+ModelElement <|-- LogicalAttribute
+ModelElement <|-- Relationship
+ModelElement <|-- ValueSet
+ModelElement <|-- ValueSetValue
+
+DomainContext "1" <-- "0..*" LogicalEntity : context_ref
+LogicalEntity "1" *-- "1..*" LogicalAttribute : owns
+Relationship "1" --> "1" LogicalEntity : source
+Relationship "1" --> "1" LogicalEntity : target
+LogicalEntity "1" -- "0..*" Relationship : participates in
+LogicalAttribute "0..*" --> "0..1" ValueSet : constrained by
+ValueSet "1" *-- "0..*" ValueSetValue : values
+
+' Логический → концептуальный
+LogicalEntity "0..*" --> "0..*" ConceptualEntity : realizes / aligns to
+LogicalAttribute "0..*" --> "0..*" ConceptualAttribute : realizes / aligns to
+
+note bottom of LogicalEntity
+  Логическая сущность существует
+  в контексте ИТ-решения.
+
+  Она может:
+  - реализовывать corporate concept;
+  - быть локальной;
+  - ожидать alignment;
+  - быть технической.
+end note
+
+' ===============================================================
+' Физический уровень
+' ===============================================================
+
+package "Физическая модель\nPhysical Model" #FCE5CD {
+
+  class PhysicalObject {
+    +object_kind: PhysicalObjectKind
+    +native_name: string
+    +native_schema_ref: string [0..1]
+    +technology: TechnologyRef
+    +system_ref: SystemRef
+    +data_bearing: boolean [0..1]
+    +mapping_coverage_status: MappingCoverageStatus [0..1]
+    +mapping_rationale: string [0..1]
+  }
+
+  class PhysicalField {
+    +native_name: string
+    +native_type: string
+    +nullable: boolean [0..1]
+    +position: integer [0..1]
+    +mapping_coverage_status: MappingCoverageStatus [0..1]
+    +mapping_rationale: string [0..1]
+  }
+
+  class NativeSchema {
+    +schema_id: string
+    +format: NativeSchemaFormat
+    +uri: uri [0..1]
+  }
+
+  class Technology {
+    +technology_ref: string
+    +name: string
+  }
+}
+
+ModelElement <|-- PhysicalObject
+ModelElement <|-- PhysicalField
+ModelElement <|-- NativeSchema
+ModelElement <|-- Technology
+
+ITSolution "1" <-- "0..*" PhysicalObject : belongs to solution
+ITSystem "1" <-- "0..*" PhysicalObject : hosted/provided by
+PhysicalObject "1" *-- "0..*" PhysicalField : fields
+PhysicalObject "0..*" --> "0..1" NativeSchema : native schema
+PhysicalObject "0..*" --> "1" Technology : technology
+
+note bottom of PhysicalObject
+  Квант данных:
+  table, view, file, API endpoint,
+  topic, message schema, dataset,
+  external data object.
+end note
+
+' ===============================================================
+' Mapping и трассируемость
+' ===============================================================
+
+package "Mappings и трассируемость" #EADCF8 {
+
+  class Mapping {
+    +mapping_id: string
+    +mapping_type: MappingType
+    +mapping_coverage_status: MappingCoverageStatus [0..1]
+    +expression_language: ExpressionLanguage [0..1]
+    +expression: string [0..1]
+    +applies_when: string [0..1]
+    +cardinality: MappingCardinality [0..1]
+    +lossiness_note: string [0..1]
+  }
+
+  class ModelElementRealization {
+    +realization_id: string
+    +realization_kind: RealizationKind
+    +rationale: string [0..1]
+  }
+
+  class Transformation {
+    +transformation_id: string
+    +expression_language: ExpressionLanguage
+    +expression: string
+  }
+}
+
+ModelElement <|-- Mapping
+ModelElement <|-- ModelElementRealization
+ModelElement <|-- Transformation
+
+' Mapping physical <-> logical
+Mapping "0..*" --> "1..*" PhysicalObject : source/target
+Mapping "0..*" --> "0..*" PhysicalField : source/target
+Mapping "0..*" --> "0..*" LogicalEntity : source/target
+Mapping "0..*" --> "0..*" LogicalAttribute : source/target
+Mapping "0..*" --> "0..1" Transformation : transformation
+
+' Реализация solution logical -> enterprise conceptual
+ModelElementRealization "0..*" --> "1" LogicalEntity : local entity
+ModelElementRealization "0..*" --> "1" ConceptualEntity : conceptual target
+
+note right of Mapping
+  Один canonical Mapping class.
+
+  mapping_type различает:
+  - entity-physical
+  - attribute-physical
+  - derivation
+  - realization
+  - semantic alignment
+  - other supported types
+
+  EntityPhysicalMapping /
+  AttributePhysicalMapping —
+  presentation aliases,
+  не отдельные метамодельные классы.
+end note
+
+' ===============================================================
+' Интеграционный уровень
+' ===============================================================
+
+package "Интеграционная модель\nData Flows and Contracts" #D0E0E3 {
+
+  class DataFlow {
+    +flow_id: string
+    +name: string
+    +direction: FlowDirection
+    +flow_kind: DataFlowKind [0..1]
+    +frequency: string [0..1]
+    +freshness_sla: string [0..1]
+  }
+
+  class DataFlowEndpoint {
+    +endpoint_id: string
+    +role: EndpointRole
+  }
+
+  class DataContractBinding {
+    +binding_id: string
+    +binding_role: ContractBindingRole
+    +status: LifecycleStatus
+  }
+
+  class DataContract {
+    +contract_id: string
+    +version: string
+    +contract_status: LifecycleStatus
+  }
+
+  class APIContract {
+    +api_contract_id: string
+    +specification_ref: string
+    +protocol: string [0..1]
+  }
+}
+
+ModelElement <|-- DataFlow
+ModelElement <|-- DataFlowEndpoint
+ModelElement <|-- DataContractBinding
+ModelElement <|-- DataContract
+ModelElement <|-- APIContract
+
+DataFlow "1" *-- "2..*" DataFlowEndpoint : endpoints
+DataFlowEndpoint "0..1" --> "1" ITSolution : solution endpoint
+DataFlowEndpoint "0..1" --> "0..1" ITSystem : system endpoint
+DataFlowEndpoint "0..1" --> "0..1" PhysicalObject : data object
+DataFlow "0..*" --> "0..*" Mapping : carries / transforms
+DataContractBinding "0..*" --> "1" DataContract : binds
+DataContractBinding "0..*" --> "0..1" DataFlow : governs flow
+DataContractBinding "0..*" --> "0..1" PhysicalObject : governs object
+APIContract "0..*" --> "0..*" PhysicalObject : exposes / consumes
+
+' ===============================================================
+' Governance
+' ===============================================================
+
+package "Governance, quality and policy" #D9D2E9 {
+
+  class DataPolicy {
+    +policy_id: string
+    +name: string
+    +policy_type: PolicyType
+  }
+
+  class PolicyBinding {
+    +binding_id: string
+    +binding_role: PolicyBindingRole
+  }
+
+  class DataQualityRule {
+    +rule_id: string
+    +name: string
+    +rule_expression: string [0..1]
+    +severity: QualitySeverity [0..1]
+  }
+
+  class DataQualityBinding {
+    +binding_id: string
+    +status: LifecycleStatus
+  }
+
+  class DataOwner {
+    +actor_ref: string
+    +name: string
+  }
+
+  class DataSteward {
+    +actor_ref: string
+    +name: string
+  }
+}
+
+ModelElement <|-- DataPolicy
+ModelElement <|-- PolicyBinding
+ModelElement <|-- DataQualityRule
+ModelElement <|-- DataQualityBinding
+ModelElement <|-- DataOwner
+ModelElement <|-- DataSteward
+
+PolicyBinding "0..*" --> "1" DataPolicy : policy
+PolicyBinding "0..*" --> "1..*" ModelElement : applies to
+DataQualityBinding "0..*" --> "1" DataQualityRule : rule
+DataQualityBinding "0..*" --> "1..*" ModelElement : evaluates
+ModelElement "0..*" --> "0..1" DataOwner : data owner
+ModelElement "0..*" --> "0..1" DataSteward : data steward
+
+' ===============================================================
+' Analytics
+' ===============================================================
+
+package "Аналитика и метрики" #CFE2F3 {
+
+  class Metric {
+    +metric_id: string
+    +name: string
+    +definition: string
+    +grain: string [0..1]
+    +calculation_expression: string [0..1]
+  }
+
+  class MetricBinding {
+    +binding_id: string
+    +binding_role: MetricBindingRole
+  }
+
+  class AnalyticalModel {
+    +analytical_model_id: string
+    +name: string
+    +model_kind: AnalyticalModelKind
+  }
+}
+
+ModelElement <|-- Metric
+ModelElement <|-- MetricBinding
+ModelElement <|-- AnalyticalModel
+
+MetricBinding "0..*" --> "1" Metric : metric
+MetricBinding "0..*" --> "1..*" LogicalEntity : based on
+MetricBinding "0..*" --> "0..*" LogicalAttribute : inputs
+AnalyticalModel "0..*" --> "0..*" Metric : evaluates/uses
+AnalyticalModel "0..*" --> "0..*" LogicalEntity : uses
+
+' ===============================================================
+' Реестры / внешняя семантика
+' ===============================================================
+
+package "Внешние спецификации и семантика" #F4CCCC {
+
+  class ExternalSpecification {
+    +specification_id: string
+    +kind: ExternalSpecificationKind
+    +version: string
+    +upstream_ref: string
+  }
+
+  class ExternalSpecificationScope {
+    +scope_id: string
+    +purpose: string
+    +status: LifecycleStatus
+  }
+
+  class ExternalSpecificationArea {
+    +area_code: string
+    +area_kind: ExternalSpecificationAreaKind
+    +relevance: RelevanceStatus
+  }
+
+  class ExternalTermSelection {
+    +selection_id: string
+    +version: string
+    +status: LifecycleStatus
+  }
+
+  class ExternalTermSelectionItem {
+    +item_id: string
+    +upstream_iri: uri
+    +term_kind: ExternalTermKind
+    +decision: ExternalSelectionDecision
+    +extraction_role: ExtractionRole
+    +review_status: ReviewStatus
+  }
+
+  class CompetencyQuestion {
+    +question_id: string
+    +question: string
+  }
+
+  class MaterializedExternalModule {
+    +module_id: string
+    +source_ref: string
+    +content_hash: string
+    +materialization_status: LifecycleStatus
+  }
+}
+
+ModelElement <|-- ExternalSpecification
+ModelElement <|-- ExternalSpecificationScope
+ModelElement <|-- ExternalSpecificationArea
+ModelElement <|-- ExternalTermSelection
+ModelElement <|-- ExternalTermSelectionItem
+ModelElement <|-- CompetencyQuestion
+ModelElement <|-- MaterializedExternalModule
+
+ExternalSpecification "1" <-- "0..*" ExternalSpecificationScope : scopes
+ExternalSpecificationScope "1" *-- "0..*" ExternalSpecificationArea : includes/excludes
+ExternalSpecificationScope "1" <-- "0..*" ExternalTermSelection : scope_ref
+ExternalTermSelection "1" *-- "0..*" ExternalTermSelectionItem : selected terms
+ExternalTermSelection "1" *-- "1..*" CompetencyQuestion : supports
+ExternalTermSelection "0..*" --> "0..*" MaterializedExternalModule : materializes
+ExternalTermSelectionItem "0..*" --> "0..*" ConceptualEntity : conceptual target
+ExternalTermSelectionItem "0..*" --> "0..*" ExternalTerm : selected term
+
+note bottom of ExternalTermSelection
+  Scope ≠ import.
+
+  Selection ≠ full external domain.
+
+  Selection задаёт управляемый набор
+  терминов, seed items, mappings,
+  review decisions и extraction role.
+end note
+
+' ===============================================================
+' Корневой репозиторий
+' ===============================================================
+
+package "Repository root" #FFFFFF {
+
+  class MoexModelRepository {
+    +repository_id: string
+    +name: string
+    +version: string
+  }
+}
+
+MoexModelRepository "1" *-- "0..*" ModelingStandard
+MoexModelRepository "1" *-- "0..*" ReferenceSpecification
+MoexModelRepository "1" *-- "0..*" SpecificationImplementation
+MoexModelRepository "1" *-- "0..*" ModelPackage
+MoexModelRepository "1" *-- "0..*" ConceptualEntity
+MoexModelRepository "1" *-- "0..*" LogicalEntity
+MoexModelRepository "1" *-- "0..*" PhysicalObject
+MoexModelRepository "1" *-- "0..*" DataFlow
+MoexModelRepository "1" *-- "0..*" ExternalSpecification
+
+legend right
+  <b>Ключевые уровни модели</b>
+
+  Желтый:
+  Enterprise conceptual model
+
+  Зеленый:
+  Solution logical model
+
+  Оранжевый:
+  Physical model
+
+  Голубой:
+  Integration / contracts
+
+  Фиолетовый:
+  Mapping / governance
+
+  Красный:
+  External semantic sources
+
+  <b>Ключевые отношения</b>
+
+  implements:
+  implementation → reference specification
+
+  realizes:
+  solution logical → enterprise conceptual
+
+  mapsTo:
+  logical ↔ physical
+
+  alignsWith:
+  enterprise conceptual → external term
+endlegend
+
+@enduml

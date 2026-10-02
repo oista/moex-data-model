@@ -1,0 +1,155 @@
+@startuml 01-core-data-model
+title MOEX DAMS - Core Data Model
+hide empty members
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+abstract class ModelElement {
+  +element_id : ElementId
+  +name : string
+  +title : string [0..1]
+  +description : string [0..1]
+  +lifecycle_status : LifecycleStatus [0..1]
+  +business_importance : BusinessImportance [0..1]
+  +governance_classification : GovernanceClassification [0..1]
+  +data_owner_ref : ActorRef [0..1]
+  +data_steward_ref : ActorRef [0..1]
+  +ownership_inheritance_rule : string [0..1]
+}
+note right of ModelElement : Базовый класс.\nВсе классы диаграммы\nнаследуют ModelElement\n(стрелки опущены).
+
+package "Концептуальный уровень" #FFF2CC {
+  class ConceptualEntity {
+    +definition : string
+    +business_term_ref : BusinessTermRef [0..1]
+  }
+  class ConceptualAttribute {
+    +definition : string
+    +logical_range : LogicalType [0..1]
+    +is_key_property : boolean [0..1]
+  }
+  class ConceptualRelationship {
+    +relationship_name : string
+    +source_min_cardinality : Cardinality [0..1]
+    +source_max_cardinality : Cardinality [0..1]
+    +target_min_cardinality : Cardinality [0..1]
+    +target_max_cardinality : Cardinality [0..1]
+  }
+  class BusinessTerm {
+    +preferred_label : string
+    +definition : string
+  }
+}
+
+package "Логический уровень" #D9EAD3 {
+  class DomainContext {
+    +name : string
+  }
+  class LogicalEntity {
+    +entity_type : EntityType
+    +data_class : DataClass
+    +solution_data_role : SolutionDataRole [0..1]
+    +identity_rule : string [0..1]
+    +business_key_kind : BusinessKeyKind [0..1]
+    +key_attribute_refs : ElementRef [0..*]
+    +conceptual_alignment_status : AlignmentStatus [0..1]
+    +alignment_rationale : string [0..1]
+    +isolation_rationale : string [0..1]
+  }
+  class LogicalAttribute {
+    +logical_type : LogicalType
+    +required : boolean
+    +multivalued : boolean [0..1]
+    +mapping_coverage_status : MappingCoverageStatus [0..1]
+    +mapping_rationale : string [0..1]
+  }
+  class Relationship {
+    +identifying : boolean [0..1]
+    +associative : boolean [0..1]
+    +source_min_cardinality : Cardinality [0..1]
+    +source_max_cardinality : Cardinality [0..1]
+    +target_min_cardinality : Cardinality [0..1]
+    +target_max_cardinality : Cardinality [0..1]
+  }
+  class ValueSet {
+    +name : string
+  }
+  class ValueSetValue {
+    +code : string
+    +label : string
+  }
+}
+
+package "Физический уровень" #FCE5CD {
+  class ITSystem {
+    +name : string
+  }
+  class Technology {
+    +name : string
+  }
+  class NativeSchema {
+    +format : NativeSchemaFormat
+    +uri : uri [0..1]
+  }
+  class PhysicalObject {
+    +object_kind : PhysicalObjectKind
+    +native_name : string
+    +mapping_coverage_status : MappingCoverageStatus [0..1]
+    +mapping_rationale : string [0..1]
+  }
+  class PhysicalField {
+    +native_name : string
+    +native_type : string
+    +nullable : boolean [0..1]
+    +position : integer [0..1]
+    +mapping_coverage_status : MappingCoverageStatus [0..1]
+    +mapping_rationale : string [0..1]
+  }
+}
+
+package "Трассируемость" #EADCF8 {
+  class Mapping {
+    +mapping_type : MappingType
+    +mapping_coverage_status : MappingCoverageStatus [0..1]
+    +expression_language : ExpressionLanguage [0..1]
+    +expression : string [0..1]
+    +applies_when : string [0..1]
+  }
+  class ModelElementRealization {
+    +realization_kind : RealizationKind
+    +rationale : string [0..1]
+  }
+}
+
+ConceptualEntity "1" *-- "0..*" ConceptualAttribute : key properties
+ConceptualEntity "0..*" --> "0..1" BusinessTerm : business term
+ConceptualRelationship "0..*" --> "1" ConceptualEntity : source
+ConceptualRelationship "0..*" --> "1" ConceptualEntity : target
+
+DomainContext "1" o-- "0..*" LogicalEntity : context_ref
+LogicalEntity "1" *-- "1..*" LogicalAttribute : attributes
+Relationship "0..*" --> "1" LogicalEntity : source
+Relationship "0..*" --> "1" LogicalEntity : target
+LogicalAttribute "0..*" --> "0..1" ValueSet : constrained by
+ValueSet "1" *-- "0..*" ValueSetValue : values
+
+ITSystem "1" o-- "0..*" PhysicalObject : system_ref
+Technology "1" o-- "0..*" PhysicalObject : technology
+NativeSchema "0..1" o-- "0..*" PhysicalObject : native schema
+PhysicalObject "1" *-- "0..*" PhysicalField : fields
+
+LogicalEntity "0..*" --> "0..*" ConceptualEntity : conceptual_entity_refs
+LogicalAttribute "0..*" ..> "0..*" ConceptualAttribute : aligns with
+ModelElementRealization "0..*" --> "1" LogicalEntity : local element
+ModelElementRealization "0..*" --> "1" ConceptualEntity : conceptual target
+
+Mapping "0..*" --> "0..*" LogicalEntity : logical side
+Mapping "0..*" --> "0..*" LogicalAttribute : logical side
+Mapping "0..*" --> "0..*" PhysicalObject : physical side
+Mapping "0..*" --> "0..*" PhysicalField : physical side
+
+note bottom of Mapping : Один класс Mapping.\nmapping_type различает entity-physical,\nattribute-physical, derivation и др.\nEntity/AttributePhysicalMapping - только алиасы.
+note bottom of ConceptualEntity : Не описывает таблицы,\nAPI и технологии.
+note bottom of PhysicalObject : Квант данных: таблица, view, файл,\nAPI endpoint, topic, dataset.
+@enduml

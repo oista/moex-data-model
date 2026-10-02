@@ -1,0 +1,187 @@
+@startuml 02-solution-model-governance
+title MOEX DAMS - Solution Model and Governance
+hide empty members
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+abstract class ModelElement {
+  +element_id : ElementId
+  +name : string
+  +lifecycle_status : LifecycleStatus [0..1]
+  +data_owner_ref : ActorRef [0..1]
+  +data_steward_ref : ActorRef [0..1]
+  +ownership_inheritance_rule : string [0..1]
+}
+note right of ModelElement : Все классы диаграммы\nнаследуют ModelElement\n(стрелки опущены).
+
+package "Спецификации и реализации" #E8F0FE {
+  class ModelingStandard {
+    +version : string
+  }
+  class ReferenceSpecification {
+    +version : string
+    +specification_kind : SpecificationKind
+  }
+  class SpecificationImplementation {
+    +implementation_profile : ImplementationProfile
+    +dams_model_level : DAMSModelLevel [0..1]
+    +implementation_scope : ImplementationScope
+    +solution_ref : SolutionRef [0..1]
+    +conceptual_implementation_ref : ImplementationRef [0..1]
+  }
+  class ModelPackage {
+    +version : string
+  }
+  class ImplementationFacet {
+    +kind : ImplementationFacetKind
+    +source_artifact_ref : ArtifactRef [0..1]
+  }
+}
+
+package "Граница EAM" #FFF2CC {
+  class Platform {
+    +name : string
+  }
+  class ITSolution {
+    +name : string
+  }
+  class ITSystem {
+    +name : string
+  }
+  class DomainContext {
+    +name : string
+  }
+}
+
+package "Содержимое модели решения" #D9EAD3 {
+  class LogicalEntity {
+    +entity_type : EntityType
+    +data_class : DataClass
+    +identity_rule : string [0..1]
+    +conceptual_alignment_status : AlignmentStatus [0..1]
+  }
+  class LogicalAttribute {
+    +logical_type : LogicalType
+    +required : boolean
+  }
+  class Relationship {
+    +source_min_cardinality : Cardinality [0..1]
+    +target_min_cardinality : Cardinality [0..1]
+  }
+  class PhysicalObject {
+    +object_kind : PhysicalObjectKind
+    +native_name : string
+  }
+  class PhysicalField {
+    +native_name : string
+    +native_type : string
+  }
+  class Mapping {
+    +mapping_type : MappingType
+    +expression : string [0..1]
+  }
+}
+
+package "Управление" #D9D2E9 {
+  class DataPolicy {
+    +policy_type : PolicyType
+  }
+  class PolicyBinding {
+    +binding_role : PolicyBindingRole
+  }
+  class DataQualityRule {
+    +rule_expression : string [0..1]
+    +severity : QualitySeverity [0..1]
+  }
+  class DataQualityBinding {
+    +status : LifecycleStatus
+  }
+}
+
+package "Интеграции и контракты" #D0E0E3 {
+  class DataFlow {
+    +direction : FlowDirection
+    +freshness_sla : string [0..1]
+  }
+  class DataFlowEndpoint {
+    +role : EndpointRole
+  }
+  class DataContract {
+    +version : string
+  }
+  class DataContractBinding {
+    +binding_role : ContractBindingRole
+  }
+}
+
+package "Контроль качества модели" #F4CCCC {
+  class SchemaValidation <<service>> {
+    +checks structure
+  }
+  class BodyAssess <<service>> {
+    +checks requirement catalog
+  }
+  class PublicationContractCheck <<service>> {
+    +checks sections and satisfies
+  }
+  class AssessmentDiagnostic {
+    +diagnostic_code : string
+    +severity : Severity
+    +remediation : string
+  }
+  class PublicationManifest {
+    +publication_profile : string
+  }
+}
+
+ModelingStandard "1" o-- "0..*" ReferenceSpecification : modeling standard
+ReferenceSpecification "1" o-- "0..*" SpecificationImplementation : implements
+SpecificationImplementation "1" *-- "1..*" ModelPackage : packages
+SpecificationImplementation "1" *-- "0..*" ImplementationFacet : facets
+SpecificationImplementation "0..*" --> "0..1" ITSolution : solution_ref
+SpecificationImplementation "0..*" --> "0..1" SpecificationImplementation : conceptual implementation
+
+Platform "1" o-- "0..*" ITSolution : contains
+ITSolution "1" o-- "1..*" ITSystem : consists of
+
+ModelPackage "1" *-- "0..*" LogicalEntity : logical model
+ModelPackage "1" *-- "0..*" Relationship : relationships
+ModelPackage "1" *-- "0..*" PhysicalObject : physical model
+ModelPackage "1" *-- "0..*" Mapping : mappings
+DomainContext "1" o-- "0..*" LogicalEntity : context_ref
+LogicalEntity "1" *-- "1..*" LogicalAttribute : attributes
+Relationship "0..*" --> "1" LogicalEntity : source
+Relationship "0..*" --> "1" LogicalEntity : target
+ITSystem "1" o-- "0..*" PhysicalObject : system_ref
+PhysicalObject "1" *-- "0..*" PhysicalField : fields
+Mapping "0..*" --> "0..*" LogicalEntity : logical side
+Mapping "0..*" --> "0..*" LogicalAttribute : logical side
+Mapping "0..*" --> "0..*" PhysicalObject : physical side
+Mapping "0..*" --> "0..*" PhysicalField : physical side
+
+PolicyBinding "0..*" --> "1" DataPolicy : policy
+PolicyBinding "0..*" --> "1..*" ModelPackage : applies to
+DataQualityBinding "0..*" --> "1" DataQualityRule : rule
+DataQualityBinding "0..*" --> "1..*" PhysicalObject : evaluates
+
+DataFlow "1" *-- "2..*" DataFlowEndpoint : endpoints
+DataFlowEndpoint "0..*" --> "0..1" ITSolution : solution
+DataFlowEndpoint "0..*" --> "0..1" ITSystem : system
+DataFlowEndpoint "0..*" --> "0..1" PhysicalObject : data object
+DataFlow "0..*" --> "0..*" Mapping : transformations
+DataContractBinding "0..*" --> "1" DataContract : contract
+DataContractBinding "0..*" --> "0..1" DataFlow : governs flow
+DataContractBinding "0..*" --> "0..1" PhysicalObject : governs object
+
+ModelPackage ..> SchemaValidation : validated by
+ModelPackage ..> BodyAssess : assessed by
+PublicationManifest ..> PublicationContractCheck : checked by
+BodyAssess --> "0..*" AssessmentDiagnostic : emits
+PublicationManifest "0..*" --> "1" ModelPackage : publishes
+
+note bottom of SpecificationImplementation : dams_model_level допустим только\nдля implementation_profile = dams-data-model.\nУровни: enterprise-conceptual и solution.
+note bottom of BodyAssess : Проверяет содержание модели.\nНе проверяет наличие publication sections.
+note bottom of PublicationContractCheck : Проверяет наличие представлений.\nНе проверяет identity_rule, owner,\nmapping coverage.
+note bottom of ModelPackage : Логический и физический слои\nодного решения живут в одном пакете.
+@enduml
