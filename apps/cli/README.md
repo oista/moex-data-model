@@ -32,7 +32,8 @@ py -3.14 -m pip install -e "./generated/contracts/moex-dams/0.1" `
 
 py -3.14 -m moex_model_cli validate --root .
 py -3.14 -m moex_model_cli publish --root .
-py -3.14 -m moex_model_cli diagram --root . --profile logical --out generated/artifacts/diagrams/trading-logical.dbml
+py -3.14 -m moex_model_cli diagram --root . --profile logical
+# → model-assets/.../publications/logical.dbml
 py -3.14 -m moex_model_cli diagram --root . --format mermaid --profile logical
 # → model-assets/.../publications/logical.erd.md (+ .svg if npx available)
 py -3.14 -m moex_model_cli map --root . --sssom model-assets/transformations/mappings/dams-fibo.sssom.yaml

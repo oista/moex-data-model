@@ -4290,6 +4290,7 @@
   function renderMermaidDiagram(mod, section) {
     const attrs = section.attributes || {};
     const source = String(attrs.mermaid_source || "");
+    const dbmlSource = String(attrs.dbml_source || "");
     const clickmap = attrs.erd_clickmap || null;
     const panel = document.createElement("div");
     panel.className = "erd-panel";
@@ -4316,8 +4317,17 @@
     tabSource.setAttribute("aria-selected", "false");
     tabSource.textContent = "Исходник";
 
+    const tabDbml = document.createElement("button");
+    tabDbml.type = "button";
+    tabDbml.className = "erd-tab";
+    tabDbml.setAttribute("data-erd-tab", "dbml");
+    tabDbml.setAttribute("role", "tab");
+    tabDbml.setAttribute("aria-selected", "false");
+    tabDbml.textContent = "DBML";
+
     toolbar.appendChild(tabDiagram);
     toolbar.appendChild(tabSource);
+    toolbar.appendChild(tabDbml);
 
     const bodyRow = document.createElement("div");
     bodyRow.className = "erd-body";
@@ -4351,55 +4361,78 @@
       detailPane.appendChild(hint);
     }
 
-    const sourcePane = document.createElement("div");
-    sourcePane.className = "erd-source is-hidden";
-    sourcePane.setAttribute("data-erd-pane", "source");
-    sourcePane.hidden = true;
+    function makeSourcePane(paneName, text) {
+      const pane = document.createElement("div");
+      pane.className = "erd-source is-hidden";
+      pane.setAttribute("data-erd-pane", paneName);
+      pane.hidden = true;
 
-    const actions = document.createElement("div");
-    actions.className = "erd-source-actions";
-    const copyBtn = document.createElement("button");
-    copyBtn.type = "button";
-    copyBtn.className = "copy-btn";
-    copyBtn.textContent = "Copy";
-    copyBtn.addEventListener("click", () => {
-      navigator.clipboard?.writeText(source).then(
-        () => {
-          copyBtn.textContent = "Copied";
-          setTimeout(() => {
-            copyBtn.textContent = "Copy";
-          }, 1200);
-        },
-        () => {}
-      );
-    });
-    actions.appendChild(copyBtn);
+      const actions = document.createElement("div");
+      actions.className = "erd-source-actions";
+      const copyBtn = document.createElement("button");
+      copyBtn.type = "button";
+      copyBtn.className = "copy-btn";
+      copyBtn.textContent = "Copy";
+      copyBtn.disabled = !text;
+      copyBtn.addEventListener("click", () => {
+        if (!text) return;
+        navigator.clipboard?.writeText(text).then(
+          () => {
+            copyBtn.textContent = "Copied";
+            setTimeout(() => {
+              copyBtn.textContent = "Copy";
+            }, 1200);
+          },
+          () => {}
+        );
+      });
+      actions.appendChild(copyBtn);
+      pane.appendChild(actions);
 
-    const pre = document.createElement("pre");
-    pre.className = "erd-source-pre";
-    const code = document.createElement("code");
-    code.textContent = source;
-    pre.appendChild(code);
-    sourcePane.appendChild(actions);
-    sourcePane.appendChild(pre);
+      if (text) {
+        const pre = document.createElement("pre");
+        pre.className = "erd-source-pre";
+        const code = document.createElement("code");
+        code.textContent = text;
+        pre.appendChild(code);
+        pane.appendChild(pre);
+      } else {
+        const miss = document.createElement("p");
+        miss.className = "muted";
+        miss.textContent =
+          paneName === "dbml"
+            ? "DBML не сгенерирован. Выполните moex-model diagram --format dbml --profile logical|physical."
+            : "Исходник недоступен.";
+        pane.appendChild(miss);
+      }
+      return pane;
+    }
+
+    const sourcePane = makeSourcePane("source", source);
+    const dbmlPane = makeSourcePane("dbml", dbmlSource);
 
     function showPane(name) {
-      const isDiagram = name === "diagram";
-      tabDiagram.classList.toggle("is-active", isDiagram);
-      tabSource.classList.toggle("is-active", !isDiagram);
-      tabDiagram.setAttribute("aria-selected", isDiagram ? "true" : "false");
-      tabSource.setAttribute("aria-selected", isDiagram ? "false" : "true");
-      canvas.classList.toggle("is-hidden", !isDiagram);
-      canvas.hidden = !isDiagram;
+      const panes = {
+        diagram: { tab: tabDiagram, el: canvas },
+        source: { tab: tabSource, el: sourcePane },
+        dbml: { tab: tabDbml, el: dbmlPane },
+      };
+      for (const [key, entry] of Object.entries(panes)) {
+        const active = key === name;
+        entry.tab.classList.toggle("is-active", active);
+        entry.tab.setAttribute("aria-selected", active ? "true" : "false");
+        entry.el.classList.toggle("is-hidden", !active);
+        entry.el.hidden = !active;
+      }
       if (clickmap) {
+        const isDiagram = name === "diagram";
         detailPane.classList.toggle("is-hidden", !isDiagram);
         detailPane.hidden = !isDiagram;
       }
-      sourcePane.classList.toggle("is-hidden", isDiagram);
-      sourcePane.hidden = isDiagram;
     }
     tabDiagram.addEventListener("click", () => showPane("diagram"));
     tabSource.addEventListener("click", () => showPane("source"));
+    tabDbml.addEventListener("click", () => showPane("dbml"));
 
     function showErdDetail(target) {
       if (!target || !mod) return;
@@ -4452,6 +4485,7 @@
     panel.appendChild(toolbar);
     panel.appendChild(bodyRow);
     panel.appendChild(sourcePane);
+    panel.appendChild(dbmlPane);
     return panel;
   }
 

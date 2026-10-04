@@ -119,6 +119,25 @@ def test_diagram_projects_logical(
     assert "digest=sha256:" in capsys.readouterr().out
 
 
+def test_diagram_rejects_conceptual_dbml(
+    repo_root: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    assert main(
+        [
+            "diagram",
+            "--root",
+            str(repo_root),
+            "--profile",
+            "conceptual",
+            "--format",
+            "dbml",
+        ]
+    ) == 2
+    err = capsys.readouterr().out + capsys.readouterr().err
+    assert "conceptual" in err
+    assert "dbml" in err.lower()
+
+
 def test_diagram_projects_mermaid_logical(
     repo_root: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:

@@ -5,6 +5,7 @@
     <div class="erd-toolbar" role="tablist">
       <button type="button" class="erd-tab is-active" data-erd-tab="diagram" role="tab" aria-selected="true">Диаграмма</button>
       <button type="button" class="erd-tab" data-erd-tab="source" role="tab" aria-selected="false">Исходник</button>
+      <button type="button" class="erd-tab" data-erd-tab="dbml" role="tab" aria-selected="false">DBML</button>
     </div>
     <div class="erd-canvas" data-erd-pane="diagram">
       {% if section.content %}
@@ -18,6 +19,17 @@
         <button type="button" class="copy-btn" data-erd-copy>Copy</button>
       </div>
       <pre class="erd-source-pre"><code>{{ (section.attributes or {}).get('mermaid_source', '') }}</code></pre>
+    </div>
+    <div class="erd-source is-hidden" data-erd-pane="dbml" hidden>
+      <div class="erd-source-actions">
+        <button type="button" class="copy-btn" data-erd-copy-dbml>Copy</button>
+      </div>
+      {% set dbml = (section.attributes or {}).get('dbml_source', '') %}
+      {% if dbml %}
+      <pre class="erd-source-pre"><code>{{ dbml }}</code></pre>
+      {% else %}
+      <p class="muted">DBML не сгенерирован. Выполните moex-model diagram --format dbml --profile logical|physical.</p>
+      {% endif %}
     </div>
   </div>
 </div>

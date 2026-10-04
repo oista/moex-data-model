@@ -24,10 +24,10 @@ One-way derived views from a ModelPackage YAML (not canonical):
 
 | API | Format | Typical output |
 |-----|--------|----------------|
-| `project_model_package_to_dbml` / `write_dbml_artifact` | DBML | drawDB / Workbench |
+| `project_model_package_to_dbml` / `write_dbml_artifact` | DBML | `publications/{logical,physical}.dbml` (viewer / drawDB) |
 | `project_model_package_to_er_diagram` / `write_er_diagram_artifact` | Mermaid `erDiagram` | `publications/{logical,physical}.erd.md` (+ SVG via `try_render_er_svg`) |
 
-CLI: `moex-model diagram --format dbml|mermaid --profile logical|physical`.
+CLI: `moex-model diagram --format dbml|mermaid --profile logical|physical` (default out under implementation `publications/`).
 
 ## Tests
 

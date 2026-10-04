@@ -9,8 +9,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-viewer.ps1
 # semantic-diff
 moex-model semantic-diff --left a.yaml --right b.yaml --json
 
-# diagram (ModelPackage → DBML)
-moex-model diagram --root . --profile logical --out generated/artifacts/diagrams/trading-logical.dbml
+# diagram (ModelPackage → DBML for viewer)
+moex-model diagram --root . --implementation model-assets/implementations/solutions/crm/crm-solution-model.yaml --format dbml --profile logical
+moex-model diagram --root . --implementation model-assets/implementations/solutions/crm/crm-solution-model.yaml --format dbml --profile physical
 
 # diagram (ModelPackage → Mermaid erDiagram + SVG for viewer)
 moex-model diagram --root . --implementation model-assets/implementations/solutions/crm/crm-solution-model.yaml --format mermaid --profile logical

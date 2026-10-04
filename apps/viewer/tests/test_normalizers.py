@@ -335,6 +335,10 @@ def test_mermaid_diagram_with_svg(tmp_path: Path):
         '<rect width="10" height="10"/></svg>',
         encoding="utf-8",
     )
+    (tmp_path / "logical.dbml").write_text(
+        "Table Client {\n  id string [not null]\n}\n",
+        encoding="utf-8",
+    )
     sec = _section(
         type="mermaid-diagram",
         source={"format": "markdown", "path": "logical.erd.md"},
@@ -345,6 +349,8 @@ def test_mermaid_diagram_with_svg(tmp_path: Path):
     assert "<script" not in out.content.lower()
     assert out.attributes["mermaid_source"].startswith("erDiagram")
     assert out.attributes["svg_missing"] is False
+    assert out.attributes["dbml_source"].startswith("Table Client")
+    assert out.attributes["dbml_missing"] is False
 
 
 def test_mermaid_diagram_without_svg(tmp_path: Path):
@@ -361,6 +367,8 @@ def test_mermaid_diagram_without_svg(tmp_path: Path):
     assert out.content == ""
     assert out.attributes["mermaid_source"].startswith("erDiagram")
     assert out.attributes["svg_missing"] is True
+    assert out.attributes["dbml_source"] == ""
+    assert out.attributes["dbml_missing"] is True
 
 
 def test_mermaid_diagram_loads_clickmap(tmp_path: Path):

@@ -71,10 +71,10 @@ Schema: `schema/package-docs-toc.schema.json`.
 
 Implementation modules may publish pre-generated Mermaid erDiagram artifacts:
 
-- `publications/logical.erd.md` + sibling `.svg`
-- `publications/physical.erd.md` + sibling `.svg`
+- `publications/logical.erd.md` + sibling `.svg` + sibling `logical.dbml`
+- `publications/physical.erd.md` + sibling `.svg` + sibling `physical.dbml`
 
-Generate with `moex-model diagram --format mermaid --profile logical|physical` (SVG needs Node/`npx`). The player shows the SVG by default and a **Исходник** tab for the Mermaid text — no mermaid.js / CDN in `index.html`.
+Generate Mermaid with `moex-model diagram --format mermaid --profile logical|physical` (SVG needs Node/`npx`), and DBML with `moex-model diagram --format dbml --profile logical|physical` (default out: `publications/{profile}.dbml`). The player shows the SVG by default, an **Исходник** tab for Mermaid text, and a **DBML** tab for the DBML projection — no mermaid.js / CDN in `index.html`.
 
 ## FIBO glossary
 

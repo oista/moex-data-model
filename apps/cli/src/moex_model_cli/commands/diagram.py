@@ -31,14 +31,12 @@ def run_diagram(
         return 1, f"missing implementation: {paths.implementation}\n"
 
     if fmt == "dbml":
+        if profile == "conceptual":
+            return 2, "unsupported --profile 'conceptual' for --format dbml (logical|physical)\n"
         dest = (
             out
             if out is not None
-            else paths.root
-            / "generated"
-            / "artifacts"
-            / "diagrams"
-            / f"{paths.implementation.stem}-{profile}.dbml"
+            else paths.implementation.parent / "publications" / f"{profile}.dbml"
         )
         if not dest.is_absolute():
             dest = (paths.root / dest).resolve()

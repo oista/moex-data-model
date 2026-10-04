@@ -209,8 +209,9 @@ def run_import_solution(
                 )
             )
 
-    # Mermaid erDiagram projections (md always; svg best-effort)
+    # Mermaid erDiagram + DBML projections (md/dbml always; svg best-effort)
     try:
+        from moex_dams.projection.dbml import write_dbml_artifact
         from moex_dams.projection.mermaid_er import (
             try_render_er_svg,
             write_er_diagram_artifact,
@@ -251,6 +252,23 @@ def run_import_solution(
                         severity=Severity.WARNING,
                         message_ru=f"erd {er_profile} failed: {exc}",
                         remediation="Проверьте package YAML и moex_dams.projection.mermaid_er.",
+                    )
+                )
+            dbml_path = pub / f"{er_profile}.dbml"
+            try:
+                write_dbml_artifact(
+                    implementation_path=result.package_path,
+                    out_path=dbml_path,
+                    profile=er_profile,  # type: ignore[arg-type]
+                )
+                lines.append(f"dbml-{er_profile}={dbml_path}")
+            except (OSError, ValueError, TypeError) as exc:
+                all_diags.append(
+                    Diagnostic(
+                        code="DBML:ERROR",
+                        severity=Severity.WARNING,
+                        message_ru=f"dbml {er_profile} failed: {exc}",
+                        remediation="Проверьте package YAML и moex_dams.projection.dbml.",
                     )
                 )
     except Exception as exc:  # noqa: BLE001

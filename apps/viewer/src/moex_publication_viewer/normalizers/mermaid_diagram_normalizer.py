@@ -1,4 +1,4 @@
-"""Normalize Mermaid erDiagram markdown (+ sibling SVG) for viewer."""
+"""Normalize Mermaid erDiagram markdown (+ sibling SVG / DBML) for viewer."""
 
 from __future__ import annotations
 
@@ -36,6 +36,27 @@ def _sanitize_svg(svg: str) -> str:
     return cleaned.strip()
 
 
+def _sibling_dbml_path(source_path: Path) -> Path:
+    """``logical.erd.md`` → ``logical.dbml``; otherwise ``{stem}.dbml``."""
+    name = source_path.name
+    if name.endswith(".erd.md"):
+        return source_path.parent / f"{name[: -len('.erd.md')]}.dbml"
+    return source_path.with_suffix(".dbml")
+
+
+def _load_dbml_source(source_path: Path) -> tuple[str, bool]:
+    dbml_path = _sibling_dbml_path(source_path)
+    if not dbml_path.is_file():
+        return "", True
+    try:
+        text = dbml_path.read_text(encoding="utf-8")
+    except OSError:
+        return "", True
+    if not text.strip():
+        return "", True
+    return text if text.endswith("\n") else text + "\n", False
+
+
 def _load_clickmap(source_path: Path) -> dict[str, Any] | None:
     """Load sibling ``*.erd.clickmap.json`` when present (conceptual diagrams)."""
     clickmap_path = source_path.parent / (source_path.stem + ".clickmap.json")
@@ -49,7 +70,7 @@ def _load_clickmap(source_path: Path) -> dict[str, Any] | None:
 
 
 class MermaidDiagramNormalizer:
-    """Load ``*.erd.md``; embed sibling ``*.erd.svg`` when present."""
+    """Load ``*.erd.md``; embed sibling ``*.erd.svg`` and ``*.dbml`` when present."""
 
     def normalize(self, section: ManifestSection, source_path: Path) -> PublicationSection:
         try:
@@ -69,9 +90,13 @@ class MermaidDiagramNormalizer:
                 content = ""
                 svg_missing = True
 
+        dbml_source, dbml_missing = _load_dbml_source(source_path)
+
         attrs: dict[str, Any] = {
             "mermaid_source": mermaid_source,
             "svg_missing": svg_missing,
+            "dbml_source": dbml_source,
+            "dbml_missing": dbml_missing,
         }
         clickmap = _load_clickmap(source_path)
         if clickmap is not None:

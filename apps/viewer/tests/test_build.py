@@ -74,6 +74,10 @@ def test_build_mermaid_diagram_section(tmp_path: Path):
         '<svg xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1"/></svg>',
         encoding="utf-8",
     )
+    (pub / "logical.dbml").write_text(
+        "Table Client {\n  id string [not null]\n}\n",
+        encoding="utf-8",
+    )
     (mod / "publish.yaml").write_text(
         """
 module_id: moex:module:erd-demo
@@ -115,7 +119,11 @@ sections:
     assert "mermaid-diagram" in html
     assert "erDiagram" in html
     assert "<svg" in html
-    assert "renderMermaidDiagram" in (dist / "viewer.js").read_text(encoding="utf-8")
+    assert "Table Client" in html
+    assert "dbml_source" in html
+    js = (dist / "viewer.js").read_text(encoding="utf-8")
+    assert "renderMermaidDiagram" in js
+    assert 'data-erd-tab", "dbml"' in js or 'textContent = "DBML"' in js
     assert_no_required_cdn(html)
 
 
