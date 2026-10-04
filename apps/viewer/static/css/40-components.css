@@ -58,6 +58,17 @@
 .nav-group-children { margin-left: 12px; display: flex; flex-direction: column; gap: 1px; }
 /* Author display:flex beats UA [hidden]{display:none}; restore collapse. */
 .nav-group-children[hidden] { display: none; }
+/* Slightly darker band for Реализации so Spec↔Impl work area reads as distinct. */
+.nav-group.nav-implementations {
+  background: color-mix(in srgb, var(--text) 5%, var(--surface-1));
+  border-radius: var(--radius-md);
+  padding: 4px 2px 6px;
+  margin: 2px 0 4px;
+}
+.nav-group.nav-implementations > .nav-group-children {
+  margin-left: 8px;
+  padding: 2px 4px 2px 2px;
+}
 .nav-kind {
   position: relative;
   display: inline-block;

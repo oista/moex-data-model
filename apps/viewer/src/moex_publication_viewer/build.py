@@ -59,17 +59,21 @@ def _impl_folder(
     title: str,
     description: str,
     children: list[PublicationItem],
+    extra_attrs: dict | None = None,
 ) -> PublicationItem:
+    attrs: dict = {
+        "kind": "group",
+        "group_style": "section_folder",
+        "member_ids": [c.id for c in children],
+        "impl_count": len(children),
+    }
+    if extra_attrs:
+        attrs.update(extra_attrs)
     return PublicationItem(
         id=folder_id,
         title=title,
         description=description,
-        attributes={
-            "kind": "group",
-            "group_style": "section_folder",
-            "member_ids": [c.id for c in children],
-            "impl_count": len(children),
-        },
+        attributes=attrs,
         children=children,
     )
 
@@ -238,6 +242,109 @@ _SECTION_ID_NAV_GLYPH: dict[str, str] = {
     "physical-erd": "pdm",
 }
 
+# Full solution-model publish.yaml set → nest under Overview / model folders.
+_SOLUTION_NAV_REQUIRED_SECTION_IDS = frozenset(
+    {
+        "package",
+        "conceptual",
+        "logical",
+        "physical",
+        "slice-summary",
+        "slice-nodes",
+        "slice-relations",
+        "model-assessment",
+    }
+)
+_SOLUTION_NAV_OVERVIEW_IDS = ("package", "slice-summary", "slice-relations", "slice-nodes")
+_SOLUTION_NAV_CONCEPTUAL_IDS = ("conceptual",)
+_SOLUTION_NAV_LOGICAL_IDS = ("logical", "logical-erd")
+_SOLUTION_NAV_PHYSICAL_IDS = ("physical", "physical-erd")
+_SOLUTION_NAV_REQUIREMENTS_IDS = ("model-assessment",)
+
+
+def group_solution_impl_nav(
+    catalog_impl_id: str,
+    leaves: list[PublicationItem],
+) -> list[PublicationItem]:
+    """Nest solution-model section_refs under Overview + model/requirements folders.
+
+    Only modules that carry the full solution section-id set are grouped;
+    dsp / conceptual / FIBO / CSV drafts stay a flat section_ref list.
+    """
+    by_sid: dict[str, PublicationItem] = {}
+    for leaf in leaves:
+        sid = (leaf.attributes or {}).get("section_id")
+        if isinstance(sid, str) and sid:
+            by_sid[sid] = leaf
+    if not _SOLUTION_NAV_REQUIRED_SECTION_IDS.issubset(by_sid):
+        return leaves
+
+    claimed: set[str] = set()
+
+    def take(ids: tuple[str, ...]) -> list[PublicationItem]:
+        out: list[PublicationItem] = []
+        for sid in ids:
+            leaf = by_sid.get(sid)
+            if leaf is not None:
+                out.append(leaf)
+                claimed.add(sid)
+        return out
+
+    overview_kids = take(_SOLUTION_NAV_OVERVIEW_IDS)
+    overview = PublicationItem(
+        id=f"implnav:{catalog_impl_id}:group:overview",
+        title="Overview",
+        description="Package and vertical-slice summary for this solution.",
+        attributes={
+            "kind": "group",
+            "nav_group": "overview",
+            "member_ids": [c.id for c in overview_kids],
+        },
+        children=overview_kids,
+    )
+    conceptual = _impl_folder(
+        folder_id=f"implnav:{catalog_impl_id}:group:conceptual",
+        title="Концептуальная модель",
+        description="Conceptual entities of the solution model.",
+        children=take(_SOLUTION_NAV_CONCEPTUAL_IDS),
+        extra_attrs={
+            "nav_glyph": "cmd",
+            "requirement_section": "CMD",
+            "nav_group": "conceptual",
+        },
+    )
+    logical = _impl_folder(
+        folder_id=f"implnav:{catalog_impl_id}:group:logical",
+        title="Логическая модель",
+        description="Logical entities and ER diagram.",
+        children=take(_SOLUTION_NAV_LOGICAL_IDS),
+        extra_attrs={
+            "nav_glyph": "ldm",
+            "requirement_section": "LDM",
+            "nav_group": "logical",
+        },
+    )
+    physical = _impl_folder(
+        folder_id=f"implnav:{catalog_impl_id}:group:physical",
+        title="Физическая модель",
+        description="Physical objects and ER diagram.",
+        children=take(_SOLUTION_NAV_PHYSICAL_IDS),
+        extra_attrs={
+            "nav_glyph": "pdm",
+            "requirement_section": "PDM",
+            "nav_group": "physical",
+        },
+    )
+    requirements = _impl_folder(
+        folder_id=f"implnav:{catalog_impl_id}:group:requirements",
+        title="Требования",
+        description="Model assessment against DAMS requirements.",
+        children=take(_SOLUTION_NAV_REQUIREMENTS_IDS),
+        extra_attrs={"nav_group": "requirements"},
+    )
+    leftovers = [leaf for leaf in leaves if (leaf.attributes or {}).get("section_id") not in claimed]
+    return [overview, conceptual, logical, physical, requirements, *leftovers]
+
 
 def impl_section_nav_children(
     catalog_impl_id: str,
@@ -247,11 +354,12 @@ def impl_section_nav_children(
 
     Emit one leaf per top-level publication section (including ``explorer``,
     e.g. moex.dsp «Classes»). Do **not** expand explorer class trees here —
-    Spec nav under Реализации → Impl stays section-level.
+    Spec nav under Реализации → Impl stays section-level. Solution modules with
+    the full section set are nested under Overview / model folders.
     """
     if impl_module is None:
         return []
-    children: list[PublicationItem] = []
+    leaves: list[PublicationItem] = []
     for sec in impl_module.sections:
         attrs: dict = {
             "kind": "section_ref",
@@ -264,7 +372,7 @@ def impl_section_nav_children(
         glyph = _SECTION_ID_NAV_GLYPH.get(sec.id)
         if glyph:
             attrs["nav_glyph"] = glyph
-        children.append(
+        leaves.append(
             PublicationItem(
                 id=f"implnav:{catalog_impl_id}:{sec.id}",
                 title=sec.title,
@@ -273,7 +381,7 @@ def impl_section_nav_children(
                 attributes=attrs,
             )
         )
-    return children
+    return group_solution_impl_nav(catalog_impl_id, leaves)
 
 
 def module_section_ids(mod: PublicationModule | None) -> set[str]:
@@ -283,17 +391,37 @@ def module_section_ids(mod: PublicationModule | None) -> set[str]:
     return {s.id for s in mod.sections}
 
 
-def impl_nav_section_ids(ref: PublicationItem) -> set[str]:
-    """section_id values of section_ref children under an implementation_ref."""
+def _collect_section_ref_ids(items: list[PublicationItem] | None) -> set[str]:
+    """Recursively collect section_id from section_ref leaves."""
     ids: set[str] = set()
-    for child in ref.children or []:
-        attrs = child.attributes or {}
-        if attrs.get("kind") != "section_ref":
-            continue
-        sid = attrs.get("section_id")
-        if isinstance(sid, str) and sid:
-            ids.add(sid)
+    for item in items or []:
+        attrs = item.attributes or {}
+        if attrs.get("kind") == "section_ref":
+            sid = attrs.get("section_id")
+            if isinstance(sid, str) and sid:
+                ids.add(sid)
+        ids |= _collect_section_ref_ids(item.children)
     return ids
+
+
+def impl_nav_section_ids(ref: PublicationItem) -> set[str]:
+    """section_id values of section_ref descendants under an implementation_ref."""
+    return _collect_section_ref_ids(ref.children)
+
+
+def _assert_impl_nav_tree(items: list[PublicationItem] | None) -> None:
+    """Direct children may be group or section_ref; section_ref leaves stay flat."""
+    for child in items or []:
+        kind = (child.attributes or {}).get("kind")
+        assert kind in {"group", "section_ref"}, (
+            f"{child.id}: unexpected kind {kind!r} under Impl nav"
+        )
+        if kind == "section_ref":
+            assert child.children == [], (
+                f"{child.id}: explorer/class tree must not nest under Impl section_ref"
+            )
+        else:
+            _assert_impl_nav_tree(child.children)
 
 
 def assert_impl_section_nav_coverage(
@@ -309,11 +437,7 @@ def assert_impl_section_nav_coverage(
         f"implementation_ref {ref.id!r} (module={mid!r}): "
         f"nav section_ids {sorted(actual)} != module sections {sorted(expected)}"
     )
-    for child in ref.children or []:
-        assert (child.attributes or {}).get("kind") == "section_ref"
-        assert child.children == [], (
-            f"{child.id}: explorer/class tree must not nest under Impl section_ref"
-        )
+    _assert_impl_nav_tree(ref.children)
 
 
 def attach_impl_section_nav_children(
@@ -327,7 +451,7 @@ def attach_impl_section_nav_children(
         mid = attrs.get("module_id")
         kids = impl_section_nav_children(ref.id, _module_by_id(modules, mid))
         attrs["member_ids"] = [c.id for c in kids]
-        attrs["nav_section_count"] = len(kids)
+        attrs["nav_section_count"] = len(_collect_section_ref_ids(kids))
         out.append(
             PublicationItem(
                 id=ref.id,

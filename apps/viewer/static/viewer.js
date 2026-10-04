@@ -747,7 +747,11 @@
         }
         const open = openGroups.has(gId);
         const gWrap = document.createElement("div");
-        gWrap.className = "nav-group";
+        gWrap.className =
+          "nav-group" +
+          (group.attributes?.section_root === "implementations"
+            ? " nav-implementations"
+            : "");
         const overviewRootActive =
           group.attributes?.section_root === "overview" &&
           !focus?.item &&

@@ -15,6 +15,7 @@ from moex_publication_viewer.build import (
     enrich_dams_explorer_implementations,
     enrich_fibo_explorer_classes,
     enrich_fibo_explorer_implementations,
+    group_solution_impl_nav,
     impl_nav_section_ids,
     impl_section_nav_children,
     module_section_ids,
@@ -82,6 +83,7 @@ def test_impl_section_nav_children_stamps_level_glyphs() -> None:
         ],
     )
     kids = impl_section_nav_children("mdm", mod)
+    # Incomplete solution set → flat leaves; glyphs stay on section_refs.
     by_sid = {c.attributes["section_id"]: c.attributes.get("nav_glyph") for c in kids}
     assert by_sid == {
         "conceptual": "cmd",
@@ -91,6 +93,100 @@ def test_impl_section_nav_children_stamps_level_glyphs() -> None:
         "physical-erd": "pdm",
         "overview": None,
     }
+
+
+def _solution_sections() -> list[PublicationSection]:
+    return [
+        PublicationSection(id="package", title="Package", type="key-value", kind="overview"),
+        PublicationSection(id="conceptual", title="Conceptual entities", type="entity-table"),
+        PublicationSection(id="logical", title="Logical entities", type="entity-table"),
+        PublicationSection(
+            id="logical-erd", title="Logical ER diagram", type="mermaid-diagram"
+        ),
+        PublicationSection(id="physical", title="Physical objects", type="entity-table"),
+        PublicationSection(
+            id="physical-erd", title="Physical ER diagram", type="mermaid-diagram"
+        ),
+        PublicationSection(
+            id="slice-summary", title="Vertical slice summary", type="key-value"
+        ),
+        PublicationSection(id="slice-nodes", title="Slice graph nodes", type="entity-table"),
+        PublicationSection(
+            id="slice-relations", title="Slice universe relations", type="entity-table"
+        ),
+        PublicationSection(
+            id="model-assessment",
+            title="Оценка соответствия требованиям модели",
+            type="entity-table",
+        ),
+    ]
+
+
+def test_group_solution_impl_nav_nests_five_folders() -> None:
+    mod = PublicationModule(
+        module_id="moex:module:crm",
+        title="CRM",
+        sections=_solution_sections(),
+    )
+    kids = impl_section_nav_children("crm-solution", mod)
+    assert [c.id for c in kids] == [
+        "implnav:crm-solution:group:overview",
+        "implnav:crm-solution:group:conceptual",
+        "implnav:crm-solution:group:logical",
+        "implnav:crm-solution:group:physical",
+        "implnav:crm-solution:group:requirements",
+    ]
+    overview = kids[0]
+    assert overview.attributes.get("kind") == "group"
+    assert overview.attributes.get("nav_group") == "overview"
+    assert overview.attributes.get("section_root") is None
+    assert overview.attributes.get("section_id") is None
+    assert [c.attributes["section_id"] for c in overview.children] == [
+        "package",
+        "slice-summary",
+        "slice-relations",
+        "slice-nodes",
+    ]
+    assert kids[1].title == "Концептуальная модель"
+    assert kids[1].attributes.get("group_style") == "section_folder"
+    assert kids[1].attributes.get("nav_glyph") == "cmd"
+    assert [c.attributes["section_id"] for c in kids[1].children] == ["conceptual"]
+    assert [c.attributes["section_id"] for c in kids[2].children] == [
+        "logical",
+        "logical-erd",
+    ]
+    assert kids[2].attributes.get("nav_glyph") == "ldm"
+    assert [c.attributes["section_id"] for c in kids[3].children] == [
+        "physical",
+        "physical-erd",
+    ]
+    assert kids[3].attributes.get("nav_glyph") == "pdm"
+    assert [c.attributes["section_id"] for c in kids[4].children] == ["model-assessment"]
+    assert kids[4].title == "Требования"
+
+
+def test_group_solution_impl_nav_passthrough_without_required_set() -> None:
+    leaves = [
+        PublicationItem(
+            id="implnav:x:overview",
+            title="Overview",
+            attributes={
+                "kind": "section_ref",
+                "section_id": "overview",
+                "target_module_id": "moex:module:x",
+            },
+        ),
+        PublicationItem(
+            id="implnav:x:classes",
+            title="Classes",
+            attributes={
+                "kind": "section_ref",
+                "section_id": "explorer",
+                "target_module_id": "moex:module:x",
+            },
+        ),
+    ]
+    assert group_solution_impl_nav("x", leaves) is leaves
 
 
 def test_attach_impl_section_nav_children() -> None:
@@ -157,6 +253,13 @@ def _iter_implementation_refs(items: list[PublicationItem]):
         yield from _iter_implementation_refs(item.children or [])
 
 
+def _iter_section_refs(items: list[PublicationItem]):
+    for item in items or []:
+        if (item.attributes or {}).get("kind") == "section_ref":
+            yield item
+        yield from _iter_section_refs(item.children or [])
+
+
 def test_repo_dams_trading_has_nested_section_refs() -> None:
     modules = compile_modules(REPO, enforce_publication_contract=False)
     catalog = compile_catalog(REPO, modules)
@@ -167,10 +270,42 @@ def test_repo_dams_trading_has_nested_section_refs() -> None:
     trading = _find_item(impls.children or [], "trading-solution")
     assert trading is not None
     assert trading.children
+    top_ids = [c.id for c in trading.children]
+    assert top_ids == [
+        "implnav:trading-solution:group:overview",
+        "implnav:trading-solution:group:conceptual",
+        "implnav:trading-solution:group:logical",
+        "implnav:trading-solution:group:physical",
+        "implnav:trading-solution:group:requirements",
+    ]
+    leaves = [
+        c
+        for c in _iter_section_refs(trading.children or [])
+    ]
+    assert leaves
     assert all(
         c.attributes.get("target_module_id") == "moex:module:trading-solution"
-        for c in trading.children
+        for c in leaves
     )
+
+
+def test_repo_dams_crm_solution_nav_folders() -> None:
+    modules = compile_modules(REPO, enforce_publication_contract=False)
+    catalog = compile_catalog(REPO, modules)
+    enrich_dams_explorer_implementations(modules, catalog)
+    dams = next(m for m in modules if m.module_id == DAMS_MODULE)
+    explorer = next(s for s in dams.sections if s.type == "explorer")
+    impls = next(i for i in explorer.items if i.id == "group:implementations")
+    crm = _find_item(impls.children or [], "crm-solution")
+    assert crm is not None
+    assert [c.title for c in crm.children] == [
+        "Overview",
+        "Концептуальная модель",
+        "Логическая модель",
+        "Физическая модель",
+        "Требования",
+    ]
+    assert_impl_section_nav_coverage(crm, modules)
 
 
 def test_repo_dams_impl_folders_group_solutions_and_projects() -> None:

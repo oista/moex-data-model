@@ -63,6 +63,20 @@ def test_js_explorer_roots_collapse_symmetrically():
     assert "openGroups.add(found.group.id)" in open_item
 
 
+def test_js_nav_implementations_band_class():
+    subtree = JS.split("function appendPublicationSubtree")[1].split(
+        "function appendCatalogNav"
+    )[0]
+    assert 'section_root === "implementations"' in subtree
+    assert "nav-implementations" in subtree
+
+
+def test_css_nav_implementations_darker_band():
+    css = assemble_css()
+    assert ".nav-group.nav-implementations" in css
+    assert "color-mix(in srgb, var(--text) 5%, var(--surface-1))" in css
+
+
 def test_css_active_gray_and_spec_pill_dark():
     css = assemble_css()
     assert "--selection-bg: #eef0f3" in css
