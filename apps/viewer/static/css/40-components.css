@@ -674,6 +674,41 @@ a.table-item-link:hover {
   border-bottom: 1px solid var(--border);
 }
 
+.glossary-relations-layout {
+  display: grid;
+  grid-template-rows: minmax(160px, 0.45fr) minmax(180px, 0.55fr);
+  gap: 12px;
+  height: min(70vh, calc(100vh - 220px));
+  min-height: 420px;
+}
+.glossary-relations-pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  padding: 8px;
+}
+.glossary-relations-pane > .section-toolbar {
+  flex: none;
+}
+.glossary-relations-pane > .table-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+.glossary-relations-pane > .pager {
+  flex: none;
+}
+.glossary-relations-pane > .glossary-relations-empty {
+  margin: 8px 4px;
+}
+tr.glossary-relations-pinned {
+  background: var(--surface-2);
+}
+
 .tree-layout { display: grid; grid-template-columns: 1fr 320px; gap: 16px; }
 .tree-node { margin-left: 0; }
 .tree-node .children { margin-left: 16px; border-left: 1px dashed var(--border); padding-left: 8px; }

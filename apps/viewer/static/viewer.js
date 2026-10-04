@@ -5000,6 +5000,37 @@
     );
   }
 
+  /** ADR-027 associative neighbours only (see_also). Union over selected ids. */
+  function collectGlossarySeeAlsoNeighbours(section, selectedIds) {
+    const selected = selectedIds instanceof Set ? selectedIds : new Set(selectedIds || []);
+    const selectedKeys = new Set();
+    selected.forEach((id) => {
+      selectedKeys.add(String(id));
+      selectedKeys.add(canonicalGlossaryId(id));
+    });
+    const out = new Map();
+    selected.forEach((fromId) => {
+      const fromItem = resolveItemInGlossary(section, fromId);
+      if (!fromItem) return;
+      const seeAlso = Array.isArray(fromItem.attributes?.see_also)
+        ? fromItem.attributes.see_also
+        : [];
+      seeAlso.forEach((entry) => {
+        const raw = relTargetId(entry);
+        if (!raw) return;
+        const target = resolveItemInGlossary(section, raw);
+        if (!target) return;
+        const tid = target.id;
+        if (selectedKeys.has(tid) || selectedKeys.has(canonicalGlossaryId(tid))) return;
+        const rel =
+          entry && typeof entry === "object" && entry.rel ? String(entry.rel) : "";
+        if (!out.has(tid)) out.set(tid, []);
+        out.get(tid).push({ fromId: fromItem.id, rel });
+      });
+    });
+    return out;
+  }
+
   function glossaryTaxonomyParentIds(item) {
     const attrs = item?.attributes || {};
     if (Array.isArray(attrs.taxonomy_parents) && attrs.taxonomy_parents.length) {
@@ -5357,6 +5388,295 @@
     return root;
   }
 
+  function renderGlossaryRelations(mod, section) {
+    const columns = pickGlossaryListColumns(section);
+    const cols = columns.length ? columns : ["title", "description"];
+    const selected = new Set();
+    const state = {
+      sortCol: null,
+      sortDir: "asc",
+      filters: {},
+      page: 0,
+      query: "",
+    };
+
+    const layout = document.createElement("div");
+    layout.className = "glossary-relations-layout";
+
+    const upper = document.createElement("div");
+    upper.className = "glossary-relations-pane glossary-relations-pane--picker";
+    const toolbar = document.createElement("div");
+    toolbar.className = "section-toolbar";
+    const filterSelects = document.createElement("div");
+    filterSelects.className = "chips";
+    (section.filterable || []).forEach((col) => {
+      const values = [
+        ...new Set(section.items.map((i) => cellValue(i, col)).filter(Boolean)),
+      ].sort();
+      const sel = document.createElement("select");
+      sel.innerHTML =
+        `<option value="">${escapeHtml(col)}: all</option>` +
+        values.map((v) => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join("");
+      sel.addEventListener("change", () => {
+        if (sel.value) state.filters[col] = sel.value;
+        else delete state.filters[col];
+        state.page = 0;
+        paint();
+      });
+      filterSelects.appendChild(sel);
+    });
+    const q = document.createElement("input");
+    q.type = "search";
+    q.placeholder = "Filter rows…";
+    q.addEventListener("input", () => {
+      state.query = q.value.trim().toLowerCase();
+      state.page = 0;
+      paint();
+    });
+    toolbar.appendChild(filterSelects);
+    toolbar.appendChild(q);
+    const chips = document.createElement("div");
+    chips.className = "chips";
+    toolbar.appendChild(chips);
+    upper.appendChild(toolbar);
+    const upperScroll = document.createElement("div");
+    upperScroll.className = "table-scroll";
+    const upperTable = document.createElement("table");
+    upperTable.className = "data-table";
+    upperScroll.appendChild(upperTable);
+    upper.appendChild(upperScroll);
+    const pager = document.createElement("div");
+    pager.className = "pager";
+    upper.appendChild(pager);
+
+    const lower = document.createElement("div");
+    lower.className = "glossary-relations-pane glossary-relations-pane--results";
+    const lowerScroll = document.createElement("div");
+    lowerScroll.className = "table-scroll";
+    const lowerTable = document.createElement("table");
+    lowerTable.className = "data-table";
+    lowerScroll.appendChild(lowerTable);
+    const lowerEmpty = document.createElement("p");
+    lowerEmpty.className = "muted glossary-relations-empty";
+    lower.appendChild(lowerEmpty);
+    lower.appendChild(lowerScroll);
+
+    layout.appendChild(upper);
+    layout.appendChild(lower);
+
+    function sortRows(rows) {
+      const list = rows.slice();
+      if (state.sortCol) {
+        const col = state.sortCol;
+        const dir = state.sortDir === "asc" ? 1 : -1;
+        list.sort(
+          (a, b) =>
+            cellValue(a, col).localeCompare(cellValue(b, col), undefined, {
+              numeric: true,
+            }) * dir
+        );
+      } else {
+        list.sort((a, b) =>
+          (a.title || a.id).localeCompare(b.title || b.id, undefined, { numeric: true })
+        );
+      }
+      return list;
+    }
+
+    function matchesFilters(item) {
+      for (const [col, val] of Object.entries(state.filters)) {
+        if (cellValue(item, col) !== val) return false;
+      }
+      if (state.query) {
+        const hit =
+          cols.some((c) => cellValue(item, c).toLowerCase().includes(state.query)) ||
+          (item.description || "").toLowerCase().includes(state.query);
+        if (!hit) return false;
+      }
+      return true;
+    }
+
+    function bindTableChrome(tableEl, onHeaderClick) {
+      tableEl.querySelectorAll("th[data-col]").forEach((th) => {
+        th.addEventListener("click", () => onHeaderClick(th.dataset.col));
+      });
+      tableEl.querySelectorAll(".copy-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          navigator.clipboard?.writeText(btn.dataset.copy || "");
+        });
+      });
+      tableEl.querySelectorAll(".expand-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const span = btn.previousElementSibling;
+          span.classList.toggle("clamped");
+          if (!span.classList.contains("clamped")) span.textContent = span.dataset.full;
+          else span.textContent = span.dataset.full.slice(0, 160) + "…";
+          btn.textContent = span.classList.contains("clamped") ? "more" : "less";
+        });
+      });
+    }
+
+    function rowCellsHtml(item) {
+      return cols
+        .map((c) => {
+          const raw = cellValue(item, c);
+          return `<td>${formatTableCellHtml(c, raw, item, mod, section)}</td>`;
+        })
+        .join("");
+    }
+
+    function paintLower() {
+      if (!selected.size) {
+        lowerEmpty.hidden = false;
+        lowerEmpty.textContent =
+          "Отметьте термины сверху, чтобы увидеть связанные.";
+        lowerScroll.hidden = true;
+        lowerTable.innerHTML = "";
+        return;
+      }
+      const neigh = collectGlossarySeeAlsoNeighbours(section, selected);
+      if (!neigh.size) {
+        lowerEmpty.hidden = false;
+        lowerEmpty.textContent =
+          "Нет ассоциативных связей у выбранных терминов.";
+        lowerScroll.hidden = true;
+        lowerTable.innerHTML = "";
+        return;
+      }
+      lowerEmpty.hidden = true;
+      lowerScroll.hidden = false;
+      const targets = [...neigh.keys()]
+        .map((id) => resolveItemInGlossary(section, id))
+        .filter(Boolean);
+      const sorted = sortRows(targets);
+      const thead = `<thead><tr>${cols
+        .map((c) => `<th>${escapeHtml(c)}</th>`)
+        .join("")}<th>Связь</th></tr></thead>`;
+      const tbody = `<tbody>${sorted
+        .map((item) => {
+          const edges = neigh.get(item.id) || [];
+          const linkText = edges
+            .map((e) => {
+              const from = resolveItemInGlossary(section, e.fromId);
+              const fromLabel = glossaryTermLabel(from) || e.fromId;
+              return e.rel ? `${fromLabel} → ${e.rel}` : fromLabel;
+            })
+            .join(", ");
+          return `<tr data-item-id="${escapeHtml(item.id)}">${rowCellsHtml(
+            item
+          )}<td>${escapeHtml(linkText)}</td></tr>`;
+        })
+        .join("")}</tbody>`;
+      lowerTable.innerHTML = thead + tbody;
+      bindTableChrome(lowerTable, () => {});
+    }
+
+    function paint() {
+      chips.innerHTML = "";
+      Object.entries(state.filters).forEach(([col, val]) => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "chip";
+        chip.innerHTML = `${escapeHtml(col)}=${escapeHtml(val)} <span class="x">×</span>`;
+        chip.addEventListener("click", () => {
+          delete state.filters[col];
+          paint();
+        });
+        chips.appendChild(chip);
+      });
+
+      const pinned = sortRows(
+        (section.items || []).filter((i) => selected.has(i.id))
+      );
+      const unpinned = sortRows(
+        (section.items || []).filter((i) => !selected.has(i.id) && matchesFilters(i))
+      );
+      const pages = Math.max(1, Math.ceil(unpinned.length / PAGE_SIZE));
+      if (state.page >= pages) state.page = pages - 1;
+      const slice = unpinned.slice(
+        state.page * PAGE_SIZE,
+        (state.page + 1) * PAGE_SIZE
+      );
+
+      const headCols = `<th aria-label="Select"></th>${cols
+        .map(
+          (c) =>
+            `<th data-col="${escapeHtml(c)}">${escapeHtml(c)}${
+              state.sortCol === c ? (state.sortDir === "asc" ? " ▲" : " ▼") : ""
+            }</th>`
+        )
+        .join("")}`;
+
+      function pickerRow(item, pinnedRow) {
+        const checked = selected.has(item.id) ? " checked" : "";
+        const cls = pinnedRow ? ' class="glossary-relations-pinned"' : "";
+        return `<tr data-item-id="${escapeHtml(item.id)}"${cls}>
+          <td><input type="checkbox" class="glossary-relations-check" data-item-id="${escapeHtml(
+            item.id
+          )}"${checked} /></td>
+          ${rowCellsHtml(item)}
+        </tr>`;
+      }
+
+      upperTable.innerHTML =
+        `<thead><tr>${headCols}</tr></thead><tbody>${pinned
+          .map((i) => pickerRow(i, true))
+          .concat(slice.map((i) => pickerRow(i, false)))
+          .join("")}</tbody>`;
+
+      bindTableChrome(upperTable, (col) => {
+        if (state.sortCol === col) state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+        else {
+          state.sortCol = col;
+          state.sortDir = "asc";
+        }
+        paint();
+      });
+      upperTable.querySelectorAll(".glossary-relations-check").forEach((cb) => {
+        cb.addEventListener("click", (e) => e.stopPropagation());
+        cb.addEventListener("change", () => {
+          const id = cb.dataset.itemId;
+          if (cb.checked) selected.add(id);
+          else selected.delete(id);
+          state.page = 0;
+          paint();
+        });
+      });
+
+      pager.innerHTML = `<span class="muted">${unpinned.length} rows</span>`;
+      if (pages > 1) {
+        const prev = document.createElement("button");
+        prev.type = "button";
+        prev.textContent = "Prev";
+        prev.disabled = state.page === 0;
+        prev.addEventListener("click", () => {
+          state.page--;
+          paint();
+        });
+        const next = document.createElement("button");
+        next.type = "button";
+        next.textContent = "Next";
+        next.disabled = state.page >= pages - 1;
+        next.addEventListener("click", () => {
+          state.page++;
+          paint();
+        });
+        pager.appendChild(prev);
+        pager.appendChild(
+          document.createTextNode(` ${state.page + 1} / ${pages} `)
+        );
+        pager.appendChild(next);
+      }
+
+      paintLower();
+    }
+
+    paint();
+    return layout;
+  }
+
   function renderGlossary(mod, section) {
     const root = document.createElement("div");
     root.className = "glossary-section-tabs";
@@ -5385,6 +5705,13 @@
           label: "Иерархия",
           render(panel) {
             panel.appendChild(renderGlossaryHierarchyTable(mod, section));
+          },
+        },
+        {
+          id: "glossary-relations",
+          label: "Связи",
+          render(panel) {
+            panel.appendChild(renderGlossaryRelations(mod, section));
           },
         },
       ],

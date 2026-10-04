@@ -68,6 +68,8 @@ def test_js_glossary_section_tabs_and_term_links():
     assert "function renderGlossaryOverview" in JS
     assert "function renderGlossaryListTable" in JS
     assert "function renderGlossaryHierarchyTable" in JS
+    assert "function renderGlossaryRelations" in JS
+    assert "function collectGlossarySeeAlsoNeighbours" in JS
     assert "function resolveGlossaryTermPageTarget" in JS
     assert "function pickGlossaryListColumns" in JS
     assert "function buildGlossaryChildrenIndex" in JS
@@ -79,13 +81,26 @@ def test_js_glossary_section_tabs_and_term_links():
     assert 'id: "overview"' in gloss
     assert 'id: "list"' in gloss
     assert 'id: "hierarchy"' in gloss
+    assert 'id: "glossary-relations"' in gloss
     assert 'label: "Список"' in gloss
     assert 'label: "Иерархия"' in gloss
+    assert 'label: "Связи"' in gloss
+    assert "Отметьте термины сверху, чтобы увидеть связанные." in JS
+    assert "Нет ассоциативных связей у выбранных терминов." in JS
+    neigh = JS.split("function collectGlossarySeeAlsoNeighbours")[1].split(
+        "function glossaryTaxonomyParentIds"
+    )[0]
+    assert "see_also" in neigh
+    assert "taxonomy_parents" not in neigh
+    assert "definition_source" not in neigh
     assert 'col === "name" || col === "title"' in JS
     assert 'section.type === "glossary"' in JS
     assert (
         'No hierarchy or definition-override links in this glossary.' in JS
     )
+    css = assemble_css()
+    assert ".glossary-relations-layout" in css
+    assert ".glossary-relations-pane" in css
 
 
 def test_section_payload_includes_instance_of():
