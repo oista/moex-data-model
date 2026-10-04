@@ -1143,11 +1143,10 @@ a {
   overflow: hidden;
 }
 a.spec-link {
+  display: inline-flex;
+  align-items: center;
   text-decoration: none;
-  color: inherit;
-}
-a.spec-link:hover {
-  border-color: var(--link);
+  color: var(--link);
 }
 a.table-item-link {
   color: var(--link);

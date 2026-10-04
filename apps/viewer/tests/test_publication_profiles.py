@@ -132,8 +132,16 @@ def test_wrap_linkml_specification_roots_nests_packages_under_classes():
     roots = wrap_linkml_specification_roots([pkg])
     assert [r.id for r in roots] == ["group:overview", "group:classes"]
     assert roots[0].attributes.get("section_root") == "overview"
+    assert roots[0].children[0].id == "group:overview-glossary"
+    assert roots[0].children[0].children[0].attributes.get("section_id") == "glossary"
     assert roots[1].attributes.get("section_root") == "classes"
     assert roots[1].children[0].id == "group:moex_dsp"
+
+
+def test_linkml_specification_recommends_glossary():
+    spec = profile_spec("linkml-specification")
+    assert spec is not None
+    assert "glossary" in spec.recommended
 
 
 def test_publication_contract_coverage_hard_fails_on_missing_satisfies(tmp_path: Path):

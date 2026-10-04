@@ -79,7 +79,10 @@ def test_wrap_roots_placeholder_implementations(tmp_path: Path):
         "group:implementations",
     ]
     assert roots[0].attributes.get("section_root") == "overview"
-    assert all(c.attributes.get("kind") == "section_ref" for c in roots[0].children)
+    assert all(
+        c.attributes.get("kind") == "section_ref" for c in roots[0].children[:4]
+    )
+    assert roots[0].children[4].id == "group:overview-glossary"
     assert roots[1].children[0].id == "group:pkg"
     assert roots[2].children
     unknown = next(

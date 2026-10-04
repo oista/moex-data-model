@@ -22,8 +22,8 @@ The same domain concept (`owl:Class` / LinkML `class`) appeared under different 
 ## Decision
 
 1. **One semantic name `class`** for LinkML classes and OWL named classes. Differences stay in the renderer selected by publication profile (`data-structure` vs `ontology-list`), as in ADR-016.
-2. **Glossary (ontology profile)** is a flat alphabetical **view** of the same class entities from the same source, not a separate data set. Profile metamodel terms (`FiboDomain`, IRI patterns, …) are documented in README / `metamodel/*.yaml`, not duplicated as glossary rows. ADR-025 generalises this: every glossary is a view of definitions for a coverage (ontology / model / corporate), never a separate entity type.
-3. **Class hierarchy** uses asserted `subClassOf` (preview: `parent_local_name`). Domain grouping (`source_domain`) nests under the Classes root. Multiple inheritance may repeat a node in several branches; the card URL/id stays canonical. Imported (`owl:imports`) classes may carry `origin`; preview data are `own`. Associative «related terms» (See also) are **not** hierarchy edges; they are derived separately when object-property data exist ([ADR-027](ADR-027-glossary-term-relations.md)).
+2. **Glossary (ontology profile)** is a flat alphabetical **view** of the same class entities from the same source, not a separate data set. Profile metamodel terms (`FiboDomain`, IRI patterns, …) are documented in README / `metamodel/*.yaml`, not duplicated as glossary rows. ADR-025 generalises this: every glossary is a view of definitions for a coverage (ontology / model / corporate), never a separate entity type. **Nav:** under Overview a Glossary folder may group terms by **definition site** (schema package / domain→module); that grouping is not a second taxonomy and does not replace the flat A–Z section or the Classes `subClassOf` tree. Term cards follow [ADR-027](ADR-027-glossary-term-relations.md) (Taxonomy / See also / Assignment). Explorer leaf wire-ids may use a `glossary:` prefix to avoid colliding with Classes nodes; semantic identity remains the class/enum id.
+3. **Class hierarchy** uses asserted `subClassOf` (preview: `parent_local_name`). Domain grouping (`source_domain`) nests under the Classes root. Multiple inheritance may repeat a node in several branches; the card URL/id stays canonical. Imported (`owl:imports`) classes may carry `origin` (`own` \| `imported` — not ConceptualEntity `genesis_kind`); preview data are `own`. Associative «related terms» (See also) are **not** hierarchy edges; they are derived separately when object-property data exist ([ADR-027](ADR-027-glossary-term-relations.md)).
 4. **Anonymous classes / restrictions** do not appear in the tree (card detail later; out of this increment).
 5. **FIBO Spec module (`edmc.fibo`)** publishes a class index from release preview data under kind `classes`, while metamodel organization moves to:
    - **Модули** → `schema-files` (domains, modules, ontology documents / `owl:imports` axis)
@@ -42,6 +42,7 @@ The same domain concept (`owl:Class` / LinkML `class`) appeared under different 
 - ADR-016 table for `ontology` profile is superseded by the ProfileSpec above.
 - `moex:module:fibo` (FIBO Glossary) may keep publishing the same CSV as a release preview; alignment to `profile: ontology` is optional follow-up.
 - Viewer fills Classes from the glossary source at build time so hierarchy and glossary stay in sync.
+- LinkML specification modules may also publish Overview→Glossary definition-site folders plus a generated A–Z glossary view (`glossary` is **recommended** on `linkml-specification`, ADR-016).
 
 ## Alternatives
 

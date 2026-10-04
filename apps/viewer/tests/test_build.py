@@ -174,7 +174,8 @@ def test_repo_golden_three_modules():
     assert "group:classes" in html
     assert "group:schema-files" in html
     assert "group:identity" in html
-    assert "group:glossary" in html
+    assert "group:overview-glossary" in html
+    assert '"id": "group:glossary"' not in html
     assert "group:overview" in html
     assert "group:fibo-domains" in html
     assert "group:fibo-patterns" in html

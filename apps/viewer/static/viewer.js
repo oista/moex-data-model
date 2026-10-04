@@ -4148,16 +4148,23 @@
             card.appendChild(parentLine);
           }
         }
-        const known = new Set((section.items || []).map((i) => i.id));
-        const expl = explorerSection(mod);
-        if (expl) {
-          collectExplorerIds(expl).forEach((id) => known.add(id));
+        const showAdr027 =
+          item.attributes?.glossary_view ||
+          item.attributes?.origin ||
+          Array.isArray(item.attributes?.taxonomy_parents) ||
+          Array.isArray(item.attributes?.see_also);
+        if (showAdr027) {
+          const known = new Set((section.items || []).map((i) => i.id));
+          const expl = explorerSection(mod);
+          if (expl) {
+            collectExplorerIds(expl).forEach((id) => known.add(id));
+          }
+          appendAdr027RelationBlocks(card, mod, item, {
+            known,
+            expl: null,
+            sectionId: section.id,
+          });
         }
-        appendAdr027RelationBlocks(card, mod, item, {
-          known,
-          expl: null,
-          sectionId: section.id,
-        });
         card.addEventListener("click", (e) => {
           if (e.target.closest("a, button")) return;
           setHash({

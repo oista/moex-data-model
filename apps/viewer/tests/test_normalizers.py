@@ -465,19 +465,22 @@ def test_dams_explorer_real_schema():
     assert overview.attributes.get("section_root") == "overview"
     assert "section_id" not in (overview.attributes or {})
     kids = overview.children
-    assert [c.attributes.get("section_id") for c in kids] == [
+    assert [c.attributes.get("section_id") for c in kids[:4]] == [
         "overview",
         "classes",
         "slots",
         "enums",
     ]
-    assert all(c.attributes.get("kind") == "section_ref" for c in kids)
-    assert [c.title for c in kids] == [
+    assert all(c.attributes.get("kind") == "section_ref" for c in kids[:4])
+    assert [c.title for c in kids[:4]] == [
         "Overview",
         "All classes",
         "All slots",
         "All enumerations",
     ]
+    assert kids[4].id == "group:overview-glossary"
+    assert kids[4].attributes.get("group_style") == "section_folder"
+    assert kids[4].children[0].attributes.get("section_id") == "glossary"
 
     classes_root = next(g for g in out.items if g.id == "group:classes")
     titles = {g.title for g in classes_root.children}
@@ -602,10 +605,10 @@ def test_json_fibo_profile_explorer_wraps_roots(tmp_path: Path):
         "group:classes",
         "group:schema-files",
         "group:identity",
-        "group:glossary",
         "group:implementations",
     ]
     assert "group:taxonomy" not in ids
+    assert "group:glossary" not in ids
     classes = next(i for i in out.items if i.id == "group:classes")
     assert classes.children == []
     modules = next(i for i in out.items if i.id == "group:schema-files")
@@ -618,3 +621,5 @@ def test_json_fibo_profile_explorer_wraps_roots(tmp_path: Path):
     }
     overview = next(i for i in out.items if i.id == "group:overview")
     assert "section_id" not in (overview.attributes or {})
+    gloss = next(c for c in overview.children if c.id == "group:overview-glossary")
+    assert gloss.children[0].attributes.get("section_id") == "glossary"

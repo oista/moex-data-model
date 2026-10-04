@@ -37,7 +37,7 @@
 
 | Profile | Required | Recommended | Forbidden |
 |---|---|---|---|
-| `linkml-specification` | overview, classes, schema-files | enumerations, slots | taxonomy |
+| `linkml-specification` | overview, classes, schema-files | enumerations, slots, glossary | taxonomy |
 | `ontology` | overview, classes, glossary | schema-files, identity | enumerations, slots |
 | `implementation` | overview, conformance | bindings, data-flows, model-assessment | taxonomy |
 

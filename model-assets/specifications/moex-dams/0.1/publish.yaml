@@ -30,9 +30,8 @@ sections:
   - id: glossary
     title: Glossary
     description: >
-      Key DAMS terms for readers (hand-curated projection). Candidate for
-      generation from schema class descriptions per ADR-025; not an
-      authoritative definition source.
+      Flat A–Z view of DAMS classes/enums (ADR-025). Rows are regenerated from
+      SchemaView at viewer build; the JSON stub is not authoritative.
     type: glossary
     kind: glossary
     source:
@@ -46,6 +45,8 @@ sections:
       - kind
     filterable:
       - kind
+      - origin
+      - defined_in
 
   - id: classes
     title: All classes

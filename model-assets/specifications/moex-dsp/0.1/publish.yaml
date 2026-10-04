@@ -33,7 +33,9 @@ sections:
 
   - id: glossary
     title: Glossary
-    description: Business-facing terms of the Data Specification Player metamodel
+    description: >
+      Flat A–Z view of DSP metamodel classes/enums (ADR-025). Regenerated from
+      SchemaView at viewer build; JSON stub is not authoritative.
     kind: glossary
     type: glossary
     source:
@@ -47,6 +49,8 @@ sections:
       - kind
     filterable:
       - kind
+      - origin
+      - defined_in
     tags:
       - dsp
       - glossary
