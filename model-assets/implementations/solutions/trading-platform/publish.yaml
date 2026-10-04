@@ -26,25 +26,8 @@ sections:
       format: yaml
       path: trading-solution-model.yaml
 
-  - id: conceptual
-    title: Conceptual entities
-    kind: classes
-    type: entity-table
-    instance_of: ConceptualEntity
-    source:
-      format: yaml
-      path: trading-solution-model.yaml
-      select: conceptual_entities
-    key_column: element_id
-    columns:
-      - name
-      - title
-      - description
-      - entity_type
-      - data_class
-    filterable:
-      - entity_type
-      - data_class
+  # Conceptual entities live in moex-enterprise-conceptual-model
+  # (conceptual_implementation_ref / ADR-029); solution body omits local copies.
 
   - id: logical
     title: Logical entities

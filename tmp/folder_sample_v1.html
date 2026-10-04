@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Folder sample v1b</title>
+<style>
+  body { margin: 0; font-family: "Segoe UI", Arial, sans-serif; background: #f5f6f8; color: #17191d; }
+  .panel { padding: 24px 28px; }
+  .dark { background: #141414; color: #eee; }
+  h1 { font-size: 16px; margin: 0 0 6px; font-weight: 650; }
+  p { margin: 0 0 16px; font-size: 13px; opacity: .72; }
+  .row { display: flex; align-items: center; gap: 14px; margin: 12px 0; }
+  .folder {
+    display: inline-flex; align-items: center; justify-content: center;
+    position: relative; color: #8a8680;
+  }
+  .folder svg { display: block; overflow: visible; }
+  .folder svg .outline {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .folder svg .tab-slot { fill: currentColor; }
+  .folder .letter {
+    position: absolute; left: 0; right: 0;
+    top: 38%; text-align: center;
+    font-weight: 300; color: currentColor;
+    line-height: 1; pointer-events: none;
+  }
+  .folder.cdm { color: #c41e1e; }
+  .folder.ldm { color: #9a4a1a; }
+  .folder.pdm { color: #8a8178; }
+  .big { width: 160px; height: 128px; }
+  .big .letter { font-size: 42px; }
+  .nav { width: 20px; height: 16px; }
+  .nav .letter { font-size: 8px; top: 36%; }
+  .badge {
+    width: 16px; height: 16px; box-sizing: border-box;
+    border: 1px solid #8a8680; border-radius: 3px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: #8a8680;
+  }
+  .badge.kind-c { color: #2f6fed; border-color: #2f6fed; }
+  .badge.kind-e { color: #7b5ea7; border-color: #7b5ea7; }
+  .tree {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 8px; border-radius: 6px; font-size: 13px;
+    background: #fff; border: 1px solid #e6e8ec; margin: 8px 0;
+  }
+</style>
+</head>
+<body>
+<section class="panel dark">
+  <h1>Образец v1b — тонкий контур 1px</h1>
+  <p>Тот же вес линии, что у квадратных C / E в дереве.</p>
+  <div class="row">
+    <span class="folder ldm big">
+      <svg viewBox="0 0 24 20">
+        <path class="outline" d="M4.2 7.6V5.45A2.05 2.05 0 0 1 6.25 3.4h6.35L14.85 7.6h3.05A2.05 2.05 0 0 1 19.95 9.65v6.25A2.05 2.05 0 0 1 17.9 17.95H6.25A2.05 2.05 0 0 1 4.2 15.9V7.6Z"/>
+        <rect class="tab-slot" x="5.95" y="5.05" width="6.05" height="1.2" rx="0.6"/>
+      </svg>
+      <span class="letter">L</span>
+    </span>
+  </div>
+</section>
+<section class="panel">
+  <h1>Рядом с остальными иконками</h1>
+  <p>Папка 20×16, буквы 16×16, рамка 1px у всех.</p>
+  <div class="tree">
+    <span class="badge kind-c">C</span>
+    <span class="folder ldm nav">
+      <svg viewBox="0 0 24 20"><path class="outline" d="M4.2 7.6V5.45A2.05 2.05 0 0 1 6.25 3.4h6.35L14.85 7.6h3.05A2.05 2.05 0 0 1 19.95 9.65v6.25A2.05 2.05 0 0 1 17.9 17.95H6.25A2.05 2.05 0 0 1 4.2 15.9V7.6Z"/><rect class="tab-slot" x="5.95" y="5.05" width="6.05" height="1.2" rx="0.6"/></svg>
+      <span class="letter">L</span>
+    </span>
+    <span class="badge kind-e">E</span>
+    <span class="folder cdm nav">
+      <svg viewBox="0 0 24 20"><path class="outline" d="M4.2 7.6V5.45A2.05 2.05 0 0 1 6.25 3.4h6.35L14.85 7.6h3.05A2.05 2.05 0 0 1 19.95 9.65v6.25A2.05 2.05 0 0 1 17.9 17.95H6.25A2.05 2.05 0 0 1 4.2 15.9V7.6Z"/><rect class="tab-slot" x="5.95" y="5.05" width="6.05" height="1.2" rx="0.6"/></svg>
+      <span class="letter">C</span>
+    </span>
+    <span class="badge">G</span>
+    Логическая модель
+  </div>
+  <div class="tree">
+    <span class="folder cdm nav">
+      <svg viewBox="0 0 24 20"><path class="outline" d="M4.2 7.6V5.45A2.05 2.05 0 0 1 6.25 3.4h6.35L14.85 7.6h3.05A2.05 2.05 0 0 1 19.95 9.65v6.25A2.05 2.05 0 0 1 17.9 17.95H6.25A2.05 2.05 0 0 1 4.2 15.9V7.6Z"/><rect class="tab-slot" x="5.95" y="5.05" width="6.05" height="1.2" rx="0.6"/></svg>
+      <span class="letter">C</span>
+    </span>
+    Концептуальная модель
+  </div>
+  <div class="tree">
+    <span class="folder pdm nav">
+      <svg viewBox="0 0 24 20"><path class="outline" d="M4.2 7.6V5.45A2.05 2.05 0 0 1 6.25 3.4h6.35L14.85 7.6h3.05A2.05 2.05 0 0 1 19.95 9.65v6.25A2.05 2.05 0 0 1 17.9 17.95H6.25A2.05 2.05 0 0 1 4.2 15.9V7.6Z"/><rect class="tab-slot" x="5.95" y="5.05" width="6.05" height="1.2" rx="0.6"/></svg>
+      <span class="letter">P</span>
+    </span>
+    Физическая модель
+  </div>
+  <div class="tree">
+    <span class="folder nav">
+      <svg viewBox="0 0 24 20"><path class="outline" d="M4.2 7.6V5.45A2.05 2.05 0 0 1 6.25 3.4h6.35L14.85 7.6h3.05A2.05 2.05 0 0 1 19.95 9.65v6.25A2.05 2.05 0 0 1 17.9 17.95H6.25A2.05 2.05 0 0 1 4.2 15.9V7.6Z"/><rect class="tab-slot" x="5.95" y="5.05" width="6.05" height="1.2" rx="0.6"/></svg>
+    </span>
+    Обычная папка
+  </div>
+</section>
+</body>
+</html>

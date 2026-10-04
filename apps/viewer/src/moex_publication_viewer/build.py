@@ -256,10 +256,11 @@ _SECTION_ID_NAV_GLYPH: dict[str, str] = {
 }
 
 # Full solution-model publish.yaml set → nest under Overview / model folders.
+# ``conceptual`` is optional: ADR-029 solutions may omit local ConceptualEntity
+# and point at enterprise via conceptual_implementation_ref.
 _SOLUTION_NAV_REQUIRED_SECTION_IDS = frozenset(
     {
         "package",
-        "conceptual",
         "logical",
         "physical",
         "slice-summary",
@@ -408,17 +409,7 @@ def group_solution_impl_nav(
         },
         children=overview_kids,
     )
-    conceptual = _impl_folder(
-        folder_id=f"implnav:{catalog_impl_id}:group:conceptual",
-        title="Концептуальная модель",
-        description="Conceptual entities of the solution model.",
-        children=take(_SOLUTION_NAV_CONCEPTUAL_IDS),
-        extra_attrs={
-            "nav_glyph": "cdm",
-            "requirement_section": "CDM",
-            "nav_group": "conceptual",
-        },
-    )
+    conceptual_kids = take(_SOLUTION_NAV_CONCEPTUAL_IDS)
     logical = _impl_folder(
         folder_id=f"implnav:{catalog_impl_id}:group:logical",
         title="Логическая модель",
@@ -450,7 +441,22 @@ def group_solution_impl_nav(
     )
     docs_kids = take(_SOLUTION_NAV_DOCUMENTATION_IDS)
     leftovers = [leaf for leaf in leaves if (leaf.attributes or {}).get("section_id") not in claimed]
-    grouped = [overview, conceptual, logical, physical, requirements]
+    grouped = [overview]
+    if conceptual_kids:
+        grouped.append(
+            _impl_folder(
+                folder_id=f"implnav:{catalog_impl_id}:group:conceptual",
+                title="Концептуальная модель",
+                description="Conceptual entities of the solution model.",
+                children=conceptual_kids,
+                extra_attrs={
+                    "nav_glyph": "cdm",
+                    "requirement_section": "CDM",
+                    "nav_group": "conceptual",
+                },
+            )
+        )
+    grouped.extend([logical, physical, requirements])
     if docs_kids:
         grouped.append(
             PublicationItem(

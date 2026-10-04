@@ -377,9 +377,9 @@ def test_repo_dams_trading_has_nested_section_refs() -> None:
     assert trading is not None
     assert trading.children
     top_ids = [c.id for c in trading.children]
+    # No local conceptual section: concepts live in enterprise (ADR-029).
     assert top_ids == [
         "implnav:trading-solution:group:overview",
-        "implnav:trading-solution:group:conceptual",
         "implnav:trading-solution:group:logical",
         "implnav:trading-solution:group:physical",
         "implnav:trading-solution:group:requirements",

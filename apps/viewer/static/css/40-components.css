@@ -110,12 +110,16 @@
   overflow: visible;
   pointer-events: none;
 }
-.nav-kind.nav-kind-folder .nav-kind-folder-shape path {
-  fill: color-mix(in srgb, var(--muted) 12%, var(--surface-2, transparent));
+.nav-kind.nav-kind-folder .nav-kind-folder-shape .outline {
+  fill: none;
   stroke: currentColor;
-  stroke-width: 1.15;
+  stroke-width: 1;
   stroke-linejoin: round;
+  stroke-linecap: round;
   vector-effect: non-scaling-stroke;
+}
+.nav-kind.nav-kind-folder .nav-kind-folder-shape .tab-slot {
+  fill: currentColor;
 }
 .nav-kind.nav-kind-folder .nav-kind-folder-code,
 .nav-kind.nav-kind-folder .nav-kind-folder-letter {

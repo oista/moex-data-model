@@ -737,7 +737,7 @@
   }
 
   function folderShapeSvg() {
-    return `<svg class="nav-kind-folder-shape" viewBox="0 0 24 20" aria-hidden="true" focusable="false"><path d="M4.15 3.15h6.75L13.7 6.85h6.15A2.55 2.55 0 0 1 22.4 9.4v5.45A2.55 2.55 0 0 1 19.85 17.4H4.15A2.55 2.55 0 0 1 1.6 14.85V5.7A2.55 2.55 0 0 1 4.15 3.15z"/></svg>`;
+    return `<svg class="nav-kind-folder-shape" viewBox="0 0 24 20" aria-hidden="true" focusable="false"><path class="outline" d="M4.2 7.6V5.45A2.05 2.05 0 0 1 6.25 3.4h6.35L14.85 7.6h3.05A2.05 2.05 0 0 1 19.95 9.65v6.25A2.05 2.05 0 0 1 17.9 17.95H6.25A2.05 2.05 0 0 1 4.2 15.9V7.6Z"/><rect class="tab-slot" x="5.95" y="5.05" width="6.05" height="1.2" rx="0.6"/></svg>`;
   }
 
   function folderMarkHtml(extraClass, innerHtml) {
