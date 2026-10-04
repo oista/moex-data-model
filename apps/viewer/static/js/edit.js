@@ -234,15 +234,40 @@
     }
   }
 
+  function announce(msg) {
+    const el = document.getElementById("status-region");
+    if (el) el.textContent = msg;
+    try {
+      console.info("[moex-edit]", msg);
+    } catch (_) {
+      /* ignore */
+    }
+  }
+
   async function init() {
-    if (location.protocol === "file:") return;
+    if (location.protocol === "file:") {
+      announce("Edit mode: off (file://). Use moex-viewer serve.");
+      return;
+    }
     try {
       const resp = await fetch("/api/capabilities");
-      if (!resp.ok) return;
+      const ctype = (resp.headers.get("content-type") || "").toLowerCase();
+      if (!resp.ok || !ctype.includes("application/json")) {
+        announce(
+          "Edit mode: off — /api/capabilities not available (wrong server on this port?). " +
+            "Run: python -m moex_publication_viewer.cli serve --root . --port 8877"
+        );
+        return;
+      }
       const data = await resp.json();
-      if (!data.edit || !data.token) return;
+      if (!data.edit || !data.token) {
+        announce("Edit mode: off — capabilities missing token.");
+        return;
+      }
       editToken = data.token;
-    } catch {
+      announce("Edit mode: on — open an entity/class card to see «Править».");
+    } catch (e) {
+      announce("Edit mode: off — " + (e && e.message ? e.message : String(e)));
       return;
     }
     const content = document.getElementById("content");

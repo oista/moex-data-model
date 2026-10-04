@@ -6,8 +6,8 @@ prefixes:
   linkml: https://w3id.org/linkml/
   dams: https://data.moex.com/dams/
 imports:
-  - linkml:types
-  - moex-types
+- linkml:types
+- moex-types
 default_prefix: dams
 default_range: string
 
@@ -16,12 +16,12 @@ classes:
     abstract: true
     description: Локальная ссылочная проекция записи внешней мастер-системы; не является мастер-копией справочника.
     slots:
-      - registry_id
-      - registry_name
-      - registry_description
-      - master_system
-      - source_uri
-      - registry_status
+    - registry_id
+    - registry_name
+    - registry_description
+    - master_system
+    - source_uri
+    - registry_status
 
   ITSystem:
     is_a: RegistryEntry
@@ -31,8 +31,8 @@ classes:
     is_a: RegistryEntry
     description: ИТ-решение, объединяющее одну или несколько ИТ-систем; мастер данных — EAM.
     slots:
-      - member_system_refs
-      - platform_ref
+    - member_system_refs
+    - platform_ref
 
   ITPlatform:
     is_a: RegistryEntry
@@ -40,9 +40,9 @@ classes:
 
   BusinessDomain:
     is_a: RegistryEntry
-    description: Бизнес-домен или предметная область; мастер определяется архитектурным governance.
+    description: Бизнес-домен или предметная область; мастер определяется архитектурным governance
     slots:
-      - parent_domain_ref
+    - parent_domain_ref
 
   GlossaryTerm:
     is_a: RegistryEntry

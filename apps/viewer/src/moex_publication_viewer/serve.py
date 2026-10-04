@@ -14,7 +14,6 @@ from urllib.parse import urlparse
 from moex_publication_viewer.assets import assemble_css, assemble_js
 from moex_publication_viewer.build import (
     VIEWER_ROOT,
-    build,
     build_dsp_documentation_sidebar_siblings,
     build_search_index,
     compile_catalog,
@@ -85,11 +84,12 @@ class ViewerServeState:
             return index_path
 
     def rebuild(self, *, write_html: bool = True) -> Path:
-        """Initial / full rebuild (publication contract gate via ``build``)."""
-        with self.lock:
-            index = build(self.root, self.dist_dir)
-            self.refresh_from_disk(write_html=write_html)
-            return index
+        """Rebuild for serve: compile + HTML, no hard publication-contract gate.
+
+        Full ``build()`` is too heavy/fragile for local edit sessions; contract
+        stays on ``moex-viewer check`` / CI.
+        """
+        return self.refresh_from_disk(write_html=write_html)
 
     def allowed_origin(self, origin: str | None) -> bool:
         if not origin:
@@ -353,12 +353,21 @@ def serve(
     state = ViewerServeState(root, dist_dir, port)
     print(f"Building viewer from {root} …")
     index = state.rebuild(write_html=True)
-    print(f"Serving {index} on http://127.0.0.1:{port}/")
+    print(f"Edit targets registered: {len(state.registry)}")
+    print(f"Serving {index}")
+    print(f"Open:  http://127.0.0.1:{port}/")
+    print(f"Check: http://127.0.0.1:{port}/api/capabilities  (must return JSON, not 404)")
 
     handler = partial(ViewerHandler)
     # attach state
     ViewerHandler.state = state  # type: ignore[attr-defined]
-    httpd = ThreadingHTTPServer(("127.0.0.1", port), ViewerHandler)
+    try:
+        httpd = ThreadingHTTPServer(("127.0.0.1", port), ViewerHandler)
+    except OSError as exc:
+        raise SystemExit(
+            f"Port {port} is busy (another python/http.server?). "
+            f"Stop it or use --port N. Underlying error: {exc}"
+        ) from exc
     if open_browser:
         import webbrowser
 
