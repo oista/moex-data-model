@@ -6,7 +6,7 @@ publish call `specification-dams` and `publication` application handlers.
 ```text
 moex-model validate       → assess_implementation
 moex-model publish        → export_slice_projection (+ refuse generated-draft)
-moex-model diagram        → ModelPackage → DBML (+ sidecar manifest)
+moex-model diagram        → ModelPackage → DBML or Mermaid erDiagram (+ sidecar / SVG)
 moex-model import         → ER-dictionary ingest OR schema-automator draft
 moex-model map            → SSSOM / LinkML extract / linkml-map transform
 moex-model semantic-diff  → diff_implementations
@@ -33,6 +33,8 @@ py -3.14 -m pip install -e "./generated/contracts/moex-dams/0.1" `
 py -3.14 -m moex_model_cli validate --root .
 py -3.14 -m moex_model_cli publish --root .
 py -3.14 -m moex_model_cli diagram --root . --profile logical --out generated/artifacts/diagrams/trading-logical.dbml
+py -3.14 -m moex_model_cli diagram --root . --format mermaid --profile logical
+# → model-assets/.../publications/logical.erd.md (+ .svg if npx available)
 py -3.14 -m moex_model_cli map --root . --sssom model-assets/transformations/mappings/dams-fibo.sssom.yaml
 py -3.14 -m moex_model_cli map --root . `
   --transform model-assets/transformations/person-rename-code.yaml `

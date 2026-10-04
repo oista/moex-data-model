@@ -7,12 +7,20 @@
     click ModelPackage href "../ModelPackage"
       HasOwnership <|-- ModelPackage
         click HasOwnership href "../HasOwnership"
+      HasGovernanceClassification <|-- ModelPackage
+        click HasGovernanceClassification href "../HasGovernanceClassification"
+      HasPolicyBindings <|-- ModelPackage
+        click HasPolicyBindings href "../HasPolicyBindings"
       ModelElement <|-- ModelPackage
         click ModelElement href "../ModelElement"
       
       ModelPackage : aliases
         
       ModelPackage : api_version
+        
+      ModelPackage : classification_rationale
+        
+      ModelPackage : classification_source
         
       ModelPackage : conceptual_entities
         
@@ -85,6 +93,17 @@
         
         ModelPackage --> "*" GlossaryTerm : glossary_term_refs
         click GlossaryTerm href "../GlossaryTerm"
+    
+
+        
+      ModelPackage : governance_classification
+        
+          
+    
+        
+        
+        ModelPackage --> "0..1" GovernanceClassificationEnum : governance_classification
+        click GovernanceClassificationEnum href "../GovernanceClassificationEnum"
     
 
         
@@ -162,6 +181,17 @@
     
 
         
+      ModelPackage : policy_refs
+        
+          
+    
+        
+        
+        ModelPackage --> "*" Policy : policy_refs
+        click Policy href "../Policy"
+    
+
+        
       ModelPackage : relationships
         
           
@@ -170,6 +200,28 @@
         
         ModelPackage --> "*" Relationship : relationships
         click Relationship href "../Relationship"
+    
+
+        
+      ModelPackage : security_classification
+        
+          
+    
+        
+        
+        ModelPackage --> "0..1" SecurityClassificationEnum : security_classification
+        click SecurityClassificationEnum href "../SecurityClassificationEnum"
+    
+
+        
+      ModelPackage : sensitivity_term_refs
+        
+          
+    
+        
+        
+        ModelPackage --> "*" DataClassificationTerm : sensitivity_term_refs
+        click DataClassificationTerm href "../DataClassificationTerm"
     
 
         

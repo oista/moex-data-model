@@ -15,6 +15,7 @@ SectionType = Literal[
     "markdown-doc",
     "key-value",
     "explorer",
+    "mermaid-diagram",
 ]
 
 SourceFormat = Literal["yaml", "json", "csv", "markdown", "linkml-yaml"]

@@ -330,10 +330,13 @@ applies_to:
 `xor_slots` не используется для ownership, conceptual alignment и mapping coverage, потому что в этих областях одновременно могут быть допустимы:
 
 ```text
-owner override + inheritance rule
+local owner override + inherited effective owner (ADR-023 cascade)
 conceptual reference + alignment rationale
 physical field reference + transformation expression
 ```
+
+Флаг formal_checks `effective: true` читает значения после containment cascade
+(ADR-023), а не сырой YAML элемента.
 
 ### 4.2. Diagnostics
 
@@ -442,17 +445,13 @@ Wave 1 проверяет:
 - описание;
 - версию;
 - lifecycle status;
-- data owner либо формальное правило наследования ответственности.
+- data owner (`data_owner_ref`) на пакете как корень containment cascade
+  (ADR-023).
 
-Локальное уточнение ответственности поверх inheritance rule допускается.
-
-Правило ownership выражается как:
-
-\[
-DataOwnerRef \lor OwnershipInheritanceRule
-\]
-
-а не как строгий XOR.
+Потомки (логическая сущность, атрибут) могут не задавать владельца и наследуют
+эффективное значение от пакета; локальный override допускается покомпонентно
+(`data_owner_ref` / `data_steward_ref` / `owning_unit_ref`). Свободная строка
+`ownership_inheritance_rule` — только пояснение, не источник истины.
 
 #### GEN-002. Привязка к ИТ-решению
 
@@ -508,7 +507,7 @@ consumer group.
 - техническое имя;
 - однозначное определение;
 - lifecycle status;
-- owner/steward либо ownership inheritance rule;
+- owner/steward declared locally либо унаследованные effective-значения от пакета (ADR-023);
 - domain context;
 - solution data role;
 - `entity_type`;
@@ -691,7 +690,8 @@ relation/alignment/realization показывает, что данные озн�
 - required/optional semantics;
 - multivalued indicator;
 - lifecycle status, если он поддерживается моделью;
-- classification либо правило её наследования;
+- classification: локальный `governance_classification` либо наследование
+  эффективного значения от сущности/пакета (ADR-023 containment cascade);
 - definition и naming metadata согласно применимым правилам.
 
 ### 7.2. Status coverage между logical и physical слоями
@@ -1102,7 +1102,7 @@ XOR допустим, только когда два значения не мо�
 Не использовать XOR для:
 
 ```text
-owner_ref + ownership_inheritance_rule
+declared owner override + inherited effective owner
 conceptual_entity_refs + alignment_rationale
 physical_field_ref + transformation_expression
 ```
@@ -1110,8 +1110,9 @@ physical_field_ref + transformation_expression
 Корректные паттерны:
 
 ```text
-owner_ref OR inheritance_rule
-  при этом оба допустимы: rule + local override.
+package data_owner_ref (required root)
+  + optional local override on entity/attribute
+  (absent slot = inherit via ADR-023 cascade).
 
 conceptual refs OR valid status/rationale branch
   при этом refs + rationale допустимы.
@@ -1295,7 +1296,8 @@ Solution Data Model
 
 7. Planned не должен быть постоянной заменой mapping.
 
-8. Ownership inheritance не исключает локальный override.
+8. Containment cascade (ADR-023): absent slot наследует effective от родителя;
+   локальный override допустим; copy-down в YAML не используется.
 
 9. Source field и transformation expression могут сосуществовать.
 

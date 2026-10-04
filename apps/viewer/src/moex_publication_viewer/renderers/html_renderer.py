@@ -20,6 +20,7 @@ SECTION_TEMPLATES = {
     "markdown-doc": "section_markdown.html.j2",
     "key-value": "section_keyvalue.html.j2",
     "explorer": "section_tree.html.j2",
+    "mermaid-diagram": "section_mermaid.html.j2",
 }
 
 
@@ -51,6 +52,7 @@ def section_payload(section: PublicationSection) -> dict[str, Any]:
         "sort_order": section.sort_order,
         "items": [_item_to_dict(i) for i in section.items],
         "content": section.content,
+        "attributes": section.attributes or {},
         "tags": section.tags,
         "default_collapsed": section.default_collapsed,
     }

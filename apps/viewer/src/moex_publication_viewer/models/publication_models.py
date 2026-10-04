@@ -32,6 +32,7 @@ class PublicationSection(BaseModel):
     sort_order: str = "asc"
     items: list[PublicationItem] = Field(default_factory=list)
     content: str | None = None
+    attributes: dict[str, Any] = Field(default_factory=dict)
     tags: list[str] = Field(default_factory=list)
     default_collapsed: bool = False
 

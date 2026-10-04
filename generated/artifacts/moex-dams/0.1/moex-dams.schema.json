@@ -277,7 +277,7 @@
                     "type": "string"
                 },
                 "ownership_inheritance_rule": {
-                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
                     "type": [
                         "string",
                         "null"
@@ -518,7 +518,7 @@
                     "type": "string"
                 },
                 "ownership_inheritance_rule": {
-                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
                     "type": [
                         "string",
                         "null"
@@ -827,7 +827,7 @@
                     "type": "string"
                 },
                 "ownership_inheritance_rule": {
-                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
                     "type": [
                         "string",
                         "null"
@@ -1068,7 +1068,7 @@
                     "type": "string"
                 },
                 "ownership_inheritance_rule": {
-                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
                     "type": [
                         "string",
                         "null"
@@ -1317,7 +1317,7 @@
         },
         "HasGovernanceClassification": {
             "additionalProperties": false,
-            "description": "\u0411\u0430\u0437\u043e\u0432\u0430\u044f \u0438 \u0441\u043f\u0435\u0446\u0438\u0430\u043b\u044c\u043d\u0430\u044f \u043a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u044f \u0447\u0443\u0432\u0441\u0442\u0432\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438 \u0434\u0430\u043d\u043d\u044b\u0445.",
+            "description": "\u0411\u0430\u0437\u043e\u0432\u0430\u044f \u0438 \u0441\u043f\u0435\u0446\u0438\u0430\u043b\u044c\u043d\u0430\u044f \u043a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u044f \u0447\u0443\u0432\u0441\u0442\u0432\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438 \u0434\u0430\u043d\u043d\u044b\u0445. governance_classification \u0443\u0447\u0430\u0441\u0442\u0432\u0443\u0435\u0442 \u0432 containment cascade (ADR-023): \u043f\u0443\u0441\u0442\u043e\u0439 \u0441\u043b\u043e\u0442 \u043d\u0430\u0441\u043b\u0435\u0434\u0443\u0435\u0442\u0441\u044f \u043e\u0442 \u0440\u043e\u0434\u0438\u0442\u0435\u043b\u044f, \u0437\u0430\u0434\u0430\u043d\u043d\u044b\u0439 \u2014 override.",
             "properties": {
                 "classification_rationale": {
                     "type": [
@@ -1387,7 +1387,7 @@
         },
         "HasOwnership": {
             "additionalProperties": false,
-            "description": "Mixin \u0432\u043b\u0430\u0434\u0435\u043d\u0438\u044f: data owner, data steward \u0438 \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u043e\u043d\u043d\u043e\u0435 \u043f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435.",
+            "description": "Mixin \u0432\u043b\u0430\u0434\u0435\u043d\u0438\u044f: data owner, data steward \u0438 \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u043e\u043d\u043d\u043e\u0435 \u043f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435. \u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0438\u0435 \u0441\u043b\u043e\u0442\u0430 \u043e\u0437\u043d\u0430\u0447\u0430\u0435\u0442 \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \u044d\u0444\u0444\u0435\u043a\u0442\u0438\u0432\u043d\u043e\u0433\u043e \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u043f\u043e containment cascade (ADR-023); \u0437\u0430\u0434\u0430\u043d\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u2014 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u0439 override.",
             "properties": {
                 "data_owner_ref": {
                     "type": [
@@ -1402,7 +1402,7 @@
                     ]
                 },
                 "ownership_inheritance_rule": {
-                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
                     "type": [
                         "string",
                         "null"
@@ -1420,7 +1420,7 @@
         },
         "HasPolicyBindings": {
             "additionalProperties": false,
-            "description": "Mixin \u043f\u0440\u0438\u0432\u044f\u0437\u043a\u0438 \u0443\u043f\u0440\u0430\u0432\u043b\u044f\u0435\u043c\u044b\u0445 \u043f\u043e\u043b\u0438\u0442\u0438\u043a \u043a \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0443 \u043c\u043e\u0434\u0435\u043b\u0438.",
+            "description": "Mixin \u043f\u0440\u0438\u0432\u044f\u0437\u043a\u0438 \u0443\u043f\u0440\u0430\u0432\u043b\u044f\u0435\u043c\u044b\u0445 \u043f\u043e\u043b\u0438\u0442\u0438\u043a \u043a \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0443 \u043c\u043e\u0434\u0435\u043b\u0438. policy_refs \u0443\u0447\u0430\u0441\u0442\u0432\u0443\u0435\u0442 \u0432 containment cascade (ADR-023): \u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0438\u0435 \u043a\u043b\u044e\u0447\u0430 \u2014 \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0435; \u043f\u0440\u0438\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0439 \u0441\u043f\u0438\u0441\u043e\u043a (\u0432 \u0442.\u0447. \u043f\u0443\u0441\u0442\u043e\u0439) \u2014 \u043f\u043e\u043b\u043d\u0430\u044f \u0437\u0430\u043c\u0435\u043d\u0430.",
             "properties": {
                 "policy_refs": {
                     "items": {
@@ -1741,6 +1741,18 @@
                         "null"
                     ]
                 },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "default_value": {
                     "type": [
                         "string",
@@ -1821,7 +1833,21 @@
                     "type": "string"
                 },
                 "owner_entity_ref": {
+                    "description": "Structural parent LogicalEntity of this attribute (containment), not the data owner role. Data ownership uses data_owner_ref via HasOwnership / ADR-023 cascade.\n",
                     "type": "string"
+                },
+                "ownership_inheritance_rule": {
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "policy_refs": {
                     "items": {
@@ -2080,7 +2106,7 @@
                     "type": "string"
                 },
                 "ownership_inheritance_rule": {
-                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
                     "type": [
                         "string",
                         "null"
@@ -2546,7 +2572,7 @@
                     "type": "string"
                 },
                 "ownership_inheritance_rule": {
-                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
                     "type": [
                         "string",
                         "null"
@@ -2719,6 +2745,18 @@
                 "api_version": {
                     "type": "string"
                 },
+                "classification_rationale": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "classification_source": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "conceptual_entities": {
                     "items": {
                         "$ref": "#/$defs/ConceptualEntity"
@@ -2786,6 +2824,9 @@
                         "null"
                     ]
                 },
+                "governance_classification": {
+                    "$ref": "#/$defs/GovernanceClassificationEnum"
+                },
                 "implementation_scope": {
                     "$ref": "#/$defs/ImplementationScopeEnum",
                     "description": "Body-level scope: enterprise (no solution_ref) or solution. Must align with envelope dams_model_level when profile is dams-data-model.\n"
@@ -2829,7 +2870,7 @@
                     "type": "string"
                 },
                 "ownership_inheritance_rule": {
-                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
                     "type": [
                         "string",
                         "null"
@@ -2850,9 +2891,31 @@
                         "null"
                     ]
                 },
+                "policy_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
                 "relationships": {
                     "items": {
                         "$ref": "#/$defs/Relationship"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "security_classification": {
+                    "$ref": "#/$defs/SecurityClassificationEnum",
+                    "description": "\u0420\u0435\u0436\u0438\u043c \u0437\u0430\u0449\u0438\u0442\u044b (Wave 2); \u043e\u0440\u0442\u043e\u0433\u043e\u043d\u0430\u043b\u0435\u043d governance_classification."
+                },
+                "sensitivity_term_refs": {
+                    "items": {
+                        "type": "string"
                     },
                     "type": [
                         "array",
@@ -3047,6 +3110,30 @@
                         "null"
                     ]
                 },
+                "classification_rationale": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "classification_source": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "deprecated_by_ref": {
                     "type": [
                         "string",
@@ -3067,6 +3154,9 @@
                         "array",
                         "null"
                     ]
+                },
+                "governance_classification": {
+                    "$ref": "#/$defs/GovernanceClassificationEnum"
                 },
                 "lifecycle_status": {
                     "$ref": "#/$defs/LifecycleStatusEnum"
@@ -3098,8 +3188,30 @@
                         "null"
                     ]
                 },
+                "ownership_inheritance_rule": {
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "physical_object_ref": {
                     "type": "string"
+                },
+                "policy_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
                 },
                 "required": {
                     "type": "boolean"
@@ -3107,6 +3219,19 @@
                 "schema_path": {
                     "type": [
                         "string",
+                        "null"
+                    ]
+                },
+                "security_classification": {
+                    "$ref": "#/$defs/SecurityClassificationEnum",
+                    "description": "\u0420\u0435\u0436\u0438\u043c \u0437\u0430\u0449\u0438\u0442\u044b (Wave 2); \u043e\u0440\u0442\u043e\u0433\u043e\u043d\u0430\u043b\u0435\u043d governance_classification."
+                },
+                "sensitivity_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
                         "null"
                     ]
                 },
@@ -3166,6 +3291,18 @@
                         "null"
                     ]
                 },
+                "classification_rationale": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "classification_source": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "data_owner_ref": {
                     "type": [
                         "string",
@@ -3202,6 +3339,9 @@
                         "null"
                     ]
                 },
+                "governance_classification": {
+                    "$ref": "#/$defs/GovernanceClassificationEnum"
+                },
                 "lifecycle_status": {
                     "$ref": "#/$defs/LifecycleStatusEnum"
                 },
@@ -3227,7 +3367,7 @@
                     "$ref": "#/$defs/PhysicalObjectKindEnum"
                 },
                 "ownership_inheritance_rule": {
-                    "description": "\u0424\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0441\u0442\u0438 (owner/steward) \u043e\u0442 \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f, \u0434\u043e\u043c\u0435\u043d\u043d\u043e\u0433\u043e \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u043b\u0438 \u0434\u0440\u0443\u0433\u043e\u0433\u043e governed artifact. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0447\u0435\u0442\u0430\u0442\u044c\u0441\u044f \u0441 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u043c data_owner_ref (override).\n",
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
                     "type": [
                         "string",
                         "null"
@@ -3259,6 +3399,19 @@
                 },
                 "qualified_name": {
                     "type": "string"
+                },
+                "security_classification": {
+                    "$ref": "#/$defs/SecurityClassificationEnum",
+                    "description": "\u0420\u0435\u0436\u0438\u043c \u0437\u0430\u0449\u0438\u0442\u044b (Wave 2); \u043e\u0440\u0442\u043e\u0433\u043e\u043d\u0430\u043b\u0435\u043d governance_classification."
+                },
+                "sensitivity_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
                 },
                 "solution_ref": {
                     "type": [

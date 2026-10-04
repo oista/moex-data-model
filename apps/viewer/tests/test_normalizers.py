@@ -10,6 +10,9 @@ from moex_publication_viewer.normalizers.csv_normalizer import CsvNormalizer
 from moex_publication_viewer.normalizers.json_normalizer import JsonNormalizer
 from moex_publication_viewer.normalizers.linkml_normalizer import LinkmlNormalizer
 from moex_publication_viewer.normalizers.markdown_normalizer import MarkdownNormalizer
+from moex_publication_viewer.normalizers.mermaid_diagram_normalizer import (
+    MermaidDiagramNormalizer,
+)
 from moex_publication_viewer.normalizers.yaml_normalizer import YamlNormalizer
 
 
@@ -264,6 +267,46 @@ def test_markdown(tmp_path: Path):
     out = MarkdownNormalizer().normalize(sec, p)
     assert out.content
     assert "Hello" in out.content
+
+
+def test_mermaid_diagram_with_svg(tmp_path: Path):
+    md = tmp_path / "logical.erd.md"
+    md.write_text(
+        "```mermaid\nerDiagram\n    Client {\n        string id PK\n    }\n```\n",
+        encoding="utf-8",
+    )
+    svg = tmp_path / "logical.erd.svg"
+    svg.write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script>'
+        '<rect width="10" height="10"/></svg>',
+        encoding="utf-8",
+    )
+    sec = _section(
+        type="mermaid-diagram",
+        source={"format": "markdown", "path": "logical.erd.md"},
+    )
+    out = MermaidDiagramNormalizer().normalize(sec, md)
+    assert out.content
+    assert "<svg" in out.content
+    assert "<script" not in out.content.lower()
+    assert out.attributes["mermaid_source"].startswith("erDiagram")
+    assert out.attributes["svg_missing"] is False
+
+
+def test_mermaid_diagram_without_svg(tmp_path: Path):
+    md = tmp_path / "logical.erd.md"
+    md.write_text(
+        "```mermaid\nerDiagram\n    Client {\n        string id PK\n    }\n```\n",
+        encoding="utf-8",
+    )
+    sec = _section(
+        type="mermaid-diagram",
+        source={"format": "markdown", "path": "logical.erd.md"},
+    )
+    out = MermaidDiagramNormalizer().normalize(sec, md)
+    assert out.content == ""
+    assert out.attributes["mermaid_source"].startswith("erDiagram")
+    assert out.attributes["svg_missing"] is True
 
 
 def test_linkml_with_import():

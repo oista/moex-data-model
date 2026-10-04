@@ -209,6 +209,60 @@ def run_import_solution(
                 )
             )
 
+    # Mermaid erDiagram projections (md always; svg best-effort)
+    try:
+        from moex_dams.projection.mermaid_er import (
+            try_render_er_svg,
+            write_er_diagram_artifact,
+        )
+
+        pub = out_dir / "publications"
+        for er_profile in ("logical", "physical"):
+            er_md = pub / f"{er_profile}.erd.md"
+            try:
+                write_er_diagram_artifact(
+                    implementation_path=result.package_path,
+                    out_md=er_md,
+                    profile=er_profile,  # type: ignore[arg-type]
+                )
+                lines.append(f"erd-{er_profile}={er_md}")
+                svg = try_render_er_svg(er_md)
+                if svg is not None:
+                    lines.append(f"erd-{er_profile}-svg={svg}")
+                else:
+                    all_diags.append(
+                        Diagnostic(
+                            code="ERD:SVG-SKIP",
+                            severity=Severity.INFO,
+                            message_ru=(
+                                f"SVG для {er_profile}.erd.md не сгенерирован "
+                                "(нет npx / mermaid-cli)"
+                            ),
+                            remediation=(
+                                "Установите Node.js и выполните "
+                                "scripts/render-mermaid-erd.ps1"
+                            ),
+                        )
+                    )
+            except (OSError, ValueError, TypeError) as exc:
+                all_diags.append(
+                    Diagnostic(
+                        code="ERD:ERROR",
+                        severity=Severity.WARNING,
+                        message_ru=f"erd {er_profile} failed: {exc}",
+                        remediation="Проверьте package YAML и moex_dams.projection.mermaid_er.",
+                    )
+                )
+    except Exception as exc:  # noqa: BLE001
+        all_diags.append(
+            Diagnostic(
+                code="ERD:ERROR",
+                severity=Severity.WARNING,
+                message_ru=f"erd projection unavailable: {exc}",
+                remediation="Убедитесь, что moex-specification-dams установлен.",
+            )
+        )
+
     md, _js = write_report(
         report,
         title=f"Import {result.src_system} → {result.slug}",

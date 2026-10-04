@@ -140,7 +140,14 @@ def compile_modules(
         for section in manifest.sections:
             source_path = resolve_source_path(path, section.source.path)
             try:
-                normalizer = get_normalizer(section.source.format)
+                if section.type == "mermaid-diagram":
+                    from moex_publication_viewer.normalizers.mermaid_diagram_normalizer import (
+                        MermaidDiagramNormalizer,
+                    )
+
+                    normalizer = MermaidDiagramNormalizer()
+                else:
+                    normalizer = get_normalizer(section.source.format)
             except KeyError:
                 errors.append(
                     f"{path}: unsupported source.format '{section.source.format}' "
@@ -152,7 +159,10 @@ def compile_modules(
             except NormalizeError as exc:
                 errors.append(f"{path}: section '{section.id}': {exc}")
                 continue
-            if not pub_section.items and not pub_section.content:
+            has_mermaid = bool(
+                (pub_section.attributes or {}).get("mermaid_source")
+            )
+            if not pub_section.items and not pub_section.content and not has_mermaid:
                 errors.append(
                     f"{path}: section '{section.id}' is empty after normalize "
                     f"(source: {source_path})"

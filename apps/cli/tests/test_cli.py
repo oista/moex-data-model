@@ -119,6 +119,31 @@ def test_diagram_projects_logical(
     assert "digest=sha256:" in capsys.readouterr().out
 
 
+def test_diagram_projects_mermaid_logical(
+    repo_root: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    out = tmp_path / "logical.erd.md"
+    assert main(
+        [
+            "diagram",
+            "--root",
+            str(repo_root),
+            "--profile",
+            "logical",
+            "--format",
+            "mermaid",
+            "--no-svg",
+            "--out",
+            str(out),
+        ]
+    ) == 0
+    text = out.read_text(encoding="utf-8")
+    assert "```mermaid" in text
+    assert "erDiagram" in text
+    assert "TradingClient" in text
+    assert "digest=sha256:" in capsys.readouterr().out
+
+
 def test_import_er_dictionary_fixture(
     repo_root: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:

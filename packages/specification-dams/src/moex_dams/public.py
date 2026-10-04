@@ -23,6 +23,18 @@ from moex_dams.projection.dbml import (
     project_model_package_to_dbml,
     write_dbml_artifact,
 )
+from moex_dams.projection.mermaid_er import (
+    ErDiagramManifest,
+    project_model_package_to_er_diagram,
+    write_er_diagram_artifact,
+)
+from moex_dams.rules.cascade import (
+    CascadeCardinality,
+    CascadeFamily,
+    SlotProvenance,
+    find_redundant_overrides,
+    resolve_governed,
+)
 from moex_dams.rules.identifiers import (
     build_dams_curie_resolver,
     check_identifiers,
@@ -32,17 +44,21 @@ from moex_dams.rules.references import check_references
 from moex_dams.rules.structural import check_structural
 
 __all__ = [
+    "CascadeCardinality",
+    "CascadeFamily",
     "DamsAssetRepository",
     "DamsModelGraphView",
     "DbmlManifest",
     "EdgeKind",
     "ElementIndexEntry",
+    "ErDiagramManifest",
     "GraphEdge",
     "GraphNode",
     "ModelPackage",
     "NodeKind",
     "RuleSet",
     "SliceResult",
+    "SlotProvenance",
     "assess_implementation",
     "build_dams_curie_resolver",
     "build_dams_graph",
@@ -54,7 +70,11 @@ __all__ = [
     "default_dams_rule_sets",
     "diff_graphs",
     "diff_implementations",
+    "find_redundant_overrides",
     "project_model_package_to_dbml",
+    "project_model_package_to_er_diagram",
+    "resolve_governed",
     "run_rule_sets",
     "write_dbml_artifact",
+    "write_er_diagram_artifact",
 ]

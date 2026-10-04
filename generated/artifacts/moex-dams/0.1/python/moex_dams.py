@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-09-28T19:59:14
+# Generation date: 2026-10-04T20:21:30
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -801,7 +801,8 @@ class HasLifecycle(YAMLRoot):
 @dataclass(repr=False)
 class HasOwnership(YAMLRoot):
     """
-    Mixin владения: data owner, data steward и организационное подразделение.
+    Mixin владения: data owner, data steward и организационное подразделение. Отсутствие слота означает наследование
+    эффективного значения по containment cascade (ADR-023); заданное значение — локальный override.
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -863,7 +864,8 @@ class HasBusinessClassification(YAMLRoot):
 @dataclass(repr=False)
 class HasGovernanceClassification(YAMLRoot):
     """
-    Базовая и специальная классификация чувствительности данных.
+    Базовая и специальная классификация чувствительности данных. governance_classification участвует в containment
+    cascade (ADR-023): пустой слот наследуется от родителя, заданный — override.
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -901,7 +903,8 @@ class HasGovernanceClassification(YAMLRoot):
 @dataclass(repr=False)
 class HasPolicyBindings(YAMLRoot):
     """
-    Mixin привязки управляемых политик к элементу модели.
+    Mixin привязки управляемых политик к элементу модели. policy_refs участвует в containment cascade (ADR-023):
+    отсутствие ключа — наследование; присутствующий список (в т.ч. пустой) — полная замена.
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -1065,6 +1068,12 @@ class ModelPackage(ModelElement):
     data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
     owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
     ownership_inheritance_rule: Optional[str] = None
+    governance_classification: Optional[Union[str, "GovernanceClassificationEnum"]] = None
+    security_classification: Optional[Union[str, "SecurityClassificationEnum"]] = None
+    sensitivity_term_refs: Optional[Union[Union[str, DataClassificationTermRegistryId], list[Union[str, DataClassificationTermRegistryId]]]] = empty_list()
+    classification_source: Optional[str] = None
+    classification_rationale: Optional[str] = None
+    policy_refs: Optional[Union[Union[str, PolicyRegistryId], list[Union[str, PolicyRegistryId]]]] = empty_list()
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
@@ -1122,6 +1131,26 @@ class ModelPackage(ModelElement):
 
         if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
             self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
+
+        if self.governance_classification is not None and not isinstance(self.governance_classification, GovernanceClassificationEnum):
+            self.governance_classification = GovernanceClassificationEnum(self.governance_classification)
+
+        if self.security_classification is not None and not isinstance(self.security_classification, SecurityClassificationEnum):
+            self.security_classification = SecurityClassificationEnum(self.security_classification)
+
+        if not isinstance(self.sensitivity_term_refs, list):
+            self.sensitivity_term_refs = [self.sensitivity_term_refs] if self.sensitivity_term_refs is not None else []
+        self.sensitivity_term_refs = [v if isinstance(v, DataClassificationTermRegistryId) else DataClassificationTermRegistryId(v) for v in self.sensitivity_term_refs]
+
+        if self.classification_source is not None and not isinstance(self.classification_source, str):
+            self.classification_source = str(self.classification_source)
+
+        if self.classification_rationale is not None and not isinstance(self.classification_rationale, str):
+            self.classification_rationale = str(self.classification_rationale)
+
+        if not isinstance(self.policy_refs, list):
+            self.policy_refs = [self.policy_refs] if self.policy_refs is not None else []
+        self.policy_refs = [v if isinstance(v, PolicyRegistryId) else PolicyRegistryId(v) for v in self.policy_refs]
 
         super().__post_init__(**kwargs)
 
@@ -1418,6 +1447,10 @@ class LogicalAttribute(ModelElement):
     currency_attribute_ref: Optional[Union[str, URIorCURIE]] = None
     timezone_policy: Optional[str] = None
     temporal_semantics: Optional[str] = None
+    data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
+    data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
+    owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+    ownership_inheritance_rule: Optional[str] = None
     governance_classification: Optional[Union[str, "GovernanceClassificationEnum"]] = None
     security_classification: Optional[Union[str, "SecurityClassificationEnum"]] = None
     sensitivity_term_refs: Optional[Union[Union[str, DataClassificationTermRegistryId], list[Union[str, DataClassificationTermRegistryId]]]] = empty_list()
@@ -1486,6 +1519,18 @@ class LogicalAttribute(ModelElement):
 
         if self.temporal_semantics is not None and not isinstance(self.temporal_semantics, str):
             self.temporal_semantics = str(self.temporal_semantics)
+
+        if self.data_owner_ref is not None and not isinstance(self.data_owner_ref, RoleRegistryId):
+            self.data_owner_ref = RoleRegistryId(self.data_owner_ref)
+
+        if self.data_steward_ref is not None and not isinstance(self.data_steward_ref, RoleRegistryId):
+            self.data_steward_ref = RoleRegistryId(self.data_steward_ref)
+
+        if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
+            self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
+
+        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
+            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
 
         if self.governance_classification is not None and not isinstance(self.governance_classification, GovernanceClassificationEnum):
             self.governance_classification = GovernanceClassificationEnum(self.governance_classification)
@@ -1618,6 +1663,11 @@ class PhysicalObject(ModelElement):
     data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
     owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
     ownership_inheritance_rule: Optional[str] = None
+    governance_classification: Optional[Union[str, "GovernanceClassificationEnum"]] = None
+    security_classification: Optional[Union[str, "SecurityClassificationEnum"]] = None
+    sensitivity_term_refs: Optional[Union[Union[str, DataClassificationTermRegistryId], list[Union[str, DataClassificationTermRegistryId]]]] = empty_list()
+    classification_source: Optional[str] = None
+    classification_rationale: Optional[str] = None
     policy_refs: Optional[Union[Union[str, PolicyRegistryId], list[Union[str, PolicyRegistryId]]]] = empty_list()
 
     def __post_init__(self, *_: str, **kwargs: Any):
@@ -1679,6 +1729,22 @@ class PhysicalObject(ModelElement):
         if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
             self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
 
+        if self.governance_classification is not None and not isinstance(self.governance_classification, GovernanceClassificationEnum):
+            self.governance_classification = GovernanceClassificationEnum(self.governance_classification)
+
+        if self.security_classification is not None and not isinstance(self.security_classification, SecurityClassificationEnum):
+            self.security_classification = SecurityClassificationEnum(self.security_classification)
+
+        if not isinstance(self.sensitivity_term_refs, list):
+            self.sensitivity_term_refs = [self.sensitivity_term_refs] if self.sensitivity_term_refs is not None else []
+        self.sensitivity_term_refs = [v if isinstance(v, DataClassificationTermRegistryId) else DataClassificationTermRegistryId(v) for v in self.sensitivity_term_refs]
+
+        if self.classification_source is not None and not isinstance(self.classification_source, str):
+            self.classification_source = str(self.classification_source)
+
+        if self.classification_rationale is not None and not isinstance(self.classification_rationale, str):
+            self.classification_rationale = str(self.classification_rationale)
+
         if not isinstance(self.policy_refs, list):
             self.policy_refs = [self.policy_refs] if self.policy_refs is not None else []
         self.policy_refs = [v if isinstance(v, PolicyRegistryId) else PolicyRegistryId(v) for v in self.policy_refs]
@@ -1710,6 +1776,16 @@ class PhysicalField(ModelElement):
     schema_path: Optional[str] = None
     mapping_coverage_status: Optional[Union[str, "MappingCoverageStatusEnum"]] = None
     mapping_rationale: Optional[str] = None
+    data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
+    data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
+    owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+    ownership_inheritance_rule: Optional[str] = None
+    governance_classification: Optional[Union[str, "GovernanceClassificationEnum"]] = None
+    security_classification: Optional[Union[str, "SecurityClassificationEnum"]] = None
+    sensitivity_term_refs: Optional[Union[Union[str, DataClassificationTermRegistryId], list[Union[str, DataClassificationTermRegistryId]]]] = empty_list()
+    classification_source: Optional[str] = None
+    classification_rationale: Optional[str] = None
+    policy_refs: Optional[Union[Union[str, PolicyRegistryId], list[Union[str, PolicyRegistryId]]]] = empty_list()
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
@@ -1748,6 +1824,38 @@ class PhysicalField(ModelElement):
 
         if self.mapping_rationale is not None and not isinstance(self.mapping_rationale, str):
             self.mapping_rationale = str(self.mapping_rationale)
+
+        if self.data_owner_ref is not None and not isinstance(self.data_owner_ref, RoleRegistryId):
+            self.data_owner_ref = RoleRegistryId(self.data_owner_ref)
+
+        if self.data_steward_ref is not None and not isinstance(self.data_steward_ref, RoleRegistryId):
+            self.data_steward_ref = RoleRegistryId(self.data_steward_ref)
+
+        if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
+            self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
+
+        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
+            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
+
+        if self.governance_classification is not None and not isinstance(self.governance_classification, GovernanceClassificationEnum):
+            self.governance_classification = GovernanceClassificationEnum(self.governance_classification)
+
+        if self.security_classification is not None and not isinstance(self.security_classification, SecurityClassificationEnum):
+            self.security_classification = SecurityClassificationEnum(self.security_classification)
+
+        if not isinstance(self.sensitivity_term_refs, list):
+            self.sensitivity_term_refs = [self.sensitivity_term_refs] if self.sensitivity_term_refs is not None else []
+        self.sensitivity_term_refs = [v if isinstance(v, DataClassificationTermRegistryId) else DataClassificationTermRegistryId(v) for v in self.sensitivity_term_refs]
+
+        if self.classification_source is not None and not isinstance(self.classification_source, str):
+            self.classification_source = str(self.classification_source)
+
+        if self.classification_rationale is not None and not isinstance(self.classification_rationale, str):
+            self.classification_rationale = str(self.classification_rationale)
+
+        if not isinstance(self.policy_refs, list):
+            self.policy_refs = [self.policy_refs] if self.policy_refs is not None else []
+        self.policy_refs = [v if isinstance(v, PolicyRegistryId) else PolicyRegistryId(v) for v in self.policy_refs]
 
         super().__post_init__(**kwargs)
 

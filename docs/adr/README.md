@@ -6,7 +6,7 @@ supersedes: []
 superseded_by: MODELING_ARCHITECTURE.md
 ---
 
-# ADR index (001–022)
+# ADR index (001–023)
 
 **Status:** Proposed drafts  
 **Date:** 2026-09-28  
@@ -40,6 +40,7 @@ Viewer-решения живут отдельно: [viewer-decisions.md](../arch
 | [ADR-020](ADR-020-external-specification-scope-and-term-selection.md) | External Specification Scope and Term Selection | Proposed; scope ≠ import; selection governance |
 | [ADR-021](ADR-021-dams-implementation-profile-and-levels.md) | DAMS implementation profile + enterprise/solution levels | Proposed; dams-data-model only |
 | [ADR-022](ADR-022-solution-xlsx-import.md) | Object/ObjectAttribute xlsx → DAMS solution import | Accepted; solution_xlsx + import-solution CLI |
+| [ADR-023](ADR-023-governed-property-cascade.md) | Containment cascade of governed properties | Proposed; ownership / classification / policies |
 
 ## Как принимать
 

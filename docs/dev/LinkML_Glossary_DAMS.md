@@ -52,10 +52,10 @@
 | Mixin | Назначение |
 |---|---|
 | `HasLifecycle` | Жизненный цикл элемента: `lifecycle_status`, `valid_from`, `valid_to`, `deprecated_by_ref` |
-| `HasOwnership` | Владение: `data_owner_ref`, `data_steward_ref`, `owning_unit_ref` |
-| `HasBusinessClassification` | Роль в бизнесе: `entity_type`, `data_class`, `business_importance` |
-| `HasGovernanceClassification` | Базовая маркировка чувствительности: `governance_classification`, `classification_source`, `classification_rationale` |
-| `HasPolicyBindings` | Держатель ссылок на применяемые политики: `policy_refs` |
+| `HasOwnership` | Владение: `data_owner_ref`, `data_steward_ref`, `owning_unit_ref` (absent = cascade inherit, ADR-023) |
+| `HasBusinessClassification` | Роль в бизнесе: `entity_type`, `data_class`, `business_importance` (не каскадируются) |
+| `HasGovernanceClassification` | Базовая маркировка: `governance_classification` каскадируется (ADR-023); `security_classification` — Wave 2 |
+| `HasPolicyBindings` | `policy_refs`: absent = inherit; present list (в т.ч. `[]`) = full replace (ADR-023) |
 | `HasProvenance` | Происхождение и согласование: `source_artifact_ref`, `approval_status`, `approved_by_ref`, `approved_at` |
 
 Правило разрешения свойств в LinkML при конфликте — «глубина поиска» по порядку: локальный `slot_usage` класса → `slot_usage` в mixins (по порядку перечисления) → `slot_usage` в `is_a`-родителе → глобальное определение слота.
@@ -278,6 +278,7 @@ LinkML в этом смысле **монотонен**: `slot_usage` может 
 
 1. **Одна вертикаль идентичности.** Всё, что имеет смысл в модели данных MOEX, — потомок `ModelElement` через `is_a`. Это даёт единый `element_id`, единый `lifecycle_status` и единую точку входа для ссылок.
 2. **Governance — горизонтальный срез, а не вертикаль.** Владение, классификация чувствительности, происхождение и согласование не встроены в основную иерархию наследования, а подключаются как независимые mixins — это позволяет применить, например, `HasGovernanceClassification` и к `LogicalEntity`, и к `PhysicalObject`, и к `Mapping`, не создавая для них общего предка ниже `ModelElement`.
-3. **Enum вместо свободной строки — везде, где возможен закрытый список значений.** Ни один статус, класс данных или тип в DAMS не выражен как обычная `string` — для каждого заведён `*_enum`, что даёт автоматическую валидацию через `linkml-validate`.
-4. **Ссылки, а не встраивание.** Связи между классами реализованы через identifier-ссылки (`_ref`-слоты с `range` на другой класс), а не через глубокое вложение объектов, что отражает философию «реестр + ссылка», используемую для проекций EAM/Clinkr/каталога (`RegistryEntry` и его потомки).
-5. **`slot_usage` как механизм специализации без дублирования.** Общие governance-слоты из mixins получают класс-специфичный `range` (например, ссылку именно на `Role` для `data_owner_ref`) без повторного объявления самого слота.
+3. **Containment cascade для governed-слотов (ADR-023).** Optional-слоты ownership / `governance_classification` / `policy_refs` наследуют эффективное значение по дереву вложенности, если ключ отсутствует; заданное значение — override. Эффективный слой вычисляет резолвер, YAML не копирует его вниз.
+4. **Enum вместо свободной строки — везде, где возможен закрытый список значений.** Ни один статус, класс данных или тип в DAMS не выражен как обычная `string` — для каждого заведён `*_enum`, что даёт автоматическую валидацию через `linkml-validate`.
+5. **Ссылки, а не встраивание.** Связи между классами реализованы через identifier-ссылки (`_ref`-слоты с `range` на другой класс), а не через глубокое вложение объектов, что отражает философию «реестр + ссылка», используемую для проекций EAM/Clinkr/каталога (`RegistryEntry` и его потомки).
+6. **`slot_usage` как механизм специализации без дублирования.** Общие governance-слоты из mixins получают класс-специфичный `range` (например, ссылку именно на `Role` для `data_owner_ref`) без повторного объявления самого слота.

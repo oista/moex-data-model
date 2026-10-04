@@ -24,6 +24,8 @@ DBML — **derived projection** (`GENERATED_FROM`) из каноническог
 
 Режимы первой версии Workbench: physical — управляемый round-trip; logical — частичный; conceptual — ограниченно; governance/ontology — не через ERD.
 
+**Mermaid erDiagram** (`moex_dams.projection.mermaid_er`) — ещё одна односторонняя derived projection для Publication Viewer: `publications/{logical,physical}.erd.md` + SVG. Канон остаётся YAML/LinkML; viewer не строит диаграмму из модели, а только показывает уже сгенерированные артефакты (без mermaid.js в `index.html`).
+
 ## Consequences
 
 - `moex-dams-drawdb-colored.dbml` — golden sample генератора, не ручной master.

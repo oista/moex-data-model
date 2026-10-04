@@ -16,6 +16,12 @@ from moex_modeling import (
 )
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
+from moex_dams.rules.cascade import (
+    DATA_OWNER_PLACEHOLDER,
+    find_redundant_overrides,
+    resolve_governed,
+)
+
 # Data-carrying PhysicalObject kinds (GEN-004 / PDM-003 allowlist).
 DATA_CARRYING_KINDS = frozenset(
     {
@@ -44,6 +50,8 @@ _DEFAULT_CATALOG = (
 
 
 def _severity(raw: str | None) -> DiagnosticSeverity:
+    if raw == "info":
+        return DiagnosticSeverity.INFO
     if raw == "warning":
         return DiagnosticSeverity.WARNING
     return DiagnosticSeverity.ERROR
@@ -57,6 +65,28 @@ def _filled(value: Any) -> bool:
     if isinstance(value, (list, tuple, dict)):
         return len(value) > 0
     return True
+
+
+def _slot_value(
+    el: dict[str, Any],
+    slot: str,
+    *,
+    subject: str | None,
+    effective: bool,
+    resolved: dict[str, Any],
+) -> Any:
+    """Return declared or effective slot value for formal_checks."""
+    if not effective:
+        return el.get(slot)
+    if subject and subject in resolved:
+        prov = resolved[subject].get(slot)
+        return None if prov is None else prov.value
+    # Fallback: package root may use element_id as subject
+    eid = str(el.get("element_id") or "")
+    if eid and eid in resolved:
+        prov = resolved[eid].get(slot)
+        return None if prov is None else prov.value
+    return el.get(slot)
 
 
 def _diag(
@@ -936,6 +966,7 @@ def check_formal_requirements(
         return ()
 
     id_set = _collect_ids(data)
+    resolved = resolve_governed(data)
     diagnostics: list[Diagnostic] = []
 
     for req in reqs:
@@ -966,10 +997,18 @@ def check_formal_requirements(
             code = str(check.get("diagnostic_code") or check.get("check_id") or "DAMS-REQ")
             rem = check.get("remediation")
             slot = check.get("target_slot")
+            use_effective = bool(check.get("effective"))
 
             for el, subject in elements:
                 if kind == "slot_required":
-                    if slot and not _filled(el.get(slot)):
+                    val = _slot_value(
+                        el,
+                        str(slot),
+                        subject=subject,
+                        effective=use_effective,
+                        resolved=resolved,
+                    )
+                    if slot and not _filled(val):
                         diagnostics.append(
                             _diag(
                                 code=code,
@@ -983,7 +1022,18 @@ def check_formal_requirements(
                         )
                 elif kind == "at_least_one_slots":
                     slots = check.get("target_slots") or []
-                    if slots and not any(_filled(el.get(s)) for s in slots):
+                    if slots and not any(
+                        _filled(
+                            _slot_value(
+                                el,
+                                str(s),
+                                subject=subject,
+                                effective=use_effective,
+                                resolved=resolved,
+                            )
+                        )
+                        for s in slots
+                    ):
                         diagnostics.append(
                             _diag(
                                 code=code,
@@ -1057,7 +1107,61 @@ def check_formal_requirements(
                 elif kind == "custom":
                     continue
 
+    diagnostics.extend(_cascade_governance_lints(data, resolved))
     return tuple(diagnostics)
+
+
+def _cascade_governance_lints(
+    data: dict[str, Any],
+    resolved: dict[str, Any],
+) -> list[Diagnostic]:
+    """Placeholder owner warning and redundant-override info (ADR-023)."""
+    out: list[Diagnostic] = []
+    reported_sources: set[str] = set()
+    for eid, slots in resolved.items():
+        owner = slots.get("data_owner_ref")
+        if owner is None or not _filled(owner.value):
+            continue
+        if str(owner.value) != DATA_OWNER_PLACEHOLDER:
+            continue
+        source = owner.source_element_id or eid
+        if source in reported_sources:
+            continue
+        reported_sources.add(source)
+        out.append(
+            _diag(
+                code="DAMS-REQ-GEN-001.placeholder",
+                severity=DiagnosticSeverity.WARNING,
+                message=(
+                    f'Effective data_owner_ref on "{source}" is placeholder '
+                    f"{DATA_OWNER_PLACEHOLDER!r}."
+                ),
+                subject=source,
+                remediation=(
+                    "Replace the package-level data_owner_ref with a real "
+                    "org:role/... once ownership is assigned."
+                ),
+                requirement_code="GEN-001",
+            )
+        )
+
+    for eid, slot, _value, parent_id in find_redundant_overrides(data):
+        out.append(
+            _diag(
+                code="DAMS-CASCADE-redundant-override",
+                severity=DiagnosticSeverity.INFO,
+                message=(
+                    f'Element "{eid}" declares {slot} equal to effective value '
+                    f'inherited from "{parent_id}" (redundant override).'
+                ),
+                subject=eid,
+                remediation=(
+                    "Remove the declared slot to inherit from the parent "
+                    "(ADR-023 containment cascade)."
+                ),
+            )
+        )
+    return out
 
 
 def check_formal_requirements_for_repo(

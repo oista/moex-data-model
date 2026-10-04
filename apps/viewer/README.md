@@ -55,6 +55,15 @@ Sidebar order follows [`architecture-catalog.yaml`](../../model-assets/specifica
 
 See `schema/publication-manifest.schema.json` for the contract.
 
+### Solution ER diagrams (`type: mermaid-diagram`)
+
+Implementation modules may publish pre-generated Mermaid erDiagram artifacts:
+
+- `publications/logical.erd.md` + sibling `.svg`
+- `publications/physical.erd.md` + sibling `.svg`
+
+Generate with `moex-model diagram --format mermaid --profile logical|physical` (SVG needs Node/`npx`). The player shows the SVG by default and a **Исходник** tab for the Mermaid text — no mermaid.js / CDN in `index.html`.
+
 ## FIBO glossary
 
 MVP uses the committed preview CSV at `packages/ontology/publications/fibo_glossary.preview.csv` (small sample). Full export under `packages/ontology/output/` is gitignored and requires a local FIBO clone + `python -m ontology.fibo`. To try the full mart locally, point the ontology `publish.yaml` `source.path` at `output/fibo_glossary.csv` after export.

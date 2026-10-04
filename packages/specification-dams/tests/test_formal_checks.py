@@ -178,11 +178,60 @@ def test_default_rule_sets_include_formal_checks() -> None:
 # --- GEN ----------------------------------------------------------------------
 
 
-def test_gen001_ownership_at_least_one() -> None:
+def test_gen001_ownership_requires_data_owner_ref() -> None:
     data = _example()
     data.pop("data_owner_ref", None)
-    data.pop("ownership_inheritance_rule", None)
+    # Free-text inheritance rule alone is no longer sufficient (ADR-023).
+    assert data.get("ownership_inheritance_rule")
     assert any("GEN-001.c7" in c for c in _codes(_errors(data)))
+
+
+def test_gen001_rule_without_owner_fails() -> None:
+    data = _example()
+    data.pop("data_owner_ref", None)
+    data["ownership_inheritance_rule"] = "Inherits from IT solution."
+    codes = _codes(_errors(data))
+    assert any("GEN-001.c7" in c for c in codes)
+
+
+def test_ldm002_inherits_owner_from_package() -> None:
+    data = _example()
+    for ent in data["logical_entities"]:
+        ent.pop("data_owner_ref", None)
+        ent.pop("data_steward_ref", None)
+        ent.pop("ownership_inheritance_rule", None)
+    assert not any("LDM-002.c5" in c for c in _codes(_errors(data)))
+
+
+def test_ldm003_inherits_classification_from_package() -> None:
+    data = _example()
+    data["governance_classification"] = "internal"
+    for ent in data["logical_entities"]:
+        ent.pop("governance_classification", None)
+    assert not any("LDM-003.c4" in c for c in _codes(_errors(data)))
+
+
+def test_placeholder_owner_warning_once() -> None:
+    data = _example()
+    data["data_owner_ref"] = "org:role/DATA_OWNER_PENDING"
+    for ent in data["logical_entities"]:
+        ent.pop("data_owner_ref", None)
+    warns = _warns(data)
+    placeholder = [d for d in warns if "placeholder" in d.diagnostic_code]
+    assert len(placeholder) == 1
+    assert placeholder[0].subject_ref == data["element_id"]
+
+
+def test_redundant_override_info() -> None:
+    data = _example()
+    # Party already declares same owner as package → info lint.
+    infos = [
+        d
+        for d in check_formal_requirements(_body(data), catalog_path=CATALOG)
+        if d.severity == DiagnosticSeverity.INFO
+        and "redundant-override" in d.diagnostic_code
+    ]
+    assert any("data_owner_ref" in d.diagnostic_message for d in infos)
 
 
 def test_gen002_implementation_scope() -> None:

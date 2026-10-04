@@ -63,7 +63,8 @@
             "tree",
             "markdown-doc",
             "key-value",
-            "explorer"
+            "explorer",
+            "mermaid-diagram"
           ]
         },
         "source": {

@@ -32,6 +32,8 @@ classes:
     is_a: ModelElement
     mixins:
       - HasOwnership
+      - HasGovernanceClassification
+      - HasPolicyBindings
     description: >
       Версионируемый артефакт модели данных: либо корпоративная conceptual
       модель (enterprise), либо модель конкретного ИТ-решения (solution).
@@ -98,6 +100,7 @@ classes:
   LogicalAttribute:
     is_a: ModelElement
     mixins:
+      - HasOwnership
       - HasGovernanceClassification
       - HasPolicyBindings
     description: Логический атрибут сущности с бизнес-смыслом, типом, обязательностью и классификацией.
@@ -140,6 +143,7 @@ classes:
     is_a: ModelElement
     mixins:
       - HasOwnership
+      - HasGovernanceClassification
       - HasPolicyBindings
     description: Квант данных или техническая точка публикации/потребления.
     slots:
@@ -156,6 +160,10 @@ classes:
 
   PhysicalField:
     is_a: ModelElement
+    mixins:
+      - HasOwnership
+      - HasGovernanceClassification
+      - HasPolicyBindings
     description: Поле физического объекта; его семантика задаётся Mapping к LogicalAttribute.
     slots:
       - physical_object_ref
@@ -308,6 +316,10 @@ slots:
     range: LogicalEntity
     inlined: false
     required: true
+    description: >
+      Structural parent LogicalEntity of this attribute (containment), not the
+      data owner role. Data ownership uses data_owner_ref via HasOwnership /
+      ADR-023 cascade.
   logical_type:
     range: LogicalDataTypeEnum
     required: true

@@ -60,6 +60,65 @@ sections:
         build(tmp_path, tmp_path / "out")
 
 
+def test_build_mermaid_diagram_section(tmp_path: Path):
+    from moex_publication_viewer.assets import assert_no_required_cdn
+
+    mod = tmp_path / "mod"
+    pub = mod / "publications"
+    pub.mkdir(parents=True)
+    (pub / "logical.erd.md").write_text(
+        "```mermaid\nerDiagram\n    Client {\n        string id PK\n    }\n```\n",
+        encoding="utf-8",
+    )
+    (pub / "logical.erd.svg").write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1"/></svg>',
+        encoding="utf-8",
+    )
+    (mod / "publish.yaml").write_text(
+        """
+module_id: moex:module:erd-demo
+kind: publication_module
+title: ERD demo
+profile: implementation
+sections:
+  - id: package
+    title: Package
+    kind: overview
+    type: key-value
+    source:
+      format: yaml
+      path: meta.yaml
+  - id: logical-erd
+    title: Logical ER diagram
+    kind: classes
+    type: mermaid-diagram
+    source:
+      format: markdown
+      path: publications/logical.erd.md
+  - id: conformance
+    title: Conformance
+    kind: conformance
+    type: key-value
+    source:
+      format: yaml
+      path: meta.yaml
+""",
+        encoding="utf-8",
+    )
+    (mod / "meta.yaml").write_text(
+        "name: demo\nstatus: draft\n",
+        encoding="utf-8",
+    )
+    dist = tmp_path / "out"
+    index = build(tmp_path, dist)
+    html = index.read_text(encoding="utf-8")
+    assert "mermaid-diagram" in html
+    assert "erDiagram" in html
+    assert "<svg" in html
+    assert "renderMermaidDiagram" in (dist / "viewer.js").read_text(encoding="utf-8")
+    assert_no_required_cdn(html)
+
+
 def test_repo_golden_three_modules():
     """Build against the real repository root (golden smoke)."""
     repo = Path(__file__).resolve().parents[3]

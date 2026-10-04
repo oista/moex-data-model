@@ -49,7 +49,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     diagram = sub.add_parser(
         "diagram",
-        help="Project ModelPackage to DBML (logical/physical; ADR-006)",
+        help="Project ModelPackage to DBML or Mermaid erDiagram (ADR-006)",
     )
     _add_slice_args(diagram)
     diagram.add_argument("--out", type=Path, default=None)
@@ -62,7 +62,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--format",
         dest="fmt",
         default="dbml",
-        help="Output format (only dbml)",
+        help="Output format: dbml (default) or mermaid",
+    )
+    diagram.add_argument(
+        "--no-svg",
+        action="store_true",
+        help="Skip SVG render for --format mermaid (md only)",
     )
 
     diff = sub.add_parser("diff", help="Unified diff of an asset between two git revisions")
@@ -378,6 +383,7 @@ def main(argv: list[str] | None = None) -> int:
             out=args.out,
             profile=args.profile,
             fmt=args.fmt,
+            render_svg=not getattr(args, "no_svg", False),
         )
     elif args.command == "diff":
         from moex_model_cli.commands.diff import run_diff

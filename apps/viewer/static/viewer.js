@@ -2646,6 +2646,9 @@
           `<div class="markdown-body">${section.content || ""}</div>`
         );
         break;
+      case "mermaid-diagram":
+        body.appendChild(renderMermaidDiagram(section));
+        break;
       case "key-value":
         body.appendChild(renderKeyValue(section));
         break;
@@ -2667,6 +2670,104 @@
     }
     wrap.appendChild(body);
     return wrap;
+  }
+
+  function renderMermaidDiagram(section) {
+    const attrs = section.attributes || {};
+    const source = String(attrs.mermaid_source || "");
+    const panel = document.createElement("div");
+    panel.className = "erd-panel";
+    panel.setAttribute("data-ui", "mermaid-diagram");
+
+    const toolbar = document.createElement("div");
+    toolbar.className = "erd-toolbar";
+    toolbar.setAttribute("role", "tablist");
+
+    const tabDiagram = document.createElement("button");
+    tabDiagram.type = "button";
+    tabDiagram.className = "erd-tab is-active";
+    tabDiagram.setAttribute("data-erd-tab", "diagram");
+    tabDiagram.setAttribute("role", "tab");
+    tabDiagram.setAttribute("aria-selected", "true");
+    tabDiagram.textContent = "Диаграмма";
+
+    const tabSource = document.createElement("button");
+    tabSource.type = "button";
+    tabSource.className = "erd-tab";
+    tabSource.setAttribute("data-erd-tab", "source");
+    tabSource.setAttribute("role", "tab");
+    tabSource.setAttribute("aria-selected", "false");
+    tabSource.textContent = "Исходник";
+
+    toolbar.appendChild(tabDiagram);
+    toolbar.appendChild(tabSource);
+
+    const canvas = document.createElement("div");
+    canvas.className = "erd-canvas";
+    canvas.setAttribute("data-erd-pane", "diagram");
+    if (section.content) {
+      const svgWrap = document.createElement("div");
+      svgWrap.className = "erd-svg";
+      svgWrap.innerHTML = section.content;
+      canvas.appendChild(svgWrap);
+    } else {
+      const miss = document.createElement("p");
+      miss.className = "muted";
+      miss.textContent =
+        "SVG не сгенерирован. Откройте вкладку «Исходник» или выполните scripts/render-mermaid-erd.ps1.";
+      canvas.appendChild(miss);
+    }
+
+    const sourcePane = document.createElement("div");
+    sourcePane.className = "erd-source is-hidden";
+    sourcePane.setAttribute("data-erd-pane", "source");
+    sourcePane.hidden = true;
+
+    const actions = document.createElement("div");
+    actions.className = "erd-source-actions";
+    const copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "copy-btn";
+    copyBtn.textContent = "Copy";
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard?.writeText(source).then(
+        () => {
+          copyBtn.textContent = "Copied";
+          setTimeout(() => {
+            copyBtn.textContent = "Copy";
+          }, 1200);
+        },
+        () => {}
+      );
+    });
+    actions.appendChild(copyBtn);
+
+    const pre = document.createElement("pre");
+    pre.className = "erd-source-pre";
+    const code = document.createElement("code");
+    code.textContent = source;
+    pre.appendChild(code);
+    sourcePane.appendChild(actions);
+    sourcePane.appendChild(pre);
+
+    function showPane(name) {
+      const isDiagram = name === "diagram";
+      tabDiagram.classList.toggle("is-active", isDiagram);
+      tabSource.classList.toggle("is-active", !isDiagram);
+      tabDiagram.setAttribute("aria-selected", isDiagram ? "true" : "false");
+      tabSource.setAttribute("aria-selected", isDiagram ? "false" : "true");
+      canvas.classList.toggle("is-hidden", !isDiagram);
+      canvas.hidden = !isDiagram;
+      sourcePane.classList.toggle("is-hidden", isDiagram);
+      sourcePane.hidden = isDiagram;
+    }
+    tabDiagram.addEventListener("click", () => showPane("diagram"));
+    tabSource.addEventListener("click", () => showPane("source"));
+
+    panel.appendChild(toolbar);
+    panel.appendChild(canvas);
+    panel.appendChild(sourcePane);
+    return panel;
   }
 
   function renderKeyValue(section) {

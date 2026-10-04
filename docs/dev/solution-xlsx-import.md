@@ -60,6 +60,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-viewer.ps1
 | `implementation.yaml` | Envelope ADR-021 (`dams-data-model` / `solution`) |
 | `publish.yaml` | Publication module (создаётся, если нет) |
 | `publications/vertical_slice.json` | Assess + graph projection |
+| `publications/logical.erd.md` / `.svg` | Mermaid erDiagram (logical) для viewer |
+| `publications/physical.erd.md` / `.svg` | Mermaid erDiagram (physical) для viewer |
+
+После `export-slice` импорт пишет erDiagram (md всегда; SVG через `npx @mermaid-js/mermaid-cli@11`, если Node доступен). Повторно: `moex-model diagram --format mermaid --profile logical|physical` или `scripts/render-mermaid-erd.ps1`.
 
 Исходный xlsx **не** коммитится. В envelope — `filename#sha256:…`, не `file:///…`.
 

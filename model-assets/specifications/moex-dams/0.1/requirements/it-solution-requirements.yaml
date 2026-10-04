@@ -62,15 +62,13 @@ requirements:
     remediation: Укажите семантическую версию модели (model_version).
     diagnostic_code: DAMS-REQ-GEN-001.c6
   - check_id: GEN-001.c7
-    kind: at_least_one_slots
+    kind: slot_required
     target_class: ModelPackage
-    target_slots:
-    - data_owner_ref
-    - ownership_inheritance_rule
+    target_slot: data_owner_ref
     severity: error
     diagnostic_code: DAMS-REQ-GEN-001.c7
-    remediation: Укажите data_owner_ref и/или ownership_inheritance_rule (наследование от решения или
-      контекста).
+    remediation: Укажите data_owner_ref на пакете модели (корень containment cascade, ADR-023).
+      ownership_inheritance_rule — только пояснение, не замена владельца.
 - element_id: dams:req/GEN-002
   name: solution_binding
   title: Привязка к ИТ-решению
@@ -242,10 +240,11 @@ requirements:
     target_slots:
     - data_owner_ref
     - data_steward_ref
-    - ownership_inheritance_rule
+    effective: true
     severity: error
     diagnostic_code: DAMS-REQ-LDM-002.c5
-    remediation: Укажите data_owner_ref, data_steward_ref и/или ownership_inheritance_rule.
+    remediation: Укажите data_owner_ref или data_steward_ref на сущности либо наследуйте
+      от пакета (ADR-023 containment cascade).
 - element_id: dams:req/LDM-003
   name: logical_entity_classification
   title: Классификация сущности
@@ -286,8 +285,10 @@ requirements:
     kind: slot_required
     target_class: LogicalEntity
     target_slot: governance_classification
+    effective: true
     severity: error
-    remediation: Укажите governance_classification.
+    remediation: Укажите governance_classification на сущности либо наследуйте от пакета
+      (ADR-023 containment cascade).
     diagnostic_code: DAMS-REQ-LDM-003.c4
 - element_id: dams:req/LDM-004
   name: identity_rule_and_key

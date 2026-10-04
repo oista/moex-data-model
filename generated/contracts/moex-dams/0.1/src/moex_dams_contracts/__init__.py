@@ -720,12 +720,13 @@ class HasLifecycle(ConfiguredBaseModel):
 
 class HasOwnership(ConfiguredBaseModel):
     """
-    Mixin владения: data owner, data steward и организационное подразделение.
+    Mixin владения: data owner, data steward и организационное подразделение. Отсутствие слота означает наследование эффективного значения по containment cascade (ADR-023); заданное значение — локальный override.
+
     """
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
-    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
 
 
@@ -740,7 +741,8 @@ class HasBusinessClassification(ConfiguredBaseModel):
 
 class HasGovernanceClassification(ConfiguredBaseModel):
     """
-    Базовая и специальная классификация чувствительности данных.
+    Базовая и специальная классификация чувствительности данных. governance_classification участвует в containment cascade (ADR-023): пустой слот наследуется от родителя, заданный — override.
+
     """
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
     security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
@@ -751,7 +753,8 @@ class HasGovernanceClassification(ConfiguredBaseModel):
 
 class HasPolicyBindings(ConfiguredBaseModel):
     """
-    Mixin привязки управляемых политик к элементу модели.
+    Mixin привязки управляемых политик к элементу модели. policy_refs участвует в containment cascade (ADR-023): отсутствие ключа — наследование; присутствующий список (в т.ч. пустой) — полная замена.
+
     """
     policy_refs: Optional[list[str]] = Field(default=None)
 
@@ -784,7 +787,7 @@ class ModelElement(HasLifecycle):
     deprecated_by_ref: Optional[str] = Field(default=None)
 
 
-class ModelPackage(ModelElement, HasOwnership):
+class ModelPackage(ModelElement, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
     """
     Версионируемый артефакт модели данных: либо корпоративная conceptual модель (enterprise), либо модель конкретного ИТ-решения (solution). Package-level DAMS layer is dams_model_level on the SpecImpl envelope (ADR-021); implementation_scope here mirrors that body-level semantics.
 
@@ -807,8 +810,14 @@ class ModelPackage(ModelElement, HasOwnership):
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
-    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
+    governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    sensitivity_term_refs: Optional[list[str]] = Field(default=None)
+    classification_source: Optional[str] = Field(default=None)
+    classification_rationale: Optional[str] = Field(default=None)
+    policy_refs: Optional[list[str]] = Field(default=None)
     element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
@@ -833,7 +842,7 @@ class DomainContext(ModelElement, HasOwnership):
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
-    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     element_id: str = Field(default=...)
     name: str = Field(default=...)
@@ -857,7 +866,7 @@ class ConceptualEntity(ModelElement, HasBusinessClassification, HasOwnership):
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
-    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     entity_type: Optional[EntityTypeEnum] = Field(default=None)
     data_class: Optional[DataClassEnum] = Field(default=None)
@@ -895,7 +904,7 @@ class LogicalEntity(ModelElement, HasPolicyBindings, HasGovernanceClassification
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
-    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     entity_type: Optional[EntityTypeEnum] = Field(default=None)
     data_class: Optional[DataClassEnum] = Field(default=None)
@@ -919,11 +928,12 @@ class LogicalEntity(ModelElement, HasPolicyBindings, HasGovernanceClassification
     deprecated_by_ref: Optional[str] = Field(default=None)
 
 
-class LogicalAttribute(ModelElement, HasPolicyBindings, HasGovernanceClassification):
+class LogicalAttribute(ModelElement, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
     """
     Логический атрибут сущности с бизнес-смыслом, типом, обязательностью и классификацией.
     """
-    owner_entity_ref: str = Field(default=...)
+    owner_entity_ref: str = Field(default=..., description="""Structural parent LogicalEntity of this attribute (containment), not the data owner role. Data ownership uses data_owner_ref via HasOwnership / ADR-023 cascade.
+""")
     logical_type: LogicalDataTypeEnum = Field(default=...)
     required: bool = Field(default=...)
     multivalued: bool = Field(default=...)
@@ -940,6 +950,11 @@ class LogicalAttribute(ModelElement, HasPolicyBindings, HasGovernanceClassificat
     currency_attribute_ref: Optional[str] = Field(default=None, description="""Ссылка на атрибут валюты для денежной величины (Wave 2 soft).""")
     timezone_policy: Optional[str] = Field(default=None, description="""Политика часового пояса для timestamp (Wave 2 soft).""")
     temporal_semantics: Optional[str] = Field(default=None, description="""Семантика даты/времени (Wave 2 soft).""")
+    data_owner_ref: Optional[str] = Field(default=None)
+    data_steward_ref: Optional[str] = Field(default=None)
+    owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
+""")
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
     security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
     sensitivity_term_refs: Optional[list[str]] = Field(default=None)
@@ -988,7 +1003,7 @@ class Relationship(ModelElement):
     deprecated_by_ref: Optional[str] = Field(default=None)
 
 
-class PhysicalObject(ModelElement, HasPolicyBindings, HasOwnership):
+class PhysicalObject(ModelElement, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
     """
     Квант данных или техническая точка публикации/потребления.
     """
@@ -1006,8 +1021,13 @@ class PhysicalObject(ModelElement, HasPolicyBindings, HasOwnership):
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
-    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
+    governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    sensitivity_term_refs: Optional[list[str]] = Field(default=None)
+    classification_source: Optional[str] = Field(default=None)
+    classification_rationale: Optional[str] = Field(default=None)
     policy_refs: Optional[list[str]] = Field(default=None)
     element_id: str = Field(default=...)
     name: str = Field(default=...)
@@ -1022,7 +1042,7 @@ class PhysicalObject(ModelElement, HasPolicyBindings, HasOwnership):
     deprecated_by_ref: Optional[str] = Field(default=None)
 
 
-class PhysicalField(ModelElement):
+class PhysicalField(ModelElement, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
     """
     Поле физического объекта; его семантика задаётся Mapping к LogicalAttribute.
     """
@@ -1035,6 +1055,17 @@ class PhysicalField(ModelElement):
     mapping_coverage_status: Optional[MappingCoverageStatusEnum] = Field(default=None, description="""Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
 """)
     mapping_rationale: Optional[str] = Field(default=None, description="""Обоснование для planned / technical-only / not-applicable / inherited.""")
+    data_owner_ref: Optional[str] = Field(default=None)
+    data_steward_ref: Optional[str] = Field(default=None)
+    owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
+""")
+    governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    sensitivity_term_refs: Optional[list[str]] = Field(default=None)
+    classification_source: Optional[str] = Field(default=None)
+    classification_rationale: Optional[str] = Field(default=None)
+    policy_refs: Optional[list[str]] = Field(default=None)
     element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
@@ -1098,7 +1129,7 @@ class DataFlow(ModelElement, HasOwnership, HasLifecycle):
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
-    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
@@ -1161,7 +1192,7 @@ class DataModelBinding(ModelElement, HasOwnership, HasLifecycle):
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
-    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     element_id: str = Field(default=...)
     name: str = Field(default=...)
@@ -1244,7 +1275,7 @@ class Metric(ModelElement, HasPolicyBindings, HasOwnership):
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
-    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Формальное правило наследования ответственности (owner/steward) от ИТ-решения, доменного контекста или другого governed artifact. Может сочетаться с локальным data_owner_ref (override).
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     policy_refs: Optional[list[str]] = Field(default=None)
     element_id: str = Field(default=...)

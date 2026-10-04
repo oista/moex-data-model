@@ -47,7 +47,10 @@ classes:
 
   HasOwnership:
     mixin: true
-    description: "Mixin владения: data owner, data steward и организационное подразделение."
+    description: >
+      Mixin владения: data owner, data steward и организационное подразделение.
+      Отсутствие слота означает наследование эффективного значения по containment
+      cascade (ADR-023); заданное значение — локальный override.
     slots:
       - data_owner_ref
       - data_steward_ref
@@ -64,7 +67,10 @@ classes:
 
   HasGovernanceClassification:
     mixin: true
-    description: Базовая и специальная классификация чувствительности данных.
+    description: >
+      Базовая и специальная классификация чувствительности данных.
+      governance_classification участвует в containment cascade (ADR-023):
+      пустой слот наследуется от родителя, заданный — override.
     slots:
       - governance_classification
       - security_classification
@@ -74,7 +80,10 @@ classes:
 
   HasPolicyBindings:
     mixin: true
-    description: Mixin привязки управляемых политик к элементу модели.
+    description: >
+      Mixin привязки управляемых политик к элементу модели.
+      policy_refs участвует в containment cascade (ADR-023): отсутствие ключа —
+      наследование; присутствующий список (в т.ч. пустой) — полная замена.
     slots:
       - policy_refs
 
@@ -131,9 +140,9 @@ slots:
   ownership_inheritance_rule:
     range: string
     description: >
-      Формальное правило наследования ответственности (owner/steward)
-      от ИТ-решения, доменного контекста или другого governed artifact.
-      Может сочетаться с локальным data_owner_ref (override).
+      Deprecated as source of truth (ADR-023). Human-readable rationale for
+      ownership inheritance/override only; does not substitute data_owner_ref.
+      Effective ownership is resolved by the containment cascade.
   entity_type:
     range: EntityTypeEnum
   data_class:

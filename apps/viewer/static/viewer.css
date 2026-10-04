@@ -1369,6 +1369,80 @@ a {
   font-weight: 600;
 }
 
+/* Mermaid erDiagram (SVG + source) */
+.erd-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.erd-toolbar {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.erd-tab {
+  appearance: none;
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  padding: 0.35rem 0.75rem;
+  font-size: var(--font-sm);
+  cursor: pointer;
+}
+
+.erd-tab.is-active {
+  background: var(--surface-1);
+  color: var(--text-primary);
+  border-color: var(--brand, #d71920);
+  font-weight: 600;
+}
+
+.erd-canvas {
+  overflow: auto;
+  max-width: 100%;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  background: var(--surface-1);
+  padding: 0.75rem;
+}
+
+.erd-svg {
+  min-width: min-content;
+}
+
+.erd-svg svg {
+  max-width: none;
+  height: auto;
+  display: block;
+}
+
+.erd-source-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.erd-source-pre {
+  margin: 0;
+  overflow: auto;
+  max-height: min(70vh, 720px);
+  background: var(--code-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-code);
+  font-size: var(--font-sm);
+  white-space: pre;
+}
+
+.erd-panel .is-hidden {
+  display: none !important;
+}
+
 
 
 /* === 60-utilities.css === */

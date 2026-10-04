@@ -7,12 +7,18 @@
     click PhysicalObject href "../PhysicalObject"
       HasOwnership <|-- PhysicalObject
         click HasOwnership href "../HasOwnership"
+      HasGovernanceClassification <|-- PhysicalObject
+        click HasGovernanceClassification href "../HasGovernanceClassification"
       HasPolicyBindings <|-- PhysicalObject
         click HasPolicyBindings href "../HasPolicyBindings"
       ModelElement <|-- PhysicalObject
         click ModelElement href "../ModelElement"
       
       PhysicalObject : aliases
+        
+      PhysicalObject : classification_rationale
+        
+      PhysicalObject : classification_source
         
       PhysicalObject : data_owner_ref
         
@@ -61,6 +67,17 @@
         
         PhysicalObject --> "*" GlossaryTerm : glossary_term_refs
         click GlossaryTerm href "../GlossaryTerm"
+    
+
+        
+      PhysicalObject : governance_classification
+        
+          
+    
+        
+        
+        PhysicalObject --> "0..1" GovernanceClassificationEnum : governance_classification
+        click GovernanceClassificationEnum href "../GovernanceClassificationEnum"
     
 
         
@@ -139,6 +156,28 @@
 
         
       PhysicalObject : qualified_name
+        
+      PhysicalObject : security_classification
+        
+          
+    
+        
+        
+        PhysicalObject --> "0..1" SecurityClassificationEnum : security_classification
+        click SecurityClassificationEnum href "../SecurityClassificationEnum"
+    
+
+        
+      PhysicalObject : sensitivity_term_refs
+        
+          
+    
+        
+        
+        PhysicalObject --> "*" DataClassificationTerm : sensitivity_term_refs
+        click DataClassificationTerm href "../DataClassificationTerm"
+    
+
         
       PhysicalObject : solution_ref
         

@@ -5,10 +5,16 @@
  classDiagram
     class HasGovernanceClassification
     click HasGovernanceClassification href "../HasGovernanceClassification"
+      HasGovernanceClassification <|-- ModelPackage
+        click ModelPackage href "../ModelPackage"
       HasGovernanceClassification <|-- LogicalEntity
         click LogicalEntity href "../LogicalEntity"
       HasGovernanceClassification <|-- LogicalAttribute
         click LogicalAttribute href "../LogicalAttribute"
+      HasGovernanceClassification <|-- PhysicalObject
+        click PhysicalObject href "../PhysicalObject"
+      HasGovernanceClassification <|-- PhysicalField
+        click PhysicalField href "../PhysicalField"
       
       HasGovernanceClassification : classification_rationale
         

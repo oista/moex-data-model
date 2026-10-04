@@ -5,6 +5,8 @@
  classDiagram
     class LogicalAttribute
     click LogicalAttribute href "../LogicalAttribute"
+      HasOwnership <|-- LogicalAttribute
+        click HasOwnership href "../HasOwnership"
       HasGovernanceClassification <|-- LogicalAttribute
         click HasGovernanceClassification href "../HasGovernanceClassification"
       HasPolicyBindings <|-- LogicalAttribute
@@ -19,6 +21,28 @@
       LogicalAttribute : classification_source
         
       LogicalAttribute : currency_attribute_ref
+        
+      LogicalAttribute : data_owner_ref
+        
+          
+    
+        
+        
+        LogicalAttribute --> "0..1" Role : data_owner_ref
+        click Role href "../Role"
+    
+
+        
+      LogicalAttribute : data_steward_ref
+        
+          
+    
+        
+        
+        LogicalAttribute --> "0..1" Role : data_steward_ref
+        click Role href "../Role"
+    
+
         
       LogicalAttribute : default_value
         
@@ -105,6 +129,19 @@
         
         LogicalAttribute --> "1" LogicalEntity : owner_entity_ref
         click LogicalEntity href "../LogicalEntity"
+    
+
+        
+      LogicalAttribute : ownership_inheritance_rule
+        
+      LogicalAttribute : owning_unit_ref
+        
+          
+    
+        
+        
+        LogicalAttribute --> "0..1" OrganizationUnit : owning_unit_ref
+        click OrganizationUnit href "../OrganizationUnit"
     
 
         

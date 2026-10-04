@@ -1,0 +1,23 @@
+<div class="section" data-section-id="{{ section.id }}" data-section-type="mermaid-diagram">
+  <h2>{{ section.title }}</h2>
+  {% if section.description %}<p class="section-desc">{{ section.description }}</p>{% endif %}
+  <div class="erd-panel" data-ui="mermaid-diagram">
+    <div class="erd-toolbar" role="tablist">
+      <button type="button" class="erd-tab is-active" data-erd-tab="diagram" role="tab" aria-selected="true">Диаграмма</button>
+      <button type="button" class="erd-tab" data-erd-tab="source" role="tab" aria-selected="false">Исходник</button>
+    </div>
+    <div class="erd-canvas" data-erd-pane="diagram">
+      {% if section.content %}
+      <div class="erd-svg">{{ section.content | safe }}</div>
+      {% else %}
+      <p class="muted">SVG не сгенерирован. Откройте вкладку «Исходник» или выполните scripts/render-mermaid-erd.ps1.</p>
+      {% endif %}
+    </div>
+    <div class="erd-source is-hidden" data-erd-pane="source" hidden>
+      <div class="erd-source-actions">
+        <button type="button" class="copy-btn" data-erd-copy>Copy</button>
+      </div>
+      <pre class="erd-source-pre"><code>{{ (section.attributes or {}).get('mermaid_source', '') }}</code></pre>
+    </div>
+  </div>
+</div>

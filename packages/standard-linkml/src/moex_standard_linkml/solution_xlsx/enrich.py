@@ -25,6 +25,7 @@ def enrich_package(
     package["conceptual_implementation_ref"] = profile.conceptual_implementation_ref
     package["data_owner_ref"] = defaults.data_owner_ref
     package["ownership_inheritance_rule"] = defaults.ownership_inheritance_rule.strip()
+    package["governance_classification"] = defaults.governance_classification
     package.setdefault("solution_ref", system.solution_ref)
 
     lineage_by_name: dict[str, str] = getattr(tables, "_mapping_lineage", {}) or {}
@@ -38,8 +39,8 @@ def enrich_package(
     for ent in package.get("logical_entities") or []:
         name = str(ent.get("name") or "")
         key = match_key(name) or name
-        ent["data_owner_ref"] = defaults.data_owner_ref
-        ent["governance_classification"] = defaults.governance_classification
+        # Ownership / governance_classification inherit from package via ADR-023
+        # cascade — do not stamp declared overrides on every entity/attribute.
         ent["business_key_kind"] = defaults.business_key_kind
         ent["identity_rule"] = defaults.identity_rule.strip()
         ent["conceptual_alignment_status"] = defaults.conceptual_alignment_status
@@ -65,9 +66,6 @@ def enrich_package(
             else:
                 attr["mapping_coverage_status"] = defaults.mapping_coverage_status_planned
                 attr["mapping_rationale"] = defaults.mapping_rationale_planned.strip()
-            attr.setdefault(
-                "governance_classification", defaults.governance_classification
-            )
 
     for po in package.get("physical_objects") or []:
         po["mapping_coverage_status"] = defaults.mapping_coverage_status_mapped

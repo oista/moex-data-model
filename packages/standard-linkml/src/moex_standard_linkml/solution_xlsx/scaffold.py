@@ -86,6 +86,16 @@ def build_publish_module(
                 "filterable": ["solution_data_role", "governance_classification"],
             },
             {
+                "id": "logical-erd",
+                "title": "Logical ER diagram",
+                "kind": "classes",
+                "type": "mermaid-diagram",
+                "source": {
+                    "format": "markdown",
+                    "path": "publications/logical.erd.md",
+                },
+            },
+            {
                 "id": "physical",
                 "title": "Physical objects",
                 "kind": "bindings",
@@ -105,6 +115,16 @@ def build_publish_module(
                     "technology",
                 ],
                 "filterable": ["object_kind"],
+            },
+            {
+                "id": "physical-erd",
+                "title": "Physical ER diagram",
+                "kind": "bindings",
+                "type": "mermaid-diagram",
+                "source": {
+                    "format": "markdown",
+                    "path": "publications/physical.erd.md",
+                },
             },
             {
                 "id": "slice-summary",

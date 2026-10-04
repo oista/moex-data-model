@@ -176,8 +176,8 @@ Name: moex_dams
 | [native_type](native_type.md) |  |
 | [object_kind](object_kind.md) |  |
 | [ordinal_position](ordinal_position.md) |  |
-| [owner_entity_ref](owner_entity_ref.md) |  |
-| [ownership_inheritance_rule](ownership_inheritance_rule.md) | Формальное правило наследования ответственности (owner/steward) от ИТ-решения... |
+| [owner_entity_ref](owner_entity_ref.md) | Structural parent LogicalEntity of this attribute (containment), not the data... |
+| [ownership_inheritance_rule](ownership_inheritance_rule.md) | Deprecated as source of truth (ADR-023) |
 | [owning_unit_ref](owning_unit_ref.md) |  |
 | [parent_concept_ref](parent_concept_ref.md) |  |
 | [parent_domain_ref](parent_domain_ref.md) |  |

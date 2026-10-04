@@ -12,6 +12,12 @@ moex-model semantic-diff --left a.yaml --right b.yaml --json
 # diagram (ModelPackage → DBML)
 moex-model diagram --root . --profile logical --out generated/artifacts/diagrams/trading-logical.dbml
 
+# diagram (ModelPackage → Mermaid erDiagram + SVG for viewer)
+moex-model diagram --root . --implementation model-assets/implementations/solutions/crm/crm-solution-model.yaml --format mermaid --profile logical
+moex-model diagram --root . --implementation model-assets/implementations/solutions/crm/crm-solution-model.yaml --format mermaid --profile physical
+# SVG only (Node/npx required):
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/render-mermaid-erd.ps1 -InputMd model-assets/implementations/solutions/crm/publications/logical.erd.md
+
 # import (ER-dictionary → ModelPackage)
 moex-model import --workbook packages/standard-linkml/tests/fixtures/er-dictionary --profile packages/standard-linkml/tests/fixtures/er-dictionary/profile.yaml --out generated/import-pilot --skip-validate
 

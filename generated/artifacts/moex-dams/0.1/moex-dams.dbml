@@ -228,6 +228,12 @@ data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
 ownership_inheritance_rule varchar
+governance_classification varchar
+security_classification varchar
+sensitivity_term_refs varchar
+classification_source varchar
+classification_rationale varchar
+policy_refs varchar
 }
 
 Table DomainContext {
@@ -342,6 +348,10 @@ unit_code varchar
 currency_attribute_ref varchar
 timezone_policy varchar
 temporal_semantics varchar
+data_owner_ref varchar
+data_steward_ref varchar
+owning_unit_ref varchar
+ownership_inheritance_rule varchar
 governance_classification varchar
 security_classification varchar
 sensitivity_term_refs varchar
@@ -402,6 +412,11 @@ data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
 ownership_inheritance_rule varchar
+governance_classification varchar
+security_classification varchar
+sensitivity_term_refs varchar
+classification_source varchar
+classification_rationale varchar
 policy_refs varchar
 }
 
@@ -425,6 +440,16 @@ ordinal_position int
 schema_path varchar
 mapping_coverage_status varchar
 mapping_rationale varchar
+data_owner_ref varchar
+data_steward_ref varchar
+owning_unit_ref varchar
+ownership_inheritance_rule varchar
+governance_classification varchar
+security_classification varchar
+sensitivity_term_refs varchar
+classification_source varchar
+classification_rationale varchar
+policy_refs varchar
 }
 
 Table Mapping {
@@ -711,6 +736,8 @@ Ref: ModelPackage.mappings > Mapping.element_id
 Ref: ModelPackage.data_owner_ref > Role.registry_id
 Ref: ModelPackage.data_steward_ref > Role.registry_id
 Ref: ModelPackage.owning_unit_ref > OrganizationUnit.registry_id
+Ref: ModelPackage.sensitivity_term_refs > DataClassificationTerm.registry_id
+Ref: ModelPackage.policy_refs > Policy.registry_id
 Ref: DomainContext.glossary_term_refs > GlossaryTerm.registry_id
 Ref: DomainContext.domain_ref > BusinessDomain.registry_id
 Ref: DomainContext.solution_ref > ITSolution.registry_id
@@ -736,6 +763,9 @@ Ref: LogicalEntity.sensitivity_term_refs > DataClassificationTerm.registry_id
 Ref: LogicalEntity.policy_refs > Policy.registry_id
 Ref: LogicalAttribute.glossary_term_refs > GlossaryTerm.registry_id
 Ref: LogicalAttribute.owner_entity_ref > LogicalEntity.element_id
+Ref: LogicalAttribute.data_owner_ref > Role.registry_id
+Ref: LogicalAttribute.data_steward_ref > Role.registry_id
+Ref: LogicalAttribute.owning_unit_ref > OrganizationUnit.registry_id
 Ref: LogicalAttribute.sensitivity_term_refs > DataClassificationTerm.registry_id
 Ref: LogicalAttribute.policy_refs > Policy.registry_id
 Ref: Relationship.glossary_term_refs > GlossaryTerm.registry_id
@@ -746,9 +776,15 @@ Ref: PhysicalObject.physical_fields > PhysicalField.element_id
 Ref: PhysicalObject.data_owner_ref > Role.registry_id
 Ref: PhysicalObject.data_steward_ref > Role.registry_id
 Ref: PhysicalObject.owning_unit_ref > OrganizationUnit.registry_id
+Ref: PhysicalObject.sensitivity_term_refs > DataClassificationTerm.registry_id
 Ref: PhysicalObject.policy_refs > Policy.registry_id
 Ref: PhysicalField.glossary_term_refs > GlossaryTerm.registry_id
 Ref: PhysicalField.physical_object_ref > PhysicalObject.element_id
+Ref: PhysicalField.data_owner_ref > Role.registry_id
+Ref: PhysicalField.data_steward_ref > Role.registry_id
+Ref: PhysicalField.owning_unit_ref > OrganizationUnit.registry_id
+Ref: PhysicalField.sensitivity_term_refs > DataClassificationTerm.registry_id
+Ref: PhysicalField.policy_refs > Policy.registry_id
 Ref: Mapping.glossary_term_refs > GlossaryTerm.registry_id
 Ref: Mapping.approved_by_ref > Role.registry_id
 Ref: DataFlow.glossary_term_refs > GlossaryTerm.registry_id
