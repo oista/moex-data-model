@@ -111,6 +111,26 @@ enums:
         description: >
           Сущность техническая/служебная и не относится к conceptual layer;
           допустимо только при entity_type technical.
+  DefinitionScopeKindEnum:
+    description: >
+      Kind of scope for a ScopedDefinition (ADR-025). v1 supports system only;
+      enum is intentionally extensible.
+    permissible_values:
+      system:
+        description: Definition applies within one ITSystem of the solution.
+  ScopedDefinitionRelationEnum:
+    description: >
+      How a scoped definition relates to the element's reference definition
+      (ADR-025).
+    permissible_values:
+      refines:
+        description: Clarifies the reference definition without changing extension.
+      narrows:
+        description: Restricts the meaning to a subset in this scope.
+      alternative:
+        description: Parallel wording for the same concept in this scope.
+      replaces:
+        description: Scope-local replacement; does not change the reference outside scope.
   MappingCoverageStatusEnum:
     description: >
       Статус покрытия элемента mapping’ом на соседнем уровне модели
@@ -323,6 +343,10 @@ enums:
       key_subset:
       at_least_one_slots:
         description: Хотя бы один из target_slots заполнен (override обоих допустим).
+      definition_resolvable:
+        description: >
+          Effective definition must resolve (ADR-025): own description,
+          definition_source_ref, or single conceptual_entity_refs inheritance.
       conditional_branch:
         description: >
           Фиксированный шаблон (имя в expression): status→slots, allowlist kinds,

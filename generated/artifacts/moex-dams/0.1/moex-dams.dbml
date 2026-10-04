@@ -185,6 +185,26 @@ approved_by_ref varchar
 approved_at datetime
 }
 
+Table HasDefinition {
+definition_source_ref varchar
+definition_rationale varchar
+scoped_definitions varchar
+}
+
+Table ScopedDefinition {
+scoped_definition_id varchar [not null, primary key]
+scope_kind varchar [not null]
+scope_ref varchar [not null]
+text varchar [not null]
+relation_to_reference varchar [not null]
+rationale varchar
+source_artifact_ref varchar
+evidence_refs varchar
+approval_status varchar
+approved_by_ref varchar
+approved_at datetime
+}
+
 Table ModelElement {
 element_id varchar [not null, primary key]
 name varchar [not null]
@@ -262,7 +282,6 @@ Table ConceptualEntity {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
 glossary_term_refs varchar
 tags varchar
@@ -272,6 +291,7 @@ valid_to datetime
 deprecated_by_ref varchar
 parent_concept_ref varchar
 key_attribute_refs varchar
+ConceptualEntity_description varchar [not null]
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
@@ -279,13 +299,16 @@ ownership_inheritance_rule varchar
 entity_type varchar
 data_class varchar
 business_importance varchar
+definition_source_ref varchar
+definition_rationale varchar
+scoped_definitions varchar
+description varchar [not null]
 }
 
 Table LogicalEntity {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
 glossary_term_refs varchar
 tags varchar
@@ -305,6 +328,7 @@ business_key_kind varchar
 conceptual_alignment_status varchar
 alignment_rationale varchar
 isolation_rationale varchar
+LogicalEntity_description varchar [not null]
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
@@ -318,13 +342,16 @@ sensitivity_term_refs varchar
 classification_source varchar
 classification_rationale varchar
 policy_refs varchar
+definition_source_ref varchar
+definition_rationale varchar
+scoped_definitions varchar
+description varchar [not null]
 }
 
 Table LogicalAttribute {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
 glossary_term_refs varchar
 tags varchar
@@ -348,6 +375,7 @@ unit_code varchar
 currency_attribute_ref varchar
 timezone_policy varchar
 temporal_semantics varchar
+LogicalAttribute_description varchar [not null]
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
@@ -358,6 +386,10 @@ sensitivity_term_refs varchar
 classification_source varchar
 classification_rationale varchar
 policy_refs varchar
+definition_source_ref varchar
+definition_rationale varchar
+scoped_definitions varchar
+description varchar [not null]
 }
 
 Table Relationship {
@@ -723,6 +755,8 @@ Ref: HasOwnership.owning_unit_ref > OrganizationUnit.registry_id
 Ref: HasGovernanceClassification.sensitivity_term_refs > DataClassificationTerm.registry_id
 Ref: HasPolicyBindings.policy_refs > Policy.registry_id
 Ref: HasProvenance.approved_by_ref > Role.registry_id
+Ref: HasDefinition.scoped_definitions > ScopedDefinition.scoped_definition_id
+Ref: ScopedDefinition.approved_by_ref > Role.registry_id
 Ref: ModelElement.glossary_term_refs > GlossaryTerm.registry_id
 Ref: ModelPackage.glossary_term_refs > GlossaryTerm.registry_id
 Ref: ModelPackage.solution_ref > ITSolution.registry_id
@@ -750,6 +784,7 @@ Ref: ConceptualEntity.parent_concept_ref > ConceptualEntity.element_id
 Ref: ConceptualEntity.data_owner_ref > Role.registry_id
 Ref: ConceptualEntity.data_steward_ref > Role.registry_id
 Ref: ConceptualEntity.owning_unit_ref > OrganizationUnit.registry_id
+Ref: ConceptualEntity.scoped_definitions > ScopedDefinition.scoped_definition_id
 Ref: LogicalEntity.glossary_term_refs > GlossaryTerm.registry_id
 Ref: LogicalEntity.context_ref > DomainContext.element_id
 Ref: LogicalEntity.conceptual_entity_refs > ConceptualEntity.element_id
@@ -761,6 +796,7 @@ Ref: LogicalEntity.data_steward_ref > Role.registry_id
 Ref: LogicalEntity.owning_unit_ref > OrganizationUnit.registry_id
 Ref: LogicalEntity.sensitivity_term_refs > DataClassificationTerm.registry_id
 Ref: LogicalEntity.policy_refs > Policy.registry_id
+Ref: LogicalEntity.scoped_definitions > ScopedDefinition.scoped_definition_id
 Ref: LogicalAttribute.glossary_term_refs > GlossaryTerm.registry_id
 Ref: LogicalAttribute.owner_entity_ref > LogicalEntity.element_id
 Ref: LogicalAttribute.data_owner_ref > Role.registry_id
@@ -768,6 +804,7 @@ Ref: LogicalAttribute.data_steward_ref > Role.registry_id
 Ref: LogicalAttribute.owning_unit_ref > OrganizationUnit.registry_id
 Ref: LogicalAttribute.sensitivity_term_refs > DataClassificationTerm.registry_id
 Ref: LogicalAttribute.policy_refs > Policy.registry_id
+Ref: LogicalAttribute.scoped_definitions > ScopedDefinition.scoped_definition_id
 Ref: Relationship.glossary_term_refs > GlossaryTerm.registry_id
 Ref: PhysicalObject.glossary_term_refs > GlossaryTerm.registry_id
 Ref: PhysicalObject.solution_ref > ITSolution.registry_id

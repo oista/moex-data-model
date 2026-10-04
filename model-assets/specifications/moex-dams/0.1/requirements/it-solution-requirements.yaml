@@ -200,8 +200,9 @@ requirements:
   code: LDM-002
   requirement_level: it_solution
   requirement_section: LDM
-  statement: У логической сущности должны быть русское бизнес-название, техническое имя, однозначное определение,
-    статус жизненного цикла и ответственный за данные либо применимое правило наследования ответственности.
+  statement: У логической сущности должны быть русское бизнес-название, техническое имя,
+    разрешимое эталонное определение (own description либо наследование по ADR-025),
+    статус жизненного цикла и ответственный за данные либо наследование ответственности (ADR-023).
   applies_to:
     applicability_id: appl:LDM-002
     applies_target_class: LogicalEntity
@@ -221,11 +222,12 @@ requirements:
     remediation: Укажите техническое имя сущности (name).
     diagnostic_code: DAMS-REQ-LDM-002.c2
   - check_id: LDM-002.c3
-    kind: slot_required
+    kind: definition_resolvable
     target_class: LogicalEntity
-    target_slot: description
     severity: error
-    remediation: Добавьте однозначное определение сущности.
+    remediation: >
+      Задайте description (own), либо definition_source_ref / единственный
+      conceptual_entity_refs для наследования эталонного определения (ADR-025).
     diagnostic_code: DAMS-REQ-LDM-002.c3
   - check_id: LDM-002.c4
     kind: slot_required

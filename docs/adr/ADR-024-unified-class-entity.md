@@ -21,7 +21,7 @@ The same domain concept (`owl:Class` / LinkML `class`) appeared under different 
 ## Decision
 
 1. **One semantic name `class`** for LinkML classes and OWL named classes. Differences stay in the renderer selected by publication profile (`data-structure` vs `ontology-list`), as in ADR-016.
-2. **Glossary (ontology profile)** is a flat alphabetical **view** of the same class entities from the same source, not a separate data set. Profile metamodel terms (`FiboDomain`, IRI patterns, …) are documented in README / `metamodel/*.yaml`, not duplicated as glossary rows.
+2. **Glossary (ontology profile)** is a flat alphabetical **view** of the same class entities from the same source, not a separate data set. Profile metamodel terms (`FiboDomain`, IRI patterns, …) are documented in README / `metamodel/*.yaml`, not duplicated as glossary rows. ADR-025 generalises this: every glossary is a view of definitions for a coverage (ontology / model / corporate), never a separate entity type.
 3. **Class hierarchy** uses asserted `subClassOf` (preview: `parent_local_name`). Domain grouping (`source_domain`) nests under the Classes root. Multiple inheritance may repeat a node in several branches; the card URL/id stays canonical. Imported (`owl:imports`) classes may carry `origin`; preview data are `own`.
 4. **Anonymous classes / restrictions** do not appear in the tree (card detail later; out of this increment).
 5. **FIBO Spec module (`edmc.fibo`)** publishes a class index from release preview data under kind `classes`, while metamodel organization moves to:

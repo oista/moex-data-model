@@ -1,4 +1,6 @@
 # SKOS concept scheme projection for business glossary (not owl:Class).
+# Projection only (ADR-025): not an authoritative definition source.
+# Canonical definitions live on ConceptualEntity / ontology classes / GlossaryTerm master.
 scheme_id: moex:glossary:core
 prefLabel: MOEX core business glossary (sample)
 concepts:

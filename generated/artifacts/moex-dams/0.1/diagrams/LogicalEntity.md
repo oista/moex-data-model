@@ -13,6 +13,8 @@
         click HasGovernanceClassification href "../HasGovernanceClassification"
       HasPolicyBindings <|-- LogicalEntity
         click HasPolicyBindings href "../HasPolicyBindings"
+      HasDefinition <|-- LogicalEntity
+        click HasDefinition href "../HasDefinition"
       ModelElement <|-- LogicalEntity
         click ModelElement href "../ModelElement"
       
@@ -123,6 +125,10 @@
     
 
         
+      LogicalEntity : definition_rationale
+        
+      LogicalEntity : definition_source_ref
+        
       LogicalEntity : deprecated_by_ref
         
       LogicalEntity : description
@@ -213,6 +219,17 @@
         
         LogicalEntity --> "*" Policy : policy_refs
         click Policy href "../Policy"
+    
+
+        
+      LogicalEntity : scoped_definitions
+        
+          
+    
+        
+        
+        LogicalEntity --> "*" ScopedDefinition : scoped_definitions
+        click ScopedDefinition href "../ScopedDefinition"
     
 
         

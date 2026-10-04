@@ -29,7 +29,10 @@ sections:
 
   - id: glossary
     title: Glossary
-    description: Key DAMS terms for readers
+    description: >
+      Key DAMS terms for readers (hand-curated projection). Candidate for
+      generation from schema class descriptions per ADR-025; not an
+      authoritative definition source.
     type: glossary
     kind: glossary
     source:

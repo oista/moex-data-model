@@ -56,7 +56,10 @@
 | `HasBusinessClassification` | Роль в бизнесе: `entity_type`, `data_class`, `business_importance` (не каскадируются) |
 | `HasGovernanceClassification` | Базовая маркировка: `governance_classification` каскадируется (ADR-023); `security_classification` — Wave 2 |
 | `HasPolicyBindings` | `policy_refs`: absent = inherit; present list (в т.ч. `[]`) = full replace (ADR-023) |
+| `HasDefinition` | Эталонное определение (ADR-025): `description` = own `skos:definition`; `definition_source_ref` / `scoped_definitions`; наследование по семантической оси, не containment |
 | `HasProvenance` | Происхождение и согласование: `source_artifact_ref`, `approval_status`, `approved_by_ref`, `approved_at` |
+
+> Этот файл — developer-справочник по конструкциям LinkML в DAMS, **не** бизнес-глоссарий предметной области (см. ADR-025).
 
 Правило разрешения свойств в LinkML при конфликте — «глубина поиска» по порядку: локальный `slot_usage` класса → `slot_usage` в mixins (по порядку перечисления) → `slot_usage` в `is_a`-родителе → глобальное определение слота.
 

@@ -76,7 +76,10 @@ text-rule inheritance.
 
 **Not in cascade:** `entity_type`, `data_class`, `business_importance`
 (intrinsic entity axes); `security_classification` / `sensitivity_term_refs`
-(Wave 2); inheritance via `realizes`.
+(Wave 2). Inheritance of **definitions** via the semantic chain
+(`realizes` / `conceptual_entity_refs` / external exact sources) is specified
+separately in [ADR-025](ADR-025-definition-cascade-and-glossary.md) — not as a
+governed-family extension of this containment cascade.
 
 ### Relation to assignment classes
 
@@ -116,10 +119,11 @@ cascade for their validity window.
 | Copy-down into YAML | Loses inherit vs override; breaks package-level updates; inflates semantic diff |
 | XOR `data_owner_ref` / `ownership_inheritance_rule` | Text rule is not executable; already rejected as XOR in requirements |
 | Union of `policy_refs` | Ambiguous removal; empty list cannot mean “no policies” |
-| Inherit via `realizes` | Second axis needs explicit priority; deferred as extension |
+| Inherit via `realizes` | Wrong axis for ownership/classification/policies; definitions use ADR-025 |
 | Separate inheritance DSL | Overkill; containment tree already defines the chain |
 
 ## Related
 
 - ADR-001 (YAML canonical), ADR-007 (DTO ≠ validator), ADR-013 (requirements catalog / formal_checks)
+- ADR-025 (definition cascade on the semantic axis; closes the deferred realizes note for definitions only)
 )

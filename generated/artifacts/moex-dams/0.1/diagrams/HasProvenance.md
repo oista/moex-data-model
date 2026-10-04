@@ -5,6 +5,8 @@
  classDiagram
     class HasProvenance
     click HasProvenance href "../HasProvenance"
+      HasProvenance <|-- ScopedDefinition
+        click ScopedDefinition href "../ScopedDefinition"
       HasProvenance <|-- Mapping
         click Mapping href "../Mapping"
       

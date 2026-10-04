@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-04T20:21:30
+# Generation date: 2026-10-04T20:57:13
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -147,6 +147,10 @@ class ClassificationAssignmentAssignmentId(URIorCURIE):
 
 
 class PolicyBindingPolicyBindingId(URIorCURIE):
+    pass
+
+
+class ScopedDefinitionScopedDefinitionId(URIorCURIE):
     pass
 
 
@@ -962,6 +966,110 @@ class HasProvenance(YAMLRoot):
 
 
 @dataclass(repr=False)
+class HasDefinition(YAMLRoot):
+    """
+    Mixin эталонного определения (ADR-025). Слот description остаётся skos:definition (own text). Отсутствие
+    description при наличии definition_source_ref означает наследование; заданный description — own (опционально
+    adapted from source). scoped_definitions — контекстные определения (v1: уровень ITSystem), не заменяющие эталон
+    вне scope.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["HasDefinition"]
+    class_class_curie: ClassVar[str] = "dams:HasDefinition"
+    class_name: ClassVar[str] = "HasDefinition"
+    class_model_uri: ClassVar[URIRef] = DAMS.HasDefinition
+
+    definition_source_ref: Optional[Union[str, URIorCURIE]] = None
+    definition_rationale: Optional[str] = None
+    scoped_definitions: Optional[Union[dict[Union[str, ScopedDefinitionScopedDefinitionId], Union[dict, "ScopedDefinition"]], list[Union[dict, "ScopedDefinition"]]]] = empty_dict()
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self.definition_source_ref is not None and not isinstance(self.definition_source_ref, URIorCURIE):
+            self.definition_source_ref = URIorCURIE(self.definition_source_ref)
+
+        if self.definition_rationale is not None and not isinstance(self.definition_rationale, str):
+            self.definition_rationale = str(self.definition_rationale)
+
+        self._normalize_inlined_as_list(slot_name="scoped_definitions", slot_type=ScopedDefinition, key_name="scoped_definition_id", keyed=True)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class ScopedDefinition(YAMLRoot):
+    """
+    Контекстное определение элемента модели (ADR-025 / ISO 11179 Context). Не является отдельным термином глоссария и
+    не заменяет эталонное определение вне указанного scope.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["ScopedDefinition"]
+    class_class_curie: ClassVar[str] = "dams:ScopedDefinition"
+    class_name: ClassVar[str] = "ScopedDefinition"
+    class_model_uri: ClassVar[URIRef] = DAMS.ScopedDefinition
+
+    scoped_definition_id: Union[str, ScopedDefinitionScopedDefinitionId] = None
+    scope_kind: Union[str, "DefinitionScopeKindEnum"] = None
+    scope_ref: Union[str, URIorCURIE] = None
+    text: str = None
+    relation_to_reference: Union[str, "ScopedDefinitionRelationEnum"] = None
+    rationale: Optional[str] = None
+    source_artifact_ref: Optional[Union[str, URI]] = None
+    evidence_refs: Optional[Union[Union[str, URI], list[Union[str, URI]]]] = empty_list()
+    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
+    approved_by_ref: Optional[Union[str, RoleRegistryId]] = None
+    approved_at: Optional[Union[str, XSDDateTime]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.scoped_definition_id):
+            self.MissingRequiredField("scoped_definition_id")
+        if not isinstance(self.scoped_definition_id, ScopedDefinitionScopedDefinitionId):
+            self.scoped_definition_id = ScopedDefinitionScopedDefinitionId(self.scoped_definition_id)
+
+        if self._is_empty(self.scope_kind):
+            self.MissingRequiredField("scope_kind")
+        if not isinstance(self.scope_kind, DefinitionScopeKindEnum):
+            self.scope_kind = DefinitionScopeKindEnum(self.scope_kind)
+
+        if self._is_empty(self.scope_ref):
+            self.MissingRequiredField("scope_ref")
+        if not isinstance(self.scope_ref, URIorCURIE):
+            self.scope_ref = URIorCURIE(self.scope_ref)
+
+        if self._is_empty(self.text):
+            self.MissingRequiredField("text")
+        if not isinstance(self.text, str):
+            self.text = str(self.text)
+
+        if self._is_empty(self.relation_to_reference):
+            self.MissingRequiredField("relation_to_reference")
+        if not isinstance(self.relation_to_reference, ScopedDefinitionRelationEnum):
+            self.relation_to_reference = ScopedDefinitionRelationEnum(self.relation_to_reference)
+
+        if self.rationale is not None and not isinstance(self.rationale, str):
+            self.rationale = str(self.rationale)
+
+        if self.source_artifact_ref is not None and not isinstance(self.source_artifact_ref, URI):
+            self.source_artifact_ref = URI(self.source_artifact_ref)
+
+        if not isinstance(self.evidence_refs, list):
+            self.evidence_refs = [self.evidence_refs] if self.evidence_refs is not None else []
+        self.evidence_refs = [v if isinstance(v, URI) else URI(v) for v in self.evidence_refs]
+
+        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
+            self.approval_status = ApprovalStatusEnum(self.approval_status)
+
+        if self.approved_by_ref is not None and not isinstance(self.approved_by_ref, RoleRegistryId):
+            self.approved_by_ref = RoleRegistryId(self.approved_by_ref)
+
+        if self.approved_at is not None and not isinstance(self.approved_at, XSDDateTime):
+            self.approved_at = XSDDateTime(self.approved_at)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
 class ModelElement(YAMLRoot):
     """
     Абстрактный корень иерархии элементов модели: общая идентичность (element_id), имя, описание и жизненный цикл.
@@ -1232,8 +1340,8 @@ class ConceptualEntity(ModelElement):
 
     element_id: Union[str, ConceptualEntityElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    description: str = None
     parent_concept_ref: Optional[Union[str, ConceptualEntityElementId]] = None
     key_attribute_refs: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
@@ -1243,12 +1351,20 @@ class ConceptualEntity(ModelElement):
     entity_type: Optional[Union[str, "EntityTypeEnum"]] = None
     data_class: Optional[Union[str, "DataClassEnum"]] = None
     business_importance: Optional[Union[str, "BusinessImportanceEnum"]] = None
+    definition_source_ref: Optional[Union[str, URIorCURIE]] = None
+    definition_rationale: Optional[str] = None
+    scoped_definitions: Optional[Union[dict[Union[str, ScopedDefinitionScopedDefinitionId], Union[dict, ScopedDefinition]], list[Union[dict, ScopedDefinition]]]] = empty_dict()
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
             self.MissingRequiredField("element_id")
         if not isinstance(self.element_id, ConceptualEntityElementId):
             self.element_id = ConceptualEntityElementId(self.element_id)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         if self.parent_concept_ref is not None and not isinstance(self.parent_concept_ref, ConceptualEntityElementId):
             self.parent_concept_ref = ConceptualEntityElementId(self.parent_concept_ref)
@@ -1278,6 +1394,14 @@ class ConceptualEntity(ModelElement):
         if self.business_importance is not None and not isinstance(self.business_importance, BusinessImportanceEnum):
             self.business_importance = BusinessImportanceEnum(self.business_importance)
 
+        if self.definition_source_ref is not None and not isinstance(self.definition_source_ref, URIorCURIE):
+            self.definition_source_ref = URIorCURIE(self.definition_source_ref)
+
+        if self.definition_rationale is not None and not isinstance(self.definition_rationale, str):
+            self.definition_rationale = str(self.definition_rationale)
+
+        self._normalize_inlined_as_list(slot_name="scoped_definitions", slot_type=ScopedDefinition, key_name="scoped_definition_id", keyed=True)
+
         super().__post_init__(**kwargs)
 
 
@@ -1295,10 +1419,10 @@ class LogicalEntity(ModelElement):
 
     element_id: Union[str, LogicalEntityElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     context_ref: Union[str, DomainContextElementId] = None
     solution_data_role: Union[str, "SolutionDataRoleEnum"] = None
+    description: str = None
     conceptual_entity_refs: Optional[Union[Union[str, ConceptualEntityElementId], list[Union[str, ConceptualEntityElementId]]]] = empty_list()
     solution_ref: Optional[Union[str, ITSolutionRegistryId]] = None
     attributes: Optional[Union[dict[Union[str, LogicalAttributeElementId], Union[dict, "LogicalAttribute"]], list[Union[dict, "LogicalAttribute"]]]] = empty_dict()
@@ -1322,6 +1446,9 @@ class LogicalEntity(ModelElement):
     classification_source: Optional[str] = None
     classification_rationale: Optional[str] = None
     policy_refs: Optional[Union[Union[str, PolicyRegistryId], list[Union[str, PolicyRegistryId]]]] = empty_list()
+    definition_source_ref: Optional[Union[str, URIorCURIE]] = None
+    definition_rationale: Optional[str] = None
+    scoped_definitions: Optional[Union[dict[Union[str, ScopedDefinitionScopedDefinitionId], Union[dict, ScopedDefinition]], list[Union[dict, ScopedDefinition]]]] = empty_dict()
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
@@ -1338,6 +1465,11 @@ class LogicalEntity(ModelElement):
             self.MissingRequiredField("solution_data_role")
         if not isinstance(self.solution_data_role, SolutionDataRoleEnum):
             self.solution_data_role = SolutionDataRoleEnum(self.solution_data_role)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         if not isinstance(self.conceptual_entity_refs, list):
             self.conceptual_entity_refs = [self.conceptual_entity_refs] if self.conceptual_entity_refs is not None else []
@@ -1412,6 +1544,14 @@ class LogicalEntity(ModelElement):
             self.policy_refs = [self.policy_refs] if self.policy_refs is not None else []
         self.policy_refs = [v if isinstance(v, PolicyRegistryId) else PolicyRegistryId(v) for v in self.policy_refs]
 
+        if self.definition_source_ref is not None and not isinstance(self.definition_source_ref, URIorCURIE):
+            self.definition_source_ref = URIorCURIE(self.definition_source_ref)
+
+        if self.definition_rationale is not None and not isinstance(self.definition_rationale, str):
+            self.definition_rationale = str(self.definition_rationale)
+
+        self._normalize_inlined_as_list(slot_name="scoped_definitions", slot_type=ScopedDefinition, key_name="scoped_definition_id", keyed=True)
+
         super().__post_init__(**kwargs)
 
 
@@ -1429,12 +1569,12 @@ class LogicalAttribute(ModelElement):
 
     element_id: Union[str, LogicalAttributeElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     owner_entity_ref: Union[str, LogicalEntityElementId] = None
     logical_type: Union[str, "LogicalDataTypeEnum"] = None
     required: Union[bool, Bool] = None
     multivalued: Union[bool, Bool] = None
+    description: str = None
     minimum_cardinality: Optional[int] = None
     maximum_cardinality: Optional[int] = None
     value_set_ref: Optional[Union[str, URI]] = None
@@ -1457,6 +1597,9 @@ class LogicalAttribute(ModelElement):
     classification_source: Optional[str] = None
     classification_rationale: Optional[str] = None
     policy_refs: Optional[Union[Union[str, PolicyRegistryId], list[Union[str, PolicyRegistryId]]]] = empty_list()
+    definition_source_ref: Optional[Union[str, URIorCURIE]] = None
+    definition_rationale: Optional[str] = None
+    scoped_definitions: Optional[Union[dict[Union[str, ScopedDefinitionScopedDefinitionId], Union[dict, ScopedDefinition]], list[Union[dict, ScopedDefinition]]]] = empty_dict()
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
@@ -1483,6 +1626,11 @@ class LogicalAttribute(ModelElement):
             self.MissingRequiredField("multivalued")
         if not isinstance(self.multivalued, Bool):
             self.multivalued = Bool(self.multivalued)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         if self.minimum_cardinality is not None and not isinstance(self.minimum_cardinality, int):
             self.minimum_cardinality = int(self.minimum_cardinality)
@@ -1551,6 +1699,14 @@ class LogicalAttribute(ModelElement):
         if not isinstance(self.policy_refs, list):
             self.policy_refs = [self.policy_refs] if self.policy_refs is not None else []
         self.policy_refs = [v if isinstance(v, PolicyRegistryId) else PolicyRegistryId(v) for v in self.policy_refs]
+
+        if self.definition_source_ref is not None and not isinstance(self.definition_source_ref, URIorCURIE):
+            self.definition_source_ref = URIorCURIE(self.definition_source_ref)
+
+        if self.definition_rationale is not None and not isinstance(self.definition_rationale, str):
+            self.definition_rationale = str(self.definition_rationale)
+
+        self._normalize_inlined_as_list(slot_name="scoped_definitions", slot_type=ScopedDefinition, key_name="scoped_definition_id", keyed=True)
 
         super().__post_init__(**kwargs)
 
@@ -2859,6 +3015,41 @@ class ConceptualAlignmentStatusEnum(EnumDefinitionImpl):
                 text="not-applicable",
                 description="""Сущность техническая/служебная и не относится к conceptual layer; допустимо только при entity_type technical."""))
 
+class DefinitionScopeKindEnum(EnumDefinitionImpl):
+    """
+    Kind of scope for a ScopedDefinition (ADR-025). v1 supports system only; enum is intentionally extensible.
+    """
+    system = PermissibleValue(
+        text="system",
+        description="Definition applies within one ITSystem of the solution.")
+
+    _defn = EnumDefinition(
+        name="DefinitionScopeKindEnum",
+        description="""Kind of scope for a ScopedDefinition (ADR-025). v1 supports system only; enum is intentionally extensible.""",
+    )
+
+class ScopedDefinitionRelationEnum(EnumDefinitionImpl):
+    """
+    How a scoped definition relates to the element's reference definition (ADR-025).
+    """
+    refines = PermissibleValue(
+        text="refines",
+        description="Clarifies the reference definition without changing extension.")
+    narrows = PermissibleValue(
+        text="narrows",
+        description="Restricts the meaning to a subset in this scope.")
+    alternative = PermissibleValue(
+        text="alternative",
+        description="Parallel wording for the same concept in this scope.")
+    replaces = PermissibleValue(
+        text="replaces",
+        description="Scope-local replacement; does not change the reference outside scope.")
+
+    _defn = EnumDefinition(
+        name="ScopedDefinitionRelationEnum",
+        description="""How a scoped definition relates to the element's reference definition (ADR-025).""",
+    )
+
 class MappingCoverageStatusEnum(EnumDefinitionImpl):
     """
     Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical). Не статус самой логической
@@ -3228,6 +3419,9 @@ class FormalCheckKindEnum(EnumDefinitionImpl):
     at_least_one_slots = PermissibleValue(
         text="at_least_one_slots",
         description="Хотя бы один из target_slots заполнен (override обоих допустим).")
+    definition_resolvable = PermissibleValue(
+        text="definition_resolvable",
+        description="""Effective definition must resolve (ADR-025): own description, definition_source_ref, or single conceptual_entity_refs inheritance.""")
     conditional_branch = PermissibleValue(
         text="conditional_branch",
         description="""Фиксированный шаблон (имя в expression): status→slots, allowlist kinds, planned guard, semantic inclusion и т.п. Без произвольного mini-language.""")
@@ -3388,6 +3582,33 @@ slots.approved_by_ref = Slot(uri=DAMS.approved_by_ref, name="approved_by_ref", c
 
 slots.approved_at = Slot(uri=DAMS.approved_at, name="approved_at", curie=DAMS.curie('approved_at'),
                    model_uri=DAMS.approved_at, domain=None, range=Optional[Union[str, XSDDateTime]])
+
+slots.definition_source_ref = Slot(uri=DAMS.definition_source_ref, name="definition_source_ref", curie=DAMS.curie('definition_source_ref'),
+                   model_uri=DAMS.definition_source_ref, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.definition_rationale = Slot(uri=DAMS.definition_rationale, name="definition_rationale", curie=DAMS.curie('definition_rationale'),
+                   model_uri=DAMS.definition_rationale, domain=None, range=Optional[str])
+
+slots.scoped_definitions = Slot(uri=DAMS.scoped_definitions, name="scoped_definitions", curie=DAMS.curie('scoped_definitions'),
+                   model_uri=DAMS.scoped_definitions, domain=None, range=Optional[Union[dict[Union[str, ScopedDefinitionScopedDefinitionId], Union[dict, ScopedDefinition]], list[Union[dict, ScopedDefinition]]]])
+
+slots.scoped_definition_id = Slot(uri=DAMS.scoped_definition_id, name="scoped_definition_id", curie=DAMS.curie('scoped_definition_id'),
+                   model_uri=DAMS.scoped_definition_id, domain=None, range=URIRef)
+
+slots.scope_kind = Slot(uri=DAMS.scope_kind, name="scope_kind", curie=DAMS.curie('scope_kind'),
+                   model_uri=DAMS.scope_kind, domain=None, range=Union[str, "DefinitionScopeKindEnum"])
+
+slots.scope_ref = Slot(uri=DAMS.scope_ref, name="scope_ref", curie=DAMS.curie('scope_ref'),
+                   model_uri=DAMS.scope_ref, domain=None, range=Union[str, URIorCURIE])
+
+slots.text = Slot(uri=DAMS.text, name="text", curie=DAMS.curie('text'),
+                   model_uri=DAMS.text, domain=None, range=str)
+
+slots.relation_to_reference = Slot(uri=DAMS.relation_to_reference, name="relation_to_reference", curie=DAMS.curie('relation_to_reference'),
+                   model_uri=DAMS.relation_to_reference, domain=None, range=Union[str, "ScopedDefinitionRelationEnum"])
+
+slots.rationale = Slot(uri=DAMS.rationale, name="rationale", curie=DAMS.curie('rationale'),
+                   model_uri=DAMS.rationale, domain=None, range=Optional[str])
 
 slots.element_id = Slot(uri=DAMS.element_id, name="element_id", curie=DAMS.curie('element_id'),
                    model_uri=DAMS.element_id, domain=None, range=URIRef)
@@ -3827,3 +4048,12 @@ slots.catalog_id = Slot(uri=DAMS.catalog_id, name="catalog_id", curie=DAMS.curie
 
 slots.requirements = Slot(uri=DAMS.requirements, name="requirements", curie=DAMS.curie('requirements'),
                    model_uri=DAMS.requirements, domain=None, range=Optional[Union[dict[Union[str, SpecificationRequirementElementId], Union[dict, SpecificationRequirement]], list[Union[dict, SpecificationRequirement]]]])
+
+slots.ConceptualEntity_description = Slot(uri=DAMS.description, name="ConceptualEntity_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.ConceptualEntity_description, domain=ConceptualEntity, range=str)
+
+slots.LogicalEntity_description = Slot(uri=DAMS.description, name="LogicalEntity_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.LogicalEntity_description, domain=LogicalEntity, range=str)
+
+slots.LogicalAttribute_description = Slot(uri=DAMS.description, name="LogicalAttribute_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.LogicalAttribute_description, domain=LogicalAttribute, range=str)

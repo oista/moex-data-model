@@ -9,6 +9,8 @@
         click HasOwnership href "../HasOwnership"
       HasBusinessClassification <|-- ConceptualEntity
         click HasBusinessClassification href "../HasBusinessClassification"
+      HasDefinition <|-- ConceptualEntity
+        click HasDefinition href "../HasDefinition"
       ModelElement <|-- ConceptualEntity
         click ModelElement href "../ModelElement"
       
@@ -57,6 +59,10 @@
         click Role href "../Role"
     
 
+        
+      ConceptualEntity : definition_rationale
+        
+      ConceptualEntity : definition_source_ref
         
       ConceptualEntity : deprecated_by_ref
         
@@ -122,6 +128,17 @@
         
         ConceptualEntity --> "0..1" ConceptualEntity : parent_concept_ref
         click ConceptualEntity href "../ConceptualEntity"
+    
+
+        
+      ConceptualEntity : scoped_definitions
+        
+          
+    
+        
+        
+        ConceptualEntity --> "*" ScopedDefinition : scoped_definitions
+        click ScopedDefinition href "../ScopedDefinition"
     
 
         

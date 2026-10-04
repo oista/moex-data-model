@@ -11,6 +11,8 @@
         click HasGovernanceClassification href "../HasGovernanceClassification"
       HasPolicyBindings <|-- LogicalAttribute
         click HasPolicyBindings href "../HasPolicyBindings"
+      HasDefinition <|-- LogicalAttribute
+        click HasDefinition href "../HasDefinition"
       ModelElement <|-- LogicalAttribute
         click ModelElement href "../ModelElement"
       
@@ -45,6 +47,10 @@
 
         
       LogicalAttribute : default_value
+        
+      LogicalAttribute : definition_rationale
+        
+      LogicalAttribute : definition_source_ref
         
       LogicalAttribute : deprecated_by_ref
         
@@ -157,6 +163,17 @@
 
         
       LogicalAttribute : required
+        
+      LogicalAttribute : scoped_definitions
+        
+          
+    
+        
+        
+        LogicalAttribute --> "*" ScopedDefinition : scoped_definitions
+        click ScopedDefinition href "../ScopedDefinition"
+    
+
         
       LogicalAttribute : security_classification
         

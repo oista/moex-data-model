@@ -104,10 +104,13 @@ Publication Viewer / API
 | Простое соответствие | LinkML `exact_mappings` / `close_mappings` / … |
 | Управляемое соответствие с автором и статусом | `SemanticBinding` (SSSOM) |
 | Связи между терминами глоссария | SKOS |
+| Эталонное определение ConceptualEntity / LogicalEntity | `description` (`skos:definition`) + ADR-025 cascade; наследование из онтологии только при exactMatch / equivalentClass |
+| Привязка к корпоративному глоссарию | `glossary_term_refs` (term assignment; не источник определения) |
+| Источник унаследованного / adapted определения | `definition_source_ref` (ADR-025) |
 
 DAMS-класс `Mapping` в `moex-core.yaml` остаётся соответствием conceptual / logical / physical внутри модели решения; он не заменяет SSSOM.
 
-`GlossaryTerm` в registries остаётся `RegistryEntry`. SKOS concept scheme — отдельная проекция; термин не становится `owl:Class` автоматически.
+`GlossaryTerm` в registries остаётся `RegistryEntry` — проекция записи корпоративного глоссария. SKOS concept scheme — отдельная **проекция**, не источник истины; термин не становится `owl:Class` автоматически. «Глоссарий» в publication viewer — всегда **view** определений заданного охвата (ADR-024 / ADR-025), не отдельная сущность.
 
 ## Publication Viewer
 

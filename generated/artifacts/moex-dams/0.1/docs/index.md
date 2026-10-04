@@ -26,6 +26,7 @@ Name: moex_dams
 | [FormalCheck](FormalCheck.md) | Одна машиночитаемая проверка требования |
 | [GlossaryTerm](GlossaryTerm.md) | Термин корпоративного бизнес-глоссария |
 | [HasBusinessClassification](HasBusinessClassification.md) | Классификация роли и бизнес-значимости логической сущности |
+| [HasDefinition](HasDefinition.md) | Mixin эталонного определения (ADR-025) |
 | [HasGovernanceClassification](HasGovernanceClassification.md) | Базовая и специальная классификация чувствительности данных |
 | [HasLifecycle](HasLifecycle.md) | Mixin жизненного цикла: статус, период действия и ссылка на заменяющий элемен... |
 | [HasOwnership](HasOwnership.md) | Mixin владения: data owner, data steward и организационное подразделение |
@@ -53,6 +54,7 @@ Name: moex_dams
 | [RequirementApplicability](RequirementApplicability.md) | Область применимости требования (без graph queries): класс цели, профиль и ур... |
 | [RequirementCatalog](RequirementCatalog.md) | Контейнер инстансов SpecificationRequirement вне ModelPackage |
 | [Role](Role.md) | Управляемая роль владельца, стюарда, потребителя или согласующего |
+| [ScopedDefinition](ScopedDefinition.md) | Контекстное определение элемента модели (ADR-025 / ISO 11179 Context) |
 | [SelectedAttribute](SelectedAttribute.md) | Выбранный атрибут и соответствующее физическое поле payload, таблицы или сооб... |
 | [SelectedEntity](SelectedEntity.md) | Выбранная для интеграции логическая сущность |
 | [SpecificationRequirement](SpecificationRequirement.md) | Нормативное требование к модели, соответствующей reference specification (кат... |
@@ -108,6 +110,8 @@ Name: moex_dams
 | [data_owner_ref](data_owner_ref.md) |  |
 | [data_steward_ref](data_steward_ref.md) |  |
 | [default_value](default_value.md) |  |
+| [definition_rationale](definition_rationale.md) | Human rationale for declaring an own definition when a source is also cited, ... |
+| [definition_source_ref](definition_source_ref.md) | Reference to the element or external term whose definition is inherited or ad... |
 | [deprecated_by_ref](deprecated_by_ref.md) |  |
 | [derived_expression](derived_expression.md) |  |
 | [description](description.md) |  |
@@ -193,11 +197,13 @@ Name: moex_dams
 | [policy_refs](policy_refs.md) |  |
 | [policy_target_ref](policy_target_ref.md) |  |
 | [qualified_name](qualified_name.md) |  |
+| [rationale](rationale.md) | Why this scoped wording differs from the reference definition |
 | [registry_description](registry_description.md) |  |
 | [registry_entries](registry_entries.md) |  |
 | [registry_id](registry_id.md) |  |
 | [registry_name](registry_name.md) |  |
 | [registry_status](registry_status.md) |  |
+| [relation_to_reference](relation_to_reference.md) |  |
 | [relationship_kind](relationship_kind.md) | Тип логической связи (Wave 2) |
 | [relationships](relationships.md) |  |
 | [remediation](remediation.md) | Actionable remediation text for CI / Cursor / authors |
@@ -207,6 +213,10 @@ Name: moex_dams
 | [requirement_section](requirement_section.md) |  |
 | [requirements](requirements.md) |  |
 | [schema_path](schema_path.md) |  |
+| [scope_kind](scope_kind.md) |  |
+| [scope_ref](scope_ref.md) | Target of the scope (e |
+| [scoped_definition_id](scoped_definition_id.md) |  |
+| [scoped_definitions](scoped_definitions.md) | Context-scoped definitions (ADR-025); v1 scope_kind = system |
 | [security_classification](security_classification.md) | Режим защиты (Wave 2); ортогонален governance_classification |
 | [selected_attributes](selected_attributes.md) |  |
 | [selected_entities](selected_entities.md) |  |
@@ -244,6 +254,7 @@ Name: moex_dams
 | [target_system_ref](target_system_ref.md) |  |
 | [technology](technology.md) |  |
 | [temporal_semantics](temporal_semantics.md) | Семантика даты/времени (Wave 2 soft) |
+| [text](text.md) | Scoped definition text (skos:definition in this context) |
 | [timezone_policy](timezone_policy.md) | Политика часового пояса для timestamp (Wave 2 soft) |
 | [title](title.md) |  |
 | [transformation_expression](transformation_expression.md) |  |
@@ -269,6 +280,7 @@ Name: moex_dams
 | [ConceptualAlignmentStatusEnum](ConceptualAlignmentStatusEnum.md) | Статус выравнивания логической сущности с корпоративным концептуальным уровне... |
 | [DAMSModelLevelEnum](DAMSModelLevelEnum.md) | Package-level DAMS model layer (ADR-021) |
 | [DataClassEnum](DataClassEnum.md) | Класс данных для наследования модельной спецификацией дата-контракта; не совп... |
+| [DefinitionScopeKindEnum](DefinitionScopeKindEnum.md) | Kind of scope for a ScopedDefinition (ADR-025) |
 | [EnforcementResultEnum](EnforcementResultEnum.md) |  |
 | [EntityTypeEnum](EntityTypeEnum.md) | Роль логической сущности в модели решения |
 | [FlowDirectionEnum](FlowDirectionEnum.md) |  |
@@ -289,6 +301,7 @@ Name: moex_dams
 | [RelationshipKindEnum](RelationshipKindEnum.md) | Тип логической связи (Wave 2) |
 | [RequirementLevelEnum](RequirementLevelEnum.md) | Уровень применения требования к спецификации |
 | [RequirementSectionEnum](RequirementSectionEnum.md) | Раздел каталога требований (трёхбуквенный код в code) |
+| [ScopedDefinitionRelationEnum](ScopedDefinitionRelationEnum.md) | How a scoped definition relates to the element's reference definition (ADR-02... |
 | [SecurityClassificationEnum](SecurityClassificationEnum.md) | Режим защиты данных (Wave 2); ортогонален governance_classification |
 | [SolutionDataRoleEnum](SolutionDataRoleEnum.md) |  |
 | [SpecificationKindEnum](SpecificationKindEnum.md) |  |

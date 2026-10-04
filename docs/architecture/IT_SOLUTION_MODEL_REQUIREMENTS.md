@@ -505,7 +505,7 @@ consumer group.
 - стабильный `element_id`;
 - русское бизнес-название;
 - техническое имя;
-- однозначное определение;
+- разрешимое эталонное определение (ADR-025): own `description`, либо наследование через `definition_source_ref` / единственный `conceptual_entity_refs` (режим own vs inherited виден в резолвере); статусы `pending` / `local-only` / `not-applicable` требуют own; контекстные определения уровня системы — в `scoped_definitions`, не заменяют эталон;
 - lifecycle status;
 - owner/steward declared locally либо унаследованные effective-значения от пакета (ADR-023);
 - domain context;
@@ -932,7 +932,7 @@ service-only correlation token.
 | General | `GEN-003` | Непустой состав модели |
 | General | `GEN-004` | Связь physical object с logical meaning |
 | Logical data model | `LDM-001` | Контекст и роль данных |
-| Logical data model | `LDM-002` | Наименование, определение, lifecycle, ownership |
+| Logical data model | `LDM-002` | Наименование, resolvable definition (ADR-025), lifecycle, ownership |
 | Logical data model | `LDM-003` | Независимые оси классификации |
 | Logical data model | `LDM-004` | Правило идентичности и ключ |
 | Logical data model | `LDM-005` | Наличие атрибутов |

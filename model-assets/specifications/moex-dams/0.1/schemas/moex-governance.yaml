@@ -97,6 +97,34 @@ classes:
       - approved_by_ref
       - approved_at
 
+  HasDefinition:
+    mixin: true
+    description: >
+      Mixin эталонного определения (ADR-025). Слот description остаётся
+      skos:definition (own text). Отсутствие description при наличии
+      definition_source_ref означает наследование; заданный description —
+      own (опционально adapted from source). scoped_definitions — контекстные
+      определения (v1: уровень ITSystem), не заменяющие эталон вне scope.
+    slots:
+      - definition_source_ref
+      - definition_rationale
+      - scoped_definitions
+
+  ScopedDefinition:
+    mixins:
+      - HasProvenance
+    description: >
+      Контекстное определение элемента модели (ADR-025 / ISO 11179 Context).
+      Не является отдельным термином глоссария и не заменяет эталонное
+      определение вне указанного scope.
+    slots:
+      - scoped_definition_id
+      - scope_kind
+      - scope_ref
+      - text
+      - relation_to_reference
+      - rationale
+
 slots:
   assignment_id:
     identifier: true
@@ -178,3 +206,42 @@ slots:
     inlined: false
   approved_at:
     range: datetime
+  definition_source_ref:
+    range: uriorcurie
+    description: >
+      Reference to the element or external term whose definition is inherited
+      or adapted (ADR-025). Orthogonal to glossary_term_refs (term assignment).
+  definition_rationale:
+    range: string
+    description: >
+      Human rationale for declaring an own definition when a source is also
+      cited, or for overriding an inherited definition.
+  scoped_definitions:
+    range: ScopedDefinition
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Context-scoped definitions (ADR-025); v1 scope_kind = system.
+  scoped_definition_id:
+    identifier: true
+    range: uriorcurie
+    required: true
+  scope_kind:
+    range: DefinitionScopeKindEnum
+    required: true
+  scope_ref:
+    range: uriorcurie
+    required: true
+    description: >
+      Target of the scope (e.g. ITSystem registry id). For scope_kind=system
+      must be a member of the solution's ITSolution.member_system_refs.
+  text:
+    range: string
+    required: true
+    description: Scoped definition text (skos:definition in this context).
+  relation_to_reference:
+    range: ScopedDefinitionRelationEnum
+    required: true
+  rationale:
+    range: string
+    description: Why this scoped wording differs from the reference definition.

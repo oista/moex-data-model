@@ -21,6 +21,15 @@ from moex_dams.rules.cascade import (
     find_redundant_overrides,
     resolve_governed,
 )
+from moex_dams.rules.definitions import (
+    DefinitionIndex,
+    DefinitionMode,
+    ExternalDefinitionProvider,
+    build_definition_index,
+    find_redundant_definition_overrides,
+    resolve_definition,
+    validate_scoped_definition_systems,
+)
 
 # Data-carrying PhysicalObject kinds (GEN-004 / PDM-003 allowlist).
 DATA_CARRYING_KINDS = frozenset(
@@ -951,6 +960,9 @@ def check_formal_requirements(
     body: LinkMLImplementationBody,
     *,
     catalog_path: Path | None = None,
+    definition_index: DefinitionIndex | None = None,
+    definition_providers: tuple[ExternalDefinitionProvider, ...] = (),
+    extra_definition_packages: tuple[dict[str, Any], ...] = (),
 ) -> tuple[Diagnostic, ...]:
     """Run it-solution catalog formal_checks against implementation body."""
     data = body.data
@@ -967,6 +979,15 @@ def check_formal_requirements(
 
     id_set = _collect_ids(data)
     resolved = resolve_governed(data)
+    def_index = definition_index or build_definition_index(
+        data,
+        *extra_definition_packages,
+        providers=definition_providers,
+    )
+    if definition_index is not None:
+        def_index.add_package(data)
+        for pkg in extra_definition_packages:
+            def_index.add_package(pkg)
     diagnostics: list[Diagnostic] = []
 
     for req in reqs:
@@ -1049,6 +1070,26 @@ def check_formal_requirements(
                                 requirement_code=requirement_code,
                             )
                         )
+                elif kind == "definition_resolvable":
+                    prov = resolve_definition(el, def_index, level=tclass)
+                    if prov.mode is DefinitionMode.UNRESOLVED or not _filled(
+                        prov.text
+                    ):
+                        detail = prov.diagnostic or "effective definition unresolved"
+                        diagnostics.append(
+                            _diag(
+                                code=code,
+                                severity=sev,
+                                message=(
+                                    f'{tclass} "{subject}" has no resolvable '
+                                    f"definition ({detail})."
+                                ),
+                                subject=subject,
+                                remediation=rem,
+                                statement=statement,
+                                requirement_code=requirement_code,
+                            )
+                        )
                 elif kind == "ref_resolves":
                     if not slot:
                         continue
@@ -1108,6 +1149,7 @@ def check_formal_requirements(
                     continue
 
     diagnostics.extend(_cascade_governance_lints(data, resolved))
+    diagnostics.extend(_definition_lints(data, def_index))
     return tuple(diagnostics)
 
 
@@ -1158,6 +1200,111 @@ def _cascade_governance_lints(
                 remediation=(
                     "Remove the declared slot to inherit from the parent "
                     "(ADR-023 containment cascade)."
+                ),
+            )
+        )
+    return out
+
+
+def _definition_lints(
+    data: dict[str, Any],
+    def_index: DefinitionIndex,
+) -> list[Diagnostic]:
+    """ADR-025 definition diagnostics beyond catalog formal_checks."""
+    out: list[Diagnostic] = []
+    solution_ref = str(data.get("solution_ref") or "") or None
+
+    for tclass in ("LogicalEntity", "LogicalAttribute", "ConceptualEntity"):
+        if tclass == "ConceptualEntity":
+            elements = []
+            for e in data.get("conceptual_entities") or []:
+                if isinstance(e, dict):
+                    elements.append((e, str(e.get("element_id") or e.get("name"))))
+        else:
+            elements = _iter_targets(data, tclass)
+
+        for el, subject in elements:
+            if not subject:
+                continue
+            desc = el.get("description")
+            title = el.get("title")
+            if (
+                isinstance(desc, str)
+                and isinstance(title, str)
+                and desc.strip()
+                and desc.strip() == title.strip()
+            ):
+                out.append(
+                    _diag(
+                        code="DAMS-DEF-description-eq-title",
+                        severity=DiagnosticSeverity.INFO,
+                        message=(
+                            f'{tclass} "{subject}" description equals title '
+                            "(likely not a real definition)."
+                        ),
+                        subject=subject,
+                        remediation=(
+                            "Replace description with an unambiguous definition "
+                            "or inherit via definition_source_ref (ADR-025)."
+                        ),
+                    )
+                )
+
+            # Own override with source but without rationale
+            if (
+                isinstance(desc, str)
+                and desc.strip()
+                and el.get("definition_source_ref")
+                and not (
+                    isinstance(el.get("definition_rationale"), str)
+                    and el["definition_rationale"].strip()
+                )
+            ):
+                out.append(
+                    _diag(
+                        code="DAMS-DEF-override-without-rationale",
+                        severity=DiagnosticSeverity.WARNING,
+                        message=(
+                            f'{tclass} "{subject}" declares own description with '
+                            "definition_source_ref but no definition_rationale."
+                        ),
+                        subject=subject,
+                        remediation=(
+                            "Add definition_rationale explaining the adaptation "
+                            "or override (ADR-025)."
+                        ),
+                    )
+                )
+
+            for msg in validate_scoped_definition_systems(
+                el, solution_ref=solution_ref, index=def_index
+            ):
+                out.append(
+                    _diag(
+                        code="DAMS-DEF-scope-ref-invalid",
+                        severity=DiagnosticSeverity.ERROR,
+                        message=f'{tclass} "{subject}": {msg}',
+                        subject=subject,
+                        remediation=(
+                            "Set scope_ref to an ITSystem in the solution's "
+                            "member_system_refs (ADR-025)."
+                        ),
+                    )
+                )
+
+    for eid, parent_id in find_redundant_definition_overrides(data, def_index):
+        out.append(
+            _diag(
+                code="DAMS-DEF-redundant-override",
+                severity=DiagnosticSeverity.INFO,
+                message=(
+                    f'Element "{eid}" declares description equal to inherited '
+                    f'definition from "{parent_id}" (redundant override).'
+                ),
+                subject=eid,
+                remediation=(
+                    "Remove description to inherit the reference definition "
+                    "(ADR-025)."
                 ),
             )
         )
