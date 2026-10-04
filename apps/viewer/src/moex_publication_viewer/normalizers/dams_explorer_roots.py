@@ -493,7 +493,6 @@ def wrap_dams_explorer_roots(
         attributes={
             "kind": "group",
             "section_root": "overview",
-            "section_id": "overview",
             "purpose": "Вход в спецификацию: описание пакета и полные таблицы.",
             "member_ids": [
                 "section:overview",

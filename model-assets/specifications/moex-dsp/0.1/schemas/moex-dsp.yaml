@@ -359,7 +359,9 @@ enums:
       linkml-specification:
         description: Эталонная LinkML-спецификация (DAMS и аналоги).
       ontology:
-        description: Онтологический профиль (FIBO и аналоги); primary nav = taxonomy.
+        description: >
+          Онтологический профиль (FIBO и аналоги); primary nav = classes
+          (+ glossary as flat view). ADR-024.
       implementation:
         description: Реализация / conformance-срез относительно эталона.
 
@@ -382,10 +384,12 @@ enums:
         description: Исходные файлы схемы с зависимостями.
       taxonomy:
         description: >
-          Иерархия как первоклассный раздел. Только для онтологий, где
-          иерархия — главная навигационная ось. Не дублирует classes.
+          Deprecated (ADR-024). Legacy hierarchy axis; new ontology modules
+          put class hierarchy under classes. Kept in enum for compatibility.
       glossary:
-        description: Естественно-языковые термины с определениями.
+        description: >
+          Естественно-языковые термины с определениями. Для ontology profile
+          — плоское представление тех же class-сущностей (ADR-024).
       identity:
         description: IRI, URI, source namespace.
       bindings:

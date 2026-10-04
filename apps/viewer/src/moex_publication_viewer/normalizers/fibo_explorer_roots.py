@@ -1,8 +1,11 @@
-"""Wrap FIBO profile explorer roots: Overview / Taxonomy / Glossary / Implementations."""
+"""Wrap FIBO profile explorer roots: Overview / Classes / Modules / Identity / Glossary / Implementations."""
 
 from __future__ import annotations
 
 from moex_publication_viewer.models.publication_models import PublicationItem
+
+_MODULES_GROUP_IDS = frozenset({"group:fibo-domains"})
+_IDENTITY_GROUP_IDS = frozenset({"group:fibo-patterns", "group:fibo-annotations"})
 
 
 def _section_ref(section_id: str, title: str) -> PublicationItem:
@@ -19,9 +22,19 @@ def _section_ref(section_id: str, title: str) -> PublicationItem:
 
 
 def wrap_fibo_explorer_roots(
-    taxonomy_groups: list[PublicationItem],
+    metamodel_groups: list[PublicationItem],
 ) -> list[PublicationItem]:
-    """Build ontology-profile roots: Overview, Taxonomy, Glossary, Implementations."""
+    """Build ontology-profile roots (ADR-024): Overview, Classes, Modules, Identity, Glossary, Impls."""
+    modules_kids = [
+        g for g in metamodel_groups if g.id in _MODULES_GROUP_IDS
+    ]
+    identity_kids = [
+        g for g in metamodel_groups if g.id in _IDENTITY_GROUP_IDS
+    ]
+    # Any unexpected groups stay under Modules so they are not dropped.
+    known = _MODULES_GROUP_IDS | _IDENTITY_GROUP_IDS
+    modules_kids.extend(g for g in metamodel_groups if g.id not in known)
+
     overview_root = PublicationItem(
         id="group:overview",
         title="Overview",
@@ -29,81 +42,82 @@ def wrap_fibo_explorer_roots(
         attributes={
             "kind": "group",
             "section_root": "overview",
-            "section_id": "overview",
-            "purpose": "Entry into the FIBO organizational profile (ADR-016 ontology).",
+            "purpose": "Entry into the FIBO organizational profile (ADR-024 ontology).",
             "member_ids": ["section:overview"],
         },
         children=[_section_ref("overview", "Overview")],
     )
-    taxonomy_root = PublicationItem(
-        id="group:taxonomy",
-        title="Taxonomy",
-        description="Domains, modules, ontology documents, IRI patterns, annotations.",
-        attributes={
-            "kind": "group",
-            "section_root": "taxonomy",
-            "purpose": "Primary navigation axis for ontology profile (ADR-016).",
-            "structure_why": "Domains → modules → ontology documents; patterns and annotations.",
-            "member_ids": [g.id for g in taxonomy_groups],
-        },
-        children=taxonomy_groups,
-    )
-    glossary_root = PublicationItem(
-        id="group:glossary",
-        title="Glossary",
-        description="Profile terms (domains, modules, IRI and annotation conventions).",
-        attributes={
-            "kind": "group",
-            "section_root": "glossary",
-            "section_id": "glossary",
-            "purpose": "Natural-language terms for the FIBO profile.",
-            "member_ids": ["section:glossary"],
-        },
-        children=[_section_ref("glossary", "Glossary")],
-    )
     classes_root = PublicationItem(
         id="group:classes",
-        title="All classes",
-        description="Alphabetical ontology-list (IRI, definition) — recommended, not primary nav.",
+        title="Классы",
+        description="OWL class hierarchy by domain (subClassOf); filled at build from glossary source.",
         attributes={
             "kind": "group",
             "section_root": "classes",
-            "purpose": "ontology-list renderer for profile ontology (ADR-016 recommended).",
+            "purpose": "Primary class nav for ontology profile (ADR-024).",
+            "structure_why": "Same entities as Glossary; tree via parent_local_name / source_domain.",
             "member_ids": [],
+            "class_count": 0,
         },
         children=[],
+    )
+    modules_root = PublicationItem(
+        id="group:schema-files",
+        title="Модули",
+        description="Domains, modules, and ontology documents (owl:imports axis).",
+        attributes={
+            "kind": "group",
+            "section_root": "schema-files",
+            "purpose": "Organizational modules of the FIBO profile (ADR-024 schema-files).",
+            "structure_why": "Domains → modules → ontology documents (ONTOLOGY_GUIDE).",
+            "member_ids": [g.id for g in modules_kids],
+            "file_count": len(modules_kids),
+        },
+        children=modules_kids,
     )
     identity_root = PublicationItem(
         id="group:identity",
         title="Identity",
-        description="IRI and namespace conventions for the profile.",
+        description="IRI, prefix, and annotation conventions for the profile.",
         attributes={
             "kind": "group",
             "section_root": "identity",
-            "purpose": "Recommended identity axis (IRI patterns live under taxonomy too).",
-            "member_ids": [],
+            "purpose": "Identity axis: IRI/prefix patterns and annotation requirements.",
+            "member_ids": [g.id for g in identity_kids],
         },
-        children=[],
+        children=identity_kids,
+    )
+    glossary_root = PublicationItem(
+        id="group:glossary",
+        title="Glossary",
+        description="Flat alphabetical view of the same OWL classes (ADR-024).",
+        attributes={
+            "kind": "group",
+            "section_root": "glossary",
+            "purpose": "Glossary is a view of classes, not a separate dataset.",
+            "member_ids": ["section:glossary"],
+        },
+        children=[_section_ref("glossary", "Glossary")],
     )
     impls_root = PublicationItem(
         id="group:implementations",
         title="Реализации",
-        description="FIBO release content registered against this profile.",
+        description="FIBO release / application content registered against this profile.",
         attributes={
             "kind": "group",
             "section_root": "implementations",
             "purpose": "Transition to release / preview content (conforms_to FIBO profile).",
-            "structure_why": "List from architecture-catalog; domain glossary lives in Impl module.",
+            "structure_why": "List from architecture-catalog; bodies live in Impl modules.",
             "member_ids": [],
         },
         children=[],
     )
     return [
         overview_root,
-        taxonomy_root,
-        glossary_root,
         classes_root,
+        modules_root,
         identity_root,
+        glossary_root,
         impls_root,
     ]
 

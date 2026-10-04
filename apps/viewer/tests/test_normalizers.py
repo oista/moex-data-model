@@ -409,7 +409,7 @@ def test_dams_explorer_real_schema():
     ]
     overview = out.items[0]
     assert overview.attributes.get("section_root") == "overview"
-    assert overview.attributes.get("section_id") == "overview"
+    assert "section_id" not in (overview.attributes or {})
     kids = overview.children
     assert [c.attributes.get("section_id") for c in kids] == [
         "overview",
@@ -543,12 +543,24 @@ def test_json_fibo_profile_explorer_wraps_roots(tmp_path: Path):
     )
     out = JsonNormalizer().normalize(sec, p)
     ids = [i.id for i in out.items]
-    assert ids[0] == "group:overview"
-    assert "group:taxonomy" in ids
-    assert "group:glossary" in ids
-    assert "group:classes" in ids
-    assert "group:identity" in ids
-    assert ids[-1] == "group:implementations"
-    tax = next(i for i in out.items if i.id == "group:taxonomy")
-    assert any(c.id == "group:fibo-domains" for c in tax.children)
-    assert any(c.id == "domain:FND" for c in tax.children[0].children)
+    assert ids == [
+        "group:overview",
+        "group:classes",
+        "group:schema-files",
+        "group:identity",
+        "group:glossary",
+        "group:implementations",
+    ]
+    assert "group:taxonomy" not in ids
+    classes = next(i for i in out.items if i.id == "group:classes")
+    assert classes.children == []
+    modules = next(i for i in out.items if i.id == "group:schema-files")
+    assert any(c.id == "group:fibo-domains" for c in modules.children)
+    assert any(c.id == "domain:FND" for c in modules.children[0].children)
+    identity = next(i for i in out.items if i.id == "group:identity")
+    assert {c.id for c in identity.children} >= {
+        "group:fibo-patterns",
+        "group:fibo-annotations",
+    }
+    overview = next(i for i in out.items if i.id == "group:overview")
+    assert "section_id" not in (overview.attributes or {})

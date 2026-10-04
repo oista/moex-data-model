@@ -6,7 +6,8 @@ icon: "📘"
 title: edmc.fibo
 description: >
   Organizational profile of FIBO (domains, modules, ontology headers,
-  IRI and annotation conventions). Domain classes live under the FIBO release module.
+  IRI and annotation conventions) plus OWL class index and glossary
+  from the shared release preview (ADR-024).
 profile: ontology
 sections:
   - id: overview
@@ -20,9 +21,11 @@ sections:
 
   - id: explorer
     title: Profile explorer
-    description: Taxonomy — domains, modules, ontology documents, IRI patterns, annotations
+    description: >
+      Classes (OWL hierarchy), modules, identity conventions, glossary link,
+      and implementations (ADR-024).
     type: explorer
-    kind: taxonomy
+    kind: classes
     source:
       format: json
       path: publications/fibo_profile_explorer.json
@@ -33,20 +36,27 @@ sections:
 
   - id: glossary
     title: Glossary
-    description: Profile terms (domains, modules, IRI and annotation conventions)
+    description: >
+      Flat alphabetical view of the same OWL classes as the Classes tree
+      (shared fibo_glossary.preview.csv).
     type: glossary
     kind: glossary
     source:
-      format: json
-      path: publications/fibo_profile_glossary.json
-    key_column: id
+      format: csv
+      path: ../../../../packages/ontology/publications/fibo_glossary.preview.csv
+    key_column: local_name
     columns:
-      - id
-      - title
-      - description
-      - kind
+      - local_name
+      - label
+      - label_ru
+      - definition
+      - definition_ru
+      - parent_local_name
+      - source_domain
+      - iri
     filterable:
-      - kind
+      - source_domain
     tags:
       - fibo
       - glossary
+      - ontology

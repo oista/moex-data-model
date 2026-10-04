@@ -13,6 +13,7 @@ from moex_publication_viewer.build import (
     compile_catalog,
     compile_modules,
     enrich_dams_explorer_implementations,
+    enrich_fibo_explorer_classes,
     enrich_fibo_explorer_implementations,
     impl_nav_section_ids,
     impl_section_nav_children,
@@ -94,6 +95,7 @@ def test_attach_impl_section_nav_children() -> None:
 def test_repo_fibo_impl_nested_under_implementations() -> None:
     modules = compile_modules(REPO, enforce_publication_contract=False)
     catalog = compile_catalog(REPO, modules)
+    enrich_fibo_explorer_classes(modules)
     enrich_fibo_explorer_implementations(modules, catalog)
     profile = next(m for m in modules if m.module_id == FIBO_PROFILE)
     explorer = next(s for s in profile.sections if s.type == "explorer")
@@ -106,8 +108,11 @@ def test_repo_fibo_impl_nested_under_implementations() -> None:
     assert all(c.attributes.get("target_module_id") == FIBO_APP for c in app.children)
     # Spec explorer roots remain (no body swap at build layer)
     roots = {i.id for i in explorer.items}
-    assert "group:taxonomy" in roots or "group:overview" in roots
+    assert "group:overview" in roots
+    assert "group:classes" in roots
+    assert "group:schema-files" in roots
     assert "group:implementations" in roots
+    assert "group:taxonomy" not in roots
 
 
 def _find_item(items: list[PublicationItem], item_id: str) -> PublicationItem | None:
@@ -200,6 +205,7 @@ def test_repo_impl_section_nav_covers_all_module_sections() -> None:
     modules = compile_modules(REPO, enforce_publication_contract=False)
     catalog = compile_catalog(REPO, modules)
     enrich_dams_explorer_implementations(modules, catalog)
+    enrich_fibo_explorer_classes(modules)
     enrich_fibo_explorer_implementations(modules, catalog)
 
     by_id = {m.module_id: m for m in modules}

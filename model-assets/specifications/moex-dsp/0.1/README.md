@@ -31,15 +31,15 @@
 - **`type`** (manifest `SectionKind` render) — формат представления: `explorer`, `glossary`, `markdown-doc`, …
 - **`satisfies`** — ссылки на `PublicationRequirement` эталона / base profile (ADR-019). Имена локальных модулей могут отличаться.
 - Один kind `classes` + разные renderer modes от profile: `data-structure` (LinkML) vs `ontology-list` (ontology).
-- Kind **`taxonomy`** — отдельный; primary nav для онтологий; **forbidden** на `linkml-specification`.
+- Kind **`taxonomy`** — deprecated (ADR-024); hierarchy for ontologies lives under `classes`. Still **forbidden** on `linkml-specification`.
 
-## Профили (ProfileSpec, ADR-016)
+## Профили (ProfileSpec, ADR-016 / ADR-024)
 
 | Profile | Required | Recommended | Forbidden |
 |---|---|---|---|
 | `linkml-specification` | overview, classes, schema-files | enumerations, slots | taxonomy |
-| `ontology` | overview, taxonomy, glossary | classes, identity | schema-files, enumerations, slots |
-| `implementation` | overview, conformance | bindings, data-flows | taxonomy |
+| `ontology` | overview, classes, glossary | schema-files, identity | enumerations, slots |
+| `implementation` | overview, conformance | bindings, data-flows, model-assessment | taxonomy |
 
 Базовый профиль — слой 1. Унаследованные requirements эталона (слой 2) задаются в `publication-requirements.yaml` Spec и покрываются локальными секциями через `satisfies`.
 
@@ -54,5 +54,5 @@
 ## Связь с другими пакетами
 
 - **moex.dams** — эталонная спецификация модели данных (`profile: linkml-specification`); `moex.dsp` вложен под неё в навигации.
-- **edmc.fibo** — эталонный профиль FIBO (`profile: ontology`); primary nav = taxonomy.
+- **edmc.fibo** — эталонный профиль FIBO (`profile: ontology`); primary nav = classes (+ glossary view, ADR-024).
 - Data / draft implementations (trading-solution, future CSV DSP units) — `profile: implementation` + `satisfies` к dams publication requirements.

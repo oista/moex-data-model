@@ -15,6 +15,7 @@ from moex_publication_viewer.models.publication_models import (
 )
 from moex_publication_viewer.normalizers import get_normalizer
 from moex_publication_viewer.normalizers.base import NormalizeError
+from moex_publication_viewer.normalizers.helpers import items_to_domain_explorer
 from moex_publication_viewer.normalizers.linkml_normalizer import clear_schema_view_cache
 from moex_publication_viewer.renderers.html_renderer import render_viewer
 from moex_publication_viewer.validators import (
@@ -395,6 +396,55 @@ def enrich_dams_explorer_implementations(
     impls_root.children = children
 
 
+def _collect_class_leaf_ids(nodes: list[PublicationItem]) -> set[str]:
+    ids: set[str] = set()
+    for node in nodes:
+        kind = (node.attributes or {}).get("kind") or "class"
+        if kind == "class":
+            ids.add(node.id)
+        ids |= _collect_class_leaf_ids(list(node.children or []))
+    return ids
+
+
+def enrich_fibo_explorer_classes(modules: list[PublicationModule]) -> None:
+    """Fill group:classes from the glossary section (same source, ADR-024)."""
+    profile = next((m for m in modules if m.module_id == FIBO_PROFILE_MODULE_ID), None)
+    if profile is None:
+        return
+    explorer = next((s for s in profile.sections if s.type == "explorer"), None)
+    glossary = next(
+        (s for s in profile.sections if s.id == "glossary" or s.kind == "glossary"),
+        None,
+    )
+    if explorer is None or glossary is None:
+        return
+    classes_root = next(
+        (i for i in explorer.items if i.id == "group:classes"),
+        None,
+    )
+    if classes_root is None:
+        return
+
+    # Flat glossary rows → domain groups with subClassOf nesting.
+    class_items: list[PublicationItem] = []
+    for item in glossary.items or []:
+        attrs = dict(item.attributes or {})
+        attrs.setdefault("kind", "class")
+        attrs.setdefault("origin", "own")
+        if item.description and "definition" not in attrs:
+            attrs["definition"] = item.description
+        class_items.append(
+            item.model_copy(update={"attributes": attrs, "children": []})
+        )
+    domain_groups = items_to_domain_explorer(class_items)
+    leaf_ids = _collect_class_leaf_ids(domain_groups)
+    attrs = dict(classes_root.attributes or {})
+    attrs["member_ids"] = [g.id for g in domain_groups]
+    attrs["class_count"] = len(leaf_ids)
+    classes_root.attributes = attrs
+    classes_root.children = domain_groups
+
+
 def enrich_fibo_explorer_implementations(
     modules: list[PublicationModule],
     catalog: ArchitectureCatalog | None,
@@ -503,6 +553,7 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
     if catalog is not None:
         check_catalog_publication_contract_gate(catalog, modules, root)
     enrich_dams_explorer_implementations(modules, catalog)
+    enrich_fibo_explorer_classes(modules)
     enrich_fibo_explorer_implementations(modules, catalog)
     search_index = build_search_index(modules)
     if catalog is not None:

@@ -493,22 +493,6 @@
         }
       }
 
-      if (
-        focus?.section &&
-        !focus?.item &&
-        nestedSectionIds.has(focus.section)
-      ) {
-        const overviewGroup = explorerItems.find(
-          (g) =>
-            g.attributes?.section_root === "overview" ||
-            (g.children || []).some(
-              (c) => c.attributes?.section_id === focus.section
-            )
-        );
-        if (overviewGroup) openGroups.add(overviewGroup.id);
-        else openGroups.add("group:overview");
-      }
-
       if (focus?.item) {
         const focused =
           findExplorerItem({ items: explorerItems }, focus.item) ||
@@ -550,22 +534,17 @@
           findExplorerItem({ items: explorerItems }, itemId) ||
           findExplorerItem(expl, itemId);
         const attrs = found?.item?.attributes || {};
-        if (
-          attrs.kind === "section_ref" ||
-          attrs.section_root === "overview"
-        ) {
-          if (attrs.section_id) {
-            if (found?.group) openGroups.add(found.group.id);
-            // Expand parent implementation_ref when nested under it.
-            if (found?.ancestors) {
-              found.ancestors.forEach((a) => openGroups.add(a.id));
-            }
-            openPublicationSection(
-              attrs.section_id,
-              attrs.target_module_id || null
-            );
-            return;
+        if (attrs.kind === "section_ref" && attrs.section_id) {
+          if (found?.group) openGroups.add(found.group.id);
+          // Expand parent implementation_ref when nested under it.
+          if (found?.ancestors) {
+            found.ancestors.forEach((a) => openGroups.add(a.id));
           }
+          openPublicationSection(
+            attrs.section_id,
+            attrs.target_module_id || null
+          );
+          return;
         }
         // implementation_ref: select item → description card (expand children in tree)
         if (attrs.kind === "implementation_ref") {

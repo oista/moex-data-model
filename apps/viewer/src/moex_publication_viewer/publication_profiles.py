@@ -48,9 +48,10 @@ PROFILES: dict[str, ProfileSpec] = {
         forbidden=frozenset({"taxonomy"}),
     ),
     "ontology": ProfileSpec(
-        required=frozenset({"overview", "taxonomy", "glossary"}),
-        recommended=frozenset({"classes", "identity"}),
-        forbidden=frozenset({"schema-files", "enumerations", "slots"}),
+        # ADR-024: classes + glossary required; taxonomy deprecated for new modules.
+        required=frozenset({"overview", "classes", "glossary"}),
+        recommended=frozenset({"schema-files", "identity"}),
+        forbidden=frozenset({"enumerations", "slots"}),
     ),
     "implementation": ProfileSpec(
         required=frozenset({"overview", "conformance"}),

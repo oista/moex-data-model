@@ -25,11 +25,18 @@ def test_renderer_mode_classes_by_profile():
     assert get_renderer_mode("taxonomy", "ontology") == "taxonomy"
 
 
-def test_profile_spec_ontology_forbids_schema_files():
+def test_profile_spec_ontology_requires_classes_and_glossary():
     spec = profile_spec("ontology")
     assert spec is not None
-    assert "taxonomy" in spec.required
-    assert "schema-files" in spec.forbidden
+    assert "classes" in spec.required
+    assert "glossary" in spec.required
+    assert "overview" in spec.required
+    assert "schema-files" in spec.recommended
+    assert "identity" in spec.recommended
+    assert "schema-files" not in spec.forbidden
+    assert "enumerations" in spec.forbidden
+    assert "slots" in spec.forbidden
+    assert "taxonomy" not in spec.required
     assert "taxonomy" in profile_spec("linkml-specification").forbidden
 
 
@@ -58,7 +65,7 @@ def test_check_publication_profiles_soft_warnings():
     )
     warnings = check_publication_profiles([module])
     assert any("missing required kinds" in w for w in warnings)
-    assert any("taxonomy" in w for w in warnings)
+    assert any("classes" in w for w in warnings)
 
 
 def test_check_ok_when_explorer_roots_cover_kinds():
@@ -78,12 +85,22 @@ def test_check_ok_when_explorer_roots_cover_kinds():
                 id="explorer",
                 title="E",
                 type="explorer",
-                kind="taxonomy",
+                kind="classes",
                 items=[
                     PublicationItem(
-                        id="group:taxonomy",
-                        title="Taxonomy",
-                        attributes={"section_root": "taxonomy"},
+                        id="group:classes",
+                        title="Классы",
+                        attributes={"section_root": "classes"},
+                    ),
+                    PublicationItem(
+                        id="group:schema-files",
+                        title="Модули",
+                        attributes={"section_root": "schema-files"},
+                    ),
+                    PublicationItem(
+                        id="group:identity",
+                        title="Identity",
+                        attributes={"section_root": "identity"},
                     ),
                     PublicationItem(
                         id="group:glossary",

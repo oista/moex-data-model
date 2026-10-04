@@ -46,6 +46,23 @@ def test_js_nav_folds_orphan_sections_and_opens_focused_tables():
     assert "opts && opts.forceOpen" in JS
 
 
+def test_js_explorer_roots_collapse_symmetrically():
+    """Overview must not be force-reopened on every render; group clicks match Classes."""
+    subtree = JS.split("function appendPublicationSubtree")[1].split(
+        "function appendCatalogNav"
+    )[0]
+    assert 'section_root === "overview" ||' not in subtree
+    assert 'section_root === "overview"' not in subtree.split(
+        "function openExplorerItem"
+    )[1].split("function appendNavClassNode")[0]
+    open_item = subtree.split("function openExplorerItem")[1].split(
+        "function appendNavClassNode"
+    )[0]
+    assert 'attrs.kind === "section_ref"' in open_item
+    assert "openPublicationSection" in open_item
+    assert "openGroups.add(found.group.id)" in open_item
+
+
 def test_css_active_gray_and_spec_pill_dark():
     css = assemble_css()
     assert "--selection-bg: #eef0f3" in css

@@ -11,8 +11,9 @@ superseded_by: []
 **Date:** 2026-09-28  
 **Status:** Proposed  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-007](ADR-007-pydantic-dto-not-validator.md), [ADR-017](ADR-017-external-specification-source-sync.md), [ADR-018](ADR-018-ontology-application-implementation.md), [ADR-019](ADR-019-publication-contract-inheritance.md)  
-**Design:** [2026-09-28-fibo-metamodel-profile-design.md](../superpowers/specs/2026-09-28-fibo-metamodel-profile-design.md)
+**Related:** [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-007](ADR-007-pydantic-dto-not-validator.md), [ADR-017](ADR-017-external-specification-source-sync.md), [ADR-018](ADR-018-ontology-application-implementation.md), [ADR-019](ADR-019-publication-contract-inheritance.md), [ADR-024](ADR-024-unified-class-entity.md)  
+**Design:** [2026-09-28-fibo-metamodel-profile-design.md](../superpowers/specs/2026-09-28-fibo-metamodel-profile-design.md)  
+**Amended by:** [ADR-024](ADR-024-unified-class-entity.md) (Spec publication may show a class index from release/index data)
 
 ## Context
 
@@ -23,7 +24,7 @@ EDM Council documents the organizational and terminology conventions in [ONTOLOG
 ## Decision
 
 - **FIBO profile** (`moex-fibo-profile`) is a `ReferenceSpecification` expressed in OWL 2. Its body is a lean Pydantic metamodel (`FiboDomain`, `FiboModule`, `FiboOntologyDocument`, IRI/prefix patterns, `FiboAnnotationRequirement`) loaded from YAML under `model-assets/specifications/moex-fibo-profile/`.
-- **Domain classes are not the metamodel.** Publication: Spec module explorer = metamodel tree; subject-domain class rows come from release/index or application-ontology content, not from the profile YAML.
+- **Domain classes are not the metamodel.** The normative Spec body remains metamodel YAML/Pydantic. **ADR-024:** the Spec *publication* module may still surface a class index (hierarchy + glossary views) sourced from release/index preview data; those rows are not authored in profile YAML.
 - Conventions come from ONTOLOGY_GUIDE (ontology header, IRI format, naming/labels, required annotations). We do **not** model full OWL 2 DL axioms or port onto-viewer.
 - Pydantic models are DTOs / structural forms (ADR-007). OWL reasoner remains out of the primary validation path (ADR-010).
 - **Refinement (ADR-018):** upstream FIBO release/index (`moex:ontology:fibo`) is a catalog read model, **not** the governed `SpecificationImplementation`. The governed OWL Impl is the MOEX **application / extension ontology** (`moex-fibo-application`: imported module + extension + mapping).

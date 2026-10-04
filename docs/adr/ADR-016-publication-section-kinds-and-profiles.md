@@ -11,8 +11,9 @@ superseded_by: []
 **Date:** 2026-09-28  
 **Status:** Proposed  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [ADR-014](ADR-014-fibo-profile-metamodel.md), [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-015](ADR-015-viewer-ui-atlas.md), [ADR-019](ADR-019-publication-contract-inheritance.md)  
-**Schema:** [moex-dsp.yaml](../../model-assets/specifications/moex-dsp/0.1/schemas/moex-dsp.yaml)
+**Related:** [ADR-014](ADR-014-fibo-profile-metamodel.md), [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-015](ADR-015-viewer-ui-atlas.md), [ADR-019](ADR-019-publication-contract-inheritance.md), [ADR-024](ADR-024-unified-class-entity.md)  
+**Schema:** [moex-dsp.yaml](../../model-assets/specifications/moex-dsp/0.1/schemas/moex-dsp.yaml)  
+**Amended by:** [ADR-024](ADR-024-unified-class-entity.md) (ontology ProfileSpec; taxonomy deprecated)
 
 ## Context
 
@@ -32,17 +33,17 @@ Publication Viewer already showed this split poorly: DAMS used a «Классы�
 ## Decision
 
 1. **Closed enum `PublicationSectionKind`** lives in the DSP metamodel (not in `modeling-kernel.yaml`). Canonical values include: `overview`, `classes`, `slots`, `enumerations`, `schema-files`, `taxonomy`, `glossary`, `identity`, `bindings`, `data-flows`, `conformance`, `source`, and (ADR-020) `external-specification-scope`, `competency-questions`, `term-selection`, `mapping-table`, `dependency-list`, `extraction-provenance`.
-2. **`taxonomy` is a separate kind**, not a view mode of `classes`. For ontology publications it is the **primary navigation axis**. It must not be required (and is forbidden) on LinkML specification profiles where hierarchy is secondary.
+2. **`taxonomy` is a separate kind** (legacy). **ADR-024:** for new ontology modules hierarchy lives under `classes`; `taxonomy` stays in the enum for compatibility but is **deprecated** and must not be required. It remains forbidden on LinkML specification profiles.
 3. **One kind `classes`**, with **renderer mode selected by publication profile**:
    - `linkml-specification` → `data-structure` (table: name, is_a, slots, …)
-   - `ontology` → `ontology-list` (alphabetical list: IRI, definition, source_domain — not slots)
-4. **`ProfileSpec`** on each `PublicationProfileId` (`linkml-specification` | `ontology` | `implementation`) declares `required` / `recommended` / `forbidden` kinds:
+   - `ontology` → `ontology-list` / hierarchy (IRI, definition, `subClassOf` / `parent_local_name` — not LinkML slots)
+4. **`ProfileSpec`** on each `PublicationProfileId` (`linkml-specification` | `ontology` | `implementation`) declares `required` / `recommended` / `forbidden` kinds (ontology row per ADR-024):
 
    | Profile | Required | Recommended | Forbidden |
    |---|---|---|---|
    | `linkml-specification` | overview, classes, schema-files | enumerations, slots | taxonomy |
-   | `ontology` | overview, taxonomy, glossary | classes, identity | schema-files, enumerations, slots |
-   | `implementation` | overview, conformance | bindings, data-flows | taxonomy |
+   | `ontology` | overview, classes, glossary | schema-files, identity | enumerations, slots |
+   | `implementation` | overview, conformance | bindings, data-flows, model-assessment | taxonomy |
 
 5. Manifest field **`profile:`** selects the ProfileSpec. Modeling language family (`ModelingStandardFamily` / catalog `expressed_in`) remains a **label**, not the profile key.
 6. Manifest **`type:`** (explorer, glossary, markdown-doc, …) is the **wire/render format**. **`kind`** is semantic. They are orthogonal.
@@ -52,7 +53,7 @@ Publication Viewer already showed this split poorly: DAMS used a «Классы�
 ## Consequences
 
 - New publication modules must pick a `profile` and section `kind`s from `PublicationSectionKind` (see Cursor rule / DSP README).
-- FIBO Spec explorer primary axis becomes **taxonomy** (+ glossary); recommended `classes` is ontology-list, not a LinkML attribute table. ADR-014 Spec vs Impl split **stays**; only the UI naming/axis for Spec body changes («metamodel» label → taxonomy kind).
+- FIBO Spec explorer primary axis becomes **classes** (+ glossary as the flat view of the same entities); metamodel organization uses `schema-files` / `identity` (ADR-024). ADR-014 Spec vs Impl split **stays** for normative metamodel authorship.
 - DAMS must not introduce a taxonomy root; «Спецификация» maps to `schema-files`.
 - Viewer code uses `get_renderer_mode(kind, profile)` instead of proliferating section kinds per formalism.
 
