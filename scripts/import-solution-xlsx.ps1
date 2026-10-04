@@ -1,9 +1,11 @@
-# Import Object/ObjectAttribute xlsx → DAMS solution YAML (ADR-022).
+# Import Object/ObjectAttribute xlsx -> DAMS solution YAML (ADR-022).
 # Usage (repo root):
 #   powershell -NoProfile -ExecutionPolicy Bypass -File scripts/import-solution-xlsx.ps1 `
 #     -Xlsx "F:\...\src_soluitions_model.xlsx" -System MDM -Force
 #
-# Optional: -All  imports MDM,UCD,CRM,ЕСЭД sequentially.
+# Optional: -All  imports MDM, UCD, CRM, ESED sequentially.
+# For ESED pass -System with the Cyrillic SrcSystem value from the workbook,
+# or use -All (uses Unicode escape for the fourth system).
 
 param(
     [Parameter(Mandatory = $false)]
@@ -29,6 +31,9 @@ $CliVenv = Join-Path $RepoRoot "apps/cli/.venv/Scripts/python.exe"
 $PubVenv = Join-Path $RepoRoot "packages/publication/.venv/Scripts/python.exe"
 $LinkmlVenv = Join-Path $RepoRoot "packages/standard-linkml/.venv/Scripts/python.exe"
 
+# Cyrillic SrcSystem label used in the MOEX workbook (ESED).
+$EsedSystem = [string]([char]0x0415 + [char]0x0421 + [char]0x042D + [char]0x0414)
+
 function Find-Python {
     foreach ($candidate in @($CliVenv, $PubVenv, $LinkmlVenv)) {
         if (Test-Path $candidate) { return $candidate }
@@ -51,16 +56,21 @@ $env:PYTHONPATH = @(
     (Join-Path $RepoRoot "packages/publication/src"),
     (Join-Path $RepoRoot "packages/modeling-kernel/src")
 ) -join ";"
+$env:PYTHONIOENCODING = "utf-8"
 
 Push-Location $RepoRoot
 try {
     $systems = @()
     if ($All) {
-        $systems = @("MDM", "UCD", "CRM", "ЕСЭД")
+        $systems = @("MDM", "UCD", "CRM", $EsedSystem)
     } elseif ($System) {
-        $systems = @($System)
+        if ($System -eq "ESED" -or $System -eq "esed") {
+            $systems = @($EsedSystem)
+        } else {
+            $systems = @($System)
+        }
     } else {
-        throw "Specify -System <MDM|UCD|CRM|ЕСЭД> or -All"
+        throw "Specify -System MDM|UCD|CRM|ESED or -All"
     }
     if (-not $Xlsx) {
         throw "Specify -Xlsx path to workbook"

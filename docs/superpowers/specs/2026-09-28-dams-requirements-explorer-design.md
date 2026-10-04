@@ -44,7 +44,13 @@ Specification explorer
 │   │           └─ …/conceptual-model.skeleton.yaml (kind: source_file)
 │   ├─ ИТ-решения
 │   │     ├─ Требования к модели
-│   │     │     └─ GEN-001, LDM-001, … (kind: requirement)
+│   │     │     ├─ LDM (folder + code) → LDM-* (kind: requirement)
+│   │     │     ├─ PDM → PDM-*
+│   │     │     ├─ REF → REF-*
+│   │     │     ├─ ATR → ATR-*
+│   │     │     ├─ FLW → FLW-*
+│   │     │     ├─ CLS → CLS-*
+│   │     │     └─ GEN → GEN-*
 │   │     ├─ Спецификация требований
 │   │     │     └─ minimal/*.required.yaml (kind: source_file)
 │   │     ├─ Спецификация модели
@@ -71,8 +77,11 @@ Specification explorer
 
 1. `group:requirements-it-solutions` — level group; description: requirements for IT-solution data models. Children:
 
-   1. `group:requirements-list` — items with `kind=requirement`, attributes:
-      `code`, `requirement_level`, `requirement_section`, `statement`, `formal_checks`
+   1. `group:requirements-list` — section folders (`group_style=section_folder`,
+      `requirement_section` = LDM|PDM|REF|ATR|FLW|CLS|GEN in enum order, non-empty
+      only); each folder holds `kind=requirement` leaves with attributes:
+      `code`, `requirement_level`, `requirement_section`, `statement`, `formal_checks`.
+      Nav mark: folder icon + three-letter section code.
    2. `group:requirements-min-spec` — `source_file` items from build-time required-only
       projection (classes/slots with `required: true` or `minimum_cardinality ≥ 1`,
       plus referenced enums)

@@ -160,7 +160,25 @@ def test_wrap_roots_loads_requirements_catalog():
     assert it.title == "ИТ-решения"
     list_group = next(c for c in it.children if c.id == "group:requirements-list")
     assert list_group.title == "Требования к модели"
-    codes = {c.attributes.get("code") for c in list_group.children}
+    assert list_group.attributes.get("requirement_count") == sum(
+        len(c.children or []) for c in list_group.children
+    )
+    assert [c.id for c in list_group.children] == [
+        "group:requirements-section-LDM",
+        "group:requirements-section-PDM",
+        "group:requirements-section-REF",
+        "group:requirements-section-ATR",
+        "group:requirements-section-FLW",
+        "group:requirements-section-CLS",
+        "group:requirements-section-GEN",
+    ]
+    assert all(
+        c.attributes.get("kind") == "group"
+        and c.attributes.get("group_style") == "section_folder"
+        for c in list_group.children
+    )
+    req_leaves = [r for g in list_group.children for r in (g.children or [])]
+    codes = {c.attributes.get("code") for c in req_leaves}
     assert "GEN-001" in codes
     assert "GEN-003" in codes
     assert "GEN-004" in codes
@@ -174,9 +192,9 @@ def test_wrap_roots_loads_requirements_catalog():
     assert "PDM-001" in codes
     assert "PDM-003" in codes
     assert "CLS-001" in codes
-    assert all(c.attributes.get("kind") == "requirement" for c in list_group.children)
-    assert all(c.attributes.get("statement") for c in list_group.children)
-    assert all(c.attributes.get("formal_checks") for c in list_group.children)
+    assert all(c.attributes.get("kind") == "requirement" for c in req_leaves)
+    assert all(c.attributes.get("statement") for c in req_leaves)
+    assert all(c.attributes.get("formal_checks") for c in req_leaves)
 
     min_group = next(c for c in it.children if c.id == "group:requirements-min-spec")
     assert min_group.title == "Спецификация требований"

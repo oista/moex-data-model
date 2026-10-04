@@ -651,6 +651,35 @@ a {
   color: var(--muted);
   overflow: visible;
 }
+.nav-kind.nav-kind-folder {
+  width: 28px;
+  height: 16px;
+  line-height: 16px;
+  border-radius: 2px 2px 3px 3px;
+  border-color: color-mix(in srgb, var(--muted) 55%, var(--border));
+  background: color-mix(in srgb, var(--muted) 10%, var(--surface-2, transparent));
+  vertical-align: middle;
+}
+.nav-kind.nav-kind-folder .nav-kind-folder-tab {
+  position: absolute;
+  top: -3px;
+  left: 2px;
+  width: 9px;
+  height: 3px;
+  border: 1px solid color-mix(in srgb, var(--muted) 55%, var(--border));
+  border-bottom: none;
+  border-radius: 2px 2px 0 0;
+  background: inherit;
+  box-sizing: border-box;
+}
+.nav-kind.nav-kind-folder .nav-kind-folder-code {
+  display: block;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 16px;
+  color: var(--muted);
+}
 .nav-kind.kind-plain {
   color: var(--class-color-plain);
   border-color: var(--class-color-plain);

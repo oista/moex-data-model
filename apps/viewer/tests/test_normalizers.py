@@ -451,7 +451,15 @@ def test_dams_explorer_real_schema():
         "group:requirements-model-example",
     }
     list_group = next(c for c in it.children if c.id == "group:requirements-list")
-    assert any(c.attributes.get("code") == "GEN-001" for c in list_group.children)
+    assert any(
+        c.id == "group:requirements-section-GEN"
+        and c.attributes.get("group_style") == "section_folder"
+        for c in list_group.children
+    )
+    gen_group = next(
+        c for c in list_group.children if c.id == "group:requirements-section-GEN"
+    )
+    assert any(c.attributes.get("code") == "GEN-001" for c in gen_group.children)
 
     pub = next(
         c for c in req_root.children if c.id == "group:requirements-publication"

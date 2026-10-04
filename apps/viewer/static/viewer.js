@@ -629,17 +629,30 @@
         const kind = node.attributes?.kind || "class";
         const kindClasses =
           kind === "class" ? classKindClassNames(node.attributes) : "";
-        let mark = "C";
-        if (kind === "enum") mark = "E";
-        else if (kind === "individual") mark = "I";
-        else if (kind === "source_file") mark = "F";
-        else if (kind === "requirement") mark = "T";
-        else if (kind === "implementation_ref") mark = "R";
-        else if (kind === "section_ref") mark = "S";
-        else if (kind === "group") mark = "G";
-        label.innerHTML = `<span class="nav-kind ${kindClasses}">${escapeHtml(mark)}</span>
+        const isSectionFolder =
+          kind === "group" && node.attributes?.group_style === "section_folder";
+        const sectionCode = String(
+          node.attributes?.requirement_section || ""
+        ).trim();
+        let markHtml;
+        if (isSectionFolder && sectionCode) {
+          markHtml = `<span class="nav-kind nav-kind-folder" aria-hidden="true"><span class="nav-kind-folder-tab"></span><span class="nav-kind-folder-code">${escapeHtml(sectionCode.slice(0, 3))}</span></span>`;
+        } else {
+          let mark = "C";
+          if (kind === "enum") mark = "E";
+          else if (kind === "individual") mark = "I";
+          else if (kind === "source_file") mark = "F";
+          else if (kind === "requirement") mark = "T";
+          else if (kind === "implementation_ref") mark = "R";
+          else if (kind === "section_ref") mark = "S";
+          else if (kind === "group") mark = "G";
+          markHtml = `<span class="nav-kind ${kindClasses}">${escapeHtml(mark)}</span>`;
+        }
+        label.innerHTML = `${markHtml}
           <span class="tree-label">${escapeHtml(node.title || node.id)}</span>`;
-        label.title = node.title || node.id;
+        label.title = isSectionFolder && sectionCode
+          ? `${sectionCode} — ${node.title || node.id}`
+          : node.title || node.id;
         label.addEventListener("click", (e) => {
           e.stopPropagation();
           if (hasKids) {

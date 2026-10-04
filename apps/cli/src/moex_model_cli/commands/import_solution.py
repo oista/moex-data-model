@@ -219,20 +219,24 @@ def run_import_solution(
         },
     )
     lines.append(f"report={md}")
-    lines.append(
-        f"SXI+ASSESS: error="
-        f"{sum(1 for d in all_diags if d.severity is Severity.ERROR)} "
-        f"warning="
-        f"{sum(1 for d in all_diags if d.severity is Severity.WARNING)}"
-    )
+    n_err = sum(1 for d in all_diags if d.severity is Severity.ERROR)
+    n_warn = sum(1 for d in all_diags if d.severity is Severity.WARNING)
+    n_info = sum(1 for d in all_diags if d.severity is Severity.INFO)
+    lines.append(f"SXI+ASSESS: error={n_err} warning={n_warn} info={n_info}")
 
     # Recompute exit: errors → 1; io skip → 3; else 0
-    code = 1 if any(d.severity is Severity.ERROR for d in all_diags) else (
-        3 if result.io_skipped else 0
-    )
-    # Surface first diagnostics
-    for d in all_diags[:25]:
+    code = 1 if n_err else (3 if result.io_skipped else 0)
+    # Surface errors fully; warnings only as a short sample (full list in report).
+    errors = [d for d in all_diags if d.severity is Severity.ERROR]
+    warnings = [d for d in all_diags if d.severity is Severity.WARNING]
+    for d in errors[:50]:
         lines.append(str(d))
-    if len(all_diags) > 25:
-        lines.append(f"... and {len(all_diags) - 25} more (see report)")
+    if len(errors) > 50:
+        lines.append(f"... and {len(errors) - 50} more errors (see report)")
+    if warnings:
+        lines.append(f"(first {min(5, len(warnings))} of {len(warnings)} warnings)")
+        for d in warnings[:5]:
+            lines.append(str(d))
+        if len(warnings) > 5:
+            lines.append(f"... see {md} for full warning list")
     return code, "\n".join(lines) + "\n"

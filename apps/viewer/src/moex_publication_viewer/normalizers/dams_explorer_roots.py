@@ -168,6 +168,27 @@ def _section_ref(section_id: str, title: str) -> PublicationItem:
     )
 
 
+# Order matches RequirementSectionEnum in moex-types.yaml.
+_SECTION_ORDER: tuple[str, ...] = (
+    "LDM",
+    "PDM",
+    "REF",
+    "ATR",
+    "FLW",
+    "CLS",
+    "GEN",
+)
+_SECTION_LABELS: dict[str, str] = {
+    "LDM": "Логическая модель",
+    "PDM": "Физическая модель",
+    "REF": "Связи сущностей",
+    "ATR": "Атрибуты",
+    "FLW": "Потоки данных",
+    "CLS": "Классификация данных",
+    "GEN": "Общие требования",
+}
+
+
 def _load_requirement_items(
     spec_dir: Path,
     catalog_rel: str = "requirements/it-solution-requirements.yaml",
@@ -207,6 +228,64 @@ def _load_requirement_items(
             )
         )
     return items
+
+
+def _group_it_requirements_by_section(
+    req_items: list[PublicationItem],
+) -> list[PublicationItem]:
+    """Nest IT-solution requirements under section folders (enum order, non-empty only)."""
+    buckets: dict[str, list[PublicationItem]] = {code: [] for code in _SECTION_ORDER}
+    unknown: dict[str, list[PublicationItem]] = {}
+    for item in req_items:
+        section = str((item.attributes or {}).get("requirement_section") or "").strip()
+        if section in buckets:
+            buckets[section].append(item)
+        elif section:
+            unknown.setdefault(section, []).append(item)
+        else:
+            unknown.setdefault("_", []).append(item)
+
+    groups: list[PublicationItem] = []
+    for code in _SECTION_ORDER:
+        children = buckets[code]
+        if not children:
+            continue
+        groups.append(
+            PublicationItem(
+                id=f"group:requirements-section-{code}",
+                title=_SECTION_LABELS.get(code, code),
+                description=_SECTION_LABELS.get(code, code),
+                attributes={
+                    "kind": "group",
+                    "group_style": "section_folder",
+                    "requirement_section": code,
+                    "requirement_count": len(children),
+                    "member_ids": [c.id for c in children],
+                },
+                children=children,
+            )
+        )
+    for code in sorted(unknown):
+        children = unknown[code]
+        if not children:
+            continue
+        label = _SECTION_LABELS.get(code, code if code != "_" else "Прочее")
+        groups.append(
+            PublicationItem(
+                id=f"group:requirements-section-{code}",
+                title=label,
+                description=label,
+                attributes={
+                    "kind": "group",
+                    "group_style": "section_folder",
+                    "requirement_section": code if code != "_" else "",
+                    "requirement_count": len(children),
+                    "member_ids": [c.id for c in children],
+                },
+                children=children,
+            )
+        )
+    return groups
 
 
 def _source_file_items(
@@ -404,6 +483,7 @@ def wrap_dams_explorer_roots(
         spec_dir,
         catalog_rel="requirements/conceptual-model-requirements.yaml",
     )
+    section_groups = _group_it_requirements_by_section(req_items)
     list_group = PublicationItem(
         id="group:requirements-list",
         title="Требования к модели",
@@ -415,7 +495,7 @@ def wrap_dams_explorer_roots(
             "requirement_count": len(req_items),
             "member_ids": [r.id for r in req_items],
         },
-        children=req_items,
+        children=section_groups,
     )
     conceptual_list_group = PublicationItem(
         id="group:requirements-conceptual-list",

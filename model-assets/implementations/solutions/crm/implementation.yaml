@@ -23,7 +23,7 @@ provenance:
   generated_from: src_soluitions_model.xlsx#sha256:d0f9a93cda53482ef8524522b5d983db15194fd9f2331f1e918cb7de9de6f862
   created_by: moex-model import-solution
   generator_id: moex-standard-linkml/solution-xlsx@0.1.0
-  created_at: '2026-10-04T15:19:31+00:00'
+  created_at: '2026-10-04T15:22:58+00:00'
 body_ref: crm-solution-model.yaml
 implementation_body: crm-solution-model.yaml
 specification_envelope: ../../../specifications/moex-dams/0.1/specification.yaml

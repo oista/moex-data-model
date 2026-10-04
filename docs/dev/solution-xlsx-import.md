@@ -19,6 +19,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/import-solution-xlsx
 # Все четыре системы
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/import-solution-xlsx.ps1 `
   -Xlsx "F:\...\src_soluitions_model.xlsx" -All -Force
+
+# ЕСЭД: в PowerShell удобнее -System ESED (алиас → кириллический SrcSystem)
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/import-solution-xlsx.ps1 `
+  -Xlsx "F:\...\src_soluitions_model.xlsx" -System ESED -Force
 ```
 
 Эквивалент через CLI (нужен `PYTHONPATH` или editable install `apps/cli`):
