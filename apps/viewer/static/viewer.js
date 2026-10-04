@@ -18,6 +18,9 @@
   const PREFS_STORAGE_KEY = "moex-viewer-prefs";
   const LEGACY_THEME_KEY = "moex-viewer-theme";
   const displayCatalog = viewerConfig.display || {};
+  const sidebarSiblings = Array.isArray(viewerConfig.sidebar_siblings)
+    ? viewerConfig.sidebar_siblings
+    : [];
   const displaySettings = Array.isArray(displayCatalog.settings)
     ? displayCatalog.settings
     : [];
@@ -894,6 +897,174 @@
     return ids;
   }
 
+  function indexExplorerClasses(expl) {
+    const byId = new Map();
+    walkExplorerItems(expl, (node) => {
+      const kind = node.attributes?.kind || "class";
+      if (kind === "class") byId.set(node.id, node);
+    });
+    return byId;
+  }
+
+  function collectClassAncestors(item, byId) {
+    const out = [];
+    const seen = new Set();
+    function walk(node) {
+      if (!node) return;
+      const parentName = node.attributes?.is_a;
+      if (parentName && byId.has(parentName) && !seen.has(parentName)) {
+        seen.add(parentName);
+        out.push(byId.get(parentName));
+        walk(byId.get(parentName));
+      }
+      (node.attributes?.mixins || []).forEach((m) => {
+        if (!byId.has(m) || seen.has(m)) return;
+        seen.add(m);
+        out.push(byId.get(m));
+        walk(byId.get(m));
+      });
+    }
+    walk(item);
+    return out;
+  }
+
+  function collectClassDescendants(classId, byId) {
+    const childrenOf = new Map();
+    byId.forEach((node) => {
+      const parents = [];
+      if (node.attributes?.is_a) parents.push(node.attributes.is_a);
+      (node.attributes?.mixins || []).forEach((m) => parents.push(m));
+      parents.forEach((p) => {
+        if (!childrenOf.has(p)) childrenOf.set(p, []);
+        childrenOf.get(p).push(node.id);
+      });
+    });
+    const out = [];
+    const seen = new Set();
+    function walk(id) {
+      (childrenOf.get(id) || []).forEach((childId) => {
+        if (seen.has(childId)) return;
+        seen.add(childId);
+        const node = byId.get(childId);
+        if (!node) return;
+        out.push(node);
+        walk(childId);
+      });
+    }
+    walk(classId);
+    out.sort((a, b) =>
+      String(a.title || a.id).localeCompare(String(b.title || b.id))
+    );
+    return out;
+  }
+
+  function collectClassInstances(className) {
+    if (!className) return [];
+    return modules.flatMap((m) =>
+      (m.sections || [])
+        .filter((s) => s.instance_of === className && s.type !== "explorer")
+        .flatMap((s) =>
+          (s.items || []).map((row) => ({ mod: m, section: s, item: row }))
+        )
+    );
+  }
+
+  function itSolutionModuleIds() {
+    const dams = modules.find(
+      (m) =>
+        m.module_id === "moex:module:dams" || shortModule(m.module_id) === "dams"
+    );
+    if (!dams) return [];
+    const expl = explorerSection(dams);
+    if (!expl) return [];
+    const found = findExplorerItem(expl, "group:implementations-it-solutions");
+    if (!found) return [];
+    const options = [];
+    (found.item.children || []).forEach((child) => {
+      if (child.attributes?.kind !== "implementation_ref") return;
+      const mid =
+        child.attributes.module_id || child.attributes.target_module_id;
+      if (!mid) return;
+      options.push({
+        moduleId: mid,
+        title: child.title || child.id,
+        id: child.id,
+      });
+    });
+    return options;
+  }
+
+  function appendExplorerClassChips(listEl, members, { mod, expl, openGroupId } = {}) {
+    (members || []).forEach((child) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      const childKind = child.attributes?.kind || "class";
+      const role =
+        childKind === "class" || childKind === "enum"
+          ? classRole(child.attributes)
+          : null;
+      btn.className = "spec-link explorer-chip" + (role ? ` kind-${role}` : "");
+      if (childKind === "class") {
+        btn.innerHTML = `<span class="nav-kind ${classKindClassNames(child.attributes)}">C</span>
+          <span>${escapeHtml(child.title || child.id)}</span>`;
+      } else if (childKind === "enum") {
+        btn.innerHTML = `<span class="nav-kind ${classKindClassNames(child.attributes)}">E</span>
+          <span>${escapeHtml(child.title || child.id)}</span>`;
+      } else if (childKind === "requirement") {
+        btn.innerHTML = `<span class="nav-kind">T</span>
+          <span>${escapeHtml(child.title || child.id)}</span>`;
+      } else if (childKind === "source_file") {
+        btn.innerHTML = `<span class="nav-kind">F</span>
+          <span>${escapeHtml(child.title || child.id)}</span>`;
+      } else {
+        btn.textContent = child.title || child.id;
+      }
+      btn.title = child.description || "";
+      btn.addEventListener("click", () => {
+        if (openGroupId) openGroups.add(openGroupId);
+        if (child.attributes?.kind === "implementation_ref") {
+          openGroups.add(child.id);
+        } else {
+          const found = findExplorerItem(expl, child.id);
+          if (found?.group) openGroups.add(found.group.id);
+        }
+        const node = nodeForModule(mod.module_id);
+        setHash({
+          node: node ? node.id : null,
+          module: shortModule(mod.module_id),
+          section: expl.id,
+          item: child.id,
+        });
+        if (node) currentNodeId = node.id;
+        showModule(mod.module_id, {
+          section: expl.id,
+          item: child.id,
+        });
+      });
+      listEl.appendChild(btn);
+    });
+  }
+
+  function appendExplorerCompositionBlock(
+    card,
+    title,
+    members,
+    { mod, expl, openGroupId, emptyMessage }
+  ) {
+    const block = document.createElement("section");
+    block.className = "detail-block";
+    block.innerHTML = `<h2>${escapeHtml(title)} (${members.length})</h2>`;
+    if (!members.length) {
+      block.innerHTML += `<p class="muted">${escapeHtml(emptyMessage)}</p>`;
+    } else {
+      const list = document.createElement("div");
+      list.className = "explorer-class-list";
+      appendExplorerClassChips(list, members, { mod, expl, openGroupId });
+      block.appendChild(list);
+    }
+    card.appendChild(block);
+  }
+
   function countExplorerClasses(node) {
     let n = 0;
     walkExplorerItems({ items: node.children || [] }, (child) => {
@@ -1200,6 +1371,11 @@
       explorerItems = filterExplorerItemsForPrefs(explorerItems);
 
       explorerItems.forEach((group) => {
+        // Top-level section_ref (e.g. moex.dams «Глоссарий») — leaf, not a folder.
+        if (group.attributes?.kind === "section_ref") {
+          appendNavClassNode(tree, group, 0);
+          return;
+        }
         const gId = group.id;
         // Default: open Классы when no focus and no section root yet expanded
         if (
@@ -1363,6 +1539,114 @@
     }
   }
 
+  function openSidebarSectionRef(attrs) {
+    selectedItemId = null;
+    const mid = attrs.target_module_id;
+    if (!mid || !attrs.section_id) return;
+    const node = nodeForModule(mid);
+    if (node) {
+      currentNodeId = node.id;
+      if (node.conforms_to) {
+        openGroups.add(catalogOpenKey(node.conforms_to));
+      }
+      if (node.role === "specification_implementation") {
+        openGroups.add(catalogOpenKey(node.id));
+        openGroups.add("group:implementations");
+        openGroups.add(node.id);
+      }
+    }
+    setHash({
+      node: node ? node.id : null,
+      module: shortModule(mid),
+      section: attrs.section_id,
+    });
+    showModule(mid, { section: attrs.section_id });
+  }
+
+  function appendSidebarSiblingNav(parentEl, sibling, focus) {
+    const mKey = `sidebar:${sibling.id}`;
+    const open = openGroups.has(mKey);
+    const kids = sibling.children || [];
+    const wrap = document.createElement("div");
+    wrap.className = "nav-module";
+    const row = document.createElement("div");
+    row.className = "nav-tree-row nav-catalog-row";
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "tree-toggle";
+    setTreeToggle(toggle, { open, leaf: !kids.length });
+    toggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (!kids.length) return;
+      if (openGroups.has(mKey)) openGroups.delete(mKey);
+      else openGroups.add(mKey);
+      renderModuleNav(focus);
+    });
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "module-btn";
+    btn.innerHTML = `<span>${escapeHtml(sibling.title)}</span>
+      <span class="badge">${kids.length}</span>`;
+    btn.addEventListener("click", () => {
+      if (openGroups.has(mKey)) openGroups.delete(mKey);
+      else openGroups.add(mKey);
+      renderModuleNav(focus);
+    });
+    row.appendChild(toggle);
+    row.appendChild(btn);
+    wrap.appendChild(row);
+    if (open && kids.length) {
+      const body = document.createElement("div");
+      body.className = "nav-catalog-body";
+      const tree = document.createElement("div");
+      tree.className = "nav-explorer";
+      kids.forEach((child) => {
+        const leafWrap = document.createElement("div");
+        leafWrap.className = "nav-tree-node";
+        leafWrap.style.setProperty("--tree-level", "0");
+        const leafRow = document.createElement("div");
+        leafRow.className = "nav-tree-row";
+        const leafToggle = document.createElement("button");
+        leafToggle.type = "button";
+        leafToggle.className = "tree-toggle is-leaf";
+        setTreeToggle(leafToggle, { open: false, leaf: true });
+        const attrs = child.attributes || {};
+        const sectionActive =
+          !focus?.item &&
+          !!focus?.section &&
+          attrs.kind === "section_ref" &&
+          attrs.section_id === focus.section &&
+          attrs.target_module_id &&
+          shortModule(attrs.target_module_id) === shortModule(currentModuleId);
+        const label = document.createElement("button");
+        label.type = "button";
+        label.className = "nav-item-btn" + (sectionActive ? " active" : "");
+        label.setAttribute("data-tree-node", "");
+        const glyph = resolveNavGlyph(attrs, { kind: attrs.kind });
+        label.innerHTML = `${navGlyphHtml(glyph, "menu")}
+          <span class="tree-label">${escapeHtml(child.title || child.id)}</span>`;
+        label.addEventListener("click", (e) => {
+          e.stopPropagation();
+          openGroups.add(mKey);
+          if (attrs.kind === "section_ref") openSidebarSectionRef(attrs);
+        });
+        leafRow.appendChild(leafToggle);
+        leafRow.appendChild(label);
+        leafWrap.appendChild(leafRow);
+        tree.appendChild(leafWrap);
+      });
+      body.appendChild(tree);
+      wrap.appendChild(body);
+    }
+    parentEl.appendChild(wrap);
+  }
+
+  function appendSidebarSiblingsAfter(parentEl, afterModuleId, focus) {
+    sidebarSiblings
+      .filter((s) => s && s.after_module_id === afterModuleId)
+      .forEach((s) => appendSidebarSiblingNav(parentEl, s, focus));
+  }
+
   function appendCatalogNav(parentEl, node, focus) {
     const bodyMod = bodyModuleForCatalogNode(node);
     const hasBody = !!bodyMod;
@@ -1473,6 +1757,7 @@
         wrap.appendChild(row);
         if (open && active) appendPublicationSubtree(wrap, mod, focus);
         moduleNav.appendChild(wrap);
+        appendSidebarSiblingsAfter(moduleNav, mod.module_id, focus);
       });
       return;
     }
@@ -1528,6 +1813,7 @@
         wrap.appendChild(row);
         if (open && active) appendPublicationSubtree(wrap, mod, focus);
         moduleNav.appendChild(wrap);
+        appendSidebarSiblingsAfter(moduleNav, mod.module_id, focus);
       });
     }
     bindPublicationTreeKeyboard();
@@ -1949,37 +2235,10 @@
         panel.appendChild(h2);
         const list = document.createElement("div");
         list.className = "explorer-class-list";
-        kids.forEach((child) => {
-          const btn = document.createElement("button");
-          btn.type = "button";
-          const kind = child.attributes?.kind || "class";
-          const role =
-            kind === "class" || kind === "enum"
-              ? classRole(child.attributes)
-              : null;
-          btn.className = "spec-link explorer-chip" + (role ? ` kind-${role}` : "");
-          if (kind === "class") {
-            btn.innerHTML = `<span class="nav-kind ${classKindClassNames(child.attributes)}">C</span>
-              <span>${escapeHtml(child.title || child.id)}</span>`;
-          } else if (kind === "enum") {
-            btn.innerHTML = `<span class="nav-kind ${classKindClassNames(child.attributes)}">E</span>
-              <span>${escapeHtml(child.title || child.id)}</span>`;
-          } else {
-            btn.textContent = child.title || child.id;
-          }
-          btn.title = child.description || "";
-          btn.addEventListener("click", () => {
-            openGroups.add(group.id);
-            const node = nodeForModule(mod.module_id);
-            setHash({
-              node: node ? node.id : null,
-              module: shortModule(mod.module_id),
-              section: expl.id,
-              item: child.id,
-            });
-            showModule(mod.module_id, { section: expl.id, item: child.id });
-          });
-          list.appendChild(btn);
+        appendExplorerClassChips(list, kids, {
+          mod,
+          expl,
+          openGroupId: group.id,
         });
         panel.appendChild(list);
         grid.appendChild(panel);
@@ -2986,72 +3245,12 @@
       card.appendChild(meta);
 
       const members = item.children || [];
-      const memberBlock = document.createElement("section");
-      memberBlock.className = "detail-block";
-      memberBlock.innerHTML = `<h2>Состав (${members.length})</h2>`;
-      if (!members.length) {
-        memberBlock.innerHTML += `<p class="muted">Пустой пакет.</p>`;
-      } else {
-        const list = document.createElement("div");
-        list.className = "explorer-class-list";
-        members.forEach((child) => {
-          const btn = document.createElement("button");
-          btn.type = "button";
-          const childKind = child.attributes?.kind || "class";
-          const role =
-            childKind === "class" || childKind === "enum"
-              ? classRole(child.attributes)
-              : null;
-          btn.className = "spec-link explorer-chip" + (role ? ` kind-${role}` : "");
-          if (childKind === "class") {
-            btn.innerHTML = `<span class="nav-kind ${classKindClassNames(child.attributes)}">C</span>
-              <span>${escapeHtml(child.title || child.id)}</span>`;
-          } else if (childKind === "enum") {
-            btn.innerHTML = `<span class="nav-kind ${classKindClassNames(child.attributes)}">E</span>
-              <span>${escapeHtml(child.title || child.id)}</span>`;
-          } else if (childKind === "requirement") {
-            btn.innerHTML = `<span class="nav-kind">T</span>
-              <span>${escapeHtml(child.title || child.id)}</span>`;
-          } else if (childKind === "source_file") {
-            btn.innerHTML = `<span class="nav-kind">F</span>
-              <span>${escapeHtml(child.title || child.id)}</span>`;
-          } else {
-            btn.textContent = child.title || child.id;
-          }
-          btn.title = child.description || "";
-          btn.addEventListener("click", () => {
-            if (child.attributes?.kind === "implementation_ref") {
-              openGroups.add(item.id);
-              openGroups.add(child.id);
-              const node = nodeForModule(mod.module_id);
-              setHash({
-                node: node ? node.id : null,
-                module: shortModule(mod.module_id),
-                section: expl.id,
-                item: child.id,
-              });
-              if (node) currentNodeId = node.id;
-              showModule(mod.module_id, {
-                section: expl.id,
-                item: child.id,
-              });
-              return;
-            }
-            openGroups.add(item.id);
-            const node = nodeForModule(mod.module_id);
-            setHash({
-              node: node ? node.id : null,
-              module: shortModule(mod.module_id),
-              section: expl.id,
-              item: child.id,
-            });
-            showModule(mod.module_id, { section: expl.id, item: child.id });
-          });
-          list.appendChild(btn);
-        });
-        memberBlock.appendChild(list);
-      }
-      card.appendChild(memberBlock);
+      appendExplorerCompositionBlock(card, "Состав", members, {
+        mod,
+        expl,
+        openGroupId: item.id,
+        emptyMessage: "Пустой пакет.",
+      });
       return card;
     }
 
@@ -3162,6 +3361,106 @@
       const slots = item.attributes?.slots || [];
       const declared = new Set(item.attributes?.declared_slots || []);
       (item.attributes?.attributes_inline || []).forEach((n) => declared.add(n));
+      const classById = indexExplorerClasses(expl);
+      const ancestors = collectClassAncestors(item, classById);
+      const descendants = collectClassDescendants(item.id, classById);
+      const instances = collectClassInstances(item.id);
+
+      function renderObjectsTab(panel) {
+        const body = document.createElement("section");
+        body.className = "detail-block";
+        body.innerHTML = `<h2>Objects</h2>`;
+        if (!instances.length) {
+          body.innerHTML += `<p class="muted">No instances of this class in compiled publications.</p>`;
+          panel.appendChild(body);
+          return;
+        }
+
+        const itSolutions = itSolutionModuleIds();
+        const toolbar = document.createElement("div");
+        toolbar.className = "section-toolbar";
+        const filterSelects = document.createElement("div");
+        filterSelects.className = "chips";
+        const sel = document.createElement("select");
+        sel.innerHTML =
+          `<option value="">IT solution: all</option>` +
+          itSolutions
+            .map(
+              (opt) =>
+                `<option value="${escapeHtml(opt.moduleId)}">${escapeHtml(
+                  opt.title
+                )}</option>`
+            )
+            .join("");
+        filterSelects.appendChild(sel);
+        toolbar.appendChild(filterSelects);
+        body.appendChild(toolbar);
+
+        const listHost = document.createElement("div");
+        body.appendChild(listHost);
+
+        function paintObjects() {
+          listHost.innerHTML = "";
+          const filterMid = sel.value;
+          const visible = filterMid
+            ? instances.filter((hit) => hit.mod.module_id === filterMid)
+            : instances;
+          if (!visible.length) {
+            const empty = document.createElement("p");
+            empty.className = "muted";
+            empty.textContent = filterMid
+              ? "No instances in the selected IT solution."
+              : "No instances of this class in compiled publications.";
+            listHost.appendChild(empty);
+            return;
+          }
+          const byMod = new Map();
+          visible.forEach((hit) => {
+            const key = hit.mod.module_id;
+            if (!byMod.has(key)) byMod.set(key, { mod: hit.mod, hits: [] });
+            byMod.get(key).hits.push(hit);
+          });
+          byMod.forEach(({ mod: pubMod, hits }) => {
+            const group = document.createElement("div");
+            group.className = "objects-pub-group";
+            const h3 = document.createElement("h3");
+            h3.textContent = `${pubMod.title || pubMod.module_id} (${hits.length})`;
+            group.appendChild(h3);
+            const list = document.createElement("div");
+            list.className = "explorer-class-list";
+            hits.forEach(({ mod: hitMod, section, item: row }) => {
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.className = "spec-link explorer-chip";
+              const label =
+                row.attributes?.name || row.title || row.id;
+              btn.innerHTML = `<span>${escapeHtml(label)}</span>`;
+              btn.title = row.id;
+              btn.addEventListener("click", () => {
+                const node = nodeForModule(hitMod.module_id);
+                setHash({
+                  node: node ? node.id : null,
+                  module: shortModule(hitMod.module_id),
+                  section: section.id,
+                  item: row.id,
+                });
+                if (node) currentNodeId = node.id;
+                showModule(hitMod.module_id, {
+                  section: section.id,
+                  item: row.id,
+                });
+              });
+              list.appendChild(btn);
+            });
+            group.appendChild(list);
+            listHost.appendChild(group);
+          });
+        }
+
+        sel.addEventListener("change", paintObjects);
+        paintObjects();
+        panel.appendChild(body);
+      }
 
       mountTabs(card, [
         {
@@ -3317,11 +3616,28 @@
           },
         },
         {
+          id: "objects",
+          label: "Objects",
+          count: instances.length,
+          render: renderObjectsTab,
+        },
+        {
           id: "source",
           label: "Source",
           render: renderSourceTab,
         },
       ], { initial: "overview" });
+
+      appendExplorerCompositionBlock(card, "Состав", ancestors, {
+        mod,
+        expl,
+        emptyMessage: "Нет родителей.",
+      });
+      appendExplorerCompositionBlock(card, "Наследники", descendants, {
+        mod,
+        expl,
+        emptyMessage: "Нет наследников.",
+      });
       return card;
     }
 

@@ -490,18 +490,17 @@ def wrap_dams_explorer_roots(
     *,
     glossary_folders: list[PublicationItem] | None = None,
 ) -> list[PublicationItem]:
-    """Wrap under Overview / Классы / Спецификация / Требования / Реализации."""
-    from moex_publication_viewer.normalizers.spec_glossary_tree import (
-        make_overview_glossary_folder,
-    )
+    """Wrap under Overview / Классы / Глоссарий / Спецификация / Требования / Реализации.
 
-    glossary_folder = make_overview_glossary_folder(glossary_folders)
+    Glossary is a top-level ``section_ref`` (not Overview folder). ``glossary_folders``
+    is accepted for call-site compat but not shown in the Spec nav tree.
+    """
+    _ = glossary_folders
     overview_children = [
         _section_ref("overview", "Overview"),
         _section_ref("classes", "All classes"),
         _section_ref("slots", "All slots"),
         _section_ref("enums", "All enumerations"),
-        glossary_folder,
     ]
     overview_root = PublicationItem(
         id="group:overview",
@@ -874,4 +873,20 @@ def wrap_dams_explorer_roots(
         },
         children=[],
     )
-    return [overview_root, classes_root, files_root, requirements_root, impls_root]
+    glossary_ref = _section_ref("glossary", "Глоссарий")
+    glossary_ref = glossary_ref.model_copy(
+        update={
+            "attributes": {
+                **(glossary_ref.attributes or {}),
+                "nav_glyph": "glossary",
+            }
+        }
+    )
+    return [
+        overview_root,
+        classes_root,
+        glossary_ref,
+        files_root,
+        requirements_root,
+        impls_root,
+    ]

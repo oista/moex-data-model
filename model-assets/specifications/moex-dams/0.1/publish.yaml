@@ -28,7 +28,7 @@ sections:
     groupby: schema
 
   - id: glossary
-    title: Glossary
+    title: Глоссарий
     description: >
       Flat A–Z view of DAMS classes/enums (ADR-025). Rows are regenerated from
       SchemaView at viewer build; the JSON stub is not authoritative.

@@ -12,10 +12,10 @@ from moex_publication_viewer.build import (
     attach_impl_section_nav_children,
     compile_catalog,
     compile_modules,
+    build_dsp_documentation_sidebar_siblings,
     enrich_dams_explorer_implementations,
     enrich_fibo_explorer_classes,
     enrich_fibo_explorer_implementations,
-    enrich_ontology_catalog_documentation_nav,
     group_enterprise_conceptual_impl_nav,
     group_solution_impl_nav,
     impl_nav_section_ids,
@@ -487,29 +487,35 @@ def test_repo_dams_dsp_includes_classes_explorer_section_ref() -> None:
 
 
 def test_repo_ontology_catalog_documentation_links_dsp_sections() -> None:
-    """Ontology Catalog → Documentation → moex.dsp.classes / moex.dsp.glossary."""
+    """Sidebar sibling under Ontology Catalog → moex.dsp.classes / moex.dsp.glossary."""
     modules = compile_modules(REPO, enforce_publication_contract=False)
-    enrich_ontology_catalog_documentation_nav(modules)
-    ontcat = next(m for m in modules if m.module_id == "moex:module:ontology-catalog")
-    explorer = next(s for s in ontcat.sections if s.type == "explorer")
-    doc = next(
-        i for i in explorer.items if i.id == "group:ontology-catalog:documentation"
-    )
-    assert doc.title == "Documentation"
-    assert doc.attributes.get("nav_group") == "documentation"
-    assert [c.title for c in doc.children] == [
+    siblings = build_dsp_documentation_sidebar_siblings(modules)
+    assert len(siblings) == 1
+    doc = siblings[0]
+    assert doc["after_module_id"] == "moex:module:ontology-catalog"
+    assert doc["id"] == "sidebar:documentation"
+    assert doc["title"] == "Documentation"
+    assert doc["attributes"].get("nav_group") == "documentation"
+    assert [c["title"] for c in doc["children"]] == [
         "moex.dsp.classes",
         "moex.dsp.glossary",
     ]
-    classes, glossary = doc.children
-    assert classes.id == "ontcat:doc:moex.dsp.classes"
-    assert classes.attributes.get("kind") == "section_ref"
-    assert classes.attributes.get("section_id") == "explorer"
-    assert classes.attributes.get("target_module_id") == "moex:module:dsp"
-    assert glossary.id == "ontcat:doc:moex.dsp.glossary"
-    assert glossary.attributes.get("section_id") == "glossary"
-    assert glossary.attributes.get("target_module_id") == "moex:module:dsp"
-    assert glossary.attributes.get("nav_glyph") == "glossary"
+    classes, glossary = doc["children"]
+    assert classes["id"] == "ontcat:doc:moex.dsp.classes"
+    assert classes["attributes"].get("kind") == "section_ref"
+    assert classes["attributes"].get("section_id") == "explorer"
+    assert classes["attributes"].get("target_module_id") == "moex:module:dsp"
+    assert glossary["id"] == "ontcat:doc:moex.dsp.glossary"
+    assert glossary["attributes"].get("section_id") == "glossary"
+    assert glossary["attributes"].get("target_module_id") == "moex:module:dsp"
+    assert glossary["attributes"].get("nav_glyph") == "glossary"
+    # Must not nest inside Ontology Catalog explorer
+    ontcat = next(m for m in modules if m.module_id == "moex:module:ontology-catalog")
+    explorer = next(s for s in ontcat.sections if s.type == "explorer")
+    assert not any(
+        i.id == "group:ontology-catalog:documentation"
+        for i in (explorer.items or [])
+    )
 
 
 def test_repo_impl_section_nav_covers_all_module_sections() -> None:

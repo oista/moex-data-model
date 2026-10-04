@@ -107,6 +107,7 @@ def render_viewer(
     *,
     inline_css: str | None = None,
     inline_js: str | None = None,
+    sidebar_siblings: list[dict] | None = None,
 ) -> str:
     templates_dir = viewer_root / "templates"
     env = Environment(
@@ -117,6 +118,8 @@ def render_viewer(
 
     template = env.get_template("base.html.j2")
     viewer_config = load_viewer_config(viewer_root)
+    if sidebar_siblings:
+        viewer_config = {**viewer_config, "sidebar_siblings": sidebar_siblings}
     return template.render(
         modules=modules,
         modules_json=json.dumps(modules_payload(modules), ensure_ascii=False),

@@ -74,34 +74,40 @@ def test_wrap_roots_placeholder_implementations(tmp_path: Path):
     assert [r.id for r in roots] == [
         "group:overview",
         "group:classes",
+        "section:glossary",
         "group:spec-files",
         "group:requirements",
         "group:implementations",
     ]
     assert roots[0].attributes.get("section_root") == "overview"
     assert all(
-        c.attributes.get("kind") == "section_ref" for c in roots[0].children[:4]
+        c.attributes.get("kind") == "section_ref" for c in roots[0].children
     )
-    assert roots[0].children[4].id == "group:overview-glossary"
+    assert "group:overview-glossary" not in {c.id for c in roots[0].children}
+    assert roots[2].id == "section:glossary"
+    assert roots[2].title == "Глоссарий"
+    assert roots[2].attributes.get("section_id") == "glossary"
+    assert roots[2].attributes.get("nav_glyph") == "glossary"
     assert roots[1].children[0].id == "group:pkg"
-    assert roots[2].children
+    assert roots[3].id == "group:spec-files"
+    assert roots[3].children
     unknown = next(
         c
-        for c in roots[2].children
+        for c in roots[3].children
         if (c.attributes or {}).get("path") == "schemas/a.yaml"
     )
     assert unknown.title == "a.yaml"
     envelope = next(
-        c for c in roots[2].children if c.id == "file:specification.yaml"
+        c for c in roots[3].children if c.id == "file:specification.yaml"
     )
     assert envelope.title == "Конверт спецификации"
-    assert roots[3].id == "group:requirements"
-    assert {c.id for c in roots[3].children} == {
+    assert roots[4].id == "group:requirements"
+    assert {c.id for c in roots[4].children} == {
         "group:requirements-conceptual",
         "group:requirements-it-solutions",
         "group:requirements-publication",
     }
-    conceptual = roots[3].children[0]
+    conceptual = roots[4].children[0]
     assert conceptual.id == "group:requirements-conceptual"
     assert {c.id for c in conceptual.children} == {
         "group:requirements-conceptual-list",
@@ -112,7 +118,7 @@ def test_wrap_roots_placeholder_implementations(tmp_path: Path):
         c.id for c in conceptual.children
     }
     it = next(
-        c for c in roots[3].children if c.id == "group:requirements-it-solutions"
+        c for c in roots[4].children if c.id == "group:requirements-it-solutions"
     )
     assert {c.id for c in it.children} == {
         "group:requirements-list",
@@ -120,12 +126,12 @@ def test_wrap_roots_placeholder_implementations(tmp_path: Path):
         "group:requirements-model-spec",
         "group:requirements-model-example",
     }
-    pub = next(c for c in roots[3].children if c.id == "group:requirements-publication")
+    pub = next(c for c in roots[4].children if c.id == "group:requirements-publication")
     assert {c.id for c in pub.children} == {
         "group:requirements-publication-list",
         "group:requirements-publication-spec",
     }
-    assert roots[4].children == []
+    assert roots[5].children == []
 
 
 def test_wrap_roots_loads_requirements_catalog():

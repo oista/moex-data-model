@@ -781,6 +781,35 @@ def enrich_fibo_explorer_classes(modules: list[PublicationModule]) -> None:
     glossary.items = enriched_rows
 
 
+def _linkml_glossary_leaves_from_manifest(
+    mod: PublicationModule,
+) -> list[PublicationItem]:
+    """Rebuild glossary leaves from explorer LinkML source (DAMS top-level glossary)."""
+    if not mod.manifest_path:
+        return []
+    try:
+        from moex_publication_viewer.normalizers.linkml_normalizer import get_schema_view
+        from moex_publication_viewer.normalizers.spec_glossary_tree import (
+            build_linkml_glossary_leaves,
+        )
+
+        manifest = load_manifest(Path(mod.manifest_path))
+        explorer_m = next(
+            (s for s in manifest.sections if s.type == "explorer"),
+            None,
+        )
+        if explorer_m is None or not explorer_m.source or not explorer_m.source.path:
+            return []
+        source_path = resolve_source_path(Path(mod.manifest_path), explorer_m.source.path)
+        if source_path.suffix.lower() not in {".yaml", ".yml"}:
+            return []
+        sv = get_schema_view(source_path)
+        spec_dir = source_path.resolve().parent.parent
+        return build_linkml_glossary_leaves(sv, spec_dir=spec_dir)
+    except Exception:
+        return []
+
+
 def enrich_linkml_glossary_sections(modules: list[PublicationModule]) -> None:
     """Replace hand JSON glossary rows with SchemaView projection (ADR-025 view)."""
     for mod in modules:
@@ -794,9 +823,11 @@ def enrich_linkml_glossary_sections(modules: list[PublicationModule]) -> None:
         if explorer is None or glossary is None:
             continue
         folder = _find_overview_glossary_folder(list(explorer.items or []))
-        if folder is None:
-            continue
-        leaves = _walk_glossary_leaves([folder])
+        if folder is not None:
+            leaves = _walk_glossary_leaves([folder])
+        else:
+            # DAMS: Glossary is a top-level section_ref, not Overview folder.
+            leaves = _linkml_glossary_leaves_from_manifest(mod)
         if not leaves:
             continue
         glossary.items = flat_glossary_items_from_leaves(leaves)
@@ -805,28 +836,19 @@ def enrich_linkml_glossary_sections(modules: list[PublicationModule]) -> None:
             glossary.filterable = ["kind", "origin", "defined_in"]
 
 
-def enrich_ontology_catalog_documentation_nav(
+def build_dsp_documentation_sidebar_siblings(
     modules: list[PublicationModule],
-) -> None:
-    """Add Documentation → moex.dsp.classes / moex.dsp.glossary under Ontology Catalog."""
-    catalog_mod = next(
-        (m for m in modules if m.module_id == ONTOLOGY_CATALOG_MODULE_ID),
-        None,
-    )
-    if catalog_mod is None:
-        return
-    explorer = next((s for s in catalog_mod.sections if s.type == "explorer"), None)
-    if explorer is None:
-        return
-    if any(
-        i.id == "group:ontology-catalog:documentation"
-        for i in (explorer.items or [])
-    ):
-        return
-    if not any(m.module_id == DSP_MODULE_ID for m in modules):
-        return
+) -> list[dict]:
+    """Sidebar sibling under Ontology Catalog: Documentation → moex.dsp sections.
 
-    def _dsp_section_ref(leaf_id: str, title: str, section_id: str) -> PublicationItem:
+    Same hierarchy level as Ontology Catalog (not nested in its explorer).
+    """
+    if not any(m.module_id == ONTOLOGY_CATALOG_MODULE_ID for m in modules):
+        return []
+    if not any(m.module_id == DSP_MODULE_ID for m in modules):
+        return []
+
+    def _dsp_section_ref(leaf_id: str, title: str, section_id: str) -> dict:
         attrs: dict = {
             "kind": "section_ref",
             "section_id": section_id,
@@ -837,12 +859,13 @@ def enrich_ontology_catalog_documentation_nav(
         glyph = _SECTION_ID_NAV_GLYPH.get(section_id)
         if glyph:
             attrs["nav_glyph"] = glyph
-        return PublicationItem(
-            id=leaf_id,
-            title=title,
-            description=f"Open moex.dsp section «{title}».",
-            attributes=attrs,
-        )
+        return {
+            "id": leaf_id,
+            "title": title,
+            "description": f"Open moex.dsp section «{title}».",
+            "attributes": attrs,
+            "children": [],
+        }
 
     kids = [
         _dsp_section_ref(
@@ -852,18 +875,28 @@ def enrich_ontology_catalog_documentation_nav(
             "ontcat:doc:moex.dsp.glossary", "moex.dsp.glossary", "glossary"
         ),
     ]
-    group = PublicationItem(
-        id="group:ontology-catalog:documentation",
-        title="Documentation",
-        description="Data Specification Player metamodel sections (moex.dsp).",
-        attributes={
-            "kind": "group",
-            "nav_group": "documentation",
-            "member_ids": [c.id for c in kids],
-        },
-        children=kids,
-    )
-    explorer.items = [*(explorer.items or []), group]
+    return [
+        {
+            "after_module_id": ONTOLOGY_CATALOG_MODULE_ID,
+            "id": "sidebar:documentation",
+            "title": "Documentation",
+            "description": "Data Specification Player metamodel sections (moex.dsp).",
+            "attributes": {
+                "kind": "group",
+                "nav_group": "documentation",
+                "member_ids": [c["id"] for c in kids],
+            },
+            "children": kids,
+        }
+    ]
+
+
+# Back-compat alias used by older tests/imports.
+def enrich_ontology_catalog_documentation_nav(
+    modules: list[PublicationModule],
+) -> list[dict]:
+    """Return sidebar siblings; does not mutate Ontology Catalog explorer."""
+    return build_dsp_documentation_sidebar_siblings(modules)
 
 
 def enrich_fibo_explorer_implementations(
@@ -977,7 +1010,7 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
     enrich_fibo_explorer_classes(modules)
     enrich_fibo_explorer_implementations(modules, catalog)
     enrich_linkml_glossary_sections(modules)
-    enrich_ontology_catalog_documentation_nav(modules)
+    sidebar_siblings = build_dsp_documentation_sidebar_siblings(modules)
     search_index = build_search_index(modules)
     if catalog is not None:
         for node in catalog.nodes:
@@ -1042,6 +1075,7 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
         catalog=catalog,
         inline_css=css_text,
         inline_js=js_text,
+        sidebar_siblings=sidebar_siblings,
     )
     index_path = dist_dir / "index.html"
     index_path.write_text(html, encoding="utf-8")

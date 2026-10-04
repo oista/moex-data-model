@@ -22,6 +22,7 @@ def test_js_has_tabs_and_icon_helpers():
     assert 'id: "overview"' in JS
     assert 'id: "attributes"' in JS
     assert 'id: "relations"' in JS
+    assert 'id: "objects"' in JS
     assert 'id: "source"' in JS
     assert 'id: "members"' in JS
     assert "function displayIcon" in JS
@@ -31,6 +32,23 @@ def test_js_has_tabs_and_icon_helpers():
     assert "searchFocusTrapHandler" in JS
     assert "shortcutModKey" in JS
     assert "Type to search classes" in JS
+
+
+def test_js_class_card_composition_and_objects():
+    assert "function appendExplorerClassChips" in JS
+    assert "function appendExplorerCompositionBlock" in JS
+    assert "function collectClassAncestors" in JS
+    assert "function collectClassDescendants" in JS
+    assert "function collectClassInstances" in JS
+    assert "function itSolutionModuleIds" in JS
+    assert "\u0421\u043e\u0441\u0442\u0430\u0432 (" in JS  # Состав (
+    assert "\u041d\u0430\u0441\u043b\u0435\u0434\u043d\u0438\u043a\u0438 (" in JS  # Наследники (
+    assert "IT solution: all" in JS
+    assert "No instances of this class in compiled publications." in JS
+    assert "explorer-chip" in JS
+    assert 'label: "Objects"' in JS
+    assert "emptyMessage: \"\u041d\u0435\u0442 \u0440\u043e\u0434\u0438\u0442\u0435\u043b\u0435\u0439.\"" in JS
+    assert "emptyMessage: \"\u041d\u0435\u0442 \u043d\u0430\u0441\u043b\u0435\u0434\u043d\u0438\u043a\u043e\u0432.\"" in JS
 
 
 def test_js_table_links_and_instance_cards():

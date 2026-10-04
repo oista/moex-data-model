@@ -127,24 +127,24 @@ def test_ontology_glossary_tree_see_also_empty_and_not_subclass_nested():
     assert "Parent" in parent_ids
 
 
-def test_dams_overview_has_glossary_folder():
+def test_dams_glossary_is_top_level_section_ref():
     modules = compile_modules(REPO, enforce_publication_contract=False)
     enrich_linkml_glossary_sections(modules)
     dams = next(m for m in modules if m.module_id == DAMS)
     explorer = next(s for s in dams.sections if s.type == "explorer")
     overview = next(i for i in explorer.items if i.id == "group:overview")
-    gloss = next(c for c in overview.children if c.id == OVERVIEW_GLOSSARY_ID)
-    assert gloss.children[0].attributes.get("section_id") == "glossary"
-    site_folders = [
-        c
-        for c in gloss.children
-        if (c.attributes or {}).get("group_style") == "section_folder"
-    ]
-    assert site_folders
-    leaf_ids = collect_glossary_leaf_canonical_ids([gloss])
-    assert "LogicalEntity" in leaf_ids
+    assert OVERVIEW_GLOSSARY_ID not in {c.id for c in overview.children}
+    classes = next(i for i in explorer.items if i.id == "group:classes")
+    gloss_ref = next(i for i in explorer.items if i.id == "section:glossary")
+    assert gloss_ref.title == "Глоссарий"
+    assert gloss_ref.attributes.get("kind") == "section_ref"
+    assert gloss_ref.attributes.get("section_id") == "glossary"
+    root_ids = [i.id for i in explorer.items]
+    assert root_ids.index(gloss_ref.id) == root_ids.index(classes.id) + 1
     glossary = next(s for s in dams.sections if s.id == "glossary")
-    assert {i.id for i in glossary.items} == leaf_ids
+    assert glossary.title == "Глоссарий"
+    leaf_ids = {i.id for i in glossary.items}
+    assert "LogicalEntity" in leaf_ids
     sample = next(i for i in glossary.items if i.id == "LogicalEntity")
     assert (sample.attributes or {}).get("origin")
     assert "related" not in (sample.attributes or {})

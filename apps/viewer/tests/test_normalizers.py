@@ -454,9 +454,10 @@ def test_dams_explorer_real_schema():
         source={"format": "linkml-yaml", "path": str(schema), "select": "classes"},
     )
     out = LinkmlNormalizer().normalize(sec, schema)
-    assert [g.id for g in out.items[:5]] == [
+    assert [g.id for g in out.items[:6]] == [
         "group:overview",
         "group:classes",
+        "section:glossary",
         "group:spec-files",
         "group:requirements",
         "group:implementations",
@@ -465,22 +466,26 @@ def test_dams_explorer_real_schema():
     assert overview.attributes.get("section_root") == "overview"
     assert "section_id" not in (overview.attributes or {})
     kids = overview.children
-    assert [c.attributes.get("section_id") for c in kids[:4]] == [
+    assert [c.attributes.get("section_id") for c in kids] == [
         "overview",
         "classes",
         "slots",
         "enums",
     ]
-    assert all(c.attributes.get("kind") == "section_ref" for c in kids[:4])
-    assert [c.title for c in kids[:4]] == [
+    assert all(c.attributes.get("kind") == "section_ref" for c in kids)
+    assert [c.title for c in kids] == [
         "Overview",
         "All classes",
         "All slots",
         "All enumerations",
     ]
-    assert kids[4].id == "group:overview-glossary"
-    assert kids[4].attributes.get("group_style") == "section_folder"
-    assert kids[4].children[0].attributes.get("section_id") == "glossary"
+    assert "group:overview-glossary" not in {c.id for c in kids}
+    gloss_ref = out.items[2]
+    assert gloss_ref.id == "section:glossary"
+    assert gloss_ref.title == "Глоссарий"
+    assert gloss_ref.attributes.get("section_id") == "glossary"
+    assert gloss_ref.attributes.get("kind") == "section_ref"
+    assert gloss_ref.attributes.get("nav_glyph") == "glossary"
 
     classes_root = next(g for g in out.items if g.id == "group:classes")
     titles = {g.title for g in classes_root.children}
