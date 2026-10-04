@@ -152,6 +152,70 @@ def build_parser() -> argparse.ArgumentParser:
         help="Source file for --source-type draft import",
     )
 
+    import_sol = sub.add_parser(
+        "import-solution",
+        help="Object/ObjectAttribute xlsx → DAMS solution YAML (ADR-022)",
+    )
+    _add_slice_args(import_sol)
+    import_sol.add_argument(
+        "--xlsx",
+        type=Path,
+        required=True,
+        help="Path to src_soluitions_model.xlsx (or fixture)",
+    )
+    import_sol.add_argument(
+        "--system",
+        required=True,
+        help="SrcSystem value: MDM | UCD | CRM | ЕСЭД",
+    )
+    import_sol.add_argument(
+        "--profile",
+        type=Path,
+        default=None,
+        help=(
+            "SolutionXlsxProfile YAML "
+            "(default: model-assets/implementations/solutions/"
+            "solution-xlsx.profile.yaml)"
+        ),
+    )
+    import_sol.add_argument(
+        "--out",
+        type=Path,
+        default=None,
+        help="Solution directory (default: model-assets/implementations/solutions/<slug>)",
+    )
+    import_sol.add_argument(
+        "--report-dir",
+        type=Path,
+        default=None,
+        help="Import report directory (default: tmp/solution-import/<slug>)",
+    )
+    import_sol.add_argument(
+        "--force",
+        action="store_true",
+        help="Overwrite existing solution YAML",
+    )
+    import_sol.add_argument(
+        "--strict",
+        action="store_true",
+        help="Promote SXI warnings to errors",
+    )
+    import_sol.add_argument(
+        "--skip-validate",
+        action="store_true",
+        help="Skip LinkML ModelPackage validation",
+    )
+    import_sol.add_argument(
+        "--skip-assess",
+        action="store_true",
+        help="Skip moex_dams assess",
+    )
+    import_sol.add_argument(
+        "--skip-export",
+        action="store_true",
+        help="Skip vertical_slice.json export",
+    )
+
     map_p = sub.add_parser(
         "map",
         help="SSSOM load, LinkML binding extract, or linkml-map transform (ADR-008)",
@@ -357,6 +421,22 @@ def main(argv: list[str] | None = None) -> int:
             schema=args.schema,
             source_type=args.source_type,
             source=args.source,
+        )
+    elif args.command == "import-solution":
+        from moex_model_cli.commands.import_solution import run_import_solution
+
+        code, text = run_import_solution(
+            paths,
+            xlsx=args.xlsx,
+            system=args.system,
+            profile=args.profile,
+            out=args.out,
+            report_dir=args.report_dir,
+            force=args.force,
+            strict=args.strict,
+            skip_validate=args.skip_validate,
+            skip_assess=args.skip_assess,
+            skip_export=args.skip_export,
         )
     elif args.command == "map":
         from moex_model_cli.commands.map_cmd import run_map

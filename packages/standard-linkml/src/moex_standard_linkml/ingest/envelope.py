@@ -28,12 +28,18 @@ def build_envelope(
     package_bytes: bytes | None = None,
     revision: str | None = None,
     created_by: str = "moex-linkml-ingest",
+    source_label: str | None = None,
 ) -> dict[str, Any]:
-    """Build a kernel-shaped SpecificationImplementation as plain YAML dict."""
+    """Build a kernel-shaped SpecificationImplementation as plain YAML dict.
+
+    ``source_label`` (optional) replaces filesystem URI in source/provenance
+    when absolute paths must not be persisted (ADR-022).
+    """
     body = package_bytes if package_bytes is not None else package_path.read_bytes()
     digest = content_digest_bytes(body)
     rev = revision or digest.removeprefix("sha256:")[:12]
     now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+    source_uri = source_label or source_path.resolve().as_uri()
 
     return {
         "id": f"moex:implementation:{profile.solution_slug}:{profile.model_version}",
@@ -50,13 +56,13 @@ def build_envelope(
         "implementation_kind": "linkml",
         "lifecycle_status": profile.defaults.lifecycle_status,
         "source": {
-            "source_uri": source_path.resolve().as_uri(),
+            "source_uri": source_uri,
             "media_type": _media_type(source_path),
             "source_root_type": "ModelPackage",
             "authoritative": True,
         },
         "provenance": {
-            "generated_from": source_path.resolve().as_uri(),
+            "generated_from": source_uri,
             "created_by": created_by,
             "generator_id": GENERATOR_ID,
             "created_at": now,

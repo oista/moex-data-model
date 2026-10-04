@@ -1,0 +1,153 @@
+# Working MOEX profile for MDM / UCD / CRM / ЕСЭД ObjectAttribute import (ADR-022).
+name: moex-solution-xlsx
+id_prefix: dams
+src_only: ignore
+
+sheets:
+  objects:
+    sheet: Object
+    required: true
+    required_headers: [SrcSystem, ObjectCode, ObjectName]
+  object_attributes:
+    sheet: ObjectAttribute
+    required: true
+    required_headers: [ObjectCode, AttributeCode, SrcSystem, SrcAttributeCode]
+
+columns:
+  src_system: SrcSystem
+  object_code: ObjectCode
+  object_name: ObjectName
+  src_object_code: SrcObjectCode
+  src_object_name: SrcObjectName
+  src_description: SrcDescription
+  sort_order: SortOrder
+  attribute_code: AttributeCode
+  attribute_description: AttributeDescription
+  data_type: DataType
+  mandatory: Mandatory
+  pk: PK
+  ak: AK
+  fk: FK
+  src_attribute_code: SrcAttributeCode
+  src_attribute_description: SrcAttributeDescription
+  src_data_type: SrcDataType
+  comments: Comments
+  base_src_scode: BaseSrcSCode
+  base_src_sname: BaseSrcSName
+  base_src_object_code: BaseSrcObjectCode
+
+ignored_sheets: ["1", "2", "Блок api"]
+
+defaults:
+  lifecycle_status: draft
+  api_version: dams.moex/v0.1
+  implementation_scope: solution
+  solution_data_role: producer
+  entity_type: core
+  data_class: master_data
+  business_importance: medium
+  data_owner_ref: org:role/DATA_OWNER_PENDING
+  ownership_inheritance_rule: >
+    Ответственность за данные наследуется от ИТ-решения
+    при отсутствии локального override на сущности.
+  governance_classification: internal
+  business_key_kind: surrogate
+  identity_rule: >
+    Идентичность определяется первичным ключом сущности
+    в контуре ИТ-решения (требует уточнения владельцем данных).
+  conceptual_alignment_status: pending
+  alignment_rationale: >
+    Локальный stub из импорта xlsx; выверка с enterprise conceptual — follow-up.
+
+severity_overrides: {}
+
+specification_envelope: ../../../specifications/moex-dams/0.1/specification.yaml
+conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
+
+systems:
+  - src_system: MDM
+    slug: mdm
+    solution_ref: eam:solution/MDM
+    system_ref: eam:system/MDM
+    package_name: mdm_solution_model
+    package_title: Модель данных MDM
+    package_description: >
+      Модель данных ИТ-решения MDM (золотые записи ЮЛ/ФЛ и связи)
+      импортирована из Object/ObjectAttribute.
+    object_kind: view
+    technology: Oracle
+    direction: internal
+    native_schema_ref_template: "oracle:{object}"
+    domain_ref: eam:domain/PARTY
+    type_map:
+      VARCHAR2: string
+      NUMBER: decimal
+      DATE: date
+      UUID: identifier
+
+  - src_system: UCD
+    slug: ucd
+    solution_ref: eam:solution/UCD
+    system_ref: eam:system/UCD
+    package_name: ucd_solution_model
+    package_title: Модель данных UCD
+    package_description: >
+      Модель данных ИТ-решения UCD (организации, сотрудники, соглашения)
+      импортирована из Object/ObjectAttribute.
+    object_kind: table
+    technology: PostgreSQL
+    direction: internal
+    native_schema_ref_template: "postgres:ucd.{object}"
+    domain_ref: eam:domain/PARTY
+    type_map:
+      UUID: identifier
+      BIGINT: integer
+      STRING: string
+      DATE: date
+      VARCHAR: string
+      BOOLEAN: boolean
+      INTEGER: integer
+
+  - src_system: CRM
+    slug: crm
+    solution_ref: eam:solution/CRM
+    system_ref: eam:system/CRM
+    package_name: crm_solution_model
+    package_title: Модель данных CRM
+    package_description: >
+      Модель данных ИТ-решения CRM (клиент, контакт, привлечение)
+      импортирована из Object/ObjectAttribute.
+    object_kind: table
+    technology: Microsoft Dynamics
+    direction: internal
+    native_schema_ref_template: "dynamics:{object}"
+    domain_ref: eam:domain/PARTY
+    type_map:
+      UUID: identifier
+      VARCHAR: string
+      BOOLEAN: boolean
+      DATE: date
+      TIMESTAMP: datetime
+      DATETIME: datetime
+
+  - src_system: ЕСЭД
+    slug: esed
+    solution_ref: eam:solution/ESED
+    system_ref: eam:system/ESED
+    package_name: esed_solution_model
+    package_title: Модель данных ЕСЭД
+    package_description: >
+      Модель данных ИТ-решения ЕСЭД (документный контур)
+      импортирована из Object/ObjectAttribute.
+    object_kind: table
+    technology: DocsVision
+    direction: internal
+    native_schema_ref_template: "esed:{object}"
+    domain_ref: eam:domain/DOCUMENT
+    type_map:
+      UUID: identifier
+      BOOLEAN: boolean
+      DATETIME: datetime
+      TEXT: string
+      INTEGER: integer
+      STRING: string

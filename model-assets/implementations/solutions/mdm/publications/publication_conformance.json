@@ -1,0 +1,127 @@
+{
+  "id": "pubconf:moex:module:mdm-solution:dams-solution",
+  "title": "Модель данных MDM",
+  "description": "Publication contract assessment for dams-solution against moex-dams@0.1",
+  "implementation_ref": "moex:module:mdm-solution",
+  "reference_specification_ref": "moex-dams@0.1",
+  "profile_ref": "dams-solution",
+  "overall_publication_status": "draft-conformant",
+  "requirement_results": [
+    {
+      "requirement_ref": "dams:overview",
+      "covered": true,
+      "covering_section_ids": [
+        "package"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:conformance",
+      "covered": true,
+      "covering_section_ids": [
+        "slice-summary"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:classes",
+      "covered": true,
+      "covering_section_ids": [
+        "logical"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:logical-entities",
+      "covered": true,
+      "covering_section_ids": [
+        "logical"
+      ],
+      "result_status": "pass",
+      "result_message": "semantic count=4 (>= 1); logical: 4",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:logical-attributes",
+      "covered": true,
+      "covering_section_ids": [
+        "logical"
+      ],
+      "result_status": "pass",
+      "result_message": "semantic count=42 (>= 1); logical: 42",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:relationships",
+      "covered": true,
+      "covering_section_ids": [
+        "logical"
+      ],
+      "result_status": "pass",
+      "result_message": "semantic count=4 (>= 0); logical: 4",
+      "obligation": "recommended"
+    },
+    {
+      "requirement_ref": "dams:declared-binding",
+      "covered": true,
+      "covering_section_ids": [],
+      "result_status": "pass",
+      "result_message": "implements moex-dams@0.1",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:model-assessment",
+      "covered": true,
+      "covering_section_ids": [
+        "model-assessment"
+      ],
+      "result_status": "pass",
+      "result_message": "covered by 1 section(s)",
+      "obligation": "recommended"
+    },
+    {
+      "requirement_ref": "dams:physical-objects",
+      "covered": true,
+      "covering_section_ids": [
+        "physical"
+      ],
+      "result_status": "pass",
+      "result_message": "semantic count=4 (>= 1); physical: 4",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:physical-fields",
+      "covered": true,
+      "covering_section_ids": [
+        "physical"
+      ],
+      "result_status": "pass",
+      "result_message": "semantic count=42 (>= 0); physical: 42",
+      "obligation": "recommended"
+    },
+    {
+      "requirement_ref": "dams:physical-mappings",
+      "covered": true,
+      "covering_section_ids": [
+        "slice-nodes"
+      ],
+      "result_status": "pass",
+      "result_message": "semantic count=50 (>= 1); slice-nodes: 50",
+      "obligation": "required"
+    },
+    {
+      "requirement_ref": "dams:draft-evidence",
+      "covered": false,
+      "covering_section_ids": [],
+      "result_status": "warning",
+      "result_message": "no covering section for evidence",
+      "obligation": "recommended"
+    }
+  ]
+}

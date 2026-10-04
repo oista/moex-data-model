@@ -1,0 +1,55 @@
+name: solution-xlsx-fixture
+id_prefix: dams
+src_only: ignore
+
+sheets:
+  objects:
+    sheet: Object
+    required: true
+    required_headers: [SrcSystem, ObjectCode, ObjectName]
+  object_attributes:
+    sheet: ObjectAttribute
+    required: true
+    required_headers: [ObjectCode, AttributeCode, SrcSystem, SrcAttributeCode]
+
+systems:
+  - src_system: MDM
+    slug: mdm
+    solution_ref: eam:solution/MDM
+    system_ref: eam:system/MDM
+    package_name: mdm_solution_model
+    package_title: MDM fixture
+    package_description: Fixture MDM slice
+    object_kind: view
+    technology: Oracle
+    direction: internal
+    type_map:
+      VARCHAR2: string
+      NUMBER: decimal
+      DATE: date
+  - src_system: CRM
+    slug: crm
+    solution_ref: eam:solution/CRM
+    system_ref: eam:system/CRM
+    package_name: crm_solution_model
+    package_title: CRM fixture
+    package_description: Fixture CRM slice
+    object_kind: table
+    technology: Dynamics
+    direction: internal
+    type_map:
+      UUID: identifier
+      VARCHAR: string
+  - src_system: ЕСЭД
+    slug: esed
+    solution_ref: eam:solution/ESED
+    system_ref: eam:system/ESED
+    package_name: esed_solution_model
+    package_title: ESED fixture
+    package_description: Fixture ESED slice
+    object_kind: table
+    technology: DocsVision
+    direction: internal
+    type_map:
+      UUID: identifier
+      TEXT: string

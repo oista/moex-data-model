@@ -1,0 +1,88 @@
+# Template SolutionXlsxProfile — copy and adjust systems / type_map.
+name: solution-xlsx-template
+id_prefix: dams
+src_only: ignore
+
+sheets:
+  objects:
+    sheet: Object
+    required: true
+    required_headers: [SrcSystem, ObjectCode, ObjectName]
+  object_attributes:
+    sheet: ObjectAttribute
+    required: true
+    required_headers: [ObjectCode, AttributeCode, SrcSystem, SrcAttributeCode]
+
+columns:
+  src_system: SrcSystem
+  object_code: ObjectCode
+  object_name: ObjectName
+  src_object_code: SrcObjectCode
+  src_object_name: SrcObjectName
+  src_description: SrcDescription
+  sort_order: SortOrder
+  attribute_code: AttributeCode
+  attribute_description: AttributeDescription
+  data_type: DataType
+  mandatory: Mandatory
+  pk: PK
+  ak: AK
+  fk: FK
+  src_attribute_code: SrcAttributeCode
+  src_attribute_description: SrcAttributeDescription
+  src_data_type: SrcDataType
+  comments: Comments
+  base_src_scode: BaseSrcSCode
+  base_src_sname: BaseSrcSName
+  base_src_object_code: BaseSrcObjectCode
+
+ignored_sheets: ["1", "2", "Блок api"]
+
+defaults:
+  lifecycle_status: draft
+  api_version: dams.moex/v0.1
+  implementation_scope: solution
+  solution_data_role: producer
+  entity_type: core
+  data_class: master_data
+  business_importance: medium
+  data_owner_ref: org:role/DATA_OWNER_PENDING
+  ownership_inheritance_rule: >
+    Ответственность за данные наследуется от ИТ-решения
+    при отсутствии локального override на сущности.
+  governance_classification: internal
+  business_key_kind: surrogate
+  identity_rule: >
+    Идентичность определяется первичным ключом сущности
+    в контуре ИТ-решения (требует уточнения владельцем данных).
+  conceptual_alignment_status: pending
+  alignment_rationale: >
+    Локальный stub из импорта xlsx; выверка с enterprise conceptual — follow-up.
+
+severity_overrides: {}
+
+systems:
+  - src_system: EXAMPLE
+    slug: example
+    solution_ref: eam:solution/EXAMPLE
+    system_ref: eam:system/EXAMPLE
+    package_name: example_solution_model
+    package_title: Example solution model
+    package_description: Template system for solution-xlsx import
+    object_kind: table
+    technology: relational
+    direction: internal
+    native_schema_ref_template: "urn:moex:{slug}:schema/{object}"
+    type_map:
+      VARCHAR2: string
+      VARCHAR: string
+      NUMBER: decimal
+      DATE: date
+      UUID: identifier
+      BOOLEAN: boolean
+      INTEGER: integer
+      TEXT: string
+      DATETIME: datetime
+      TIMESTAMP: datetime
+      BIGINT: integer
+      STRING: string

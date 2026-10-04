@@ -99,9 +99,21 @@ powershell -NoProfile -ExecutionPolicy Bypass -File packages/standard-linkml/scr
 make linkml-ingest-check
 ```
 
+## Solution xlsx import (ADR-022)
+
+Object/ObjectAttribute workbook → DAMS solution `ModelPackage` (MDM/UCD/CRM/ЕСЭД).
+
+- Package: `moex_standard_linkml.solution_xlsx` (adapter → existing `map_er_dictionary`)
+- CLI orchestration (assess + export-slice): `moex-model import-solution` / `scripts/import-solution-xlsx.ps1`
+- Working profile: `model-assets/implementations/solutions/solution-xlsx.profile.yaml`
+- Docs: [`docs/dev/solution-xlsx-import.md`](../../docs/dev/solution-xlsx-import.md)
+
+This package **must not** import `moex_dams` (fitness: `tests/architecture/test_import_boundaries.py`).
+
 ## Success criteria
 
 - Fixture ER dictionary maps to YAML that passes `linkml-validate --target-class ModelPackage`
 - Cross-name conceptual refs and field-level mappings round-trip in tests
 - Envelope has `conforms_to` → moex-dams and `body_ref` → package file
 - No `schema-automator` dependency
+- Solution-xlsx fixture converts; architecture boundary test green

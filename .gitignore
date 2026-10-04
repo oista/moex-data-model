@@ -38,6 +38,9 @@ generated/artifacts/moex-dams/0.1/docs/*
 .cache/
 model-assets/external-sources/**/.cache/
 
+# Solution-xlsx import reports (ADR-022)
+tmp/solution-import/
+
 # IDE
 .idea/
 .vscode/

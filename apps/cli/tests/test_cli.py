@@ -342,3 +342,55 @@ def test_semantic_diff_breaking_exit_1(
     payload = json.loads(captured.out)
     categories = {c["category"] for c in payload["changes"]}
     assert "breaking" in categories
+
+
+def test_import_solution_fixture(
+    repo_root: Path,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    xlsx = (
+        repo_root
+        / "packages"
+        / "standard-linkml"
+        / "tests"
+        / "fixtures"
+        / "solution-xlsx"
+        / "fixture.xlsx"
+    )
+    profile = (
+        repo_root
+        / "packages"
+        / "standard-linkml"
+        / "tests"
+        / "fixtures"
+        / "solution-xlsx"
+        / "profile.yaml"
+    )
+    out = tmp_path / "crm"
+    code = main(
+        [
+            "import-solution",
+            "--root",
+            str(repo_root),
+            "--xlsx",
+            str(xlsx),
+            "--profile",
+            str(profile),
+            "--system",
+            "CRM",
+            "--out",
+            str(out),
+            "--report-dir",
+            str(tmp_path / "report"),
+            "--force",
+            "--skip-assess",
+            "--skip-export",
+        ]
+    )
+    captured = capsys.readouterr()
+    assert code == 0, captured.out
+    assert (out / "crm-solution-model.yaml").is_file()
+    assert (out / "implementation.yaml").is_file()
+    assert (out / "publish.yaml").is_file()
+    assert "import-solution" in captured.out
