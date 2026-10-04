@@ -363,6 +363,35 @@ def test_mermaid_diagram_without_svg(tmp_path: Path):
     assert out.attributes["svg_missing"] is True
 
 
+def test_mermaid_diagram_loads_clickmap(tmp_path: Path):
+    md = tmp_path / "conceptual.erd.md"
+    md.write_text(
+        "```mermaid\nerDiagram\n    LegalEntity {\n        string concept\n    }\n```\n",
+        encoding="utf-8",
+    )
+    clickmap = {
+        "profile": "conceptual",
+        "entities": {
+            "LegalEntity": {
+                "element_id": "dams:concept/LegalEntity",
+                "section_id": "conceptual",
+            }
+        },
+        "edges": [],
+    }
+    (tmp_path / "conceptual.erd.clickmap.json").write_text(
+        json.dumps(clickmap), encoding="utf-8"
+    )
+    sec = _section(
+        type="mermaid-diagram",
+        source={"format": "markdown", "path": "conceptual.erd.md"},
+    )
+    out = MermaidDiagramNormalizer().normalize(sec, md)
+    assert out.attributes["erd_clickmap"]["entities"]["LegalEntity"][
+        "element_id"
+    ] == "dams:concept/LegalEntity"
+
+
 def test_linkml_with_import():
     root = FIXTURES / "linkml"
     schema = root / "root.yaml"

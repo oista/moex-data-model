@@ -9,6 +9,7 @@ from moex_dams.projection.dbml import (
 )
 from moex_dams.projection.mermaid_er import (
     ErDiagramManifest,
+    build_er_clickmap,
     project_model_package_to_er_diagram,
     try_render_er_svg,
     write_er_diagram_artifact,
@@ -17,6 +18,7 @@ from moex_dams.projection.mermaid_er import (
 __all__ = [
     "DbmlManifest",
     "ErDiagramManifest",
+    "build_er_clickmap",
     "project_model_package_to_dbml",
     "project_model_package_to_er_diagram",
     "try_render_er_svg",

@@ -7,6 +7,7 @@ from pathlib import Path
 import yaml
 
 from moex_dams.projection.mermaid_er import (
+    build_er_clickmap,
     project_model_package_to_er_diagram,
     write_er_diagram_artifact,
 )
@@ -207,3 +208,82 @@ def test_write_er_diagram_artifact(tmp_path: Path) -> None:
     assert "erDiagram" in body
     assert manifest.content_digest.startswith("sha256:")
     assert manifest.profile == "logical"
+
+
+CONCEPTUAL_MINI = {
+    "element_id": "dams:model/cdm-mini/1.0.0",
+    "name": "cdm_mini",
+    "conceptual_entities": [
+        {
+            "element_id": "dams:concept/LegalEntity",
+            "name": "LegalEntity",
+            "title": "Юридическое лицо",
+        },
+        {
+            "element_id": "dams:concept/CorporateGroup",
+            "name": "CorporateGroup",
+            "title": "Группа компаний",
+        },
+    ],
+    "relation_terms": [
+        {
+            "element_id": "dams:relterm/memberOf",
+            "name": "memberOf",
+            "forward_label": "является членом",
+            "inverse_label": "включает",
+        }
+    ],
+    "relationships": [
+        {
+            "element_id": "dams:rel/LegalEntity/memberOf",
+            "name": "memberOf",
+            "source_entity_ref": "dams:concept/LegalEntity",
+            "target_entity_ref": "dams:concept/CorporateGroup",
+            "relation_term_ref": "dams:relterm/memberOf",
+            "term_direction": "forward",
+            "source_min_cardinality": 0,
+            "source_max_cardinality": 1,
+            "target_min_cardinality": 0,
+            "target_max_cardinality": 999,
+        },
+        {
+            "element_id": "dams:rel/hanging",
+            "name": "Hanging",
+            "source_entity_ref": "dams:concept/LegalEntity",
+            "target_entity_ref": "dams:concept/missing",
+        },
+    ],
+}
+
+
+def test_conceptual_er_diagram_entities_and_edge() -> None:
+    text = project_model_package_to_er_diagram(CONCEPTUAL_MINI, profile="conceptual")
+    assert text.startswith("erDiagram")
+    assert 'LegalEntity["Юридическое лицо"]' in text
+    assert 'CorporateGroup["Группа компаний"]' in text
+    assert 'string concept "concept"' in text
+    assert "является членом" in text
+    assert "Hanging" not in text
+    clickmap = build_er_clickmap(CONCEPTUAL_MINI, profile="conceptual")
+    assert clickmap["entities"]["LegalEntity"]["element_id"] == "dams:concept/LegalEntity"
+    assert clickmap["entities"]["LegalEntity"]["section_id"] == "conceptual"
+    assert len(clickmap["edges"]) == 1
+    assert clickmap["edges"][0]["element_id"] == "dams:rel/LegalEntity/memberOf"
+    assert clickmap["edges"][0]["section_id"] == "relationships"
+    assert clickmap["edges"][0]["label"] == "является членом"
+
+
+def test_write_conceptual_er_diagram_writes_clickmap(tmp_path: Path) -> None:
+    src = tmp_path / "pkg.yaml"
+    src.write_text(yaml.safe_dump(CONCEPTUAL_MINI), encoding="utf-8")
+    out = tmp_path / "conceptual.erd.md"
+    manifest = write_er_diagram_artifact(
+        implementation_path=src,
+        out_md=out,
+        profile="conceptual",
+    )
+    assert manifest.profile == "conceptual"
+    clickmap_path = tmp_path / "conceptual.erd.clickmap.json"
+    assert clickmap_path.is_file()
+    clickmap = yaml.safe_load(clickmap_path.read_text(encoding="utf-8"))
+    assert "LegalEntity" in clickmap["entities"]

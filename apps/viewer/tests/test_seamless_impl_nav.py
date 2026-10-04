@@ -198,6 +198,9 @@ def _enterprise_conceptual_sections() -> list[PublicationSection]:
         PublicationSection(
             id="conceptual", title="Conceptual entities", type="entity-table"
         ),
+        PublicationSection(
+            id="conceptual-erd", title="Conceptual diagram", type="mermaid-diagram"
+        ),
         PublicationSection(id="glossary", title="Model glossary", type="glossary"),
         PublicationSection(
             id="relation-terms", title="Relation terms", type="entity-table"
@@ -224,9 +227,8 @@ def test_group_enterprise_conceptual_impl_nav_nests_overview_and_glossary() -> N
     kids = impl_section_nav_children("moex-enterprise-conceptual-model", mod)
     assert [c.title for c in kids] == [
         "Overview",
-        "Conceptual entities",
+        "Концептуальная модель",
         "Model glossary",
-        "Relationships",
         "Source artifacts",
     ]
     overview = kids[0]
@@ -243,8 +245,17 @@ def test_group_enterprise_conceptual_impl_nav_nests_overview_and_glossary() -> N
         "conformance",
         "alignments",
     ]
-    assert kids[1].attributes.get("section_id") == "conceptual"
-    assert kids[1].attributes.get("nav_glyph") == "cdm"
+    cdm = kids[1]
+    assert cdm.id == "implnav:moex-enterprise-conceptual-model:group:conceptual"
+    assert cdm.attributes.get("nav_glyph") == "cdm"
+    assert cdm.attributes.get("nav_group") == "conceptual"
+    assert [c.attributes["section_id"] for c in cdm.children] == [
+        "conceptual",
+        "conceptual-erd",
+        "relationships",
+    ]
+    assert cdm.children[0].attributes.get("nav_glyph") == "cdm"
+    assert cdm.children[1].attributes.get("nav_glyph") == "cdm"
     glossary = kids[2]
     assert glossary.id == "implnav:moex-enterprise-conceptual-model:group:glossary"
     assert glossary.attributes.get("kind") == "group"
@@ -260,6 +271,9 @@ def test_group_enterprise_conceptual_impl_nav_nests_overview_and_glossary() -> N
         "relation-terms",
         "vocabularies",
     ]
+    assert all(
+        c.attributes.get("nav_glyph") == "glossary" for c in glossary.children
+    )
     assert_impl_section_nav_coverage(
         PublicationItem(
             id="moex-enterprise-conceptual-model",
@@ -432,9 +446,8 @@ def test_repo_dams_impl_folders_group_solutions_and_projects() -> None:
     ecm = next(c for c in impls.children if c.id == "moex-enterprise-conceptual-model")
     assert [c.title for c in ecm.children] == [
         "Overview",
-        "Conceptual entities",
+        "Концептуальная модель",
         "Model glossary",
-        "Relationships",
         "Source artifacts",
     ]
     assert [c.title for c in ecm.children[0].children] == [
@@ -442,12 +455,23 @@ def test_repo_dams_impl_folders_group_solutions_and_projects() -> None:
         "Conformance",
         "External alignments",
     ]
-    assert [c.title for c in ecm.children[2].children] == [
+    cdm = ecm.children[1]
+    assert cdm.attributes.get("nav_glyph") == "cdm"
+    assert [c.attributes["section_id"] for c in cdm.children] == [
+        "conceptual",
+        "conceptual-erd",
+        "relationships",
+    ]
+    glossary = ecm.children[2]
+    assert [c.title for c in glossary.children] == [
         "Model glossary",
         "Relation terms",
         "Controlled vocabularies",
     ]
-    assert ecm.children[2].attributes.get("nav_glyph") == "glossary"
+    assert glossary.attributes.get("nav_glyph") == "glossary"
+    assert all(
+        c.attributes.get("nav_glyph") == "glossary" for c in glossary.children
+    )
     it_folder = next(
         c for c in impls.children if c.id == "group:implementations-it-solutions"
     )

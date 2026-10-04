@@ -7,6 +7,12 @@ artifacts:
     role: controlled-vocabularies
   - path: publications/model_glossary.json
     role: generated-glossary-view
+  - path: publications/conceptual.erd.md
+    role: generated-diagram
+  - path: publications/conceptual.erd.svg
+    role: generated-diagram-svg
+  - path: publications/conceptual.erd.clickmap.json
+    role: generated-diagram-clickmap
   - path: implementation.yaml
     role: envelope
   - path: publish.yaml

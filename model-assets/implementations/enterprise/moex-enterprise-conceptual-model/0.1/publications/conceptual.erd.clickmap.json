@@ -1,0 +1,1145 @@
+{
+  "profile": "conceptual",
+  "entities": {
+    "Organization": {
+      "element_id": "dams:concept/Organization",
+      "section_id": "conceptual",
+      "title": "Организация"
+    },
+    "LegalEntity": {
+      "element_id": "dams:concept/LegalEntity",
+      "section_id": "conceptual",
+      "title": "Юридическое лицо"
+    },
+    "CorporateGroup": {
+      "element_id": "dams:concept/CorporateGroup",
+      "section_id": "conceptual",
+      "title": "Группа компаний"
+    },
+    "OrganizationIdentifier": {
+      "element_id": "dams:concept/OrganizationIdentifier",
+      "section_id": "conceptual",
+      "title": "Идентификатор организации"
+    },
+    "TradingParticipation": {
+      "element_id": "dams:concept/TradingParticipation",
+      "section_id": "conceptual",
+      "title": "Участие в торгах"
+    },
+    "TradingVenue": {
+      "element_id": "dams:concept/TradingVenue",
+      "section_id": "conceptual",
+      "title": "Торговая площадка"
+    },
+    "TradingSection": {
+      "element_id": "dams:concept/TradingSection",
+      "section_id": "conceptual",
+      "title": "Торговая секция"
+    },
+    "Admission": {
+      "element_id": "dams:concept/Admission",
+      "section_id": "conceptual",
+      "title": "Допуск к торгам"
+    },
+    "Agreement": {
+      "element_id": "dams:concept/Agreement",
+      "section_id": "conceptual",
+      "title": "Соглашение"
+    },
+    "AccountRelationship": {
+      "element_id": "dams:concept/AccountRelationship",
+      "section_id": "conceptual",
+      "title": "Счётное отношение"
+    },
+    "RegistrationAction": {
+      "element_id": "dams:concept/RegistrationAction",
+      "section_id": "conceptual",
+      "title": "Регистрационное действие"
+    },
+    "SupportingDocument": {
+      "element_id": "dams:concept/SupportingDocument",
+      "section_id": "conceptual",
+      "title": "Подтверждающий документ"
+    },
+    "Person": {
+      "element_id": "dams:concept/Person",
+      "section_id": "conceptual",
+      "title": "Физическое лицо"
+    },
+    "Client": {
+      "element_id": "dams:concept/Client",
+      "section_id": "conceptual",
+      "title": "Клиент"
+    },
+    "Issuer": {
+      "element_id": "dams:concept/Issuer",
+      "section_id": "conceptual",
+      "title": "Эмитент"
+    },
+    "ClientAccount": {
+      "element_id": "dams:concept/ClientAccount",
+      "section_id": "conceptual",
+      "title": "Учётная запись клиента"
+    },
+    "Asset": {
+      "element_id": "dams:concept/Asset",
+      "section_id": "conceptual",
+      "title": "Актив"
+    },
+    "Instrument": {
+      "element_id": "dams:concept/Instrument",
+      "section_id": "conceptual",
+      "title": "Инструмент"
+    },
+    "AssetGroup": {
+      "element_id": "dams:concept/AssetGroup",
+      "section_id": "conceptual",
+      "title": "Группа активов"
+    },
+    "AssetPool": {
+      "element_id": "dams:concept/AssetPool",
+      "section_id": "conceptual",
+      "title": "Пул активов"
+    },
+    "Benchmark": {
+      "element_id": "dams:concept/Benchmark",
+      "section_id": "conceptual",
+      "title": "Бенчмарк"
+    },
+    "TradingSystem": {
+      "element_id": "dams:concept/TradingSystem",
+      "section_id": "conceptual",
+      "title": "Торговая система"
+    },
+    "TradingMode": {
+      "element_id": "dams:concept/TradingMode",
+      "section_id": "conceptual",
+      "title": "Режим торгов"
+    },
+    "TradingCalendar": {
+      "element_id": "dams:concept/TradingCalendar",
+      "section_id": "conceptual",
+      "title": "Торговый календарь"
+    },
+    "TradingSession": {
+      "element_id": "dams:concept/TradingSession",
+      "section_id": "conceptual",
+      "title": "Торговая сессия"
+    },
+    "Order": {
+      "element_id": "dams:concept/Order",
+      "section_id": "conceptual",
+      "title": "Заявка"
+    },
+    "Trade": {
+      "element_id": "dams:concept/Trade",
+      "section_id": "conceptual",
+      "title": "Сделка"
+    },
+    "OpenPosition": {
+      "element_id": "dams:concept/OpenPosition",
+      "section_id": "conceptual",
+      "title": "Открытая позиция"
+    },
+    "Collateral": {
+      "element_id": "dams:concept/Collateral",
+      "section_id": "conceptual",
+      "title": "Обеспечение участника"
+    },
+    "UnifiedLimit": {
+      "element_id": "dams:concept/UnifiedLimit",
+      "section_id": "conceptual",
+      "title": "Единый лимит"
+    },
+    "Obligation": {
+      "element_id": "dams:concept/Obligation",
+      "section_id": "conceptual",
+      "title": "Требования и обязательства"
+    },
+    "MarketMakingProgram": {
+      "element_id": "dams:concept/MarketMakingProgram",
+      "section_id": "conceptual",
+      "title": "Программа маркет-мейкинга"
+    },
+    "CorporateAction": {
+      "element_id": "dams:concept/CorporateAction",
+      "section_id": "conceptual",
+      "title": "Корпоративное событие"
+    },
+    "ConnectionType": {
+      "element_id": "dams:concept/ConnectionType",
+      "section_id": "conceptual",
+      "title": "Тип подключения"
+    },
+    "SettlementCode": {
+      "element_id": "dams:concept/SettlementCode",
+      "section_id": "conceptual",
+      "title": "Расчётный код"
+    },
+    "TradingAccount": {
+      "element_id": "dams:concept/TradingAccount",
+      "section_id": "conceptual",
+      "title": "Торговый счёт"
+    },
+    "CalendarDay": {
+      "element_id": "dams:concept/CalendarDay",
+      "section_id": "conceptual",
+      "title": "Календарный день"
+    },
+    "AssetPoolMembership": {
+      "element_id": "dams:concept/AssetPoolMembership",
+      "section_id": "conceptual",
+      "title": "Состав пула активов"
+    },
+    "MarketMakingParticipation": {
+      "element_id": "dams:concept/MarketMakingParticipation",
+      "section_id": "conceptual",
+      "title": "Участие в программе ММ"
+    },
+    "TradingLogin": {
+      "element_id": "dams:concept/TradingLogin",
+      "section_id": "conceptual",
+      "title": "Логин ТКС"
+    },
+    "CouponPayment": {
+      "element_id": "dams:concept/CouponPayment",
+      "section_id": "conceptual",
+      "title": "Купонная выплата"
+    },
+    "AssetRiskParameter": {
+      "element_id": "dams:concept/AssetRiskParameter",
+      "section_id": "conceptual",
+      "title": "Риск-параметр актива"
+    },
+    "Counterparty": {
+      "element_id": "dams:concept/Counterparty",
+      "section_id": "conceptual",
+      "title": "Контрагент"
+    },
+    "Product": {
+      "element_id": "dams:concept/Product",
+      "section_id": "conceptual",
+      "title": "Продукт"
+    },
+    "Service": {
+      "element_id": "dams:concept/Service",
+      "section_id": "conceptual",
+      "title": "Услуга"
+    },
+    "Tariff": {
+      "element_id": "dams:concept/Tariff",
+      "section_id": "conceptual",
+      "title": "Тариф"
+    },
+    "Payment": {
+      "element_id": "dams:concept/Payment",
+      "section_id": "conceptual",
+      "title": "Платёж"
+    },
+    "Sale": {
+      "element_id": "dams:concept/Sale",
+      "section_id": "conceptual",
+      "title": "Продажа"
+    },
+    "CostCenter": {
+      "element_id": "dams:concept/CostCenter",
+      "section_id": "conceptual",
+      "title": "ЦФО"
+    },
+    "Income": {
+      "element_id": "dams:concept/Income",
+      "section_id": "conceptual",
+      "title": "Доход"
+    },
+    "Expense": {
+      "element_id": "dams:concept/Expense",
+      "section_id": "conceptual",
+      "title": "Расход"
+    },
+    "Budget": {
+      "element_id": "dams:concept/Budget",
+      "section_id": "conceptual",
+      "title": "Бюджет"
+    },
+    "Project": {
+      "element_id": "dams:concept/Project",
+      "section_id": "conceptual",
+      "title": "Проект"
+    },
+    "Task": {
+      "element_id": "dams:concept/Task",
+      "section_id": "conceptual",
+      "title": "Задача"
+    },
+    "TimeEntry": {
+      "element_id": "dams:concept/TimeEntry",
+      "section_id": "conceptual",
+      "title": "Трудозатрата"
+    },
+    "Rating": {
+      "element_id": "dams:concept/Rating",
+      "section_id": "conceptual",
+      "title": "Рейтинг"
+    },
+    "FinancialReport": {
+      "element_id": "dams:concept/FinancialReport",
+      "section_id": "conceptual",
+      "title": "Финансовая отчётность"
+    },
+    "ContractAmendment": {
+      "element_id": "dams:concept/ContractAmendment",
+      "section_id": "conceptual",
+      "title": "Дополнительное соглашение"
+    },
+    "MarketingCampaign": {
+      "element_id": "dams:concept/MarketingCampaign",
+      "section_id": "conceptual",
+      "title": "Маркетинговая кампания"
+    },
+    "CampaignMembership": {
+      "element_id": "dams:concept/CampaignMembership",
+      "section_id": "conceptual",
+      "title": "Участие в кампании"
+    },
+    "Department": {
+      "element_id": "dams:concept/Department",
+      "section_id": "conceptual",
+      "title": "Департамент"
+    },
+    "StaffPosition": {
+      "element_id": "dams:concept/StaffPosition",
+      "section_id": "conceptual",
+      "title": "Штатная единица"
+    },
+    "Employee": {
+      "element_id": "dams:concept/Employee",
+      "section_id": "conceptual",
+      "title": "Сотрудник"
+    },
+    "EmploymentContract": {
+      "element_id": "dams:concept/EmploymentContract",
+      "section_id": "conceptual",
+      "title": "Трудовой договор"
+    },
+    "Role": {
+      "element_id": "dams:concept/Role",
+      "section_id": "conceptual",
+      "title": "Роль"
+    },
+    "User": {
+      "element_id": "dams:concept/User",
+      "section_id": "conceptual",
+      "title": "Пользователь"
+    },
+    "RoleAssignment": {
+      "element_id": "dams:concept/RoleAssignment",
+      "section_id": "conceptual",
+      "title": "Назначение роли"
+    },
+    "AccountingSystem": {
+      "element_id": "dams:concept/AccountingSystem",
+      "section_id": "conceptual",
+      "title": "АБС"
+    },
+    "LedgerAccount": {
+      "element_id": "dams:concept/LedgerAccount",
+      "section_id": "conceptual",
+      "title": "Счёт АБС"
+    },
+    "SubledgerAccount": {
+      "element_id": "dams:concept/SubledgerAccount",
+      "section_id": "conceptual",
+      "title": "Лицевой счёт"
+    },
+    "Currency": {
+      "element_id": "dams:concept/Currency",
+      "section_id": "conceptual",
+      "title": "Валюта"
+    },
+    "UserLedgerLink": {
+      "element_id": "dams:concept/UserLedgerLink",
+      "section_id": "conceptual",
+      "title": "Счёт пользователя"
+    },
+    "JournalEntry": {
+      "element_id": "dams:concept/JournalEntry",
+      "section_id": "conceptual",
+      "title": "Проводка"
+    },
+    "InformationSystem": {
+      "element_id": "dams:concept/InformationSystem",
+      "section_id": "conceptual",
+      "title": "Инфо-система"
+    },
+    "Act": {
+      "element_id": "dams:concept/Act",
+      "section_id": "conceptual",
+      "title": "Акт"
+    },
+    "SalesFunnel": {
+      "element_id": "dams:concept/SalesFunnel",
+      "section_id": "conceptual",
+      "title": "Воронка продаж"
+    },
+    "Deposit": {
+      "element_id": "dams:concept/Deposit",
+      "section_id": "conceptual",
+      "title": "Депозит"
+    },
+    "Curve": {
+      "element_id": "dams:concept/Curve",
+      "section_id": "conceptual",
+      "title": "Кривая"
+    },
+    "Portfolio": {
+      "element_id": "dams:concept/Portfolio",
+      "section_id": "conceptual",
+      "title": "Портфель"
+    },
+    "ClearingPositionDetail": {
+      "element_id": "dams:concept/ClearingPositionDetail",
+      "section_id": "conceptual",
+      "title": "ЧПД"
+    },
+    "LoginEvent": {
+      "element_id": "dams:concept/LoginEvent",
+      "section_id": "conceptual",
+      "title": "Событие логина"
+    },
+    "TradingTerminal": {
+      "element_id": "dams:concept/TradingTerminal",
+      "section_id": "conceptual",
+      "title": "Торговый терминал"
+    }
+  },
+  "edges": [
+    {
+      "source": "LegalEntity",
+      "target": "CorporateGroup",
+      "label": "входит в",
+      "element_id": "dams:rel/LegalEntity/memberOf",
+      "section_id": "relationships"
+    },
+    {
+      "source": "OrganizationIdentifier",
+      "target": "LegalEntity",
+      "label": "идентифицирует",
+      "element_id": "dams:rel/OrganizationIdentifier/ofLegalEntity",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingParticipation",
+      "target": "LegalEntity",
+      "label": "принадлежит",
+      "element_id": "dams:rel/TradingParticipation/ofLegalEntity",
+      "section_id": "relationships"
+    },
+    {
+      "source": "AccountRelationship",
+      "target": "LegalEntity",
+      "label": "относится к",
+      "element_id": "dams:rel/AccountRelationship/ofLegalEntity",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingParticipation",
+      "target": "TradingVenue",
+      "label": "допущено к",
+      "element_id": "dams:rel/TradingParticipation/admittedTo",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingParticipation",
+      "target": "TradingSection",
+      "label": "применяется к",
+      "element_id": "dams:rel/TradingParticipation/appliesTo",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingParticipation",
+      "target": "Admission",
+      "label": "имеет допуск",
+      "element_id": "dams:rel/TradingParticipation/hasAdmission",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingParticipation",
+      "target": "Agreement",
+      "label": "регулируется",
+      "element_id": "dams:rel/TradingParticipation/governedBy",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingParticipation",
+      "target": "SupportingDocument",
+      "label": "подтверждается",
+      "element_id": "dams:rel/TradingParticipation/evidencedBy",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Admission",
+      "target": "LegalEntity",
+      "label": "выдан",
+      "element_id": "dams:rel/Admission/grantedTo",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Admission",
+      "target": "TradingVenue",
+      "label": "даёт доступ к",
+      "element_id": "dams:rel/Admission/grantsAccessToVenue",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Admission",
+      "target": "Agreement",
+      "label": "основан на",
+      "element_id": "dams:rel/Admission/basedOnAgreement",
+      "section_id": "relationships"
+    },
+    {
+      "source": "RegistrationAction",
+      "target": "LegalEntity",
+      "label": "касается",
+      "element_id": "dams:rel/RegistrationAction/concernsLegalEntity",
+      "section_id": "relationships"
+    },
+    {
+      "source": "RegistrationAction",
+      "target": "SupportingDocument",
+      "label": "подтверждается",
+      "element_id": "dams:rel/RegistrationAction/evidencedBy",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Client",
+      "target": "Person",
+      "label": "как физлицо",
+      "element_id": "dams:rel/Client/asPerson",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Client",
+      "target": "LegalEntity",
+      "label": "как юрлицо",
+      "element_id": "dams:rel/Client/asLegalEntity",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Issuer",
+      "target": "LegalEntity",
+      "label": "принадлежит",
+      "element_id": "dams:rel/Issuer/ofLegalEntity",
+      "section_id": "relationships"
+    },
+    {
+      "source": "ClientAccount",
+      "target": "Client",
+      "label": "относится к",
+      "element_id": "dams:rel/ClientAccount/ofClient",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingParticipation",
+      "target": "ClientAccount",
+      "label": "использует учётную запись",
+      "element_id": "dams:rel/TradingParticipation/usesAccount",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Instrument",
+      "target": "Asset",
+      "label": "основан на активе",
+      "element_id": "dams:rel/Instrument/basedOnAsset",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Instrument",
+      "target": "Issuer",
+      "label": "выпущен",
+      "element_id": "dams:rel/Instrument/issuedBy",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Asset",
+      "target": "AssetGroup",
+      "label": "входит в группу",
+      "element_id": "dams:rel/Asset/groupedIn",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingVenue",
+      "target": "TradingSystem",
+      "label": "относится к",
+      "element_id": "dams:rel/TradingVenue/listedOn",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Trade",
+      "target": "TradingParticipation",
+      "label": "исполнена",
+      "element_id": "dams:rel/Trade/executedBy",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Trade",
+      "target": "Instrument",
+      "label": "торгуется в",
+      "element_id": "dams:rel/Trade/tradedIn",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Trade",
+      "target": "TradingMode",
+      "label": "в режиме",
+      "element_id": "dams:rel/Trade/inMode",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Trade",
+      "target": "Client",
+      "label": "в интересах",
+      "element_id": "dams:rel/Trade/onBehalfOf",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Order",
+      "target": "TradingParticipation",
+      "label": "подана",
+      "element_id": "dams:rel/Order/placedBy",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Order",
+      "target": "Instrument",
+      "label": "торгуется в",
+      "element_id": "dams:rel/Order/tradedIn",
+      "section_id": "relationships"
+    },
+    {
+      "source": "SettlementCode",
+      "target": "TradingParticipation",
+      "label": "относится к",
+      "element_id": "dams:rel/SettlementCode/ofParticipation",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingAccount",
+      "target": "SettlementCode",
+      "label": "относится к",
+      "element_id": "dams:rel/TradingAccount/ofSettlementCode",
+      "section_id": "relationships"
+    },
+    {
+      "source": "CalendarDay",
+      "target": "TradingCalendar",
+      "label": "входит в",
+      "element_id": "dams:rel/CalendarDay/ofCalendar",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingSession",
+      "target": "TradingVenue",
+      "label": "в сессии на",
+      "element_id": "dams:rel/TradingSession/onVenue",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingSession",
+      "target": "TradingSystem",
+      "label": "принадлежит системе",
+      "element_id": "dams:rel/TradingSession/ofSystem",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingSession",
+      "target": "CalendarDay",
+      "label": "в сессии на",
+      "element_id": "dams:rel/TradingSession/onDay",
+      "section_id": "relationships"
+    },
+    {
+      "source": "AssetPoolMembership",
+      "target": "AssetPool",
+      "label": "входит в",
+      "element_id": "dams:rel/AssetPoolMembership/ofPool",
+      "section_id": "relationships"
+    },
+    {
+      "source": "AssetPoolMembership",
+      "target": "Asset",
+      "label": "входит в",
+      "element_id": "dams:rel/AssetPoolMembership/ofAsset",
+      "section_id": "relationships"
+    },
+    {
+      "source": "MarketMakingParticipation",
+      "target": "MarketMakingProgram",
+      "label": "входит в",
+      "element_id": "dams:rel/MarketMakingParticipation/ofProgram",
+      "section_id": "relationships"
+    },
+    {
+      "source": "MarketMakingParticipation",
+      "target": "TradingParticipation",
+      "label": "принадлежит",
+      "element_id": "dams:rel/MarketMakingParticipation/ofParticipation",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingLogin",
+      "target": "TradingParticipation",
+      "label": "принадлежит",
+      "element_id": "dams:rel/TradingLogin/ofParticipation",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingLogin",
+      "target": "ConnectionType",
+      "label": "типизирован",
+      "element_id": "dams:rel/TradingLogin/typedAs",
+      "section_id": "relationships"
+    },
+    {
+      "source": "CouponPayment",
+      "target": "Instrument",
+      "label": "касается",
+      "element_id": "dams:rel/CouponPayment/ofInstrument",
+      "section_id": "relationships"
+    },
+    {
+      "source": "CouponPayment",
+      "target": "CorporateAction",
+      "label": "основан на",
+      "element_id": "dams:rel/CouponPayment/ofCorporateAction",
+      "section_id": "relationships"
+    },
+    {
+      "source": "AssetRiskParameter",
+      "target": "Asset",
+      "label": "касается",
+      "element_id": "dams:rel/AssetRiskParameter/ofAsset",
+      "section_id": "relationships"
+    },
+    {
+      "source": "OpenPosition",
+      "target": "TradingParticipation",
+      "label": "держит позицию",
+      "element_id": "dams:rel/OpenPosition/holdsPosition",
+      "section_id": "relationships"
+    },
+    {
+      "source": "OpenPosition",
+      "target": "Instrument",
+      "label": "торгуется в",
+      "element_id": "dams:rel/OpenPosition/tradedIn",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Collateral",
+      "target": "TradingParticipation",
+      "label": "обеспечивает",
+      "element_id": "dams:rel/Collateral/ofParticipation",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Collateral",
+      "target": "Asset",
+      "label": "обеспечивает",
+      "element_id": "dams:rel/Collateral/ofAsset",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Collateral",
+      "target": "TradingVenue",
+      "label": "допущено к",
+      "element_id": "dams:rel/Collateral/onVenue",
+      "section_id": "relationships"
+    },
+    {
+      "source": "UnifiedLimit",
+      "target": "TradingParticipation",
+      "label": "ограничивает",
+      "element_id": "dams:rel/UnifiedLimit/ofParticipation",
+      "section_id": "relationships"
+    },
+    {
+      "source": "UnifiedLimit",
+      "target": "SettlementCode",
+      "label": "ограничивает",
+      "element_id": "dams:rel/UnifiedLimit/ofSettlementCode",
+      "section_id": "relationships"
+    },
+    {
+      "source": "UnifiedLimit",
+      "target": "TradingVenue",
+      "label": "ограничивает",
+      "element_id": "dams:rel/UnifiedLimit/onVenue",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Obligation",
+      "target": "TradingParticipation",
+      "label": "имеет обязательства",
+      "element_id": "dams:rel/Obligation/ofParticipation",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Obligation",
+      "target": "Asset",
+      "label": "имеет обязательства",
+      "element_id": "dams:rel/Obligation/ofAsset",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Obligation",
+      "target": "SettlementCode",
+      "label": "имеет обязательства",
+      "element_id": "dams:rel/Obligation/ofSettlementCode",
+      "section_id": "relationships"
+    },
+    {
+      "source": "CorporateAction",
+      "target": "Issuer",
+      "label": "касается",
+      "element_id": "dams:rel/CorporateAction/ofIssuer",
+      "section_id": "relationships"
+    },
+    {
+      "source": "CorporateAction",
+      "target": "Instrument",
+      "label": "касается",
+      "element_id": "dams:rel/CorporateAction/ofInstrument",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Counterparty",
+      "target": "LegalEntity",
+      "label": "принадлежит",
+      "element_id": "dams:rel/Counterparty/ofLegalEntity",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Agreement",
+      "target": "Counterparty",
+      "label": "сторона",
+      "element_id": "dams:rel/Agreement/withCounterparty",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Agreement",
+      "target": "CorporateGroup",
+      "label": "сторона",
+      "element_id": "dams:rel/Agreement/withCorporateGroup",
+      "section_id": "relationships"
+    },
+    {
+      "source": "ContractAmendment",
+      "target": "Agreement",
+      "label": "дополняет",
+      "element_id": "dams:rel/ContractAmendment/ofAgreement",
+      "section_id": "relationships"
+    },
+    {
+      "source": "ContractAmendment",
+      "target": "Employee",
+      "label": "подписано",
+      "element_id": "dams:rel/ContractAmendment/signedBy",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Product",
+      "target": "Service",
+      "label": "предоставляет услугу",
+      "element_id": "dams:rel/Product/ofService",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Product",
+      "target": "Tariff",
+      "label": "тарифицируется",
+      "element_id": "dams:rel/Product/pricedBy",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Payment",
+      "target": "Client",
+      "label": "оплачен",
+      "element_id": "dams:rel/Payment/paidByClient",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Payment",
+      "target": "Counterparty",
+      "label": "оплачен",
+      "element_id": "dams:rel/Payment/paidByCounterparty",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Payment",
+      "target": "Product",
+      "label": "за продукт",
+      "element_id": "dams:rel/Payment/forProduct",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Sale",
+      "target": "Client",
+      "label": "продано",
+      "element_id": "dams:rel/Sale/soldTo",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Sale",
+      "target": "Product",
+      "label": "за продукт",
+      "element_id": "dams:rel/Sale/forProduct",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Rating",
+      "target": "LegalEntity",
+      "label": "оценивает",
+      "element_id": "dams:rel/Rating/ofLegalEntity",
+      "section_id": "relationships"
+    },
+    {
+      "source": "FinancialReport",
+      "target": "LegalEntity",
+      "label": "отчитывается по",
+      "element_id": "dams:rel/FinancialReport/ofLegalEntity",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Income",
+      "target": "CostCenter",
+      "label": "относится к ЦФО",
+      "element_id": "dams:rel/Income/ofCostCenter",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Income",
+      "target": "CorporateGroup",
+      "label": "входит в",
+      "element_id": "dams:rel/Income/ofCorporateGroup",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Expense",
+      "target": "CostCenter",
+      "label": "относится к ЦФО",
+      "element_id": "dams:rel/Expense/ofCostCenter",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Expense",
+      "target": "CorporateGroup",
+      "label": "входит в",
+      "element_id": "dams:rel/Expense/ofCorporateGroup",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Budget",
+      "target": "Project",
+      "label": "бюджетирует",
+      "element_id": "dams:rel/Budget/ofProject",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Task",
+      "target": "Project",
+      "label": "относится к проекту",
+      "element_id": "dams:rel/Task/ofProject",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TimeEntry",
+      "target": "Task",
+      "label": "учтено по",
+      "element_id": "dams:rel/TimeEntry/ofTask",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TimeEntry",
+      "target": "Employee",
+      "label": "учтено по",
+      "element_id": "dams:rel/TimeEntry/ofEmployee",
+      "section_id": "relationships"
+    },
+    {
+      "source": "CampaignMembership",
+      "target": "MarketingCampaign",
+      "label": "в кампании",
+      "element_id": "dams:rel/CampaignMembership/ofCampaign",
+      "section_id": "relationships"
+    },
+    {
+      "source": "CampaignMembership",
+      "target": "User",
+      "label": "в кампании",
+      "element_id": "dams:rel/CampaignMembership/ofUser",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Department",
+      "target": "CorporateGroup",
+      "label": "входит в",
+      "element_id": "dams:rel/Department/ofCorporateGroup",
+      "section_id": "relationships"
+    },
+    {
+      "source": "StaffPosition",
+      "target": "Department",
+      "label": "относится к департаменту",
+      "element_id": "dams:rel/StaffPosition/ofDepartment",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Employee",
+      "target": "Person",
+      "label": "принадлежит",
+      "element_id": "dams:rel/Employee/ofPerson",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Employee",
+      "target": "StaffPosition",
+      "label": "занимает должность",
+      "element_id": "dams:rel/Employee/holdsStaffPosition",
+      "section_id": "relationships"
+    },
+    {
+      "source": "EmploymentContract",
+      "target": "Employee",
+      "label": "касается",
+      "element_id": "dams:rel/EmploymentContract/ofEmployee",
+      "section_id": "relationships"
+    },
+    {
+      "source": "RoleAssignment",
+      "target": "Role",
+      "label": "назначена роль",
+      "element_id": "dams:rel/RoleAssignment/ofRole",
+      "section_id": "relationships"
+    },
+    {
+      "source": "RoleAssignment",
+      "target": "User",
+      "label": "назначена роль",
+      "element_id": "dams:rel/RoleAssignment/ofUser",
+      "section_id": "relationships"
+    },
+    {
+      "source": "LedgerAccount",
+      "target": "AccountingSystem",
+      "label": "в АБС",
+      "element_id": "dams:rel/LedgerAccount/ofAccountingSystem",
+      "section_id": "relationships"
+    },
+    {
+      "source": "SubledgerAccount",
+      "target": "LedgerAccount",
+      "label": "относится к счёту",
+      "element_id": "dams:rel/SubledgerAccount/ofLedger",
+      "section_id": "relationships"
+    },
+    {
+      "source": "UserLedgerLink",
+      "target": "User",
+      "label": "входит в",
+      "element_id": "dams:rel/UserLedgerLink/ofUser",
+      "section_id": "relationships"
+    },
+    {
+      "source": "UserLedgerLink",
+      "target": "LedgerAccount",
+      "label": "относится к счёту",
+      "element_id": "dams:rel/UserLedgerLink/ofLedger",
+      "section_id": "relationships"
+    },
+    {
+      "source": "UserLedgerLink",
+      "target": "Currency",
+      "label": "номинирован в",
+      "element_id": "dams:rel/UserLedgerLink/denominatedIn",
+      "section_id": "relationships"
+    },
+    {
+      "source": "JournalEntry",
+      "target": "LedgerAccount",
+      "label": "проводится на",
+      "element_id": "dams:rel/JournalEntry/postsTo",
+      "section_id": "relationships"
+    },
+    {
+      "source": "JournalEntry",
+      "target": "SubledgerAccount",
+      "label": "по лицевому счёту",
+      "element_id": "dams:rel/JournalEntry/ofSubledger",
+      "section_id": "relationships"
+    },
+    {
+      "source": "User",
+      "target": "InformationSystem",
+      "label": "размещён в",
+      "element_id": "dams:rel/User/hostedOn",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Portfolio",
+      "target": "Asset",
+      "label": "держит актив",
+      "element_id": "dams:rel/Portfolio/holdsAsset",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Portfolio",
+      "target": "LedgerAccount",
+      "label": "относится к счёту",
+      "element_id": "dams:rel/Portfolio/ofLedger",
+      "section_id": "relationships"
+    },
+    {
+      "source": "Deposit",
+      "target": "LedgerAccount",
+      "label": "относится к счёту",
+      "element_id": "dams:rel/Deposit/ofLedger",
+      "section_id": "relationships"
+    },
+    {
+      "source": "ClearingPositionDetail",
+      "target": "LedgerAccount",
+      "label": "относится к счёту",
+      "element_id": "dams:rel/ClearingPositionDetail/ofLedger",
+      "section_id": "relationships"
+    },
+    {
+      "source": "LoginEvent",
+      "target": "TradingLogin",
+      "label": "произошло на логине",
+      "element_id": "dams:rel/LoginEvent/ofLogin",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingTerminal",
+      "target": "TradingParticipation",
+      "label": "на терминале",
+      "element_id": "dams:rel/TradingTerminal/ofParticipation",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingTerminal",
+      "target": "Instrument",
+      "label": "на терминале",
+      "element_id": "dams:rel/TradingTerminal/ofInstrument",
+      "section_id": "relationships"
+    },
+    {
+      "source": "TradingTerminal",
+      "target": "TradingVenue",
+      "label": "на терминале",
+      "element_id": "dams:rel/TradingTerminal/ofVenue",
+      "section_id": "relationships"
+    }
+  ]
+}

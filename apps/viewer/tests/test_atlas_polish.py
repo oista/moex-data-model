@@ -200,8 +200,11 @@ def test_js_nav_glyph_helpers():
     assert "function navGlyphHtml" in JS
     assert 'LEVEL_GLYPHS = new Set(["cdm", "ldm", "pdm"])' in JS
     assert 'conceptual: "cdm"' in JS
+    assert '"conceptual-erd": "cdm"' in JS
     assert 'logical: "ldm"' in JS
     assert 'physical: "pdm"' in JS
+    assert '"relation-terms": "glossary"' in JS
+    assert 'vocabularies: "glossary"' in JS
     assert "nav-kind-folder--level" in JS
     assert "nav-kind-folder-letter" in JS
     assert "function folderShapeSvg" in JS

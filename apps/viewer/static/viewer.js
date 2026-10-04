@@ -685,11 +685,14 @@
   const LEVEL_GLYPHS = new Set(["cdm", "ldm", "pdm"]);
   const SECTION_ID_NAV_GLYPH = {
     conceptual: "cdm",
+    "conceptual-erd": "cdm",
     logical: "ldm",
     "logical-erd": "ldm",
     physical: "pdm",
     "physical-erd": "pdm",
     glossary: "glossary",
+    "relation-terms": "glossary",
+    vocabularies: "glossary",
   };
   const KIND_LETTER = {
     enum: "E",
@@ -4144,7 +4147,7 @@
         );
         break;
       case "mermaid-diagram":
-        body.appendChild(renderMermaidDiagram(section));
+        body.appendChild(renderMermaidDiagram(mod, section));
         break;
       case "key-value":
         body.appendChild(renderKeyValue(section));
@@ -4221,12 +4224,76 @@
     return panel;
   }
 
-  function renderMermaidDiagram(section) {
+  function resolveErdClickTarget(clickmap, el) {
+    if (!clickmap || !el) return null;
+    let node = el;
+    while (node && node !== document && node.nodeType === 1) {
+      const id = String(node.getAttribute?.("id") || "");
+      const dataId = String(node.getAttribute?.("data-id") || "");
+      const hay = `${id} ${dataId}`;
+      const entityMatch = hay.match(/entity-([A-Za-z0-9_]+)-\d+/);
+      if (entityMatch) {
+        const entry = (clickmap.entities || {})[entityMatch[1]];
+        if (entry?.element_id) {
+          return {
+            element_id: entry.element_id,
+            section_id: entry.section_id || "conceptual",
+            kind: "entity",
+          };
+        }
+      }
+      const edgeMatch = hay.match(
+        /id_entity-([A-Za-z0-9_]+)-\d+_entity-([A-Za-z0-9_]+)-\d+/
+      );
+      if (edgeMatch || node.getAttribute?.("data-edge") === "true") {
+        const edges = clickmap.edges || [];
+        if (edgeMatch) {
+          const targetName = edgeMatch[1];
+          const sourceName = edgeMatch[2];
+          const hit =
+            edges.find(
+              (e) => e.source === sourceName && e.target === targetName
+            ) ||
+            edges.find(
+              (e) => e.source === targetName && e.target === sourceName
+            );
+          if (hit?.element_id) {
+            return {
+              element_id: hit.element_id,
+              section_id: hit.section_id || "relationships",
+              kind: "edge",
+            };
+          }
+        }
+        // Edge label text nodes sit near relationshipLine; walk up already done.
+      }
+      // Relationship labels are often <text> without entity ids — match by label.
+      if (node.tagName === "text" || node.tagName === "tspan") {
+        const label = String(node.textContent || "").trim();
+        if (label) {
+          const hit = (clickmap.edges || []).find((e) => e.label === label);
+          if (hit?.element_id) {
+            return {
+              element_id: hit.element_id,
+              section_id: hit.section_id || "relationships",
+              kind: "edge",
+            };
+          }
+        }
+      }
+      node = node.parentElement || node.parentNode;
+    }
+    return null;
+  }
+
+  function renderMermaidDiagram(mod, section) {
     const attrs = section.attributes || {};
     const source = String(attrs.mermaid_source || "");
+    const clickmap = attrs.erd_clickmap || null;
     const panel = document.createElement("div");
     panel.className = "erd-panel";
     panel.setAttribute("data-ui", "mermaid-diagram");
+    if (clickmap) panel.classList.add("erd-panel--interactive");
 
     const toolbar = document.createElement("div");
     toolbar.className = "erd-toolbar";
@@ -4251,12 +4318,16 @@
     toolbar.appendChild(tabDiagram);
     toolbar.appendChild(tabSource);
 
+    const bodyRow = document.createElement("div");
+    bodyRow.className = "erd-body";
+
     const canvas = document.createElement("div");
     canvas.className = "erd-canvas";
     canvas.setAttribute("data-erd-pane", "diagram");
     if (section.content) {
       const svgWrap = document.createElement("div");
       svgWrap.className = "erd-svg";
+      if (clickmap) svgWrap.classList.add("erd-svg--clickable");
       svgWrap.innerHTML = section.content;
       canvas.appendChild(svgWrap);
     } else {
@@ -4265,6 +4336,18 @@
       miss.textContent =
         "SVG не сгенерирован. Откройте вкладку «Исходник» или выполните scripts/render-mermaid-erd.ps1.";
       canvas.appendChild(miss);
+    }
+
+    const detailPane = document.createElement("aside");
+    detailPane.className = "erd-detail";
+    detailPane.setAttribute("data-erd-detail", "");
+    detailPane.hidden = !clickmap;
+    if (clickmap) {
+      const hint = document.createElement("p");
+      hint.className = "muted erd-detail-hint";
+      hint.textContent =
+        "Кликните сущность или связь на диаграмме, чтобы прочитать определение.";
+      detailPane.appendChild(hint);
     }
 
     const sourcePane = document.createElement("div");
@@ -4307,14 +4390,66 @@
       tabSource.setAttribute("aria-selected", isDiagram ? "false" : "true");
       canvas.classList.toggle("is-hidden", !isDiagram);
       canvas.hidden = !isDiagram;
+      if (clickmap) {
+        detailPane.classList.toggle("is-hidden", !isDiagram);
+        detailPane.hidden = !isDiagram;
+      }
       sourcePane.classList.toggle("is-hidden", isDiagram);
       sourcePane.hidden = isDiagram;
     }
     tabDiagram.addEventListener("click", () => showPane("diagram"));
     tabSource.addEventListener("click", () => showPane("source"));
 
+    function showErdDetail(target) {
+      if (!target || !mod) return;
+      const sec =
+        mod.sections.find((s) => s.id === target.section_id) ||
+        mod.sections.find((s) =>
+          (s.items || []).some((it) => it.id === target.element_id)
+        );
+      if (!sec) return;
+      const row = findSectionItem(sec, target.element_id);
+      if (!row) return;
+      detailPane.replaceChildren();
+      const openLink = document.createElement("a");
+      openLink.className = "erd-detail-open";
+      openLink.href = itemHref({
+        module: shortModule(mod.module_id),
+        section: sec.id,
+        item: row.id,
+        node: nodeForModule(mod.module_id)?.id || null,
+        card: true,
+      });
+      openLink.textContent = "Открыть карточку";
+      detailPane.appendChild(openLink);
+      if (sec.instance_of) {
+        detailPane.appendChild(renderInstanceDetail(mod, sec, row));
+      } else {
+        const fallback = document.createElement("article");
+        fallback.className = "detail-card content-card";
+        fallback.innerHTML = `<header class="detail-head"><h1>${escapeHtml(
+          row.title || row.id
+        )}</h1><p class="muted">${escapeHtml(row.id)}</p></header>
+          <p class="detail-desc">${escapeHtml(
+            row.description || "No description."
+          )}</p>`;
+        detailPane.appendChild(fallback);
+      }
+    }
+
+    if (clickmap && section.content) {
+      canvas.addEventListener("click", (ev) => {
+        const hit = resolveErdClickTarget(clickmap, ev.target);
+        if (!hit) return;
+        ev.preventDefault();
+        showErdDetail(hit);
+      });
+    }
+
+    bodyRow.appendChild(canvas);
+    if (clickmap) bodyRow.appendChild(detailPane);
     panel.appendChild(toolbar);
-    panel.appendChild(canvas);
+    panel.appendChild(bodyRow);
     panel.appendChild(sourcePane);
     return panel;
   }

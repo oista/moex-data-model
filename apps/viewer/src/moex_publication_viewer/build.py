@@ -248,11 +248,14 @@ def _module_by_id(
 # Publication section ids → DAMS model-level plaque / glossary glyph.
 _SECTION_ID_NAV_GLYPH: dict[str, str] = {
     "conceptual": "cdm",
+    "conceptual-erd": "cdm",
     "logical": "ldm",
     "logical-erd": "ldm",
     "physical": "pdm",
     "physical-erd": "pdm",
     "glossary": "glossary",
+    "relation-terms": "glossary",
+    "vocabularies": "glossary",
 }
 
 # Full solution-model publish.yaml set → nest under Overview / model folders.
@@ -276,7 +279,7 @@ _SOLUTION_NAV_PHYSICAL_IDS = ("physical", "physical-erd")
 _SOLUTION_NAV_REQUIREMENTS_IDS = ("model-assessment",)
 _SOLUTION_NAV_DOCUMENTATION_IDS = ("documentation",)
 
-# Enterprise conceptual (moex.concept-data-model) → Overview + Model glossary folders.
+# Enterprise conceptual (moex.concept-data-model) → Overview + CDM + Model glossary.
 _ENTERPRISE_CONCEPTUAL_NAV_REQUIRED_SECTION_IDS = frozenset(
     {
         "overview",
@@ -289,6 +292,11 @@ _ENTERPRISE_CONCEPTUAL_NAV_REQUIRED_SECTION_IDS = frozenset(
     }
 )
 _ENTERPRISE_CONCEPTUAL_NAV_OVERVIEW_IDS = ("overview", "conformance", "alignments")
+_ENTERPRISE_CONCEPTUAL_NAV_CONCEPTUAL_IDS = (
+    "conceptual",
+    "conceptual-erd",
+    "relationships",
+)
 _ENTERPRISE_CONCEPTUAL_NAV_GLOSSARY_IDS = (
     "glossary",
     "relation-terms",
@@ -300,7 +308,7 @@ def group_enterprise_conceptual_impl_nav(
     catalog_impl_id: str,
     leaves: list[PublicationItem],
 ) -> list[PublicationItem]:
-    """Nest enterprise-conceptual section_refs under Overview + Model glossary.
+    """Nest enterprise-conceptual section_refs under Overview / CDM / glossary.
 
     Only modules that carry the full conceptual section-id set are grouped;
     solutions / dsp / FIBO stay unchanged (caller falls through to solution nav).
@@ -336,7 +344,12 @@ def group_enterprise_conceptual_impl_nav(
         },
         children=overview_kids,
     )
+    conceptual_kids = take(_ENTERPRISE_CONCEPTUAL_NAV_CONCEPTUAL_IDS)
     glossary_kids = take(_ENTERPRISE_CONCEPTUAL_NAV_GLOSSARY_IDS)
+    for leaf in glossary_kids:
+        attrs = dict(leaf.attributes or {})
+        attrs["nav_glyph"] = "glossary"
+        leaf.attributes = attrs
     glossary = PublicationItem(
         id=f"implnav:{catalog_impl_id}:group:glossary",
         title="Model glossary",
@@ -349,23 +362,31 @@ def group_enterprise_conceptual_impl_nav(
         },
         children=glossary_kids,
     )
-    # Top-level: conceptual, then glossary folder, then relationships / source.
-    conceptual = take(("conceptual",))
-    relationships = take(("relationships",))
     source = take(("source",))
     leftovers = [
         leaf
         for leaf in leaves
         if (leaf.attributes or {}).get("section_id") not in claimed
     ]
-    return [
-        overview,
-        *conceptual,
-        glossary,
-        *relationships,
-        *source,
-        *leftovers,
-    ]
+    grouped: list[PublicationItem] = [overview]
+    if conceptual_kids:
+        grouped.append(
+            _impl_folder(
+                folder_id=f"implnav:{catalog_impl_id}:group:conceptual",
+                title="Концептуальная модель",
+                description="Conceptual entities, diagram, and relationships.",
+                children=conceptual_kids,
+                extra_attrs={
+                    "nav_glyph": "cdm",
+                    "requirement_section": "CDM",
+                    "nav_group": "conceptual",
+                },
+            )
+        )
+    grouped.append(glossary)
+    grouped.extend(source)
+    grouped.extend(leftovers)
+    return grouped
 
 
 def group_solution_impl_nav(

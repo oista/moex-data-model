@@ -56,7 +56,7 @@ def build_parser() -> argparse.ArgumentParser:
     diagram.add_argument(
         "--profile",
         default="logical",
-        help="Projection profile: logical (default) or physical",
+        help="Projection profile: logical (default), physical, or conceptual",
     )
     diagram.add_argument(
         "--format",

@@ -16,9 +16,13 @@ from moex_dams.projection.dbml import _ident
 
 MERMAID_CLI_PACKAGE = "@mermaid-js/mermaid-cli@11"
 
-Profile = Literal["logical", "physical"]
+Profile = Literal["logical", "physical", "conceptual"]
 
 GENERATOR = "moex-dams-mermaid-er/0.1"
+
+# Viewer section ids for conceptual clickmap deep-links / detail panels.
+_CONCEPTUAL_ENTITY_SECTION = "conceptual"
+_CONCEPTUAL_RELATIONSHIP_SECTION = "relationships"
 
 _MANY = 999999
 
@@ -150,13 +154,89 @@ def _entity_header(tname: str, title: Any) -> str:
     return f"    {tname} {{"
 
 
+def _relation_term_label(
+    rel: dict[str, Any], terms_by_id: dict[str, dict[str, Any]]
+) -> str:
+    """Prefer RelationTerm forward/inverse label; fall back to relationship name."""
+    term = terms_by_id.get(str(rel.get("relation_term_ref") or ""))
+    direction = str(rel.get("term_direction") or "forward").lower()
+    if term:
+        if direction == "inverse":
+            for key in ("inverse_label", "inverse_label_en", "title", "name"):
+                val = term.get(key)
+                if val:
+                    return str(val)
+        else:
+            for key in ("forward_label", "forward_label_en", "title", "name"):
+                val = term.get(key)
+                if val:
+                    return str(val)
+    for key in ("title", "name"):
+        val = rel.get(key)
+        if val:
+            return str(val)
+    return "rel"
+
+
+def build_er_clickmap(
+    data: dict[str, Any],
+    *,
+    profile: Profile,
+) -> dict[str, Any]:
+    """Map Mermaid entity/edge names to publication ``element_id`` targets."""
+    entities: dict[str, dict[str, str]] = {}
+    edges: list[dict[str, str]] = []
+    table_names: set[str] = set()
+    entity_table: dict[str, str] = {}
+
+    if profile == "conceptual":
+        entity_section = _CONCEPTUAL_ENTITY_SECTION
+        rel_section = _CONCEPTUAL_RELATIONSHIP_SECTION
+        for entity in data.get("conceptual_entities") or []:
+            if not isinstance(entity, dict):
+                continue
+            tname = _unique_table_name(
+                entity.get("name"), fallback="ConceptualEntity", used=table_names
+            )
+            eid = str(entity.get("element_id") or "")
+            if eid:
+                entity_table[eid] = tname
+            entities[tname] = {
+                "element_id": eid,
+                "section_id": entity_section,
+                "title": str(entity.get("title") or entity.get("name") or tname),
+            }
+        terms_by_id = {
+            str(t.get("element_id")): t
+            for t in (data.get("relation_terms") or [])
+            if isinstance(t, dict) and t.get("element_id")
+        }
+        for rel in data.get("relationships") or []:
+            if not isinstance(rel, dict):
+                continue
+            src_id = str(rel.get("source_entity_ref") or "")
+            tgt_id = str(rel.get("target_entity_ref") or "")
+            if src_id not in entity_table or tgt_id not in entity_table:
+                continue
+            edges.append(
+                {
+                    "source": entity_table[src_id],
+                    "target": entity_table[tgt_id],
+                    "label": _relation_term_label(rel, terms_by_id),
+                    "element_id": str(rel.get("element_id") or ""),
+                    "section_id": rel_section,
+                }
+            )
+    return {"profile": profile, "entities": entities, "edges": edges}
+
+
 def project_model_package_to_er_diagram(
     data: dict[str, Any],
     *,
     profile: Profile,
 ) -> str:
     """Project a ModelPackage mapping into Mermaid ``erDiagram`` text."""
-    if profile not in ("logical", "physical"):
+    if profile not in ("logical", "physical", "conceptual"):
         raise ValueError(f"unsupported profile: {profile}")
 
     lines: list[str] = [
@@ -188,6 +268,45 @@ def project_model_package_to_er_diagram(
                         "dams:physical/"
                     ):
                         fk_field_ids.add(src)
+
+    if profile == "conceptual":
+        terms_by_id = {
+            str(t.get("element_id")): t
+            for t in (data.get("relation_terms") or [])
+            if isinstance(t, dict) and t.get("element_id")
+        }
+        for entity in data.get("conceptual_entities") or []:
+            if not isinstance(entity, dict):
+                continue
+            tname = _unique_table_name(
+                entity.get("name"), fallback="ConceptualEntity", used=table_names
+            )
+            eid = entity.get("element_id")
+            if eid:
+                entity_table[str(eid)] = tname
+            # Empty attribute block — conceptual layer has no PK/FK columns (ADR-029).
+            # Mermaid requires a non-empty entity body; use a neutral marker field.
+            lines.append(_entity_header(tname, entity.get("title")))
+            lines.append('        string concept "concept"')
+            lines.append("    }")
+        for rel in relationships:
+            src_id = str(rel.get("source_entity_ref") or "")
+            tgt_id = str(rel.get("target_entity_ref") or "")
+            if src_id not in entity_table or tgt_id not in entity_table:
+                continue
+            label = _relation_term_label(rel, terms_by_id)
+            lines.append(
+                _cardinality_edge(
+                    source_name=entity_table[src_id],
+                    target_name=entity_table[tgt_id],
+                    source_min=rel.get("source_min_cardinality"),
+                    source_max=rel.get("source_max_cardinality", _MANY),
+                    target_min=rel.get("target_min_cardinality"),
+                    target_max=rel.get("target_max_cardinality", 1),
+                    label=label,
+                )
+            )
+        return "\n".join(lines).rstrip() + "\n"
 
     if profile == "logical":
         for entity in data.get("logical_entities") or []:
@@ -379,6 +498,14 @@ def write_er_diagram_artifact(
         json.dumps(manifest.to_dict(), indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
+    if profile == "conceptual":
+        clickmap = build_er_clickmap(raw, profile=profile)
+        # conceptual.erd.md → conceptual.erd.clickmap.json
+        clickmap_path = out_md.parent / (out_md.stem + ".clickmap.json")
+        clickmap_path.write_text(
+            json.dumps(clickmap, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
     return manifest
 
 

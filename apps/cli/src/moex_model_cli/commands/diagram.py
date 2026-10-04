@@ -12,7 +12,7 @@ from moex_dams.projection.mermaid_er import (
 from moex_model_cli.bootstrap import SlicePaths
 
 SUPPORTED_FORMATS = frozenset({"dbml", "mermaid"})
-SUPPORTED_PROFILES = frozenset({"logical", "physical"})
+SUPPORTED_PROFILES = frozenset({"logical", "physical", "conceptual"})
 
 
 def run_diagram(
@@ -26,7 +26,7 @@ def run_diagram(
     if fmt not in SUPPORTED_FORMATS:
         return 2, f"unsupported --format {fmt!r} (dbml|mermaid)\n"
     if profile not in SUPPORTED_PROFILES:
-        return 2, f"unsupported --profile {profile!r} (logical|physical)\n"
+        return 2, f"unsupported --profile {profile!r} (logical|physical|conceptual)\n"
     if not paths.implementation.is_file():
         return 1, f"missing implementation: {paths.implementation}\n"
 

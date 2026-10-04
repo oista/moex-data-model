@@ -67,6 +67,14 @@ sections:
       - entity_tier
       - genesis_kind
 
+  - id: conceptual-erd
+    title: Conceptual diagram
+    kind: classes
+    type: mermaid-diagram
+    source:
+      format: markdown
+      path: publications/conceptual.erd.md
+
   - id: glossary
     title: Model glossary
     kind: glossary

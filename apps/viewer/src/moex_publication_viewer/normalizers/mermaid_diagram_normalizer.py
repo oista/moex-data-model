@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
+from typing import Any
 
 from moex_publication_viewer.models.manifest_models import ManifestSection
 from moex_publication_viewer.models.publication_models import PublicationSection
@@ -34,6 +36,18 @@ def _sanitize_svg(svg: str) -> str:
     return cleaned.strip()
 
 
+def _load_clickmap(source_path: Path) -> dict[str, Any] | None:
+    """Load sibling ``*.erd.clickmap.json`` when present (conceptual diagrams)."""
+    clickmap_path = source_path.parent / (source_path.stem + ".clickmap.json")
+    if not clickmap_path.is_file():
+        return None
+    try:
+        raw = json.loads(clickmap_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    return raw if isinstance(raw, dict) else None
+
+
 class MermaidDiagramNormalizer:
     """Load ``*.erd.md``; embed sibling ``*.erd.svg`` when present."""
 
@@ -55,13 +69,18 @@ class MermaidDiagramNormalizer:
                 content = ""
                 svg_missing = True
 
+        attrs: dict[str, Any] = {
+            "mermaid_source": mermaid_source,
+            "svg_missing": svg_missing,
+        }
+        clickmap = _load_clickmap(source_path)
+        if clickmap is not None:
+            attrs["erd_clickmap"] = clickmap
+
         meta = section_meta(section)
         return PublicationSection(
             **meta,
             items=[],
             content=content,
-            attributes={
-                "mermaid_source": mermaid_source,
-                "svg_missing": svg_missing,
-            },
+            attributes=attrs,
         )
