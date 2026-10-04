@@ -668,7 +668,7 @@ def wrap_dams_explorer_roots(
         attributes={
             "kind": "group",
             "section_root": "requirements-conceptual",
-            "nav_glyph": "cdm",
+            "nav_glyph": "requirements",
             "purpose": (
                 "Требования, схема и скелет модели уровня enterprise-conceptual "
                 "(без примера модели)."
@@ -698,6 +698,7 @@ def wrap_dams_explorer_roots(
         attributes={
             "kind": "group",
             "section_root": "requirements-it-solutions",
+            "nav_glyph": "requirements",
             "purpose": "Требования, схема, скелет и пример модели уровня ИТ-решения.",
             "structure_why": (
                 "Требования к модели — каталог SpecificationRequirement; "
@@ -792,6 +793,7 @@ def wrap_dams_explorer_roots(
         attributes={
             "kind": "group",
             "section_root": "requirements-publication",
+            "nav_glyph": "requirements",
             "purpose": (
                 "Контракт публикации: список PublicationRequirement и исходный YAML."
             ),

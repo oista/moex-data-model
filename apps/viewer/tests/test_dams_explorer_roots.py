@@ -150,7 +150,15 @@ def test_wrap_roots_loads_requirements_catalog():
     assert req_root.children[0].id == "group:requirements-conceptual"
     assert req_root.children[0].title == "Концептуальная модель"
     conceptual = req_root.children[0]
-    assert conceptual.attributes.get("nav_glyph") == "cdm"
+    assert conceptual.attributes.get("nav_glyph") == "requirements"
+    it = next(
+        c for c in req_root.children if c.id == "group:requirements-it-solutions"
+    )
+    publication = next(
+        c for c in req_root.children if c.id == "group:requirements-publication"
+    )
+    assert it.attributes.get("nav_glyph") == "requirements"
+    assert publication.attributes.get("nav_glyph") == "requirements"
     assert {c.id for c in conceptual.children} == {
         "group:requirements-conceptual-list",
         "group:requirements-conceptual-spec",
@@ -190,9 +198,6 @@ def test_wrap_roots_loads_requirements_catalog():
     assert "relationships:" in cm_skel_text
     assert "physical_objects:" not in cm_skel_text
 
-    it = next(
-        c for c in req_root.children if c.id == "group:requirements-it-solutions"
-    )
     assert it.title == "ИТ-решения"
     list_group = next(c for c in it.children if c.id == "group:requirements-list")
     assert list_group.title == "Требования к модели"

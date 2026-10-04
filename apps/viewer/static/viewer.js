@@ -702,6 +702,7 @@
     enum: "E",
     individual: "I",
     source_file: "F",
+    requirements: "R",
     requirement: "T",
     implementation_ref: "M",
     section_ref: "S",
@@ -715,8 +716,6 @@
     const x = extras || {};
     const explicit = String(a.nav_glyph || "").trim().toLowerCase();
     if (LEVEL_GLYPHS.has(explicit) || KIND_LETTER[explicit]) return explicit;
-
-    if (a.section_root === "requirements-conceptual") return "cdm";
 
     const sectionCode = String(a.requirement_section || "").trim().toUpperCase();
     if (
@@ -760,11 +759,21 @@
     return `<span class="nav-kind nav-kind-yaml" aria-hidden="true">${yamlFileSvg()}</span>`;
   }
 
+  function requirementsFileSvg() {
+    // font-size 52 in viewBox 80×89 ≈ 9.5px at 14×16 slot (matches .nav-kind letters)
+    return `<svg class="nav-kind-requirements-shape" viewBox="0 0 80 89" fill="none" aria-hidden="true" focusable="false"><g stroke="#ff6641" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.8 18.2A8.2 8.2 0 0 1 23 10h27.6L66.2 23.6v47.6A8.2 8.2 0 0 1 58 79.4H23A8.2 8.2 0 0 1 14.8 71.2V18.2Z"/><path d="M50.6 10v13.6h15.6"/></g><text x="40" y="54" text-anchor="middle" dominant-baseline="central" fill="#ff6641" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="52" font-weight="700">R</text></svg>`;
+  }
+
+  function requirementsFileMarkHtml() {
+    return `<span class="nav-kind nav-kind-requirements" aria-hidden="true">${requirementsFileSvg()}</span>`;
+  }
+
   function navGlyphHtml(glyph, slot, opts) {
     const g = String(glyph || "").toLowerCase();
     const s = slot || "menu";
     const o = opts || {};
     if (g === "source_file") return yamlFileMarkHtml();
+    if (g === "requirements") return requirementsFileMarkHtml();
     if (LEVEL_GLYPHS.has(g)) {
       const label = g.toUpperCase();
       const plaque = `<span class="nav-glyph nav-glyph--${g} nav-glyph--menu" aria-hidden="true">${label}</span>`;

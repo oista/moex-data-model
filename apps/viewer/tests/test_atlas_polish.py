@@ -232,7 +232,13 @@ def test_js_nav_glyph_helpers():
     assert "function yamlFileMarkHtml" in JS
     assert "nav-kind-yaml" in JS
     assert 'if (g === "source_file") return yamlFileMarkHtml()' in JS
+    assert "function requirementsFileSvg" in JS
+    assert "function requirementsFileMarkHtml" in JS
+    assert "nav-kind-requirements" in JS
+    assert 'if (g === "requirements") return requirementsFileMarkHtml()' in JS
+    assert 'requirements: "R"' in JS
     assert '"artifact-model-body": "source_file"' in JS
+
     assert "function renderSourceFileSection" in JS
     assert 'section.type === "source-file"' in JS
     # Spec explorer top-level section_ref (Глоссарий) omits glyph; impl keeps it.
@@ -265,6 +271,10 @@ def test_css_nav_kind_fixed_square_and_section_frame():
     yaml_icon = css.split(".nav-kind.nav-kind-yaml {")[1][:220]
     assert "height: 16px" in yaml_icon
     assert "background: transparent" in yaml_icon
+    assert ".nav-kind.nav-kind-requirements" in css
+    req_icon = css.split(".nav-kind.nav-kind-requirements {")[1][:220]
+    assert "height: 16px" in req_icon
+    assert "background: transparent" in req_icon
     assert ".badge-pill.badge-kind-mixin" in css
     assert ".badge-pill.badge-kind-enum" in css
     assert "text-overflow: ellipsis" in css
