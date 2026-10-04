@@ -48,6 +48,15 @@ PublicationSectionKind = Literal[
     "extraction-provenance",
 ]
 
+# DAMS metamodel class a section's rows instantiate (viewer instance cards).
+InstanceOfClass = Literal[
+    "ConceptualEntity",
+    "LogicalEntity",
+    "PhysicalObject",
+    "Relationship",
+    "RelationTerm",
+]
+
 
 class SourceSpec(BaseModel):
     format: SourceFormat
@@ -75,6 +84,7 @@ class ManifestSection(BaseModel):
     key_column: str | None = None
     default_collapsed: bool = False
     tags: list[str] = Field(default_factory=list)
+    instance_of: InstanceOfClass | None = None
 
     @model_validator(mode="before")
     @classmethod

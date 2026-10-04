@@ -103,14 +103,16 @@ Publication Viewer / API
 | Enum value обозначает concept | `meaning` |
 | Простое соответствие | LinkML `exact_mappings` / `close_mappings` / … |
 | Управляемое соответствие с автором и статусом | `SemanticBinding` (SSSOM) |
-| Связи между терминами глоссария | SKOS |
+| Связи между терминами **корпоративного** глоссария (hierarchy + related) | SKOS concept-scheme **проекция** (`broader` / `narrower` / `related`); не слоты на `GlossaryTerm` ([ADR-027](../adr/ADR-027-glossary-term-relations.md)) |
+| Иерархия / See also в **онтологическом** глоссарии | Hierarchy = `rdfs:subClassOf`; associative = object properties → UX See also (ADR-024 / ADR-027); не SKOS-дерево |
+| Иерархия / See also в **model** glossary | Hierarchy = `parent_concept_ref`; associative = `Relationship` / `RelationTerm` (ADR-026 / ADR-027) |
 | Эталонное определение ConceptualEntity / LogicalEntity | `description` (`skos:definition`) + ADR-025 cascade; наследование из онтологии только при exactMatch / equivalentClass |
-| Привязка к корпоративному глоссарию | `glossary_term_refs` (term assignment; не источник определения) |
-| Источник унаследованного / adapted определения | `definition_source_ref` (ADR-025) |
+| Привязка к корпоративному глоссарию | `glossary_term_refs` (term assignment; не источник определения; не associative related — ADR-027) |
+| Источник унаследованного / adapted определения | `definition_source_ref` (ADR-025); не See also (ADR-027) |
 
 DAMS-класс `Mapping` в `moex-core.yaml` остаётся соответствием conceptual / logical / physical внутри модели решения; он не заменяет SSSOM.
 
-`GlossaryTerm` в registries остаётся `RegistryEntry` — проекция записи корпоративного глоссария. SKOS concept scheme — отдельная **проекция**, не источник истины; термин не становится `owl:Class` автоматически. «Глоссарий» в publication viewer — всегда **view** определений заданного охвата (ADR-024 / ADR-025), не отдельная сущность.
+`GlossaryTerm` в registries остаётся `RegistryEntry` — проекция записи корпоративного глоссария. SKOS concept scheme — отдельная **проекция**, не источник истины; термин не становится `owl:Class` автоматически. «Глоссарий» в publication viewer — всегда **view** определений заданного охвата (ADR-024 / ADR-025), не отдельная сущность. Три семейства связей (hierarchy / associative / equivalence) — [ADR-027](../adr/ADR-027-glossary-term-relations.md); related не кладётся в дерево.
 
 ## Publication Viewer
 

@@ -11,8 +11,9 @@ superseded_by: []
 **Date:** 2026-10-04  
 **Status:** Proposed  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [ADR-014](ADR-014-fibo-profile-metamodel.md), [ADR-016](ADR-016-publication-section-kinds-and-profiles.md), [ADR-018](ADR-018-ontology-application-implementation.md)  
-**Amends:** ADR-014 (partial), ADR-016 (ontology ProfileSpec)
+**Related:** [ADR-014](ADR-014-fibo-profile-metamodel.md), [ADR-016](ADR-016-publication-section-kinds-and-profiles.md), [ADR-018](ADR-018-ontology-application-implementation.md), [ADR-027](ADR-027-glossary-term-relations.md)  
+**Amends:** ADR-014 (partial), ADR-016 (ontology ProfileSpec)  
+**Amended by:** [ADR-027](ADR-027-glossary-term-relations.md) (hierarchy ≠ related; associative See also from object properties)
 
 ## Context
 
@@ -22,7 +23,7 @@ The same domain concept (`owl:Class` / LinkML `class`) appeared under different 
 
 1. **One semantic name `class`** for LinkML classes and OWL named classes. Differences stay in the renderer selected by publication profile (`data-structure` vs `ontology-list`), as in ADR-016.
 2. **Glossary (ontology profile)** is a flat alphabetical **view** of the same class entities from the same source, not a separate data set. Profile metamodel terms (`FiboDomain`, IRI patterns, …) are documented in README / `metamodel/*.yaml`, not duplicated as glossary rows. ADR-025 generalises this: every glossary is a view of definitions for a coverage (ontology / model / corporate), never a separate entity type.
-3. **Class hierarchy** uses asserted `subClassOf` (preview: `parent_local_name`). Domain grouping (`source_domain`) nests under the Classes root. Multiple inheritance may repeat a node in several branches; the card URL/id stays canonical. Imported (`owl:imports`) classes may carry `origin`; preview data are `own`.
+3. **Class hierarchy** uses asserted `subClassOf` (preview: `parent_local_name`). Domain grouping (`source_domain`) nests under the Classes root. Multiple inheritance may repeat a node in several branches; the card URL/id stays canonical. Imported (`owl:imports`) classes may carry `origin`; preview data are `own`. Associative «related terms» (See also) are **not** hierarchy edges; they are derived separately when object-property data exist ([ADR-027](ADR-027-glossary-term-relations.md)).
 4. **Anonymous classes / restrictions** do not appear in the tree (card detail later; out of this increment).
 5. **FIBO Spec module (`edmc.fibo`)** publishes a class index from release preview data under kind `classes`, while metamodel organization moves to:
    - **Модули** → `schema-files` (domains, modules, ontology documents / `owl:imports` axis)
@@ -52,5 +53,5 @@ The same domain concept (`owl:Class` / LinkML `class`) appeared under different 
 
 ## Related
 
-- ADR-014, ADR-016, ADR-018
+- ADR-014, ADR-016, ADR-018, ADR-027
 - Publication Viewer `fibo_explorer_roots` / `enrich_fibo_explorer_classes`

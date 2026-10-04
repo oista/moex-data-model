@@ -29,6 +29,7 @@ sections:
   title: Conceptual entities
   kind: classes
   type: entity-table
+  instance_of: ConceptualEntity
   source:
     format: yaml
     path: crm-solution-model.yaml
@@ -47,6 +48,7 @@ sections:
   title: Logical entities
   kind: classes
   type: entity-table
+  instance_of: LogicalEntity
   satisfies:
   - dams:classes
   - dams:logical-entities
@@ -77,6 +79,7 @@ sections:
   title: Physical objects
   kind: bindings
   type: entity-table
+  instance_of: PhysicalObject
   satisfies:
   - dams:physical-objects
   - dams:physical-fields

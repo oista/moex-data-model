@@ -11,8 +11,9 @@ superseded_by: []
 **Date:** 2026-10-04  
 **Status:** Proposed  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [ADR-001](ADR-001-linkml-yaml-canonical.md), [ADR-012](ADR-012-semantic-diff-review.md), [ADR-013](ADR-013-specification-requirements-catalog.md), [ADR-020](ADR-020-external-specification-scope-and-term-selection.md), [ADR-023](ADR-023-governed-property-cascade.md), [ADR-024](ADR-024-unified-class-entity.md)  
+**Related:** [ADR-001](ADR-001-linkml-yaml-canonical.md), [ADR-012](ADR-012-semantic-diff-review.md), [ADR-013](ADR-013-specification-requirements-catalog.md), [ADR-020](ADR-020-external-specification-scope-and-term-selection.md), [ADR-023](ADR-023-governed-property-cascade.md), [ADR-024](ADR-024-unified-class-entity.md), [ADR-027](ADR-027-glossary-term-relations.md)  
 **Amends:** ADR-023 (closes deferred `realizes` inheritance for **definitions** only), ADR-024 (generalises “glossary = view”)  
+**Amended by:** [ADR-027](ADR-027-glossary-term-relations.md) (term-relation families; related ≠ assignment / definition source)  
 **Requirements:** [IT_SOLUTION_MODEL_REQUIREMENTS.md](../architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md)
 
 ## Context
@@ -49,9 +50,9 @@ asset descriptions are separate. ODCS `authoritativeDefinitions` matches our
 | **Scoped definition** | Additional definition in a context; does **not** replace the reference definition outside that scope |
 | **Glossary** | Always a **view** of definitions for a given coverage — not a dataset and not an entity. Three kinds: ontology (ADR-024), model (enterprise + solution entities), corporate (external master) |
 | **`GlossaryTerm`** | Registry projection of a corporate-glossary master record (name kept for migration stability) |
-| **`glossary_term_refs`** | Term *assignment* (catalog-style link); orthogonal to where the definition text comes from |
-| **`definition_source_ref`** | Where the **definition text** is inherited or adapted from |
-| SKOS / hand JSON | **Projections**, not authoritative sources. `dams_glossary.json` is a candidate for generation |
+| **`glossary_term_refs`** | Term *assignment* (catalog-style link); orthogonal to where the definition text comes from; **not** associative related (ADR-027) |
+| **`definition_source_ref`** | Where the **definition text** is inherited or adapted from; **not** related / See also (ADR-027) |
+| SKOS / hand JSON | **Projections**, not authoritative sources. `dams_glossary.json` is a candidate for generation. Corporate broader/narrower/related live in the SKOS projection (ADR-027), not on `GlossaryTerm` |
 
 `LinkML_Glossary_DAMS.md` is a developer metamodel cheat-sheet, not a business
 glossary.
@@ -153,6 +154,6 @@ come from `Mapping`. Language is a separate axis (resolver returns language;
 
 ## Related
 
-- ADR-001, ADR-012, ADR-013, ADR-020, ADR-023, ADR-024, ADR-026
+- ADR-001, ADR-012, ADR-013, ADR-020, ADR-023, ADR-024, ADR-026, ADR-027
 - Resolver: `packages/specification-dams/src/moex_dams/rules/definitions.py`
 )

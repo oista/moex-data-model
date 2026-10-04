@@ -6,7 +6,7 @@ supersedes: []
 superseded_by: MODELING_ARCHITECTURE.md
 ---
 
-# ADR index (001–026)
+# ADR index (001–027)
 
 **Status:** Proposed drafts  
 **Date:** 2026-09-28  
@@ -44,6 +44,7 @@ Viewer-решения живут отдельно: [viewer-decisions.md](../arch
 | [ADR-024](ADR-024-unified-class-entity.md) | Unified Class entity; glossary as class view | Proposed; ontology ProfileSpec + edmc.fibo classes |
 | [ADR-025](ADR-025-definition-cascade-and-glossary.md) | Definition cascade + glossary terminology | Proposed; HasDefinition / ScopedDefinition; semantic-axis resolver |
 | [ADR-026](ADR-026-cmd-entity-metamodel.md) | Conceptual entity metamodel (tier, genesis, relation terms) | Proposed; RelationTerm / ExternalClassRef; model glossary view |
+| [ADR-027](ADR-027-glossary-term-relations.md) | Glossary term relations (hierarchy vs associative vs equivalence) | Proposed; See also derived; no related-in-tree; SKOS = corporate projection |
 
 ## Как принимать
 

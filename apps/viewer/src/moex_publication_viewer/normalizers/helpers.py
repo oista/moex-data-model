@@ -71,8 +71,16 @@ def dict_to_item(
     skip = {"id", "title", "description", "children", "tags", "attributes", "source_ref"}
     attrs = {k: v for k, v in record.items() if k not in skip}
     nested = record.get("attributes")
+    nested_children: list[PublicationItem] = []
     if isinstance(nested, dict):
         attrs = {**attrs, **nested}
+    elif isinstance(nested, list):
+        # DAMS LogicalEntity.attributes / similar nested element lists
+        nested_children = [
+            dict_to_item(c, key_column="element_id", index=i)
+            for i, c in enumerate(nested)
+            if isinstance(c, dict)
+        ]
     tags = record.get("tags") or []
     if not isinstance(tags, list):
         tags = [str(tags)]
@@ -82,6 +90,17 @@ def dict_to_item(
         for i, c in enumerate(children_raw)
         if isinstance(c, dict)
     ]
+    if nested_children:
+        children = nested_children + children
+    # Nested physical_fields list → children when present on PhysicalObject
+    fields = attrs.pop("physical_fields", None)
+    if isinstance(fields, list):
+        field_children = [
+            dict_to_item(c, key_column="element_id", index=i)
+            for i, c in enumerate(fields)
+            if isinstance(c, dict)
+        ]
+        children = children + field_children
     return PublicationItem(
         id=item_id,
         title=str(title) if title is not None else None,
@@ -201,4 +220,5 @@ def section_meta(section) -> dict[str, Any]:
         "sort_order": sort.order if sort else "asc",
         "tags": section.tags,
         "default_collapsed": section.default_collapsed,
+        "instance_of": getattr(section, "instance_of", None),
     }

@@ -30,6 +30,7 @@ sections:
     title: Conceptual entities
     kind: classes
     type: entity-table
+  instance_of: ConceptualEntity
     source:
       format: yaml
       path: trading-solution-model.yaml

@@ -35,6 +35,7 @@ class PublicationSection(BaseModel):
     attributes: dict[str, Any] = Field(default_factory=dict)
     tags: list[str] = Field(default_factory=list)
     default_collapsed: bool = False
+    instance_of: str | None = None
 
 
 class PublicationModule(BaseModel):
