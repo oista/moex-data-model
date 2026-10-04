@@ -20,6 +20,7 @@ CSS_ORDER = [
     "20-base.css",
     "30-layout.css",
     "40-components.css",
+    "45-edit.css",
     "50-renderers.css",
     "60-utilities.css",
     "70-responsive.css",
@@ -105,7 +106,12 @@ def assemble_js() -> str:
     if not parts:
         legacy = STATIC / "viewer.js"
         if legacy.is_file():
-            return legacy.read_text(encoding="utf-8")
+            parts.append(legacy.read_text(encoding="utf-8"))
+    # Append edit layer after viewer.js (never put edit.js in JS_ORDER —
+    # that would skip the viewer.js fallback).
+    edit_js = JS_DIR / "edit.js"
+    if edit_js.is_file() and parts:
+        parts.append(f"/* === edit.js === */\n{edit_js.read_text(encoding='utf-8')}")
     return "\n\n".join(parts)
 
 

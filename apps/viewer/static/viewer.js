@@ -1,10 +1,10 @@
 (() => {
-  const modules = JSON.parse(document.getElementById("publication-data").textContent);
+  let modules = JSON.parse(document.getElementById("publication-data").textContent);
   const catalogRaw = JSON.parse(
     document.getElementById("architecture-catalog").textContent
   );
   const catalogNodes = (catalogRaw && catalogRaw.nodes) || [];
-  const searchIndex = JSON.parse(document.getElementById("search-index").textContent);
+  let searchIndex = JSON.parse(document.getElementById("search-index").textContent);
   const viewerConfig = (() => {
     const el = document.getElementById("viewer-config");
     if (!el) return {};
@@ -2558,6 +2558,8 @@
     const card = document.createElement("article");
     card.className = "detail-card content-card";
     card.setAttribute("data-publication-item", "");
+    card.setAttribute("data-module-id", mod.module_id || "");
+    card.setAttribute("data-section-id", expl.id || "");
     card.setAttribute("data-item-id", item.id);
     card.setAttribute("data-item-type", item.attributes?.kind || "class");
     const attrs = item.attributes || {};
@@ -2610,6 +2612,8 @@
     const card = document.createElement("article");
     card.className = "detail-card content-card";
     card.setAttribute("data-publication-item", "");
+    card.setAttribute("data-module-id", mod.module_id || "");
+    card.setAttribute("data-section-id", expl.id || "");
     card.setAttribute("data-item-id", item.id);
     card.setAttribute("data-item-type", item.attributes?.kind || "class");
     const attrs = item.attributes || {};
@@ -3143,6 +3147,8 @@
     const card = document.createElement("article");
     card.className = "detail-card content-card";
     card.setAttribute("data-publication-item", "");
+    card.setAttribute("data-module-id", mod.module_id || "");
+    card.setAttribute("data-section-id", expl.id || "");
     card.setAttribute("data-item-id", item.id);
     card.setAttribute("data-item-type", item.attributes?.kind || "class");
     const kind = item.attributes?.kind || "class";
@@ -3862,6 +3868,8 @@
     const card = document.createElement("article");
     card.className = "detail-card content-card";
     card.setAttribute("data-publication-item", "");
+    card.setAttribute("data-module-id", mod.module_id || "");
+    card.setAttribute("data-section-id", section.id || "");
     card.setAttribute("data-item-id", item.id);
     card.setAttribute("data-item-type", "instance");
     card.setAttribute("data-instance-of", className || "");
@@ -6359,4 +6367,27 @@
 
   window.addEventListener("hashchange", applyRoute);
   applyRoute();
+
+  /** Serve-mode edit layer: replace in-memory modules and re-render current route. */
+  window.__moexReplacePublicationData = function replacePublicationData(next) {
+    if (next && Array.isArray(next.modules)) {
+      modules = next.modules;
+    }
+    if (next && Array.isArray(next.search_index)) {
+      searchIndex = next.search_index;
+    }
+    const dataEl = document.getElementById("publication-data");
+    if (dataEl && next && next.modules) {
+      dataEl.textContent = JSON.stringify(next.modules);
+    }
+    const searchEl = document.getElementById("search-index");
+    if (searchEl && next && next.search_index) {
+      searchEl.textContent = JSON.stringify(next.search_index);
+    }
+    applyRoute();
+  };
+
+  window.__moexGetModules = function getModules() {
+    return modules;
+  };
 })();

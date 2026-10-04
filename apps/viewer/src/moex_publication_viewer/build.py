@@ -15,6 +15,7 @@ from moex_publication_viewer.models.publication_models import (
 )
 from moex_publication_viewer.normalizers import get_normalizer
 from moex_publication_viewer.normalizers.base import NormalizeError
+from moex_publication_viewer.normalizers.edit_targets import relativize_module_edit_targets
 from moex_publication_viewer.normalizers.helpers import items_to_domain_explorer
 from moex_publication_viewer.normalizers.linkml_normalizer import clear_schema_view_cache
 from moex_publication_viewer.normalizers.spec_glossary_tree import (
@@ -217,6 +218,7 @@ def compile_modules(
         raise ValidationError(errors)
 
     modules.sort(key=lambda m: (m.order, m.title))
+    relativize_module_edit_targets(modules, root.resolve())
     check_publication_profiles(modules)
     if enforce_publication_contract:
         run_publication_contracts(

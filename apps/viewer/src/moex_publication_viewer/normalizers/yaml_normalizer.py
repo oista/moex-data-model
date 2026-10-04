@@ -9,6 +9,7 @@ import yaml
 from moex_publication_viewer.models.manifest_models import ManifestSection
 from moex_publication_viewer.models.publication_models import PublicationItem, PublicationSection
 from moex_publication_viewer.normalizers.base import NormalizeError
+from moex_publication_viewer.normalizers.edit_targets import attach_yaml_list_edit_targets
 from moex_publication_viewer.normalizers.helpers import (
     flatten_publication_requirements,
     records_to_items,
@@ -31,6 +32,7 @@ class YamlNormalizer:
             raise NormalizeError(f"cannot parse YAML {source_path}: {exc}") from exc
 
         select = section.source.select
+        skip_edit = select in (FLATTENED_REQUIREMENTS_SELECT, MODEL_GLOSSARY_SELECT)
         if select == FLATTENED_REQUIREMENTS_SELECT:
             selected = flatten_publication_requirements(data)
         elif select == MODEL_GLOSSARY_SELECT:
@@ -49,5 +51,19 @@ class YamlNormalizer:
             ]
         else:
             items = records_to_items(selected, key_column=section.key_column)
+            if (
+                not skip_edit
+                and isinstance(selected, list)
+                and select
+                and "." not in select  # top-level list only for v1
+            ):
+                records = [r for r in selected if isinstance(r, dict)]
+                items = attach_yaml_list_edit_targets(
+                    items,
+                    source_path=source_path,
+                    select=select,
+                    records=records,
+                    key_column=section.key_column,
+                )
 
         return PublicationSection(**section_meta(section), items=items)

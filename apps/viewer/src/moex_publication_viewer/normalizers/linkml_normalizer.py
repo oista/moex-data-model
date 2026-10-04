@@ -14,6 +14,7 @@ from moex_publication_viewer.normalizers.dams_explorer_roots import (
     is_dams_specification_dir,
     wrap_dams_explorer_roots,
 )
+from moex_publication_viewer.normalizers.edit_targets import attach_linkml_edit_targets
 from moex_publication_viewer.normalizers.helpers import section_meta
 from moex_publication_viewer.normalizers.linkml_spec_roots import (
     wrap_linkml_specification_roots,
@@ -236,6 +237,11 @@ def _compact_slot_usage(cls: Any) -> dict[str, dict[str, Any]]:
     return out
 
 
+def _element_aliases(el: Any) -> list[str]:
+    raw = getattr(el, "aliases", None) or []
+    return [str(a) for a in raw]
+
+
 def _class_identity_attrs(sv: SchemaView, name: str, cls: Any) -> dict[str, Any]:
     return {
         "name": name,
@@ -251,6 +257,7 @@ def _class_identity_attrs(sv: SchemaView, name: str, cls: Any) -> dict[str, Any]
         "declared_slots": _declared_slot_names(cls),
         "attributes_inline": _attributes_inline_names(cls),
         "slot_usage": _compact_slot_usage(cls),
+        "aliases": _element_aliases(cls),
     }
 
 
@@ -336,6 +343,9 @@ def _normalize_slots(sv: SchemaView) -> list[PublicationItem]:
                     "required": bool(slot.required) if slot.required is not None else False,
                     "multivalued": bool(slot.multivalued) if slot.multivalued is not None else False,
                     "slot_uri": slot.slot_uri,
+                    "kind": "slot",
+                    "schema_key": _schema_key_for(sv, name),
+                    "aliases": _element_aliases(slot),
                 },
             )
         )
@@ -366,6 +376,7 @@ def _normalize_enums(sv: SchemaView) -> list[PublicationItem]:
                     "name": name,
                     "description": enum.description,
                     "kind": "enum",
+                    "aliases": _element_aliases(enum),
                     "from_schema": enum.from_schema,
                     "schema_key": _schema_key_for(sv, name),
                 },
@@ -435,6 +446,7 @@ def _normalize_explorer(sv: SchemaView) -> list[PublicationItem]:
                 "description": enum.description,
                 "from_schema": enum.from_schema,
                 "schema_key": schema_key,
+                "aliases": _element_aliases(enum),
             },
             children=children,
         )
@@ -518,6 +530,13 @@ class LinkmlNormalizer:
             raise
         except Exception as exc:
             raise NormalizeError(f"failed to normalize LinkML select={select}: {exc}") from exc
+
+        schema_dir = source_path.resolve().parent
+        items = attach_linkml_edit_targets(
+            items,
+            schema_dir=schema_dir,
+            source_file_for_key=_group_source_file,
+        )
 
         return PublicationSection(
             **{**section_meta(section), "columns": section.columns or default_columns},

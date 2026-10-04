@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check packages-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples validate-requirements generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate
+.PHONY: viewer viewer-check viewer-serve packages-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples validate-requirements generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -28,6 +28,10 @@ viewer-check:
 	$(PYTHON) -m pip install -e "./$(VIEWER)[dev]"
 	$(PYTHON) -m pytest $(VIEWER)/tests -q
 	$(PYTHON) -m moex_publication_viewer.cli check --root .
+
+viewer-serve:
+	$(PYTHON) -m pip install -e "./$(VIEWER)[dev]"
+	$(PYTHON) -m moex_publication_viewer.cli serve --root . --port 8765
 
 # Ontology stack pytest (outside Stage 0 make check; gated in GHA viewer-and-packages)
 packages-check:

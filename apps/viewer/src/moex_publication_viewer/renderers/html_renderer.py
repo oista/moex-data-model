@@ -33,6 +33,7 @@ def _item_to_dict(item) -> dict[str, Any]:
         "children": [_item_to_dict(c) for c in item.children],
         "tags": item.tags,
         "source_ref": item.source_ref,
+        "edit_targets": item.edit_targets,
     }
 
 

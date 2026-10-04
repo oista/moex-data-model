@@ -15,6 +15,8 @@ class PublicationItem(BaseModel):
     children: list[PublicationItem] = Field(default_factory=list)
     tags: list[str] = Field(default_factory=list)
     source_ref: str | None = None
+    # field name -> EditTarget dict (description / title / aliases)
+    edit_targets: dict[str, dict[str, str]] | None = None
 
 
 class PublicationSection(BaseModel):

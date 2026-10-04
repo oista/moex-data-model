@@ -34,6 +34,20 @@ python -m moex_publication_viewer.cli build --root .
 
 Open `apps/viewer/dist/index.html` in a browser (`file://` works).
 
+### Local edit server
+
+To edit `description` / `title` / `aliases` in YAML/LinkML from the UI:
+
+```bash
+make viewer-serve
+# or
+python -m moex_publication_viewer.cli serve --root . --port 8765
+```
+
+Open `http://127.0.0.1:8765/`. The static `file://` build stays read-only;
+edit controls appear only when `/api/capabilities` is reachable. Changes write
+to the working tree (Git commit is still manual).
+
 ## Architecture navigation
 
 Sidebar order follows [`architecture-catalog.yaml`](../../model-assets/specifications/moex-dams/0.1/architecture-catalog.yaml):
