@@ -1,0 +1,23 @@
+{
+  "disable_ai": true,
+  "proxy": "",
+  "active_pane_modifiers": {
+    "border_size": 1.0
+  },
+  "cursor_shape": "bar",
+  "cursor_blink": false,
+  "base_keymap": "Cursor",
+  "ui_font_size": 16,
+  "buffer_font_size": 15,
+  "theme": {
+    "mode": "dark",
+    "light": "One Light",
+    "dark": "One Dark"
+  },
+  "hide_mouse": "never",
+  "vim_mode": false,
+  "restore_on_startup": "last_session",
+  "restore_on_file_reopen": true,
+  "close_on_file_delete": false,
+  "cli_default_open_behavior": "existing_window"
+}

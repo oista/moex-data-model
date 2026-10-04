@@ -1,155 +1,179 @@
 @startuml 01-core-data-model
-title MOEX DAMS - Core Data Model
+title MOEX DAMS - Core Data Model (LinkML moex-core / registries)
 hide empty members
 skinparam shadowing false
 skinparam classAttributeIconSize 0
 skinparam packageStyle rectangle
 
+note as N_SRC
+  Normative source:
+  moex-core.yaml, moex-registries.yaml,
+  moex-governance.yaml (mixins), moex-types.yaml
+  UML shows key slots only.
+end note
+
 abstract class ModelElement {
-  +element_id : ElementId
-  +name : string
+  +element_id : uriorcurie [1]
+  +name : string [1]
   +title : string [0..1]
-  +description : string [0..1]
-  +lifecycle_status : LifecycleStatus [0..1]
-  +business_importance : BusinessImportance [0..1]
-  +governance_classification : GovernanceClassification [0..1]
-  +data_owner_ref : ActorRef [0..1]
-  +data_steward_ref : ActorRef [0..1]
-  +ownership_inheritance_rule : string [0..1]
+  +description : string [1]
+  +aliases : string [0..*]
+  +tags : string [0..*]
+  +lifecycle_status : LifecycleStatusEnum [1]
 }
-note right of ModelElement : Базовый класс.\nВсе классы диаграммы\nнаследуют ModelElement\n(стрелки опущены).
+note right of ModelElement
+  Abstract root (moex-core).
+  Mixin HasLifecycle on all ModelElement.
+  Further mixins (HasOwnership, HasBusinessClassification,
+  HasGovernanceClassification, HasPolicyBindings, HasProvenance)
+  attach per subclass — not separate Identified/Governed classes.
+end note
 
 package "Концептуальный уровень" #FFF2CC {
   class ConceptualEntity {
-    +definition : string
-    +business_term_ref : BusinessTermRef [0..1]
-  }
-  class ConceptualAttribute {
-    +definition : string
-    +logical_range : LogicalType [0..1]
-    +is_key_property : boolean [0..1]
-  }
-  class ConceptualRelationship {
-    +relationship_name : string
-    +source_min_cardinality : Cardinality [0..1]
-    +source_max_cardinality : Cardinality [0..1]
-    +target_min_cardinality : Cardinality [0..1]
-    +target_max_cardinality : Cardinality [0..1]
-  }
-  class BusinessTerm {
-    +preferred_label : string
-    +definition : string
+    +parent_concept_ref : ConceptualEntity [0..1]
+    +key_attribute_refs : uriorcurie [0..*]
   }
 }
 
 package "Логический уровень" #D9EAD3 {
   class DomainContext {
-    +name : string
+    +domain_ref : BusinessDomain [1]
+    +solution_ref : ITSolution [0..1]
+    +namespace : uri [1]
+    +business_process_refs : BusinessProcess [0..*]
   }
   class LogicalEntity {
-    +entity_type : EntityType
-    +data_class : DataClass
-    +solution_data_role : SolutionDataRole [0..1]
+    +context_ref : DomainContext [1]
+    +conceptual_entity_refs : ConceptualEntity [0..*]
+    +solution_ref : ITSolution [0..1]
+    +solution_data_role : SolutionDataRoleEnum [1]
     +identity_rule : string [0..1]
-    +business_key_kind : BusinessKeyKind [0..1]
-    +key_attribute_refs : ElementRef [0..*]
-    +conceptual_alignment_status : AlignmentStatus [0..1]
+    +business_key_kind : BusinessKeyKindEnum [0..1]
+    +key_attribute_refs : uriorcurie [0..*]
+    +conceptual_alignment_status : ConceptualAlignmentStatusEnum [0..1]
     +alignment_rationale : string [0..1]
     +isolation_rationale : string [0..1]
   }
   class LogicalAttribute {
-    +logical_type : LogicalType
-    +required : boolean
-    +multivalued : boolean [0..1]
-    +mapping_coverage_status : MappingCoverageStatus [0..1]
+    +owner_entity_ref : LogicalEntity [1]
+    +logical_type : LogicalDataTypeEnum [1]
+    +required : boolean [1]
+    +multivalued : boolean [1]
+    +value_set_ref : uri [0..1]
+    +mapping_coverage_status : MappingCoverageStatusEnum [0..1]
     +mapping_rationale : string [0..1]
   }
   class Relationship {
+    +source_entity_ref : uriorcurie [1]
+    +target_entity_ref : uriorcurie [1]
+    +source_min_cardinality : integer [0..1]
+    +source_max_cardinality : integer [0..1]
+    +target_min_cardinality : integer [0..1]
+    +target_max_cardinality : integer [0..1]
     +identifying : boolean [0..1]
     +associative : boolean [0..1]
-    +source_min_cardinality : Cardinality [0..1]
-    +source_max_cardinality : Cardinality [0..1]
-    +target_min_cardinality : Cardinality [0..1]
-    +target_max_cardinality : Cardinality [0..1]
-  }
-  class ValueSet {
-    +name : string
-  }
-  class ValueSetValue {
-    +code : string
-    +label : string
+    +relationship_kind : RelationshipKindEnum [0..1]
   }
 }
 
 package "Физический уровень" #FCE5CD {
-  class ITSystem {
-    +name : string
-  }
-  class Technology {
-    +name : string
-  }
-  class NativeSchema {
-    +format : NativeSchemaFormat
-    +uri : uri [0..1]
-  }
   class PhysicalObject {
-    +object_kind : PhysicalObjectKind
-    +native_name : string
-    +mapping_coverage_status : MappingCoverageStatus [0..1]
+    +solution_ref : ITSolution [0..1]
+    +system_ref : ITSystem [1]
+    +object_kind : PhysicalObjectKindEnum [1]
+    +qualified_name : string [1]
+    +technology : string [1]
+    +native_schema_ref : uri [1]
+    +direction : FlowDirectionEnum [1]
+    +mapping_coverage_status : MappingCoverageStatusEnum [0..1]
     +mapping_rationale : string [0..1]
   }
   class PhysicalField {
-    +native_name : string
-    +native_type : string
-    +nullable : boolean [0..1]
-    +position : integer [0..1]
-    +mapping_coverage_status : MappingCoverageStatus [0..1]
+    +physical_object_ref : PhysicalObject [1]
+    +native_name : string [1]
+    +native_type : string [1]
+    +required : boolean [1]
+    +ordinal_position : integer [0..1]
+    +schema_path : string [0..1]
+    +mapping_coverage_status : MappingCoverageStatusEnum [0..1]
     +mapping_rationale : string [0..1]
   }
 }
 
 package "Трассируемость" #EADCF8 {
   class Mapping {
-    +mapping_type : MappingType
-    +mapping_coverage_status : MappingCoverageStatus [0..1]
-    +expression_language : ExpressionLanguage [0..1]
-    +expression : string [0..1]
-    +applies_when : string [0..1]
-  }
-  class ModelElementRealization {
-    +realization_kind : RealizationKind
-    +rationale : string [0..1]
+    +source_refs : uriorcurie [1..*]
+    +target_refs : uriorcurie [1..*]
+    +mapping_type : MappingTypeEnum [1]
+    +mapping_cardinality : MappingCardinalityEnum [1]
+    +transformation_ref : uri [0..1]
+    +transformation_expression : string [0..1]
+    +confidence : decimal [0..1]
   }
 }
 
-ConceptualEntity "1" *-- "0..*" ConceptualAttribute : key properties
-ConceptualEntity "0..*" --> "0..1" BusinessTerm : business term
-ConceptualRelationship "0..*" --> "1" ConceptualEntity : source
-ConceptualRelationship "0..*" --> "1" ConceptualEntity : target
+package "Реестры (RegistryEntry)" #F5F5F5 {
+  abstract class RegistryEntry {
+    +registry_id : uriorcurie [1]
+    +registry_name : string [1]
+    +master_system : string [1]
+    +registry_status : LifecycleStatusEnum [1]
+  }
+  class ITSystem
+  class ITSolution {
+    +member_system_refs : ITSystem [0..*]
+    +platform_ref : ITPlatform [0..1]
+  }
+  class GlossaryTerm
+  class BusinessDomain
+}
 
-DomainContext "1" o-- "0..*" LogicalEntity : context_ref
-LogicalEntity "1" *-- "1..*" LogicalAttribute : attributes
-Relationship "0..*" --> "1" LogicalEntity : source
-Relationship "0..*" --> "1" LogicalEntity : target
-LogicalAttribute "0..*" --> "0..1" ValueSet : constrained by
-ValueSet "1" *-- "0..*" ValueSetValue : values
+ModelElement <|-- ConceptualEntity
+ModelElement <|-- DomainContext
+ModelElement <|-- LogicalEntity
+ModelElement <|-- LogicalAttribute
+ModelElement <|-- Relationship
+ModelElement <|-- PhysicalObject
+ModelElement <|-- PhysicalField
+ModelElement <|-- Mapping
 
-ITSystem "1" o-- "0..*" PhysicalObject : system_ref
-Technology "1" o-- "0..*" PhysicalObject : technology
-NativeSchema "0..1" o-- "0..*" PhysicalObject : native schema
-PhysicalObject "1" *-- "0..*" PhysicalField : fields
+RegistryEntry <|-- ITSystem
+RegistryEntry <|-- ITSolution
+RegistryEntry <|-- GlossaryTerm
+RegistryEntry <|-- BusinessDomain
 
+ModelElement "0..*" --> "0..*" GlossaryTerm : glossary_term_refs
+DomainContext "0..*" --> "1" BusinessDomain : domain_ref
+DomainContext "1" <-- "0..*" LogicalEntity : context_ref
+LogicalEntity "1" *-- "0..*" LogicalAttribute : attributes
 LogicalEntity "0..*" --> "0..*" ConceptualEntity : conceptual_entity_refs
-LogicalAttribute "0..*" ..> "0..*" ConceptualAttribute : aligns with
-ModelElementRealization "0..*" --> "1" LogicalEntity : local element
-ModelElementRealization "0..*" --> "1" ConceptualEntity : conceptual target
+LogicalEntity "0..*" --> "0..1" ITSolution : solution_ref
+Relationship "0..*" --> "1" ConceptualEntity : source/target\n(via uriorcurie)
+Relationship "0..*" --> "1" LogicalEntity : source/target\n(via uriorcurie)
 
-Mapping "0..*" --> "0..*" LogicalEntity : logical side
-Mapping "0..*" --> "0..*" LogicalAttribute : logical side
-Mapping "0..*" --> "0..*" PhysicalObject : physical side
-Mapping "0..*" --> "0..*" PhysicalField : physical side
+PhysicalObject "0..*" --> "1" ITSystem : system_ref
+PhysicalObject "0..*" --> "0..1" ITSolution : solution_ref
+PhysicalObject "1" *-- "0..*" PhysicalField : physical_fields
+ITSolution "1" o-- "0..*" ITSystem : member_system_refs
 
-note bottom of Mapping : Один класс Mapping.\nmapping_type различает entity-physical,\nattribute-physical, derivation и др.\nEntity/AttributePhysicalMapping - только алиасы.
-note bottom of ConceptualEntity : Не описывает таблицы,\nAPI и технологии.
-note bottom of PhysicalObject : Квант данных: таблица, view, файл,\nAPI endpoint, topic, dataset.
+Mapping "0..*" ..> ModelElement : source_refs / target_refs\n(uriorcurie 1..*)
+
+note bottom of Mapping
+  One canonical Mapping class.
+  mapping_type: realizes, entity_physical,
+  field_mapping, aligns_with, derivation, …
+  No ModelElementRealization / Transformation classes.
+end note
+note bottom of ConceptualEntity
+  No ConceptualAttribute class.
+  Key props via key_attribute_refs only.
+end note
+note bottom of PhysicalObject
+  technology and native_schema_ref are required
+  string/uri slots — not typed classes.
+end note
+note bottom of LogicalAttribute
+  value_set_ref is uri, not a ValueSet class.
+end note
 @enduml

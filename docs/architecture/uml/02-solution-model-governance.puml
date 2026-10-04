@@ -1,187 +1,245 @@
 @startuml 02-solution-model-governance
-title MOEX DAMS - Solution Model and Governance
+title MOEX DAMS - Solution Model and Governance (kernel + DAMS body)
 hide empty members
 skinparam shadowing false
 skinparam classAttributeIconSize 0
 skinparam packageStyle rectangle
 
-abstract class ModelElement {
-  +element_id : ElementId
-  +name : string
-  +lifecycle_status : LifecycleStatus [0..1]
-  +data_owner_ref : ActorRef [0..1]
-  +data_steward_ref : ActorRef [0..1]
-  +ownership_inheritance_rule : string [0..1]
-}
-note right of ModelElement : Все классы диаграммы\nнаследуют ModelElement\n(стрелки опущены).
+note as N_SRC
+  Normative sources:
+  modeling-kernel.yaml (envelope),
+  moex-dams.yaml / moex-core.yaml (body),
+  moex-registries / moex-governance /
+  moex-integration / moex-contract-binding
+end note
 
-package "Спецификации и реализации" #E8F0FE {
+package "Modeling kernel (not DAMS is_a)" #E8F0FE {
   class ModelingStandard {
-    +version : string
+    +id : string [1]
+    +name : string [1]
+    +version : string [1]
+    +standard_family : string [1]
+    +specification_uri : uri [1]
+    +semantic_regime : string [1]
   }
   class ReferenceSpecification {
-    +version : string
-    +specification_kind : SpecificationKind
+    +id : string [1]
+    +name : string [1]
+    +version : string [1]
+    +specification_kind : string [1]
+    +expressed_in : StandardRef [1]
+    +root_type : string [1]
+    +conformance_policy : ConformancePolicy [1]
   }
   class SpecificationImplementation {
-    +implementation_profile : ImplementationProfile
+    +id : string [1]
+    +version : string [1]
+    +conforms_to : SpecificationRef [1]
+    +implementation_kind : string [1]
+    +lifecycle_status : string [0..1]
+    +source : SourceDescriptor [1]
+    +body_ref : string [0..1]
+    +implementation_profile : ImplementationProfile [0..1]
     +dams_model_level : DAMSModelLevel [0..1]
-    +implementation_scope : ImplementationScope
-    +solution_ref : SolutionRef [0..1]
-    +conceptual_implementation_ref : ImplementationRef [0..1]
+  }
+  note bottom of SpecificationImplementation
+    dams_model_level only when
+    implementation_profile = dams-data-model.
+    Levels: enterprise-conceptual | solution.
+    Body typed by provider schema (DAMS ModelPackage).
+    No ImplementationFacet class in LinkML.
+  end note
+}
+
+package "DAMS body" #D9EAD3 {
+  class MOEXModelRepository {
+    +repository_id : uriorcurie [1]
   }
   class ModelPackage {
-    +version : string
+    +api_version : string [1]
+    +model_version : SemVer [1]
+    +implementation_scope : ImplementationScopeEnum [0..1]
+    +conceptual_implementation_ref : uriorcurie [0..1]
+    +solution_ref : ITSolution [0..1]
   }
-  class ImplementationFacet {
-    +kind : ImplementationFacetKind
-    +source_artifact_ref : ArtifactRef [0..1]
-  }
-}
-
-package "Граница EAM" #FFF2CC {
-  class Platform {
-    +name : string
-  }
-  class ITSolution {
-    +name : string
-  }
-  class ITSystem {
-    +name : string
-  }
-  class DomainContext {
-    +name : string
-  }
-}
-
-package "Содержимое модели решения" #D9EAD3 {
   class LogicalEntity {
-    +entity_type : EntityType
-    +data_class : DataClass
-    +identity_rule : string [0..1]
-    +conceptual_alignment_status : AlignmentStatus [0..1]
+    +context_ref : DomainContext [1]
+    +solution_data_role : SolutionDataRoleEnum [1]
+    +conceptual_alignment_status : ConceptualAlignmentStatusEnum [0..1]
   }
   class LogicalAttribute {
-    +logical_type : LogicalType
-    +required : boolean
+    +logical_type : LogicalDataTypeEnum [1]
+    +required : boolean [1]
+    +multivalued : boolean [1]
   }
   class Relationship {
-    +source_min_cardinality : Cardinality [0..1]
-    +target_min_cardinality : Cardinality [0..1]
+    +source_entity_ref : uriorcurie [1]
+    +target_entity_ref : uriorcurie [1]
   }
   class PhysicalObject {
-    +object_kind : PhysicalObjectKind
-    +native_name : string
+    +system_ref : ITSystem [1]
+    +object_kind : PhysicalObjectKindEnum [1]
+    +qualified_name : string [1]
+    +technology : string [1]
+    +native_schema_ref : uri [1]
+    +direction : FlowDirectionEnum [1]
   }
   class PhysicalField {
-    +native_name : string
-    +native_type : string
+    +native_name : string [1]
+    +native_type : string [1]
+    +required : boolean [1]
   }
   class Mapping {
-    +mapping_type : MappingType
-    +expression : string [0..1]
+    +source_refs : uriorcurie [1..*]
+    +target_refs : uriorcurie [1..*]
+    +mapping_type : MappingTypeEnum [1]
+    +mapping_cardinality : MappingCardinalityEnum [1]
+  }
+  class DomainContext {
+    +domain_ref : BusinessDomain [1]
+    +namespace : uri [1]
   }
 }
 
-package "Управление" #D9D2E9 {
-  class DataPolicy {
-    +policy_type : PolicyType
+package "Реестры" #FFF2CC {
+  abstract class RegistryEntry {
+    +registry_id : uriorcurie [1]
+    +registry_name : string [1]
+    +registry_status : LifecycleStatusEnum [1]
   }
+  class ITPlatform
+  class ITSolution {
+    +member_system_refs : ITSystem [0..*]
+    +platform_ref : ITPlatform [0..1]
+  }
+  class ITSystem
+  class Policy
+  class DataContractReference
+  class IntegrationReference
+}
+
+package "Governance" #D9D2E9 {
   class PolicyBinding {
-    +binding_role : PolicyBindingRole
-  }
-  class DataQualityRule {
-    +rule_expression : string [0..1]
-    +severity : QualitySeverity [0..1]
-  }
-  class DataQualityBinding {
-    +status : LifecycleStatus
+    +policy_binding_id : string [1]
+    +policy_target_ref : uriorcurie [1]
+    +policy_ref : Policy [1]
+    +approval_status : ApprovalStatusEnum [0..1]
   }
 }
 
-package "Интеграции и контракты" #D0E0E3 {
+package "Интеграции и контрактные bindings" #D0E0E3 {
   class DataFlow {
-    +direction : FlowDirection
-    +freshness_sla : string [0..1]
+    +integration_ref : IntegrationReference [1]
+    +contract_ref : DataContractReference [0..1]
+    +source_solution_ref : ITSolution [1]
+    +target_solution_ref : ITSolution [1]
+    +source_system_ref : ITSystem [1]
+    +target_system_ref : ITSystem [1]
+    +source_platform_ref : ITPlatform [1]
+    +target_platform_ref : ITPlatform [1]
+    +integration_level : IntegrationLevelEnum [1]
+    +integration_class : IntegrationClassEnum [1]
+    +integration_channel : IntegrationChannelEnum [1]
+    +integration_spec_ref : uri [1]
   }
-  class DataFlowEndpoint {
-    +role : EndpointRole
+  class DataFlowEntityBinding {
+    +flow_ref : DataFlow [1]
+    +source_model_ref : uri [1]
+    +logical_entity_ref : LogicalEntity [1]
+    +logical_attribute_refs : LogicalAttribute [1..*]
+    +physical_object_refs : PhysicalObject [1..*]
+    +physical_field_refs : PhysicalField [0..*]
+    +transformation_mapping_refs : Mapping [0..*]
+    +direction : FlowDirectionEnum [0..1]
   }
-  class DataContract {
-    +version : string
+  class DataModelBinding {
+    +specification_version : SemVer [1]
+    +implementation_version : SemVer [1]
+    +contract_ref : DataContractReference [0..1]
+    +model_package_ref : uri [1]
+    +model_revision : string [1]
+    +compatibility_mode : CompatibilityModeEnum [1]
+    +integrity_digest : Sha256Digest [1]
   }
-  class DataContractBinding {
-    +binding_role : ContractBindingRole
+  class ModelSelection
+  class SelectedEntity {
+    +logical_entity_ref : LogicalEntity [1]
   }
 }
 
-package "Контроль качества модели" #F4CCCC {
-  class SchemaValidation <<service>> {
-    +checks structure
-  }
-  class BodyAssess <<service>> {
-    +checks requirement catalog
-  }
-  class PublicationContractCheck <<service>> {
-    +checks sections and satisfies
-  }
-  class AssessmentDiagnostic {
-    +diagnostic_code : string
-    +severity : Severity
-    +remediation : string
-  }
-  class PublicationManifest {
-    +publication_profile : string
-  }
-}
+ModelingStandard "1" <-- "0..*" ReferenceSpecification : expressed_in
+ReferenceSpecification "1" <-- "0..*" SpecificationImplementation : conforms_to
+SpecificationImplementation ..> ModelPackage : body_ref\n(provider-owned)
 
-ModelingStandard "1" o-- "0..*" ReferenceSpecification : modeling standard
-ReferenceSpecification "1" o-- "0..*" SpecificationImplementation : implements
-SpecificationImplementation "1" *-- "1..*" ModelPackage : packages
-SpecificationImplementation "1" *-- "0..*" ImplementationFacet : facets
-SpecificationImplementation "0..*" --> "0..1" ITSolution : solution_ref
-SpecificationImplementation "0..*" --> "0..1" SpecificationImplementation : conceptual implementation
+MOEXModelRepository "1" *-- "0..*" ModelPackage : model_packages
+MOEXModelRepository "1" *-- "0..*" RegistryEntry : registry_entries
+MOEXModelRepository "1" *-- "0..*" DataFlow : data_flows
+MOEXModelRepository "1" *-- "0..*" DataModelBinding : data_model_bindings
+MOEXModelRepository "1" *-- "0..*" PolicyBinding : policy_bindings
 
-Platform "1" o-- "0..*" ITSolution : contains
-ITSolution "1" o-- "1..*" ITSystem : consists of
-
-ModelPackage "1" *-- "0..*" LogicalEntity : logical model
+ModelPackage "1" *-- "0..*" DomainContext : domain_contexts
+ModelPackage "1" *-- "0..*" LogicalEntity : logical_entities
 ModelPackage "1" *-- "0..*" Relationship : relationships
-ModelPackage "1" *-- "0..*" PhysicalObject : physical model
+ModelPackage "1" *-- "0..*" PhysicalObject : physical_objects
 ModelPackage "1" *-- "0..*" Mapping : mappings
-DomainContext "1" o-- "0..*" LogicalEntity : context_ref
-LogicalEntity "1" *-- "1..*" LogicalAttribute : attributes
-Relationship "0..*" --> "1" LogicalEntity : source
-Relationship "0..*" --> "1" LogicalEntity : target
-ITSystem "1" o-- "0..*" PhysicalObject : system_ref
-PhysicalObject "1" *-- "0..*" PhysicalField : fields
-Mapping "0..*" --> "0..*" LogicalEntity : logical side
-Mapping "0..*" --> "0..*" LogicalAttribute : logical side
-Mapping "0..*" --> "0..*" PhysicalObject : physical side
-Mapping "0..*" --> "0..*" PhysicalField : physical side
+ModelPackage "0..*" --> "0..1" ITSolution : solution_ref
 
-PolicyBinding "0..*" --> "1" DataPolicy : policy
-PolicyBinding "0..*" --> "1..*" ModelPackage : applies to
-DataQualityBinding "0..*" --> "1" DataQualityRule : rule
-DataQualityBinding "0..*" --> "1..*" PhysicalObject : evaluates
+DomainContext "1" <-- "0..*" LogicalEntity : context_ref
+LogicalEntity "1" *-- "0..*" LogicalAttribute : attributes
+Relationship "0..*" --> "1" LogicalEntity : source/target
+PhysicalObject "0..*" --> "1" ITSystem : system_ref
+PhysicalObject "1" *-- "0..*" PhysicalField : physical_fields
 
-DataFlow "1" *-- "2..*" DataFlowEndpoint : endpoints
-DataFlowEndpoint "0..*" --> "0..1" ITSolution : solution
-DataFlowEndpoint "0..*" --> "0..1" ITSystem : system
-DataFlowEndpoint "0..*" --> "0..1" PhysicalObject : data object
-DataFlow "0..*" --> "0..*" Mapping : transformations
-DataContractBinding "0..*" --> "1" DataContract : contract
-DataContractBinding "0..*" --> "0..1" DataFlow : governs flow
-DataContractBinding "0..*" --> "0..1" PhysicalObject : governs object
+RegistryEntry <|-- ITPlatform
+RegistryEntry <|-- ITSolution
+RegistryEntry <|-- ITSystem
+RegistryEntry <|-- Policy
+RegistryEntry <|-- DataContractReference
+RegistryEntry <|-- IntegrationReference
 
-ModelPackage ..> SchemaValidation : validated by
-ModelPackage ..> BodyAssess : assessed by
-PublicationManifest ..> PublicationContractCheck : checked by
-BodyAssess --> "0..*" AssessmentDiagnostic : emits
-PublicationManifest "0..*" --> "1" ModelPackage : publishes
+ITPlatform "1" o-- "0..*" ITSolution : platform_ref
+ITSolution "1" o-- "0..*" ITSystem : member_system_refs
 
-note bottom of SpecificationImplementation : dams_model_level допустим только\nдля implementation_profile = dams-data-model.\nУровни: enterprise-conceptual и solution.
-note bottom of BodyAssess : Проверяет содержание модели.\nНе проверяет наличие publication sections.
-note bottom of PublicationContractCheck : Проверяет наличие представлений.\nНе проверяет identity_rule, owner,\nmapping coverage.
-note bottom of ModelPackage : Логический и физический слои\nодного решения живут в одном пакете.
+PolicyBinding "0..*" --> "1" Policy : policy_ref
+PolicyBinding "0..*" --> "1" ModelElement : policy_target_ref
+
+DataFlow "1" *-- "0..*" DataFlowEntityBinding : entity_bindings
+DataFlowEntityBinding "0..*" --> "1" LogicalEntity : logical_entity_ref
+DataFlowEntityBinding "0..*" --> "1..*" PhysicalObject : physical_object_refs
+DataFlowEntityBinding "0..*" --> "0..*" Mapping : transformation_mapping_refs
+
+DataModelBinding "1" *-- "1..*" ModelSelection : selections
+ModelSelection "1" *-- "1..*" SelectedEntity : selected_entities
+DataModelBinding "0..*" --> "0..1" DataContractReference : contract_ref
+DataModelBinding "0..*" --> "1" ModelPackage : model_package_ref
+
+abstract class ModelElement {
+  +element_id : uriorcurie [1]
+  +name : string [1]
+  +lifecycle_status : LifecycleStatusEnum [1]
+}
+ModelElement <|-- ModelPackage
+ModelElement <|-- LogicalEntity
+ModelElement <|-- LogicalAttribute
+ModelElement <|-- Relationship
+ModelElement <|-- PhysicalObject
+ModelElement <|-- PhysicalField
+ModelElement <|-- Mapping
+ModelElement <|-- DomainContext
+ModelElement <|-- DataFlow
+ModelElement <|-- DataFlowEntityBinding
+ModelElement <|-- DataModelBinding
+ModelElement <|-- ModelSelection
+ModelElement <|-- SelectedEntity
+
+note bottom of ModelPackage
+  implementation_scope: enterprise | solution.
+  Logical and physical layers of one solution
+  live in one ModelPackage (0..* compositions).
+end note
+note bottom of DataFlow
+  Topology (source/target solution, system,
+  platform) is required on DataFlow itself.
+  Bindings link flow to logical/physical slice.
+end note
 @enduml
