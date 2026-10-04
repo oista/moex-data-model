@@ -180,6 +180,75 @@ def test_agreement_has_commercial_party_links() -> None:
     ) in pairs
 
 
+def test_remainder_slice_concepts_present() -> None:
+    data = yaml.safe_load(ENTERPRISE.read_text(encoding="utf-8"))
+    names = {c["name"] for c in data["conceptual_entities"]}
+    required = {
+        "AccountingSystem",
+        "LedgerAccount",
+        "SubledgerAccount",
+        "Currency",
+        "UserLedgerLink",
+        "JournalEntry",
+        "InformationSystem",
+        "Act",
+        "SalesFunnel",
+        "Deposit",
+        "Curve",
+        "Portfolio",
+        "ClearingPositionDetail",
+        "LoginEvent",
+        "TradingTerminal",
+    }
+    assert required <= names
+
+
+def test_drawio_remainder_tables_mapped() -> None:
+    """Every former missing drawio table maps to an enterprise concept id."""
+    data = yaml.safe_load(ENTERPRISE.read_text(encoding="utf-8"))
+    ids = {c["element_id"] for c in data["conceptual_entities"]}
+    drawio_to_concept = {
+        "АБС": "dams:concept/AccountingSystem",
+        "Счета АБС": "dams:concept/LedgerAccount",
+        "Лицевые": "dams:concept/SubledgerAccount",
+        "Счета пользователя": "dams:concept/UserLedgerLink",
+        "Инфо-системы": "dams:concept/InformationSystem",
+        "Проводки": "dams:concept/JournalEntry",
+        "Акты": "dams:concept/Act",
+        "Воронки": "dams:concept/SalesFunnel",
+        "Депозиты": "dams:concept/Deposit",
+        "Кривые": "dams:concept/Curve",
+        "Портфель": "dams:concept/Portfolio",
+        "События логинов": "dams:concept/LoginEvent",
+        "Торговые терминалы": "dams:concept/TradingTerminal",
+        "ЧПД": "dams:concept/ClearingPositionDetail",
+    }
+    for ru, cid in drawio_to_concept.items():
+        assert cid in ids, f"{ru} -> {cid} missing"
+
+
+def test_ledger_and_login_event_dependencies() -> None:
+    data = yaml.safe_load(ENTERPRISE.read_text(encoding="utf-8"))
+    concepts = {c["name"]: c for c in data["conceptual_entities"]}
+    assert concepts["LedgerAccount"]["depends_on_refs"] == [
+        "dams:concept/AccountingSystem"
+    ]
+    assert concepts["LoginEvent"]["depends_on_refs"] == ["dams:concept/TradingLogin"]
+    assert concepts["UserLedgerLink"]["dependency_kind"] == "associative"
+    pairs = {
+        (r["source_entity_ref"], r["target_entity_ref"])
+        for r in data["relationships"]
+    }
+    assert (
+        "dams:concept/User",
+        "dams:concept/InformationSystem",
+    ) in pairs
+    assert (
+        "dams:concept/Portfolio",
+        "dams:concept/Asset",
+    ) in pairs
+
+
 def test_enterprise_cm_checks_clean() -> None:
     data = yaml.safe_load(ENTERPRISE.read_text(encoding="utf-8"))
     diags = check_conceptual_entities(data) + check_relation_terms(data)

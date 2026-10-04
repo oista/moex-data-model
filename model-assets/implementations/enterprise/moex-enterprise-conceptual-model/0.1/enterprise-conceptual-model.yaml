@@ -2,11 +2,10 @@ element_id: dams:model/enterprise-conceptual/0.1
 name: moex_enterprise_conceptual_model
 title: moex.concept-data-model
 description: >
-  Единая корпоративная концептуальная модель MOEX (Party + trading/TKS + commercial/HR slices).
-  TradingParticipation / Counterparty / Employee — reified roles, не подклассы.
-  ER-черновик концептуализирован без PK/FK-атрибутов (ADR-029). Physical layer
-  запрещён. ExternalTermSelection выравнивается сюда, не на таблицы решений.
-  Tier / genesis / relation terms — ADR-026. ABS/IT deferred.
+  Единая корпоративная концептуальная модель MOEX (Party + trading/TKS + commercial/HR + ABS/IT remainder).
+  Полное покрытие таблиц CModel_content04.drawio на концептуальном уровне (ADR-029).
+  Reified roles не подклассы. Без PK/FK-атрибутов. Physical layer запрещён.
+  ExternalTermSelection выравнивается сюда. Tier / genesis / relation terms — ADR-026.
 lifecycle_status: draft
 api_version: dams.moex/v0.1
 model_version: 0.1.0
@@ -854,6 +853,175 @@ conceptual_entities:
     - dams:concept/Role
     - dams:concept/User
 
+  # --- ABS/IT/ops remainder (ADR-029 wave 3) ---
+
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/AccountingSystem
+    name: AccountingSystem
+    title: АБС
+    description: Автоматизированная банковская / учётная система (АБС).
+    entity_type: reference
+    data_class: reference_data
+    business_importance: high
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/LedgerAccount
+    name: LedgerAccount
+    title: Счёт АБС
+    description: Счёт в АБС / главной книге.
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+    - dams:concept/AccountingSystem
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/SubledgerAccount
+    name: SubledgerAccount
+    title: Лицевой счёт
+    description: Лицевой счёт (субсчёт) при счёте АБС.
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+    - dams:concept/LedgerAccount
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Currency
+    name: Currency
+    title: Валюта
+    description: Валюта номинала / расчётов (из FK на счетах пользователя).
+    entity_type: reference
+    data_class: reference_data
+    business_importance: high
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/UserLedgerLink
+    name: UserLedgerLink
+    title: Счёт пользователя
+    description: Связь пользователя приложений со счётом АБС (associative).
+    entity_type: core
+    data_class: master_data
+    business_importance: medium
+    entity_tier: dependent
+    dependency_kind: associative
+    depends_on_refs:
+    - dams:concept/User
+    - dams:concept/LedgerAccount
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/JournalEntry
+    name: JournalEntry
+    title: Проводка
+    description: Бухгалтерская / учётная проводка по счёту АБС.
+    entity_type: core
+    data_class: transactional_data
+    business_importance: high
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/InformationSystem
+    name: InformationSystem
+    title: Инфо-система
+    description: Информационная система / приложение корпоративного контура.
+    entity_type: reference
+    data_class: reference_data
+    business_importance: high
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Act
+    name: Act
+    title: Акт
+    description: Акт (документальный факт). В ER-черновике — тонкая заглушка без атрибутов; концепт без
+      PK/FK-колонок (ADR-029).
+    entity_type: core
+    data_class: transactional_data
+    business_importance: low
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/SalesFunnel
+    name: SalesFunnel
+    title: Воронка продаж
+    description: Воронка продаж / CRM-воронка. Атрибуты черновика (дата рождения) игнорируются — только
+      концепт.
+    entity_type: core
+    data_class: reference_data
+    business_importance: medium
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Deposit
+    name: Deposit
+    title: Депозит
+    description: Депозит; в черновике связан со счётом.
+    entity_type: core
+    data_class: master_data
+    business_importance: medium
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Curve
+    name: Curve
+    title: Кривая
+    description: Кривая (доходности / ставок и т.п.).
+    entity_type: reference
+    data_class: reference_data
+    business_importance: medium
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Portfolio
+    name: Portfolio
+    title: Портфель
+    description: Портфель активов, связанный со счётом АБС.
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/ClearingPositionDetail
+    name: ClearingPositionDetail
+    title: ЧПД
+    description: 'ЧПД (черновик: счётоподобная сущность). Тонкий концепт; опциональная связь со счётом АБС.'
+    entity_type: core
+    data_class: transactional_data
+    business_importance: low
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/LoginEvent
+    name: LoginEvent
+    title: Событие логина
+    description: Событие логина ТКС; зависит от TradingLogin.
+    entity_type: core
+    data_class: transactional_data
+    business_importance: medium
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+    - dams:concept/TradingLogin
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/TradingTerminal
+    name: TradingTerminal
+    title: Торговый терминал
+    description: Торговый терминал. В ER-черновике поля похожи на сделку — в КМД только концепт и опциональные
+      связи.
+    entity_type: core
+    data_class: master_data
+    business_importance: medium
+    entity_tier: primary
+
 relation_terms:
   - element_id: dams:relterm/memberOf
     name: memberOf
@@ -1485,6 +1653,119 @@ relation_terms:
     inverse_label_en: signs
     symmetric: false
     default_relationship_kind: association
+
+  # --- remainder relation terms (wave 3) ---
+
+  - element_id: dams:relterm/hostedOn
+    name: hostedOn
+    title: размещён в / хостит
+    description: Пользователь размещён / работает в инфо-системе.
+    lifecycle_status: active
+    forward_label: размещён в
+    forward_label_en: hosted on
+    inverse_label: хостит
+    inverse_label_en: hosts
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/ofLedger
+    name: ofLedger
+    title: относится к счёту / имеет субсчёт
+    description: Лицевой счёт или связь относится к счёту АБС.
+    lifecycle_status: active
+    forward_label: относится к счёту
+    forward_label_en: of ledger account
+    inverse_label: имеет субсчёт/связь
+    inverse_label_en: has subledger or link
+    symmetric: false
+    default_relationship_kind: composition
+  - element_id: dams:relterm/ofAccountingSystem
+    name: ofAccountingSystem
+    title: в АБС / содержит счета
+    description: Счёт принадлежит АБС.
+    lifecycle_status: active
+    forward_label: в АБС
+    forward_label_en: of accounting system
+    inverse_label: содержит счета
+    inverse_label_en: has ledger accounts
+    symmetric: false
+    default_relationship_kind: composition
+  - element_id: dams:relterm/ofSubledger
+    name: ofSubledger
+    title: по лицевому счёту / имеет проводки
+    description: Проводка может относиться к лицевому счёту.
+    lifecycle_status: active
+    forward_label: по лицевому счёту
+    forward_label_en: of subledger
+    inverse_label: имеет проводки
+    inverse_label_en: has journal entries
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/postsTo
+    name: postsTo
+    title: проводится на / принимает проводки
+    description: Проводка проводится на счёт АБС.
+    lifecycle_status: active
+    forward_label: проводится на
+    forward_label_en: posts to
+    inverse_label: принимает проводки
+    inverse_label_en: receives postings
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/denominatedIn
+    name: denominatedIn
+    title: номинирован в / номинирует
+    description: Связь счёта пользователя номинирована в валюте.
+    lifecycle_status: active
+    forward_label: номинирован в
+    forward_label_en: denominated in
+    inverse_label: номинирует
+    inverse_label_en: denominates
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/holdsAsset
+    name: holdsAsset
+    title: держит актив / входит в портфель
+    description: Портфель держит актив.
+    lifecycle_status: active
+    forward_label: держит актив
+    forward_label_en: holds asset
+    inverse_label: входит в портфель
+    inverse_label_en: held in portfolio
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/ofPortfolio
+    name: ofPortfolio
+    title: относится к портфелю / включает
+    description: Связь портфеля со счётом.
+    lifecycle_status: active
+    forward_label: относится к портфелю
+    forward_label_en: of portfolio
+    inverse_label: включает
+    inverse_label_en: includes
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/ofTerminal
+    name: ofTerminal
+    title: на терминале / обслуживает
+    description: Связь торгового терминала с участием / инструментом / площадкой.
+    lifecycle_status: active
+    forward_label: на терминале
+    forward_label_en: of terminal
+    inverse_label: обслуживает
+    inverse_label_en: serves
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/occurredOnLogin
+    name: occurredOnLogin
+    title: произошло на логине / имеет события
+    description: Событие логина относится к логину ТКС.
+    lifecycle_status: active
+    forward_label: произошло на логине
+    forward_label_en: occurred on login
+    inverse_label: имеет события
+    inverse_label_en: has login events
+    symmetric: false
+    default_relationship_kind: composition
 
 relationships:
   # One record per pair (ADR-026). Dependent→owner edges carry mandatory
@@ -2986,6 +3267,270 @@ relationships:
     term_direction: forward
     relationship_kind: association
     identifying: true
+
+  # --- remainder relationships (wave 3) ---
+
+  - element_id: dams:rel/LedgerAccount/ofAccountingSystem
+    name: ofAccountingSystem
+    title: ofAccountingSystem
+    description: Счёт АБС принадлежит AccountingSystem (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/LedgerAccount
+    target_entity_ref: dams:concept/AccountingSystem
+    source_role: ledger_account
+    target_role: accounting_system
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/ofAccountingSystem
+    term_direction: forward
+    relationship_kind: composition
+    identifying: true
+  - element_id: dams:rel/SubledgerAccount/ofLedger
+    name: ofLedger
+    title: ofLedger
+    description: Лицевой счёт принадлежит счёту АБС (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/SubledgerAccount
+    target_entity_ref: dams:concept/LedgerAccount
+    source_role: subledger
+    target_role: ledger_account
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/ofLedger
+    term_direction: forward
+    relationship_kind: composition
+    identifying: true
+  - element_id: dams:rel/UserLedgerLink/ofUser
+    name: ofUser
+    title: ofUser
+    description: Связь принадлежит пользователю (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/UserLedgerLink
+    target_entity_ref: dams:concept/User
+    source_role: link
+    target_role: user
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/memberOf
+    term_direction: forward
+    relationship_kind: association
+    identifying: true
+  - element_id: dams:rel/UserLedgerLink/ofLedger
+    name: ofLedger
+    title: ofLedger
+    description: Связь принадлежит счёту АБС (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/UserLedgerLink
+    target_entity_ref: dams:concept/LedgerAccount
+    source_role: link
+    target_role: ledger_account
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/ofLedger
+    term_direction: forward
+    relationship_kind: association
+    identifying: true
+  - element_id: dams:rel/UserLedgerLink/denominatedIn
+    name: denominatedIn
+    title: denominatedIn
+    description: Связь может быть номинирована в валюте.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/UserLedgerLink
+    target_entity_ref: dams:concept/Currency
+    source_role: link
+    target_role: currency
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/denominatedIn
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/JournalEntry/postsTo
+    name: postsTo
+    title: postsTo
+    description: Проводка проводится на счёт АБС.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/JournalEntry
+    target_entity_ref: dams:concept/LedgerAccount
+    source_role: entry
+    target_role: ledger_account
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/postsTo
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/JournalEntry/ofSubledger
+    name: ofSubledger
+    title: ofSubledger
+    description: Проводка может относиться к лицевому счёту.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/JournalEntry
+    target_entity_ref: dams:concept/SubledgerAccount
+    source_role: entry
+    target_role: subledger
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/ofSubledger
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/User/hostedOn
+    name: hostedOn
+    title: hostedOn
+    description: Пользователь работает в инфо-системе.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/User
+    target_entity_ref: dams:concept/InformationSystem
+    source_role: user
+    target_role: information_system
+    source_min_cardinality: 0
+    source_max_cardinality: 999
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/hostedOn
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Portfolio/holdsAsset
+    name: holdsAsset
+    title: holdsAsset
+    description: Портфель держит актив.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Portfolio
+    target_entity_ref: dams:concept/Asset
+    source_role: portfolio
+    target_role: asset
+    source_min_cardinality: 0
+    source_max_cardinality: 999
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/holdsAsset
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Portfolio/ofLedger
+    name: ofLedger
+    title: ofLedger
+    description: Портфель связан со счётом АБС.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Portfolio
+    target_entity_ref: dams:concept/LedgerAccount
+    source_role: portfolio
+    target_role: ledger_account
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/ofLedger
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Deposit/ofLedger
+    name: ofLedger
+    title: ofLedger
+    description: Депозит может относиться к счёту АБС.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Deposit
+    target_entity_ref: dams:concept/LedgerAccount
+    source_role: deposit
+    target_role: ledger_account
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/ofLedger
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/ClearingPositionDetail/ofLedger
+    name: ofLedger
+    title: ofLedger
+    description: ЧПД может относиться к счёту АБС.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/ClearingPositionDetail
+    target_entity_ref: dams:concept/LedgerAccount
+    source_role: cpd
+    target_role: ledger_account
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/ofLedger
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/LoginEvent/ofLogin
+    name: ofLogin
+    title: occurredOnLogin
+    description: Событие принадлежит логину ТКС (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/LoginEvent
+    target_entity_ref: dams:concept/TradingLogin
+    source_role: event
+    target_role: login
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/occurredOnLogin
+    term_direction: forward
+    relationship_kind: composition
+    identifying: true
+  - element_id: dams:rel/TradingTerminal/ofParticipation
+    name: ofParticipation
+    title: ofTerminal (participation)
+    description: Терминал может относиться к участию в торгах.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingTerminal
+    target_entity_ref: dams:concept/TradingParticipation
+    source_role: terminal
+    target_role: participation
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/ofTerminal
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/TradingTerminal/ofInstrument
+    name: ofInstrument
+    title: ofTerminal (instrument)
+    description: Терминал может относиться к инструменту (черновик).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingTerminal
+    target_entity_ref: dams:concept/Instrument
+    source_role: terminal
+    target_role: instrument
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/ofTerminal
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/TradingTerminal/ofVenue
+    name: ofVenue
+    title: ofTerminal (venue)
+    description: Терминал может относиться к площадке (черновик).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingTerminal
+    target_entity_ref: dams:concept/TradingVenue
+    source_role: terminal
+    target_role: venue
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/ofTerminal
+    term_direction: forward
+    relationship_kind: association
 
 mappings:
   - element_id: dams:mapping/align/LegalEntity-fibo

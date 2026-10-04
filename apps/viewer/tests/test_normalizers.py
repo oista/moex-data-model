@@ -485,7 +485,7 @@ def test_dams_explorer_real_schema():
     assert gloss_ref.title == "Глоссарий"
     assert gloss_ref.attributes.get("section_id") == "glossary"
     assert gloss_ref.attributes.get("kind") == "section_ref"
-    assert gloss_ref.attributes.get("nav_glyph") == "glossary"
+    assert "nav_glyph" not in (gloss_ref.attributes or {})
 
     classes_root = next(g for g in out.items if g.id == "group:classes")
     titles = {g.title for g in classes_root.children}

@@ -1,8 +1,8 @@
 # moex.concept-data-model (ADR-021)
 
-Canonical **enterprise-conceptual** DAMS implementation for the Party +
-trading/TKS + commercial/HR slices (ADR-029; ER sketches conceptualized
-without PK/FK attributes). ABS / info-systems deferred.
+Canonical **enterprise-conceptual** DAMS implementation covering the full
+`CModel_content04.drawio` table set as concepts (ADR-029; no PK/FK attributes).
+Includes Party, trading/TKS, commercial/HR, ABS/ledger, and IT/ops remainder.
 
 ## Distinctions
 

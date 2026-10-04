@@ -745,10 +745,19 @@
     return `<span class="nav-kind nav-kind-folder${cls}" aria-hidden="true">${folderShapeSvg()}${innerHtml || ""}</span>`;
   }
 
+  function yamlFileSvg() {
+    return `<svg class="nav-kind-yaml-shape" viewBox="0 0 80 89" fill="none" aria-hidden="true" focusable="false"><g stroke="#ff6641" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.8 35.4V18.2A8.2 8.2 0 0 1 23 10h27.6L66.2 23.6v11.8"/><path d="M50.6 10v13.6h15.6"/><path d="M24.2 21.6h24.8M24.2 28.8h20.2M24.2 36h13.6"/><rect x="6.6" y="37.2" width="66.8" height="23.4" rx="8.4"/><path d="M14.8 60.6v10.6A8.2 8.2 0 0 0 23 79.4h34.2A8.2 8.2 0 0 0 65.4 71.2V60.6"/><path d="M26.8 66.4h26.4M31.2 73.6h17.6"/></g><text x="40" y="53.4" text-anchor="middle" fill="#ff6641" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="12" font-weight="700">yaml</text></svg>`;
+  }
+
+  function yamlFileMarkHtml() {
+    return `<span class="nav-kind nav-kind-yaml" aria-hidden="true">${yamlFileSvg()}</span>`;
+  }
+
   function navGlyphHtml(glyph, slot, opts) {
     const g = String(glyph || "").toLowerCase();
     const s = slot || "menu";
     const o = opts || {};
+    if (g === "source_file") return yamlFileMarkHtml();
     if (LEVEL_GLYPHS.has(g)) {
       const label = g.toUpperCase();
       const plaque = `<span class="nav-glyph nav-glyph--${g} nav-glyph--menu" aria-hidden="true">${label}</span>`;
@@ -1026,7 +1035,7 @@
         btn.innerHTML = `<span class="nav-kind">T</span>
           <span>${escapeHtml(child.title || child.id)}</span>`;
       } else if (childKind === "source_file") {
-        btn.innerHTML = `<span class="nav-kind">F</span>
+        btn.innerHTML = `${yamlFileMarkHtml()}
           <span>${escapeHtml(child.title || child.id)}</span>`;
       } else {
         btn.textContent = child.title || child.id;
@@ -1149,13 +1158,12 @@
           };
           if (sec.type) attrs.section_type = sec.type;
           if (sec.kind) attrs.publication_kind = sec.kind;
+          // Spec chrome: only DAMS level plaques (cdm/ldm/pdm). Glossary is plain
+          // text like Overview peers — keep glossary glyph for impl nav only.
           if (
-            sec.id === "glossary" ||
-            sec.type === "glossary" ||
-            sec.kind === "glossary"
+            SECTION_ID_NAV_GLYPH[sec.id] &&
+            SECTION_ID_NAV_GLYPH[sec.id] !== "glossary"
           ) {
-            attrs.nav_glyph = "glossary";
-          } else if (SECTION_ID_NAV_GLYPH[sec.id]) {
             attrs.nav_glyph = SECTION_ID_NAV_GLYPH[sec.id];
           }
           return {
@@ -1272,7 +1280,7 @@
         showModule(mod.module_id, { section: expl.id, item: itemId });
       }
 
-      function appendNavClassNode(parentEl, node, depth) {
+      function appendNavClassNode(parentEl, node, depth, opts) {
         const hasKids = node.children && node.children.length;
         const open = openGroups.has(node.id);
         const wrapNode = document.createElement("div");
@@ -1327,8 +1335,13 @@
           node.attributes?.requirement_section || ""
         ).trim();
         const glyph = resolveNavGlyph(node.attributes, { kind });
+        // Spec top-level peers (e.g. Глоссарий next to Overview/Classes) use plain
+        // chrome like nav-group rows — no letter/glyph. Impl trees keep glyphs.
+        const omitGlyph = !!(opts && opts.omitGlyph);
         let markHtml;
-        if (isSectionFolder) {
+        if (omitGlyph) {
+          markHtml = "";
+        } else if (isSectionFolder) {
           if (LEVEL_GLYPHS.has(glyph)) {
             markHtml = navGlyphHtml(glyph, "folder", {
               folderCode: sectionCode || glyph,
@@ -1384,8 +1397,9 @@
 
       explorerItems.forEach((group) => {
         // Top-level section_ref (e.g. moex.dams «Глоссарий») — leaf, not a folder.
+        // Match peer groups: no kind/glyph icon at this hierarchy level.
         if (group.attributes?.kind === "section_ref") {
-          appendNavClassNode(tree, group, 0);
+          appendNavClassNode(tree, group, 0, { omitGlyph: true });
           return;
         }
         const gId = group.id;
@@ -1529,7 +1543,8 @@
             { section_id: sec.id, nav_glyph: sec.nav_glyph },
             { type: sec.type, publicationKind: sec.kind }
           );
-        if (LEVEL_GLYPHS.has(secGlyph) || secGlyph === "glossary") {
+        // Spec section list: level plaques only; glossary matches plain siblings.
+        if (LEVEL_GLYPHS.has(secGlyph)) {
           sBtn.innerHTML = `${navGlyphHtml(secGlyph, "menu")} <span>${escapeHtml(sec.title)}</span>`;
         } else {
           sBtn.textContent = sec.title;
@@ -2939,7 +2954,7 @@
         : item.title || fileName || item.id;
     card.innerHTML = `
       <header class="detail-head">
-        <h1>${escapeHtml(heading)}</h1>
+        <h1>${yamlFileMarkHtml()}${escapeHtml(heading)}</h1>
         <div class="badge-row">
           <span class="badge-pill">YAML</span>
           ${version ? `<span class="badge-pill">${escapeHtml(String(version))}</span>` : ""}
@@ -4080,10 +4095,11 @@
         { nav_glyph: section.nav_glyph, section_id: section.id },
         { type: section.type, publicationKind: section.kind }
       );
-    const sectionBadge =
-      LEVEL_GLYPHS.has(sectionGlyph) || sectionGlyph === "glossary"
-        ? navGlyphHtml(sectionGlyph, "card")
-        : "";
+    // Content section heads: level plaques only. Glossary matches plain sections
+    // under specifications; impl nav trees still use glossary glyphs in the menu.
+    const sectionBadge = LEVEL_GLYPHS.has(sectionGlyph)
+      ? navGlyphHtml(sectionGlyph, "card")
+      : "";
     head.innerHTML = `${sectionBadge}<h2>${escapeHtml(section.title)}</h2><span class="muted">${escapeHtml(section.type)}</span>`;
     head.addEventListener("click", () => {
       // Collapse only — do not setHash (would re-render and hide the body permanently

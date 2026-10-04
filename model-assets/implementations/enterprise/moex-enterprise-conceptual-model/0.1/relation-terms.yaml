@@ -596,3 +596,113 @@ relation_terms:
   inverse_label_en: signs
   symmetric: false
   default_relationship_kind: association
+- element_id: dams:relterm/hostedOn
+  name: hostedOn
+  title: размещён в / хостит
+  description: Пользователь размещён / работает в инфо-системе.
+  lifecycle_status: active
+  forward_label: размещён в
+  forward_label_en: hosted on
+  inverse_label: хостит
+  inverse_label_en: hosts
+  symmetric: false
+  default_relationship_kind: association
+- element_id: dams:relterm/ofLedger
+  name: ofLedger
+  title: относится к счёту / имеет субсчёт
+  description: Лицевой счёт или связь относится к счёту АБС.
+  lifecycle_status: active
+  forward_label: относится к счёту
+  forward_label_en: of ledger account
+  inverse_label: имеет субсчёт/связь
+  inverse_label_en: has subledger or link
+  symmetric: false
+  default_relationship_kind: composition
+- element_id: dams:relterm/ofAccountingSystem
+  name: ofAccountingSystem
+  title: в АБС / содержит счета
+  description: Счёт принадлежит АБС.
+  lifecycle_status: active
+  forward_label: в АБС
+  forward_label_en: of accounting system
+  inverse_label: содержит счета
+  inverse_label_en: has ledger accounts
+  symmetric: false
+  default_relationship_kind: composition
+- element_id: dams:relterm/ofSubledger
+  name: ofSubledger
+  title: по лицевому счёту / имеет проводки
+  description: Проводка может относиться к лицевому счёту.
+  lifecycle_status: active
+  forward_label: по лицевому счёту
+  forward_label_en: of subledger
+  inverse_label: имеет проводки
+  inverse_label_en: has journal entries
+  symmetric: false
+  default_relationship_kind: association
+- element_id: dams:relterm/postsTo
+  name: postsTo
+  title: проводится на / принимает проводки
+  description: Проводка проводится на счёт АБС.
+  lifecycle_status: active
+  forward_label: проводится на
+  forward_label_en: posts to
+  inverse_label: принимает проводки
+  inverse_label_en: receives postings
+  symmetric: false
+  default_relationship_kind: association
+- element_id: dams:relterm/denominatedIn
+  name: denominatedIn
+  title: номинирован в / номинирует
+  description: Связь счёта пользователя номинирована в валюте.
+  lifecycle_status: active
+  forward_label: номинирован в
+  forward_label_en: denominated in
+  inverse_label: номинирует
+  inverse_label_en: denominates
+  symmetric: false
+  default_relationship_kind: association
+- element_id: dams:relterm/holdsAsset
+  name: holdsAsset
+  title: держит актив / входит в портфель
+  description: Портфель держит актив.
+  lifecycle_status: active
+  forward_label: держит актив
+  forward_label_en: holds asset
+  inverse_label: входит в портфель
+  inverse_label_en: held in portfolio
+  symmetric: false
+  default_relationship_kind: association
+- element_id: dams:relterm/ofPortfolio
+  name: ofPortfolio
+  title: относится к портфелю / включает
+  description: Связь портфеля со счётом.
+  lifecycle_status: active
+  forward_label: относится к портфелю
+  forward_label_en: of portfolio
+  inverse_label: включает
+  inverse_label_en: includes
+  symmetric: false
+  default_relationship_kind: association
+- element_id: dams:relterm/ofTerminal
+  name: ofTerminal
+  title: на терминале / обслуживает
+  description: Связь торгового терминала с участием / инструментом / площадкой.
+  lifecycle_status: active
+  forward_label: на терминале
+  forward_label_en: of terminal
+  inverse_label: обслуживает
+  inverse_label_en: serves
+  symmetric: false
+  default_relationship_kind: association
+- element_id: dams:relterm/occurredOnLogin
+  name: occurredOnLogin
+  title: произошло на логине / имеет события
+  description: Событие логина относится к логину ТКС.
+  lifecycle_status: active
+  forward_label: произошло на логине
+  forward_label_en: occurred on login
+  inverse_label: имеет события
+  inverse_label_en: has login events
+  symmetric: false
+  default_relationship_kind: composition

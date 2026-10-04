@@ -873,15 +873,9 @@ def wrap_dams_explorer_roots(
         },
         children=[],
     )
+    # Top-level spec peers (Overview / Classes / Glossary / …) share plain chrome —
+    # no glossary glyph here; impl nav may still stamp nav_glyph=glossary.
     glossary_ref = _section_ref("glossary", "Глоссарий")
-    glossary_ref = glossary_ref.model_copy(
-        update={
-            "attributes": {
-                **(glossary_ref.attributes or {}),
-                "nav_glyph": "glossary",
-            }
-        }
-    )
     return [
         overview_root,
         classes_root,

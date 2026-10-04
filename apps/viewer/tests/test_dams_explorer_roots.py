@@ -87,7 +87,8 @@ def test_wrap_roots_placeholder_implementations(tmp_path: Path):
     assert roots[2].id == "section:glossary"
     assert roots[2].title == "Глоссарий"
     assert roots[2].attributes.get("section_id") == "glossary"
-    assert roots[2].attributes.get("nav_glyph") == "glossary"
+    # Spec top-level peers share plain chrome (no glossary glyph).
+    assert "nav_glyph" not in (roots[2].attributes or {})
     assert roots[1].children[0].id == "group:pkg"
     assert roots[3].id == "group:spec-files"
     assert roots[3].children

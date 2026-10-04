@@ -85,8 +85,11 @@ LinkML class inheritance.
   as conceptual entities and relationships in
   `moex-enterprise-conceptual-model`.
 - Wave 2 authors the blue commercial + HR slice (Counterparty, Product/Sale/
-  Payment, Department/Employee/Role, …). Deferred: ABS / accounts /
-  info-systems / postings and green draft junk (curves, deposits, portfolio).
+  Payment, Department/Employee/Role, …).
+- Wave 3 completes drawio table coverage: ABS / ledger accounts, info-systems,
+  journal entries, CRM stubs (`Act`, `SalesFunnel`), and remaining green/ops
+  (`Curve`, `Deposit`, `Portfolio`, `LoginEvent`, `TradingTerminal`, …). Thin
+  drafts stay as concepts without attributes.
 - Catalog gains LDM-008; formal_checks loads the enterprise body by
   `conceptual_implementation_ref` for the warning.
 - Viewer / glossary continue to treat glossary as a generated view of

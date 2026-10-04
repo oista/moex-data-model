@@ -1,5 +1,37 @@
 [
   {
+    "id": "dams:concept/AccountingSystem",
+    "name": "AccountingSystem",
+    "title": "АБС",
+    "description": "Автоматизированная банковская / учётная система (АБС).",
+    "kind": "entity",
+    "definition_mode": "own",
+    "definition_source": "dams:concept/AccountingSystem",
+    "entity_tier": "primary",
+    "dependency_kind": null,
+    "genesis_kind": "native",
+    "aliases": [],
+    "external_class_refs": [],
+    "label": "АБС",
+    "definition": "Автоматизированная банковская / учётная система (АБС)."
+  },
+  {
+    "id": "dams:concept/Act",
+    "name": "Act",
+    "title": "Акт",
+    "description": "Акт (документальный факт). В ER-черновике — тонкая заглушка без атрибутов; концепт без PK/FK-колонок (ADR-029).",
+    "kind": "entity",
+    "definition_mode": "own",
+    "definition_source": "dams:concept/Act",
+    "entity_tier": "primary",
+    "dependency_kind": null,
+    "genesis_kind": "native",
+    "aliases": [],
+    "external_class_refs": [],
+    "label": "Акт",
+    "definition": "Акт (документальный факт). В ER-черновике — тонкая заглушка без атрибутов; концепт без PK/FK-колонок (ADR-029)."
+  },
+  {
     "id": "dams:concept/Asset",
     "name": "Asset",
     "title": "Актив",
@@ -63,6 +95,23 @@
     "aliases": [],
     "label": "бюджетирует / имеет бюджет",
     "definition": "Бюджет проекта."
+  },
+  {
+    "id": "dams:relterm/ofAccountingSystem",
+    "name": "ofAccountingSystem",
+    "title": "в АБС / содержит счета",
+    "description": "Счёт принадлежит АБС.",
+    "kind": "relation-term",
+    "definition_mode": "own",
+    "definition_source": "dams:relterm/ofAccountingSystem",
+    "forward_label": "в АБС",
+    "inverse_label": "содержит счета",
+    "forward_label_en": "of accounting system",
+    "inverse_label_en": "has ledger accounts",
+    "symmetric": false,
+    "aliases": [],
+    "label": "в АБС / содержит счета",
+    "definition": "Счёт принадлежит АБС."
   },
   {
     "id": "dams:relterm/onBehalfOf",
@@ -131,6 +180,38 @@
     "aliases": [],
     "label": "в сессии / включает",
     "definition": "Сессия на площадке / дне / системе."
+  },
+  {
+    "id": "dams:concept/Currency",
+    "name": "Currency",
+    "title": "Валюта",
+    "description": "Валюта номинала / расчётов (из FK на счетах пользователя).",
+    "kind": "entity",
+    "definition_mode": "own",
+    "definition_source": "dams:concept/Currency",
+    "entity_tier": "primary",
+    "dependency_kind": null,
+    "genesis_kind": "native",
+    "aliases": [],
+    "external_class_refs": [],
+    "label": "Валюта",
+    "definition": "Валюта номинала / расчётов (из FK на счетах пользователя)."
+  },
+  {
+    "id": "dams:concept/SalesFunnel",
+    "name": "SalesFunnel",
+    "title": "Воронка продаж",
+    "description": "Воронка продаж / CRM-воронка. Атрибуты черновика (дата рождения) игнорируются — только концепт.",
+    "kind": "entity",
+    "definition_mode": "own",
+    "definition_source": "dams:concept/SalesFunnel",
+    "entity_tier": "primary",
+    "dependency_kind": null,
+    "genesis_kind": "native",
+    "aliases": [],
+    "external_class_refs": [],
+    "label": "Воронка продаж",
+    "definition": "Воронка продаж / CRM-воронка. Атрибуты черновика (дата рождения) игнорируются — только концепт."
   },
   {
     "id": "dams:relterm/memberOf",
@@ -264,6 +345,39 @@
     "external_class_refs": [],
     "label": "Департамент",
     "definition": "Организационное подразделение; может относиться к группе компаний."
+  },
+  {
+    "id": "dams:concept/Deposit",
+    "name": "Deposit",
+    "title": "Депозит",
+    "description": "Депозит; в черновике связан со счётом.",
+    "kind": "entity",
+    "definition_mode": "own",
+    "definition_source": "dams:concept/Deposit",
+    "entity_tier": "primary",
+    "dependency_kind": null,
+    "genesis_kind": "native",
+    "aliases": [],
+    "external_class_refs": [],
+    "label": "Депозит",
+    "definition": "Депозит; в черновике связан со счётом."
+  },
+  {
+    "id": "dams:relterm/holdsAsset",
+    "name": "holdsAsset",
+    "title": "держит актив / входит в портфель",
+    "description": "Портфель держит актив.",
+    "kind": "relation-term",
+    "definition_mode": "own",
+    "definition_source": "dams:relterm/holdsAsset",
+    "forward_label": "держит актив",
+    "inverse_label": "входит в портфель",
+    "forward_label_en": "holds asset",
+    "inverse_label_en": "held in portfolio",
+    "symmetric": false,
+    "aliases": [],
+    "label": "держит актив / входит в портфель",
+    "definition": "Портфель держит актив."
   },
   {
     "id": "dams:relterm/holdsPosition",
@@ -632,6 +746,22 @@
     "definition": "Торговый инструмент, основанный на активе и связанный с эмитентом."
   },
   {
+    "id": "dams:concept/InformationSystem",
+    "name": "InformationSystem",
+    "title": "Инфо-система",
+    "description": "Информационная система / приложение корпоративного контура.",
+    "kind": "entity",
+    "definition_mode": "own",
+    "definition_source": "dams:concept/InformationSystem",
+    "entity_tier": "primary",
+    "dependency_kind": null,
+    "genesis_kind": "native",
+    "aliases": [],
+    "external_class_refs": [],
+    "label": "Инфо-система",
+    "definition": "Информационная система / приложение корпоративного контура."
+  },
+  {
     "id": "dams:relterm/executedBy",
     "name": "executedBy",
     "title": "исполнена / исполняет",
@@ -781,6 +911,22 @@
     "definition": "Корпоративное событие по инструменту / эмитенту."
   },
   {
+    "id": "dams:concept/Curve",
+    "name": "Curve",
+    "title": "Кривая",
+    "description": "Кривая (доходности / ставок и т.п.).",
+    "kind": "entity",
+    "definition_mode": "own",
+    "definition_source": "dams:concept/Curve",
+    "entity_tier": "primary",
+    "dependency_kind": null,
+    "genesis_kind": "native",
+    "aliases": [],
+    "external_class_refs": [],
+    "label": "Кривая",
+    "definition": "Кривая (доходности / ставок и т.п.)."
+  },
+  {
     "id": "dams:concept/CouponPayment",
     "name": "CouponPayment",
     "title": "Купонная выплата",
@@ -795,6 +941,22 @@
     "external_class_refs": [],
     "label": "Купонная выплата",
     "definition": "Купонная выплата по инструменту; может относиться к корпоративному событию."
+  },
+  {
+    "id": "dams:concept/SubledgerAccount",
+    "name": "SubledgerAccount",
+    "title": "Лицевой счёт",
+    "description": "Лицевой счёт (субсчёт) при счёте АБС.",
+    "kind": "entity",
+    "definition_mode": "own",
+    "definition_source": "dams:concept/SubledgerAccount",
+    "entity_tier": "dependent",
+    "dependency_kind": "characteristic",
+    "genesis_kind": "native",
+    "aliases": [],
+    "external_class_refs": [],
+    "label": "Лицевой счёт",
+    "definition": "Лицевой счёт (субсчёт) при счёте АБС."
   },
   {
     "id": "dams:concept/TradingLogin",
@@ -829,6 +991,23 @@
     "definition": "Маркетинговая кампания."
   },
   {
+    "id": "dams:relterm/ofTerminal",
+    "name": "ofTerminal",
+    "title": "на терминале / обслуживает",
+    "description": "Связь торгового терминала с участием / инструментом / площадкой.",
+    "kind": "relation-term",
+    "definition_mode": "own",
+    "definition_source": "dams:relterm/ofTerminal",
+    "forward_label": "на терминале",
+    "inverse_label": "обслуживает",
+    "forward_label_en": "of terminal",
+    "inverse_label_en": "serves",
+    "symmetric": false,
+    "aliases": [],
+    "label": "на терминале / обслуживает",
+    "definition": "Связь торгового терминала с участием / инструментом / площадкой."
+  },
+  {
     "id": "dams:relterm/assignedRole",
     "name": "assignedRole",
     "title": "назначена роль / назначена",
@@ -860,6 +1039,23 @@
     "external_class_refs": [],
     "label": "Назначение роли",
     "definition": "Ассоциация роли и пользователя (Состав ролей)."
+  },
+  {
+    "id": "dams:relterm/denominatedIn",
+    "name": "denominatedIn",
+    "title": "номинирован в / номинирует",
+    "description": "Связь счёта пользователя номинирована в валюте.",
+    "kind": "relation-term",
+    "definition_mode": "own",
+    "definition_source": "dams:relterm/denominatedIn",
+    "forward_label": "номинирован в",
+    "inverse_label": "номинирует",
+    "forward_label_en": "denominated in",
+    "inverse_label_en": "denominates",
+    "symmetric": false,
+    "aliases": [],
+    "label": "номинирован в / номинирует",
+    "definition": "Связь счёта пользователя номинирована в валюте."
   },
   {
     "id": "dams:concept/Collateral",
@@ -1029,6 +1225,23 @@
     "definition": "Штатная единица относится к департаменту."
   },
   {
+    "id": "dams:relterm/ofPortfolio",
+    "name": "ofPortfolio",
+    "title": "относится к портфелю / включает",
+    "description": "Связь портфеля со счётом.",
+    "kind": "relation-term",
+    "definition_mode": "own",
+    "definition_source": "dams:relterm/ofPortfolio",
+    "forward_label": "относится к портфелю",
+    "inverse_label": "включает",
+    "forward_label_en": "of portfolio",
+    "inverse_label_en": "includes",
+    "symmetric": false,
+    "aliases": [],
+    "label": "относится к портфелю / включает",
+    "definition": "Связь портфеля со счётом."
+  },
+  {
     "id": "dams:relterm/ofProject",
     "name": "ofProject",
     "title": "относится к проекту / включает",
@@ -1044,6 +1257,23 @@
     "aliases": [],
     "label": "относится к проекту / включает",
     "definition": "Задача или бюджет относится к проекту."
+  },
+  {
+    "id": "dams:relterm/ofLedger",
+    "name": "ofLedger",
+    "title": "относится к счёту / имеет субсчёт",
+    "description": "Лицевой счёт или связь относится к счёту АБС.",
+    "kind": "relation-term",
+    "definition_mode": "own",
+    "definition_source": "dams:relterm/ofLedger",
+    "forward_label": "относится к счёту",
+    "inverse_label": "имеет субсчёт/связь",
+    "forward_label_en": "of ledger account",
+    "inverse_label_en": "has subledger or link",
+    "symmetric": false,
+    "aliases": [],
+    "label": "относится к счёту / имеет субсчёт",
+    "definition": "Лицевой счёт или связь относится к счёту АБС."
   },
   {
     "id": "dams:relterm/ofCostCenter",
@@ -1111,6 +1341,23 @@
     "external_class_refs": [],
     "label": "Платёж",
     "definition": "Платёж по продукту с участием клиента и/или контрагента."
+  },
+  {
+    "id": "dams:relterm/ofSubledger",
+    "name": "ofSubledger",
+    "title": "по лицевому счёту / имеет проводки",
+    "description": "Проводка может относиться к лицевому счёту.",
+    "kind": "relation-term",
+    "definition_mode": "own",
+    "definition_source": "dams:relterm/ofSubledger",
+    "forward_label": "по лицевому счёту",
+    "inverse_label": "имеет проводки",
+    "forward_label_en": "of subledger",
+    "inverse_label_en": "has journal entries",
+    "symmetric": false,
+    "aliases": [],
+    "label": "по лицевому счёту / имеет проводки",
+    "definition": "Проводка может относиться к лицевому счёту."
   },
   {
     "id": "dams:relterm/placedBy",
@@ -1196,6 +1443,22 @@
     "definition": "Учётная запись пользователя приложений (IAM). Связь с инфо-системами отложена."
   },
   {
+    "id": "dams:concept/Portfolio",
+    "name": "Portfolio",
+    "title": "Портфель",
+    "description": "Портфель активов, связанный со счётом АБС.",
+    "kind": "entity",
+    "definition_mode": "own",
+    "definition_source": "dams:concept/Portfolio",
+    "entity_tier": "primary",
+    "dependency_kind": null,
+    "genesis_kind": "native",
+    "aliases": [],
+    "external_class_refs": [],
+    "label": "Портфель",
+    "definition": "Портфель активов, связанный со счётом АБС."
+  },
+  {
     "id": "dams:relterm/ofService",
     "name": "ofService",
     "title": "предоставляет услугу / входит в",
@@ -1245,6 +1508,39 @@
     "aliases": [],
     "label": "принадлежит системе / содержит",
     "definition": "Сессия / площадка принадлежит торговой системе."
+  },
+  {
+    "id": "dams:relterm/postsTo",
+    "name": "postsTo",
+    "title": "проводится на / принимает проводки",
+    "description": "Проводка проводится на счёт АБС.",
+    "kind": "relation-term",
+    "definition_mode": "own",
+    "definition_source": "dams:relterm/postsTo",
+    "forward_label": "проводится на",
+    "inverse_label": "принимает проводки",
+    "forward_label_en": "posts to",
+    "inverse_label_en": "receives postings",
+    "symmetric": false,
+    "aliases": [],
+    "label": "проводится на / принимает проводки",
+    "definition": "Проводка проводится на счёт АБС."
+  },
+  {
+    "id": "dams:concept/JournalEntry",
+    "name": "JournalEntry",
+    "title": "Проводка",
+    "description": "Бухгалтерская / учётная проводка по счёту АБС.",
+    "kind": "entity",
+    "definition_mode": "own",
+    "definition_source": "dams:concept/JournalEntry",
+    "entity_tier": "primary",
+    "dependency_kind": null,
+    "genesis_kind": "native",
+    "aliases": [],
+    "external_class_refs": [],
+    "label": "Проводка",
+    "definition": "Бухгалтерская / учётная проводка по счёту АБС."
   },
   {
     "id": "dams:concept/MarketMakingProgram",
@@ -1328,6 +1624,23 @@
     "definition": "Проект / инициатива (управление работами и бюджетом)."
   },
   {
+    "id": "dams:relterm/occurredOnLogin",
+    "name": "occurredOnLogin",
+    "title": "произошло на логине / имеет события",
+    "description": "Событие логина относится к логину ТКС.",
+    "kind": "relation-term",
+    "definition_mode": "own",
+    "definition_source": "dams:relterm/occurredOnLogin",
+    "forward_label": "произошло на логине",
+    "inverse_label": "имеет события",
+    "forward_label_en": "occurred on login",
+    "inverse_label_en": "has login events",
+    "symmetric": false,
+    "aliases": [],
+    "label": "произошло на логине / имеет события",
+    "definition": "Событие логина относится к логину ТКС."
+  },
+  {
     "id": "dams:concept/AssetPool",
     "name": "AssetPool",
     "title": "Пул активов",
@@ -1342,6 +1655,23 @@
     "external_class_refs": [],
     "label": "Пул активов",
     "definition": "Пул активов (состав через AssetPoolMembership)."
+  },
+  {
+    "id": "dams:relterm/hostedOn",
+    "name": "hostedOn",
+    "title": "размещён в / хостит",
+    "description": "Пользователь размещён / работает в инфо-системе.",
+    "kind": "relation-term",
+    "definition_mode": "own",
+    "definition_source": "dams:relterm/hostedOn",
+    "forward_label": "размещён в",
+    "inverse_label": "хостит",
+    "forward_label_en": "hosted on",
+    "inverse_label_en": "hosts",
+    "symmetric": false,
+    "aliases": [],
+    "label": "размещён в / хостит",
+    "definition": "Пользователь размещён / работает в инфо-системе."
   },
   {
     "id": "dams:concept/Expense",
@@ -1490,6 +1820,22 @@
     "definition": "Сделка ТКС — самостоятельная транзакционная сущность (primary), несмотря на FK на участника/инструмент в ER-черновике."
   },
   {
+    "id": "dams:concept/LoginEvent",
+    "name": "LoginEvent",
+    "title": "Событие логина",
+    "description": "Событие логина ТКС; зависит от TradingLogin.",
+    "kind": "entity",
+    "definition_mode": "own",
+    "definition_source": "dams:concept/LoginEvent",
+    "entity_tier": "dependent",
+    "dependency_kind": "characteristic",
+    "genesis_kind": "native",
+    "aliases": [],
+    "external_class_refs": [],
+    "label": "Событие логина",
+    "definition": "Событие логина ТКС; зависит от TradingLogin."
+  },
+  {
     "id": "dams:concept/Agreement",
     "name": "Agreement",
     "title": "Соглашение",
@@ -1553,6 +1899,38 @@
     "aliases": [],
     "label": "сторона / имеет сторону",
     "definition": "Договор со стороной-контрагентом или группой."
+  },
+  {
+    "id": "dams:concept/LedgerAccount",
+    "name": "LedgerAccount",
+    "title": "Счёт АБС",
+    "description": "Счёт в АБС / главной книге.",
+    "kind": "entity",
+    "definition_mode": "own",
+    "definition_source": "dams:concept/LedgerAccount",
+    "entity_tier": "dependent",
+    "dependency_kind": "characteristic",
+    "genesis_kind": "native",
+    "aliases": [],
+    "external_class_refs": [],
+    "label": "Счёт АБС",
+    "definition": "Счёт в АБС / главной книге."
+  },
+  {
+    "id": "dams:concept/UserLedgerLink",
+    "name": "UserLedgerLink",
+    "title": "Счёт пользователя",
+    "description": "Связь пользователя приложений со счётом АБС (associative).",
+    "kind": "entity",
+    "definition_mode": "own",
+    "definition_source": "dams:concept/UserLedgerLink",
+    "entity_tier": "dependent",
+    "dependency_kind": "associative",
+    "genesis_kind": "native",
+    "aliases": [],
+    "external_class_refs": [],
+    "label": "Счёт пользователя",
+    "definition": "Связь пользователя приложений со счётом АБС (associative)."
   },
   {
     "id": "dams:concept/AccountRelationship",
@@ -1732,6 +2110,22 @@
     "label": "Торговый счёт",
     "definition": "Торговый счёт ТКС при расчётном коде. Специализация AccountRelationship.",
     "parent_concept_ref": "dams:concept/AccountRelationship"
+  },
+  {
+    "id": "dams:concept/TradingTerminal",
+    "name": "TradingTerminal",
+    "title": "Торговый терминал",
+    "description": "Торговый терминал. В ER-черновике поля похожи на сделку — в КМД только концепт и опциональные связи.",
+    "kind": "entity",
+    "definition_mode": "own",
+    "definition_source": "dams:concept/TradingTerminal",
+    "entity_tier": "primary",
+    "dependency_kind": null,
+    "genesis_kind": "native",
+    "aliases": [],
+    "external_class_refs": [],
+    "label": "Торговый терминал",
+    "definition": "Торговый терминал. В ER-черновике поля похожи на сделку — в КМД только концепт и опциональные связи."
   },
   {
     "id": "dams:relterm/tradedIn",
@@ -1943,6 +2337,22 @@
     "external_class_refs": [],
     "label": "ЦФО",
     "definition": "Центр финансовой ответственности."
+  },
+  {
+    "id": "dams:concept/ClearingPositionDetail",
+    "name": "ClearingPositionDetail",
+    "title": "ЧПД",
+    "description": "ЧПД (черновик: счётоподобная сущность). Тонкий концепт; опциональная связь со счётом АБС.",
+    "kind": "entity",
+    "definition_mode": "own",
+    "definition_source": "dams:concept/ClearingPositionDetail",
+    "entity_tier": "primary",
+    "dependency_kind": null,
+    "genesis_kind": "native",
+    "aliases": [],
+    "external_class_refs": [],
+    "label": "ЧПД",
+    "definition": "ЧПД (черновик: счётоподобная сущность). Тонкий концепт; опциональная связь со счётом АБС."
   },
   {
     "id": "dams:concept/StaffPosition",

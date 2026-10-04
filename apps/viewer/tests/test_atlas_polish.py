@@ -210,6 +210,13 @@ def test_js_nav_glyph_helpers():
     assert "nav-kind--impl" in JS
     assert 'glossary: "G"' in JS
     assert "nav-kind--glossary" in JS
+    assert "function yamlFileSvg" in JS
+    assert "function yamlFileMarkHtml" in JS
+    assert "nav-kind-yaml" in JS
+    assert 'if (g === "source_file") return yamlFileMarkHtml()' in JS
+    # Spec explorer top-level section_ref (Глоссарий) omits glyph; impl keeps it.
+    assert "omitGlyph: true" in JS
+    assert "opts.omitGlyph" in JS
 
 
 def test_css_nav_kind_fixed_square_and_section_frame():
@@ -233,6 +240,10 @@ def test_css_nav_kind_fixed_square_and_section_frame():
     assert "color-mix(in srgb, var(--level-glossary-start) 12%, transparent)" in gloss
     assert "var(--level-glossary-start)" in gloss
     assert "border-radius: 50%" not in gloss.split("}")[0]
+    assert ".nav-kind.nav-kind-yaml" in css
+    yaml_icon = css.split(".nav-kind.nav-kind-yaml {")[1][:220]
+    assert "height: 16px" in yaml_icon
+    assert "background: transparent" in yaml_icon
     assert ".badge-pill.badge-kind-mixin" in css
     assert ".badge-pill.badge-kind-enum" in css
     assert "text-overflow: ellipsis" in css

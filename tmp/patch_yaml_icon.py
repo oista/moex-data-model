@@ -1,0 +1,26 @@
+from pathlib import Path
+
+js_path = Path(r"c:\Users\bons1\IdeaProjects\moex-data-model\apps\viewer\static\viewer.js")
+js = js_path.read_text(encoding="utf-8")
+i = js.find("  function yamlFileSvg() {")
+j = js.find("  function yamlFileMarkHtml()", i)
+if i < 0 or j < 0:
+    raise SystemExit(f"markers missing {i} {j}")
+svg = (
+    '<svg class="nav-kind-yaml-shape" viewBox="0 0 80 89" fill="none" '
+    'aria-hidden="true" focusable="false">'
+    '<g stroke="#ff6641" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round">'
+    '<path d="M14.8 35.4V18.2A8.2 8.2 0 0 1 23 10h27.6L66.2 23.6v11.8"/>'
+    '<path d="M50.6 10v13.6h15.6"/>'
+    '<path d="M24.2 21.6h24.8M24.2 28.8h20.2M24.2 36h13.6"/>'
+    '<rect x="6.6" y="37.2" width="66.8" height="23.4" rx="8.4"/>'
+    '<path d="M14.8 60.6v10.6A8.2 8.2 0 0 0 23 79.4h34.2A8.2 8.2 0 0 0 65.4 71.2V60.6"/>'
+    '<path d="M26.8 66.4h26.4M31.2 73.6h17.6"/>'
+    "</g>"
+    '<text x="40" y="53.4" text-anchor="middle" fill="#ff6641" '
+    'font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="12" font-weight="700">yaml</text>'
+    "</svg>"
+)
+new = f"  function yamlFileSvg() {{\n    return `{svg}`;\n  }}\n\n"
+js_path.write_text(js[:i] + new + js[j:], encoding="utf-8")
+print("restored svg", len(svg))

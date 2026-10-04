@@ -933,6 +933,24 @@ a {
   padding-left: 2px;
   padding-right: 2px;
 }
+.nav-kind.nav-kind-yaml {
+  width: 14px;
+  min-width: 14px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+.nav-kind.nav-kind-yaml .nav-kind-yaml-shape {
+  display: block;
+  width: 14px;
+  height: 16px;
+  overflow: visible;
+  pointer-events: none;
+  object-fit: contain;
+}
 .nav-kind.kind-plain {
   color: var(--class-color-plain);
   border-color: var(--class-color-plain);
@@ -1147,6 +1165,15 @@ a {
   line-height: 18px;
   font-size: 11px;
   flex-shrink: 0;
+}
+.detail-head h1 .nav-kind.nav-kind-yaml {
+  width: 18px;
+  min-width: 18px;
+  height: 20px;
+}
+.detail-head h1 .nav-kind.nav-kind-yaml .nav-kind-yaml-shape {
+  width: 18px;
+  height: 20px;
 }
 .detail-head h1 .nav-kind-section {
   width: 24px;
