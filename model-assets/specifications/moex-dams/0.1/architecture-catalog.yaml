@@ -38,6 +38,50 @@ nodes:
       Demo IT-solution DAMS Impl (dams-data-model / solution). Realizes
       enterprise conceptual entities; not the enterprise SoT.
 
+  - id: mdm-solution
+    role: specification_implementation
+    title: Модель данных MDM
+    version: "0.1.0"
+    conforms_to: moex-dams
+    module_id: moex:module:mdm-solution
+    order: 111
+    description: >
+      IT-solution DAMS Impl for MDM (золотые записи ЮЛ/ФЛ и связи).
+      Imported from Object/ObjectAttribute (ADR-022).
+
+  - id: ucd-solution
+    role: specification_implementation
+    title: Модель данных UCD
+    version: "0.1.0"
+    conforms_to: moex-dams
+    module_id: moex:module:ucd-solution
+    order: 112
+    description: >
+      IT-solution DAMS Impl for UCD (организации, сотрудники, соглашения).
+      Imported from Object/ObjectAttribute (ADR-022).
+
+  - id: crm-solution
+    role: specification_implementation
+    title: Модель данных CRM
+    version: "0.1.0"
+    conforms_to: moex-dams
+    module_id: moex:module:crm-solution
+    order: 113
+    description: >
+      IT-solution DAMS Impl for CRM (клиент, контакт, привлечение).
+      Imported from Object/ObjectAttribute (ADR-022).
+
+  - id: esed-solution
+    role: specification_implementation
+    title: Модель данных ЕСЭД
+    version: "0.1.0"
+    conforms_to: moex-dams
+    module_id: moex:module:esed-solution
+    order: 114
+    description: >
+      IT-solution DAMS Impl for ЕСЭД (документный контур).
+      Imported from Object/ObjectAttribute (ADR-022).
+
   - id: moex-enterprise-conceptual-model
     role: specification_implementation
     title: MOEX Enterprise Conceptual Model

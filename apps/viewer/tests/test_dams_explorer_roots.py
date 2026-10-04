@@ -39,6 +39,15 @@ def test_build_spec_file_items_repo():
     assert "file:schemas/moex-core.yaml" in ids
     assert all(i.attributes.get("kind") == "source_file" for i in items)
     assert all(i.attributes.get("text") for i in items)
+    by_file = {i.attributes["file_name"]: i for i in items}
+    assert by_file["specification.yaml"].title == "Конверт спецификации"
+    assert by_file["moex-core.yaml"].title == "Ядро модели данных"
+    assert by_file["moex-dams.yaml"].title == "Корневая схема"
+    for item in items:
+        name = item.attributes["file_name"]
+        assert item.title != name
+        desc = item.description or ""
+        assert 100 <= len(desc) <= 200, (name, len(desc), desc)
 
 
 def test_wrap_roots_placeholder_implementations(tmp_path: Path):
@@ -73,6 +82,16 @@ def test_wrap_roots_placeholder_implementations(tmp_path: Path):
     assert all(c.attributes.get("kind") == "section_ref" for c in roots[0].children)
     assert roots[1].children[0].id == "group:pkg"
     assert roots[2].children
+    unknown = next(
+        c
+        for c in roots[2].children
+        if (c.attributes or {}).get("path") == "schemas/a.yaml"
+    )
+    assert unknown.title == "a.yaml"
+    envelope = next(
+        c for c in roots[2].children if c.id == "file:specification.yaml"
+    )
+    assert envelope.title == "Конверт спецификации"
     assert roots[3].id == "group:requirements"
     assert {c.id for c in roots[3].children} == {
         "group:requirements-conceptual",

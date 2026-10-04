@@ -38,11 +38,19 @@ moex-model import-solution --xlsx <path> --system MDM|UCD|CRM|ЕСЭД --force
 
 После импорта:
 
+1. Зарегистрируйте Impl в
+   [`architecture-catalog.yaml`](../../model-assets/specifications/moex-dams/0.1/architecture-catalog.yaml)
+   (`role: specification_implementation`, `conforms_to: moex-dams`, `module_id`).
+   Без записи в каталоге модуль есть в HTML, но **не** появляется в
+   `moex.dams → Реализации`.
+2. Пересоберите viewer:
+
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-viewer.ps1
 ```
 
-В дереве viewer появятся модули `moex:module:{mdm,ucd,crm,esed}-solution`.
+В дереве `moex.dams → Реализации` появятся MDM / UCD / CRM / ЕСЭД
+(`moex:module:{mdm,ucd,crm,esed}-solution`).
 
 ## Что куда пишется
 

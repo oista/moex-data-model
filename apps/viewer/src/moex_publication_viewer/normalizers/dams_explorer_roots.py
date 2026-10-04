@@ -22,6 +22,81 @@ def _file_item_id(rel_path: str) -> str:
     return f"file:{rel_path.replace(chr(92), '/')}"
 
 
+# Russian display titles and 100–200 character descriptions for DAMS spec YAML files.
+# Tree uses the title; the source-file card appends [filename.yaml].
+_SPEC_FILE_META: dict[str, tuple[str, str]] = {
+    "specification.yaml": (
+        "Конверт спецификации",
+        "Дескриптор эталона DAMS: идентификатор, версия, стандарт LinkML и ссылка "
+        "на нормативное тело. Классы живут в schemas/; этот файл задаёт оболочку "
+        "спецификации.",
+    ),
+    "moex-dams.yaml": (
+        "Корневая схема",
+        "Точка сборки модулей DAMS и контейнер MOEXModelRepository. Объединяет "
+        "импорты в одну схему для совместной проверки моделей, справочников, "
+        "потоков и контрактов.",
+    ),
+    "moex-core.yaml": (
+        "Ядро модели данных",
+        "Описывает уровни conceptual, logical и physical и явный Mapping между "
+        "ними. Это тело модели решения: пакеты, сущности, атрибуты, физические "
+        "объекты и соответствия.",
+    ),
+    "moex-registries.yaml": (
+        "Справочные проекции",
+        "Локальные ссылки на внешние мастер-системы: EAM, глоссарий, роли, "
+        "политики и Clinkr. Модель указывает стабильные идентификаторы и не "
+        "копирует справочники целиком.",
+    ),
+    "moex-governance.yaml": (
+        "Управление данными",
+        "Сквозные правила владения, жизненного цикла, классификации и политик. "
+        "Накладываются на любые элементы модели через mixins и отдельные "
+        "назначения, а не только поля сущностей.",
+    ),
+    "moex-integration.yaml": (
+        "Интеграционные потоки",
+        "Связывает топологию интеграции из Clinkr с семантикой модели: кто и что "
+        "передаётся на логическом и физическом уровне. Канал и системы остаются "
+        "в Clinkr.",
+    ),
+    "moex-contract-binding.yaml": (
+        "Привязка к контракту",
+        "Машиночитаемый срез модели в дата-контракте: неизменяемая ревизия, выбор "
+        "сущностей и атрибутов, совместимость и контрольная сумма. Это не полная "
+        "копия модели.",
+    ),
+    "moex-analytics.yaml": (
+        "Аналитический профиль",
+        "Опциональный слой метрик и измерений поверх логической модели. Не "
+        "обязателен для базовой модели решения; аналитика ссылается на "
+        "logical-элементы, без параллельной онтологии.",
+    ),
+    "moex-requirements.yaml": (
+        "Схема требований",
+        "Классы каталога нормативных требований: формулировка, область "
+        "применимости и формальные проверки assess. Это схема пунктов, а не сам "
+        "каталог требований ИТ-решения.",
+    ),
+    "moex-types.yaml": (
+        "Типы и шкалы",
+        "Общие технические типы и стабильные перечисления DAMS: статусы, уровни "
+        "модели, SemVer и дайджесты. Базовый слой импортов, чтобы модули не "
+        "размножали локальные enum.",
+    ),
+}
+
+
+def _spec_file_display(rel: str, yaml_description: str | None) -> tuple[str, str]:
+    """Return (tree title, card description) for a spec YAML path."""
+    name = Path(rel).name
+    meta = _SPEC_FILE_META.get(name)
+    if meta:
+        return meta
+    return name, yaml_description or ""
+
+
 def _read_yaml_meta(path: Path) -> tuple[str | None, str | None, dict[str, Any]]:
     """Return (version, description, raw_mapping) best-effort."""
     text = path.read_text(encoding="utf-8")
@@ -136,16 +211,18 @@ def build_spec_file_items(spec_dir: Path) -> list[PublicationItem]:
     items: list[PublicationItem] = []
     for d in items_data:
         name = Path(d["rel"]).name
+        title, description = _spec_file_display(d["rel"], d["description"])
         items.append(
             PublicationItem(
                 id=d["id"],
-                title=name,
-                description=d["description"],
+                title=title,
+                description=description or None,
                 attributes={
                     "kind": "source_file",
                     "path": d["rel"],
+                    "file_name": name,
                     "version": d["version"],
-                    "description": d["description"],
+                    "description": description or d["description"],
                     "text": d["text"],
                     "refs_out": d["refs_out"],
                     "refs_in": refs_in[d["id"]],

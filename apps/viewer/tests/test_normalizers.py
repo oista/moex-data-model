@@ -426,6 +426,8 @@ def test_dams_explorer_real_schema():
     assert "file:schemas/moex-core.yaml" in file_ids
     envelope = next(f for f in files_root.children if f.id == "file:specification.yaml")
     assert envelope.attributes.get("kind") == "source_file"
+    assert envelope.title == "Конверт спецификации"
+    assert envelope.attributes.get("file_name") == "specification.yaml"
     assert "specification_kind" in (envelope.attributes.get("text") or "")
     assert "file:schemas/moex-dams.yaml" in (envelope.attributes.get("refs_out") or [])
 

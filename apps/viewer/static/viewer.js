@@ -1845,9 +1845,18 @@
     const version = attrs.version || "";
     const refsOut = Array.isArray(attrs.refs_out) ? attrs.refs_out : [];
     const refsIn = Array.isArray(attrs.refs_in) ? attrs.refs_in : [];
+    const fileName = String(attrs.file_name || attrs.path || "")
+      .replace(/\\/g, "/")
+      .split("/")
+      .filter(Boolean)
+      .pop();
+    const heading =
+      item.title && fileName && item.title !== fileName
+        ? `${item.title} [${fileName}]`
+        : item.title || fileName || item.id;
     card.innerHTML = `
       <header class="detail-head">
-        <h1>${escapeHtml(item.title || item.id)}</h1>
+        <h1>${escapeHtml(heading)}</h1>
         <div class="badge-row">
           <span class="badge-pill">YAML</span>
           ${version ? `<span class="badge-pill">${escapeHtml(String(version))}</span>` : ""}
@@ -2258,10 +2267,12 @@
         if (hit) return;
         if (node.attributes?.kind !== "source_file") return;
         const path = String(node.attributes?.path || node.title || node.id);
+        const fileName = String(node.attributes?.file_name || "");
         if (
           path.endsWith(key) ||
           path.includes(key) ||
           node.id.includes(key) ||
+          fileName === key ||
           (node.title || "") === key
         ) {
           hit = node.id;
