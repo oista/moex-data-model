@@ -105,6 +105,10 @@
   --level-pdm-start: #c4a484;
   --level-pdm-end: #8a8178;
   --level-pdm-text: #3d342c;
+  /* Implementation ref glyph — darker CDM + Spec red */
+  --level-impl-start: #c73a1e;
+  --level-impl-end: #950d13;
+  --level-impl-text: #ffffff;
 }
 
 [data-theme="dark"] {
@@ -164,4 +168,7 @@
   --level-pdm-start: #a89880;
   --level-pdm-end: #6e675e;
   --level-pdm-text: #f1ebe3;
+  --level-impl-start: #e54750;
+  --level-impl-end: #b01d28;
+  --level-impl-text: #ffffff;
 }

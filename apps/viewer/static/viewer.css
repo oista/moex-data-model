@@ -154,6 +154,10 @@ svg {
   --level-pdm-start: #c4a484;
   --level-pdm-end: #8a8178;
   --level-pdm-text: #3d342c;
+  /* Implementation ref glyph — darker CDM + Spec red */
+  --level-impl-start: #c73a1e;
+  --level-impl-end: #950d13;
+  --level-impl-text: #ffffff;
 }
 
 [data-theme="dark"] {
@@ -213,6 +217,9 @@ svg {
   --level-pdm-start: #a89880;
   --level-pdm-end: #6e675e;
   --level-pdm-text: #f1ebe3;
+  --level-impl-start: #e54750;
+  --level-impl-end: #b01d28;
+  --level-impl-text: #ffffff;
 }
 
 
@@ -667,6 +674,9 @@ a {
   padding: 4px 2px 6px;
   margin: 2px 0 4px;
 }
+.nav-group.nav-implementations > .nav-group-btn {
+  font-weight: 700;
+}
 .nav-group.nav-implementations > .nav-group-children {
   margin-left: 8px;
   padding: 2px 4px 2px 2px;
@@ -737,6 +747,12 @@ a {
   color: var(--class-color-enum);
   border-color: var(--class-color-enum);
   background: color-mix(in srgb, var(--class-color-enum) 12%, transparent);
+}
+.nav-kind.nav-kind--impl {
+  border-radius: 50%;
+  color: var(--level-impl-text);
+  background: linear-gradient(135deg, var(--level-impl-start), var(--level-impl-end));
+  border-color: var(--level-impl-end);
 }
 .nav-kind-section {
   display: inline-flex;
@@ -853,11 +869,11 @@ a {
   background: linear-gradient(135deg, var(--level-pdm-start), var(--level-pdm-end));
   border-color: var(--level-pdm-end);
 }
-/* Level folders: gray folder chrome + unchanged plaque inside + light tint */
+/* Level folders: gray folder chrome + compact plaque inside + light tint */
 .nav-kind.nav-kind-folder.nav-kind-folder--level {
   width: auto;
-  min-width: 34px;
-  height: 18px;
+  min-width: 30px;
+  height: 16px;
   padding: 0 2px;
   gap: 0;
   border-color: color-mix(in srgb, var(--level-folder-edge, var(--muted)) 45%, var(--border));
@@ -870,6 +886,9 @@ a {
 .nav-kind.nav-kind-folder.nav-kind-folder--level .nav-glyph {
   position: relative;
   z-index: 1;
+  font-size: 8px;
+  line-height: 12px;
+  padding: 0 3px;
 }
 .nav-kind.nav-kind-folder.nav-kind-folder--cdm {
   --level-folder-tint: var(--level-cdm-start);

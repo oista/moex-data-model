@@ -311,7 +311,7 @@
     individual: "I",
     source_file: "F",
     requirement: "T",
-    implementation_ref: "R",
+    implementation_ref: "M",
     section_ref: "S",
     group: "G",
     class: "C",
@@ -357,7 +357,8 @@
     }
     const letter = KIND_LETTER[g] || String(o.letter || "C");
     const kindClasses = o.kindClasses || "";
-    return `<span class="nav-kind ${kindClasses}" aria-hidden="true">${escapeHtml(letter)}</span>`;
+    const implClass = g === "implementation_ref" ? " nav-kind--impl" : "";
+    return `<span class="nav-kind ${kindClasses}${implClass}" aria-hidden="true">${escapeHtml(letter)}</span>`;
   }
 
   function chevronSvg(direction) {

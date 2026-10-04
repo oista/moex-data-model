@@ -75,6 +75,9 @@ def test_css_nav_implementations_darker_band():
     css = assemble_css()
     assert ".nav-group.nav-implementations" in css
     assert "color-mix(in srgb, var(--text) 5%, var(--surface-1))" in css
+    assert ".nav-group.nav-implementations > .nav-group-btn" in css
+    impl_btn = css.split(".nav-group.nav-implementations > .nav-group-btn")[1][:80]
+    assert "font-weight: 700" in impl_btn
 
 
 def test_css_active_gray_and_spec_pill_dark():
@@ -92,6 +95,7 @@ def test_css_level_glyph_tokens_and_slots():
     assert "--level-cdm-start:" in css
     assert "--level-ldm-start:" in css
     assert "--level-pdm-start:" in css
+    assert "--level-impl-start:" in css
     assert ".nav-glyph--cdm" in css
     assert ".nav-glyph--ldm" in css
     assert ".nav-glyph--pdm" in css
@@ -99,6 +103,17 @@ def test_css_level_glyph_tokens_and_slots():
     assert ".nav-glyph--card" in css
     assert ".nav-kind-folder--level" in css
     assert ".nav-kind-folder--cdm" in css
+    level_folder = css.split(
+        ".nav-kind.nav-kind-folder.nav-kind-folder--level {"
+    )[1][:220]
+    assert "min-width: 30px" in level_folder
+    assert "height: 16px" in level_folder
+    folder_glyph = css.split(
+        ".nav-kind.nav-kind-folder.nav-kind-folder--level .nav-glyph {"
+    )[1][:160]
+    assert "font-size: 8px" in folder_glyph
+    assert "line-height: 12px" in folder_glyph
+    assert "padding: 0 3px" in folder_glyph
 
 
 def test_js_nav_glyph_helpers():
@@ -109,6 +124,8 @@ def test_js_nav_glyph_helpers():
     assert 'logical: "ldm"' in JS
     assert 'physical: "pdm"' in JS
     assert "nav-kind-folder--level" in JS
+    assert 'implementation_ref: "M"' in JS
+    assert "nav-kind--impl" in JS
 
 
 def test_css_nav_kind_fixed_square_and_section_frame():
@@ -120,6 +137,11 @@ def test_css_nav_kind_fixed_square_and_section_frame():
     assert ".nav-kind-section" in css
     assert "filter: saturate(1.18)" in css
     assert ".nav-kind.kind-enum" in css
+    assert ".nav-kind.nav-kind--impl" in css
+    impl = css.split(".nav-kind.nav-kind--impl")[1][:220]
+    assert "border-radius: 50%" in impl
+    assert "var(--level-impl-start)" in impl
+    assert "var(--level-impl-end)" in impl
     assert ".badge-pill.badge-kind-mixin" in css
     assert ".badge-pill.badge-kind-enum" in css
     assert "text-overflow: ellipsis" in css

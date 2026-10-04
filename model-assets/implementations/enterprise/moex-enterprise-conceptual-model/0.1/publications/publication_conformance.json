@@ -44,7 +44,7 @@
         "relationships"
       ],
       "result_status": "pass",
-      "result_message": "semantic count=15 (>= 1); relationships: 15",
+      "result_message": "semantic count=14 (>= 1); relationships: 14",
       "obligation": "required"
     },
     {
