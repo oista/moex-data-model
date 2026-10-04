@@ -110,7 +110,7 @@
   {
     "id": "PublicationSectionKind",
     "title": "Publication section kind",
-    "description": "Закрытый семантический словарь разделов (overview, classes, taxonomy, glossary, conformance, model-assessment, …). ADR-016. taxonomy ≠ classes. model-assessment ≠ conformance.",
+    "description": "Закрытый семантический словарь разделов (overview, classes, taxonomy, glossary, conformance, model-assessment, documentation, …). ADR-016 / ADR-028. taxonomy ≠ classes. model-assessment ≠ conformance. documentation ≠ glossary.",
     "kind": "enum"
   },
   {
@@ -141,6 +141,12 @@
     "id": "Overview",
     "title": "Overview",
     "description": "Kind overview: вводный раздел модуля.",
+    "kind": "section"
+  },
+  {
+    "id": "Documentation",
+    "title": "Documentation",
+    "description": "Kind documentation: owner-authored docs/toc.yaml + consumer-context; reserved docs/adr/. ADR-028. Recommended on implementation.",
     "kind": "section"
   },
   {

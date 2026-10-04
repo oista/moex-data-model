@@ -1,5 +1,5 @@
 ---
-description: New PublicationModule must declare profile, kinds, and satisfies when a reference contract applies (ADR-016 / ADR-019 / ADR-024)
+description: New PublicationModule must declare profile, kinds, and satisfies when a reference contract applies (ADR-016 / ADR-019 / ADR-024 / ADR-028)
 globs:
   - "**/publish.yaml"
   - "model-assets/specifications/**/publications/**"
@@ -7,7 +7,7 @@ globs:
   - "apps/viewer/src/moex_publication_viewer/**"
 ---
 
-# Publication modules (ADR-016 / ADR-019 / ADR-024)
+# Publication modules (ADR-016 / ADR-019 / ADR-024 / ADR-028)
 
 When adding or editing a `PublicationModule` (`publish.yaml`):
 
@@ -17,11 +17,11 @@ When adding or editing a `PublicationModule` (`publish.yaml`):
 4. Respect ProfileSpec:
    - `linkml-specification`: required overview, classes, schema-files; recommended enumerations, slots, **glossary**; **forbidden taxonomy**
    - `ontology`: required overview, classes, glossary; recommended schema-files, identity; forbidden enumerations/slots (ADR-024). Kind `taxonomy` is **deprecated** — do not require it; put hierarchy under `classes`. Glossary is a flat view of the same class entities, not a separate dataset. Overview may nest a Glossary folder by definition site; that is not a second is_a/subClassOf tree (ADR-027).
-   - `implementation`: required overview, conformance; recommended bindings, data-flows, model-assessment; forbidden taxonomy
+   - `implementation`: required overview, conformance; recommended bindings, data-flows, model-assessment, **documentation** (ADR-028 `docs/toc.yaml`); forbidden taxonomy
 5. One kind `classes` — renderer mode comes from profile (`data-structure` vs `ontology-list`). Do **not** add `OWL Classes` / `SHACL Classes` kinds. Empty explorer stubs must not be used to satisfy `classes`.
 6. **ADR-019:** Implementations that claim a reference Spec with inherited `PublicationRequirement`s must set **`satisfies:`** on covering sections (requirement ids). Do not copy reference module ids/files one-to-one. Aggregation and decomposition of `satisfies` are allowed; semantic substitution is not.
 7. Player metamodel docs (`moex.dsp`) use `profile: linkml-specification` and do **not** need dams:logical-entities `satisfies`.
 8. **ADR-020** selection publications may use kinds `external-specification-scope`, `competency-questions`, `term-selection`, `mapping-table`, `dependency-list`, `extraction-provenance` with profile `fibo-external-term-selection`.
 9. **Instance cards:** entity-table sections whose rows are DAMS metamodel instances (conceptual/logical/physical entities, relationships, relation terms) should set **`instance_of:`** to the DAMS class name (`ConceptualEntity`, `LogicalEntity`, `PhysicalObject`, `Relationship`, `RelationTerm`). The viewer opens a class-template card for those rows. Omit `instance_of` for assessment/slice/utility tables.
 
-See: [ADR-016](docs/adr/ADR-016-publication-section-kinds-and-profiles.md), [ADR-019](docs/adr/ADR-019-publication-contract-inheritance.md), [ADR-020](docs/adr/ADR-020-external-specification-scope-and-term-selection.md), [ADR-024](docs/adr/ADR-024-unified-class-entity.md), [DSP README](model-assets/specifications/moex-dsp/0.1/README.md).
+See: [ADR-016](docs/adr/ADR-016-publication-section-kinds-and-profiles.md), [ADR-019](docs/adr/ADR-019-publication-contract-inheritance.md), [ADR-020](docs/adr/ADR-020-external-specification-scope-and-term-selection.md), [ADR-024](docs/adr/ADR-024-unified-class-entity.md), [ADR-028](docs/adr/ADR-028-package-documentation-section.md), [DSP README](model-assets/specifications/moex-dsp/0.1/README.md).

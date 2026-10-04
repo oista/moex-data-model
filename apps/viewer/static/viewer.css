@@ -1879,6 +1879,55 @@ a.table-item-link:hover {
   display: none !important;
 }
 
+.package-docs {
+  display: grid;
+  grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.doc-toc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+}
+
+.doc-toc-heading {
+  margin: var(--space-3) 0 var(--space-1);
+  color: var(--text-tertiary);
+  font-size: var(--font-sm);
+  font-weight: 600;
+}
+
+.doc-toc-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  padding: 0.35rem 0.5rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.doc-toc-item:hover {
+  background: var(--surface-3);
+}
+
+.doc-toc-item[aria-current="page"] {
+  background: var(--surface-3);
+  font-weight: 600;
+}
+
+.doc-page {
+  min-width: 0;
+}
+
 
 
 /* === 60-utilities.css === */

@@ -181,3 +181,11 @@ sections:
       - status
       - severity
       - requirement_code
+
+  - id: documentation
+    title: Documentation
+    kind: documentation
+    type: markdown-doc
+    source:
+      format: yaml
+      path: docs/toc.yaml

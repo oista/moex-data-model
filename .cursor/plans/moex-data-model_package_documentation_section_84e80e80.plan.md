@@ -7,10 +7,10 @@ todos:
     status: completed
   - id: adr-docs-section
     content: "По согласованию: платформенный ADR на kind documentation, схема toc.yaml и шаблон model ADR"
-    status: in_progress
+    status: completed
   - id: viewer-demo
     content: "По согласованию: viewer tree + demo в одном implementation-пакете"
-    status: pending
+    status: completed
 isProject: false
 ---
 

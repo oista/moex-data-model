@@ -1,0 +1,13 @@
+entry_for_agents: consumer-context.md
+pages:
+  - id: consumer-context
+    path: consumer-context.md
+    title: Consumer context
+    audience: both
+    role: contract
+  - id: adr-001
+    path: adr/0001-demo-vertical-slice.md
+    title: Demo vertical slice
+    audience: both
+    role: decision
+    applies_to: []

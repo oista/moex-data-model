@@ -55,6 +55,18 @@ Sidebar order follows [`architecture-catalog.yaml`](../../model-assets/specifica
 
 See `schema/publication-manifest.schema.json` for the contract.
 
+### Package documentation (`kind: documentation`)
+
+Implementation modules may publish owner-authored docs (ADR-028):
+
+- `docs/toc.yaml` — machine index (`entry_for_agents` + `pages`)
+- `docs/consumer-context.md` — required consumer/agent contract
+- `docs/adr/*.md` — optional model decision records (template + TOC `role: decision`)
+
+Point a section at the TOC (`type: markdown-doc`, `kind: documentation`,
+`source.format: yaml`). This is not LinkML gen-doc and not a glossary.
+Schema: `schema/package-docs-toc.schema.json`.
+
 ### Solution ER diagrams (`type: mermaid-diagram`)
 
 Implementation modules may publish pre-generated Mermaid erDiagram artifacts:

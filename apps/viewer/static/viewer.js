@@ -3751,6 +3751,12 @@
       body.appendChild(note);
     }
 
+    if (section.kind === "documentation" && (section.items || []).length) {
+      body.appendChild(renderPackageDocs(section));
+      wrap.appendChild(body);
+      return wrap;
+    }
+
     switch (section.type) {
       case "markdown-doc":
         body.insertAdjacentHTML(
@@ -3782,6 +3788,58 @@
     }
     wrap.appendChild(body);
     return wrap;
+  }
+
+  function renderPackageDocs(section) {
+    const panel = document.createElement("div");
+    panel.className = "package-docs";
+    panel.setAttribute("data-ui", "package-docs");
+
+    const toc = document.createElement("nav");
+    toc.className = "doc-toc";
+    toc.setAttribute("aria-label", "Package documentation");
+
+    const page = document.createElement("div");
+    page.className = "markdown-body doc-page";
+    page.innerHTML = section.content || "";
+
+    function markCurrent(btn) {
+      toc.querySelectorAll("[aria-current]").forEach((el) => el.removeAttribute("aria-current"));
+      if (btn) btn.setAttribute("aria-current", "page");
+    }
+
+    function addNode(parent, item) {
+      const kids = item.children || [];
+      if (item.attributes?.kind === "group" && kids.length) {
+        const group = document.createElement("div");
+        group.className = "doc-toc-group";
+        const label = document.createElement("p");
+        label.className = "doc-toc-heading";
+        label.textContent = item.title || item.id;
+        group.appendChild(label);
+        kids.forEach((child) => addNode(group, child));
+        parent.appendChild(group);
+        return;
+      }
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "doc-toc-item";
+      btn.textContent = item.title || item.id;
+      btn.dataset.docId = item.id;
+      btn.addEventListener("click", () => {
+        page.innerHTML = item.attributes?.content || "";
+        markCurrent(btn);
+      });
+      parent.appendChild(btn);
+    }
+
+    (section.items || []).forEach((item) => addNode(toc, item));
+    const firstBtn = toc.querySelector(".doc-toc-item");
+    markCurrent(firstBtn);
+
+    panel.appendChild(toc);
+    panel.appendChild(page);
+    return panel;
   }
 
   function renderMermaidDiagram(section) {

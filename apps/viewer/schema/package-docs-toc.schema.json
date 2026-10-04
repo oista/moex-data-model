@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://data.moex.com/viewer/package-docs-toc.schema.json",
+  "title": "PackageDocsToc",
+  "type": "object",
+  "required": ["entry_for_agents", "pages"],
+  "additionalProperties": false,
+  "properties": {
+    "entry_for_agents": {
+      "type": "string",
+      "description": "Path (relative to docs/) of the first page agents should read"
+    },
+    "pages": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/page" }
+    }
+  },
+  "$defs": {
+    "page": {
+      "type": "object",
+      "required": ["id", "path", "title", "audience", "role"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "path": { "type": "string" },
+        "title": { "type": "string" },
+        "audience": { "enum": ["human", "agent", "both"] },
+        "role": {
+          "enum": ["contract", "explanation", "how-to", "example", "decision"]
+        },
+        "applies_to": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

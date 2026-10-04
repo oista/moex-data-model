@@ -102,17 +102,16 @@ try {
     $env:PIP_DISABLE_PIP_VERSION_CHECK = "1"
     if (-not $env:PIP_DEFAULT_TIMEOUT) { $env:PIP_DEFAULT_TIMEOUT = "15" }
 
-    if ($doSkipPip) {
+    if ($doSkipPip -or ($depsOk -and -not $doForcePip)) {
         if (-not $depsOk) {
             Write-Error "SkipPip set but viewer deps are not importable in $Python"
         }
-        Write-Host "Skipping pip (SkipPip / VIEWER_SKIP_PIP); using existing venv"
-    } elseif ($depsOk -and -not $doForcePip) {
-        # Refresh editable link without contacting PyPI for dependencies.
-        Write-Host "deps present; pip install -e ./apps/viewer --no-deps (offline-friendly)"
-        & $Python -m pip install -e $ViewerDir --no-deps --disable-pip-version-check
-        if ($LASTEXITCODE -ne 0) {
-            Write-Host "WARNING: offline editable refresh failed; continuing with existing install"
+        # Editable install already present: skip pip entirely. Even
+        # `pip install -e --no-deps` still hits PyPI for PEP 517 build isolation.
+        if ($doSkipPip) {
+            Write-Host "Skipping pip (SkipPip / VIEWER_SKIP_PIP); using existing venv"
+        } else {
+            Write-Host "deps present; skipping pip (use -ForcePip to reinstall)"
         }
     } else {
         Write-Host "pip install -U pip setuptools wheel"
@@ -129,7 +128,11 @@ try {
         Write-Host "pip: $pipVer"
 
         Write-Host "pip install -e ./apps/viewer[dev]"
-        $pipArgs = @("install", "-e", "${ViewerDir}[dev]", "--disable-pip-version-check")
+        $pipArgs = @(
+            "install", "-e", "${ViewerDir}[dev]",
+            "--disable-pip-version-check",
+            "--no-build-isolation"
+        )
         if ($env:VIEWER_PIP_VERBOSE -eq "1") {
             $pipArgs += "-v"
         }

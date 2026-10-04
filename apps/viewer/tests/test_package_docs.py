@@ -277,3 +277,23 @@ def test_group_solution_impl_nav_documentation_folder():
     assert kids[-1].title == "Documentation"
     assert [c.attributes["section_id"] for c in kids[-1].children] == ["documentation"]
     assert kids[-1].children[0].children == []
+
+
+def test_repo_trading_platform_compiles_documentation():
+    from moex_publication_viewer.build import compile_modules
+
+    repo = Path(__file__).resolve().parents[3]
+    modules = compile_modules(repo, enforce_publication_contract=False)
+    trading = next(m for m in modules if m.module_id == "moex:module:trading-solution")
+    doc = next(s for s in trading.sections if s.kind == "documentation")
+    assert doc.content
+    assert any(i.id == "consumer-context" for i in doc.items)
+    assert any(i.id == "group:decisions" for i in doc.items)
+
+
+def test_viewer_js_renders_package_docs():
+    js = (
+        Path(__file__).resolve().parents[1] / "static" / "viewer.js"
+    ).read_text(encoding="utf-8")
+    assert "function renderPackageDocs" in js
+    assert 'data-ui", "package-docs"' in js

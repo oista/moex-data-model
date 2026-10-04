@@ -19,7 +19,7 @@
 | Specification implementation | Публикация, согласованная с эталоном (в т.ч. сам `moex.dsp` как shell docs) |
 | Publication module | Открытый набор экземпляров разделов; `profile` выбирает ProfileSpec |
 | Publication section | Экземпляр раздела: `kind` (семантика) + `type` (render/wire) + опционально `satisfies` |
-| PublicationSectionKind | Закрытый словарь: overview, classes, taxonomy, glossary, … + ADR-020 external-specification-scope, competency-questions, term-selection, mapping-table, dependency-list, extraction-provenance |
+| PublicationSectionKind | Закрытый словарь: overview, classes, taxonomy, glossary, … + ADR-020 kinds + ADR-028 `documentation` |
 | Publication profile | `linkml-specification` \| `ontology` \| `implementation` (ADR-016 base) |
 | Publication requirement | Обязательная capability контракта эталона (ADR-019); покрывается через `satisfies` |
 | Publication conformance report | Отчёт покрытия requirements (отдельно от kernel ConformanceReport) |
@@ -39,7 +39,7 @@
 |---|---|---|---|
 | `linkml-specification` | overview, classes, schema-files | enumerations, slots, glossary | taxonomy |
 | `ontology` | overview, classes, glossary | schema-files, identity | enumerations, slots |
-| `implementation` | overview, conformance | bindings, data-flows, model-assessment | taxonomy |
+| `implementation` | overview, conformance | bindings, data-flows, model-assessment, documentation | taxonomy |
 
 Базовый профиль — слой 1. Унаследованные requirements эталона (слой 2) задаются в `publication-requirements.yaml` Spec и покрываются локальными секциями через `satisfies`.
 

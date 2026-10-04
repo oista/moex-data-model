@@ -277,6 +277,7 @@ def test_repo_dams_trading_has_nested_section_refs() -> None:
         "implnav:trading-solution:group:logical",
         "implnav:trading-solution:group:physical",
         "implnav:trading-solution:group:requirements",
+        "implnav:trading-solution:group:documentation",
     ]
     leaves = [
         c
