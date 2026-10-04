@@ -109,6 +109,10 @@
   --level-impl-start: #c73a1e;
   --level-impl-end: #950d13;
   --level-impl-text: #ffffff;
+  /* Glossary section glyph — burgundy → near-black */
+  --level-glossary-start: #5c1020;
+  --level-glossary-end: #12080a;
+  --level-glossary-text: #ffffff;
 
   /* Class-kind palette (default) — matches config/class-kind-colors.yaml */
   --class-color-plain: #3d8f6e;
@@ -203,4 +207,7 @@
   --level-impl-start: #e54750;
   --level-impl-end: #b01d28;
   --level-impl-text: #ffffff;
+  --level-glossary-start: #7a1830;
+  --level-glossary-end: #1a0a0e;
+  --level-glossary-text: #ffffff;
 }

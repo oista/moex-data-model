@@ -15,6 +15,8 @@ from moex_publication_viewer.build import (
     enrich_dams_explorer_implementations,
     enrich_fibo_explorer_classes,
     enrich_fibo_explorer_implementations,
+    enrich_ontology_catalog_documentation_nav,
+    group_enterprise_conceptual_impl_nav,
     group_solution_impl_nav,
     impl_nav_section_ids,
     impl_section_nav_children,
@@ -189,6 +191,110 @@ def test_group_solution_impl_nav_passthrough_without_required_set() -> None:
     assert group_solution_impl_nav("x", leaves) is leaves
 
 
+def _enterprise_conceptual_sections() -> list[PublicationSection]:
+    return [
+        PublicationSection(id="overview", title="Overview", type="markdown-doc"),
+        PublicationSection(id="conformance", title="Conformance", type="key-value"),
+        PublicationSection(
+            id="conceptual", title="Conceptual entities", type="entity-table"
+        ),
+        PublicationSection(id="glossary", title="Model glossary", type="glossary"),
+        PublicationSection(
+            id="relation-terms", title="Relation terms", type="entity-table"
+        ),
+        PublicationSection(
+            id="relationships", title="Relationships", type="entity-table"
+        ),
+        PublicationSection(
+            id="vocabularies", title="Controlled vocabularies", type="entity-table"
+        ),
+        PublicationSection(
+            id="alignments", title="External alignments", type="entity-table"
+        ),
+        PublicationSection(id="source", title="Source artifacts", type="file-list"),
+    ]
+
+
+def test_group_enterprise_conceptual_impl_nav_nests_overview_and_glossary() -> None:
+    mod = PublicationModule(
+        module_id="moex:module:enterprise-conceptual",
+        title="Enterprise conceptual",
+        sections=_enterprise_conceptual_sections(),
+    )
+    kids = impl_section_nav_children("moex-enterprise-conceptual-model", mod)
+    assert [c.title for c in kids] == [
+        "Overview",
+        "Conceptual entities",
+        "Model glossary",
+        "Relationships",
+        "Source artifacts",
+    ]
+    overview = kids[0]
+    assert overview.id == "implnav:moex-enterprise-conceptual-model:group:overview"
+    assert overview.attributes.get("kind") == "group"
+    assert overview.attributes.get("nav_group") == "overview"
+    assert [c.title for c in overview.children] == [
+        "Overview",
+        "Conformance",
+        "External alignments",
+    ]
+    assert [c.attributes["section_id"] for c in overview.children] == [
+        "overview",
+        "conformance",
+        "alignments",
+    ]
+    assert kids[1].attributes.get("section_id") == "conceptual"
+    assert kids[1].attributes.get("nav_glyph") == "cdm"
+    glossary = kids[2]
+    assert glossary.id == "implnav:moex-enterprise-conceptual-model:group:glossary"
+    assert glossary.attributes.get("kind") == "group"
+    assert glossary.attributes.get("nav_group") == "glossary"
+    assert glossary.attributes.get("nav_glyph") == "glossary"
+    assert [c.title for c in glossary.children] == [
+        "Model glossary",
+        "Relation terms",
+        "Controlled vocabularies",
+    ]
+    assert [c.attributes["section_id"] for c in glossary.children] == [
+        "glossary",
+        "relation-terms",
+        "vocabularies",
+    ]
+    assert_impl_section_nav_coverage(
+        PublicationItem(
+            id="moex-enterprise-conceptual-model",
+            title="Enterprise conceptual",
+            attributes={"kind": "implementation_ref", "module_id": mod.module_id},
+            children=kids,
+        ),
+        [mod],
+    )
+
+
+def test_group_enterprise_conceptual_impl_nav_passthrough_without_required_set() -> None:
+    leaves = [
+        PublicationItem(
+            id="implnav:x:overview",
+            title="Overview",
+            attributes={
+                "kind": "section_ref",
+                "section_id": "overview",
+                "target_module_id": "moex:module:x",
+            },
+        ),
+        PublicationItem(
+            id="implnav:x:conformance",
+            title="Conformance",
+            attributes={
+                "kind": "section_ref",
+                "section_id": "conformance",
+                "target_module_id": "moex:module:x",
+            },
+        ),
+    ]
+    assert group_enterprise_conceptual_impl_nav("x", leaves) is leaves
+
+
 def test_attach_impl_section_nav_children() -> None:
     modules = [
         PublicationModule(
@@ -323,6 +429,25 @@ def test_repo_dams_impl_folders_group_solutions_and_projects() -> None:
     ]
     assert "moex-dsp" in top_ids
     assert "moex-enterprise-conceptual-model" in top_ids
+    ecm = next(c for c in impls.children if c.id == "moex-enterprise-conceptual-model")
+    assert [c.title for c in ecm.children] == [
+        "Overview",
+        "Conceptual entities",
+        "Model glossary",
+        "Relationships",
+        "Source artifacts",
+    ]
+    assert [c.title for c in ecm.children[0].children] == [
+        "Overview",
+        "Conformance",
+        "External alignments",
+    ]
+    assert [c.title for c in ecm.children[2].children] == [
+        "Model glossary",
+        "Relation terms",
+        "Controlled vocabularies",
+    ]
+    assert ecm.children[2].attributes.get("nav_glyph") == "glossary"
     it_folder = next(
         c for c in impls.children if c.id == "group:implementations-it-solutions"
     )
@@ -359,6 +484,32 @@ def test_repo_dams_dsp_includes_classes_explorer_section_ref() -> None:
     assert classes.attributes.get("target_module_id") == "moex:module:dsp"
     # section leaf only — no class-tree expansion under Impl
     assert classes.children == []
+
+
+def test_repo_ontology_catalog_documentation_links_dsp_sections() -> None:
+    """Ontology Catalog → Documentation → moex.dsp.classes / moex.dsp.glossary."""
+    modules = compile_modules(REPO, enforce_publication_contract=False)
+    enrich_ontology_catalog_documentation_nav(modules)
+    ontcat = next(m for m in modules if m.module_id == "moex:module:ontology-catalog")
+    explorer = next(s for s in ontcat.sections if s.type == "explorer")
+    doc = next(
+        i for i in explorer.items if i.id == "group:ontology-catalog:documentation"
+    )
+    assert doc.title == "Documentation"
+    assert doc.attributes.get("nav_group") == "documentation"
+    assert [c.title for c in doc.children] == [
+        "moex.dsp.classes",
+        "moex.dsp.glossary",
+    ]
+    classes, glossary = doc.children
+    assert classes.id == "ontcat:doc:moex.dsp.classes"
+    assert classes.attributes.get("kind") == "section_ref"
+    assert classes.attributes.get("section_id") == "explorer"
+    assert classes.attributes.get("target_module_id") == "moex:module:dsp"
+    assert glossary.id == "ontcat:doc:moex.dsp.glossary"
+    assert glossary.attributes.get("section_id") == "glossary"
+    assert glossary.attributes.get("target_module_id") == "moex:module:dsp"
+    assert glossary.attributes.get("nav_glyph") == "glossary"
 
 
 def test_repo_impl_section_nav_covers_all_module_sections() -> None:

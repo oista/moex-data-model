@@ -55,6 +55,7 @@ def section_payload(section: PublicationSection) -> dict[str, Any]:
         "attributes": section.attributes or {},
         "tags": section.tags,
         "default_collapsed": section.default_collapsed,
+        "instance_of": section.instance_of,
     }
 
 

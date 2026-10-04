@@ -84,7 +84,7 @@ nodes:
 
   - id: moex-enterprise-conceptual-model
     role: specification_implementation
-    title: MOEX Enterprise Conceptual Model
+    title: moex.concept-data-model
     version: "0.1.0"
     conforms_to: moex-dams
     module_id: moex:module:enterprise-conceptual

@@ -686,6 +686,7 @@
     "logical-erd": "ldm",
     physical: "pdm",
     "physical-erd": "pdm",
+    glossary: "glossary",
   };
   const KIND_LETTER = {
     enum: "E",
@@ -695,6 +696,7 @@
     implementation_ref: "M",
     section_ref: "S",
     group: "G",
+    glossary: "G",
     class: "C",
   };
 
@@ -719,6 +721,14 @@
     ).trim();
     if (SECTION_ID_NAV_GLYPH[sectionId]) return SECTION_ID_NAV_GLYPH[sectionId];
 
+    const sectionType = String(a.section_type || x.type || "")
+      .trim()
+      .toLowerCase();
+    const pubKind = String(a.publication_kind || x.publicationKind || "")
+      .trim()
+      .toLowerCase();
+    if (sectionType === "glossary" || pubKind === "glossary") return "glossary";
+
     const kind = String(a.kind || x.kind || "class");
     return KIND_LETTER[kind] ? kind : "class";
   }
@@ -739,7 +749,8 @@
     const letter = KIND_LETTER[g] || String(o.letter || "C");
     const kindClasses = o.kindClasses || "";
     const implClass = g === "implementation_ref" ? " nav-kind--impl" : "";
-    return `<span class="nav-kind ${kindClasses}${implClass}" aria-hidden="true">${escapeHtml(letter)}</span>`;
+    const glossaryClass = g === "glossary" ? " nav-kind--glossary" : "";
+    return `<span class="nav-kind ${kindClasses}${implClass}${glossaryClass}" aria-hidden="true">${escapeHtml(letter)}</span>`;
   }
 
   function chevronSvg(direction) {
@@ -946,17 +957,33 @@
         const overviewExisting = explorerItems.find(
           (g) => g.attributes?.section_root === "overview"
         );
-        const orphanRefs = orphanSections.map((sec) => ({
-          id: `section:${sec.id}`,
-          title: sec.title,
-          description: sec.description || `Open publication section «${sec.title}».`,
-          attributes: {
+        const orphanRefs = orphanSections.map((sec) => {
+          const attrs = {
             kind: "section_ref",
             section_id: sec.id,
-            description: sec.description || `Open publication section «${sec.title}».`,
-          },
-          children: [],
-        }));
+            description:
+              sec.description || `Open publication section «${sec.title}».`,
+          };
+          if (sec.type) attrs.section_type = sec.type;
+          if (sec.kind) attrs.publication_kind = sec.kind;
+          if (
+            sec.id === "glossary" ||
+            sec.type === "glossary" ||
+            sec.kind === "glossary"
+          ) {
+            attrs.nav_glyph = "glossary";
+          } else if (SECTION_ID_NAV_GLYPH[sec.id]) {
+            attrs.nav_glyph = SECTION_ID_NAV_GLYPH[sec.id];
+          }
+          return {
+            id: `section:${sec.id}`,
+            title: sec.title,
+            description:
+              sec.description || `Open publication section «${sec.title}».`,
+            attributes: attrs,
+            children: [],
+          };
+        });
         orphanRefs.forEach((r) => nestedSectionIds.add(r.attributes.section_id));
         if (overviewExisting) {
           const mergedKids = [
@@ -1310,8 +1337,11 @@
         sBtn.setAttribute("data-tree-node", "");
         const secGlyph =
           SECTION_ID_NAV_GLYPH[sec.id] ||
-          resolveNavGlyph({ section_id: sec.id, nav_glyph: sec.nav_glyph });
-        if (LEVEL_GLYPHS.has(secGlyph)) {
+          resolveNavGlyph(
+            { section_id: sec.id, nav_glyph: sec.nav_glyph },
+            { type: sec.type, publicationKind: sec.kind }
+          );
+        if (LEVEL_GLYPHS.has(secGlyph) || secGlyph === "glossary") {
           sBtn.innerHTML = `${navGlyphHtml(secGlyph, "menu")} <span>${escapeHtml(sec.title)}</span>`;
         } else {
           sBtn.textContent = sec.title;
@@ -3717,10 +3747,14 @@
     head.className = "section-head";
     const sectionGlyph =
       SECTION_ID_NAV_GLYPH[section.id] ||
-      resolveNavGlyph({ nav_glyph: section.nav_glyph, section_id: section.id });
-    const sectionBadge = LEVEL_GLYPHS.has(sectionGlyph)
-      ? navGlyphHtml(sectionGlyph, "card")
-      : "";
+      resolveNavGlyph(
+        { nav_glyph: section.nav_glyph, section_id: section.id },
+        { type: section.type, publicationKind: section.kind }
+      );
+    const sectionBadge =
+      LEVEL_GLYPHS.has(sectionGlyph) || sectionGlyph === "glossary"
+        ? navGlyphHtml(sectionGlyph, "card")
+        : "";
     head.innerHTML = `${sectionBadge}<h2>${escapeHtml(section.title)}</h2><span class="muted">${escapeHtml(section.type)}</span>`;
     head.addEventListener("click", () => {
       // Collapse only — do not setHash (would re-render and hide the body permanently
@@ -4004,6 +4038,43 @@
     return false;
   }
 
+  function findExplorerLinkTarget(mod, nameOrId) {
+    const expl = explorerSection(mod);
+    if (!expl || !nameOrId) return null;
+    const key = String(nameOrId);
+    let best = null;
+    let bestScore = -1;
+    walkExplorerItems(expl, (node, group, ancestors) => {
+      const kind = node.attributes?.kind;
+      if (kind !== "class" && kind !== "enum" && kind !== "slot") return;
+      const name = node.attributes?.name || node.title;
+      if (node.id !== key && name !== key) return;
+      let score = node.id === key ? 3 : 2;
+      const chain = [group, ...(ancestors || [])].filter(Boolean);
+      if (
+        chain.some(
+          (g) =>
+            g.id === "group:classes" ||
+            g.attributes?.section_root === "classes"
+        )
+      ) {
+        score += 2;
+      }
+      if (score > bestScore) {
+        bestScore = score;
+        best = node;
+      }
+    });
+    if (!best) return null;
+    return {
+      module: shortModule(mod.module_id),
+      section: expl.id,
+      item: best.id,
+      node: nodeForModule(mod.module_id)?.id || currentNodeId,
+      card: true,
+    };
+  }
+
   function resolveTableCellTarget(mod, section, col, raw, item) {
     if (!raw || !mod) return null;
     const index = ensureLinkIndex();
@@ -4017,29 +4088,19 @@
           card: true,
         };
       }
-      const expl = explorerSection(mod);
-      if (expl) {
-        const found =
-          findExplorerItem(expl, String(raw)) || findExplorerItem(expl, item.id);
-        if (
-          found &&
-          (found.item.attributes?.kind === "class" ||
-            found.item.attributes?.kind === "enum" ||
-            found.item.attributes?.kind === "slot")
-        ) {
-          return {
-            module: shortModule(mod.module_id),
-            section: expl.id,
-            item: found.item.id,
-            node: nodeForModule(mod.module_id)?.id || currentNodeId,
-            card: true,
-          };
-        }
-      }
-      return null;
+      return (
+        findExplorerLinkTarget(mod, raw) ||
+        findExplorerLinkTarget(mod, item.id) ||
+        null
+      );
+    }
+    if (col === "is_a" || col === "mixins" || col === "range") {
+      return findExplorerLinkTarget(mod, raw) || null;
     }
     const hit = index.resolve(raw, mod);
-    return hit && hit.card ? hit : null;
+    if (hit && hit.card) return hit;
+    // Cross-module / same-module refs may resolve via explorer class name.
+    return findExplorerLinkTarget(mod, raw);
   }
 
   function formatLinkedCellParts(mod, section, col, raw, item) {

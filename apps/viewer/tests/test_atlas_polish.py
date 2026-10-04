@@ -38,10 +38,25 @@ def test_js_table_links_and_instance_cards():
     assert "function ensureLinkIndex" in JS
     assert "function renderInstanceDetail" in JS
     assert "function findDamsClassItem" in JS
+    assert "function findExplorerLinkTarget" in JS
     assert 'target = "_blank"' in JS or 'target="_blank"' in JS
     assert "table-item-link" in JS
     assert "content--wide" in JS
     assert "instance_of" in JS
+
+
+def test_section_payload_includes_instance_of():
+    from moex_publication_viewer.models.publication_models import PublicationSection
+    from moex_publication_viewer.renderers.html_renderer import section_payload
+
+    sec = PublicationSection(
+        id="logical",
+        title="Logical",
+        type="entity-table",
+        instance_of="LogicalEntity",
+    )
+    payload = section_payload(sec)
+    assert payload["instance_of"] == "LogicalEntity"
 
 
 def test_css_tables_adapt_to_width():
@@ -117,6 +132,7 @@ def test_css_level_glyph_tokens_and_slots():
     assert "--level-ldm-start:" in css
     assert "--level-pdm-start:" in css
     assert "--level-impl-start:" in css
+    assert "--level-glossary-start:" in css
     assert ".nav-glyph--cdm" in css
     assert ".nav-glyph--ldm" in css
     assert ".nav-glyph--pdm" in css
@@ -148,6 +164,8 @@ def test_js_nav_glyph_helpers():
     assert "nav-kind-folder--level" in JS
     assert 'implementation_ref: "M"' in JS
     assert "nav-kind--impl" in JS
+    assert 'glossary: "G"' in JS
+    assert "nav-kind--glossary" in JS
 
 
 def test_css_nav_kind_fixed_square_and_section_frame():
@@ -164,6 +182,13 @@ def test_css_nav_kind_fixed_square_and_section_frame():
     assert "border-radius: 50%" in impl
     assert "var(--level-impl-start)" in impl
     assert "var(--level-impl-end)" in impl
+    assert ".nav-kind.nav-kind--glossary" in css
+    gloss = css.split(".nav-kind.nav-kind--glossary")[1][:280]
+    assert "border-radius: 3px" in gloss
+    assert "font-weight: 500" in gloss
+    assert "color-mix(in srgb, var(--level-glossary-start) 12%, transparent)" in gloss
+    assert "var(--level-glossary-start)" in gloss
+    assert "border-radius: 50%" not in gloss.split("}")[0]
     assert ".badge-pill.badge-kind-mixin" in css
     assert ".badge-pill.badge-kind-enum" in css
     assert "text-overflow: ellipsis" in css

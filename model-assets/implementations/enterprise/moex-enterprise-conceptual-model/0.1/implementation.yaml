@@ -1,6 +1,6 @@
 # SpecificationImplementation descriptor — MOEX enterprise conceptual model (ADR-021)
 id: moex:implementation:moex-enterprise-conceptual-model:0.1
-name: MOEX Enterprise Conceptual Model
+name: moex.concept-data-model
 description: >
   Canonical enterprise conceptual model for MOEX DAMS (Party & Trading
   Participation slice). Source of truth for corporate business entities;

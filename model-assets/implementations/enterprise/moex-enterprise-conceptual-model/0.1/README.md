@@ -1,4 +1,4 @@
-# MOEX Enterprise Conceptual Model (ADR-021)
+# moex.concept-data-model (ADR-021)
 
 Canonical **enterprise-conceptual** DAMS implementation for the Party & Trading
 Participation slice.

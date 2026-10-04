@@ -145,6 +145,13 @@
   background: linear-gradient(135deg, var(--level-impl-start), var(--level-impl-end));
   border-color: var(--level-impl-end);
 }
+.nav-kind.nav-kind--glossary {
+  border-radius: 3px;
+  color: var(--level-glossary-start);
+  border-color: var(--level-glossary-start);
+  background: color-mix(in srgb, var(--level-glossary-start) 12%, transparent);
+  font-weight: 500;
+}
 .nav-kind-section {
   display: inline-flex;
   align-items: center;

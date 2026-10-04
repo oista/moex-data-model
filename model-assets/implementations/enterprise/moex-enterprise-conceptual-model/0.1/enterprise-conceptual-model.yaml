@@ -1,6 +1,6 @@
 element_id: dams:model/enterprise-conceptual/0.1
 name: moex_enterprise_conceptual_model
-title: MOEX Enterprise Conceptual Model
+title: moex.concept-data-model
 description: >
   Единая корпоративная концептуальная модель MOEX (Party & Trading Participation).
   TradingParticipation — reified relation entity, не подкласс LegalEntity.

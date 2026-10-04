@@ -158,6 +158,10 @@ svg {
   --level-impl-start: #c73a1e;
   --level-impl-end: #950d13;
   --level-impl-text: #ffffff;
+  /* Glossary section glyph — burgundy → near-black */
+  --level-glossary-start: #5c1020;
+  --level-glossary-end: #12080a;
+  --level-glossary-text: #ffffff;
 
   /* Class-kind palette (default) — matches config/class-kind-colors.yaml */
   --class-color-plain: #3d8f6e;
@@ -252,6 +256,9 @@ svg {
   --level-impl-start: #e54750;
   --level-impl-end: #b01d28;
   --level-impl-text: #ffffff;
+  --level-glossary-start: #7a1830;
+  --level-glossary-end: #1a0a0e;
+  --level-glossary-text: #ffffff;
 }
 
 
@@ -929,6 +936,13 @@ a {
   background: linear-gradient(135deg, var(--level-impl-start), var(--level-impl-end));
   border-color: var(--level-impl-end);
 }
+.nav-kind.nav-kind--glossary {
+  border-radius: 3px;
+  color: var(--level-glossary-start);
+  border-color: var(--level-glossary-start);
+  background: color-mix(in srgb, var(--level-glossary-start) 12%, transparent);
+  font-weight: 500;
+}
 .nav-kind-section {
   display: inline-flex;
   align-items: center;
@@ -1047,8 +1061,8 @@ a {
 /* Level folders: gray folder chrome + compact plaque inside + light tint */
 .nav-kind.nav-kind-folder.nav-kind-folder--level {
   width: auto;
-  min-width: 30px;
-  height: 16px;
+  min-width: 26px;
+  height: 14px;
   padding: 0 2px;
   gap: 0;
   border-color: color-mix(in srgb, var(--level-folder-edge, var(--muted)) 45%, var(--border));
@@ -1061,9 +1075,10 @@ a {
 .nav-kind.nav-kind-folder.nav-kind-folder--level .nav-glyph {
   position: relative;
   z-index: 1;
-  font-size: 8px;
-  line-height: 12px;
-  padding: 0 3px;
+  font-size: 7px;
+  line-height: 10px;
+  padding: 0 2px;
+  opacity: 0.7;
 }
 .nav-kind.nav-kind-folder.nav-kind-folder--cdm {
   --level-folder-tint: var(--level-cdm-start);

@@ -40,6 +40,8 @@ DAMS_MODULE_ID = "moex:module:dams"
 DAMS_CATALOG_SPEC_ID = "moex-dams"
 FIBO_PROFILE_MODULE_ID = "moex:module:fibo-profile"
 FIBO_PROFILE_CATALOG_SPEC_ID = "moex-fibo-profile"
+ONTOLOGY_CATALOG_MODULE_ID = "moex:module:ontology-catalog"
+DSP_MODULE_ID = "moex:module:dsp"
 
 # Stay at Реализации root (not nested under folders).
 _DAMS_IMPL_ROOT_IDS = frozenset(
@@ -243,13 +245,14 @@ def _module_by_id(
     return next((m for m in modules if m.module_id == module_id), None)
 
 
-# Publication section ids → DAMS model-level plaque (undeniable mapping).
+# Publication section ids → DAMS model-level plaque / glossary glyph.
 _SECTION_ID_NAV_GLYPH: dict[str, str] = {
     "conceptual": "cdm",
     "logical": "ldm",
     "logical-erd": "ldm",
     "physical": "pdm",
     "physical-erd": "pdm",
+    "glossary": "glossary",
 }
 
 # Full solution-model publish.yaml set → nest under Overview / model folders.
@@ -272,6 +275,97 @@ _SOLUTION_NAV_PHYSICAL_IDS = ("physical", "physical-erd")
 _SOLUTION_NAV_REQUIREMENTS_IDS = ("model-assessment",)
 _SOLUTION_NAV_DOCUMENTATION_IDS = ("documentation",)
 
+# Enterprise conceptual (moex.concept-data-model) → Overview + Model glossary folders.
+_ENTERPRISE_CONCEPTUAL_NAV_REQUIRED_SECTION_IDS = frozenset(
+    {
+        "overview",
+        "conformance",
+        "alignments",
+        "glossary",
+        "relation-terms",
+        "vocabularies",
+        "conceptual",
+    }
+)
+_ENTERPRISE_CONCEPTUAL_NAV_OVERVIEW_IDS = ("overview", "conformance", "alignments")
+_ENTERPRISE_CONCEPTUAL_NAV_GLOSSARY_IDS = (
+    "glossary",
+    "relation-terms",
+    "vocabularies",
+)
+
+
+def group_enterprise_conceptual_impl_nav(
+    catalog_impl_id: str,
+    leaves: list[PublicationItem],
+) -> list[PublicationItem]:
+    """Nest enterprise-conceptual section_refs under Overview + Model glossary.
+
+    Only modules that carry the full conceptual section-id set are grouped;
+    solutions / dsp / FIBO stay unchanged (caller falls through to solution nav).
+    """
+    by_sid: dict[str, PublicationItem] = {}
+    for leaf in leaves:
+        sid = (leaf.attributes or {}).get("section_id")
+        if isinstance(sid, str) and sid:
+            by_sid[sid] = leaf
+    if not _ENTERPRISE_CONCEPTUAL_NAV_REQUIRED_SECTION_IDS.issubset(by_sid):
+        return leaves
+
+    claimed: set[str] = set()
+
+    def take(ids: tuple[str, ...]) -> list[PublicationItem]:
+        out: list[PublicationItem] = []
+        for sid in ids:
+            leaf = by_sid.get(sid)
+            if leaf is not None:
+                out.append(leaf)
+                claimed.add(sid)
+        return out
+
+    overview_kids = take(_ENTERPRISE_CONCEPTUAL_NAV_OVERVIEW_IDS)
+    overview = PublicationItem(
+        id=f"implnav:{catalog_impl_id}:group:overview",
+        title="Overview",
+        description="Overview, conformance, and external alignments.",
+        attributes={
+            "kind": "group",
+            "nav_group": "overview",
+            "member_ids": [c.id for c in overview_kids],
+        },
+        children=overview_kids,
+    )
+    glossary_kids = take(_ENTERPRISE_CONCEPTUAL_NAV_GLOSSARY_IDS)
+    glossary = PublicationItem(
+        id=f"implnav:{catalog_impl_id}:group:glossary",
+        title="Model glossary",
+        description="Model glossary, relation terms, and controlled vocabularies.",
+        attributes={
+            "kind": "group",
+            "nav_group": "glossary",
+            "nav_glyph": "glossary",
+            "member_ids": [c.id for c in glossary_kids],
+        },
+        children=glossary_kids,
+    )
+    # Top-level: conceptual, then glossary folder, then relationships / source.
+    conceptual = take(("conceptual",))
+    relationships = take(("relationships",))
+    source = take(("source",))
+    leftovers = [
+        leaf
+        for leaf in leaves
+        if (leaf.attributes or {}).get("section_id") not in claimed
+    ]
+    return [
+        overview,
+        *conceptual,
+        glossary,
+        *relationships,
+        *source,
+        *leftovers,
+    ]
+
 
 def group_solution_impl_nav(
     catalog_impl_id: str,
@@ -280,7 +374,8 @@ def group_solution_impl_nav(
     """Nest solution-model section_refs under Overview + model/requirements folders.
 
     Only modules that carry the full solution section-id set are grouped;
-    dsp / conceptual / FIBO / CSV drafts stay a flat section_ref list.
+    dsp / FIBO / CSV drafts stay a flat section_ref list (enterprise conceptual
+    is handled by ``group_enterprise_conceptual_impl_nav``).
     """
     by_sid: dict[str, PublicationItem] = {}
     for leaf in leaves:
@@ -381,8 +476,8 @@ def impl_section_nav_children(
 
     Emit one leaf per top-level publication section (including ``explorer``,
     e.g. moex.dsp «Classes»). Do **not** expand explorer class trees here —
-    Spec nav under Реализации → Impl stays section-level. Solution modules with
-    the full section set are nested under Overview / model folders.
+    Spec nav under Реализации → Impl stays section-level. Enterprise conceptual
+    and solution modules with their full section sets are nested under folders.
     """
     if impl_module is None:
         return []
@@ -408,6 +503,9 @@ def impl_section_nav_children(
                 attributes=attrs,
             )
         )
+    grouped = group_enterprise_conceptual_impl_nav(catalog_impl_id, leaves)
+    if grouped is not leaves:
+        return grouped
     return group_solution_impl_nav(catalog_impl_id, leaves)
 
 
@@ -707,6 +805,67 @@ def enrich_linkml_glossary_sections(modules: list[PublicationModule]) -> None:
             glossary.filterable = ["kind", "origin", "defined_in"]
 
 
+def enrich_ontology_catalog_documentation_nav(
+    modules: list[PublicationModule],
+) -> None:
+    """Add Documentation → moex.dsp.classes / moex.dsp.glossary under Ontology Catalog."""
+    catalog_mod = next(
+        (m for m in modules if m.module_id == ONTOLOGY_CATALOG_MODULE_ID),
+        None,
+    )
+    if catalog_mod is None:
+        return
+    explorer = next((s for s in catalog_mod.sections if s.type == "explorer"), None)
+    if explorer is None:
+        return
+    if any(
+        i.id == "group:ontology-catalog:documentation"
+        for i in (explorer.items or [])
+    ):
+        return
+    if not any(m.module_id == DSP_MODULE_ID for m in modules):
+        return
+
+    def _dsp_section_ref(leaf_id: str, title: str, section_id: str) -> PublicationItem:
+        attrs: dict = {
+            "kind": "section_ref",
+            "section_id": section_id,
+            "target_module_id": DSP_MODULE_ID,
+            "target_section_id": section_id,
+            "description": f"Open moex.dsp section «{title}».",
+        }
+        glyph = _SECTION_ID_NAV_GLYPH.get(section_id)
+        if glyph:
+            attrs["nav_glyph"] = glyph
+        return PublicationItem(
+            id=leaf_id,
+            title=title,
+            description=f"Open moex.dsp section «{title}».",
+            attributes=attrs,
+        )
+
+    kids = [
+        _dsp_section_ref(
+            "ontcat:doc:moex.dsp.classes", "moex.dsp.classes", "explorer"
+        ),
+        _dsp_section_ref(
+            "ontcat:doc:moex.dsp.glossary", "moex.dsp.glossary", "glossary"
+        ),
+    ]
+    group = PublicationItem(
+        id="group:ontology-catalog:documentation",
+        title="Documentation",
+        description="Data Specification Player metamodel sections (moex.dsp).",
+        attributes={
+            "kind": "group",
+            "nav_group": "documentation",
+            "member_ids": [c.id for c in kids],
+        },
+        children=kids,
+    )
+    explorer.items = [*(explorer.items or []), group]
+
+
 def enrich_fibo_explorer_implementations(
     modules: list[PublicationModule],
     catalog: ArchitectureCatalog | None,
@@ -818,6 +977,7 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
     enrich_fibo_explorer_classes(modules)
     enrich_fibo_explorer_implementations(modules, catalog)
     enrich_linkml_glossary_sections(modules)
+    enrich_ontology_catalog_documentation_nav(modules)
     search_index = build_search_index(modules)
     if catalog is not None:
         for node in catalog.nodes:

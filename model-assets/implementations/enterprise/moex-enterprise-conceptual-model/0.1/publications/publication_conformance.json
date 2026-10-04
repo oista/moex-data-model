@@ -1,6 +1,6 @@
 {
   "id": "pubconf:moex:module:enterprise-conceptual:dams-enterprise-conceptual",
-  "title": "MOEX Enterprise Conceptual Model",
+  "title": "moex.concept-data-model",
   "description": "Publication contract assessment for dams-enterprise-conceptual against moex-dams@0.1",
   "implementation_ref": "moex:module:enterprise-conceptual",
   "reference_specification_ref": "moex-dams@0.1",
