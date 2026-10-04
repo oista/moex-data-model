@@ -1256,6 +1256,14 @@ a {
 .explorer-class-list {
   display: flex; flex-wrap: wrap; gap: 6px;
 }
+.explorer-class-list.explorer-class-tree {
+  flex-direction: column; flex-wrap: nowrap; align-items: flex-start;
+}
+.explorer-class-subtree.explorer-class-tree {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+  margin-left: 14px; padding-left: 12px;
+  border-left: 1px solid var(--border);
+}
 
 .search-wrap { position: relative; flex: 1; max-width: 520px; }
 .search-wrap input {

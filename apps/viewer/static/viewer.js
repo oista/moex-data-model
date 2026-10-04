@@ -1022,7 +1022,13 @@
     return options;
   }
 
-  function appendExplorerClassChips(listEl, members, { mod, expl, openGroupId } = {}) {
+  function appendExplorerClassChips(
+    listEl,
+    members,
+    { mod, expl, openGroupId, nested } = {}
+  ) {
+    // nested: render is_a / subClassOf children as an indented tree, not flat chips.
+    if (nested) listEl.classList.add("explorer-class-tree");
     (members || []).forEach((child) => {
       const btn = document.createElement("button");
       btn.type = "button";
@@ -1070,6 +1076,22 @@
         });
       });
       listEl.appendChild(btn);
+      if (nested && childKind === "class") {
+        const subclasses = (child.children || []).filter(
+          (c) => (c.attributes?.kind || "class") === "class"
+        );
+        if (subclasses.length) {
+          const sub = document.createElement("div");
+          sub.className = "explorer-class-subtree";
+          appendExplorerClassChips(sub, subclasses, {
+            mod,
+            expl,
+            openGroupId,
+            nested,
+          });
+          listEl.appendChild(sub);
+        }
+      }
     });
   }
 
@@ -1087,7 +1109,12 @@
     } else {
       const list = document.createElement("div");
       list.className = "explorer-class-list";
-      appendExplorerClassChips(list, members, { mod, expl, openGroupId });
+      appendExplorerClassChips(list, members, {
+        mod,
+        expl,
+        openGroupId,
+        nested: true,
+      });
       block.appendChild(list);
     }
     card.appendChild(block);
@@ -2235,6 +2262,7 @@
         0
       );
       const enumTotal = groups.reduce((n, g) => {
+        if (g.attributes?.enum_count != null) return n + g.attributes.enum_count;
         const kids = g.children || [];
         return n + kids.filter((c) => c.attributes?.kind === "enum").length;
       }, 0);
@@ -2247,11 +2275,27 @@
 
       const grid = document.createElement("div");
       grid.className = "explorer-landing";
+      // LinkML spec roots wrap packages under group:classes — show each package
+      // with its is_a hierarchy instead of one flat «Classes» panel of package chips.
+      const landingGroups = [];
       filterExplorerItemsForPrefs(expl.items || []).forEach((group) => {
+        const pkgs = (group.children || []).filter(
+          (c) => c.attributes?.kind === "group"
+        );
+        if (
+          !ontoExpl &&
+          group.attributes?.section_root === "classes" &&
+          pkgs.length
+        ) {
+          pkgs.forEach((p) => landingGroups.push(p));
+        } else {
+          landingGroups.push(group);
+        }
+      });
+      landingGroups.forEach((group) => {
         const panel = document.createElement("section");
         panel.className = "explorer-package";
         const kids = group.children || [];
-        const classes = kids.filter((c) => (c.attributes?.kind || "class") === "class");
         const enums = kids.filter((c) => c.attributes?.kind === "enum");
         const h2 = document.createElement("h2");
         const titleBtn = document.createElement("button");
@@ -2276,9 +2320,10 @@
         countSpan.className = "muted";
         const totalClasses =
           group.attributes?.class_count ?? countExplorerClasses(group);
+        const enumCount = group.attributes?.enum_count ?? enums.length;
         countSpan.textContent = ontoExpl
           ? `${totalClasses} classes`
-          : `${classes.length} classes${enums.length ? ", " + enums.length + " enums" : ""}`;
+          : `${totalClasses} classes${enumCount ? ", " + enumCount + " enums" : ""}`;
         h2.appendChild(titleBtn);
         h2.appendChild(document.createTextNode(" "));
         h2.appendChild(countSpan);
@@ -2289,6 +2334,7 @@
           mod,
           expl,
           openGroupId: group.id,
+          nested: !ontoExpl,
         });
         panel.appendChild(list);
         grid.appendChild(panel);

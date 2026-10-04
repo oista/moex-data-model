@@ -9,15 +9,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-viewer.ps1
 # semantic-diff
 moex-model semantic-diff --left a.yaml --right b.yaml --json
 
-# diagram (ModelPackage → DBML for viewer)
-moex-model diagram --root . --implementation model-assets/implementations/solutions/crm/crm-solution-model.yaml --format dbml --profile logical
-moex-model diagram --root . --implementation model-assets/implementations/solutions/crm/crm-solution-model.yaml --format dbml --profile physical
-
-# diagram (ModelPackage → Mermaid erDiagram + SVG for viewer)
-moex-model diagram --root . --implementation model-assets/implementations/solutions/crm/crm-solution-model.yaml --format mermaid --profile logical
-moex-model diagram --root . --implementation model-assets/implementations/solutions/crm/crm-solution-model.yaml --format mermaid --profile physical
-# SVG only (Node/npx required):
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/render-mermaid-erd.ps1 -InputMd model-assets/implementations/solutions/crm/publications/logical.erd.md
+# diagram (ModelPackage → DBML)
+moex-model diagram --root . --profile logical --out generated/artifacts/diagrams/trading-logical.dbml
 
 # import (ER-dictionary → ModelPackage)
 moex-model import --workbook packages/standard-linkml/tests/fixtures/er-dictionary --profile packages/standard-linkml/tests/fixtures/er-dictionary/profile.yaml --out generated/import-pilot --skip-validate
@@ -25,3 +18,8 @@ moex-model import --workbook packages/standard-linkml/tests/fixtures/er-dictiona
 # map (SSSOM / LinkML extract)
 moex-model map --sssom model-assets/transformations/mappings/dams-fibo.sssom.yaml
 moex-model map --extract-schema packages/semantic-mappings/tests/fixtures/mapped_schema.yaml --json
+
+# serv
+cd c:\Users\bons1\IdeaProjects\moex-data-model\apps\viewer
+python -m pip install -e ".[dev]"
+python -m moex_publication_viewer.cli serve --root ../.. --port 8765
