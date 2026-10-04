@@ -1,7 +1,7 @@
 # moex.concept-data-model (ADR-021)
 
-Canonical **enterprise-conceptual** DAMS implementation for the Party & Trading
-Participation slice.
+Canonical **enterprise-conceptual** DAMS implementation for the Party +
+trading/TKS slice (ADR-029; ER sketches conceptualized without PK/FK attributes).
 
 ## Distinctions
 

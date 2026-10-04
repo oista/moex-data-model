@@ -385,6 +385,36 @@ requirements:
     diagnostic_code: DAMS-REQ-LDM-007.c1
     remediation: Добавьте связь с другой сущностью, conceptual alignment/realizes или isolation_rationale.
       Physical mapping сам по себе не достаточен.
+- element_id: dams:req/LDM-008
+  name: realization_completeness
+  title: Полнота реализации зависимых концептов
+  description: >
+    Warning when an aligned LogicalEntity realizes a dependent enterprise concept
+    without a logical Relationship to a peer that realizes each owner (ADR-029).
+  lifecycle_status: active
+  code: LDM-008
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: >-
+    Если логическая сущность выровнена (aligned) с зависимым корпоративным
+    понятием (entity_tier=dependent) из пакета, указанного в
+    conceptual_implementation_ref, то в том же solution-пакете должна быть
+    логическая связь с сущностью, реализующей каждого владельца из
+    depends_on_refs. Нарушение — предупреждение (не ошибка): подсказка
+    моделисту, не наследование атрибутов и не subclass.
+  applies_to:
+    applicability_id: appl:LDM-008
+    applies_target_class: LogicalEntity
+  formal_checks:
+  - check_id: LDM-008.c1
+    kind: conditional_branch
+    target_class: LogicalEntity
+    expression: ldm008_realization_completeness
+    severity: warning
+    diagnostic_code: DAMS-REQ-LDM-008.c1
+    remediation: >-
+      Добавьте Relationship к логической сущности, которая realizes владельца
+      зависимого концепта (depends_on_refs), либо уточните conceptual_entity_refs.
 - element_id: dams:req/ATR-001
   name: logical_attribute_core
   title: Основные свойства атрибута

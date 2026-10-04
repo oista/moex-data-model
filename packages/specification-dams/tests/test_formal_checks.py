@@ -112,6 +112,7 @@ def test_catalog_expressions_all_have_runner_templates() -> None:
         "ldm005_attributes",
         "ldm006_alignment",
         "ldm007_semantic_inclusion",
+        "ldm008_realization_completeness",
         "atr005_mapping_coverage",
         "planned_on_active_warning",
         "ref002_cardinality",
@@ -572,3 +573,169 @@ def test_enterprise_package_skipped() -> None:
     }
     diags = check_formal_requirements(_body(data), catalog_path=CATALOG)
     assert diags == ()
+
+
+# --- LDM-008 realization completeness (ADR-029) -------------------------------
+
+
+def _ldm008_base() -> dict:
+    """Minimal solution package realizing Issuer without owner link."""
+    return {
+        "element_id": "dams:model/ldm008/1.0.0",
+        "name": "ldm008_fixture",
+        "description": "LDM-008 realization completeness fixture.",
+        "lifecycle_status": "draft",
+        "api_version": "dams.moex/v0.1",
+        "model_version": "1.0.0",
+        "implementation_scope": "solution",
+        "conceptual_implementation_ref": (
+            "moex:implementation:moex-enterprise-conceptual-model:0.1"
+        ),
+        "solution_ref": "eam:solution/LDM008",
+        "data_owner_ref": "org:role/CLIENT_DATA_OWNER",
+        "logical_entities": [
+            {
+                "element_id": "dams:logical/ldm008/IssuerView",
+                "name": "IssuerView",
+                "title": "Issuer view",
+                "description": "Logical projection of Issuer.",
+                "lifecycle_status": "active",
+                "conceptual_entity_refs": ["dams:concept/Issuer"],
+                "solution_ref": "eam:solution/LDM008",
+                "entity_type": "core",
+                "data_class": "master_data",
+                "business_importance": "high",
+                "governance_classification": "internal",
+                "conceptual_alignment_status": "aligned",
+                "identity_rule": "Issuer code in solution.",
+                "business_key_kind": "natural",
+                "isolation_rationale": "Fixture isolates completeness warning.",
+                "attributes": [
+                    {
+                        "element_id": "dams:logical/ldm008/IssuerView/id",
+                        "name": "issuer_id",
+                        "title": "Issuer id",
+                        "description": "Identifier",
+                        "lifecycle_status": "active",
+                        "owner_entity_ref": "dams:logical/ldm008/IssuerView",
+                        "logical_type": "identifier",
+                        "required": True,
+                        "multivalued": False,
+                        "mapping_coverage_status": "not-applicable",
+                        "mapping_rationale": "No physical in fixture.",
+                    }
+                ],
+            }
+        ],
+        "mappings": [
+            {
+                "element_id": "dams:mapping/ldm008/issuer-realizes",
+                "name": "realizes_IssuerView",
+                "description": "IssuerView realizes Issuer.",
+                "lifecycle_status": "active",
+                "source_refs": ["dams:logical/ldm008/IssuerView"],
+                "target_refs": ["dams:concept/Issuer"],
+                "mapping_type": "realizes",
+                "mapping_cardinality": "one_to_one",
+            }
+        ],
+        "realizes_not_applicable": None,
+    }
+
+
+def test_ldm008_warns_when_dependent_owner_link_missing() -> None:
+    data = _ldm008_base()
+    # Need realizes mapping present for DAMS-LEVEL; also non-empty logical
+    warns = [
+        d
+        for d in check_formal_requirements(_body(data), catalog_path=CATALOG)
+        if d.severity == DiagnosticSeverity.WARNING
+        and "LDM-008" in d.diagnostic_code
+    ]
+    assert warns
+    assert any("LegalEntity" in d.diagnostic_message for d in warns)
+
+
+def test_ldm008_passes_when_owner_realizer_linked() -> None:
+    data = _ldm008_base()
+    data["logical_entities"].append(
+        {
+            "element_id": "dams:logical/ldm008/LegalEntityView",
+            "name": "LegalEntityView",
+            "title": "Legal entity view",
+            "description": "Logical projection of LegalEntity.",
+            "lifecycle_status": "active",
+            "conceptual_entity_refs": ["dams:concept/LegalEntity"],
+            "solution_ref": "eam:solution/LDM008",
+            "entity_type": "core",
+            "data_class": "master_data",
+            "business_importance": "high",
+            "governance_classification": "internal",
+            "conceptual_alignment_status": "aligned",
+            "identity_rule": "LE id.",
+            "business_key_kind": "natural",
+            "attributes": [
+                {
+                    "element_id": "dams:logical/ldm008/LegalEntityView/id",
+                    "name": "le_id",
+                    "title": "LE id",
+                    "description": "Identifier",
+                    "lifecycle_status": "active",
+                    "owner_entity_ref": "dams:logical/ldm008/LegalEntityView",
+                    "logical_type": "identifier",
+                    "required": True,
+                    "multivalued": False,
+                    "mapping_coverage_status": "not-applicable",
+                    "mapping_rationale": "No physical in fixture.",
+                }
+            ],
+        }
+    )
+    data["relationships"] = [
+        {
+            "element_id": "dams:rel/ldm008/IssuerView/ofLE",
+            "name": "ofLegalEntity",
+            "title": "ofLegalEntity",
+            "description": "Issuer view belongs to legal entity view.",
+            "lifecycle_status": "active",
+            "source_entity_ref": "dams:logical/ldm008/IssuerView",
+            "target_entity_ref": "dams:logical/ldm008/LegalEntityView",
+            "source_role": "issuer",
+            "target_role": "legal_entity",
+            "source_min_cardinality": 1,
+            "source_max_cardinality": 1,
+            "relationship_kind": "association",
+        }
+    ]
+    data["mappings"].append(
+        {
+            "element_id": "dams:mapping/ldm008/le-realizes",
+            "name": "realizes_LegalEntityView",
+            "description": "LegalEntityView realizes LegalEntity.",
+            "lifecycle_status": "active",
+            "source_refs": ["dams:logical/ldm008/LegalEntityView"],
+            "target_refs": ["dams:concept/LegalEntity"],
+            "mapping_type": "realizes",
+            "mapping_cardinality": "one_to_one",
+        }
+    )
+    data["logical_entities"][0].pop("isolation_rationale", None)
+    warns = [
+        d
+        for d in check_formal_requirements(_body(data), catalog_path=CATALOG)
+        if d.severity == DiagnosticSeverity.WARNING
+        and "LDM-008" in d.diagnostic_code
+    ]
+    assert warns == []
+
+
+def test_ldm008_skips_primary_concepts() -> None:
+    """TradingClient realizes primary Client — no LDM-008 warning."""
+    data = yaml.safe_load(TRADING.read_text(encoding="utf-8"))
+    warns = [
+        d
+        for d in check_formal_requirements(_body(data, str(TRADING)), catalog_path=CATALOG)
+        if d.severity == DiagnosticSeverity.WARNING
+        and "LDM-008" in d.diagnostic_code
+    ]
+    assert warns == []

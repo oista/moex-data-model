@@ -91,33 +91,52 @@
   overflow: visible;
 }
 .nav-kind.nav-kind-folder {
-  width: 28px;
+  width: 20px;
+  min-width: 20px;
   height: 16px;
-  line-height: 16px;
-  border-radius: 2px 2px 3px 3px;
-  border-color: color-mix(in srgb, var(--muted) 55%, var(--border));
-  background: color-mix(in srgb, var(--muted) 10%, var(--surface-2, transparent));
+  padding: 3px 0 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: color-mix(in srgb, var(--muted) 70%, var(--border));
   vertical-align: middle;
-}
-.nav-kind.nav-kind-folder .nav-kind-folder-tab {
-  position: absolute;
-  top: -3px;
-  left: 2px;
-  width: 9px;
-  height: 3px;
-  border: 1px solid color-mix(in srgb, var(--muted) 55%, var(--border));
-  border-bottom: none;
-  border-radius: 2px 2px 0 0;
-  background: inherit;
   box-sizing: border-box;
 }
-.nav-kind.nav-kind-folder .nav-kind-folder-code {
+.nav-kind.nav-kind-folder .nav-kind-folder-shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.nav-kind.nav-kind-folder .nav-kind-folder-shape path {
+  fill: color-mix(in srgb, var(--muted) 12%, var(--surface-2, transparent));
+  stroke: currentColor;
+  stroke-width: 1.15;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.nav-kind.nav-kind-folder .nav-kind-folder-code,
+.nav-kind.nav-kind-folder .nav-kind-folder-letter {
+  position: relative;
+  z-index: 1;
   display: block;
   font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  line-height: 16px;
-  color: var(--muted);
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 1;
+  color: currentColor;
+}
+.nav-kind.nav-kind-folder .nav-kind-folder-code {
+  font-size: 7px;
+  font-weight: 600;
+}
+.nav-kind.nav-kind-folder:has(.nav-kind-folder-code) {
+  width: auto;
+  min-width: 24px;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 .nav-kind.kind-plain {
   color: var(--class-color-plain);
@@ -267,38 +286,22 @@
   background: linear-gradient(135deg, var(--level-pdm-start), var(--level-pdm-end));
   border-color: var(--level-pdm-end);
 }
-/* Level folders: gray folder chrome + compact plaque inside + light tint */
+/* Level folders: folder outline in level color + thin C/L/P, no plaque */
 .nav-kind.nav-kind-folder.nav-kind-folder--level {
-  width: auto;
-  min-width: 26px;
-  height: 14px;
-  padding: 0 2px;
-  gap: 0;
-  border-color: color-mix(in srgb, var(--level-folder-edge, var(--muted)) 45%, var(--border));
-  background: color-mix(in srgb, var(--level-folder-tint, var(--muted)) 14%, var(--surface-2, transparent));
+  color: var(--level-folder-edge, var(--muted));
 }
-.nav-kind.nav-kind-folder.nav-kind-folder--level .nav-kind-folder-tab {
-  border-color: color-mix(in srgb, var(--level-folder-edge, var(--muted)) 45%, var(--border));
-  background: inherit;
-}
-.nav-kind.nav-kind-folder.nav-kind-folder--level .nav-glyph {
-  position: relative;
-  z-index: 1;
-  font-size: 7px;
-  line-height: 10px;
-  padding: 0 2px;
-  opacity: 0.7;
+.nav-kind.nav-kind-folder.nav-kind-folder--level .nav-kind-folder-letter {
+  font-size: 9px;
+  font-weight: 300;
+  color: inherit;
 }
 .nav-kind.nav-kind-folder.nav-kind-folder--cdm {
-  --level-folder-tint: var(--level-cdm-start);
   --level-folder-edge: var(--level-cdm-end);
 }
 .nav-kind.nav-kind-folder.nav-kind-folder--ldm {
-  --level-folder-tint: var(--level-ldm-start);
   --level-folder-edge: var(--level-ldm-end);
 }
 .nav-kind.nav-kind-folder.nav-kind-folder--pdm {
-  --level-folder-tint: var(--level-pdm-start);
   --level-folder-edge: var(--level-pdm-end);
 }
 .detail-head h1 .nav-glyph,

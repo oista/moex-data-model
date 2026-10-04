@@ -2,10 +2,10 @@
 id: moex:implementation:moex-enterprise-conceptual-model:0.1
 name: moex.concept-data-model
 description: >
-  Canonical enterprise conceptual model for MOEX DAMS (Party & Trading
-  Participation slice). Source of truth for corporate business entities;
-  primary target for ExternalTermSelection alignsWith. Not a solution model,
-  not a FIBO import, not an ontology-application.
+  Canonical enterprise conceptual model for MOEX DAMS (Party + trading/TKS
+  slice, ADR-029). Source of truth for corporate business entities; primary
+  target for ExternalTermSelection alignsWith. Not a solution model, not a
+  FIBO import, not an ontology-application.
 version: "0.1.0"
 revision: "0.1.0"
 content_digest: "sha256:preview-moex-enterprise-conceptual-model"

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Folder icon preview</title>
+<style>
+  body { font-family: "Segoe UI", Arial, sans-serif; background: #f6f5f3; color: #222; padding: 24px; }
+  .row { display: flex; align-items: center; gap: 16px; margin: 16px 0; }
+  .label { width: 140px; font-size: 13px; }
+  .nav-kind {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    text-align: center;
+    overflow: visible;
+  }
+  .nav-kind.nav-kind-folder {
+    width: 20px;
+    min-width: 20px;
+    height: 16px;
+    padding: 3px 0 0;
+    border: 0;
+    background: transparent;
+    color: #8a8680;
+    box-sizing: border-box;
+  }
+  .nav-kind.nav-kind-folder .nav-kind-folder-shape {
+    position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none;
+  }
+  .nav-kind.nav-kind-folder .nav-kind-folder-shape path {
+    fill: rgba(120,118,114,.12);
+    stroke: currentColor;
+    stroke-width: 1.15;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .nav-kind.nav-kind-folder .nav-kind-folder-letter {
+    position: relative; z-index: 1; display: block;
+    font-size: 9px; font-weight: 300; line-height: 1; color: inherit;
+  }
+  .nav-kind-folder--cdm { color: #c41e1e; }
+  .nav-kind-folder--ldm { color: #7c2d12; }
+  .nav-kind-folder--pdm { color: #8a8178; }
+  .big .nav-kind.nav-kind-folder { width: 120px; min-width: 120px; height: 96px; padding-top: 18px; }
+  .big .nav-kind-folder-letter { font-size: 42px; font-weight: 300; }
+</style>
+</head>
+<body>
+<h1>Folder shape preview</h1>
+<p>Small (nav size) and large (shape check)</p>
+<div class="row">
+  <div class="label">plain</div>
+  <span class="nav-kind nav-kind-folder"><svg class="nav-kind-folder-shape" viewBox="0 0 24 20"><path d="M4.15 3.15h6.75L13.7 6.85h6.15A2.55 2.55 0 0 1 22.4 9.4v5.45A2.55 2.55 0 0 1 19.85 17.4H4.15A2.55 2.55 0 0 1 1.6 14.85V5.7A2.55 2.55 0 0 1 4.15 3.15z"/></svg></span>
+</div>
+<div class="row">
+  <div class="label">CDM</div>
+  <span class="nav-kind nav-kind-folder nav-kind-folder--cdm"><svg class="nav-kind-folder-shape" viewBox="0 0 24 20"><path d="M4.15 3.15h6.75L13.7 6.85h6.15A2.55 2.55 0 0 1 22.4 9.4v5.45A2.55 2.55 0 0 1 19.85 17.4H4.15A2.55 2.55 0 0 1 1.6 14.85V5.7A2.55 2.55 0 0 1 4.15 3.15z"/></svg><span class="nav-kind-folder-letter">C</span></span>
+</div>
+<div class="row">
+  <div class="label">LDM</div>
+  <span class="nav-kind nav-kind-folder nav-kind-folder--ldm"><svg class="nav-kind-folder-shape" viewBox="0 0 24 20"><path d="M4.15 3.15h6.75L13.7 6.85h6.15A2.55 2.55 0 0 1 22.4 9.4v5.45A2.55 2.55 0 0 1 19.85 17.4H4.15A2.55 2.55 0 0 1 1.6 14.85V5.7A2.55 2.55 0 0 1 4.15 3.15z"/></svg><span class="nav-kind-folder-letter">L</span></span>
+</div>
+<div class="row">
+  <div class="label">PDM</div>
+  <span class="nav-kind nav-kind-folder nav-kind-folder--pdm"><svg class="nav-kind-folder-shape" viewBox="0 0 24 20"><path d="M4.15 3.15h6.75L13.7 6.85h6.15A2.55 2.55 0 0 1 22.4 9.4v5.45A2.55 2.55 0 0 1 19.85 17.4H4.15A2.55 2.55 0 0 1 1.6 14.85V5.7A2.55 2.55 0 0 1 4.15 3.15z"/></svg><span class="nav-kind-folder-letter">P</span></span>
+</div>
+<div class="row big">
+  <div class="label">large CDM</div>
+  <span class="nav-kind nav-kind-folder nav-kind-folder--cdm"><svg class="nav-kind-folder-shape" viewBox="0 0 24 20"><path d="M4.15 3.15h6.75L13.7 6.85h6.15A2.55 2.55 0 0 1 22.4 9.4v5.45A2.55 2.55 0 0 1 19.85 17.4H4.15A2.55 2.55 0 0 1 1.6 14.85V5.7A2.55 2.55 0 0 1 4.15 3.15z"/></svg><span class="nav-kind-folder-letter">C</span></span>
+</div>
+</body>
+</html>

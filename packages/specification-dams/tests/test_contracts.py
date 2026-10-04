@@ -15,7 +15,11 @@ def test_model_package_loads_trading_solution(trading_solution: Path) -> None:
     pkg = ModelPackage.model_validate(data)
     assert pkg.element_id == "dams:model/trading/1.0.0"
     assert pkg.name == "trading_solution_model"
-    assert pkg.conceptual_entities
+    # Enterprise concepts live in conceptual_implementation_ref (ADR-029);
+    # solution may omit local conceptual_entities.
+    assert data.get("conceptual_implementation_ref")
+    client = next(e for e in data["logical_entities"] if e["name"] == "TradingClient")
+    assert "dams:concept/Client" in (client.get("conceptual_entity_refs") or [])
 
 
 def test_assess_uses_typed_model_package(

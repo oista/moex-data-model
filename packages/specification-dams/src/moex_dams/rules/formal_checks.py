@@ -22,6 +22,7 @@ from moex_dams.rules.cascade import (
     resolve_governed,
 )
 from moex_dams.rules.conceptual_entity import check_conceptual_entities
+from moex_dams.rules.dams_levels import ENTERPRISE_CONCEPTUAL_REF
 from moex_dams.rules.definitions import (
     DefinitionIndex,
     DefinitionMode,
@@ -289,6 +290,100 @@ def _has_realizes(data: dict[str, Any], entity_id: str) -> bool:
             continue
         refs = {str(x) for x in (m.get("source_refs") or []) + (m.get("target_refs") or [])}
         if entity_id in refs:
+            return True
+    return False
+
+
+_ENTERPRISE_BODY_CACHE: dict[str, dict[str, Any] | None] = {}
+
+
+def _enterprise_body_path(conceptual_ref: str) -> Path | None:
+    """Resolve enterprise ModelPackage body for a conceptual_implementation_ref."""
+    if conceptual_ref != ENTERPRISE_CONCEPTUAL_REF:
+        return None
+    # packages/specification-dams/src/moex_dams/rules → repo root = parents[5]
+    root = Path(__file__).resolve().parents[5]
+    path = (
+        root
+        / "model-assets"
+        / "implementations"
+        / "enterprise"
+        / "moex-enterprise-conceptual-model"
+        / "0.1"
+        / "enterprise-conceptual-model.yaml"
+    )
+    return path if path.is_file() else None
+
+
+def _load_enterprise_concepts(
+    conceptual_ref: str | None,
+) -> dict[str, dict[str, Any]]:
+    """Map conceptual element_id → entity dict from the enterprise package."""
+    if not conceptual_ref:
+        return {}
+    if conceptual_ref in _ENTERPRISE_BODY_CACHE:
+        body = _ENTERPRISE_BODY_CACHE[conceptual_ref]
+    else:
+        path = _enterprise_body_path(str(conceptual_ref))
+        body = None
+        if path is not None:
+            raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+            body = raw if isinstance(raw, dict) else None
+        _ENTERPRISE_BODY_CACHE[conceptual_ref] = body
+    if not body:
+        return {}
+    out: dict[str, dict[str, Any]] = {}
+    for el in body.get("conceptual_entities") or []:
+        if isinstance(el, dict) and el.get("element_id"):
+            out[str(el["element_id"])] = el
+    return out
+
+
+def _concepts_realized_by_logical(
+    data: dict[str, Any], logical_id: str
+) -> set[str]:
+    """Concepts referenced via conceptual_entity_refs or Mapping(realizes)."""
+    refs: set[str] = set()
+    for el in data.get("logical_entities") or []:
+        if not isinstance(el, dict):
+            continue
+        if str(el.get("element_id") or "") != logical_id:
+            continue
+        for r in el.get("conceptual_entity_refs") or []:
+            if r:
+                refs.add(str(r))
+    for m in data.get("mappings") or []:
+        if not isinstance(m, dict):
+            continue
+        if str(m.get("mapping_type") or "") != "realizes":
+            continue
+        sources = {str(x) for x in (m.get("source_refs") or [])}
+        if logical_id not in sources:
+            continue
+        for t in m.get("target_refs") or []:
+            if t:
+                refs.add(str(t))
+    return refs
+
+
+def _logical_linked_to_owner_realizer(
+    data: dict[str, Any],
+    logical_id: str,
+    owner_concept: str,
+) -> bool:
+    """True if a Relationship links logical_id to a peer realizing owner_concept."""
+    for rel in data.get("relationships") or []:
+        if not isinstance(rel, dict):
+            continue
+        src = str(rel.get("source_entity_ref") or "")
+        tgt = str(rel.get("target_entity_ref") or "")
+        if src == logical_id:
+            peer = tgt
+        elif tgt == logical_id:
+            peer = src
+        else:
+            continue
+        if owner_concept in _concepts_realized_by_logical(data, peer):
             return True
     return False
 
@@ -631,6 +726,43 @@ def _run_conditional(
                     requirement_code=requirement_code,
                 )
             )
+        return out
+
+    if template == "ldm008_realization_completeness":
+        status = str(el.get("conceptual_alignment_status") or "")
+        refs = [str(r) for r in (el.get("conceptual_entity_refs") or []) if r]
+        aligned = status == "aligned" or (not status and refs)
+        if not aligned or not refs:
+            return out
+        enterprise = _load_enterprise_concepts(
+            str(data.get("conceptual_implementation_ref") or "") or None
+        )
+        if not enterprise:
+            return out
+        eid = str(el.get("element_id") or "")
+        for cref in refs:
+            concept = enterprise.get(cref)
+            if not concept or str(concept.get("entity_tier") or "") != "dependent":
+                continue
+            owners = [str(o) for o in (concept.get("depends_on_refs") or []) if o]
+            for owner in owners:
+                if _logical_linked_to_owner_realizer(data, eid, owner):
+                    continue
+                out.append(
+                    _diag(
+                        code=code,
+                        severity=sev,
+                        message=(
+                            f'LogicalEntity "{subject}" realizes dependent concept '
+                            f'"{cref}" but has no Relationship to a logical entity '
+                            f'that realizes owner "{owner}".'
+                        ),
+                        subject=subject,
+                        remediation=rem,
+                        statement=statement,
+                        requirement_code=requirement_code,
+                    )
+                )
         return out
 
     if template == "atr005_mapping_coverage":

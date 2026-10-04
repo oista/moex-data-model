@@ -6,7 +6,7 @@ supersedes: []
 superseded_by: MODELING_ARCHITECTURE.md
 ---
 
-# ADR index (001–028)
+# ADR index (001–029)
 
 **Status:** Proposed drafts  
 **Date:** 2026-09-28  
@@ -46,6 +46,7 @@ Viewer-решения живут отдельно: [viewer-decisions.md](../arch
 | [ADR-026](ADR-026-cmd-entity-metamodel.md) | Conceptual entity metamodel (tier, genesis, relation terms) | Proposed; RelationTerm / ExternalClassRef; model glossary view |
 | [ADR-027](ADR-027-glossary-term-relations.md) | Glossary term relations (hierarchy vs associative vs equivalence) | Proposed; See also derived; no related-in-tree; SKOS = corporate projection |
 | [ADR-028](ADR-028-package-documentation-section.md) | Package documentation section | Proposed; kind `documentation`; `docs/toc.yaml` + consumer-context + reserved `docs/adr/` |
+| [ADR-029](ADR-029-cdm-from-er-sketch-and-realization.md) | ER sketch → CDM; no ConceptualAttribute; realization completeness (LDM-008) | Proposed; trading/party slice; warning only |
 
 ## Как принимать
 

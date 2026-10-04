@@ -736,6 +736,15 @@
     return KIND_LETTER[kind] ? kind : "class";
   }
 
+  function folderShapeSvg() {
+    return `<svg class="nav-kind-folder-shape" viewBox="0 0 24 20" aria-hidden="true" focusable="false"><path d="M4.15 3.15h6.75L13.7 6.85h6.15A2.55 2.55 0 0 1 22.4 9.4v5.45A2.55 2.55 0 0 1 19.85 17.4H4.15A2.55 2.55 0 0 1 1.6 14.85V5.7A2.55 2.55 0 0 1 4.15 3.15z"/></svg>`;
+  }
+
+  function folderMarkHtml(extraClass, innerHtml) {
+    const cls = extraClass ? ` ${extraClass}` : "";
+    return `<span class="nav-kind nav-kind-folder${cls}" aria-hidden="true">${folderShapeSvg()}${innerHtml || ""}</span>`;
+  }
+
   function navGlyphHtml(glyph, slot, opts) {
     const g = String(glyph || "").toLowerCase();
     const s = slot || "menu";
@@ -744,7 +753,10 @@
       const label = g.toUpperCase();
       const plaque = `<span class="nav-glyph nav-glyph--${g} nav-glyph--menu" aria-hidden="true">${label}</span>`;
       if (s === "folder") {
-        return `<span class="nav-kind nav-kind-folder nav-kind-folder--level nav-kind-folder--${g}" aria-hidden="true"><span class="nav-kind-folder-tab"></span>${plaque}</span>`;
+        return folderMarkHtml(
+          `nav-kind-folder--level nav-kind-folder--${g}`,
+          `<span class="nav-kind-folder-letter">${escapeHtml(label.charAt(0))}</span>`
+        );
       }
       if (s === "menu") return plaque;
       return `<span class="nav-glyph nav-glyph--${g} nav-glyph--${s}" aria-hidden="true">${label}</span>`;
@@ -1325,7 +1337,7 @@
             const codeHtml = sectionCode
               ? `<span class="nav-kind-folder-code">${escapeHtml(sectionCode.slice(0, 3))}</span>`
               : "";
-            markHtml = `<span class="nav-kind nav-kind-folder" aria-hidden="true"><span class="nav-kind-folder-tab"></span>${codeHtml}</span>`;
+            markHtml = folderMarkHtml("", codeHtml);
           }
         } else if (isPackageGroup) {
           markHtml = sectionMajorityGlyphHtml(node);

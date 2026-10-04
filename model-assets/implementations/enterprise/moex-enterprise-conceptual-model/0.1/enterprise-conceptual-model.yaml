@@ -2,10 +2,11 @@ element_id: dams:model/enterprise-conceptual/0.1
 name: moex_enterprise_conceptual_model
 title: moex.concept-data-model
 description: >
-  Единая корпоративная концептуальная модель MOEX (Party & Trading Participation).
+  Единая корпоративная концептуальная модель MOEX (Party + trading/TKS slice).
   TradingParticipation — reified relation entity, не подкласс LegalEntity.
-  Physical layer запрещён. ExternalTermSelection выравнивается сюда, не на
-  таблицы решений. Tier / genesis / relation terms — ADR-026.
+  ER-черновик концептуализирован без PK/FK-атрибутов (ADR-029). Physical layer
+  запрещён. ExternalTermSelection выравнивается сюда, не на таблицы решений.
+  Tier / genesis / relation terms — ADR-026.
 lifecycle_status: draft
 api_version: dams.moex/v0.1
 model_version: 0.1.0
@@ -92,7 +93,10 @@ conceptual_entities:
   - element_id: dams:concept/TradingVenue
     name: TradingVenue
     title: Торговая площадка
-    description: Торговая площадка / рынок, к которому относится допуск.
+    description: >
+      Торговая площадка / рынок, к которому относится допуск.
+      Принадлежит торговой системе (TradingSystem); не путать с режимом торгов
+      (TradingMode) и секцией (TradingSection).
     lifecycle_status: active
     entity_type: reference
     data_class: reference_data
@@ -176,6 +180,388 @@ conceptual_entities:
     data_class: transactional_data
     business_importance: medium
     entity_tier: primary
+    genesis_kind: native
+
+  # --- Party hub + trading/TKS slice (ADR-029; from CModel_content04 green + party) ---
+
+  - element_id: dams:concept/Person
+    name: Person
+    title: Физическое лицо
+    description: >
+      Физическое лицо как бизнес-актор (sibling Organization; общий Party
+      отложен). Не подкласс Organization.
+    lifecycle_status: active
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/Client
+    name: Client
+    title: Клиент
+    description: >
+      Клиент биржевого/торгового контура со своим идентификатором. Может
+      относиться к Person и/или LegalEntity (XOR на логическом уровне;
+      обе связи концептуально необязательны — не AND depends_on).
+    lifecycle_status: active
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/Issuer
+    name: Issuer
+    title: Эмитент
+    description: >
+      Роль LegalEntity как эмитента инструментов. Reified role, не подкласс
+      LegalEntity (одна организация — много эмиссионных контекстов).
+    lifecycle_status: active
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+      - dams:concept/LegalEntity
+    genesis_kind: native
+
+  - element_id: dams:concept/ClientAccount
+    name: ClientAccount
+    title: Учётная запись клиента
+    description: >
+      Учётная запись клиента, через которую участие в торгах связывается
+      с Client (drawio: Учетные записи клиентов).
+    lifecycle_status: active
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+      - dams:concept/Client
+    genesis_kind: native
+
+  - element_id: dams:concept/Asset
+    name: Asset
+    title: Актив
+    description: Базовый актив / underlying в торговом и риск-контексте.
+    lifecycle_status: active
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/Instrument
+    name: Instrument
+    title: Инструмент
+    description: Торговый инструмент, основанный на активе и связанный с эмитентом.
+    lifecycle_status: active
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/AssetGroup
+    name: AssetGroup
+    title: Группа активов
+    description: Группировка активов для классификации / риск-параметров.
+    lifecycle_status: active
+    entity_type: reference
+    data_class: reference_data
+    business_importance: medium
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/AssetPool
+    name: AssetPool
+    title: Пул активов
+    description: Пул активов (состав через AssetPoolMembership).
+    lifecycle_status: active
+    entity_type: core
+    data_class: reference_data
+    business_importance: medium
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/Benchmark
+    name: Benchmark
+    title: Бенчмарк
+    description: Бенчмарк / эталонный индикатор в торговом контуре.
+    lifecycle_status: active
+    entity_type: reference
+    data_class: reference_data
+    business_importance: medium
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/TradingSystem
+    name: TradingSystem
+    title: Торговая система
+    description: Торговая система / ТКС, на которой ведутся рынки и сессии.
+    lifecycle_status: active
+    entity_type: reference
+    data_class: reference_data
+    business_importance: high
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/TradingMode
+    name: TradingMode
+    title: Режим торгов
+    description: >
+      Режим торгов (не TradingSection и не TradingVenue). Определяет правила
+      исполнения заявок и сделок.
+    lifecycle_status: active
+    entity_type: reference
+    data_class: reference_data
+    business_importance: high
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/TradingCalendar
+    name: TradingCalendar
+    title: Торговый календарь
+    description: Календарь торговых дней / сессий.
+    lifecycle_status: active
+    entity_type: reference
+    data_class: reference_data
+    business_importance: medium
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/TradingSession
+    name: TradingSession
+    title: Торговая сессия
+    description: Сессия торгов на площадке / системе в календарный день.
+    lifecycle_status: active
+    entity_type: core
+    data_class: transactional_data
+    business_importance: high
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/Order
+    name: Order
+    title: Заявка
+    description: Заявка ТКС на инструмент от участника торгов.
+    lifecycle_status: active
+    entity_type: core
+    data_class: transactional_data
+    business_importance: high
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/Trade
+    name: Trade
+    title: Сделка
+    description: >
+      Сделка ТКС — самостоятельная транзакционная сущность (primary),
+      несмотря на FK на участника/инструмент в ER-черновике.
+    lifecycle_status: active
+    entity_type: core
+    data_class: transactional_data
+    business_importance: high
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/OpenPosition
+    name: OpenPosition
+    title: Открытая позиция
+    description: Открытая позиция участника по инструменту.
+    lifecycle_status: active
+    entity_type: core
+    data_class: transactional_data
+    business_importance: high
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/Collateral
+    name: Collateral
+    title: Обеспечение участника
+    description: Обеспечение участника торгов активами на рынке.
+    lifecycle_status: active
+    entity_type: core
+    data_class: transactional_data
+    business_importance: high
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/UnifiedLimit
+    name: UnifiedLimit
+    title: Единый лимит
+    description: Единый лимит участника по расчётному коду / рынку.
+    lifecycle_status: active
+    entity_type: core
+    data_class: transactional_data
+    business_importance: high
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/Obligation
+    name: Obligation
+    title: Требования и обязательства
+    description: Требования и обязательства участника по активу / расчётному коду.
+    lifecycle_status: active
+    entity_type: core
+    data_class: transactional_data
+    business_importance: high
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/MarketMakingProgram
+    name: MarketMakingProgram
+    title: Программа маркет-мейкинга
+    description: Программа маркет-мейкинга (ММ).
+    lifecycle_status: active
+    entity_type: core
+    data_class: reference_data
+    business_importance: medium
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/CorporateAction
+    name: CorporateAction
+    title: Корпоративное событие
+    description: Корпоративное событие по инструменту / эмитенту.
+    lifecycle_status: active
+    entity_type: core
+    data_class: transactional_data
+    business_importance: high
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/ConnectionType
+    name: ConnectionType
+    title: Тип подключения
+    description: Тип подключения / логина к торговой системе.
+    lifecycle_status: active
+    entity_type: reference
+    data_class: reference_data
+    business_importance: medium
+    entity_tier: primary
+    genesis_kind: native
+
+  - element_id: dams:concept/SettlementCode
+    name: SettlementCode
+    title: Расчётный код
+    description: >
+      Расчётный код участника торгов. Специализация AccountRelationship
+      (parent_concept_ref), characteristic of TradingParticipation.
+    lifecycle_status: active
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    parent_concept_ref: dams:concept/AccountRelationship
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+      - dams:concept/TradingParticipation
+    genesis_kind: native
+
+  - element_id: dams:concept/TradingAccount
+    name: TradingAccount
+    title: Торговый счёт
+    description: >
+      Торговый счёт ТКС при расчётном коде. Специализация AccountRelationship.
+    lifecycle_status: active
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    parent_concept_ref: dams:concept/AccountRelationship
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+      - dams:concept/SettlementCode
+    genesis_kind: native
+
+  - element_id: dams:concept/CalendarDay
+    name: CalendarDay
+    title: Календарный день
+    description: День торгового календаря.
+    lifecycle_status: active
+    entity_type: reference
+    data_class: reference_data
+    business_importance: medium
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+      - dams:concept/TradingCalendar
+    genesis_kind: native
+
+  - element_id: dams:concept/AssetPoolMembership
+    name: AssetPoolMembership
+    title: Состав пула активов
+    description: Ассоциация актива и пула активов (M:N).
+    lifecycle_status: active
+    entity_type: core
+    data_class: reference_data
+    business_importance: medium
+    entity_tier: dependent
+    dependency_kind: associative
+    depends_on_refs:
+      - dams:concept/AssetPool
+      - dams:concept/Asset
+    genesis_kind: native
+
+  - element_id: dams:concept/MarketMakingParticipation
+    name: MarketMakingParticipation
+    title: Участие в программе ММ
+    description: Ассоциация участия в торгах и программы маркет-мейкинга.
+    lifecycle_status: active
+    entity_type: core
+    data_class: transactional_data
+    business_importance: medium
+    entity_tier: dependent
+    dependency_kind: associative
+    depends_on_refs:
+      - dams:concept/MarketMakingProgram
+      - dams:concept/TradingParticipation
+    genesis_kind: native
+
+  - element_id: dams:concept/TradingLogin
+    name: TradingLogin
+    title: Логин ТКС
+    description: Логин участника торгов; связан с типом подключения.
+    lifecycle_status: active
+    entity_type: core
+    data_class: master_data
+    business_importance: medium
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+      - dams:concept/TradingParticipation
+    genesis_kind: native
+
+  - element_id: dams:concept/CouponPayment
+    name: CouponPayment
+    title: Купонная выплата
+    description: Купонная выплата по инструменту; может относиться к корпоративному событию.
+    lifecycle_status: active
+    entity_type: core
+    data_class: transactional_data
+    business_importance: medium
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+      - dams:concept/Instrument
+    genesis_kind: native
+
+  - element_id: dams:concept/AssetRiskParameter
+    name: AssetRiskParameter
+    title: Риск-параметр актива
+    description: Риск-параметр / характеристика актива на дату.
+    lifecycle_status: active
+    entity_type: core
+    data_class: reference_data
+    business_importance: medium
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+      - dams:concept/Asset
     genesis_kind: native
 
 relation_terms:
@@ -332,6 +718,258 @@ relation_terms:
     forward_label_en: concerns
     inverse_label: является предметом
     inverse_label_en: is subject of
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/hasIssuerRole
+    name: hasIssuerRole
+    title: имеет роль эмитента / принадлежит
+    description: Организация имеет роль эмитента; роль принадлежит организации.
+    lifecycle_status: active
+    forward_label: имеет роль эмитента
+    forward_label_en: has issuer role
+    inverse_label: принадлежит
+    inverse_label_en: belongs to
+    symmetric: false
+    default_relationship_kind: composition
+
+  - element_id: dams:relterm/issuedBy
+    name: issuedBy
+    title: выпущен / выпускает
+    description: Инструмент выпущен эмитентом.
+    lifecycle_status: active
+    forward_label: выпущен
+    forward_label_en: issued by
+    inverse_label: выпускает
+    inverse_label_en: issues
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/basedOnAsset
+    name: basedOnAsset
+    title: основан на активе / является базовым для
+    description: Инструмент основан на базовом активе.
+    lifecycle_status: active
+    forward_label: основан на активе
+    forward_label_en: based on asset
+    inverse_label: является базовым для
+    inverse_label_en: underpins
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/tradedIn
+    name: tradedIn
+    title: торгуется в / включает торговлю
+    description: Сделка или заявка относится к инструменту.
+    lifecycle_status: active
+    forward_label: торгуется в
+    forward_label_en: traded in
+    inverse_label: включает торговлю
+    inverse_label_en: has trading activity
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/executedBy
+    name: executedBy
+    title: исполнена / исполняет
+    description: Сделка исполнена участником торгов.
+    lifecycle_status: active
+    forward_label: исполнена
+    forward_label_en: executed by
+    inverse_label: исполняет
+    inverse_label_en: executes
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/placedBy
+    name: placedBy
+    title: подана / подаёт
+    description: Заявка подана участником торгов.
+    lifecycle_status: active
+    forward_label: подана
+    forward_label_en: placed by
+    inverse_label: подаёт
+    inverse_label_en: places
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/onBehalfOf
+    name: onBehalfOf
+    title: в интересах / имеет сделки
+    description: Сделка совершена в интересах клиента.
+    lifecycle_status: active
+    forward_label: в интересах
+    forward_label_en: on behalf of
+    inverse_label: имеет сделки
+    inverse_label_en: has trades
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/listedOn
+    name: listedOn
+    title: относится к / включает
+    description: Рынок относится к торговой системе.
+    lifecycle_status: active
+    forward_label: относится к
+    forward_label_en: of system
+    inverse_label: включает
+    inverse_label_en: hosts
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/ofSystem
+    name: ofSystem
+    title: принадлежит системе / содержит
+    description: Сессия / площадка принадлежит торговой системе.
+    lifecycle_status: active
+    forward_label: принадлежит системе
+    forward_label_en: of system
+    inverse_label: содержит
+    inverse_label_en: contains
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/inMode
+    name: inMode
+    title: в режиме / применяется к
+    description: Сделка или заявка в режиме торгов.
+    lifecycle_status: active
+    forward_label: в режиме
+    forward_label_en: in mode
+    inverse_label: применяется к
+    inverse_label_en: applies to activity
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/collateralizes
+    name: collateralizes
+    title: обеспечивает / обеспечено
+    description: Обеспечение участника активом на рынке.
+    lifecycle_status: active
+    forward_label: обеспечивает
+    forward_label_en: collateralizes
+    inverse_label: обеспечено
+    inverse_label_en: collateralized by
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/limits
+    name: limits
+    title: ограничивает / ограничен
+    description: Единый лимит ограничивает участника / код / рынок.
+    lifecycle_status: active
+    forward_label: ограничивает
+    forward_label_en: limits
+    inverse_label: ограничен
+    inverse_label_en: limited by
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/owes
+    name: owes
+    title: имеет обязательства / предъявляет требования
+    description: Требования и обязательства участника по активу.
+    lifecycle_status: active
+    forward_label: имеет обязательства
+    forward_label_en: owes
+    inverse_label: предъявляет требования
+    inverse_label_en: claims from
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/hasLogin
+    name: hasLogin
+    title: имеет логин / принадлежит
+    description: Участие имеет логин ТКС.
+    lifecycle_status: active
+    forward_label: имеет логин
+    forward_label_en: has login
+    inverse_label: принадлежит
+    inverse_label_en: belongs to participation
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/typedAs
+    name: typedAs
+    title: типизирован / типизирует
+    description: Логин типизирован типом подключения.
+    lifecycle_status: active
+    forward_label: типизирован
+    forward_label_en: typed as
+    inverse_label: типизирует
+    inverse_label_en: types
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/asPerson
+    name: asPerson
+    title: как физлицо / является клиентом
+    description: Клиент может относиться к физическому лицу.
+    lifecycle_status: active
+    forward_label: как физлицо
+    forward_label_en: as person
+    inverse_label: является клиентом
+    inverse_label_en: is client
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/asLegalEntity
+    name: asLegalEntity
+    title: как юрлицо / является клиентом
+    description: Клиент может относиться к юридическому лицу.
+    lifecycle_status: active
+    forward_label: как юрлицо
+    forward_label_en: as legal entity
+    inverse_label: является клиентом
+    inverse_label_en: is client
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/usesAccount
+    name: usesAccount
+    title: использует учётную запись / используется
+    description: Участие в торгах использует учётную запись клиента.
+    lifecycle_status: active
+    forward_label: использует учётную запись
+    forward_label_en: uses account
+    inverse_label: используется
+    inverse_label_en: used by
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/groupedIn
+    name: groupedIn
+    title: входит в группу / группирует
+    description: Актив входит в группу активов.
+    lifecycle_status: active
+    forward_label: входит в группу
+    forward_label_en: grouped in
+    inverse_label: группирует
+    inverse_label_en: groups
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/onSession
+    name: onSession
+    title: в сессии / включает
+    description: Сессия на площадке / дне / системе.
+    lifecycle_status: active
+    forward_label: в сессии на
+    forward_label_en: on
+    inverse_label: имеет сессию
+    inverse_label_en: has session
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/holdsPosition
+    name: holdsPosition
+    title: держит позицию / позиция у
+    description: Открытая позиция участника по инструменту.
+    lifecycle_status: active
+    forward_label: держит позицию
+    forward_label_en: holds position
+    inverse_label: позиция у
+    inverse_label_en: position of
     symmetric: false
     default_relationship_kind: association
 
@@ -575,6 +1213,751 @@ relationships:
     target_min_cardinality: 0
     target_max_cardinality: 999
     relation_term_ref: dams:relterm/evidencedBy
+    term_direction: forward
+    relationship_kind: association
+
+  # --- Party hub + trading/TKS relationships (ADR-029) ---
+
+  - element_id: dams:rel/Client/asPerson
+    name: asPerson
+    title: asPerson
+    description: Клиент может относиться к Person (необязательно; XOR с LegalEntity на ЛМД).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Client
+    target_entity_ref: dams:concept/Person
+    source_role: client
+    target_role: person
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/asPerson
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Client/asLegalEntity
+    name: asLegalEntity
+    title: asLegalEntity
+    description: Клиент может относиться к LegalEntity (необязательно).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Client
+    target_entity_ref: dams:concept/LegalEntity
+    source_role: client
+    target_role: legal_entity
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/asLegalEntity
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Issuer/ofLegalEntity
+    name: ofLegalEntity
+    title: belongsTo / hasIssuerRole
+    description: Issuer принадлежит LegalEntity (mandatory owner).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Issuer
+    target_entity_ref: dams:concept/LegalEntity
+    source_role: issuer
+    target_role: legal_entity
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    identifying: true
+    relation_term_ref: dams:relterm/hasIssuerRole
+    term_direction: inverse
+    relationship_kind: composition
+
+  - element_id: dams:rel/ClientAccount/ofClient
+    name: ofClient
+    title: ofClient
+    description: ClientAccount принадлежит Client (mandatory owner).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/ClientAccount
+    target_entity_ref: dams:concept/Client
+    source_role: account
+    target_role: client
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    identifying: true
+    relation_term_ref: dams:relterm/hasAccountRelationship
+    term_direction: inverse
+    relationship_kind: association
+
+  - element_id: dams:rel/TradingParticipation/usesAccount
+    name: usesAccount
+    title: usesAccount
+    description: Участие использует учётную запись клиента.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingParticipation
+    target_entity_ref: dams:concept/ClientAccount
+    source_role: participation
+    target_role: client_account
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/usesAccount
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Instrument/basedOnAsset
+    name: basedOnAsset
+    title: basedOnAsset
+    description: Инструмент основан на активе.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Instrument
+    target_entity_ref: dams:concept/Asset
+    source_role: instrument
+    target_role: asset
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/basedOnAsset
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Instrument/issuedBy
+    name: issuedBy
+    title: issuedBy
+    description: Инструмент выпущен эмитентом.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Instrument
+    target_entity_ref: dams:concept/Issuer
+    source_role: instrument
+    target_role: issuer
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/issuedBy
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Asset/groupedIn
+    name: groupedIn
+    title: groupedIn
+    description: Актив может входить в группу активов.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Asset
+    target_entity_ref: dams:concept/AssetGroup
+    source_role: asset
+    target_role: group
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/groupedIn
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/TradingVenue/listedOn
+    name: listedOn
+    title: ofTradingSystem
+    description: Рынок относится к торговой системе.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingVenue
+    target_entity_ref: dams:concept/TradingSystem
+    source_role: venue
+    target_role: system
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/listedOn
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Trade/executedBy
+    name: executedBy
+    title: executedBy
+    description: Сделка исполнена участником торгов.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Trade
+    target_entity_ref: dams:concept/TradingParticipation
+    source_role: trade
+    target_role: participation
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/executedBy
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Trade/tradedIn
+    name: tradedIn
+    title: tradedIn
+    description: Сделка по инструменту.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Trade
+    target_entity_ref: dams:concept/Instrument
+    source_role: trade
+    target_role: instrument
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/tradedIn
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Trade/inMode
+    name: inMode
+    title: inMode
+    description: Сделка в режиме торгов.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Trade
+    target_entity_ref: dams:concept/TradingMode
+    source_role: trade
+    target_role: mode
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/inMode
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Trade/onBehalfOf
+    name: onBehalfOf
+    title: onBehalfOf
+    description: Сделка может быть в интересах клиента.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Trade
+    target_entity_ref: dams:concept/Client
+    source_role: trade
+    target_role: client
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/onBehalfOf
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Order/placedBy
+    name: placedBy
+    title: placedBy
+    description: Заявка подана участником торгов.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Order
+    target_entity_ref: dams:concept/TradingParticipation
+    source_role: order
+    target_role: participation
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/placedBy
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Order/tradedIn
+    name: tradedIn
+    title: tradedIn
+    description: Заявка по инструменту.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Order
+    target_entity_ref: dams:concept/Instrument
+    source_role: order
+    target_role: instrument
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/tradedIn
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/SettlementCode/ofParticipation
+    name: ofParticipation
+    title: ofParticipation
+    description: Расчётный код принадлежит участию в торгах (mandatory owner).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/SettlementCode
+    target_entity_ref: dams:concept/TradingParticipation
+    source_role: settlement_code
+    target_role: participation
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    identifying: true
+    relation_term_ref: dams:relterm/hasAccountRelationship
+    term_direction: inverse
+    relationship_kind: association
+
+  - element_id: dams:rel/TradingAccount/ofSettlementCode
+    name: ofSettlementCode
+    title: ofSettlementCode
+    description: Торговый счёт принадлежит расчётному коду (mandatory owner).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingAccount
+    target_entity_ref: dams:concept/SettlementCode
+    source_role: trading_account
+    target_role: settlement_code
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    identifying: true
+    relation_term_ref: dams:relterm/hasAccountRelationship
+    term_direction: inverse
+    relationship_kind: association
+
+  - element_id: dams:rel/CalendarDay/ofCalendar
+    name: ofCalendar
+    title: ofCalendar
+    description: Календарный день принадлежит торговому календарю.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/CalendarDay
+    target_entity_ref: dams:concept/TradingCalendar
+    source_role: day
+    target_role: calendar
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    identifying: true
+    relation_term_ref: dams:relterm/memberOf
+    term_direction: forward
+    relationship_kind: composition
+
+  - element_id: dams:rel/TradingSession/onVenue
+    name: onVenue
+    title: onVenue
+    description: Сессия на торговой площадке.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingSession
+    target_entity_ref: dams:concept/TradingVenue
+    source_role: session
+    target_role: venue
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/onSession
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/TradingSession/ofSystem
+    name: ofSystem
+    title: ofSystem
+    description: Сессия принадлежит торговой системе.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingSession
+    target_entity_ref: dams:concept/TradingSystem
+    source_role: session
+    target_role: system
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/ofSystem
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/TradingSession/onDay
+    name: onDay
+    title: onDay
+    description: Сессия в календарный день.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingSession
+    target_entity_ref: dams:concept/CalendarDay
+    source_role: session
+    target_role: day
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/onSession
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/AssetPoolMembership/ofPool
+    name: ofPool
+    title: ofPool
+    description: Членство принадлежит пулу (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/AssetPoolMembership
+    target_entity_ref: dams:concept/AssetPool
+    source_role: membership
+    target_role: pool
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    identifying: true
+    relation_term_ref: dams:relterm/memberOf
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/AssetPoolMembership/ofAsset
+    name: ofAsset
+    title: ofAsset
+    description: Членство ссылается на актив (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/AssetPoolMembership
+    target_entity_ref: dams:concept/Asset
+    source_role: membership
+    target_role: asset
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    identifying: true
+    relation_term_ref: dams:relterm/memberOf
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/MarketMakingParticipation/ofProgram
+    name: ofProgram
+    title: ofProgram
+    description: Участие в ММ принадлежит программе (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/MarketMakingParticipation
+    target_entity_ref: dams:concept/MarketMakingProgram
+    source_role: mm_participation
+    target_role: program
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    identifying: true
+    relation_term_ref: dams:relterm/memberOf
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/MarketMakingParticipation/ofParticipation
+    name: ofParticipation
+    title: ofParticipation
+    description: Участие в ММ принадлежит участию в торгах (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/MarketMakingParticipation
+    target_entity_ref: dams:concept/TradingParticipation
+    source_role: mm_participation
+    target_role: participation
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    identifying: true
+    relation_term_ref: dams:relterm/hasParticipation
+    term_direction: inverse
+    relationship_kind: association
+
+  - element_id: dams:rel/TradingLogin/ofParticipation
+    name: ofParticipation
+    title: ofParticipation
+    description: Логин принадлежит участию в торгах (mandatory owner).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingLogin
+    target_entity_ref: dams:concept/TradingParticipation
+    source_role: login
+    target_role: participation
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    identifying: true
+    relation_term_ref: dams:relterm/hasLogin
+    term_direction: inverse
+    relationship_kind: association
+
+  - element_id: dams:rel/TradingLogin/typedAs
+    name: typedAs
+    title: typedAs
+    description: Логин типизирован типом подключения.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TradingLogin
+    target_entity_ref: dams:concept/ConnectionType
+    source_role: login
+    target_role: connection_type
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/typedAs
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/CouponPayment/ofInstrument
+    name: ofInstrument
+    title: ofInstrument
+    description: Купонная выплата по инструменту (mandatory owner).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/CouponPayment
+    target_entity_ref: dams:concept/Instrument
+    source_role: coupon
+    target_role: instrument
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    identifying: true
+    relation_term_ref: dams:relterm/concerns
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/CouponPayment/ofCorporateAction
+    name: ofCorporateAction
+    title: ofCorporateAction
+    description: Купонная выплата может относиться к корпоративному событию.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/CouponPayment
+    target_entity_ref: dams:concept/CorporateAction
+    source_role: coupon
+    target_role: corporate_action
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/basedOn
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/AssetRiskParameter/ofAsset
+    name: ofAsset
+    title: ofAsset
+    description: Риск-параметр принадлежит активу (mandatory owner).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/AssetRiskParameter
+    target_entity_ref: dams:concept/Asset
+    source_role: risk_param
+    target_role: asset
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    identifying: true
+    relation_term_ref: dams:relterm/concerns
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/OpenPosition/holdsPosition
+    name: holdsPosition
+    title: holdsPosition
+    description: Позиция участника по инструменту.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/OpenPosition
+    target_entity_ref: dams:concept/TradingParticipation
+    source_role: position
+    target_role: participation
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/holdsPosition
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/OpenPosition/tradedIn
+    name: tradedIn
+    title: tradedIn
+    description: Позиция по инструменту.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/OpenPosition
+    target_entity_ref: dams:concept/Instrument
+    source_role: position
+    target_role: instrument
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/tradedIn
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Collateral/ofParticipation
+    name: ofParticipation
+    title: ofParticipation
+    description: Обеспечение относится к участию.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Collateral
+    target_entity_ref: dams:concept/TradingParticipation
+    source_role: collateral
+    target_role: participation
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/collateralizes
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Collateral/ofAsset
+    name: ofAsset
+    title: ofAsset
+    description: Обеспечение активом.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Collateral
+    target_entity_ref: dams:concept/Asset
+    source_role: collateral
+    target_role: asset
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/collateralizes
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Collateral/onVenue
+    name: onVenue
+    title: onVenue
+    description: Обеспечение на рынке.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Collateral
+    target_entity_ref: dams:concept/TradingVenue
+    source_role: collateral
+    target_role: venue
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/admittedTo
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/UnifiedLimit/ofParticipation
+    name: ofParticipation
+    title: ofParticipation
+    description: Лимит относится к участию.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/UnifiedLimit
+    target_entity_ref: dams:concept/TradingParticipation
+    source_role: limit
+    target_role: participation
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/limits
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/UnifiedLimit/ofSettlementCode
+    name: ofSettlementCode
+    title: ofSettlementCode
+    description: Лимит может относиться к расчётному коду.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/UnifiedLimit
+    target_entity_ref: dams:concept/SettlementCode
+    source_role: limit
+    target_role: settlement_code
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/limits
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/UnifiedLimit/onVenue
+    name: onVenue
+    title: onVenue
+    description: Лимит может относиться к рынку.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/UnifiedLimit
+    target_entity_ref: dams:concept/TradingVenue
+    source_role: limit
+    target_role: venue
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/limits
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Obligation/ofParticipation
+    name: ofParticipation
+    title: ofParticipation
+    description: Требования/обязательства участника.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Obligation
+    target_entity_ref: dams:concept/TradingParticipation
+    source_role: obligation
+    target_role: participation
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/owes
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Obligation/ofAsset
+    name: ofAsset
+    title: ofAsset
+    description: Требования/обязательства по активу.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Obligation
+    target_entity_ref: dams:concept/Asset
+    source_role: obligation
+    target_role: asset
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/owes
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/Obligation/ofSettlementCode
+    name: ofSettlementCode
+    title: ofSettlementCode
+    description: Требования/обязательства по расчётному коду.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Obligation
+    target_entity_ref: dams:concept/SettlementCode
+    source_role: obligation
+    target_role: settlement_code
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/owes
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/CorporateAction/ofIssuer
+    name: ofIssuer
+    title: ofIssuer
+    description: Корпоративное событие эмитента.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/CorporateAction
+    target_entity_ref: dams:concept/Issuer
+    source_role: corporate_action
+    target_role: issuer
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/concerns
+    term_direction: forward
+    relationship_kind: association
+
+  - element_id: dams:rel/CorporateAction/ofInstrument
+    name: ofInstrument
+    title: ofInstrument
+    description: Корпоративное событие по инструменту.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/CorporateAction
+    target_entity_ref: dams:concept/Instrument
+    source_role: corporate_action
+    target_role: instrument
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/concerns
     term_direction: forward
     relationship_kind: association
 

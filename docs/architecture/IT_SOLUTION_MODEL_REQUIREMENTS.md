@@ -938,6 +938,7 @@ service-only correlation token.
 | Logical data model | `LDM-005` | Наличие атрибутов |
 | Logical data model | `LDM-006` | Conceptual alignment |
 | Logical data model | `LDM-007` | Семантическая включённость |
+| Logical data model | `LDM-008` | Полнота реализации зависимых концептов (warning; ADR-029) |
 | Attribute | `ATR-001` | Основные свойства logical attribute |
 | Attribute | `ATR-005` | Mapping logical attribute на реализацию |
 | Relationship | `REF-001` | Концы relationship и разрешимость refs |

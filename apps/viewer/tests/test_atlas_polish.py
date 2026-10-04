@@ -183,18 +183,16 @@ def test_css_level_glyph_tokens_and_slots():
     assert ".nav-glyph--card" in css
     assert ".nav-kind-folder--level" in css
     assert ".nav-kind-folder--cdm" in css
+    assert ".nav-kind-folder-letter" in css
     level_folder = css.split(
         ".nav-kind.nav-kind-folder.nav-kind-folder--level {"
     )[1][:220]
-    assert "min-width: 26px" in level_folder
-    assert "height: 14px" in level_folder
-    folder_glyph = css.split(
-        ".nav-kind.nav-kind-folder.nav-kind-folder--level .nav-glyph {"
+    assert "var(--level-folder-edge" in level_folder
+    folder_letter = css.split(
+        ".nav-kind.nav-kind-folder.nav-kind-folder--level .nav-kind-folder-letter {"
     )[1][:200]
-    assert "font-size: 7px" in folder_glyph
-    assert "line-height: 10px" in folder_glyph
-    assert "padding: 0 2px" in folder_glyph
-    assert "opacity: 0.7" in folder_glyph
+    assert "font-size: 9px" in folder_letter
+    assert "font-weight: 300" in folder_letter
 
 
 def test_js_nav_glyph_helpers():
@@ -205,6 +203,9 @@ def test_js_nav_glyph_helpers():
     assert 'logical: "ldm"' in JS
     assert 'physical: "pdm"' in JS
     assert "nav-kind-folder--level" in JS
+    assert "nav-kind-folder-letter" in JS
+    assert "function folderShapeSvg" in JS
+    assert "function folderMarkHtml" in JS
     assert 'implementation_ref: "M"' in JS
     assert "nav-kind--impl" in JS
     assert 'glossary: "G"' in JS

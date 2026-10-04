@@ -3,8 +3,8 @@ name: trading_solution_model
 title: Модель данных торгового решения
 description: >
   Черновой пример модели одного ИТ-решения (dams-data-model / solution).
-  Local Client conceptual entity is transitional; canonical Party concepts
-  live in moex-enterprise-conceptual-model. TradingClient realizes LegalEntity.
+  Canonical Client and Party concepts live in moex-enterprise-conceptual-model.
+  TradingClient realizes enterprise dams:concept/Client (ADR-029).
 lifecycle_status: draft
 api_version: dams.moex/v0.1
 model_version: 1.0.0
@@ -15,17 +15,6 @@ data_owner_ref: org:role/CLIENT_DATA_OWNER
 ownership_inheritance_rule: >-
   Ответственность за данные наследуется от ИТ-решения eam:solution/TRADING
   при отсутствии локального override на сущности.
-conceptual_entities:
-  - element_id: dams:concept/Client
-    name: Client
-    title: Клиент
-    description: >
-      Переходное локальное понятие решения. Canonical SoT —
-      dams:concept/LegalEntity в enterprise conceptual model.
-    lifecycle_status: active
-    entity_type: core
-    data_class: master_data
-    business_importance: high
 domain_contexts:
   - element_id: dams:context/trading
     name: TradingContext
@@ -44,7 +33,6 @@ logical_entities:
     context_ref: dams:context/trading
     conceptual_entity_refs:
       - dams:concept/Client
-      - dams:concept/LegalEntity
     solution_ref: eam:solution/TRADING
     solution_data_role: producer
     entity_type: core
@@ -54,8 +42,8 @@ logical_entities:
     governance_classification: confidential
     conceptual_alignment_status: aligned
     alignment_rationale: >
-      Локальная проекция LegalEntity для торгового контура; сохраняет ссылку
-      на корпоративное понятие и локальный Client.
+      Локальная проекция корпоративного Client (enterprise SoT) для торгового
+      контура; не subclass ConceptualEntity (ADR-029).
     identity_rule: >
       Клиент торгового решения идентифицируется корпоративным идентификатором
       клиента в контуре торговли.
@@ -118,15 +106,15 @@ physical_objects:
         schema_path: /payload/client_id
         mapping_coverage_status: mapped
 mappings:
-  - element_id: dams:mapping/trading/client-realizes-legal-entity
-    name: realizes_TradingClient_LegalEntity
+  - element_id: dams:mapping/trading/client-realizes-client
+    name: realizes_TradingClient_Client
     description: >
-      Solution TradingClient realizes enterprise conceptual LegalEntity (ADR-021).
+      Solution TradingClient realizes enterprise conceptual Client (ADR-021/029).
     lifecycle_status: active
     source_refs:
       - dams:logical/trading/Client
     target_refs:
-      - dams:concept/LegalEntity
+      - dams:concept/Client
     mapping_type: realizes
     mapping_cardinality: one_to_one
     approval_status: proposed
