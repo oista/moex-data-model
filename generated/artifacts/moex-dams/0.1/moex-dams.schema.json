@@ -251,6 +251,20 @@
                         "null"
                     ]
                 },
+                "dependency_kind": {
+                    "$ref": "#/$defs/DependencyKindEnum",
+                    "description": "Required when entity_tier=dependent. characteristic = part/detail of an owner; associative = M:N resolver between owners (ADR-026).\n"
+                },
+                "depends_on_refs": {
+                    "description": "Owner conceptual entities this dependent entity requires. Empty for primary; at least one for dependent (ADR-026).\n",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
                 "deprecated_by_ref": {
                     "type": [
                         "string",
@@ -267,8 +281,26 @@
                 "element_id": {
                     "type": "string"
                 },
+                "entity_tier": {
+                    "$ref": "#/$defs/EntityTierEnum",
+                    "description": "Structural independence of the conceptual entity (ADR-026). primary = independent existence; dependent = requires depends_on_refs.\n"
+                },
                 "entity_type": {
                     "$ref": "#/$defs/EntityTypeEnum"
+                },
+                "external_class_refs": {
+                    "description": "Canonical ConceptualEntity \u2192 external class/term alignments with match_kind (ADR-026). Non-empty iff genesis_kind=external.\n",
+                    "items": {
+                        "$ref": "#/$defs/ExternalClassRef"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "genesis_kind": {
+                    "$ref": "#/$defs/GenesisKindEnum",
+                    "description": "external = aligns to ontology/external class(es); native = modelled without external parents (ADR-026).\n"
                 },
                 "glossary_term_refs": {
                     "items": {
@@ -936,6 +968,15 @@
             "title": "DefinitionScopeKindEnum",
             "type": "string"
         },
+        "DependencyKindEnum": {
+            "description": "Kind of structural dependency for a dependent ConceptualEntity (ADR-026).",
+            "enum": [
+                "characteristic",
+                "associative"
+            ],
+            "title": "DependencyKindEnum",
+            "type": "string"
+        },
         "Dimension": {
             "additionalProperties": false,
             "description": "\u041f\u0435\u0440\u0435\u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0435\u043c\u043e\u0435 \u0430\u043d\u0430\u043b\u0438\u0442\u0438\u0447\u0435\u0441\u043a\u043e\u0435 \u0438\u0437\u043c\u0435\u0440\u0435\u043d\u0438\u0435, \u0441\u0432\u044f\u0437\u0430\u043d\u043d\u043e\u0435 \u0441 \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0438\u043c\u0438 \u0430\u0442\u0440\u0438\u0431\u0443\u0442\u0430\u043c\u0438.",
@@ -1173,6 +1214,15 @@
             "title": "EnforcementResultEnum",
             "type": "string"
         },
+        "EntityTierEnum": {
+            "description": "Structural independence of a ConceptualEntity (ADR-026). Orthogonal to entity_type, data_class, and business_importance.",
+            "enum": [
+                "primary",
+                "dependent"
+            ],
+            "title": "EntityTierEnum",
+            "type": "string"
+        },
         "EntityTypeEnum": {
             "description": "\u0420\u043e\u043b\u044c \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u043e\u0439 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0438 \u0432 \u043c\u043e\u0434\u0435\u043b\u0438 \u0440\u0435\u0448\u0435\u043d\u0438\u044f.",
             "enum": [
@@ -1183,6 +1233,106 @@
                 "technical"
             ],
             "title": "EntityTypeEnum",
+            "type": "string"
+        },
+        "ExternalClassRef": {
+            "additionalProperties": false,
+            "description": "Alignment of a ConceptualEntity to an external class or term (ADR-026). Canonical store for conceptual\u2194external links; Mapping(aligns_with) may mirror for ExternalTermSelection projections.",
+            "properties": {
+                "approval_status": {
+                    "$ref": "#/$defs/ApprovalStatusEnum"
+                },
+                "approved_at": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "approved_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "evidence_refs": {
+                    "items": {
+                        "format": "uri",
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "external_class_ref_id": {
+                    "type": "string"
+                },
+                "external_specification_ref": {
+                    "description": "Optional ExternalSpecification / version pin (ADR-020).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "match_kind": {
+                    "$ref": "#/$defs/ExternalMatchKindEnum",
+                    "description": "Alignment strength. exact/equivalent allow definition inheritance (ADR-025 / ADR-026); close/broad/narrow do not.\n"
+                },
+                "selection_ref": {
+                    "description": "Optional ExternalTermSelection id (ADR-020).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "source_artifact_ref": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "source_kind": {
+                    "$ref": "#/$defs/ExternalSourceKindEnum",
+                    "description": "Kind of external source (ontology, corp architecture, \u2026)."
+                },
+                "target_ref": {
+                    "description": "IRI/CURIE of the external class or term (ADR-026).",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "external_class_ref_id",
+                "target_ref",
+                "match_kind",
+                "source_kind"
+            ],
+            "title": "ExternalClassRef",
+            "type": "object"
+        },
+        "ExternalMatchKindEnum": {
+            "description": "Strength of ConceptualEntity \u2194 external class alignment (ADR-026). Mirrors SKOS mapping relations plus owl:equivalentClass; used for definition inheritance (exact/equivalent only).",
+            "enum": [
+                "exact",
+                "equivalent",
+                "close",
+                "broad",
+                "narrow"
+            ],
+            "title": "ExternalMatchKindEnum",
+            "type": "string"
+        },
+        "ExternalSourceKindEnum": {
+            "description": "Kind of external source for a ConceptualEntity alignment (ADR-026). Aligned with ExternalSpecificationKind where values overlap.",
+            "enum": [
+                "ontology",
+                "corporate-architecture",
+                "business-model",
+                "api-spec",
+                "other"
+            ],
+            "title": "ExternalSourceKindEnum",
             "type": "string"
         },
         "FlowDirectionEnum": {
@@ -1282,6 +1432,15 @@
                 "custom"
             ],
             "title": "FormalCheckKindEnum",
+            "type": "string"
+        },
+        "GenesisKindEnum": {
+            "description": "Whether a ConceptualEntity is aligned to an external class/term or is native to MOEX (ADR-026).",
+            "enum": [
+                "external",
+                "native"
+            ],
+            "title": "GenesisKindEnum",
             "type": "string"
         },
         "GlossaryTerm": {
@@ -3022,6 +3181,16 @@
                         "null"
                     ]
                 },
+                "relation_terms": {
+                    "description": "Governed relation-term dictionary for the package (ADR-026).",
+                    "items": {
+                        "$ref": "#/$defs/RelationTerm"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
                 "relationships": {
                     "items": {
                         "$ref": "#/$defs/Relationship"
@@ -3730,6 +3899,156 @@
             "title": "RegistryEntry",
             "type": "object"
         },
+        "RelationTerm": {
+            "additionalProperties": false,
+            "description": "Governed dictionary term for a conceptual/logical relationship (ADR-026). Provides forward and inverse natural-language labels so a single Relationship assertion can be read from either side.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "default_relationship_kind": {
+                    "$ref": "#/$defs/RelationshipKindEnum",
+                    "description": "Optional default relationship_kind when this term is used."
+                },
+                "definition_rationale": {
+                    "description": "Human rationale for declaring an own definition when a source is also cited, or for overriding an inherited definition.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "definition_source_ref": {
+                    "description": "Reference to the element or external term whose definition is inherited or adapted (ADR-025). Orthogonal to glossary_term_refs (term assignment).\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "description": "Reference definition of the relation term (skos:definition). Absent means inherit via definition_source_ref per ADR-025.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "forward_label": {
+                    "description": "Natural-language label source \u2192 target (ADR-026).",
+                    "type": "string"
+                },
+                "forward_label_en": {
+                    "description": "English forward label (ADR-026).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "inverse_label": {
+                    "description": "Natural-language label target \u2192 source. Required unless symmetric (ADR-026).\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "inverse_label_en": {
+                    "description": "English inverse label (ADR-026).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ontology_property_ref": {
+                    "description": "Optional owl:ObjectProperty IRI. Reserve for future property import; not required in v1 (ADR-026 / ADR-024 \u00a77).\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "scoped_definitions": {
+                    "description": "Context-scoped definitions (ADR-025); v1 scope_kind = system.",
+                    "items": {
+                        "$ref": "#/$defs/ScopedDefinition"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "symmetric": {
+                    "description": "When true, forward and inverse labels are the same; inverse_label may be omitted (ADR-026).\n",
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "forward_label",
+                "element_id",
+                "name",
+                "lifecycle_status"
+            ],
+            "title": "RelationTerm",
+            "type": "object"
+        },
         "Relationship": {
             "additionalProperties": false,
             "description": "\u0418\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u043d\u0430\u044f \u0441\u0432\u044f\u0437\u044c \u043c\u0435\u0436\u0434\u0443 \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0438\u043c\u0438 \u0438\u043b\u0438 \u043a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u044b\u043c\u0438 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u044f\u043c\u0438.",
@@ -3789,6 +4108,13 @@
                 "name": {
                     "type": "string"
                 },
+                "relation_term_ref": {
+                    "description": "Reference to a governed RelationTerm providing forward/inverse labels (ADR-026). One Relationship record per pair; labels are derived.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "relationship_kind": {
                     "$ref": "#/$defs/RelationshipKindEnum",
                     "description": "\u0422\u0438\u043f \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u043e\u0439 \u0441\u0432\u044f\u0437\u0438 (Wave 2)."
@@ -3847,6 +4173,10 @@
                         "string",
                         "null"
                     ]
+                },
+                "term_direction": {
+                    "$ref": "#/$defs/TermDirectionEnum",
+                    "description": "Whether this Relationship assertion uses the forward or inverse wording of relation_term_ref (ADR-026). Default forward when omitted.\n"
                 },
                 "title": {
                     "type": [
@@ -4458,6 +4788,15 @@
             ],
             "title": "SpecificationRequirement",
             "type": "object"
+        },
+        "TermDirectionEnum": {
+            "description": "Which side of a RelationTerm a Relationship assertion uses (ADR-026).",
+            "enum": [
+                "forward",
+                "inverse"
+            ],
+            "title": "TermDirectionEnum",
+            "type": "string"
         }
     },
     "$id": "https://data.moex.com/dams/v0.1",

@@ -29,9 +29,15 @@ def test_trading_participation_is_reified_entity() -> None:
     tp = concepts["TradingParticipation"]
     assert tp["element_id"] == "dams:concept/TradingParticipation"
     rels = data["relationships"]
-    participant = next(r for r in rels if r["name"] == "participant")
-    assert participant["source_entity_ref"] == "dams:concept/TradingParticipation"
-    assert participant["target_entity_ref"] == "dams:concept/LegalEntity"
+    # ADR-026: single owner link (merged former participant + hasTradingParticipation)
+    owner = next(
+        r
+        for r in rels
+        if r["source_entity_ref"] == "dams:concept/TradingParticipation"
+        and r["target_entity_ref"] == "dams:concept/LegalEntity"
+    )
+    assert owner.get("identifying") is True
+    assert owner.get("relation_term_ref") == "dams:relterm/hasParticipation"
     # No relationship that treats TradingParticipation as LegalEntity subclass alias
     for r in rels:
         if r["source_entity_ref"] == "dams:concept/TradingParticipation":

@@ -50,9 +50,10 @@
   --accent-soft: var(--brand-soft);
   --shadow: 0 1px 2px rgba(18, 24, 33, 0.025);
 
-  --sidebar-w: 288px;
-  --sidebar-min: 240px;
-  --sidebar-max: 420px;
+  /* Wide enough for deep Impl nav leaves (e.g. model-assessment) on one line + spare. */
+  --sidebar-w: 400px;
+  --sidebar-min: 300px;
+  --sidebar-max: 520px;
   --header-h: 56px;
   --content-max: 1180px;
   --reading-max: 76ch;
@@ -94,10 +95,10 @@
   --font-ui-family: "MOEX UI", "Segoe UI", Arial, sans-serif;
   --font-code: "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Consolas, monospace;
 
-  /* DAMS model-level plaques (CMD / LDM / PDM) — orange-russet family */
-  --level-cmd-start: #f06a1a;
-  --level-cmd-end: #c41e1e;
-  --level-cmd-text: #ffffff;
+  /* DAMS model-level plaques (CDM / LDM / PDM) — orange-russet family */
+  --level-cdm-start: #f06a1a;
+  --level-cdm-end: #c41e1e;
+  --level-cdm-text: #ffffff;
   --level-ldm-start: #d97706;
   --level-ldm-end: #7c2d12;
   --level-ldm-text: #ffffff;
@@ -154,9 +155,9 @@
   --accent-soft: var(--brand-soft);
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 
-  --level-cmd-start: #ff8a3d;
-  --level-cmd-end: #e54750;
-  --level-cmd-text: #ffffff;
+  --level-cdm-start: #ff8a3d;
+  --level-cdm-end: #e54750;
+  --level-cdm-text: #ffffff;
   --level-ldm-start: #e89a3c;
   --level-ldm-end: #a45a2a;
   --level-ldm-text: #ffffff;

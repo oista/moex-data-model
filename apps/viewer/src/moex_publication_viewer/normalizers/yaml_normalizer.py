@@ -15,8 +15,12 @@ from moex_publication_viewer.normalizers.helpers import (
     section_meta,
     select_path,
 )
+from moex_publication_viewer.normalizers.model_glossary_projection import (
+    project_model_glossary,
+)
 
 FLATTENED_REQUIREMENTS_SELECT = "flattened_requirements"
+MODEL_GLOSSARY_SELECT = "model_glossary"
 
 
 class YamlNormalizer:
@@ -29,6 +33,8 @@ class YamlNormalizer:
         select = section.source.select
         if select == FLATTENED_REQUIREMENTS_SELECT:
             selected = flatten_publication_requirements(data)
+        elif select == MODEL_GLOSSARY_SELECT:
+            selected = project_model_glossary(data)
         else:
             try:
                 selected = select_path(data, select)

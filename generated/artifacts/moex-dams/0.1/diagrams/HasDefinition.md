@@ -11,6 +11,8 @@
         click LogicalEntity href "../LogicalEntity"
       HasDefinition <|-- LogicalAttribute
         click LogicalAttribute href "../LogicalAttribute"
+      HasDefinition <|-- RelationTerm
+        click RelationTerm href "../RelationTerm"
       
       HasDefinition : definition_rationale
         

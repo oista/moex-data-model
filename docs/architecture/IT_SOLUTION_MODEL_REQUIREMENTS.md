@@ -1215,12 +1215,25 @@ FIBO / ODCM / other external specification
           │
           ▼
 Enterprise Conceptual Model
+  (entity_tier, genesis_kind, external_class_refs, RelationTerm — ADR-026)
           │
           ▼
 Solution Data Model
 ```
 
 Для solution model допустимы local external mappings, но они должны быть явно отмечены как локальные или исключительные. Основной semantic target для ExternalTermSelection — enterprise conceptual layer.
+
+### 15.1 ConceptualEntity metamodel (ADR-026)
+
+Корпоративная концептуальная сущность дополнительно несёт:
+
+| Ось | Слоты | Смысл |
+|---|---|---|
+| Уровень | `entity_tier`, `dependency_kind`, `depends_on_refs` | `primary` vs `dependent` (characteristic / associative). Не путать с `business_importance`. FK в ER-схеме ≠ dependent. |
+| Генезис | `genesis_kind`, `external_class_refs` | `external` ⇔ есть выравнивание на класс онтологии / внешней спецификации с `match_kind`; `native` — без внешних родителей. Канон — `external_class_refs`; `Mapping(aligns_with)` — проекция. |
+| Связи | `RelationTerm` + `Relationship.relation_term_ref` | Прямая и обратная формулировка из справочника; одна запись `Relationship` на пару. |
+
+Требования каталога: `CM-CON-002` (tier), `CM-CON-003` (genesis), `CM-REF-002` (relation term). Exactness для наследования определений (ADR-025) берётся из `match_kind` (`exact` / `equivalent`). Модельный глоссарий КМД — генерируемое view (`build_model_glossary`), не отдельный dataset.
 
 ---
 

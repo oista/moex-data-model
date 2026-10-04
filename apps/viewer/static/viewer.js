@@ -16,7 +16,12 @@
   })();
 
   const DEFAULT_CLASS_COLORS = {
-    roles: { plain: "#3d8f6e", mixin: "#3d6eb5", abstract: "#2e8fad" },
+    roles: {
+      plain: "#3d8f6e",
+      mixin: "#3d6eb5",
+      abstract: "#2e8fad",
+      enum: "#b8922e",
+    },
     corner: { has_mixins: "#3d6eb5" },
   };
   const classKindColors = {
@@ -35,6 +40,7 @@
     root.style.setProperty("--class-color-plain", classKindColors.roles.plain);
     root.style.setProperty("--class-color-mixin", classKindColors.roles.mixin);
     root.style.setProperty("--class-color-abstract", classKindColors.roles.abstract);
+    root.style.setProperty("--class-color-enum", classKindColors.roles.enum);
     root.style.setProperty(
       "--class-color-has-mixins",
       classKindColors.corner.has_mixins || classKindColors.roles.mixin
@@ -42,7 +48,9 @@
   })();
 
   function classRole(attrs) {
-    if (!attrs || attrs.kind === "enum") return null;
+    if (!attrs) return null;
+    if (attrs.kind === "enum") return "enum";
+    if (attrs.kind && attrs.kind !== "class") return null;
     if (attrs.mixin) return "mixin";
     if (attrs.abstract) return "abstract";
     return "plain";
@@ -53,12 +61,60 @@
     return Array.isArray(mixins) && mixins.length > 0;
   }
 
-  function classKindClassNames(attrs) {
+  function classKindClassNames(attrs, { corner = true } = {}) {
     const role = classRole(attrs);
     if (!role) return "";
     let cls = `kind-${role}`;
-    if (classHasMixins(attrs)) cls += " has-mixins-corner";
+    if (corner && role !== "enum" && classHasMixins(attrs)) cls += " has-mixins-corner";
     return cls;
+  }
+
+  function sectionMajorityRole(children) {
+    const counts = { plain: 0, mixin: 0, abstract: 0, enum: 0 };
+    let total = 0;
+    (children || []).forEach((child) => {
+      const role = classRole(child?.attributes);
+      if (!role || !(role in counts)) return;
+      counts[role] += 1;
+      total += 1;
+    });
+    if (!total) {
+      return { role: "plain", count: 0, total: 0, tied: false };
+    }
+    let bestRole = "plain";
+    let bestCount = -1;
+    let tied = false;
+    Object.keys(counts).forEach((role) => {
+      const n = counts[role];
+      if (n > bestCount) {
+        bestRole = role;
+        bestCount = n;
+        tied = false;
+      } else if (n === bestCount && n > 0) {
+        tied = true;
+      }
+    });
+    if (tied || bestCount <= 0) {
+      return { role: "plain", count: bestCount, total, tied: true };
+    }
+    return { role: bestRole, count: bestCount, total, tied: false };
+  }
+
+  function isSchemaPackageGroup(attrs) {
+    if (!attrs || attrs.kind !== "group") return false;
+    if (attrs.section_root || attrs.group_style === "section_folder") return false;
+    return !!(attrs.schema_key || attrs.source_domain || attrs.ontology_id);
+  }
+
+  function sectionMajorityGlyphHtml(node) {
+    const kids = node?.children || [];
+    const majority = sectionMajorityRole(kids);
+    const role = majority.role || "plain";
+    const letter = role === "enum" ? "E" : "C";
+    const tip = majority.tied || !majority.total
+      ? "mixed"
+      : `mostly ${role} (${majority.count}/${majority.total})`;
+    return `<span class="nav-kind-section" title="${escapeHtml(tip)}" aria-hidden="true"><span class="nav-kind kind-${role}">${letter}</span></span>`;
   }
 
   const moduleNav = document.getElementById("module-nav");
@@ -242,9 +298,9 @@
     return String(icon);
   }
 
-  const LEVEL_GLYPHS = new Set(["cmd", "ldm", "pdm"]);
+  const LEVEL_GLYPHS = new Set(["cdm", "ldm", "pdm"]);
   const SECTION_ID_NAV_GLYPH = {
-    conceptual: "cmd",
+    conceptual: "cdm",
     logical: "ldm",
     "logical-erd": "ldm",
     physical: "pdm",
@@ -267,12 +323,12 @@
     const explicit = String(a.nav_glyph || "").trim().toLowerCase();
     if (LEVEL_GLYPHS.has(explicit) || KIND_LETTER[explicit]) return explicit;
 
-    if (a.section_root === "requirements-conceptual") return "cmd";
+    if (a.section_root === "requirements-conceptual") return "cdm";
 
     const sectionCode = String(a.requirement_section || "").trim().toUpperCase();
     if (
       a.group_style === "section_folder" &&
-      (sectionCode === "LDM" || sectionCode === "PDM")
+      (sectionCode === "CDM" || sectionCode === "LDM" || sectionCode === "PDM")
     ) {
       return sectionCode.toLowerCase();
     }
@@ -291,11 +347,12 @@
     const s = slot || "menu";
     const o = opts || {};
     if (LEVEL_GLYPHS.has(g)) {
-      if (s === "folder") {
-        const code = String(o.folderCode || g).slice(0, 3).toUpperCase();
-        return `<span class="nav-kind nav-kind-folder nav-glyph--${g}" aria-hidden="true"><span class="nav-kind-folder-tab"></span><span class="nav-kind-folder-code">${escapeHtml(code)}</span></span>`;
-      }
       const label = g.toUpperCase();
+      const plaque = `<span class="nav-glyph nav-glyph--${g} nav-glyph--menu" aria-hidden="true">${label}</span>`;
+      if (s === "folder") {
+        return `<span class="nav-kind nav-kind-folder nav-kind-folder--level nav-kind-folder--${g}" aria-hidden="true"><span class="nav-kind-folder-tab"></span>${plaque}</span>`;
+      }
+      if (s === "menu") return plaque;
       return `<span class="nav-glyph nav-glyph--${g} nav-glyph--${s}" aria-hidden="true">${label}</span>`;
     }
     const letter = KIND_LETTER[g] || String(o.letter || "C");
@@ -668,9 +725,12 @@
         if (hasKids) label.setAttribute("aria-expanded", open ? "true" : "false");
         const kind = node.attributes?.kind || "class";
         const kindClasses =
-          kind === "class" ? classKindClassNames(node.attributes) : "";
+          kind === "class" || kind === "enum"
+            ? classKindClassNames(node.attributes)
+            : "";
         const isSectionFolder =
           kind === "group" && node.attributes?.group_style === "section_folder";
+        const isPackageGroup = isSchemaPackageGroup(node.attributes);
         const sectionCode = String(
           node.attributes?.requirement_section || ""
         ).trim();
@@ -687,6 +747,8 @@
               : "";
             markHtml = `<span class="nav-kind nav-kind-folder" aria-hidden="true"><span class="nav-kind-folder-tab"></span>${codeHtml}</span>`;
           }
+        } else if (isPackageGroup) {
+          markHtml = sectionMajorityGlyphHtml(node);
         } else if (LEVEL_GLYPHS.has(glyph)) {
           markHtml = navGlyphHtml(glyph, "menu");
         } else {
@@ -1454,13 +1516,16 @@
           const btn = document.createElement("button");
           btn.type = "button";
           const kind = child.attributes?.kind || "class";
-          const role = kind === "class" ? classRole(child.attributes) : null;
+          const role =
+            kind === "class" || kind === "enum"
+              ? classRole(child.attributes)
+              : null;
           btn.className = "spec-link explorer-chip" + (role ? ` kind-${role}` : "");
           if (kind === "class") {
             btn.innerHTML = `<span class="nav-kind ${classKindClassNames(child.attributes)}">C</span>
               <span>${escapeHtml(child.title || child.id)}</span>`;
           } else if (kind === "enum") {
-            btn.innerHTML = `<span class="nav-kind">E</span>
+            btn.innerHTML = `<span class="nav-kind ${classKindClassNames(child.attributes)}">E</span>
               <span>${escapeHtml(child.title || child.id)}</span>`;
           } else {
             btn.textContent = child.title || child.id;
@@ -1839,7 +1904,7 @@
         : "";
     const cardGlyph = LEVEL_GLYPHS.has(reqGlyph)
       ? reqGlyph
-      : levelSection || (level === "conceptual_model" ? "cmd" : "");
+      : levelSection || (level === "conceptual_model" ? "cdm" : "");
     const titleBadge = LEVEL_GLYPHS.has(cardGlyph)
       ? navGlyphHtml(cardGlyph, "card")
       : "";
@@ -2146,9 +2211,12 @@
             ? "domain"
             : "package";
       const groupLevelGlyph = resolveNavGlyph(item.attributes);
-      const groupTitleBadge = LEVEL_GLYPHS.has(groupLevelGlyph)
-        ? navGlyphHtml(groupLevelGlyph, "card")
-        : "";
+      let groupTitleBadge = "";
+      if (LEVEL_GLYPHS.has(groupLevelGlyph)) {
+        groupTitleBadge = navGlyphHtml(groupLevelGlyph, "card");
+      } else if (isSchemaPackageGroup(item.attributes)) {
+        groupTitleBadge = sectionMajorityGlyphHtml(item);
+      }
       card.innerHTML = `
         <header class="detail-head">
           <h1>${groupTitleBadge}${escapeHtml(item.title || item.id)}</h1>
@@ -2252,13 +2320,16 @@
           const btn = document.createElement("button");
           btn.type = "button";
           const childKind = child.attributes?.kind || "class";
-          const role = childKind === "class" ? classRole(child.attributes) : null;
+          const role =
+            childKind === "class" || childKind === "enum"
+              ? classRole(child.attributes)
+              : null;
           btn.className = "spec-link explorer-chip" + (role ? ` kind-${role}` : "");
           if (childKind === "class") {
             btn.innerHTML = `<span class="nav-kind ${classKindClassNames(child.attributes)}">C</span>
               <span>${escapeHtml(child.title || child.id)}</span>`;
           } else if (childKind === "enum") {
-            btn.innerHTML = `<span class="nav-kind">E</span>
+            btn.innerHTML = `<span class="nav-kind ${classKindClassNames(child.attributes)}">E</span>
               <span>${escapeHtml(child.title || child.id)}</span>`;
           } else if (childKind === "requirement") {
             btn.innerHTML = `<span class="nav-kind">T</span>
@@ -2312,17 +2383,24 @@
 
 
     const badges = [];
-    if (kind) badges.push(`<span class="badge-pill">${escapeHtml(kind)}</span>`);
+    if (kind === "enum") {
+      badges.push(`<span class="badge-pill badge-kind-enum">enum</span>`);
+    } else if (kind) {
+      badges.push(`<span class="badge-pill">${escapeHtml(kind)}</span>`);
+    }
     if (abstract) badges.push(`<span class="badge-pill">abstract</span>`);
-    if (isMixin) badges.push(`<span class="badge-pill">mixin</span>`);
-    // Keep at most 3 badges in the header row (ADR)
-    const headerBadges = badges.slice(0, 3);
+    if (isMixin) badges.push(`<span class="badge-pill badge-kind-mixin">mixin</span>`);
+    if (kind === "class" && classHasMixins(item.attributes)) {
+      badges.push(`<span class="badge-pill badge-kind-mixin">has mixin</span>`);
+    }
+    // Keep at most 4 badges in the header row (class/abstract/mixin/has mixin)
+    const headerBadges = badges.slice(0, 4);
 
     const titleBadge =
       kind === "class"
         ? `<span class="nav-kind ${classKindClassNames(item.attributes)}" aria-hidden="true">C</span> `
         : kind === "enum"
-          ? `<span class="nav-kind" aria-hidden="true">E</span> `
+          ? `<span class="nav-kind ${classKindClassNames(item.attributes)}" aria-hidden="true">E</span> `
           : "";
 
     card.innerHTML = `
@@ -3281,7 +3359,15 @@
         const defEn = item.attributes?.definition || item.description || "";
         const defRu = (item.attributes?.definition_ru || "").trim();
         const domain = item.attributes?.source_domain || "";
-        card.innerHTML = `<h3>${escapeHtml(title)}</h3>
+        const defMode = (item.attributes?.definition_mode || "").trim();
+        const kind = (item.attributes?.kind || "").trim();
+        const modeBadge = defMode
+          ? `<span class="glossary-mode-badge" data-mode="${escapeHtml(defMode)}">${escapeHtml(defMode)}</span>`
+          : "";
+        const kindBadge = kind
+          ? `<span class="glossary-kind-badge">${escapeHtml(kind)}</span>`
+          : "";
+        card.innerHTML = `<h3>${escapeHtml(title)} ${kindBadge}${modeBadge}</h3>
           <p>${escapeHtml(defEn)}</p>
           ${defRu ? `<p class="muted">${escapeHtml(defRu)}</p>` : ""}
           <div class="muted">${escapeHtml(item.id)}${domain ? " · " + escapeHtml(domain) : ""}</div>`;
@@ -3722,7 +3808,10 @@
     const startX = e.clientX;
     const startW = sidebarEl.getBoundingClientRect().width;
     function onMove(ev) {
-      const next = Math.min(420, Math.max(240, startW + (ev.clientX - startX)));
+      const rootStyles = getComputedStyle(document.documentElement);
+      const minW = parseFloat(rootStyles.getPropertyValue("--sidebar-min")) || 300;
+      const maxW = parseFloat(rootStyles.getPropertyValue("--sidebar-max")) || 520;
+      const next = Math.min(maxW, Math.max(minW, startW + (ev.clientX - startX)));
       document.documentElement.style.setProperty("--sidebar-w", `${next}px`);
     }
     function onUp() {

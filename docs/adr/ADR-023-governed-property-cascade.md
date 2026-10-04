@@ -126,4 +126,5 @@ cascade for their validity window.
 
 - ADR-001 (YAML canonical), ADR-007 (DTO ≠ validator), ADR-013 (requirements catalog / formal_checks)
 - ADR-025 (definition cascade on the semantic axis; closes the deferred realizes note for definitions only)
+- ADR-026 (`entity_tier` / `genesis_kind` are structural metadata on ConceptualEntity; they do **not** participate in this containment cascade)
 )

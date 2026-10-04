@@ -51,6 +51,7 @@ classes:
       - domain_contexts
       - logical_entities
       - relationships
+      - relation_terms
       - physical_objects
       - mappings
 
@@ -75,6 +76,11 @@ classes:
     slots:
       - parent_concept_ref
       - key_attribute_refs
+      - entity_tier
+      - dependency_kind
+      - depends_on_refs
+      - genesis_kind
+      - external_class_refs
     slot_usage:
       description:
         required: false
@@ -159,6 +165,46 @@ classes:
       - associative
       - relationship_kind
       - cardinality_rationale
+      - relation_term_ref
+      - term_direction
+
+  RelationTerm:
+    is_a: ModelElement
+    mixins:
+      - HasDefinition
+    description: >
+      Governed dictionary term for a conceptual/logical relationship (ADR-026).
+      Provides forward and inverse natural-language labels so a single Relationship
+      assertion can be read from either side.
+    slots:
+      - forward_label
+      - forward_label_en
+      - inverse_label
+      - inverse_label_en
+      - symmetric
+      - default_relationship_kind
+      - ontology_property_ref
+    slot_usage:
+      description:
+        required: false
+        description: >
+          Reference definition of the relation term (skos:definition). Absent
+          means inherit via definition_source_ref per ADR-025.
+
+  ExternalClassRef:
+    mixins:
+      - HasProvenance
+    description: >
+      Alignment of a ConceptualEntity to an external class or term (ADR-026).
+      Canonical store for conceptual↔external links; Mapping(aligns_with) may
+      mirror for ExternalTermSelection projections.
+    slots:
+      - external_class_ref_id
+      - target_ref
+      - match_kind
+      - source_kind
+      - external_specification_ref
+      - selection_ref
 
   PhysicalObject:
     is_a: ModelElement
@@ -313,6 +359,42 @@ slots:
   key_attribute_refs:
     range: uriorcurie
     multivalued: true
+  entity_tier:
+    range: EntityTierEnum
+    description: >
+      Structural independence of the conceptual entity (ADR-026). primary =
+      independent existence; dependent = requires depends_on_refs.
+  dependency_kind:
+    range: DependencyKindEnum
+    description: >
+      Required when entity_tier=dependent. characteristic = part/detail of an
+      owner; associative = M:N resolver between owners (ADR-026).
+  depends_on_refs:
+    range: ConceptualEntity
+    multivalued: true
+    inlined: false
+    description: >
+      Owner conceptual entities this dependent entity requires. Empty for
+      primary; at least one for dependent (ADR-026).
+  genesis_kind:
+    range: GenesisKindEnum
+    description: >
+      external = aligns to ontology/external class(es); native = modelled
+      without external parents (ADR-026).
+  external_class_refs:
+    range: ExternalClassRef
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: >
+      Canonical ConceptualEntity → external class/term alignments with
+      match_kind (ADR-026). Non-empty iff genesis_kind=external.
+  relation_terms:
+    range: RelationTerm
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Governed relation-term dictionary for the package (ADR-026).
   context_ref:
     range: DomainContext
     inlined: false
@@ -404,6 +486,69 @@ slots:
   cardinality_rationale:
     range: string
     description: Обоснование отсутствия кардинальности для draft/imported связей.
+  relation_term_ref:
+    range: RelationTerm
+    inlined: false
+    description: >
+      Reference to a governed RelationTerm providing forward/inverse labels
+      (ADR-026). One Relationship record per pair; labels are derived.
+  term_direction:
+    range: TermDirectionEnum
+    description: >
+      Whether this Relationship assertion uses the forward or inverse wording
+      of relation_term_ref (ADR-026). Default forward when omitted.
+  forward_label:
+    range: string
+    required: true
+    description: Natural-language label source → target (ADR-026).
+  forward_label_en:
+    range: string
+    description: English forward label (ADR-026).
+  inverse_label:
+    range: string
+    description: >
+      Natural-language label target → source. Required unless symmetric
+      (ADR-026).
+  inverse_label_en:
+    range: string
+    description: English inverse label (ADR-026).
+  symmetric:
+    range: boolean
+    description: >
+      When true, forward and inverse labels are the same; inverse_label may
+      be omitted (ADR-026).
+  default_relationship_kind:
+    range: RelationshipKindEnum
+    description: Optional default relationship_kind when this term is used.
+  ontology_property_ref:
+    range: uriorcurie
+    description: >
+      Optional owl:ObjectProperty IRI. Reserve for future property import;
+      not required in v1 (ADR-026 / ADR-024 §7).
+  external_class_ref_id:
+    identifier: true
+    range: uriorcurie
+    required: true
+  target_ref:
+    range: uriorcurie
+    required: true
+    description: IRI/CURIE of the external class or term (ADR-026).
+  match_kind:
+    range: ExternalMatchKindEnum
+    required: true
+    description: >
+      Alignment strength. exact/equivalent allow definition inheritance
+      (ADR-025 / ADR-026); close/broad/narrow do not.
+  source_kind:
+    range: ExternalSourceKindEnum
+    required: true
+    description: Kind of external source (ontology, corp architecture, …).
+  external_specification_ref:
+    range: uriorcurie
+    description: Optional ExternalSpecification / version pin (ADR-020).
+  selection_ref:
+    range: uriorcurie
+    description: Optional ExternalTermSelection id (ADR-020).
   source_entity_ref:
     range: uriorcurie
     required: true

@@ -215,6 +215,142 @@ class ConceptualAlignmentStatusEnum(str, Enum):
     """
 
 
+class DefinitionScopeKindEnum(str, Enum):
+    """
+    Kind of scope for a ScopedDefinition (ADR-025). v1 supports system only; enum is intentionally extensible.
+
+    """
+    system = "system"
+    """
+    Definition applies within one ITSystem of the solution.
+    """
+
+
+class ScopedDefinitionRelationEnum(str, Enum):
+    """
+    How a scoped definition relates to the element's reference definition (ADR-025).
+
+    """
+    refines = "refines"
+    """
+    Clarifies the reference definition without changing extension.
+    """
+    narrows = "narrows"
+    """
+    Restricts the meaning to a subset in this scope.
+    """
+    alternative = "alternative"
+    """
+    Parallel wording for the same concept in this scope.
+    """
+    replaces = "replaces"
+    """
+    Scope-local replacement; does not change the reference outside scope.
+    """
+
+
+class EntityTierEnum(str, Enum):
+    """
+    Structural independence of a ConceptualEntity (ADR-026). Orthogonal to entity_type, data_class, and business_importance.
+
+    """
+    primary = "primary"
+    """
+    Existence does not depend on other conceptual entities (FK presence alone does not make an entity dependent).
+
+    """
+    dependent = "dependent"
+    """
+    Cannot exist without owner entity/entities listed in depends_on_refs.
+
+    """
+
+
+class DependencyKindEnum(str, Enum):
+    """
+    Kind of structural dependency for a dependent ConceptualEntity (ADR-026).
+
+    """
+    characteristic = "characteristic"
+    """
+    Part or detail of an owning entity (owner key in identity).
+    """
+    associative = "associative"
+    """
+    Resolves an M:N association between owner entities.
+    """
+
+
+class GenesisKindEnum(str, Enum):
+    """
+    Whether a ConceptualEntity is aligned to an external class/term or is native to MOEX (ADR-026).
+
+    """
+    external = "external"
+    """
+    Aligns to one or more ontology classes or external-specification terms (corporate architecture, business models, API/data standards).
+
+    """
+    native = "native"
+    """
+    Modelled in MOEX without external parent classes.
+    """
+
+
+class ExternalMatchKindEnum(str, Enum):
+    """
+    Strength of ConceptualEntity ↔ external class alignment (ADR-026). Mirrors SKOS mapping relations plus owl:equivalentClass; used for definition inheritance (exact/equivalent only).
+
+    """
+    exact = "exact"
+    """
+    skos:exactMatch — substitutable; definition may inherit.
+    """
+    equivalent = "equivalent"
+    """
+    owl:equivalentClass — substitutable; definition may inherit.
+    """
+    close = "close"
+    """
+    skos:closeMatch — not substitutable; own description required.
+    """
+    broad = "broad"
+    """
+    skos:broadMatch — external is broader; own description required.
+    """
+    narrow = "narrow"
+    """
+    skos:narrowMatch — external is narrower; own description required.
+    """
+
+
+class ExternalSourceKindEnum(str, Enum):
+    """
+    Kind of external source for a ConceptualEntity alignment (ADR-026). Aligned with ExternalSpecificationKind where values overlap.
+
+    """
+    ontology = "ontology"
+    corporate_architecture = "corporate-architecture"
+    business_model = "business-model"
+    api_spec = "api-spec"
+    other = "other"
+
+
+class TermDirectionEnum(str, Enum):
+    """
+    Which side of a RelationTerm a Relationship assertion uses (ADR-026).
+
+    """
+    forward = "forward"
+    """
+    Assertion reads with forward_label (source → target).
+    """
+    inverse = "inverse"
+    """
+    Assertion reads with inverse_label (source → target uses inverse wording).
+    """
+
+
 class MappingCoverageStatusEnum(str, Enum):
     """
     Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical). Не статус самой логической модели.
@@ -508,6 +644,11 @@ class FormalCheckKindEnum(str, Enum):
     """
     Хотя бы один из target_slots заполнен (override обоих допустим).
     """
+    definition_resolvable = "definition_resolvable"
+    """
+    Effective definition must resolve (ADR-025): own description, definition_source_ref, or single conceptual_entity_refs inheritance.
+
+    """
     conditional_branch = "conditional_branch"
     """
     Фиксированный шаблон (имя в expression): status→slots, allowlist kinds, planned guard, semantic inclusion и т.п. Без произвольного mini-language.
@@ -770,6 +911,37 @@ class HasProvenance(ConfiguredBaseModel):
     approved_at: Optional[datetime ] = Field(default=None)
 
 
+class HasDefinition(ConfiguredBaseModel):
+    """
+    Mixin эталонного определения (ADR-025). Слот description остаётся skos:definition (own text). Отсутствие description при наличии definition_source_ref означает наследование; заданный description — own (опционально adapted from source). scoped_definitions — контекстные определения (v1: уровень ITSystem), не заменяющие эталон вне scope.
+
+    """
+    definition_source_ref: Optional[str] = Field(default=None, description="""Reference to the element or external term whose definition is inherited or adapted (ADR-025). Orthogonal to glossary_term_refs (term assignment).
+""")
+    definition_rationale: Optional[str] = Field(default=None, description="""Human rationale for declaring an own definition when a source is also cited, or for overriding an inherited definition.
+""")
+    scoped_definitions: Optional[list[ScopedDefinition]] = Field(default=None, description="""Context-scoped definitions (ADR-025); v1 scope_kind = system.""")
+
+
+class ScopedDefinition(HasProvenance):
+    """
+    Контекстное определение элемента модели (ADR-025 / ISO 11179 Context). Не является отдельным термином глоссария и не заменяет эталонное определение вне указанного scope.
+
+    """
+    scoped_definition_id: str = Field(default=...)
+    scope_kind: DefinitionScopeKindEnum = Field(default=...)
+    scope_ref: str = Field(default=..., description="""Target of the scope (e.g. ITSystem registry id). For scope_kind=system must be a member of the solution's ITSolution.member_system_refs.
+""")
+    text: str = Field(default=..., description="""Scoped definition text (skos:definition in this context).""")
+    relation_to_reference: ScopedDefinitionRelationEnum = Field(default=...)
+    rationale: Optional[str] = Field(default=None, description="""Why this scoped wording differs from the reference definition.""")
+    source_artifact_ref: Optional[str] = Field(default=None)
+    evidence_refs: Optional[list[str]] = Field(default=None)
+    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
+    approved_by_ref: Optional[str] = Field(default=None)
+    approved_at: Optional[datetime ] = Field(default=None)
+
+
 class ModelElement(HasLifecycle):
     """
     Абстрактный корень иерархии элементов модели: общая идентичность (element_id), имя, описание и жизненный цикл.
@@ -805,6 +977,7 @@ class ModelPackage(ModelElement, HasPolicyBindings, HasGovernanceClassification,
     domain_contexts: Optional[list[DomainContext]] = Field(default=None)
     logical_entities: Optional[list[LogicalEntity]] = Field(default=None)
     relationships: Optional[list[Relationship]] = Field(default=None)
+    relation_terms: Optional[list[RelationTerm]] = Field(default=None, description="""Governed relation-term dictionary for the package (ADR-026).""")
     physical_objects: Optional[list[PhysicalObject]] = Field(default=None)
     mappings: Optional[list[Mapping]] = Field(default=None)
     data_owner_ref: Optional[str] = Field(default=None)
@@ -857,12 +1030,22 @@ class DomainContext(ModelElement, HasOwnership):
     deprecated_by_ref: Optional[str] = Field(default=None)
 
 
-class ConceptualEntity(ModelElement, HasBusinessClassification, HasOwnership):
+class ConceptualEntity(ModelElement, HasDefinition, HasBusinessClassification, HasOwnership):
     """
     Корпоративное бизнес-понятие верхнего уровня, независимое от конкретной реализации.
     """
     parent_concept_ref: Optional[str] = Field(default=None)
     key_attribute_refs: Optional[list[str]] = Field(default=None)
+    entity_tier: Optional[EntityTierEnum] = Field(default=None, description="""Structural independence of the conceptual entity (ADR-026). primary = independent existence; dependent = requires depends_on_refs.
+""")
+    dependency_kind: Optional[DependencyKindEnum] = Field(default=None, description="""Required when entity_tier=dependent. characteristic = part/detail of an owner; associative = M:N resolver between owners (ADR-026).
+""")
+    depends_on_refs: Optional[list[str]] = Field(default=None, description="""Owner conceptual entities this dependent entity requires. Empty for primary; at least one for dependent (ADR-026).
+""")
+    genesis_kind: Optional[GenesisKindEnum] = Field(default=None, description="""external = aligns to ontology/external class(es); native = modelled without external parents (ADR-026).
+""")
+    external_class_refs: Optional[list[ExternalClassRef]] = Field(default=None, description="""Canonical ConceptualEntity → external class/term alignments with match_kind (ADR-026). Non-empty iff genesis_kind=external.
+""")
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
@@ -871,10 +1054,16 @@ class ConceptualEntity(ModelElement, HasBusinessClassification, HasOwnership):
     entity_type: Optional[EntityTypeEnum] = Field(default=None)
     data_class: Optional[DataClassEnum] = Field(default=None)
     business_importance: Optional[BusinessImportanceEnum] = Field(default=None)
+    definition_source_ref: Optional[str] = Field(default=None, description="""Reference to the element or external term whose definition is inherited or adapted (ADR-025). Orthogonal to glossary_term_refs (term assignment).
+""")
+    definition_rationale: Optional[str] = Field(default=None, description="""Human rationale for declaring an own definition when a source is also cited, or for overriding an inherited definition.
+""")
+    scoped_definitions: Optional[list[ScopedDefinition]] = Field(default=None, description="""Context-scoped definitions (ADR-025); v1 scope_kind = system.""")
     element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
+    description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition). Absent means inherit via definition_source_ref (ontology class or GlossaryTerm) per ADR-025.
+""")
     aliases: Optional[list[str]] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
@@ -884,7 +1073,7 @@ class ConceptualEntity(ModelElement, HasBusinessClassification, HasOwnership):
     deprecated_by_ref: Optional[str] = Field(default=None)
 
 
-class LogicalEntity(ModelElement, HasPolicyBindings, HasGovernanceClassification, HasBusinessClassification, HasOwnership):
+class LogicalEntity(ModelElement, HasDefinition, HasPolicyBindings, HasGovernanceClassification, HasBusinessClassification, HasOwnership):
     """
     Представление бизнес-сущности в доменном контексте и модели конкретного решения.
     """
@@ -915,10 +1104,16 @@ class LogicalEntity(ModelElement, HasPolicyBindings, HasGovernanceClassification
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
     policy_refs: Optional[list[str]] = Field(default=None)
+    definition_source_ref: Optional[str] = Field(default=None, description="""Reference to the element or external term whose definition is inherited or adapted (ADR-025). Orthogonal to glossary_term_refs (term assignment).
+""")
+    definition_rationale: Optional[str] = Field(default=None, description="""Human rationale for declaring an own definition when a source is also cited, or for overriding an inherited definition.
+""")
+    scoped_definitions: Optional[list[ScopedDefinition]] = Field(default=None, description="""Context-scoped definitions (ADR-025); v1 scope_kind = system.""")
     element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
+    description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition). Absent means inherit from conceptual_entity_refs or definition_source_ref per ADR-025.
+""")
     aliases: Optional[list[str]] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
@@ -928,7 +1123,7 @@ class LogicalEntity(ModelElement, HasPolicyBindings, HasGovernanceClassification
     deprecated_by_ref: Optional[str] = Field(default=None)
 
 
-class LogicalAttribute(ModelElement, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
+class LogicalAttribute(ModelElement, HasDefinition, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
     """
     Логический атрибут сущности с бизнес-смыслом, типом, обязательностью и классификацией.
     """
@@ -961,10 +1156,16 @@ class LogicalAttribute(ModelElement, HasPolicyBindings, HasGovernanceClassificat
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
     policy_refs: Optional[list[str]] = Field(default=None)
+    definition_source_ref: Optional[str] = Field(default=None, description="""Reference to the element or external term whose definition is inherited or adapted (ADR-025). Orthogonal to glossary_term_refs (term assignment).
+""")
+    definition_rationale: Optional[str] = Field(default=None, description="""Human rationale for declaring an own definition when a source is also cited, or for overriding an inherited definition.
+""")
+    scoped_definitions: Optional[list[ScopedDefinition]] = Field(default=None, description="""Context-scoped definitions (ADR-025); v1 scope_kind = system.""")
     element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
+    description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition). v1 attributes are own-only; inheritance from conceptual attributes is out of scope (ADR-025).
+""")
     aliases: Optional[list[str]] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
@@ -990,6 +1191,10 @@ class Relationship(ModelElement):
     associative: Optional[bool] = Field(default=None)
     relationship_kind: Optional[RelationshipKindEnum] = Field(default=None, description="""Тип логической связи (Wave 2).""")
     cardinality_rationale: Optional[str] = Field(default=None, description="""Обоснование отсутствия кардинальности для draft/imported связей.""")
+    relation_term_ref: Optional[str] = Field(default=None, description="""Reference to a governed RelationTerm providing forward/inverse labels (ADR-026). One Relationship record per pair; labels are derived.
+""")
+    term_direction: Optional[TermDirectionEnum] = Field(default=None, description="""Whether this Relationship assertion uses the forward or inverse wording of relation_term_ref (ADR-026). Default forward when omitted.
+""")
     element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
@@ -1001,6 +1206,59 @@ class Relationship(ModelElement):
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
     deprecated_by_ref: Optional[str] = Field(default=None)
+
+
+class RelationTerm(ModelElement, HasDefinition):
+    """
+    Governed dictionary term for a conceptual/logical relationship (ADR-026). Provides forward and inverse natural-language labels so a single Relationship assertion can be read from either side.
+
+    """
+    forward_label: str = Field(default=..., description="""Natural-language label source → target (ADR-026).""")
+    forward_label_en: Optional[str] = Field(default=None, description="""English forward label (ADR-026).""")
+    inverse_label: Optional[str] = Field(default=None, description="""Natural-language label target → source. Required unless symmetric (ADR-026).
+""")
+    inverse_label_en: Optional[str] = Field(default=None, description="""English inverse label (ADR-026).""")
+    symmetric: Optional[bool] = Field(default=None, description="""When true, forward and inverse labels are the same; inverse_label may be omitted (ADR-026).
+""")
+    default_relationship_kind: Optional[RelationshipKindEnum] = Field(default=None, description="""Optional default relationship_kind when this term is used.""")
+    ontology_property_ref: Optional[str] = Field(default=None, description="""Optional owl:ObjectProperty IRI. Reserve for future property import; not required in v1 (ADR-026 / ADR-024 §7).
+""")
+    definition_source_ref: Optional[str] = Field(default=None, description="""Reference to the element or external term whose definition is inherited or adapted (ADR-025). Orthogonal to glossary_term_refs (term assignment).
+""")
+    definition_rationale: Optional[str] = Field(default=None, description="""Human rationale for declaring an own definition when a source is also cited, or for overriding an inherited definition.
+""")
+    scoped_definitions: Optional[list[ScopedDefinition]] = Field(default=None, description="""Context-scoped definitions (ADR-025); v1 scope_kind = system.""")
+    element_id: str = Field(default=...)
+    name: str = Field(default=...)
+    title: Optional[str] = Field(default=None)
+    description: Optional[str] = Field(default=None, description="""Reference definition of the relation term (skos:definition). Absent means inherit via definition_source_ref per ADR-025.
+""")
+    aliases: Optional[list[str]] = Field(default=None)
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+
+
+class ExternalClassRef(HasProvenance):
+    """
+    Alignment of a ConceptualEntity to an external class or term (ADR-026). Canonical store for conceptual↔external links; Mapping(aligns_with) may mirror for ExternalTermSelection projections.
+
+    """
+    external_class_ref_id: str = Field(default=...)
+    target_ref: str = Field(default=..., description="""IRI/CURIE of the external class or term (ADR-026).""")
+    match_kind: ExternalMatchKindEnum = Field(default=..., description="""Alignment strength. exact/equivalent allow definition inheritance (ADR-025 / ADR-026); close/broad/narrow do not.
+""")
+    source_kind: ExternalSourceKindEnum = Field(default=..., description="""Kind of external source (ontology, corp architecture, …).""")
+    external_specification_ref: Optional[str] = Field(default=None, description="""Optional ExternalSpecification / version pin (ADR-020).""")
+    selection_ref: Optional[str] = Field(default=None, description="""Optional ExternalTermSelection id (ADR-020).""")
+    source_artifact_ref: Optional[str] = Field(default=None)
+    evidence_refs: Optional[list[str]] = Field(default=None)
+    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
+    approved_by_ref: Optional[str] = Field(default=None)
+    approved_at: Optional[datetime ] = Field(default=None)
 
 
 class PhysicalObject(ModelElement, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
@@ -1424,6 +1682,8 @@ HasBusinessClassification.model_rebuild()
 HasGovernanceClassification.model_rebuild()
 HasPolicyBindings.model_rebuild()
 HasProvenance.model_rebuild()
+HasDefinition.model_rebuild()
+ScopedDefinition.model_rebuild()
 ModelElement.model_rebuild()
 ModelPackage.model_rebuild()
 DomainContext.model_rebuild()
@@ -1431,6 +1691,8 @@ ConceptualEntity.model_rebuild()
 LogicalEntity.model_rebuild()
 LogicalAttribute.model_rebuild()
 Relationship.model_rebuild()
+RelationTerm.model_rebuild()
+ExternalClassRef.model_rebuild()
 PhysicalObject.model_rebuild()
 PhysicalField.model_rebuild()
 Mapping.model_rebuild()

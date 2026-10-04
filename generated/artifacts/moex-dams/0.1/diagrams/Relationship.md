@@ -46,6 +46,17 @@
         
       Relationship : name
         
+      Relationship : relation_term_ref
+        
+          
+    
+        
+        
+        Relationship --> "0..1" RelationTerm : relation_term_ref
+        click RelationTerm href "../RelationTerm"
+    
+
+        
       Relationship : relationship_kind
         
           
@@ -74,6 +85,17 @@
       Relationship : target_min_cardinality
         
       Relationship : target_role
+        
+      Relationship : term_direction
+        
+          
+    
+        
+        
+        Relationship --> "0..1" TermDirectionEnum : term_direction
+        click TermDirectionEnum href "../TermDirectionEnum"
+    
+
         
       Relationship : title
         

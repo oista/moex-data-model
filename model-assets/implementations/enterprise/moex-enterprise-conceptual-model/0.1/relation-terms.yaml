@@ -1,0 +1,159 @@
+# Governed relation-term dictionary (ADR-026).
+# SoT is also inlined under ModelPackage.relation_terms in
+# enterprise-conceptual-model.yaml for package validation.
+relation_terms:
+  - element_id: dams:relterm/memberOf
+    name: memberOf
+    title: входит в / включает
+    description: Членство сущности в группе или совокупности.
+    lifecycle_status: active
+    forward_label: входит в
+    forward_label_en: member of
+    inverse_label: включает
+    inverse_label_en: has member
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/identifiedBy
+    name: identifiedBy
+    title: идентифицируется / идентифицирует
+    description: Связь сущности с её идентификатором.
+    lifecycle_status: active
+    forward_label: идентифицируется
+    forward_label_en: identified by
+    inverse_label: идентифицирует
+    inverse_label_en: identifies
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/hasParticipation
+    name: hasParticipation
+    title: имеет участие / принадлежит
+    description: Организация имеет участие в торгах; участие принадлежит организации.
+    lifecycle_status: active
+    forward_label: имеет участие
+    forward_label_en: has participation
+    inverse_label: принадлежит
+    inverse_label_en: belongs to
+    symmetric: false
+    default_relationship_kind: composition
+
+  - element_id: dams:relterm/hasAccountRelationship
+    name: hasAccountRelationship
+    title: имеет счётное отношение / относится к
+    description: Организация имеет счётное/учётное отношение.
+    lifecycle_status: active
+    forward_label: имеет счётное отношение
+    forward_label_en: has account relationship
+    inverse_label: относится к
+    inverse_label_en: belongs to party
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/admittedTo
+    name: admittedTo
+    title: допущено к / допускает
+    description: Участие относится к торговой площадке.
+    lifecycle_status: active
+    forward_label: допущено к
+    forward_label_en: admitted to
+    inverse_label: допускает
+    inverse_label_en: admits
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/appliesTo
+    name: appliesTo
+    title: применяется к / применяется для
+    description: Участие применяется к торговой секции.
+    lifecycle_status: active
+    forward_label: применяется к
+    forward_label_en: applies to
+    inverse_label: применяется для
+    inverse_label_en: applied for by
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/hasAdmission
+    name: hasAdmission
+    title: имеет допуск / выдан для
+    description: Участие связано с фактом допуска.
+    lifecycle_status: active
+    forward_label: имеет допуск
+    forward_label_en: has admission
+    inverse_label: выдан для
+    inverse_label_en: granted for
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/governedBy
+    name: governedBy
+    title: регулируется / регулирует
+    description: Участие регулируется соглашением.
+    lifecycle_status: active
+    forward_label: регулируется
+    forward_label_en: governed by
+    inverse_label: регулирует
+    inverse_label_en: governs
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/evidencedBy
+    name: evidencedBy
+    title: подтверждается / подтверждает
+    description: Факт подтверждается документом.
+    lifecycle_status: active
+    forward_label: подтверждается
+    forward_label_en: evidenced by
+    inverse_label: подтверждает
+    inverse_label_en: evidences
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/grantedTo
+    name: grantedTo
+    title: выдан / получает
+    description: Допуск выдан юридическому лицу.
+    lifecycle_status: active
+    forward_label: выдан
+    forward_label_en: granted to
+    inverse_label: получает
+    inverse_label_en: receives
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/grantsAccessTo
+    name: grantsAccessTo
+    title: даёт доступ к / доступен через
+    description: Допуск даёт доступ к площадке.
+    lifecycle_status: active
+    forward_label: даёт доступ к
+    forward_label_en: grants access to
+    inverse_label: доступен через
+    inverse_label_en: accessible via
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/basedOn
+    name: basedOn
+    title: основан на / является основанием для
+    description: Допуск основан на соглашении.
+    lifecycle_status: active
+    forward_label: основан на
+    forward_label_en: based on
+    inverse_label: является основанием для
+    inverse_label_en: is basis for
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/concerns
+    name: concerns
+    title: касается / является предметом
+    description: Регистрационное действие касается юридического лица.
+    lifecycle_status: active
+    forward_label: касается
+    forward_label_en: concerns
+    inverse_label: является предметом
+    inverse_label_en: is subject of
+    symmetric: false
+    default_relationship_kind: association

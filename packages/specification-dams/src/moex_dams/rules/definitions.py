@@ -36,6 +36,9 @@ EXACT_MATCH_RELATIONS = frozenset(
     }
 )
 
+# ADR-026 ExternalMatchKindEnum values that allow definition inheritance.
+EXACT_MATCH_KINDS = frozenset({"exact", "equivalent"})
+
 
 @dataclass(frozen=True)
 class DefinitionProvenance:
@@ -86,13 +89,17 @@ class DefinitionIndex:
         return self.elements.get(element_id)
 
     def add_package(self, body_data: dict[str, Any]) -> None:
-        """Index ConceptualEntity / LogicalEntity / LogicalAttribute from a package."""
+        """Index ConceptualEntity / LogicalEntity / LogicalAttribute / RelationTerm."""
         if not isinstance(body_data, dict):
             return
         for ent in body_data.get("conceptual_entities") or []:
             if isinstance(ent, dict) and ent.get("element_id"):
                 eid = str(ent["element_id"])
                 self.elements[eid] = _IndexedElement(eid, "ConceptualEntity", ent)
+        for term in body_data.get("relation_terms") or []:
+            if isinstance(term, dict) and term.get("element_id"):
+                tid = str(term["element_id"])
+                self.elements[tid] = _IndexedElement(tid, "RelationTerm", term)
         for ent in body_data.get("logical_entities") or []:
             if not isinstance(ent, dict) or not ent.get("element_id"):
                 continue
@@ -141,12 +148,30 @@ def _lookup_external(
     return None
 
 
+def _declared_match_exact(
+    element: dict[str, Any], target_ref: str
+) -> bool | None:
+    """Return exactness from ConceptualEntity.external_class_refs (ADR-026).
+
+    True/False when a matching ExternalClassRef exists; None if undeclared.
+    """
+    for cref in element.get("external_class_refs") or []:
+        if not isinstance(cref, dict):
+            continue
+        if str(cref.get("target_ref") or "") != target_ref:
+            continue
+        kind = str(cref.get("match_kind") or "")
+        return kind in EXACT_MATCH_KINDS or kind in EXACT_MATCH_RELATIONS
+    return None
+
+
 def _resolve_ref(
     ref: str,
     index: DefinitionIndex,
     *,
     stack: tuple[str, ...],
     require_exact_external: bool,
+    external_exact_override: bool | None = None,
 ) -> DefinitionProvenance:
     if ref in stack:
         return DefinitionProvenance(
@@ -189,7 +214,12 @@ def _resolve_ref(
             mode=DefinitionMode.UNRESOLVED,
             diagnostic=f"Definition source {ref!r} not found.",
         )
-    if require_exact_external and not external.exact:
+    is_exact = (
+        external_exact_override
+        if external_exact_override is not None
+        else external.exact
+    )
+    if require_exact_external and not is_exact:
         return DefinitionProvenance(
             text=None,
             language=None,
@@ -324,13 +354,18 @@ def resolve_definition(
 
     # 3. Explicit definition_source_ref
     if has_source:
+        source_key = str(source_ref)
         # Ontology / external: require exact. Internal model elements: always ok.
-        require_exact = index.get(str(source_ref)) is None
+        # ADR-026: prefer match_kind on external_class_refs when declared.
+        is_internal = index.get(source_key) is not None
+        declared_exact = _declared_match_exact(element, source_key)
+        require_exact = not is_internal
         return _resolve_ref(
-            str(source_ref),
+            source_key,
             index,
             stack=stack,
             require_exact_external=require_exact,
+            external_exact_override=declared_exact,
         )
 
     # 4. Implicit: single conceptual_entity_refs (LogicalEntity)

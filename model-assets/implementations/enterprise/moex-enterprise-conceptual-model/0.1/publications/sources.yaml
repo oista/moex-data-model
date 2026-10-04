@@ -1,8 +1,12 @@
 artifacts:
   - path: enterprise-conceptual-model.yaml
     role: model-body
+  - path: relation-terms.yaml
+    role: relation-terms
   - path: controlled-vocabularies.yaml
     role: controlled-vocabularies
+  - path: publications/model_glossary.json
+    role: generated-glossary-view
   - path: implementation.yaml
     role: envelope
   - path: publish.yaml

@@ -35,6 +35,10 @@ from moex_dams.rules.cascade import (
     find_redundant_overrides,
     resolve_governed,
 )
+from moex_dams.rules.conceptual_entity import (
+    check_conceptual_entities,
+    check_conceptual_entities_body,
+)
 from moex_dams.rules.definitions import (
     DefinitionIndex,
     DefinitionMode,
@@ -51,7 +55,13 @@ from moex_dams.rules.identifiers import (
     check_identifiers,
 )
 from moex_dams.rules.formal_checks import check_formal_requirements
+from moex_dams.rules.glossary import build_model_glossary
 from moex_dams.rules.references import check_references
+from moex_dams.rules.relation_terms import (
+    check_relation_terms,
+    check_relation_terms_body,
+    relation_label,
+)
 from moex_dams.rules.structural import check_structural
 
 __all__ = [
@@ -80,9 +90,14 @@ __all__ = [
     "build_dams_graph",
     "build_definition_index",
     "build_element_index",
+    "build_model_glossary",
+    "check_conceptual_entities",
+    "check_conceptual_entities_body",
     "check_identifiers",
     "check_formal_requirements",
     "check_references",
+    "check_relation_terms",
+    "check_relation_terms_body",
     "check_structural",
     "default_dams_rule_sets",
     "diff_graphs",
@@ -91,6 +106,7 @@ __all__ = [
     "find_redundant_overrides",
     "project_model_package_to_dbml",
     "project_model_package_to_er_diagram",
+    "relation_label",
     "resolve_definition",
     "resolve_governed",
     "resolve_package_definitions",

@@ -681,7 +681,7 @@ def wrap_dams_explorer_roots(
         attributes={
             "kind": "group",
             "section_root": "requirements-conceptual",
-            "nav_glyph": "cmd",
+            "nav_glyph": "cdm",
             "purpose": (
                 "Требования, схема и скелет модели уровня enterprise-conceptual "
                 "(без примера модели)."

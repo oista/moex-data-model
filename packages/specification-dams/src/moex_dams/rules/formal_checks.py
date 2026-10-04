@@ -21,6 +21,7 @@ from moex_dams.rules.cascade import (
     find_redundant_overrides,
     resolve_governed,
 )
+from moex_dams.rules.conceptual_entity import check_conceptual_entities
 from moex_dams.rules.definitions import (
     DefinitionIndex,
     DefinitionMode,
@@ -30,6 +31,7 @@ from moex_dams.rules.definitions import (
     resolve_definition,
     validate_scoped_definition_systems,
 )
+from moex_dams.rules.relation_terms import check_relation_terms
 
 # Data-carrying PhysicalObject kinds (GEN-004 / PDM-003 allowlist).
 DATA_CARRYING_KINDS = frozenset(
@@ -1150,6 +1152,8 @@ def check_formal_requirements(
 
     diagnostics.extend(_cascade_governance_lints(data, resolved))
     diagnostics.extend(_definition_lints(data, def_index))
+    diagnostics.extend(check_conceptual_entities(data))
+    diagnostics.extend(check_relation_terms(data))
     return tuple(diagnostics)
 
 

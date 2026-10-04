@@ -235,7 +235,7 @@ def _module_by_id(
 
 # Publication section ids → DAMS model-level plaque (undeniable mapping).
 _SECTION_ID_NAV_GLYPH: dict[str, str] = {
-    "conceptual": "cmd",
+    "conceptual": "cdm",
     "logical": "ldm",
     "logical-erd": "ldm",
     "physical": "pdm",
@@ -308,8 +308,8 @@ def group_solution_impl_nav(
         description="Conceptual entities of the solution model.",
         children=take(_SOLUTION_NAV_CONCEPTUAL_IDS),
         extra_attrs={
-            "nav_glyph": "cmd",
-            "requirement_section": "CMD",
+            "nav_glyph": "cdm",
+            "requirement_section": "CDM",
             "nav_group": "conceptual",
         },
     )

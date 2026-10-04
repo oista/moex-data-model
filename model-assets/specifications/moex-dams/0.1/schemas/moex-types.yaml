@@ -131,6 +131,71 @@ enums:
         description: Parallel wording for the same concept in this scope.
       replaces:
         description: Scope-local replacement; does not change the reference outside scope.
+  EntityTierEnum:
+    description: >
+      Structural independence of a ConceptualEntity (ADR-026). Orthogonal to
+      entity_type, data_class, and business_importance.
+    permissible_values:
+      primary:
+        description: >
+          Existence does not depend on other conceptual entities (FK presence
+          alone does not make an entity dependent).
+      dependent:
+        description: >
+          Cannot exist without owner entity/entities listed in depends_on_refs.
+  DependencyKindEnum:
+    description: >
+      Kind of structural dependency for a dependent ConceptualEntity (ADR-026).
+    permissible_values:
+      characteristic:
+        description: Part or detail of an owning entity (owner key in identity).
+      associative:
+        description: Resolves an M:N association between owner entities.
+  GenesisKindEnum:
+    description: >
+      Whether a ConceptualEntity is aligned to an external class/term or is
+      native to MOEX (ADR-026).
+    permissible_values:
+      external:
+        description: >
+          Aligns to one or more ontology classes or external-specification
+          terms (corporate architecture, business models, API/data standards).
+      native:
+        description: Modelled in MOEX without external parent classes.
+  ExternalMatchKindEnum:
+    description: >
+      Strength of ConceptualEntity ↔ external class alignment (ADR-026).
+      Mirrors SKOS mapping relations plus owl:equivalentClass; used for
+      definition inheritance (exact/equivalent only).
+    permissible_values:
+      exact:
+        description: skos:exactMatch — substitutable; definition may inherit.
+      equivalent:
+        description: owl:equivalentClass — substitutable; definition may inherit.
+      close:
+        description: skos:closeMatch — not substitutable; own description required.
+      broad:
+        description: skos:broadMatch — external is broader; own description required.
+      narrow:
+        description: skos:narrowMatch — external is narrower; own description required.
+  ExternalSourceKindEnum:
+    description: >
+      Kind of external source for a ConceptualEntity alignment (ADR-026).
+      Aligned with ExternalSpecificationKind where values overlap.
+    permissible_values:
+      ontology:
+      corporate-architecture:
+      business-model:
+      api-spec:
+      other:
+  TermDirectionEnum:
+    description: >
+      Which side of a RelationTerm a Relationship assertion uses (ADR-026).
+    permissible_values:
+      forward:
+        description: Assertion reads with forward_label (source → target).
+      inverse:
+        description: Assertion reads with inverse_label (source → target uses inverse wording).
   MappingCoverageStatusEnum:
     description: >
       Статус покрытия элемента mapping’ом на соседнем уровне модели

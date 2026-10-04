@@ -41,7 +41,8 @@ semantics.
    | `implements` / `conforms_to` | SpecImpl → ReferenceSpec / publication contract |
    | `realizes` | solution element → enterprise conceptual entity |
    | `field_mapping` (mapsTo) | physical ↔ logical |
-   | `aligns_with` | enterprise conceptual ↔ external term |
+   | `aligns_with` | enterprise conceptual ↔ external term (projection / selection) |
+   | `external_class_refs` | Canonical ConceptualEntity → external class/term with `match_kind` (ADR-026) |
 
 5. Canonical fixtures:
 
@@ -61,6 +62,6 @@ semantics.
 
 ## Related
 
-- ADR-016, ADR-018, ADR-019, ADR-020
+- ADR-016, ADR-018, ADR-019, ADR-020, ADR-026
 - [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)
 - [MOEX_PARTY_AND_TRADING_PARTICIPATION_PROFILE.md](../architecture/MOEX_PARTY_AND_TRADING_PARTICIPATION_PROFILE.md)

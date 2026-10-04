@@ -5,6 +5,7 @@ roles:
   plain: "#3d8f6e"      # sage green — concrete class without mixin role
   mixin: "#3d6eb5"      # steel blue — mixin class
   abstract: "#2e8fad"   # teal cyan — abstract class
+  enum: "#b8922e"       # warm yellow — enumeration
 
 corner:
   has_mixins: "#3d6eb5" # same family as mixin; blue triangle on (C)

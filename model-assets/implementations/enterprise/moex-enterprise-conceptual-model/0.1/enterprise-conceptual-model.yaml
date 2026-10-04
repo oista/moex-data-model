@@ -5,7 +5,7 @@ description: >
   Единая корпоративная концептуальная модель MOEX (Party & Trading Participation).
   TradingParticipation — reified relation entity, не подкласс LegalEntity.
   Physical layer запрещён. ExternalTermSelection выравнивается сюда, не на
-  таблицы решений.
+  таблицы решений. Tier / genesis / relation terms — ADR-026.
 lifecycle_status: draft
 api_version: dams.moex/v0.1
 model_version: 0.1.0
@@ -22,6 +22,8 @@ conceptual_entities:
     entity_type: core
     data_class: master_data
     business_importance: high
+    entity_tier: primary
+    genesis_kind: native
 
   - element_id: dams:concept/LegalEntity
     name: LegalEntity
@@ -34,6 +36,14 @@ conceptual_entities:
     data_class: master_data
     business_importance: high
     parent_concept_ref: dams:concept/Organization
+    entity_tier: primary
+    genesis_kind: external
+    external_class_refs:
+      - external_class_ref_id: dams:extref/LegalEntity/fibo-LegalPerson
+        target_ref: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
+        match_kind: close
+        source_kind: ontology
+        approval_status: proposed
 
   - element_id: dams:concept/CorporateGroup
     name: CorporateGroup
@@ -43,6 +53,8 @@ conceptual_entities:
     entity_type: core
     data_class: master_data
     business_importance: medium
+    entity_tier: primary
+    genesis_kind: native
 
   - element_id: dams:concept/OrganizationIdentifier
     name: OrganizationIdentifier
@@ -54,6 +66,11 @@ conceptual_entities:
     entity_type: core
     data_class: reference_data
     business_importance: high
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+      - dams:concept/LegalEntity
+    genesis_kind: native
 
   - element_id: dams:concept/TradingParticipation
     name: TradingParticipation
@@ -66,6 +83,11 @@ conceptual_entities:
     entity_type: core
     data_class: master_data
     business_importance: high
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+      - dams:concept/LegalEntity
+    genesis_kind: native
 
   - element_id: dams:concept/TradingVenue
     name: TradingVenue
@@ -75,6 +97,8 @@ conceptual_entities:
     entity_type: reference
     data_class: reference_data
     business_importance: high
+    entity_tier: primary
+    genesis_kind: native
 
   - element_id: dams:concept/TradingSection
     name: TradingSection
@@ -84,6 +108,8 @@ conceptual_entities:
     entity_type: reference
     data_class: reference_data
     business_importance: high
+    entity_tier: primary
+    genesis_kind: native
 
   - element_id: dams:concept/Admission
     name: Admission
@@ -95,6 +121,11 @@ conceptual_entities:
     entity_type: core
     data_class: transactional_data
     business_importance: high
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+      - dams:concept/LegalEntity
+    genesis_kind: native
 
   - element_id: dams:concept/Agreement
     name: Agreement
@@ -104,6 +135,8 @@ conceptual_entities:
     entity_type: core
     data_class: transactional_data
     business_importance: high
+    entity_tier: primary
+    genesis_kind: native
 
   - element_id: dams:concept/AccountRelationship
     name: AccountRelationship
@@ -115,6 +148,11 @@ conceptual_entities:
     entity_type: core
     data_class: master_data
     business_importance: high
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+      - dams:concept/LegalEntity
+    genesis_kind: native
 
   - element_id: dams:concept/RegistrationAction
     name: RegistrationAction
@@ -126,6 +164,8 @@ conceptual_entities:
     entity_type: core
     data_class: transactional_data
     business_importance: high
+    entity_tier: primary
+    genesis_kind: native
 
   - element_id: dams:concept/SupportingDocument
     name: SupportingDocument
@@ -135,8 +175,169 @@ conceptual_entities:
     entity_type: core
     data_class: transactional_data
     business_importance: medium
+    entity_tier: primary
+    genesis_kind: native
+
+relation_terms:
+  - element_id: dams:relterm/memberOf
+    name: memberOf
+    title: входит в / включает
+    description: Членство сущности в группе или совокупности.
+    lifecycle_status: active
+    forward_label: входит в
+    forward_label_en: member of
+    inverse_label: включает
+    inverse_label_en: has member
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/identifiedBy
+    name: identifiedBy
+    title: идентифицируется / идентифицирует
+    description: Связь сущности с её идентификатором.
+    lifecycle_status: active
+    forward_label: идентифицируется
+    forward_label_en: identified by
+    inverse_label: идентифицирует
+    inverse_label_en: identifies
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/hasParticipation
+    name: hasParticipation
+    title: имеет участие / принадлежит
+    description: Организация имеет участие в торгах; участие принадлежит организации.
+    lifecycle_status: active
+    forward_label: имеет участие
+    forward_label_en: has participation
+    inverse_label: принадлежит
+    inverse_label_en: belongs to
+    symmetric: false
+    default_relationship_kind: composition
+
+  - element_id: dams:relterm/hasAccountRelationship
+    name: hasAccountRelationship
+    title: имеет счётное отношение / относится к
+    description: Организация имеет счётное/учётное отношение.
+    lifecycle_status: active
+    forward_label: имеет счётное отношение
+    forward_label_en: has account relationship
+    inverse_label: относится к
+    inverse_label_en: belongs to party
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/admittedTo
+    name: admittedTo
+    title: допущено к / допускает
+    description: Участие относится к торговой площадке.
+    lifecycle_status: active
+    forward_label: допущено к
+    forward_label_en: admitted to
+    inverse_label: допускает
+    inverse_label_en: admits
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/appliesTo
+    name: appliesTo
+    title: применяется к / применяется для
+    description: Участие применяется к торговой секции.
+    lifecycle_status: active
+    forward_label: применяется к
+    forward_label_en: applies to
+    inverse_label: применяется для
+    inverse_label_en: applied for by
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/hasAdmission
+    name: hasAdmission
+    title: имеет допуск / выдан для
+    description: Участие связано с фактом допуска.
+    lifecycle_status: active
+    forward_label: имеет допуск
+    forward_label_en: has admission
+    inverse_label: выдан для
+    inverse_label_en: granted for
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/governedBy
+    name: governedBy
+    title: регулируется / регулирует
+    description: Участие регулируется соглашением.
+    lifecycle_status: active
+    forward_label: регулируется
+    forward_label_en: governed by
+    inverse_label: регулирует
+    inverse_label_en: governs
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/evidencedBy
+    name: evidencedBy
+    title: подтверждается / подтверждает
+    description: Факт подтверждается документом.
+    lifecycle_status: active
+    forward_label: подтверждается
+    forward_label_en: evidenced by
+    inverse_label: подтверждает
+    inverse_label_en: evidences
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/grantedTo
+    name: grantedTo
+    title: выдан / получает
+    description: Допуск выдан юридическому лицу.
+    lifecycle_status: active
+    forward_label: выдан
+    forward_label_en: granted to
+    inverse_label: получает
+    inverse_label_en: receives
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/grantsAccessTo
+    name: grantsAccessTo
+    title: даёт доступ к / доступен через
+    description: Допуск даёт доступ к площадке.
+    lifecycle_status: active
+    forward_label: даёт доступ к
+    forward_label_en: grants access to
+    inverse_label: доступен через
+    inverse_label_en: accessible via
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/basedOn
+    name: basedOn
+    title: основан на / является основанием для
+    description: Допуск основан на соглашении.
+    lifecycle_status: active
+    forward_label: основан на
+    forward_label_en: based on
+    inverse_label: является основанием для
+    inverse_label_en: is basis for
+    symmetric: false
+    default_relationship_kind: association
+
+  - element_id: dams:relterm/concerns
+    name: concerns
+    title: касается / является предметом
+    description: Регистрационное действие касается юридического лица.
+    lifecycle_status: active
+    forward_label: касается
+    forward_label_en: concerns
+    inverse_label: является предметом
+    inverse_label_en: is subject of
+    symmetric: false
+    default_relationship_kind: association
 
 relationships:
+  # One record per pair (ADR-026). Dependent→owner edges carry mandatory
+  # cardinality; labels on the opposite side are derived from RelationTerm.
   - element_id: dams:rel/LegalEntity/memberOf
     name: memberOf
     title: memberOf
@@ -150,50 +351,37 @@ relationships:
     source_max_cardinality: 1
     target_min_cardinality: 0
     target_max_cardinality: 999
+    relation_term_ref: dams:relterm/memberOf
+    term_direction: forward
+    relationship_kind: association
 
-  - element_id: dams:rel/LegalEntity/identifiedBy
-    name: identifiedBy
-    title: identifiedBy
-    description: LegalEntity идентифицируется OrganizationIdentifier.
+  - element_id: dams:rel/OrganizationIdentifier/ofLegalEntity
+    name: ofLegalEntity
+    title: identifies / identifiedBy
+    description: >
+      OrganizationIdentifier identifies LegalEntity (mandatory owner).
+      Opposite label «идентифицируется» is derived from the relation term.
     lifecycle_status: active
-    source_entity_ref: dams:concept/LegalEntity
-    target_entity_ref: dams:concept/OrganizationIdentifier
-    source_role: identified
-    target_role: identifier
-    source_min_cardinality: 0
-    target_min_cardinality: 1
-    target_max_cardinality: 999
-
-  - element_id: dams:rel/LegalEntity/hasTradingParticipation
-    name: hasTradingParticipation
-    title: hasTradingParticipation
-    description: LegalEntity имеет одно или несколько TradingParticipation.
-    lifecycle_status: active
-    source_entity_ref: dams:concept/LegalEntity
-    target_entity_ref: dams:concept/TradingParticipation
-    source_role: participant_org
-    target_role: participation
-    source_min_cardinality: 0
+    source_entity_ref: dams:concept/OrganizationIdentifier
+    target_entity_ref: dams:concept/LegalEntity
+    source_role: identifier
+    target_role: identified
+    source_min_cardinality: 1
+    source_max_cardinality: 1
     target_min_cardinality: 0
     target_max_cardinality: 999
+    identifying: true
+    relation_term_ref: dams:relterm/identifiedBy
+    term_direction: inverse
+    relationship_kind: association
 
-  - element_id: dams:rel/LegalEntity/hasAccountRelationship
-    name: hasAccountRelationship
-    title: hasAccountRelationship
-    description: LegalEntity имеет AccountRelationship.
-    lifecycle_status: active
-    source_entity_ref: dams:concept/LegalEntity
-    target_entity_ref: dams:concept/AccountRelationship
-    source_role: party
-    target_role: account_rel
-    source_min_cardinality: 0
-    target_min_cardinality: 0
-    target_max_cardinality: 999
-
-  - element_id: dams:rel/TradingParticipation/participant
-    name: participant
-    title: participant
-    description: TradingParticipation принадлежит LegalEntity.
+  - element_id: dams:rel/TradingParticipation/ofLegalEntity
+    name: ofLegalEntity
+    title: belongsTo / hasParticipation
+    description: >
+      TradingParticipation принадлежит LegalEntity (mandatory, identifying).
+      Former duplicate LegalEntity/hasTradingParticipation + TradingParticipation/participant
+      edges merged into this single record (ADR-026).
     lifecycle_status: active
     source_entity_ref: dams:concept/TradingParticipation
     target_entity_ref: dams:concept/LegalEntity
@@ -201,9 +389,31 @@ relationships:
     target_role: participant
     source_min_cardinality: 1
     source_max_cardinality: 1
-    target_min_cardinality: 1
-    target_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
     identifying: true
+    relation_term_ref: dams:relterm/hasParticipation
+    term_direction: inverse
+    relationship_kind: composition
+
+  - element_id: dams:rel/AccountRelationship/ofLegalEntity
+    name: ofLegalEntity
+    title: belongsTo / hasAccountRelationship
+    description: >
+      AccountRelationship относится к LegalEntity (mandatory owner).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/AccountRelationship
+    target_entity_ref: dams:concept/LegalEntity
+    source_role: account_rel
+    target_role: party
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    identifying: true
+    relation_term_ref: dams:relterm/hasAccountRelationship
+    term_direction: inverse
+    relationship_kind: association
 
   - element_id: dams:rel/TradingParticipation/admittedTo
     name: admittedTo
@@ -218,6 +428,9 @@ relationships:
     source_max_cardinality: 1
     target_min_cardinality: 1
     target_max_cardinality: 1
+    relation_term_ref: dams:relterm/admittedTo
+    term_direction: forward
+    relationship_kind: association
 
   - element_id: dams:rel/TradingParticipation/appliesTo
     name: appliesTo
@@ -231,6 +444,9 @@ relationships:
     source_min_cardinality: 0
     target_min_cardinality: 0
     target_max_cardinality: 999
+    relation_term_ref: dams:relterm/appliesTo
+    term_direction: forward
+    relationship_kind: association
 
   - element_id: dams:rel/TradingParticipation/hasAdmission
     name: hasAdmission
@@ -244,6 +460,9 @@ relationships:
     source_min_cardinality: 0
     target_min_cardinality: 0
     target_max_cardinality: 999
+    relation_term_ref: dams:relterm/hasAdmission
+    term_direction: forward
+    relationship_kind: association
 
   - element_id: dams:rel/TradingParticipation/governedBy
     name: governedBy
@@ -257,6 +476,9 @@ relationships:
     source_min_cardinality: 0
     target_min_cardinality: 0
     target_max_cardinality: 999
+    relation_term_ref: dams:relterm/governedBy
+    term_direction: forward
+    relationship_kind: association
 
   - element_id: dams:rel/TradingParticipation/evidencedBy
     name: evidencedBy
@@ -270,6 +492,9 @@ relationships:
     source_min_cardinality: 0
     target_min_cardinality: 0
     target_max_cardinality: 999
+    relation_term_ref: dams:relterm/evidencedBy
+    term_direction: forward
+    relationship_kind: association
 
   - element_id: dams:rel/Admission/grantedTo
     name: grantedTo
@@ -284,6 +509,10 @@ relationships:
     source_max_cardinality: 1
     target_min_cardinality: 1
     target_max_cardinality: 1
+    identifying: true
+    relation_term_ref: dams:relterm/grantedTo
+    term_direction: forward
+    relationship_kind: association
 
   - element_id: dams:rel/Admission/grantsAccessToVenue
     name: grantsAccessTo
@@ -297,6 +526,9 @@ relationships:
     source_min_cardinality: 0
     target_min_cardinality: 0
     target_max_cardinality: 999
+    relation_term_ref: dams:relterm/grantsAccessTo
+    term_direction: forward
+    relationship_kind: association
 
   - element_id: dams:rel/Admission/basedOnAgreement
     name: basedOn
@@ -310,6 +542,9 @@ relationships:
     source_min_cardinality: 0
     target_min_cardinality: 0
     target_max_cardinality: 999
+    relation_term_ref: dams:relterm/basedOn
+    term_direction: forward
+    relationship_kind: association
 
   - element_id: dams:rel/RegistrationAction/concernsLegalEntity
     name: concerns
@@ -323,6 +558,9 @@ relationships:
     source_min_cardinality: 0
     target_min_cardinality: 0
     target_max_cardinality: 1
+    relation_term_ref: dams:relterm/concerns
+    term_direction: forward
+    relationship_kind: association
 
   - element_id: dams:rel/RegistrationAction/evidencedBy
     name: evidencedBy
@@ -336,13 +574,16 @@ relationships:
     source_min_cardinality: 0
     target_min_cardinality: 0
     target_max_cardinality: 999
+    relation_term_ref: dams:relterm/evidencedBy
+    term_direction: forward
+    relationship_kind: association
 
 mappings:
-  - element_id: dams:mapping/align/LegalEntity-placeholder
+  - element_id: dams:mapping/align/LegalEntity-fibo
     name: align_LegalEntity_fibo
     description: >
-      Candidate alignsWith to FIBO LegalPerson — governed in ExternalTermSelection
-      moex-trading-participant-core; recorded here as enterprise alignment stub.
+      Projection of LegalEntity external_class_refs for ExternalTermSelection
+      (ADR-020/026). Canonical match_kind=close lives on the entity.
     lifecycle_status: draft
     source_refs:
       - dams:concept/LegalEntity

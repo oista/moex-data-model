@@ -86,7 +86,7 @@ def test_impl_section_nav_children_stamps_level_glyphs() -> None:
     # Incomplete solution set → flat leaves; glyphs stay on section_refs.
     by_sid = {c.attributes["section_id"]: c.attributes.get("nav_glyph") for c in kids}
     assert by_sid == {
-        "conceptual": "cmd",
+        "conceptual": "cdm",
         "logical": "ldm",
         "logical-erd": "ldm",
         "physical": "pdm",
@@ -149,7 +149,7 @@ def test_group_solution_impl_nav_nests_five_folders() -> None:
     ]
     assert kids[1].title == "Концептуальная модель"
     assert kids[1].attributes.get("group_style") == "section_folder"
-    assert kids[1].attributes.get("nav_glyph") == "cmd"
+    assert kids[1].attributes.get("nav_glyph") == "cdm"
     assert [c.attributes["section_id"] for c in kids[1].children] == ["conceptual"]
     assert [c.attributes["section_id"] for c in kids[2].children] == [
         "logical",

@@ -23,6 +23,7 @@ Name: moex_dams
 | [DataModelBinding](DataModelBinding.md) | Дочерняя модельная спецификация дата-контракта, фиксирующая неизменяемую реви... |
 | [Dimension](Dimension.md) | Переиспользуемое аналитическое измерение, связанное с логическими атрибутами |
 | [DomainContext](DomainContext.md) | Ограниченный логический контекст с собственной терминологией и областью ответ... |
+| [ExternalClassRef](ExternalClassRef.md) | Alignment of a ConceptualEntity to an external class or term (ADR-026) |
 | [FormalCheck](FormalCheck.md) | Одна машиночитаемая проверка требования |
 | [GlossaryTerm](GlossaryTerm.md) | Термин корпоративного бизнес-глоссария |
 | [HasBusinessClassification](HasBusinessClassification.md) | Классификация роли и бизнес-значимости логической сущности |
@@ -51,6 +52,7 @@ Name: moex_dams
 | [PolicyBinding](PolicyBinding.md) | Применение управляемой политики к элементу модели |
 | [RegistryEntry](RegistryEntry.md) | Локальная ссылочная проекция записи внешней мастер-системы; не является масте... |
 | [Relationship](Relationship.md) | Именованная связь между логическими или концептуальными сущностями |
+| [RelationTerm](RelationTerm.md) | Governed dictionary term for a conceptual/logical relationship (ADR-026) |
 | [RequirementApplicability](RequirementApplicability.md) | Область применимости требования (без graph queries): класс цели, профиль и ур... |
 | [RequirementCatalog](RequirementCatalog.md) | Контейнер инстансов SpecificationRequirement вне ModelPackage |
 | [Role](Role.md) | Управляемая роль владельца, стюарда, потребителя или согласующего |
@@ -109,9 +111,12 @@ Name: moex_dams
 | [data_model_bindings](data_model_bindings.md) |  |
 | [data_owner_ref](data_owner_ref.md) |  |
 | [data_steward_ref](data_steward_ref.md) |  |
+| [default_relationship_kind](default_relationship_kind.md) | Optional default relationship_kind when this term is used |
 | [default_value](default_value.md) |  |
 | [definition_rationale](definition_rationale.md) | Human rationale for declaring an own definition when a source is also cited, ... |
 | [definition_source_ref](definition_source_ref.md) | Reference to the element or external term whose definition is inherited or ad... |
+| [dependency_kind](dependency_kind.md) | Required when entity_tier=dependent |
+| [depends_on_refs](depends_on_refs.md) | Owner conceptual entities this dependent entity requires |
 | [deprecated_by_ref](deprecated_by_ref.md) |  |
 | [derived_expression](derived_expression.md) |  |
 | [description](description.md) |  |
@@ -124,14 +129,21 @@ Name: moex_dams
 | [domain_refs](domain_refs.md) |  |
 | [element_id](element_id.md) |  |
 | [entity_bindings](entity_bindings.md) |  |
+| [entity_tier](entity_tier.md) | Structural independence of the conceptual entity (ADR-026) |
 | [entity_type](entity_type.md) |  |
 | [evidence_refs](evidence_refs.md) |  |
 | [expression](expression.md) | Имя фиксированного шаблона для conditional_branch / custom (например ldm006_a... |
+| [external_class_ref_id](external_class_ref_id.md) |  |
+| [external_class_refs](external_class_refs.md) | Canonical ConceptualEntity → external class/term alignments with match_kind (... |
+| [external_specification_ref](external_specification_ref.md) | Optional ExternalSpecification / version pin (ADR-020) |
 | [filter_expression](filter_expression.md) |  |
 | [flow_ref](flow_ref.md) |  |
 | [formal_checks](formal_checks.md) |  |
 | [format_pattern](format_pattern.md) |  |
+| [forward_label](forward_label.md) | Natural-language label source → target (ADR-026) |
+| [forward_label_en](forward_label_en.md) | English forward label (ADR-026) |
 | [generated_at](generated_at.md) |  |
+| [genesis_kind](genesis_kind.md) | external = aligns to ontology/external class(es); native = modelled without e... |
 | [glossary_term_refs](glossary_term_refs.md) |  |
 | [governance_classification](governance_classification.md) |  |
 | [grain_entity_refs](grain_entity_refs.md) |  |
@@ -147,6 +159,8 @@ Name: moex_dams
 | [integration_spec_ref](integration_spec_ref.md) |  |
 | [integrity_digest](integrity_digest.md) |  |
 | [invariant_refs](invariant_refs.md) |  |
+| [inverse_label](inverse_label.md) | Natural-language label target → source |
+| [inverse_label_en](inverse_label_en.md) | English inverse label (ADR-026) |
 | [isolation_rationale](isolation_rationale.md) | Обоснование семантической изоляции сущности (LDM-007) |
 | [key_attribute_refs](key_attribute_refs.md) |  |
 | [kind](kind.md) |  |
@@ -162,6 +176,7 @@ Name: moex_dams
 | [mapping_type](mapping_type.md) |  |
 | [mappings](mappings.md) |  |
 | [master_system](master_system.md) |  |
+| [match_kind](match_kind.md) | Alignment strength |
 | [maximum_cardinality](maximum_cardinality.md) |  |
 | [measure_attribute_refs](measure_attribute_refs.md) |  |
 | [member_system_refs](member_system_refs.md) |  |
@@ -179,6 +194,7 @@ Name: moex_dams
 | [native_schema_ref](native_schema_ref.md) |  |
 | [native_type](native_type.md) |  |
 | [object_kind](object_kind.md) |  |
+| [ontology_property_ref](ontology_property_ref.md) | Optional owl:ObjectProperty IRI |
 | [ordinal_position](ordinal_position.md) |  |
 | [owner_entity_ref](owner_entity_ref.md) | Structural parent LogicalEntity of this attribute (containment), not the data... |
 | [ownership_inheritance_rule](ownership_inheritance_rule.md) | Deprecated as source of truth (ADR-023) |
@@ -203,6 +219,8 @@ Name: moex_dams
 | [registry_id](registry_id.md) |  |
 | [registry_name](registry_name.md) |  |
 | [registry_status](registry_status.md) |  |
+| [relation_term_ref](relation_term_ref.md) | Reference to a governed RelationTerm providing forward/inverse labels (ADR-02... |
+| [relation_terms](relation_terms.md) | Governed relation-term dictionary for the package (ADR-026) |
 | [relation_to_reference](relation_to_reference.md) |  |
 | [relationship_kind](relationship_kind.md) | Тип логической связи (Wave 2) |
 | [relationships](relationships.md) |  |
@@ -220,6 +238,7 @@ Name: moex_dams
 | [security_classification](security_classification.md) | Режим защиты (Wave 2); ортогонален governance_classification |
 | [selected_attributes](selected_attributes.md) |  |
 | [selected_entities](selected_entities.md) |  |
+| [selection_ref](selection_ref.md) | Optional ExternalTermSelection id (ADR-020) |
 | [selections](selections.md) |  |
 | [sensitivity_term_refs](sensitivity_term_refs.md) |  |
 | [severity](severity.md) |  |
@@ -227,6 +246,7 @@ Name: moex_dams
 | [solution_ref](solution_ref.md) |  |
 | [source_artifact_ref](source_artifact_ref.md) |  |
 | [source_entity_ref](source_entity_ref.md) |  |
+| [source_kind](source_kind.md) | Kind of external source (ontology, corp architecture, …) |
 | [source_max_cardinality](source_max_cardinality.md) |  |
 | [source_min_cardinality](source_min_cardinality.md) |  |
 | [source_model_ref](source_model_ref.md) |  |
@@ -238,6 +258,7 @@ Name: moex_dams
 | [source_uri](source_uri.md) |  |
 | [specification_version](specification_version.md) |  |
 | [statement](statement.md) | Полная нормативная формулировка на русском для человека: без имён LinkML-клас... |
+| [symmetric](symmetric.md) | When true, forward and inverse labels are the same; inverse_label may be omit... |
 | [system_ref](system_ref.md) |  |
 | [tags](tags.md) |  |
 | [target_class](target_class.md) | Имя класса LinkML (например LogicalEntity) |
@@ -246,6 +267,7 @@ Name: moex_dams
 | [target_min_cardinality](target_min_cardinality.md) |  |
 | [target_path](target_path.md) | JSON Pointer или path hint в теле ModelPackage |
 | [target_platform_ref](target_platform_ref.md) |  |
+| [target_ref](target_ref.md) | IRI/CURIE of the external class or term (ADR-026) |
 | [target_refs](target_refs.md) |  |
 | [target_role](target_role.md) |  |
 | [target_slot](target_slot.md) |  |
@@ -254,6 +276,7 @@ Name: moex_dams
 | [target_system_ref](target_system_ref.md) |  |
 | [technology](technology.md) |  |
 | [temporal_semantics](temporal_semantics.md) | Семантика даты/времени (Wave 2 soft) |
+| [term_direction](term_direction.md) | Whether this Relationship assertion uses the forward or inverse wording of re... |
 | [text](text.md) | Scoped definition text (skos:definition in this context) |
 | [timezone_policy](timezone_policy.md) | Политика часового пояса для timestamp (Wave 2 soft) |
 | [title](title.md) |  |
@@ -281,10 +304,15 @@ Name: moex_dams
 | [DAMSModelLevelEnum](DAMSModelLevelEnum.md) | Package-level DAMS model layer (ADR-021) |
 | [DataClassEnum](DataClassEnum.md) | Класс данных для наследования модельной спецификацией дата-контракта; не совп... |
 | [DefinitionScopeKindEnum](DefinitionScopeKindEnum.md) | Kind of scope for a ScopedDefinition (ADR-025) |
+| [DependencyKindEnum](DependencyKindEnum.md) | Kind of structural dependency for a dependent ConceptualEntity (ADR-026) |
 | [EnforcementResultEnum](EnforcementResultEnum.md) |  |
+| [EntityTierEnum](EntityTierEnum.md) | Structural independence of a ConceptualEntity (ADR-026) |
 | [EntityTypeEnum](EntityTypeEnum.md) | Роль логической сущности в модели решения |
+| [ExternalMatchKindEnum](ExternalMatchKindEnum.md) | Strength of ConceptualEntity ↔ external class alignment (ADR-026) |
+| [ExternalSourceKindEnum](ExternalSourceKindEnum.md) | Kind of external source for a ConceptualEntity alignment (ADR-026) |
 | [FlowDirectionEnum](FlowDirectionEnum.md) |  |
 | [FormalCheckKindEnum](FormalCheckKindEnum.md) | Вид формальной проверки в нотации, близкой к LinkML constraints |
+| [GenesisKindEnum](GenesisKindEnum.md) | Whether a ConceptualEntity is aligned to an external class/term or is native ... |
 | [GovernanceClassificationEnum](GovernanceClassificationEnum.md) | Базовая шкала ограничения доступа; специальные виды тайны задаются отдельными... |
 | [ImplementationProfileEnum](ImplementationProfileEnum.md) | DAMS-side mirror of kernel ImplementationProfile for ModelPackage metadata |
 | [ImplementationScopeEnum](ImplementationScopeEnum.md) |  |
@@ -305,6 +333,7 @@ Name: moex_dams
 | [SecurityClassificationEnum](SecurityClassificationEnum.md) | Режим защиты данных (Wave 2); ортогонален governance_classification |
 | [SolutionDataRoleEnum](SolutionDataRoleEnum.md) |  |
 | [SpecificationKindEnum](SpecificationKindEnum.md) |  |
+| [TermDirectionEnum](TermDirectionEnum.md) | Which side of a RelationTerm a Relationship assertion uses (ADR-026) |
 
 
 ## Types

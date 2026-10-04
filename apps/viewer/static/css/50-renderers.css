@@ -91,6 +91,18 @@
   font-weight: 500;
 }
 
+.badge-pill.badge-kind-mixin {
+  color: var(--class-color-mixin);
+  border-color: var(--class-color-mixin);
+  background: color-mix(in srgb, var(--class-color-mixin) 12%, transparent);
+}
+
+.badge-pill.badge-kind-enum {
+  color: var(--class-color-enum);
+  border-color: var(--class-color-enum);
+  background: color-mix(in srgb, var(--class-color-enum) 12%, transparent);
+}
+
 .badge--brand {
   color: var(--brand-active);
   background: var(--brand-soft);

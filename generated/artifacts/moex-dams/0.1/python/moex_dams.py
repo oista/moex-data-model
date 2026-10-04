@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-04T20:57:13
+# Generation date: 2026-10-04T21:32:32
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -179,6 +179,14 @@ class LogicalAttributeElementId(ModelElementElementId):
 
 
 class RelationshipElementId(ModelElementElementId):
+    pass
+
+
+class RelationTermElementId(ModelElementElementId):
+    pass
+
+
+class ExternalClassRefExternalClassRefId(URIorCURIE):
     pass
 
 
@@ -1170,6 +1178,7 @@ class ModelPackage(ModelElement):
     domain_contexts: Optional[Union[dict[Union[str, DomainContextElementId], Union[dict, "DomainContext"]], list[Union[dict, "DomainContext"]]]] = empty_dict()
     logical_entities: Optional[Union[dict[Union[str, LogicalEntityElementId], Union[dict, "LogicalEntity"]], list[Union[dict, "LogicalEntity"]]]] = empty_dict()
     relationships: Optional[Union[dict[Union[str, RelationshipElementId], Union[dict, "Relationship"]], list[Union[dict, "Relationship"]]]] = empty_dict()
+    relation_terms: Optional[Union[dict[Union[str, RelationTermElementId], Union[dict, "RelationTerm"]], list[Union[dict, "RelationTerm"]]]] = empty_dict()
     physical_objects: Optional[Union[dict[Union[str, PhysicalObjectElementId], Union[dict, "PhysicalObject"]], list[Union[dict, "PhysicalObject"]]]] = empty_dict()
     mappings: Optional[Union[dict[Union[str, MappingElementId], Union[dict, "Mapping"]], list[Union[dict, "Mapping"]]]] = empty_dict()
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
@@ -1223,6 +1232,8 @@ class ModelPackage(ModelElement):
         self._normalize_inlined_as_list(slot_name="logical_entities", slot_type=LogicalEntity, key_name="element_id", keyed=True)
 
         self._normalize_inlined_as_list(slot_name="relationships", slot_type=Relationship, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="relation_terms", slot_type=RelationTerm, key_name="element_id", keyed=True)
 
         self._normalize_inlined_as_list(slot_name="physical_objects", slot_type=PhysicalObject, key_name="element_id", keyed=True)
 
@@ -1344,6 +1355,11 @@ class ConceptualEntity(ModelElement):
     description: str = None
     parent_concept_ref: Optional[Union[str, ConceptualEntityElementId]] = None
     key_attribute_refs: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
+    entity_tier: Optional[Union[str, "EntityTierEnum"]] = None
+    dependency_kind: Optional[Union[str, "DependencyKindEnum"]] = None
+    depends_on_refs: Optional[Union[Union[str, ConceptualEntityElementId], list[Union[str, ConceptualEntityElementId]]]] = empty_list()
+    genesis_kind: Optional[Union[str, "GenesisKindEnum"]] = None
+    external_class_refs: Optional[Union[dict[Union[str, ExternalClassRefExternalClassRefId], Union[dict, "ExternalClassRef"]], list[Union[dict, "ExternalClassRef"]]]] = empty_dict()
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
     data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
     owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
@@ -1372,6 +1388,21 @@ class ConceptualEntity(ModelElement):
         if not isinstance(self.key_attribute_refs, list):
             self.key_attribute_refs = [self.key_attribute_refs] if self.key_attribute_refs is not None else []
         self.key_attribute_refs = [v if isinstance(v, URIorCURIE) else URIorCURIE(v) for v in self.key_attribute_refs]
+
+        if self.entity_tier is not None and not isinstance(self.entity_tier, EntityTierEnum):
+            self.entity_tier = EntityTierEnum(self.entity_tier)
+
+        if self.dependency_kind is not None and not isinstance(self.dependency_kind, DependencyKindEnum):
+            self.dependency_kind = DependencyKindEnum(self.dependency_kind)
+
+        if not isinstance(self.depends_on_refs, list):
+            self.depends_on_refs = [self.depends_on_refs] if self.depends_on_refs is not None else []
+        self.depends_on_refs = [v if isinstance(v, ConceptualEntityElementId) else ConceptualEntityElementId(v) for v in self.depends_on_refs]
+
+        if self.genesis_kind is not None and not isinstance(self.genesis_kind, GenesisKindEnum):
+            self.genesis_kind = GenesisKindEnum(self.genesis_kind)
+
+        self._normalize_inlined_as_list(slot_name="external_class_refs", slot_type=ExternalClassRef, key_name="external_class_ref_id", keyed=True)
 
         if self.data_owner_ref is not None and not isinstance(self.data_owner_ref, RoleRegistryId):
             self.data_owner_ref = RoleRegistryId(self.data_owner_ref)
@@ -1739,6 +1770,8 @@ class Relationship(ModelElement):
     associative: Optional[Union[bool, Bool]] = None
     relationship_kind: Optional[Union[str, "RelationshipKindEnum"]] = None
     cardinality_rationale: Optional[str] = None
+    relation_term_ref: Optional[Union[str, RelationTermElementId]] = None
+    term_direction: Optional[Union[str, "TermDirectionEnum"]] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
@@ -1785,6 +1818,156 @@ class Relationship(ModelElement):
 
         if self.cardinality_rationale is not None and not isinstance(self.cardinality_rationale, str):
             self.cardinality_rationale = str(self.cardinality_rationale)
+
+        if self.relation_term_ref is not None and not isinstance(self.relation_term_ref, RelationTermElementId):
+            self.relation_term_ref = RelationTermElementId(self.relation_term_ref)
+
+        if self.term_direction is not None and not isinstance(self.term_direction, TermDirectionEnum):
+            self.term_direction = TermDirectionEnum(self.term_direction)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class RelationTerm(ModelElement):
+    """
+    Governed dictionary term for a conceptual/logical relationship (ADR-026). Provides forward and inverse
+    natural-language labels so a single Relationship assertion can be read from either side.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["RelationTerm"]
+    class_class_curie: ClassVar[str] = "dams:RelationTerm"
+    class_name: ClassVar[str] = "RelationTerm"
+    class_model_uri: ClassVar[URIRef] = DAMS.RelationTerm
+
+    element_id: Union[str, RelationTermElementId] = None
+    name: str = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    forward_label: str = None
+    description: str = None
+    forward_label_en: Optional[str] = None
+    inverse_label: Optional[str] = None
+    inverse_label_en: Optional[str] = None
+    symmetric: Optional[Union[bool, Bool]] = None
+    default_relationship_kind: Optional[Union[str, "RelationshipKindEnum"]] = None
+    ontology_property_ref: Optional[Union[str, URIorCURIE]] = None
+    definition_source_ref: Optional[Union[str, URIorCURIE]] = None
+    definition_rationale: Optional[str] = None
+    scoped_definitions: Optional[Union[dict[Union[str, ScopedDefinitionScopedDefinitionId], Union[dict, ScopedDefinition]], list[Union[dict, ScopedDefinition]]]] = empty_dict()
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, RelationTermElementId):
+            self.element_id = RelationTermElementId(self.element_id)
+
+        if self._is_empty(self.forward_label):
+            self.MissingRequiredField("forward_label")
+        if not isinstance(self.forward_label, str):
+            self.forward_label = str(self.forward_label)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
+
+        if self.forward_label_en is not None and not isinstance(self.forward_label_en, str):
+            self.forward_label_en = str(self.forward_label_en)
+
+        if self.inverse_label is not None and not isinstance(self.inverse_label, str):
+            self.inverse_label = str(self.inverse_label)
+
+        if self.inverse_label_en is not None and not isinstance(self.inverse_label_en, str):
+            self.inverse_label_en = str(self.inverse_label_en)
+
+        if self.symmetric is not None and not isinstance(self.symmetric, Bool):
+            self.symmetric = Bool(self.symmetric)
+
+        if self.default_relationship_kind is not None and not isinstance(self.default_relationship_kind, RelationshipKindEnum):
+            self.default_relationship_kind = RelationshipKindEnum(self.default_relationship_kind)
+
+        if self.ontology_property_ref is not None and not isinstance(self.ontology_property_ref, URIorCURIE):
+            self.ontology_property_ref = URIorCURIE(self.ontology_property_ref)
+
+        if self.definition_source_ref is not None and not isinstance(self.definition_source_ref, URIorCURIE):
+            self.definition_source_ref = URIorCURIE(self.definition_source_ref)
+
+        if self.definition_rationale is not None and not isinstance(self.definition_rationale, str):
+            self.definition_rationale = str(self.definition_rationale)
+
+        self._normalize_inlined_as_list(slot_name="scoped_definitions", slot_type=ScopedDefinition, key_name="scoped_definition_id", keyed=True)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class ExternalClassRef(YAMLRoot):
+    """
+    Alignment of a ConceptualEntity to an external class or term (ADR-026). Canonical store for conceptual↔external
+    links; Mapping(aligns_with) may mirror for ExternalTermSelection projections.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["ExternalClassRef"]
+    class_class_curie: ClassVar[str] = "dams:ExternalClassRef"
+    class_name: ClassVar[str] = "ExternalClassRef"
+    class_model_uri: ClassVar[URIRef] = DAMS.ExternalClassRef
+
+    external_class_ref_id: Union[str, ExternalClassRefExternalClassRefId] = None
+    target_ref: Union[str, URIorCURIE] = None
+    match_kind: Union[str, "ExternalMatchKindEnum"] = None
+    source_kind: Union[str, "ExternalSourceKindEnum"] = None
+    external_specification_ref: Optional[Union[str, URIorCURIE]] = None
+    selection_ref: Optional[Union[str, URIorCURIE]] = None
+    source_artifact_ref: Optional[Union[str, URI]] = None
+    evidence_refs: Optional[Union[Union[str, URI], list[Union[str, URI]]]] = empty_list()
+    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
+    approved_by_ref: Optional[Union[str, RoleRegistryId]] = None
+    approved_at: Optional[Union[str, XSDDateTime]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.external_class_ref_id):
+            self.MissingRequiredField("external_class_ref_id")
+        if not isinstance(self.external_class_ref_id, ExternalClassRefExternalClassRefId):
+            self.external_class_ref_id = ExternalClassRefExternalClassRefId(self.external_class_ref_id)
+
+        if self._is_empty(self.target_ref):
+            self.MissingRequiredField("target_ref")
+        if not isinstance(self.target_ref, URIorCURIE):
+            self.target_ref = URIorCURIE(self.target_ref)
+
+        if self._is_empty(self.match_kind):
+            self.MissingRequiredField("match_kind")
+        if not isinstance(self.match_kind, ExternalMatchKindEnum):
+            self.match_kind = ExternalMatchKindEnum(self.match_kind)
+
+        if self._is_empty(self.source_kind):
+            self.MissingRequiredField("source_kind")
+        if not isinstance(self.source_kind, ExternalSourceKindEnum):
+            self.source_kind = ExternalSourceKindEnum(self.source_kind)
+
+        if self.external_specification_ref is not None and not isinstance(self.external_specification_ref, URIorCURIE):
+            self.external_specification_ref = URIorCURIE(self.external_specification_ref)
+
+        if self.selection_ref is not None and not isinstance(self.selection_ref, URIorCURIE):
+            self.selection_ref = URIorCURIE(self.selection_ref)
+
+        if self.source_artifact_ref is not None and not isinstance(self.source_artifact_ref, URI):
+            self.source_artifact_ref = URI(self.source_artifact_ref)
+
+        if not isinstance(self.evidence_refs, list):
+            self.evidence_refs = [self.evidence_refs] if self.evidence_refs is not None else []
+        self.evidence_refs = [v if isinstance(v, URI) else URI(v) for v in self.evidence_refs]
+
+        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
+            self.approval_status = ApprovalStatusEnum(self.approval_status)
+
+        if self.approved_by_ref is not None and not isinstance(self.approved_by_ref, RoleRegistryId):
+            self.approved_by_ref = RoleRegistryId(self.approved_by_ref)
+
+        if self.approved_at is not None and not isinstance(self.approved_at, XSDDateTime):
+            self.approved_at = XSDDateTime(self.approved_at)
 
         super().__post_init__(**kwargs)
 
@@ -3050,6 +3233,119 @@ class ScopedDefinitionRelationEnum(EnumDefinitionImpl):
         description="""How a scoped definition relates to the element's reference definition (ADR-025).""",
     )
 
+class EntityTierEnum(EnumDefinitionImpl):
+    """
+    Structural independence of a ConceptualEntity (ADR-026). Orthogonal to entity_type, data_class, and
+    business_importance.
+    """
+    primary = PermissibleValue(
+        text="primary",
+        description="""Existence does not depend on other conceptual entities (FK presence alone does not make an entity dependent).""")
+    dependent = PermissibleValue(
+        text="dependent",
+        description="""Cannot exist without owner entity/entities listed in depends_on_refs.""")
+
+    _defn = EnumDefinition(
+        name="EntityTierEnum",
+        description="""Structural independence of a ConceptualEntity (ADR-026). Orthogonal to entity_type, data_class, and business_importance.""",
+    )
+
+class DependencyKindEnum(EnumDefinitionImpl):
+    """
+    Kind of structural dependency for a dependent ConceptualEntity (ADR-026).
+    """
+    characteristic = PermissibleValue(
+        text="characteristic",
+        description="Part or detail of an owning entity (owner key in identity).")
+    associative = PermissibleValue(
+        text="associative",
+        description="Resolves an M:N association between owner entities.")
+
+    _defn = EnumDefinition(
+        name="DependencyKindEnum",
+        description="""Kind of structural dependency for a dependent ConceptualEntity (ADR-026).""",
+    )
+
+class GenesisKindEnum(EnumDefinitionImpl):
+    """
+    Whether a ConceptualEntity is aligned to an external class/term or is native to MOEX (ADR-026).
+    """
+    external = PermissibleValue(
+        text="external",
+        description="""Aligns to one or more ontology classes or external-specification terms (corporate architecture, business models, API/data standards).""")
+    native = PermissibleValue(
+        text="native",
+        description="Modelled in MOEX without external parent classes.")
+
+    _defn = EnumDefinition(
+        name="GenesisKindEnum",
+        description="""Whether a ConceptualEntity is aligned to an external class/term or is native to MOEX (ADR-026).""",
+    )
+
+class ExternalMatchKindEnum(EnumDefinitionImpl):
+    """
+    Strength of ConceptualEntity ↔ external class alignment (ADR-026). Mirrors SKOS mapping relations plus
+    owl:equivalentClass; used for definition inheritance (exact/equivalent only).
+    """
+    exact = PermissibleValue(
+        text="exact",
+        description="skos:exactMatch — substitutable; definition may inherit.")
+    equivalent = PermissibleValue(
+        text="equivalent",
+        description="owl:equivalentClass — substitutable; definition may inherit.")
+    close = PermissibleValue(
+        text="close",
+        description="skos:closeMatch — not substitutable; own description required.")
+    broad = PermissibleValue(
+        text="broad",
+        description="skos:broadMatch — external is broader; own description required.")
+    narrow = PermissibleValue(
+        text="narrow",
+        description="skos:narrowMatch — external is narrower; own description required.")
+
+    _defn = EnumDefinition(
+        name="ExternalMatchKindEnum",
+        description="""Strength of ConceptualEntity ↔ external class alignment (ADR-026). Mirrors SKOS mapping relations plus owl:equivalentClass; used for definition inheritance (exact/equivalent only).""",
+    )
+
+class ExternalSourceKindEnum(EnumDefinitionImpl):
+    """
+    Kind of external source for a ConceptualEntity alignment (ADR-026). Aligned with ExternalSpecificationKind where
+    values overlap.
+    """
+    ontology = PermissibleValue(text="ontology")
+    other = PermissibleValue(text="other")
+
+    _defn = EnumDefinition(
+        name="ExternalSourceKindEnum",
+        description="""Kind of external source for a ConceptualEntity alignment (ADR-026). Aligned with ExternalSpecificationKind where values overlap.""",
+    )
+
+    @classmethod
+    def _addvals(cls):
+        setattr(cls, "corporate-architecture",
+            PermissibleValue(text="corporate-architecture"))
+        setattr(cls, "business-model",
+            PermissibleValue(text="business-model"))
+        setattr(cls, "api-spec",
+            PermissibleValue(text="api-spec"))
+
+class TermDirectionEnum(EnumDefinitionImpl):
+    """
+    Which side of a RelationTerm a Relationship assertion uses (ADR-026).
+    """
+    forward = PermissibleValue(
+        text="forward",
+        description="Assertion reads with forward_label (source → target).")
+    inverse = PermissibleValue(
+        text="inverse",
+        description="Assertion reads with inverse_label (source → target uses inverse wording).")
+
+    _defn = EnumDefinition(
+        name="TermDirectionEnum",
+        description="""Which side of a RelationTerm a Relationship assertion uses (ADR-026).""",
+    )
+
 class MappingCoverageStatusEnum(EnumDefinitionImpl):
     """
     Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical). Не статус самой логической
@@ -3685,6 +3981,24 @@ slots.parent_concept_ref = Slot(uri=DAMS.parent_concept_ref, name="parent_concep
 slots.key_attribute_refs = Slot(uri=DAMS.key_attribute_refs, name="key_attribute_refs", curie=DAMS.curie('key_attribute_refs'),
                    model_uri=DAMS.key_attribute_refs, domain=None, range=Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]])
 
+slots.entity_tier = Slot(uri=DAMS.entity_tier, name="entity_tier", curie=DAMS.curie('entity_tier'),
+                   model_uri=DAMS.entity_tier, domain=None, range=Optional[Union[str, "EntityTierEnum"]])
+
+slots.dependency_kind = Slot(uri=DAMS.dependency_kind, name="dependency_kind", curie=DAMS.curie('dependency_kind'),
+                   model_uri=DAMS.dependency_kind, domain=None, range=Optional[Union[str, "DependencyKindEnum"]])
+
+slots.depends_on_refs = Slot(uri=DAMS.depends_on_refs, name="depends_on_refs", curie=DAMS.curie('depends_on_refs'),
+                   model_uri=DAMS.depends_on_refs, domain=None, range=Optional[Union[Union[str, ConceptualEntityElementId], list[Union[str, ConceptualEntityElementId]]]])
+
+slots.genesis_kind = Slot(uri=DAMS.genesis_kind, name="genesis_kind", curie=DAMS.curie('genesis_kind'),
+                   model_uri=DAMS.genesis_kind, domain=None, range=Optional[Union[str, "GenesisKindEnum"]])
+
+slots.external_class_refs = Slot(uri=DAMS.external_class_refs, name="external_class_refs", curie=DAMS.curie('external_class_refs'),
+                   model_uri=DAMS.external_class_refs, domain=None, range=Optional[Union[dict[Union[str, ExternalClassRefExternalClassRefId], Union[dict, ExternalClassRef]], list[Union[dict, ExternalClassRef]]]])
+
+slots.relation_terms = Slot(uri=DAMS.relation_terms, name="relation_terms", curie=DAMS.curie('relation_terms'),
+                   model_uri=DAMS.relation_terms, domain=None, range=Optional[Union[dict[Union[str, RelationTermElementId], Union[dict, RelationTerm]], list[Union[dict, RelationTerm]]]])
+
 slots.context_ref = Slot(uri=DAMS.context_ref, name="context_ref", curie=DAMS.curie('context_ref'),
                    model_uri=DAMS.context_ref, domain=None, range=Union[str, DomainContextElementId])
 
@@ -3768,6 +4082,51 @@ slots.relationship_kind = Slot(uri=DAMS.relationship_kind, name="relationship_ki
 
 slots.cardinality_rationale = Slot(uri=DAMS.cardinality_rationale, name="cardinality_rationale", curie=DAMS.curie('cardinality_rationale'),
                    model_uri=DAMS.cardinality_rationale, domain=None, range=Optional[str])
+
+slots.relation_term_ref = Slot(uri=DAMS.relation_term_ref, name="relation_term_ref", curie=DAMS.curie('relation_term_ref'),
+                   model_uri=DAMS.relation_term_ref, domain=None, range=Optional[Union[str, RelationTermElementId]])
+
+slots.term_direction = Slot(uri=DAMS.term_direction, name="term_direction", curie=DAMS.curie('term_direction'),
+                   model_uri=DAMS.term_direction, domain=None, range=Optional[Union[str, "TermDirectionEnum"]])
+
+slots.forward_label = Slot(uri=DAMS.forward_label, name="forward_label", curie=DAMS.curie('forward_label'),
+                   model_uri=DAMS.forward_label, domain=None, range=str)
+
+slots.forward_label_en = Slot(uri=DAMS.forward_label_en, name="forward_label_en", curie=DAMS.curie('forward_label_en'),
+                   model_uri=DAMS.forward_label_en, domain=None, range=Optional[str])
+
+slots.inverse_label = Slot(uri=DAMS.inverse_label, name="inverse_label", curie=DAMS.curie('inverse_label'),
+                   model_uri=DAMS.inverse_label, domain=None, range=Optional[str])
+
+slots.inverse_label_en = Slot(uri=DAMS.inverse_label_en, name="inverse_label_en", curie=DAMS.curie('inverse_label_en'),
+                   model_uri=DAMS.inverse_label_en, domain=None, range=Optional[str])
+
+slots.symmetric = Slot(uri=DAMS.symmetric, name="symmetric", curie=DAMS.curie('symmetric'),
+                   model_uri=DAMS.symmetric, domain=None, range=Optional[Union[bool, Bool]])
+
+slots.default_relationship_kind = Slot(uri=DAMS.default_relationship_kind, name="default_relationship_kind", curie=DAMS.curie('default_relationship_kind'),
+                   model_uri=DAMS.default_relationship_kind, domain=None, range=Optional[Union[str, "RelationshipKindEnum"]])
+
+slots.ontology_property_ref = Slot(uri=DAMS.ontology_property_ref, name="ontology_property_ref", curie=DAMS.curie('ontology_property_ref'),
+                   model_uri=DAMS.ontology_property_ref, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.external_class_ref_id = Slot(uri=DAMS.external_class_ref_id, name="external_class_ref_id", curie=DAMS.curie('external_class_ref_id'),
+                   model_uri=DAMS.external_class_ref_id, domain=None, range=URIRef)
+
+slots.target_ref = Slot(uri=DAMS.target_ref, name="target_ref", curie=DAMS.curie('target_ref'),
+                   model_uri=DAMS.target_ref, domain=None, range=Union[str, URIorCURIE])
+
+slots.match_kind = Slot(uri=DAMS.match_kind, name="match_kind", curie=DAMS.curie('match_kind'),
+                   model_uri=DAMS.match_kind, domain=None, range=Union[str, "ExternalMatchKindEnum"])
+
+slots.source_kind = Slot(uri=DAMS.source_kind, name="source_kind", curie=DAMS.curie('source_kind'),
+                   model_uri=DAMS.source_kind, domain=None, range=Union[str, "ExternalSourceKindEnum"])
+
+slots.external_specification_ref = Slot(uri=DAMS.external_specification_ref, name="external_specification_ref", curie=DAMS.curie('external_specification_ref'),
+                   model_uri=DAMS.external_specification_ref, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.selection_ref = Slot(uri=DAMS.selection_ref, name="selection_ref", curie=DAMS.curie('selection_ref'),
+                   model_uri=DAMS.selection_ref, domain=None, range=Optional[Union[str, URIorCURIE]])
 
 slots.source_entity_ref = Slot(uri=DAMS.source_entity_ref, name="source_entity_ref", curie=DAMS.curie('source_entity_ref'),
                    model_uri=DAMS.source_entity_ref, domain=None, range=Union[str, URIorCURIE])
@@ -4057,3 +4416,6 @@ slots.LogicalEntity_description = Slot(uri=DAMS.description, name="LogicalEntity
 
 slots.LogicalAttribute_description = Slot(uri=DAMS.description, name="LogicalAttribute_description", curie=DAMS.curie('description'),
                    model_uri=DAMS.LogicalAttribute_description, domain=LogicalAttribute, range=str)
+
+slots.RelationTerm_description = Slot(uri=DAMS.description, name="RelationTerm_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.RelationTerm_description, domain=RelationTerm, range=str)

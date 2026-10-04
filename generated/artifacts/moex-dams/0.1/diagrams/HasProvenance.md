@@ -7,6 +7,8 @@
     click HasProvenance href "../HasProvenance"
       HasProvenance <|-- ScopedDefinition
         click ScopedDefinition href "../ScopedDefinition"
+      HasProvenance <|-- ExternalClassRef
+        click ExternalClassRef href "../ExternalClassRef"
       HasProvenance <|-- Mapping
         click Mapping href "../Mapping"
       

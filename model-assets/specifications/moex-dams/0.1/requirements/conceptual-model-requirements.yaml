@@ -142,6 +142,88 @@ requirements:
         severity: error
         diagnostic_code: DAMS-REF-006
 
+  - element_id: dams:req/CM-CON-002
+    name: conceptual_entity_tier
+    title: Уровень концептуальной сущности (primary/dependent)
+    description: >
+      Structural independence of ConceptualEntity (ADR-026). Implemented by
+      check_conceptual_entities (warning during transitional period when tier
+      is omitted; errors when tier is declared inconsistently).
+    lifecycle_status: active
+    code: CM-CON-002
+    requirement_level: conceptual_model
+    requirement_section: GEN
+    statement: >-
+      Каждая концептуальная сущность должна иметь entity_tier: primary
+      (независимое существование) или dependent (не существует без владельцев
+      в depends_on_refs). Для dependent обязателен dependency_kind
+      (characteristic | associative). Граф depends_on ацикличен. Наличие FK
+      в ER-схеме само по себе не делает сущность dependent.
+    formal_checks:
+      - check_id: CM-CON-002.c1
+        kind: custom
+        target_class: ConceptualEntity
+        target_slot: entity_tier
+        severity: warning
+        diagnostic_code: DAMS-CM-TIER
+        description: >
+          Validated by check_conceptual_entities (ADR-026). Transitional:
+          missing entity_tier is tolerated; inconsistent declarations error.
+
+  - element_id: dams:req/CM-CON-003
+    name: conceptual_entity_genesis
+    title: Генезис концептуальной сущности (external/native)
+    description: >
+      Genesis and external_class_refs (ADR-026). external ⇔ ≥1
+      external_class_refs; native ⇔ empty. match_kind drives ADR-025 exactness.
+    lifecycle_status: active
+    code: CM-CON-003
+    requirement_level: conceptual_model
+    requirement_section: GEN
+    statement: >-
+      Концептуальная сущность либо выравнивается на внешний класс/термин
+      (genesis_kind=external с external_class_refs и match_kind), либо является
+      собственной моделью MOEX (genesis_kind=native без внешних ссылок).
+      Каноническое хранение выравнивания — external_class_refs; Mapping
+      aligns_with может дублировать для ExternalTermSelection.
+    formal_checks:
+      - check_id: CM-CON-003.c1
+        kind: custom
+        target_class: ConceptualEntity
+        target_slot: genesis_kind
+        severity: warning
+        diagnostic_code: DAMS-CM-GENESIS
+        description: >
+          Validated by check_conceptual_entities (ADR-026). Transitional:
+          missing genesis_kind with no external refs is tolerated as native.
+
+  - element_id: dams:req/CM-REF-002
+    name: conceptual_relation_term
+    title: Термин связи концептуальных сущностей
+    description: >
+      RelationTerm dictionary with forward/inverse labels (ADR-026). One
+      Relationship record per pair; labels derived from the term.
+    lifecycle_status: active
+    code: CM-REF-002
+    requirement_level: conceptual_model
+    requirement_section: REF
+    statement: >-
+      Именованная связь на концептуальном уровне ссылается на термин из
+      справочника RelationTerm с прямой и обратной формулировкой
+      (forward_label / inverse_label). Одна запись Relationship на пару;
+      подписи с обеих сторон вычисляются. Для active связей enterprise-модели
+      отсутствие relation_term_ref — предупреждение на переходный период.
+    formal_checks:
+      - check_id: CM-REF-002.c1
+        kind: custom
+        target_class: Relationship
+        target_slot: relation_term_ref
+        severity: warning
+        diagnostic_code: DAMS-CM-RELTERM
+        description: >
+          Validated by check_relation_terms (ADR-026). Transitional warning
+          when active enterprise relationships lack relation_term_ref.
+
   - element_id: dams:req/CM-PDM-000
     name: conceptual_no_physical
     title: Запрет физического слоя

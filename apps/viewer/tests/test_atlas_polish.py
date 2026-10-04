@@ -89,23 +89,53 @@ def test_css_active_gray_and_spec_pill_dark():
 
 def test_css_level_glyph_tokens_and_slots():
     css = assemble_css()
-    assert "--level-cmd-start:" in css
+    assert "--level-cdm-start:" in css
     assert "--level-ldm-start:" in css
     assert "--level-pdm-start:" in css
-    assert ".nav-glyph--cmd" in css
+    assert ".nav-glyph--cdm" in css
     assert ".nav-glyph--ldm" in css
     assert ".nav-glyph--pdm" in css
     assert ".nav-glyph--menu" in css
     assert ".nav-glyph--card" in css
+    assert ".nav-kind-folder--level" in css
+    assert ".nav-kind-folder--cdm" in css
 
 
 def test_js_nav_glyph_helpers():
     assert "function resolveNavGlyph" in JS
     assert "function navGlyphHtml" in JS
-    assert 'LEVEL_GLYPHS = new Set(["cmd", "ldm", "pdm"])' in JS
-    assert 'conceptual: "cmd"' in JS
+    assert 'LEVEL_GLYPHS = new Set(["cdm", "ldm", "pdm"])' in JS
+    assert 'conceptual: "cdm"' in JS
     assert 'logical: "ldm"' in JS
     assert 'physical: "pdm"' in JS
+    assert "nav-kind-folder--level" in JS
+
+
+def test_css_nav_kind_fixed_square_and_section_frame():
+    css = assemble_css()
+    nav = css.split(".nav-kind {")[1].split(".nav-kind.nav-kind-folder")[0]
+    assert "min-width: 16px" in nav
+    assert "flex: none" in nav
+    assert "height: 16px" in nav
+    assert ".nav-kind-section" in css
+    assert "filter: saturate(1.18)" in css
+    assert ".nav-kind.kind-enum" in css
+    assert ".badge-pill.badge-kind-mixin" in css
+    assert ".badge-pill.badge-kind-enum" in css
+    assert "text-overflow: ellipsis" in css
+
+
+def test_js_class_icon_badges_and_section_majority():
+    assert "function sectionMajorityRole" in JS
+    assert "function sectionMajorityGlyphHtml" in JS
+    assert "function isSchemaPackageGroup" in JS
+    assert "has mixin" in JS
+    assert "badge-kind-mixin" in JS
+    assert "badge-kind-enum" in JS
+    assert "slice(0, 4)" in JS
+    assert 'if (attrs.kind === "enum") return "enum"' in JS
+    assert "--class-color-enum" in JS
+    assert "nav-kind-section" in JS
 
 
 def test_build_strips_emoji_from_nav_html():

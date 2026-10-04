@@ -242,6 +242,7 @@ conceptual_entities varchar
 domain_contexts varchar
 logical_entities varchar
 relationships varchar
+relation_terms varchar
 physical_objects varchar
 mappings varchar
 data_owner_ref varchar
@@ -291,6 +292,11 @@ valid_to datetime
 deprecated_by_ref varchar
 parent_concept_ref varchar
 key_attribute_refs varchar
+entity_tier varchar
+dependency_kind varchar
+depends_on_refs varchar
+genesis_kind varchar
+external_class_refs varchar
 ConceptualEntity_description varchar [not null]
 data_owner_ref varchar
 data_steward_ref varchar
@@ -416,6 +422,47 @@ identifying boolean
 associative boolean
 relationship_kind varchar
 cardinality_rationale varchar
+relation_term_ref varchar
+term_direction varchar
+}
+
+Table RelationTerm {
+element_id varchar [not null, primary key]
+name varchar [not null]
+title varchar
+aliases varchar
+glossary_term_refs varchar
+tags varchar
+lifecycle_status varchar [not null]
+valid_from datetime
+valid_to datetime
+deprecated_by_ref varchar
+forward_label varchar [not null]
+forward_label_en varchar
+inverse_label varchar
+inverse_label_en varchar
+symmetric boolean
+default_relationship_kind varchar
+ontology_property_ref varchar
+RelationTerm_description varchar [not null]
+definition_source_ref varchar
+definition_rationale varchar
+scoped_definitions varchar
+description varchar [not null]
+}
+
+Table ExternalClassRef {
+external_class_ref_id varchar [not null, primary key]
+target_ref varchar [not null]
+match_kind varchar [not null]
+source_kind varchar [not null]
+external_specification_ref varchar
+selection_ref varchar
+source_artifact_ref varchar
+evidence_refs varchar
+approval_status varchar
+approved_by_ref varchar
+approved_at datetime
 }
 
 Table PhysicalObject {
@@ -765,6 +812,7 @@ Ref: ModelPackage.conceptual_entities > ConceptualEntity.element_id
 Ref: ModelPackage.domain_contexts > DomainContext.element_id
 Ref: ModelPackage.logical_entities > LogicalEntity.element_id
 Ref: ModelPackage.relationships > Relationship.element_id
+Ref: ModelPackage.relation_terms > RelationTerm.element_id
 Ref: ModelPackage.physical_objects > PhysicalObject.element_id
 Ref: ModelPackage.mappings > Mapping.element_id
 Ref: ModelPackage.data_owner_ref > Role.registry_id
@@ -781,6 +829,8 @@ Ref: DomainContext.data_steward_ref > Role.registry_id
 Ref: DomainContext.owning_unit_ref > OrganizationUnit.registry_id
 Ref: ConceptualEntity.glossary_term_refs > GlossaryTerm.registry_id
 Ref: ConceptualEntity.parent_concept_ref > ConceptualEntity.element_id
+Ref: ConceptualEntity.depends_on_refs > ConceptualEntity.element_id
+Ref: ConceptualEntity.external_class_refs > ExternalClassRef.external_class_ref_id
 Ref: ConceptualEntity.data_owner_ref > Role.registry_id
 Ref: ConceptualEntity.data_steward_ref > Role.registry_id
 Ref: ConceptualEntity.owning_unit_ref > OrganizationUnit.registry_id
@@ -806,6 +856,10 @@ Ref: LogicalAttribute.sensitivity_term_refs > DataClassificationTerm.registry_id
 Ref: LogicalAttribute.policy_refs > Policy.registry_id
 Ref: LogicalAttribute.scoped_definitions > ScopedDefinition.scoped_definition_id
 Ref: Relationship.glossary_term_refs > GlossaryTerm.registry_id
+Ref: Relationship.relation_term_ref > RelationTerm.element_id
+Ref: RelationTerm.glossary_term_refs > GlossaryTerm.registry_id
+Ref: RelationTerm.scoped_definitions > ScopedDefinition.scoped_definition_id
+Ref: ExternalClassRef.approved_by_ref > Role.registry_id
 Ref: PhysicalObject.glossary_term_refs > GlossaryTerm.registry_id
 Ref: PhysicalObject.solution_ref > ITSolution.registry_id
 Ref: PhysicalObject.system_ref > ITSystem.registry_id

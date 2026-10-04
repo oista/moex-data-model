@@ -21,6 +21,8 @@
         click LogicalAttribute href "../LogicalAttribute"
       ModelElement <|-- Relationship
         click Relationship href "../Relationship"
+      ModelElement <|-- RelationTerm
+        click RelationTerm href "../RelationTerm"
       ModelElement <|-- PhysicalObject
         click PhysicalObject href "../PhysicalObject"
       ModelElement <|-- PhysicalField

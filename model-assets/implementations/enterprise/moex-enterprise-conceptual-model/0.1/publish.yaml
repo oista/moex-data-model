@@ -58,9 +58,52 @@ sections:
       - entity_type
       - data_class
       - business_importance
+      - entity_tier
+      - genesis_kind
     filterable:
       - entity_type
       - data_class
+      - entity_tier
+      - genesis_kind
+
+  - id: glossary
+    title: Model glossary
+    kind: glossary
+    type: glossary
+    description: >
+      Generated view of ConceptualEntity and RelationTerm definitions
+      (ADR-025 / ADR-026). Not a hand-edited source.
+    source:
+      format: json
+      path: publications/model_glossary.json
+    key_column: id
+    filterable:
+      - kind
+      - definition_mode
+      - entity_tier
+      - genesis_kind
+
+  - id: relation-terms
+    title: Relation terms
+    kind: enumerations
+    type: entity-table
+    description: Governed forward/inverse relation-term dictionary (ADR-026).
+    source:
+      format: yaml
+      path: relation-terms.yaml
+      select: relation_terms
+    key_column: element_id
+    columns:
+      - name
+      - title
+      - forward_label
+      - inverse_label
+      - forward_label_en
+      - inverse_label_en
+      - symmetric
+      - description
+    filterable:
+      - symmetric
 
   - id: relationships
     title: Relationships
@@ -79,10 +122,13 @@ sections:
       - description
       - source_entity_ref
       - target_entity_ref
+      - relation_term_ref
+      - term_direction
       - source_role
       - target_role
     filterable:
       - source_entity_ref
+      - relation_term_ref
 
   - id: vocabularies
     title: Controlled vocabularies

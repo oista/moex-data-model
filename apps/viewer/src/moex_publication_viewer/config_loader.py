@@ -12,6 +12,7 @@ DEFAULT_CLASS_KIND_COLORS: dict[str, Any] = {
         "plain": "#3d8f6e",
         "mixin": "#3d6eb5",
         "abstract": "#2e8fad",
+        "enum": "#b8922e",
     },
     "corner": {
         "has_mixins": "#3d6eb5",

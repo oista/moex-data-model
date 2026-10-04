@@ -56,10 +56,21 @@
 | `HasBusinessClassification` | Роль в бизнесе: `entity_type`, `data_class`, `business_importance` (не каскадируются) |
 | `HasGovernanceClassification` | Базовая маркировка: `governance_classification` каскадируется (ADR-023); `security_classification` — Wave 2 |
 | `HasPolicyBindings` | `policy_refs`: absent = inherit; present list (в т.ч. `[]`) = full replace (ADR-023) |
-| `HasDefinition` | Эталонное определение (ADR-025): `description` = own `skos:definition`; `definition_source_ref` / `scoped_definitions`; наследование по семантической оси, не containment |
-| `HasProvenance` | Происхождение и согласование: `source_artifact_ref`, `approval_status`, `approved_by_ref`, `approved_at` |
+| `HasDefinition` | Эталонное определение (ADR-025): `description` = own `skos:definition`; `definition_source_ref` / `scoped_definitions`; наследование по семантической оси, не containment. Также на `RelationTerm` (ADR-026) |
+| `HasProvenance` | Происхождение и согласование: `source_artifact_ref`, `approval_status`, `approved_by_ref`, `approved_at`. Также на `ExternalClassRef` / `ScopedDefinition` |
 
-> Этот файл — developer-справочник по конструкциям LinkML в DAMS, **не** бизнес-глоссарий предметной области (см. ADR-025).
+**Классы КМД (ADR-026), в дополнение к `ConceptualEntity` / `Relationship`:**
+
+| Класс | Назначение |
+|---|---|
+| `RelationTerm` | Справочник терминов связей: `forward_label` / `inverse_label` (+ en), `symmetric`; одна `Relationship` на пару, подписи с обеих сторон вычисляются |
+| `ExternalClassRef` | Каноническое выравнивание `ConceptualEntity` → внешний класс/термин: `target_ref`, `match_kind`, `source_kind` |
+
+**Слоты `ConceptualEntity` (ADR-026):** `entity_tier` (primary/dependent), `dependency_kind` (characteristic/associative), `depends_on_refs`, `genesis_kind` (external/native), `external_class_refs`. Ортогональны `entity_type` / `business_importance`; не входят в containment cascade ADR-023.
+
+**Слоты `Relationship` (ADR-026):** `relation_term_ref`, `term_direction` (forward/inverse).
+
+> Этот файл — developer-справочник по конструкциям LinkML в DAMS, **не** бизнес-глоссарий предметной области (см. ADR-025). Модельный глоссарий КМД — генерируемое view (`build_model_glossary`, ADR-026).
 
 Правило разрешения свойств в LinkML при конфликте — «глубина поиска» по порядку: локальный `slot_usage` класса → `slot_usage` в mixins (по порядку перечисления) → `slot_usage` в `is_a`-родителе → глобальное определение слота.
 
@@ -180,10 +191,10 @@ LinkML в этом смысле **монотонен**: `slot_usage` может 
 Помимо `required`/`multivalued`/`identifier`, LinkML предоставляет слоты, которые в DAMS используются на уровне `Relationship` для описания природы связи:
 
 ### identifying (в контексте Relationship)
-Булев флаг у класса `Relationship` в DAMS: обозначает, что связь является **идентифицирующей** (аналог identifying relationship в ER-моделировании — когда первичный ключ дочерней сущности зависит от родительской).
+Булев флаг у класса `Relationship` в DAMS: обозначает, что связь является **идентифицирующей** (аналог identifying relationship в ER-моделировании — когда первичный ключ дочерней сущности зависит от родительской). Для `entity_tier: dependent` (ADR-026) предпочтителен identifying / mandatory link к владельцу из `depends_on_refs`.
 
 ### associative (в контексте Relationship)
-Булев флаг у `Relationship`: обозначает, что связь **ассоциативная**, то есть сама является сущностью верхнего уровня (аналог "table-relationship" или связывающей таблицы many-to-many, а не простого FK).
+Булев флаг у `Relationship`: обозначает, что связь **ассоциативная**, то есть сама является сущностью верхнего уровня (аналог "table-relationship" или связывающей таблицы many-to-many, а не простого FK). Не путать с `dependency_kind: associative` у `ConceptualEntity` (ADR-026) — тот описывает *зависимую сущность*-разрешатель M:N, а не флаг на ребре.
 
 ### rules
 Более сложная (в DAMS не задействованная в базовом ядре, но доступная в языке LinkML) конструкция условной логики: набор `preconditions`/`postconditions` для описания зависимых ограничений (например: «если `data_class = transactional_data`, то `business_importance` обязателен»). Упоминается в архитектурном плане как часть языка, которую DBML/OWL не могут выразить напрямую.
@@ -260,20 +271,20 @@ LinkML в этом смысле **монотонен**: `slot_usage` может 
 | `imports` | `moex-core.yaml` импортирует `moex-types.yaml`, `moex-governance.yaml` |
 | `is_a` | Все классы верхнего уровня наследуются от `ModelElement` |
 | `abstract` | `ModelElement` — абстрактный корень иерархии |
-| `mixin` + `mixins` | `HasLifecycle`, `HasOwnership`, `HasBusinessClassification`, `HasGovernanceClassification`, `HasPolicyBindings`, `HasProvenance` |
+| `mixin` + `mixins` | `HasLifecycle`, `HasOwnership`, `HasBusinessClassification`, `HasGovernanceClassification`, `HasPolicyBindings`, `HasDefinition`, `HasProvenance` |
 | `tree_root` | `MoexModelRepository` |
-| `identifier` | `element_id` у `ModelElement`, `registry_id` у `RegistryEntry` |
-| `required` | `description` у `ModelElement`, `lifecycle_status` и др. |
-| `multivalued` | `policy_refs`, `member_system_refs`, ссылки в junction-классах |
+| `identifier` | `element_id` у `ModelElement`, `registry_id` у `RegistryEntry`, `external_class_ref_id` |
+| `required` | `description` у `ModelElement`, `lifecycle_status` и др.; `forward_label` у `RelationTerm` |
+| `multivalued` | `policy_refs`, `member_system_refs`, `external_class_refs`, `depends_on_refs`, `relation_terms` |
 | `minimum_cardinality` / `maximum_cardinality` | Ограничения кардинальности у `LogicalAttribute`, `Relationship` |
-| `slot_usage` | Уточнение `range` mixin-слотов (например, `data_owner_ref`) в конкретных классах |
+| `slot_usage` | Уточнение `range` mixin-слотов; `description required: false` на definition-bearing классах (ADR-025) |
 | `range` (class) | Все `_ref`-слоты, указывающие на другие классы модели |
-| `range` (enum) | `lifecycle_status`, `entity_type`, `data_class` и остальные `*_enum` слоты |
-| `enums` / `permissible_values` | Полный список из 18 enum-ов в `moex-types.yaml` |
+| `range` (enum) | `lifecycle_status`, `entity_type`, `entity_tier`, `genesis_kind`, `match_kind` и остальные `*_enum` слоты |
+| `enums` / `permissible_values` | Enum-ы в `moex-types.yaml` (включая ADR-026: EntityTier, DependencyKind, GenesisKind, ExternalMatchKind, …) |
 | `abstract` (registry) | `RegistryEntry` — абстрактный базовый класс для проекций EAM/Clinkr/каталога |
-| `identifying` / `associative` | Класс `Relationship` |
+| `identifying` / `associative` | Класс `Relationship`; см. также `dependency_kind` у `ConceptualEntity` (ADR-026) |
 | `annotations` | Планируемый механизм хранения generator-specific hints (например, DBML physical_name) |
-| `description` | Обязательное поле документации на каждом классе, слоте и enum-значении |
+| `description` | `skos:definition` на элементах; модельный глоссарий — view через `build_model_glossary` |
 
 ---
 

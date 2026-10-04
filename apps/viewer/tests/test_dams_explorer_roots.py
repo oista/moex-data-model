@@ -142,7 +142,7 @@ def test_wrap_roots_loads_requirements_catalog():
     assert req_root.children[0].id == "group:requirements-conceptual"
     assert req_root.children[0].title == "Концептуальная модель"
     conceptual = req_root.children[0]
-    assert conceptual.attributes.get("nav_glyph") == "cmd"
+    assert conceptual.attributes.get("nav_glyph") == "cdm"
     assert {c.id for c in conceptual.children} == {
         "group:requirements-conceptual-list",
         "group:requirements-conceptual-min-spec",

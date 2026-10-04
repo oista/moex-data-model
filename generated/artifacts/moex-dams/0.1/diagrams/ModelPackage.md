@@ -192,6 +192,17 @@
     
 
         
+      ModelPackage : relation_terms
+        
+          
+    
+        
+        
+        ModelPackage --> "*" RelationTerm : relation_terms
+        click RelationTerm href "../RelationTerm"
+    
+
+        
       ModelPackage : relationships
         
           

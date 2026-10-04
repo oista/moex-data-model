@@ -64,11 +64,44 @@
         
       ConceptualEntity : definition_source_ref
         
+      ConceptualEntity : dependency_kind
+        
+          
+    
+        
+        
+        ConceptualEntity --> "0..1" DependencyKindEnum : dependency_kind
+        click DependencyKindEnum href "../DependencyKindEnum"
+    
+
+        
+      ConceptualEntity : depends_on_refs
+        
+          
+    
+        
+        
+        ConceptualEntity --> "*" ConceptualEntity : depends_on_refs
+        click ConceptualEntity href "../ConceptualEntity"
+    
+
+        
       ConceptualEntity : deprecated_by_ref
         
       ConceptualEntity : description
         
       ConceptualEntity : element_id
+        
+      ConceptualEntity : entity_tier
+        
+          
+    
+        
+        
+        ConceptualEntity --> "0..1" EntityTierEnum : entity_tier
+        click EntityTierEnum href "../EntityTierEnum"
+    
+
         
       ConceptualEntity : entity_type
         
@@ -78,6 +111,28 @@
         
         ConceptualEntity --> "0..1" EntityTypeEnum : entity_type
         click EntityTypeEnum href "../EntityTypeEnum"
+    
+
+        
+      ConceptualEntity : external_class_refs
+        
+          
+    
+        
+        
+        ConceptualEntity --> "*" ExternalClassRef : external_class_refs
+        click ExternalClassRef href "../ExternalClassRef"
+    
+
+        
+      ConceptualEntity : genesis_kind
+        
+          
+    
+        
+        
+        ConceptualEntity --> "0..1" GenesisKindEnum : genesis_kind
+        click GenesisKindEnum href "../GenesisKindEnum"
     
 
         

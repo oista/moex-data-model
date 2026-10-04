@@ -17,13 +17,19 @@ def test_class_kind_colors_config_exists():
     assert data["roles"]["plain"]
     assert data["roles"]["mixin"]
     assert data["roles"]["abstract"]
+    assert data["roles"]["enum"]
     assert data["corner"]["has_mixins"]
 
 
 def test_load_viewer_config_shape():
     cfg = load_viewer_config(VIEWER_ROOT)
     assert "class_kind_colors" in cfg
-    assert set(cfg["class_kind_colors"]["roles"]) >= {"plain", "mixin", "abstract"}
+    assert set(cfg["class_kind_colors"]["roles"]) >= {
+        "plain",
+        "mixin",
+        "abstract",
+        "enum",
+    }
 
 
 def test_missing_config_falls_back(tmp_path: Path):
@@ -40,4 +46,6 @@ def test_build_embeds_viewer_config():
     assert '"plain"' in html
     assert '"mixin"' in html
     assert '"abstract"' in html
+    assert '"enum"' in html
     assert '"has_mixins"' in html
+    assert "#b8922e" in html

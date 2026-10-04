@@ -78,9 +78,11 @@ Corporate GlossaryTerm ──────►        │                  │
    set → “own, adapted from”).
 3. Else `definition_source_ref` → recursively resolve target; mode `inherited`.
    Ontology targets require an **exact** correspondence (`skos:exactMatch` /
-   `owl:equivalentClass`). `closeMatch` / `broadMatch` do **not** inherit;
-   the element must declare its own `description` (may still cite the source
-   via `definition_source_ref` as attribution).
+   `owl:equivalentClass`). Exactness is taken from the owning
+   `ConceptualEntity.external_class_refs[].match_kind` when present (ADR-026),
+   else from the external definition provider. `closeMatch` / `broadMatch` do
+   **not** inherit; the element must declare its own `description` (may still
+   cite the source via `definition_source_ref` as attribution).
 4. Else for `LogicalEntity` with exactly one `conceptual_entity_refs` →
    inherit that concept’s reference definition (implicit). Multiple refs
    without an explicit source or own text → error.
@@ -131,10 +133,12 @@ come from `Mapping`. Language is a separate axis (resolver returns language;
 
 - New resolver module (not an extension of `GOVERNED_FAMILIES`).
 - Existing models with filled `description` remain valid as `own`.
-- Viewer provenance UI and auto-generated model glossary are out of this ADR’s
-  delivery; the resolver contract is the interface for that follow-up.
+- Viewer provenance UI and auto-generated model glossary are delivered under
+  ADR-026 (`build_model_glossary`); the resolver contract remains the interface.
 - ADR-023’s deferred “inherit via `realizes`” is **closed for definitions**;
   other governed families still do not inherit across `realizes`.
+- Exact-match source for ontology targets is amended by ADR-026
+  (`external_class_refs.match_kind`).
 
 ## Alternatives
 
@@ -149,6 +153,6 @@ come from `Mapping`. Language is a separate axis (resolver returns language;
 
 ## Related
 
-- ADR-001, ADR-012, ADR-013, ADR-020, ADR-023, ADR-024
+- ADR-001, ADR-012, ADR-013, ADR-020, ADR-023, ADR-024, ADR-026
 - Resolver: `packages/specification-dams/src/moex_dams/rules/definitions.py`
 )
