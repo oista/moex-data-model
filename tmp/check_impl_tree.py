@@ -27,11 +27,20 @@ def find(items, item_id):
 
 impls = find(explorer.get("items") or [], "group:implementations")
 assert impls, "group:implementations missing"
-titles = [c.get("title") for c in impls.get("children") or []]
-ids = [c.get("id") for c in impls.get("children") or []]
+top_ids = [c.get("id") for c in impls.get("children") or []]
 print("Реализации children:")
-for i, t in zip(ids, titles):
+for i, t in zip(
+    top_ids, [c.get("title") for c in impls.get("children") or []]
+):
     print(f"  - {i}: {t}")
+assert top_ids[:2] == [
+    "group:implementations-it-solutions",
+    "group:implementations-projects",
+]
+assert "moex-dsp" in top_ids
+assert "moex-enterprise-conceptual-model" in top_ids
+it_folder = find(impls.get("children") or [], "group:implementations-it-solutions")
+it_ids = {c.get("id") for c in it_folder.get("children") or []}
 for need in ("mdm-solution", "ucd-solution", "crm-solution", "esed-solution"):
-    assert need in ids, f"missing {need}"
-print("OK: four solutions under Реализации")
+    assert need in it_ids, f"missing {need} under ИТ-решения"
+print("OK: folders + four solutions under ИТ-решения")

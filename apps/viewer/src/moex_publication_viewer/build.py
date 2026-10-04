@@ -34,6 +34,86 @@ DAMS_CATALOG_SPEC_ID = "moex-dams"
 FIBO_PROFILE_MODULE_ID = "moex:module:fibo-profile"
 FIBO_PROFILE_CATALOG_SPEC_ID = "moex-fibo-profile"
 
+# Stay at Реализации root (not nested under folders).
+_DAMS_IMPL_ROOT_IDS = frozenset(
+    {
+        "moex-dsp",
+        "moex-enterprise-conceptual-model",
+    }
+)
+# Nested under «ИТ-решения»; everything else (except root) → «Проекты».
+_DAMS_IMPL_IT_SOLUTION_IDS = frozenset(
+    {
+        "mdm-solution",
+        "ucd-solution",
+        "crm-solution",
+        "esed-solution",
+    }
+)
+
+
+def _impl_folder(
+    *,
+    folder_id: str,
+    title: str,
+    description: str,
+    children: list[PublicationItem],
+) -> PublicationItem:
+    return PublicationItem(
+        id=folder_id,
+        title=title,
+        description=description,
+        attributes={
+            "kind": "group",
+            "group_style": "section_folder",
+            "member_ids": [c.id for c in children],
+            "impl_count": len(children),
+        },
+        children=children,
+    )
+
+
+def group_dams_implementation_children(
+    children: list[PublicationItem],
+) -> list[PublicationItem]:
+    """
+    Nest DAMS Impl refs: ИТ-решения → Проекты → root (dsp, conceptual).
+
+    Catalog order inside each bucket is preserved.
+    """
+    it_items: list[PublicationItem] = []
+    project_items: list[PublicationItem] = []
+    root_items: list[PublicationItem] = []
+    for child in children:
+        if child.id in _DAMS_IMPL_ROOT_IDS:
+            root_items.append(child)
+        elif child.id in _DAMS_IMPL_IT_SOLUTION_IDS:
+            it_items.append(child)
+        else:
+            project_items.append(child)
+
+    grouped: list[PublicationItem] = []
+    if it_items:
+        grouped.append(
+            _impl_folder(
+                folder_id="group:implementations-it-solutions",
+                title="ИТ-решения",
+                description="Реализации моделей данных ИТ-решений.",
+                children=it_items,
+            )
+        )
+    if project_items:
+        grouped.append(
+            _impl_folder(
+                folder_id="group:implementations-projects",
+                title="Проекты",
+                description="Проектные и демо-реализации DAMS.",
+                children=project_items,
+            )
+        )
+    grouped.extend(root_items)
+    return grouped
+
 
 def compile_modules(
     root: Path,
@@ -272,6 +352,7 @@ def enrich_dams_explorer_implementations(
         for n in impl_nodes
     ]
     children = attach_impl_section_nav_children(children, modules)
+    children = group_dams_implementation_children(children)
     impls_root = next(
         (i for i in explorer.items if i.id == "group:implementations"),
         None,
@@ -285,7 +366,10 @@ def enrich_dams_explorer_implementations(
                 "kind": "group",
                 "section_root": "implementations",
                 "purpose": "Переход к зарегистрированным реализациям (conforms_to DAMS).",
-                "structure_why": "Список из architecture-catalog; тела живут в своих модулях.",
+                "structure_why": (
+                    "ИТ-решения и Проекты — папки; dsp и conceptual — в корне. "
+                    "Список из architecture-catalog; тела живут в своих модулях."
+                ),
                 "class_count": 0,
                 "enum_count": 0,
                 "member_ids": [],
@@ -296,7 +380,7 @@ def enrich_dams_explorer_implementations(
 
     attrs = dict(impls_root.attributes or {})
     attrs["member_ids"] = [c.id for c in children]
-    attrs["impl_count"] = len(children)
+    attrs["impl_count"] = len(impl_nodes)
     impls_root.attributes = attrs
     impls_root.children = children
 

@@ -157,12 +157,22 @@ def test_repo_golden_three_modules():
     dams_pub = next(m for m in pub_modules if m["module_id"] == "moex:module:dams")
     dams_expl = next(s for s in dams_pub["sections"] if s["type"] == "explorer")
     impls_root = next(i for i in dams_expl["items"] if i["id"] == "group:implementations")
-    impl_ids = {c["id"] for c in impls_root.get("children") or []}
-    assert {"moex-dsp", "trading-solution"}.issubset(impl_ids)
-    assert all(
-        (c.get("attributes") or {}).get("kind") == "implementation_ref"
-        for c in impls_root.get("children") or []
-    )
+    top = impls_root.get("children") or []
+    impl_ids = [c["id"] for c in top]
+    assert impl_ids[:2] == [
+        "group:implementations-it-solutions",
+        "group:implementations-projects",
+    ]
+    assert "moex-dsp" in impl_ids
+    assert "moex-enterprise-conceptual-model" in impl_ids
+    projects = next(c for c in top if c["id"] == "group:implementations-projects")
+    assert "trading-solution" in {c["id"] for c in projects.get("children") or []}
+    it_sols = next(c for c in top if c["id"] == "group:implementations-it-solutions")
+    assert {"mdm-solution", "ucd-solution", "crm-solution", "esed-solution"} <= {
+        c["id"] for c in it_sols.get("children") or []
+    }
+    assert (projects.get("attributes") or {}).get("group_style") == "section_folder"
+    assert (it_sols.get("attributes") or {}).get("group_style") == "section_folder"
     assert by_id["moex-dams"].get("description")
     assert by_id["trading-solution"].get("description")
     assert by_id["moex-fibo-profile"].get("description")

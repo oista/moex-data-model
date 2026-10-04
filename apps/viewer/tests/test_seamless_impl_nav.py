@@ -110,6 +110,23 @@ def test_repo_fibo_impl_nested_under_implementations() -> None:
     assert "group:implementations" in roots
 
 
+def _find_item(items: list[PublicationItem], item_id: str) -> PublicationItem | None:
+    for item in items or []:
+        if item.id == item_id:
+            return item
+        hit = _find_item(item.children or [], item_id)
+        if hit is not None:
+            return hit
+    return None
+
+
+def _iter_implementation_refs(items: list[PublicationItem]):
+    for item in items or []:
+        if (item.attributes or {}).get("kind") == "implementation_ref":
+            yield item
+        yield from _iter_implementation_refs(item.children or [])
+
+
 def test_repo_dams_trading_has_nested_section_refs() -> None:
     modules = compile_modules(REPO, enforce_publication_contract=False)
     catalog = compile_catalog(REPO, modules)
@@ -117,12 +134,45 @@ def test_repo_dams_trading_has_nested_section_refs() -> None:
     dams = next(m for m in modules if m.module_id == DAMS_MODULE)
     explorer = next(s for s in dams.sections if s.type == "explorer")
     impls = next(i for i in explorer.items if i.id == "group:implementations")
-    trading = next(c for c in impls.children if c.id == "trading-solution")
+    trading = _find_item(impls.children or [], "trading-solution")
+    assert trading is not None
     assert trading.children
     assert all(
         c.attributes.get("target_module_id") == "moex:module:trading-solution"
         for c in trading.children
     )
+
+
+def test_repo_dams_impl_folders_group_solutions_and_projects() -> None:
+    modules = compile_modules(REPO, enforce_publication_contract=False)
+    catalog = compile_catalog(REPO, modules)
+    enrich_dams_explorer_implementations(modules, catalog)
+    dams = next(m for m in modules if m.module_id == DAMS_MODULE)
+    explorer = next(s for s in dams.sections if s.type == "explorer")
+    impls = next(i for i in explorer.items if i.id == "group:implementations")
+    top_ids = [c.id for c in impls.children or []]
+    assert top_ids[:2] == [
+        "group:implementations-it-solutions",
+        "group:implementations-projects",
+    ]
+    assert "moex-dsp" in top_ids
+    assert "moex-enterprise-conceptual-model" in top_ids
+    it_folder = next(
+        c for c in impls.children if c.id == "group:implementations-it-solutions"
+    )
+    proj_folder = next(
+        c for c in impls.children if c.id == "group:implementations-projects"
+    )
+    assert {c.id for c in it_folder.children} == {
+        "mdm-solution",
+        "ucd-solution",
+        "crm-solution",
+        "esed-solution",
+    }
+    assert "trading-solution" in {c.id for c in proj_folder.children}
+    assert "client-accounts-csv-draft" in {c.id for c in proj_folder.children}
+    assert it_folder.attributes.get("group_style") == "section_folder"
+    assert proj_folder.attributes.get("group_style") == "section_folder"
 
 
 def test_repo_dams_dsp_includes_classes_explorer_section_ref() -> None:
@@ -166,9 +216,7 @@ def test_repo_impl_section_nav_covers_all_module_sections() -> None:
         )
         if impls is None:
             continue
-        for ref in impls.children or []:
-            if (ref.attributes or {}).get("kind") != "implementation_ref":
-                continue
+        for ref in _iter_implementation_refs(impls.children or []):
             mid = (ref.attributes or {}).get("module_id")
             if not mid or mid not in by_id:
                 continue
@@ -306,3 +354,6 @@ def test_viewer_js_drops_body_swap() -> None:
     assert "Reveal sections" in js
     assert "Open implementation" not in js
     assert "target_module_id" in js
+    # Folder mark for section_folder even without requirement_section code.
+    assert "if (isSectionFolder)" in js
+    assert "nav-kind-folder" in js

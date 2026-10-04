@@ -635,8 +635,11 @@
           node.attributes?.requirement_section || ""
         ).trim();
         let markHtml;
-        if (isSectionFolder && sectionCode) {
-          markHtml = `<span class="nav-kind nav-kind-folder" aria-hidden="true"><span class="nav-kind-folder-tab"></span><span class="nav-kind-folder-code">${escapeHtml(sectionCode.slice(0, 3))}</span></span>`;
+        if (isSectionFolder) {
+          const codeHtml = sectionCode
+            ? `<span class="nav-kind-folder-code">${escapeHtml(sectionCode.slice(0, 3))}</span>`
+            : "";
+          markHtml = `<span class="nav-kind nav-kind-folder" aria-hidden="true"><span class="nav-kind-folder-tab"></span>${codeHtml}</span>`;
         } else {
           let mark = "C";
           if (kind === "enum") mark = "E";
