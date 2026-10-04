@@ -54,12 +54,14 @@ Spec moex.dams                         ← select + toggle
 ├─ Требования
 │  ├─ Концептуальная модель            ← ADR-021 enterprise-conceptual
 │  │  ├─ Требования к модели
-│  │  ├─ Спецификация требований
-│  │  └─ Спецификация модели           ← no Пример модели
+│  │  └─ Спецификация                  ← source_file leaves; card Title [file]
+│  │     ├─ Спецификация требований    ← moex-dams.required.yaml
+│  │     └─ Спецификация модели        ← conceptual-model.skeleton.yaml
 │  ├─ ИТ-решения
 │  │  ├─ Требования к модели
-│  │  ├─ Спецификация требований
-│  │  ├─ Спецификация модели
+│  │  ├─ Спецификация
+│  │  │  ├─ Спецификация требований
+│  │  │  └─ Спецификация модели        ← it-solution-model.skeleton.yaml
 │  │  └─ Пример модели
 │  └─ Публикация                       ← ADR-019 publication-requirements.yaml
 │     ├─ Требования публикации         ← entity-table (flattened)

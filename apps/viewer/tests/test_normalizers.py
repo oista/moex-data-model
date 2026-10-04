@@ -629,14 +629,12 @@ def test_dams_explorer_real_schema():
     )
     assert {c.id for c in conceptual.children} == {
         "group:requirements-conceptual-list",
-        "group:requirements-conceptual-min-spec",
-        "group:requirements-conceptual-model-spec",
+        "group:requirements-conceptual-spec",
     }
     it = next(c for c in req_root.children if c.id == "group:requirements-it-solutions")
     assert {c.id for c in it.children} == {
         "group:requirements-list",
-        "group:requirements-min-spec",
-        "group:requirements-model-spec",
+        "group:requirements-it-spec",
         "group:requirements-model-example",
     }
     list_group = next(c for c in it.children if c.id == "group:requirements-list")

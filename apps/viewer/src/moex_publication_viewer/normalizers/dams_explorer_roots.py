@@ -373,17 +373,21 @@ def _source_file_items(
     *,
     description: str,
     version: str = "0.1.0",
+    title: str | None = None,
 ) -> list[PublicationItem]:
+    """Build source_file cards; optional ``title`` shows in nav, basename in card."""
     items: list[PublicationItem] = []
     for rel, text in projected.items():
+        name = Path(rel).name
         items.append(
             PublicationItem(
                 id=_file_item_id(rel),
-                title=Path(rel).name,
+                title=title or name,
                 description=description,
                 attributes={
                     "kind": "source_file",
                     "path": rel,
+                    "file_name": name,
                     "version": version,
                     "description": description,
                     "text": text,
@@ -410,6 +414,7 @@ def _build_minimal_spec_file_items(spec_dir: Path) -> list[PublicationItem]:
     projected = project_required_only_schema(sv)
     return _source_file_items(
         projected,
+        title="Спецификация требований",
         description=(
             "Derived required-only projection "
             "(required / minimum_cardinality≥1 slots)."
@@ -427,6 +432,7 @@ def _build_model_skeleton_file_items(spec_dir: Path) -> list[PublicationItem]:
     projected = project_it_solution_model_skeleton(catalog)
     return _source_file_items(
         projected,
+        title="Спецификация модели",
         description=(
             "Derived ModelPackage skeleton from IT-solution formal_checks "
             "(placeholders for required / ref_resolves slots)."
@@ -446,6 +452,7 @@ def _build_conceptual_model_skeleton_file_items(
     projected = project_conceptual_model_skeleton(catalog)
     return _source_file_items(
         projected,
+        title="Спецификация модели",
         description=(
             "Derived ModelPackage skeleton from conceptual-model formal_checks "
             "(placeholders for required / ref_resolves slots)."
@@ -596,70 +603,47 @@ def wrap_dams_explorer_roots(
         children=conceptual_req_items,
     )
     min_files = _build_minimal_spec_file_items(spec_dir)
-    min_spec_group = PublicationItem(
-        id="group:requirements-min-spec",
-        title="Спецификация требований",
-        description="Required-only срез схемы DAMS по обязательным слотам.",
-        attributes={
-            "kind": "group",
-            "section_root": "requirements-min-spec",
-            "purpose": "Тот же шаблон, что «Спецификация», но только обязательные слоты.",
-            "file_count": len(min_files),
-            "member_ids": [f.id for f in min_files],
-        },
-        children=min_files,
-    )
-    conceptual_min_spec_group = PublicationItem(
-        id="group:requirements-conceptual-min-spec",
-        title="Спецификация требований",
-        description="Required-only срез схемы DAMS по обязательным слотам.",
-        attributes={
-            "kind": "group",
-            "section_root": "requirements-conceptual-min-spec",
-            "purpose": (
-                "Тот же шаблон, что «Спецификация», но только обязательные слоты "
-                "(общий schema projection для conceptual level)."
-            ),
-            "file_count": len(min_files),
-            "member_ids": [f.id for f in min_files],
-        },
-        children=min_files,
-    )
     skeleton_files = _build_model_skeleton_file_items(spec_dir)
-    model_spec_group = PublicationItem(
-        id="group:requirements-model-spec",
-        title="Спецификация модели",
-        description="Минимально допустимый скелет ModelPackage по formal_checks.",
-        attributes={
-            "kind": "group",
-            "section_root": "requirements-model-spec",
-            "purpose": (
-                "Референсная форма инстанса модели, которую владельцы решений "
-                "должны уметь заполнить."
-            ),
-            "file_count": len(skeleton_files),
-            "member_ids": [f.id for f in skeleton_files],
-        },
-        children=skeleton_files,
-    )
     conceptual_skeleton_files = _build_conceptual_model_skeleton_file_items(spec_dir)
-    conceptual_model_spec_group = PublicationItem(
-        id="group:requirements-conceptual-model-spec",
-        title="Спецификация модели",
+    it_spec_files = [*min_files, *skeleton_files]
+    conceptual_spec_files = [*min_files, *conceptual_skeleton_files]
+    it_spec_group = PublicationItem(
+        id="group:requirements-it-spec",
+        title="Спецификация",
         description=(
-            "Минимально допустимый скелет enterprise-conceptual ModelPackage "
-            "по formal_checks."
+            "Required-only срез схемы DAMS и минимальный скелет ModelPackage "
+            "для ИТ-решения."
         ),
         attributes={
             "kind": "group",
-            "section_root": "requirements-conceptual-model-spec",
+            "section_root": "requirements-it-spec",
             "purpose": (
-                "Референсная форма инстанса корпоративной концептуальной модели."
+                "Спецификация требований (required-only LinkML) и спецификация "
+                "модели (derived skeleton) уровня ИТ-решения."
             ),
-            "file_count": len(conceptual_skeleton_files),
-            "member_ids": [f.id for f in conceptual_skeleton_files],
+            "file_count": len(it_spec_files),
+            "member_ids": [f.id for f in it_spec_files],
         },
-        children=conceptual_skeleton_files,
+        children=it_spec_files,
+    )
+    conceptual_spec_group = PublicationItem(
+        id="group:requirements-conceptual-spec",
+        title="Спецификация",
+        description=(
+            "Required-only срез схемы DAMS и минимальный скелет "
+            "enterprise-conceptual ModelPackage."
+        ),
+        attributes={
+            "kind": "group",
+            "section_root": "requirements-conceptual-spec",
+            "purpose": (
+                "Спецификация требований (required-only LinkML) и спецификация "
+                "модели (derived skeleton) уровня enterprise-conceptual."
+            ),
+            "file_count": len(conceptual_spec_files),
+            "member_ids": [f.id for f in conceptual_spec_files],
+        },
+        children=conceptual_spec_files,
     )
     example_files = _build_model_example_file_items(spec_dir)
     model_example_group = PublicationItem(
@@ -692,22 +676,19 @@ def wrap_dams_explorer_roots(
             "structure_why": (
                 "Требования к модели — каталог SpecificationRequirement "
                 "(requirement_level: conceptual_model); "
-                "спецификация требований — required-only LinkML; "
-                "спецификация модели — derived skeleton. "
+                "Спецификация — required-only LinkML и derived skeleton. "
                 "Пример модели на этом уровне не публикуется."
             ),
             "requirement_count": len(conceptual_req_items),
-            "file_count": len(min_files) + len(conceptual_skeleton_files),
+            "file_count": len(conceptual_spec_files),
             "member_ids": [
                 conceptual_list_group.id,
-                conceptual_min_spec_group.id,
-                conceptual_model_spec_group.id,
+                conceptual_spec_group.id,
             ],
         },
         children=[
             conceptual_list_group,
-            conceptual_min_spec_group,
-            conceptual_model_spec_group,
+            conceptual_spec_group,
         ],
     )
     it_solutions_group = PublicationItem(
@@ -720,23 +701,20 @@ def wrap_dams_explorer_roots(
             "purpose": "Требования, схема, скелет и пример модели уровня ИТ-решения.",
             "structure_why": (
                 "Требования к модели — каталог SpecificationRequirement; "
-                "спецификация требований — required-only LinkML; "
-                "спецификация модели — derived skeleton; "
+                "Спецификация — required-only LinkML и derived skeleton; "
                 "пример модели — curated ModelPackage."
             ),
             "requirement_count": len(req_items),
-            "file_count": len(min_files) + len(skeleton_files) + len(example_files),
+            "file_count": len(it_spec_files) + len(example_files),
             "member_ids": [
                 list_group.id,
-                min_spec_group.id,
-                model_spec_group.id,
+                it_spec_group.id,
                 model_example_group.id,
             ],
         },
         children=[
             list_group,
-            min_spec_group,
-            model_spec_group,
+            it_spec_group,
             model_example_group,
         ],
     )

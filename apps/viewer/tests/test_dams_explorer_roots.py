@@ -112,8 +112,7 @@ def test_wrap_roots_placeholder_implementations(tmp_path: Path):
     assert conceptual.id == "group:requirements-conceptual"
     assert {c.id for c in conceptual.children} == {
         "group:requirements-conceptual-list",
-        "group:requirements-conceptual-min-spec",
-        "group:requirements-conceptual-model-spec",
+        "group:requirements-conceptual-spec",
     }
     assert "group:requirements-conceptual-model-example" not in {
         c.id for c in conceptual.children
@@ -123,8 +122,7 @@ def test_wrap_roots_placeholder_implementations(tmp_path: Path):
     )
     assert {c.id for c in it.children} == {
         "group:requirements-list",
-        "group:requirements-min-spec",
-        "group:requirements-model-spec",
+        "group:requirements-it-spec",
         "group:requirements-model-example",
     }
     pub = next(c for c in roots[4].children if c.id == "group:requirements-publication")
@@ -155,8 +153,7 @@ def test_wrap_roots_loads_requirements_catalog():
     assert conceptual.attributes.get("nav_glyph") == "cdm"
     assert {c.id for c in conceptual.children} == {
         "group:requirements-conceptual-list",
-        "group:requirements-conceptual-min-spec",
-        "group:requirements-conceptual-model-spec",
+        "group:requirements-conceptual-spec",
     }
     assert all(
         "example" not in c.id for c in conceptual.children
@@ -173,13 +170,22 @@ def test_wrap_roots_loads_requirements_catalog():
         c.attributes.get("requirement_level") == "conceptual_model"
         for c in conceptual_list.children
     )
-    conceptual_skel = next(
+    conceptual_spec = next(
         c
         for c in conceptual.children
-        if c.id == "group:requirements-conceptual-model-spec"
+        if c.id == "group:requirements-conceptual-spec"
     )
-    assert conceptual_skel.children
-    cm_skel_text = conceptual_skel.children[0].attributes.get("text") or ""
+    assert conceptual_spec.title == "Спецификация"
+    assert len(conceptual_spec.children) == 2
+    cm_by_title = {c.title: c for c in conceptual_spec.children}
+    assert "Спецификация требований" in cm_by_title
+    assert "Спецификация модели" in cm_by_title
+    cm_req_file = cm_by_title["Спецификация требований"]
+    assert cm_req_file.attributes.get("kind") == "source_file"
+    assert cm_req_file.attributes.get("file_name") == "moex-dams.required.yaml"
+    cm_skel = cm_by_title["Спецификация модели"]
+    assert cm_skel.attributes.get("file_name") == "conceptual-model.skeleton.yaml"
+    cm_skel_text = cm_skel.attributes.get("text") or ""
     assert "conceptual_entities:" in cm_skel_text
     assert "relationships:" in cm_skel_text
     assert "physical_objects:" not in cm_skel_text
@@ -231,18 +237,20 @@ def test_wrap_roots_loads_requirements_catalog():
     assert all(c.attributes.get("statement") for c in req_leaves)
     assert all(c.attributes.get("formal_checks") for c in req_leaves)
 
-    min_group = next(c for c in it.children if c.id == "group:requirements-min-spec")
-    assert min_group.title == "Спецификация требований"
-    assert min_group.children
-    assert all(c.attributes.get("kind") == "source_file" for c in min_group.children)
-    assert all("classes:" in (c.attributes.get("text") or "") for c in min_group.children)
-
-    model_spec = next(
-        c for c in it.children if c.id == "group:requirements-model-spec"
+    it_spec = next(c for c in it.children if c.id == "group:requirements-it-spec")
+    assert it_spec.title == "Спецификация"
+    assert len(it_spec.children) == 2
+    assert all(c.attributes.get("kind") == "source_file" for c in it_spec.children)
+    it_by_title = {c.title: c for c in it_spec.children}
+    assert it_by_title["Спецификация требований"].attributes.get("file_name") == (
+        "moex-dams.required.yaml"
     )
-    assert model_spec.title == "Спецификация модели"
-    assert model_spec.children
-    skel_text = model_spec.children[0].attributes.get("text") or ""
+    assert "classes:" in (
+        it_by_title["Спецификация требований"].attributes.get("text") or ""
+    )
+    it_skel = it_by_title["Спецификация модели"]
+    assert it_skel.attributes.get("file_name") == "it-solution-model.skeleton.yaml"
+    skel_text = it_skel.attributes.get("text") or ""
     assert "element_id:" in skel_text
     assert "logical_entities:" in skel_text
     assert "<required>" in skel_text or "<must-resolve-in-package>" in skel_text

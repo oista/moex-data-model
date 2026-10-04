@@ -1495,11 +1495,9 @@
               0
             );
         } else if (
-          sectionRoot === "requirements-min-spec" ||
-          sectionRoot === "requirements-model-spec" ||
+          sectionRoot === "requirements-it-spec" ||
+          sectionRoot === "requirements-conceptual-spec" ||
           sectionRoot === "requirements-model-example" ||
-          sectionRoot === "requirements-conceptual-min-spec" ||
-          sectionRoot === "requirements-conceptual-model-spec" ||
           sectionRoot === "requirements-publication-spec"
         ) {
           badgeCount =
@@ -3284,14 +3282,12 @@
         );
       } else if (
         sectionRoot === "requirements-list" ||
-        sectionRoot === "requirements-min-spec" ||
+        sectionRoot === "requirements-it-spec" ||
         sectionRoot === "requirements-it-solutions" ||
-        sectionRoot === "requirements-model-spec" ||
         sectionRoot === "requirements-model-example" ||
         sectionRoot === "requirements-conceptual" ||
         sectionRoot === "requirements-conceptual-list" ||
-        sectionRoot === "requirements-conceptual-min-spec" ||
-        sectionRoot === "requirements-conceptual-model-spec" ||
+        sectionRoot === "requirements-conceptual-spec" ||
         sectionRoot === "requirements-publication" ||
         sectionRoot === "requirements-publication-list" ||
         sectionRoot === "requirements-publication-spec"
