@@ -4231,17 +4231,7 @@
       const id = String(node.getAttribute?.("id") || "");
       const dataId = String(node.getAttribute?.("data-id") || "");
       const hay = `${id} ${dataId}`;
-      const entityMatch = hay.match(/entity-([A-Za-z0-9_]+)-\d+/);
-      if (entityMatch) {
-        const entry = (clickmap.entities || {})[entityMatch[1]];
-        if (entry?.element_id) {
-          return {
-            element_id: entry.element_id,
-            section_id: entry.section_id || "conceptual",
-            kind: "entity",
-          };
-        }
-      }
+      // Edges first: mermaid edge ids embed entity-… substrings.
       const edgeMatch = hay.match(
         /id_entity-([A-Za-z0-9_]+)-\d+_entity-([A-Za-z0-9_]+)-\d+/
       );
@@ -4265,7 +4255,18 @@
             };
           }
         }
-        // Edge label text nodes sit near relationshipLine; walk up already done.
+      }
+      // Standalone entity node ids look like entity-LegalEntity-3 (no id_entity_…_entity).
+      const entityMatch = hay.match(/(?:^|[^_])entity-([A-Za-z0-9_]+)-\d+(?:$|[^_])/);
+      if (entityMatch && !hay.includes("id_entity-")) {
+        const entry = (clickmap.entities || {})[entityMatch[1]];
+        if (entry?.element_id) {
+          return {
+            element_id: entry.element_id,
+            section_id: entry.section_id || "conceptual",
+            kind: "entity",
+          };
+        }
       }
       // Relationship labels are often <text> without entity ids — match by label.
       if (node.tagName === "text" || node.tagName === "tspan") {

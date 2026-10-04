@@ -265,6 +265,18 @@ def test_js_class_icon_badges_and_section_majority():
     assert "nav-kind-section" in JS
 
 
+def test_js_erd_clickmap_panel():
+    assert "function resolveErdClickTarget" in JS
+    assert "function renderMermaidDiagram(mod, section)" in JS
+    assert "erd_clickmap" in JS
+    assert "erd-panel--interactive" in JS
+    assert "erd-detail" in JS
+    css = assemble_css()
+    assert ".erd-panel--interactive .erd-body" in css
+    assert ".erd-svg--clickable" in css
+    assert ".erd-detail" in css
+
+
 def test_build_strips_emoji_from_nav_html():
     repo = Path(__file__).resolve().parents[3]
     dist = repo / "apps" / "viewer" / "dist"
