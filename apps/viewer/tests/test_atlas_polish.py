@@ -127,14 +127,15 @@ def test_css_level_glyph_tokens_and_slots():
     level_folder = css.split(
         ".nav-kind.nav-kind-folder.nav-kind-folder--level {"
     )[1][:220]
-    assert "min-width: 30px" in level_folder
-    assert "height: 16px" in level_folder
+    assert "min-width: 26px" in level_folder
+    assert "height: 14px" in level_folder
     folder_glyph = css.split(
         ".nav-kind.nav-kind-folder.nav-kind-folder--level .nav-glyph {"
-    )[1][:160]
-    assert "font-size: 8px" in folder_glyph
-    assert "line-height: 12px" in folder_glyph
-    assert "padding: 0 3px" in folder_glyph
+    )[1][:200]
+    assert "font-size: 7px" in folder_glyph
+    assert "line-height: 10px" in folder_glyph
+    assert "padding: 0 2px" in folder_glyph
+    assert "opacity: 0.7" in folder_glyph
 
 
 def test_js_nav_glyph_helpers():

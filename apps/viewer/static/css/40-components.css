@@ -263,8 +263,8 @@
 /* Level folders: gray folder chrome + compact plaque inside + light tint */
 .nav-kind.nav-kind-folder.nav-kind-folder--level {
   width: auto;
-  min-width: 30px;
-  height: 16px;
+  min-width: 26px;
+  height: 14px;
   padding: 0 2px;
   gap: 0;
   border-color: color-mix(in srgb, var(--level-folder-edge, var(--muted)) 45%, var(--border));
@@ -277,9 +277,10 @@
 .nav-kind.nav-kind-folder.nav-kind-folder--level .nav-glyph {
   position: relative;
   z-index: 1;
-  font-size: 8px;
-  line-height: 12px;
-  padding: 0 3px;
+  font-size: 7px;
+  line-height: 10px;
+  padding: 0 2px;
+  opacity: 0.7;
 }
 .nav-kind.nav-kind-folder.nav-kind-folder--cdm {
   --level-folder-tint: var(--level-cdm-start);
