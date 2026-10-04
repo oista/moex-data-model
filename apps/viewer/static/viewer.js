@@ -242,6 +242,67 @@
     return String(icon);
   }
 
+  const LEVEL_GLYPHS = new Set(["cmd", "ldm", "pdm"]);
+  const SECTION_ID_NAV_GLYPH = {
+    conceptual: "cmd",
+    logical: "ldm",
+    "logical-erd": "ldm",
+    physical: "pdm",
+    "physical-erd": "pdm",
+  };
+  const KIND_LETTER = {
+    enum: "E",
+    individual: "I",
+    source_file: "F",
+    requirement: "T",
+    implementation_ref: "R",
+    section_ref: "S",
+    group: "G",
+    class: "C",
+  };
+
+  function resolveNavGlyph(attrs, extras) {
+    const a = attrs || {};
+    const x = extras || {};
+    const explicit = String(a.nav_glyph || "").trim().toLowerCase();
+    if (LEVEL_GLYPHS.has(explicit) || KIND_LETTER[explicit]) return explicit;
+
+    if (a.section_root === "requirements-conceptual") return "cmd";
+
+    const sectionCode = String(a.requirement_section || "").trim().toUpperCase();
+    if (
+      a.group_style === "section_folder" &&
+      (sectionCode === "LDM" || sectionCode === "PDM")
+    ) {
+      return sectionCode.toLowerCase();
+    }
+
+    const sectionId = String(
+      a.section_id || x.sectionId || a.target_section_id || ""
+    ).trim();
+    if (SECTION_ID_NAV_GLYPH[sectionId]) return SECTION_ID_NAV_GLYPH[sectionId];
+
+    const kind = String(a.kind || x.kind || "class");
+    return KIND_LETTER[kind] ? kind : "class";
+  }
+
+  function navGlyphHtml(glyph, slot, opts) {
+    const g = String(glyph || "").toLowerCase();
+    const s = slot || "menu";
+    const o = opts || {};
+    if (LEVEL_GLYPHS.has(g)) {
+      if (s === "folder") {
+        const code = String(o.folderCode || g).slice(0, 3).toUpperCase();
+        return `<span class="nav-kind nav-kind-folder nav-glyph--${g}" aria-hidden="true"><span class="nav-kind-folder-tab"></span><span class="nav-kind-folder-code">${escapeHtml(code)}</span></span>`;
+      }
+      const label = g.toUpperCase();
+      return `<span class="nav-glyph nav-glyph--${g} nav-glyph--${s}" aria-hidden="true">${label}</span>`;
+    }
+    const letter = KIND_LETTER[g] || String(o.letter || "C");
+    const kindClasses = o.kindClasses || "";
+    return `<span class="nav-kind ${kindClasses}" aria-hidden="true">${escapeHtml(letter)}</span>`;
+  }
+
   function chevronSvg(direction) {
     if (direction === "down") {
       return `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
@@ -613,22 +674,23 @@
         const sectionCode = String(
           node.attributes?.requirement_section || ""
         ).trim();
+        const glyph = resolveNavGlyph(node.attributes, { kind });
         let markHtml;
         if (isSectionFolder) {
-          const codeHtml = sectionCode
-            ? `<span class="nav-kind-folder-code">${escapeHtml(sectionCode.slice(0, 3))}</span>`
-            : "";
-          markHtml = `<span class="nav-kind nav-kind-folder" aria-hidden="true"><span class="nav-kind-folder-tab"></span>${codeHtml}</span>`;
+          if (LEVEL_GLYPHS.has(glyph)) {
+            markHtml = navGlyphHtml(glyph, "folder", {
+              folderCode: sectionCode || glyph,
+            });
+          } else {
+            const codeHtml = sectionCode
+              ? `<span class="nav-kind-folder-code">${escapeHtml(sectionCode.slice(0, 3))}</span>`
+              : "";
+            markHtml = `<span class="nav-kind nav-kind-folder" aria-hidden="true"><span class="nav-kind-folder-tab"></span>${codeHtml}</span>`;
+          }
+        } else if (LEVEL_GLYPHS.has(glyph)) {
+          markHtml = navGlyphHtml(glyph, "menu");
         } else {
-          let mark = "C";
-          if (kind === "enum") mark = "E";
-          else if (kind === "individual") mark = "I";
-          else if (kind === "source_file") mark = "F";
-          else if (kind === "requirement") mark = "T";
-          else if (kind === "implementation_ref") mark = "R";
-          else if (kind === "section_ref") mark = "S";
-          else if (kind === "group") mark = "G";
-          markHtml = `<span class="nav-kind ${kindClasses}">${escapeHtml(mark)}</span>`;
+          markHtml = navGlyphHtml(glyph, "menu", { kindClasses });
         }
         label.innerHTML = `${markHtml}
           <span class="tree-label">${escapeHtml(node.title || node.id)}</span>`;
@@ -709,6 +771,7 @@
         });
         const titleSpan = document.createElement("span");
         titleSpan.textContent = group.title || group.id;
+        const groupGlyph = resolveNavGlyph(group.attributes);
         const badge = document.createElement("span");
         badge.className = "badge";
         const sectionRoot = group.attributes?.section_root;
@@ -756,6 +819,9 @@
         }
         badge.textContent = String(badgeCount);
         gBtn.appendChild(toggle);
+        if (LEVEL_GLYPHS.has(groupGlyph)) {
+          gBtn.insertAdjacentHTML("beforeend", navGlyphHtml(groupGlyph, "menu"));
+        }
         gBtn.appendChild(titleSpan);
         gBtn.appendChild(badge);
         const kids = document.createElement("div");
@@ -792,7 +858,14 @@
           "nav-section-btn" +
           (focus?.section === sec.id && !focus?.item ? " active" : "");
         sBtn.setAttribute("data-tree-node", "");
-        sBtn.textContent = sec.title;
+        const secGlyph =
+          SECTION_ID_NAV_GLYPH[sec.id] ||
+          resolveNavGlyph({ section_id: sec.id, nav_glyph: sec.nav_glyph });
+        if (LEVEL_GLYPHS.has(secGlyph)) {
+          sBtn.innerHTML = `${navGlyphHtml(secGlyph, "menu")} <span>${escapeHtml(sec.title)}</span>`;
+        } else {
+          sBtn.textContent = sec.title;
+        }
         sBtn.addEventListener("click", (e) => {
           e.stopPropagation();
           selectedItemId = null;
@@ -1754,12 +1827,24 @@
     const level = attrs.requirement_level || "";
     const section = attrs.requirement_section || "";
     const title = attrs.title || attrs.name || "";
+    const reqGlyph = resolveNavGlyph(attrs);
+    const levelSection =
+      String(section).toUpperCase() === "LDM" ||
+      String(section).toUpperCase() === "PDM"
+        ? String(section).toLowerCase()
+        : "";
+    const cardGlyph = LEVEL_GLYPHS.has(reqGlyph)
+      ? reqGlyph
+      : levelSection || (level === "conceptual_model" ? "cmd" : "");
+    const titleBadge = LEVEL_GLYPHS.has(cardGlyph)
+      ? navGlyphHtml(cardGlyph, "card")
+      : "";
     card.innerHTML = `
       <header class="detail-head">
-        <h1>${escapeHtml(String(code))}</h1>
+        <h1>${titleBadge}${escapeHtml(String(code))}</h1>
         <div class="badge-row">
           <span class="badge-pill">requirement</span>
-          ${section ? `<span class="badge-pill">${escapeHtml(String(section))}</span>` : ""}
+          ${section && !LEVEL_GLYPHS.has(cardGlyph) ? `<span class="badge-pill">${escapeHtml(String(section))}</span>` : ""}
           ${level ? `<span class="badge-pill">${escapeHtml(String(level))}</span>` : ""}
         </div>
         <p class="muted">${escapeHtml(title)}</p>
@@ -2056,9 +2141,13 @@
           : item.attributes?.source_domain
             ? "domain"
             : "package";
+      const groupLevelGlyph = resolveNavGlyph(item.attributes);
+      const groupTitleBadge = LEVEL_GLYPHS.has(groupLevelGlyph)
+        ? navGlyphHtml(groupLevelGlyph, "card")
+        : "";
       card.innerHTML = `
         <header class="detail-head">
-          <h1>${escapeHtml(item.title || item.id)}</h1>
+          <h1>${groupTitleBadge}${escapeHtml(item.title || item.id)}</h1>
           <div class="badge-row"><span class="badge-pill">${groupBadge}</span></div>
           <p class="muted">${escapeHtml(item.attributes?.source_file || item.attributes?.schema_key || item.attributes?.ontology_id || item.attributes?.source_domain || sectionRoot || "")}</p>
         </header>
@@ -2588,7 +2677,13 @@
 
     const head = document.createElement("div");
     head.className = "section-head";
-    head.innerHTML = `<h2>${escapeHtml(section.title)}</h2><span class="muted">${escapeHtml(section.type)}</span>`;
+    const sectionGlyph =
+      SECTION_ID_NAV_GLYPH[section.id] ||
+      resolveNavGlyph({ nav_glyph: section.nav_glyph, section_id: section.id });
+    const sectionBadge = LEVEL_GLYPHS.has(sectionGlyph)
+      ? navGlyphHtml(sectionGlyph, "card")
+      : "";
+    head.innerHTML = `${sectionBadge}<h2>${escapeHtml(section.title)}</h2><span class="muted">${escapeHtml(section.type)}</span>`;
     head.addEventListener("click", () => {
       // Collapse only — do not setHash (would re-render and hide the body permanently
       // when already focused on this section).

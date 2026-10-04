@@ -68,6 +68,31 @@ def test_impl_section_nav_children_includes_explorer_as_section_leaf() -> None:
     assert kids[0].children == []
 
 
+def test_impl_section_nav_children_stamps_level_glyphs() -> None:
+    mod = PublicationModule(
+        module_id="moex:module:mdm",
+        title="MDM",
+        sections=[
+            PublicationSection(id="conceptual", title="Conceptual", type="entity-table"),
+            PublicationSection(id="logical", title="Logical", type="entity-table"),
+            PublicationSection(id="logical-erd", title="Logical ER", type="mermaid-diagram"),
+            PublicationSection(id="physical", title="Physical", type="entity-table"),
+            PublicationSection(id="physical-erd", title="Physical ER", type="mermaid-diagram"),
+            PublicationSection(id="overview", title="Overview", type="markdown-doc"),
+        ],
+    )
+    kids = impl_section_nav_children("mdm", mod)
+    by_sid = {c.attributes["section_id"]: c.attributes.get("nav_glyph") for c in kids}
+    assert by_sid == {
+        "conceptual": "cmd",
+        "logical": "ldm",
+        "logical-erd": "ldm",
+        "physical": "pdm",
+        "physical-erd": "pdm",
+        "overview": None,
+    }
+
+
 def test_attach_impl_section_nav_children() -> None:
     modules = [
         PublicationModule(

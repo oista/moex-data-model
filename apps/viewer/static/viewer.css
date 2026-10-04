@@ -142,6 +142,17 @@ svg {
 
   --font-ui-family: "MOEX UI", "Segoe UI", Arial, sans-serif;
   --font-code: "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+
+  /* DAMS model-level plaques (CMD / LDM / PDM) — orange-russet family */
+  --level-cmd-start: #f06a1a;
+  --level-cmd-end: #c41e1e;
+  --level-cmd-text: #ffffff;
+  --level-ldm-start: #d97706;
+  --level-ldm-end: #7c2d12;
+  --level-ldm-text: #ffffff;
+  --level-pdm-start: #c4a484;
+  --level-pdm-end: #8a8178;
+  --level-pdm-text: #3d342c;
 }
 
 [data-theme="dark"] {
@@ -191,6 +202,16 @@ svg {
   --accent: var(--brand);
   --accent-soft: var(--brand-soft);
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+
+  --level-cmd-start: #ff8a3d;
+  --level-cmd-end: #e54750;
+  --level-cmd-text: #ffffff;
+  --level-ldm-start: #e89a3c;
+  --level-ldm-end: #a45a2a;
+  --level-ldm-text: #ffffff;
+  --level-pdm-start: #a89880;
+  --level-pdm-end: #6e675e;
+  --level-pdm-text: #f1ebe3;
 }
 
 
@@ -747,6 +768,86 @@ a {
   color: var(--text-secondary);
   background: var(--surface-3);
   border-color: var(--border-default);
+}
+
+/* Compact level plaques (younger siblings of .role-pill) */
+.nav-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  box-sizing: border-box;
+}
+.nav-glyph--menu {
+  font-size: 9px;
+  line-height: 14px;
+  padding: 0 4px;
+  min-width: 1.6em;
+}
+.nav-glyph--card {
+  font-size: 11px;
+  line-height: 18px;
+  padding: 0 6px;
+}
+.nav-glyph--cmd {
+  color: var(--level-cmd-text);
+  background: linear-gradient(135deg, var(--level-cmd-start), var(--level-cmd-end));
+  border-color: var(--level-cmd-end);
+}
+.nav-glyph--ldm {
+  color: var(--level-ldm-text);
+  background: linear-gradient(135deg, var(--level-ldm-start), var(--level-ldm-end));
+  border-color: var(--level-ldm-end);
+}
+.nav-glyph--pdm {
+  color: var(--level-pdm-text);
+  background: linear-gradient(135deg, var(--level-pdm-start), var(--level-pdm-end));
+  border-color: var(--level-pdm-end);
+}
+.nav-kind.nav-kind-folder.nav-glyph--cmd,
+.nav-kind.nav-kind-folder.nav-glyph--ldm,
+.nav-kind.nav-kind-folder.nav-glyph--pdm {
+  background: color-mix(in srgb, var(--level-folder-tint, var(--muted)) 18%, var(--surface-2, transparent));
+  border-color: color-mix(in srgb, var(--level-folder-edge, var(--muted)) 70%, var(--border));
+}
+.nav-kind.nav-kind-folder.nav-glyph--cmd {
+  --level-folder-tint: var(--level-cmd-start);
+  --level-folder-edge: var(--level-cmd-end);
+}
+.nav-kind.nav-kind-folder.nav-glyph--ldm {
+  --level-folder-tint: var(--level-ldm-start);
+  --level-folder-edge: var(--level-ldm-end);
+}
+.nav-kind.nav-kind-folder.nav-glyph--pdm {
+  --level-folder-tint: var(--level-pdm-start);
+  --level-folder-edge: var(--level-pdm-end);
+}
+.nav-kind.nav-kind-folder.nav-glyph--cmd .nav-kind-folder-tab,
+.nav-kind.nav-kind-folder.nav-glyph--ldm .nav-kind-folder-tab,
+.nav-kind.nav-kind-folder.nav-glyph--pdm .nav-kind-folder-tab {
+  border-color: color-mix(in srgb, var(--level-folder-edge) 70%, var(--border));
+  background: inherit;
+}
+.nav-kind.nav-kind-folder.nav-glyph--cmd .nav-kind-folder-code {
+  color: var(--level-cmd-end);
+}
+.nav-kind.nav-kind-folder.nav-glyph--ldm .nav-kind-folder-code {
+  color: var(--level-ldm-end);
+}
+.nav-kind.nav-kind-folder.nav-glyph--pdm .nav-kind-folder-code {
+  color: var(--level-pdm-end);
+}
+.detail-head h1 .nav-glyph,
+.section-head .nav-glyph {
+  flex-shrink: 0;
+}
+.nav-group-btn .nav-glyph {
+  margin-right: 2px;
 }
 .arch-chrome { margin-bottom: 16px; }
 .arch-meta { margin: 8px 0 12px; }

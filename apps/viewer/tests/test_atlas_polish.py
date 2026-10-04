@@ -73,6 +73,27 @@ def test_css_active_gray_and_spec_pill_dark():
     assert "color: #ffffff" in pill
 
 
+def test_css_level_glyph_tokens_and_slots():
+    css = assemble_css()
+    assert "--level-cmd-start:" in css
+    assert "--level-ldm-start:" in css
+    assert "--level-pdm-start:" in css
+    assert ".nav-glyph--cmd" in css
+    assert ".nav-glyph--ldm" in css
+    assert ".nav-glyph--pdm" in css
+    assert ".nav-glyph--menu" in css
+    assert ".nav-glyph--card" in css
+
+
+def test_js_nav_glyph_helpers():
+    assert "function resolveNavGlyph" in JS
+    assert "function navGlyphHtml" in JS
+    assert 'LEVEL_GLYPHS = new Set(["cmd", "ldm", "pdm"])' in JS
+    assert 'conceptual: "cmd"' in JS
+    assert 'logical: "ldm"' in JS
+    assert 'physical: "pdm"' in JS
+
+
 def test_build_strips_emoji_from_nav_html():
     repo = Path(__file__).resolve().parents[3]
     dist = repo / "apps" / "viewer" / "dist"

@@ -142,6 +142,7 @@ def test_wrap_roots_loads_requirements_catalog():
     assert req_root.children[0].id == "group:requirements-conceptual"
     assert req_root.children[0].title == "Концептуальная модель"
     conceptual = req_root.children[0]
+    assert conceptual.attributes.get("nav_glyph") == "cmd"
     assert {c.id for c in conceptual.children} == {
         "group:requirements-conceptual-list",
         "group:requirements-conceptual-min-spec",
@@ -196,6 +197,11 @@ def test_wrap_roots_loads_requirements_catalog():
         and c.attributes.get("group_style") == "section_folder"
         for c in list_group.children
     )
+    by_section = {c.attributes.get("requirement_section"): c for c in list_group.children}
+    assert by_section["LDM"].attributes.get("nav_glyph") == "ldm"
+    assert by_section["PDM"].attributes.get("nav_glyph") == "pdm"
+    assert by_section["REF"].attributes.get("nav_glyph") is None
+    assert by_section["GEN"].attributes.get("nav_glyph") is None
     req_leaves = [r for g in list_group.children for r in (g.children or [])]
     codes = {c.attributes.get("code") for c in req_leaves}
     assert "GEN-001" in codes

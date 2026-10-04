@@ -327,18 +327,21 @@ def _group_it_requirements_by_section(
         children = buckets[code]
         if not children:
             continue
+        attrs: dict[str, Any] = {
+            "kind": "group",
+            "group_style": "section_folder",
+            "requirement_section": code,
+            "requirement_count": len(children),
+            "member_ids": [c.id for c in children],
+        }
+        if code in ("LDM", "PDM"):
+            attrs["nav_glyph"] = code.lower()
         groups.append(
             PublicationItem(
                 id=f"group:requirements-section-{code}",
                 title=_SECTION_LABELS.get(code, code),
                 description=_SECTION_LABELS.get(code, code),
-                attributes={
-                    "kind": "group",
-                    "group_style": "section_folder",
-                    "requirement_section": code,
-                    "requirement_count": len(children),
-                    "member_ids": [c.id for c in children],
-                },
+                attributes=attrs,
                 children=children,
             )
         )
@@ -678,6 +681,7 @@ def wrap_dams_explorer_roots(
         attributes={
             "kind": "group",
             "section_root": "requirements-conceptual",
+            "nav_glyph": "cmd",
             "purpose": (
                 "Требования, схема и скелет модели уровня enterprise-conceptual "
                 "(без примера модели)."

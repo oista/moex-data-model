@@ -229,6 +229,16 @@ def _module_by_id(
     return next((m for m in modules if m.module_id == module_id), None)
 
 
+# Publication section ids → DAMS model-level plaque (undeniable mapping).
+_SECTION_ID_NAV_GLYPH: dict[str, str] = {
+    "conceptual": "cmd",
+    "logical": "ldm",
+    "logical-erd": "ldm",
+    "physical": "pdm",
+    "physical-erd": "pdm",
+}
+
+
 def impl_section_nav_children(
     catalog_impl_id: str,
     impl_module: PublicationModule | None,
@@ -243,20 +253,24 @@ def impl_section_nav_children(
         return []
     children: list[PublicationItem] = []
     for sec in impl_module.sections:
+        attrs: dict = {
+            "kind": "section_ref",
+            "section_id": sec.id,
+            "target_module_id": impl_module.module_id,
+            "target_section_id": sec.id,
+            "description": sec.description
+            or f"Open publication section «{sec.title}».",
+        }
+        glyph = _SECTION_ID_NAV_GLYPH.get(sec.id)
+        if glyph:
+            attrs["nav_glyph"] = glyph
         children.append(
             PublicationItem(
                 id=f"implnav:{catalog_impl_id}:{sec.id}",
                 title=sec.title,
                 description=sec.description
                 or f"Open publication section «{sec.title}».",
-                attributes={
-                    "kind": "section_ref",
-                    "section_id": sec.id,
-                    "target_module_id": impl_module.module_id,
-                    "target_section_id": sec.id,
-                    "description": sec.description
-                    or f"Open publication section «{sec.title}».",
-                },
+                attributes=attrs,
             )
         )
     return children

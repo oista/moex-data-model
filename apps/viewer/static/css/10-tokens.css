@@ -93,6 +93,17 @@
 
   --font-ui-family: "MOEX UI", "Segoe UI", Arial, sans-serif;
   --font-code: "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+
+  /* DAMS model-level plaques (CMD / LDM / PDM) — orange-russet family */
+  --level-cmd-start: #f06a1a;
+  --level-cmd-end: #c41e1e;
+  --level-cmd-text: #ffffff;
+  --level-ldm-start: #d97706;
+  --level-ldm-end: #7c2d12;
+  --level-ldm-text: #ffffff;
+  --level-pdm-start: #c4a484;
+  --level-pdm-end: #8a8178;
+  --level-pdm-text: #3d342c;
 }
 
 [data-theme="dark"] {
@@ -142,4 +153,14 @@
   --accent: var(--brand);
   --accent-soft: var(--brand-soft);
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+
+  --level-cmd-start: #ff8a3d;
+  --level-cmd-end: #e54750;
+  --level-cmd-text: #ffffff;
+  --level-ldm-start: #e89a3c;
+  --level-ldm-end: #a45a2a;
+  --level-ldm-text: #ffffff;
+  --level-pdm-start: #a89880;
+  --level-pdm-end: #6e675e;
+  --level-pdm-text: #f1ebe3;
 }
