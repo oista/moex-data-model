@@ -421,6 +421,11 @@ enums:
         description: Зависимости / materialized external modules (ADR-020).
       extraction-provenance:
         description: План и provenance extract (ROBOT и аналоги, ADR-020).
+      documentation:
+        description: >
+          Owner-authored package docs (docs/toc.yaml + consumer-context;
+          reserved docs/adr/). Recommended on implementation. ADR-028.
+          Не glossary и не LinkML gen-doc.
 
   SectionKind:
     description: >

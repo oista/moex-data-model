@@ -158,6 +158,38 @@ svg {
   --level-impl-start: #c73a1e;
   --level-impl-end: #950d13;
   --level-impl-text: #ffffff;
+
+  /* Class-kind palette (default) — matches config/class-kind-colors.yaml */
+  --class-color-plain: #3d8f6e;
+  --class-color-mixin: #3d6eb5;
+  --class-color-abstract: #2e8fad;
+  --class-color-enum: #9a7a18;
+  --class-color-has-mixins: #3d6eb5;
+}
+
+[data-palette="default"] {
+  --class-color-plain: #3d8f6e;
+  --class-color-mixin: #3d6eb5;
+  --class-color-abstract: #2e8fad;
+  --class-color-enum: #9a7a18;
+  --class-color-has-mixins: #3d6eb5;
+}
+
+[data-density="compact"] {
+  --header-h: 48px;
+  --font-2xs: 10px;
+  --font-xs: 11px;
+  --font-sm: 12px;
+  --font-ui: 13px;
+  --font-body: 14px;
+  --font-lead: 15px;
+  --font-h3: 16px;
+  --font-h2: 20px;
+  --font-h1: 24px;
+  --space-4: 12px;
+  --space-5: 16px;
+  --space-6: 18px;
+  --space-8: 24px;
 }
 
 [data-theme="dark"] {
@@ -603,6 +635,149 @@ a {
 
 .overflow-menu button:hover {
   background: var(--surface-3);
+}
+
+[data-ui="settings-dialog"] {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10vh var(--space-4) var(--space-4);
+  background: rgba(18, 24, 33, 0.4);
+}
+
+[data-ui="settings-dialog"][hidden] {
+  display: none;
+}
+
+.settings-dialog-panel {
+  width: min(480px, 100%);
+  max-height: min(80vh, 640px);
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-1);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-float);
+  overflow: hidden;
+}
+
+.settings-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.settings-dialog-header h2 {
+  margin: 0;
+  font-size: var(--font-h3);
+  font-weight: 600;
+}
+
+.settings-dialog-body {
+  overflow: auto;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.settings-group-title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: var(--space-3);
+}
+
+.settings-field:last-child {
+  margin-bottom: 0;
+}
+
+.settings-field-label {
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.settings-field-desc {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+.settings-field select,
+.settings-field input[type="checkbox"] {
+  font: inherit;
+}
+
+.settings-field select {
+  max-width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text-primary);
+}
+
+.settings-multi {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 160px;
+  overflow: auto;
+  padding: 8px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.settings-multi label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-sm);
+  color: var(--text-primary);
+}
+
+.settings-dialog-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+  background: var(--surface-2);
+}
+
+.settings-dialog-footer button {
+  padding: 6px 10px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  color: var(--text-primary);
+  font-size: var(--font-sm);
+}
+
+.settings-dialog-footer button:hover {
+  background: var(--surface-3);
+}
+
+.settings-dialog-footer .settings-close-btn {
+  margin-left: auto;
+  border-color: var(--brand);
+  color: var(--brand);
 }
 
 
@@ -1847,6 +2022,7 @@ a.table-item-link:hover {
   [data-ui="topbar"],
   .toolbar,
   [data-ui="search-dialog"],
+  [data-ui="settings-dialog"],
   .sidebar-backdrop,
   .overflow-menu,
   .no-print,

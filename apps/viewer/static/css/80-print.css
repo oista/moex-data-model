@@ -6,6 +6,7 @@
   [data-ui="topbar"],
   .toolbar,
   [data-ui="search-dialog"],
+  [data-ui="settings-dialog"],
   .sidebar-backdrop,
   .overflow-menu,
   .no-print,

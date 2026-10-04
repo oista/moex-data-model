@@ -1,0 +1,18 @@
+<div data-ui="settings-dialog" id="settings-dialog" role="dialog" aria-modal="true" aria-labelledby="settings-dialog-title" hidden>
+  <div class="settings-dialog-panel">
+    <div class="settings-dialog-header">
+      <h2 id="settings-dialog-title">Display settings</h2>
+      <button type="button" class="icon-button" id="settings-dialog-x" aria-label="Close settings" title="Close">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" fill="none" stroke="currentColor" stroke-width="1.75"/></svg>
+      </button>
+    </div>
+    <div class="settings-dialog-body" id="settings-dialog-body"></div>
+    <div class="settings-dialog-footer">
+      <button type="button" id="settings-reset">Reset</button>
+      <button type="button" id="settings-export">Export</button>
+      <button type="button" id="settings-import">Import</button>
+      <input type="file" id="settings-import-file" accept="application/json,.json" hidden />
+      <button type="button" class="settings-close-btn" id="settings-close">Close</button>
+    </div>
+  </div>
+</div>

@@ -15,37 +15,324 @@
     }
   })();
 
-  const DEFAULT_CLASS_COLORS = {
-    roles: {
-      plain: "#3d8f6e",
-      mixin: "#3d6eb5",
-      abstract: "#2e8fad",
-      enum: "#b8922e",
-    },
-    corner: { has_mixins: "#3d6eb5" },
-  };
-  const classKindColors = {
-    roles: {
-      ...DEFAULT_CLASS_COLORS.roles,
-      ...(viewerConfig.class_kind_colors?.roles || {}),
-    },
-    corner: {
-      ...DEFAULT_CLASS_COLORS.corner,
-      ...(viewerConfig.class_kind_colors?.corner || {}),
-    },
-  };
+  const PREFS_STORAGE_KEY = "moex-viewer-prefs";
+  const LEGACY_THEME_KEY = "moex-viewer-theme";
+  const displayCatalog = viewerConfig.display || {};
+  const displaySettings = Array.isArray(displayCatalog.settings)
+    ? displayCatalog.settings
+    : [];
+  const catalogDefaults = { ...(displayCatalog.defaults || {}) };
+  displaySettings.forEach((s) => {
+    if (s && s.key != null && catalogDefaults[s.key] === undefined) {
+      catalogDefaults[s.key] = s.default;
+    }
+  });
 
-  (function applyClassKindCssVars() {
-    const root = document.documentElement;
-    root.style.setProperty("--class-color-plain", classKindColors.roles.plain);
-    root.style.setProperty("--class-color-mixin", classKindColors.roles.mixin);
-    root.style.setProperty("--class-color-abstract", classKindColors.roles.abstract);
-    root.style.setProperty("--class-color-enum", classKindColors.roles.enum);
-    root.style.setProperty(
-      "--class-color-has-mixins",
-      classKindColors.corner.has_mixins || classKindColors.roles.mixin
+  let prefsMemory = null;
+  let systemThemeMql = null;
+
+  function safeStorageGet(key) {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  }
+
+  function safeStorageSet(key, value) {
+    try {
+      localStorage.setItem(key, value);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function safeStorageRemove(key) {
+    try {
+      localStorage.removeItem(key);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function settingMeta(key) {
+    return displaySettings.find((s) => s.key === key) || null;
+  }
+
+  function coercePrefValue(key, value) {
+    const meta = settingMeta(key);
+    if (!meta) return undefined;
+    const stype = meta.type;
+    if (stype === "bool") return !!value;
+    if (stype === "choice") {
+      const options = meta.options || [];
+      if (value == null || !options.includes(value)) return meta.default;
+      return value;
+    }
+    if (stype === "multi-from-data") {
+      if (!Array.isArray(value)) return Array.isArray(meta.default) ? [...meta.default] : [];
+      return value.map(String);
+    }
+    return value;
+  }
+
+  function readStoredPrefs() {
+    const raw = safeStorageGet(PREFS_STORAGE_KEY);
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }
+
+  function migrateLegacyTheme(overlay) {
+    const legacy = safeStorageGet(LEGACY_THEME_KEY);
+    if (!legacy) return overlay;
+    const next = { ...(overlay || {}) };
+    if (next["appearance.theme"] == null && ["light", "dark"].includes(legacy)) {
+      next["appearance.theme"] = legacy;
+    }
+    return next;
+  }
+
+  function mergePrefs(overlay) {
+    const merged = { ...catalogDefaults };
+    const src = migrateLegacyTheme(overlay || {});
+    Object.keys(src).forEach((key) => {
+      if (key === "version") return;
+      if (!settingMeta(key) && catalogDefaults[key] === undefined) return;
+      const coerced = coercePrefValue(key, src[key]);
+      if (coerced !== undefined) merged[key] = coerced;
+    });
+    return merged;
+  }
+
+  function loadPrefs() {
+    const stored = readStoredPrefs();
+    const overlay = stored && typeof stored === "object" ? stored : null;
+    prefsMemory = mergePrefs(overlay);
+    return prefsMemory;
+  }
+
+  function persistPrefs() {
+    const payload = {
+      version: displayCatalog.version || 1,
+      ...prefsMemory,
+    };
+    safeStorageSet(PREFS_STORAGE_KEY, JSON.stringify(payload));
+    // Keep legacy key in sync for older bookmarks / external tools.
+    if (prefsMemory["appearance.theme"] === "light" || prefsMemory["appearance.theme"] === "dark") {
+      safeStorageSet(LEGACY_THEME_KEY, prefsMemory["appearance.theme"]);
+    }
+  }
+
+  function getPref(key) {
+    if (!prefsMemory) loadPrefs();
+    return prefsMemory[key];
+  }
+
+  function setPref(key, value) {
+    if (!prefsMemory) loadPrefs();
+    const coerced = coercePrefValue(key, value);
+    if (coerced === undefined) return;
+    prefsMemory[key] = coerced;
+    persistPrefs();
+  }
+
+  function setPrefs(patch) {
+    if (!prefsMemory) loadPrefs();
+    Object.keys(patch || {}).forEach((key) => {
+      const coerced = coercePrefValue(key, patch[key]);
+      if (coerced !== undefined) prefsMemory[key] = coerced;
+    });
+    persistPrefs();
+  }
+
+  function resetPrefs() {
+    prefsMemory = { ...catalogDefaults };
+    persistPrefs();
+    safeStorageRemove(LEGACY_THEME_KEY);
+  }
+
+  function exportPrefsJson() {
+    return JSON.stringify(
+      { version: displayCatalog.version || 1, ...prefsMemory },
+      null,
+      2
     );
-  })();
+  }
+
+  function importPrefsJson(text) {
+    const data = JSON.parse(text);
+    if (!data || typeof data !== "object") throw new Error("Invalid prefs JSON");
+    prefsMemory = mergePrefs(data);
+    persistPrefs();
+  }
+
+  function resolvedTheme(pref) {
+    const theme = pref || getPref("appearance.theme") || "light";
+    if (theme === "system") {
+      try {
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+      } catch {
+        return "light";
+      }
+    }
+    return theme === "dark" ? "dark" : "light";
+  }
+
+  function applyPalette(name) {
+    const root = document.documentElement;
+    const paletteName = name || getPref("appearance.palette") || "default";
+    root.dataset.palette = paletteName;
+    // YAML remains source of truth for the default palette values.
+    if (paletteName === "default" && viewerConfig.class_kind_colors?.roles) {
+      const roles = viewerConfig.class_kind_colors.roles;
+      const corner = viewerConfig.class_kind_colors.corner || {};
+      root.style.setProperty("--class-color-plain", roles.plain);
+      root.style.setProperty("--class-color-mixin", roles.mixin);
+      root.style.setProperty("--class-color-abstract", roles.abstract);
+      root.style.setProperty("--class-color-enum", roles.enum);
+      root.style.setProperty(
+        "--class-color-has-mixins",
+        corner.has_mixins || roles.mixin
+      );
+    } else {
+      ["plain", "mixin", "abstract", "enum", "has-mixins"].forEach((k) => {
+        root.style.removeProperty(`--class-color-${k}`);
+      });
+    }
+  }
+
+  function applyAppearancePrefs() {
+    const root = document.documentElement;
+    const themePref = getPref("appearance.theme") || "light";
+    root.dataset.theme = resolvedTheme(themePref);
+    root.dataset.density = getPref("appearance.density") || "comfortable";
+    applyPalette(getPref("appearance.palette") || "default");
+
+    if (systemThemeMql) {
+      try {
+        systemThemeMql.removeEventListener("change", onSystemThemeChange);
+      } catch {
+        try {
+          systemThemeMql.removeListener(onSystemThemeChange);
+        } catch {
+          /* ignore */
+        }
+      }
+      systemThemeMql = null;
+    }
+    if (themePref === "system") {
+      try {
+        systemThemeMql = window.matchMedia("(prefers-color-scheme: dark)");
+        if (systemThemeMql.addEventListener) {
+          systemThemeMql.addEventListener("change", onSystemThemeChange);
+        } else if (systemThemeMql.addListener) {
+          systemThemeMql.addListener(onSystemThemeChange);
+        }
+      } catch {
+        systemThemeMql = null;
+      }
+    }
+  }
+
+  function onSystemThemeChange() {
+    if (getPref("appearance.theme") === "system") {
+      document.documentElement.dataset.theme = resolvedTheme("system");
+    }
+  }
+
+  /** Strip ADR mentions from displayed copy; publication data is unchanged. */
+  function stripAdrRefs(s) {
+    if (s == null) return "";
+    return String(s)
+      .replace(
+        /\s*[\(（]\s*ADR[-–]?\s*\d{3}(?:\s*[/,]\s*(?:ADR[-–]?)?\d{3})*\s*[\)）]/gi,
+        ""
+      )
+      .replace(/\bADR[-–]?\d{3}(?:\s*[/,]\s*(?:ADR[-–]?)?\d{3})*/gi, "")
+      .replace(/\s{2,}/g, " ")
+      .replace(/\s+([.,;:])/g, "$1")
+      .trim();
+  }
+
+  function displayText(s) {
+    if (s == null) return "";
+    const text = String(s);
+    return getPref("text.hide_adr_refs") ? stripAdrRefs(text) : text;
+  }
+
+  function collectSectionRoots(mod) {
+    const roots = new Set();
+    const expl = explorerSection(mod);
+    function walk(nodes) {
+      (nodes || []).forEach((n) => {
+        const root = n?.attributes?.section_root;
+        if (root) roots.add(String(root));
+        walk(n.children);
+      });
+    }
+    if (expl) walk(expl.items);
+    return [...roots].sort();
+  }
+
+  function collectAllSectionRoots() {
+    const roots = new Set();
+    modules.forEach((m) => collectSectionRoots(m).forEach((r) => roots.add(r)));
+    return [...roots].sort();
+  }
+
+  function filterGlossaryFolderChildren(folder, view) {
+    const kids = folder.children || [];
+    if (view === "flat-az") {
+      return {
+        ...folder,
+        children: kids.filter((c) => c.attributes?.kind === "section_ref"),
+      };
+    }
+    if (view === "by-definition-site") {
+      return {
+        ...folder,
+        children: kids.filter((c) => c.attributes?.kind !== "section_ref"),
+      };
+    }
+    return folder;
+  }
+
+  function filterExplorerItemsForPrefs(items) {
+    const hidden = new Set(getPref("navigation.hidden_roots") || []);
+    const showGlossaryFolder = getPref("glossary.show_overview_folder") !== false;
+    const glossaryView = getPref("glossary.view") || "by-definition-site";
+    return (items || [])
+      .filter((g) => {
+        const root = g.attributes?.section_root;
+        if (root && hidden.has(String(root))) return false;
+        return true;
+      })
+      .map((g) => {
+        if (g.attributes?.section_root !== "overview" && g.id !== "group:overview") {
+          return g;
+        }
+        let children = (g.children || []).filter((c) => {
+          if (c.id === "group:overview-glossary" && !showGlossaryFolder) return false;
+          return true;
+        });
+        children = children.map((c) =>
+          c.id === "group:overview-glossary"
+            ? filterGlossaryFolderChildren(c, glossaryView)
+            : c
+        );
+        return { ...g, children };
+      });
+  }
+
+  loadPrefs();
+  applyAppearancePrefs();
 
   function classRole(attrs) {
     if (!attrs) return null;
@@ -883,6 +1170,8 @@
         parentEl.appendChild(wrapNode);
       }
 
+      explorerItems = filterExplorerItemsForPrefs(explorerItems);
+
       explorerItems.forEach((group) => {
         const gId = group.id;
         // Default: open Классы when no focus and no section root yet expanded
@@ -1568,7 +1857,7 @@
         ? "Домены и иерархия классов. Выберите класс слева или ниже."
         : "Пакеты схемы спецификации (тело LinkML). Выберите класс слева или ниже.";
       header.innerHTML = `<h1>${escapeHtml(displayIcon(mod.icon) ? displayIcon(mod.icon) + " " : "")}${escapeHtml(mod.title)}</h1>
-        <p class="muted">${escapeHtml(mod.description || "")}</p>
+        <p class="muted">${escapeHtml(displayText(mod.description || ""))}</p>
         <p>${landingHint}</p>`;
       content.appendChild(header);
 
@@ -1592,7 +1881,7 @@
 
       const grid = document.createElement("div");
       grid.className = "explorer-landing";
-      (expl.items || []).forEach((group) => {
+      filterExplorerItemsForPrefs(expl.items || []).forEach((group) => {
         const panel = document.createElement("section");
         panel.className = "explorer-package";
         const kids = group.children || [];
@@ -1603,7 +1892,9 @@
         titleBtn.type = "button";
         titleBtn.className = "package-title-link";
         titleBtn.textContent = group.title || group.id;
-        titleBtn.title = group.attributes?.purpose || group.description || "";
+        titleBtn.title = displayText(
+          group.attributes?.purpose || group.description || ""
+        );
         titleBtn.addEventListener("click", () => {
           openGroups.add(group.id);
           const node = nodeForModule(mod.module_id);
@@ -1795,6 +2086,7 @@
 
   function appendAdr027RelationBlocks(card, mod, item, navCtx) {
     /** Taxonomy / See also / Assignment / Origin — ADR-027 term card contract. */
+    if (getPref("glossary.show_relation_blocks") === false) return;
     const attrs = item.attributes || {};
     const known = navCtx.known || new Set();
     const sectionId = navCtx.sectionId;
@@ -1974,12 +2266,13 @@
     defBlock.innerHTML = `<h2>Definition</h2>`;
     const defEn = document.createElement("p");
     defEn.className = "detail-desc";
-    defEn.textContent = item.description || attrs.definition || "No definition.";
+    defEn.textContent =
+      displayText(item.description || attrs.definition || "No definition.");
     defBlock.appendChild(defEn);
     if (attrs.definition_ru) {
       const defRu = document.createElement("p");
       defRu.className = "detail-desc muted";
-      defRu.textContent = String(attrs.definition_ru);
+      defRu.textContent = displayText(String(attrs.definition_ru));
       defBlock.appendChild(defRu);
     }
     card.appendChild(defBlock);
@@ -2026,7 +2319,8 @@
     defBlock.innerHTML = `<h2>Definition</h2>`;
     const defEn = document.createElement("p");
     defEn.className = "detail-desc";
-    defEn.textContent = item.description || attrs.definition || "No definition.";
+    defEn.textContent =
+      displayText(item.description || attrs.definition || "No definition.");
     defBlock.appendChild(defEn);
     if (attrs.definition_ru) {
       const ruHead = document.createElement("h3");
@@ -2037,7 +2331,7 @@
       defBlock.appendChild(ruHead);
       const defRu = document.createElement("p");
       defRu.className = "detail-desc";
-      defRu.textContent = String(attrs.definition_ru);
+      defRu.textContent = displayText(String(attrs.definition_ru));
       defBlock.appendChild(defRu);
     }
     card.appendChild(defBlock);
@@ -2350,7 +2644,7 @@
         </div>
         <p class="muted">${escapeHtml(attrs.path || "")}</p>
       </header>
-      <p class="detail-desc">${escapeHtml(attrs.description || item.description || "No description.")}</p>
+      <p class="detail-desc">${escapeHtml(displayText(attrs.description || item.description || "No description."))}</p>
     `;
 
     function fillRefList(container, title, refs) {
@@ -2552,8 +2846,8 @@
     }
 
     if (kind === "group") {
-      const purpose = item.attributes?.purpose || item.description || "";
-      const structureWhy = item.attributes?.structure_why || "";
+      const purpose = displayText(item.attributes?.purpose || item.description || "");
+      const structureWhy = displayText(item.attributes?.structure_why || "");
       const classCount = item.attributes?.class_count ?? 0;
       const enumCount = item.attributes?.enum_count ?? 0;
       const sectionRoot = item.attributes?.section_root;
@@ -2763,7 +3057,7 @@
         <div class="badge-row">${headerBadges.join("")}</div>
         <p class="muted">${escapeHtml(fromSchema)}</p>
       </header>
-      <p class="detail-desc">${escapeHtml(item.description || "No description.")}</p>
+      <p class="detail-desc">${escapeHtml(displayText(item.description || "No description."))}</p>
     `;
 
     function findSourceFileId() {
@@ -4095,8 +4389,8 @@
         const en = item.attributes?.label || item.title || item.id;
         const ru = (item.attributes?.label_ru || "").trim();
         const title = ru ? `${en} (${ru})` : en;
-        const defEn = item.attributes?.definition || item.description || "";
-        const defRu = (item.attributes?.definition_ru || "").trim();
+        const defEn = displayText(item.attributes?.definition || item.description || "");
+        const defRu = displayText((item.attributes?.definition_ru || "").trim());
         const domain = item.attributes?.source_domain || "";
         const defMode = (item.attributes?.definition_mode || "").trim();
         const kind = (item.attributes?.kind || "").trim();
@@ -4501,6 +4795,10 @@
       return;
     }
     if (e.key === "Escape") {
+      if (settingsDialog && !settingsDialog.hidden) {
+        closeSettingsDialog();
+        return;
+      }
       if (searchDialog && !searchDialog.hidden) closeSearchDialog();
       else setSidebarOpen(false);
       if (overflowMenu) overflowMenu.hidden = true;
@@ -4512,11 +4810,193 @@
   });
   sidebarBackdrop?.addEventListener("click", () => setSidebarOpen(false));
 
-  document.getElementById("btn-theme").addEventListener("click", () => {
-    const html = document.documentElement;
-    const next = html.dataset.theme === "dark" ? "light" : "dark";
-    html.dataset.theme = next;
-    localStorage.setItem("moex-viewer-theme", next);
+  function applyDisplayPrefs({ rerender = true } = {}) {
+    applyAppearancePrefs();
+    if (!rerender) return;
+    const route = parseHash();
+    renderModuleNav({
+      item: selectedItemId || route.item || null,
+      section: route.section || null,
+    });
+    if (currentModuleId) {
+      showModule(currentModuleId, {
+        section: route.section || null,
+        item: selectedItemId || route.item || null,
+      });
+    }
+  }
+
+  function choiceLabel(value) {
+    return String(value || "")
+      .replace(/-/g, " ")
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+
+  function renderSettingsFields() {
+    const body = document.getElementById("settings-dialog-body");
+    if (!body) return;
+    body.innerHTML = "";
+    const availableRoots = collectAllSectionRoots();
+    const byGroup = new Map();
+    displaySettings.forEach((s) => {
+      const g = s.group || "Other";
+      if (!byGroup.has(g)) byGroup.set(g, []);
+      byGroup.get(g).push(s);
+    });
+    byGroup.forEach((settings, groupName) => {
+      const section = document.createElement("section");
+      section.className = "settings-group";
+      const h = document.createElement("h3");
+      h.className = "settings-group-title";
+      h.textContent = groupName;
+      section.appendChild(h);
+      settings.forEach((meta) => {
+        const field = document.createElement("div");
+        field.className = "settings-field";
+        const label = document.createElement("label");
+        label.className = "settings-field-label";
+        label.textContent = meta.label || meta.key;
+        field.appendChild(label);
+        if (meta.description) {
+          const desc = document.createElement("div");
+          desc.className = "settings-field-desc";
+          desc.textContent = meta.description;
+          field.appendChild(desc);
+        }
+        const key = meta.key;
+        if (meta.type === "bool") {
+          const row = document.createElement("label");
+          row.style.display = "inline-flex";
+          row.style.alignItems = "center";
+          row.style.gap = "8px";
+          const input = document.createElement("input");
+          input.type = "checkbox";
+          input.checked = !!getPref(key);
+          input.addEventListener("change", () => {
+            setPref(key, input.checked);
+            applyDisplayPrefs();
+          });
+          row.appendChild(input);
+          row.appendChild(document.createTextNode(input.checked ? "On" : "Off"));
+          input.addEventListener("change", () => {
+            row.lastChild.textContent = input.checked ? "On" : "Off";
+          });
+          field.appendChild(row);
+        } else if (meta.type === "choice") {
+          const select = document.createElement("select");
+          (meta.options || []).forEach((opt) => {
+            const o = document.createElement("option");
+            o.value = opt;
+            o.textContent = choiceLabel(opt);
+            select.appendChild(o);
+          });
+          select.value = getPref(key);
+          select.addEventListener("change", () => {
+            setPref(key, select.value);
+            applyDisplayPrefs();
+          });
+          field.appendChild(select);
+        } else if (meta.type === "multi-from-data") {
+          const box = document.createElement("div");
+          box.className = "settings-multi";
+          const selected = new Set(getPref(key) || []);
+          if (!availableRoots.length) {
+            const empty = document.createElement("div");
+            empty.className = "settings-field-desc";
+            empty.textContent = "No section roots in loaded publications.";
+            box.appendChild(empty);
+          }
+          availableRoots.forEach((root) => {
+            const row = document.createElement("label");
+            const cb = document.createElement("input");
+            cb.type = "checkbox";
+            cb.checked = selected.has(root);
+            cb.addEventListener("change", () => {
+              const next = new Set(getPref(key) || []);
+              if (cb.checked) next.add(root);
+              else next.delete(root);
+              setPref(key, [...next].sort());
+              applyDisplayPrefs();
+            });
+            row.appendChild(cb);
+            row.appendChild(document.createTextNode(root));
+            box.appendChild(row);
+          });
+          field.appendChild(box);
+        }
+        section.appendChild(field);
+      });
+      body.appendChild(section);
+    });
+  }
+
+  const settingsDialog = document.getElementById("settings-dialog");
+
+  function openSettingsDialog() {
+    if (!settingsDialog) return;
+    renderSettingsFields();
+    settingsDialog.hidden = false;
+    document.getElementById("settings-close")?.focus();
+  }
+
+  function closeSettingsDialog() {
+    if (!settingsDialog) return;
+    settingsDialog.hidden = true;
+  }
+
+  document.getElementById("btn-theme")?.addEventListener("click", () => {
+    const order = ["light", "dark", "system"];
+    const cur = getPref("appearance.theme") || "light";
+    const idx = order.indexOf(cur);
+    const next = order[(idx + 1) % order.length];
+    setPref("appearance.theme", next);
+    applyDisplayPrefs({ rerender: false });
+    announce(`Theme: ${next}`);
+  });
+  document.getElementById("btn-settings")?.addEventListener("click", () => {
+    if (overflowMenu) overflowMenu.hidden = true;
+    openSettingsDialog();
+  });
+  document.getElementById("settings-close")?.addEventListener("click", closeSettingsDialog);
+  document.getElementById("settings-dialog-x")?.addEventListener("click", closeSettingsDialog);
+  settingsDialog?.addEventListener("click", (e) => {
+    if (e.target === settingsDialog) closeSettingsDialog();
+  });
+  document.getElementById("settings-reset")?.addEventListener("click", () => {
+    resetPrefs();
+    applyDisplayPrefs();
+    renderSettingsFields();
+    announce("Settings reset");
+  });
+  document.getElementById("settings-export")?.addEventListener("click", () => {
+    const blob = new Blob([exportPrefsJson()], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "moex-viewer-prefs.json";
+    a.click();
+    URL.revokeObjectURL(url);
+    announce("Settings exported");
+  });
+  document.getElementById("settings-import")?.addEventListener("click", () => {
+    document.getElementById("settings-import-file")?.click();
+  });
+  document.getElementById("settings-import-file")?.addEventListener("change", (e) => {
+    const file = e.target?.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        importPrefsJson(String(reader.result || ""));
+        applyDisplayPrefs();
+        renderSettingsFields();
+        announce("Settings imported");
+      } catch {
+        announce("Import failed");
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
   });
   document.getElementById("btn-expand").addEventListener("click", () => {
     const mod = modules.find((m) => m.module_id === currentModuleId);
@@ -4589,8 +5069,7 @@
     window.addEventListener("pointerup", onUp);
   });
 
-  const savedTheme = localStorage.getItem("moex-viewer-theme");
-  if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+  // Prefs already loaded + appearance applied at startup (prefs store).
 
   const shortcutKbd = document.getElementById("search-shortcut-kbd");
   if (shortcutKbd) shortcutKbd.textContent = `${shortcutModKey()}+K`;

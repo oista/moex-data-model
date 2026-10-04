@@ -1328,7 +1328,7 @@ Breakpoints:
 ### Запреты
 - Не добавлять React, Vue или Svelte только ради нового оформления.
 - Не менять `publish.yaml` для визуальных деталей.
-- Не хранить UI preferences в publication model.
+- Не хранить UI preferences в publication model. Допустимо: дефолты в `apps/viewer/config/display.yaml` и overlay читателя в `localStorage` (`moex-viewer-prefs`) с graceful fallback.
 - Не использовать CDN в итоговом HTML.
 - Не использовать base64 PNG для UI-icons.
 - Не создавать отдельные HTML-страницы.

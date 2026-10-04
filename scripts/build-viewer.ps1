@@ -1,13 +1,18 @@
 # Build static Publication Viewer HTML (apps/viewer/dist/index.html).
 # Usage from repo root:
 #   powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-viewer.ps1
-# Optional: -Check  (pytest + moex_publication_viewer check)
-# Optional: -Open   (open index.html after build)
+# Optional: -Check     (pytest + moex_publication_viewer check)
+# Optional: -Open      (open index.html after build)
+# Optional: -SkipPip   (skip pip; use existing apps/viewer/.venv)
+# Optional: -ForcePip  (always run pip even if deps already import)
 # Env: VIEWER_PIP_VERBOSE=1  (pass -v to pip install)
+# Env: VIEWER_SKIP_PIP=1 / VIEWER_FORCE_PIP=1  (same as switches)
 
 param(
     [switch]$Check,
-    [switch]$Open
+    [switch]$Open,
+    [switch]$SkipPip,
+    [switch]$ForcePip
 )
 
 $ErrorActionPreference = "Stop"
@@ -63,6 +68,12 @@ function New-ViewerVenv {
     }
 }
 
+function Test-ViewerDepsImportable {
+    param([Parameter(Mandatory = $true)][string]$Exe)
+    & $Exe -c "import moex_publication_viewer, jinja2, yaml, markdown, click, pytest" 2>$null
+    return ($LASTEXITCODE -eq 0)
+}
+
 # Reuse .venv only if it is Python 3.11+; otherwise recreate.
 if (Test-Path $ViewerVenv) {
     if (Test-PythonAtLeast311 $ViewerVenv) {
@@ -82,22 +93,55 @@ Write-Host "Using Python: $Python ($pyVer)"
 $env:PYTHONUTF8 = "1"
 $env:PYTHONIOENCODING = "utf-8"
 
+$doSkipPip = $SkipPip -or ($env:VIEWER_SKIP_PIP -eq "1")
+$doForcePip = $ForcePip -or ($env:VIEWER_FORCE_PIP -eq "1")
+$depsOk = Test-ViewerDepsImportable $Python
+
 Push-Location $RepoRoot
 try {
-    Write-Host "pip install -U pip setuptools wheel"
-    & $Python -m pip install -U pip setuptools wheel
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    $env:PIP_DISABLE_PIP_VERSION_CHECK = "1"
+    if (-not $env:PIP_DEFAULT_TIMEOUT) { $env:PIP_DEFAULT_TIMEOUT = "15" }
 
-    $pipVer = & $Python -m pip --version
-    Write-Host "pip: $pipVer"
+    if ($doSkipPip) {
+        if (-not $depsOk) {
+            Write-Error "SkipPip set but viewer deps are not importable in $Python"
+        }
+        Write-Host "Skipping pip (SkipPip / VIEWER_SKIP_PIP); using existing venv"
+    } elseif ($depsOk -and -not $doForcePip) {
+        # Refresh editable link without contacting PyPI for dependencies.
+        Write-Host "deps present; pip install -e ./apps/viewer --no-deps (offline-friendly)"
+        & $Python -m pip install -e $ViewerDir --no-deps --disable-pip-version-check
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "WARNING: offline editable refresh failed; continuing with existing install"
+        }
+    } else {
+        Write-Host "pip install -U pip setuptools wheel"
+        & $Python -m pip install -U pip setuptools wheel --disable-pip-version-check
+        if ($LASTEXITCODE -ne 0) {
+            if (Test-ViewerDepsImportable $Python) {
+                Write-Host "WARNING: pip bootstrap failed (network?); continuing with existing packages"
+            } else {
+                exit $LASTEXITCODE
+            }
+        }
 
-    Write-Host "pip install -e ./apps/viewer[dev]"
-    $pipArgs = @("install", "-e", "${ViewerDir}[dev]")
-    if ($env:VIEWER_PIP_VERBOSE -eq "1") {
-        $pipArgs += "-v"
+        $pipVer = & $Python -m pip --version
+        Write-Host "pip: $pipVer"
+
+        Write-Host "pip install -e ./apps/viewer[dev]"
+        $pipArgs = @("install", "-e", "${ViewerDir}[dev]", "--disable-pip-version-check")
+        if ($env:VIEWER_PIP_VERBOSE -eq "1") {
+            $pipArgs += "-v"
+        }
+        & $Python -m pip @pipArgs
+        if ($LASTEXITCODE -ne 0) {
+            if (Test-ViewerDepsImportable $Python) {
+                Write-Host "WARNING: pip install failed (network?); continuing with existing packages"
+            } else {
+                exit $LASTEXITCODE
+            }
+        }
     }
-    & $Python -m pip @pipArgs
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
     if ($Check) {
         Write-Host "pytest apps/viewer/tests"

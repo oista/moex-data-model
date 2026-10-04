@@ -141,6 +141,8 @@ apps/viewer/
 - Отдельные HTML-страницы; rendered HTML как source of truth.
 - DAMS/FIBO branching в shell.
 
+**UI display preferences** (theme, density, palette, section visibility, glossary chrome) live in `apps/viewer/config/display.yaml` (product defaults) and reader overlay in `localStorage` (`moex-viewer-prefs`), with graceful fallback when storage is unavailable (`file://`). They must not be authored in `publish.yaml`.
+
 ### 13. Definition of Done
 
 - Один автономный HTML; все существующие публикации.

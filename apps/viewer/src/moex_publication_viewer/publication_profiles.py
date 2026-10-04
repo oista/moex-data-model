@@ -31,6 +31,7 @@ PublicationSectionKind = Literal[
     "mapping-table",
     "dependency-list",
     "extraction-provenance",
+    "documentation",
 ]
 
 
@@ -55,7 +56,9 @@ PROFILES: dict[str, ProfileSpec] = {
     ),
     "implementation": ProfileSpec(
         required=frozenset({"overview", "conformance"}),
-        recommended=frozenset({"bindings", "data-flows", "model-assessment"}),
+        recommended=frozenset(
+            {"bindings", "data-flows", "model-assessment", "documentation"}
+        ),
         forbidden=frozenset({"taxonomy"}),
     ),
 }
@@ -82,6 +85,7 @@ SECTION_ROOT_TO_KIND: dict[str, str] = {
     "mapping-table": "mapping-table",
     "dependency-list": "dependency-list",
     "extraction-provenance": "extraction-provenance",
+    "documentation": "documentation",
 }
 
 

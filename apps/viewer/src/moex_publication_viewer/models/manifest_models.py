@@ -46,6 +46,7 @@ PublicationSectionKind = Literal[
     "mapping-table",
     "dependency-list",
     "extraction-provenance",
+    "documentation",
 ]
 
 # DAMS metamodel class a section's rows instantiate (viewer instance cards).

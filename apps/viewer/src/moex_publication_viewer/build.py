@@ -151,7 +151,11 @@ def compile_modules(
         for section in manifest.sections:
             source_path = resolve_source_path(path, section.source.path)
             try:
-                if section.type == "mermaid-diagram":
+                if section.kind == "documentation":
+                    from moex_publication_viewer.package_docs import PackageDocsNormalizer
+
+                    normalizer = PackageDocsNormalizer()
+                elif section.type == "mermaid-diagram":
                     from moex_publication_viewer.normalizers.mermaid_diagram_normalizer import (
                         MermaidDiagramNormalizer,
                     )
@@ -266,6 +270,7 @@ _SOLUTION_NAV_CONCEPTUAL_IDS = ("conceptual",)
 _SOLUTION_NAV_LOGICAL_IDS = ("logical", "logical-erd")
 _SOLUTION_NAV_PHYSICAL_IDS = ("physical", "physical-erd")
 _SOLUTION_NAV_REQUIREMENTS_IDS = ("model-assessment",)
+_SOLUTION_NAV_DOCUMENTATION_IDS = ("documentation",)
 
 
 def group_solution_impl_nav(
@@ -348,8 +353,24 @@ def group_solution_impl_nav(
         children=take(_SOLUTION_NAV_REQUIREMENTS_IDS),
         extra_attrs={"nav_group": "requirements"},
     )
+    docs_kids = take(_SOLUTION_NAV_DOCUMENTATION_IDS)
     leftovers = [leaf for leaf in leaves if (leaf.attributes or {}).get("section_id") not in claimed]
-    return [overview, conceptual, logical, physical, requirements, *leftovers]
+    grouped = [overview, conceptual, logical, physical, requirements]
+    if docs_kids:
+        grouped.append(
+            PublicationItem(
+                id=f"implnav:{catalog_impl_id}:group:documentation",
+                title="Documentation",
+                description="Owner-authored package docs and model decisions.",
+                attributes={
+                    "kind": "group",
+                    "nav_group": "documentation",
+                    "member_ids": [c.id for c in docs_kids],
+                },
+                children=docs_kids,
+            )
+        )
+    return [*grouped, *leftovers]
 
 
 def impl_section_nav_children(

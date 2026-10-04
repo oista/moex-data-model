@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light" data-viewer-version="2" data-density="comfortable">
+<html lang="en" data-theme="light" data-viewer-version="2" data-density="comfortable" data-palette="default">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,7 @@
     </div>
   </div>
   {% include "components/search-dialog.html.j2" %}
+  {% include "components/settings-dialog.html.j2" %}
   <div class="status-region" id="status-region" role="status" aria-live="polite"></div>
 
   <script id="publication-data" type="application/json">{{ modules_json | safe }}</script>

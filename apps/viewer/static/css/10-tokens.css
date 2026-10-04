@@ -109,6 +109,38 @@
   --level-impl-start: #c73a1e;
   --level-impl-end: #950d13;
   --level-impl-text: #ffffff;
+
+  /* Class-kind palette (default) — matches config/class-kind-colors.yaml */
+  --class-color-plain: #3d8f6e;
+  --class-color-mixin: #3d6eb5;
+  --class-color-abstract: #2e8fad;
+  --class-color-enum: #9a7a18;
+  --class-color-has-mixins: #3d6eb5;
+}
+
+[data-palette="default"] {
+  --class-color-plain: #3d8f6e;
+  --class-color-mixin: #3d6eb5;
+  --class-color-abstract: #2e8fad;
+  --class-color-enum: #9a7a18;
+  --class-color-has-mixins: #3d6eb5;
+}
+
+[data-density="compact"] {
+  --header-h: 48px;
+  --font-2xs: 10px;
+  --font-xs: 11px;
+  --font-sm: 12px;
+  --font-ui: 13px;
+  --font-body: 14px;
+  --font-lead: 15px;
+  --font-h3: 16px;
+  --font-h2: 20px;
+  --font-h1: 24px;
+  --space-4: 12px;
+  --space-5: 16px;
+  --space-6: 18px;
+  --space-8: 24px;
 }
 
 [data-theme="dark"] {

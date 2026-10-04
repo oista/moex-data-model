@@ -32,6 +32,12 @@ def wrap_markdown_tables(html: str) -> str:
     return _TABLE_RE.sub(_wrap_block, html)
 
 
+def render_markdown(body: str) -> str:
+    """Render markdown body to HTML (tables wrapped for overflow)."""
+    html = markdown.markdown(body, extensions=["fenced_code", "tables"])
+    return wrap_markdown_tables(html)
+
+
 class MarkdownNormalizer:
     def normalize(self, section: ManifestSection, source_path: Path) -> PublicationSection:
         try:
@@ -45,6 +51,4 @@ class MarkdownNormalizer:
             if len(parts) >= 3:
                 body = parts[2].lstrip("\n")
 
-        html = markdown.markdown(body, extensions=["fenced_code", "tables"])
-        html = wrap_markdown_tables(html)
-        return PublicationSection(**section_meta(section), items=[], content=html)
+        return PublicationSection(**section_meta(section), items=[], content=render_markdown(body))

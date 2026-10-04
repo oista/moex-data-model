@@ -1,0 +1,64 @@
+# Display settings catalog for Publication Viewer (ADR-015).
+# Product defaults; readers override via Settings dialog → localStorage.
+# Do not put these knobs in publish.yaml.
+
+version: 1
+
+settings:
+  - key: appearance.theme
+    type: choice
+    options: [light, dark, system]
+    default: light
+    label: Theme
+    group: Appearance
+
+  - key: appearance.density
+    type: choice
+    options: [comfortable, compact]
+    default: comfortable
+    label: Density
+    group: Appearance
+
+  - key: appearance.palette
+    type: choice
+    options: [default]
+    default: default
+    label: Color palette
+    group: Appearance
+
+  - key: navigation.hidden_roots
+    type: multi-from-data
+    default: []
+    label: Hidden navigation roots
+    description: Hides sidebar roots only. Search and deep links still open items.
+    group: Navigation
+
+  - key: text.hide_adr_refs
+    type: bool
+    default: false
+    label: Hide ADR references in text
+    description: Strips mentions like (ADR-016/019) from displayed descriptions.
+    group: Text
+
+  - key: glossary.show_relation_blocks
+    type: bool
+    default: true
+    label: Show Taxonomy / See also blocks
+    description: ADR-027 relation blocks on glossary term cards.
+    group: Glossary
+
+  - key: glossary.show_overview_folder
+    type: bool
+    default: true
+    label: Show Overview → Glossary folder
+    group: Glossary
+
+  - key: glossary.view
+    type: choice
+    options: [by-definition-site, flat-az]
+    default: by-definition-site
+    label: Glossary folder view
+    description: Definition-site folders vs flat A–Z section link under Overview → Glossary.
+    group: Glossary
+
+presets: {}
