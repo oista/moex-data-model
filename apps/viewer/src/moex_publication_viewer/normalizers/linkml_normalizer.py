@@ -18,6 +18,9 @@ from moex_publication_viewer.normalizers.helpers import section_meta
 from moex_publication_viewer.normalizers.linkml_spec_roots import (
     wrap_linkml_specification_roots,
 )
+from moex_publication_viewer.normalizers.spec_glossary_tree import (
+    build_linkml_glossary_tree,
+)
 
 # Cache SchemaView per absolute path for one build process
 _VIEW_CACHE: dict[str, SchemaView] = {}
@@ -481,12 +484,18 @@ class LinkmlNormalizer:
         try:
             if section.type == "explorer":
                 items = _normalize_explorer(sv)
+                spec_dir = source_path.resolve().parent.parent
+                glossary_folders = build_linkml_glossary_tree(sv, spec_dir=spec_dir)
                 if is_dams_specification_dir(source_path):
                     items = wrap_dams_explorer_roots(
-                        items, source_path.resolve().parent.parent
+                        items,
+                        spec_dir,
+                        glossary_folders=glossary_folders,
                     )
                 else:
-                    items = wrap_linkml_specification_roots(items)
+                    items = wrap_linkml_specification_roots(
+                        items, glossary_folders=glossary_folders
+                    )
                 default_columns = ["name", "description", "kind"]
             elif select == "classes":
                 items = _normalize_classes(sv, as_tree=as_tree)

@@ -17,20 +17,36 @@ sections:
       format: markdown
       path: README.md
 
-  - id: classes
-    title: Alignment classes
+  - id: explorer
+    title: Classes
     description: LinkML classes for scope and term selection
-    type: entity-table
+    type: explorer
     kind: classes
     source:
       format: linkml-yaml
       path: schemas/moex-external-alignment.yaml
       select: classes
-    key_column: name
+    groupby: schema
+
+  - id: glossary
+    title: Glossary
+    description: >
+      Class and enum terms of the external-alignment metamodel (generated
+      from SchemaView at build; stub JSON is not the source of truth).
+    type: glossary
+    kind: glossary
+    source:
+      format: json
+      path: publications/external_alignment_glossary.json
+    key_column: id
     columns:
-      - name
+      - id
+      - title
       - description
-      - is_a
+      - kind
+    filterable:
+      - kind
+      - origin
 
   - id: schema-files
     title: Schema source

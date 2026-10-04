@@ -487,8 +487,22 @@ def _build_model_example_file_items(spec_dir: Path) -> list[PublicationItem]:
 def wrap_dams_explorer_roots(
     package_groups: list[PublicationItem],
     spec_dir: Path,
+    *,
+    glossary_folders: list[PublicationItem] | None = None,
 ) -> list[PublicationItem]:
     """Wrap under Overview / Классы / Спецификация / Требования / Реализации."""
+    from moex_publication_viewer.normalizers.spec_glossary_tree import (
+        make_overview_glossary_folder,
+    )
+
+    glossary_folder = make_overview_glossary_folder(glossary_folders)
+    overview_children = [
+        _section_ref("overview", "Overview"),
+        _section_ref("classes", "All classes"),
+        _section_ref("slots", "All slots"),
+        _section_ref("enums", "All enumerations"),
+        glossary_folder,
+    ]
     overview_root = PublicationItem(
         id="group:overview",
         title="Overview",
@@ -497,19 +511,9 @@ def wrap_dams_explorer_roots(
             "kind": "group",
             "section_root": "overview",
             "purpose": "Вход в спецификацию: описание пакета и полные таблицы.",
-            "member_ids": [
-                "section:overview",
-                "section:classes",
-                "section:slots",
-                "section:enums",
-            ],
+            "member_ids": [c.id for c in overview_children],
         },
-        children=[
-            _section_ref("overview", "Overview"),
-            _section_ref("classes", "All classes"),
-            _section_ref("slots", "All slots"),
-            _section_ref("enums", "All enumerations"),
-        ],
+        children=overview_children,
     )
 
     class_count = sum(

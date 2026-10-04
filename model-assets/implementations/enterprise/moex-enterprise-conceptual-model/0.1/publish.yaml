@@ -44,6 +44,7 @@ sections:
     title: Conceptual entities
     kind: classes
     type: entity-table
+    instance_of: ConceptualEntity
     satisfies:
       - dams:conceptual-entities
     source:
@@ -87,6 +88,7 @@ sections:
     title: Relation terms
     kind: enumerations
     type: entity-table
+    instance_of: RelationTerm
     description: Governed forward/inverse relation-term dictionary (ADR-026).
     source:
       format: yaml
@@ -109,6 +111,7 @@ sections:
     title: Relationships
     kind: classes
     type: entity-table
+    instance_of: Relationship
     satisfies:
       - dams:relationships
     source:

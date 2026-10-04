@@ -6,7 +6,16 @@ import pytest
 import yaml
 
 from moex_publication_viewer.manifest_loader import load_manifest, resolve_source_path
-from moex_publication_viewer.validators import ValidationError, validate_manifests
+from moex_publication_viewer.models.publication_models import (
+    PublicationItem,
+    PublicationModule,
+    PublicationSection,
+)
+from moex_publication_viewer.validators import (
+    ValidationError,
+    check_instance_of_classes,
+    validate_manifests,
+)
 
 
 def _write_manifest(path: Path, data: dict) -> None:
@@ -101,3 +110,48 @@ def test_missing_source_path(tmp_path: Path):
     with pytest.raises(ValidationError) as exc:
         validate_manifests([(p, m)])
     assert "missing source file" in str(exc.value)
+
+
+def test_check_instance_of_unknown_class_warns():
+    dams = PublicationModule(
+        module_id="moex:module:dams",
+        title="DAMS",
+        sections=[
+            PublicationSection(
+                id="explorer",
+                title="Explorer",
+                type="explorer",
+                items=[
+                    PublicationItem(
+                        id="LogicalEntity",
+                        title="LogicalEntity",
+                        attributes={"kind": "class"},
+                    )
+                ],
+            )
+        ],
+    )
+    impl = PublicationModule(
+        module_id="moex:module:demo",
+        title="Demo",
+        manifest_path="demo/publish.yaml",
+        sections=[
+            PublicationSection(
+                id="logical",
+                title="Logical",
+                type="entity-table",
+                instance_of="NoSuchClass",
+                items=[],
+            ),
+            PublicationSection(
+                id="ok",
+                title="OK",
+                type="entity-table",
+                instance_of="LogicalEntity",
+                items=[],
+            ),
+        ],
+    )
+    warnings = check_instance_of_classes([dams, impl])
+    assert any("NoSuchClass" in w for w in warnings)
+    assert not any("LogicalEntity" in w and "not found" in w for w in warnings)

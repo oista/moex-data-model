@@ -269,6 +269,60 @@ def test_markdown(tmp_path: Path):
     assert "Hello" in out.content
 
 
+def test_markdown_wraps_tables(tmp_path: Path):
+    p = tmp_path / "doc.md"
+    p.write_text("| A | B |\n| --- | --- |\n| 1 | 2 |\n", encoding="utf-8")
+    sec = _section(type="markdown-doc", source={"format": "markdown", "path": "doc.md"})
+    out = MarkdownNormalizer().normalize(sec, p)
+    assert out.content
+    assert 'class="table-scroll"' in out.content or "table-scroll" in out.content
+    assert "data-table" in out.content
+    assert "<table" in out.content
+
+
+def test_yaml_nested_attributes_become_children(tmp_path: Path):
+    p = tmp_path / "model.yaml"
+    p.write_text(
+        yaml.dump(
+            {
+                "logical_entities": [
+                    {
+                        "element_id": "dams:logical/demo/doc",
+                        "name": "document",
+                        "title": "Document",
+                        "description": "A document",
+                        "attributes": [
+                            {
+                                "element_id": "dams:logical/demo/doc/id",
+                                "name": "id",
+                                "title": "Id",
+                                "logical_type": "identifier",
+                                "required": True,
+                            }
+                        ],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    sec = _section(
+        source={"format": "yaml", "path": "model.yaml", "select": "logical_entities"},
+        key_column="element_id",
+        instance_of="LogicalEntity",
+    )
+    out = YamlNormalizer().normalize(sec, p)
+    assert out.instance_of == "LogicalEntity"
+    assert len(out.items) == 1
+    assert out.items[0].id == "dams:logical/demo/doc"
+    assert len(out.items[0].children) == 1
+    assert out.items[0].children[0].id == "dams:logical/demo/doc/id"
+    assert out.items[0].children[0].attributes.get("logical_type") == "identifier"
+    assert "attributes" not in out.items[0].attributes or not isinstance(
+        out.items[0].attributes.get("attributes"), list
+    )
+
+
 def test_mermaid_diagram_with_svg(tmp_path: Path):
     md = tmp_path / "logical.erd.md"
     md.write_text(

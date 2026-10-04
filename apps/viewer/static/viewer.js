@@ -271,8 +271,102 @@
   }
 
   function shortModule(moduleId) {
-    const parts = moduleId.split(":");
+    const parts = String(moduleId || "").split(":");
     return parts[parts.length - 1];
+  }
+
+  function itemHref({ node, module, section, item }) {
+    const params = new URLSearchParams();
+    if (node) params.set("node", node);
+    if (module) params.set("module", module);
+    if (section) params.set("section", section);
+    if (item) params.set("item", item);
+    const base = String(location.href || "").split("#")[0];
+    const q = params.toString();
+    return q ? `${base}#${q}` : base;
+  }
+
+  function setContentWide(on) {
+    if (!content) return;
+    content.classList.toggle("content--wide", !!on);
+  }
+
+  let linkIndex = null;
+
+  function ensureLinkIndex() {
+    if (linkIndex) return linkIndex;
+    const byId = new Map();
+    const byKey = new Map();
+
+    function put(target, id, name, short, sectionId) {
+      if (id && !byId.has(id)) byId.set(id, target);
+      if (id) byKey.set(`${short}:${sectionId}:${id}`, target);
+      if (name) byKey.set(`${short}:${sectionId}:${name}`, target);
+    }
+
+    modules.forEach((mod) => {
+      const short = shortModule(mod.module_id);
+      const node = nodeForModule(mod.module_id);
+      const nodeId = node ? node.id : null;
+      (mod.sections || []).forEach((sec) => {
+        if (sec.type === "explorer") {
+          walkExplorerItems(sec, (nodeItem) => {
+            const kind = nodeItem.attributes?.kind;
+            if (!kind || kind === "group" || kind === "section_ref") return;
+            const target = {
+              module: short,
+              section: sec.id,
+              item: nodeItem.id,
+              node: nodeId,
+              card: true,
+            };
+            put(
+              target,
+              nodeItem.id,
+              nodeItem.attributes?.name || nodeItem.title,
+              short,
+              sec.id
+            );
+          });
+          return;
+        }
+        const card = !!sec.instance_of;
+        (sec.items || []).forEach((item) => {
+          const target = {
+            module: short,
+            section: sec.id,
+            item: item.id,
+            node: nodeId,
+            card,
+          };
+          put(target, item.id, item.attributes?.name || item.title, short, sec.id);
+          (item.children || []).forEach((ch) => {
+            // Nested attribute/field ids resolve to the parent entity card.
+            if (ch.id) {
+              if (!byId.has(ch.id)) byId.set(ch.id, target);
+              byKey.set(`${short}:${sec.id}:${ch.id}`, target);
+            }
+          });
+        });
+      });
+    });
+
+    linkIndex = {
+      resolve(raw, preferredMod) {
+        if (raw === null || raw === undefined || raw === "") return null;
+        const s = String(raw).trim();
+        if (!s) return null;
+        if (preferredMod) {
+          const short = shortModule(preferredMod.module_id);
+          for (const sec of preferredMod.sections || []) {
+            const hit = byKey.get(`${short}:${sec.id}:${s}`);
+            if (hit) return hit;
+          }
+        }
+        return byId.get(s) || null;
+      },
+    };
+    return linkIndex;
   }
 
   function escapeHtml(s) {
@@ -1377,6 +1471,7 @@
     const mod = modules.find((m) => m.module_id === currentModuleId);
     if (!mod) {
       content.innerHTML = `<p class="muted">Module not found.</p>`;
+      setContentWide(false);
       return;
     }
 
@@ -1398,6 +1493,7 @@
     renderModuleNav(focus);
 
     content.innerHTML = "";
+    setContentWide(false);
     const chrome = prependArchitectureChrome(mod, focus);
     if (chrome) content.appendChild(chrome);
 
@@ -1428,10 +1524,29 @@
       }
     }
 
+    // Instance card for entity-table rows with instance_of
+    if (focus?.section && focus?.item) {
+      const section = mod.sections.find((s) => s.id === focus.section);
+      if (section && section.instance_of && section.type !== "explorer") {
+        const row = findSectionItem(section, focus.item);
+        if (row) {
+          crumb.textContent = `${mod.title} / ${section.title} / ${row.title || row.id}`;
+          content.appendChild(crumb);
+          content.appendChild(renderInstanceDetail(mod, section, row));
+          return;
+        }
+      }
+    }
+
     // Secondary section (or overview) as single focus
     if (focus?.section && (!expl || focus.section !== expl.id || !focus.item)) {
       const section = mod.sections.find((s) => s.id === focus.section);
       if (section && section.type !== "explorer") {
+        const isTable =
+          section.type === "entity-table" ||
+          section.type === "enum-table" ||
+          section.type === "markdown-doc";
+        setContentWide(isTable);
         crumb.textContent = `${mod.title} / ${section.title}`;
         content.appendChild(crumb);
         content.appendChild(renderSection(mod, section, { forceOpen: true }));
@@ -1637,6 +1752,10 @@
     return tags.includes("ontology") || tags.includes("fibo");
   }
 
+  function isGlossaryViewItem(item) {
+    return Boolean(item?.attributes?.glossary_view);
+  }
+
   function splitRefList(value) {
     if (value == null || value === "") return [];
     if (Array.isArray(value)) return value.map(String).filter(Boolean);
@@ -1644,6 +1763,234 @@
       .split(/\s*\|\s*|\s*,\s*/)
       .map((s) => s.trim())
       .filter(Boolean);
+  }
+
+  function canonicalGlossaryId(id) {
+    const raw = String(id || "");
+    return raw.startsWith("glossary:") ? raw.slice("glossary:".length) : raw;
+  }
+
+  function resolveGlossaryNavId(canonicalId, known) {
+    const cid = canonicalGlossaryId(canonicalId);
+    if (!cid) return null;
+    const prefixed = "glossary:" + cid;
+    if (known && known.has(prefixed)) return prefixed;
+    if (known && known.has(cid)) return cid;
+    return null;
+  }
+
+  function relTargetId(entry) {
+    if (entry == null) return "";
+    if (typeof entry === "string") return entry;
+    return String(entry.id || entry.target_ref || "");
+  }
+
+  function relLabel(entry) {
+    if (entry == null) return "";
+    if (typeof entry === "string") return entry;
+    const id = relTargetId(entry);
+    const rel = entry.rel ? String(entry.rel) : "";
+    return rel ? `${id} (${rel})` : id;
+  }
+
+  function appendAdr027RelationBlocks(card, mod, item, navCtx) {
+    /** Taxonomy / See also / Assignment / Origin — ADR-027 term card contract. */
+    const attrs = item.attributes || {};
+    const known = navCtx.known || new Set();
+    const sectionId = navCtx.sectionId;
+    const expl = navCtx.expl;
+
+    function makeTermChip(targetId, label) {
+      const display = label || canonicalGlossaryId(targetId) || targetId;
+      const navId = resolveGlossaryNavId(targetId, known);
+      if (!navId) {
+        const span = document.createElement("span");
+        span.className = "spec-link disabled glossary-rel-chip";
+        span.textContent = display;
+        return span;
+      }
+      const node = nodeForModule(mod.module_id);
+      const href = itemHref({
+        node: node ? node.id : currentNodeId,
+        module: shortModule(mod.module_id),
+        section: expl ? expl.id : sectionId,
+        item: expl ? navId : canonicalGlossaryId(navId),
+      });
+      return makeBlankAnchor(href, display, "spec-link glossary-rel-chip");
+    }
+
+    // Taxonomy
+    let parents = Array.isArray(attrs.taxonomy_parents) ? attrs.taxonomy_parents : [];
+    let children = Array.isArray(attrs.taxonomy_children) ? attrs.taxonomy_children : [];
+    if (!parents.length) {
+      const fallbackParent =
+        (attrs.parent_local_name || "").trim() ||
+        (attrs.is_a || "").trim() ||
+        "";
+      if (fallbackParent) parents = [{ id: fallbackParent, rel: "parent" }];
+      const mixins = Array.isArray(attrs.mixins) ? attrs.mixins : [];
+      mixins.forEach((m) => parents.push({ id: String(m), rel: "mixin" }));
+    }
+    const tax = document.createElement("section");
+    tax.className = "detail-block glossary-adr027-taxonomy";
+    tax.innerHTML = `<h2>Taxonomy</h2>`;
+    const taxRow = document.createElement("div");
+    taxRow.className = "link-row";
+    if (attrs.defined_in) {
+      const defined = document.createElement("div");
+      defined.className = "muted";
+      defined.textContent = `defined in: ${attrs.defined_in}`;
+      tax.appendChild(defined);
+    }
+    if (attrs.is_a_chain && attrs.is_a_chain.length) {
+      const chain = document.createElement("div");
+      chain.className = "muted glossary-isa-chain";
+      chain.textContent = `is_a chain: ${attrs.is_a_chain.join(" ← ")}`;
+      tax.appendChild(chain);
+    }
+    if (attrs.definition_depth != null && attrs.definition_depth !== "") {
+      const depth = document.createElement("div");
+      depth.className = "muted";
+      depth.textContent = `depth: ${attrs.definition_depth}`;
+      tax.appendChild(depth);
+    }
+    if (parents.length) {
+      const pLabel = document.createElement("div");
+      pLabel.className = "muted mixin-label";
+      pLabel.textContent = "parents:";
+      taxRow.appendChild(pLabel);
+      parents.forEach((p) =>
+        taxRow.appendChild(makeTermChip(relTargetId(p), relLabel(p)))
+      );
+    } else {
+      taxRow.appendChild(document.createTextNode("No parents"));
+    }
+    if (children.length) {
+      const cLabel = document.createElement("div");
+      cLabel.className = "muted mixin-label";
+      cLabel.textContent = "children:";
+      taxRow.appendChild(cLabel);
+      children.forEach((c) =>
+        taxRow.appendChild(makeTermChip(relTargetId(c), relLabel(c)))
+      );
+    }
+    tax.appendChild(taxRow);
+    card.appendChild(tax);
+
+    // See also (associative only — never parent/child)
+    const seeAlso = Array.isArray(attrs.see_also) ? attrs.see_also : [];
+    const see = document.createElement("section");
+    see.className = "detail-block glossary-adr027-see-also";
+    see.innerHTML = `<h2>See also</h2>`;
+    if (!seeAlso.length) {
+      const empty = document.createElement("p");
+      empty.className = "muted";
+      empty.textContent = "No associative links in this coverage.";
+      see.appendChild(empty);
+    } else {
+      const row = document.createElement("div");
+      row.className = "link-row";
+      seeAlso.forEach((entry) =>
+        row.appendChild(makeTermChip(relTargetId(entry), relLabel(entry)))
+      );
+      see.appendChild(row);
+    }
+    card.appendChild(see);
+
+    // Assignment / mapping (equivalence family — separate heading)
+    const assignments = []
+      .concat(attrs.related_glossary_terms || [])
+      .concat(attrs.glossary_term_refs || [])
+      .concat(attrs.external_class_refs || []);
+    if (assignments.length) {
+      const asg = document.createElement("section");
+      asg.className = "detail-block glossary-adr027-assignment";
+      asg.innerHTML = `<h2>Assignment / mapping</h2>`;
+      const row = document.createElement("div");
+      row.className = "link-row";
+      assignments.forEach((entry) => {
+        const id = relTargetId(entry) || String(entry);
+        const span = document.createElement("span");
+        span.className = "spec-link disabled glossary-rel-chip";
+        const mk = entry && entry.match_kind ? ` [${entry.match_kind}]` : "";
+        span.textContent = id + mk;
+        row.appendChild(span);
+      });
+      asg.appendChild(row);
+      card.appendChild(asg);
+    }
+
+    // Origin (not genesis_kind)
+    const origin = (attrs.origin || "").trim();
+    if (origin) {
+      const orig = document.createElement("section");
+      orig.className = "detail-block glossary-adr027-origin";
+      orig.innerHTML = `<h2>Origin</h2>`;
+      const badge = document.createElement("span");
+      badge.className = "glossary-origin-badge";
+      badge.setAttribute("data-origin", origin);
+      badge.textContent = origin;
+      orig.appendChild(badge);
+      if (attrs.source_release) {
+        const rel = document.createElement("span");
+        rel.className = "muted";
+        rel.style.marginLeft = "8px";
+        rel.textContent = String(attrs.source_release);
+        orig.appendChild(rel);
+      }
+      card.appendChild(orig);
+    }
+  }
+
+  function renderGlossaryTermDetail(mod, expl, item) {
+    const card = document.createElement("article");
+    card.className = "detail-card content-card";
+    card.setAttribute("data-publication-item", "");
+    card.setAttribute("data-item-id", item.id);
+    card.setAttribute("data-item-type", item.attributes?.kind || "class");
+    const attrs = item.attributes || {};
+    const kind = attrs.kind || "class";
+    const labelRu = (attrs.label_ru || "").trim();
+    const titleExtra = labelRu
+      ? ` <span class="muted">(${escapeHtml(labelRu)})</span>`
+      : "";
+    const badges = [];
+    if (kind) badges.push(`<span class="badge-pill">${escapeHtml(kind)}</span>`);
+    if (attrs.origin) {
+      badges.push(
+        `<span class="badge-pill glossary-origin-badge" data-origin="${escapeHtml(String(attrs.origin))}">${escapeHtml(String(attrs.origin))}</span>`
+      );
+    }
+    card.innerHTML = `
+      <header class="detail-head">
+        <h1>${escapeHtml(item.title || item.id)}${titleExtra}</h1>
+        <div class="badge-row">${badges.slice(0, 4).join("")}</div>
+        <p class="muted">${escapeHtml(attrs.defined_in || attrs.source_domain || attrs.schema_key || "")}</p>
+      </header>
+    `;
+    const defBlock = document.createElement("section");
+    defBlock.className = "detail-block";
+    defBlock.setAttribute("data-renderer", "definition");
+    defBlock.innerHTML = `<h2>Definition</h2>`;
+    const defEn = document.createElement("p");
+    defEn.className = "detail-desc";
+    defEn.textContent = item.description || attrs.definition || "No definition.";
+    defBlock.appendChild(defEn);
+    if (attrs.definition_ru) {
+      const defRu = document.createElement("p");
+      defRu.className = "detail-desc muted";
+      defRu.textContent = String(attrs.definition_ru);
+      defBlock.appendChild(defRu);
+    }
+    card.appendChild(defBlock);
+
+    const known = collectExplorerIds(expl);
+    appendAdr027RelationBlocks(card, mod, item, {
+      known,
+      expl,
+      sectionId: expl.id,
+    });
+    return card;
   }
 
   function renderOntologyExplorerDetail(mod, expl, item) {
@@ -1953,7 +2300,10 @@
         tbody.appendChild(tr);
       });
       table.appendChild(tbody);
-      checkBlock.appendChild(table);
+      const scroll = document.createElement("div");
+      scroll.className = "table-scroll data-table-shell";
+      scroll.appendChild(table);
+      checkBlock.appendChild(scroll);
     }
     card.appendChild(checkBlock);
 
@@ -2196,6 +2546,9 @@
     }
     if (kind === "implementation_ref") {
       return renderImplementationRefDetail(item);
+    }
+    if (isGlossaryViewItem(item)) {
+      return renderGlossaryTermDetail(mod, expl, item);
     }
 
     if (kind === "group") {
@@ -2708,46 +3061,354 @@
     return card;
   }
 
+  function makeBlankAnchor(href, text, className) {
+    const a = document.createElement("a");
+    a.className = className || "spec-link";
+    a.href = href;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.textContent = text;
+    return a;
+  }
+
   function makeSpecLink(mod, expl, name, known, label) {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "spec-link";
-    btn.textContent = label ? `${label}: ${name}` : name;
-    if (known.has(name)) {
-      btn.addEventListener("click", () => {
-        const node = nodeForModule(mod.module_id);
-        setHash({
-          node: node ? node.id : currentNodeId,
-          module: shortModule(mod.module_id),
-          section: expl.id,
-          item: name,
-        });
-        showModule(mod.module_id, { section: expl.id, item: name });
-      });
-    } else {
-      btn.disabled = true;
-      btn.classList.add("disabled");
+    const text = label ? `${label}: ${name}` : name;
+    if (!known.has(name)) {
+      const span = document.createElement("span");
+      span.className = "spec-link disabled";
+      span.textContent = text;
+      return span;
     }
-    return btn;
+    const node = nodeForModule(mod.module_id);
+    const href = itemHref({
+      node: node ? node.id : currentNodeId,
+      module: shortModule(mod.module_id),
+      section: expl.id,
+      item: name,
+    });
+    return makeBlankAnchor(href, text, "spec-link");
   }
 
   function makeFiboLink(itemId) {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "spec-link";
-    btn.textContent = `FIBO: ${itemId}`;
-    btn.addEventListener("click", () => {
-      const node = nodeForModule("moex:module:fibo");
-      currentNodeId = node ? node.id : null;
-      setHash({
-        node: node ? node.id : null,
-        module: "fibo",
-        section: "glossary",
-        item: itemId,
-      });
-      showModule("moex:module:fibo", { section: "glossary", item: itemId });
+    const node = nodeForModule("moex:module:fibo");
+    const href = itemHref({
+      node: node ? node.id : null,
+      module: "fibo",
+      section: "glossary",
+      item: itemId,
     });
-    return btn;
+    return makeBlankAnchor(href, `FIBO: ${itemId}`, "spec-link");
+  }
+
+  function findDamsClassItem(className) {
+    if (!className) return null;
+    const dams = modules.find(
+      (m) => m.module_id === "moex:module:dams" || shortModule(m.module_id) === "dams"
+    );
+    if (!dams) return null;
+    const expl = explorerSection(dams);
+    if (!expl) return null;
+    const found = findExplorerItem(expl, className);
+    return found ? { mod: dams, expl, item: found.item } : null;
+  }
+
+  function findSectionItem(section, itemId) {
+    if (!section || !itemId) return null;
+    return (section.items || []).find((it) => it.id === itemId) || null;
+  }
+
+  function renderLinkedValue(raw, mod) {
+    const target = ensureLinkIndex().resolve(raw, mod);
+    if (!target || !target.card) {
+      const span = document.createElement("span");
+      span.textContent = String(raw ?? "");
+      return span;
+    }
+    const href = itemHref(target);
+    return makeBlankAnchor(href, String(raw), "table-item-link");
+  }
+
+  function appendMetaValue(dl, label, valueNode) {
+    const dt = document.createElement("dt");
+    dt.textContent = label;
+    const dd = document.createElement("dd");
+    if (typeof valueNode === "string") dd.textContent = valueNode;
+    else if (valueNode) dd.appendChild(valueNode);
+    else dd.textContent = "—";
+    dl.appendChild(dt);
+    dl.appendChild(dd);
+  }
+
+  function renderNestedAttributesTable(nestedItems, emptyMessage) {
+    const slotBlock = document.createElement("section");
+    slotBlock.className = "detail-block";
+    slotBlock.setAttribute("data-renderer", "properties-table");
+    slotBlock.innerHTML = `<h2>Attributes</h2>`;
+    if (!nestedItems.length) {
+      slotBlock.innerHTML += `<p class="muted">${escapeHtml(emptyMessage || "No attributes defined.")}</p>`;
+      return slotBlock;
+    }
+    const table = document.createElement("table");
+    table.className = "data-table detail-slots";
+    table.innerHTML = `<thead><tr>
+      <th>Attribute</th><th>Type</th><th>Required</th><th>Multiple</th>
+      <th>Declared</th><th>Description</th>
+    </tr></thead>`;
+    const tbody = document.createElement("tbody");
+    nestedItems.forEach((slot) => {
+      const attrs = slot.attributes || {};
+      const tr = document.createElement("tr");
+      const nameTd = document.createElement("td");
+      nameTd.textContent = attrs.name || slot.title || slot.id || "";
+      const rangeTd = document.createElement("td");
+      rangeTd.textContent = attrs.logical_type || attrs.native_type || attrs.range || "";
+      tr.appendChild(nameTd);
+      tr.appendChild(rangeTd);
+      [["required", attrs.required], ["multivalued", attrs.multivalued]].forEach(([, flag]) => {
+        const td = document.createElement("td");
+        td.textContent = yesBlank(flag) || "No";
+        tr.appendChild(td);
+      });
+      const declTd = document.createElement("td");
+      declTd.textContent = "Yes";
+      tr.appendChild(declTd);
+      const desc = document.createElement("td");
+      desc.textContent = slot.description || attrs.description || "";
+      tr.appendChild(desc);
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    const scroll = document.createElement("div");
+    scroll.className = "table-scroll data-table-shell";
+    scroll.appendChild(table);
+    slotBlock.appendChild(scroll);
+    return slotBlock;
+  }
+
+  function renderInstanceDetail(mod, section, item) {
+    const className = section.instance_of;
+    const damsClass = findDamsClassItem(className);
+    const card = document.createElement("article");
+    card.className = "detail-card content-card";
+    card.setAttribute("data-publication-item", "");
+    card.setAttribute("data-item-id", item.id);
+    card.setAttribute("data-item-type", "instance");
+    card.setAttribute("data-instance-of", className || "");
+
+    const titleBadge = `<span class="nav-kind kind-plain" aria-hidden="true">C</span> `;
+    card.innerHTML = `
+      <header class="detail-head">
+        <h1>${titleBadge}${escapeHtml(item.title || item.attributes?.name || item.id)}</h1>
+        <div class="badge-row"><span class="badge-pill">${escapeHtml(className || "instance")}</span></div>
+        <p class="muted">${escapeHtml(item.id)}</p>
+      </header>
+      <p class="detail-desc">${escapeHtml(item.description || "No description.")}</p>
+    `;
+
+    const classSlots = damsClass?.item?.attributes?.slots || [];
+    const nested = item.children || [];
+    const attrs = item.attributes || {};
+
+    function renderSourceTab(panel) {
+      const sec = document.createElement("section");
+      sec.className = "detail-block";
+      sec.innerHTML = `<h2>Source</h2>`;
+      const dl = document.createElement("dl");
+      dl.className = "detail-meta definition-list";
+      appendMetaRow(dl, "module", mod.module_id);
+      appendMetaRow(dl, "section", section.id);
+      appendMetaRow(dl, "instance_of", className || "—");
+      if (mod.manifest_path) appendMetaRow(dl, "manifest", String(mod.manifest_path));
+      sec.appendChild(dl);
+      panel.appendChild(sec);
+    }
+
+    mountTabs(card, [
+      {
+        id: "overview",
+        label: "Overview",
+        render(panel) {
+          const def = document.createElement("section");
+          def.className = "detail-block";
+          def.setAttribute("data-renderer", "definition");
+          def.innerHTML = `<h2>Definition</h2>
+            <p class="detail-desc">${escapeHtml(item.description || "No description.")}</p>`;
+          panel.appendChild(def);
+
+          const meta = document.createElement("section");
+          meta.className = "detail-block";
+          meta.innerHTML = `<h2>Identity</h2>`;
+          const dl = document.createElement("dl");
+          dl.className = "detail-meta definition-list";
+          if (damsClass) {
+            const typeLink = makeSpecLink(
+              damsClass.mod,
+              damsClass.expl,
+              className,
+              new Set([className]),
+              "type"
+            );
+            appendMetaValue(dl, "type", typeLink);
+          } else {
+            appendMetaRow(dl, "type", className || "—");
+          }
+          appendMetaRow(dl, "element_id", item.id);
+          appendMetaRow(dl, "name", String(attrs.name || item.title || ""));
+          if (item.title) appendMetaRow(dl, "title", String(item.title));
+          // Class-template slots with scalar values on the instance
+          classSlots.forEach((slot) => {
+            const sn = slot.name;
+            if (!sn || sn === "attributes" || sn === "physical_fields" || sn === "description") {
+              return;
+            }
+            if (!(sn in attrs) || attrs[sn] === null || attrs[sn] === undefined || attrs[sn] === "") {
+              return;
+            }
+            const val = attrs[sn];
+            if (Array.isArray(val)) {
+              const wrap = document.createElement("span");
+              wrap.className = "link-row";
+              val.forEach((v, i) => {
+                if (i) wrap.appendChild(document.createTextNode(", "));
+                wrap.appendChild(renderLinkedValue(v, mod));
+              });
+              appendMetaValue(dl, sn, wrap);
+            } else if (typeof val !== "object") {
+              const asRef = /_refs?$/.test(sn) || sn.endsWith("_ref");
+              appendMetaValue(dl, sn, asRef ? renderLinkedValue(val, mod) : String(val));
+            }
+          });
+          meta.appendChild(dl);
+          panel.appendChild(meta);
+        },
+      },
+      {
+        id: "attributes",
+        label: "Attributes",
+        count: nested.length || classSlots.length,
+        render(panel) {
+          if (nested.length) {
+            panel.appendChild(
+              renderNestedAttributesTable(nested, "No attributes defined for this entity.")
+            );
+            return;
+          }
+          // Fall back to class slot template with instance values
+          const slotBlock = document.createElement("section");
+          slotBlock.className = "detail-block";
+          slotBlock.setAttribute("data-renderer", "properties-table");
+          slotBlock.innerHTML = `<h2>Attributes</h2>`;
+          const valueSlots = classSlots.filter((s) => {
+            const sn = s.name;
+            return sn && sn in attrs && attrs[sn] !== null && attrs[sn] !== undefined && attrs[sn] !== "";
+          });
+          if (!valueSlots.length) {
+            slotBlock.innerHTML += `<p class="muted">No attributes defined for this class.</p>`;
+            panel.appendChild(slotBlock);
+            return;
+          }
+          const table = document.createElement("table");
+          table.className = "data-table detail-slots";
+          table.innerHTML = `<thead><tr>
+            <th>Attribute</th><th>Type</th><th>Required</th><th>Multiple</th>
+            <th>Declared</th><th>Description</th>
+          </tr></thead>`;
+          const tbody = document.createElement("tbody");
+          valueSlots.forEach((slot) => {
+            const tr = document.createElement("tr");
+            const nameTd = document.createElement("td");
+            nameTd.textContent = slot.name || "";
+            const rangeTd = document.createElement("td");
+            rangeTd.textContent = slot.range || typeof attrs[slot.name];
+            tr.appendChild(nameTd);
+            tr.appendChild(rangeTd);
+            [["required", slot.required], ["multivalued", slot.multivalued]].forEach(([, flag]) => {
+              const td = document.createElement("td");
+              td.textContent = yesBlank(flag) || "No";
+              tr.appendChild(td);
+            });
+            const declTd = document.createElement("td");
+            declTd.textContent = "Yes";
+            tr.appendChild(declTd);
+            const desc = document.createElement("td");
+            const v = attrs[slot.name];
+            desc.textContent = Array.isArray(v) ? v.join(", ") : String(v);
+            tr.appendChild(desc);
+            tbody.appendChild(tr);
+          });
+          table.appendChild(tbody);
+          const scroll = document.createElement("div");
+          scroll.className = "table-scroll data-table-shell";
+          scroll.appendChild(table);
+          slotBlock.appendChild(scroll);
+          panel.appendChild(slotBlock);
+        },
+      },
+      {
+        id: "relations",
+        label: "Relations",
+        render(panel) {
+          const ranges = document.createElement("section");
+          ranges.className = "detail-block";
+          ranges.innerHTML = `<h2>Typed references</h2>`;
+          const row = document.createElement("div");
+          row.className = "link-row";
+          const refKeys = [
+            "conceptual_entity_refs",
+            "context_ref",
+            "key_attribute_refs",
+            "source_entity_ref",
+            "target_entity_ref",
+            "relation_term_ref",
+            "parent_concept_ref",
+          ];
+          let any = false;
+          refKeys.forEach((key) => {
+            const val = attrs[key];
+            if (val === null || val === undefined || val === "") return;
+            const list = Array.isArray(val) ? val : [val];
+            list.forEach((v) => {
+              const target = ensureLinkIndex().resolve(v, mod);
+              if (!target || !target.card) return;
+              any = true;
+              const a = makeBlankAnchor(itemHref(target), `${key}: ${v}`, "spec-link");
+              row.appendChild(a);
+            });
+          });
+          if (!any) {
+            ranges.innerHTML += `<p class="muted">No outbound type references.</p>`;
+          } else {
+            ranges.appendChild(row);
+          }
+          panel.appendChild(ranges);
+
+          if (damsClass) {
+            const inh = document.createElement("section");
+            inh.className = "detail-block";
+            inh.innerHTML = `<h2>Inheritance</h2>`;
+            const list = document.createElement("div");
+            list.className = "link-row";
+            list.appendChild(
+              makeSpecLink(
+                damsClass.mod,
+                damsClass.expl,
+                className,
+                new Set([className]),
+                "instance_of"
+              )
+            );
+            inh.appendChild(list);
+            panel.appendChild(inh);
+          }
+        },
+      },
+      {
+        id: "source",
+        label: "Source",
+        render: renderSourceTab,
+      },
+    ], { initial: "overview" });
+    return card;
   }
 
   function renderSection(mod, section, opts) {
@@ -2983,7 +3644,76 @@
     return "status-chip";
   }
 
-  function formatTableCellHtml(col, raw, item) {
+  function isLinkableTableColumn(col) {
+    if (!col) return false;
+    if (col === "name" || col === "is_a" || col === "mixins") return true;
+    if (col === "source" || col === "target") return true;
+    if (/_refs?$/.test(col)) return true;
+    return false;
+  }
+
+  function resolveTableCellTarget(mod, section, col, raw, item) {
+    if (!raw || !mod) return null;
+    const index = ensureLinkIndex();
+    if (col === "name") {
+      if (section?.instance_of) {
+        return {
+          module: shortModule(mod.module_id),
+          section: section.id,
+          item: item.id,
+          node: nodeForModule(mod.module_id)?.id || currentNodeId,
+          card: true,
+        };
+      }
+      const expl = explorerSection(mod);
+      if (expl) {
+        const found =
+          findExplorerItem(expl, String(raw)) || findExplorerItem(expl, item.id);
+        if (
+          found &&
+          (found.item.attributes?.kind === "class" ||
+            found.item.attributes?.kind === "enum" ||
+            found.item.attributes?.kind === "slot")
+        ) {
+          return {
+            module: shortModule(mod.module_id),
+            section: expl.id,
+            item: found.item.id,
+            node: nodeForModule(mod.module_id)?.id || currentNodeId,
+            card: true,
+          };
+        }
+      }
+      return null;
+    }
+    const hit = index.resolve(raw, mod);
+    return hit && hit.card ? hit : null;
+  }
+
+  function formatLinkedCellParts(mod, section, col, raw, item) {
+    if (raw === null || raw === undefined || raw === "") return null;
+    const multi = col === "mixins" || /_refs$/.test(col);
+    const parts = multi
+      ? String(raw)
+          .split(/\s*,\s*/)
+          .map((p) => p.trim())
+          .filter(Boolean)
+      : [String(raw).trim()].filter(Boolean);
+    if (!parts.length) return null;
+    const linked = parts.map((part) => {
+      const target = resolveTableCellTarget(mod, section, col, part, item);
+      if (!target) return escapeHtml(part);
+      const href = itemHref(target);
+      return `<a class="table-item-link" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(
+        part
+      )}</a>`;
+    });
+    // Only treat as linked cell if at least one part resolved.
+    if (!linked.some((html) => html.includes("table-item-link"))) return null;
+    return linked.join(", ");
+  }
+
+  function formatTableCellHtml(col, raw, item, mod, section) {
     const attrs = item?.attributes || {};
     if (col === "decision" || col === "review_status") {
       const kind = col === "decision" ? "decision" : "review";
@@ -3012,6 +3742,14 @@
           <button type="button" class="copy-btn" data-copy="${escapeHtml(full)}" aria-label="Copy full IRI">copy</button>
           ${link}
         </span></span>`;
+    }
+    if (isLinkableTableColumn(col)) {
+      const linkedHtml = formatLinkedCellParts(mod, section, col, raw, item);
+      if (linkedHtml) {
+        return `${linkedHtml}<span class="cell-actions"><button type="button" class="copy-btn" data-copy="${escapeHtml(
+          raw
+        )}">copy</button></span>`;
+      }
     }
     const long = raw.length > 160;
     const text = long
@@ -3138,7 +3876,7 @@
           const cells = columns
             .map((c) => {
               const raw = cellValue(item, c);
-              return `<td>${formatTableCellHtml(c, raw, item)}</td>`;
+              return `<td>${formatTableCellHtml(c, raw, item, mod, section)}</td>`;
             })
             .join("");
           return `<tr data-item-id="${escapeHtml(item.id)}">${cells}</tr>`;
@@ -3368,39 +4106,60 @@
         const kindBadge = kind
           ? `<span class="glossary-kind-badge">${escapeHtml(kind)}</span>`
           : "";
-        card.innerHTML = `<h3>${escapeHtml(title)} ${kindBadge}${modeBadge}</h3>
+        const origin = (item.attributes?.origin || "").trim();
+        const originBadge = origin
+          ? `<span class="glossary-origin-badge" data-origin="${escapeHtml(origin)}">${escapeHtml(origin)}</span>`
+          : "";
+        const definedIn = (item.attributes?.defined_in || "").trim();
+        card.innerHTML = `<h3>${escapeHtml(title)} ${kindBadge}${modeBadge}${originBadge}</h3>
           <p>${escapeHtml(defEn)}</p>
           ${defRu ? `<p class="muted">${escapeHtml(defRu)}</p>` : ""}
-          <div class="muted">${escapeHtml(item.id)}${domain ? " · " + escapeHtml(domain) : ""}</div>`;
-        const parentRow = parentMeta(item, section);
-        if (parentRow) {
-          const parentLine = document.createElement("div");
-          parentLine.className = "glossary-parent";
-          parentLine.appendChild(document.createTextNode("extends "));
-          if (parentRow.inSection) {
-            const link = document.createElement("button");
-            link.type = "button";
-            link.className = "glossary-parent-link";
-            link.textContent = parentRow.label;
-            link.addEventListener("click", (e) => {
-              e.stopPropagation();
-              setHash({
-                node: nodeForModule(mod.module_id)?.id || currentNodeId,
-                module: shortModule(mod.module_id),
-                section: section.id,
-                item: parentRow.id,
+          <div class="muted">${escapeHtml(item.id)}${domain ? " · " + escapeHtml(domain) : ""}${definedIn ? " · " + escapeHtml(definedIn) : ""}</div>`;
+        // ADR-027 blocks (Taxonomy / See also / Assignment / Origin).
+        // Keep legacy "extends" only when taxonomy_parents is absent.
+        const hasTaxonomyAttrs = Array.isArray(item.attributes?.taxonomy_parents);
+        if (!hasTaxonomyAttrs) {
+          const parentRow = parentMeta(item, section);
+          if (parentRow) {
+            const parentLine = document.createElement("div");
+            parentLine.className = "glossary-parent";
+            parentLine.appendChild(document.createTextNode("extends "));
+            if (parentRow.inSection) {
+              const link = document.createElement("button");
+              link.type = "button";
+              link.className = "glossary-parent-link";
+              link.textContent = parentRow.label;
+              link.addEventListener("click", (e) => {
+                e.stopPropagation();
+                setHash({
+                  node: nodeForModule(mod.module_id)?.id || currentNodeId,
+                  module: shortModule(mod.module_id),
+                  section: section.id,
+                  item: parentRow.id,
+                });
               });
-            });
-            parentLine.appendChild(link);
-          } else {
-            const span = document.createElement("span");
-            span.className = "muted";
-            span.textContent = parentRow.label;
-            parentLine.appendChild(span);
+              parentLine.appendChild(link);
+            } else {
+              const span = document.createElement("span");
+              span.className = "muted";
+              span.textContent = parentRow.label;
+              parentLine.appendChild(span);
+            }
+            card.appendChild(parentLine);
           }
-          card.appendChild(parentLine);
         }
-        card.addEventListener("click", () => {
+        const known = new Set((section.items || []).map((i) => i.id));
+        const expl = explorerSection(mod);
+        if (expl) {
+          collectExplorerIds(expl).forEach((id) => known.add(id));
+        }
+        appendAdr027RelationBlocks(card, mod, item, {
+          known,
+          expl: null,
+          sectionId: section.id,
+        });
+        card.addEventListener("click", (e) => {
+          if (e.target.closest("a, button")) return;
           setHash({
             node: nodeForModule(mod.module_id)?.id || currentNodeId,
             module: shortModule(mod.module_id),

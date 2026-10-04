@@ -3,12 +3,17 @@
 from __future__ import annotations
 
 from moex_publication_viewer.models.publication_models import PublicationItem
+from moex_publication_viewer.normalizers.spec_glossary_tree import (
+    make_overview_glossary_folder,
+)
 
 
 def wrap_linkml_specification_roots(
     package_groups: list[PublicationItem],
+    *,
+    glossary_folders: list[PublicationItem] | None = None,
 ) -> list[PublicationItem]:
-    """Place schema packages under Classes; add empty Overview for orphan fold-in.
+    """Place schema packages under Classes; Overview holds orphan fold-in + Glossary.
 
     Used when the explorer is a plain LinkML schema projection (e.g. moex.dsp),
     not the DAMS triple-root wrapper. Avoids package folders as top-level siblings
@@ -19,6 +24,7 @@ def wrap_linkml_specification_roots(
     if any((g.attributes or {}).get("section_root") for g in package_groups):
         return package_groups
 
+    glossary_folder = make_overview_glossary_folder(glossary_folders)
     overview = PublicationItem(
         id="group:overview",
         title="Overview",
@@ -28,11 +34,11 @@ def wrap_linkml_specification_roots(
             "section_root": "overview",
             "purpose": "Entry point for module overview and non-explorer sections.",
             "structure_why": "ADR-016/019: orphans fold into Overview, never «Разделы».",
-            "member_ids": [],
+            "member_ids": [glossary_folder.id, "section:glossary"],
             "class_count": 0,
             "enum_count": 0,
         },
-        children=[],
+        children=[glossary_folder],
     )
     class_count = sum(
         int((g.attributes or {}).get("class_count") or 0) for g in package_groups

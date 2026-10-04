@@ -104,8 +104,51 @@ def check_publication_profiles(modules: list[PublicationModule]) -> list[str]:
                 f"{loc}: profile '{module.profile}' missing recommended kinds: "
                 f"{', '.join(missing_rec)}"
             )
+    warnings.extend(check_instance_of_classes(modules))
     for w in warnings:
         logger.warning("%s", w)
+    return warnings
+
+
+def _dams_explorer_class_ids(modules: list[PublicationModule]) -> set[str]:
+    """Class / enum ids from the DAMS reference explorer (if present)."""
+    dams = next((m for m in modules if m.module_id == "moex:module:dams"), None)
+    if dams is None:
+        return set()
+    expl = next((s for s in dams.sections if s.type == "explorer"), None)
+    if expl is None:
+        return set()
+    ids: set[str] = set()
+
+    def walk(nodes: list) -> None:
+        for node in nodes or []:
+            kind = (node.attributes or {}).get("kind")
+            if kind in ("class", "enum"):
+                ids.add(node.id)
+            if node.children:
+                walk(node.children)
+
+    walk(expl.items)
+    return ids
+
+
+def check_instance_of_classes(modules: list[PublicationModule]) -> list[str]:
+    """Warn when section.instance_of names a class missing from DAMS explorer."""
+    known = _dams_explorer_class_ids(modules)
+    if not known:
+        return []
+    warnings: list[str] = []
+    for module in modules:
+        loc = module.manifest_path or module.module_id
+        for section in module.sections:
+            cls = getattr(section, "instance_of", None)
+            if not cls:
+                continue
+            if cls not in known:
+                warnings.append(
+                    f"{loc}: section '{section.id}' instance_of '{cls}' "
+                    f"not found in DAMS explorer classes"
+                )
     return warnings
 
 

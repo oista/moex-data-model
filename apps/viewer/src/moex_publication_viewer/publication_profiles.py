@@ -44,7 +44,7 @@ class ProfileSpec:
 PROFILES: dict[str, ProfileSpec] = {
     "linkml-specification": ProfileSpec(
         required=frozenset({"overview", "classes", "schema-files"}),
-        recommended=frozenset({"enumerations", "slots"}),
+        recommended=frozenset({"enumerations", "slots", "glossary"}),
         forbidden=frozenset({"taxonomy"}),
     ),
     "ontology": ProfileSpec(

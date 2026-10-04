@@ -1,8 +1,11 @@
-"""Wrap FIBO profile explorer roots: Overview / Classes / Modules / Identity / Glossary / Implementations."""
+"""Wrap FIBO profile explorer roots: Overview / Classes / Modules / Identity / Implementations."""
 
 from __future__ import annotations
 
 from moex_publication_viewer.models.publication_models import PublicationItem
+from moex_publication_viewer.normalizers.spec_glossary_tree import (
+    make_overview_glossary_folder,
+)
 
 _MODULES_GROUP_IDS = frozenset({"group:fibo-domains"})
 _IDENTITY_GROUP_IDS = frozenset({"group:fibo-patterns", "group:fibo-annotations"})
@@ -23,8 +26,10 @@ def _section_ref(section_id: str, title: str) -> PublicationItem:
 
 def wrap_fibo_explorer_roots(
     metamodel_groups: list[PublicationItem],
+    *,
+    glossary_folders: list[PublicationItem] | None = None,
 ) -> list[PublicationItem]:
-    """Build ontology-profile roots (ADR-024): Overview, Classes, Modules, Identity, Glossary, Impls."""
+    """Build ontology-profile roots (ADR-024): Overview(+Glossary), Classes, Modules, Identity, Impls."""
     modules_kids = [
         g for g in metamodel_groups if g.id in _MODULES_GROUP_IDS
     ]
@@ -35,6 +40,11 @@ def wrap_fibo_explorer_roots(
     known = _MODULES_GROUP_IDS | _IDENTITY_GROUP_IDS
     modules_kids.extend(g for g in metamodel_groups if g.id not in known)
 
+    glossary_folder = make_overview_glossary_folder(glossary_folders)
+    overview_children = [
+        _section_ref("overview", "Overview"),
+        glossary_folder,
+    ]
     overview_root = PublicationItem(
         id="group:overview",
         title="Overview",
@@ -43,9 +53,9 @@ def wrap_fibo_explorer_roots(
             "kind": "group",
             "section_root": "overview",
             "purpose": "Entry into the FIBO organizational profile (ADR-024 ontology).",
-            "member_ids": ["section:overview"],
+            "member_ids": [c.id for c in overview_children],
         },
-        children=[_section_ref("overview", "Overview")],
+        children=overview_children,
     )
     classes_root = PublicationItem(
         id="group:classes",
@@ -87,18 +97,6 @@ def wrap_fibo_explorer_roots(
         },
         children=identity_kids,
     )
-    glossary_root = PublicationItem(
-        id="group:glossary",
-        title="Glossary",
-        description="Flat alphabetical view of the same OWL classes (ADR-024).",
-        attributes={
-            "kind": "group",
-            "section_root": "glossary",
-            "purpose": "Glossary is a view of classes, not a separate dataset.",
-            "member_ids": ["section:glossary"],
-        },
-        children=[_section_ref("glossary", "Glossary")],
-    )
     impls_root = PublicationItem(
         id="group:implementations",
         title="Реализации",
@@ -117,7 +115,6 @@ def wrap_fibo_explorer_roots(
         classes_root,
         modules_root,
         identity_root,
-        glossary_root,
         impls_root,
     ]
 

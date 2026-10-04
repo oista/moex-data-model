@@ -33,6 +33,27 @@ def test_js_has_tabs_and_icon_helpers():
     assert "Type to search classes" in JS
 
 
+def test_js_table_links_and_instance_cards():
+    assert "function itemHref" in JS
+    assert "function ensureLinkIndex" in JS
+    assert "function renderInstanceDetail" in JS
+    assert "function findDamsClassItem" in JS
+    assert 'target = "_blank"' in JS or 'target="_blank"' in JS
+    assert "table-item-link" in JS
+    assert "content--wide" in JS
+    assert "instance_of" in JS
+
+
+def test_css_tables_adapt_to_width():
+    css = assemble_css()
+    assert "width: max-content" not in css.split(".data-table")[1].split("}")[0]
+    data_table = css.split(".data-table {")[1].split("}")[0]
+    assert "width: 100%" in data_table
+    assert "max-width: 360px" not in css.split(".data-table th, .data-table td")[1].split("}")[0]
+    assert ".content.content--wide" in css
+    assert "a.table-item-link" in css
+
+
 def test_js_nav_folds_orphan_sections_and_opens_focused_tables():
     """Impl modules must not bolt secondary strips; focused tables open expanded."""
     assert "function collectNestedSectionIds" in JS

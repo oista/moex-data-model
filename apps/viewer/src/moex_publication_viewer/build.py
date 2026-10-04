@@ -17,6 +17,12 @@ from moex_publication_viewer.normalizers import get_normalizer
 from moex_publication_viewer.normalizers.base import NormalizeError
 from moex_publication_viewer.normalizers.helpers import items_to_domain_explorer
 from moex_publication_viewer.normalizers.linkml_normalizer import clear_schema_view_cache
+from moex_publication_viewer.normalizers.spec_glossary_tree import (
+    OVERVIEW_GLOSSARY_ID,
+    build_ontology_glossary_tree,
+    flat_glossary_items_from_leaves,
+    make_overview_glossary_folder,
+)
 from moex_publication_viewer.renderers.html_renderer import render_viewer
 from moex_publication_viewer.validators import (
     ValidationError,
@@ -544,8 +550,30 @@ def _collect_class_leaf_ids(nodes: list[PublicationItem]) -> set[str]:
     return ids
 
 
+def _find_overview_glossary_folder(
+    explorer_items: list[PublicationItem],
+) -> PublicationItem | None:
+    overview = next((i for i in explorer_items if i.id == "group:overview"), None)
+    if overview is None:
+        return None
+    return next(
+        (c for c in (overview.children or []) if c.id == OVERVIEW_GLOSSARY_ID),
+        None,
+    )
+
+
+def _walk_glossary_leaves(nodes: list[PublicationItem]) -> list[PublicationItem]:
+    leaves: list[PublicationItem] = []
+    for node in nodes:
+        kind = (node.attributes or {}).get("kind")
+        if kind in ("class", "enum") and (node.attributes or {}).get("glossary_view"):
+            leaves.append(node)
+        leaves.extend(_walk_glossary_leaves(list(node.children or [])))
+    return leaves
+
+
 def enrich_fibo_explorer_classes(modules: list[PublicationModule]) -> None:
-    """Fill group:classes from the glossary section (same source, ADR-024)."""
+    """Fill group:classes and Overview/Glossary from the glossary section (ADR-024)."""
     profile = next((m for m in modules if m.module_id == FIBO_PROFILE_MODULE_ID), None)
     if profile is None:
         return
@@ -563,7 +591,7 @@ def enrich_fibo_explorer_classes(modules: list[PublicationModule]) -> None:
     if classes_root is None:
         return
 
-    # Flat glossary rows → domain groups with subClassOf nesting.
+    # Flat glossary rows → domain groups with subClassOf nesting (Classes).
     class_items: list[PublicationItem] = []
     for item in glossary.items or []:
         attrs = dict(item.attributes or {})
@@ -581,6 +609,81 @@ def enrich_fibo_explorer_classes(modules: list[PublicationModule]) -> None:
     attrs["class_count"] = len(leaf_ids)
     classes_root.attributes = attrs
     classes_root.children = domain_groups
+
+    # Overview → Glossary: definition-site folders (domain / module_path), not subClassOf.
+    site_folders = build_ontology_glossary_tree(class_items)
+    glossary_folder = make_overview_glossary_folder(site_folders)
+    overview = next((i for i in explorer.items if i.id == "group:overview"), None)
+    if overview is not None:
+        kept = [
+            c
+            for c in (overview.children or [])
+            if c.id != OVERVIEW_GLOSSARY_ID
+        ]
+        overview.children = [*kept, glossary_folder]
+        oattrs = dict(overview.attributes or {})
+        oattrs["member_ids"] = [c.id for c in overview.children]
+        overview.attributes = oattrs
+
+    # Enrich flat A–Z glossary rows with Taxonomy / See also / origin (ADR-027).
+    leaf_by_canonical = {
+        (leaf.attributes or {}).get("name")
+        or leaf.id.removeprefix("glossary:"): leaf
+        for leaf in _walk_glossary_leaves([glossary_folder])
+    }
+    enriched_rows: list[PublicationItem] = []
+    for item in glossary.items or []:
+        leaf = leaf_by_canonical.get(item.id)
+        if leaf is None:
+            attrs = dict(item.attributes or {})
+            attrs.setdefault("kind", "class")
+            attrs.setdefault("origin", "own")
+            attrs.setdefault("see_also", [])
+            attrs.setdefault("taxonomy_parents", [])
+            attrs.setdefault("taxonomy_children", [])
+            enriched_rows.append(item.model_copy(update={"attributes": attrs}))
+            continue
+        merged = dict(item.attributes or {})
+        lattrs = leaf.attributes or {}
+        for key in (
+            "origin",
+            "defined_in",
+            "is_a_chain",
+            "definition_depth",
+            "taxonomy_parents",
+            "taxonomy_children",
+            "see_also",
+            "glossary_view",
+            "kind",
+        ):
+            if key in lattrs:
+                merged[key] = lattrs[key]
+        enriched_rows.append(item.model_copy(update={"attributes": merged}))
+    glossary.items = enriched_rows
+
+
+def enrich_linkml_glossary_sections(modules: list[PublicationModule]) -> None:
+    """Replace hand JSON glossary rows with SchemaView projection (ADR-025 view)."""
+    for mod in modules:
+        if mod.profile != "linkml-specification":
+            continue
+        explorer = next((s for s in mod.sections if s.type == "explorer"), None)
+        glossary = next(
+            (s for s in mod.sections if s.id == "glossary" or s.kind == "glossary"),
+            None,
+        )
+        if explorer is None or glossary is None:
+            continue
+        folder = _find_overview_glossary_folder(list(explorer.items or []))
+        if folder is None:
+            continue
+        leaves = _walk_glossary_leaves([folder])
+        if not leaves:
+            continue
+        glossary.items = flat_glossary_items_from_leaves(leaves)
+        # Keep filterable useful for generated rows
+        if not glossary.filterable:
+            glossary.filterable = ["kind", "origin", "defined_in"]
 
 
 def enrich_fibo_explorer_implementations(
@@ -693,6 +796,7 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
     enrich_dams_explorer_implementations(modules, catalog)
     enrich_fibo_explorer_classes(modules)
     enrich_fibo_explorer_implementations(modules, catalog)
+    enrich_linkml_glossary_sections(modules)
     search_index = build_search_index(modules)
     if catalog is not None:
         for node in catalog.nodes:
