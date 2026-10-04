@@ -114,6 +114,72 @@ def test_settlement_code_specializes_account_relationship() -> None:
     assert sc["depends_on_refs"] == ["dams:concept/TradingParticipation"]
 
 
+def test_commercial_hr_slice_concepts_present() -> None:
+    data = yaml.safe_load(ENTERPRISE.read_text(encoding="utf-8"))
+    names = {c["name"] for c in data["conceptual_entities"]}
+    required = {
+        "Counterparty",
+        "Product",
+        "Service",
+        "Tariff",
+        "Payment",
+        "Sale",
+        "CostCenter",
+        "Income",
+        "Expense",
+        "Budget",
+        "Project",
+        "Task",
+        "TimeEntry",
+        "Rating",
+        "FinancialReport",
+        "ContractAmendment",
+        "MarketingCampaign",
+        "CampaignMembership",
+        "Department",
+        "StaffPosition",
+        "Employee",
+        "EmploymentContract",
+        "Role",
+        "User",
+        "RoleAssignment",
+    }
+    assert required <= names
+
+
+def test_counterparty_and_employee_not_subclass() -> None:
+    data = yaml.safe_load(ENTERPRISE.read_text(encoding="utf-8"))
+    concepts = {c["name"]: c for c in data["conceptual_entities"]}
+    assert concepts["Counterparty"].get("parent_concept_ref") is None
+    assert concepts["Employee"].get("parent_concept_ref") is None
+    assert concepts["Counterparty"]["entity_tier"] == "dependent"
+    assert concepts["Counterparty"]["depends_on_refs"] == ["dams:concept/LegalEntity"]
+    assert concepts["Employee"]["entity_tier"] == "dependent"
+    assert concepts["Employee"]["depends_on_refs"] == ["dams:concept/Person"]
+    assert concepts["Agreement"]["entity_tier"] == "primary"
+    assert concepts["Client"]["entity_tier"] == "primary"
+    emp_contract = concepts["EmploymentContract"]
+    assert emp_contract["parent_concept_ref"] == "dams:concept/Agreement"
+    for r in data["relationships"]:
+        assert r.get("name") != "subclassOf"
+
+
+def test_agreement_has_commercial_party_links() -> None:
+    data = yaml.safe_load(ENTERPRISE.read_text(encoding="utf-8"))
+    pairs = {
+        (r["source_entity_ref"], r["target_entity_ref"])
+        for r in data["relationships"]
+    }
+    assert (
+        "dams:concept/Agreement",
+        "dams:concept/Counterparty",
+    ) in pairs
+    assert (
+        "dams:concept/Agreement",
+        "dams:concept/CorporateGroup",
+    ) in pairs
+
+
 def test_enterprise_cm_checks_clean() -> None:
     data = yaml.safe_load(ENTERPRISE.read_text(encoding="utf-8"))
     diags = check_conceptual_entities(data) + check_relation_terms(data)

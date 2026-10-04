@@ -2,11 +2,11 @@ element_id: dams:model/enterprise-conceptual/0.1
 name: moex_enterprise_conceptual_model
 title: moex.concept-data-model
 description: >
-  Единая корпоративная концептуальная модель MOEX (Party + trading/TKS slice).
-  TradingParticipation — reified relation entity, не подкласс LegalEntity.
+  Единая корпоративная концептуальная модель MOEX (Party + trading/TKS + commercial/HR slices).
+  TradingParticipation / Counterparty / Employee — reified roles, не подклассы.
   ER-черновик концептуализирован без PK/FK-атрибутов (ADR-029). Physical layer
   запрещён. ExternalTermSelection выравнивается сюда, не на таблицы решений.
-  Tier / genesis / relation terms — ADR-026.
+  Tier / genesis / relation terms — ADR-026. ABS/IT deferred.
 lifecycle_status: draft
 api_version: dams.moex/v0.1
 model_version: 0.1.0
@@ -564,6 +564,296 @@ conceptual_entities:
       - dams:concept/Asset
     genesis_kind: native
 
+  # --- commercial + HR slice (ADR-029 wave 2) ---
+
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Counterparty
+    name: Counterparty
+    title: Контрагент
+    description: Роль LegalEntity как контрагента по договорам и платежам. Reified role, не подкласс LegalEntity.
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+    - dams:concept/LegalEntity
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Product
+    name: Product
+    title: Продукт
+    description: Коммерческий продукт биржи / группы, связанный с услугой и тарифом.
+    entity_type: core
+    data_class: reference_data
+    business_importance: high
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Service
+    name: Service
+    title: Услуга
+    description: Услуга, оказываемая в рамках коммерческого каталога.
+    entity_type: reference
+    data_class: reference_data
+    business_importance: high
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Tariff
+    name: Tariff
+    title: Тариф
+    description: Тариф / прайс для продукта или услуги.
+    entity_type: reference
+    data_class: reference_data
+    business_importance: medium
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Payment
+    name: Payment
+    title: Платёж
+    description: Платёж по продукту с участием клиента и/или контрагента.
+    entity_type: core
+    data_class: transactional_data
+    business_importance: high
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Sale
+    name: Sale
+    title: Продажа
+    description: Факт продажи продукта клиенту.
+    entity_type: core
+    data_class: transactional_data
+    business_importance: high
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/CostCenter
+    name: CostCenter
+    title: ЦФО
+    description: Центр финансовой ответственности.
+    entity_type: reference
+    data_class: reference_data
+    business_importance: medium
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Income
+    name: Income
+    title: Доход
+    description: Доходная статья / факт дохода по ЦФО и группе компаний.
+    entity_type: core
+    data_class: transactional_data
+    business_importance: medium
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Expense
+    name: Expense
+    title: Расход
+    description: Расходная статья / факт расхода по ЦФО и группе компаний.
+    entity_type: core
+    data_class: transactional_data
+    business_importance: medium
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Budget
+    name: Budget
+    title: Бюджет
+    description: Бюджет, связанный с проектом.
+    entity_type: core
+    data_class: transactional_data
+    business_importance: medium
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Project
+    name: Project
+    title: Проект
+    description: Проект / инициатива (управление работами и бюджетом).
+    entity_type: core
+    data_class: master_data
+    business_importance: medium
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Task
+    name: Task
+    title: Задача
+    description: Задача проекта.
+    entity_type: core
+    data_class: transactional_data
+    business_importance: medium
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+    - dams:concept/Project
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/TimeEntry
+    name: TimeEntry
+    title: Трудозатрата
+    description: Учёт трудозатрат сотрудника по задаче (associative).
+    entity_type: core
+    data_class: transactional_data
+    business_importance: medium
+    entity_tier: dependent
+    dependency_kind: associative
+    depends_on_refs:
+    - dams:concept/Task
+    - dams:concept/Employee
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Rating
+    name: Rating
+    title: Рейтинг
+    description: Рейтинг юридического лица.
+    entity_type: core
+    data_class: reference_data
+    business_importance: medium
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+    - dams:concept/LegalEntity
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/FinancialReport
+    name: FinancialReport
+    title: Финансовая отчётность
+    description: Финансовая отчётность юридического лица.
+    entity_type: core
+    data_class: transactional_data
+    business_importance: medium
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+    - dams:concept/LegalEntity
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/ContractAmendment
+    name: ContractAmendment
+    title: Дополнительное соглашение
+    description: Доп. соглашение к договору (Agreement); может быть связано с сотрудником.
+    entity_type: core
+    data_class: transactional_data
+    business_importance: high
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+    - dams:concept/Agreement
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/MarketingCampaign
+    name: MarketingCampaign
+    title: Маркетинговая кампания
+    description: Маркетинговая кампания.
+    entity_type: core
+    data_class: transactional_data
+    business_importance: medium
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/CampaignMembership
+    name: CampaignMembership
+    title: Участие в кампании
+    description: Ассоциация маркетинговой кампании и пользователя (Состав компаний в drawio).
+    entity_type: core
+    data_class: transactional_data
+    business_importance: low
+    entity_tier: dependent
+    dependency_kind: associative
+    depends_on_refs:
+    - dams:concept/MarketingCampaign
+    - dams:concept/User
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Department
+    name: Department
+    title: Департамент
+    description: Организационное подразделение; может относиться к группе компаний.
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/StaffPosition
+    name: StaffPosition
+    title: Штатная единица
+    description: Позиция штатного расписания в департаменте.
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+    - dams:concept/Department
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Employee
+    name: Employee
+    title: Сотрудник
+    description: Роль Person как сотрудника (reified). Не подкласс Person. Связан со штатной единицей.
+    entity_type: core
+    data_class: master_data
+    business_importance: high
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+    - dams:concept/Person
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/EmploymentContract
+    name: EmploymentContract
+    title: Трудовой договор
+    description: Трудовой договор сотрудника. Специализация Agreement (parent_concept_ref).
+    entity_type: core
+    data_class: transactional_data
+    business_importance: high
+    parent_concept_ref: dams:concept/Agreement
+    entity_tier: dependent
+    dependency_kind: characteristic
+    depends_on_refs:
+    - dams:concept/Employee
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/Role
+    name: Role
+    title: Роль
+    description: Роль доступа / полномочия в прикладных системах (без привязки к инфо-системе в этой волне).
+    entity_type: reference
+    data_class: reference_data
+    business_importance: medium
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/User
+    name: User
+    title: Пользователь
+    description: Учётная запись пользователя приложений (IAM). Связь с инфо-системами отложена.
+    entity_type: core
+    data_class: master_data
+    business_importance: medium
+    entity_tier: primary
+  - lifecycle_status: active
+    genesis_kind: native
+    element_id: dams:concept/RoleAssignment
+    name: RoleAssignment
+    title: Назначение роли
+    description: Ассоциация роли и пользователя (Состав ролей).
+    entity_type: core
+    data_class: master_data
+    business_importance: medium
+    entity_tier: dependent
+    dependency_kind: associative
+    depends_on_refs:
+    - dams:concept/Role
+    - dams:concept/User
+
 relation_terms:
   - element_id: dams:relterm/memberOf
     name: memberOf
@@ -970,6 +1260,229 @@ relation_terms:
     forward_label_en: holds position
     inverse_label: позиция у
     inverse_label_en: position of
+    symmetric: false
+    default_relationship_kind: association
+
+  # --- commercial + HR relation terms (wave 2) ---
+
+  - element_id: dams:relterm/hasCounterpartyRole
+    name: hasCounterpartyRole
+    title: имеет роль контрагента / принадлежит
+    description: Организация имеет роль контрагента.
+    lifecycle_status: active
+    forward_label: имеет роль контрагента
+    forward_label_en: has counterparty role
+    inverse_label: принадлежит
+    inverse_label_en: belongs to
+    symmetric: false
+    default_relationship_kind: composition
+  - element_id: dams:relterm/amends
+    name: amends
+    title: дополняет / дополняется
+    description: Доп. соглашение дополняет договор.
+    lifecycle_status: active
+    forward_label: дополняет
+    forward_label_en: amends
+    inverse_label: дополняется
+    inverse_label_en: amended by
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/hasEmployeeRole
+    name: hasEmployeeRole
+    title: имеет роль сотрудника / принадлежит
+    description: Физическое лицо имеет роль сотрудника.
+    lifecycle_status: active
+    forward_label: имеет роль сотрудника
+    forward_label_en: has employee role
+    inverse_label: принадлежит
+    inverse_label_en: belongs to
+    symmetric: false
+    default_relationship_kind: composition
+  - element_id: dams:relterm/holdsStaffPosition
+    name: holdsStaffPosition
+    title: занимает должность / занята
+    description: Сотрудник занимает штатную единицу.
+    lifecycle_status: active
+    forward_label: занимает должность
+    forward_label_en: holds staff position
+    inverse_label: занята
+    inverse_label_en: filled by
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/ofDepartment
+    name: ofDepartment
+    title: относится к департаменту / включает
+    description: Штатная единица относится к департаменту.
+    lifecycle_status: active
+    forward_label: относится к департаменту
+    forward_label_en: of department
+    inverse_label: включает
+    inverse_label_en: includes position
+    symmetric: false
+    default_relationship_kind: composition
+  - element_id: dams:relterm/soldTo
+    name: soldTo
+    title: продано / купил
+    description: Продажа клиенту.
+    lifecycle_status: active
+    forward_label: продано
+    forward_label_en: sold to
+    inverse_label: купил
+    inverse_label_en: bought
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/paidBy
+    name: paidBy
+    title: оплачен / оплачивает
+    description: Платёж от клиента или контрагента.
+    lifecycle_status: active
+    forward_label: оплачен
+    forward_label_en: paid by
+    inverse_label: оплачивает
+    inverse_label_en: pays
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/forProduct
+    name: forProduct
+    title: за продукт / имеет платежи
+    description: Платёж или продажа по продукту.
+    lifecycle_status: active
+    forward_label: за продукт
+    forward_label_en: for product
+    inverse_label: имеет платежи/продажи
+    inverse_label_en: has payments or sales
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/ofService
+    name: ofService
+    title: предоставляет услугу / входит в
+    description: Продукт связан с услугой.
+    lifecycle_status: active
+    forward_label: предоставляет услугу
+    forward_label_en: offers service
+    inverse_label: входит в продукт
+    inverse_label_en: part of product
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/pricedBy
+    name: pricedBy
+    title: тарифицируется / тарифицирует
+    description: Продукт связан с тарифом.
+    lifecycle_status: active
+    forward_label: тарифицируется
+    forward_label_en: priced by
+    inverse_label: тарифицирует
+    inverse_label_en: prices
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/rates
+    name: rates
+    title: оценивает / имеет рейтинг
+    description: Рейтинг юридического лица.
+    lifecycle_status: active
+    forward_label: оценивает
+    forward_label_en: rates
+    inverse_label: имеет рейтинг
+    inverse_label_en: has rating
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/reportsOn
+    name: reportsOn
+    title: отчитывается по / имеет отчётность
+    description: Финансовая отчётность юрлица.
+    lifecycle_status: active
+    forward_label: отчитывается по
+    forward_label_en: reports on
+    inverse_label: имеет отчётность
+    inverse_label_en: has financial report
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/ofCostCenter
+    name: ofCostCenter
+    title: относится к ЦФО / учитывает
+    description: Доход/расход относится к ЦФО.
+    lifecycle_status: active
+    forward_label: относится к ЦФО
+    forward_label_en: of cost center
+    inverse_label: учитывает
+    inverse_label_en: records
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/budgets
+    name: budgets
+    title: бюджетирует / имеет бюджет
+    description: Бюджет проекта.
+    lifecycle_status: active
+    forward_label: бюджетирует
+    forward_label_en: budgets
+    inverse_label: имеет бюджет
+    inverse_label_en: has budget
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/ofProject
+    name: ofProject
+    title: относится к проекту / включает
+    description: Задача или бюджет относится к проекту.
+    lifecycle_status: active
+    forward_label: относится к проекту
+    forward_label_en: of project
+    inverse_label: включает
+    inverse_label_en: includes
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/loggedAgainst
+    name: loggedAgainst
+    title: учтено по / имеет трудозатраты
+    description: Трудозатрата по задаче / сотруднику.
+    lifecycle_status: active
+    forward_label: учтено по
+    forward_label_en: logged against
+    inverse_label: имеет трудозатраты
+    inverse_label_en: has time entries
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/assignedRole
+    name: assignedRole
+    title: назначена роль / назначена
+    description: Назначение роли пользователю.
+    lifecycle_status: active
+    forward_label: назначена роль
+    forward_label_en: has assigned role
+    inverse_label: назначена
+    inverse_label_en: assigned to
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/inCampaign
+    name: inCampaign
+    title: в кампании / включает участника
+    description: Участие пользователя в маркетинговой кампании.
+    lifecycle_status: active
+    forward_label: в кампании
+    forward_label_en: in campaign
+    inverse_label: включает участника
+    inverse_label_en: has member
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/partyTo
+    name: partyTo
+    title: сторона / имеет сторону
+    description: Договор со стороной-контрагентом или группой.
+    lifecycle_status: active
+    forward_label: сторона
+    forward_label_en: party to
+    inverse_label: имеет сторону
+    inverse_label_en: has as party
+    symmetric: false
+    default_relationship_kind: association
+  - element_id: dams:relterm/signedBy
+    name: signedBy
+    title: подписано / подписывает
+    description: Доп. соглашение связано с сотрудником.
+    lifecycle_status: active
+    forward_label: подписано
+    forward_label_en: signed by
+    inverse_label: подписывает
+    inverse_label_en: signs
     symmetric: false
     default_relationship_kind: association
 
@@ -1960,6 +2473,519 @@ relationships:
     relation_term_ref: dams:relterm/concerns
     term_direction: forward
     relationship_kind: association
+
+  # --- commercial + HR relationships (wave 2) ---
+
+  - element_id: dams:rel/Counterparty/ofLegalEntity
+    name: ofLegalEntity
+    title: belongsTo / hasCounterpartyRole
+    description: Counterparty принадлежит LegalEntity (mandatory owner).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Counterparty
+    target_entity_ref: dams:concept/LegalEntity
+    source_role: counterparty
+    target_role: legal_entity
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/hasCounterpartyRole
+    term_direction: inverse
+    relationship_kind: composition
+    identifying: true
+  - element_id: dams:rel/Agreement/withCounterparty
+    name: withCounterparty
+    title: partyTo (counterparty)
+    description: Договор со стороной-контрагентом.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Agreement
+    target_entity_ref: dams:concept/Counterparty
+    source_role: agreement
+    target_role: counterparty
+    source_min_cardinality: 0
+    source_max_cardinality: 999
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/partyTo
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Agreement/withCorporateGroup
+    name: withCorporateGroup
+    title: partyTo (group)
+    description: Договор с компанией группы.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Agreement
+    target_entity_ref: dams:concept/CorporateGroup
+    source_role: agreement
+    target_role: group
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/partyTo
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/ContractAmendment/ofAgreement
+    name: ofAgreement
+    title: amends
+    description: Доп. соглашение дополняет Agreement (mandatory owner).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/ContractAmendment
+    target_entity_ref: dams:concept/Agreement
+    source_role: amendment
+    target_role: agreement
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/amends
+    term_direction: forward
+    relationship_kind: association
+    identifying: true
+  - element_id: dams:rel/ContractAmendment/signedBy
+    name: signedBy
+    title: signedBy
+    description: Доп. соглашение может быть связано с сотрудником.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/ContractAmendment
+    target_entity_ref: dams:concept/Employee
+    source_role: amendment
+    target_role: employee
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/signedBy
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Product/ofService
+    name: ofService
+    title: ofService
+    description: Продукт связан с услугой.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Product
+    target_entity_ref: dams:concept/Service
+    source_role: product
+    target_role: service
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/ofService
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Product/pricedBy
+    name: pricedBy
+    title: pricedBy
+    description: Продукт связан с тарифом.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Product
+    target_entity_ref: dams:concept/Tariff
+    source_role: product
+    target_role: tariff
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/pricedBy
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Payment/paidByClient
+    name: paidByClient
+    title: paidBy (client)
+    description: Платёж от клиента.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Payment
+    target_entity_ref: dams:concept/Client
+    source_role: payment
+    target_role: client
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/paidBy
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Payment/paidByCounterparty
+    name: paidByCounterparty
+    title: paidBy (counterparty)
+    description: Платёж с участием контрагента.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Payment
+    target_entity_ref: dams:concept/Counterparty
+    source_role: payment
+    target_role: counterparty
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/paidBy
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Payment/forProduct
+    name: forProduct
+    title: forProduct
+    description: Платёж по продукту.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Payment
+    target_entity_ref: dams:concept/Product
+    source_role: payment
+    target_role: product
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/forProduct
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Sale/soldTo
+    name: soldTo
+    title: soldTo
+    description: Продажа клиенту.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Sale
+    target_entity_ref: dams:concept/Client
+    source_role: sale
+    target_role: client
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/soldTo
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Sale/forProduct
+    name: forProduct
+    title: forProduct
+    description: Продажа продукта.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Sale
+    target_entity_ref: dams:concept/Product
+    source_role: sale
+    target_role: product
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/forProduct
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Rating/ofLegalEntity
+    name: ofLegalEntity
+    title: rates
+    description: Рейтинг принадлежит LegalEntity (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Rating
+    target_entity_ref: dams:concept/LegalEntity
+    source_role: rating
+    target_role: legal_entity
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/rates
+    term_direction: forward
+    relationship_kind: association
+    identifying: true
+  - element_id: dams:rel/FinancialReport/ofLegalEntity
+    name: ofLegalEntity
+    title: reportsOn
+    description: Отчётность принадлежит LegalEntity (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/FinancialReport
+    target_entity_ref: dams:concept/LegalEntity
+    source_role: report
+    target_role: legal_entity
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/reportsOn
+    term_direction: forward
+    relationship_kind: association
+    identifying: true
+  - element_id: dams:rel/Income/ofCostCenter
+    name: ofCostCenter
+    title: ofCostCenter
+    description: Доход относится к ЦФО.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Income
+    target_entity_ref: dams:concept/CostCenter
+    source_role: income
+    target_role: cost_center
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/ofCostCenter
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Income/ofCorporateGroup
+    name: ofCorporateGroup
+    title: memberOf (group)
+    description: Доход относится к группе компаний.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Income
+    target_entity_ref: dams:concept/CorporateGroup
+    source_role: income
+    target_role: group
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/memberOf
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Expense/ofCostCenter
+    name: ofCostCenter
+    title: ofCostCenter
+    description: Расход относится к ЦФО.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Expense
+    target_entity_ref: dams:concept/CostCenter
+    source_role: expense
+    target_role: cost_center
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/ofCostCenter
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Expense/ofCorporateGroup
+    name: ofCorporateGroup
+    title: memberOf (group)
+    description: Расход относится к группе компаний.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Expense
+    target_entity_ref: dams:concept/CorporateGroup
+    source_role: expense
+    target_role: group
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/memberOf
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Budget/ofProject
+    name: ofProject
+    title: budgets
+    description: Бюджет относится к проекту.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Budget
+    target_entity_ref: dams:concept/Project
+    source_role: budget
+    target_role: project
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/budgets
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/Task/ofProject
+    name: ofProject
+    title: ofProject
+    description: Задача принадлежит проекту (mandatory owner).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Task
+    target_entity_ref: dams:concept/Project
+    source_role: task
+    target_role: project
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/ofProject
+    term_direction: forward
+    relationship_kind: composition
+    identifying: true
+  - element_id: dams:rel/TimeEntry/ofTask
+    name: ofTask
+    title: loggedAgainst (task)
+    description: Трудозатрата по задаче (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TimeEntry
+    target_entity_ref: dams:concept/Task
+    source_role: time_entry
+    target_role: task
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/loggedAgainst
+    term_direction: forward
+    relationship_kind: association
+    identifying: true
+  - element_id: dams:rel/TimeEntry/ofEmployee
+    name: ofEmployee
+    title: loggedAgainst (employee)
+    description: Трудозатрата сотрудника (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/TimeEntry
+    target_entity_ref: dams:concept/Employee
+    source_role: time_entry
+    target_role: employee
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/loggedAgainst
+    term_direction: forward
+    relationship_kind: association
+    identifying: true
+  - element_id: dams:rel/CampaignMembership/ofCampaign
+    name: ofCampaign
+    title: inCampaign
+    description: Членство в кампании (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/CampaignMembership
+    target_entity_ref: dams:concept/MarketingCampaign
+    source_role: membership
+    target_role: campaign
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/inCampaign
+    term_direction: forward
+    relationship_kind: association
+    identifying: true
+  - element_id: dams:rel/CampaignMembership/ofUser
+    name: ofUser
+    title: inCampaign (user)
+    description: Участник кампании — пользователь (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/CampaignMembership
+    target_entity_ref: dams:concept/User
+    source_role: membership
+    target_role: user
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/inCampaign
+    term_direction: forward
+    relationship_kind: association
+    identifying: true
+  - element_id: dams:rel/Department/ofCorporateGroup
+    name: ofCorporateGroup
+    title: memberOf
+    description: Департамент может относиться к группе компаний.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Department
+    target_entity_ref: dams:concept/CorporateGroup
+    source_role: department
+    target_role: group
+    source_min_cardinality: 0
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/memberOf
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/StaffPosition/ofDepartment
+    name: ofDepartment
+    title: ofDepartment
+    description: Штатная единица принадлежит департаменту (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/StaffPosition
+    target_entity_ref: dams:concept/Department
+    source_role: position
+    target_role: department
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/ofDepartment
+    term_direction: forward
+    relationship_kind: composition
+    identifying: true
+  - element_id: dams:rel/Employee/ofPerson
+    name: ofPerson
+    title: belongsTo / hasEmployeeRole
+    description: Сотрудник принадлежит Person (mandatory owner).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Employee
+    target_entity_ref: dams:concept/Person
+    source_role: employee
+    target_role: person
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/hasEmployeeRole
+    term_direction: inverse
+    relationship_kind: composition
+    identifying: true
+  - element_id: dams:rel/Employee/holdsStaffPosition
+    name: holdsStaffPosition
+    title: holdsStaffPosition
+    description: Сотрудник занимает штатную единицу.
+    lifecycle_status: active
+    source_entity_ref: dams:concept/Employee
+    target_entity_ref: dams:concept/StaffPosition
+    source_role: employee
+    target_role: position
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/holdsStaffPosition
+    term_direction: forward
+    relationship_kind: association
+  - element_id: dams:rel/EmploymentContract/ofEmployee
+    name: ofEmployee
+    title: ofEmployee
+    description: Трудовой договор принадлежит сотруднику (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/EmploymentContract
+    target_entity_ref: dams:concept/Employee
+    source_role: contract
+    target_role: employee
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/concerns
+    term_direction: forward
+    relationship_kind: association
+    identifying: true
+  - element_id: dams:rel/RoleAssignment/ofRole
+    name: ofRole
+    title: assignedRole
+    description: Назначение принадлежит роли (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/RoleAssignment
+    target_entity_ref: dams:concept/Role
+    source_role: assignment
+    target_role: role
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/assignedRole
+    term_direction: forward
+    relationship_kind: association
+    identifying: true
+  - element_id: dams:rel/RoleAssignment/ofUser
+    name: ofUser
+    title: assignedRole (user)
+    description: Назначение принадлежит пользователю (mandatory).
+    lifecycle_status: active
+    source_entity_ref: dams:concept/RoleAssignment
+    target_entity_ref: dams:concept/User
+    source_role: assignment
+    target_role: user
+    source_min_cardinality: 1
+    source_max_cardinality: 1
+    target_min_cardinality: 0
+    target_max_cardinality: 999
+    relation_term_ref: dams:relterm/assignedRole
+    term_direction: forward
+    relationship_kind: association
+    identifying: true
 
 mappings:
   - element_id: dams:mapping/align/LegalEntity-fibo

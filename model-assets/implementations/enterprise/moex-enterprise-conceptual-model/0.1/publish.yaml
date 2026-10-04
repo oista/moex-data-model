@@ -6,7 +6,7 @@ order: 108
 icon: "🏛"
 title: moex.concept-data-model
 description: >
-  Canonical enterprise conceptual model (Party + trading/TKS slice).
+  Canonical enterprise conceptual model (Party + trading/TKS + commercial/HR).
   dams-data-model / enterprise-conceptual. Scope ≠ FIBO import.
 profile: implementation
 implementation_profile: dams-data-model
