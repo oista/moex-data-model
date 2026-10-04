@@ -121,6 +121,18 @@ def _solution_sections() -> list[PublicationSection]:
             title="Оценка соответствия требованиям модели",
             type="entity-table",
         ),
+        PublicationSection(
+            id="artifact-model-body",
+            title="Тело модели",
+            type="source-file",
+            kind="source",
+        ),
+        PublicationSection(
+            id="artifact-envelope",
+            title="Конверт реализации",
+            type="source-file",
+            kind="source",
+        ),
     ]
 
 
@@ -137,6 +149,7 @@ def test_group_solution_impl_nav_nests_five_folders() -> None:
         "implnav:crm-solution:group:logical",
         "implnav:crm-solution:group:physical",
         "implnav:crm-solution:group:requirements",
+        "implnav:crm-solution:group:artifacts",
     ]
     overview = kids[0]
     assert overview.attributes.get("kind") == "group"
@@ -165,6 +178,17 @@ def test_group_solution_impl_nav_nests_five_folders() -> None:
     assert kids[3].attributes.get("nav_glyph") == "pdm"
     assert [c.attributes["section_id"] for c in kids[4].children] == ["model-assessment"]
     assert kids[4].title == "Требования"
+    artifacts = kids[5]
+    assert artifacts.title == "Артефакты"
+    assert artifacts.attributes.get("nav_glyph") == "source_file"
+    assert artifacts.attributes.get("nav_group") == "artifacts"
+    assert [c.attributes["section_id"] for c in artifacts.children] == [
+        "artifact-model-body",
+        "artifact-envelope",
+    ]
+    assert all(
+        c.attributes.get("nav_glyph") == "source_file" for c in artifacts.children
+    )
 
 
 def test_group_solution_impl_nav_passthrough_without_required_set() -> None:
@@ -214,7 +238,24 @@ def _enterprise_conceptual_sections() -> list[PublicationSection]:
         PublicationSection(
             id="alignments", title="External alignments", type="entity-table"
         ),
-        PublicationSection(id="source", title="Source artifacts", type="file-list"),
+        PublicationSection(
+            id="artifact-model-body", title="Тело модели", type="source-file"
+        ),
+        PublicationSection(
+            id="artifact-relation-terms",
+            title="Термины отношений",
+            type="source-file",
+        ),
+        PublicationSection(
+            id="artifact-vocabularies",
+            title="Контролируемые словари",
+            type="source-file",
+        ),
+        PublicationSection(
+            id="artifact-envelope",
+            title="Конверт реализации",
+            type="source-file",
+        ),
     ]
 
 
@@ -229,7 +270,7 @@ def test_group_enterprise_conceptual_impl_nav_nests_overview_and_glossary() -> N
         "Overview",
         "Концептуальная модель",
         "Model glossary",
-        "Source artifacts",
+        "Артефакты",
     ]
     overview = kids[0]
     assert overview.id == "implnav:moex-enterprise-conceptual-model:group:overview"
@@ -273,6 +314,18 @@ def test_group_enterprise_conceptual_impl_nav_nests_overview_and_glossary() -> N
     ]
     assert all(
         c.attributes.get("nav_glyph") == "glossary" for c in glossary.children
+    )
+    artifacts = kids[3]
+    assert artifacts.id == "implnav:moex-enterprise-conceptual-model:group:artifacts"
+    assert artifacts.attributes.get("nav_glyph") == "source_file"
+    assert [c.attributes["section_id"] for c in artifacts.children] == [
+        "artifact-model-body",
+        "artifact-relation-terms",
+        "artifact-vocabularies",
+        "artifact-envelope",
+    ]
+    assert all(
+        c.attributes.get("nav_glyph") == "source_file" for c in artifacts.children
     )
     assert_impl_section_nav_coverage(
         PublicationItem(
@@ -398,6 +451,14 @@ def test_repo_dams_trading_has_nested_section_refs() -> None:
         "implnav:trading-solution:group:physical",
         "implnav:trading-solution:group:requirements",
         "implnav:trading-solution:group:documentation",
+        "implnav:trading-solution:group:artifacts",
+    ]
+    artifacts = trading.children[-1]
+    assert artifacts.title == "Артефакты"
+    assert artifacts.attributes.get("nav_glyph") == "source_file"
+    assert [c.attributes["section_id"] for c in artifacts.children] == [
+        "artifact-model-body",
+        "artifact-envelope",
     ]
     leaves = [
         c
@@ -425,6 +486,13 @@ def test_repo_dams_crm_solution_nav_folders() -> None:
         "Логическая модель",
         "Физическая модель",
         "Требования",
+        "Артефакты",
+    ]
+    artifacts = crm.children[-1]
+    assert artifacts.attributes.get("nav_glyph") == "source_file"
+    assert [c.attributes["section_id"] for c in artifacts.children] == [
+        "artifact-model-body",
+        "artifact-envelope",
     ]
     assert_impl_section_nav_coverage(crm, modules)
 
@@ -448,7 +516,14 @@ def test_repo_dams_impl_folders_group_solutions_and_projects() -> None:
         "Overview",
         "Концептуальная модель",
         "Model glossary",
-        "Source artifacts",
+        "Артефакты",
+    ]
+    assert ecm.children[-1].attributes.get("nav_glyph") == "source_file"
+    assert [c.attributes["section_id"] for c in ecm.children[-1].children] == [
+        "artifact-model-body",
+        "artifact-relation-terms",
+        "artifact-vocabularies",
+        "artifact-envelope",
     ]
     assert [c.title for c in ecm.children[0].children] == [
         "Overview",

@@ -61,7 +61,7 @@
       "requirement_ref": "dams:source",
       "covered": true,
       "covering_section_ids": [
-        "source"
+        "artifact-model-body"
       ],
       "result_status": "pass",
       "result_message": "covered by 1 section(s)",

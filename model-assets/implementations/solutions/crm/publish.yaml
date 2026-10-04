@@ -171,3 +171,19 @@ sections:
   - status
   - severity
   - requirement_code
+- id: artifact-model-body
+  title: Тело модели
+  description: Authored ModelPackage body for this solution (TImplBody).
+  kind: source
+  type: source-file
+  source:
+    format: yaml
+    path: crm-solution-model.yaml
+- id: artifact-envelope
+  title: Конверт реализации
+  description: SpecificationImplementation envelope (conforms_to, body_ref, provenance).
+  kind: source
+  type: source-file
+  source:
+    format: yaml
+    path: implementation.yaml

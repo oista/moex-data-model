@@ -164,6 +164,12 @@ def compile_modules(
                     )
 
                     normalizer = MermaidDiagramNormalizer()
+                elif section.type == "source-file":
+                    from moex_publication_viewer.normalizers.source_file_normalizer import (
+                        SourceFileNormalizer,
+                    )
+
+                    normalizer = SourceFileNormalizer()
                 else:
                     normalizer = get_normalizer(section.source.format)
             except KeyError:
@@ -258,6 +264,10 @@ _SECTION_ID_NAV_GLYPH: dict[str, str] = {
     "glossary": "glossary",
     "relation-terms": "glossary",
     "vocabularies": "glossary",
+    "artifact-model-body": "source_file",
+    "artifact-envelope": "source_file",
+    "artifact-relation-terms": "source_file",
+    "artifact-vocabularies": "source_file",
 }
 
 # Full solution-model publish.yaml set → nest under Overview / model folders.
@@ -280,6 +290,7 @@ _SOLUTION_NAV_LOGICAL_IDS = ("logical", "logical-erd")
 _SOLUTION_NAV_PHYSICAL_IDS = ("physical", "physical-erd")
 _SOLUTION_NAV_REQUIREMENTS_IDS = ("model-assessment",)
 _SOLUTION_NAV_DOCUMENTATION_IDS = ("documentation",)
+_SOLUTION_NAV_ARTIFACT_IDS = ("artifact-model-body", "artifact-envelope")
 
 # Enterprise conceptual (moex.concept-data-model) → Overview + CDM + Model glossary.
 _ENTERPRISE_CONCEPTUAL_NAV_REQUIRED_SECTION_IDS = frozenset(
@@ -303,6 +314,12 @@ _ENTERPRISE_CONCEPTUAL_NAV_GLOSSARY_IDS = (
     "glossary",
     "relation-terms",
     "vocabularies",
+)
+_ENTERPRISE_CONCEPTUAL_NAV_ARTIFACT_IDS = (
+    "artifact-model-body",
+    "artifact-relation-terms",
+    "artifact-vocabularies",
+    "artifact-envelope",
 )
 
 
@@ -364,7 +381,11 @@ def group_enterprise_conceptual_impl_nav(
         },
         children=glossary_kids,
     )
-    source = take(("source",))
+    artifact_kids = take(_ENTERPRISE_CONCEPTUAL_NAV_ARTIFACT_IDS)
+    for leaf in artifact_kids:
+        attrs = dict(leaf.attributes or {})
+        attrs["nav_glyph"] = "source_file"
+        leaf.attributes = attrs
     leftovers = [
         leaf
         for leaf in leaves
@@ -386,7 +407,19 @@ def group_enterprise_conceptual_impl_nav(
             )
         )
     grouped.append(glossary)
-    grouped.extend(source)
+    if artifact_kids:
+        grouped.append(
+            _impl_folder(
+                folder_id=f"implnav:{catalog_impl_id}:group:artifacts",
+                title="Артефакты",
+                description="Authored implementation YAML (model body and envelope).",
+                children=artifact_kids,
+                extra_attrs={
+                    "nav_glyph": "source_file",
+                    "nav_group": "artifacts",
+                },
+            )
+        )
     grouped.extend(leftovers)
     return grouped
 
@@ -463,6 +496,11 @@ def group_solution_impl_nav(
         extra_attrs={"nav_group": "requirements"},
     )
     docs_kids = take(_SOLUTION_NAV_DOCUMENTATION_IDS)
+    artifact_kids = take(_SOLUTION_NAV_ARTIFACT_IDS)
+    for leaf in artifact_kids:
+        attrs = dict(leaf.attributes or {})
+        attrs["nav_glyph"] = "source_file"
+        leaf.attributes = attrs
     leftovers = [leaf for leaf in leaves if (leaf.attributes or {}).get("section_id") not in claimed]
     grouped = [overview]
     if conceptual_kids:
@@ -492,6 +530,19 @@ def group_solution_impl_nav(
                     "member_ids": [c.id for c in docs_kids],
                 },
                 children=docs_kids,
+            )
+        )
+    if artifact_kids:
+        grouped.append(
+            _impl_folder(
+                folder_id=f"implnav:{catalog_impl_id}:group:artifacts",
+                title="Артефакты",
+                description="Authored implementation YAML (model body and envelope).",
+                children=artifact_kids,
+                extra_attrs={
+                    "nav_glyph": "source_file",
+                    "nav_group": "artifacts",
+                },
             )
         )
     return [*grouped, *leftovers]

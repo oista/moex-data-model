@@ -226,7 +226,7 @@ profiles:
         obligation: required
         min_occurs: 1
         accepted_section_kinds: [source]
-        accepted_renderers: [entity-table, key-value, markdown-doc]
+        accepted_renderers: [entity-table, key-value, markdown-doc, source-file]
         applies_to_profile: implementation
 
       - id: dams:declared-binding

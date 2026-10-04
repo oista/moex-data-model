@@ -693,6 +693,10 @@
     glossary: "glossary",
     "relation-terms": "glossary",
     vocabularies: "glossary",
+    "artifact-model-body": "source_file",
+    "artifact-envelope": "source_file",
+    "artifact-relation-terms": "source_file",
+    "artifact-vocabularies": "source_file",
   };
   const KIND_LETTER = {
     enum: "E",
@@ -1349,6 +1353,8 @@
             markHtml = navGlyphHtml(glyph, "folder", {
               folderCode: sectionCode || glyph,
             });
+          } else if (glyph === "source_file") {
+            markHtml = yamlFileMarkHtml();
           } else {
             const codeHtml = sectionCode
               ? `<span class="nav-kind-folder-code">${escapeHtml(sectionCode.slice(0, 3))}</span>`
@@ -1406,14 +1412,22 @@
           return;
         }
         const gId = group.id;
-        // Default: open Классы when no focus and no section root yet expanded
-        if (
+        // Default: open Классы when no item focus — also when landing on
+        // explorer via section_ref (focus.section === explorer.id).
+        const landingOnExplorer =
           !focus?.item &&
-          !focus?.section &&
+          (!focus?.section || focus.section === expl.id);
+        if (
+          landingOnExplorer &&
           gId === "group:classes" &&
           !explorerItems.some((g) => openGroups.has(g.id))
         ) {
           openGroups.add(gId);
+          // Single package under Classes (e.g. moex.dsp): open it too.
+          const pkgKids = (group.children || []).filter(
+            (c) => c.attributes?.kind === "group"
+          );
+          if (pkgKids.length === 1) openGroups.add(pkgKids[0].id);
         }
         // Auto-open only when a descendant is focused, not the group itself
         if (
@@ -2176,6 +2190,13 @@
     // Secondary section (or overview) as single focus
     if (focus?.section && (!expl || focus.section !== expl.id || !focus.item)) {
       const section = mod.sections.find((s) => s.id === focus.section);
+      if (section && section.type === "source-file") {
+        setContentWide(false);
+        crumb.textContent = `${mod.title} / ${section.title}`;
+        content.appendChild(crumb);
+        content.appendChild(renderSourceFileSection(mod, section));
+        return;
+      }
       if (section && section.type !== "explorer") {
         const isTable =
           section.type === "entity-table" ||
@@ -2938,6 +2959,26 @@
     meta.appendChild(dl);
     card.appendChild(meta);
     return card;
+  }
+
+  function sourceFileItemFromSection(section) {
+    const raw = (section.items || [])[0] || {};
+    const attrs = { ...(raw.attributes || {}) };
+    if (!attrs.kind) attrs.kind = "source_file";
+    if (!attrs.path && section.source_path) attrs.path = section.source_path;
+    return {
+      id: raw.id || `file:${section.id}`,
+      title: section.title || raw.title || attrs.file_name || section.id,
+      description: section.description || raw.description || attrs.description || "",
+      attributes: attrs,
+    };
+  }
+
+  function renderSourceFileSection(mod, section) {
+    const item = sourceFileItemFromSection(section);
+    // Minimal explorer stub so dependency deep-links stay no-ops when refs empty.
+    const explStub = { id: section.id, items: section.items || [] };
+    return renderSourceFileDetail(mod, explStub, item);
   }
 
   function renderSourceFileDetail(mod, expl, item) {
@@ -4165,6 +4206,9 @@
         break;
       case "glossary":
         body.appendChild(renderGlossary(mod, section));
+        break;
+      case "source-file":
+        body.appendChild(renderSourceFileSection(mod, section));
         break;
       case "explorer":
         body.insertAdjacentHTML(

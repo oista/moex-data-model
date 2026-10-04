@@ -181,16 +181,40 @@ sections:
     filterable:
       - mapping_type
 
-  - id: source
-    title: Source artifacts
+  - id: artifact-model-body
+    title: Тело модели
+    description: Authored enterprise conceptual ModelPackage body (TImplBody).
     kind: source
-    type: entity-table
+    type: source-file
     satisfies:
       - dams:source
     source:
       format: yaml
-      path: publications/sources.yaml
-      select: artifacts
-    columns:
-      - path
-      - role
+      path: enterprise-conceptual-model.yaml
+
+  - id: artifact-relation-terms
+    title: Термины отношений
+    description: Governed forward/inverse relation-term dictionary YAML.
+    kind: source
+    type: source-file
+    source:
+      format: yaml
+      path: relation-terms.yaml
+
+  - id: artifact-vocabularies
+    title: Контролируемые словари
+    description: Controlled vocabularies YAML for the conceptual model.
+    kind: source
+    type: source-file
+    source:
+      format: yaml
+      path: controlled-vocabularies.yaml
+
+  - id: artifact-envelope
+    title: Конверт реализации
+    description: SpecificationImplementation envelope (conforms_to, body_ref, provenance).
+    kind: source
+    type: source-file
+    source:
+      format: yaml
+      path: implementation.yaml

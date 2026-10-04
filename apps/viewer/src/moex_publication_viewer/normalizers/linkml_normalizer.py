@@ -15,7 +15,7 @@ from moex_publication_viewer.normalizers.dams_explorer_roots import (
     wrap_dams_explorer_roots,
 )
 from moex_publication_viewer.normalizers.edit_targets import attach_linkml_edit_targets
-from moex_publication_viewer.normalizers.helpers import section_meta
+from moex_publication_viewer.normalizers.helpers import items_to_tree, section_meta
 from moex_publication_viewer.normalizers.linkml_spec_roots import (
     wrap_linkml_specification_roots,
 )
@@ -457,9 +457,19 @@ def _normalize_explorer(sv: SchemaView) -> list[PublicationItem]:
         # Skip linkml builtin types package if it appears
         if schema_key.startswith("linkml"):
             continue
-        children = sorted(by_schema[schema_key], key=lambda i: i.id)
-        class_count = sum(1 for c in children if (c.attributes or {}).get("kind") == "class")
-        enum_count = sum(1 for c in children if (c.attributes or {}).get("kind") == "enum")
+        members = by_schema[schema_key]
+        class_items = [
+            c for c in members if (c.attributes or {}).get("kind") == "class"
+        ]
+        enum_items = sorted(
+            (c for c in members if (c.attributes or {}).get("kind") == "enum"),
+            key=lambda i: i.id,
+        )
+        class_count = len(class_items)
+        enum_count = len(enum_items)
+        # Nest classes by asserted is_a within the package; enums stay siblings of roots.
+        class_tree = items_to_tree(class_items, parent_attr="is_a")
+        children = list(class_tree) + enum_items
         purpose = _group_purpose(schema_key)
         structure_why = _group_structure_why(schema_key)
         groups.append(
@@ -476,7 +486,7 @@ def _normalize_explorer(sv: SchemaView) -> list[PublicationItem]:
                     "source_file": _group_source_file(schema_key),
                     "class_count": class_count,
                     "enum_count": enum_count,
-                    "member_ids": [c.id for c in children],
+                    "member_ids": [c.id for c in class_items] + [e.id for e in enum_items],
                 },
                 children=children,
             )

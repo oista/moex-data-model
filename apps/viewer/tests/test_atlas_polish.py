@@ -232,6 +232,9 @@ def test_js_nav_glyph_helpers():
     assert "function yamlFileMarkHtml" in JS
     assert "nav-kind-yaml" in JS
     assert 'if (g === "source_file") return yamlFileMarkHtml()' in JS
+    assert '"artifact-model-body": "source_file"' in JS
+    assert "function renderSourceFileSection" in JS
+    assert 'section.type === "source-file"' in JS
     # Spec explorer top-level section_ref (Глоссарий) omits glyph; impl keeps it.
     assert "omitGlyph: true" in JS
     assert "opts.omitGlyph" in JS

@@ -14,6 +14,10 @@ classes:
     slots:
       - root_slot
 
+  MidClass:
+    is_a: RootClass
+    description: Same-package child of RootClass
+
 slots:
   root_slot:
     range: string

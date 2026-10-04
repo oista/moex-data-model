@@ -19,6 +19,17 @@ from moex_publication_viewer.normalizers.yaml_normalizer import YamlNormalizer
 FIXTURES = Path(__file__).parent / "fixtures"
 
 
+def _walk_classes(nodes) -> dict:
+    """Collect kind=class items recursively (explorer nests by is_a)."""
+    out: dict = {}
+    for node in nodes or []:
+        attrs = node.attributes or {}
+        if attrs.get("kind") == "class":
+            out[node.id] = node
+        out.update(_walk_classes(node.children))
+    return out
+
+
 def _section(**kwargs) -> ManifestSection:
     defaults = {
         "id": "s",
@@ -449,28 +460,65 @@ def test_linkml_explorer_groups_by_schema():
     # Fixture has root + imported child schemas
     schema_keys = {i.attributes.get("schema_key") for i in package_groups}
     assert schema_keys & {"root_schema", "child_schema"} or len(package_groups) >= 1
-    # Classes live under schema packages under Classes root
-    classes = [
-        c
-        for g in package_groups
-        for c in g.children
-        if c.attributes.get("kind") == "class"
-    ]
+    # Classes live under schema packages under Classes root (nested by is_a)
+    classes = {}
+    for g in package_groups:
+        classes.update(_walk_classes(g.children))
     assert classes
-    assert any(c.id == "RootClass" for c in classes)
-    root_cls = next(c for c in classes if c.id == "RootClass")
+    assert "RootClass" in classes
+    root_cls = classes["RootClass"]
     assert isinstance(root_cls.attributes.get("slots"), list)
     assert root_cls.attributes.get("declared_slots") == ["root_slot"]
     root_slots = {s["name"]: s for s in root_cls.attributes["slots"]}
     assert root_slots["root_slot"]["inherited"] is False
 
-    child_cls = next(c for c in classes if c.id == "ChildClass")
+    # Same-package is_a → nested children
+    assert any(c.id == "MidClass" for c in root_cls.children)
+    mid = next(c for c in root_cls.children if c.id == "MidClass")
+    assert mid.attributes.get("is_a") == "RootClass"
+
+    # Cross-package is_a → local root in child package (parent not in by_id)
+    child_cls = classes["ChildClass"]
     assert child_cls.attributes.get("is_a") == "RootClass"
     assert child_cls.attributes.get("declared_slots") == ["child_slot"]
     child_slots = {s["name"]: s for s in child_cls.attributes.get("slots") or []}
     assert "root_slot" in child_slots
     assert child_slots["root_slot"]["inherited"] is True
     assert child_slots["child_slot"]["inherited"] is False
+    child_pkg = next(
+        g for g in package_groups if g.attributes.get("schema_key") == "child_schema"
+    )
+    assert any(c.id == "ChildClass" for c in child_pkg.children)
+
+
+def test_dsp_explorer_nests_is_a_hierarchy():
+    repo = Path(__file__).resolve().parents[3]
+    schema = (
+        repo
+        / "model-assets"
+        / "specifications"
+        / "moex-dsp"
+        / "0.1"
+        / "schemas"
+        / "moex-dsp.yaml"
+    )
+    if not schema.is_file():
+        return
+    sec = _section(
+        type="explorer",
+        source={"format": "linkml-yaml", "path": str(schema), "select": "classes"},
+    )
+    out = LinkmlNormalizer().normalize(sec, schema)
+    classes_root = next(g for g in out.items if g.id == "group:classes")
+    assert classes_root.children
+    pkg = classes_root.children[0]
+    assert pkg.id == "group:moex_dsp"
+    named = next(c for c in pkg.children if c.id == "NamedElement")
+    kid_ids = {c.id for c in named.children}
+    assert "CatalogNode" in kid_ids
+    assert "PublicationModule" in kid_ids
+    catalog = next(c for c in named.children if c.id == "CatalogNode")
+    assert any(c.id == "ReferenceSpecification" for c in catalog.children)
 
 
 def test_dams_explorer_real_schema():
@@ -546,12 +594,9 @@ def test_dams_explorer_real_schema():
     assert "проекц" in reg_purpose.lower() or "projection" in reg_purpose.lower()
     assert "не копируя" in reg_purpose.lower() or "справочник" in reg_purpose.lower()
 
-    classes = {
-        c.id: c
-        for g in classes_root.children
-        for c in g.children
-        if c.attributes.get("kind") == "class"
-    }
+    classes = {}
+    for g in classes_root.children:
+        classes.update(_walk_classes(g.children))
     assert "LogicalEntity" in classes
     slots = classes["LogicalEntity"].attributes.get("slots") or []
     slot_names = {s["name"] for s in slots}
