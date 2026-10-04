@@ -63,6 +63,31 @@ def test_js_table_links_and_instance_cards():
     assert "instance_of" in JS
 
 
+def test_js_glossary_section_tabs_and_term_links():
+    assert "function renderGlossary" in JS
+    assert "function renderGlossaryOverview" in JS
+    assert "function renderGlossaryListTable" in JS
+    assert "function renderGlossaryHierarchyTable" in JS
+    assert "function resolveGlossaryTermPageTarget" in JS
+    assert "function pickGlossaryListColumns" in JS
+    assert "function buildGlossaryChildrenIndex" in JS
+    assert "function glossaryDefinitionDependents" in JS
+    gloss = JS.split("function renderGlossary(mod, section)")[1].split(
+        "function renderTree"
+    )[0]
+    assert "mountTabs" in gloss
+    assert 'id: "overview"' in gloss
+    assert 'id: "list"' in gloss
+    assert 'id: "hierarchy"' in gloss
+    assert 'label: "Список"' in gloss
+    assert 'label: "Иерархия"' in gloss
+    assert 'col === "name" || col === "title"' in JS
+    assert 'section.type === "glossary"' in JS
+    assert (
+        'No hierarchy or definition-override links in this glossary.' in JS
+    )
+
+
 def test_section_payload_includes_instance_of():
     from moex_publication_viewer.models.publication_models import PublicationSection
     from moex_publication_viewer.renderers.html_renderer import section_payload

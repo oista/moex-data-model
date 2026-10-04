@@ -2150,7 +2150,8 @@
         const isTable =
           section.type === "entity-table" ||
           section.type === "enum-table" ||
-          section.type === "markdown-doc";
+          section.type === "markdown-doc" ||
+          section.type === "glossary";
         setContentWide(isTable);
         crumb.textContent = `${mod.title} / ${section.title}`;
         content.appendChild(crumb);
@@ -4348,10 +4349,47 @@
 
   function isLinkableTableColumn(col) {
     if (!col) return false;
-    if (col === "name" || col === "is_a" || col === "mixins") return true;
+    if (col === "name" || col === "title" || col === "is_a" || col === "mixins") return true;
     if (col === "source" || col === "target") return true;
     if (/_refs?$/.test(col)) return true;
     return false;
+  }
+
+  function resolveGlossaryTermPageTarget(mod, section, item) {
+    if (!mod || !item) return null;
+    const cid = canonicalGlossaryId(item.id);
+    const name = item.attributes?.name || item.title || cid;
+    const byExplorer =
+      findExplorerLinkTarget(mod, name) ||
+      findExplorerLinkTarget(mod, item.id) ||
+      findExplorerLinkTarget(mod, cid);
+    if (byExplorer) return byExplorer;
+
+    const expl = explorerSection(mod);
+    if (expl) {
+      const leafId = "glossary:" + cid;
+      const found =
+        findExplorerItem(expl, leafId) ||
+        findExplorerItem(expl, item.id) ||
+        findExplorerItem(expl, cid);
+      if (found && isGlossaryViewItem(found.item)) {
+        return {
+          module: shortModule(mod.module_id),
+          section: expl.id,
+          item: found.item.id,
+          node: nodeForModule(mod.module_id)?.id || currentNodeId,
+          card: true,
+        };
+      }
+    }
+
+    return {
+      module: shortModule(mod.module_id),
+      section: section?.id || "glossary",
+      item: item.id,
+      node: nodeForModule(mod.module_id)?.id || currentNodeId,
+      card: true,
+    };
   }
 
   function findExplorerLinkTarget(mod, nameOrId) {
@@ -4394,7 +4432,10 @@
   function resolveTableCellTarget(mod, section, col, raw, item) {
     if (!raw || !mod) return null;
     const index = ensureLinkIndex();
-    if (col === "name") {
+    if (col === "name" || col === "title") {
+      if (section?.type === "glossary") {
+        return resolveGlossaryTermPageTarget(mod, section, item);
+      }
       if (section?.instance_of) {
         return {
           module: shortModule(mod.module_id),
@@ -4740,7 +4781,130 @@
     }
   }
 
-  function renderGlossary(mod, section) {
+  function glossaryTermLabel(item) {
+    if (!item) return "";
+    const en = item.attributes?.label || item.title || item.id;
+    const ru = (item.attributes?.label_ru || "").trim();
+    return ru ? `${en} (${ru})` : en;
+  }
+
+  function resolveItemInGlossary(section, raw) {
+    const key = String(raw || "").trim();
+    if (!key || !section) return null;
+    const cid = canonicalGlossaryId(key);
+    return (
+      (section.items || []).find((i) => i.id === key) ||
+      (section.items || []).find((i) => canonicalGlossaryId(i.id) === cid) ||
+      (section.items || []).find((i) => (i.attributes?.local_name || "") === key) ||
+      (section.items || []).find((i) => (i.attributes?.name || "") === key) ||
+      (section.items || []).find((i) => (i.attributes?.curie || "") === key) ||
+      null
+    );
+  }
+
+  function glossaryTaxonomyParentIds(item) {
+    const attrs = item?.attributes || {};
+    if (Array.isArray(attrs.taxonomy_parents) && attrs.taxonomy_parents.length) {
+      return attrs.taxonomy_parents.map(relTargetId).filter(Boolean);
+    }
+    return [
+      (attrs.parent_local_name || "").trim(),
+      (attrs.is_a || "").trim(),
+      (attrs.parent_concept_ref || "").trim(),
+    ].filter(Boolean);
+  }
+
+  function buildGlossaryChildrenIndex(section) {
+    const byParentKey = new Map();
+    function add(parentKey, childId) {
+      if (!parentKey || !childId) return;
+      if (!byParentKey.has(parentKey)) byParentKey.set(parentKey, []);
+      const arr = byParentKey.get(parentKey);
+      if (!arr.includes(childId)) arr.push(childId);
+    }
+    (section.items || []).forEach((item) => {
+      glossaryTaxonomyParentIds(item).forEach((pid) => {
+        add(pid, item.id);
+        const parent = resolveItemInGlossary(section, pid);
+        if (parent) {
+          add(parent.id, item.id);
+          add(canonicalGlossaryId(parent.id), item.id);
+          if (parent.attributes?.name) add(String(parent.attributes.name), item.id);
+          if (parent.attributes?.local_name) {
+            add(String(parent.attributes.local_name), item.id);
+          }
+        }
+      });
+    });
+    return byParentKey;
+  }
+
+  function glossaryTaxonomyChildIds(item, childrenIndex) {
+    const attrs = item?.attributes || {};
+    if (Array.isArray(attrs.taxonomy_children) && attrs.taxonomy_children.length) {
+      return attrs.taxonomy_children.map(relTargetId).filter(Boolean);
+    }
+    const keys = [
+      item.id,
+      canonicalGlossaryId(item.id),
+      attrs.name,
+      attrs.local_name,
+    ]
+      .map((k) => String(k || "").trim())
+      .filter(Boolean);
+    const out = [];
+    keys.forEach((k) => {
+      (childrenIndex.get(k) || []).forEach((id) => {
+        if (!out.includes(id)) out.push(id);
+      });
+    });
+    return out;
+  }
+
+  function glossaryDefinitionDependents(item, section) {
+    const id = item.id;
+    const cid = canonicalGlossaryId(id);
+    return (section.items || []).filter((other) => {
+      if (other.id === id) return false;
+      const src = String(other.attributes?.definition_source || "").trim();
+      if (!src) return false;
+      return src === id || src === cid || canonicalGlossaryId(src) === cid;
+    });
+  }
+
+  function glossaryTermLinkHtml(mod, section, targetIdOrItem) {
+    const item =
+      typeof targetIdOrItem === "object" && targetIdOrItem
+        ? targetIdOrItem
+        : resolveItemInGlossary(section, targetIdOrItem);
+    if (item) {
+      const target = resolveGlossaryTermPageTarget(mod, section, item);
+      const href = itemHref(target);
+      return `<a class="table-item-link" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(
+        glossaryTermLabel(item)
+      )}</a>`;
+    }
+    const raw = String(targetIdOrItem || "");
+    return raw ? escapeHtml(raw) : "—";
+  }
+
+  function pickGlossaryListColumns(section) {
+    const candidates = [
+      "title",
+      "kind",
+      "description",
+      "defined_in",
+      "origin",
+      "source_domain",
+      "definition_mode",
+      "definition_source",
+    ];
+    return candidates.filter((c) =>
+      (section.items || []).some((i) => Boolean(cellValue(i, c)))
+    );
+  }
+
+  function renderGlossaryOverview(mod, section) {
     const root = document.createElement("div");
     const toolbar = document.createElement("div");
     toolbar.className = "section-toolbar";
@@ -4821,9 +4985,7 @@
         const card = document.createElement("div");
         card.className = "glossary-card";
         card.dataset.itemId = item.id;
-        const en = item.attributes?.label || item.title || item.id;
-        const ru = (item.attributes?.label_ru || "").trim();
-        const title = ru ? `${en} (${ru})` : en;
+        const title = glossaryTermLabel(item);
         const defEn = displayText(item.attributes?.definition || item.description || "");
         const defRu = displayText((item.attributes?.definition_ru || "").trim());
         const domain = item.attributes?.source_domain || "";
@@ -4907,6 +5069,129 @@
       });
     }
     paint();
+    return root;
+  }
+
+  function renderGlossaryListTable(mod, section) {
+    const columns = pickGlossaryListColumns(section);
+    const listSection = {
+      ...section,
+      type: "glossary",
+      columns: columns.length ? columns : ["title", "description"],
+    };
+    return renderTable(mod, listSection);
+  }
+
+  function renderGlossaryHierarchyTable(mod, section) {
+    const root = document.createElement("div");
+    const items = (section.items || [])
+      .slice()
+      .sort((a, b) => (a.title || a.id).localeCompare(b.title || b.id));
+    const childrenIndex = buildGlossaryChildrenIndex(section);
+    let hasAnyLink = false;
+
+    const scroll = document.createElement("div");
+    scroll.className = "table-scroll";
+    const table = document.createElement("table");
+    table.className = "data-table glossary-hierarchy-table";
+    const thead = `<thead><tr>
+      <th>Term</th>
+      <th>Parents</th>
+      <th>Children</th>
+      <th>Definition source</th>
+      <th>Definition dependents</th>
+    </tr></thead>`;
+
+    const rows = items
+      .map((item) => {
+        const parents = glossaryTaxonomyParentIds(item);
+        const children = glossaryTaxonomyChildIds(item, childrenIndex);
+        const dependents = glossaryDefinitionDependents(item, section);
+        const defSource = String(item.attributes?.definition_source || "").trim();
+        const defMode = String(item.attributes?.definition_mode || "").trim();
+        if (parents.length || children.length || dependents.length || defSource) {
+          hasAnyLink = true;
+        }
+        const parentsHtml = parents.length
+          ? parents.map((p) => glossaryTermLinkHtml(mod, section, p)).join(", ")
+          : "—";
+        const childrenHtml = children.length
+          ? children.map((c) => glossaryTermLinkHtml(mod, section, c)).join(", ")
+          : "—";
+        const modeBadge = defMode
+          ? ` <span class="glossary-mode-badge" data-mode="${escapeHtml(defMode)}">${escapeHtml(
+              defMode
+            )}</span>`
+          : "";
+        let sourceHtml = "—";
+        if (defSource) {
+          const selfRef =
+            defSource === item.id ||
+            defSource === canonicalGlossaryId(item.id) ||
+            canonicalGlossaryId(defSource) === canonicalGlossaryId(item.id);
+          sourceHtml = selfRef
+            ? `${escapeHtml(defSource)}${modeBadge}`
+            : `${glossaryTermLinkHtml(mod, section, defSource)}${modeBadge}`;
+        }
+        const dependentsHtml = dependents.length
+          ? dependents.map((d) => glossaryTermLinkHtml(mod, section, d)).join(", ")
+          : "—";
+        return `<tr data-item-id="${escapeHtml(item.id)}">
+          <td>${glossaryTermLinkHtml(mod, section, item)}</td>
+          <td>${parentsHtml}</td>
+          <td>${childrenHtml}</td>
+          <td>${sourceHtml}</td>
+          <td>${dependentsHtml}</td>
+        </tr>`;
+      })
+      .join("");
+
+    table.innerHTML = thead + `<tbody>${rows}</tbody>`;
+    scroll.appendChild(table);
+    if (!hasAnyLink) {
+      const empty = document.createElement("p");
+      empty.className = "muted";
+      empty.textContent =
+        "No hierarchy or definition-override links in this glossary.";
+      root.appendChild(empty);
+    }
+    root.appendChild(scroll);
+    return root;
+  }
+
+  function renderGlossary(mod, section) {
+    const root = document.createElement("div");
+    root.className = "glossary-section-tabs";
+    const n = (section.items || []).length;
+    mountTabs(
+      root,
+      [
+        {
+          id: "overview",
+          label: "Overview",
+          count: n,
+          render(panel) {
+            panel.appendChild(renderGlossaryOverview(mod, section));
+          },
+        },
+        {
+          id: "list",
+          label: "Список",
+          count: n,
+          render(panel) {
+            panel.appendChild(renderGlossaryListTable(mod, section));
+          },
+        },
+        {
+          id: "hierarchy",
+          label: "Иерархия",
+          render(panel) {
+            panel.appendChild(renderGlossaryHierarchyTable(mod, section));
+          },
+        },
+      ],
+      { initial: "overview" }
+    );
     return root;
   }
 

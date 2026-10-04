@@ -345,6 +345,7 @@ def test_match_kind_close_blocks_inherit():
 
 def test_glossary_includes_entities_and_relation_terms():
     data = _drawio_slice()
+    data["conceptual_entities"][0]["parent_concept_ref"] = "dams:concept/Trade"
     rows = build_model_glossary(data)
     kinds = {r["kind"] for r in rows}
     assert "entity" in kinds
@@ -352,11 +353,17 @@ def test_glossary_includes_entities_and_relation_terms():
     trade = next(r for r in rows if r["id"] == "dams:concept/Trade")
     assert trade["entity_tier"] == "primary"
     assert trade["definition_mode"] == "own"
+    assert "parent_concept_ref" not in trade
+    participant = next(
+        r for r in rows if r["id"] == "dams:concept/TradingParticipant"
+    )
+    assert participant["parent_concept_ref"] == "dams:concept/Trade"
     participates = next(
         r for r in rows if r["id"] == "dams:relterm/participates"
     )
     assert participates["forward_label"] == "участвует"
     assert participates["inverse_label"] == "совершается"
+    assert "parent_concept_ref" not in participates
 
 
 def test_enterprise_model_passes_cmd_checks():

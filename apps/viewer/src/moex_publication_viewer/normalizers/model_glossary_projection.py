@@ -35,21 +35,23 @@ def project_model_glossary(data: Any) -> list[dict[str, Any]]:
         else:
             mode = "unresolved"
             text = ""
-        rows.append(
-            {
-                "id": eid,
-                "name": el.get("name") or eid,
-                "title": el.get("title") or el.get("name") or eid,
-                "description": text,
-                "kind": "entity",
-                "definition_mode": mode,
-                "definition_source": str(source) if source else None,
-                "entity_tier": el.get("entity_tier"),
-                "genesis_kind": el.get("genesis_kind"),
-                "label": el.get("title") or el.get("name") or eid,
-                "definition": text,
-            }
-        )
+        row = {
+            "id": eid,
+            "name": el.get("name") or eid,
+            "title": el.get("title") or el.get("name") or eid,
+            "description": text,
+            "kind": "entity",
+            "definition_mode": mode,
+            "definition_source": str(source) if source else None,
+            "entity_tier": el.get("entity_tier"),
+            "genesis_kind": el.get("genesis_kind"),
+            "label": el.get("title") or el.get("name") or eid,
+            "definition": text,
+        }
+        parent_ref = el.get("parent_concept_ref")
+        if parent_ref:
+            row["parent_concept_ref"] = str(parent_ref)
+        rows.append(row)
 
     for term in data.get("relation_terms") or []:
         if not isinstance(term, dict):

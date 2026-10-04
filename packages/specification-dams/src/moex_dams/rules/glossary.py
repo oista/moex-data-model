@@ -44,24 +44,26 @@ def build_model_glossary(
                     }
                 )
         mode = prov.mode.value if isinstance(prov.mode, DefinitionMode) else str(prov.mode)
-        rows.append(
-            {
-                "id": eid,
-                "name": el.get("name") or eid,
-                "title": el.get("title") or el.get("name") or eid,
-                "description": prov.text or el.get("description") or "",
-                "kind": "entity",
-                "definition_mode": mode,
-                "definition_source": prov.source_element_id,
-                "entity_tier": el.get("entity_tier"),
-                "dependency_kind": el.get("dependency_kind"),
-                "genesis_kind": el.get("genesis_kind"),
-                "aliases": el.get("aliases") or [],
-                "external_class_refs": ext_targets,
-                "label": el.get("title") or el.get("name") or eid,
-                "definition": prov.text or el.get("description") or "",
-            }
-        )
+        row = {
+            "id": eid,
+            "name": el.get("name") or eid,
+            "title": el.get("title") or el.get("name") or eid,
+            "description": prov.text or el.get("description") or "",
+            "kind": "entity",
+            "definition_mode": mode,
+            "definition_source": prov.source_element_id,
+            "entity_tier": el.get("entity_tier"),
+            "dependency_kind": el.get("dependency_kind"),
+            "genesis_kind": el.get("genesis_kind"),
+            "aliases": el.get("aliases") or [],
+            "external_class_refs": ext_targets,
+            "label": el.get("title") or el.get("name") or eid,
+            "definition": prov.text or el.get("description") or "",
+        }
+        parent_ref = el.get("parent_concept_ref")
+        if parent_ref:
+            row["parent_concept_ref"] = str(parent_ref)
+        rows.append(row)
 
     for term in body_data.get("relation_terms") or []:
         if not isinstance(term, dict):

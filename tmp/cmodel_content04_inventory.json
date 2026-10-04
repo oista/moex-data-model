@@ -1,0 +1,3298 @@
+{
+  "source_file": "f:\\!PASSPORT\\!H_DATASC\\!Data Architecture\\MOEX_DataModel\\MOEX Data Model Standart\\enterpise_cdm_src\\CModel_content04.drawio",
+  "file_size_bytes": 385120,
+  "diagrams": [
+    {
+      "name": "Страница — 1",
+      "id": "OmNk44kStsmgh4sAtesg"
+    }
+  ],
+  "summary": {
+    "entity_count": 74,
+    "edge_count": 74,
+    "inferred_fk_count": 54,
+    "swimlane_group_count": 0,
+    "note_count": 0,
+    "distinct_fill_colors": 2
+  },
+  "fill_color_domains": {
+    "#0050ef": [
+      "АБС",
+      "Акты",
+      "Бюджеты",
+      "Воронки",
+      "Департаменты",
+      "Договора",
+      "Доп соглашения",
+      "Доходы",
+      "Задачи",
+      "Инфо-системы",
+      "Клиенты",
+      "Компании группы МБ",
+      "Контрагенты",
+      "Лицевые",
+      "Маркетинговые компании",
+      "Платежи",
+      "Пользователь",
+      "Проводки",
+      "Продажи",
+      "Продукты",
+      "Проекты",
+      "Расходы",
+      "Рейтинги",
+      "Роли",
+      "Состав компаний",
+      "Состав ролей",
+      "Сотрудники",
+      "Счета АБС",
+      "Счета пользователя",
+      "Тарифы",
+      "Трудовые договора",
+      "Трудозатраты",
+      "Услуги",
+      "Учетные записи клиентов",
+      "Физлица",
+      "Фин отчетность",
+      "ЦФО",
+      "Штатное расписание",
+      "Юрлица"
+    ],
+    "#60a917": [
+      "Активы",
+      "Бенчмарки",
+      "Группы активов",
+      "Депозиты",
+      "Единые лимиты",
+      "Заявки ТКС",
+      "Инструменты",
+      "Календарные дни",
+      "Корпоративные события",
+      "Кривые",
+      "Купонные выплаты",
+      "Логины ТКС",
+      "ММ программы",
+      "Обеспечение участников",
+      "Открытые позиции",
+      "Портфель",
+      "Пулы активов",
+      "Расчетные кода",
+      "Режимы торгов",
+      "Риск параметры активов",
+      "Рынки",
+      "Сделки ТКС",
+      "События логинов",
+      "Состав пулов активов",
+      "Типы подключения",
+      "Торговые календари",
+      "Торговые сессии",
+      "Торговые системы",
+      "Торговые счета ТКС",
+      "Торговые терминалы",
+      "Требования и обязательства",
+      "Участники ММ програм",
+      "Участники торгов",
+      "ЧПД",
+      "Эмитенты"
+    ]
+  },
+  "entities": [
+    {
+      "page": "Страница — 1",
+      "name": "Сделки ТКС",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-2",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Номер сделки&nbsp;",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Участник торгов",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Режим торгов",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Инструмент",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Клиент",
+          "key": "FK",
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Участники торгов",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-15",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Код участника",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Юрлицо",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Код клиента",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Инструменты",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-28",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Код инструмента",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Базовый актив",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Тип инструмента",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Дата погашения",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Эмитент",
+          "key": "FK",
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Клиенты",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-41",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Код клиента",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Физлицо",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Юрлицо",
+          "key": "FK",
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Рынки",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-54",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Код рынка",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "ТКС",
+          "key": "FK",
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Расчетные кода",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-67",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор кода",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Участник торгов",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Тип кода",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Признак единого пула",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Торговые счета ТКС",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-93",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор счета",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Расчетный код",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Тип торгового счета",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Торговые календари",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-106",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Код календаря",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Тип календаря",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Заявки ТКС",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-119",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Номер заявки",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Участник торгов",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Инструмент",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Тип заявки",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Кол-во инструмента",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Платежи",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-132",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Продукт",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Клиент контрагент",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Тип платежа",
+          "key": "FK",
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Обеспечение участников",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-145",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Код участника",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Дата",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Рынок",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Участник торгов",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Актив",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Кол-во актива",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Логины ТКС",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-171",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Код логина",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Код участника торгов",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Тип логина",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Тип Подключения",
+          "key": "FK",
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Активы",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-184",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Код актива",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Тип актива",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Пулы активов",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-197",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Код пула",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование пула",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Состав пулов активов",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-210",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Код пула",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Код актива",
+          "key": "FK",
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Режимы торгов",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-223",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Код режима торгов",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование режима",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Группы активов",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-236",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Код типа актива",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование группы",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Актив",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Торговые сессии",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-249",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Рынок",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Торговая система",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Дата и время начала",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Дата и время начала",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Торговые системы",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-262",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Код ТКС",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Открытые позиции",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-288",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Дата",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Участника торгов",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Инструмент",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Размер позиции",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Тип позиции",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "ММ программы",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-360",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Торговые терминалы",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-373",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Номер сделки",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Участник торгов",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Инструмент",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Рынок",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Требования и обязательства",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-399",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Дата",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Расчетный код",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Участник торгов",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Актив",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Размер требований",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Размер обязательств",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Эмитенты",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-412",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Юрлицо",
+          "key": "FK",
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "АБС",
+      "id": "VEv_WER6EldtKdZ8CrUn-14",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Код АБС",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Компании группы МБ",
+      "id": "VEv_WER6EldtKdZ8CrUn-21",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "ЦФО",
+      "id": "VEv_WER6EldtKdZ8CrUn-28",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Доходы",
+      "id": "VEv_WER6EldtKdZ8CrUn-35",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Компания группы МБ",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "ЦФО",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Тип платежа",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Акты",
+      "id": "VEv_WER6EldtKdZ8CrUn-61",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "-",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "-",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Депозиты",
+      "id": "VEv_WER6EldtKdZ8CrUn-74",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Счет",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Портфель",
+      "id": "VEv_WER6EldtKdZ8CrUn-81",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Счет АБС",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Актив",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Типы подключения",
+      "id": "VEv_WER6EldtKdZ8CrUn-88",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Тип логина",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "События логинов",
+      "id": "VEv_WER6EldtKdZ8CrUn-102",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Дата время",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Тип события",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Логин",
+          "key": "FK",
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Календарные дни",
+      "id": "VEv_WER6EldtKdZ8CrUn-126",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Код календаря",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Дата",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Учетные записи клиентов",
+      "id": "VEv_WER6EldtKdZ8CrUn-140",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Код записи",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Система",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Клиент",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Участники ММ програм",
+      "id": "6AAQSaJgHSWLD09ZQvEW-3",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Программа",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Участник торгов",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Департаменты",
+      "id": "6AAQSaJgHSWLD09ZQvEW-15",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Компания группы",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Сотрудники",
+      "id": "6AAQSaJgHSWLD09ZQvEW-22",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Физлицо",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Тип",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Штатнач единица",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Физлица",
+      "id": "6AAQSaJgHSWLD09ZQvEW-29",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "ФМО",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Дата рождения",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Трудовые договора",
+      "id": "6AAQSaJgHSWLD09ZQvEW-43",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Номер договора",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Сотрудник",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Инфо-системы",
+      "id": "6AAQSaJgHSWLD09ZQvEW-54",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Код записи",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Система",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Штатное расписание",
+      "id": "6AAQSaJgHSWLD09ZQvEW-79",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Департамент",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Юрлица",
+      "id": "6AAQSaJgHSWLD09ZQvEW-113",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "ИНН",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Контрагенты",
+      "id": "6AAQSaJgHSWLD09ZQvEW-126",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Юрлицо",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "статус",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Рейтинги",
+      "id": "6AAQSaJgHSWLD09ZQvEW-136",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Юрлицо",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Значение рейтинга",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Договора",
+      "id": "6AAQSaJgHSWLD09ZQvEW-151",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Номер договора",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Контрагент",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Срок исполнения",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Компания группы",
+          "key": "FK",
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Единые лимиты",
+      "id": "6AAQSaJgHSWLD09ZQvEW-192",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Участник",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Расчетный код",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Рынок",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Значение лимита",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Продукты",
+      "id": "6AAQSaJgHSWLD09ZQvEW-246",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Услуга",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Тариф",
+          "key": "FK",
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Тарифы",
+      "id": "6AAQSaJgHSWLD09ZQvEW-259",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Стоимость",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Услуги",
+      "id": "6AAQSaJgHSWLD09ZQvEW-272",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Тариф",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Риск параметры активов",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-158",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Дата",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Код актива",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Код параметра",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Значение параметра",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Кривые",
+      "id": "6AAQSaJgHSWLD09ZQvEW-335",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Код АБС",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Бенчмарки",
+      "id": "6AAQSaJgHSWLD09ZQvEW-342",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Код АБС",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "ЧПД",
+      "id": "6AAQSaJgHSWLD09ZQvEW-349",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Счет",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Корпоративные события",
+      "id": "6AAQSaJgHSWLD09ZQvEW-359",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Дата",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Тип события",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Инструмент",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Эмитент",
+          "key": "FK",
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Купонные выплаты",
+      "id": "6AAQSaJgHSWLD09ZQvEW-378",
+      "fillColor": "#60a917",
+      "strokeColor": "#2D7600",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Дата",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Сумма",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Инструмент",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Корп событие",
+          "key": "FK",
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Счета АБС",
+      "id": "6AAQSaJgHSWLD09ZQvEW-409",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Номер счета",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "АБС",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Владелец счета",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Продажи",
+      "id": "6AAQSaJgHSWLD09ZQvEW-425",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Клиент",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Продукт",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Дата",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Расходы",
+      "id": "6AAQSaJgHSWLD09ZQvEW-438",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Компания группы МБ",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "ЦФО",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Тип платежа",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Фин отчетность",
+      "id": "6AAQSaJgHSWLD09ZQvEW-453",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Юрлицо",
+          "key": "FK",
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Пользователь",
+      "id": "6AAQSaJgHSWLD09ZQvEW-476",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Система",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Имя пользователя",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Состав ролей",
+      "id": "6AAQSaJgHSWLD09ZQvEW-491",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Роль",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Пользователь",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Роли",
+      "id": "6AAQSaJgHSWLD09ZQvEW-502",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Счета пользователя",
+      "id": "6AAQSaJgHSWLD09ZQvEW-518",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Код пользоват",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Валюта",
+          "key": "FK",
+          "data_type": null
+        },
+        {
+          "name": "Счет АБС",
+          "key": "FK",
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Воронки",
+      "id": "6AAQSaJgHSWLD09ZQvEW-533",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "ФМО",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Дата рождения",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Маркетинговые компании",
+      "id": "6AAQSaJgHSWLD09ZQvEW-543",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Наименование",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Дата начала",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Трудозатраты",
+      "id": "6AAQSaJgHSWLD09ZQvEW-553",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Задача",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Сотрудник",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Доп соглашения",
+      "id": "6AAQSaJgHSWLD09ZQvEW-566",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Номер",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Сотрудник",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Состав компаний",
+      "id": "6AAQSaJgHSWLD09ZQvEW-577",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Компания",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Пользователь",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Проекты",
+      "id": "6AAQSaJgHSWLD09ZQvEW-587",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Код проекта",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Бюджеты",
+      "id": "6AAQSaJgHSWLD09ZQvEW-601",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Код проекта",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Задачи",
+      "id": "6AAQSaJgHSWLD09ZQvEW-609",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "Код проекта",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Лицевые",
+      "id": "6AAQSaJgHSWLD09ZQvEW-618",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Номер счета",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "АБС",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "Владелец счета",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    },
+    {
+      "page": "Страница — 1",
+      "name": "Проводки",
+      "id": "O4dt0i0aNA9MMIRAe3GS-1",
+      "fillColor": "#0050ef",
+      "strokeColor": "#001DBC",
+      "attributes": [
+        {
+          "name": "Идентификатор",
+          "key": "PK",
+          "data_type": null
+        },
+        {
+          "name": "-",
+          "key": null,
+          "data_type": null
+        },
+        {
+          "name": "-",
+          "key": null,
+          "data_type": null
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "page": "Страница — 1",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-425",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-126",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-29",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Заявки ТКС",
+      "target_entity": "Инструменты"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-426",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-35",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-185",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Инструменты",
+      "target_entity": "Активы"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-431",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-6",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-16",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Сделки ТКС",
+      "target_entity": "Участники торгов"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-432",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-9",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-29",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Сделки ТКС",
+      "target_entity": "Инструменты"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "mXX1lFB-GyiXgtXh9Rfv-436",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-97",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-68",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Торговые счета ТКС",
+      "target_entity": "Расчетные кода"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "VEv_WER6EldtKdZ8CrUn-2",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-214",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-198",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;",
+      "source_entity": "Состав пулов активов",
+      "target_entity": "Пулы активов"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "VEv_WER6EldtKdZ8CrUn-3",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-217",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-188",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=-0.014;entryY=-0.058;entryDx=0;entryDy=0;entryPerimeter=0;",
+      "source_entity": "Состав пулов активов",
+      "target_entity": "Активы"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "VEv_WER6EldtKdZ8CrUn-101",
+      "source_id": "VEv_WER6EldtKdZ8CrUn-98",
+      "target_id": "VEv_WER6EldtKdZ8CrUn-89",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;",
+      "source_entity": "Логины ТКС",
+      "target_entity": "Типы подключения"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "VEv_WER6EldtKdZ8CrUn-115",
+      "source_id": "VEv_WER6EldtKdZ8CrUn-112",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-172",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;",
+      "source_entity": "События логинов",
+      "target_entity": "Логины ТКС"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "VEv_WER6EldtKdZ8CrUn-136",
+      "source_id": "VEv_WER6EldtKdZ8CrUn-130",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-107",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Календарные дни",
+      "target_entity": "Торговые календари"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "VEv_WER6EldtKdZ8CrUn-137",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-256",
+      "target_id": "VEv_WER6EldtKdZ8CrUn-133",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Торговые сессии",
+      "target_entity": "Календарные дни"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "VEv_WER6EldtKdZ8CrUn-138",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-253",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-263",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Торговые сессии",
+      "target_entity": "Торговые системы"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-14",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-10",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-16",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;",
+      "source_entity": "Участники ММ програм",
+      "target_entity": "Участники торгов"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-53",
+      "source_id": "VEv_WER6EldtKdZ8CrUn-147",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-42",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;",
+      "source_entity": "Учетные записи клиентов",
+      "target_entity": "Клиенты"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-67",
+      "source_id": null,
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-55",
+      "source_label": null,
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;",
+      "source_entity": null,
+      "target_entity": "Инфо-системы"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-78",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-75",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-23",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Трудовые договора",
+      "target_entity": "Сотрудники"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-97",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-72",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-80",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;",
+      "source_entity": "Сотрудники",
+      "target_entity": "Штатное расписание"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-99",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-93",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-16",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Штатное расписание",
+      "target_entity": "Департаменты"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-103",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-295",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-29",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Открытые позиции",
+      "target_entity": "Инструменты"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-150",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-130",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-114",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;",
+      "source_entity": "Контрагенты",
+      "target_entity": "Юрлица"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-189",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-186",
+      "target_id": "VEv_WER6EldtKdZ8CrUn-22",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Договора",
+      "target_entity": "Компании группы МБ"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-191",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-136",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-127",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Платежи",
+      "target_entity": "Контрагенты"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-210",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-196",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-16",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Единые лимиты",
+      "target_entity": "Участники торгов"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-211",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-199",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-55",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Единые лимиты",
+      "target_entity": "Рынки"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-216",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-71",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-16",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;",
+      "source_entity": "Расчетные кода",
+      "target_entity": "Участники торгов"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-217",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-123",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-16",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;",
+      "source_entity": "Заявки ТКС",
+      "target_entity": "Участники торгов"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-222",
+      "source_id": "VEv_WER6EldtKdZ8CrUn-4",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-224",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Сделки ТКС",
+      "target_entity": "Режимы торгов"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-233",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-230",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-94",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": null,
+      "target_entity": "Торговые счета ТКС"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-235",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-227",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-16",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": null,
+      "target_entity": "Участники торгов"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-240",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-298",
+      "target_id": null,
+      "source_label": "",
+      "target_label": null,
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.333;exitDx=0;exitDy=0;exitPerimeter=0;",
+      "source_entity": "Открытые позиции",
+      "target_entity": null
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-285",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-253",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-273",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;",
+      "source_entity": "Продукты",
+      "target_entity": "Услуги"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-290",
+      "source_id": "VEv_WER6EldtKdZ8CrUn-123",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-55",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Торговые сессии",
+      "target_entity": "Рынки"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-291",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-61",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-263",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Рынки",
+      "target_entity": "Торговые системы"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-298",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-149",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-16",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Обеспечение участников",
+      "target_entity": "Участники торгов"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-299",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-152",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-185",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.007;entryY=0.816;entryDx=0;entryDy=0;entryPerimeter=0;",
+      "source_entity": "Обеспечение участников",
+      "target_entity": "Активы"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-306",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-303",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-55",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Обеспечение участников",
+      "target_entity": "Рынки"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-311",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-307",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-413",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;",
+      "source_entity": "Инструменты",
+      "target_entity": "Эмитенты"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-317",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-314",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-114",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;",
+      "source_entity": "Эмитенты",
+      "target_entity": "Юрлица"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-318",
+      "source_id": "VEv_WER6EldtKdZ8CrUn-8",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-16",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Требования и обязательства",
+      "target_entity": "Участники торгов"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-319",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-406",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-185",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;",
+      "source_entity": "Требования и обязательства",
+      "target_entity": "Активы"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-320",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-212",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-68",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Единые лимиты",
+      "target_entity": "Расчетные кода"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-327",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-321",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-68",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Требования и обязательства",
+      "target_entity": "Расчетные кода"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-328",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-140",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-114",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Рейтинги",
+      "target_entity": "Юрлица"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-332",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-136",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-42",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Платежи",
+      "target_entity": "Клиенты"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-334",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-158",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-127",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1.001;entryY=0.775;entryDx=0;entryDy=0;entryPerimeter=0;",
+      "source_entity": "Договора",
+      "target_entity": "Контрагенты"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-356",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-7",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-361",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;",
+      "source_entity": "Участники ММ програм",
+      "target_entity": "ММ программы"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-357",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-175",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-16",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Логины ТКС",
+      "target_entity": "Участники торгов"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-358",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-162",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-185",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Риск параметры активов",
+      "target_entity": "Активы"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-377",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-372",
+      "target_id": null,
+      "source_label": "",
+      "target_label": null,
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Корпоративные события",
+      "target_entity": null
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-394",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-391",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-360",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Купонные выплаты",
+      "target_entity": "Корпоративные события"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-395",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-388",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-28",
+      "source_label": "",
+      "target_label": "Инструменты",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;",
+      "source_entity": "Купонные выплаты",
+      "target_entity": "Инструменты"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-399",
+      "source_id": null,
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-30",
+      "source_label": null,
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;",
+      "source_entity": null,
+      "target_entity": "Физлица"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-400",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-396",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-114",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Клиенты",
+      "target_entity": "Юрлица"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-401",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-142",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-247",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=-0.025;entryY=0.928;entryDx=0;entryDy=0;entryPerimeter=0;",
+      "source_entity": "Платежи",
+      "target_entity": "Продукты"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-408",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-405",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-185",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Группы активов",
+      "target_entity": "Активы"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-419",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-413",
+      "target_id": "VEv_WER6EldtKdZ8CrUn-15",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Счета АБС",
+      "target_entity": "АБС"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-420",
+      "source_id": "VEv_WER6EldtKdZ8CrUn-85",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-410",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Портфель",
+      "target_entity": "Счета АБС"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-424",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-421",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-185",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;",
+      "source_entity": "Портфель",
+      "target_entity": "Активы"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-451",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-429",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-42",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Продажи",
+      "target_entity": "Клиенты"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-463",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-457",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-114",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;",
+      "source_entity": "Фин отчетность",
+      "target_entity": "Юрлица"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-474",
+      "source_id": "mXX1lFB-GyiXgtXh9Rfv-25",
+      "target_id": "VEv_WER6EldtKdZ8CrUn-141",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Участники торгов",
+      "target_entity": "Учетные записи клиентов"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-475",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-26",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-30",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Сотрудники",
+      "target_entity": "Физлица"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-490",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-480",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-55",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;",
+      "source_entity": "Пользователь",
+      "target_entity": "Инфо-системы"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-501",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-495",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-477",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;",
+      "source_entity": "Состав ролей",
+      "target_entity": "Пользователь"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-512",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-498",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-503",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Состав ролей",
+      "target_entity": "Роли"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-515",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-432",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-247",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Продажи",
+      "target_entity": "Продукты"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-516",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-256",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-260",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Продукты",
+      "target_entity": "Тарифы"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-531",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-522",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-477",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Счета пользователя",
+      "target_entity": "Пользователь"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-576",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-573",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-23",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;",
+      "source_entity": "Доп соглашения",
+      "target_entity": "Сотрудники"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-600",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-581",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-544",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;",
+      "source_entity": "Состав компаний",
+      "target_entity": "Маркетинговые компании"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-608",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-605",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-588",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Бюджеты",
+      "target_entity": "Проекты"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-616",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-613",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-588",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+      "source_entity": "Задачи",
+      "target_entity": "Проекты"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-617",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-557",
+      "target_id": "6AAQSaJgHSWLD09ZQvEW-609",
+      "source_label": "",
+      "target_label": "Задачи",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;",
+      "source_entity": "Трудозатраты",
+      "target_entity": "Задачи"
+    },
+    {
+      "page": "Страница — 1",
+      "id": "6AAQSaJgHSWLD09ZQvEW-629",
+      "source_id": "6AAQSaJgHSWLD09ZQvEW-369",
+      "target_id": "mXX1lFB-GyiXgtXh9Rfv-413",
+      "source_label": "",
+      "target_label": "",
+      "label": "",
+      "cardinality_hint": null,
+      "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;",
+      "source_entity": "Корпоративные события",
+      "target_entity": "Эмитенты"
+    }
+  ],
+  "inferred_fk_relationships": [
+    {
+      "page": "Страница — 1",
+      "from_entity": "Сделки ТКС",
+      "via_attribute": "Участник торгов",
+      "to_entity_guess": "Участники ММ програм"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Сделки ТКС",
+      "via_attribute": "Режим торгов",
+      "to_entity_guess": "Режимы торгов"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Сделки ТКС",
+      "via_attribute": "Инструмент",
+      "to_entity_guess": "Инструменты"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Сделки ТКС",
+      "via_attribute": "Клиент",
+      "to_entity_guess": "Клиенты"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Участники торгов",
+      "via_attribute": "Юрлицо",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Инструменты",
+      "via_attribute": "Базовый актив",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Инструменты",
+      "via_attribute": "Эмитент",
+      "to_entity_guess": "Эмитенты"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Клиенты",
+      "via_attribute": "Физлицо",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Клиенты",
+      "via_attribute": "Юрлицо",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Рынки",
+      "via_attribute": "ТКС",
+      "to_entity_guess": "Сделки ТКС"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Расчетные кода",
+      "via_attribute": "Участник торгов",
+      "to_entity_guess": "Участники ММ програм"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Торговые счета ТКС",
+      "via_attribute": "Расчетный код",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Заявки ТКС",
+      "via_attribute": "Участник торгов",
+      "to_entity_guess": "Участники ММ програм"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Заявки ТКС",
+      "via_attribute": "Инструмент",
+      "to_entity_guess": "Инструменты"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Платежи",
+      "via_attribute": "Продукт",
+      "to_entity_guess": "Продукты"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Платежи",
+      "via_attribute": "Клиент контрагент",
+      "to_entity_guess": "Клиенты"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Платежи",
+      "via_attribute": "Тип платежа",
+      "to_entity_guess": "Типы подключения"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Обеспечение участников",
+      "via_attribute": "Рынок",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Обеспечение участников",
+      "via_attribute": "Участник торгов",
+      "to_entity_guess": "Участники ММ програм"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Обеспечение участников",
+      "via_attribute": "Актив",
+      "to_entity_guess": "Активы"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Логины ТКС",
+      "via_attribute": "Тип Подключения",
+      "to_entity_guess": "Типы подключения"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Состав пулов активов",
+      "via_attribute": "Код пула",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Состав пулов активов",
+      "via_attribute": "Код актива",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Торговые сессии",
+      "via_attribute": "Рынок",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Торговые сессии",
+      "via_attribute": "Торговая система",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Открытые позиции",
+      "via_attribute": "Участника торгов",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Открытые позиции",
+      "via_attribute": "Инструмент",
+      "to_entity_guess": "Инструменты"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Требования и обязательства",
+      "via_attribute": "Расчетный код",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Требования и обязательства",
+      "via_attribute": "Участник торгов",
+      "to_entity_guess": "Участники ММ програм"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Требования и обязательства",
+      "via_attribute": "Актив",
+      "to_entity_guess": "Активы"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Эмитенты",
+      "via_attribute": "Юрлицо",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "События логинов",
+      "via_attribute": "Логин",
+      "to_entity_guess": "Логины ТКС"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Календарные дни",
+      "via_attribute": "Код календаря",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Участники ММ програм",
+      "via_attribute": "Программа",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Контрагенты",
+      "via_attribute": "Юрлицо",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Рейтинги",
+      "via_attribute": "Юрлицо",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Договора",
+      "via_attribute": "Контрагент",
+      "to_entity_guess": "Контрагенты"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Договора",
+      "via_attribute": "Компания группы",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Единые лимиты",
+      "via_attribute": "Участник",
+      "to_entity_guess": "Участники ММ програм"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Единые лимиты",
+      "via_attribute": "Расчетный код",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Единые лимиты",
+      "via_attribute": "Рынок",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Продукты",
+      "via_attribute": "Услуга",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Продукты",
+      "via_attribute": "Тариф",
+      "to_entity_guess": "Тарифы"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Риск параметры активов",
+      "via_attribute": "Идентификатор",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Риск параметры активов",
+      "via_attribute": "Код актива",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Корпоративные события",
+      "via_attribute": "Инструмент",
+      "to_entity_guess": "Инструменты"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Корпоративные события",
+      "via_attribute": "Эмитент",
+      "to_entity_guess": "Эмитенты"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Купонные выплаты",
+      "via_attribute": "Инструмент",
+      "to_entity_guess": "Инструменты"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Купонные выплаты",
+      "via_attribute": "Корп событие",
+      "to_entity_guess": "Корпоративные события"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Продажи",
+      "via_attribute": "Клиент",
+      "to_entity_guess": "Клиенты"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Продажи",
+      "via_attribute": "Продукт",
+      "to_entity_guess": "Продукты"
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Фин отчетность",
+      "via_attribute": "Юрлицо",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Счета пользователя",
+      "via_attribute": "Валюта",
+      "to_entity_guess": null
+    },
+    {
+      "page": "Страница — 1",
+      "from_entity": "Счета пользователя",
+      "via_attribute": "Счет АБС",
+      "to_entity_guess": "Счета АБС"
+    }
+  ],
+  "swimlanes_groups": [],
+  "notes_legend": []
+}
