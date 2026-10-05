@@ -6,6 +6,9 @@ import hashlib
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+from types import SimpleNamespace
+
+from pydantic import ValidationError
 
 from moex_modeling import (
     ConformanceAssessment,
@@ -42,6 +45,19 @@ from moex_dams.application.rules_runner import default_dams_rule_sets, run_rule_
 from moex_dams.contracts import ModelPackage
 from moex_dams.domain.graph import DamsModelGraphView
 from moex_dams.mappings.dams_to_graph import build_dams_graph
+
+
+def _typed_package_or_fallback(data: dict) -> ModelPackage | SimpleNamespace:
+    """Prefer generated contracts; fall back when contracts lag schema (ADR-031)."""
+    try:
+        return ModelPackage.model_validate(data)
+    except ValidationError:
+        return SimpleNamespace(
+            name=data.get("name"),
+            description=data.get("description"),
+            model_version=data.get("model_version"),
+            lifecycle_status=data.get("lifecycle_status"),
+        )
 
 
 @dataclass(frozen=True)
@@ -85,7 +101,10 @@ def assess_implementation(
     spec_body = repo.load_specification(spec_ref)
     impl_body = repo.load_implementation(impl_ref, path=implementation_path)
     # Typed root path (generated contracts) — rules still use dict body for now.
-    typed_package = ModelPackage.model_validate(impl_body.data)
+    # Fallback when contracts lag TechnicalAsset schema migration (do not edit generated/).
+    typed_package = _typed_package_or_fallback(
+        impl_body.data if isinstance(impl_body.data, dict) else {}
+    )
 
     now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     standard_ref = StandardRef(

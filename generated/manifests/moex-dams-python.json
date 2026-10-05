@@ -4,10 +4,10 @@
   "generator_module": "linkml.generators.pythongen",
   "generator_version": "1.11.1",
   "schema_path": "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml",
-  "schema_digest": "sha256:a3fd63d36db81fea87bbe23fd89c0c61fd1feeaf381bcb71bed5570552cb4609",
+  "schema_digest": "sha256:5bfbb9fb1af31231f78caafbb19c8186cb7438c41f537f881dbe8bbdaf86edef",
   "output_path": "generated/artifacts/moex-dams/0.1/python/moex_dams.py",
-  "content_digest": "sha256:f6a4c320d4537e7f0fb4f0d05e14503ad6addaa4ba0920a97917cc4c4da01151",
-  "generated_at": "2026-10-05T06:08:14.047346+00:00",
+  "content_digest": "sha256:23bcc3f6ec40ea42a09b8372c0e14cecd27ee7325ded5b63cc891c0594457399",
+  "generated_at": "2026-10-05T18:35:08.205368+00:00",
   "generator_options": {
     "digest_mode": "strip_generation_date_comment"
   }

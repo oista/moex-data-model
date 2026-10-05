@@ -31,7 +31,10 @@ function collectIds(data: Record<string, unknown>): Set<string> {
   if (root) ids.add(String(root));
   for (const key of [
     "logical_entities",
-    "physical_objects",
+    "data_carriers",
+    "access_points",
+    "data_containers",
+    "execution_assets",
     "mappings",
     "relationships",
     "conceptual_entities",
@@ -118,11 +121,76 @@ function findTopLevel(
   throw new YamlMutateError(`${label} not found: ${elementId}`);
 }
 
-function findPhysicalObject(
+const TECH_COLLECTIONS = [
+  "data_carriers",
+  "access_points",
+  "data_containers",
+  "execution_assets",
+] as const;
+
+const LEGACY_KIND: Record<string, string> = {
+  table: "relational_table",
+  view: "relational_view",
+  topic: "stream_topic",
+  queue: "stream_queue",
+  message: "message_type",
+  payload: "message_type",
+  api: "interface",
+  endpoint: "operation",
+};
+
+const KIND_COLLECTION: Record<string, string> = {
+  relational_table: "data_carriers",
+  relational_view: "data_carriers",
+  file: "data_carriers",
+  dataset: "data_carriers",
+  stream_topic: "data_carriers",
+  stream_queue: "data_carriers",
+  message_type: "data_carriers",
+  in_memory: "data_carriers",
+  api_resource: "data_carriers",
+  other: "data_carriers",
+  interface: "access_points",
+  operation: "access_points",
+  channel: "access_points",
+  database: "data_containers",
+  schema: "data_containers",
+  bucket: "data_containers",
+  broker: "data_containers",
+  directory: "data_containers",
+  cluster: "data_containers",
+  pipeline: "execution_assets",
+  job: "execution_assets",
+};
+
+function normalizeAssetKind(raw: unknown): string {
+  const k = String(raw || "relational_table").trim() || "relational_table";
+  return LEGACY_KIND[k] || k;
+}
+
+function findTechnicalAsset(
+  data: Record<string, unknown>,
+  elementId: string,
+): { collection: string; idx: number; row: Record<string, unknown> } {
+  for (const key of TECH_COLLECTIONS) {
+    const items = data[key];
+    if (!Array.isArray(items)) continue;
+    for (let i = 0; i < items.length; i++) {
+      const row = asRecord(items[i]);
+      if (row && String(row.element_id) === elementId) {
+        return { collection: key, idx: i, row };
+      }
+    }
+  }
+  throw new YamlMutateError(`technical asset not found: ${elementId}`);
+}
+
+function findDataCarrier(
   data: Record<string, unknown>,
   elementId: string,
 ): { idx: number; row: Record<string, unknown> } {
-  return findTopLevel(data, "physical_objects", elementId, "physical object");
+  const found = findTechnicalAsset(data, elementId);
+  return { idx: found.idx, row: found.row };
 }
 
 function findPhysicalField(
@@ -133,19 +201,19 @@ function findPhysicalField(
   idx: number;
   row: Record<string, unknown>;
 } {
-  const objects = data.physical_objects;
-  if (!Array.isArray(objects)) {
-    throw new YamlMutateError("physical_objects missing");
-  }
-  for (const obj of objects) {
-    const owner = asRecord(obj);
-    if (!owner) continue;
-    const fields = owner.physical_fields;
-    if (!Array.isArray(fields)) continue;
-    for (let i = 0; i < fields.length; i++) {
-      const row = asRecord(fields[i]);
-      if (row && String(row.element_id) === elementId) {
-        return { owner, idx: i, row };
+  for (const key of TECH_COLLECTIONS) {
+    const objects = data[key];
+    if (!Array.isArray(objects)) continue;
+    for (const obj of objects) {
+      const owner = asRecord(obj);
+      if (!owner) continue;
+      const fields = owner.physical_fields;
+      if (!Array.isArray(fields)) continue;
+      for (let i = 0; i < fields.length; i++) {
+        const row = asRecord(fields[i]);
+        if (row && String(row.element_id) === elementId) {
+          return { owner, idx: i, row };
+        }
       }
     }
   }
@@ -367,46 +435,66 @@ function mutateData(
       const name = String(obj.name || "").trim();
       if (!eid || !name) throw new YamlMutateError("element_id and name are required");
       if (ids().has(eid)) throw new YamlMutateError(`duplicate element_id: ${eid}`);
-      ensureSeq(data, "physical_objects").push({
+      const assetKind = normalizeAssetKind(obj.asset_kind || obj.object_kind);
+      const collection =
+        String(obj.collection || KIND_COLLECTION[assetKind] || "data_carriers");
+      const row: Record<string, unknown> = {
         element_id: eid,
         name,
         title: obj.title || name,
         description:
-          obj.description || `Physical object ${name} (workbench draft).`,
+          obj.description || `Technical asset ${name} (workbench draft).`,
         lifecycle_status: obj.lifecycle_status || "draft",
-        object_kind: obj.object_kind || "table",
+        asset_kind: assetKind,
         ...(obj.logical_entity_ref
           ? { logical_entity_ref: obj.logical_entity_ref }
           : {}),
         ...(obj.qualified_name ? { qualified_name: obj.qualified_name } : {}),
         ...(obj.technology ? { technology: obj.technology } : {}),
-        physical_fields: [],
-      });
+        ...(obj.asset_namespace ? { asset_namespace: obj.asset_namespace } : {}),
+        ...(obj.structure_ref ? { structure_ref: obj.structure_ref } : {}),
+        ...(obj.parent_ref ? { parent_ref: obj.parent_ref } : {}),
+      };
+      if (collection === "data_carriers") {
+        row.physical_fields = [];
+      }
+      ensureSeq(data, collection).push(row);
       break;
     }
     case "update_physical_object": {
-      const { row } = findPhysicalObject(data, payload.element_id);
+      const { row } = findDataCarrier(data, payload.element_id);
+      const patch = { ...(payload.patch as Record<string, unknown>) };
+      if (patch.object_kind != null && patch.asset_kind == null) {
+        patch.asset_kind = normalizeAssetKind(patch.object_kind);
+        delete patch.object_kind;
+      } else if (patch.asset_kind != null) {
+        patch.asset_kind = normalizeAssetKind(patch.asset_kind);
+        delete patch.object_kind;
+      }
       applyPatch(
         row,
-        payload.patch as Record<string, unknown>,
+        patch,
         new Set([
           "name",
           "title",
           "description",
           "lifecycle_status",
-          "object_kind",
+          "asset_kind",
           "logical_entity_ref",
           "qualified_name",
           "technology",
           "system_ref",
           "direction",
+          "asset_namespace",
+          "structure_ref",
+          "parent_ref",
         ]),
       );
       break;
     }
     case "delete_physical_object": {
-      const { idx } = findPhysicalObject(data, payload.element_id);
-      (data.physical_objects as unknown[]).splice(idx, 1);
+      const found = findTechnicalAsset(data, payload.element_id);
+      (data[found.collection] as unknown[]).splice(found.idx, 1);
       break;
     }
     case "add_physical_field": {
@@ -421,7 +509,7 @@ function mutateData(
         );
       }
       if (ids().has(eid)) throw new YamlMutateError(`duplicate element_id: ${eid}`);
-      const { row: owner } = findPhysicalObject(data, ownerId);
+      const { row: owner } = findDataCarrier(data, ownerId);
       if (!Array.isArray(owner.physical_fields)) owner.physical_fields = [];
       (owner.physical_fields as Record<string, unknown>[]).push({
         element_id: eid,
@@ -429,7 +517,7 @@ function mutateData(
         description:
           field.description || `Physical field ${name} (workbench draft).`,
         lifecycle_status: field.lifecycle_status || "draft",
-        physical_object_ref: ownerId,
+        carrier_ref: ownerId,
         native_name: field.native_name || name,
         native_type: nativeType,
         required: Boolean(field.required),

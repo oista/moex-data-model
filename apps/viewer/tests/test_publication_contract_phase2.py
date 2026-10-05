@@ -36,11 +36,18 @@ FIXTURE_MODEL = {
             ],
         }
     ],
-    "physical_objects": [
+    "data_carriers": [
         {
             "element_id": "p1",
             "name": "P1",
-            "physical_fields": [{"element_id": "f1", "name": "f1"}],
+            "asset_kind": "relational_table",
+            "physical_fields": [
+                {
+                    "element_id": "f1",
+                    "name": "f1",
+                    "carrier_ref": "p1",
+                }
+            ],
         }
     ],
     "mappings": [{"element_id": "m1", "name": "M1", "mapping_type": "field_mapping"}],
@@ -53,9 +60,9 @@ def test_count_logical_entities_and_nested_attributes():
         count_semantic_entities(FIXTURE_MODEL, ["LogicalAttribute"], select="logical_entities")
         == 2
     )
-    assert count_semantic_entities(FIXTURE_MODEL, ["PhysicalObject"], select="physical_objects") == 1
+    assert count_semantic_entities(FIXTURE_MODEL, ["DataCarrier"], select="data_carriers") == 1
     assert (
-        count_semantic_entities(FIXTURE_MODEL, ["PhysicalField"], select="physical_objects") == 1
+        count_semantic_entities(FIXTURE_MODEL, ["PhysicalField"], select="data_carriers") == 1
     )
     assert (
         count_semantic_entities(

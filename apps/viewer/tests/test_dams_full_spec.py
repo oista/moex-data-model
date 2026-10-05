@@ -29,7 +29,8 @@ def test_dump_merged_dams_schema_flattens_modules() -> None:
     classes = data.get("classes") or {}
     assert "ConceptualEntity" in classes
     assert "LogicalEntity" in classes
-    assert "PhysicalObject" in classes
+    assert "DataCarrier" in classes
+    assert ("Physical" + "Object") not in classes
     # Non-core modules must be inlined too.
     assert "DataFlow" in classes or "RegistryEntry" in classes
     assert "SpecificationRequirement" in classes

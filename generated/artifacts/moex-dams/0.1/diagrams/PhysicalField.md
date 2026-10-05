@@ -16,6 +16,17 @@
       
       PhysicalField : aliases
         
+      PhysicalField : carrier_ref
+        
+          
+    
+        
+        
+        PhysicalField --> "1" DataCarrier : carrier_ref
+        click DataCarrier href "../DataCarrier"
+    
+
+        
       PhysicalField : classification_rationale
         
       PhysicalField : classification_source
@@ -112,17 +123,6 @@
         
         PhysicalField --> "0..1" OrganizationUnit : owning_unit_ref
         click OrganizationUnit href "../OrganizationUnit"
-    
-
-        
-      PhysicalField : physical_object_ref
-        
-          
-    
-        
-        
-        PhysicalField --> "1" PhysicalObject : physical_object_ref
-        click PhysicalObject href "../PhysicalObject"
     
 
         

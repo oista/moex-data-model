@@ -12,15 +12,16 @@ logical_entities:
         name: clientId
         logical_type: identifier
         required: true
-physical_objects:
+data_carriers:
   - element_id: dams:physical/mdm/client-topic
     name: client_changed_topic
-    object_kind: topic
+    asset_kind: stream_topic
     physical_fields:
       - element_id: dams:physical/mdm/client-topic/client_id
         name: client_id
         native_type: string
         required: true
+        carrier_ref: dams:physical/mdm/client-topic
 `;
 
 describe("applyMutationOptimistic", () => {
@@ -34,16 +35,18 @@ describe("applyMutationOptimistic", () => {
     expect(out).toContain("dams:logical/mdm/Client");
   });
 
-  it("adds physical object and field", () => {
+  it("adds data carrier and field", () => {
     const withObj = applyMutationOptimistic(SAMPLE, {
       op: "add_physical_object",
       physical_object: {
         element_id: "dams:physical/mdm/orders",
         name: "orders_table",
-        object_kind: "table",
+        asset_kind: "relational_table",
       },
     });
     expect(withObj).toContain("dams:physical/mdm/orders");
+    expect(withObj).toContain("data_carriers:");
+    expect(withObj).toContain("asset_kind: relational_table");
     const withField = applyMutationOptimistic(withObj, {
       op: "add_physical_field",
       owner_element_id: "dams:physical/mdm/orders",
@@ -55,6 +58,7 @@ describe("applyMutationOptimistic", () => {
     });
     expect(withField).toContain("dams:physical/mdm/orders/id");
     expect(withField).toContain("native_type: uuid");
+    expect(withField).toContain("carrier_ref:");
   });
 
   it("deletes physical field", () => {

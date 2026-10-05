@@ -16,16 +16,16 @@ integration_class: EDA
 integration_channel: queue
 integration_spec_ref: https://clinkr.moex.com/specifications/INT-00421/asyncapi/2.3.0
 entity_bindings:
-  - element_id: dams:flow-binding/INT-00421/Client
-    name: client_binding
-    description: Семантическая привязка payload потока к логической сущности ЮЛ (MDM).
-    lifecycle_status: active
-    flow_ref: dams:flow/INT-00421
-    source_model_ref: https://modelhub.moex.com/models/mdm/0.1.0
-    logical_entity_ref: dams:logical/mdm/ENTERPRISE
-    logical_attribute_refs:
-      - dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID
-      - dams:logical/mdm/ENTERPRISE/FULL_NAME
-    physical_object_refs:
-      - dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE
-    direction: outbound
+- element_id: dams:flow-binding/INT-00421/Client
+  name: client_binding
+  description: Семантическая привязка payload потока к логической сущности ЮЛ (MDM).
+  lifecycle_status: active
+  flow_ref: dams:flow/INT-00421
+  source_model_ref: https://modelhub.moex.com/models/mdm/0.1.0
+  logical_entity_ref: dams:logical/mdm/ENTERPRISE
+  logical_attribute_refs:
+  - dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID
+  - dams:logical/mdm/ENTERPRISE/FULL_NAME
+  direction: outbound
+  carrier_refs:
+  - dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE

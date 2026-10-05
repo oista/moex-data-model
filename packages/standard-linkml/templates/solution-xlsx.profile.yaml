@@ -69,7 +69,8 @@ systems:
     package_name: example_solution_model
     package_title: Example solution model
     package_description: Template system for solution-xlsx import
-    object_kind: table
+    asset_kind: relational_table
+    asset_kind: relational_table
     technology: relational
     direction: internal
     native_schema_ref_template: "urn:moex:{slug}:schema/{object}"

@@ -10,6 +10,17 @@
       
       DataFlowEntityBinding : aliases
         
+      DataFlowEntityBinding : carrier_refs
+        
+          
+    
+        
+        
+        DataFlowEntityBinding --> "1..*" DataCarrier : carrier_refs
+        click DataCarrier href "../DataCarrier"
+    
+
+        
       DataFlowEntityBinding : deprecated_by_ref
         
       DataFlowEntityBinding : description
@@ -20,7 +31,7 @@
     
         
         
-        DataFlowEntityBinding --> "1" FlowDirectionEnum : direction
+        DataFlowEntityBinding --> "0..1" FlowDirectionEnum : direction
         click FlowDirectionEnum href "../FlowDirectionEnum"
     
 
@@ -92,17 +103,6 @@
         
         DataFlowEntityBinding --> "*" PhysicalField : physical_field_refs
         click PhysicalField href "../PhysicalField"
-    
-
-        
-      DataFlowEntityBinding : physical_object_refs
-        
-          
-    
-        
-        
-        DataFlowEntityBinding --> "1..*" PhysicalObject : physical_object_refs
-        click PhysicalObject href "../PhysicalObject"
     
 
         

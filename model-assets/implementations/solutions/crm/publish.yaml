@@ -74,26 +74,26 @@ sections:
     format: markdown
     path: publications/logical.erd.md
 - id: physical
-  title: Physical objects
+  title: Data carriers
   kind: bindings
   type: entity-table
-  instance_of: PhysicalObject
+  instance_of: DataCarrier
   satisfies:
   - dams:physical-objects
   - dams:physical-fields
   source:
     format: yaml
     path: crm-solution-model.yaml
-    select: physical_objects
+    select: data_carriers
   key_column: element_id
   columns:
   - name
   - title
   - description
-  - object_kind
+  - asset_kind
   - technology
   filterable:
-  - object_kind
+  - asset_kind
 - id: physical-erd
   title: Physical ER diagram
   kind: bindings

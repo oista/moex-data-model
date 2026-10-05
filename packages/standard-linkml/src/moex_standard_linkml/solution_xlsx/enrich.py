@@ -67,9 +67,9 @@ def enrich_package(
                 attr["mapping_coverage_status"] = defaults.mapping_coverage_status_planned
                 attr["mapping_rationale"] = defaults.mapping_rationale_planned.strip()
 
-    for po in package.get("physical_objects") or []:
-        po["mapping_coverage_status"] = defaults.mapping_coverage_status_mapped
-        for pf in po.get("physical_fields") or []:
+    for carrier in package.get("data_carriers") or []:
+        carrier["mapping_coverage_status"] = defaults.mapping_coverage_status_mapped
+        for pf in carrier.get("physical_fields") or []:
             pf["mapping_coverage_status"] = defaults.mapping_coverage_status_mapped
 
     for mapping in package.get("mappings") or []:

@@ -18,12 +18,14 @@ logical_entities:
 relationships:
   - element_id: dams:rel/mdm/X
     name: x
-physical_objects:
+data_carriers:
   - element_id: dams:physical/mdm/topic
     name: topic
+    asset_kind: stream_topic
     physical_fields:
       - element_id: dams:physical/mdm/topic/id
         name: id
+        carrier_ref: dams:physical/mdm/topic
 mappings:
   - element_id: dams:mapping/mdm/m
     name: m

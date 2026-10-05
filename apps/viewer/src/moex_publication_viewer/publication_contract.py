@@ -25,7 +25,10 @@ _SELECT_SUFFIXES: dict[str, tuple[str, ...]] = {
     "LogicalEntity": ("logical_entities", "logical-entities"),
     "LogicalAttribute": ("logical_attributes", "logical-attributes", "attributes"),
     "Relationship": ("relationships", "relations"),
-    "PhysicalObject": ("physical_objects", "physical-objects"),
+    "DataCarrier": ("data_carriers",),
+    "AccessPoint": ("access_points",),
+    "DataContainer": ("data_containers",),
+    "ExecutionAsset": ("execution_assets",),
     "PhysicalField": ("physical_fields", "physical-fields", "fields"),
     "EntityPhysicalMapping": ("mappings", "physical_mappings", "nodes"),
     "AttributePhysicalMapping": ("mappings", "physical_mappings", "nodes"),
@@ -35,7 +38,10 @@ _KIND_MARKERS: dict[str, frozenset[str]] = {
     "LogicalEntity": frozenset({"logical_entity", "LogicalEntity"}),
     "LogicalAttribute": frozenset({"attribute", "LogicalAttribute", "logical_attribute"}),
     "Relationship": frozenset({"relationship", "Relationship", "relation"}),
-    "PhysicalObject": frozenset({"physical_object", "PhysicalObject"}),
+    "DataCarrier": frozenset({"data_carrier", "DataCarrier"}),
+    "AccessPoint": frozenset({"access_point", "AccessPoint"}),
+    "DataContainer": frozenset({"data_container", "DataContainer"}),
+    "ExecutionAsset": frozenset({"execution_asset", "ExecutionAsset"}),
     "PhysicalField": frozenset({"field", "PhysicalField", "physical_field"}),
     "EntityPhysicalMapping": frozenset(
         {
@@ -252,14 +258,20 @@ def _count_one_type(
 
     if stype == "PhysicalField":
         objs = _as_list(selected)
-        if select and select.split(".")[-1] in ("physical_objects", "physical-objects"):
+        leaf = select.split(".")[-1] if select else ""
+        if leaf in (
+            "data_carriers",
+            "physical-objects",
+        ):
             return sum(
                 len(_as_list(o.get("physical_fields") or o.get("fields")))
                 for o in objs
                 if isinstance(o, dict)
             )
         if isinstance(root, dict):
-            pobjs = _as_list(root.get("physical_objects") or root.get("physical-objects"))
+            pobjs = _as_list(
+                root.get("data_carriers") or root.get("physical-objects")
+            )
             nested = sum(
                 len(_as_list(o.get("physical_fields") or o.get("fields")))
                 for o in pobjs

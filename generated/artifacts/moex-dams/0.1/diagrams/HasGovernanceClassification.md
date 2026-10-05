@@ -11,10 +11,10 @@
         click LogicalEntity href "../LogicalEntity"
       HasGovernanceClassification <|-- LogicalAttribute
         click LogicalAttribute href "../LogicalAttribute"
-      HasGovernanceClassification <|-- PhysicalObject
-        click PhysicalObject href "../PhysicalObject"
       HasGovernanceClassification <|-- PhysicalField
         click PhysicalField href "../PhysicalField"
+      HasGovernanceClassification <|-- TechnicalAsset
+        click TechnicalAsset href "../TechnicalAsset"
       
       HasGovernanceClassification : classification_rationale
         

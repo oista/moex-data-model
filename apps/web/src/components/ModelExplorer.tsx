@@ -135,39 +135,79 @@ function parseTree(content: string): { groups: Group[]; error: string | null } {
       });
     }
 
-    const physical = Array.isArray(data.physical_objects)
-      ? data.physical_objects
+    const carriers = Array.isArray(data.data_carriers) ? data.data_carriers : [];
+    const accessPoints = Array.isArray(data.access_points) ? data.access_points : [];
+    const containers = Array.isArray(data.data_containers)
+      ? data.data_containers
       : [];
-    if (physical.length) {
+    const execution = Array.isArray(data.execution_assets)
+      ? data.execution_assets
+      : [];
+    const technical = [
+      ...carriers.map((e) => ({ ...(e as object), _collection: "data_carriers" })),
+      ...accessPoints.map((e) => ({
+        ...(e as object),
+        _collection: "access_points",
+      })),
+      ...containers.map((e) => ({
+        ...(e as object),
+        _collection: "data_containers",
+      })),
+      ...execution.map((e) => ({
+        ...(e as object),
+        _collection: "execution_assets",
+      })),
+    ];
+    if (technical.length) {
+      // Group by subclass, then nest children under parent_ref when present
+      const byId = new Map<string, Record<string, unknown>>();
+      for (const e of technical) {
+        const rec = e as Record<string, unknown>;
+        if (rec.element_id) byId.set(String(rec.element_id), rec);
+      }
+      const roots: Record<string, unknown>[] = [];
+      const childrenOf = new Map<string, Record<string, unknown>[]>();
+      for (const e of technical) {
+        const rec = e as Record<string, unknown>;
+        if (!rec.element_id) continue;
+        const parent = rec.parent_ref ? String(rec.parent_ref) : "";
+        if (parent && byId.has(parent)) {
+          const list = childrenOf.get(parent) || [];
+          list.push(rec);
+          childrenOf.set(parent, list);
+        } else {
+          roots.push(rec);
+        }
+      }
+      const toNode = (e: Record<string, unknown>): TreeNode => {
+        const fields = Array.isArray(e.physical_fields) ? e.physical_fields : [];
+        const nested = childrenOf.get(String(e.element_id)) || [];
+        return {
+          id: String(e.element_id),
+          label: `${String(e.name || e.element_id)} (${String(e.asset_kind || e._collection)})`,
+          kind: "physical_object" as const,
+          tab: "physical" as FormsTab,
+          children: [
+            ...nested.map(toNode),
+            ...fields
+              .filter(
+                (f): f is Record<string, unknown> =>
+                  !!f && typeof f === "object",
+              )
+              .filter((f) => f.element_id)
+              .map((f) => ({
+                id: String(f.element_id),
+                label: String(f.name || f.element_id),
+                kind: "physical_field" as const,
+                tab: "physical" as FormsTab,
+              })),
+          ],
+        };
+      };
       groups.push({
-        id: "physical",
-        title: "Physical objects",
-        nodes: physical
-          .filter((e): e is Record<string, unknown> => !!e && typeof e === "object")
-          .filter((e) => e.element_id)
-          .map((e) => {
-            const fields = Array.isArray(e.physical_fields)
-              ? e.physical_fields
-              : [];
-            return {
-              id: String(e.element_id),
-              label: String(e.name || e.element_id),
-              kind: "physical_object" as const,
-              tab: "physical" as FormsTab,
-              children: fields
-                .filter(
-                  (f): f is Record<string, unknown> =>
-                    !!f && typeof f === "object",
-                )
-                .filter((f) => f.element_id)
-                .map((f) => ({
-                  id: String(f.element_id),
-                  label: String(f.name || f.element_id),
-                  kind: "physical_field" as const,
-                  tab: "physical" as FormsTab,
-                })),
-            };
-          }),
+        id: "technical",
+        title: "Technical assets",
+        nodes: roots.map(toNode),
       });
     }
 

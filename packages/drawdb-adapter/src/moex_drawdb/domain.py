@@ -31,7 +31,8 @@ class ProjectedTable(BaseModel):
 
     name: str
     element_id: str | None = None
-    object_kind: str | None = None
+    object_kind: str | None = None  # legacy DBML note alias
+    asset_kind: str | None = None
     title: str | None = None
     columns: tuple[ProjectedColumn, ...] = ()
 
@@ -64,7 +65,7 @@ class PatchOpKind(str, Enum):
     ADD_RELATIONSHIP = "add_relationship"
     UPDATE_RELATIONSHIP = "update_relationship"
     DELETE_RELATIONSHIP = "delete_relationship"
-    ADD_PHYSICAL_OBJECT = "add_physical_object"
+    ADD_PHYSICAL_OBJECT = "add_physical_object"  # DataCarrier
     UPDATE_PHYSICAL_OBJECT = "update_physical_object"
     DELETE_PHYSICAL_OBJECT = "delete_physical_object"
     ADD_FIELD = "add_field"

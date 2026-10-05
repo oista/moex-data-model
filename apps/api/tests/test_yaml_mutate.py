@@ -351,7 +351,7 @@ def test_add_update_delete_physical_object_and_field() -> None:
         },
     )
     data = load_yaml(out)
-    objs = data["physical_objects"]
+    objs = data["data_carriers"]
     assert any(o["element_id"] == "dams:physical/mdm/orders" for o in objs)
 
     out2 = apply_mutation(
@@ -370,23 +370,25 @@ def test_add_update_delete_physical_object_and_field() -> None:
     data2 = load_yaml(out2)
     obj = next(
         o
-        for o in data2["physical_objects"]
+        for o in data2["data_carriers"]
         if o["element_id"] == "dams:physical/mdm/orders"
     )
     assert obj["physical_fields"][0]["native_type"] == "uuid"
+    assert obj["physical_fields"][0]["carrier_ref"] == "dams:physical/mdm/orders"
+    assert obj["asset_kind"] == "relational_table"
 
     out3 = apply_mutation(
         out2,
         {
             "op": "update_physical_object",
             "element_id": "dams:physical/mdm/orders",
-            "patch": {"title": "OrderBooks Table", "object_kind": "table"},
+            "patch": {"title": "OrderBooks Table", "asset_kind": "relational_table"},
         },
     )
     data3 = load_yaml(out3)
     obj3 = next(
         o
-        for o in data3["physical_objects"]
+        for o in data3["data_carriers"]
         if o["element_id"] == "dams:physical/mdm/orders"
     )
     assert obj3["title"] == "OrderBooks Table"
@@ -402,7 +404,7 @@ def test_add_update_delete_physical_object_and_field() -> None:
     data4 = load_yaml(out4)
     obj4 = next(
         o
-        for o in data4["physical_objects"]
+        for o in data4["data_carriers"]
         if o["element_id"] == "dams:physical/mdm/orders"
     )
     assert obj4["physical_fields"][0]["native_type"] == "varchar"
@@ -418,7 +420,7 @@ def test_add_update_delete_physical_object_and_field() -> None:
     data5 = load_yaml(out5)
     obj5 = next(
         o
-        for o in data5["physical_objects"]
+        for o in data5["data_carriers"]
         if o["element_id"] == "dams:physical/mdm/orders"
     )
     assert list(obj5.get("physical_fields") or []) == []
@@ -431,5 +433,5 @@ def test_add_update_delete_physical_object_and_field() -> None:
         },
     )
     data6 = load_yaml(out6)
-    ids = [o["element_id"] for o in data6.get("physical_objects") or []]
+    ids = [o["element_id"] for o in data6.get("data_carriers") or []]
     assert "dams:physical/mdm/orders" not in ids

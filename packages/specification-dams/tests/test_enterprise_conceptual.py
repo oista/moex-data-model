@@ -25,7 +25,10 @@ ENTERPRISE = (
 def test_trading_participation_is_reified_entity() -> None:
     data = yaml.safe_load(ENTERPRISE.read_text(encoding="utf-8"))
     assert data["implementation_scope"] == "enterprise"
-    assert not data.get("physical_objects")
+    assert not data.get("data_carriers")
+    assert not data.get("access_points")
+    assert not data.get("data_containers")
+    assert not data.get("execution_assets")
     concepts = {c["name"]: c for c in data["conceptual_entities"]}
     assert "TradingParticipation" in concepts
     assert "LegalEntity" in concepts

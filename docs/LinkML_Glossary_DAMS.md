@@ -39,7 +39,7 @@
 Слот, задающий единственного **первичного родителя** класса (или слота) — классическое одиночное наследование. В DAMS почти все содержательные классы объявлены как `is_a: ModelElement`, что и делает `ModelElement` корнем всей иерархии метамодели.
 
 ### abstract
-Булев флаг, помечающий класс (или слот) как **абстрактный**: он не может быть напрямую инстанцирован, но служит основанием для наследования. `ModelElement` в DAMS — классический пример abstract-класса: у него нет собственных экземпляров, только конкретные потомки (`LogicalEntity`, `PhysicalObject` и т. д.).
+Булев флаг, помечающий класс (или слот) как **абстрактный**: он не может быть напрямую инстанцирован, но служит основанием для наследования. `ModelElement` в DAMS — классический пример abstract-класса: у него нет собственных экземпляров, только конкретные потомки (`LogicalEntity`, `DataCarrier` и т. д.).
 
 ### mixin
 Булев флаг, помечающий класс (или слот) как **mixin** — «пакет» переиспользуемых свойств, который не участвует в основной (одиночной) иерархии `is_a`, а подмешивается дополнительно. В отличие от `is_a`, у класса может быть несколько mixins одновременно.
@@ -172,7 +172,10 @@ LinkML в этом смысле **монотонен**: `slot_usage` может 
 | `business_importance_enum` | high, medium, low | Бизнес-значимость сущности |
 | `governance_classification_enum` | public, internal, confidential, restricted | Уровень чувствительности данных |
 | `logical_data_type_enum` | string, integer, decimal, boolean, date, datetime, time, binary, identifier, uri, object | Логический тип атрибута |
-| `physical_object_kind_enum` | database, schema, table, view, column, api, endpoint, payload, topic, queue, message, file, dataset, pipeline | Вид физического объекта данных |
+| `DataCarrierKindEnum` | relational_table, relational_view, file, dataset, stream_topic, stream_queue, message_type, in_memory, api_resource, other | Вид носителя данных |
+| `AccessPointKindEnum` | interface, operation, channel | Вид точки доступа |
+| `DataContainerKindEnum` | database, schema, bucket, broker, directory, cluster | Вид контейнера |
+| `ExecutionAssetKindEnum` | pipeline, job | Вид исполняемого актива |
 | `flow_direction_enum` | inbound, outbound, internal, bidirectional | Направление потока данных |
 | `solution_data_role_enum` | producer, consumer, intermediary | Роль решения относительно данных |
 | `integration_channel_enum` | api, queue, database, file, other | Канал интеграции |
@@ -291,7 +294,7 @@ LinkML в этом смысле **монотонен**: `slot_usage` может 
 ## Итоговые принципы, зафиксированные в DAMS через LinkML
 
 1. **Одна вертикаль идентичности.** Всё, что имеет смысл в модели данных MOEX, — потомок `ModelElement` через `is_a`. Это даёт единый `element_id`, единый `lifecycle_status` и единую точку входа для ссылок.
-2. **Governance — горизонтальный срез, а не вертикаль.** Владение, классификация чувствительности, происхождение и согласование не встроены в основную иерархию наследования, а подключаются как независимые mixins — это позволяет применить, например, `HasGovernanceClassification` и к `LogicalEntity`, и к `PhysicalObject`, и к `Mapping`, не создавая для них общего предка ниже `ModelElement`.
+2. **Governance — горизонтальный срез, а не вертикаль.** Владение, классификация чувствительности, происхождение и согласование не встроены в основную иерархию наследования, а подключаются как независимые mixins — это позволяет применить, например, `HasGovernanceClassification` и к `LogicalEntity`, и к `TechnicalAsset` / `DataCarrier`, и к `Mapping`, не создавая для них общего предка ниже `ModelElement`.
 3. **Containment cascade для governed-слотов (ADR-023).** Optional-слоты ownership / `governance_classification` / `policy_refs` наследуют эффективное значение по дереву вложенности, если ключ отсутствует; заданное значение — override. Эффективный слой вычисляет резолвер, YAML не копирует его вниз.
 4. **Enum вместо свободной строки — везде, где возможен закрытый список значений.** Ни один статус, класс данных или тип в DAMS не выражен как обычная `string` — для каждого заведён `*_enum`, что даёт автоматическую валидацию через `linkml-validate`.
 5. **Ссылки, а не встраивание.** Связи между классами реализованы через identifier-ссылки (`_ref`-слоты с `range` на другой класс), а не через глубокое вложение объектов, что отражает философию «реестр + ссылка», используемую для проекций EAM/Clinkr/каталога (`RegistryEntry` и его потомки).

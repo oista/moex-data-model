@@ -93,8 +93,7 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: UCD AGREEMENT реализует корпоративный Agreement.
 - element_id: dams:logical/ucd/AUTHORIZATION
@@ -180,11 +179,9 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: local-only
-  alignment_rationale: Полномочия сотрудника UCD; RoleAssignment в CDM — IAM User↔Role, не 
-    Employee↔тип полномочия.
+  alignment_rationale: Полномочия сотрудника UCD; RoleAssignment в CDM — IAM User↔Role, не Employee↔тип полномочия.
 - element_id: dams:logical/ucd/EMPOYEE
   name: EMPOYEE
   title: Сотрудник
@@ -314,11 +311,10 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
-  alignment_rationale: UCD EMPOYEE реализует Employee (reified роль Person); Person уже на UCD 
-    PERSON. Связь EMPOYEE→PERSON закрывает LDM-008.
+  alignment_rationale: UCD EMPOYEE реализует Employee (reified роль Person); Person уже на UCD PERSON. Связь EMPOYEE→PERSON
+    закрывает LDM-008.
 - element_id: dams:logical/ucd/ORGANIZATION
   name: ORGANIZATION
   title: Организация
@@ -426,8 +422,7 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: UCD ORGANIZATION (ИНН, typeId) реализует LegalEntity.
 - element_id: dams:logical/ucd/ORGANIZATION_TYPE
@@ -480,11 +475,9 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: local-only
-  alignment_rationale: Классификатор типа организации в контуре UCD; отдельного корпоративного 
-    концепта нет.
+  alignment_rationale: Классификатор типа организации в контуре UCD; отдельного корпоративного концепта нет.
 - element_id: dams:logical/ucd/PERSON
   name: PERSON
   title: Персона
@@ -559,8 +552,7 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: UCD PERSON реализует корпоративный Person.
 - element_id: dams:logical/ucd/POSITION
@@ -615,11 +607,10 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
-  alignment_rationale: UCD POSITION — каталог должностей; ближайший корпоративный концепт 
-    StaffPosition (штатная единица). Зерно без Department — осознанно.
+  alignment_rationale: UCD POSITION — каталог должностей; ближайший корпоративный концепт StaffPosition (штатная единица).
+    Зерно без Department — осознанно.
 relationships:
 - element_id: dams:rel/ucd/AGREEMENT_to_ORGANIZATION_via_organizationId
   name: AGREEMENT_to_ORGANIZATION_via_organizationId
@@ -693,456 +684,6 @@ relationships:
   source_max_cardinality: 999999
   target_min_cardinality: 0
   target_max_cardinality: 1
-physical_objects:
-- element_id: dams:physical/ucd/phys_AGREEMENT
-  name: phys_AGREEMENT
-  title: Соглашение
-  description: Соглашение
-  lifecycle_status: draft
-  solution_ref: eam:solution/UCD
-  system_ref: eam:system/UCD
-  object_kind: table
-  qualified_name: AGREEMENT
-  technology: PostgreSQL
-  native_schema_ref: postgres:ucd.phys_AGREEMENT
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/ucd/phys_AGREEMENT/id
-    name: id
-    description: ID соглашения
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_AGREEMENT
-    native_name: id
-    native_type: uuid
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_AGREEMENT/organizationId
-    name: organizationId
-    description: ID организации
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_AGREEMENT
-    native_name: organizationId
-    native_type: uuid
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_AGREEMENT/type
-    name: type
-    description: Тип соглашения
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_AGREEMENT
-    native_name: type
-    native_type: string
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_AGREEMENT/status
-    name: status
-    description: Статус соглашения
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_AGREEMENT
-    native_name: status
-    native_type: string
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_AGREEMENT/conclusionDate
-    name: conclusionDate
-    description: Дата заключения
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_AGREEMENT
-    native_name: conclusionDate
-    native_type: date
-    required: true
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/ucd/phys_AUTHORIZATION
-  name: phys_AUTHORIZATION
-  title: Полномочия
-  description: Полномочия сотрудника
-  lifecycle_status: draft
-  solution_ref: eam:solution/UCD
-  system_ref: eam:system/UCD
-  object_kind: table
-  qualified_name: AUTHORIZATION
-  technology: PostgreSQL
-  native_schema_ref: postgres:ucd.phys_AUTHORIZATION
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/ucd/phys_AUTHORIZATION/id
-    name: id
-    description: ID полномочий сотрудника
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_AUTHORIZATION
-    native_name: id
-    native_type: uuid
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_AUTHORIZATION/employeeId
-    name: employeeId
-    description: ID сотрудника
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_AUTHORIZATION
-    native_name: employeeId
-    native_type: uuid
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_AUTHORIZATION/type
-    name: type
-    description: Тип полномочий
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_AUTHORIZATION
-    native_name: type
-    native_type: string
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_AUTHORIZATION/valid_from
-    name: valid_from
-    description: Действует с
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_AUTHORIZATION
-    native_name: valid_from
-    native_type: date
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_AUTHORIZATION/valid_to
-    name: valid_to
-    description: Действует по
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_AUTHORIZATION
-    native_name: valid_to
-    native_type: date
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_AUTHORIZATION/status
-    name: status
-    description: Статус полномочий
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_AUTHORIZATION
-    native_name: status
-    native_type: string
-    required: true
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/ucd/phys_EMPOYEE
-  name: phys_EMPOYEE
-  title: Сотрудник
-  description: Сотрудник
-  lifecycle_status: draft
-  solution_ref: eam:solution/UCD
-  system_ref: eam:system/UCD
-  object_kind: table
-  qualified_name: EMPOYEE
-  technology: PostgreSQL
-  native_schema_ref: postgres:ucd.phys_EMPOYEE
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/ucd/phys_EMPOYEE/id
-    name: id
-    description: ID сотрудника
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_EMPOYEE
-    native_name: id
-    native_type: uuid
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_EMPOYEE/organizationId
-    name: organizationId
-    description: ID организации
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_EMPOYEE
-    native_name: organizationId
-    native_type: bigint
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_EMPOYEE/personId
-    name: personId
-    description: ID физического лица
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_EMPOYEE
-    native_name: personId
-    native_type: uuid
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_EMPOYEE/full_name
-    name: full_name
-    description: Полное наименование
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_EMPOYEE
-    native_name: full_name
-    native_type: string
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_EMPOYEE/inn
-    name: inn
-    description: ИНН физического лица
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_EMPOYEE
-    native_name: inn
-    native_type: string
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_EMPOYEE/snils
-    name: snils
-    description: СНИЛС
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_EMPOYEE
-    native_name: snils
-    native_type: string
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_EMPOYEE/status
-    name: status
-    description: Статус сотрудника
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_EMPOYEE
-    native_name: status
-    native_type: string
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_EMPOYEE/hire_date
-    name: hire_date
-    description: Дата приема на работу
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_EMPOYEE
-    native_name: hire_date
-    native_type: date
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_EMPOYEE/termination_date
-    name: termination_date
-    description: Дата увольнения
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_EMPOYEE
-    native_name: termination_date
-    native_type: date
-    required: false
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/ucd/phys_ORGANIZATION
-  name: phys_ORGANIZATION
-  title: Организация
-  description: Организация
-  lifecycle_status: draft
-  solution_ref: eam:solution/UCD
-  system_ref: eam:system/UCD
-  object_kind: table
-  qualified_name: ORGANIZATION
-  technology: PostgreSQL
-  native_schema_ref: postgres:ucd.phys_ORGANIZATION
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/ucd/phys_ORGANIZATION/id
-    name: id
-    description: ID организации
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_ORGANIZATION
-    native_name: id
-    native_type: uuid
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_ORGANIZATION/typeId
-    name: typeId
-    description: Тип организации
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_ORGANIZATION
-    native_name: typeId
-    native_type: bigint
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_ORGANIZATION/inn
-    name: inn
-    description: ИНН организации
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_ORGANIZATION
-    native_name: inn
-    native_type: string
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_ORGANIZATION/shortName
-    name: shortName
-    description: Краткое наименование
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_ORGANIZATION
-    native_name: shortName
-    native_type: string
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_ORGANIZATION/kpp
-    name: kpp
-    description: КПП организации
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_ORGANIZATION
-    native_name: kpp
-    native_type: string
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_ORGANIZATION/ogrn
-    name: ogrn
-    description: ОГРН организации
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_ORGANIZATION
-    native_name: ogrn
-    native_type: string
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_ORGANIZATION/fullName
-    name: fullName
-    description: Полное наименование
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_ORGANIZATION
-    native_name: fullName
-    native_type: string
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_ORGANIZATION/mcdbId
-    name: mcdbId
-    description: Уникальный идентификатор (MCDB ID)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_ORGANIZATION
-    native_name: mcdbId
-    native_type: bigint
-    required: true
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/ucd/phys_ORGANIZATION_TYPE
-  name: phys_ORGANIZATION_TYPE
-  title: Тип организации
-  description: Тип организации
-  lifecycle_status: draft
-  solution_ref: eam:solution/UCD
-  system_ref: eam:system/UCD
-  object_kind: table
-  qualified_name: ORGANIZATION_TYPE
-  technology: PostgreSQL
-  native_schema_ref: postgres:ucd.phys_ORGANIZATION_TYPE
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/ucd/phys_ORGANIZATION_TYPE/Id
-    name: Id
-    description: Уникальный идентификатор
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_ORGANIZATION_TYPE
-    native_name: Id
-    native_type: bigint
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_ORGANIZATION_TYPE/typeName
-    name: typeName
-    description: Тип организации
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_ORGANIZATION_TYPE
-    native_name: typeName
-    native_type: string
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_ORGANIZATION_TYPE/code
-    name: code
-    description: Код типа организации
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_ORGANIZATION_TYPE
-    native_name: code
-    native_type: string
-    required: false
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/ucd/phys_PERSON
-  name: phys_PERSON
-  title: Персона
-  description: Персона
-  lifecycle_status: draft
-  solution_ref: eam:solution/UCD
-  system_ref: eam:system/UCD
-  object_kind: table
-  qualified_name: PERSON
-  technology: PostgreSQL
-  native_schema_ref: postgres:ucd.phys_PERSON
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/ucd/phys_PERSON/id
-    name: id
-    description: Уникальный идентификатор
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_PERSON
-    native_name: id
-    native_type: uuid
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_PERSON/fullName
-    name: fullName
-    description: ФИО
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_PERSON
-    native_name: fullName
-    native_type: string
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_PERSON/birthDate
-    name: birthDate
-    description: Дата рождения
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_PERSON
-    native_name: birthDate
-    native_type: date
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_PERSON/inn
-    name: inn
-    description: ИНН физического лица
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_PERSON
-    native_name: inn
-    native_type: string
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_PERSON/snils
-    name: snils
-    description: СНИЛС
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_PERSON
-    native_name: snils
-    native_type: string
-    required: true
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/ucd/phys_POSITION
-  name: phys_POSITION
-  title: Должность
-  description: Должность сотрудника
-  lifecycle_status: draft
-  solution_ref: eam:solution/UCD
-  system_ref: eam:system/UCD
-  object_kind: table
-  qualified_name: POSITION
-  technology: PostgreSQL
-  native_schema_ref: postgres:ucd.phys_POSITION
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/ucd/phys_POSITION/id
-    name: id
-    description: ID должности
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_POSITION
-    native_name: id
-    native_type: uuid
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_POSITION/name
-    name: name
-    description: Имя должности
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_POSITION
-    native_name: name
-    native_type: string
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/ucd/phys_POSITION/code
-    name: code
-    description: Код должности
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/ucd/phys_POSITION
-    native_name: code
-    native_type: string
-    required: false
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
 mappings:
 - element_id: dams:mapping/ucd/map_AGREEMENT_id
   name: map_AGREEMENT_id
@@ -1679,5 +1220,482 @@ mappings:
 implementation_scope: solution
 conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
 data_owner_ref: org:role/DATA_OWNER_PENDING
-ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при отсутствии 
-  локального override на сущности.
+ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при отсутствии локального override на сущности.
+data_carriers:
+- element_id: dams:physical/ucd/phys_AGREEMENT
+  name: phys_AGREEMENT
+  title: Соглашение
+  description: Соглашение
+  lifecycle_status: draft
+  solution_ref: eam:solution/UCD
+  system_ref: eam:system/UCD
+  qualified_name: AGREEMENT
+  technology: PostgreSQL
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/ucd/phys_AGREEMENT/id
+    name: id
+    description: ID соглашения
+    lifecycle_status: draft
+    native_name: id
+    native_type: uuid
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_AGREEMENT
+  - element_id: dams:physical/ucd/phys_AGREEMENT/organizationId
+    name: organizationId
+    description: ID организации
+    lifecycle_status: draft
+    native_name: organizationId
+    native_type: uuid
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_AGREEMENT
+  - element_id: dams:physical/ucd/phys_AGREEMENT/type
+    name: type
+    description: Тип соглашения
+    lifecycle_status: draft
+    native_name: type
+    native_type: string
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_AGREEMENT
+  - element_id: dams:physical/ucd/phys_AGREEMENT/status
+    name: status
+    description: Статус соглашения
+    lifecycle_status: draft
+    native_name: status
+    native_type: string
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_AGREEMENT
+  - element_id: dams:physical/ucd/phys_AGREEMENT/conclusionDate
+    name: conclusionDate
+    description: Дата заключения
+    lifecycle_status: draft
+    native_name: conclusionDate
+    native_type: date
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_AGREEMENT
+  mapping_coverage_status: mapped
+  asset_namespace: postgresql://UCD
+  asset_kind: relational_table
+  structure_ref: postgres:ucd.phys_AGREEMENT
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/ucd/phys_AUTHORIZATION
+  name: phys_AUTHORIZATION
+  title: Полномочия
+  description: Полномочия сотрудника
+  lifecycle_status: draft
+  solution_ref: eam:solution/UCD
+  system_ref: eam:system/UCD
+  qualified_name: AUTHORIZATION
+  technology: PostgreSQL
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/ucd/phys_AUTHORIZATION/id
+    name: id
+    description: ID полномочий сотрудника
+    lifecycle_status: draft
+    native_name: id
+    native_type: uuid
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_AUTHORIZATION
+  - element_id: dams:physical/ucd/phys_AUTHORIZATION/employeeId
+    name: employeeId
+    description: ID сотрудника
+    lifecycle_status: draft
+    native_name: employeeId
+    native_type: uuid
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_AUTHORIZATION
+  - element_id: dams:physical/ucd/phys_AUTHORIZATION/type
+    name: type
+    description: Тип полномочий
+    lifecycle_status: draft
+    native_name: type
+    native_type: string
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_AUTHORIZATION
+  - element_id: dams:physical/ucd/phys_AUTHORIZATION/valid_from
+    name: valid_from
+    description: Действует с
+    lifecycle_status: draft
+    native_name: valid_from
+    native_type: date
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_AUTHORIZATION
+  - element_id: dams:physical/ucd/phys_AUTHORIZATION/valid_to
+    name: valid_to
+    description: Действует по
+    lifecycle_status: draft
+    native_name: valid_to
+    native_type: date
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_AUTHORIZATION
+  - element_id: dams:physical/ucd/phys_AUTHORIZATION/status
+    name: status
+    description: Статус полномочий
+    lifecycle_status: draft
+    native_name: status
+    native_type: string
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_AUTHORIZATION
+  mapping_coverage_status: mapped
+  asset_namespace: postgresql://UCD
+  asset_kind: relational_table
+  structure_ref: postgres:ucd.phys_AUTHORIZATION
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/ucd/phys_EMPOYEE
+  name: phys_EMPOYEE
+  title: Сотрудник
+  description: Сотрудник
+  lifecycle_status: draft
+  solution_ref: eam:solution/UCD
+  system_ref: eam:system/UCD
+  qualified_name: EMPOYEE
+  technology: PostgreSQL
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/ucd/phys_EMPOYEE/id
+    name: id
+    description: ID сотрудника
+    lifecycle_status: draft
+    native_name: id
+    native_type: uuid
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_EMPOYEE
+  - element_id: dams:physical/ucd/phys_EMPOYEE/organizationId
+    name: organizationId
+    description: ID организации
+    lifecycle_status: draft
+    native_name: organizationId
+    native_type: bigint
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_EMPOYEE
+  - element_id: dams:physical/ucd/phys_EMPOYEE/personId
+    name: personId
+    description: ID физического лица
+    lifecycle_status: draft
+    native_name: personId
+    native_type: uuid
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_EMPOYEE
+  - element_id: dams:physical/ucd/phys_EMPOYEE/full_name
+    name: full_name
+    description: Полное наименование
+    lifecycle_status: draft
+    native_name: full_name
+    native_type: string
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_EMPOYEE
+  - element_id: dams:physical/ucd/phys_EMPOYEE/inn
+    name: inn
+    description: ИНН физического лица
+    lifecycle_status: draft
+    native_name: inn
+    native_type: string
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_EMPOYEE
+  - element_id: dams:physical/ucd/phys_EMPOYEE/snils
+    name: snils
+    description: СНИЛС
+    lifecycle_status: draft
+    native_name: snils
+    native_type: string
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_EMPOYEE
+  - element_id: dams:physical/ucd/phys_EMPOYEE/status
+    name: status
+    description: Статус сотрудника
+    lifecycle_status: draft
+    native_name: status
+    native_type: string
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_EMPOYEE
+  - element_id: dams:physical/ucd/phys_EMPOYEE/hire_date
+    name: hire_date
+    description: Дата приема на работу
+    lifecycle_status: draft
+    native_name: hire_date
+    native_type: date
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_EMPOYEE
+  - element_id: dams:physical/ucd/phys_EMPOYEE/termination_date
+    name: termination_date
+    description: Дата увольнения
+    lifecycle_status: draft
+    native_name: termination_date
+    native_type: date
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_EMPOYEE
+  mapping_coverage_status: mapped
+  asset_namespace: postgresql://UCD
+  asset_kind: relational_table
+  structure_ref: postgres:ucd.phys_EMPOYEE
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/ucd/phys_ORGANIZATION
+  name: phys_ORGANIZATION
+  title: Организация
+  description: Организация
+  lifecycle_status: draft
+  solution_ref: eam:solution/UCD
+  system_ref: eam:system/UCD
+  qualified_name: ORGANIZATION
+  technology: PostgreSQL
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/ucd/phys_ORGANIZATION/id
+    name: id
+    description: ID организации
+    lifecycle_status: draft
+    native_name: id
+    native_type: uuid
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_ORGANIZATION
+  - element_id: dams:physical/ucd/phys_ORGANIZATION/typeId
+    name: typeId
+    description: Тип организации
+    lifecycle_status: draft
+    native_name: typeId
+    native_type: bigint
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_ORGANIZATION
+  - element_id: dams:physical/ucd/phys_ORGANIZATION/inn
+    name: inn
+    description: ИНН организации
+    lifecycle_status: draft
+    native_name: inn
+    native_type: string
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_ORGANIZATION
+  - element_id: dams:physical/ucd/phys_ORGANIZATION/shortName
+    name: shortName
+    description: Краткое наименование
+    lifecycle_status: draft
+    native_name: shortName
+    native_type: string
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_ORGANIZATION
+  - element_id: dams:physical/ucd/phys_ORGANIZATION/kpp
+    name: kpp
+    description: КПП организации
+    lifecycle_status: draft
+    native_name: kpp
+    native_type: string
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_ORGANIZATION
+  - element_id: dams:physical/ucd/phys_ORGANIZATION/ogrn
+    name: ogrn
+    description: ОГРН организации
+    lifecycle_status: draft
+    native_name: ogrn
+    native_type: string
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_ORGANIZATION
+  - element_id: dams:physical/ucd/phys_ORGANIZATION/fullName
+    name: fullName
+    description: Полное наименование
+    lifecycle_status: draft
+    native_name: fullName
+    native_type: string
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_ORGANIZATION
+  - element_id: dams:physical/ucd/phys_ORGANIZATION/mcdbId
+    name: mcdbId
+    description: Уникальный идентификатор (MCDB ID)
+    lifecycle_status: draft
+    native_name: mcdbId
+    native_type: bigint
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_ORGANIZATION
+  mapping_coverage_status: mapped
+  asset_namespace: postgresql://UCD
+  asset_kind: relational_table
+  structure_ref: postgres:ucd.phys_ORGANIZATION
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/ucd/phys_ORGANIZATION_TYPE
+  name: phys_ORGANIZATION_TYPE
+  title: Тип организации
+  description: Тип организации
+  lifecycle_status: draft
+  solution_ref: eam:solution/UCD
+  system_ref: eam:system/UCD
+  qualified_name: ORGANIZATION_TYPE
+  technology: PostgreSQL
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/ucd/phys_ORGANIZATION_TYPE/Id
+    name: Id
+    description: Уникальный идентификатор
+    lifecycle_status: draft
+    native_name: Id
+    native_type: bigint
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_ORGANIZATION_TYPE
+  - element_id: dams:physical/ucd/phys_ORGANIZATION_TYPE/typeName
+    name: typeName
+    description: Тип организации
+    lifecycle_status: draft
+    native_name: typeName
+    native_type: string
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_ORGANIZATION_TYPE
+  - element_id: dams:physical/ucd/phys_ORGANIZATION_TYPE/code
+    name: code
+    description: Код типа организации
+    lifecycle_status: draft
+    native_name: code
+    native_type: string
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_ORGANIZATION_TYPE
+  mapping_coverage_status: mapped
+  asset_namespace: postgresql://UCD
+  asset_kind: relational_table
+  structure_ref: postgres:ucd.phys_ORGANIZATION_TYPE
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/ucd/phys_PERSON
+  name: phys_PERSON
+  title: Персона
+  description: Персона
+  lifecycle_status: draft
+  solution_ref: eam:solution/UCD
+  system_ref: eam:system/UCD
+  qualified_name: PERSON
+  technology: PostgreSQL
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/ucd/phys_PERSON/id
+    name: id
+    description: Уникальный идентификатор
+    lifecycle_status: draft
+    native_name: id
+    native_type: uuid
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_PERSON
+  - element_id: dams:physical/ucd/phys_PERSON/fullName
+    name: fullName
+    description: ФИО
+    lifecycle_status: draft
+    native_name: fullName
+    native_type: string
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_PERSON
+  - element_id: dams:physical/ucd/phys_PERSON/birthDate
+    name: birthDate
+    description: Дата рождения
+    lifecycle_status: draft
+    native_name: birthDate
+    native_type: date
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_PERSON
+  - element_id: dams:physical/ucd/phys_PERSON/inn
+    name: inn
+    description: ИНН физического лица
+    lifecycle_status: draft
+    native_name: inn
+    native_type: string
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_PERSON
+  - element_id: dams:physical/ucd/phys_PERSON/snils
+    name: snils
+    description: СНИЛС
+    lifecycle_status: draft
+    native_name: snils
+    native_type: string
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_PERSON
+  mapping_coverage_status: mapped
+  asset_namespace: postgresql://UCD
+  asset_kind: relational_table
+  structure_ref: postgres:ucd.phys_PERSON
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/ucd/phys_POSITION
+  name: phys_POSITION
+  title: Должность
+  description: Должность сотрудника
+  lifecycle_status: draft
+  solution_ref: eam:solution/UCD
+  system_ref: eam:system/UCD
+  qualified_name: POSITION
+  technology: PostgreSQL
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/ucd/phys_POSITION/id
+    name: id
+    description: ID должности
+    lifecycle_status: draft
+    native_name: id
+    native_type: uuid
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_POSITION
+  - element_id: dams:physical/ucd/phys_POSITION/name
+    name: name
+    description: Имя должности
+    lifecycle_status: draft
+    native_name: name
+    native_type: string
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_POSITION
+  - element_id: dams:physical/ucd/phys_POSITION/code
+    name: code
+    description: Код должности
+    lifecycle_status: draft
+    native_name: code
+    native_type: string
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/ucd/phys_POSITION
+  mapping_coverage_status: mapped
+  asset_namespace: postgresql://UCD
+  asset_kind: relational_table
+  structure_ref: postgres:ucd.phys_POSITION
+  tags:
+  - transitional
+  - namespace_heuristic

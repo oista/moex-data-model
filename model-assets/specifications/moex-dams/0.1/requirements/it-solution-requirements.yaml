@@ -101,13 +101,13 @@ requirements:
 - element_id: dams:req/GEN-003
   name: non_empty_model
   title: Непустой состав модели
-  description: Пакет содержит logical или physical facet.
+  description: Пакет содержит logical или technical facet.
   lifecycle_status: approved
   code: GEN-003
   requirement_level: it_solution
   requirement_section: GEN
   statement: Пакет модели ИТ-решения должен содержать хотя бы одну логическую сущность или хотя бы один
-    физический объект данных. Пустой пакет не допускается.
+    технический актив (носитель данных, точка доступа, контейнер или исполняемый актив). Пустой пакет не допускается.
   applies_to:
     applicability_id: appl:GEN-003
     applies_target_class: ModelPackage
@@ -119,39 +119,39 @@ requirements:
     expression: non_empty_logical_or_physical
     severity: error
     diagnostic_code: DAMS-REQ-GEN-003.c1
-    remediation: Добавьте хотя бы одну логическую сущность или физический объект данных.
+    remediation: Добавьте хотя бы одну логическую сущность или технический актив (DataCarrier и др.).
 - element_id: dams:req/GEN-004
-  name: physical_object_semantic_link
-  title: Физические объекты связаны со смыслом
-  description: Data-carrying PhysicalObject имеет entity mapping или technical-only.
+  name: data_carrier_semantic_link
+  title: Носители данных связаны со смыслом
+  description: DataCarrier имеет entity mapping или technical-only.
   lifecycle_status: approved
   code: GEN-004
   requirement_level: it_solution
   requirement_section: GEN
-  statement: Если в пакете описан физический объект, который сам несёт или предоставляет данные (таблица,
-    представление, файл, набор данных, конечная точка API, топик/сообщение и т.п.), для него должно быть
-    показано соответствие логическому смыслу либо явно указано, что объект только технический/служебный,
-    с кратким обоснованием. Инфраструктурные контейнеры (экземпляр БД, пространство имён схемы, бакет
-    как контейнер, соединение, индекс и т.п.) этим требованием не покрываются автоматически.
+  statement: >-
+    Если в пакете описан носитель данных (DataCarrier), который сам несёт или предоставляет данные
+    (реляционная таблица/представление, файл, набор данных, API-ресурс, топик/очередь/тип сообщения и т.п.),
+    для него должно быть показано соответствие логическому смыслу либо явно указано, что носитель только
+    технический/служебный, с кратким обоснованием. Инфраструктурные контейнеры (DataContainer — БД, схема,
+    бакет, брокер и т.п.) и точки доступа (AccessPoint) этим требованием не покрываются автоматически.
   applies_to:
     applicability_id: appl:GEN-004
-    applies_target_class: PhysicalObject
+    applies_target_class: DataCarrier
     applies_implementation_scope: solution
     applies_target_kinds:
-    - table
-    - view
+    - relational_table
+    - relational_view
     - file
     - dataset
-    - api
-    - endpoint
-    - topic
-    - message
-    - queue
-    - payload
+    - stream_topic
+    - stream_queue
+    - message_type
+    - api_resource
+    - other
   formal_checks:
   - check_id: GEN-004.c1
     kind: conditional_branch
-    target_class: PhysicalObject
+    target_class: DataCarrier
     expression: data_carrying_entity_mapping_or_technical
     severity: error
     diagnostic_code: DAMS-REQ-GEN-004.c1
@@ -579,72 +579,80 @@ requirements:
     diagnostic_code: DAMS-REQ-REF-002.c1
     remediation: Задайте source/target min и max cardinality либо для draft укажите cardinality_rationale.
 - element_id: dams:req/PDM-001
-  name: physical_object_core
-  title: Основные свойства физического объекта
-  description: system, kind, name, technology, schema, lifecycle.
+  name: data_carrier_core
+  title: Основные свойства носителя данных
+  description: system, asset_kind, namespace, name, technology, structure, lifecycle.
   lifecycle_status: approved
   implementation_status: in_progress
   code: PDM-001
   requirement_level: it_solution
   requirement_section: PDM
-  statement: У физического объекта данных должны быть указаны ИТ-система, вид объекта, нативное имя/идентификатор,
-    технология и ссылка на нативную схему или формат, а также статус жизненного цикла.
+  statement: У носителя данных (DataCarrier) должны быть указаны ИТ-система, вид актива (asset_kind),
+    пространство имён (asset_namespace), квалифицированное имя, технология и ссылка на структуру
+    (structure_ref; не требуется для in_memory), а также статус жизненного цикла.
   applies_to:
     applicability_id: appl:PDM-001
-    applies_target_class: PhysicalObject
+    applies_target_class: DataCarrier
   formal_checks:
   - check_id: PDM-001.c1
     kind: slot_required
-    target_class: PhysicalObject
+    target_class: DataCarrier
     target_slot: system_ref
     severity: error
     remediation: Укажите system_ref на ИТ-систему.
     diagnostic_code: DAMS-REQ-PDM-001.c1
   - check_id: PDM-001.c2
     kind: slot_required
-    target_class: PhysicalObject
-    target_slot: object_kind
+    target_class: DataCarrier
+    target_slot: asset_kind
     severity: error
-    remediation: Укажите вид физического объекта (object_kind).
+    remediation: Укажите вид носителя данных (asset_kind).
     diagnostic_code: DAMS-REQ-PDM-001.c2
   - check_id: PDM-001.c3
     kind: slot_required
-    target_class: PhysicalObject
+    target_class: DataCarrier
     target_slot: qualified_name
     severity: error
     remediation: Укажите квалифицированное нативное имя.
     diagnostic_code: DAMS-REQ-PDM-001.c3
   - check_id: PDM-001.c4
     kind: slot_required
-    target_class: PhysicalObject
+    target_class: DataCarrier
     target_slot: technology
     severity: error
     remediation: Укажите технологию хранения/предоставления.
     diagnostic_code: DAMS-REQ-PDM-001.c4
   - check_id: PDM-001.c5
-    kind: slot_required
-    target_class: PhysicalObject
-    target_slot: native_schema_ref
+    kind: conditional_branch
+    target_class: DataCarrier
+    expression: pdm001_structure_ref
     severity: error
-    remediation: Укажите ссылку на нативную схему или формат.
+    remediation: Укажите structure_ref (ссылку на структуру/схему); для in_memory не требуется.
     diagnostic_code: DAMS-REQ-PDM-001.c5
   - check_id: PDM-001.c6
     kind: slot_required
-    target_class: PhysicalObject
+    target_class: DataCarrier
     target_slot: lifecycle_status
     severity: error
-    remediation: Укажите lifecycle_status физического объекта.
+    remediation: Укажите lifecycle_status носителя данных.
     diagnostic_code: DAMS-REQ-PDM-001.c6
+  - check_id: PDM-001.c7
+    kind: slot_required
+    target_class: DataCarrier
+    target_slot: asset_namespace
+    severity: error
+    remediation: Укажите asset_namespace (OpenLineage-подобное пространство имён).
+    diagnostic_code: DAMS-REQ-PDM-001.c7
 - element_id: dams:req/PDM-002
   name: physical_field_core
   title: Основные свойства физического поля
-  description: parent, native name/type, required.
+  description: parent carrier, native name/type, required.
   lifecycle_status: approved
   code: PDM-002
   requirement_level: it_solution
   requirement_section: PDM
-  statement: У физического поля должны быть указаны родительский объект, нативное имя, нативный тип и
-    семантика обязательности (допустимость пустого значения).
+  statement: У физического поля должны быть указаны родительский носитель данных (carrier_ref), нативное
+    имя, нативный тип и семантика обязательности (допустимость пустого значения).
   applies_to:
     applicability_id: appl:PDM-002
     applies_target_class: PhysicalField
@@ -652,9 +660,9 @@ requirements:
   - check_id: PDM-002.c1
     kind: slot_required
     target_class: PhysicalField
-    target_slot: physical_object_ref
+    target_slot: carrier_ref
     severity: error
-    remediation: Укажите physical_object_ref родительского объекта.
+    remediation: Укажите carrier_ref родительского DataCarrier.
     diagnostic_code: DAMS-REQ-PDM-002.c1
   - check_id: PDM-002.c2
     kind: slot_required
@@ -679,37 +687,36 @@ requirements:
     diagnostic_code: DAMS-REQ-PDM-002.c4
 - element_id: dams:req/PDM-003
   name: entity_physical_mapping
-  title: Отображение сущности и физического объекта
+  title: Отображение сущности и носителя данных
   description: Explicit entity_physical Mapping only.
   lifecycle_status: approved
   code: PDM-003
   requirement_level: it_solution
   requirement_section: PDM
-  statement: Для физического объекта, который несёт данные и не помечен как только технический, должно
-    существовать явное отображение уровня сущности на одну или несколько логических сущностей. Наличие
-    отображений отдельных полей само по себе не засчитывается как доказательство на уровне объекта.
+  statement: Для носителя данных (DataCarrier), который несёт данные и не помечен как только технический,
+    должно существовать явное отображение уровня сущности на одну или несколько логических сущностей.
+    Наличие отображений отдельных полей само по себе не засчитывается как доказательство на уровне носителя.
   applies_to:
     applicability_id: appl:PDM-003
-    applies_target_class: PhysicalObject
+    applies_target_class: DataCarrier
     applies_target_kinds:
-    - table
-    - view
+    - relational_table
+    - relational_view
     - file
     - dataset
-    - api
-    - endpoint
-    - topic
-    - message
-    - queue
-    - payload
+    - stream_topic
+    - stream_queue
+    - message_type
+    - api_resource
+    - other
   formal_checks:
   - check_id: PDM-003.c1
     kind: conditional_branch
-    target_class: PhysicalObject
+    target_class: DataCarrier
     expression: pdm003_entity_physical
     severity: error
     diagnostic_code: DAMS-REQ-PDM-003.c1
-    remediation: Добавьте Mapping с mapping_type entity_physical между этим объектом и ≥1 логической сущностью,
+    remediation: Добавьте Mapping с mapping_type entity_physical между этим носителем и ≥1 логической сущностью,
       либо technical-only + mapping_rationale.
 - element_id: dams:req/PDM-004
   name: field_attribute_mapping
@@ -734,6 +741,172 @@ requirements:
     diagnostic_code: DAMS-REQ-PDM-004.c1
     remediation: Добавьте field_mapping (и при необходимости transformation_expression) либо mapping_coverage_status
       с mapping_rationale.
+- element_id: dams:req/PDM-005
+  name: technical_asset_unique_key
+  title: Уникальность ключа технического актива
+  description: (asset_namespace, qualified_name) unique across collections.
+  lifecycle_status: approved
+  code: PDM-005
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: Пара (asset_namespace, qualified_name) должна быть уникальна среди всех технических активов
+    пакета (data_carriers, access_points, data_containers, execution_assets).
+  applies_to:
+    applicability_id: appl:PDM-005
+    applies_target_class: TechnicalAsset
+  formal_checks:
+  - check_id: PDM-005.c1
+    kind: custom
+    target_class: TechnicalAsset
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-005.c1
+    remediation: Исправьте дублирующиеся asset_namespace и qualified_name.
+    description: Enforced by check_unique_asset_keys.
+- element_id: dams:req/PDM-006
+  name: parent_ref_acyclic
+  title: Иерархия parent_ref без циклов
+  description: parent_ref must not self-ref or cycle.
+  lifecycle_status: approved
+  code: PDM-006
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: Ссылка parent_ref технического актива не должна указывать на сам актив и не должна образовывать
+    циклы в контейнерной иерархии.
+  applies_to:
+    applicability_id: appl:PDM-006
+    applies_target_class: TechnicalAsset
+  formal_checks:
+  - check_id: PDM-006.c1
+    kind: custom
+    target_class: TechnicalAsset
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-006.c1
+    remediation: Устраните самоссылку или цикл в parent_ref.
+    description: Enforced by check_parent_ref_cycles.
+- element_id: dams:req/PDM-007
+  name: asset_kind_allowlist
+  title: Допустимые asset_kind по подклассу
+  description: asset_kind must match subclass enum.
+  lifecycle_status: approved
+  code: PDM-007
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: Значение asset_kind должно принадлежать перечислению соответствующего подкласса TechnicalAsset
+    (DataCarrierKindEnum, AccessPointKindEnum, DataContainerKindEnum или ExecutionAssetKindEnum).
+  applies_to:
+    applicability_id: appl:PDM-007
+    applies_target_class: TechnicalAsset
+  formal_checks:
+  - check_id: PDM-007.c1
+    kind: custom
+    target_class: TechnicalAsset
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-007.c1
+    remediation: Укажите asset_kind из допустимого enum подкласса.
+    description: Enforced by check_asset_kind_allowlists.
+- element_id: dams:req/PDM-008
+  name: direction_forbidden_on_containers
+  title: Запрет direction для контейнеров и исполнения
+  description: direction forbidden on DataContainer and ExecutionAsset.
+  lifecycle_status: approved
+  code: PDM-008
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: Слот direction запрещён для DataContainer и ExecutionAsset; он допустим только у DataCarrier
+    и AccessPoint.
+  applies_to:
+    applicability_id: appl:PDM-008
+    applies_target_class: TechnicalAsset
+  formal_checks:
+  - check_id: PDM-008.c1
+    kind: custom
+    target_class: TechnicalAsset
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-008.c1
+    remediation: Удалите direction у DataContainer/ExecutionAsset.
+    description: Enforced by check_direction_forbidden.
+- element_id: dams:req/PDM-009
+  name: mapping_endpoint_types
+  title: Типы концов Mapping
+  description: entity_physical and field_mapping endpoint class checks.
+  lifecycle_status: approved
+  code: PDM-009
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: Mapping типа entity_physical связывает LogicalEntity и DataCarrier; Mapping типа field_mapping
+    связывает LogicalAttribute и PhysicalField.
+  applies_to:
+    applicability_id: appl:PDM-009
+    applies_target_class: Mapping
+  formal_checks:
+  - check_id: PDM-009.c1
+    kind: custom
+    target_class: Mapping
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-009.c1
+    remediation: Исправьте типы концов Mapping.
+    description: Enforced by check_mapping_endpoint_types.
+- element_id: dams:req/PDM-010
+  name: carrier_refs_data_carrier_only
+  title: carrier_refs только на DataCarrier
+  description: Bindings must not point carrier_refs at containers.
+  lifecycle_status: approved
+  code: PDM-010
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: В DataFlowEntityBinding и SelectedEntity слот carrier_refs должен ссылаться только на идентификаторы
+    DataCarrier, а не на DataContainer, AccessPoint или ExecutionAsset.
+  applies_to:
+    applicability_id: appl:PDM-010
+    applies_target_class: ModelPackage
+  formal_checks:
+  - check_id: PDM-010.c1
+    kind: custom
+    target_class: ModelPackage
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-010.c1
+    remediation: Укажите в carrier_refs только element_id из data_carriers.
+    description: Enforced by check_carrier_refs_are_data_carriers.
+- element_id: dams:req/PDM-011
+  name: operation_requires_interface
+  title: operation требует interface_ref
+  description: AccessPoint operation must set interface_ref.
+  lifecycle_status: approved
+  code: PDM-011
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: Точка доступа с asset_kind=operation должна ссылаться на родительский интерфейс через interface_ref.
+  applies_to:
+    applicability_id: appl:PDM-011
+    applies_target_class: AccessPoint
+  formal_checks:
+  - check_id: PDM-011.c1
+    kind: custom
+    target_class: AccessPoint
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-011.c1
+    remediation: Укажите interface_ref для operation.
+    description: Enforced by check_operation_interface_ref.
+- element_id: dams:req/PDM-012
+  name: in_memory_no_location
+  title: in_memory без location
+  description: in_memory must not set location_uri/region.
+  lifecycle_status: approved
+  code: PDM-012
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: Носитель с asset_kind=in_memory не должен задавать location_uri и region.
+  applies_to:
+    applicability_id: appl:PDM-012
+    applies_target_class: DataCarrier
+  formal_checks:
+  - check_id: PDM-012.c1
+    kind: custom
+    target_class: DataCarrier
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-012.c1
+    remediation: Удалите location_uri и region у in_memory носителя.
+    description: Enforced by check_in_memory_location.
 - element_id: dams:req/CLS-001
   name: classification_axes_independent
   title: Независимость осей классификации

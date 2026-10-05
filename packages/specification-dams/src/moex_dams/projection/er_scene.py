@@ -229,11 +229,11 @@ def project_model_package_to_er_scene(
                 }
             )
     else:
-        for obj in data.get("physical_objects") or []:
+        for obj in data.get("data_carriers") or []:
             if not isinstance(obj, dict):
                 continue
             tname = unique_table_name(
-                obj.get("name"), fallback="PhysicalObject", used=table_names
+                obj.get("name"), fallback="DataCarrier", used=table_names
             )
             oid = str(obj.get("element_id") or "")
             if oid:

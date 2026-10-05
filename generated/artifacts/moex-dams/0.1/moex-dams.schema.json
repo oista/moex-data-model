@@ -1,5 +1,323 @@
 {
     "$defs": {
+        "AccessPoint": {
+            "additionalProperties": false,
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "asset_kind": {
+                                "const": "operation"
+                            }
+                        },
+                        "required": [
+                            "asset_kind"
+                        ]
+                    },
+                    "then": {
+                        "properties": {
+                            "interface_ref": {}
+                        },
+                        "required": [
+                            "interface_ref"
+                        ]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "asset_kind": {
+                                "const": "interface"
+                            }
+                        },
+                        "required": [
+                            "asset_kind"
+                        ]
+                    },
+                    "then": {
+                        "not": {
+                            "required": [
+                                "operation_name",
+                                "http_method",
+                                "path_template"
+                            ]
+                        },
+                        "properties": {
+                            "http_method": {},
+                            "operation_name": {},
+                            "path_template": {}
+                        }
+                    }
+                }
+            ],
+            "description": "\u0422\u043e\u0447\u043a\u0430 \u0434\u043e\u0441\u0442\u0443\u043f\u0430 \u043a \u0434\u0430\u043d\u043d\u044b\u043c: \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441, \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u044f \u0438\u043b\u0438 \u043a\u0430\u043d\u0430\u043b. \u0421\u0430\u043c\u0430 \u0434\u0430\u043d\u043d\u044b\u0435 \u043d\u0435 \u043d\u0435\u0441\u0451\u0442; \u0443\u043a\u0430\u0437\u044b\u0432\u0430\u0435\u0442 \u043d\u0430 \u043d\u043e\u0441\u0438\u0442\u0435\u043b\u0438 \u0447\u0435\u0440\u0435\u0437 serves_refs.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "asset_kind": {
+                    "$ref": "#/$defs/AccessPointKindEnum",
+                    "description": "\u0420\u0430\u0437\u043d\u043e\u0432\u0438\u0434\u043d\u043e\u0441\u0442\u044c \u0430\u043a\u0442\u0438\u0432\u0430. \u041d\u0430 \u043f\u043e\u0434\u043a\u043b\u0430\u0441\u0441\u0430\u0445 \u0441\u0443\u0436\u0430\u0435\u0442\u0441\u044f \u0447\u0435\u0440\u0435\u0437 slot_usage \u043d\u0430 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0439 enum.\n"
+                },
+                "asset_namespace": {
+                    "description": "\u041f\u0440\u043e\u0441\u0442\u0440\u0430\u043d\u0441\u0442\u0432\u043e \u0438\u043c\u0451\u043d \u0438\u0441\u0442\u043e\u0447\u043d\u0438\u043a\u0430 \u043f\u043e \u0430\u043d\u0430\u043b\u043e\u0433\u0438\u0438 \u0441 OpenLineage namespace (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 postgres://host:5432, kafka://cluster, s3://bucket). \u041e\u0442\u0434\u0435\u043b\u044c\u043d\u044b\u0439 \u0441\u043b\u043e\u0442 \u043e\u0442 DomainContext.namespace (ADR-B).\n",
+                    "type": "string"
+                },
+                "binding_ref": {
+                    "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u0432\u043d\u0435\u0448\u043d\u0435\u0435 \u043e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 binding.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "classification_rationale": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "classification_source": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "direction": {
+                    "$ref": "#/$defs/FlowDirectionEnum",
+                    "description": "\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u043f\u0440\u043e\u0442\u043e\u043a\u043e\u043b\u0430 AccessPoint (\u0447\u0435\u0440\u0435\u0437 FlowDirectionEnum)."
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "governance_classification": {
+                    "$ref": "#/$defs/GovernanceClassificationEnum"
+                },
+                "http_method": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "interface_ref": {
+                    "description": "\u0420\u043e\u0434\u0438\u0442\u0435\u043b\u044c\u0441\u043a\u0438\u0439 \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441 \u0434\u043b\u044f \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0438 (asset_kind=operation).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "lineage_role": {
+                    "$ref": "#/$defs/LineageRoleEnum",
+                    "description": "\u0420\u043e\u043b\u044c \u0430\u043a\u0442\u0438\u0432\u0430 \u0432 lineage (source, sink, intermediate, none)."
+                },
+                "location_uri": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "name": {
+                    "type": "string"
+                },
+                "native_name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "operation_name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "ownership_inheritance_rule": {
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "parent_ref": {
+                    "description": "\u0420\u043e\u0434\u0438\u0442\u0435\u043b\u044c \u0432 \u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440\u043d\u043e\u0439 \u0438\u0435\u0440\u0430\u0440\u0445\u0438\u0438 (\u0431\u0435\u0437 \u0446\u0438\u043a\u043b\u043e\u0432).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "path_template": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "policy_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "protocol": {
+                    "description": "\u041f\u0440\u043e\u0442\u043e\u043a\u043e\u043b \u0434\u043e\u0441\u0442\u0443\u043f\u0430 (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 https, jdbc, kafka).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "protocol_version": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "qualified_name": {
+                    "type": "string"
+                },
+                "region": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "security_classification": {
+                    "$ref": "#/$defs/SecurityClassificationEnum",
+                    "description": "\u0420\u0435\u0436\u0438\u043c \u0437\u0430\u0449\u0438\u0442\u044b (Wave 2); \u043e\u0440\u0442\u043e\u0433\u043e\u043d\u0430\u043b\u0435\u043d governance_classification."
+                },
+                "sensitivity_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "serves_refs": {
+                    "description": "\u041d\u043e\u0441\u0438\u0442\u0435\u043b\u0438, \u0434\u043e\u0441\u0442\u0443\u043f\u043d\u044b\u0435 \u0447\u0435\u0440\u0435\u0437 \u044d\u0442\u0443 \u0442\u043e\u0447\u043a\u0443 \u0434\u043e\u0441\u0442\u0443\u043f\u0430.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "solution_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "system_ref": {
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "technology": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "asset_namespace",
+                "qualified_name",
+                "system_ref",
+                "asset_kind",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "AccessPoint",
+            "type": "object"
+        },
+        "AccessPointKindEnum": {
+            "description": "",
+            "enum": [
+                "interface",
+                "operation",
+                "channel"
+            ],
+            "title": "AccessPointKindEnum",
+            "type": "string"
+        },
         "ApprovalStatusEnum": {
             "description": "",
             "enum": [
@@ -393,6 +711,27 @@
             "title": "ConceptualEntity",
             "type": "object"
         },
+        "ContainmentKindEnum": {
+            "description": "",
+            "enum": [
+                "composite",
+                "partitioned",
+                "hierarchical"
+            ],
+            "title": "ContainmentKindEnum",
+            "type": "string"
+        },
+        "Contains": {
+            "additionalProperties": false,
+            "description": "Mixin \u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440\u043d\u043e\u0441\u0442\u0438. child_refs \u043d\u0435 \u0445\u0440\u0430\u043d\u044f\u0442\u0441\u044f: \u0432\u044b\u0432\u043e\u0434\u044f\u0442\u0441\u044f \u0438\u0437 parent_ref.",
+            "properties": {
+                "containment_kind": {
+                    "$ref": "#/$defs/ContainmentKindEnum"
+                }
+            },
+            "title": "Contains",
+            "type": "object"
+        },
         "DAMSModelLevelEnum": {
             "description": "Package-level DAMS model layer (ADR-021). Distinct from ModelLevelEnum (element conceptual/logical/physical). No domain-logical value.",
             "enum": [
@@ -400,6 +739,294 @@
                 "solution"
             ],
             "title": "DAMSModelLevelEnum",
+            "type": "string"
+        },
+        "DataCarrier": {
+            "additionalProperties": false,
+            "description": "\u041d\u043e\u0441\u0438\u0442\u0435\u043b\u044c \u0434\u0430\u043d\u043d\u044b\u0445: \u0445\u0440\u0430\u043d\u0438\u0442 \u0438\u043b\u0438 \u043f\u0435\u0440\u0435\u0434\u0430\u0451\u0442 \u0434\u0430\u043d\u043d\u044b\u0435 (\u0442\u0430\u0431\u043b\u0438\u0446\u0430, \u0444\u0430\u0439\u043b, \u0442\u043e\u043f\u0438\u043a, \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 \u0438 \u0442.\u043f.).",
+            "if": {
+                "properties": {
+                    "asset_kind": {
+                        "const": "in_memory"
+                    }
+                },
+                "required": [
+                    "asset_kind"
+                ]
+            },
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "asset_kind": {
+                    "$ref": "#/$defs/DataCarrierKindEnum",
+                    "description": "\u0420\u0430\u0437\u043d\u043e\u0432\u0438\u0434\u043d\u043e\u0441\u0442\u044c \u0430\u043a\u0442\u0438\u0432\u0430. \u041d\u0430 \u043f\u043e\u0434\u043a\u043b\u0430\u0441\u0441\u0430\u0445 \u0441\u0443\u0436\u0430\u0435\u0442\u0441\u044f \u0447\u0435\u0440\u0435\u0437 slot_usage \u043d\u0430 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0439 enum.\n"
+                },
+                "asset_namespace": {
+                    "description": "\u041f\u0440\u043e\u0441\u0442\u0440\u0430\u043d\u0441\u0442\u0432\u043e \u0438\u043c\u0451\u043d \u0438\u0441\u0442\u043e\u0447\u043d\u0438\u043a\u0430 \u043f\u043e \u0430\u043d\u0430\u043b\u043e\u0433\u0438\u0438 \u0441 OpenLineage namespace (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 postgres://host:5432, kafka://cluster, s3://bucket). \u041e\u0442\u0434\u0435\u043b\u044c\u043d\u044b\u0439 \u0441\u043b\u043e\u0442 \u043e\u0442 DomainContext.namespace (ADR-B).\n",
+                    "type": "string"
+                },
+                "classification_rationale": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "classification_source": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "containment_kind": {
+                    "$ref": "#/$defs/ContainmentKindEnum"
+                },
+                "data_format": {
+                    "description": "\u0424\u043e\u0440\u043c\u0430\u0442 \u0434\u0430\u043d\u043d\u044b\u0445 (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 parquet, csv, json).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "direction": {
+                    "$ref": "#/$defs/FlowDirectionEnum",
+                    "description": "\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u043e\u0442\u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u0440\u0435\u0448\u0435\u043d\u0438\u044f. \u0417\u0430\u043f\u0440\u0435\u0449\u0451\u043d \u0434\u043b\u044f DataContainer \u0438 ExecutionAsset \u043f\u0440\u0430\u0432\u0438\u043b\u043e\u043c DAMS-\u0432\u0430\u043b\u0438\u0434\u0430\u0442\u043e\u0440\u0430 \u0438 LinkML rules.\n"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "governance_classification": {
+                    "$ref": "#/$defs/GovernanceClassificationEnum"
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "lineage_role": {
+                    "$ref": "#/$defs/LineageRoleEnum",
+                    "description": "\u0420\u043e\u043b\u044c \u0430\u043a\u0442\u0438\u0432\u0430 \u0432 lineage (source, sink, intermediate, none)."
+                },
+                "location_uri": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "mapping_coverage_status": {
+                    "$ref": "#/$defs/MappingCoverageStatusEnum",
+                    "description": "\u0421\u0442\u0430\u0442\u0443\u0441 \u043f\u043e\u043a\u0440\u044b\u0442\u0438\u044f \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430 mapping\u2019\u043e\u043c \u043d\u0430 \u0441\u043e\u0441\u0435\u0434\u043d\u0435\u043c \u0443\u0440\u043e\u0432\u043d\u0435 \u043c\u043e\u0434\u0435\u043b\u0438 (logical \u2194 physical).\n"
+                },
+                "mapping_rationale": {
+                    "description": "\u041e\u0431\u043e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0434\u043b\u044f planned / technical-only / not-applicable / inherited.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "name": {
+                    "type": "string"
+                },
+                "native_name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "ownership_inheritance_rule": {
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "parent_ref": {
+                    "description": "\u0420\u043e\u0434\u0438\u0442\u0435\u043b\u044c \u0432 \u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440\u043d\u043e\u0439 \u0438\u0435\u0440\u0430\u0440\u0445\u0438\u0438 (\u0431\u0435\u0437 \u0446\u0438\u043a\u043b\u043e\u0432).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "physical_fields": {
+                    "items": {
+                        "$ref": "#/$defs/PhysicalField"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "policy_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "qualified_name": {
+                    "type": "string"
+                },
+                "region": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "schema_dialect": {
+                    "description": "\u0414\u0438\u0430\u043b\u0435\u043a\u0442 \u0441\u0445\u0435\u043c\u044b (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 avro, json-schema, sql-ddl).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "security_classification": {
+                    "$ref": "#/$defs/SecurityClassificationEnum",
+                    "description": "\u0420\u0435\u0436\u0438\u043c \u0437\u0430\u0449\u0438\u0442\u044b (Wave 2); \u043e\u0440\u0442\u043e\u0433\u043e\u043d\u0430\u043b\u0435\u043d governance_classification."
+                },
+                "sensitivity_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "solution_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "structure_ref": {
+                    "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0443 \u0434\u0430\u043d\u043d\u044b\u0445 (\u043f\u043e\u043a\u0430 uriorcurie; \u0432 \u0431\u0443\u0434\u0443\u0449\u0435\u043c DataStructure).\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "system_ref": {
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "technology": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "asset_namespace",
+                "qualified_name",
+                "system_ref",
+                "asset_kind",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "then": {
+                "not": {
+                    "required": [
+                        "location_uri",
+                        "region"
+                    ]
+                },
+                "properties": {
+                    "location_uri": {},
+                    "region": {}
+                }
+            },
+            "title": "DataCarrier",
+            "type": "object"
+        },
+        "DataCarrierKindEnum": {
+            "description": "",
+            "enum": [
+                "relational_table",
+                "relational_view",
+                "file",
+                "dataset",
+                "stream_topic",
+                "stream_queue",
+                "message_type",
+                "in_memory",
+                "api_resource",
+                "other"
+            ],
+            "title": "DataCarrierKindEnum",
             "type": "string"
         },
         "DataClassEnum": {
@@ -453,6 +1080,214 @@
             ],
             "title": "DataClassificationTerm",
             "type": "object"
+        },
+        "DataContainer": {
+            "additionalProperties": false,
+            "description": "\u041a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440 \u0434\u0440\u0443\u0433\u0438\u0445 \u0430\u043a\u0442\u0438\u0432\u043e\u0432 (database, schema, bucket, broker, directory, cluster). \u0414\u0430\u043d\u043d\u044b\u0445 \u043d\u0435 \u043d\u0435\u0441\u0451\u0442: structure_ref \u0438 data_format \u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u044e\u0442.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "asset_kind": {
+                    "$ref": "#/$defs/DataContainerKindEnum",
+                    "description": "\u0420\u0430\u0437\u043d\u043e\u0432\u0438\u0434\u043d\u043e\u0441\u0442\u044c \u0430\u043a\u0442\u0438\u0432\u0430. \u041d\u0430 \u043f\u043e\u0434\u043a\u043b\u0430\u0441\u0441\u0430\u0445 \u0441\u0443\u0436\u0430\u0435\u0442\u0441\u044f \u0447\u0435\u0440\u0435\u0437 slot_usage \u043d\u0430 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0439 enum.\n"
+                },
+                "asset_namespace": {
+                    "description": "\u041f\u0440\u043e\u0441\u0442\u0440\u0430\u043d\u0441\u0442\u0432\u043e \u0438\u043c\u0451\u043d \u0438\u0441\u0442\u043e\u0447\u043d\u0438\u043a\u0430 \u043f\u043e \u0430\u043d\u0430\u043b\u043e\u0433\u0438\u0438 \u0441 OpenLineage namespace (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 postgres://host:5432, kafka://cluster, s3://bucket). \u041e\u0442\u0434\u0435\u043b\u044c\u043d\u044b\u0439 \u0441\u043b\u043e\u0442 \u043e\u0442 DomainContext.namespace (ADR-B).\n",
+                    "type": "string"
+                },
+                "classification_rationale": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "classification_source": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "containment_kind": {
+                    "$ref": "#/$defs/ContainmentKindEnum"
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "direction": {
+                    "$ref": "#/$defs/FlowDirectionEnum",
+                    "description": "\u0417\u0430\u043f\u0440\u0435\u0449\u0451\u043d \u0434\u043b\u044f DataContainer (\u043f\u0440\u0430\u0432\u0438\u043b\u043e \u0432\u0430\u043b\u0438\u0434\u0430\u0442\u043e\u0440\u0430)."
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "governance_classification": {
+                    "$ref": "#/$defs/GovernanceClassificationEnum"
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "lineage_role": {
+                    "$ref": "#/$defs/LineageRoleEnum",
+                    "description": "\u0420\u043e\u043b\u044c \u0430\u043a\u0442\u0438\u0432\u0430 \u0432 lineage (source, sink, intermediate, none)."
+                },
+                "name": {
+                    "type": "string"
+                },
+                "native_name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "ownership_inheritance_rule": {
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "parent_ref": {
+                    "description": "\u0420\u043e\u0434\u0438\u0442\u0435\u043b\u044c \u0432 \u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440\u043d\u043e\u0439 \u0438\u0435\u0440\u0430\u0440\u0445\u0438\u0438 (\u0431\u0435\u0437 \u0446\u0438\u043a\u043b\u043e\u0432).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "policy_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "qualified_name": {
+                    "type": "string"
+                },
+                "security_classification": {
+                    "$ref": "#/$defs/SecurityClassificationEnum",
+                    "description": "\u0420\u0435\u0436\u0438\u043c \u0437\u0430\u0449\u0438\u0442\u044b (Wave 2); \u043e\u0440\u0442\u043e\u0433\u043e\u043d\u0430\u043b\u0435\u043d governance_classification."
+                },
+                "sensitivity_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "solution_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "system_ref": {
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "technology": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "asset_namespace",
+                "qualified_name",
+                "system_ref",
+                "asset_kind",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "DataContainer",
+            "type": "object"
+        },
+        "DataContainerKindEnum": {
+            "description": "",
+            "enum": [
+                "database",
+                "schema",
+                "bucket",
+                "broker",
+                "directory",
+                "cluster"
+            ],
+            "title": "DataContainerKindEnum",
+            "type": "string"
         },
         "DataContractReference": {
             "additionalProperties": false,
@@ -659,12 +1494,23 @@
         },
         "DataFlowEntityBinding": {
             "additionalProperties": false,
-            "description": "\u0421\u0432\u044f\u0437\u044c \u043f\u043e\u0442\u043e\u043a\u0430 \u0441 \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0438\u043c\u0438 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u044f\u043c\u0438, \u0430\u0442\u0440\u0438\u0431\u0443\u0442\u0430\u043c\u0438 \u0438 \u0444\u0438\u0437\u0438\u0447\u0435\u0441\u043a\u0438\u043c\u0438 \u043e\u0431\u044a\u0435\u043a\u0442\u0430\u043c\u0438 \u043c\u043e\u0434\u0435\u043b\u0438 \u0440\u0435\u0448\u0435\u043d\u0438\u044f.",
+            "description": "\u0421\u0432\u044f\u0437\u044c \u043f\u043e\u0442\u043e\u043a\u0430 \u0441 \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0438\u043c\u0438 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u044f\u043c\u0438, \u0430\u0442\u0440\u0438\u0431\u0443\u0442\u0430\u043c\u0438 \u0438 \u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044f\u043c\u0438 \u0434\u0430\u043d\u043d\u044b\u0445 \u043c\u043e\u0434\u0435\u043b\u0438 \u0440\u0435\u0448\u0435\u043d\u0438\u044f.",
             "properties": {
                 "aliases": {
                     "items": {
                         "type": "string"
                     },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "carrier_refs": {
+                    "description": "\u041d\u043e\u0441\u0438\u0442\u0435\u043b\u0438 \u0434\u0430\u043d\u043d\u044b\u0445, \u0443\u0447\u0430\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0435 \u0432 binding (\u043d\u0435 \u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440\u044b).",
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1,
                     "type": [
                         "array",
                         "null"
@@ -725,16 +1571,6 @@
                         "null"
                     ]
                 },
-                "physical_object_refs": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "minItems": 1,
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
                 "source_model_ref": {
                     "format": "uri",
                     "type": "string"
@@ -782,7 +1618,6 @@
                 "flow_ref",
                 "source_model_ref",
                 "logical_entity_ref",
-                "direction",
                 "element_id",
                 "name",
                 "description",
@@ -1235,6 +2070,225 @@
             "title": "EntityTypeEnum",
             "type": "string"
         },
+        "ExecutionAsset": {
+            "additionalProperties": false,
+            "description": "\u0418\u0441\u043f\u043e\u043b\u043d\u044f\u0435\u043c\u044b\u0439 \u0430\u043a\u0442\u0438\u0432 (pipeline / job) \u0441 \u043c\u0438\u043d\u0438\u043c\u0430\u043b\u044c\u043d\u043e\u0439 lineage-\u0440\u043e\u043b\u044c\u044e.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "asset_kind": {
+                    "$ref": "#/$defs/ExecutionAssetKindEnum",
+                    "description": "\u0420\u0430\u0437\u043d\u043e\u0432\u0438\u0434\u043d\u043e\u0441\u0442\u044c \u0430\u043a\u0442\u0438\u0432\u0430. \u041d\u0430 \u043f\u043e\u0434\u043a\u043b\u0430\u0441\u0441\u0430\u0445 \u0441\u0443\u0436\u0430\u0435\u0442\u0441\u044f \u0447\u0435\u0440\u0435\u0437 slot_usage \u043d\u0430 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0439 enum.\n"
+                },
+                "asset_namespace": {
+                    "description": "\u041f\u0440\u043e\u0441\u0442\u0440\u0430\u043d\u0441\u0442\u0432\u043e \u0438\u043c\u0451\u043d \u0438\u0441\u0442\u043e\u0447\u043d\u0438\u043a\u0430 \u043f\u043e \u0430\u043d\u0430\u043b\u043e\u0433\u0438\u0438 \u0441 OpenLineage namespace (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 postgres://host:5432, kafka://cluster, s3://bucket). \u041e\u0442\u0434\u0435\u043b\u044c\u043d\u044b\u0439 \u0441\u043b\u043e\u0442 \u043e\u0442 DomainContext.namespace (ADR-B).\n",
+                    "type": "string"
+                },
+                "classification_rationale": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "classification_source": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "consumes_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "direction": {
+                    "$ref": "#/$defs/FlowDirectionEnum",
+                    "description": "\u0417\u0430\u043f\u0440\u0435\u0449\u0451\u043d \u0434\u043b\u044f ExecutionAsset (\u043f\u0440\u0430\u0432\u0438\u043b\u043e \u0432\u0430\u043b\u0438\u0434\u0430\u0442\u043e\u0440\u0430)."
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "governance_classification": {
+                    "$ref": "#/$defs/GovernanceClassificationEnum"
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "lineage_role": {
+                    "$ref": "#/$defs/LineageRoleEnum",
+                    "description": "\u0420\u043e\u043b\u044c \u0430\u043a\u0442\u0438\u0432\u0430 \u0432 lineage (source, sink, intermediate, none)."
+                },
+                "name": {
+                    "type": "string"
+                },
+                "native_name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "ownership_inheritance_rule": {
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "parent_ref": {
+                    "description": "\u0420\u043e\u0434\u0438\u0442\u0435\u043b\u044c \u0432 \u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440\u043d\u043e\u0439 \u0438\u0435\u0440\u0430\u0440\u0445\u0438\u0438 (\u0431\u0435\u0437 \u0446\u0438\u043a\u043b\u043e\u0432).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "policy_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "produces_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "qualified_name": {
+                    "type": "string"
+                },
+                "security_classification": {
+                    "$ref": "#/$defs/SecurityClassificationEnum",
+                    "description": "\u0420\u0435\u0436\u0438\u043c \u0437\u0430\u0449\u0438\u0442\u044b (Wave 2); \u043e\u0440\u0442\u043e\u0433\u043e\u043d\u0430\u043b\u0435\u043d governance_classification."
+                },
+                "sensitivity_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "solution_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "system_ref": {
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "technology": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "asset_namespace",
+                "qualified_name",
+                "system_ref",
+                "asset_kind",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "ExecutionAsset",
+            "type": "object"
+        },
+        "ExecutionAssetKindEnum": {
+            "description": "",
+            "enum": [
+                "pipeline",
+                "job"
+            ],
+            "title": "ExecutionAssetKindEnum",
+            "type": "string"
+        },
         "ExternalClassRef": {
             "additionalProperties": false,
             "description": "Alignment of a ConceptualEntity to an external class or term (ADR-026). Canonical store for conceptual\u2194external links; Mapping(aligns_with) may mirror for ExternalTermSelection projections.",
@@ -1612,6 +2666,27 @@
             "title": "HasLifecycle",
             "type": "object"
         },
+        "HasLocation": {
+            "additionalProperties": false,
+            "description": "Mixin \u0440\u0430\u0441\u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u044f \u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044f \u0438\u043b\u0438 \u0442\u043e\u0447\u043a\u0438 \u0434\u043e\u0441\u0442\u0443\u043f\u0430.",
+            "properties": {
+                "location_uri": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "region": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "HasLocation",
+            "type": "object"
+        },
         "HasOwnership": {
             "additionalProperties": false,
             "description": "Mixin \u0432\u043b\u0430\u0434\u0435\u043d\u0438\u044f: data owner, data steward \u0438 \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u043e\u043d\u043d\u043e\u0435 \u043f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435. \u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0438\u0435 \u0441\u043b\u043e\u0442\u0430 \u043e\u0437\u043d\u0430\u0447\u0430\u0435\u0442 \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \u044d\u0444\u0444\u0435\u043a\u0442\u0438\u0432\u043d\u043e\u0433\u043e \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u043f\u043e containment cascade (ADR-023); \u0437\u0430\u0434\u0430\u043d\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u2014 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u0439 override.",
@@ -1662,6 +2737,34 @@
             "title": "HasPolicyBindings",
             "type": "object"
         },
+        "HasProtocolBinding": {
+            "additionalProperties": false,
+            "description": "Mixin \u043f\u0440\u043e\u0442\u043e\u043a\u043e\u043b\u0430 \u0434\u043e\u0441\u0442\u0443\u043f\u0430 \u0434\u043b\u044f \u0442\u043e\u0447\u043a\u0438 \u0434\u043e\u0441\u0442\u0443\u043f\u0430 (AccessPoint).",
+            "properties": {
+                "binding_ref": {
+                    "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u0432\u043d\u0435\u0448\u043d\u0435\u0435 \u043e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 binding.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "protocol": {
+                    "description": "\u041f\u0440\u043e\u0442\u043e\u043a\u043e\u043b \u0434\u043e\u0441\u0442\u0443\u043f\u0430 (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 https, jdbc, kafka).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "protocol_version": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "HasProtocolBinding",
+            "type": "object"
+        },
         "HasProvenance": {
             "additionalProperties": false,
             "description": "Mixin \u043f\u0440\u043e\u0438\u0441\u0445\u043e\u0436\u0434\u0435\u043d\u0438\u044f \u0438 \u0441\u043e\u0433\u043b\u0430\u0441\u043e\u0432\u0430\u043d\u0438\u044f: \u0438\u0441\u0445\u043e\u0434\u043d\u044b\u0439 \u0430\u0440\u0442\u0435\u0444\u0430\u043a\u0442, evidence, \u0441\u0442\u0430\u0442\u0443\u0441 \u0438 \u0441\u043e\u0433\u043b\u0430\u0441\u0443\u044e\u0449\u0438\u0439.",
@@ -1701,6 +2804,35 @@
                 }
             },
             "title": "HasProvenance",
+            "type": "object"
+        },
+        "HasStructure": {
+            "additionalProperties": false,
+            "description": "Mixin \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u044b \u0434\u0430\u043d\u043d\u044b\u0445 \u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044f. structure_ref \u2014 \u0432\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u0441\u0441\u044b\u043b\u043a\u0430 (uriorcurie); \u0432 \u0431\u0443\u0434\u0443\u0449\u0435\u043c \u0437\u0430\u043c\u0435\u043d\u044f\u0435\u0442\u0441\u044f \u043a\u043b\u0430\u0441\u0441\u043e\u043c DataStructure (ADR-C).",
+            "properties": {
+                "data_format": {
+                    "description": "\u0424\u043e\u0440\u043c\u0430\u0442 \u0434\u0430\u043d\u043d\u044b\u0445 (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 parquet, csv, json).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "schema_dialect": {
+                    "description": "\u0414\u0438\u0430\u043b\u0435\u043a\u0442 \u0441\u0445\u0435\u043c\u044b (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 avro, json-schema, sql-ddl).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "structure_ref": {
+                    "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0443 \u0434\u0430\u043d\u043d\u044b\u0445 (\u043f\u043e\u043a\u0430 uriorcurie; \u0432 \u0431\u0443\u0434\u0443\u0449\u0435\u043c DataStructure).\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "HasStructure",
             "type": "object"
         },
         "ITPlatform": {
@@ -1934,6 +3066,17 @@
                 "retired"
             ],
             "title": "LifecycleStatusEnum",
+            "type": "string"
+        },
+        "LineageRoleEnum": {
+            "description": "",
+            "enum": [
+                "source",
+                "sink",
+                "intermediate",
+                "none"
+            ],
+            "title": "LineageRoleEnum",
             "type": "string"
         },
         "LogicalAttribute": {
@@ -2559,7 +3702,7 @@
         },
         "Mapping": {
             "additionalProperties": false,
-            "description": "\u042f\u0432\u043d\u043e\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430\u043c\u0438. Discriminate via mapping_type: realizes (solution\u2192enterprise conceptual), entity_physical (PhysicalObject\u2194LogicalEntity), field_mapping/mapsTo (physical\u2194logical), aligns_with (enterprise\u2194external term). Not used for SpecImpl implements/conforms_to.",
+            "description": "\u042f\u0432\u043d\u043e\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430\u043c\u0438. Discriminate via mapping_type: realizes (solution\u2192enterprise conceptual), entity_physical (DataCarrier\u2194LogicalEntity), field_mapping/mapsTo (PhysicalField\u2194LogicalAttribute), aligns_with (enterprise\u2194external term). Not used for SpecImpl implements/conforms_to.",
             "properties": {
                 "aliases": {
                     "items": {
@@ -2743,7 +3886,7 @@
             "type": "string"
         },
         "MappingTypeEnum": {
-            "description": "Kind of Mapping assertion. realizes = solution element \u2192 enterprise conceptual; entity_physical = PhysicalObject \u2194 LogicalEntity; field_mapping = mapsTo (physical field \u2194 logical attribute); aligns_with = enterprise conceptual \u2194 external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).",
+            "description": "Kind of Mapping assertion. realizes = solution element \u2192 enterprise conceptual; entity_physical = DataCarrier \u2194 LogicalEntity; field_mapping = mapsTo (PhysicalField \u2194 LogicalAttribute); aligns_with = enterprise conceptual \u2194 external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).",
             "enum": [
                 "semantic_equivalence",
                 "specialization",
@@ -3014,6 +4157,16 @@
             "additionalProperties": false,
             "description": "\u0412\u0435\u0440\u0441\u0438\u043e\u043d\u0438\u0440\u0443\u0435\u043c\u044b\u0439 \u0430\u0440\u0442\u0435\u0444\u0430\u043a\u0442 \u043c\u043e\u0434\u0435\u043b\u0438 \u0434\u0430\u043d\u043d\u044b\u0445: \u043b\u0438\u0431\u043e \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u0430\u044f conceptual \u043c\u043e\u0434\u0435\u043b\u044c (enterprise), \u043b\u0438\u0431\u043e \u043c\u043e\u0434\u0435\u043b\u044c \u043a\u043e\u043d\u043a\u0440\u0435\u0442\u043d\u043e\u0433\u043e \u0418\u0422-\u0440\u0435\u0448\u0435\u043d\u0438\u044f (solution). Package-level DAMS layer is dams_model_level on the SpecImpl envelope (ADR-021); implementation_scope here mirrors that body-level semantics.",
             "properties": {
+                "access_points": {
+                    "description": "\u041a\u043e\u043b\u043b\u0435\u043a\u0446\u0438\u044f \u0442\u043e\u0447\u0435\u043a \u0434\u043e\u0441\u0442\u0443\u043f\u0430 \u043f\u0430\u043a\u0435\u0442\u0430 (Variant B, ADR-031).",
+                    "items": {
+                        "$ref": "#/$defs/AccessPoint"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
                 "aliases": {
                     "items": {
                         "type": "string"
@@ -3051,6 +4204,26 @@
                     "description": "Required for solution packages: reference to the enterprise-conceptual SpecImpl / ModelPackage id (e.g. moex-enterprise-conceptual-model).\n",
                     "type": [
                         "string",
+                        "null"
+                    ]
+                },
+                "data_carriers": {
+                    "description": "\u041a\u043e\u043b\u043b\u0435\u043a\u0446\u0438\u044f \u043d\u043e\u0441\u0438\u0442\u0435\u043b\u0435\u0439 \u0434\u0430\u043d\u043d\u044b\u0445 \u043f\u0430\u043a\u0435\u0442\u0430 (Variant B, ADR-031).",
+                    "items": {
+                        "$ref": "#/$defs/DataCarrier"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "data_containers": {
+                    "description": "\u041a\u043e\u043b\u043b\u0435\u043a\u0446\u0438\u044f \u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440\u043e\u0432 \u043f\u0430\u043a\u0435\u0442\u0430 (Variant B, ADR-031).",
+                    "items": {
+                        "$ref": "#/$defs/DataContainer"
+                    },
+                    "type": [
+                        "array",
                         "null"
                     ]
                 },
@@ -3095,6 +4268,16 @@
                 },
                 "element_id": {
                     "type": "string"
+                },
+                "execution_assets": {
+                    "description": "\u041a\u043e\u043b\u043b\u0435\u043a\u0446\u0438\u044f \u0438\u0441\u043f\u043e\u043b\u043d\u044f\u0435\u043c\u044b\u0445 \u0430\u043a\u0442\u0438\u0432\u043e\u0432 \u043f\u0430\u043a\u0435\u0442\u0430 (Variant B, ADR-031).",
+                    "items": {
+                        "$ref": "#/$defs/ExecutionAsset"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
                 },
                 "glossary_term_refs": {
                     "items": {
@@ -3160,15 +4343,6 @@
                 "owning_unit_ref": {
                     "type": [
                         "string",
-                        "null"
-                    ]
-                },
-                "physical_objects": {
-                    "items": {
-                        "$ref": "#/$defs/PhysicalObject"
-                    },
-                    "type": [
-                        "array",
                         "null"
                     ]
                 },
@@ -3390,7 +4564,7 @@
         },
         "PhysicalField": {
             "additionalProperties": false,
-            "description": "\u041f\u043e\u043b\u0435 \u0444\u0438\u0437\u0438\u0447\u0435\u0441\u043a\u043e\u0433\u043e \u043e\u0431\u044a\u0435\u043a\u0442\u0430; \u0435\u0433\u043e \u0441\u0435\u043c\u0430\u043d\u0442\u0438\u043a\u0430 \u0437\u0430\u0434\u0430\u0451\u0442\u0441\u044f Mapping \u043a LogicalAttribute.",
+            "description": "\u041f\u043e\u043b\u0435 \u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044f \u0434\u0430\u043d\u043d\u044b\u0445 (DataCarrier); \u0441\u0435\u043c\u0430\u043d\u0442\u0438\u043a\u0430 \u0437\u0430\u0434\u0430\u0451\u0442\u0441\u044f Mapping \u043a LogicalAttribute.",
             "properties": {
                 "aliases": {
                     "items": {
@@ -3400,6 +4574,10 @@
                         "array",
                         "null"
                     ]
+                },
+                "carrier_ref": {
+                    "description": "\u041d\u043e\u0441\u0438\u0442\u0435\u043b\u044c \u0434\u0430\u043d\u043d\u044b\u0445, \u043a\u043e\u0442\u043e\u0440\u043e\u043c\u0443 \u043f\u0440\u0438\u043d\u0430\u0434\u043b\u0435\u0436\u0438\u0442 \u043f\u043e\u043b\u0435.",
+                    "type": "string"
                 },
                 "classification_rationale": {
                     "type": [
@@ -3492,9 +4670,6 @@
                         "null"
                     ]
                 },
-                "physical_object_ref": {
-                    "type": "string"
-                },
                 "policy_refs": {
                     "items": {
                         "type": "string"
@@ -3557,7 +4732,7 @@
                 }
             },
             "required": [
-                "physical_object_ref",
+                "carrier_ref",
                 "native_name",
                 "native_type",
                 "required",
@@ -3568,219 +4743,6 @@
             ],
             "title": "PhysicalField",
             "type": "object"
-        },
-        "PhysicalObject": {
-            "additionalProperties": false,
-            "description": "\u041a\u0432\u0430\u043d\u0442 \u0434\u0430\u043d\u043d\u044b\u0445 \u0438\u043b\u0438 \u0442\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u0430\u044f \u0442\u043e\u0447\u043a\u0430 \u043f\u0443\u0431\u043b\u0438\u043a\u0430\u0446\u0438\u0438/\u043f\u043e\u0442\u0440\u0435\u0431\u043b\u0435\u043d\u0438\u044f.",
-            "properties": {
-                "aliases": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
-                "classification_rationale": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "classification_source": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "data_owner_ref": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "data_steward_ref": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "deprecated_by_ref": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "description": {
-                    "type": "string"
-                },
-                "direction": {
-                    "$ref": "#/$defs/FlowDirectionEnum"
-                },
-                "element_id": {
-                    "type": "string"
-                },
-                "glossary_term_refs": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
-                "governance_classification": {
-                    "$ref": "#/$defs/GovernanceClassificationEnum"
-                },
-                "lifecycle_status": {
-                    "$ref": "#/$defs/LifecycleStatusEnum"
-                },
-                "mapping_coverage_status": {
-                    "$ref": "#/$defs/MappingCoverageStatusEnum",
-                    "description": "\u0421\u0442\u0430\u0442\u0443\u0441 \u043f\u043e\u043a\u0440\u044b\u0442\u0438\u044f \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430 mapping\u2019\u043e\u043c \u043d\u0430 \u0441\u043e\u0441\u0435\u0434\u043d\u0435\u043c \u0443\u0440\u043e\u0432\u043d\u0435 \u043c\u043e\u0434\u0435\u043b\u0438 (logical \u2194 physical).\n"
-                },
-                "mapping_rationale": {
-                    "description": "\u041e\u0431\u043e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0434\u043b\u044f planned / technical-only / not-applicable / inherited.",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "name": {
-                    "type": "string"
-                },
-                "native_schema_ref": {
-                    "format": "uri",
-                    "type": "string"
-                },
-                "object_kind": {
-                    "$ref": "#/$defs/PhysicalObjectKindEnum"
-                },
-                "ownership_inheritance_rule": {
-                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "owning_unit_ref": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "physical_fields": {
-                    "items": {
-                        "$ref": "#/$defs/PhysicalField"
-                    },
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
-                "policy_refs": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
-                "qualified_name": {
-                    "type": "string"
-                },
-                "security_classification": {
-                    "$ref": "#/$defs/SecurityClassificationEnum",
-                    "description": "\u0420\u0435\u0436\u0438\u043c \u0437\u0430\u0449\u0438\u0442\u044b (Wave 2); \u043e\u0440\u0442\u043e\u0433\u043e\u043d\u0430\u043b\u0435\u043d governance_classification."
-                },
-                "sensitivity_term_refs": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
-                "solution_ref": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "system_ref": {
-                    "type": "string"
-                },
-                "tags": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
-                "technology": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "valid_from": {
-                    "format": "date-time",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "valid_to": {
-                    "format": "date-time",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                }
-            },
-            "required": [
-                "system_ref",
-                "object_kind",
-                "qualified_name",
-                "technology",
-                "native_schema_ref",
-                "direction",
-                "element_id",
-                "name",
-                "description",
-                "lifecycle_status"
-            ],
-            "title": "PhysicalObject",
-            "type": "object"
-        },
-        "PhysicalObjectKindEnum": {
-            "description": "",
-            "enum": [
-                "database",
-                "schema",
-                "table",
-                "view",
-                "column",
-                "api",
-                "endpoint",
-                "payload",
-                "topic",
-                "queue",
-                "message",
-                "file",
-                "dataset",
-                "pipeline"
-            ],
-            "title": "PhysicalObjectKindEnum",
-            "type": "string"
         },
         "Policy": {
             "additionalProperties": false,
@@ -4251,7 +5213,7 @@
                     ]
                 },
                 "applies_target_kinds": {
-                    "description": "\u041e\u043f\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u044b\u0439 allowlist object_kind / facet (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 table, topic).",
+                    "description": "\u041e\u043f\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u044b\u0439 allowlist asset_kind / facet (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 relational_table, stream_topic).",
                     "items": {
                         "type": "string"
                     },
@@ -4585,6 +5547,17 @@
                         "null"
                     ]
                 },
+                "carrier_refs": {
+                    "description": "\u041d\u043e\u0441\u0438\u0442\u0435\u043b\u0438 \u0434\u0430\u043d\u043d\u044b\u0445, \u0443\u0447\u0430\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0435 \u0432 binding (\u043d\u0435 \u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440\u044b).",
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
                 "deprecated_by_ref": {
                     "type": [
                         "string",
@@ -4614,16 +5587,6 @@
                 },
                 "name": {
                     "type": "string"
-                },
-                "physical_object_refs": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "minItems": 1,
-                    "type": [
-                        "array",
-                        "null"
-                    ]
                 },
                 "selected_attributes": {
                     "items": {
@@ -4822,6 +5785,198 @@
                 "lifecycle_status"
             ],
             "title": "SpecificationRequirement",
+            "type": "object"
+        },
+        "TechnicalAsset": {
+            "additionalProperties": false,
+            "description": "\u041a\u0432\u0430\u043d\u0442 \u0434\u0430\u043d\u043d\u044b\u0445: \u0430\u0434\u0440\u0435\u0441\u0443\u0435\u043c\u044b\u0439 \u0442\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u043e\u0431\u044a\u0435\u043a\u0442 \u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f. \u0418\u043c\u0435\u0435\u0442 \u0441\u043e\u0431\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439 \u0438\u0434\u0435\u043d\u0442\u0438\u0444\u0438\u043a\u0430\u0442\u043e\u0440, \u0441\u0438\u0441\u0442\u0435\u043c\u0443-\u0432\u043b\u0430\u0434\u0435\u043b\u044c\u0446\u0430, \u0440\u0430\u0441\u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u0435 \u0438\u043b\u0438 \u0441\u043f\u043e\u0441\u043e\u0431 \u0434\u043e\u0441\u0442\u0443\u043f\u0430, \u0436\u0438\u0437\u043d\u0435\u043d\u043d\u044b\u0439 \u0446\u0438\u043a\u043b, \u0432\u043b\u0430\u0434\u0435\u043b\u044c\u0446\u0430, \u043a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u044e \u0438 \u0440\u043e\u043b\u044c \u0432 lineage. \u041f\u043e\u043b\u044f, \u043a\u043e\u043b\u043e\u043d\u043a\u0438 \u0438 \u0443\u0437\u043b\u044b \u0441\u0445\u0435\u043c \u043a\u0432\u0430\u043d\u0442\u0430\u043c\u0438 \u041d\u0415 \u044f\u0432\u043b\u044f\u044e\u0442\u0441\u044f (ADR-C).",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "asset_kind": {
+                    "description": "\u0420\u0430\u0437\u043d\u043e\u0432\u0438\u0434\u043d\u043e\u0441\u0442\u044c \u0430\u043a\u0442\u0438\u0432\u0430. \u041d\u0430 \u043f\u043e\u0434\u043a\u043b\u0430\u0441\u0441\u0430\u0445 \u0441\u0443\u0436\u0430\u0435\u0442\u0441\u044f \u0447\u0435\u0440\u0435\u0437 slot_usage \u043d\u0430 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0439 enum.\n",
+                    "type": "string"
+                },
+                "asset_namespace": {
+                    "description": "\u041f\u0440\u043e\u0441\u0442\u0440\u0430\u043d\u0441\u0442\u0432\u043e \u0438\u043c\u0451\u043d \u0438\u0441\u0442\u043e\u0447\u043d\u0438\u043a\u0430 \u043f\u043e \u0430\u043d\u0430\u043b\u043e\u0433\u0438\u0438 \u0441 OpenLineage namespace (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 postgres://host:5432, kafka://cluster, s3://bucket). \u041e\u0442\u0434\u0435\u043b\u044c\u043d\u044b\u0439 \u0441\u043b\u043e\u0442 \u043e\u0442 DomainContext.namespace (ADR-B).\n",
+                    "type": "string"
+                },
+                "classification_rationale": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "classification_source": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "direction": {
+                    "$ref": "#/$defs/FlowDirectionEnum",
+                    "description": "\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u043e\u0442\u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u0440\u0435\u0448\u0435\u043d\u0438\u044f. \u0417\u0430\u043f\u0440\u0435\u0449\u0451\u043d \u0434\u043b\u044f DataContainer \u0438 ExecutionAsset \u043f\u0440\u0430\u0432\u0438\u043b\u043e\u043c DAMS-\u0432\u0430\u043b\u0438\u0434\u0430\u0442\u043e\u0440\u0430 \u0438 LinkML rules.\n"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "governance_classification": {
+                    "$ref": "#/$defs/GovernanceClassificationEnum"
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "lineage_role": {
+                    "$ref": "#/$defs/LineageRoleEnum",
+                    "description": "\u0420\u043e\u043b\u044c \u0430\u043a\u0442\u0438\u0432\u0430 \u0432 lineage (source, sink, intermediate, none)."
+                },
+                "name": {
+                    "type": "string"
+                },
+                "native_name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "ownership_inheritance_rule": {
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "parent_ref": {
+                    "description": "\u0420\u043e\u0434\u0438\u0442\u0435\u043b\u044c \u0432 \u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440\u043d\u043e\u0439 \u0438\u0435\u0440\u0430\u0440\u0445\u0438\u0438 (\u0431\u0435\u0437 \u0446\u0438\u043a\u043b\u043e\u0432).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "policy_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "qualified_name": {
+                    "type": "string"
+                },
+                "security_classification": {
+                    "$ref": "#/$defs/SecurityClassificationEnum",
+                    "description": "\u0420\u0435\u0436\u0438\u043c \u0437\u0430\u0449\u0438\u0442\u044b (Wave 2); \u043e\u0440\u0442\u043e\u0433\u043e\u043d\u0430\u043b\u0435\u043d governance_classification."
+                },
+                "sensitivity_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "solution_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "system_ref": {
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "technology": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "asset_namespace",
+                "qualified_name",
+                "system_ref",
+                "asset_kind",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "TechnicalAsset",
             "type": "object"
         },
         "TermDirectionEnum": {

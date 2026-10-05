@@ -23,7 +23,7 @@ not improvise.
 |-----------|--------|
 | Default PDF input | `F:\!PASSPORT\!H_DATASC\!Data Architecture\MOEX_DataModel\OKITA\pdf solutions` |
 | CSV output | `packages/standard-linkml/tests/fixtures/er-dictionary/` |
-| Sheets to fill | Entities, Attributes, Relationships, PhysicalObjects, PhysicalFields, Mappings |
+| Sheets to fill | Entities, Attributes, Relationships, DataCarriers, PhysicalFields, Mappings |
 | Sheets forbidden | Conceptual |
 | Naming | System/technical names in `name`; RU business text in `title` / `description` |
 | Missing data | **Do not invent.** Leave empty or omit the row; record in `gaps.md` |
@@ -114,16 +114,16 @@ Ignore pure glossary definitions that do not define fields.
 
 ### 3.3 API / connector → physical (+ rare mappings)
 
-1. Treat a documented DTO / resource / topic as a **candidate** PhysicalObject.
-2. Write `PhysicalObjects` **only if every ingest-required column** is present
+1. Treat a documented DTO / resource / topic as a **candidate** DataCarrier.
+2. Write `DataCarriers` **only if every ingest-required column** is present
    in the PDF (contract §2.4):  
-   `name, description, object_kind, qualified_name, technology, system_ref, direction, native_schema_ref`
+   `name, description, asset_kind, qualified_name, technology, system_ref, direction, structure_ref`
 3. Typical grounded fills (examples — use only when text supports them):
-   - `object_kind=api` or `endpoint` / `payload` when document is an API
+   - `asset_kind=api` or `endpoint` / `payload` when document is an API
    - `qualified_name` = server URL + path, or DTO name if that is the only
      stable qualifier **printed**
    - `technology` = e.g. `REST` if stated
-   - `native_schema_ref` = schema URL if printed
+   - `structure_ref` = schema URL if printed
    - `system_ref` / `direction` — **only if printed**; otherwise omit entire object
 4. Fields of request/response DTOs → `PhysicalFields` for objects you actually wrote.
 5. `Mappings` — only if the document explicitly maps API fields to logical
@@ -167,7 +167,7 @@ Re-open the contract and verify:
 - [ ] Headers 1:1 for every written file
 - [ ] No Conceptual file
 - [ ] All referential integrity rules (contract §9)
-- [ ] No invented `system_ref`, `native_schema_ref`, cardinalities, or mappings
+- [ ] No invented `system_ref`, `structure_ref`, cardinalities, or mappings
 - [ ] Every incomplete physical candidate is in `gaps.md` with missing columns listed
 - [ ] Spot-check ≥3 attributes and ≥1 entity against PDF text
 
@@ -203,7 +203,7 @@ On failure:
 Include:
 
 1. PDF files processed + classification per file
-2. Counts: entities, attributes, relationships, physical objects, fields, mappings
+2. Counts: entities, attributes, relationships, technical asset (DataCarrier)s, fields, mappings
 3. Path to `gaps.md` + top residual risks
 4. Ingest command result (pass/fail + path to `validation.txt`)
 5. Explicit statement: “Contract checklist passed” or list failures
@@ -240,11 +240,11 @@ Organization,id,id,Уникальный идентификатор (MCDB ID),BIG
 ### 6.3 API field without system_ref
 
 PDF documents `EmployeeReadDto.rowId: uuid` but no EAM system CURIE and no
-schema URI → **do not** write PhysicalObjects/PhysicalFields; gap:
+schema URI → **do not** write DataCarriers/PhysicalFields; gap:
 
 ```markdown
-## Unmapped / incomplete physical objects
-- EmployeeReadDto (API Docsvision): missing system_ref, native_schema_ref, direction; has fields rowId, id1c, accountName, email
+## Unmapped / incomplete technical asset (DataCarrier)s
+- EmployeeReadDto (API Docsvision): missing system_ref, structure_ref, direction; has fields rowId, id1c, accountName, email
 ```
 
 ---

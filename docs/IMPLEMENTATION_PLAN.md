@@ -506,7 +506,7 @@ audit_event
 
 ## Этап 4. Web Workbench
 
-**Progress (Stage 4 Web close-out 2026-09-28 + Workbench UX):** `apps/web` — dashboard/workspaces/models/validate; Monaco YAML + `workspace_document`; shared `useModelDraft` with optimistic form→Monaco YAML mutate mirror (`yamlMutate.ts`) + debounce PUT; forms add/update/delete LogicalEntity/LogicalAttribute, Relationship/Mapping, **and PhysicalObject/PhysicalField** via `POST …/mutations`; Model explorer tree (Physical tab focus); **Review changes** semantic-diff preview; Compile job + artifact list/preview (`GET /jobs/{id}/artifacts`). Out: deep Monaco JSON Schema diagnostics, OIDC, i18n.
+**Progress (Stage 4 Web close-out 2026-09-28 + Workbench UX):** `apps/web` — dashboard/workspaces/models/validate; Monaco YAML + `workspace_document`; shared `useModelDraft` with optimistic form→Monaco YAML mutate mirror (`yamlMutate.ts`) + debounce PUT; forms add/update/delete LogicalEntity/LogicalAttribute, Relationship/Mapping, **and TechnicalAsset (DataCarrier)/PhysicalField** via `POST …/mutations`; Model explorer tree (Physical tab focus); **Review changes** semantic-diff preview; Compile job + artifact list/preview (`GET /jobs/{id}/artifacts`). Out: deep Monaco JSON Schema diagnostics, OIDC, i18n.
 
 ### Основные экраны
 
@@ -569,7 +569,7 @@ audit_event
 - LogicalEntity.
 - LogicalAttribute.
 - Relationship.
-- PhysicalObject типа table/view.
+- DataCarrier типа relational_table/relational_view.
 - PhysicalField.
 - Physical foreign keys.
 - Description.

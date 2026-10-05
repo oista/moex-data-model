@@ -15,10 +15,10 @@
         click LogicalEntity href "../LogicalEntity"
       HasOwnership <|-- LogicalAttribute
         click LogicalAttribute href "../LogicalAttribute"
-      HasOwnership <|-- PhysicalObject
-        click PhysicalObject href "../PhysicalObject"
       HasOwnership <|-- PhysicalField
         click PhysicalField href "../PhysicalField"
+      HasOwnership <|-- TechnicalAsset
+        click TechnicalAsset href "../TechnicalAsset"
       HasOwnership <|-- DataFlow
         click DataFlow href "../DataFlow"
       HasOwnership <|-- DataModelBinding

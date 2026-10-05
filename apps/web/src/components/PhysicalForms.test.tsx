@@ -10,16 +10,17 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { PhysicalForms } from "./PhysicalForms";
 
 const SAMPLE = `
-physical_objects:
+data_carriers:
   - element_id: dams:physical/mdm/client-topic
     name: client_changed_topic
     title: Client topic
-    object_kind: topic
+    asset_kind: stream_topic
     physical_fields:
       - element_id: dams:physical/mdm/client-topic/client_id
         name: client_id
         native_type: string
         required: true
+        carrier_ref: dams:physical/mdm/client-topic
 `;
 
 describe("PhysicalForms", () => {
@@ -69,7 +70,7 @@ describe("PhysicalForms", () => {
     fireEvent.change(screen.getByDisplayValue("new_object"), {
       target: { value: "orders" },
     });
-    fireEvent.click(screen.getByRole("button", { name: /^add object$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^add asset$/i }));
 
     await waitFor(() => expect(onDocument).toHaveBeenCalled());
     expect(fetchMock).toHaveBeenCalledWith(

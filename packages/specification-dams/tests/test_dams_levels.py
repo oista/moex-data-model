@@ -32,7 +32,7 @@ def test_legacy_missing_scope_warns() -> None:
     assert all(d.severity is not DiagnosticSeverity.ERROR for d in diags)
 
 
-def test_enterprise_forbids_physical() -> None:
+def test_enterprise_forbids_technical_assets() -> None:
     diags = check_dams_model_level(
         _body(
             {
@@ -51,7 +51,7 @@ def test_enterprise_forbids_physical() -> None:
                         "lifecycle_status": "active",
                     }
                 ],
-                "physical_objects": [
+                "data_carriers": [
                     {
                         "element_id": "dams:physical/x",
                         "name": "x",

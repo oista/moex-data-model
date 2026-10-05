@@ -33,22 +33,14 @@ from moex_dams.rules.definitions import (
     validate_scoped_definition_systems,
 )
 from moex_dams.rules.relation_terms import check_relation_terms
-
-# Data-carrying PhysicalObject kinds (GEN-004 / PDM-003 allowlist).
-DATA_CARRYING_KINDS = frozenset(
-    {
-        "table",
-        "view",
-        "file",
-        "dataset",
-        "api",
-        "endpoint",
-        "topic",
-        "message",
-        "queue",
-        "payload",
-    }
+from moex_dams.rules.technical_assets import (
+    DATA_CARRIER_KINDS,
+    check_technical_assets,
+    iter_technical_assets,
 )
+
+# DataCarrier kinds (GEN-004 / PDM-003 allowlist).
+DATA_CARRYING_KINDS = DATA_CARRIER_KINDS
 
 _DEFAULT_CATALOG = (
     Path(__file__).resolve().parents[5]
@@ -161,7 +153,10 @@ def _collect_ids(data: dict[str, Any]) -> set[str]:
         "domain_contexts",
         "logical_entities",
         "relationships",
-        "physical_objects",
+        "data_carriers",
+        "access_points",
+        "data_containers",
+        "execution_assets",
         "mappings",
         "conceptual_entities",
     ):
@@ -172,7 +167,7 @@ def _collect_ids(data: dict[str, Any]) -> set[str]:
                 for attr in item.get("attributes") or []:
                     if isinstance(attr, dict) and attr.get("element_id"):
                         ids.add(str(attr["element_id"]))
-            if key == "physical_objects" and isinstance(item, dict):
+            if key == "data_carriers" and isinstance(item, dict):
                 for field in item.get("physical_fields") or []:
                     if isinstance(field, dict) and field.get("element_id"):
                         ids.add(str(field["element_id"]))
@@ -207,15 +202,35 @@ def _iter_targets(
             if isinstance(r, dict):
                 out.append((r, str(r.get("element_id") or r.get("name"))))
         return out
-    if target_class == "PhysicalObject":
+    if target_class == "TechnicalAsset":
+        return [(el, sid) for el, sid, _ in iter_technical_assets(data)]
+    if target_class == "DataCarrier":
         out = []
-        for p in data.get("physical_objects") or []:
+        for p in data.get("data_carriers") or []:
+            if isinstance(p, dict):
+                out.append((p, str(p.get("element_id") or p.get("name"))))
+        return out
+    if target_class == "AccessPoint":
+        out = []
+        for p in data.get("access_points") or []:
+            if isinstance(p, dict):
+                out.append((p, str(p.get("element_id") or p.get("name"))))
+        return out
+    if target_class == "DataContainer":
+        out = []
+        for p in data.get("data_containers") or []:
+            if isinstance(p, dict):
+                out.append((p, str(p.get("element_id") or p.get("name"))))
+        return out
+    if target_class == "ExecutionAsset":
+        out = []
+        for p in data.get("execution_assets") or []:
             if isinstance(p, dict):
                 out.append((p, str(p.get("element_id") or p.get("name"))))
         return out
     if target_class == "PhysicalField":
         out = []
-        for p in data.get("physical_objects") or []:
+        for p in data.get("data_carriers") or []:
             if not isinstance(p, dict):
                 continue
             for f in p.get("physical_fields") or []:
@@ -226,7 +241,7 @@ def _iter_targets(
 
 
 def _is_data_carrying(obj: dict[str, Any]) -> bool:
-    kind = str(obj.get("object_kind") or "")
+    kind = str(obj.get("asset_kind") or "")
     if kind in DATA_CARRYING_KINDS:
         return True
     fields = obj.get("physical_fields") or []
@@ -417,7 +432,7 @@ def _filter_by_kinds(
     return [
         (el, sid)
         for el, sid in elements
-        if str(el.get("object_kind") or "") in allow
+        if str(el.get("asset_kind") or "") in allow
     ]
 
 
@@ -471,12 +486,25 @@ def _run_conditional(
         return out
 
     if template == "non_empty_logical_or_physical":
-        if not (data.get("logical_entities") or data.get("physical_objects")):
+        has_tech = any(
+            data.get(k)
+            for k in (
+                "data_carriers",
+                "access_points",
+                "data_containers",
+                "execution_assets",
+            )
+        )
+        if not (data.get("logical_entities") or has_tech):
             out.append(
                 _diag(
                     code=code,
                     severity=sev,
-                    message="Model package has neither logical entities nor physical objects.",
+                    message=(
+                        "Model package has neither logical entities nor "
+                        "technical assets (data_carriers / access_points / "
+                        "data_containers / execution_assets)."
+                    ),
                     subject=subject,
                     remediation=rem,
                     statement=statement,
@@ -499,7 +527,7 @@ def _run_conditional(
                         code=code,
                         severity=sev,
                         message=(
-                            f'PhysicalObject "{subject}" is technical-only but '
+                            f'DataCarrier "{subject}" is technical-only but '
                             "mapping_rationale is empty."
                         ),
                         subject=subject,
@@ -516,8 +544,29 @@ def _run_conditional(
                     code=code,
                     severity=sev,
                     message=(
-                        f'PhysicalObject "{subject}" lacks entity_physical Mapping '
+                        f'DataCarrier "{subject}" lacks entity_physical Mapping '
                         "to a logical entity."
+                    ),
+                    subject=subject,
+                    remediation=rem,
+                    statement=statement,
+                    requirement_code=requirement_code,
+                )
+            )
+        return out
+
+    if template == "pdm001_structure_ref":
+        kind = str(el.get("asset_kind") or "")
+        if kind == "in_memory":
+            return out
+        if not _filled(el.get("structure_ref")):
+            out.append(
+                _diag(
+                    code=code,
+                    severity=sev,
+                    message=(
+                        f'DataCarrier "{subject}" missing required structure_ref '
+                        "(not required for in_memory)."
                     ),
                     subject=subject,
                     remediation=rem,
@@ -972,11 +1021,11 @@ def _run_conditional(
         return out
 
     if template == "flw001_soft_presence":
-        # Soft: only warn if package has outbound/inbound physical and no data_flows key
-        phys = data.get("physical_objects") or []
+        # Soft: warn if package has outbound/inbound data_carriers and no data_flows
+        carriers = data.get("data_carriers") or []
         directions = {
             str(p.get("direction"))
-            for p in phys
+            for p in carriers
             if isinstance(p, dict) and p.get("direction")
         }
         if directions & {"outbound", "inbound", "bidirectional"}:
@@ -986,7 +1035,7 @@ def _run_conditional(
                         code=code,
                         severity=DiagnosticSeverity.WARNING,
                         message=(
-                            "Package exposes integration-facing physical objects but "
+                            "Package exposes integration-facing data carriers but "
                             "has no data_flows section yet."
                         ),
                         subject=subject,
@@ -1145,7 +1194,13 @@ def check_formal_requirements(
             if not tclass:
                 continue
             elements = _iter_targets(data, tclass)
-            if tclass == "PhysicalObject" and (applies or {}).get("applies_target_kinds"):
+            if tclass in (
+                "DataCarrier",
+                "TechnicalAsset",
+                "AccessPoint",
+                "DataContainer",
+                "ExecutionAsset",
+            ) and (applies or {}).get("applies_target_kinds"):
                 elements = _filter_by_kinds(elements, applies or {})
 
             sev = _severity(check.get("severity"))
@@ -1286,6 +1341,7 @@ def check_formal_requirements(
     diagnostics.extend(_definition_lints(data, def_index))
     diagnostics.extend(check_conceptual_entities(data))
     diagnostics.extend(check_relation_terms(data))
+    diagnostics.extend(check_technical_assets(data))
     return tuple(diagnostics)
 
 

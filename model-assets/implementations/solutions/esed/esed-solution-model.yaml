@@ -93,8 +93,7 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: Проверка доверенности на карточке — характеристика SupportingDocument.
 - element_id: dams:logical/esed/common_state
@@ -136,8 +135,7 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: local-only
   alignment_rationale: Workflow/lookup состояние ЕСЭД; корпоративного концепта нет.
 - element_id: dams:logical/esed/common_type
@@ -179,8 +177,7 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: local-only
   alignment_rationale: Workflow/lookup вид ЕСЭД; корпоративного концепта нет.
 - element_id: dams:logical/esed/division
@@ -235,8 +232,7 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: ЕСЭД division реализует корпоративный Department.
 - element_id: dams:logical/esed/document
@@ -533,8 +529,7 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: ЕСЭД document реализует SupportingDocument.
 - element_id: dams:logical/esed/employee
@@ -622,11 +617,10 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
-  alignment_rationale: ЕСЭД employee реализует Employee. Отдельного Person в пакете нет; Person 
-    живёт в MDM/UCD (LDM-008 warning допустим).
+  alignment_rationale: ЕСЭД employee реализует Employee. Отдельного Person в пакете нет; Person живёт в MDM/UCD (LDM-008 warning
+    допустим).
 - element_id: dams:logical/esed/file
   name: file
   title: file
@@ -699,8 +693,7 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: not-applicable
   alignment_rationale: Физическое хранилище вложения ЕСЭД; не бизнес-понятие CDM.
 - element_id: dams:logical/esed/file_binary
@@ -753,8 +746,7 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: not-applicable
   alignment_rationale: Бинарные данные файла ЕСЭД; не бизнес-понятие CDM.
 - element_id: dams:logical/esed/instance
@@ -798,11 +790,9 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
-  alignment_rationale: Карточка/экземпляр документа ЕСЭД — то же понятие SupportingDocument, другое 
-    зерно относительно document.
+  alignment_rationale: Карточка/экземпляр документа ЕСЭД — то же понятие SupportingDocument, другое зерно относительно document.
 - element_id: dams:logical/esed/organization
   name: organization
   title: organization
@@ -910,11 +900,10 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
-  alignment_rationale: ЕСЭД organization (партнёр ЭДО, ИНН/КПП/ОГРН) реализует LegalEntity; не 
-    Counterparty (коммерческая роль).
+  alignment_rationale: ЕСЭД organization (партнёр ЭДО, ИНН/КПП/ОГРН) реализует LegalEntity; не Counterparty (коммерческая
+    роль).
 - element_id: dams:logical/esed/organization_employee
   name: organization_employee
   title: organization_employee
@@ -978,8 +967,7 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: Сотрудник контрагента в ЕСЭД — Person, не Employee МОЕХ.
 - element_id: dams:logical/esed/universal_item
@@ -1032,8 +1020,7 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
-    уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: local-only
   alignment_rationale: Универсальный справочник значений ЕСЭД; корпоративного концепта нет.
 relationships:
@@ -1231,788 +1218,6 @@ relationships:
   source_max_cardinality: 999999
   target_min_cardinality: 0
   target_max_cardinality: 1
-physical_objects:
-- element_id: dams:physical/esed/CardDocument_ExternalPoaInfo
-  name: CardDocument_ExternalPoaInfo
-  title: attorney_check_info
-  description: attorney_check_info
-  lifecycle_status: draft
-  solution_ref: eam:solution/ESED
-  system_ref: eam:system/ESED
-  object_kind: table
-  qualified_name: CardDocument.ExternalPoaInfo
-  technology: DocsVision
-  native_schema_ref: esed:CardDocument_ExternalPoaInfo
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/esed/CardDocument_ExternalPoaInfo/InstanceID
-    name: InstanceID
-    description: Идентификатор документа
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/CardDocument_ExternalPoaInfo
-    native_name: InstanceID
-    native_type: UUID
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/CardDocument_ExternalPoaInfo/PowersValidationStatus
-    name: PowersValidationStatus
-    description: Статус проверки полномочий
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/CardDocument_ExternalPoaInfo
-    native_name: PowersValidationStatus
-    native_type: Integer
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/CardDocument_ExternalPoaInfo/MainFilesSignatureStatus
-    name: MainFilesSignatureStatus
-    description: Статус подписи документа
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/CardDocument_ExternalPoaInfo
-    native_name: MainFilesSignatureStatus
-    native_type: Integer
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: 
-      dams:physical/esed/CardDocument_ExternalPoaInfo/MainFilesRepresentativeSignatureStatus
-    name: MainFilesRepresentativeSignatureStatus
-    description: Статус подписи представителя
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/CardDocument_ExternalPoaInfo
-    native_name: MainFilesRepresentativeSignatureStatus
-    native_type: Integer
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/CardDocument_ExternalPoaInfo/ValidationJsonData
-    name: ValidationJsonData
-    description: JSON-данные валидации (Контур)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/CardDocument_ExternalPoaInfo
-    native_name: ValidationJsonData
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/esed/RefStates_States
-  name: RefStates_States
-  title: common_state
-  description: common_state
-  lifecycle_status: draft
-  solution_ref: eam:solution/ESED
-  system_ref: eam:system/ESED
-  object_kind: table
-  qualified_name: RefStates.States
-  technology: DocsVision
-  native_schema_ref: esed:RefStates_States
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/esed/RefStates_States/RowID
-    name: RowID
-    description: Идентификатор состояния
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefStates_States
-    native_name: RowID
-    native_type: UUID
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefStates_States/DefaultName
-    name: DefaultName
-    description: Название по умолчанию (английское)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefStates_States
-    native_name: DefaultName
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/esed/RefKinds_CardKinds
-  name: RefKinds_CardKinds
-  title: common_type
-  description: common_type
-  lifecycle_status: draft
-  solution_ref: eam:solution/ESED
-  system_ref: eam:system/ESED
-  object_kind: table
-  qualified_name: RefKinds.CardKinds
-  technology: DocsVision
-  native_schema_ref: esed:RefKinds_CardKinds
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/esed/RefKinds_CardKinds/RowID
-    name: RowID
-    description: Идентификатор вида
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefKinds_CardKinds
-    native_name: RowID
-    native_type: UUID
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefKinds_CardKinds/Name
-    name: Name
-    description: Название вида документа
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefKinds_CardKinds
-    native_name: Name
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/esed/RefStaff_Units
-  name: RefStaff_Units
-  title: division
-  description: division
-  lifecycle_status: draft
-  solution_ref: eam:solution/ESED
-  system_ref: eam:system/ESED
-  object_kind: table
-  qualified_name: RefStaff.Units
-  technology: DocsVision
-  native_schema_ref: esed:RefStaff_Units
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/esed/RefStaff_Units/RowID
-    name: RowID
-    description: Идентификатор подразделения
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefStaff_Units
-    native_name: RowID
-    native_type: UUID
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefStaff_Units/Name
-    name: Name
-    description: Название
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefStaff_Units
-    native_name: Name
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefStaff_Units/ParentTreeRowID
-    name: ParentTreeRowID
-    description: Родительское подразделение (иерархия)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefStaff_Units
-    native_name: ParentTreeRowID
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/esed/dvsys_instances_date
-  name: dvsys_instances_date
-  title: document
-  description: document
-  lifecycle_status: draft
-  solution_ref: eam:solution/ESED
-  system_ref: eam:system/ESED
-  object_kind: table
-  qualified_name: dvsys_instances_date
-  technology: DocsVision
-  native_schema_ref: esed:dvsys_instances_date
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/esed/dvsys_instances_date/InstanceID
-    name: InstanceID
-    description: Идентификатор документа
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: InstanceID
-    native_type: UUID
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/RegDate
-    name: RegDate
-    description: Дата регистрации
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: RegDate
-    native_type: DateTime
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/RegNumber
-    name: RegNumber
-    description: Регистрационный номер
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: RegNumber
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/ExternalNumber
-    name: ExternalNumber
-    description: Исходящий номер (внешний номер документа)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: ExternalNumber
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/Registrar
-    name: Registrar
-    description: Регистратор
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: Registrar
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/Author
-    name: Author
-    description: Автор
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: Author
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/Name
-    name: Name
-    description: Название (заголовок, тема документа)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: Name
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/Content
-    name: Content
-    description: Содержание
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: Content
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/ResponsDepartment
-    name: ResponsDepartment
-    description: Ответственное подразделение (юридическое лицо)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: ResponsDepartment
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/Kind
-    name: Kind
-    description: Вид (тип документа)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: Kind
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/State
-    name: State
-    description: Состояние (статус документа)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: State
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/StatusId
-    name: StatusId
-    description: Статус (тип документа)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: StatusId
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/DeliveryTypeId
-    name: DeliveryTypeId
-    description: Идентификатор типа доставки (способ получения)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: DeliveryTypeId
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/DeliveryDate
-    name: DeliveryDate
-    description: Дата от (дата получения документа)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: DeliveryDate
-    native_type: DateTime
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/SenderOrg
-    name: SenderOrg
-    description: Организация-отправитель
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: SenderOrg
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/SenderPerson
-    name: SenderPerson
-    description: Сотрудник-отправитель
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: SenderPerson
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/AnswerNotNeed
-    name: AnswerNotNeed
-    description: Ответ не требуется
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: AnswerNotNeed
-    native_type: Boolean
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/ItemID
-    name: ItemID
-    description: Строка справочника (рубрика)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: ItemID
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/IndocProcessingStatus
-    name: IndocProcessingStatus
-    description: Статус обработки в InDoc
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: IndocProcessingStatus
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/DocumentTypeIndoc
-    name: DocumentTypeIndoc
-    description: Тип документа в InDoc
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: DocumentTypeIndoc
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/DocumentTypeKbd
-    name: DocumentTypeKbd
-    description: Тип документа КБД
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: DocumentTypeKbd
-    native_type: Integer
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/KBD_DvSyncStatus
-    name: KBD_DvSyncStatus
-    description: Статус отправки в КБД
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: KBD_DvSyncStatus
-    native_type: Integer
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/KBD_LkuDocumentId
-    name: KBD_LkuDocumentId
-    description: Идентификатор ЛКУ КБД
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: KBD_LkuDocumentId
-    native_type: Integer
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/CreationDateTime
-    name: CreationDateTime
-    description: Дата и время создания
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: CreationDateTime
-    native_type: DateTime
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances_date/ChangeDateTime
-    name: ChangeDateTime
-    description: Дата и время изменения
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances_date
-    native_name: ChangeDateTime
-    native_type: DateTime
-    required: false
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/esed/RefStaff_Employees
-  name: RefStaff_Employees
-  title: employee
-  description: employee
-  lifecycle_status: draft
-  solution_ref: eam:solution/ESED
-  system_ref: eam:system/ESED
-  object_kind: table
-  qualified_name: RefStaff.Employees
-  technology: DocsVision
-  native_schema_ref: esed:RefStaff_Employees
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/esed/RefStaff_Employees/RowID
-    name: RowID
-    description: Идентификатор сотрудника
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefStaff_Employees
-    native_name: RowID
-    native_type: UUID
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefStaff_Employees/LastName
-    name: LastName
-    description: Фамилия
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefStaff_Employees
-    native_name: LastName
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefStaff_Employees/FirstName
-    name: FirstName
-    description: Имя
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefStaff_Employees
-    native_name: FirstName
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefStaff_Employees/MiddleName
-    name: MiddleName
-    description: Отчество
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefStaff_Employees
-    native_name: MiddleName
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefStaff_Employees/AccountName
-    name: AccountName
-    description: Пользователь (AD-логин)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefStaff_Employees
-    native_name: AccountName
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefStaff_Employees/ParentRowID
-    name: ParentRowID
-    description: Подразделение сотрудника
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefStaff_Employees
-    native_name: ParentRowID
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/esed/dvsys_files
-  name: dvsys_files
-  title: file
-  description: file
-  lifecycle_status: draft
-  solution_ref: eam:solution/ESED
-  system_ref: eam:system/ESED
-  object_kind: table
-  qualified_name: dvsys_files
-  technology: DocsVision
-  native_schema_ref: esed:dvsys_files
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/esed/dvsys_files/ID
-    name: ID
-    description: Идентификатор записи файла
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_files
-    native_name: ID
-    native_type: UUID
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_files/OwnerCardID
-    name: OwnerCardID
-    description: Карточка-владелец файла
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_files
-    native_name: OwnerCardID
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_files/Name
-    name: Name
-    description: Имя файла
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_files
-    native_name: Name
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_files/BinaryID
-    name: BinaryID
-    description: Идентификатор бинарных данных
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_files
-    native_name: BinaryID
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_files/FileType
-    name: FileType
-    description: Тип файла
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_files
-    native_name: FileType
-    native_type: Integer
-    required: false
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/esed/dvsys_binaries
-  name: dvsys_binaries
-  title: file_binary
-  description: file_binary
-  lifecycle_status: draft
-  solution_ref: eam:solution/ESED
-  system_ref: eam:system/ESED
-  object_kind: table
-  qualified_name: dvsys_binaries
-  technology: DocsVision
-  native_schema_ref: esed:dvsys_binaries
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/esed/dvsys_binaries/ID
-    name: ID
-    description: Идентификатор бинарных данных
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_binaries
-    native_name: ID
-    native_type: UUID
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_binaries/Path
-    name: Path
-    description: Путь к файлу (Nuxeo ID)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_binaries
-    native_name: Path
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_binaries/StorageID
-    name: StorageID
-    description: Идентификатор хранилища
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_binaries
-    native_name: StorageID
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/esed/dvsys_instances
-  name: dvsys_instances
-  title: instance
-  description: instance
-  lifecycle_status: draft
-  solution_ref: eam:solution/ESED
-  system_ref: eam:system/ESED
-  object_kind: table
-  qualified_name: dvsys_instances
-  technology: DocsVision
-  native_schema_ref: esed:dvsys_instances
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/esed/dvsys_instances/InstanceID
-    name: InstanceID
-    description: Идентификатор документа (карточки)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances
-    native_name: InstanceID
-    native_type: UUID
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/dvsys_instances/Deleted
-    name: Deleted
-    description: Признак мягкого удаления
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/dvsys_instances
-    native_name: Deleted
-    native_type: Boolean
-    required: false
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/esed/RefPartners_Companies
-  name: RefPartners_Companies
-  title: organization
-  description: organization
-  lifecycle_status: draft
-  solution_ref: eam:solution/ESED
-  system_ref: eam:system/ESED
-  object_kind: table
-  qualified_name: RefPartners.Companies
-  technology: DocsVision
-  native_schema_ref: esed:RefPartners_Companies
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/esed/RefPartners_Companies/RowID
-    name: RowID
-    description: Идентификатор организации
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefPartners_Companies
-    native_name: RowID
-    native_type: UUID
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefPartners_Companies/Name
-    name: Name
-    description: Название (краткое)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefPartners_Companies
-    native_name: Name
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefPartners_Companies/FullName
-    name: FullName
-    description: Полное название
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefPartners_Companies
-    native_name: FullName
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefPartners_Companies/INN
-    name: INN
-    description: ИНН
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefPartners_Companies
-    native_name: INN
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefPartners_Companies/KPP
-    name: KPP
-    description: КПП
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefPartners_Companies
-    native_name: KPP
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefPartners_Companies/OGRN
-    name: OGRN
-    description: ОГРН
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefPartners_Companies
-    native_name: OGRN
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefPartners_Companies/Comments
-    name: Comments
-    description: Дополнительная информация (MDM ID организации)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefPartners_Companies
-    native_name: Comments
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefPartners_Companies/Fax
-    name: Fax
-    description: Факс (ICDB ID организации)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefPartners_Companies
-    native_name: Fax
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/esed/RefPartners_Employees
-  name: RefPartners_Employees
-  title: organization_employee
-  description: organization_employee
-  lifecycle_status: draft
-  solution_ref: eam:solution/ESED
-  system_ref: eam:system/ESED
-  object_kind: table
-  qualified_name: RefPartners.Employees
-  technology: DocsVision
-  native_schema_ref: esed:RefPartners_Employees
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/esed/RefPartners_Employees/RowID
-    name: RowID
-    description: Идентификатор сотрудника контрагента
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefPartners_Employees
-    native_name: RowID
-    native_type: UUID
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefPartners_Employees/LastName
-    name: LastName
-    description: Фамилия
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefPartners_Employees
-    native_name: LastName
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefPartners_Employees/FirstName
-    name: FirstName
-    description: Имя
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefPartners_Employees
-    native_name: FirstName
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefPartners_Employees/MiddleName
-    name: MiddleName
-    description: Отчество
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefPartners_Employees
-    native_name: MiddleName
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
-- element_id: dams:physical/esed/RefBaseUniversal_Items
-  name: RefBaseUniversal_Items
-  title: universal_item
-  description: universal_item
-  lifecycle_status: draft
-  solution_ref: eam:solution/ESED
-  system_ref: eam:system/ESED
-  object_kind: table
-  qualified_name: RefBaseUniversal.Items
-  technology: DocsVision
-  native_schema_ref: esed:RefBaseUniversal_Items
-  direction: internal
-  physical_fields:
-  - element_id: dams:physical/esed/RefBaseUniversal_Items/RowID
-    name: RowID
-    description: Идентификатор значения
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefBaseUniversal_Items
-    native_name: RowID
-    native_type: UUID
-    required: true
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefBaseUniversal_Items/Name
-    name: Name
-    description: Имя (наименование справочного значения)
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefBaseUniversal_Items
-    native_name: Name
-    native_type: Text
-    required: false
-    mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/RefBaseUniversal_Items/ItemCard
-    name: ItemCard
-    description: Ссылка на карточку
-    lifecycle_status: draft
-    physical_object_ref: dams:physical/esed/RefBaseUniversal_Items
-    native_name: ItemCard
-    native_type: UUID
-    required: false
-    mapping_coverage_status: mapped
-  mapping_coverage_status: mapped
 mappings:
 - element_id: dams:mapping/esed/map_attorney_check_info_instance_id
   name: map_attorney_check_info_instance_id
@@ -2894,8 +2099,7 @@ mappings:
   approval_status: proposed
 - element_id: dams:mapping/esed/realizes_attorney_check_info
   name: realizes_attorney_check_info
-  description: ESED attorney_check_info realizes enterprise dams:concept/SupportingDocument 
-    (ADR-021/029).
+  description: ESED attorney_check_info realizes enterprise dams:concept/SupportingDocument (ADR-021/029).
   lifecycle_status: draft
   source_refs:
   - dams:logical/esed/attorney_check_info
@@ -2907,5 +2111,833 @@ mappings:
 implementation_scope: solution
 conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
 data_owner_ref: org:role/DATA_OWNER_PENDING
-ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при отсутствии 
-  локального override на сущности.
+ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при отсутствии локального override на сущности.
+data_carriers:
+- element_id: dams:physical/esed/CardDocument_ExternalPoaInfo
+  name: CardDocument_ExternalPoaInfo
+  title: attorney_check_info
+  description: attorney_check_info
+  lifecycle_status: draft
+  solution_ref: eam:solution/ESED
+  system_ref: eam:system/ESED
+  qualified_name: CardDocument.ExternalPoaInfo
+  technology: DocsVision
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/esed/CardDocument_ExternalPoaInfo/InstanceID
+    name: InstanceID
+    description: Идентификатор документа
+    lifecycle_status: draft
+    native_name: InstanceID
+    native_type: UUID
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/CardDocument_ExternalPoaInfo
+  - element_id: dams:physical/esed/CardDocument_ExternalPoaInfo/PowersValidationStatus
+    name: PowersValidationStatus
+    description: Статус проверки полномочий
+    lifecycle_status: draft
+    native_name: PowersValidationStatus
+    native_type: Integer
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/CardDocument_ExternalPoaInfo
+  - element_id: dams:physical/esed/CardDocument_ExternalPoaInfo/MainFilesSignatureStatus
+    name: MainFilesSignatureStatus
+    description: Статус подписи документа
+    lifecycle_status: draft
+    native_name: MainFilesSignatureStatus
+    native_type: Integer
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/CardDocument_ExternalPoaInfo
+  - element_id: dams:physical/esed/CardDocument_ExternalPoaInfo/MainFilesRepresentativeSignatureStatus
+    name: MainFilesRepresentativeSignatureStatus
+    description: Статус подписи представителя
+    lifecycle_status: draft
+    native_name: MainFilesRepresentativeSignatureStatus
+    native_type: Integer
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/CardDocument_ExternalPoaInfo
+  - element_id: dams:physical/esed/CardDocument_ExternalPoaInfo/ValidationJsonData
+    name: ValidationJsonData
+    description: JSON-данные валидации (Контур)
+    lifecycle_status: draft
+    native_name: ValidationJsonData
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/CardDocument_ExternalPoaInfo
+  mapping_coverage_status: mapped
+  asset_namespace: docsvision://ESED
+  asset_kind: relational_table
+  structure_ref: esed:CardDocument_ExternalPoaInfo
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/esed/RefStates_States
+  name: RefStates_States
+  title: common_state
+  description: common_state
+  lifecycle_status: draft
+  solution_ref: eam:solution/ESED
+  system_ref: eam:system/ESED
+  qualified_name: RefStates.States
+  technology: DocsVision
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/esed/RefStates_States/RowID
+    name: RowID
+    description: Идентификатор состояния
+    lifecycle_status: draft
+    native_name: RowID
+    native_type: UUID
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefStates_States
+  - element_id: dams:physical/esed/RefStates_States/DefaultName
+    name: DefaultName
+    description: Название по умолчанию (английское)
+    lifecycle_status: draft
+    native_name: DefaultName
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefStates_States
+  mapping_coverage_status: mapped
+  asset_namespace: docsvision://ESED
+  asset_kind: relational_table
+  structure_ref: esed:RefStates_States
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/esed/RefKinds_CardKinds
+  name: RefKinds_CardKinds
+  title: common_type
+  description: common_type
+  lifecycle_status: draft
+  solution_ref: eam:solution/ESED
+  system_ref: eam:system/ESED
+  qualified_name: RefKinds.CardKinds
+  technology: DocsVision
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/esed/RefKinds_CardKinds/RowID
+    name: RowID
+    description: Идентификатор вида
+    lifecycle_status: draft
+    native_name: RowID
+    native_type: UUID
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefKinds_CardKinds
+  - element_id: dams:physical/esed/RefKinds_CardKinds/Name
+    name: Name
+    description: Название вида документа
+    lifecycle_status: draft
+    native_name: Name
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefKinds_CardKinds
+  mapping_coverage_status: mapped
+  asset_namespace: docsvision://ESED
+  asset_kind: relational_table
+  structure_ref: esed:RefKinds_CardKinds
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/esed/RefStaff_Units
+  name: RefStaff_Units
+  title: division
+  description: division
+  lifecycle_status: draft
+  solution_ref: eam:solution/ESED
+  system_ref: eam:system/ESED
+  qualified_name: RefStaff.Units
+  technology: DocsVision
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/esed/RefStaff_Units/RowID
+    name: RowID
+    description: Идентификатор подразделения
+    lifecycle_status: draft
+    native_name: RowID
+    native_type: UUID
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefStaff_Units
+  - element_id: dams:physical/esed/RefStaff_Units/Name
+    name: Name
+    description: Название
+    lifecycle_status: draft
+    native_name: Name
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefStaff_Units
+  - element_id: dams:physical/esed/RefStaff_Units/ParentTreeRowID
+    name: ParentTreeRowID
+    description: Родительское подразделение (иерархия)
+    lifecycle_status: draft
+    native_name: ParentTreeRowID
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefStaff_Units
+  mapping_coverage_status: mapped
+  asset_namespace: docsvision://ESED
+  asset_kind: relational_table
+  structure_ref: esed:RefStaff_Units
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/esed/dvsys_instances_date
+  name: dvsys_instances_date
+  title: document
+  description: document
+  lifecycle_status: draft
+  solution_ref: eam:solution/ESED
+  system_ref: eam:system/ESED
+  qualified_name: dvsys_instances_date
+  technology: DocsVision
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/esed/dvsys_instances_date/InstanceID
+    name: InstanceID
+    description: Идентификатор документа
+    lifecycle_status: draft
+    native_name: InstanceID
+    native_type: UUID
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/RegDate
+    name: RegDate
+    description: Дата регистрации
+    lifecycle_status: draft
+    native_name: RegDate
+    native_type: DateTime
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/RegNumber
+    name: RegNumber
+    description: Регистрационный номер
+    lifecycle_status: draft
+    native_name: RegNumber
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/ExternalNumber
+    name: ExternalNumber
+    description: Исходящий номер (внешний номер документа)
+    lifecycle_status: draft
+    native_name: ExternalNumber
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/Registrar
+    name: Registrar
+    description: Регистратор
+    lifecycle_status: draft
+    native_name: Registrar
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/Author
+    name: Author
+    description: Автор
+    lifecycle_status: draft
+    native_name: Author
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/Name
+    name: Name
+    description: Название (заголовок, тема документа)
+    lifecycle_status: draft
+    native_name: Name
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/Content
+    name: Content
+    description: Содержание
+    lifecycle_status: draft
+    native_name: Content
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/ResponsDepartment
+    name: ResponsDepartment
+    description: Ответственное подразделение (юридическое лицо)
+    lifecycle_status: draft
+    native_name: ResponsDepartment
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/Kind
+    name: Kind
+    description: Вид (тип документа)
+    lifecycle_status: draft
+    native_name: Kind
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/State
+    name: State
+    description: Состояние (статус документа)
+    lifecycle_status: draft
+    native_name: State
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/StatusId
+    name: StatusId
+    description: Статус (тип документа)
+    lifecycle_status: draft
+    native_name: StatusId
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/DeliveryTypeId
+    name: DeliveryTypeId
+    description: Идентификатор типа доставки (способ получения)
+    lifecycle_status: draft
+    native_name: DeliveryTypeId
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/DeliveryDate
+    name: DeliveryDate
+    description: Дата от (дата получения документа)
+    lifecycle_status: draft
+    native_name: DeliveryDate
+    native_type: DateTime
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/SenderOrg
+    name: SenderOrg
+    description: Организация-отправитель
+    lifecycle_status: draft
+    native_name: SenderOrg
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/SenderPerson
+    name: SenderPerson
+    description: Сотрудник-отправитель
+    lifecycle_status: draft
+    native_name: SenderPerson
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/AnswerNotNeed
+    name: AnswerNotNeed
+    description: Ответ не требуется
+    lifecycle_status: draft
+    native_name: AnswerNotNeed
+    native_type: Boolean
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/ItemID
+    name: ItemID
+    description: Строка справочника (рубрика)
+    lifecycle_status: draft
+    native_name: ItemID
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/IndocProcessingStatus
+    name: IndocProcessingStatus
+    description: Статус обработки в InDoc
+    lifecycle_status: draft
+    native_name: IndocProcessingStatus
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/DocumentTypeIndoc
+    name: DocumentTypeIndoc
+    description: Тип документа в InDoc
+    lifecycle_status: draft
+    native_name: DocumentTypeIndoc
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/DocumentTypeKbd
+    name: DocumentTypeKbd
+    description: Тип документа КБД
+    lifecycle_status: draft
+    native_name: DocumentTypeKbd
+    native_type: Integer
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/KBD_DvSyncStatus
+    name: KBD_DvSyncStatus
+    description: Статус отправки в КБД
+    lifecycle_status: draft
+    native_name: KBD_DvSyncStatus
+    native_type: Integer
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/KBD_LkuDocumentId
+    name: KBD_LkuDocumentId
+    description: Идентификатор ЛКУ КБД
+    lifecycle_status: draft
+    native_name: KBD_LkuDocumentId
+    native_type: Integer
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/CreationDateTime
+    name: CreationDateTime
+    description: Дата и время создания
+    lifecycle_status: draft
+    native_name: CreationDateTime
+    native_type: DateTime
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  - element_id: dams:physical/esed/dvsys_instances_date/ChangeDateTime
+    name: ChangeDateTime
+    description: Дата и время изменения
+    lifecycle_status: draft
+    native_name: ChangeDateTime
+    native_type: DateTime
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances_date
+  mapping_coverage_status: mapped
+  asset_namespace: docsvision://ESED
+  asset_kind: relational_table
+  structure_ref: esed:dvsys_instances_date
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/esed/RefStaff_Employees
+  name: RefStaff_Employees
+  title: employee
+  description: employee
+  lifecycle_status: draft
+  solution_ref: eam:solution/ESED
+  system_ref: eam:system/ESED
+  qualified_name: RefStaff.Employees
+  technology: DocsVision
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/esed/RefStaff_Employees/RowID
+    name: RowID
+    description: Идентификатор сотрудника
+    lifecycle_status: draft
+    native_name: RowID
+    native_type: UUID
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefStaff_Employees
+  - element_id: dams:physical/esed/RefStaff_Employees/LastName
+    name: LastName
+    description: Фамилия
+    lifecycle_status: draft
+    native_name: LastName
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefStaff_Employees
+  - element_id: dams:physical/esed/RefStaff_Employees/FirstName
+    name: FirstName
+    description: Имя
+    lifecycle_status: draft
+    native_name: FirstName
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefStaff_Employees
+  - element_id: dams:physical/esed/RefStaff_Employees/MiddleName
+    name: MiddleName
+    description: Отчество
+    lifecycle_status: draft
+    native_name: MiddleName
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefStaff_Employees
+  - element_id: dams:physical/esed/RefStaff_Employees/AccountName
+    name: AccountName
+    description: Пользователь (AD-логин)
+    lifecycle_status: draft
+    native_name: AccountName
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefStaff_Employees
+  - element_id: dams:physical/esed/RefStaff_Employees/ParentRowID
+    name: ParentRowID
+    description: Подразделение сотрудника
+    lifecycle_status: draft
+    native_name: ParentRowID
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefStaff_Employees
+  mapping_coverage_status: mapped
+  asset_namespace: docsvision://ESED
+  asset_kind: relational_table
+  structure_ref: esed:RefStaff_Employees
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/esed/dvsys_files
+  name: dvsys_files
+  title: file
+  description: file
+  lifecycle_status: draft
+  solution_ref: eam:solution/ESED
+  system_ref: eam:system/ESED
+  qualified_name: dvsys_files
+  technology: DocsVision
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/esed/dvsys_files/ID
+    name: ID
+    description: Идентификатор записи файла
+    lifecycle_status: draft
+    native_name: ID
+    native_type: UUID
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_files
+  - element_id: dams:physical/esed/dvsys_files/OwnerCardID
+    name: OwnerCardID
+    description: Карточка-владелец файла
+    lifecycle_status: draft
+    native_name: OwnerCardID
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_files
+  - element_id: dams:physical/esed/dvsys_files/Name
+    name: Name
+    description: Имя файла
+    lifecycle_status: draft
+    native_name: Name
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_files
+  - element_id: dams:physical/esed/dvsys_files/BinaryID
+    name: BinaryID
+    description: Идентификатор бинарных данных
+    lifecycle_status: draft
+    native_name: BinaryID
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_files
+  - element_id: dams:physical/esed/dvsys_files/FileType
+    name: FileType
+    description: Тип файла
+    lifecycle_status: draft
+    native_name: FileType
+    native_type: Integer
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_files
+  mapping_coverage_status: mapped
+  asset_namespace: docsvision://ESED
+  asset_kind: relational_table
+  structure_ref: esed:dvsys_files
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/esed/dvsys_binaries
+  name: dvsys_binaries
+  title: file_binary
+  description: file_binary
+  lifecycle_status: draft
+  solution_ref: eam:solution/ESED
+  system_ref: eam:system/ESED
+  qualified_name: dvsys_binaries
+  technology: DocsVision
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/esed/dvsys_binaries/ID
+    name: ID
+    description: Идентификатор бинарных данных
+    lifecycle_status: draft
+    native_name: ID
+    native_type: UUID
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_binaries
+  - element_id: dams:physical/esed/dvsys_binaries/Path
+    name: Path
+    description: Путь к файлу (Nuxeo ID)
+    lifecycle_status: draft
+    native_name: Path
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_binaries
+  - element_id: dams:physical/esed/dvsys_binaries/StorageID
+    name: StorageID
+    description: Идентификатор хранилища
+    lifecycle_status: draft
+    native_name: StorageID
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_binaries
+  mapping_coverage_status: mapped
+  asset_namespace: docsvision://ESED
+  asset_kind: relational_table
+  structure_ref: esed:dvsys_binaries
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/esed/dvsys_instances
+  name: dvsys_instances
+  title: instance
+  description: instance
+  lifecycle_status: draft
+  solution_ref: eam:solution/ESED
+  system_ref: eam:system/ESED
+  qualified_name: dvsys_instances
+  technology: DocsVision
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/esed/dvsys_instances/InstanceID
+    name: InstanceID
+    description: Идентификатор документа (карточки)
+    lifecycle_status: draft
+    native_name: InstanceID
+    native_type: UUID
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances
+  - element_id: dams:physical/esed/dvsys_instances/Deleted
+    name: Deleted
+    description: Признак мягкого удаления
+    lifecycle_status: draft
+    native_name: Deleted
+    native_type: Boolean
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/dvsys_instances
+  mapping_coverage_status: mapped
+  asset_namespace: docsvision://ESED
+  asset_kind: relational_table
+  structure_ref: esed:dvsys_instances
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/esed/RefPartners_Companies
+  name: RefPartners_Companies
+  title: organization
+  description: organization
+  lifecycle_status: draft
+  solution_ref: eam:solution/ESED
+  system_ref: eam:system/ESED
+  qualified_name: RefPartners.Companies
+  technology: DocsVision
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/esed/RefPartners_Companies/RowID
+    name: RowID
+    description: Идентификатор организации
+    lifecycle_status: draft
+    native_name: RowID
+    native_type: UUID
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefPartners_Companies
+  - element_id: dams:physical/esed/RefPartners_Companies/Name
+    name: Name
+    description: Название (краткое)
+    lifecycle_status: draft
+    native_name: Name
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefPartners_Companies
+  - element_id: dams:physical/esed/RefPartners_Companies/FullName
+    name: FullName
+    description: Полное название
+    lifecycle_status: draft
+    native_name: FullName
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefPartners_Companies
+  - element_id: dams:physical/esed/RefPartners_Companies/INN
+    name: INN
+    description: ИНН
+    lifecycle_status: draft
+    native_name: INN
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefPartners_Companies
+  - element_id: dams:physical/esed/RefPartners_Companies/KPP
+    name: KPP
+    description: КПП
+    lifecycle_status: draft
+    native_name: KPP
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefPartners_Companies
+  - element_id: dams:physical/esed/RefPartners_Companies/OGRN
+    name: OGRN
+    description: ОГРН
+    lifecycle_status: draft
+    native_name: OGRN
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefPartners_Companies
+  - element_id: dams:physical/esed/RefPartners_Companies/Comments
+    name: Comments
+    description: Дополнительная информация (MDM ID организации)
+    lifecycle_status: draft
+    native_name: Comments
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefPartners_Companies
+  - element_id: dams:physical/esed/RefPartners_Companies/Fax
+    name: Fax
+    description: Факс (ICDB ID организации)
+    lifecycle_status: draft
+    native_name: Fax
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefPartners_Companies
+  mapping_coverage_status: mapped
+  asset_namespace: docsvision://ESED
+  asset_kind: relational_table
+  structure_ref: esed:RefPartners_Companies
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/esed/RefPartners_Employees
+  name: RefPartners_Employees
+  title: organization_employee
+  description: organization_employee
+  lifecycle_status: draft
+  solution_ref: eam:solution/ESED
+  system_ref: eam:system/ESED
+  qualified_name: RefPartners.Employees
+  technology: DocsVision
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/esed/RefPartners_Employees/RowID
+    name: RowID
+    description: Идентификатор сотрудника контрагента
+    lifecycle_status: draft
+    native_name: RowID
+    native_type: UUID
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefPartners_Employees
+  - element_id: dams:physical/esed/RefPartners_Employees/LastName
+    name: LastName
+    description: Фамилия
+    lifecycle_status: draft
+    native_name: LastName
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefPartners_Employees
+  - element_id: dams:physical/esed/RefPartners_Employees/FirstName
+    name: FirstName
+    description: Имя
+    lifecycle_status: draft
+    native_name: FirstName
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefPartners_Employees
+  - element_id: dams:physical/esed/RefPartners_Employees/MiddleName
+    name: MiddleName
+    description: Отчество
+    lifecycle_status: draft
+    native_name: MiddleName
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefPartners_Employees
+  mapping_coverage_status: mapped
+  asset_namespace: docsvision://ESED
+  asset_kind: relational_table
+  structure_ref: esed:RefPartners_Employees
+  tags:
+  - transitional
+  - namespace_heuristic
+- element_id: dams:physical/esed/RefBaseUniversal_Items
+  name: RefBaseUniversal_Items
+  title: universal_item
+  description: universal_item
+  lifecycle_status: draft
+  solution_ref: eam:solution/ESED
+  system_ref: eam:system/ESED
+  qualified_name: RefBaseUniversal.Items
+  technology: DocsVision
+  direction: internal
+  physical_fields:
+  - element_id: dams:physical/esed/RefBaseUniversal_Items/RowID
+    name: RowID
+    description: Идентификатор значения
+    lifecycle_status: draft
+    native_name: RowID
+    native_type: UUID
+    required: true
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefBaseUniversal_Items
+  - element_id: dams:physical/esed/RefBaseUniversal_Items/Name
+    name: Name
+    description: Имя (наименование справочного значения)
+    lifecycle_status: draft
+    native_name: Name
+    native_type: Text
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefBaseUniversal_Items
+  - element_id: dams:physical/esed/RefBaseUniversal_Items/ItemCard
+    name: ItemCard
+    description: Ссылка на карточку
+    lifecycle_status: draft
+    native_name: ItemCard
+    native_type: UUID
+    required: false
+    mapping_coverage_status: mapped
+    carrier_ref: dams:physical/esed/RefBaseUniversal_Items
+  mapping_coverage_status: mapped
+  asset_namespace: docsvision://ESED
+  asset_kind: relational_table
+  structure_ref: esed:RefBaseUniversal_Items
+  tags:
+  - transitional
+  - namespace_heuristic

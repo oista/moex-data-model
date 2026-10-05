@@ -17,10 +17,12 @@ logical_entities:
     attributes:
       - element_id: dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID
         name: clientId
-physical_objects:
+data_carriers:
   - element_id: dams:physical/mdm/topic
+    asset_kind: stream_topic
     physical_fields:
       - element_id: dams:physical/mdm/topic/id
+        carrier_ref: dams:physical/mdm/topic
 mappings:
   - element_id: dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID
     name: map_client_id

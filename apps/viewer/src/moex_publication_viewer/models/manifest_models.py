@@ -54,7 +54,10 @@ PublicationSectionKind = Literal[
 InstanceOfClass = Literal[
     "ConceptualEntity",
     "LogicalEntity",
-    "PhysicalObject",
+    "DataCarrier",
+    "AccessPoint",
+    "DataContainer",
+    "ExecutionAsset",
     "Relationship",
     "RelationTerm",
 ]

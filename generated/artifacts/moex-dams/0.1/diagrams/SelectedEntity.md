@@ -10,6 +10,17 @@
       
       SelectedEntity : aliases
         
+      SelectedEntity : carrier_refs
+        
+          
+    
+        
+        
+        SelectedEntity --> "1..*" DataCarrier : carrier_refs
+        click DataCarrier href "../DataCarrier"
+    
+
+        
       SelectedEntity : deprecated_by_ref
         
       SelectedEntity : description
@@ -50,17 +61,6 @@
 
         
       SelectedEntity : name
-        
-      SelectedEntity : physical_object_refs
-        
-          
-    
-        
-        
-        SelectedEntity --> "1..*" PhysicalObject : physical_object_refs
-        click PhysicalObject href "../PhysicalObject"
-    
-
         
       SelectedEntity : selected_attributes
         

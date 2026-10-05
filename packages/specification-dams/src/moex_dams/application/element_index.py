@@ -17,7 +17,10 @@ class ElementIndexEntry:
 _LIST_KINDS: tuple[tuple[str, str, str], ...] = (
     ("conceptual_entities", "ConceptualEntity", "conceptual"),
     ("logical_entities", "LogicalEntity", "logical"),
-    ("physical_objects", "PhysicalObject", "physical"),
+    ("data_carriers", "DataCarrier", "physical"),
+    ("access_points", "AccessPoint", "physical"),
+    ("data_containers", "DataContainer", "physical"),
+    ("execution_assets", "ExecutionAsset", "physical"),
     ("mappings", "Mapping", "mapping"),
     ("relationships", "Relationship", "logical"),
 )

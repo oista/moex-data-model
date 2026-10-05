@@ -69,24 +69,26 @@ MINI = {
             "mapping_cardinality": "one_to_one",
         }
     ],
-    "physical_objects": [
+    "data_carriers": [
         {
             "element_id": "dams:physical/mini/client_tbl",
             "name": "client_tbl",
             "title": "Client table",
-            "object_kind": "table",
+            "asset_kind": "relational_table",
             "physical_fields": [
                 {
                     "element_id": "dams:physical/mini/client_tbl/client_id",
                     "name": "client_id",
                     "native_type": "varchar",
                     "required": True,
+                    "carrier_ref": "dams:physical/mini/client_tbl",
                 },
                 {
                     "element_id": "dams:physical/mini/client_tbl/full_name",
                     "name": "full_name",
                     "native_type": "varchar",
                     "required": False,
+                    "carrier_ref": "dams:physical/mini/client_tbl",
                 },
             ],
         }
@@ -169,7 +171,7 @@ def test_physical_identity_round_trip() -> None:
     assert "client_tbl" in dbml
     merged, patch = svc.from_dbml(MINI, dbml, profile="physical")
     assert not patch.rejected
-    ids = {o["element_id"] for o in merged["physical_objects"]}
+    ids = {o["element_id"] for o in merged["data_carriers"]}
     assert "dams:physical/mini/client_tbl" in ids
     # conceptual layer untouched by physical apply
     assert merged["conceptual_entities"][0]["element_id"] == "dams:concept/mini/Client"

@@ -34,7 +34,12 @@ def check_dams_model_level(body: LinkMLImplementationBody) -> tuple[Diagnostic, 
         return tuple(diagnostics)
 
     conceptual = data.get("conceptual_entities") or []
-    physical = data.get("physical_objects") or []
+    technical = (
+        (data.get("data_carriers") or [])
+        or (data.get("access_points") or [])
+        or (data.get("data_containers") or [])
+        or (data.get("execution_assets") or [])
+    )
     logical = data.get("logical_entities") or []
     mappings = data.get("mappings") or []
     solution_ref = data.get("solution_ref")
@@ -65,13 +70,15 @@ def check_dams_model_level(body: LinkMLImplementationBody) -> tuple[Diagnostic, 
                     subject_ref=subject,
                 )
             )
-        if physical:
+        if technical:
             diagnostics.append(
                 Diagnostic(
                     diagnostic_code="DAMS-LEVEL-003",
                     severity=DiagnosticSeverity.ERROR,
                     diagnostic_message=(
-                        "enterprise-conceptual package forbids physical_objects"
+                        "enterprise-conceptual package forbids technical assets "
+                        "(data_carriers / access_points / data_containers / "
+                        "execution_assets)"
                     ),
                     conformance_phase=ConformancePhase.CORPORATE_SEMANTICS,
                     subject_ref=subject,
@@ -101,14 +108,15 @@ def check_dams_model_level(body: LinkMLImplementationBody) -> tuple[Diagnostic, 
                     subject_ref=subject,
                 )
             )
-        if not logical and not physical:
+        if not logical and not technical:
             diagnostics.append(
                 Diagnostic(
                     diagnostic_code="DAMS-LEVEL-006",
                     severity=DiagnosticSeverity.ERROR,
                     diagnostic_message=(
                         "solution package requires at least one logical_entities "
-                        "or physical_objects facet"
+                        "or technical-asset facet (data_carriers / access_points / "
+                        "data_containers / execution_assets)"
                     ),
                     conformance_phase=ConformancePhase.CORPORATE_SEMANTICS,
                     subject_ref=subject,

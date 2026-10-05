@@ -77,27 +77,30 @@ package "Логический уровень" #D9EAD3 {
   }
 }
 
-package "Физический уровень" #FCE5CD {
-  class PhysicalObject {
-    +solution_ref : ITSolution [0..1]
-    +system_ref : ITSystem [1]
-    +object_kind : PhysicalObjectKindEnum [1]
+package "Технический уровень (TechnicalAsset)" #FCE5CD {
+  abstract class TechnicalAsset {
+    +asset_namespace : string [1]
     +qualified_name : string [1]
-    +technology : string [1]
-    +native_schema_ref : uri [1]
-    +direction : FlowDirectionEnum [1]
-    +mapping_coverage_status : MappingCoverageStatusEnum [0..1]
-    +mapping_rationale : string [0..1]
+    +system_ref : ITSystem [1]
+    +asset_kind : enum [1]
+    +technology : string [0..1]
+    +direction : FlowDirectionEnum [0..1]
+    +solution_ref : ITSolution [0..1]
   }
+  class DataCarrier {
+    +structure_ref : uri [0..1]
+    +mapping_coverage_status : MappingCoverageStatusEnum [0..1]
+  }
+  class AccessPoint
+  class DataContainer
+  class ExecutionAsset
   class PhysicalField {
-    +physical_object_ref : PhysicalObject [1]
+    +carrier_ref : DataCarrier [1]
     +native_name : string [1]
     +native_type : string [1]
     +required : boolean [1]
     +ordinal_position : integer [0..1]
     +schema_path : string [0..1]
-    +mapping_coverage_status : MappingCoverageStatusEnum [0..1]
-    +mapping_rationale : string [0..1]
   }
 }
 
@@ -134,7 +137,11 @@ ModelElement <|-- DomainContext
 ModelElement <|-- LogicalEntity
 ModelElement <|-- LogicalAttribute
 ModelElement <|-- Relationship
-ModelElement <|-- PhysicalObject
+ModelElement <|-- TechnicalAsset
+TechnicalAsset <|-- DataCarrier
+TechnicalAsset <|-- AccessPoint
+TechnicalAsset <|-- DataContainer
+TechnicalAsset <|-- ExecutionAsset
 ModelElement <|-- PhysicalField
 ModelElement <|-- Mapping
 
@@ -152,9 +159,9 @@ LogicalEntity "0..*" --> "0..1" ITSolution : solution_ref
 Relationship "0..*" --> "1" ConceptualEntity : source/target\n(via uriorcurie)
 Relationship "0..*" --> "1" LogicalEntity : source/target\n(via uriorcurie)
 
-PhysicalObject "0..*" --> "1" ITSystem : system_ref
-PhysicalObject "0..*" --> "0..1" ITSolution : solution_ref
-PhysicalObject "1" *-- "0..*" PhysicalField : physical_fields
+TechnicalAsset "0..*" --> "1" ITSystem : system_ref
+TechnicalAsset "0..*" --> "0..1" ITSolution : solution_ref
+DataCarrier "1" *-- "0..*" PhysicalField : physical_fields
 ITSolution "1" o-- "0..*" ITSystem : member_system_refs
 
 Mapping "0..*" ..> ModelElement : source_refs / target_refs\n(uriorcurie 1..*)
@@ -169,9 +176,10 @@ note bottom of ConceptualEntity
   No ConceptualAttribute class.
   Key props via key_attribute_refs only.
 end note
-note bottom of PhysicalObject
-  technology and native_schema_ref are required
-  string/uri slots — not typed classes.
+note bottom of TechnicalAsset
+  Collections: data_carriers, access_points,
+  data_containers, execution_assets (ADR-031).
+  Identity: asset_namespace + qualified_name.
 end note
 note bottom of LogicalAttribute
   value_set_ref is uri, not a ValueSet class.

@@ -117,6 +117,7 @@ def test_catalog_expressions_all_have_runner_templates() -> None:
         "planned_on_active_warning",
         "ref002_cardinality",
         "pdm004_field_mapping",
+        "pdm001_structure_ref",
         "atr002_snake_case",
         "cls001_axes_present",
         "flw001_soft_presence",
@@ -273,24 +274,25 @@ def test_gen004_data_carrying_needs_entity_mapping() -> None:
 
 def test_gen004_infra_database_skipped() -> None:
     data = _example()
-    data["physical_objects"] = [
+    # Infra container lives in data_containers — GEN-004 applies only to DataCarrier.
+    data["data_containers"] = [
         {
             "element_id": "dams:physical/example-min/db",
             "name": "example_db",
             "description": "Infra container",
             "lifecycle_status": "active",
             "system_ref": "eam:system/EXAMPLE_CORE",
-            "object_kind": "database",
+            "asset_kind": "database",
+            "asset_namespace": "postgres://EXAMPLE_CORE",
             "qualified_name": "example",
             "technology": "PostgreSQL",
-            "native_schema_ref": "https://example/db",
-            "direction": "internal",
         }
     ]
+    data["data_carriers"] = []
     data["mappings"] = [
         m for m in data["mappings"] if m.get("mapping_type") != "entity_physical"
     ]
-    # Only infra object — GEN-004 must not fire; GEN-003 still ok via logical entities
+    # Only infra container — GEN-004 must not fire; GEN-003 still ok via logical entities
     assert "DAMS-REQ-GEN-004.c1" not in _codes(_errors(data))
 
 
@@ -479,13 +481,13 @@ def test_ref003_kind_soft_warning() -> None:
 
 def test_pdm001_system_ref_required() -> None:
     data = _example()
-    data["physical_objects"][0].pop("system_ref", None)
+    data["data_carriers"][0].pop("system_ref", None)
     assert any("PDM-001" in d.diagnostic_code and "system_ref" in d.diagnostic_message for d in _errors(data))
 
 
 def test_pdm002_native_name_required() -> None:
     data = _example()
-    data["physical_objects"][0]["physical_fields"][0].pop("native_name", None)
+    data["data_carriers"][0]["physical_fields"][0].pop("native_name", None)
     assert any("PDM-002" in d.diagnostic_code for d in _errors(data))
 
 
@@ -500,7 +502,7 @@ def test_pdm003_not_inferred_from_field_mapping() -> None:
 
 def test_pdm003_technical_only_with_rationale_ok() -> None:
     data = _example()
-    obj = data["physical_objects"][0]
+    obj = data["data_carriers"][0]
     obj["mapping_coverage_status"] = "technical-only"
     obj["mapping_rationale"] = "Internal staging topic."
     data["mappings"] = [
@@ -511,7 +513,7 @@ def test_pdm003_technical_only_with_rationale_ok() -> None:
 
 def test_pdm004_field_needs_mapping() -> None:
     data = _example()
-    field = data["physical_objects"][0]["physical_fields"][0]
+    field = data["data_carriers"][0]["physical_fields"][0]
     field.pop("mapping_coverage_status", None)
     data["mappings"] = [
         m for m in data["mappings"] if m.get("mapping_type") != "field_mapping"

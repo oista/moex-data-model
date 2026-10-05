@@ -31,7 +31,10 @@ _SKIP_KEYS = frozenset(
         "physical_fields",
         "conceptual_entities",
         "logical_entities",
-        "physical_objects",
+        "data_carriers",
+        "access_points",
+        "data_containers",
+        "execution_assets",
         "domain_contexts",
         "mappings",
         "relationships",
@@ -49,12 +52,12 @@ _REF_EDGE_KINDS = frozenset(
     {
         EdgeKind.MAPS_TO,
         EdgeKind.CONCEPTUAL_REF,
-        EdgeKind.PHYSICAL_OBJECT_REF,
+        EdgeKind.CARRIER_REF,
         EdgeKind.RELATES_TO,
     }
 )
 
-_PHYSICAL_KINDS = frozenset({NodeKind.PHYSICAL_OBJECT, NodeKind.FIELD})
+_PHYSICAL_KINDS = frozenset({NodeKind.TECHNICAL_ASSET, NodeKind.FIELD})
 
 
 def diff_implementations(

@@ -92,7 +92,7 @@ def dict_to_item(
     ]
     if nested_children:
         children = nested_children + children
-    # Nested physical_fields list → children when present on PhysicalObject
+    # Nested physical_fields list → children when present on DataCarrier
     fields = attrs.pop("physical_fields", None)
     if isinstance(fields, list):
         field_children = [

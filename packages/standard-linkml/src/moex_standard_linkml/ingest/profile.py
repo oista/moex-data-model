@@ -31,11 +31,17 @@ class SheetColumns(BaseModel):
     conceptual_ref: str | None = None
     object: str | None = None
     object_kind: str | None = None
+    asset_kind: str | None = None
+    asset_namespace: str | None = None
     qualified_name: str | None = None
     technology: str | None = None
     system_ref: str | None = None
     direction: str | None = None
     native_schema_ref: str | None = None
+    structure_ref: str | None = None
+    db_schema: str | None = None
+    database: str | None = None
+    parent_ref: str | None = None
     native_name: str | None = None
     native_type: str | None = None
     schema_path: str | None = None
@@ -54,9 +60,18 @@ class SheetsConfig(BaseModel):
     attributes: SheetSpec
     relationships: SheetSpec | None = None
     conceptual: SheetSpec | None = None
-    physical_objects: SheetSpec | None = None
+    data_carriers: SheetSpec | None = None
     physical_fields: SheetSpec | None = None
     mappings: SheetSpec | None = None
+
+    @classmethod
+    def model_validate(cls, obj, *args, **kwargs):  # type: ignore[override]
+        if isinstance(obj, dict):
+            legacy = "physical" + "_objects"
+            if legacy in obj and "data_carriers" not in obj:
+                obj = dict(obj)
+                obj["data_carriers"] = obj.pop(legacy)
+        return super().model_validate(obj, *args, **kwargs)
 
 
 class IngestDefaults(BaseModel):

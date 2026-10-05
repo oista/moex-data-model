@@ -55,13 +55,15 @@ def test_map_fixture_er_dictionary(
     assert rel["target_max_cardinality"] == 1
     assert rel["identifying"] is False
 
-    assert len(pkg["physical_objects"]) == 1
-    phys = pkg["physical_objects"][0]
+    assert len(pkg["data_carriers"]) == 1
+    phys = pkg["data_carriers"][0]
     assert phys["name"] == "client_changed_topic"
-    assert phys["object_kind"] == "topic"
+    assert phys["asset_kind"] == "stream_topic"
     assert phys["element_id"] == "dams:physical/pilot/client_changed_topic"
     assert len(phys["physical_fields"]) == 1
     assert phys["physical_fields"][0]["native_name"] == "client_id"
+    assert phys["physical_fields"][0]["carrier_ref"] == phys["element_id"]
+    assert not pkg.get("access_points")  # topic → data_carriers only
 
     assert len(pkg["mappings"]) == 1
     mapping = pkg["mappings"][0]
@@ -195,9 +197,9 @@ def test_unresolved_mapping_ref_fails(
         "Client,clientId,Id,Id,UUID,true,true\n",
         encoding="utf-8",
     )
-    (root / "PhysicalObjects.csv").write_text(
-        "name,title,description,object_kind,qualified_name,technology,"
-        "system_ref,direction,native_schema_ref\n"
+    (root / "DataCarriers.csv").write_text(
+        "name,title,description,asset_kind,qualified_name,technology,"
+        "system_ref,direction,structure_ref\n"
         "t,t,topic desc,topic,q.n,Kafka,eam:system/X,outbound,"
         "https://example.com/schema\n",
         encoding="utf-8",

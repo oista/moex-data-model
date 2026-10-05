@@ -54,7 +54,7 @@ superseded_by: MODELING_ARCHITECTURE.md
   └── связи с корпоративными понятиями
 
 Физическое представление
-  ├── PhysicalObject
+  ├── TechnicalAsset
   ├── PhysicalField
   ├── native schemas / formats
   ├── ИТ-системы и технологии
@@ -303,7 +303,7 @@ applies_to:
 - не проверять solution requirements на enterprise conceptual model;
 - не применять DAMS solution rules к FIBO application ontology;
 - не применять PDM rules к LogicalEntity;
-- не применять ATR rules к PhysicalObject;
+- не применять ATR rules к TechnicalAsset;
 - не интерпретировать каждый requirement как глобальный для всего репозитория.
 
 ---
@@ -473,7 +473,7 @@ Wave 1 проверяет:
 
 ```text
 - LogicalEntity;
-- PhysicalObject.
+- TechnicalAsset.
 ```
 
 Пустой пакет не является моделью данных решения.
@@ -827,7 +827,7 @@ Wave 1 не требует:
 
 ### 9.1. Physical object
 
-PhysicalObject — точка хранения или предоставления данных.
+TechnicalAsset — точка хранения или предоставления данных.
 
 Примеры:
 
@@ -857,7 +857,7 @@ External dataset
 
 Каждый PhysicalField должен иметь:
 
-- parent PhysicalObject;
+- parent TechnicalAsset;
 - native name;
 - native type;
 - nullability/required semantics;
@@ -872,7 +872,7 @@ Entity-level mapping доказывает, какой логический см�
 `PDM-003` считается выполненным, если существует явный Mapping:
 
 ```text
-PhysicalObject
+TechnicalAsset
   ↔ Mapping(mapping_type = entity-physical)
   ↔ минимум одна LogicalEntity
 ```
@@ -1281,7 +1281,7 @@ Solution Data Model
 4. Установить conceptual alignment:
    aligned / pending / local-only / not-applicable.
 
-5. Описать PhysicalObject и PhysicalField для известной реализации.
+5. Описать TechnicalAsset и PhysicalField для известной реализации.
 
 6. Добавить entity-level и attribute-level mappings.
 

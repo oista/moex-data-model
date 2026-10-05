@@ -14,6 +14,17 @@
       ModelElement <|-- ModelPackage
         click ModelElement href "../ModelElement"
       
+      ModelPackage : access_points
+        
+          
+    
+        
+        
+        ModelPackage --> "*" AccessPoint : access_points
+        click AccessPoint href "../AccessPoint"
+    
+
+        
       ModelPackage : aliases
         
       ModelPackage : api_version
@@ -34,6 +45,28 @@
 
         
       ModelPackage : conceptual_implementation_ref
+        
+      ModelPackage : data_carriers
+        
+          
+    
+        
+        
+        ModelPackage --> "*" DataCarrier : data_carriers
+        click DataCarrier href "../DataCarrier"
+    
+
+        
+      ModelPackage : data_containers
+        
+          
+    
+        
+        
+        ModelPackage --> "*" DataContainer : data_containers
+        click DataContainer href "../DataContainer"
+    
+
         
       ModelPackage : data_owner_ref
         
@@ -84,6 +117,17 @@
 
         
       ModelPackage : element_id
+        
+      ModelPackage : execution_assets
+        
+          
+    
+        
+        
+        ModelPackage --> "*" ExecutionAsset : execution_assets
+        click ExecutionAsset href "../ExecutionAsset"
+    
+
         
       ModelPackage : glossary_term_refs
         
@@ -167,17 +211,6 @@
         
         ModelPackage --> "0..1" OrganizationUnit : owning_unit_ref
         click OrganizationUnit href "../OrganizationUnit"
-    
-
-        
-      ModelPackage : physical_objects
-        
-          
-    
-        
-        
-        ModelPackage --> "*" PhysicalObject : physical_objects
-        click PhysicalObject href "../PhysicalObject"
     
 
         

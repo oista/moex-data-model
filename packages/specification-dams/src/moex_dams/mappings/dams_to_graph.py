@@ -114,19 +114,30 @@ def build_dams_graph(body: LinkMLImplementationBody) -> DamsModelGraphView:
                 edges.append(
                     GraphEdge(source=eid, target=fid, kind=EdgeKind.CONTAINS)
                 )
-                if field.get("physical_object_ref"):
+                if field.get("carrier_ref"):
+                    edges.append(
+                        GraphEdge(
+                            source=fid,
+                            target=str(field["carrier_ref"]),
+                            kind=EdgeKind.CARRIER_REF,
+                        )
+                    )
+                elif field.get("physical_object_ref"):
                     edges.append(
                         GraphEdge(
                             source=fid,
                             target=str(field["physical_object_ref"]),
-                            kind=EdgeKind.PHYSICAL_OBJECT_REF,
+                            kind=EdgeKind.CARRIER_REF,
                         )
                     )
 
     add_entity("conceptual_entities", NodeKind.CONCEPTUAL_ENTITY)
     add_entity("domain_contexts", NodeKind.DOMAIN_CONTEXT)
     add_entity("logical_entities", NodeKind.LOGICAL_ENTITY)
-    add_entity("physical_objects", NodeKind.PHYSICAL_OBJECT)
+    add_entity("data_carriers", NodeKind.TECHNICAL_ASSET)
+    add_entity("access_points", NodeKind.TECHNICAL_ASSET)
+    add_entity("data_containers", NodeKind.TECHNICAL_ASSET)
+    add_entity("execution_assets", NodeKind.TECHNICAL_ASSET)
 
     for item in data.get("relationships") or []:
         if not isinstance(item, dict):
@@ -205,7 +216,10 @@ def package_index(data: dict[str, Any]) -> dict[str, dict[str, Any]]:
     for collection in (
         "conceptual_entities",
         "logical_entities",
-        "physical_objects",
+        "data_carriers",
+        "access_points",
+        "data_containers",
+        "execution_assets",
         "domain_contexts",
         "mappings",
         "relationships",

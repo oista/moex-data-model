@@ -660,38 +660,6 @@ enums:
         text: uri
       object:
         text: object
-  PhysicalObjectKindEnum:
-    name: PhysicalObjectKindEnum
-    from_schema: https://data.moex.com/dams/types/v0.1
-    permissible_values:
-      database:
-        text: database
-      schema:
-        text: schema
-      table:
-        text: table
-      view:
-        text: view
-      column:
-        text: column
-      api:
-        text: api
-      endpoint:
-        text: endpoint
-      payload:
-        text: payload
-      topic:
-        text: topic
-      queue:
-        text: queue
-      message:
-        text: message
-      file:
-        text: file
-      dataset:
-        text: dataset
-      pipeline:
-        text: pipeline
   FlowDirectionEnum:
     name: FlowDirectionEnum
     from_schema: https://data.moex.com/dams/types/v0.1
@@ -747,10 +715,10 @@ enums:
   MappingTypeEnum:
     name: MappingTypeEnum
     description: 'Kind of Mapping assertion. realizes = solution element → enterprise
-      conceptual; entity_physical = PhysicalObject ↔ LogicalEntity; field_mapping
-      = mapsTo (physical field ↔ logical attribute); aligns_with = enterprise conceptual
-      ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to
-      / publication implements).
+      conceptual; entity_physical = DataCarrier ↔ LogicalEntity; field_mapping = mapsTo
+      (PhysicalField ↔ LogicalAttribute); aligns_with = enterprise conceptual ↔ external
+      term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication
+      implements).
 
       '
     from_schema: https://data.moex.com/dams/types/v0.1
@@ -763,7 +731,7 @@ enums:
         text: implementation
       entity_physical:
         text: entity_physical
-        description: 'Explicit entity-level link between PhysicalObject and LogicalEntity
+        description: 'Explicit entity-level link between DataCarrier and LogicalEntity
           (PDM-003). Do not infer from field_mapping alone.
 
           '
@@ -996,6 +964,87 @@ enums:
         text: error
       warning:
         text: warning
+  DataCarrierKindEnum:
+    name: DataCarrierKindEnum
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    permissible_values:
+      relational_table:
+        text: relational_table
+      relational_view:
+        text: relational_view
+      file:
+        text: file
+      dataset:
+        text: dataset
+      stream_topic:
+        text: stream_topic
+      stream_queue:
+        text: stream_queue
+      message_type:
+        text: message_type
+        description: Transitional; будет заменён Message/DataStructure (ADR-C).
+      in_memory:
+        text: in_memory
+      api_resource:
+        text: api_resource
+      other:
+        text: other
+  AccessPointKindEnum:
+    name: AccessPointKindEnum
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    permissible_values:
+      interface:
+        text: interface
+      operation:
+        text: operation
+      channel:
+        text: channel
+  DataContainerKindEnum:
+    name: DataContainerKindEnum
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    permissible_values:
+      database:
+        text: database
+      schema:
+        text: schema
+      bucket:
+        text: bucket
+      broker:
+        text: broker
+      directory:
+        text: directory
+      cluster:
+        text: cluster
+  ExecutionAssetKindEnum:
+    name: ExecutionAssetKindEnum
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    permissible_values:
+      pipeline:
+        text: pipeline
+      job:
+        text: job
+  LineageRoleEnum:
+    name: LineageRoleEnum
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    permissible_values:
+      source:
+        text: source
+      sink:
+        text: sink
+      intermediate:
+        text: intermediate
+      none:
+        text: none
+  ContainmentKindEnum:
+    name: ContainmentKindEnum
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    permissible_values:
+      composite:
+        text: composite
+      partitioned:
+        text: partitioned
+      hierarchical:
+        text: hierarchical
 slots:
   repository_id:
     name: repository_id
@@ -1407,13 +1456,6 @@ slots:
     multivalued: true
     inlined: true
     inlined_as_list: true
-  physical_objects:
-    name: physical_objects
-    from_schema: https://data.moex.com/dams/core/v0.1
-    range: PhysicalObject
-    multivalued: true
-    inlined: true
-    inlined_as_list: true
   mappings:
     name: mappings
     from_schema: https://data.moex.com/dams/core/v0.1
@@ -1802,11 +1844,6 @@ slots:
     range: ITSystem
     required: true
     inlined: false
-  object_kind:
-    name: object_kind
-    from_schema: https://data.moex.com/dams/core/v0.1
-    range: PhysicalObjectKindEnum
-    required: true
   qualified_name:
     name: qualified_name
     from_schema: https://data.moex.com/dams/core/v0.1
@@ -1816,17 +1853,10 @@ slots:
     name: technology
     from_schema: https://data.moex.com/dams/core/v0.1
     range: string
-    required: true
-  native_schema_ref:
-    name: native_schema_ref
-    from_schema: https://data.moex.com/dams/core/v0.1
-    range: uri
-    required: true
   direction:
     name: direction
     from_schema: https://data.moex.com/dams/core/v0.1
     range: FlowDirectionEnum
-    required: true
   physical_fields:
     name: physical_fields
     from_schema: https://data.moex.com/dams/core/v0.1
@@ -1834,12 +1864,6 @@ slots:
     multivalued: true
     inlined: true
     inlined_as_list: true
-  physical_object_ref:
-    name: physical_object_ref
-    from_schema: https://data.moex.com/dams/core/v0.1
-    range: PhysicalObject
-    required: true
-    inlined: false
   native_name:
     name: native_name
     from_schema: https://data.moex.com/dams/core/v0.1
@@ -1895,6 +1919,155 @@ slots:
     range: decimal
     minimum_value: 0
     maximum_value: 1
+  asset_namespace:
+    name: asset_namespace
+    description: 'Пространство имён источника по аналогии с OpenLineage namespace
+      (например postgres://host:5432, kafka://cluster, s3://bucket). Отдельный слот
+      от DomainContext.namespace (ADR-B).
+
+      '
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: string
+    required: true
+  parent_ref:
+    name: parent_ref
+    description: Родитель в контейнерной иерархии (без циклов).
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: TechnicalAsset
+    inlined: false
+  asset_kind:
+    name: asset_kind
+    description: 'Разновидность актива. На подклассах сужается через slot_usage на
+      соответствующий enum.
+
+      '
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: string
+    required: true
+  lineage_role:
+    name: lineage_role
+    description: Роль актива в lineage (source, sink, intermediate, none).
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: LineageRoleEnum
+  structure_ref:
+    name: structure_ref
+    description: 'Ссылка на структуру данных (пока uriorcurie; в будущем DataStructure).
+
+      '
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: uriorcurie
+  schema_dialect:
+    name: schema_dialect
+    description: Диалект схемы (например avro, json-schema, sql-ddl).
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: string
+  data_format:
+    name: data_format
+    description: Формат данных (например parquet, csv, json).
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: string
+  protocol:
+    name: protocol
+    description: Протокол доступа (например https, jdbc, kafka).
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: string
+  protocol_version:
+    name: protocol_version
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: string
+  binding_ref:
+    name: binding_ref
+    description: Ссылка на внешнее описание binding.
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: uriorcurie
+  containment_kind:
+    name: containment_kind
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: ContainmentKindEnum
+  location_uri:
+    name: location_uri
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: uri
+  region:
+    name: region
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: string
+  serves_refs:
+    name: serves_refs
+    description: Носители, доступные через эту точку доступа.
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: DataCarrier
+    multivalued: true
+    inlined: false
+  interface_ref:
+    name: interface_ref
+    description: Родительский интерфейс для операции (asset_kind=operation).
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: AccessPoint
+    inlined: false
+  operation_name:
+    name: operation_name
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: string
+  http_method:
+    name: http_method
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: string
+  path_template:
+    name: path_template
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: string
+  produces_refs:
+    name: produces_refs
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: TechnicalAsset
+    multivalued: true
+    inlined: false
+  consumes_refs:
+    name: consumes_refs
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: TechnicalAsset
+    multivalued: true
+    inlined: false
+  carrier_ref:
+    name: carrier_ref
+    description: Носитель данных, которому принадлежит поле.
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: DataCarrier
+    required: true
+    inlined: false
+  data_carriers:
+    name: data_carriers
+    description: Коллекция носителей данных пакета (Variant B, ADR-031).
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: DataCarrier
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  access_points:
+    name: access_points
+    description: Коллекция точек доступа пакета (Variant B, ADR-031).
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: AccessPoint
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  data_containers:
+    name: data_containers
+    description: Коллекция контейнеров пакета (Variant B, ADR-031).
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: DataContainer
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  execution_assets:
+    name: execution_assets
+    description: Коллекция исполняемых активов пакета (Variant B, ADR-031).
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    range: ExecutionAsset
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
   integration_ref:
     name: integration_ref
     from_schema: https://data.moex.com/dams/integration/v0.1
@@ -1993,10 +2166,11 @@ slots:
     multivalued: true
     inlined: false
     minimum_cardinality: 1
-  physical_object_refs:
-    name: physical_object_refs
+  carrier_refs:
+    name: carrier_refs
+    description: Носители данных, участвующие в binding (не контейнеры).
     from_schema: https://data.moex.com/dams/integration/v0.1
-    range: PhysicalObject
+    range: DataCarrier
     multivalued: true
     inlined: false
     minimum_cardinality: 1
@@ -2223,7 +2397,8 @@ slots:
     range: string
   applies_target_kinds:
     name: applies_target_kinds
-    description: Опциональный allowlist object_kind / facet (например table, topic).
+    description: Опциональный allowlist asset_kind / facet (например relational_table,
+      stream_topic).
     from_schema: https://data.moex.com/dams/requirements/v0.1
     range: string
     multivalued: true
@@ -2550,7 +2725,6 @@ classes:
     - logical_entities
     - relationships
     - relation_terms
-    - physical_objects
     - mappings
   DomainContext:
     name: DomainContext
@@ -2724,29 +2898,12 @@ classes:
     - source_kind
     - external_specification_ref
     - selection_ref
-  PhysicalObject:
-    name: PhysicalObject
-    description: Квант данных или техническая точка публикации/потребления.
-    from_schema: https://data.moex.com/dams/core/v0.1
-    is_a: ModelElement
-    mixins:
-    - HasOwnership
-    - HasGovernanceClassification
-    - HasPolicyBindings
-    slots:
-    - solution_ref
-    - system_ref
-    - object_kind
-    - qualified_name
-    - technology
-    - native_schema_ref
-    - direction
-    - physical_fields
-    - mapping_coverage_status
-    - mapping_rationale
   PhysicalField:
     name: PhysicalField
-    description: Поле физического объекта; его семантика задаётся Mapping к LogicalAttribute.
+    description: 'Поле носителя данных (DataCarrier); семантика задаётся Mapping к
+      LogicalAttribute. Ссылка на носителя — carrier_ref (см. moex-technical).
+
+      '
     from_schema: https://data.moex.com/dams/core/v0.1
     is_a: ModelElement
     mixins:
@@ -2754,7 +2911,6 @@ classes:
     - HasGovernanceClassification
     - HasPolicyBindings
     slots:
-    - physical_object_ref
     - native_name
     - native_type
     - required
@@ -2765,9 +2921,9 @@ classes:
   Mapping:
     name: Mapping
     description: 'Явное соответствие между элементами. Discriminate via mapping_type:
-      realizes (solution→enterprise conceptual), entity_physical (PhysicalObject↔LogicalEntity),
-      field_mapping/mapsTo (physical↔logical), aligns_with (enterprise↔external term).
-      Not used for SpecImpl implements/conforms_to.
+      realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity),
+      field_mapping/mapsTo (PhysicalField↔LogicalAttribute), aligns_with (enterprise↔external
+      term). Not used for SpecImpl implements/conforms_to.
 
       '
     from_schema: https://data.moex.com/dams/core/v0.1
@@ -2784,6 +2940,229 @@ classes:
     - confidence
     - valid_from
     - valid_to
+  HasStructure:
+    name: HasStructure
+    description: 'Mixin структуры данных носителя. structure_ref — временная ссылка
+      (uriorcurie); в будущем заменяется классом DataStructure (ADR-C).
+
+      '
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    mixin: true
+    slots:
+    - structure_ref
+    - schema_dialect
+    - data_format
+  HasProtocolBinding:
+    name: HasProtocolBinding
+    description: Mixin протокола доступа для точки доступа (AccessPoint).
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    mixin: true
+    slots:
+    - protocol
+    - protocol_version
+    - binding_ref
+  Contains:
+    name: Contains
+    description: 'Mixin контейнерности. child_refs не хранятся: выводятся из parent_ref.
+
+      '
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    mixin: true
+    slots:
+    - containment_kind
+  HasLocation:
+    name: HasLocation
+    description: Mixin расположения носителя или точки доступа.
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    mixin: true
+    slots:
+    - location_uri
+    - region
+  TechnicalAsset:
+    name: TechnicalAsset
+    id_prefixes:
+    - dams
+    description: 'Квант данных: адресуемый технический объект управления. Имеет собственный
+      идентификатор, систему-владельца, расположение или способ доступа, жизненный
+      цикл, владельца, классификацию и роль в lineage. Поля, колонки и узлы схем квантами
+      НЕ являются (ADR-C).
+
+      '
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    is_a: ModelElement
+    abstract: true
+    mixins:
+    - HasOwnership
+    - HasGovernanceClassification
+    - HasPolicyBindings
+    slots:
+    - asset_namespace
+    - qualified_name
+    - native_name
+    - system_ref
+    - parent_ref
+    - technology
+    - asset_kind
+    - lineage_role
+    - direction
+    - solution_ref
+    slot_usage:
+      description:
+        name: description
+        required: true
+      qualified_name:
+        name: qualified_name
+        required: true
+      system_ref:
+        name: system_ref
+        required: true
+      native_name:
+        name: native_name
+        required: false
+      technology:
+        name: technology
+        required: false
+      direction:
+        name: direction
+        description: 'Направление относительно решения. Запрещён для DataContainer
+          и ExecutionAsset правилом DAMS-валидатора и LinkML rules.
+
+          '
+        required: false
+    unique_keys:
+      technical_asset_key:
+        unique_key_name: technical_asset_key
+        unique_key_slots:
+        - asset_namespace
+        - qualified_name
+  DataCarrier:
+    name: DataCarrier
+    description: 'Носитель данных: хранит или передаёт данные (таблица, файл, топик,
+      сообщение и т.п.).
+
+      '
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    is_a: TechnicalAsset
+    mixins:
+    - HasStructure
+    - HasLocation
+    - Contains
+    slots:
+    - physical_fields
+    - mapping_coverage_status
+    - mapping_rationale
+    slot_usage:
+      asset_kind:
+        name: asset_kind
+        range: DataCarrierKindEnum
+        required: true
+    rules:
+    - preconditions:
+        slot_conditions:
+          asset_kind:
+            name: asset_kind
+            equals_string: in_memory
+      postconditions:
+        slot_conditions:
+          location_uri:
+            name: location_uri
+            value_presence: ABSENT
+          region:
+            name: region
+            value_presence: ABSENT
+      description: in_memory носитель не имеет location_uri и region
+  AccessPoint:
+    name: AccessPoint
+    description: 'Точка доступа к данным: интерфейс, операция или канал. Сама данные
+      не несёт; указывает на носители через serves_refs.
+
+      '
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    is_a: TechnicalAsset
+    mixins:
+    - HasProtocolBinding
+    - HasLocation
+    slots:
+    - serves_refs
+    - interface_ref
+    - operation_name
+    - http_method
+    - path_template
+    slot_usage:
+      asset_kind:
+        name: asset_kind
+        range: AccessPointKindEnum
+        required: true
+      direction:
+        name: direction
+        description: Направление протокола AccessPoint (через FlowDirectionEnum).
+    rules:
+    - preconditions:
+        slot_conditions:
+          asset_kind:
+            name: asset_kind
+            equals_string: operation
+      postconditions:
+        slot_conditions:
+          interface_ref:
+            name: interface_ref
+            required: true
+      description: operation требует interface_ref
+    - preconditions:
+        slot_conditions:
+          asset_kind:
+            name: asset_kind
+            equals_string: interface
+      postconditions:
+        slot_conditions:
+          operation_name:
+            name: operation_name
+            value_presence: ABSENT
+          http_method:
+            name: http_method
+            value_presence: ABSENT
+          path_template:
+            name: path_template
+            value_presence: ABSENT
+      description: interface не имеет operation-полей
+  DataContainer:
+    name: DataContainer
+    description: 'Контейнер других активов (database, schema, bucket, broker, directory,
+      cluster). Данных не несёт: structure_ref и data_format отсутствуют.
+
+      '
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    is_a: TechnicalAsset
+    mixins:
+    - Contains
+    slot_usage:
+      asset_kind:
+        name: asset_kind
+        range: DataContainerKindEnum
+        required: true
+      direction:
+        name: direction
+        description: Запрещён для DataContainer (правило валидатора).
+        required: false
+  ExecutionAsset:
+    name: ExecutionAsset
+    description: 'Исполняемый актив (pipeline / job) с минимальной lineage-ролью.
+
+      '
+    from_schema: https://data.moex.com/dams/technical/v0.1
+    is_a: TechnicalAsset
+    slots:
+    - produces_refs
+    - consumes_refs
+    slot_usage:
+      asset_kind:
+        name: asset_kind
+        range: ExecutionAssetKindEnum
+        required: true
+      direction:
+        name: direction
+        description: Запрещён для ExecutionAsset (правило валидатора).
+        required: false
   DataFlow:
     name: DataFlow
     description: Ссылочная проекция зарегистрированной интеграции; топология и канал
@@ -2809,7 +3188,7 @@ classes:
     - entity_bindings
   DataFlowEntityBinding:
     name: DataFlowEntityBinding
-    description: Связь потока с логическими сущностями, атрибутами и физическими объектами
+    description: Связь потока с логическими сущностями, атрибутами и носителями данных
       модели решения.
     from_schema: https://data.moex.com/dams/integration/v0.1
     is_a: ModelElement
@@ -2818,7 +3197,7 @@ classes:
     - source_model_ref
     - logical_entity_ref
     - logical_attribute_refs
-    - physical_object_refs
+    - carrier_refs
     - physical_field_refs
     - transformation_mapping_refs
     - direction
@@ -2860,7 +3239,7 @@ classes:
     slots:
     - logical_entity_ref
     - selected_attributes
-    - physical_object_refs
+    - carrier_refs
   SelectedAttribute:
     name: SelectedAttribute
     description: Выбранный атрибут и соответствующее физическое поле payload, таблицы

@@ -30,7 +30,7 @@ Target directory (filling runs for this mission):
 | `Entities.csv` | **yes** | logical entities |
 | `Attributes.csv` | **yes** | logical attributes |
 | `Relationships.csv` | no | logical relationships |
-| `PhysicalObjects.csv` | no | physical objects |
+| `DataCarriers.csv` | no | technical asset (DataCarrier)s |
 | `PhysicalFields.csv` | no | physical fields |
 | `Mappings.csv` | no | logical↔physical mappings |
 | `gaps.md` | agent deliverable | omissions / conflicts / unmapped facts |
@@ -112,23 +112,23 @@ card columns **only when** the PDF clearly states a relationship between two
 named entities; if only a lookup type is listed without a clear association
 direction, put the fact in `gaps.md` instead.
 
-### 2.4 `PhysicalObjects.csv`
+### 2.4 `DataCarriers.csv`
 
 ```
-name,title,description,object_kind,qualified_name,technology,system_ref,direction,native_schema_ref
+name,title,description,asset_kind,qualified_name,technology,system_ref,direction,structure_ref
 ```
 
 | Column | Required in row | Semantics |
 |--------|-----------------|-----------|
-| `name` | **yes** | Technical physical object id (`EmployeeReadDto`, `client_changed_topic`). |
+| `name` | **yes** | Technical asset id (`EmployeeReadDto`, `client_changed_topic`). |
 | `title` | no | Display title. |
 | `description` | **yes** (ingest) | Must be grounded in PDF text. |
-| `object_kind` | **yes** (ingest) | Enum §5.1 — only if PDF supports the choice without stretching. |
+| `asset_kind` | **yes** (ingest) | Enum §5.1 — only if PDF supports the choice without stretching. |
 | `qualified_name` | **yes** (ingest) | Stable technical qualifier (topic name, API path, table FQN) **from PDF**. |
 | `technology` | **yes** (ingest) | Technology string **from PDF** (e.g. `Apache Kafka`, `REST`). |
 | `system_ref` | **yes** (ingest) | IT system ref **only if present in PDF** (e.g. `eam:system/…`). **Never invent.** |
 | `direction` | **yes** (ingest) | Enum §5.2 — only if stated or unambiguously labeled in PDF. |
-| `native_schema_ref` | **yes** (ingest) | URI/ref to native schema **from PDF**. **Never invent.** |
+| `structure_ref` | **yes** (ingest) | URI/ref to native schema **from PDF**. **Never invent.** |
 
 **Critical:** if any ingest-required column cannot be filled from the PDF,
 **do not write the row**. List the candidate object in `gaps.md` with missing
@@ -142,7 +142,7 @@ object,name,description,native_name,native_type,required,schema_path
 
 | Column | Required in row | Semantics |
 |--------|-----------------|-----------|
-| `object` | **yes** | Must equal a written `PhysicalObjects.name`. |
+| `object` | **yes** | Must equal a written `DataCarriers.name`. |
 | `name` | **yes** | Field technical name. |
 | `description` | no | From PDF. |
 | `native_name` | no | Wire/DB name if different; else empty (ingest may default to `name`). |
@@ -150,7 +150,7 @@ object,name,description,native_name,native_type,required,schema_path
 | `required` | no | `true` / `false` if stated; else empty. |
 | `schema_path` | no | JSON path / column path if stated (e.g. `/payload/client_id`). |
 
-Do not emit fields for physical objects that were omitted due to incompleteness.
+Do not emit fields for DataCarriers that were omitted due to incompleteness.
 
 ### 2.6 `Mappings.csv`
 
@@ -216,10 +216,16 @@ Invalid strings cause mapper errors — leave empty rather than guess.
 
 Use these literals **exactly** when a value is written.
 
-### 5.1 `object_kind` (`PhysicalObjectKindEnum`)
+### 5.1 `asset_kind` (routed to TechnicalAsset subclasses)
 
-`database`, `schema`, `table`, `view`, `column`, `api`, `endpoint`, `payload`,
-`topic`, `queue`, `message`, `file`, `dataset`, `pipeline`
+Prefer canonical kinds from DAMS enums:
+
+- DataCarrier: `relational_table`, `relational_view`, `file`, `dataset`, `stream_topic`, `stream_queue`, `message_type`, `in_memory`, `api_resource`, `other`
+- AccessPoint: `interface`, `operation`, `channel`
+- DataContainer: `database`, `schema`, `bucket`, `broker`, `directory`, `cluster`
+- ExecutionAsset: `pipeline`, `job`
+
+Legacy ingest aliases still accepted (mapped by ingest): `table`, `view`, `topic`, `queue`, `message`, `api`, `endpoint`, `payload`, …
 
 ### 5.2 `direction` (`FlowDirectionEnum`)
 
@@ -247,7 +253,7 @@ Allowed forms:
 |------|-------------|
 | `EntityName` | logical entity |
 | `EntityName.attrName` | logical attribute |
-| `ObjectName` | physical object |
+| `ObjectName` | technical asset (DataCarrier) |
 | `ObjectName.fieldName` | physical field |
 
 Unresolved refs → mapper error → must fix or remove the mapping row.
@@ -276,7 +282,7 @@ Minimum structure:
 ```markdown
 # ER-dictionary gaps
 
-## Unmapped / incomplete physical objects
+## Unmapped / incomplete technical asset (DataCarrier)s
 - ...
 
 ## Relationships not emitted (missing cardinality / unclear direction)
@@ -292,7 +298,7 @@ Minimum structure:
 - ...
 ```
 
-Every omitted PhysicalObject candidate must list which required columns were
+Every omitted DataCarrier candidate must list which required columns were
 missing. Every skipped inventable-looking value must state why it was not filled.
 
 ---
@@ -303,10 +309,10 @@ missing. Every skipped inventable-looking value must state why it was not filled
 2. `Entities.name` unique; non-empty.
 3. Every `Attributes.entity` ∈ Entities; `(entity,name)` unique.
 4. Every `Relationships.source`/`target` ∈ Entities; `name` unique when file present.
-5. Every `PhysicalFields.object` ∈ PhysicalObjects written rows.
+5. Every `PhysicalFields.object` ∈ DataCarriers written rows.
 6. Every mapping token resolves per §6.
 7. No `Conceptual.csv`.
-8. No fabricated `system_ref` / `native_schema_ref` / cardinalities / mappings.
+8. No fabricated `system_ref` / `structure_ref` / cardinalities / mappings.
 
 Then run ingest validation (see playbook). Delivery is forbidden if mapper or
 LinkML validation reports errors.

@@ -57,12 +57,12 @@ sections:
     source:
       format: yaml
       path: draft-model.yaml
-      select: physical_objects
+      select: data_carriers
     key_column: element_id
     columns:
       - name
       - title
-      - object_kind
+      - asset_kind
       - technology
 
   - id: inferred-mappings

@@ -1,5 +1,7 @@
 # MOEX Data Model Specification v0.1 на основе LinkML
 
+> **Superseded physical layer (2026-10-05):** the flat class/collection in this draft is replaced by `TechnicalAsset` hierarchy (`DataCarrier`, `AccessPoint`, `DataContainer`, `ExecutionAsset`) per ADR-031 / ADR-032 / ADR-033. Prefer those ADRs and `moex-technical.yaml` over any remaining draft excerpts below.
+
 ## Статус документа
 
 | Атрибут | Значение |
@@ -87,7 +89,7 @@ DAMS должна обеспечивать:
 | DAMS-F-002 | `ModelPackage` модели решения должен ссылаться на одну `ITSolution`. | MUST |
 | DAMS-F-003 | Модель должна различать conceptual, logical и physical elements типами метамодели, а не соглашением об именовании. | MUST |
 | DAMS-F-004 | `LogicalEntity` должна принадлежать `DomainContext` и модели ИТ-решения. | MUST |
-| DAMS-F-005 | Публикуемый `PhysicalObject` должен иметь Mapping к одной или нескольким логическим сущностям; каждое передаваемое поле — к логическому атрибуту или утверждённому преобразованию. | MUST |
+| DAMS-F-005 | Публикуемый `TechnicalAsset` должен иметь Mapping к одной или нескольким логическим сущностям; каждое передаваемое поле — к логическому атрибуту или утверждённому преобразованию. | MUST |
 | DAMS-F-006 | Системы, решения и платформы должны задаваться ссылками на EAM; сущность платформы называется `ITPlatform`. | MUST |
 | DAMS-F-007 | Интеграционный поток должен ссылаться на интеграцию Clinkr, а не дублировать её как независимый master record. | MUST |
 | DAMS-F-008 | Модельная спецификация дата-контракта должна фиксировать immutable revision модели и точный selection сущностей, атрибутов и физических представлений. | MUST |
@@ -240,7 +242,7 @@ dams/
 
 ## Физический блок
 
-### `PhysicalObject`
+### `TechnicalAsset`
 
 Управляемый квант данных или точка интеграции: БД, схема, таблица, view, API, endpoint, payload, topic, queue, message, file, dataset или pipeline. Содержит ссылки на решение и систему, вид объекта, qualified name, технологию, authoritative native schema и направление использования.
 
@@ -491,7 +493,7 @@ classes:
       - solution_ref
       - domain_contexts
       - logical_entities
-      - physical_objects
+      - data_carriers
       - mappings
 
   LogicalEntity:
@@ -509,7 +511,7 @@ classes:
       - attributes
       - key_attribute_refs
 
-  PhysicalObject:
+  TechnicalAsset:
     is_a: ModelElement
     slots:
       - solution_ref

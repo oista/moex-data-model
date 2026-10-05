@@ -67,7 +67,7 @@ _SCHEMA_GROUP_META_BASE: dict[str, tuple[int, str, str, str, str]] = {
         "Сквозные правила владения, жизненного цикла, классификации, политик и provenance — "
         "горизонтальные «грани», накладываемые на любые элементы модели.",
         "Оформлен mixins плюс самостоятельными PolicyBinding и ClassificationAssignment, а не "
-        "полями только в LogicalEntity: одни и те же concerns нужны PhysicalObject, Mapping, "
+        "полями только в LogicalEntity: одни и те же concerns нужны DataCarrier, Mapping, "
         "package. История классификации не должна теряться в inline-полях.",
         "moex-governance.yaml",
     ),

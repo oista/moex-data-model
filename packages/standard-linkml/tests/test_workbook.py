@@ -22,8 +22,8 @@ def test_load_csv_directory(fixture_dir: Path, fixture_profile_path: Path) -> No
     assert tables.entities.rows[0]["name"] == "TradingClient"
     assert tables.conceptual is not None
     assert len(tables.conceptual.rows) == 2
-    assert tables.physical_objects is not None
-    assert len(tables.physical_objects.rows) == 1
+    assert tables.data_carriers is not None
+    assert len(tables.data_carriers.rows) == 1
     assert tables.physical_fields is not None
     assert len(tables.physical_fields.rows) == 1
     assert tables.mappings is not None

@@ -290,11 +290,11 @@ def project_model_package_to_er_diagram(
                     col_index[aid] = (tname, cname)
             lines.append("    }")
     else:
-        for obj in data.get("physical_objects") or []:
+        for obj in data.get("data_carriers") or []:
             if not isinstance(obj, dict):
                 continue
             tname = _unique_table_name(
-                obj.get("name"), fallback="PhysicalObject", used=table_names
+                obj.get("name"), fallback="DataCarrier", used=table_names
             )
             oid = obj.get("element_id")
             if oid:

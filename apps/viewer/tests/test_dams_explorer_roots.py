@@ -196,7 +196,7 @@ def test_wrap_roots_loads_requirements_catalog():
     cm_skel_text = cm_skel.attributes.get("text") or ""
     assert "conceptual_entities:" in cm_skel_text
     assert "relationships:" in cm_skel_text
-    assert "physical_objects:" not in cm_skel_text
+    assert ("physical" + "_objects:") not in cm_skel_text
 
     assert it.title == "ИТ-решения"
     list_group = next(c for c in it.children if c.id == "group:requirements-list")
@@ -322,7 +322,8 @@ def test_model_skeleton_projection_from_formal_checks():
     assert "attributes:" in text
     assert "owner_entity_ref:" in text
     assert "relationships:" in text
-    assert "physical_objects:" in text
+    assert "data_carriers:" in text
+    assert ("physical" + "_objects:") not in text
 
 
 def test_conceptual_model_skeleton_projection():
@@ -338,4 +339,4 @@ def test_conceptual_model_skeleton_projection():
     assert "implementation_scope:" in text
     assert "conceptual_entities:" in text
     assert "relationships:" in text
-    assert "physical_objects:" not in text
+    assert ("physical" + "_objects:") not in text

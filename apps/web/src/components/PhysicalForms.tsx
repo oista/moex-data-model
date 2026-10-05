@@ -16,8 +16,58 @@ type ObjectSummary = {
   name: string;
   title: string;
   description: string;
-  object_kind: string;
+  asset_kind: string;
+  collection: string;
   fields: FieldSummary[];
+};
+
+const ASSET_KIND_OPTIONS: Record<string, string[]> = {
+  data_carriers: [
+    "relational_table",
+    "relational_view",
+    "stream_topic",
+    "stream_queue",
+    "file",
+    "dataset",
+    "message_type",
+    "in_memory",
+    "api_resource",
+    "other",
+  ],
+  access_points: ["interface", "operation", "channel"],
+  data_containers: ["database", "schema", "bucket", "broker", "directory", "cluster"],
+  execution_assets: ["pipeline", "job"],
+};
+
+const LEGACY_KIND: Record<string, string> = {
+  table: "relational_table",
+  view: "relational_view",
+  topic: "stream_topic",
+  queue: "stream_queue",
+  message: "message_type",
+  payload: "message_type",
+  api: "interface",
+  endpoint: "operation",
+};
+
+function normalizeKind(raw: unknown): string {
+  const k = String(raw || "relational_table").trim() || "relational_table";
+  return LEGACY_KIND[k] || k;
+}
+
+type TechItem = {
+  element_id?: string;
+  name?: string;
+  title?: string;
+  description?: string;
+  asset_kind?: string;
+  object_kind?: string;
+  physical_fields?: Array<{
+    element_id?: string;
+    name?: string;
+    native_type?: string;
+    required?: boolean;
+  }>;
 };
 
 function parsePhysical(content: string): {
@@ -29,37 +79,38 @@ function parsePhysical(content: string): {
   }
   try {
     const data = yaml.load(content) as {
-      physical_objects?: Array<{
-        element_id?: string;
-        name?: string;
-        title?: string;
-        description?: string;
-        object_kind?: string;
-        physical_fields?: Array<{
-          element_id?: string;
-          name?: string;
-          native_type?: string;
-          required?: boolean;
-        }>;
-      }>;
+      data_carriers?: TechItem[];
+      access_points?: TechItem[];
+      data_containers?: TechItem[];
+      execution_assets?: TechItem[];
     } | null;
-    const objects = (data?.physical_objects ?? [])
-      .filter((o) => o?.element_id)
-      .map((o) => ({
-        element_id: String(o.element_id),
-        name: String(o.name || ""),
-        title: String(o.title || ""),
-        description: String(o.description || ""),
-        object_kind: String(o.object_kind || "table"),
-        fields: (Array.isArray(o.physical_fields) ? o.physical_fields : [])
-          .filter((f) => f?.element_id)
-          .map((f) => ({
-            element_id: String(f.element_id),
-            name: String(f.name || ""),
-            native_type: String(f.native_type || "string"),
-            required: Boolean(f.required),
-          })),
-      }));
+    const objects: ObjectSummary[] = [];
+    for (const [collection, items] of [
+      ["data_carriers", data?.data_carriers],
+      ["access_points", data?.access_points],
+      ["data_containers", data?.data_containers],
+      ["execution_assets", data?.execution_assets],
+    ] as const) {
+      for (const o of items ?? []) {
+        if (!o?.element_id) continue;
+        objects.push({
+          element_id: String(o.element_id),
+          name: String(o.name || ""),
+          title: String(o.title || ""),
+          description: String(o.description || ""),
+          asset_kind: normalizeKind(o.asset_kind || o.object_kind),
+          collection,
+          fields: (Array.isArray(o.physical_fields) ? o.physical_fields : [])
+            .filter((f) => f?.element_id)
+            .map((f) => ({
+              element_id: String(f.element_id),
+              name: String(f.name || ""),
+              native_type: String(f.native_type || "string"),
+              required: Boolean(f.required),
+            })),
+        });
+      }
+    }
     return { objects, error: null };
   } catch (err) {
     return {
@@ -105,7 +156,7 @@ export function PhysicalForms({
   const [editName, setEditName] = useState("");
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
-  const [editKind, setEditKind] = useState("table");
+  const [editKind, setEditKind] = useState("relational_table");
   const [editFieldId, setEditFieldId] = useState<string | null>(null);
   const [editFieldName, setEditFieldName] = useState("");
   const [editFieldType, setEditFieldType] = useState("string");
@@ -143,14 +194,14 @@ export function PhysicalForms({
       setEditName("");
       setEditTitle("");
       setEditDescription("");
-      setEditKind("table");
+      setEditKind("relational_table");
       setEditFieldId(null);
       return;
     }
     setEditName(selected.name);
     setEditTitle(selected.title);
     setEditDescription(selected.description);
-    setEditKind(selected.object_kind);
+    setEditKind(selected.asset_kind);
     if (pendingFieldFocus) {
       const field = selected.fields.find(
         (f) => f.element_id === pendingFieldFocus,
@@ -179,7 +230,7 @@ export function PhysicalForms({
     selected?.name,
     selected?.title,
     selected?.description,
-    selected?.object_kind,
+    selected?.asset_kind,
     selected?.fields,
     pendingFieldFocus,
   ]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -187,7 +238,8 @@ export function PhysicalForms({
   const [objId, setObjId] = useState(`dams:physical/${idNamespace}/new-object`);
   const [objName, setObjName] = useState("new_object");
   const [objTitle, setObjTitle] = useState("");
-  const [objKind, setObjKind] = useState("table");
+  const [objCollection, setObjCollection] = useState("data_carriers");
+  const [objKind, setObjKind] = useState("relational_table");
   const [ownerId, setOwnerId] = useState("");
   const [fieldId, setFieldId] = useState("");
   const [fieldName, setFieldName] = useState("");
@@ -213,7 +265,8 @@ export function PhysicalForms({
         element_id: objId.trim(),
         name: objName.trim(),
         title: objTitle.trim() || undefined,
-        object_kind: objKind.trim() || "table",
+        asset_kind: objKind.trim() || "relational_table",
+        collection: objCollection,
       },
     });
   }
@@ -243,14 +296,14 @@ export function PhysicalForms({
         name: editName.trim(),
         title: editTitle.trim(),
         description: editDescription,
-        object_kind: editKind.trim() || "table",
+        asset_kind: editKind.trim() || "relational_table",
       },
     });
   }
 
   function onDeleteObject() {
     if (!selected) return;
-    if (!window.confirm(`Delete physical object ${selected.element_id}?`)) {
+    if (!window.confirm(`Delete technical asset ${selected.element_id}?`)) {
       return;
     }
     mutate.mutate({
@@ -292,7 +345,7 @@ export function PhysicalForms({
 
   return (
     <div className="forms-panel" data-testid="physical-forms">
-      <h2>Physical objects</h2>
+      <h2>Technical assets</h2>
       {parseError && (
         <p className="error" data-testid="yaml-parse-error">
           YAML parse error: {parseError}
@@ -311,13 +364,13 @@ export function PhysicalForms({
               onClick={() => setSelectedId(obj.element_id)}
               disabled={busy}
             >
-              <code>{obj.element_id}</code> · {obj.name} · {obj.object_kind} ·{" "}
+              <code>{obj.element_id}</code> · {obj.name} · {obj.asset_kind} ·{" "}
               {obj.fields.length} fields
             </button>
           </li>
         ))}
         {!parseError && objects.length === 0 && (
-          <li className="lede">No physical objects parsed</li>
+          <li className="lede">No technical assets parsed</li>
         )}
       </ul>
 
@@ -351,13 +404,20 @@ export function PhysicalForms({
             />
           </label>
           <label>
-            object_kind
-            <input
-              type="text"
+            asset_kind
+            <select
               value={editKind}
               onChange={(e) => setEditKind(e.target.value)}
               disabled={busy}
-            />
+            >
+              {(ASSET_KIND_OPTIONS[selected.collection] || ASSET_KIND_OPTIONS.data_carriers).map(
+                (k) => (
+                  <option key={k} value={k}>
+                    {k}
+                  </option>
+                ),
+              )}
+            </select>
           </label>
           <label>
             description
@@ -455,7 +515,7 @@ export function PhysicalForms({
       )}
 
       <form className="form-block" onSubmit={onAddObject}>
-        <h3>Add PhysicalObject</h3>
+        <h3>Add TechnicalAsset</h3>
         <label>
           element_id
           <input
@@ -486,16 +546,41 @@ export function PhysicalForms({
           />
         </label>
         <label>
-          object_kind
-          <input
-            type="text"
+          subclass
+          <select
+            value={objCollection}
+            onChange={(e) => {
+              const next = e.target.value;
+              setObjCollection(next);
+              const kinds = ASSET_KIND_OPTIONS[next] || ASSET_KIND_OPTIONS.data_carriers;
+              setObjKind(kinds[0]);
+            }}
+            disabled={busy}
+          >
+            <option value="data_carriers">DataCarrier</option>
+            <option value="access_points">AccessPoint</option>
+            <option value="data_containers">DataContainer</option>
+            <option value="execution_assets">ExecutionAsset</option>
+          </select>
+        </label>
+        <label>
+          asset_kind
+          <select
             value={objKind}
             onChange={(e) => setObjKind(e.target.value)}
             disabled={busy}
-          />
+          >
+            {(ASSET_KIND_OPTIONS[objCollection] || ASSET_KIND_OPTIONS.data_carriers).map(
+              (k) => (
+                <option key={k} value={k}>
+                  {k}
+                </option>
+              ),
+            )}
+          </select>
         </label>
         <button className="primary" type="submit" disabled={busy}>
-          Add object
+          Add asset
         </button>
       </form>
 

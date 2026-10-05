@@ -139,18 +139,19 @@ def test_absent_policy_inherits() -> None:
 
 def test_physical_field_inherits_from_object_and_package() -> None:
     data = _pkg(
-        physical_objects=[
+        data_carriers=[
             {
                 "element_id": "dams:physical/cascade/T",
                 "name": "T",
                 "description": "table",
                 "lifecycle_status": "draft",
                 "system_ref": "eam:system/S",
-                "object_kind": "table",
+                "asset_kind": "relational_table",
+                "asset_namespace": "postgres://S",
                 "qualified_name": "public.t",
                 "technology": "postgres",
-                "native_schema_ref": "urn:schema:t",
-                "direction": "store",
+                "structure_ref": "urn:schema:t",
+                "direction": "internal",
                 "data_owner_ref": "org:role/PHYS_OWNER",
                 "physical_fields": [
                     {
@@ -158,7 +159,7 @@ def test_physical_field_inherits_from_object_and_package() -> None:
                         "name": "c1",
                         "description": "col",
                         "lifecycle_status": "draft",
-                        "physical_object_ref": "dams:physical/cascade/T",
+                        "carrier_ref": "dams:physical/cascade/T",
                         "native_name": "c1",
                         "native_type": "text",
                         "required": True,

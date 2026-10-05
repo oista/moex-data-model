@@ -431,23 +431,6 @@ class LogicalDataTypeEnum(str, Enum):
     object = "object"
 
 
-class PhysicalObjectKindEnum(str, Enum):
-    database = "database"
-    schema = "schema"
-    table = "table"
-    view = "view"
-    column = "column"
-    api = "api"
-    endpoint = "endpoint"
-    payload = "payload"
-    topic = "topic"
-    queue = "queue"
-    message = "message"
-    file = "file"
-    dataset = "dataset"
-    pipeline = "pipeline"
-
-
 class FlowDirectionEnum(str, Enum):
     inbound = "inbound"
     outbound = "outbound"
@@ -481,7 +464,7 @@ class IntegrationLevelEnum(str, Enum):
 
 class MappingTypeEnum(str, Enum):
     """
-    Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = PhysicalObject ↔ LogicalEntity; field_mapping = mapsTo (physical field ↔ logical attribute); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).
+    Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = DataCarrier ↔ LogicalEntity; field_mapping = mapsTo (PhysicalField ↔ LogicalAttribute); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).
 
     """
     semantic_equivalence = "semantic_equivalence"
@@ -489,7 +472,7 @@ class MappingTypeEnum(str, Enum):
     implementation = "implementation"
     entity_physical = "entity_physical"
     """
-    Explicit entity-level link between PhysicalObject and LogicalEntity (PDM-003). Do not infer from field_mapping alone.
+    Explicit entity-level link between DataCarrier and LogicalEntity (PDM-003). Do not infer from field_mapping alone.
 
     """
     field_mapping = "field_mapping"
@@ -714,6 +697,55 @@ class FormalCheckKindEnum(str, Enum):
 class CheckSeverityEnum(str, Enum):
     error = "error"
     warning = "warning"
+
+
+class DataCarrierKindEnum(str, Enum):
+    relational_table = "relational_table"
+    relational_view = "relational_view"
+    file = "file"
+    dataset = "dataset"
+    stream_topic = "stream_topic"
+    stream_queue = "stream_queue"
+    message_type = "message_type"
+    """
+    Transitional; будет заменён Message/DataStructure (ADR-C).
+    """
+    in_memory = "in_memory"
+    api_resource = "api_resource"
+    other = "other"
+
+
+class AccessPointKindEnum(str, Enum):
+    interface = "interface"
+    operation = "operation"
+    channel = "channel"
+
+
+class DataContainerKindEnum(str, Enum):
+    database = "database"
+    schema = "schema"
+    bucket = "bucket"
+    broker = "broker"
+    directory = "directory"
+    cluster = "cluster"
+
+
+class ExecutionAssetKindEnum(str, Enum):
+    pipeline = "pipeline"
+    job = "job"
+
+
+class LineageRoleEnum(str, Enum):
+    source = "source"
+    sink = "sink"
+    intermediate = "intermediate"
+    none = "none"
+
+
+class ContainmentKindEnum(str, Enum):
+    composite = "composite"
+    partitioned = "partitioned"
+    hierarchical = "hierarchical"
 
 
 
@@ -1032,7 +1064,10 @@ class ModelPackage(ModelElement, HasPolicyBindings, HasGovernanceClassification,
     logical_entities: Optional[list[LogicalEntity]] = Field(default=None)
     relationships: Optional[list[Relationship]] = Field(default=None)
     relation_terms: Optional[list[RelationTerm]] = Field(default=None, description="""Governed relation-term dictionary for the package (ADR-026).""")
-    physical_objects: Optional[list[PhysicalObject]] = Field(default=None)
+    data_carriers: Optional[list[DataCarrier]] = Field(default=None, description="""Коллекция носителей данных пакета (Variant B, ADR-031).""")
+    access_points: Optional[list[AccessPoint]] = Field(default=None, description="""Коллекция точек доступа пакета (Variant B, ADR-031).""")
+    data_containers: Optional[list[DataContainer]] = Field(default=None, description="""Коллекция контейнеров пакета (Variant B, ADR-031).""")
+    execution_assets: Optional[list[ExecutionAsset]] = Field(default=None, description="""Коллекция исполняемых активов пакета (Variant B, ADR-031).""")
     mappings: Optional[list[Mapping]] = Field(default=None)
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
@@ -1315,50 +1350,12 @@ class ExternalClassRef(HasProvenance):
     approved_at: Optional[datetime ] = Field(default=None)
 
 
-class PhysicalObject(ModelElement, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
-    """
-    Квант данных или техническая точка публикации/потребления.
-    """
-    solution_ref: Optional[str] = Field(default=None)
-    system_ref: str = Field(default=...)
-    object_kind: PhysicalObjectKindEnum = Field(default=...)
-    qualified_name: str = Field(default=...)
-    technology: str = Field(default=...)
-    native_schema_ref: str = Field(default=...)
-    direction: FlowDirectionEnum = Field(default=...)
-    physical_fields: Optional[list[PhysicalField]] = Field(default=None)
-    mapping_coverage_status: Optional[MappingCoverageStatusEnum] = Field(default=None, description="""Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
-""")
-    mapping_rationale: Optional[str] = Field(default=None, description="""Обоснование для planned / technical-only / not-applicable / inherited.""")
-    data_owner_ref: Optional[str] = Field(default=None)
-    data_steward_ref: Optional[str] = Field(default=None)
-    owning_unit_ref: Optional[str] = Field(default=None)
-    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
-""")
-    governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
-    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
-    sensitivity_term_refs: Optional[list[str]] = Field(default=None)
-    classification_source: Optional[str] = Field(default=None)
-    classification_rationale: Optional[str] = Field(default=None)
-    policy_refs: Optional[list[str]] = Field(default=None)
-    element_id: str = Field(default=...)
-    name: str = Field(default=...)
-    title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
-    aliases: Optional[list[str]] = Field(default=None)
-    glossary_term_refs: Optional[list[str]] = Field(default=None)
-    tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
-    valid_from: Optional[datetime ] = Field(default=None)
-    valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
-
-
 class PhysicalField(ModelElement, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
     """
-    Поле физического объекта; его семантика задаётся Mapping к LogicalAttribute.
+    Поле носителя данных (DataCarrier); семантика задаётся Mapping к LogicalAttribute.
+
     """
-    physical_object_ref: str = Field(default=...)
+    carrier_ref: str = Field(default=..., description="""Носитель данных, которому принадлежит поле.""")
     native_name: str = Field(default=...)
     native_type: str = Field(default=...)
     required: bool = Field(default=...)
@@ -1393,7 +1390,7 @@ class PhysicalField(ModelElement, HasPolicyBindings, HasGovernanceClassification
 
 class Mapping(ModelElement, HasProvenance):
     """
-    Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (PhysicalObject↔LogicalEntity), field_mapping/mapsTo (physical↔logical), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
+    Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (PhysicalField↔LogicalAttribute), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
 
     """
     source_refs: Optional[list[str]] = Field(default=None, min_length=1)
@@ -1418,6 +1415,273 @@ class Mapping(ModelElement, HasProvenance):
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+
+
+class HasStructure(ConfiguredBaseModel):
+    """
+    Mixin структуры данных носителя. structure_ref — временная ссылка (uriorcurie); в будущем заменяется классом DataStructure (ADR-C).
+
+    """
+    structure_ref: Optional[str] = Field(default=None, description="""Ссылка на структуру данных (пока uriorcurie; в будущем DataStructure).
+""")
+    schema_dialect: Optional[str] = Field(default=None, description="""Диалект схемы (например avro, json-schema, sql-ddl).""")
+    data_format: Optional[str] = Field(default=None, description="""Формат данных (например parquet, csv, json).""")
+
+
+class HasProtocolBinding(ConfiguredBaseModel):
+    """
+    Mixin протокола доступа для точки доступа (AccessPoint).
+    """
+    protocol: Optional[str] = Field(default=None, description="""Протокол доступа (например https, jdbc, kafka).""")
+    protocol_version: Optional[str] = Field(default=None)
+    binding_ref: Optional[str] = Field(default=None, description="""Ссылка на внешнее описание binding.""")
+
+
+class Contains(ConfiguredBaseModel):
+    """
+    Mixin контейнерности. child_refs не хранятся: выводятся из parent_ref.
+
+    """
+    containment_kind: Optional[ContainmentKindEnum] = Field(default=None)
+
+
+class HasLocation(ConfiguredBaseModel):
+    """
+    Mixin расположения носителя или точки доступа.
+    """
+    location_uri: Optional[str] = Field(default=None)
+    region: Optional[str] = Field(default=None)
+
+
+class TechnicalAsset(ModelElement, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
+    """
+    Квант данных: адресуемый технический объект управления. Имеет собственный идентификатор, систему-владельца, расположение или способ доступа, жизненный цикл, владельца, классификацию и роль в lineage. Поля, колонки и узлы схем квантами НЕ являются (ADR-C).
+
+    """
+    asset_namespace: str = Field(default=..., description="""Пространство имён источника по аналогии с OpenLineage namespace (например postgres://host:5432, kafka://cluster, s3://bucket). Отдельный слот от DomainContext.namespace (ADR-B).
+""")
+    qualified_name: str = Field(default=...)
+    native_name: Optional[str] = Field(default=None)
+    system_ref: str = Field(default=...)
+    parent_ref: Optional[str] = Field(default=None, description="""Родитель в контейнерной иерархии (без циклов).""")
+    technology: Optional[str] = Field(default=None)
+    asset_kind: str = Field(default=..., description="""Разновидность актива. На подклассах сужается через slot_usage на соответствующий enum.
+""")
+    lineage_role: Optional[LineageRoleEnum] = Field(default=None, description="""Роль актива в lineage (source, sink, intermediate, none).""")
+    direction: Optional[FlowDirectionEnum] = Field(default=None, description="""Направление относительно решения. Запрещён для DataContainer и ExecutionAsset правилом DAMS-валидатора и LinkML rules.
+""")
+    solution_ref: Optional[str] = Field(default=None)
+    data_owner_ref: Optional[str] = Field(default=None)
+    data_steward_ref: Optional[str] = Field(default=None)
+    owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
+""")
+    governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    sensitivity_term_refs: Optional[list[str]] = Field(default=None)
+    classification_source: Optional[str] = Field(default=None)
+    classification_rationale: Optional[str] = Field(default=None)
+    policy_refs: Optional[list[str]] = Field(default=None)
+    element_id: str = Field(default=...)
+    name: str = Field(default=...)
+    title: Optional[str] = Field(default=None)
+    description: str = Field(default=...)
+    aliases: Optional[list[str]] = Field(default=None)
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+
+
+class DataCarrier(TechnicalAsset, HasLocation, Contains, HasStructure):
+    """
+    Носитель данных: хранит или передаёт данные (таблица, файл, топик, сообщение и т.п.).
+
+    """
+    physical_fields: Optional[list[PhysicalField]] = Field(default=None)
+    mapping_coverage_status: Optional[MappingCoverageStatusEnum] = Field(default=None, description="""Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
+""")
+    mapping_rationale: Optional[str] = Field(default=None, description="""Обоснование для planned / technical-only / not-applicable / inherited.""")
+    structure_ref: Optional[str] = Field(default=None, description="""Ссылка на структуру данных (пока uriorcurie; в будущем DataStructure).
+""")
+    schema_dialect: Optional[str] = Field(default=None, description="""Диалект схемы (например avro, json-schema, sql-ddl).""")
+    data_format: Optional[str] = Field(default=None, description="""Формат данных (например parquet, csv, json).""")
+    location_uri: Optional[str] = Field(default=None)
+    region: Optional[str] = Field(default=None)
+    containment_kind: Optional[ContainmentKindEnum] = Field(default=None)
+    asset_namespace: str = Field(default=..., description="""Пространство имён источника по аналогии с OpenLineage namespace (например postgres://host:5432, kafka://cluster, s3://bucket). Отдельный слот от DomainContext.namespace (ADR-B).
+""")
+    qualified_name: str = Field(default=...)
+    native_name: Optional[str] = Field(default=None)
+    system_ref: str = Field(default=...)
+    parent_ref: Optional[str] = Field(default=None, description="""Родитель в контейнерной иерархии (без циклов).""")
+    technology: Optional[str] = Field(default=None)
+    asset_kind: DataCarrierKindEnum = Field(default=..., description="""Разновидность актива. На подклассах сужается через slot_usage на соответствующий enum.
+""")
+    lineage_role: Optional[LineageRoleEnum] = Field(default=None, description="""Роль актива в lineage (source, sink, intermediate, none).""")
+    direction: Optional[FlowDirectionEnum] = Field(default=None, description="""Направление относительно решения. Запрещён для DataContainer и ExecutionAsset правилом DAMS-валидатора и LinkML rules.
+""")
+    solution_ref: Optional[str] = Field(default=None)
+    data_owner_ref: Optional[str] = Field(default=None)
+    data_steward_ref: Optional[str] = Field(default=None)
+    owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
+""")
+    governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    sensitivity_term_refs: Optional[list[str]] = Field(default=None)
+    classification_source: Optional[str] = Field(default=None)
+    classification_rationale: Optional[str] = Field(default=None)
+    policy_refs: Optional[list[str]] = Field(default=None)
+    element_id: str = Field(default=...)
+    name: str = Field(default=...)
+    title: Optional[str] = Field(default=None)
+    description: str = Field(default=...)
+    aliases: Optional[list[str]] = Field(default=None)
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+
+
+class AccessPoint(TechnicalAsset, HasLocation, HasProtocolBinding):
+    """
+    Точка доступа к данным: интерфейс, операция или канал. Сама данные не несёт; указывает на носители через serves_refs.
+
+    """
+    serves_refs: Optional[list[str]] = Field(default=None, description="""Носители, доступные через эту точку доступа.""")
+    interface_ref: Optional[str] = Field(default=None, description="""Родительский интерфейс для операции (asset_kind=operation).""")
+    operation_name: Optional[str] = Field(default=None)
+    http_method: Optional[str] = Field(default=None)
+    path_template: Optional[str] = Field(default=None)
+    protocol: Optional[str] = Field(default=None, description="""Протокол доступа (например https, jdbc, kafka).""")
+    protocol_version: Optional[str] = Field(default=None)
+    binding_ref: Optional[str] = Field(default=None, description="""Ссылка на внешнее описание binding.""")
+    location_uri: Optional[str] = Field(default=None)
+    region: Optional[str] = Field(default=None)
+    asset_namespace: str = Field(default=..., description="""Пространство имён источника по аналогии с OpenLineage namespace (например postgres://host:5432, kafka://cluster, s3://bucket). Отдельный слот от DomainContext.namespace (ADR-B).
+""")
+    qualified_name: str = Field(default=...)
+    native_name: Optional[str] = Field(default=None)
+    system_ref: str = Field(default=...)
+    parent_ref: Optional[str] = Field(default=None, description="""Родитель в контейнерной иерархии (без циклов).""")
+    technology: Optional[str] = Field(default=None)
+    asset_kind: AccessPointKindEnum = Field(default=..., description="""Разновидность актива. На подклассах сужается через slot_usage на соответствующий enum.
+""")
+    lineage_role: Optional[LineageRoleEnum] = Field(default=None, description="""Роль актива в lineage (source, sink, intermediate, none).""")
+    direction: Optional[FlowDirectionEnum] = Field(default=None, description="""Направление протокола AccessPoint (через FlowDirectionEnum).""")
+    solution_ref: Optional[str] = Field(default=None)
+    data_owner_ref: Optional[str] = Field(default=None)
+    data_steward_ref: Optional[str] = Field(default=None)
+    owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
+""")
+    governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    sensitivity_term_refs: Optional[list[str]] = Field(default=None)
+    classification_source: Optional[str] = Field(default=None)
+    classification_rationale: Optional[str] = Field(default=None)
+    policy_refs: Optional[list[str]] = Field(default=None)
+    element_id: str = Field(default=...)
+    name: str = Field(default=...)
+    title: Optional[str] = Field(default=None)
+    description: str = Field(default=...)
+    aliases: Optional[list[str]] = Field(default=None)
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+
+
+class DataContainer(TechnicalAsset, Contains):
+    """
+    Контейнер других активов (database, schema, bucket, broker, directory, cluster). Данных не несёт: structure_ref и data_format отсутствуют.
+
+    """
+    containment_kind: Optional[ContainmentKindEnum] = Field(default=None)
+    asset_namespace: str = Field(default=..., description="""Пространство имён источника по аналогии с OpenLineage namespace (например postgres://host:5432, kafka://cluster, s3://bucket). Отдельный слот от DomainContext.namespace (ADR-B).
+""")
+    qualified_name: str = Field(default=...)
+    native_name: Optional[str] = Field(default=None)
+    system_ref: str = Field(default=...)
+    parent_ref: Optional[str] = Field(default=None, description="""Родитель в контейнерной иерархии (без циклов).""")
+    technology: Optional[str] = Field(default=None)
+    asset_kind: DataContainerKindEnum = Field(default=..., description="""Разновидность актива. На подклассах сужается через slot_usage на соответствующий enum.
+""")
+    lineage_role: Optional[LineageRoleEnum] = Field(default=None, description="""Роль актива в lineage (source, sink, intermediate, none).""")
+    direction: Optional[FlowDirectionEnum] = Field(default=None, description="""Запрещён для DataContainer (правило валидатора).""")
+    solution_ref: Optional[str] = Field(default=None)
+    data_owner_ref: Optional[str] = Field(default=None)
+    data_steward_ref: Optional[str] = Field(default=None)
+    owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
+""")
+    governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    sensitivity_term_refs: Optional[list[str]] = Field(default=None)
+    classification_source: Optional[str] = Field(default=None)
+    classification_rationale: Optional[str] = Field(default=None)
+    policy_refs: Optional[list[str]] = Field(default=None)
+    element_id: str = Field(default=...)
+    name: str = Field(default=...)
+    title: Optional[str] = Field(default=None)
+    description: str = Field(default=...)
+    aliases: Optional[list[str]] = Field(default=None)
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+
+
+class ExecutionAsset(TechnicalAsset):
+    """
+    Исполняемый актив (pipeline / job) с минимальной lineage-ролью.
+
+    """
+    produces_refs: Optional[list[str]] = Field(default=None)
+    consumes_refs: Optional[list[str]] = Field(default=None)
+    asset_namespace: str = Field(default=..., description="""Пространство имён источника по аналогии с OpenLineage namespace (например postgres://host:5432, kafka://cluster, s3://bucket). Отдельный слот от DomainContext.namespace (ADR-B).
+""")
+    qualified_name: str = Field(default=...)
+    native_name: Optional[str] = Field(default=None)
+    system_ref: str = Field(default=...)
+    parent_ref: Optional[str] = Field(default=None, description="""Родитель в контейнерной иерархии (без циклов).""")
+    technology: Optional[str] = Field(default=None)
+    asset_kind: ExecutionAssetKindEnum = Field(default=..., description="""Разновидность актива. На подклассах сужается через slot_usage на соответствующий enum.
+""")
+    lineage_role: Optional[LineageRoleEnum] = Field(default=None, description="""Роль актива в lineage (source, sink, intermediate, none).""")
+    direction: Optional[FlowDirectionEnum] = Field(default=None, description="""Запрещён для ExecutionAsset (правило валидатора).""")
+    solution_ref: Optional[str] = Field(default=None)
+    data_owner_ref: Optional[str] = Field(default=None)
+    data_steward_ref: Optional[str] = Field(default=None)
+    owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
+""")
+    governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    sensitivity_term_refs: Optional[list[str]] = Field(default=None)
+    classification_source: Optional[str] = Field(default=None)
+    classification_rationale: Optional[str] = Field(default=None)
+    policy_refs: Optional[list[str]] = Field(default=None)
+    element_id: str = Field(default=...)
+    name: str = Field(default=...)
+    title: Optional[str] = Field(default=None)
+    description: str = Field(default=...)
+    aliases: Optional[list[str]] = Field(default=None)
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
     deprecated_by_ref: Optional[str] = Field(default=None)
 
 
@@ -1458,16 +1722,16 @@ class DataFlow(ModelElement, HasOwnership, HasLifecycle):
 
 class DataFlowEntityBinding(ModelElement):
     """
-    Связь потока с логическими сущностями, атрибутами и физическими объектами модели решения.
+    Связь потока с логическими сущностями, атрибутами и носителями данных модели решения.
     """
     flow_ref: str = Field(default=...)
     source_model_ref: str = Field(default=...)
     logical_entity_ref: str = Field(default=...)
     logical_attribute_refs: Optional[list[str]] = Field(default=None, min_length=1)
-    physical_object_refs: Optional[list[str]] = Field(default=None, min_length=1)
+    carrier_refs: Optional[list[str]] = Field(default=None, description="""Носители данных, участвующие в binding (не контейнеры).""", min_length=1)
     physical_field_refs: Optional[list[str]] = Field(default=None)
     transformation_mapping_refs: Optional[list[str]] = Field(default=None)
-    direction: FlowDirectionEnum = Field(default=...)
+    direction: Optional[FlowDirectionEnum] = Field(default=None)
     element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
@@ -1539,7 +1803,7 @@ class SelectedEntity(ModelElement):
     """
     logical_entity_ref: str = Field(default=...)
     selected_attributes: Optional[list[SelectedAttribute]] = Field(default=None, min_length=1)
-    physical_object_refs: Optional[list[str]] = Field(default=None, min_length=1)
+    carrier_refs: Optional[list[str]] = Field(default=None, description="""Носители данных, участвующие в binding (не контейнеры).""", min_length=1)
     element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
@@ -1629,7 +1893,7 @@ class RequirementApplicability(ConfiguredBaseModel):
     """
     applicability_id: str = Field(default=..., description="""Stable id for applies_to blocks (e.g. appl:LDM-001).""")
     applies_target_class: Optional[str] = Field(default=None, description="""Имя класса LinkML, к экземплярам которого применяется требование.""")
-    applies_target_kinds: Optional[list[str]] = Field(default=None, description="""Опциональный allowlist object_kind / facet (например table, topic).""")
+    applies_target_kinds: Optional[list[str]] = Field(default=None, description="""Опциональный allowlist asset_kind / facet (например relational_table, stream_topic).""")
     applies_implementation_scope: Optional[ImplementationScopeEnum] = Field(default=None)
     applies_dams_model_level: Optional[DAMSModelLevelEnum] = Field(default=None)
     applies_implementation_profile: Optional[ImplementationProfileEnum] = Field(default=None)
@@ -1751,9 +2015,17 @@ LogicalAttribute.model_rebuild()
 Relationship.model_rebuild()
 RelationTerm.model_rebuild()
 ExternalClassRef.model_rebuild()
-PhysicalObject.model_rebuild()
 PhysicalField.model_rebuild()
 Mapping.model_rebuild()
+HasStructure.model_rebuild()
+HasProtocolBinding.model_rebuild()
+Contains.model_rebuild()
+HasLocation.model_rebuild()
+TechnicalAsset.model_rebuild()
+DataCarrier.model_rebuild()
+AccessPoint.model_rebuild()
+DataContainer.model_rebuild()
+ExecutionAsset.model_rebuild()
 DataFlow.model_rebuild()
 DataFlowEntityBinding.model_rebuild()
 DataModelBinding.model_rebuild()

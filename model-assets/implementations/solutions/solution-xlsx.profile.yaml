@@ -74,10 +74,12 @@ systems:
     package_description: >
       Модель данных ИТ-решения MDM (золотые записи ЮЛ/ФЛ и связи)
       импортирована из Object/ObjectAttribute.
-    object_kind: view
+    asset_kind: relational_view
+    asset_kind: relational_view
     technology: Oracle
     direction: internal
     native_schema_ref_template: "oracle:{object}"
+    schema_name: null
     domain_ref: eam:domain/PARTY
     type_map:
       VARCHAR2: string
@@ -94,10 +96,12 @@ systems:
     package_description: >
       Модель данных ИТ-решения UCD (организации, сотрудники, соглашения)
       импортирована из Object/ObjectAttribute.
-    object_kind: table
+    asset_kind: relational_table
+    asset_kind: relational_table
     technology: PostgreSQL
     direction: internal
     native_schema_ref_template: "postgres:ucd.{object}"
+    schema_name: ucd
     domain_ref: eam:domain/PARTY
     type_map:
       UUID: identifier
@@ -117,7 +121,8 @@ systems:
     package_description: >
       Модель данных ИТ-решения CRM (клиент, контакт, привлечение)
       импортирована из Object/ObjectAttribute.
-    object_kind: table
+    asset_kind: relational_table
+    asset_kind: relational_table
     technology: Microsoft Dynamics
     direction: internal
     native_schema_ref_template: "dynamics:{object}"
@@ -139,7 +144,8 @@ systems:
     package_description: >
       Модель данных ИТ-решения ЕСЭД (документный контур)
       импортирована из Object/ObjectAttribute.
-    object_kind: table
+    asset_kind: relational_table
+    asset_kind: relational_table
     technology: DocsVision
     direction: internal
     native_schema_ref_template: "esed:{object}"

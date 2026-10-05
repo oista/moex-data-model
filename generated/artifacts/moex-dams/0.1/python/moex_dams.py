@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-05T09:08:13
+# Generation date: 2026-10-05T21:35:07
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -190,15 +190,31 @@ class ExternalClassRefExternalClassRefId(URIorCURIE):
     pass
 
 
-class PhysicalObjectElementId(ModelElementElementId):
-    pass
-
-
 class PhysicalFieldElementId(ModelElementElementId):
     pass
 
 
 class MappingElementId(ModelElementElementId):
+    pass
+
+
+class TechnicalAssetElementId(ModelElementElementId):
+    pass
+
+
+class DataCarrierElementId(TechnicalAssetElementId):
+    pass
+
+
+class AccessPointElementId(TechnicalAssetElementId):
+    pass
+
+
+class DataContainerElementId(TechnicalAssetElementId):
+    pass
+
+
+class ExecutionAssetElementId(TechnicalAssetElementId):
     pass
 
 
@@ -1179,7 +1195,10 @@ class ModelPackage(ModelElement):
     logical_entities: Optional[Union[dict[Union[str, LogicalEntityElementId], Union[dict, "LogicalEntity"]], list[Union[dict, "LogicalEntity"]]]] = empty_dict()
     relationships: Optional[Union[dict[Union[str, RelationshipElementId], Union[dict, "Relationship"]], list[Union[dict, "Relationship"]]]] = empty_dict()
     relation_terms: Optional[Union[dict[Union[str, RelationTermElementId], Union[dict, "RelationTerm"]], list[Union[dict, "RelationTerm"]]]] = empty_dict()
-    physical_objects: Optional[Union[dict[Union[str, PhysicalObjectElementId], Union[dict, "PhysicalObject"]], list[Union[dict, "PhysicalObject"]]]] = empty_dict()
+    data_carriers: Optional[Union[dict[Union[str, DataCarrierElementId], Union[dict, "DataCarrier"]], list[Union[dict, "DataCarrier"]]]] = empty_dict()
+    access_points: Optional[Union[dict[Union[str, AccessPointElementId], Union[dict, "AccessPoint"]], list[Union[dict, "AccessPoint"]]]] = empty_dict()
+    data_containers: Optional[Union[dict[Union[str, DataContainerElementId], Union[dict, "DataContainer"]], list[Union[dict, "DataContainer"]]]] = empty_dict()
+    execution_assets: Optional[Union[dict[Union[str, ExecutionAssetElementId], Union[dict, "ExecutionAsset"]], list[Union[dict, "ExecutionAsset"]]]] = empty_dict()
     mappings: Optional[Union[dict[Union[str, MappingElementId], Union[dict, "Mapping"]], list[Union[dict, "Mapping"]]]] = empty_dict()
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
     data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
@@ -1235,7 +1254,13 @@ class ModelPackage(ModelElement):
 
         self._normalize_inlined_as_list(slot_name="relation_terms", slot_type=RelationTerm, key_name="element_id", keyed=True)
 
-        self._normalize_inlined_as_list(slot_name="physical_objects", slot_type=PhysicalObject, key_name="element_id", keyed=True)
+        self._normalize_inlined_as_list(slot_name="data_carriers", slot_type=DataCarrier, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="access_points", slot_type=AccessPoint, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="data_containers", slot_type=DataContainer, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="execution_assets", slot_type=ExecutionAsset, key_name="element_id", keyed=True)
 
         self._normalize_inlined_as_list(slot_name="mappings", slot_type=Mapping, key_name="element_id", keyed=True)
 
@@ -1973,128 +1998,9 @@ class ExternalClassRef(YAMLRoot):
 
 
 @dataclass(repr=False)
-class PhysicalObject(ModelElement):
-    """
-    Квант данных или техническая точка публикации/потребления.
-    """
-    _inherited_slots: ClassVar[list[str]] = []
-
-    class_class_uri: ClassVar[URIRef] = DAMS["PhysicalObject"]
-    class_class_curie: ClassVar[str] = "dams:PhysicalObject"
-    class_name: ClassVar[str] = "PhysicalObject"
-    class_model_uri: ClassVar[URIRef] = DAMS.PhysicalObject
-
-    element_id: Union[str, PhysicalObjectElementId] = None
-    name: str = None
-    description: str = None
-    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
-    system_ref: Union[str, ITSystemRegistryId] = None
-    object_kind: Union[str, "PhysicalObjectKindEnum"] = None
-    qualified_name: str = None
-    technology: str = None
-    native_schema_ref: Union[str, URI] = None
-    direction: Union[str, "FlowDirectionEnum"] = None
-    solution_ref: Optional[Union[str, ITSolutionRegistryId]] = None
-    physical_fields: Optional[Union[dict[Union[str, PhysicalFieldElementId], Union[dict, "PhysicalField"]], list[Union[dict, "PhysicalField"]]]] = empty_dict()
-    mapping_coverage_status: Optional[Union[str, "MappingCoverageStatusEnum"]] = None
-    mapping_rationale: Optional[str] = None
-    data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
-    data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
-    owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
-    ownership_inheritance_rule: Optional[str] = None
-    governance_classification: Optional[Union[str, "GovernanceClassificationEnum"]] = None
-    security_classification: Optional[Union[str, "SecurityClassificationEnum"]] = None
-    sensitivity_term_refs: Optional[Union[Union[str, DataClassificationTermRegistryId], list[Union[str, DataClassificationTermRegistryId]]]] = empty_list()
-    classification_source: Optional[str] = None
-    classification_rationale: Optional[str] = None
-    policy_refs: Optional[Union[Union[str, PolicyRegistryId], list[Union[str, PolicyRegistryId]]]] = empty_list()
-
-    def __post_init__(self, *_: str, **kwargs: Any):
-        if self._is_empty(self.element_id):
-            self.MissingRequiredField("element_id")
-        if not isinstance(self.element_id, PhysicalObjectElementId):
-            self.element_id = PhysicalObjectElementId(self.element_id)
-
-        if self._is_empty(self.system_ref):
-            self.MissingRequiredField("system_ref")
-        if not isinstance(self.system_ref, ITSystemRegistryId):
-            self.system_ref = ITSystemRegistryId(self.system_ref)
-
-        if self._is_empty(self.object_kind):
-            self.MissingRequiredField("object_kind")
-        if not isinstance(self.object_kind, PhysicalObjectKindEnum):
-            self.object_kind = PhysicalObjectKindEnum(self.object_kind)
-
-        if self._is_empty(self.qualified_name):
-            self.MissingRequiredField("qualified_name")
-        if not isinstance(self.qualified_name, str):
-            self.qualified_name = str(self.qualified_name)
-
-        if self._is_empty(self.technology):
-            self.MissingRequiredField("technology")
-        if not isinstance(self.technology, str):
-            self.technology = str(self.technology)
-
-        if self._is_empty(self.native_schema_ref):
-            self.MissingRequiredField("native_schema_ref")
-        if not isinstance(self.native_schema_ref, URI):
-            self.native_schema_ref = URI(self.native_schema_ref)
-
-        if self._is_empty(self.direction):
-            self.MissingRequiredField("direction")
-        if not isinstance(self.direction, FlowDirectionEnum):
-            self.direction = FlowDirectionEnum(self.direction)
-
-        if self.solution_ref is not None and not isinstance(self.solution_ref, ITSolutionRegistryId):
-            self.solution_ref = ITSolutionRegistryId(self.solution_ref)
-
-        self._normalize_inlined_as_list(slot_name="physical_fields", slot_type=PhysicalField, key_name="element_id", keyed=True)
-
-        if self.mapping_coverage_status is not None and not isinstance(self.mapping_coverage_status, MappingCoverageStatusEnum):
-            self.mapping_coverage_status = MappingCoverageStatusEnum(self.mapping_coverage_status)
-
-        if self.mapping_rationale is not None and not isinstance(self.mapping_rationale, str):
-            self.mapping_rationale = str(self.mapping_rationale)
-
-        if self.data_owner_ref is not None and not isinstance(self.data_owner_ref, RoleRegistryId):
-            self.data_owner_ref = RoleRegistryId(self.data_owner_ref)
-
-        if self.data_steward_ref is not None and not isinstance(self.data_steward_ref, RoleRegistryId):
-            self.data_steward_ref = RoleRegistryId(self.data_steward_ref)
-
-        if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
-            self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
-
-        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
-            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
-
-        if self.governance_classification is not None and not isinstance(self.governance_classification, GovernanceClassificationEnum):
-            self.governance_classification = GovernanceClassificationEnum(self.governance_classification)
-
-        if self.security_classification is not None and not isinstance(self.security_classification, SecurityClassificationEnum):
-            self.security_classification = SecurityClassificationEnum(self.security_classification)
-
-        if not isinstance(self.sensitivity_term_refs, list):
-            self.sensitivity_term_refs = [self.sensitivity_term_refs] if self.sensitivity_term_refs is not None else []
-        self.sensitivity_term_refs = [v if isinstance(v, DataClassificationTermRegistryId) else DataClassificationTermRegistryId(v) for v in self.sensitivity_term_refs]
-
-        if self.classification_source is not None and not isinstance(self.classification_source, str):
-            self.classification_source = str(self.classification_source)
-
-        if self.classification_rationale is not None and not isinstance(self.classification_rationale, str):
-            self.classification_rationale = str(self.classification_rationale)
-
-        if not isinstance(self.policy_refs, list):
-            self.policy_refs = [self.policy_refs] if self.policy_refs is not None else []
-        self.policy_refs = [v if isinstance(v, PolicyRegistryId) else PolicyRegistryId(v) for v in self.policy_refs]
-
-        super().__post_init__(**kwargs)
-
-
-@dataclass(repr=False)
 class PhysicalField(ModelElement):
     """
-    Поле физического объекта; его семантика задаётся Mapping к LogicalAttribute.
+    Поле носителя данных (DataCarrier); семантика задаётся Mapping к LogicalAttribute.
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -2107,7 +2013,7 @@ class PhysicalField(ModelElement):
     name: str = None
     description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
-    physical_object_ref: Union[str, PhysicalObjectElementId] = None
+    carrier_ref: Union[str, DataCarrierElementId] = None
     native_name: str = None
     native_type: str = None
     required: Union[bool, Bool] = None
@@ -2132,10 +2038,10 @@ class PhysicalField(ModelElement):
         if not isinstance(self.element_id, PhysicalFieldElementId):
             self.element_id = PhysicalFieldElementId(self.element_id)
 
-        if self._is_empty(self.physical_object_ref):
-            self.MissingRequiredField("physical_object_ref")
-        if not isinstance(self.physical_object_ref, PhysicalObjectElementId):
-            self.physical_object_ref = PhysicalObjectElementId(self.physical_object_ref)
+        if self._is_empty(self.carrier_ref):
+            self.MissingRequiredField("carrier_ref")
+        if not isinstance(self.carrier_ref, DataCarrierElementId):
+            self.carrier_ref = DataCarrierElementId(self.carrier_ref)
 
         if self._is_empty(self.native_name):
             self.MissingRequiredField("native_name")
@@ -2203,7 +2109,7 @@ class PhysicalField(ModelElement):
 class Mapping(ModelElement):
     """
     Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual),
-    entity_physical (PhysicalObject↔LogicalEntity), field_mapping/mapsTo (physical↔logical), aligns_with
+    entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (PhysicalField↔LogicalAttribute), aligns_with
     (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
     """
     _inherited_slots: ClassVar[list[str]] = []
@@ -2286,6 +2192,479 @@ class Mapping(ModelElement):
 
         if self.approved_at is not None and not isinstance(self.approved_at, XSDDateTime):
             self.approved_at = XSDDateTime(self.approved_at)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class HasStructure(YAMLRoot):
+    """
+    Mixin структуры данных носителя. structure_ref — временная ссылка (uriorcurie); в будущем заменяется классом
+    DataStructure (ADR-C).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["HasStructure"]
+    class_class_curie: ClassVar[str] = "dams:HasStructure"
+    class_name: ClassVar[str] = "HasStructure"
+    class_model_uri: ClassVar[URIRef] = DAMS.HasStructure
+
+    structure_ref: Optional[Union[str, URIorCURIE]] = None
+    schema_dialect: Optional[str] = None
+    data_format: Optional[str] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self.structure_ref is not None and not isinstance(self.structure_ref, URIorCURIE):
+            self.structure_ref = URIorCURIE(self.structure_ref)
+
+        if self.schema_dialect is not None and not isinstance(self.schema_dialect, str):
+            self.schema_dialect = str(self.schema_dialect)
+
+        if self.data_format is not None and not isinstance(self.data_format, str):
+            self.data_format = str(self.data_format)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class HasProtocolBinding(YAMLRoot):
+    """
+    Mixin протокола доступа для точки доступа (AccessPoint).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["HasProtocolBinding"]
+    class_class_curie: ClassVar[str] = "dams:HasProtocolBinding"
+    class_name: ClassVar[str] = "HasProtocolBinding"
+    class_model_uri: ClassVar[URIRef] = DAMS.HasProtocolBinding
+
+    protocol: Optional[str] = None
+    protocol_version: Optional[str] = None
+    binding_ref: Optional[Union[str, URIorCURIE]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self.protocol is not None and not isinstance(self.protocol, str):
+            self.protocol = str(self.protocol)
+
+        if self.protocol_version is not None and not isinstance(self.protocol_version, str):
+            self.protocol_version = str(self.protocol_version)
+
+        if self.binding_ref is not None and not isinstance(self.binding_ref, URIorCURIE):
+            self.binding_ref = URIorCURIE(self.binding_ref)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class Contains(YAMLRoot):
+    """
+    Mixin контейнерности. child_refs не хранятся: выводятся из parent_ref.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["Contains"]
+    class_class_curie: ClassVar[str] = "dams:Contains"
+    class_name: ClassVar[str] = "Contains"
+    class_model_uri: ClassVar[URIRef] = DAMS.Contains
+
+    containment_kind: Optional[Union[str, "ContainmentKindEnum"]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self.containment_kind is not None and not isinstance(self.containment_kind, ContainmentKindEnum):
+            self.containment_kind = ContainmentKindEnum(self.containment_kind)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class HasLocation(YAMLRoot):
+    """
+    Mixin расположения носителя или точки доступа.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["HasLocation"]
+    class_class_curie: ClassVar[str] = "dams:HasLocation"
+    class_name: ClassVar[str] = "HasLocation"
+    class_model_uri: ClassVar[URIRef] = DAMS.HasLocation
+
+    location_uri: Optional[Union[str, URI]] = None
+    region: Optional[str] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self.location_uri is not None and not isinstance(self.location_uri, URI):
+            self.location_uri = URI(self.location_uri)
+
+        if self.region is not None and not isinstance(self.region, str):
+            self.region = str(self.region)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class TechnicalAsset(ModelElement):
+    """
+    Квант данных: адресуемый технический объект управления. Имеет собственный идентификатор, систему-владельца,
+    расположение или способ доступа, жизненный цикл, владельца, классификацию и роль в lineage. Поля, колонки и узлы
+    схем квантами НЕ являются (ADR-C).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["TechnicalAsset"]
+    class_class_curie: ClassVar[str] = "dams:TechnicalAsset"
+    class_name: ClassVar[str] = "TechnicalAsset"
+    class_model_uri: ClassVar[URIRef] = DAMS.TechnicalAsset
+
+    element_id: Union[str, TechnicalAssetElementId] = None
+    name: str = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    asset_namespace: str = None
+    qualified_name: str = None
+    native_name: str = None
+    system_ref: Union[str, ITSystemRegistryId] = None
+    asset_kind: str = None
+    description: str = None
+    parent_ref: Optional[Union[str, TechnicalAssetElementId]] = None
+    technology: Optional[str] = None
+    lineage_role: Optional[Union[str, "LineageRoleEnum"]] = None
+    direction: Optional[Union[str, "FlowDirectionEnum"]] = None
+    solution_ref: Optional[Union[str, ITSolutionRegistryId]] = None
+    data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
+    data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
+    owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+    ownership_inheritance_rule: Optional[str] = None
+    governance_classification: Optional[Union[str, "GovernanceClassificationEnum"]] = None
+    security_classification: Optional[Union[str, "SecurityClassificationEnum"]] = None
+    sensitivity_term_refs: Optional[Union[Union[str, DataClassificationTermRegistryId], list[Union[str, DataClassificationTermRegistryId]]]] = empty_list()
+    classification_source: Optional[str] = None
+    classification_rationale: Optional[str] = None
+    policy_refs: Optional[Union[Union[str, PolicyRegistryId], list[Union[str, PolicyRegistryId]]]] = empty_list()
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.asset_namespace):
+            self.MissingRequiredField("asset_namespace")
+        if not isinstance(self.asset_namespace, str):
+            self.asset_namespace = str(self.asset_namespace)
+
+        if self._is_empty(self.qualified_name):
+            self.MissingRequiredField("qualified_name")
+        if not isinstance(self.qualified_name, str):
+            self.qualified_name = str(self.qualified_name)
+
+        if self._is_empty(self.native_name):
+            self.MissingRequiredField("native_name")
+        if not isinstance(self.native_name, str):
+            self.native_name = str(self.native_name)
+
+        if self._is_empty(self.system_ref):
+            self.MissingRequiredField("system_ref")
+        if not isinstance(self.system_ref, ITSystemRegistryId):
+            self.system_ref = ITSystemRegistryId(self.system_ref)
+
+        if self._is_empty(self.asset_kind):
+            self.MissingRequiredField("asset_kind")
+        if not isinstance(self.asset_kind, str):
+            self.asset_kind = str(self.asset_kind)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
+
+        if self.parent_ref is not None and not isinstance(self.parent_ref, TechnicalAssetElementId):
+            self.parent_ref = TechnicalAssetElementId(self.parent_ref)
+
+        if self.technology is not None and not isinstance(self.technology, str):
+            self.technology = str(self.technology)
+
+        if self.lineage_role is not None and not isinstance(self.lineage_role, LineageRoleEnum):
+            self.lineage_role = LineageRoleEnum(self.lineage_role)
+
+        if self.direction is not None and not isinstance(self.direction, FlowDirectionEnum):
+            self.direction = FlowDirectionEnum(self.direction)
+
+        if self.solution_ref is not None and not isinstance(self.solution_ref, ITSolutionRegistryId):
+            self.solution_ref = ITSolutionRegistryId(self.solution_ref)
+
+        if self.data_owner_ref is not None and not isinstance(self.data_owner_ref, RoleRegistryId):
+            self.data_owner_ref = RoleRegistryId(self.data_owner_ref)
+
+        if self.data_steward_ref is not None and not isinstance(self.data_steward_ref, RoleRegistryId):
+            self.data_steward_ref = RoleRegistryId(self.data_steward_ref)
+
+        if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
+            self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
+
+        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
+            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
+
+        if self.governance_classification is not None and not isinstance(self.governance_classification, GovernanceClassificationEnum):
+            self.governance_classification = GovernanceClassificationEnum(self.governance_classification)
+
+        if self.security_classification is not None and not isinstance(self.security_classification, SecurityClassificationEnum):
+            self.security_classification = SecurityClassificationEnum(self.security_classification)
+
+        if not isinstance(self.sensitivity_term_refs, list):
+            self.sensitivity_term_refs = [self.sensitivity_term_refs] if self.sensitivity_term_refs is not None else []
+        self.sensitivity_term_refs = [v if isinstance(v, DataClassificationTermRegistryId) else DataClassificationTermRegistryId(v) for v in self.sensitivity_term_refs]
+
+        if self.classification_source is not None and not isinstance(self.classification_source, str):
+            self.classification_source = str(self.classification_source)
+
+        if self.classification_rationale is not None and not isinstance(self.classification_rationale, str):
+            self.classification_rationale = str(self.classification_rationale)
+
+        if not isinstance(self.policy_refs, list):
+            self.policy_refs = [self.policy_refs] if self.policy_refs is not None else []
+        self.policy_refs = [v if isinstance(v, PolicyRegistryId) else PolicyRegistryId(v) for v in self.policy_refs]
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class DataCarrier(TechnicalAsset):
+    """
+    Носитель данных: хранит или передаёт данные (таблица, файл, топик, сообщение и т.п.).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["DataCarrier"]
+    class_class_curie: ClassVar[str] = "dams:DataCarrier"
+    class_name: ClassVar[str] = "DataCarrier"
+    class_model_uri: ClassVar[URIRef] = DAMS.DataCarrier
+
+    element_id: Union[str, DataCarrierElementId] = None
+    name: str = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    asset_namespace: str = None
+    qualified_name: str = None
+    native_name: str = None
+    system_ref: Union[str, ITSystemRegistryId] = None
+    description: str = None
+    asset_kind: Union[str, "DataCarrierKindEnum"] = None
+    physical_fields: Optional[Union[dict[Union[str, PhysicalFieldElementId], Union[dict, PhysicalField]], list[Union[dict, PhysicalField]]]] = empty_dict()
+    mapping_coverage_status: Optional[Union[str, "MappingCoverageStatusEnum"]] = None
+    mapping_rationale: Optional[str] = None
+    structure_ref: Optional[Union[str, URIorCURIE]] = None
+    schema_dialect: Optional[str] = None
+    data_format: Optional[str] = None
+    location_uri: Optional[Union[str, URI]] = None
+    region: Optional[str] = None
+    containment_kind: Optional[Union[str, "ContainmentKindEnum"]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, DataCarrierElementId):
+            self.element_id = DataCarrierElementId(self.element_id)
+
+        if self._is_empty(self.asset_kind):
+            self.MissingRequiredField("asset_kind")
+        if not isinstance(self.asset_kind, DataCarrierKindEnum):
+            self.asset_kind = DataCarrierKindEnum(self.asset_kind)
+
+        self._normalize_inlined_as_list(slot_name="physical_fields", slot_type=PhysicalField, key_name="element_id", keyed=True)
+
+        if self.mapping_coverage_status is not None and not isinstance(self.mapping_coverage_status, MappingCoverageStatusEnum):
+            self.mapping_coverage_status = MappingCoverageStatusEnum(self.mapping_coverage_status)
+
+        if self.mapping_rationale is not None and not isinstance(self.mapping_rationale, str):
+            self.mapping_rationale = str(self.mapping_rationale)
+
+        if self.structure_ref is not None and not isinstance(self.structure_ref, URIorCURIE):
+            self.structure_ref = URIorCURIE(self.structure_ref)
+
+        if self.schema_dialect is not None and not isinstance(self.schema_dialect, str):
+            self.schema_dialect = str(self.schema_dialect)
+
+        if self.data_format is not None and not isinstance(self.data_format, str):
+            self.data_format = str(self.data_format)
+
+        if self.location_uri is not None and not isinstance(self.location_uri, URI):
+            self.location_uri = URI(self.location_uri)
+
+        if self.region is not None and not isinstance(self.region, str):
+            self.region = str(self.region)
+
+        if self.containment_kind is not None and not isinstance(self.containment_kind, ContainmentKindEnum):
+            self.containment_kind = ContainmentKindEnum(self.containment_kind)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class AccessPoint(TechnicalAsset):
+    """
+    Точка доступа к данным: интерфейс, операция или канал. Сама данные не несёт; указывает на носители через
+    serves_refs.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["AccessPoint"]
+    class_class_curie: ClassVar[str] = "dams:AccessPoint"
+    class_name: ClassVar[str] = "AccessPoint"
+    class_model_uri: ClassVar[URIRef] = DAMS.AccessPoint
+
+    element_id: Union[str, AccessPointElementId] = None
+    name: str = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    asset_namespace: str = None
+    qualified_name: str = None
+    native_name: str = None
+    system_ref: Union[str, ITSystemRegistryId] = None
+    description: str = None
+    asset_kind: Union[str, "AccessPointKindEnum"] = None
+    serves_refs: Optional[Union[Union[str, DataCarrierElementId], list[Union[str, DataCarrierElementId]]]] = empty_list()
+    interface_ref: Optional[Union[str, AccessPointElementId]] = None
+    operation_name: Optional[str] = None
+    http_method: Optional[str] = None
+    path_template: Optional[str] = None
+    direction: Optional[Union[str, "FlowDirectionEnum"]] = None
+    protocol: Optional[str] = None
+    protocol_version: Optional[str] = None
+    binding_ref: Optional[Union[str, URIorCURIE]] = None
+    location_uri: Optional[Union[str, URI]] = None
+    region: Optional[str] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, AccessPointElementId):
+            self.element_id = AccessPointElementId(self.element_id)
+
+        if self._is_empty(self.asset_kind):
+            self.MissingRequiredField("asset_kind")
+        if not isinstance(self.asset_kind, AccessPointKindEnum):
+            self.asset_kind = AccessPointKindEnum(self.asset_kind)
+
+        if not isinstance(self.serves_refs, list):
+            self.serves_refs = [self.serves_refs] if self.serves_refs is not None else []
+        self.serves_refs = [v if isinstance(v, DataCarrierElementId) else DataCarrierElementId(v) for v in self.serves_refs]
+
+        if self.interface_ref is not None and not isinstance(self.interface_ref, AccessPointElementId):
+            self.interface_ref = AccessPointElementId(self.interface_ref)
+
+        if self.operation_name is not None and not isinstance(self.operation_name, str):
+            self.operation_name = str(self.operation_name)
+
+        if self.http_method is not None and not isinstance(self.http_method, str):
+            self.http_method = str(self.http_method)
+
+        if self.path_template is not None and not isinstance(self.path_template, str):
+            self.path_template = str(self.path_template)
+
+        if self.direction is not None and not isinstance(self.direction, FlowDirectionEnum):
+            self.direction = FlowDirectionEnum(self.direction)
+
+        if self.protocol is not None and not isinstance(self.protocol, str):
+            self.protocol = str(self.protocol)
+
+        if self.protocol_version is not None and not isinstance(self.protocol_version, str):
+            self.protocol_version = str(self.protocol_version)
+
+        if self.binding_ref is not None and not isinstance(self.binding_ref, URIorCURIE):
+            self.binding_ref = URIorCURIE(self.binding_ref)
+
+        if self.location_uri is not None and not isinstance(self.location_uri, URI):
+            self.location_uri = URI(self.location_uri)
+
+        if self.region is not None and not isinstance(self.region, str):
+            self.region = str(self.region)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class DataContainer(TechnicalAsset):
+    """
+    Контейнер других активов (database, schema, bucket, broker, directory, cluster). Данных не несёт: structure_ref и
+    data_format отсутствуют.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["DataContainer"]
+    class_class_curie: ClassVar[str] = "dams:DataContainer"
+    class_name: ClassVar[str] = "DataContainer"
+    class_model_uri: ClassVar[URIRef] = DAMS.DataContainer
+
+    element_id: Union[str, DataContainerElementId] = None
+    name: str = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    asset_namespace: str = None
+    qualified_name: str = None
+    native_name: str = None
+    system_ref: Union[str, ITSystemRegistryId] = None
+    description: str = None
+    asset_kind: Union[str, "DataContainerKindEnum"] = None
+    direction: Optional[Union[str, "FlowDirectionEnum"]] = None
+    containment_kind: Optional[Union[str, "ContainmentKindEnum"]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, DataContainerElementId):
+            self.element_id = DataContainerElementId(self.element_id)
+
+        if self._is_empty(self.asset_kind):
+            self.MissingRequiredField("asset_kind")
+        if not isinstance(self.asset_kind, DataContainerKindEnum):
+            self.asset_kind = DataContainerKindEnum(self.asset_kind)
+
+        if self.direction is not None and not isinstance(self.direction, FlowDirectionEnum):
+            self.direction = FlowDirectionEnum(self.direction)
+
+        if self.containment_kind is not None and not isinstance(self.containment_kind, ContainmentKindEnum):
+            self.containment_kind = ContainmentKindEnum(self.containment_kind)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class ExecutionAsset(TechnicalAsset):
+    """
+    Исполняемый актив (pipeline / job) с минимальной lineage-ролью.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["ExecutionAsset"]
+    class_class_curie: ClassVar[str] = "dams:ExecutionAsset"
+    class_name: ClassVar[str] = "ExecutionAsset"
+    class_model_uri: ClassVar[URIRef] = DAMS.ExecutionAsset
+
+    element_id: Union[str, ExecutionAssetElementId] = None
+    name: str = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    asset_namespace: str = None
+    qualified_name: str = None
+    native_name: str = None
+    system_ref: Union[str, ITSystemRegistryId] = None
+    description: str = None
+    asset_kind: Union[str, "ExecutionAssetKindEnum"] = None
+    produces_refs: Optional[Union[Union[str, TechnicalAssetElementId], list[Union[str, TechnicalAssetElementId]]]] = empty_list()
+    consumes_refs: Optional[Union[Union[str, TechnicalAssetElementId], list[Union[str, TechnicalAssetElementId]]]] = empty_list()
+    direction: Optional[Union[str, "FlowDirectionEnum"]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, ExecutionAssetElementId):
+            self.element_id = ExecutionAssetElementId(self.element_id)
+
+        if self._is_empty(self.asset_kind):
+            self.MissingRequiredField("asset_kind")
+        if not isinstance(self.asset_kind, ExecutionAssetKindEnum):
+            self.asset_kind = ExecutionAssetKindEnum(self.asset_kind)
+
+        if not isinstance(self.produces_refs, list):
+            self.produces_refs = [self.produces_refs] if self.produces_refs is not None else []
+        self.produces_refs = [v if isinstance(v, TechnicalAssetElementId) else TechnicalAssetElementId(v) for v in self.produces_refs]
+
+        if not isinstance(self.consumes_refs, list):
+            self.consumes_refs = [self.consumes_refs] if self.consumes_refs is not None else []
+        self.consumes_refs = [v if isinstance(v, TechnicalAssetElementId) else TechnicalAssetElementId(v) for v in self.consumes_refs]
+
+        if self.direction is not None and not isinstance(self.direction, FlowDirectionEnum):
+            self.direction = FlowDirectionEnum(self.direction)
 
         super().__post_init__(**kwargs)
 
@@ -2426,7 +2805,7 @@ class DataFlow(ModelElement):
 @dataclass(repr=False)
 class DataFlowEntityBinding(ModelElement):
     """
-    Связь потока с логическими сущностями, атрибутами и физическими объектами модели решения.
+    Связь потока с логическими сущностями, атрибутами и носителями данных модели решения.
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -2442,11 +2821,11 @@ class DataFlowEntityBinding(ModelElement):
     flow_ref: Union[str, DataFlowElementId] = None
     source_model_ref: Union[str, URI] = None
     logical_entity_ref: Union[str, LogicalEntityElementId] = None
-    direction: Union[str, "FlowDirectionEnum"] = None
     logical_attribute_refs: Optional[Union[Union[str, LogicalAttributeElementId], list[Union[str, LogicalAttributeElementId]]]] = empty_list()
-    physical_object_refs: Optional[Union[Union[str, PhysicalObjectElementId], list[Union[str, PhysicalObjectElementId]]]] = empty_list()
+    carrier_refs: Optional[Union[Union[str, DataCarrierElementId], list[Union[str, DataCarrierElementId]]]] = empty_list()
     physical_field_refs: Optional[Union[Union[str, PhysicalFieldElementId], list[Union[str, PhysicalFieldElementId]]]] = empty_list()
     transformation_mapping_refs: Optional[Union[Union[str, MappingElementId], list[Union[str, MappingElementId]]]] = empty_list()
+    direction: Optional[Union[str, "FlowDirectionEnum"]] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
@@ -2469,18 +2848,13 @@ class DataFlowEntityBinding(ModelElement):
         if not isinstance(self.logical_entity_ref, LogicalEntityElementId):
             self.logical_entity_ref = LogicalEntityElementId(self.logical_entity_ref)
 
-        if self._is_empty(self.direction):
-            self.MissingRequiredField("direction")
-        if not isinstance(self.direction, FlowDirectionEnum):
-            self.direction = FlowDirectionEnum(self.direction)
-
         if not isinstance(self.logical_attribute_refs, list):
             self.logical_attribute_refs = [self.logical_attribute_refs] if self.logical_attribute_refs is not None else []
         self.logical_attribute_refs = [v if isinstance(v, LogicalAttributeElementId) else LogicalAttributeElementId(v) for v in self.logical_attribute_refs]
 
-        if not isinstance(self.physical_object_refs, list):
-            self.physical_object_refs = [self.physical_object_refs] if self.physical_object_refs is not None else []
-        self.physical_object_refs = [v if isinstance(v, PhysicalObjectElementId) else PhysicalObjectElementId(v) for v in self.physical_object_refs]
+        if not isinstance(self.carrier_refs, list):
+            self.carrier_refs = [self.carrier_refs] if self.carrier_refs is not None else []
+        self.carrier_refs = [v if isinstance(v, DataCarrierElementId) else DataCarrierElementId(v) for v in self.carrier_refs]
 
         if not isinstance(self.physical_field_refs, list):
             self.physical_field_refs = [self.physical_field_refs] if self.physical_field_refs is not None else []
@@ -2489,6 +2863,9 @@ class DataFlowEntityBinding(ModelElement):
         if not isinstance(self.transformation_mapping_refs, list):
             self.transformation_mapping_refs = [self.transformation_mapping_refs] if self.transformation_mapping_refs is not None else []
         self.transformation_mapping_refs = [v if isinstance(v, MappingElementId) else MappingElementId(v) for v in self.transformation_mapping_refs]
+
+        if self.direction is not None and not isinstance(self.direction, FlowDirectionEnum):
+            self.direction = FlowDirectionEnum(self.direction)
 
         super().__post_init__(**kwargs)
 
@@ -2664,7 +3041,7 @@ class SelectedEntity(ModelElement):
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     logical_entity_ref: Union[str, LogicalEntityElementId] = None
     selected_attributes: Optional[Union[dict[Union[str, SelectedAttributeElementId], Union[dict, "SelectedAttribute"]], list[Union[dict, "SelectedAttribute"]]]] = empty_dict()
-    physical_object_refs: Optional[Union[Union[str, PhysicalObjectElementId], list[Union[str, PhysicalObjectElementId]]]] = empty_list()
+    carrier_refs: Optional[Union[Union[str, DataCarrierElementId], list[Union[str, DataCarrierElementId]]]] = empty_list()
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
@@ -2679,9 +3056,9 @@ class SelectedEntity(ModelElement):
 
         self._normalize_inlined_as_list(slot_name="selected_attributes", slot_type=SelectedAttribute, key_name="element_id", keyed=True)
 
-        if not isinstance(self.physical_object_refs, list):
-            self.physical_object_refs = [self.physical_object_refs] if self.physical_object_refs is not None else []
-        self.physical_object_refs = [v if isinstance(v, PhysicalObjectElementId) else PhysicalObjectElementId(v) for v in self.physical_object_refs]
+        if not isinstance(self.carrier_refs, list):
+            self.carrier_refs = [self.carrier_refs] if self.carrier_refs is not None else []
+        self.carrier_refs = [v if isinstance(v, DataCarrierElementId) else DataCarrierElementId(v) for v in self.carrier_refs]
 
         super().__post_init__(**kwargs)
 
@@ -3457,27 +3834,6 @@ class LogicalDataTypeEnum(EnumDefinitionImpl):
         name="LogicalDataTypeEnum",
     )
 
-class PhysicalObjectKindEnum(EnumDefinitionImpl):
-
-    database = PermissibleValue(text="database")
-    schema = PermissibleValue(text="schema")
-    table = PermissibleValue(text="table")
-    view = PermissibleValue(text="view")
-    column = PermissibleValue(text="column")
-    api = PermissibleValue(text="api")
-    endpoint = PermissibleValue(text="endpoint")
-    payload = PermissibleValue(text="payload")
-    topic = PermissibleValue(text="topic")
-    queue = PermissibleValue(text="queue")
-    message = PermissibleValue(text="message")
-    file = PermissibleValue(text="file")
-    dataset = PermissibleValue(text="dataset")
-    pipeline = PermissibleValue(text="pipeline")
-
-    _defn = EnumDefinition(
-        name="PhysicalObjectKindEnum",
-    )
-
 class FlowDirectionEnum(EnumDefinitionImpl):
 
     inbound = PermissibleValue(text="inbound")
@@ -3531,8 +3887,8 @@ class IntegrationLevelEnum(EnumDefinitionImpl):
 
 class MappingTypeEnum(EnumDefinitionImpl):
     """
-    Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = PhysicalObject ↔
-    LogicalEntity; field_mapping = mapsTo (physical field ↔ logical attribute); aligns_with = enterprise conceptual ↔
+    Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = DataCarrier ↔
+    LogicalEntity; field_mapping = mapsTo (PhysicalField ↔ LogicalAttribute); aligns_with = enterprise conceptual ↔
     external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).
     """
     semantic_equivalence = PermissibleValue(text="semantic_equivalence")
@@ -3540,7 +3896,7 @@ class MappingTypeEnum(EnumDefinitionImpl):
     implementation = PermissibleValue(text="implementation")
     entity_physical = PermissibleValue(
         text="entity_physical",
-        description="""Explicit entity-level link between PhysicalObject and LogicalEntity (PDM-003). Do not infer from field_mapping alone.""")
+        description="""Explicit entity-level link between DataCarrier and LogicalEntity (PDM-003). Do not infer from field_mapping alone.""")
     field_mapping = PermissibleValue(
         text="field_mapping",
         description="Technical/structural mapsTo between physical and logical.")
@@ -3556,7 +3912,7 @@ class MappingTypeEnum(EnumDefinitionImpl):
 
     _defn = EnumDefinition(
         name="MappingTypeEnum",
-        description="""Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = PhysicalObject ↔ LogicalEntity; field_mapping = mapsTo (physical field ↔ logical attribute); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).""",
+        description="""Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = DataCarrier ↔ LogicalEntity; field_mapping = mapsTo (PhysicalField ↔ LogicalAttribute); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).""",
     )
 
 class ImplementationProfileEnum(EnumDefinitionImpl):
@@ -3802,6 +4158,78 @@ class CheckSeverityEnum(EnumDefinitionImpl):
         name="CheckSeverityEnum",
     )
 
+class DataCarrierKindEnum(EnumDefinitionImpl):
+
+    relational_table = PermissibleValue(text="relational_table")
+    relational_view = PermissibleValue(text="relational_view")
+    file = PermissibleValue(text="file")
+    dataset = PermissibleValue(text="dataset")
+    stream_topic = PermissibleValue(text="stream_topic")
+    stream_queue = PermissibleValue(text="stream_queue")
+    message_type = PermissibleValue(
+        text="message_type",
+        description="Transitional; будет заменён Message/DataStructure (ADR-C).")
+    in_memory = PermissibleValue(text="in_memory")
+    api_resource = PermissibleValue(text="api_resource")
+    other = PermissibleValue(text="other")
+
+    _defn = EnumDefinition(
+        name="DataCarrierKindEnum",
+    )
+
+class AccessPointKindEnum(EnumDefinitionImpl):
+
+    interface = PermissibleValue(text="interface")
+    operation = PermissibleValue(text="operation")
+    channel = PermissibleValue(text="channel")
+
+    _defn = EnumDefinition(
+        name="AccessPointKindEnum",
+    )
+
+class DataContainerKindEnum(EnumDefinitionImpl):
+
+    database = PermissibleValue(text="database")
+    schema = PermissibleValue(text="schema")
+    bucket = PermissibleValue(text="bucket")
+    broker = PermissibleValue(text="broker")
+    directory = PermissibleValue(text="directory")
+    cluster = PermissibleValue(text="cluster")
+
+    _defn = EnumDefinition(
+        name="DataContainerKindEnum",
+    )
+
+class ExecutionAssetKindEnum(EnumDefinitionImpl):
+
+    pipeline = PermissibleValue(text="pipeline")
+    job = PermissibleValue(text="job")
+
+    _defn = EnumDefinition(
+        name="ExecutionAssetKindEnum",
+    )
+
+class LineageRoleEnum(EnumDefinitionImpl):
+
+    source = PermissibleValue(text="source")
+    sink = PermissibleValue(text="sink")
+    intermediate = PermissibleValue(text="intermediate")
+    none = PermissibleValue(text="none")
+
+    _defn = EnumDefinition(
+        name="LineageRoleEnum",
+    )
+
+class ContainmentKindEnum(EnumDefinitionImpl):
+
+    composite = PermissibleValue(text="composite")
+    partitioned = PermissibleValue(text="partitioned")
+    hierarchical = PermissibleValue(text="hierarchical")
+
+    _defn = EnumDefinition(
+        name="ContainmentKindEnum",
+    )
+
 # Slots
 class slots:
     pass
@@ -4025,11 +4453,23 @@ slots.logical_entities = Slot(uri=DAMS.logical_entities, name="logical_entities"
 slots.relationships = Slot(uri=DAMS.relationships, name="relationships", curie=DAMS.curie('relationships'),
                    model_uri=DAMS.relationships, domain=None, range=Optional[Union[dict[Union[str, RelationshipElementId], Union[dict, Relationship]], list[Union[dict, Relationship]]]])
 
-slots.physical_objects = Slot(uri=DAMS.physical_objects, name="physical_objects", curie=DAMS.curie('physical_objects'),
-                   model_uri=DAMS.physical_objects, domain=None, range=Optional[Union[dict[Union[str, PhysicalObjectElementId], Union[dict, PhysicalObject]], list[Union[dict, PhysicalObject]]]])
-
 slots.mappings = Slot(uri=DAMS.mappings, name="mappings", curie=DAMS.curie('mappings'),
                    model_uri=DAMS.mappings, domain=None, range=Optional[Union[dict[Union[str, MappingElementId], Union[dict, Mapping]], list[Union[dict, Mapping]]]])
+
+slots.data_carriers = Slot(uri=DAMS.data_carriers, name="data_carriers", curie=DAMS.curie('data_carriers'),
+                   model_uri=DAMS.data_carriers, domain=None, range=Optional[Union[dict[Union[str, DataCarrierElementId], Union[dict, DataCarrier]], list[Union[dict, DataCarrier]]]])
+
+slots.access_points = Slot(uri=DAMS.access_points, name="access_points", curie=DAMS.curie('access_points'),
+                   model_uri=DAMS.access_points, domain=None, range=Optional[Union[dict[Union[str, AccessPointElementId], Union[dict, AccessPoint]], list[Union[dict, AccessPoint]]]])
+
+slots.data_containers = Slot(uri=DAMS.data_containers, name="data_containers", curie=DAMS.curie('data_containers'),
+                   model_uri=DAMS.data_containers, domain=None, range=Optional[Union[dict[Union[str, DataContainerElementId], Union[dict, DataContainer]], list[Union[dict, DataContainer]]]])
+
+slots.execution_assets = Slot(uri=DAMS.execution_assets, name="execution_assets", curie=DAMS.curie('execution_assets'),
+                   model_uri=DAMS.execution_assets, domain=None, range=Optional[Union[dict[Union[str, ExecutionAssetElementId], Union[dict, ExecutionAsset]], list[Union[dict, ExecutionAsset]]]])
+
+slots.carrier_ref = Slot(uri=DAMS.carrier_ref, name="carrier_ref", curie=DAMS.curie('carrier_ref'),
+                   model_uri=DAMS.carrier_ref, domain=None, range=Union[str, DataCarrierElementId])
 
 slots.domain_ref = Slot(uri=DAMS.domain_ref, name="domain_ref", curie=DAMS.curie('domain_ref'),
                    model_uri=DAMS.domain_ref, domain=None, range=Union[str, BusinessDomainRegistryId])
@@ -4226,26 +4666,17 @@ slots.associative = Slot(uri=DAMS.associative, name="associative", curie=DAMS.cu
 slots.system_ref = Slot(uri=DAMS.system_ref, name="system_ref", curie=DAMS.curie('system_ref'),
                    model_uri=DAMS.system_ref, domain=None, range=Union[str, ITSystemRegistryId])
 
-slots.object_kind = Slot(uri=DAMS.object_kind, name="object_kind", curie=DAMS.curie('object_kind'),
-                   model_uri=DAMS.object_kind, domain=None, range=Union[str, "PhysicalObjectKindEnum"])
-
 slots.qualified_name = Slot(uri=DAMS.qualified_name, name="qualified_name", curie=DAMS.curie('qualified_name'),
                    model_uri=DAMS.qualified_name, domain=None, range=str)
 
 slots.technology = Slot(uri=DAMS.technology, name="technology", curie=DAMS.curie('technology'),
-                   model_uri=DAMS.technology, domain=None, range=str)
-
-slots.native_schema_ref = Slot(uri=DAMS.native_schema_ref, name="native_schema_ref", curie=DAMS.curie('native_schema_ref'),
-                   model_uri=DAMS.native_schema_ref, domain=None, range=Union[str, URI])
+                   model_uri=DAMS.technology, domain=None, range=Optional[str])
 
 slots.direction = Slot(uri=DAMS.direction, name="direction", curie=DAMS.curie('direction'),
-                   model_uri=DAMS.direction, domain=None, range=Union[str, "FlowDirectionEnum"])
+                   model_uri=DAMS.direction, domain=None, range=Optional[Union[str, "FlowDirectionEnum"]])
 
 slots.physical_fields = Slot(uri=DAMS.physical_fields, name="physical_fields", curie=DAMS.curie('physical_fields'),
                    model_uri=DAMS.physical_fields, domain=None, range=Optional[Union[dict[Union[str, PhysicalFieldElementId], Union[dict, PhysicalField]], list[Union[dict, PhysicalField]]]])
-
-slots.physical_object_ref = Slot(uri=DAMS.physical_object_ref, name="physical_object_ref", curie=DAMS.curie('physical_object_ref'),
-                   model_uri=DAMS.physical_object_ref, domain=None, range=Union[str, PhysicalObjectElementId])
 
 slots.native_name = Slot(uri=DAMS.native_name, name="native_name", curie=DAMS.curie('native_name'),
                    model_uri=DAMS.native_name, domain=None, range=str)
@@ -4279,6 +4710,66 @@ slots.transformation_expression = Slot(uri=DAMS.transformation_expression, name=
 
 slots.confidence = Slot(uri=DAMS.confidence, name="confidence", curie=DAMS.curie('confidence'),
                    model_uri=DAMS.confidence, domain=None, range=Optional[Decimal])
+
+slots.asset_namespace = Slot(uri=DAMS.asset_namespace, name="asset_namespace", curie=DAMS.curie('asset_namespace'),
+                   model_uri=DAMS.asset_namespace, domain=None, range=str)
+
+slots.parent_ref = Slot(uri=DAMS.parent_ref, name="parent_ref", curie=DAMS.curie('parent_ref'),
+                   model_uri=DAMS.parent_ref, domain=None, range=Optional[Union[str, TechnicalAssetElementId]])
+
+slots.asset_kind = Slot(uri=DAMS.asset_kind, name="asset_kind", curie=DAMS.curie('asset_kind'),
+                   model_uri=DAMS.asset_kind, domain=None, range=str)
+
+slots.lineage_role = Slot(uri=DAMS.lineage_role, name="lineage_role", curie=DAMS.curie('lineage_role'),
+                   model_uri=DAMS.lineage_role, domain=None, range=Optional[Union[str, "LineageRoleEnum"]])
+
+slots.structure_ref = Slot(uri=DAMS.structure_ref, name="structure_ref", curie=DAMS.curie('structure_ref'),
+                   model_uri=DAMS.structure_ref, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.schema_dialect = Slot(uri=DAMS.schema_dialect, name="schema_dialect", curie=DAMS.curie('schema_dialect'),
+                   model_uri=DAMS.schema_dialect, domain=None, range=Optional[str])
+
+slots.data_format = Slot(uri=DAMS.data_format, name="data_format", curie=DAMS.curie('data_format'),
+                   model_uri=DAMS.data_format, domain=None, range=Optional[str])
+
+slots.protocol = Slot(uri=DAMS.protocol, name="protocol", curie=DAMS.curie('protocol'),
+                   model_uri=DAMS.protocol, domain=None, range=Optional[str])
+
+slots.protocol_version = Slot(uri=DAMS.protocol_version, name="protocol_version", curie=DAMS.curie('protocol_version'),
+                   model_uri=DAMS.protocol_version, domain=None, range=Optional[str])
+
+slots.binding_ref = Slot(uri=DAMS.binding_ref, name="binding_ref", curie=DAMS.curie('binding_ref'),
+                   model_uri=DAMS.binding_ref, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.containment_kind = Slot(uri=DAMS.containment_kind, name="containment_kind", curie=DAMS.curie('containment_kind'),
+                   model_uri=DAMS.containment_kind, domain=None, range=Optional[Union[str, "ContainmentKindEnum"]])
+
+slots.location_uri = Slot(uri=DAMS.location_uri, name="location_uri", curie=DAMS.curie('location_uri'),
+                   model_uri=DAMS.location_uri, domain=None, range=Optional[Union[str, URI]])
+
+slots.region = Slot(uri=DAMS.region, name="region", curie=DAMS.curie('region'),
+                   model_uri=DAMS.region, domain=None, range=Optional[str])
+
+slots.serves_refs = Slot(uri=DAMS.serves_refs, name="serves_refs", curie=DAMS.curie('serves_refs'),
+                   model_uri=DAMS.serves_refs, domain=None, range=Optional[Union[Union[str, DataCarrierElementId], list[Union[str, DataCarrierElementId]]]])
+
+slots.interface_ref = Slot(uri=DAMS.interface_ref, name="interface_ref", curie=DAMS.curie('interface_ref'),
+                   model_uri=DAMS.interface_ref, domain=None, range=Optional[Union[str, AccessPointElementId]])
+
+slots.operation_name = Slot(uri=DAMS.operation_name, name="operation_name", curie=DAMS.curie('operation_name'),
+                   model_uri=DAMS.operation_name, domain=None, range=Optional[str])
+
+slots.http_method = Slot(uri=DAMS.http_method, name="http_method", curie=DAMS.curie('http_method'),
+                   model_uri=DAMS.http_method, domain=None, range=Optional[str])
+
+slots.path_template = Slot(uri=DAMS.path_template, name="path_template", curie=DAMS.curie('path_template'),
+                   model_uri=DAMS.path_template, domain=None, range=Optional[str])
+
+slots.produces_refs = Slot(uri=DAMS.produces_refs, name="produces_refs", curie=DAMS.curie('produces_refs'),
+                   model_uri=DAMS.produces_refs, domain=None, range=Optional[Union[Union[str, TechnicalAssetElementId], list[Union[str, TechnicalAssetElementId]]]])
+
+slots.consumes_refs = Slot(uri=DAMS.consumes_refs, name="consumes_refs", curie=DAMS.curie('consumes_refs'),
+                   model_uri=DAMS.consumes_refs, domain=None, range=Optional[Union[Union[str, TechnicalAssetElementId], list[Union[str, TechnicalAssetElementId]]]])
 
 slots.integration_ref = Slot(uri=DAMS.integration_ref, name="integration_ref", curie=DAMS.curie('integration_ref'),
                    model_uri=DAMS.integration_ref, domain=None, range=Union[str, IntegrationReferenceRegistryId])
@@ -4331,8 +4822,8 @@ slots.logical_entity_ref = Slot(uri=DAMS.logical_entity_ref, name="logical_entit
 slots.logical_attribute_refs = Slot(uri=DAMS.logical_attribute_refs, name="logical_attribute_refs", curie=DAMS.curie('logical_attribute_refs'),
                    model_uri=DAMS.logical_attribute_refs, domain=None, range=Optional[Union[Union[str, LogicalAttributeElementId], list[Union[str, LogicalAttributeElementId]]]])
 
-slots.physical_object_refs = Slot(uri=DAMS.physical_object_refs, name="physical_object_refs", curie=DAMS.curie('physical_object_refs'),
-                   model_uri=DAMS.physical_object_refs, domain=None, range=Optional[Union[Union[str, PhysicalObjectElementId], list[Union[str, PhysicalObjectElementId]]]])
+slots.carrier_refs = Slot(uri=DAMS.carrier_refs, name="carrier_refs", curie=DAMS.curie('carrier_refs'),
+                   model_uri=DAMS.carrier_refs, domain=None, range=Optional[Union[Union[str, DataCarrierElementId], list[Union[str, DataCarrierElementId]]]])
 
 slots.physical_field_refs = Slot(uri=DAMS.physical_field_refs, name="physical_field_refs", curie=DAMS.curie('physical_field_refs'),
                    model_uri=DAMS.physical_field_refs, domain=None, range=Optional[Union[Union[str, PhysicalFieldElementId], list[Union[str, PhysicalFieldElementId]]]])
@@ -4490,6 +4981,45 @@ slots.LogicalAttribute_description = Slot(uri=DAMS.description, name="LogicalAtt
 
 slots.RelationTerm_description = Slot(uri=DAMS.description, name="RelationTerm_description", curie=DAMS.curie('description'),
                    model_uri=DAMS.RelationTerm_description, domain=RelationTerm, range=str)
+
+slots.TechnicalAsset_description = Slot(uri=DAMS.description, name="TechnicalAsset_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.TechnicalAsset_description, domain=TechnicalAsset, range=str)
+
+slots.TechnicalAsset_qualified_name = Slot(uri=DAMS.qualified_name, name="TechnicalAsset_qualified_name", curie=DAMS.curie('qualified_name'),
+                   model_uri=DAMS.TechnicalAsset_qualified_name, domain=TechnicalAsset, range=str)
+
+slots.TechnicalAsset_system_ref = Slot(uri=DAMS.system_ref, name="TechnicalAsset_system_ref", curie=DAMS.curie('system_ref'),
+                   model_uri=DAMS.TechnicalAsset_system_ref, domain=TechnicalAsset, range=Union[str, ITSystemRegistryId])
+
+slots.TechnicalAsset_native_name = Slot(uri=DAMS.native_name, name="TechnicalAsset_native_name", curie=DAMS.curie('native_name'),
+                   model_uri=DAMS.TechnicalAsset_native_name, domain=TechnicalAsset, range=str)
+
+slots.TechnicalAsset_technology = Slot(uri=DAMS.technology, name="TechnicalAsset_technology", curie=DAMS.curie('technology'),
+                   model_uri=DAMS.TechnicalAsset_technology, domain=TechnicalAsset, range=Optional[str])
+
+slots.TechnicalAsset_direction = Slot(uri=DAMS.direction, name="TechnicalAsset_direction", curie=DAMS.curie('direction'),
+                   model_uri=DAMS.TechnicalAsset_direction, domain=TechnicalAsset, range=Optional[Union[str, "FlowDirectionEnum"]])
+
+slots.DataCarrier_asset_kind = Slot(uri=DAMS.asset_kind, name="DataCarrier_asset_kind", curie=DAMS.curie('asset_kind'),
+                   model_uri=DAMS.DataCarrier_asset_kind, domain=DataCarrier, range=Union[str, "DataCarrierKindEnum"])
+
+slots.AccessPoint_asset_kind = Slot(uri=DAMS.asset_kind, name="AccessPoint_asset_kind", curie=DAMS.curie('asset_kind'),
+                   model_uri=DAMS.AccessPoint_asset_kind, domain=AccessPoint, range=Union[str, "AccessPointKindEnum"])
+
+slots.AccessPoint_direction = Slot(uri=DAMS.direction, name="AccessPoint_direction", curie=DAMS.curie('direction'),
+                   model_uri=DAMS.AccessPoint_direction, domain=AccessPoint, range=Optional[Union[str, "FlowDirectionEnum"]])
+
+slots.DataContainer_asset_kind = Slot(uri=DAMS.asset_kind, name="DataContainer_asset_kind", curie=DAMS.curie('asset_kind'),
+                   model_uri=DAMS.DataContainer_asset_kind, domain=DataContainer, range=Union[str, "DataContainerKindEnum"])
+
+slots.DataContainer_direction = Slot(uri=DAMS.direction, name="DataContainer_direction", curie=DAMS.curie('direction'),
+                   model_uri=DAMS.DataContainer_direction, domain=DataContainer, range=Optional[Union[str, "FlowDirectionEnum"]])
+
+slots.ExecutionAsset_asset_kind = Slot(uri=DAMS.asset_kind, name="ExecutionAsset_asset_kind", curie=DAMS.curie('asset_kind'),
+                   model_uri=DAMS.ExecutionAsset_asset_kind, domain=ExecutionAsset, range=Union[str, "ExecutionAssetKindEnum"])
+
+slots.ExecutionAsset_direction = Slot(uri=DAMS.direction, name="ExecutionAsset_direction", curie=DAMS.curie('direction'),
+                   model_uri=DAMS.ExecutionAsset_direction, domain=ExecutionAsset, range=Optional[Union[str, "FlowDirectionEnum"]])
 
 slots.SpecificationRequirement_lifecycle_status = Slot(uri=DAMS.lifecycle_status, name="SpecificationRequirement_lifecycle_status", curie=DAMS.curie('lifecycle_status'),
                    model_uri=DAMS.SpecificationRequirement_lifecycle_status, domain=SpecificationRequirement, range=Union[str, "RequirementLifecycleStatus"])

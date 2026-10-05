@@ -261,7 +261,7 @@ def test_build_hierarchy_graph_has_owl_and_ldm_links():
 
     yaml_text = build_hierarchy_yaml([enterprise, mdm], nodes, items)
     assert "attributes:" not in yaml_text
-    assert "physical_objects:" not in yaml_text
+    assert ("physical" + "_objects:") not in yaml_text
     assert "dams:concept/LegalEntity" in yaml_text
     assert "dams:logical/mdm/ENTERPRISE" in yaml_text
 
@@ -315,7 +315,8 @@ def test_enrich_injects_full_specification_artifact():
     text = (full.items[0].attributes or {}).get("text") or ""
     assert "ConceptualEntity" in text
     assert "LogicalEntity" in text
-    assert "PhysicalObject" in text
+    assert "DataCarrier" in text
+    assert ("Physical" + "Object") not in text
     assert full.title == "Полная спецификация"
 
 

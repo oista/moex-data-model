@@ -10,6 +10,7 @@ imports:
   - moex-types
   - moex-registries
   - moex-governance
+  - moex-technical
 default_prefix: dams
 default_range: string
 
@@ -52,7 +53,10 @@ classes:
       - logical_entities
       - relationships
       - relation_terms
-      - physical_objects
+      - data_carriers
+      - access_points
+      - data_containers
+      - execution_assets
       - mappings
 
   DomainContext:
@@ -206,34 +210,17 @@ classes:
       - external_specification_ref
       - selection_ref
 
-  PhysicalObject:
-    is_a: ModelElement
-    mixins:
-      - HasOwnership
-      - HasGovernanceClassification
-      - HasPolicyBindings
-    description: Квант данных или техническая точка публикации/потребления.
-    slots:
-      - solution_ref
-      - system_ref
-      - object_kind
-      - qualified_name
-      - technology
-      - native_schema_ref
-      - direction
-      - physical_fields
-      - mapping_coverage_status
-      - mapping_rationale
-
   PhysicalField:
     is_a: ModelElement
     mixins:
       - HasOwnership
       - HasGovernanceClassification
       - HasPolicyBindings
-    description: Поле физического объекта; его семантика задаётся Mapping к LogicalAttribute.
+    description: >
+      Поле носителя данных (DataCarrier); семантика задаётся Mapping к
+      LogicalAttribute.
     slots:
-      - physical_object_ref
+      - carrier_ref
       - native_name
       - native_type
       - required
@@ -249,9 +236,9 @@ classes:
     description: >
       Явное соответствие между элементами. Discriminate via mapping_type:
       realizes (solution→enterprise conceptual), entity_physical
-      (PhysicalObject↔LogicalEntity), field_mapping/mapsTo
-      (physical↔logical), aligns_with (enterprise↔external term). Not used
-      for SpecImpl implements/conforms_to.
+      (DataCarrier↔LogicalEntity), field_mapping/mapsTo
+      (PhysicalField↔LogicalAttribute), aligns_with (enterprise↔external term).
+      Not used for SpecImpl implements/conforms_to.
     slots:
       - source_refs
       - target_refs
@@ -332,16 +319,40 @@ slots:
     multivalued: true
     inlined: true
     inlined_as_list: true
-  physical_objects:
-    range: PhysicalObject
-    multivalued: true
-    inlined: true
-    inlined_as_list: true
   mappings:
     range: Mapping
     multivalued: true
     inlined: true
     inlined_as_list: true
+  data_carriers:
+    range: DataCarrier
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Коллекция носителей данных пакета (Variant B, ADR-031).
+  access_points:
+    range: AccessPoint
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Коллекция точек доступа пакета (Variant B, ADR-031).
+  data_containers:
+    range: DataContainer
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Коллекция контейнеров пакета (Variant B, ADR-031).
+  execution_assets:
+    range: ExecutionAsset
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Коллекция исполняемых активов пакета (Variant B, ADR-031).
+  carrier_ref:
+    range: DataCarrier
+    inlined: false
+    required: true
+    description: Носитель данных, которому принадлежит поле.
   domain_ref:
     range: BusinessDomain
     inlined: false
@@ -579,30 +590,18 @@ slots:
     range: ITSystem
     inlined: false
     required: true
-  object_kind:
-    range: PhysicalObjectKindEnum
-    required: true
   qualified_name:
     range: string
     required: true
   technology:
     range: string
-    required: true
-  native_schema_ref:
-    range: uri
-    required: true
   direction:
     range: FlowDirectionEnum
-    required: true
   physical_fields:
     range: PhysicalField
     multivalued: true
     inlined: true
     inlined_as_list: true
-  physical_object_ref:
-    range: PhysicalObject
-    inlined: false
-    required: true
   native_name:
     range: string
     required: true

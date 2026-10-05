@@ -76,9 +76,9 @@ package "DAMS body" #D9EAD3 {
     +source_entity_ref : uriorcurie [1]
     +target_entity_ref : uriorcurie [1]
   }
-  class PhysicalObject {
+  class DataCarrier {
     +system_ref : ITSystem [1]
-    +object_kind : PhysicalObjectKindEnum [1]
+    +asset_kind : DataCarrierKindEnum [1]
     +qualified_name : string [1]
     +technology : string [1]
     +native_schema_ref : uri [1]
@@ -147,7 +147,7 @@ package "Интеграции и контрактные bindings" #D0E0E3 {
     +source_model_ref : uri [1]
     +logical_entity_ref : LogicalEntity [1]
     +logical_attribute_refs : LogicalAttribute [1..*]
-    +physical_object_refs : PhysicalObject [1..*]
+    +carrier_refs : DataCarrier [1..*]
     +physical_field_refs : PhysicalField [0..*]
     +transformation_mapping_refs : Mapping [0..*]
     +direction : FlowDirectionEnum [0..1]
@@ -180,15 +180,15 @@ MOEXModelRepository "1" *-- "0..*" PolicyBinding : policy_bindings
 ModelPackage "1" *-- "0..*" DomainContext : domain_contexts
 ModelPackage "1" *-- "0..*" LogicalEntity : logical_entities
 ModelPackage "1" *-- "0..*" Relationship : relationships
-ModelPackage "1" *-- "0..*" PhysicalObject : physical_objects
+ModelPackage "1" *-- "0..*" DataCarrier : data_carriers
 ModelPackage "1" *-- "0..*" Mapping : mappings
 ModelPackage "0..*" --> "0..1" ITSolution : solution_ref
 
 DomainContext "1" <-- "0..*" LogicalEntity : context_ref
 LogicalEntity "1" *-- "0..*" LogicalAttribute : attributes
 Relationship "0..*" --> "1" LogicalEntity : source/target
-PhysicalObject "0..*" --> "1" ITSystem : system_ref
-PhysicalObject "1" *-- "0..*" PhysicalField : physical_fields
+DataCarrier "0..*" --> "1" ITSystem : system_ref
+DataCarrier "1" *-- "0..*" PhysicalField : physical_fields
 
 RegistryEntry <|-- ITPlatform
 RegistryEntry <|-- ITSolution
@@ -205,7 +205,7 @@ PolicyBinding "0..*" --> "1" ModelElement : policy_target_ref
 
 DataFlow "1" *-- "0..*" DataFlowEntityBinding : entity_bindings
 DataFlowEntityBinding "0..*" --> "1" LogicalEntity : logical_entity_ref
-DataFlowEntityBinding "0..*" --> "1..*" PhysicalObject : physical_object_refs
+DataFlowEntityBinding "0..*" --> "1..*" DataCarrier : carrier_refs
 DataFlowEntityBinding "0..*" --> "0..*" Mapping : transformation_mapping_refs
 
 DataModelBinding "1" *-- "1..*" ModelSelection : selections
@@ -222,7 +222,7 @@ ModelElement <|-- ModelPackage
 ModelElement <|-- LogicalEntity
 ModelElement <|-- LogicalAttribute
 ModelElement <|-- Relationship
-ModelElement <|-- PhysicalObject
+ModelElement <|-- DataCarrier
 ModelElement <|-- PhysicalField
 ModelElement <|-- Mapping
 ModelElement <|-- DomainContext

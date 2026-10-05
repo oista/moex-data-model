@@ -11,7 +11,7 @@ class NodeKind(str, Enum):
     PACKAGE = "package"
     CONCEPTUAL_ENTITY = "conceptual_entity"
     LOGICAL_ENTITY = "logical_entity"
-    PHYSICAL_OBJECT = "physical_object"
+    TECHNICAL_ASSET = "technical_asset"
     DOMAIN_CONTEXT = "domain_context"
     MAPPING = "mapping"
     RELATIONSHIP = "relationship"
@@ -25,7 +25,7 @@ class EdgeKind(str, Enum):
     CONTEXT_REF = "context_ref"
     MAPS_TO = "maps_to"
     OWNER_ENTITY = "owner_entity"
-    PHYSICAL_OBJECT_REF = "physical_object_ref"
+    CARRIER_REF = "carrier_ref"
     RELATES_TO = "relates_to"
 
 

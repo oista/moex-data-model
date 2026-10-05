@@ -23,12 +23,12 @@
         click Relationship href "../Relationship"
       ModelElement <|-- RelationTerm
         click RelationTerm href "../RelationTerm"
-      ModelElement <|-- PhysicalObject
-        click PhysicalObject href "../PhysicalObject"
       ModelElement <|-- PhysicalField
         click PhysicalField href "../PhysicalField"
       ModelElement <|-- Mapping
         click Mapping href "../Mapping"
+      ModelElement <|-- TechnicalAsset
+        click TechnicalAsset href "../TechnicalAsset"
       ModelElement <|-- DataFlow
         click DataFlow href "../DataFlow"
       ModelElement <|-- DataFlowEntityBinding

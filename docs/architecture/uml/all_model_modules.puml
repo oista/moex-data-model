@@ -63,7 +63,8 @@ package "DAMS ModelElement" #D9EAD3 {
   class LogicalEntity
   class LogicalAttribute
   class Relationship
-  class PhysicalObject
+  class TechnicalAsset
+  class DataCarrier
   class PhysicalField
   class Mapping {
     +source_refs [1..*]
@@ -86,7 +87,8 @@ ModelElement <|-- ConceptualEntity
 ModelElement <|-- LogicalEntity
 ModelElement <|-- LogicalAttribute
 ModelElement <|-- Relationship
-ModelElement <|-- PhysicalObject
+ModelElement <|-- TechnicalAsset
+TechnicalAsset <|-- DataCarrier
 ModelElement <|-- PhysicalField
 ModelElement <|-- Mapping
 ModelElement <|-- DataFlow
@@ -103,14 +105,14 @@ ModelPackage "1" *-- "0..*" ConceptualEntity : conceptual_entities
 ModelPackage "1" *-- "0..*" DomainContext : domain_contexts
 ModelPackage "1" *-- "0..*" LogicalEntity : logical_entities
 ModelPackage "1" *-- "0..*" Relationship : relationships
-ModelPackage "1" *-- "0..*" PhysicalObject : physical_objects
+ModelPackage "1" *-- "0..*" DataCarrier : data_carriers
 ModelPackage "1" *-- "0..*" Mapping : mappings
 
 DomainContext "1" <-- "0..*" LogicalEntity : context_ref
 LogicalEntity "1" *-- "0..*" LogicalAttribute : attributes
 LogicalEntity "0..*" --> "0..*" ConceptualEntity : conceptual_entity_refs
 Relationship "0..*" --> "1" LogicalEntity : source/target
-PhysicalObject "1" *-- "0..*" PhysicalField : physical_fields
+DataCarrier "1" *-- "0..*" PhysicalField : physical_fields
 Mapping "0..*" ..> ModelElement : source_refs / target_refs
 
 DataFlow "1" *-- "0..*" DataFlowEntityBinding : entity_bindings
@@ -161,7 +163,7 @@ RegistryEntry <|-- BusinessProcess
 
 ITSolution "1" o-- "0..*" ITSystem : member_system_refs
 ITSolution "0..*" --> "0..1" ITPlatform : platform_ref
-PhysicalObject "0..*" --> "1" ITSystem : system_ref
+TechnicalAsset "0..*" --> "1" ITSystem : system_ref
 LogicalEntity "0..*" --> "0..1" ITSolution : solution_ref
 ModelElement "0..*" --> "0..*" GlossaryTerm : glossary_term_refs
 

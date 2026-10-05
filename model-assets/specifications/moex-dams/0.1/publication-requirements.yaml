@@ -110,7 +110,7 @@ profiles:
         semantic_capability: physical-objects
         obligation: required
         min_occurs: 1
-        expected_semantic_types: [PhysicalObject]
+        expected_semantic_types: [DataCarrier]
         accepted_section_kinds: [classes, bindings, source]
         accepted_renderers: [entity-table, entity-detail]
         inherited_from: dams-logical-and-physical

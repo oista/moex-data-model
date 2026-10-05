@@ -25,7 +25,7 @@ _COL_RE = re.compile(
 )
 _NOTE_RE = re.compile(r"Note:\s*'((?:\\'|[^'])*)'", re.MULTILINE)
 _ELEMENT_ID_RE = re.compile(r"element_id=([^\s;']+)")
-_OBJECT_KIND_RE = re.compile(r"object_kind=([^\s;']+)")
+_ASSET_KIND_RE = re.compile(r"(?:asset_kind|object_kind)=([^\s;']+)")
 
 
 def _unescape(note: str) -> str:
@@ -53,7 +53,13 @@ def _title_from_table_note(note: str | None) -> str | None:
         return None
     # "element_id=…; Title" or just title bits after element_id
     bits = [b.strip() for b in note.split(";") if b.strip()]
-    titles = [b for b in bits if not b.startswith("element_id=") and not b.startswith("object_kind=")]
+    titles = [
+        b
+        for b in bits
+        if not b.startswith("element_id=")
+        and not b.startswith("object_kind=")
+        and not b.startswith("asset_kind=")
+    ]
     return titles[0] if titles else None
 
 
@@ -81,7 +87,7 @@ def parse_dbml(text: str) -> ProjectedDiagram:
             em = _ELEMENT_ID_RE.search(table_note)
             if em:
                 eid = em.group(1)
-            km = _OBJECT_KIND_RE.search(table_note)
+            km = _ASSET_KIND_RE.search(table_note)
             if km:
                 kind = km.group(1)
         columns: list[ProjectedColumn] = []
@@ -112,6 +118,7 @@ def parse_dbml(text: str) -> ProjectedDiagram:
                 name=tname,
                 element_id=eid,
                 object_kind=kind,
+                asset_kind=kind,
                 title=_title_from_table_note(table_note),
                 columns=tuple(columns),
             )

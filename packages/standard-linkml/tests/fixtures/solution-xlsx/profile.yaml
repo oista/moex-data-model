@@ -20,7 +20,7 @@ systems:
     package_name: mdm_solution_model
     package_title: MDM fixture
     package_description: Fixture MDM slice
-    object_kind: view
+    asset_kind: relational_view
     technology: Oracle
     direction: internal
     type_map:
@@ -34,7 +34,7 @@ systems:
     package_name: crm_solution_model
     package_title: CRM fixture
     package_description: Fixture CRM slice
-    object_kind: table
+    asset_kind: relational_table
     technology: Dynamics
     direction: internal
     type_map:
@@ -47,7 +47,7 @@ systems:
     package_name: esed_solution_model
     package_title: ESED fixture
     package_description: Fixture ESED slice
-    object_kind: table
+    asset_kind: relational_table
     technology: DocsVision
     direction: internal
     type_map:

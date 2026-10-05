@@ -64,8 +64,8 @@ Artifacts in `--out`:
 | **Entities** | yes | `LogicalEntity`; optional `conceptual_ref` → Conceptual `name` (`\|` for several) |
 | **Attributes** | yes | nested `LogicalAttribute` on entity |
 | **Relationships** | no | logical `Relationship` |
-| **PhysicalObjects** | no | `PhysicalObject` (table, topic, api, …) |
-| **PhysicalFields** | no | fields; `object` = PhysicalObjects.name |
+| **DataCarriers** | no | TechnicalAsset rows (`DataCarrier` / routed by `asset_kind`) |
+| **PhysicalFields** | no | fields; `object` = DataCarriers.name; stored as `carrier_ref` |
 | **Mappings** | no | `source` / `target` as `Entity.attr` or `Object.field` (or bare entity/object name); `\|` for several |
 
 Example fixture: [`tests/fixtures/er-dictionary/`](tests/fixtures/er-dictionary/).
@@ -75,11 +75,11 @@ Example fixture: [`tests/fixtures/er-dictionary/`](tests/fixtures/er-dictionary/
 - With a **Conceptual** sheet: concepts come only from that sheet. `Entities.conceptual_ref` must name a concept (or stay empty → no refs). Logical and conceptual names may differ (`TradingClient` → `Client`).
 - **Compat (no Conceptual sheet):** empty `conceptual_ref` still creates a 1:1 stub concept from the entity name (legacy behaviour).
 
-### Physical ↔ mapping
+### Technical assets ↔ mapping
 
-- `PhysicalObjects` (DAMS-required): `name`, `description`, `object_kind`, `qualified_name`, `system_ref`, `technology`, `direction`, `native_schema_ref`.
-- `PhysicalFields`: `object`, `name`, `native_type`; optional `native_name`, `required`, `schema_path`.
-- `Mappings`: dotted refs resolve to logical attributes / physical fields first; bare names to entities / objects. Defaults: `mapping_type=field_mapping`, `mapping_cardinality=one_to_one`.
+- `DataCarriers` (ingest sheet): `name`, `description`, `asset_kind`, `qualified_name`, `system_ref`, `technology`, `direction`, `structure_ref` (legacy column `native_schema_ref` accepted). Rows are routed into `data_carriers` / `access_points` / `data_containers` / `execution_assets` by `asset_kind`.
+- `PhysicalFields`: `object`, `name`, `native_type`; optional `native_name`, `required`, `schema_path`; mapped to `carrier_ref`.
+- `Mappings`: dotted refs resolve to logical attributes / physical fields first; bare names to entities / carriers. Defaults: `mapping_type=field_mapping`, `mapping_cardinality=one_to_one`.
 
 ## Mapping semantics
 
@@ -87,7 +87,7 @@ Example fixture: [`tests/fixtures/er-dictionary/`](tests/fixtures/er-dictionary/
 - Attributes → nested `LogicalAttribute` (`pk` → `key_attribute_refs`, types via `type_map`)
 - Relationships → `Relationship` with CURIE refs
 - One `DomainContext` from profile defaults
-- PhysicalObjects / PhysicalFields / Mappings when sheets are present
+- DataCarriers / PhysicalFields / Mappings when sheets are present
 
 ## Tests
 

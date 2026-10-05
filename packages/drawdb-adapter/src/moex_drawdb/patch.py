@@ -356,27 +356,27 @@ def _patch_physical(
     ops: list[PatchOp],
     rejected: list[RejectedOp],
 ) -> None:
-    objects = list(base.get("physical_objects") or [])
+    objects = list(base.get("data_carriers") or [])
     by_id = _index_by_id(objects)
     by_name = _index_by_name(objects)
     seen_ids: set[str] = set()
     table_to_obj: dict[str, str] = {}
 
     for table in diagram.tables:
-        kind = table.object_kind or "table"
+        kind = table.asset_kind or table.object_kind or "relational_table"
         if table.element_id and table.element_id in by_id:
             existing = by_id[table.element_id]
             if existing.get("name") != table.name or (
                 table.title and existing.get("title") != table.title
-            ) or (kind and existing.get("object_kind") != kind):
+            ) or (kind and existing.get("asset_kind") != kind):
                 ops.append(
                     PatchOp(
                         kind=PatchOpKind.UPDATE_PHYSICAL_OBJECT,
-                        path=f"physical_objects[{table.element_id}]",
+                        path=f"data_carriers[{table.element_id}]",
                         payload={
                             "element_id": table.element_id,
                             "name": table.name,
-                            "object_kind": kind,
+                            "asset_kind": kind,
                             "title": table.title or existing.get("title"),
                         },
                     )
@@ -413,11 +413,11 @@ def _patch_physical(
                 ops.append(
                     PatchOp(
                         kind=PatchOpKind.ADD_PHYSICAL_OBJECT,
-                        path=f"physical_objects[{oid}]",
+                        path=f"data_carriers[{oid}]",
                         payload={
                             "element_id": oid,
                             "name": table.name,
-                            "object_kind": kind,
+                            "asset_kind": kind,
                             "title": table.title or table.name,
                             "physical_fields": [
                                 {
@@ -427,6 +427,7 @@ def _patch_physical(
                                     "native_name": c.name,
                                     "native_type": c.type_name,
                                     "required": c.required,
+                                    "carrier_ref": oid,
                                 }
                                 for c in table.columns
                             ],
@@ -442,7 +443,7 @@ def _patch_physical(
                 ops.append(
                     PatchOp(
                         kind=PatchOpKind.DELETE_PHYSICAL_OBJECT,
-                        path=f"physical_objects[{oid}]",
+                        path=f"data_carriers[{oid}]",
                         payload={"element_id": oid},
                     )
                 )
@@ -476,7 +477,7 @@ def _patch_fields(
             ops.append(
                 PatchOp(
                     kind=PatchOpKind.UPDATE_FIELD,
-                    path=f"physical_objects[{oid}].physical_fields[{col.element_id}]",
+                    path=f"data_carriers[{oid}].physical_fields[{col.element_id}]",
                     payload={
                         "owner_element_id": oid,
                         "element_id": col.element_id,
@@ -515,7 +516,7 @@ def _patch_fields(
                 ops.append(
                     PatchOp(
                         kind=PatchOpKind.ADD_FIELD,
-                        path=f"physical_objects[{oid}].physical_fields[{fid}]",
+                        path=f"data_carriers[{oid}].physical_fields[{fid}]",
                         payload={
                             "owner_element_id": oid,
                             "element_id": fid,
@@ -523,6 +524,7 @@ def _patch_fields(
                             "native_name": col.name,
                             "native_type": col.type_name,
                             "required": col.required,
+                            "carrier_ref": oid,
                         },
                     )
                 )
@@ -535,7 +537,7 @@ def _patch_fields(
                 ops.append(
                     PatchOp(
                         kind=PatchOpKind.DELETE_FIELD,
-                        path=f"physical_objects[{oid}].physical_fields[{fid}]",
+                        path=f"data_carriers[{oid}].physical_fields[{fid}]",
                         payload={"owner_element_id": oid, "element_id": fid},
                     )
                 )
@@ -554,7 +556,7 @@ def _patch_physical_refs(
         if isinstance(m, dict) and m.get("mapping_type") == "field_mapping"
     ]
     # Index fields by table.column via objects
-    objects = list(base.get("physical_objects") or [])
+    objects = list(base.get("data_carriers") or [])
     # After adds we don't have new fields in base; resolve columns from diagram
     col_eid: dict[tuple[str, str], str] = {}
     for table in diagram.tables:
@@ -713,32 +715,35 @@ def apply_model_patch(
                 if r.get("element_id") != p["element_id"]
             ]
         elif kind is PatchOpKind.ADD_PHYSICAL_OBJECT:
-            out.setdefault("physical_objects", []).append(p)
+            out.setdefault("data_carriers", []).append(p)
         elif kind is PatchOpKind.UPDATE_PHYSICAL_OBJECT:
-            for obj in out.get("physical_objects") or []:
+            for obj in out.get("data_carriers") or []:
                 if obj.get("element_id") == p["element_id"]:
                     obj["name"] = p["name"]
-                    if p.get("object_kind"):
-                        obj["object_kind"] = p["object_kind"]
+                    if p.get("asset_kind"):
+                        obj["asset_kind"] = p["asset_kind"]
+                    elif p.get("object_kind"):
+                        obj["asset_kind"] = p["object_kind"]
                     if p.get("title") is not None:
                         obj["title"] = p["title"]
         elif kind is PatchOpKind.DELETE_PHYSICAL_OBJECT:
-            out["physical_objects"] = [
+            out["data_carriers"] = [
                 o
-                for o in (out.get("physical_objects") or [])
+                for o in (out.get("data_carriers") or [])
                 if o.get("element_id") != p["element_id"]
             ]
         elif kind is PatchOpKind.ADD_FIELD:
-            for obj in out.get("physical_objects") or []:
+            for obj in out.get("data_carriers") or []:
                 if obj.get("element_id") == p["owner_element_id"]:
                     field = {
                         k: v
                         for k, v in p.items()
                         if k != "owner_element_id"
                     }
+                    field.setdefault("carrier_ref", p["owner_element_id"])
                     obj.setdefault("physical_fields", []).append(field)
         elif kind is PatchOpKind.UPDATE_FIELD:
-            for obj in out.get("physical_objects") or []:
+            for obj in out.get("data_carriers") or []:
                 if obj.get("element_id") != p["owner_element_id"]:
                     continue
                 for field in obj.get("physical_fields") or []:
@@ -748,7 +753,7 @@ def apply_model_patch(
                         field["native_type"] = p["native_type"]
                         field["required"] = p["required"]
         elif kind is PatchOpKind.DELETE_FIELD:
-            for obj in out.get("physical_objects") or []:
+            for obj in out.get("data_carriers") or []:
                 if obj.get("element_id") != p["owner_element_id"]:
                     continue
                 obj["physical_fields"] = [

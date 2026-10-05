@@ -57,7 +57,10 @@ def _collect_ids(data: CommentedMap) -> set[str]:
         ids.add(str(root))
     for key in (
         "logical_entities",
-        "physical_objects",
+        "data_carriers",
+        "access_points",
+        "data_containers",
+        "execution_assets",
         "mappings",
         "relationships",
         "conceptual_entities",
@@ -464,18 +467,72 @@ def delete_mapping(data: CommentedMap, element_id: str) -> None:
     del seq[idx]
 
 
+_TECHNICAL_COLLECTIONS = (
+    "data_carriers",
+    "access_points",
+    "data_containers",
+    "execution_assets",
+)
+
+_ASSET_KIND_TO_COLLECTION: dict[str, str] = {
+    "relational_table": "data_carriers",
+    "relational_view": "data_carriers",
+    "file": "data_carriers",
+    "dataset": "data_carriers",
+    "stream_topic": "data_carriers",
+    "stream_queue": "data_carriers",
+    "message_type": "data_carriers",
+    "in_memory": "data_carriers",
+    "api_resource": "data_carriers",
+    "other": "data_carriers",
+    "table": "data_carriers",
+    "view": "data_carriers",
+    "topic": "data_carriers",
+    "queue": "data_carriers",
+    "message": "data_carriers",
+    "payload": "data_carriers",
+    "interface": "access_points",
+    "operation": "access_points",
+    "channel": "access_points",
+    "api": "access_points",
+    "endpoint": "access_points",
+    "database": "data_containers",
+    "schema": "data_containers",
+    "bucket": "data_containers",
+    "broker": "data_containers",
+    "directory": "data_containers",
+    "cluster": "data_containers",
+    "pipeline": "execution_assets",
+    "job": "execution_assets",
+}
+
+_LEGACY_KIND_MAP: dict[str, str] = {
+    "table": "relational_table",
+    "view": "relational_view",
+    "topic": "stream_topic",
+    "queue": "stream_queue",
+    "message": "message_type",
+    "payload": "message_type",
+    "api": "interface",
+    "endpoint": "operation",
+}
+
 _PHYSICAL_OBJECT_PATCH_KEYS = frozenset(
     {
         "name",
         "title",
         "description",
         "lifecycle_status",
-        "object_kind",
+        "asset_kind",
+        "object_kind",  # legacy alias → remapped in update
         "logical_entity_ref",
         "qualified_name",
         "technology",
         "system_ref",
         "direction",
+        "asset_namespace",
+        "structure_ref",
+        "parent_ref",
     }
 )
 _PHYSICAL_FIELD_PATCH_KEYS = frozenset(
@@ -494,12 +551,36 @@ _PHYSICAL_FIELD_PATCH_KEYS = frozenset(
 )
 
 
+def _normalize_asset_kind(raw: str | None) -> str:
+    kind = str(raw or "relational_table").strip() or "relational_table"
+    return _LEGACY_KIND_MAP.get(kind, kind)
+
+
+def _collection_for_kind(asset_kind: str) -> str:
+    return _ASSET_KIND_TO_COLLECTION.get(asset_kind, "data_carriers")
+
+
+def _find_technical_asset(
+    data: CommentedMap, element_id: str
+) -> tuple[str, int, CommentedMap | dict[str, Any]]:
+    eid = str(element_id or "").strip()
+    if not eid:
+        raise MutationError("element_id is required")
+    for key in _TECHNICAL_COLLECTIONS:
+        items = data.get(key) or []
+        if not isinstance(items, list):
+            continue
+        for idx, item in enumerate(items):
+            if isinstance(item, dict) and str(item.get("element_id")) == eid:
+                return key, idx, item
+    raise MutationError(f"technical asset not found: {eid}")
+
+
 def _find_physical_object(
     data: CommentedMap, element_id: str
 ) -> tuple[int, CommentedMap | dict[str, Any]]:
-    return _find_top_level_item(
-        data, "physical_objects", element_id, "physical object"
-    )
+    _key, idx, item = _find_technical_asset(data, element_id)
+    return idx, item
 
 
 def _find_physical_field(
@@ -508,18 +589,19 @@ def _find_physical_field(
     eid = str(element_id or "").strip()
     if not eid:
         raise MutationError("element_id is required")
-    objects = data.get("physical_objects") or []
-    if not isinstance(objects, list):
-        raise MutationError("physical_objects missing")
-    for obj in objects:
-        if not isinstance(obj, dict):
+    for key in _TECHNICAL_COLLECTIONS:
+        objects = data.get(key) or []
+        if not isinstance(objects, list):
             continue
-        fields = obj.get("physical_fields") or []
-        if not isinstance(fields, list):
-            continue
-        for idx, field in enumerate(fields):
-            if isinstance(field, dict) and str(field.get("element_id")) == eid:
-                return obj, idx, field
+        for obj in objects:
+            if not isinstance(obj, dict):
+                continue
+            fields = obj.get("physical_fields") or []
+            if not isinstance(fields, list):
+                continue
+            for idx, field in enumerate(fields):
+                if isinstance(field, dict) and str(field.get("element_id")) == eid:
+                    return obj, idx, field
     raise MutationError(f"physical field not found: {eid}")
 
 
@@ -531,15 +613,22 @@ def add_physical_object(data: CommentedMap, obj: dict[str, Any]) -> None:
     if eid in _collect_ids(data):
         raise MutationConflict(f"duplicate element_id: {eid}")
 
+    asset_kind = _normalize_asset_kind(
+        obj.get("asset_kind") or obj.get("object_kind")
+    )
+    collection = str(obj.get("collection") or _collection_for_kind(asset_kind))
+    if collection not in _TECHNICAL_COLLECTIONS:
+        collection = "data_carriers"
+
     row = CommentedMap()
     row["element_id"] = eid
     row["name"] = name
     row["title"] = str(obj.get("title") or name)
     row["description"] = str(
-        obj.get("description") or f"Physical object {name} (workbench draft)."
+        obj.get("description") or f"Technical asset {name} (workbench draft)."
     )
     row["lifecycle_status"] = str(obj.get("lifecycle_status") or "draft")
-    row["object_kind"] = str(obj.get("object_kind") or "table")
+    row["asset_kind"] = asset_kind
     for key in (
         "logical_entity_ref",
         "qualified_name",
@@ -547,12 +636,20 @@ def add_physical_object(data: CommentedMap, obj: dict[str, Any]) -> None:
         "system_ref",
         "direction",
         "solution_ref",
+        "asset_namespace",
+        "structure_ref",
+        "parent_ref",
         "native_schema_ref",
     ):
         if obj.get(key) is not None:
-            row[key] = str(obj[key])
-    row["physical_fields"] = CommentedSeq()
-    seq = _ensure_seq(data, "physical_objects")
+            # native_schema_ref → structure_ref for carriers
+            if key == "native_schema_ref":
+                row["structure_ref"] = str(obj[key])
+            else:
+                row[key] = str(obj[key])
+    if collection == "data_carriers":
+        row["physical_fields"] = CommentedSeq()
+    seq = _ensure_seq(data, collection)
     seq.append(row)
 
 
@@ -560,12 +657,18 @@ def update_physical_object(
     data: CommentedMap, element_id: str, patch: dict[str, Any]
 ) -> None:
     _, item = _find_physical_object(data, element_id)
-    _apply_patch(item, patch or {}, _PHYSICAL_OBJECT_PATCH_KEYS)
+    patch = dict(patch or {})
+    if "object_kind" in patch and "asset_kind" not in patch:
+        patch["asset_kind"] = _normalize_asset_kind(str(patch.pop("object_kind")))
+    elif "asset_kind" in patch:
+        patch["asset_kind"] = _normalize_asset_kind(str(patch["asset_kind"]))
+        patch.pop("object_kind", None)
+    _apply_patch(item, patch, _PHYSICAL_OBJECT_PATCH_KEYS)
 
 
 def delete_physical_object(data: CommentedMap, element_id: str) -> None:
-    idx, _ = _find_physical_object(data, element_id)
-    seq = data["physical_objects"]
+    key, idx, _ = _find_technical_asset(data, element_id)
+    seq = data[key]
     del seq[idx]
 
 
@@ -600,7 +703,9 @@ def add_physical_field(
         field.get("description") or f"Physical field {name} (workbench draft)."
     )
     row["lifecycle_status"] = str(field.get("lifecycle_status") or "draft")
-    row["physical_object_ref"] = str(field.get("physical_object_ref") or owner)
+    row["carrier_ref"] = str(
+        field.get("carrier_ref") or field.get("physical_object_ref") or owner
+    )
     row["native_name"] = str(field.get("native_name") or name)
     row["native_type"] = native_type
     row["required"] = bool(field.get("required", False))

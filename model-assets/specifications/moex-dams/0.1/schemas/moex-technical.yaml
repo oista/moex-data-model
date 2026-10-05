@@ -1,0 +1,311 @@
+id: https://data.moex.com/dams/technical/v0.1
+name: moex_technical
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  dams: https://data.moex.com/dams/
+imports:
+  - linkml:types
+  - moex-types
+  - moex-registries
+  - moex-governance
+  - moex-core
+default_prefix: dams
+default_range: string
+
+classes:
+  HasStructure:
+    mixin: true
+    description: >
+      Mixin структуры данных носителя. structure_ref — временная ссылка
+      (uriorcurie); в будущем заменяется классом DataStructure (ADR-C).
+    slots:
+      - structure_ref
+      - schema_dialect
+      - data_format
+
+  HasProtocolBinding:
+    mixin: true
+    description: Mixin протокола доступа для точки доступа (AccessPoint).
+    slots:
+      - protocol
+      - protocol_version
+      - binding_ref
+
+  Contains:
+    mixin: true
+    description: >
+      Mixin контейнерности. child_refs не хранятся: выводятся из parent_ref.
+    slots:
+      - containment_kind
+
+  HasLocation:
+    mixin: true
+    description: Mixin расположения носителя или точки доступа.
+    slots:
+      - location_uri
+      - region
+
+  TechnicalAsset:
+    abstract: true
+    is_a: ModelElement
+    mixins:
+      - HasOwnership
+      - HasGovernanceClassification
+      - HasPolicyBindings
+    description: >
+      Квант данных: адресуемый технический объект управления. Имеет
+      собственный идентификатор, систему-владельца, расположение или способ
+      доступа, жизненный цикл, владельца, классификацию и роль в lineage.
+      Поля, колонки и узлы схем квантами НЕ являются (ADR-C).
+    slots:
+      - asset_namespace
+      - qualified_name
+      - native_name
+      - system_ref
+      - parent_ref
+      - technology
+      - asset_kind
+      - lineage_role
+      - direction
+      - solution_ref
+    id_prefixes:
+      - dams
+    unique_keys:
+      technical_asset_key:
+        unique_key_slots:
+          - asset_namespace
+          - qualified_name
+    slot_usage:
+      description:
+        required: true
+      qualified_name:
+        required: true
+      system_ref:
+        required: true
+      native_name:
+        required: false
+      technology:
+        required: false
+      direction:
+        required: false
+        description: >
+          Направление относительно решения. Запрещён для DataContainer и
+          ExecutionAsset правилом DAMS-валидатора и LinkML rules.
+
+  DataCarrier:
+    is_a: TechnicalAsset
+    mixins:
+      - HasStructure
+      - HasLocation
+      - Contains
+    description: >
+      Носитель данных: хранит или передаёт данные (таблица, файл, топик,
+      сообщение и т.п.).
+    slots:
+      - physical_fields
+      - mapping_coverage_status
+      - mapping_rationale
+    slot_usage:
+      asset_kind:
+        range: DataCarrierKindEnum
+        required: true
+    rules:
+      - description: in_memory носитель не имеет location_uri и region
+        preconditions:
+          slot_conditions:
+            asset_kind:
+              equals_string: in_memory
+        postconditions:
+          slot_conditions:
+            location_uri:
+              value_presence: ABSENT
+            region:
+              value_presence: ABSENT
+
+  AccessPoint:
+    is_a: TechnicalAsset
+    mixins:
+      - HasProtocolBinding
+      - HasLocation
+    description: >
+      Точка доступа к данным: интерфейс, операция или канал. Сама данные
+      не несёт; указывает на носители через serves_refs.
+    slots:
+      - serves_refs
+      - interface_ref
+      - operation_name
+      - http_method
+      - path_template
+    slot_usage:
+      asset_kind:
+        range: AccessPointKindEnum
+        required: true
+      direction:
+        description: Направление протокола AccessPoint (через FlowDirectionEnum).
+    rules:
+      - description: operation требует interface_ref
+        preconditions:
+          slot_conditions:
+            asset_kind:
+              equals_string: operation
+        postconditions:
+          slot_conditions:
+            interface_ref:
+              required: true
+      - description: interface не имеет operation-полей
+        preconditions:
+          slot_conditions:
+            asset_kind:
+              equals_string: interface
+        postconditions:
+          slot_conditions:
+            operation_name:
+              value_presence: ABSENT
+            http_method:
+              value_presence: ABSENT
+            path_template:
+              value_presence: ABSENT
+
+  DataContainer:
+    is_a: TechnicalAsset
+    mixins:
+      - Contains
+    description: >
+      Контейнер других активов (database, schema, bucket, broker, directory,
+      cluster). Данных не несёт: structure_ref и data_format отсутствуют.
+    slot_usage:
+      asset_kind:
+        range: DataContainerKindEnum
+        required: true
+      direction:
+        required: false
+        description: Запрещён для DataContainer (правило валидатора).
+
+  ExecutionAsset:
+    is_a: TechnicalAsset
+    description: >
+      Исполняемый актив (pipeline / job) с минимальной lineage-ролью.
+    slots:
+      - produces_refs
+      - consumes_refs
+    slot_usage:
+      asset_kind:
+        range: ExecutionAssetKindEnum
+        required: true
+      direction:
+        required: false
+        description: Запрещён для ExecutionAsset (правило валидатора).
+
+slots:
+  asset_namespace:
+    range: string
+    required: true
+    description: >
+      Пространство имён источника по аналогии с OpenLineage namespace
+      (например postgres://host:5432, kafka://cluster, s3://bucket).
+      Отдельный слот от DomainContext.namespace (ADR-B).
+  parent_ref:
+    range: TechnicalAsset
+    inlined: false
+    description: Родитель в контейнерной иерархии (без циклов).
+  asset_kind:
+    range: string
+    required: true
+    description: >
+      Разновидность актива. На подклассах сужается через slot_usage
+      на соответствующий enum.
+  lineage_role:
+    range: LineageRoleEnum
+    description: Роль актива в lineage (source, sink, intermediate, none).
+  structure_ref:
+    range: uriorcurie
+    description: >
+      Ссылка на структуру данных (пока uriorcurie; в будущем DataStructure).
+  schema_dialect:
+    range: string
+    description: Диалект схемы (например avro, json-schema, sql-ddl).
+  data_format:
+    range: string
+    description: Формат данных (например parquet, csv, json).
+  protocol:
+    range: string
+    description: Протокол доступа (например https, jdbc, kafka).
+  protocol_version:
+    range: string
+  binding_ref:
+    range: uriorcurie
+    description: Ссылка на внешнее описание binding.
+  containment_kind:
+    range: ContainmentKindEnum
+  location_uri:
+    range: uri
+  region:
+    range: string
+  serves_refs:
+    range: DataCarrier
+    multivalued: true
+    inlined: false
+    description: Носители, доступные через эту точку доступа.
+  interface_ref:
+    range: AccessPoint
+    inlined: false
+    description: Родительский интерфейс для операции (asset_kind=operation).
+  operation_name:
+    range: string
+  http_method:
+    range: string
+  path_template:
+    range: string
+  produces_refs:
+    range: TechnicalAsset
+    multivalued: true
+    inlined: false
+  consumes_refs:
+    range: TechnicalAsset
+    multivalued: true
+    inlined: false
+
+enums:
+  DataCarrierKindEnum:
+    permissible_values:
+      relational_table:
+      relational_view:
+      file:
+      dataset:
+      stream_topic:
+      stream_queue:
+      message_type:
+        description: Transitional; будет заменён Message/DataStructure (ADR-C).
+      in_memory:
+      api_resource:
+      other:
+  AccessPointKindEnum:
+    permissible_values:
+      interface:
+      operation:
+      channel:
+  DataContainerKindEnum:
+    permissible_values:
+      database:
+      schema:
+      bucket:
+      broker:
+      directory:
+      cluster:
+  ExecutionAssetKindEnum:
+    permissible_values:
+      pipeline:
+      job:
+  LineageRoleEnum:
+    permissible_values:
+      source:
+      sink:
+      intermediate:
+      none:
+  ContainmentKindEnum:
+    permissible_values:
+      composite:
+      partitioned:
+      hierarchical:

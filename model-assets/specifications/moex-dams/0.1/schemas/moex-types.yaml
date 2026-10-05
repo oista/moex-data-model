@@ -253,22 +253,6 @@ enums:
       identifier:
       uri:
       object:
-  PhysicalObjectKindEnum:
-    permissible_values:
-      database:
-      schema:
-      table:
-      view:
-      column:
-      api:
-      endpoint:
-      payload:
-      topic:
-      queue:
-      message:
-      file:
-      dataset:
-      pipeline:
   FlowDirectionEnum:
     permissible_values:
       inbound:
@@ -298,8 +282,8 @@ enums:
   MappingTypeEnum:
     description: >
       Kind of Mapping assertion. realizes = solution element → enterprise
-      conceptual; entity_physical = PhysicalObject ↔ LogicalEntity;
-      field_mapping = mapsTo (physical field ↔ logical attribute); aligns_with =
+      conceptual; entity_physical = DataCarrier ↔ LogicalEntity;
+      field_mapping = mapsTo (PhysicalField ↔ LogicalAttribute); aligns_with =
       enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl
       implements (that is conforms_to / publication implements).
     permissible_values:
@@ -308,7 +292,7 @@ enums:
       implementation:
       entity_physical:
         description: >
-          Explicit entity-level link between PhysicalObject and LogicalEntity
+          Explicit entity-level link between DataCarrier and LogicalEntity
           (PDM-003). Do not infer from field_mapping alone.
       field_mapping:
         description: Technical/structural mapsTo between physical and logical.

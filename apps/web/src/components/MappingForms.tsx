@@ -35,10 +35,13 @@ function collectRefOptions(content: string): string[] {
         element_id?: string;
         attributes?: Array<{ element_id?: string }>;
       }>;
-      physical_objects?: Array<{
+      data_carriers?: Array<{
         element_id?: string;
         physical_fields?: Array<{ element_id?: string }>;
       }>;
+      access_points?: Array<{ element_id?: string }>;
+      data_containers?: Array<{ element_id?: string }>;
+      execution_assets?: Array<{ element_id?: string }>;
     } | null;
     const ids: string[] = [];
     for (const ent of data?.logical_entities ?? []) {
@@ -47,10 +50,19 @@ function collectRefOptions(content: string): string[] {
         if (a?.element_id) ids.push(String(a.element_id));
       }
     }
-    for (const obj of data?.physical_objects ?? []) {
-      if (obj?.element_id) ids.push(String(obj.element_id));
-      for (const f of obj?.physical_fields ?? []) {
-        if (f?.element_id) ids.push(String(f.element_id));
+    for (const key of [
+      "data_carriers",
+      "access_points",
+      "data_containers",
+      "execution_assets",
+    ] as const) {
+      for (const obj of data?.[key] ?? []) {
+        if (obj?.element_id) ids.push(String(obj.element_id));
+        const fields = (obj as { physical_fields?: Array<{ element_id?: string }> })
+          .physical_fields;
+        for (const f of fields ?? []) {
+          if (f?.element_id) ids.push(String(f.element_id));
+        }
       }
     }
     return ids;

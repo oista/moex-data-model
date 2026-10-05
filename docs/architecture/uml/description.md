@@ -14,7 +14,7 @@ ModelingStandard                          (modeling-kernel.yaml)
                     │     └── ConceptualEntity / Relationship / …
                     └── implementation_scope = solution
                           ├── DomainContext / LogicalEntity / LogicalAttribute / Relationship
-                          ├── PhysicalObject / PhysicalField
+                          ├── TechnicalAsset (DataCarrier / AccessPoint / DataContainer / ExecutionAsset) / PhysicalField
                           └── Mapping (realizes, entity_physical, field_mapping, …)
 ```
 

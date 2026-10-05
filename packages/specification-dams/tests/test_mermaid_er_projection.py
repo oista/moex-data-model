@@ -98,11 +98,11 @@ MINI = {
             "target_entity_ref": "dams:logical/missing",
         },
     ],
-    "physical_objects": [
+    "data_carriers": [
         {
             "element_id": "dams:physical/mini/client-topic",
             "name": "client_changed_topic",
-            "object_kind": "topic",
+            "asset_kind": "stream_topic",
             "physical_fields": [
                 {
                     "element_id": "dams:physical/mini/client-topic/client_id",
@@ -116,7 +116,7 @@ MINI = {
         {
             "element_id": "dams:physical/mini/account_table",
             "name": "account",
-            "object_kind": "table",
+            "asset_kind": "relational_table",
             "physical_fields": [
                 {
                     "element_id": "dams:physical/mini/account/id",
@@ -137,7 +137,7 @@ MINI = {
         {
             "element_id": "dams:physical/mini/client_table",
             "name": "client",
-            "object_kind": "table",
+            "asset_kind": "relational_table",
             "physical_fields": [
                 {
                     "element_id": "dams:physical/mini/client/id",

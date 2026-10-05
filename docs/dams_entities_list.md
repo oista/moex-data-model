@@ -9,7 +9,11 @@
 4. LogicalEntity — логическая сущность в рамках доменного контекста / решения
 5. Attribute — атрибут логической сущности
 6. Relationship — связь между логическими сущностями (роли, кардинальность)
-7. PhysicalObject — физический объект (таблица, топик, API endpoint, файл)
+7. TechnicalAsset (abstract) — квант данных; подклассы: DataCarrier, AccessPoint, DataContainer, ExecutionAsset
+7a. DataCarrier — носитель данных (таблица, топик, файл, сообщение)
+7b. AccessPoint — точка доступа (interface / operation / channel)
+7c. DataContainer — контейнер (database, schema, broker, …)
+7d. ExecutionAsset — исполняемый актив (pipeline, job)
 8. Mapping — маппинг между уровнями (лог <-> физ, домен <-> домен)
 9. ClassificationAssignment — присвоение классификации/чувствительности элементу
 10. ModelSelection / DataModelBinding — выбранная проекция модели для контракта

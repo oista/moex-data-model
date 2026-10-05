@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
 import yaml
+from pydantic import ValidationError
 
 from moex_dams.application.assess import assess_implementation
 from moex_dams.contracts import ModelPackage
@@ -20,6 +22,7 @@ def test_model_package_loads_mdm_solution(mdm_solution: Path) -> None:
     assert data.get("conceptual_implementation_ref")
     enterprise = next(e for e in data["logical_entities"] if e["name"] == "ENTERPRISE")
     assert "dams:concept/LegalEntity" in (enterprise.get("conceptual_entity_refs") or [])
+    assert getattr(pkg, "data_carriers", None) or data.get("data_carriers")
 
 
 def test_assess_uses_typed_model_package(

@@ -226,24 +226,26 @@ requirements:
 
   - element_id: dams:req/CM-PDM-000
     name: conceptual_no_physical
-    title: Запрет физического слоя
+    title: Запрет технического слоя
     description: >
-      Enterprise-conceptual пакет не содержит physical_objects (ADR-021).
+      Enterprise-conceptual пакет не содержит коллекций TechnicalAsset (data_carriers / access_points /
+      data_containers / execution_assets) (ADR-021 / ADR-031).
     lifecycle_status: approved
     code: CM-PDM-000
     requirement_level: conceptual_model
     requirement_section: PDM
     statement: >-
-      В корпоративной концептуальной модели физические объекты (таблицы, топики,
-      API) запрещены. Физический слой описывается только в solution-реализациях,
-      которые realize концептуальные сущности.
+      В корпоративной концептуальной модели технические активы (носители данных,
+      точки доступа, контейнеры, исполняемые активы) запрещены. Технический слой
+      описывается только в solution-реализациях, которые realize концептуальные сущности.
     formal_checks:
       - check_id: CM-PDM-000.c1
         kind: custom
         target_class: ModelPackage
-        target_slot: physical_objects
+        target_slot: data_carriers
         severity: error
         diagnostic_code: DAMS-LEVEL-003
         description: >
-          physical_objects must be absent or empty for
-          implementation_scope: enterprise.
+          technical-asset collections
+          (data_carriers, access_points, data_containers, execution_assets)
+          must be absent or empty for implementation_scope: enterprise.

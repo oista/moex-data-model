@@ -198,10 +198,15 @@ export type DocumentMutation =
         title?: string;
         description?: string;
         lifecycle_status?: string;
-        object_kind?: string;
+        asset_kind?: string;
+        object_kind?: string; // legacy alias
+        collection?: string;
         logical_entity_ref?: string;
         qualified_name?: string;
         technology?: string;
+        asset_namespace?: string;
+        structure_ref?: string;
+        parent_ref?: string;
       };
     }
   | {
@@ -212,12 +217,16 @@ export type DocumentMutation =
         title?: string;
         description?: string;
         lifecycle_status?: string;
+        asset_kind?: string;
         object_kind?: string;
         logical_entity_ref?: string;
         qualified_name?: string;
         technology?: string;
         system_ref?: string;
         direction?: string;
+        asset_namespace?: string;
+        structure_ref?: string;
+        parent_ref?: string;
       };
     }
   | {

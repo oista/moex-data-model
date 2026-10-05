@@ -12,6 +12,7 @@ imports:
   - moex-registries
   - moex-governance
   - moex-core
+  - moex-technical
   - moex-integration
   - moex-contract-binding
   - moex-analytics

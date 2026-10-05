@@ -228,7 +228,7 @@ flowchart TB
 
 - У каждого опубликованного `ModelPackage` есть `model_version`.
 - У каждого `LogicalEntity` определён `DomainContext`.
-- У каждого `PhysicalObject` определены `system_ref`, `technology` и `native_schema_ref`.
+- У каждого `DataCarrier` / `TechnicalAsset` определены `system_ref`, `technology` и `structure_ref` (или эквивалент по подклассу).
 - `Mapping` содержит хотя бы один source и target.
 - `DataFlow` ссылается на существующую интеграцию Clinkr.
 - `DataModelBinding` содержит immutable revision и integrity digest.
@@ -365,7 +365,7 @@ MOEX ModelGraph
 - LogicalEntity.
 - LogicalAttribute.
 - Relationship.
-- PhysicalObject.
+- TechnicalAsset (`DataCarrier`, `AccessPoint`, `DataContainer`, `ExecutionAsset`).
 - PhysicalField.
 - Mapping.
 - DataFlow.

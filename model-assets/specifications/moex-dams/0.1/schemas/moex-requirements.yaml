@@ -134,7 +134,7 @@ slots:
   applies_target_kinds:
     range: string
     multivalued: true
-    description: Опциональный allowlist object_kind / facet (например table, topic).
+    description: Опциональный allowlist asset_kind / facet (например relational_table, stream_topic).
   applies_implementation_scope:
     range: ImplementationScopeEnum
   applies_dams_model_level:

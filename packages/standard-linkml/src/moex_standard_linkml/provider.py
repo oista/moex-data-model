@@ -105,7 +105,10 @@ class LinkMLStandardProvider:
         for collection in (
             "conceptual_entities",
             "logical_entities",
-            "physical_objects",
+            "data_carriers",
+            "access_points",
+            "data_containers",
+            "execution_assets",
             "domain_contexts",
             "mappings",
         ):

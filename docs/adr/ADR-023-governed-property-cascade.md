@@ -54,7 +54,7 @@ text-rule inheritance.
 |---|---|
 | Solution logical | `ModelPackage` → `LogicalEntity` → `LogicalAttribute` |
 | Enterprise conceptual | `ModelPackage` → `ConceptualEntity` |
-| Physical | `ModelPackage` → `PhysicalObject` → `PhysicalField` |
+| Technical | `ModelPackage` → `TechnicalAsset` (`DataCarrier` / …) → `PhysicalField` |
 
 ### Rules
 

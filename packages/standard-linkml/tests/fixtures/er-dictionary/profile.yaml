@@ -52,19 +52,19 @@ sheets:
       source_card: source_card
       target_card: target_card
       identifying: identifying
-  physical_objects:
-    sheet: PhysicalObjects
+  data_carriers:
+    sheet: DataCarriers
     required: false
     columns:
       name: name
       title: title
       description: description
-      object_kind: object_kind
+      asset_kind: asset_kind
       qualified_name: qualified_name
       technology: technology
       system_ref: system_ref
       direction: direction
-      native_schema_ref: native_schema_ref
+      structure_ref: structure_ref
   physical_fields:
     sheet: PhysicalFields
     required: false

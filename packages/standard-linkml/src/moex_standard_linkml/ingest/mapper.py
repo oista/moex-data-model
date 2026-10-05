@@ -8,6 +8,14 @@ from typing import Any
 
 from moex_standard_linkml.ingest import ids
 from moex_standard_linkml.ingest.profile import IngestProfile
+from moex_standard_linkml.ingest.technical_asset import (
+    CARRIER_COLLECTIONS,
+    TRANSITIONAL_KINDS,
+    ensure_container,
+    heuristic_namespace,
+    infer_parent_names,
+    resolve_kind,
+)
 from moex_standard_linkml.ingest.workbook import WorkbookTables
 
 _CARD_RE = re.compile(
@@ -314,66 +322,97 @@ def map_er_dictionary(
                 rel["identifying"] = _as_bool(row.get("identifying"))
             relationships.append(rel)
 
-    physical_objects: list[dict[str, Any]] = []
+    # TechnicalAsset collections (Variant B). Rows use asset_kind (or legacy object_kind).
+    collections: dict[str, list[dict[str, Any]]] = {
+        "data_carriers": [],
+        "access_points": [],
+        "data_containers": [],
+        "execution_assets": [],
+    }
     phys_obj_by_name: dict[str, dict[str, Any]] = {}
+    containers_by_name: dict[str, dict[str, Any]] = {}
     field_by_dotted: dict[str, str] = {}
 
-    if tables.physical_objects is not None:
-        for i, row in enumerate(tables.physical_objects.rows, start=2):
+    if tables.data_carriers is not None:
+        for i, row in enumerate(tables.data_carriers.rows, start=2):
             name = _req_str(
-                row.get("name"), "physical_objects", i, "name", errors
+                row.get("name"), "data_carriers", i, "name", errors
             )
             description = _req_str(
-                row.get("description"), "physical_objects", i, "description", errors
+                row.get("description"), "data_carriers", i, "description", errors
             )
-            object_kind = _req_str(
-                row.get("object_kind"), "physical_objects", i, "object_kind", errors
+            kind_raw = _opt_str(row.get("asset_kind")) or _opt_str(
+                row.get("object_kind")
             )
+            if kind_raw is None:
+                errors.append(
+                    MapperError(
+                        "data_carriers",
+                        i,
+                        "missing required field 'asset_kind' (or legacy object_kind)",
+                    )
+                )
+            resolved = resolve_kind(kind_raw) if kind_raw else None
+            if kind_raw and resolved is None:
+                errors.append(
+                    MapperError(
+                        "data_carriers",
+                        i,
+                        f"unknown asset_kind/object_kind '{kind_raw}'",
+                    )
+                )
             qualified_name = _req_str(
                 row.get("qualified_name"),
-                "physical_objects",
+                "data_carriers",
                 i,
                 "qualified_name",
                 errors,
             )
             system_ref = _req_str(
-                row.get("system_ref"), "physical_objects", i, "system_ref", errors
+                row.get("system_ref"), "data_carriers", i, "system_ref", errors
             )
             technology = _req_str(
-                row.get("technology"), "physical_objects", i, "technology", errors
+                row.get("technology"), "data_carriers", i, "technology", errors
             )
-            direction = _req_str(
-                row.get("direction"), "physical_objects", i, "direction", errors
-            )
-            native_schema_ref = _req_str(
-                row.get("native_schema_ref"),
-                "physical_objects",
-                i,
-                "native_schema_ref",
-                errors,
+            # direction required for carriers/access_points; optional for containers
+            direction = _opt_str(row.get("direction"))
+            native_schema_ref = _opt_str(row.get("native_schema_ref")) or _opt_str(
+                row.get("structure_ref")
             )
             if (
                 name is None
                 or description is None
-                or object_kind is None
+                or resolved is None
                 or qualified_name is None
                 or system_ref is None
                 or technology is None
-                or direction is None
-                or native_schema_ref is None
             ):
+                continue
+            coll, asset_kind = resolved
+            if coll in ("data_carriers", "access_points") and not direction:
+                errors.append(
+                    MapperError(
+                        "data_carriers",
+                        i,
+                        "missing required field 'direction'",
+                    )
+                )
                 continue
             if name in phys_obj_by_name:
                 errors.append(
                     MapperError(
-                        "physical_objects",
+                        "data_carriers",
                         i,
-                        f"duplicate physical object name '{name}'",
+                        f"duplicate technical asset name '{name}'",
                     )
                 )
                 continue
             title = _opt_str(row.get("title")) or name
             obj_curie = ids.physical_object_id(prefix, slug, name)
+            ns = (
+                _opt_str(row.get("asset_namespace"))
+                or heuristic_namespace(technology, system_ref)
+            )
             obj: dict[str, Any] = {
                 "element_id": obj_curie,
                 "name": name,
@@ -382,14 +421,69 @@ def map_er_dictionary(
                 "lifecycle_status": defaults.lifecycle_status,
                 "solution_ref": profile.solution_ref,
                 "system_ref": system_ref,
-                "object_kind": object_kind,
+                "asset_kind": asset_kind,
+                "asset_namespace": ns,
                 "qualified_name": qualified_name,
                 "technology": technology,
-                "native_schema_ref": native_schema_ref,
-                "direction": direction,
-                "physical_fields": [],
             }
-            physical_objects.append(obj)
+            if direction and coll not in ("data_containers", "execution_assets"):
+                obj["direction"] = direction
+
+            # ADR-033: create parent DataContainer when schema/DB present in source
+            db_name, schema_name = infer_parent_names(
+                qualified_name=qualified_name,
+                native_schema_ref=native_schema_ref,
+                schema=_opt_str(row.get("db_schema")) or _opt_str(row.get("schema")),
+                database=_opt_str(row.get("database")),
+            )
+            parent_ref: str | None = None
+            if coll in CARRIER_COLLECTIONS and (db_name or schema_name):
+                db_obj = None
+                if db_name:
+                    db_obj = ensure_container(
+                        collections["data_containers"],
+                        containers_by_name,
+                        name=db_name,
+                        asset_kind="database",
+                        prefix=prefix,
+                        slug=slug,
+                        technology=technology,
+                        system_ref=system_ref,
+                        solution_ref=profile.solution_ref,
+                        lifecycle_status=defaults.lifecycle_status,
+                        description=f"Database {db_name}",
+                    )
+                if schema_name:
+                    sch_obj = ensure_container(
+                        collections["data_containers"],
+                        containers_by_name,
+                        name=schema_name,
+                        asset_kind="schema",
+                        prefix=prefix,
+                        slug=slug,
+                        technology=technology,
+                        system_ref=system_ref,
+                        solution_ref=profile.solution_ref,
+                        lifecycle_status=defaults.lifecycle_status,
+                        parent_ref=db_obj["element_id"] if db_obj else None,
+                        description=f"Schema {schema_name}",
+                    )
+                    parent_ref = str(sch_obj["element_id"])
+                elif db_obj is not None:
+                    parent_ref = str(db_obj["element_id"])
+            if parent_ref:
+                obj["parent_ref"] = parent_ref
+            elif _opt_str(row.get("parent_ref")):
+                obj["parent_ref"] = _opt_str(row.get("parent_ref"))
+
+            if coll in CARRIER_COLLECTIONS:
+                if native_schema_ref:
+                    obj["structure_ref"] = native_schema_ref
+                obj["physical_fields"] = []
+                if kind_raw in TRANSITIONAL_KINDS or asset_kind in TRANSITIONAL_KINDS:
+                    obj["annotations"] = {"transitional": "true"}
+
+            collections[coll].append(obj)
             phys_obj_by_name[name] = obj
 
     if tables.physical_fields is not None:
@@ -408,7 +502,16 @@ def map_er_dictionary(
                     MapperError(
                         "physical_fields",
                         i,
-                        f"unknown physical object '{object_name}'",
+                        f"unknown data carrier '{object_name}'",
+                    )
+                )
+                continue
+            if "physical_fields" not in owner:
+                errors.append(
+                    MapperError(
+                        "physical_fields",
+                        i,
+                        f"'{object_name}' is not a DataCarrier (no physical_fields)",
                     )
                 )
                 continue
@@ -431,7 +534,7 @@ def map_er_dictionary(
                 "name": field_name,
                 "description": description,
                 "lifecycle_status": defaults.lifecycle_status,
-                "physical_object_ref": owner["element_id"],
+                "carrier_ref": owner["element_id"],
                 "native_name": native_name,
                 "native_type": native_type,
                 "required": _as_bool(row.get("required")),
@@ -516,8 +619,9 @@ def map_er_dictionary(
         "logical_entities": logical,
         "relationships": relationships,
     }
-    if physical_objects:
-        package["physical_objects"] = physical_objects
+    for key, items in collections.items():
+        if items:
+            package[key] = items
     if mappings:
         package["mappings"] = mappings
 

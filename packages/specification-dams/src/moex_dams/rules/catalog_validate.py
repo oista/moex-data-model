@@ -30,7 +30,11 @@ ALLOWED_TARGET_CLASSES = frozenset(
         "LogicalEntity",
         "LogicalAttribute",
         "Relationship",
-        "PhysicalObject",
+        "TechnicalAsset",
+        "DataCarrier",
+        "AccessPoint",
+        "DataContainer",
+        "ExecutionAsset",
         "PhysicalField",
         "Mapping",
         "DomainContext",
@@ -40,20 +44,31 @@ ALLOWED_TARGET_CLASSES = frozenset(
 
 ALLOWED_OBJECT_KINDS = frozenset(
     {
-        "database",
-        "schema",
-        "table",
-        "view",
-        "column",
-        "api",
-        "endpoint",
-        "payload",
-        "topic",
-        "queue",
-        "message",
+        # DataCarrierKindEnum
+        "relational_table",
+        "relational_view",
         "file",
         "dataset",
+        "stream_topic",
+        "stream_queue",
+        "message_type",
+        "in_memory",
+        "api_resource",
+        "other",
+        # AccessPointKindEnum
+        "interface",
+        "operation",
+        "channel",
+        # DataContainerKindEnum
+        "database",
+        "schema",
+        "bucket",
+        "broker",
+        "directory",
+        "cluster",
+        # ExecutionAssetKindEnum
         "pipeline",
+        "job",
     }
 )
 

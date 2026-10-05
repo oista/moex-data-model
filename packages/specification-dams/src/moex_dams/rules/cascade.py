@@ -63,7 +63,10 @@ _CHILD_COLLECTIONS: tuple[tuple[str, str, str | None], ...] = (
     # (collection_key, level_name, nested_collection_key)
     ("logical_entities", "LogicalEntity", "attributes"),
     ("conceptual_entities", "ConceptualEntity", None),
-    ("physical_objects", "PhysicalObject", "physical_fields"),
+    ("data_carriers", "DataCarrier", "physical_fields"),
+    ("access_points", "AccessPoint", None),
+    ("data_containers", "DataContainer", None),
+    ("execution_assets", "ExecutionAsset", None),
 )
 
 _NESTED_LEVEL: dict[str, str] = {

@@ -71,7 +71,7 @@ class SheetsConfig(BaseModel):
 
 
 class SystemDefaults(BaseModel):
-    """Per-SrcSystem settings used when building ModelPackage / physical layer."""
+    """Per-SrcSystem settings used when building ModelPackage / technical layer."""
 
     src_system: str
     slug: str
@@ -81,10 +81,14 @@ class SystemDefaults(BaseModel):
     package_title: str
     package_description: str
     model_version: str = "0.1.0"
-    object_kind: str = "table"
+    # Prefer asset_kind (Variant B); object_kind kept as legacy alias in YAML.
+    asset_kind: str = "relational_table"
+    object_kind: str | None = None
     technology: str = "relational"
     direction: str = "internal"
     native_schema_ref_template: str = "urn:moex:{slug}:schema/{object}"
+    schema_name: str | None = None
+    database_name: str | None = None
     type_map: dict[str, str] = Field(default_factory=dict)
     domain_ref: str = "eam:domain/PARTY"
     namespace: str | None = None
@@ -98,6 +102,23 @@ class SystemDefaults(BaseModel):
         if not value:
             return {}
         return {str(k).strip().upper(): str(v).strip() for k, v in dict(value).items()}
+
+    def model_post_init(self, __context: Any) -> None:
+        # Prefer explicit object_kind when present (legacy profiles); else normalize asset_kind.
+        from moex_standard_linkml.ingest.technical_asset import resolve_kind
+
+        if self.object_kind:
+            resolved = resolve_kind(self.object_kind)
+            if resolved:
+                self.asset_kind = resolved[1]
+        else:
+            resolved = resolve_kind(self.asset_kind)
+            if resolved:
+                self.asset_kind = resolved[1]
+
+    def resolved_kind_raw(self) -> str:
+        """Kind token for DataCarriers sheet (legacy object_kind or asset_kind)."""
+        return self.object_kind or self.asset_kind
 
     def resolved_namespace(self) -> str:
         if self.namespace:
@@ -278,19 +299,22 @@ def system_to_ingest_profile(system: SystemDefaults, profile: SolutionXlsxProfil
                     identifying="identifying",
                 ),
             ),
-            physical_objects=IngestSheetSpec(
-                sheet="PhysicalObjects",
+            data_carriers=IngestSheetSpec(
+                sheet="DataCarriers",
                 required=False,
                 columns=IngestSheetColumns(
                     name="name",
                     title="title",
                     description="description",
                     object_kind="object_kind",
+                    asset_kind="asset_kind",
                     qualified_name="qualified_name",
                     technology="technology",
                     system_ref="system_ref",
                     direction="direction",
                     native_schema_ref="native_schema_ref",
+                    db_schema="schema",
+                    database="database",
                 ),
             ),
             physical_fields=IngestSheetSpec(

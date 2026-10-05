@@ -187,7 +187,10 @@ def convert_solution(
             len(e.get("attributes") or [])
             for e in (package.get("logical_entities") or [])
         ),
-        "physical_objects": len(package.get("physical_objects") or []),
+        "data_carriers": len(package.get("data_carriers") or []),
+        "data_containers": len(package.get("data_containers") or []),
+        "access_points": len(package.get("access_points") or []),
+        "execution_assets": len(package.get("execution_assets") or []),
         "src_only_rows": len(ir.src_only),
         "package_path": str(written_pkg),
         "envelope_path": str(written_env),

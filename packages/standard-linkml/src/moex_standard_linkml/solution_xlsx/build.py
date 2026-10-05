@@ -43,7 +43,7 @@ def ir_to_workbook_tables(
     entities: list[dict[str, Any]] = []
     attributes: list[dict[str, Any]] = []
     relationships: list[dict[str, Any]] = []
-    physical_objects: list[dict[str, Any]] = []
+    data_carriers: list[dict[str, Any]] = []
     physical_fields: list[dict[str, Any]] = []
     mappings: list[dict[str, Any]] = []
 
@@ -70,17 +70,20 @@ def ir_to_workbook_tables(
         phys_name = physical_name(phys_raw, logical_names=logical_names)
         if phys_name not in phys_names:
             phys_names.add(phys_name)
-            physical_objects.append(
+            data_carriers.append(
                 {
                     "name": phys_name,
                     "title": obj.src_object_name or title,
                     "description": desc,
-                    "object_kind": system.object_kind,
+                    "object_kind": system.resolved_kind_raw(),
+                    "asset_kind": system.asset_kind,
                     "qualified_name": phys_raw,
                     "technology": system.technology,
                     "system_ref": system.system_ref,
                     "direction": system.direction,
                     "native_schema_ref": system.native_schema_ref(phys_name),
+                    "schema": system.schema_name,
+                    "database": system.database_name,
                 }
             )
 
@@ -118,17 +121,20 @@ def ir_to_workbook_tables(
             phys_name = physical_name(phys_raw, logical_names=logical_names)
             if phys_name not in phys_names:
                 phys_names.add(phys_name)
-                physical_objects.append(
+                data_carriers.append(
                     {
                         "name": phys_name,
                         "title": phys_raw,
                         "description": phys_raw,
-                        "object_kind": system.object_kind,
+                        "object_kind": system.resolved_kind_raw(),
+                        "asset_kind": system.asset_kind,
                         "qualified_name": phys_raw,
                         "technology": system.technology,
                         "system_ref": system.system_ref,
                         "direction": system.direction,
                         "native_schema_ref": system.native_schema_ref(phys_name),
+                        "schema": system.schema_name,
+                        "database": system.database_name,
                     }
                 )
             # Field names may also contain dots — sanitize for dotted refs
@@ -223,8 +229,8 @@ def ir_to_workbook_tables(
         attributes=SheetTable("attributes", "Attributes", attributes),
         relationships=SheetTable("relationships", "Relationships", relationships),
         conceptual=None,
-        physical_objects=SheetTable(
-            "physical_objects", "PhysicalObjects", physical_objects
+        data_carriers=SheetTable(
+            "data_carriers", "DataCarriers", data_carriers
         ),
         physical_fields=SheetTable(
             "physical_fields", "PhysicalFields", physical_fields

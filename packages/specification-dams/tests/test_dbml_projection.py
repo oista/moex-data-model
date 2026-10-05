@@ -61,11 +61,11 @@ MINI = {
             "target_entity_ref": "dams:logical/mini/Client",
         }
     ],
-    "physical_objects": [
+    "data_carriers": [
         {
             "element_id": "dams:physical/mini/client-topic",
             "name": "client_changed_topic",
-            "object_kind": "topic",
+            "asset_kind": "stream_topic",
             "physical_fields": [
                 {
                     "element_id": "dams:physical/mini/client-topic/client_id",
@@ -79,7 +79,7 @@ MINI = {
         {
             "element_id": "dams:physical/mini/account_table",
             "name": "account",
-            "object_kind": "table",
+            "asset_kind": "relational_table",
             "physical_fields": [
                 {
                     "element_id": "dams:physical/mini/account/id",
@@ -100,7 +100,7 @@ MINI = {
         {
             "element_id": "dams:physical/mini/client_table",
             "name": "client",
-            "object_kind": "table",
+            "asset_kind": "relational_table",
             "physical_fields": [
                 {
                     "element_id": "dams:physical/mini/client/id",
@@ -141,10 +141,10 @@ def test_logical_profile_emits_table_and_columns() -> None:
     assert "client_changed_topic" not in text
 
 
-def test_physical_profile_notes_object_kind() -> None:
+def test_physical_profile_notes_asset_kind() -> None:
     text = project_model_package_to_dbml(MINI, profile="physical")
     assert "Table client_changed_topic" in text
-    assert "object_kind=topic" in text
+    assert "asset_kind=stream_topic" in text
     assert "headercolor: #0F9D58" in text
     assert "client_id string [not null" in text
     assert "Ref account_client_fk:" in text
