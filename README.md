@@ -93,12 +93,17 @@ linkml-lint --config .linkmllint.yaml model-assets/specifications/moex-dams/0.1/
 
 ### Первый вертикальный срез и CLI (Stage 0)
 
+Основной запуск (кроссплатформенный, в т.ч. Windows без `make`):
+
 ```bash
-make check
+python scripts/check_all.py
+# или: powershell -NoProfile -File scripts/check_all.ps1
+# или: make check
 ```
 
-Порядок: `generate-contracts` → slice/CLI pytest (`apps/cli/scripts/check.ps1`) → `validate-schemas` → `validate-examples` → `compare-golden` (contracts, JSON Schema, OWL, SHACL, DBML, Mermaid).  
-Pin: [`requirements-linkml.txt`](requirements-linkml.txt), CI: [`.github/workflows/check.yml`](.github/workflows/check.yml) (Python из [`.python-version`](.python-version)).
+Порядок: `generate-contracts` → slice/CLI pytest (`apps/cli/scripts/check.ps1`) → `validate-schemas` → `validate-examples` → `validate-requirements` → `compare-golden` (contracts, JSON Schema, OWL, SHACL, DBML, Mermaid) → `architecture-check` → `publish-gate`.  
+Флаги: `--keep-going`, `--only <step>`. Интерпретатор: `$PYTHON` / [`.python-version`](.python-version) / `apps/cli/.venv`.  
+Pin: [`requirements-linkml.txt`](requirements-linkml.txt), CI: [`.github/workflows/check.yml`](.github/workflows/check.yml).
 
 Регенерируемые артефакты схемы (кроме curated colored DBML):
 
