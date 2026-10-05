@@ -237,6 +237,16 @@ def test_enrich_hierarchy_on_repo_build_tmp(tmp_path: Path):
     assert "cdn.jsdelivr" not in text.lower()
 
 
+def test_serve_refresh_enriches_hierarchy_module():
+    """serve.refresh_from_disk must enrich hierarchy (else UI falls back to glossary tabs)."""
+    serve_py = (
+        VIEWER / "src" / "moex_publication_viewer" / "serve.py"
+    ).read_text(encoding="utf-8")
+    assert "enrich_dams_hierarchy_module" in serve_py
+    # Called after catalog compile, same order as build().
+    assert "enrich_dams_hierarchy_module(modules" in serve_py
+
+
 def test_atlas_hierarchy_tabs_in_js():
     js = (VIEWER / "static" / "viewer.js").read_text(encoding="utf-8")
     assert 'scope === "hierarchy"' in js
@@ -252,6 +262,15 @@ def test_atlas_hierarchy_tabs_in_js():
     assert 'id: "overview"' in gloss
     assert 'id: "list"' in gloss
     assert 'label: "Связи"' in gloss
+    assert 'id: "hierarchy-mermaid"' in gloss
+    assert 'label: "Mermaid"' in gloss
+    assert "function hierarchyNeighborhoodToMermaid" in js
+    assert "function renderHierarchyMermaidPane" in js
+    gen = js.split("function hierarchyNeighborhoodToMermaid")[1].split(
+        "function hierarchyNodeSize"
+    )[0]
+    assert "flowchart TB" in gen
+    assert "subgraph" in gen
 
 
 def test_js_hierarchy_edges_snap_to_leaf_boxes():

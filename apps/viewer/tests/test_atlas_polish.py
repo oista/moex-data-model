@@ -91,8 +91,12 @@ def test_js_glossary_section_tabs_and_term_links():
     assert 'label: "Связи"' in gloss
     assert 'scope === "hierarchy"' in gloss
     assert 'label: "Визуализация"' in gloss
+    assert 'id: "hierarchy-mermaid"' in gloss
+    assert 'label: "Mermaid"' in gloss
     assert "function renderHierarchyVisualization" in JS
     assert "function collectHierarchyNeighborhood" in JS
+    assert "function hierarchyNeighborhoodToMermaid" in JS
+    assert "function renderHierarchyMermaidPane" in JS
     assert ".hierarchy-viz" in assemble_css()
     assert "Отметьте термины сверху, чтобы увидеть связанные." in JS
     assert "Нет ассоциативных связей у выбранных терминов." in JS

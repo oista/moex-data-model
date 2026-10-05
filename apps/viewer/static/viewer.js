@@ -7463,6 +7463,67 @@
     return { nodes: outNodes, edges: outEdges };
   }
 
+  function hierarchyMermaidNodeId(rawId, used) {
+    let base = String(rawId || "n").replace(/[^A-Za-z0-9_]/g, "_");
+    if (!/^[A-Za-z_]/.test(base)) base = `n_${base}`;
+    let id = base || "n";
+    let i = 2;
+    while (used.has(id)) {
+      id = `${base}_${i}`;
+      i += 1;
+    }
+    used.add(id);
+    return id;
+  }
+
+  function hierarchyNeighborhoodToMermaid(nodes, edges) {
+    const list = Array.isArray(nodes) ? nodes : [];
+    const edgeList = Array.isArray(edges) ? edges : [];
+    if (!list.length) {
+      return (
+        "%% Отметьте сущности на вкладке «Связи», чтобы построить схему.\n" +
+        "flowchart TB\n"
+      );
+    }
+    const used = new Set();
+    const idMap = new Map();
+    list.forEach((n) => {
+      idMap.set(String(n.id), hierarchyMermaidNodeId(n.id, used));
+    });
+    function bandOf(n) {
+      const layer = String(n.layer || "CDM").toUpperCase();
+      return layer === "OWL" || layer === "LDM" ? layer : "CDM";
+    }
+    function escapeLabel(s) {
+      // Mermaid text entities: #quot; → "
+      return String(s || "").replace(/"/g, "#quot;");
+    }
+    const lines = ["flowchart TB"];
+    ["OWL", "CDM", "LDM"].forEach((band) => {
+      const bandNodes = list.filter((n) => bandOf(n) === band);
+      if (!bandNodes.length) return;
+      lines.push(`  subgraph ${band}["${band}"]`);
+      bandNodes.forEach((n) => {
+        const mid = idMap.get(String(n.id));
+        const label = escapeLabel(n.title || n.name || n.id);
+        lines.push(`    ${mid}["${label}"]`);
+      });
+      lines.push("  end");
+    });
+    edgeList.forEach((e) => {
+      const s = idMap.get(String(e.source));
+      const t = idMap.get(String(e.target));
+      if (!s || !t) return;
+      const rel = String(e.rel || "").trim();
+      if (rel) {
+        lines.push(`  ${s} -->|"${escapeLabel(rel)}"| ${t}`);
+      } else {
+        lines.push(`  ${s} --> ${t}`);
+      }
+    });
+    return lines.join("\n") + "\n";
+  }
+
   function hierarchyNodeSize(title) {
     const t = String(title || "");
     const w = Math.min(220, Math.max(120, 10 + t.length * 7.2));
@@ -7670,6 +7731,10 @@
     const hops = opts && opts.hops ? opts.hops : { OWL: 1, CDM: 1, LDM: 1 };
     const onToggleSeed =
       opts && typeof opts.onToggleSeed === "function" ? opts.onToggleSeed : null;
+    const onNeighborhoodChange =
+      opts && typeof opts.onNeighborhoodChange === "function"
+        ? opts.onNeighborhoodChange
+        : null;
 
     const root = document.createElement("div");
     root.className = "hierarchy-viz";
@@ -7691,6 +7756,7 @@
       input.addEventListener("change", () => {
         hops[band] = Math.max(0, Math.min(5, Number(input.value) || 0));
         paint();
+        if (onNeighborhoodChange) onNeighborhoodChange();
       });
       label.appendChild(input);
       hopWrap.appendChild(label);
@@ -7947,6 +8013,72 @@
     return root;
   }
 
+  function renderHierarchyMermaidPane(mod, section, opts) {
+    const selected =
+      opts && opts.selected instanceof Set ? opts.selected : new Set();
+    const hops = opts && opts.hops ? opts.hops : { OWL: 1, CDM: 1, LDM: 1 };
+
+    const root = document.createElement("div");
+    root.className = "hierarchy-mermaid-pane erd-source";
+
+    const actions = document.createElement("div");
+    actions.className = "erd-source-actions";
+    const hint = document.createElement("span");
+    hint.className = "muted";
+    hint.style.marginRight = "auto";
+    hint.textContent = "Вставьте код на mermaid.live";
+    const copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "copy-btn";
+    copyBtn.textContent = "Копировать";
+    actions.appendChild(hint);
+    actions.appendChild(copyBtn);
+    root.appendChild(actions);
+
+    const pre = document.createElement("pre");
+    pre.className = "erd-source-pre";
+    const code = document.createElement("code");
+    pre.appendChild(code);
+    root.appendChild(pre);
+
+    let currentText = "";
+
+    function refresh() {
+      if (!selected.size) {
+        currentText = hierarchyNeighborhoodToMermaid([], []);
+      } else {
+        const neigh = collectHierarchyNeighborhood(
+          section,
+          [...selected],
+          hops
+        );
+        currentText = hierarchyNeighborhoodToMermaid(
+          neigh.nodes,
+          neigh.edges
+        );
+      }
+      code.textContent = currentText;
+      copyBtn.disabled = !currentText.trim();
+    }
+
+    copyBtn.addEventListener("click", () => {
+      if (!currentText) return;
+      navigator.clipboard?.writeText(currentText).then(
+        () => {
+          copyBtn.textContent = "Скопировано";
+          setTimeout(() => {
+            copyBtn.textContent = "Копировать";
+          }, 1200);
+        },
+        () => {}
+      );
+    });
+
+    root._hierarchyMermaidRefresh = refresh;
+    refresh();
+    return root;
+  }
+
   function renderGlossary(mod, section) {
     const root = document.createElement("div");
     root.className = "glossary-section-tabs";
@@ -7957,6 +8089,15 @@
       const sharedSelected = new Set();
       const hops = { OWL: 1, CDM: 1, LDM: 1 };
       let vizRoot = null;
+      let mermaidRoot = null;
+      function refreshHierarchyViews() {
+        if (vizRoot && vizRoot._hierarchyRepaint) {
+          vizRoot._hierarchyRepaint();
+        }
+        if (mermaidRoot && mermaidRoot._hierarchyMermaidRefresh) {
+          mermaidRoot._hierarchyMermaidRefresh();
+        }
+      }
       mountTabs(
         root,
         [
@@ -7968,11 +8109,7 @@
               panel.appendChild(
                 renderGlossaryRelations(mod, section, {
                   selected: sharedSelected,
-                  onSelectionChange() {
-                    if (vizRoot && vizRoot._hierarchyRepaint) {
-                      vizRoot._hierarchyRepaint();
-                    }
-                  },
+                  onSelectionChange: refreshHierarchyViews,
                 })
               );
             },
@@ -7984,15 +8121,29 @@
               vizRoot = renderHierarchyVisualization(mod, section, {
                 selected: sharedSelected,
                 hops,
+                onNeighborhoodChange() {
+                  if (mermaidRoot && mermaidRoot._hierarchyMermaidRefresh) {
+                    mermaidRoot._hierarchyMermaidRefresh();
+                  }
+                },
                 onToggleSeed(id) {
                   if (sharedSelected.has(id)) sharedSelected.delete(id);
                   else sharedSelected.add(id);
-                  if (vizRoot && vizRoot._hierarchyRepaint) {
-                    vizRoot._hierarchyRepaint();
-                  }
+                  refreshHierarchyViews();
                 },
               });
               panel.appendChild(vizRoot);
+            },
+          },
+          {
+            id: "hierarchy-mermaid",
+            label: "Mermaid",
+            render(panel) {
+              mermaidRoot = renderHierarchyMermaidPane(mod, section, {
+                selected: sharedSelected,
+                hops,
+              });
+              panel.appendChild(mermaidRoot);
             },
           },
         ],

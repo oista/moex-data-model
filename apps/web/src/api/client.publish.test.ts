@@ -27,7 +27,10 @@ describe("createPublication", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     const pub = await api.createPublication(
-      { workspace_id: "ws-workbench" },
+      {
+        workspace_id: "ws-workbench",
+        implementation_id: "moex:implementation:trading:1.0.0",
+      },
       "idem-1",
     );
     expect(pub.status).toBe("submitted");
