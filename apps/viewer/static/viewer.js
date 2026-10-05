@@ -1295,8 +1295,8 @@
         }
       }
 
-      function openPublicationSection(sectionId, targetModuleId) {
-        selectedItemId = null;
+      function openPublicationSection(sectionId, targetModuleId, itemId) {
+        selectedItemId = itemId || null;
         const mid = targetModuleId || mod.module_id;
         const node = nodeForModule(mid) || nodeForModule(mod.module_id);
         if (node) currentNodeId = node.id;
@@ -1313,8 +1313,9 @@
           node: node ? node.id : null,
           module: shortModule(mid),
           section: sectionId,
+          item: itemId || null,
         });
-        showModule(mid, { section: sectionId });
+        showModule(mid, { section: sectionId, item: itemId || null });
       }
 
       function openExplorerItem(itemId) {
@@ -1322,7 +1323,10 @@
           findExplorerItem({ items: explorerItems }, itemId) ||
           findExplorerItem(expl, itemId);
         const attrs = found?.item?.attributes || {};
-        if (attrs.kind === "section_ref" && attrs.section_id) {
+        if (
+          (attrs.kind === "section_ref" || attrs.kind === "hierarchy_entity") &&
+          attrs.section_id
+        ) {
           if (found?.group) openGroups.add(found.group.id);
           // Expand parent implementation_ref when nested under it.
           if (found?.ancestors) {
@@ -1330,7 +1334,8 @@
           }
           openPublicationSection(
             attrs.section_id,
-            attrs.target_module_id || null
+            attrs.target_module_id || null,
+            attrs.kind === "hierarchy_entity" ? itemId : null
           );
           return;
         }
@@ -2245,10 +2250,23 @@
 
     // Instance card for entity-table rows with instance_of,
     // or term card for aggregated implementations glossary (term_cards).
+    // Hierarchy scope: card + Entity hierarchy tabs with the entity selected.
     if (focus?.section && focus?.item) {
       const section = mod.sections.find((s) => s.id === focus.section);
       if (section && section.type !== "explorer") {
         const row = findSectionItem(section, focus.item);
+        if (
+          row &&
+          section.attributes?.glossary_scope === "hierarchy" &&
+          section.attributes?.term_cards
+        ) {
+          setContentWide(true);
+          crumb.textContent = `${mod.title} / ${section.title} / ${row.title || row.id}`;
+          content.appendChild(crumb);
+          content.appendChild(renderImplTermDetail(mod, section, row));
+          content.appendChild(renderGlossary(mod, section));
+          return;
+        }
         if (row && section.attributes?.term_cards) {
           crumb.textContent = `${mod.title} / ${section.title} / ${row.title || row.id}`;
           content.appendChild(crumb);
@@ -8153,6 +8171,7 @@
 
     if (scope === "hierarchy") {
       const sharedSelected = new Set();
+      if (selectedItemId) sharedSelected.add(selectedItemId);
       const hops = { OWL: 1, CDM: 1, LDM: 1 };
       let vizRoot = null;
       let mermaidRoot = null;

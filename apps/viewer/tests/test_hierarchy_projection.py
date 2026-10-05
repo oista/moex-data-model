@@ -21,8 +21,11 @@ from moex_publication_viewer.models.publication_models import (
     PublicationSection,
 )
 from moex_publication_viewer.normalizers.hierarchy_projection import (
+    HIERARCHY_CATALOG_ID,
     HIERARCHY_MODULE_ID,
     HIERARCHY_SECTION_ID,
+    attach_hierarchy_entity_nav,
+    build_hierarchy_entity_nav,
     build_hierarchy_graph_and_items,
     build_hierarchy_yaml,
 )
@@ -302,6 +305,180 @@ def test_serve_refresh_enriches_hierarchy_module(tmp_path: Path):
     _assert_hierarchy_section_enriched(state.modules)
 
 
+def test_build_hierarchy_entity_nav_cdm_forest_and_ldm_folders():
+    items = [
+        PublicationItem(
+            id="ecm:dams:concept/Organization",
+            title="Организация",
+            description="Org",
+            attributes={
+                "instance_of": "ConceptualEntity",
+                "layer": "CDM",
+                "source_item_id": "dams:concept/Organization",
+                "solution_id": "moex-enterprise-conceptual-model",
+                "solution": "enterprise",
+            },
+        ),
+        PublicationItem(
+            id="ecm:dams:concept/LegalEntity",
+            title="Юридическое лицо",
+            description="LE",
+            attributes={
+                "instance_of": "ConceptualEntity",
+                "layer": "CDM",
+                "source_item_id": "dams:concept/LegalEntity",
+                "parent_concept_ref": "dams:concept/Organization",
+                "solution_id": "moex-enterprise-conceptual-model",
+                "solution": "enterprise",
+            },
+        ),
+        PublicationItem(
+            id="crm-solution:dams:logical/crm/CONTACT",
+            title="CONTACT",
+            description="contact",
+            attributes={
+                "instance_of": "LogicalEntity",
+                "layer": "LDM",
+                "source_item_id": "dams:logical/crm/CONTACT",
+                "solution_id": "crm-solution",
+                "solution": "CRM",
+            },
+        ),
+        PublicationItem(
+            id="mdm-solution:dams:logical/mdm/ENTERPRISE",
+            title="ENTERPRISE",
+            description="logical",
+            attributes={
+                "instance_of": "LogicalEntity",
+                "layer": "LDM",
+                "source_item_id": "dams:logical/mdm/ENTERPRISE",
+                "solution_id": "mdm-solution",
+                "solution": "MDM",
+            },
+        ),
+        PublicationItem(
+            id="https://example.org/owl/Thing",
+            title="Thing",
+            description="OWL",
+            attributes={"instance_of": "OwlClass", "layer": "OWL"},
+        ),
+    ]
+    conceptual, logical = build_hierarchy_entity_nav(items)
+    assert conceptual.title == "Conceptual Entities"
+    assert logical.title == "Logical Entities"
+    assert [c.title for c in conceptual.children] == ["Организация"]
+    org = conceptual.children[0]
+    assert org.attributes.get("kind") == "hierarchy_entity"
+    assert org.attributes.get("section_id") == HIERARCHY_SECTION_ID
+    assert [c.title for c in org.children] == ["Юридическое лицо"]
+    assert [c.title for c in logical.children] == ["CRM", "MDM"]
+    crm = logical.children[0]
+    assert crm.attributes.get("kind") == "group"
+    assert [c.id for c in crm.children] == ["crm-solution:dams:logical/crm/CONTACT"]
+    assert crm.children[0].attributes.get("kind") == "hierarchy_entity"
+    assert crm.children[0].attributes.get("nav_glyph") == "ldm"
+
+
+def test_attach_hierarchy_entity_nav_inserts_after_entity_hierarchy():
+    hierarchy = PublicationModule(
+        module_id=HIERARCHY_MODULE_ID,
+        title="moex.hierarchy",
+        sections=[
+            PublicationSection(
+                id=HIERARCHY_SECTION_ID,
+                title="Entity hierarchy",
+                type="glossary",
+                items=[
+                    PublicationItem(
+                        id="ecm:dams:concept/Person",
+                        title="Person",
+                        description="P",
+                        attributes={
+                            "instance_of": "ConceptualEntity",
+                            "layer": "CDM",
+                            "source_item_id": "dams:concept/Person",
+                            "solution_id": "ecm",
+                            "solution": "enterprise",
+                        },
+                    ),
+                    PublicationItem(
+                        id="crm-solution:dams:logical/crm/CONTACT",
+                        title="CONTACT",
+                        description="c",
+                        attributes={
+                            "instance_of": "LogicalEntity",
+                            "layer": "LDM",
+                            "source_item_id": "dams:logical/crm/CONTACT",
+                            "solution_id": "crm-solution",
+                            "solution": "CRM",
+                        },
+                    ),
+                ],
+                attributes={"glossary_scope": "hierarchy", "term_cards": True},
+            )
+        ],
+    )
+    href = PublicationItem(
+        id=HIERARCHY_CATALOG_ID,
+        title="moex.hierarchy",
+        attributes={"kind": "implementation_ref", "module_id": HIERARCHY_MODULE_ID},
+        children=[
+            PublicationItem(
+                id="implnav:moex-hierarchy:group:overview",
+                title="Overview",
+                attributes={"kind": "group"},
+                children=[],
+            ),
+            PublicationItem(
+                id="implnav:moex-hierarchy:entity-hierarchy",
+                title="Entity hierarchy",
+                attributes={
+                    "kind": "section_ref",
+                    "section_id": HIERARCHY_SECTION_ID,
+                },
+            ),
+            PublicationItem(
+                id="implnav:moex-hierarchy:group:artifacts",
+                title="Артефакты",
+                attributes={"kind": "group", "nav_group": "artifacts"},
+                children=[],
+            ),
+        ],
+    )
+    dams = PublicationModule(
+        module_id="moex:module:dams",
+        title="moex.dams",
+        sections=[
+            PublicationSection(
+                id="explorer",
+                title="Explorer",
+                type="explorer",
+                items=[
+                    PublicationItem(
+                        id="group:implementations",
+                        title="Реализации",
+                        attributes={"kind": "group"},
+                        children=[href],
+                    )
+                ],
+            )
+        ],
+    )
+    attach_hierarchy_entity_nav([dams, hierarchy])
+    titles = [c.title for c in href.children]
+    assert titles == [
+        "Overview",
+        "Entity hierarchy",
+        "Conceptual Entities",
+        "Logical Entities",
+        "Артефакты",
+    ]
+    conceptual = href.children[2]
+    assert conceptual.children[0].attributes.get("kind") == "hierarchy_entity"
+    logical = href.children[3]
+    assert logical.children[0].title == "CRM"
+
+
 def test_atlas_hierarchy_tabs_in_js():
     js = (VIEWER / "static" / "viewer.js").read_text(encoding="utf-8")
     assert 'scope === "hierarchy"' in js
@@ -331,6 +508,16 @@ def test_atlas_hierarchy_tabs_in_js():
     assert "n.solution" in gen
     assert "sol_" in gen
     assert gen.count("subgraph") >= 2
+    # Hierarchy entity nav click + card+tabs focus.
+    assert 'kind === "hierarchy_entity"' in js
+    assert 'attrs.kind === "hierarchy_entity" ? itemId : null' in js
+    assert 'glossary_scope === "hierarchy"' in js
+    assert "sharedSelected.add(selectedItemId)" in js
+    show = js.split("// Instance card for entity-table rows")[1].split(
+        "// Secondary section"
+    )[0]
+    assert "renderImplTermDetail(mod, section, row)" in show
+    assert "renderGlossary(mod, section)" in show
 
 
 def test_js_hierarchy_edges_snap_to_leaf_boxes():

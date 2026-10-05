@@ -25,6 +25,7 @@ from moex_publication_viewer.normalizers.implementation_glossary import (
 )
 from moex_publication_viewer.normalizers.hierarchy_projection import (
     HIERARCHY_CATALOG_ID,
+    attach_hierarchy_entity_nav,
     enrich_dams_hierarchy_module,
 )
 from moex_publication_viewer.normalizers.spec_glossary_tree import (
@@ -706,10 +707,10 @@ def impl_nav_section_ids(ref: PublicationItem) -> set[str]:
 
 
 def _assert_impl_nav_tree(items: list[PublicationItem] | None) -> None:
-    """Direct children may be group or section_ref; section_ref leaves stay flat."""
+    """Impl nav: group folders, section_ref leaves, hierarchy_entity CDM/LDM nodes."""
     for child in items or []:
         kind = (child.attributes or {}).get("kind")
-        assert kind in {"group", "section_ref"}, (
+        assert kind in {"group", "section_ref", "hierarchy_entity"}, (
             f"{child.id}: unexpected kind {kind!r} under Impl nav"
         )
         if kind == "section_ref":
@@ -717,6 +718,7 @@ def _assert_impl_nav_tree(items: list[PublicationItem] | None) -> None:
                 f"{child.id}: explorer/class tree must not nest under Impl section_ref"
             )
         else:
+            # group folders and hierarchy_entity taxonomy nodes may nest
             _assert_impl_nav_tree(child.children)
 
 
@@ -1242,6 +1244,7 @@ def enrich_publication_modules(
     enrich_dams_implementation_glossary(modules, catalog)
     if catalog is not None:
         enrich_dams_hierarchy_module(modules, catalog.nodes)
+        attach_hierarchy_entity_nav(modules)
     enrich_fibo_explorer_classes(modules)
     enrich_fibo_explorer_implementations(modules, catalog)
     enrich_linkml_glossary_sections(modules)

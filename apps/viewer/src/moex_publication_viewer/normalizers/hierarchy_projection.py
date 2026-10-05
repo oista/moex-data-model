@@ -587,3 +587,244 @@ def enrich_dams_hierarchy_module(
             f"{HIERARCHY_MODULE_ID}: entity-hierarchy missing "
             "glossary_scope=hierarchy after enrich"
         )
+
+
+def _hierarchy_entity_nav_leaf(
+    item: PublicationItem, *, glyph: str
+) -> PublicationItem:
+    """Sidebar leaf/node that opens Entity hierarchy focused on this row."""
+    attrs = item.attributes or {}
+    desc = item.description or (
+        f"Open «{item.title or item.id}» in Entity hierarchy."
+    )
+    return PublicationItem(
+        id=item.id,
+        title=item.title,
+        description=desc,
+        attributes={
+            "kind": "hierarchy_entity",
+            "section_id": HIERARCHY_SECTION_ID,
+            "target_module_id": HIERARCHY_MODULE_ID,
+            "target_section_id": HIERARCHY_SECTION_ID,
+            "nav_glyph": glyph,
+            "model_level": attrs.get("model_level") or attrs.get("layer"),
+            "solution": attrs.get("solution"),
+            "solution_id": attrs.get("solution_id"),
+            "source_item_id": attrs.get("source_item_id"),
+            "instance_of": attrs.get("instance_of"),
+            "description": desc,
+        },
+        children=[],
+    )
+
+
+def _sort_nav_tree(nodes: list[PublicationItem]) -> list[PublicationItem]:
+    ordered = sorted(nodes, key=lambda n: (n.title or n.id).lower())
+    for node in ordered:
+        if node.children:
+            node.children = _sort_nav_tree(list(node.children))
+    return ordered
+
+
+def _build_conceptual_entity_forest(
+    cdm_items: list[PublicationItem],
+) -> list[PublicationItem]:
+    """Nest CDM rows by parent_concept_ref (same-solution parent preferred)."""
+    nodes = {
+        item.id: _hierarchy_entity_nav_leaf(item, glyph="cdm") for item in cdm_items
+    }
+    meta = {
+        item.id: {
+            "source": str((item.attributes or {}).get("source_item_id") or "").strip(),
+            "parent": str(
+                (item.attributes or {}).get("parent_concept_ref") or ""
+            ).strip(),
+            "solution_id": str(
+                (item.attributes or {}).get("solution_id") or ""
+            ).strip(),
+        }
+        for item in cdm_items
+    }
+    by_source: dict[str, list[str]] = {}
+    for rid, m in meta.items():
+        if m["source"]:
+            by_source.setdefault(m["source"], []).append(rid)
+
+    child_ids: set[str] = set()
+    for rid, m in meta.items():
+        pref = m["parent"]
+        if not pref:
+            continue
+        candidates = by_source.get(pref) or []
+        parent_row = next(
+            (cid for cid in candidates if meta[cid]["solution_id"] == m["solution_id"]),
+            None,
+        )
+        if parent_row is None and candidates:
+            parent_row = candidates[0]
+        if not parent_row or parent_row == rid or parent_row not in nodes:
+            continue
+        nodes[parent_row].children.append(nodes[rid])
+        child_ids.add(rid)
+
+    roots = [nodes[item.id] for item in cdm_items if item.id not in child_ids]
+    return _sort_nav_tree(roots)
+
+
+def _build_logical_entity_folders(
+    ldm_items: list[PublicationItem],
+) -> list[PublicationItem]:
+    """Group LDM rows into solution folders (catalog encounter order)."""
+    by_sol: dict[str, list[PublicationItem]] = {}
+    order: list[str] = []
+    titles: dict[str, str] = {}
+    for item in ldm_items:
+        attrs = item.attributes or {}
+        sid = str(attrs.get("solution_id") or "unknown").strip() or "unknown"
+        if sid not in by_sol:
+            by_sol[sid] = []
+            order.append(sid)
+            titles[sid] = str(attrs.get("solution") or sid)
+        by_sol[sid].append(_hierarchy_entity_nav_leaf(item, glyph="ldm"))
+
+    folders: list[PublicationItem] = []
+    for sid in order:
+        kids = _sort_nav_tree(by_sol[sid])
+        folders.append(
+            PublicationItem(
+                id=f"implnav:{HIERARCHY_CATALOG_ID}:group:logical:{sid}",
+                title=titles[sid],
+                description=f"Logical entities from {titles[sid]}.",
+                attributes={
+                    "kind": "group",
+                    "group_style": "section_folder",
+                    "nav_glyph": "ldm",
+                    "nav_group": "logical-entities",
+                    "member_ids": [c.id for c in kids],
+                },
+                children=kids,
+            )
+        )
+    return folders
+
+
+def build_hierarchy_entity_nav(
+    items: list[PublicationItem],
+) -> tuple[PublicationItem, PublicationItem]:
+    """Build Conceptual Entities / Logical Entities sidebar groups from hierarchy rows."""
+    cdm: list[PublicationItem] = []
+    ldm: list[PublicationItem] = []
+    for item in items:
+        attrs = item.attributes or {}
+        instance_of = attrs.get("instance_of")
+        layer = attrs.get("layer") or attrs.get("model_level")
+        if instance_of == "ConceptualEntity" or (
+            layer == "CDM" and instance_of != "OwlClass"
+        ):
+            cdm.append(item)
+        elif instance_of == "LogicalEntity" or layer == "LDM":
+            ldm.append(item)
+
+    cdm_kids = _build_conceptual_entity_forest(cdm)
+    ldm_kids = _build_logical_entity_folders(ldm)
+
+    conceptual = PublicationItem(
+        id=f"implnav:{HIERARCHY_CATALOG_ID}:group:conceptual-entities",
+        title="Conceptual Entities",
+        description="All conceptual-model entities (CDM) across DAMS implementations.",
+        attributes={
+            "kind": "group",
+            "nav_glyph": "cdm",
+            "nav_group": "conceptual-entities",
+            "member_ids": [c.id for c in cdm_kids],
+        },
+        children=cdm_kids,
+    )
+    logical = PublicationItem(
+        id=f"implnav:{HIERARCHY_CATALOG_ID}:group:logical-entities",
+        title="Logical Entities",
+        description="Logical-model entities (LDM) grouped by IT solution.",
+        attributes={
+            "kind": "group",
+            "nav_glyph": "ldm",
+            "nav_group": "logical-entities",
+            "member_ids": [c.id for c in ldm_kids],
+        },
+        children=ldm_kids,
+    )
+    return conceptual, logical
+
+
+def attach_hierarchy_entity_nav(modules: list[PublicationModule]) -> None:
+    """Insert Conceptual/Logical entity trees under moex.hierarchy in DAMS explorer."""
+    hierarchy = next((m for m in modules if m.module_id == HIERARCHY_MODULE_ID), None)
+    if hierarchy is None:
+        return
+    section = next((s for s in hierarchy.sections if s.id == HIERARCHY_SECTION_ID), None)
+    if section is None or not section.items:
+        return
+
+    conceptual, logical = build_hierarchy_entity_nav(list(section.items))
+
+    dams = next((m for m in modules if m.module_id == "moex:module:dams"), None)
+    if dams is None:
+        return
+    explorer = next((s for s in dams.sections if s.type == "explorer"), None)
+    if explorer is None:
+        return
+    impls = next(
+        (i for i in (explorer.items or []) if i.id == "group:implementations"),
+        None,
+    )
+    if impls is None:
+        return
+
+    def find_hierarchy_ref(
+        nodes: list[PublicationItem] | None,
+    ) -> PublicationItem | None:
+        for node in nodes or []:
+            if node.id == HIERARCHY_CATALOG_ID:
+                return node
+            found = find_hierarchy_ref(node.children)
+            if found is not None:
+                return found
+        return None
+
+    href = find_hierarchy_ref(impls.children)
+    if href is None:
+        return
+
+    kids = list(href.children or [])
+    # Drop prior attach (idempotent refresh / serve).
+    kids = [
+        c
+        for c in kids
+        if c.id
+        not in {
+            conceptual.id,
+            logical.id,
+        }
+    ]
+    insert_at = next(
+        (
+            i
+            for i, c in enumerate(kids)
+            if (c.attributes or {}).get("section_id") == HIERARCHY_SECTION_ID
+        ),
+        None,
+    )
+    if insert_at is None:
+        # Fallback: before Артефакты, else append.
+        insert_at = len(kids)
+        for i, c in enumerate(kids):
+            if (c.attributes or {}).get("nav_group") == "artifacts" or c.title == "Артефакты":
+                insert_at = i
+                break
+        kids[insert_at:insert_at] = [conceptual, logical]
+    else:
+        kids[insert_at + 1 : insert_at + 1] = [conceptual, logical]
+
+    href.children = kids
+    attrs = dict(href.attributes or {})
+    attrs["member_ids"] = [c.id for c in kids]
+    href.attributes = attrs

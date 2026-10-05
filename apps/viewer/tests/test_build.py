@@ -244,6 +244,8 @@ def test_repo_golden_three_modules():
     assert [c["title"] for c in hierarchy.get("children") or []] == [
         "Overview",
         "Entity hierarchy",
+        "Conceptual Entities",
+        "Logical Entities",
         "Артефакты",
     ]
     entity_nav = hierarchy["children"][1]
@@ -251,6 +253,12 @@ def test_repo_golden_three_modules():
     assert (entity_nav.get("attributes") or {}).get("section_id") == (
         "entity-hierarchy"
     )
+    conceptual_nav = hierarchy["children"][2]
+    assert (conceptual_nav.get("attributes") or {}).get("kind") == "group"
+    assert conceptual_nav.get("children")
+    logical_nav = hierarchy["children"][3]
+    assert (logical_nav.get("attributes") or {}).get("kind") == "group"
+    assert logical_nav.get("children")
     glossary_nav = top[0]
     assert (glossary_nav.get("attributes") or {}).get("section_id") == (
         "implementations-glossary"

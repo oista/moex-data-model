@@ -17,6 +17,7 @@ from moex_publication_viewer.build import (
     enrich_dams_implementation_glossary,
     enrich_fibo_explorer_classes,
     enrich_fibo_explorer_implementations,
+    enrich_publication_modules,
     group_enterprise_conceptual_impl_nav,
     group_solution_impl_nav,
     impl_nav_section_ids,
@@ -518,8 +519,7 @@ def test_repo_dams_crm_solution_nav_folders() -> None:
 def test_repo_dams_impl_folders_group_solutions_and_projects() -> None:
     modules = compile_modules(REPO, enforce_publication_contract=False)
     catalog = compile_catalog(REPO, modules)
-    enrich_dams_explorer_implementations(modules, catalog)
-    enrich_dams_implementation_glossary(modules, catalog)
+    enrich_publication_modules(modules, catalog)
     dams = next(m for m in modules if m.module_id == DAMS_MODULE)
     explorer = next(s for s in dams.sections if s.type == "explorer")
     impls = next(i for i in explorer.items if i.id == "group:implementations")
@@ -536,11 +536,25 @@ def test_repo_dams_impl_folders_group_solutions_and_projects() -> None:
     assert [c.title for c in hierarchy.children] == [
         "Overview",
         "Entity hierarchy",
+        "Conceptual Entities",
+        "Logical Entities",
         "Артефакты",
     ]
     entity_nav = hierarchy.children[1]
     assert entity_nav.attributes.get("kind") == "section_ref"
     assert entity_nav.attributes.get("section_id") == "entity-hierarchy"
+    conceptual_nav = hierarchy.children[2]
+    assert conceptual_nav.attributes.get("kind") == "group"
+    assert conceptual_nav.children
+    assert conceptual_nav.children[0].attributes.get("kind") == "hierarchy_entity"
+    logical_nav = hierarchy.children[3]
+    assert logical_nav.attributes.get("kind") == "group"
+    assert logical_nav.children
+    assert logical_nav.children[0].attributes.get("kind") == "group"
+    assert logical_nav.children[0].children
+    assert logical_nav.children[0].children[0].attributes.get("kind") == (
+        "hierarchy_entity"
+    )
     ecm = next(c for c in impls.children if c.id == "moex-enterprise-conceptual-model")
     assert [c.title for c in ecm.children] == [
         "Overview",
