@@ -5,7 +5,7 @@ requirements:
     name: first
     title: First
     description: Fixture
-    lifecycle_status: active
+    lifecycle_status: approved
     code: GEN-902
     requirement_level: it_solution
     requirement_section: GEN
@@ -25,7 +25,7 @@ requirements:
     name: second
     title: Second
     description: Fixture
-    lifecycle_status: active
+    lifecycle_status: approved
     code: GEN-903
     requirement_level: it_solution
     requirement_section: GEN

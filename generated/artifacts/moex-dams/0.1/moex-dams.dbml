@@ -761,7 +761,6 @@ description varchar [not null]
 aliases varchar
 glossary_term_refs varchar
 tags varchar
-lifecycle_status varchar [not null]
 valid_from datetime
 valid_to datetime
 deprecated_by_ref varchar
@@ -771,6 +770,10 @@ requirement_section varchar [not null]
 statement varchar [not null]
 applies_to varchar
 formal_checks varchar
+implementation_status varchar
+superseded_by varchar
+SpecificationRequirement_lifecycle_status varchar [not null]
+lifecycle_status varchar [not null]
 }
 
 Table RequirementCatalog {
@@ -929,6 +932,7 @@ Ref: Dimension.grain_entity_refs > LogicalEntity.element_id
 Ref: SpecificationRequirement.glossary_term_refs > GlossaryTerm.registry_id
 Ref: SpecificationRequirement.applies_to > RequirementApplicability.applicability_id
 Ref: SpecificationRequirement.formal_checks > FormalCheck.check_id
+Ref: SpecificationRequirement.superseded_by > SpecificationRequirement.element_id
 Ref: RequirementCatalog.requirements > SpecificationRequirement.element_id
 Ref: MOEXModelRepository.registry_entries > RegistryEntry.registry_id
 Ref: MOEXModelRepository.model_packages > ModelPackage.element_id

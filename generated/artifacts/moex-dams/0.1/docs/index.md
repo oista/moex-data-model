@@ -150,6 +150,7 @@ Name: moex_dams
 | [identifying](identifying.md) |  |
 | [identity_rule](identity_rule.md) | Деловое правило идентичности экземпляров сущности в контексте ИТ-решения |
 | [implementation_scope](implementation_scope.md) | Body-level scope: enterprise (no solution_ref) or solution |
+| [implementation_status](implementation_status.md) | Статус реализации требования |
 | [implementation_version](implementation_version.md) |  |
 | [imports_refs](imports_refs.md) |  |
 | [integration_channel](integration_channel.md) |  |
@@ -258,6 +259,7 @@ Name: moex_dams
 | [source_uri](source_uri.md) |  |
 | [specification_version](specification_version.md) |  |
 | [statement](statement.md) | Полная нормативная формулировка на русском для человека: без имён LinkML-клас... |
+| [superseded_by](superseded_by.md) | Ссылка на требование, которым данное заменено (при lifecycle_status=supersede... |
 | [symmetric](symmetric.md) | When true, forward and inverse labels are the same; inverse_label may be omit... |
 | [system_ref](system_ref.md) |  |
 | [tags](tags.md) |  |
@@ -327,7 +329,9 @@ Name: moex_dams
 | [ModelLevelEnum](ModelLevelEnum.md) |  |
 | [PhysicalObjectKindEnum](PhysicalObjectKindEnum.md) |  |
 | [RelationshipKindEnum](RelationshipKindEnum.md) | Тип логической связи (Wave 2) |
+| [RequirementImplementationStatus](RequirementImplementationStatus.md) | Статус реализации утверждённого требования |
 | [RequirementLevelEnum](RequirementLevelEnum.md) | Уровень применения требования к спецификации |
+| [RequirementLifecycleStatus](RequirementLifecycleStatus.md) | Статус жизненного цикла нормативного требования (SpecificationRequirement) |
 | [RequirementSectionEnum](RequirementSectionEnum.md) | Раздел каталога требований (трёхбуквенный код в code) |
 | [ScopedDefinitionRelationEnum](ScopedDefinitionRelationEnum.md) | How a scoped definition relates to the element's reference definition (ADR-02... |
 | [SecurityClassificationEnum](SecurityClassificationEnum.md) | Режим защиты данных (Wave 2); ортогонален governance_classification |

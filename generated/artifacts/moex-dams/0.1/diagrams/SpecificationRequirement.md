@@ -51,14 +51,25 @@
     
 
         
+      SpecificationRequirement : implementation_status
+        
+          
+    
+        
+        
+        SpecificationRequirement --> "0..1" RequirementImplementationStatus : implementation_status
+        click RequirementImplementationStatus href "../RequirementImplementationStatus"
+    
+
+        
       SpecificationRequirement : lifecycle_status
         
           
     
         
         
-        SpecificationRequirement --> "1" LifecycleStatusEnum : lifecycle_status
-        click LifecycleStatusEnum href "../LifecycleStatusEnum"
+        SpecificationRequirement --> "1" RequirementLifecycleStatus : lifecycle_status
+        click RequirementLifecycleStatus href "../RequirementLifecycleStatus"
     
 
         
@@ -87,6 +98,17 @@
 
         
       SpecificationRequirement : statement
+        
+      SpecificationRequirement : superseded_by
+        
+          
+    
+        
+        
+        SpecificationRequirement --> "0..1" SpecificationRequirement : superseded_by
+        click SpecificationRequirement href "../SpecificationRequirement"
+    
+
         
       SpecificationRequirement : tags
         

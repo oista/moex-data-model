@@ -54,6 +54,13 @@ classes:
       - statement
       - applies_to
       - formal_checks
+      - implementation_status
+      - superseded_by
+    slot_usage:
+      lifecycle_status:
+        range: RequirementLifecycleStatus
+        required: true
+        ifabsent: string(draft)
 
   RequirementCatalog:
     description: Контейнер инстансов SpecificationRequirement вне ModelPackage.
@@ -140,6 +147,19 @@ slots:
     inlined: true
     inlined_as_list: true
     minimum_cardinality: 1
+  implementation_status:
+    range: RequirementImplementationStatus
+    description: >
+      Статус реализации требования. Осмысленно при lifecycle_status=approved;
+      обязательность при approved не проверяется в этой версии схемы.
+  superseded_by:
+    range: SpecificationRequirement
+    inlined: false
+    description: >
+      Ссылка на требование, которым данное заменено (при lifecycle_status=superseded).
+      Отличается от deprecated_by_ref (HasLifecycle): deprecated_by_ref означает
+      «устарело из-за …» без обязательной замены нормой; superseded_by — «заменено
+      указанным требованием». Обязательность при superseded не проверяется здесь.
   catalog_id:
     identifier: true
     range: uriorcurie

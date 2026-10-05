@@ -18,12 +18,7 @@ from moex_publication_viewer.build import (
     build_search_index,
     compile_catalog,
     compile_modules,
-    enrich_dams_explorer_implementations,
-    enrich_dams_implementation_glossary,
-    enrich_dams_hierarchy_module,
-    enrich_fibo_explorer_classes,
-    enrich_fibo_explorer_implementations,
-    enrich_linkml_glossary_sections,
+    enrich_publication_modules,
 )
 from moex_publication_viewer.edits import (
     EditError,
@@ -58,13 +53,7 @@ class ViewerServeState:
                 self.root, enforce_publication_contract=False, dist_dir=self.dist_dir
             )
             catalog = compile_catalog(self.root, modules)
-            enrich_dams_explorer_implementations(modules, catalog)
-            enrich_dams_implementation_glossary(modules, catalog)
-            if catalog is not None:
-                enrich_dams_hierarchy_module(modules, catalog.nodes)
-            enrich_fibo_explorer_classes(modules)
-            enrich_fibo_explorer_implementations(modules, catalog)
-            enrich_linkml_glossary_sections(modules)
+            enrich_publication_modules(modules, catalog)
             self.sidebar_siblings = build_dsp_documentation_sidebar_siblings(modules)
             self.modules = modules
             self.catalog = catalog

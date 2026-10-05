@@ -519,7 +519,10 @@ def enrich_dams_hierarchy_module(
     impl_nodes = _dams_impl_nodes(catalog_nodes)
     items, graph = build_hierarchy_graph_and_items(modules, impl_nodes)
     if not items:
-        return
+        raise RuntimeError(
+            f"{HIERARCHY_MODULE_ID}: enrich produced no hierarchy entities; "
+            "refusing to leave entity-hierarchy without glossary_scope=hierarchy"
+        )
     section = PublicationSection(
         id=HIERARCHY_SECTION_ID,
         title="Entity hierarchy",
@@ -574,3 +577,13 @@ def enrich_dams_hierarchy_module(
             out.write_text(yaml_text, encoding="utf-8")
         except OSError:
             pass
+
+    # Fail-closed: hierarchy UI tabs depend on this attribute.
+    secured = next(
+        (s for s in hierarchy.sections if s.id == HIERARCHY_SECTION_ID), None
+    )
+    if secured is None or (secured.attributes or {}).get("glossary_scope") != "hierarchy":
+        raise RuntimeError(
+            f"{HIERARCHY_MODULE_ID}: entity-hierarchy missing "
+            "glossary_scope=hierarchy after enrich"
+        )

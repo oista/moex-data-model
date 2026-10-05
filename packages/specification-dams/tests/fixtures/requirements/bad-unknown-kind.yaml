@@ -5,7 +5,7 @@ requirements:
     name: bad_kind
     title: Bad kind
     description: Fixture
-    lifecycle_status: active
+    lifecycle_status: approved
     code: GEN-900
     requirement_level: it_solution
     requirement_section: GEN

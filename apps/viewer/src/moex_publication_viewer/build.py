@@ -1230,6 +1230,23 @@ def _index_item(index: list[dict], module_id: str, section_id: str, item) -> Non
         _index_item(index, module_id, section_id, child)
 
 
+def enrich_publication_modules(
+    modules: list[PublicationModule],
+    catalog: ArchitectureCatalog | None,
+) -> None:
+    """Shared enrich pipeline for build() and serve.refresh_from_disk().
+
+    Keep a single call list so serve cannot drift and drop hierarchy/glossary UI.
+    """
+    enrich_dams_explorer_implementations(modules, catalog)
+    enrich_dams_implementation_glossary(modules, catalog)
+    if catalog is not None:
+        enrich_dams_hierarchy_module(modules, catalog.nodes)
+    enrich_fibo_explorer_classes(modules)
+    enrich_fibo_explorer_implementations(modules, catalog)
+    enrich_linkml_glossary_sections(modules)
+
+
 def build(root: Path, dist_dir: Path | None = None) -> Path:
     """Build viewer into dist_dir (default apps/viewer/dist). Returns index.html path."""
     root = root.resolve()
@@ -1243,13 +1260,7 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
     catalog = compile_catalog(root, modules)
     if catalog is not None:
         check_catalog_publication_contract_gate(catalog, modules, root)
-    enrich_dams_explorer_implementations(modules, catalog)
-    enrich_dams_implementation_glossary(modules, catalog)
-    if catalog is not None:
-        enrich_dams_hierarchy_module(modules, catalog.nodes)
-    enrich_fibo_explorer_classes(modules)
-    enrich_fibo_explorer_implementations(modules, catalog)
-    enrich_linkml_glossary_sections(modules)
+    enrich_publication_modules(modules, catalog)
     sidebar_siblings = build_dsp_documentation_sidebar_siblings(modules)
     search_index = build_search_index(modules)
     if catalog is not None:

@@ -5,7 +5,7 @@ requirements:
     name: bad_target
     title: Bad target
     description: Fixture
-    lifecycle_status: active
+    lifecycle_status: approved
     code: GEN-904
     requirement_level: it_solution
     requirement_section: GEN

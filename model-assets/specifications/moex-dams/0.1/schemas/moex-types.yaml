@@ -382,6 +382,36 @@ enums:
         description: ИТ-решение
       it_system:
         description: ИТ-система
+  RequirementLifecycleStatus:
+    description: >
+      Статус жизненного цикла нормативного требования (SpecificationRequirement).
+      Не заменяет ApprovalStatusEnum (согласование provenance у других элементов).
+    permissible_values:
+      draft:
+        description: Черновик, формулируется
+      proposed:
+        description: Вынесено на согласование
+      approved:
+        description: Принято как норма
+      rejected:
+        description: Отклонено
+      deprecated:
+        description: Больше не актуально, замены нет
+      superseded:
+        description: Заменено другим требованием
+  RequirementImplementationStatus:
+    description: >
+      Статус реализации утверждённого требования. Осмысленно при lifecycle_status=approved;
+      не заменяет ApprovalStatusEnum.
+    permissible_values:
+      not_started:
+        description: Не начато
+      in_progress:
+        description: Реализуется
+      implemented:
+        description: Реализовано
+      verified:
+        description: Проверено
   RequirementSectionEnum:
     description: Раздел каталога требований (трёхбуквенный код в code).
     permissible_values:

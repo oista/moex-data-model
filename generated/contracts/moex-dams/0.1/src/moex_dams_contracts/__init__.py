@@ -598,6 +598,60 @@ class RequirementLevelEnum(str, Enum):
     """
 
 
+class RequirementLifecycleStatus(str, Enum):
+    """
+    Статус жизненного цикла нормативного требования (SpecificationRequirement). Не заменяет ApprovalStatusEnum (согласование provenance у других элементов).
+
+    """
+    draft = "draft"
+    """
+    Черновик, формулируется
+    """
+    proposed = "proposed"
+    """
+    Вынесено на согласование
+    """
+    approved = "approved"
+    """
+    Принято как норма
+    """
+    rejected = "rejected"
+    """
+    Отклонено
+    """
+    deprecated = "deprecated"
+    """
+    Больше не актуально, замены нет
+    """
+    superseded = "superseded"
+    """
+    Заменено другим требованием
+    """
+
+
+class RequirementImplementationStatus(str, Enum):
+    """
+    Статус реализации утверждённого требования. Осмысленно при lifecycle_status=approved; не заменяет ApprovalStatusEnum.
+
+    """
+    not_started = "not_started"
+    """
+    Не начато
+    """
+    in_progress = "in_progress"
+    """
+    Реализуется
+    """
+    implemented = "implemented"
+    """
+    Реализовано
+    """
+    verified = "verified"
+    """
+    Проверено
+    """
+
+
 class RequirementSectionEnum(str, Enum):
     """
     Раздел каталога требований (трёхбуквенный код в code).
@@ -1609,6 +1663,10 @@ class SpecificationRequirement(ModelElement):
 """)
     applies_to: Optional[RequirementApplicability] = Field(default=None, description="""Область применимости требования для formal_checks runner.""")
     formal_checks: Optional[list[FormalCheck]] = Field(default=None, min_length=1)
+    implementation_status: Optional[RequirementImplementationStatus] = Field(default=None, description="""Статус реализации требования. Осмысленно при lifecycle_status=approved; обязательность при approved не проверяется в этой версии схемы.
+""")
+    superseded_by: Optional[str] = Field(default=None, description="""Ссылка на требование, которым данное заменено (при lifecycle_status=superseded). Отличается от deprecated_by_ref (HasLifecycle): deprecated_by_ref означает «устарело из-за …» без обязательной замены нормой; superseded_by — «заменено указанным требованием». Обязательность при superseded не проверяется здесь.
+""")
     element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
@@ -1616,7 +1674,7 @@ class SpecificationRequirement(ModelElement):
     aliases: Optional[list[str]] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    lifecycle_status: RequirementLifecycleStatus = Field(default=RequirementLifecycleStatus.draft)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
     deprecated_by_ref: Optional[str] = Field(default=None)

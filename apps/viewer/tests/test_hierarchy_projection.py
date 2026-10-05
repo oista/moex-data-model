@@ -2,10 +2,15 @@
 
 from __future__ import annotations
 
+import json
+import re
 from pathlib import Path
 
 from moex_publication_viewer.build import (
     build,
+    compile_catalog,
+    compile_modules,
+    enrich_publication_modules,
     group_hierarchy_impl_nav,
     impl_section_nav_children,
 )
@@ -17,12 +22,23 @@ from moex_publication_viewer.models.publication_models import (
 )
 from moex_publication_viewer.normalizers.hierarchy_projection import (
     HIERARCHY_MODULE_ID,
+    HIERARCHY_SECTION_ID,
     build_hierarchy_graph_and_items,
     build_hierarchy_yaml,
 )
+from moex_publication_viewer.serve import ViewerServeState
 
 REPO = Path(__file__).resolve().parents[3]
 VIEWER = Path(__file__).resolve().parents[1]
+
+
+def _assert_hierarchy_section_enriched(modules: list[PublicationModule]) -> None:
+    mod = next(m for m in modules if m.module_id == HIERARCHY_MODULE_ID)
+    sec = next(s for s in mod.sections if s.id == HIERARCHY_SECTION_ID)
+    attrs = sec.attributes or {}
+    assert attrs.get("glossary_scope") == "hierarchy", attrs
+    graph = attrs.get("hierarchy_graph") or {}
+    assert isinstance(graph.get("nodes"), list) and len(graph["nodes"]) > 0
 
 
 def test_hierarchy_nav_groups_three_folders():
@@ -230,21 +246,60 @@ def test_enrich_hierarchy_on_repo_build_tmp(tmp_path: Path):
     assert html.is_file()
     text = html.read_text(encoding="utf-8")
     assert "moex.hierarchy" in text
-    assert "glossary_scope" in text
-    assert '"hierarchy"' in text or "hierarchy" in text
     # Vendored elkjs must be inlined, no CDN.
     assert "elk.algorithm" in text or "ELK" in text
     assert "cdn.jsdelivr" not in text.lower()
+    # Payload invariant: parse publication-data, not substring search.
+    m = re.search(
+        r'<script id="publication-data" type="application/json">(.*?)</script>',
+        text,
+        re.DOTALL,
+    )
+    assert m, "publication-data script missing"
+    payload = json.loads(m.group(1))
+    mod = next(x for x in payload if x.get("module_id") == HIERARCHY_MODULE_ID)
+    sec = next(s for s in mod["sections"] if s.get("id") == HIERARCHY_SECTION_ID)
+    assert (sec.get("attributes") or {}).get("glossary_scope") == "hierarchy"
+    nodes = ((sec.get("attributes") or {}).get("hierarchy_graph") or {}).get("nodes")
+    assert isinstance(nodes, list) and len(nodes) > 0
 
 
-def test_serve_refresh_enriches_hierarchy_module():
-    """serve.refresh_from_disk must enrich hierarchy (else UI falls back to glossary tabs)."""
+def test_enrich_publication_modules_sets_hierarchy_scope():
+    """Shared enrich pipeline (build=serve) must set hierarchy glossary_scope."""
+    modules = compile_modules(
+        REPO, enforce_publication_contract=False, dist_dir=REPO / "apps" / "viewer" / "dist"
+    )
+    catalog = compile_catalog(REPO, modules)
+    enrich_publication_modules(modules, catalog)
+    _assert_hierarchy_section_enriched(modules)
+
+
+def test_build_and_serve_share_enrich_publication_modules():
+    """build.py and serve.py must call the same enrich_publication_modules."""
+    build_py = (
+        VIEWER / "src" / "moex_publication_viewer" / "build.py"
+    ).read_text(encoding="utf-8")
     serve_py = (
         VIEWER / "src" / "moex_publication_viewer" / "serve.py"
     ).read_text(encoding="utf-8")
-    assert "enrich_dams_hierarchy_module" in serve_py
-    # Called after catalog compile, same order as build().
-    assert "enrich_dams_hierarchy_module(modules" in serve_py
+    assert "def enrich_publication_modules(" in build_py
+    assert "enrich_dams_hierarchy_module(modules" in build_py.split(
+        "def enrich_publication_modules"
+    )[1].split("def build(")[0]
+    assert "enrich_publication_modules(modules" in build_py
+    assert "enrich_publication_modules" in serve_py
+    assert "enrich_publication_modules(modules" in serve_py
+    # Serve must not re-list individual enrich_* calls (drift risk).
+    refresh = serve_py.split("def refresh_from_disk")[1].split("def rebuild")[0]
+    assert "enrich_dams_hierarchy_module(" not in refresh
+    assert "enrich_publication_modules(modules" in refresh
+
+
+def test_serve_refresh_enriches_hierarchy_module(tmp_path: Path):
+    """serve.refresh_from_disk must leave hierarchy section with glossary_scope."""
+    state = ViewerServeState(REPO, tmp_path / "dist", port=0)
+    state.refresh_from_disk(write_html=False)
+    _assert_hierarchy_section_enriched(state.modules)
 
 
 def test_atlas_hierarchy_tabs_in_js():
@@ -271,6 +326,11 @@ def test_atlas_hierarchy_tabs_in_js():
     )[0]
     assert "flowchart TB" in gen
     assert "subgraph" in gen
+    # Nested IT-solution clusters inside OWL/CDM/LDM bands (mirror ELK viz).
+    assert "solution_id" in gen
+    assert "n.solution" in gen
+    assert "sol_" in gen
+    assert gen.count("subgraph") >= 2
 
 
 def test_js_hierarchy_edges_snap_to_leaf_boxes():

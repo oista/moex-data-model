@@ -7502,12 +7502,24 @@
     ["OWL", "CDM", "LDM"].forEach((band) => {
       const bandNodes = list.filter((n) => bandOf(n) === band);
       if (!bandNodes.length) return;
-      lines.push(`  subgraph ${band}["${band}"]`);
+      const bySol = new Map();
       bandNodes.forEach((n) => {
-        const mid = idMap.get(String(n.id));
-        const label = escapeLabel(n.title || n.name || n.id);
-        lines.push(`    ${mid}["${label}"]`);
+        const sid = String(n.solution_id || n.solution || "other");
+        if (!bySol.has(sid)) bySol.set(sid, []);
+        bySol.get(sid).push(n);
       });
+      lines.push(`  subgraph ${band}["${band}"]`);
+      for (const [sid, kids] of bySol.entries()) {
+        const solLabel = escapeLabel(kids[0]?.solution || sid);
+        const solSubId = hierarchyMermaidNodeId(`sol_${band}_${sid}`, used);
+        lines.push(`    subgraph ${solSubId}["${solLabel}"]`);
+        kids.forEach((n) => {
+          const mid = idMap.get(String(n.id));
+          const label = escapeLabel(n.title || n.name || n.id);
+          lines.push(`      ${mid}["${label}"]`);
+        });
+        lines.push("    end");
+      }
       lines.push("  end");
     });
     edgeList.forEach((e) => {

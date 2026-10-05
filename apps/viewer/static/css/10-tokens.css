@@ -120,6 +120,16 @@
   --class-color-abstract: #2e8fad;
   --class-color-enum: #9a7a18;
   --class-color-has-mixins: #3d6eb5;
+
+  /* Requirement lifecycle status (SpecificationRequirement) */
+  --status-draft: #7a8fa3;
+  --status-proposed: #a8b8c6;
+  --status-approved: #ffffff;
+  --status-inactive: #8a7a6e;
+  --status-outline: #3a4450;
+  --status-chip-bg: #2c333c;
+  /* Requirements section folder glyph (document mark) */
+  --nav-requirements-accent: #ff6641;
 }
 
 [data-palette="default"] {

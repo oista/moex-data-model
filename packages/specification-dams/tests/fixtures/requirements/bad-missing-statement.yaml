@@ -5,7 +5,7 @@ requirements:
     name: missing_statement
     title: Missing statement
     description: Fixture
-    lifecycle_status: active
+    lifecycle_status: approved
     code: GEN-901
     requirement_level: it_solution
     requirement_section: GEN

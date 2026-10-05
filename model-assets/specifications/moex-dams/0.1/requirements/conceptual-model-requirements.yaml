@@ -5,7 +5,7 @@ requirements:
     name: conceptual_package_identity
     title: Идентичность пакета концептуальной модели
     description: Обязательные поля корня ModelPackage для enterprise-conceptual.
-    lifecycle_status: active
+    lifecycle_status: draft
     code: CM-GEN-001
     requirement_level: conceptual_model
     requirement_section: GEN
@@ -54,7 +54,7 @@ requirements:
     description: >
       Пакет концептуальной модели должен иметь implementation_scope: enterprise
       и не ссылаться на конкретное ИТ-решение.
-    lifecycle_status: active
+    lifecycle_status: proposed
     code: CM-GEN-002
     requirement_level: conceptual_model
     requirement_section: GEN
@@ -74,7 +74,7 @@ requirements:
     name: conceptual_entity_core
     title: Концептуальная сущность
     description: Обязательные поля ConceptualEntity.
-    lifecycle_status: active
+    lifecycle_status: approved
     code: CM-CON-001
     requirement_level: conceptual_model
     requirement_section: GEN
@@ -108,7 +108,7 @@ requirements:
     name: conceptual_relationship_endpoints
     title: Концы связей концептуальных сущностей
     description: Обязательные концы Relationship на концептуальном уровне.
-    lifecycle_status: active
+    lifecycle_status: draft
     code: CM-REF-001
     requirement_level: conceptual_model
     requirement_section: REF
@@ -149,7 +149,7 @@ requirements:
       Structural independence of ConceptualEntity (ADR-026). Implemented by
       check_conceptual_entities (warning during transitional period when tier
       is omitted; errors when tier is declared inconsistently).
-    lifecycle_status: active
+    lifecycle_status: proposed
     code: CM-CON-002
     requirement_level: conceptual_model
     requirement_section: GEN
@@ -176,7 +176,7 @@ requirements:
     description: >
       Genesis and external_class_refs (ADR-026). external ⇔ ≥1
       external_class_refs; native ⇔ empty. match_kind drives ADR-025 exactness.
-    lifecycle_status: active
+    lifecycle_status: approved
     code: CM-CON-003
     requirement_level: conceptual_model
     requirement_section: GEN
@@ -203,7 +203,7 @@ requirements:
     description: >
       RelationTerm dictionary with forward/inverse labels (ADR-026). One
       Relationship record per pair; labels derived from the term.
-    lifecycle_status: active
+    lifecycle_status: approved
     code: CM-REF-002
     requirement_level: conceptual_model
     requirement_section: REF
@@ -229,7 +229,7 @@ requirements:
     title: Запрет физического слоя
     description: >
       Enterprise-conceptual пакет не содержит physical_objects (ADR-021).
-    lifecycle_status: active
+    lifecycle_status: approved
     code: CM-PDM-000
     requirement_level: conceptual_model
     requirement_section: PDM

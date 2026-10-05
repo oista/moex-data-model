@@ -1186,6 +1186,28 @@
       ]
     },
     {
+      "iri": "https://data.moex.com/dams/RequirementImplementationStatus",
+      "name": "RequirementImplementationStatus",
+      "values": [
+        {
+          "iri": "https://data.moex.com/dams/RequirementImplementationStatus#implemented",
+          "name": "implemented"
+        },
+        {
+          "iri": "https://data.moex.com/dams/RequirementImplementationStatus#in_progress",
+          "name": "in_progress"
+        },
+        {
+          "iri": "https://data.moex.com/dams/RequirementImplementationStatus#not_started",
+          "name": "not_started"
+        },
+        {
+          "iri": "https://data.moex.com/dams/RequirementImplementationStatus#verified",
+          "name": "verified"
+        }
+      ]
+    },
+    {
       "iri": "https://data.moex.com/dams/RequirementLevelEnum",
       "name": "RequirementLevelEnum",
       "values": [
@@ -1200,6 +1222,36 @@
         {
           "iri": "https://data.moex.com/dams/RequirementLevelEnum#it_system",
           "name": "it_system"
+        }
+      ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/RequirementLifecycleStatus",
+      "name": "RequirementLifecycleStatus",
+      "values": [
+        {
+          "iri": "https://data.moex.com/dams/RequirementLifecycleStatus#approved",
+          "name": "approved"
+        },
+        {
+          "iri": "https://data.moex.com/dams/RequirementLifecycleStatus#deprecated",
+          "name": "deprecated"
+        },
+        {
+          "iri": "https://data.moex.com/dams/RequirementLifecycleStatus#draft",
+          "name": "draft"
+        },
+        {
+          "iri": "https://data.moex.com/dams/RequirementLifecycleStatus#proposed",
+          "name": "proposed"
+        },
+        {
+          "iri": "https://data.moex.com/dams/RequirementLifecycleStatus#rejected",
+          "name": "rejected"
+        },
+        {
+          "iri": "https://data.moex.com/dams/RequirementLifecycleStatus#superseded",
+          "name": "superseded"
         }
       ]
     },
@@ -1337,7 +1389,7 @@
     "shex": "http://www.w3.org/ns/shex#",
     "xsd": "http://www.w3.org/2001/XMLSchema#"
   },
-  "schema_digest": "sha256:f112c0407187fd408730dd6b88a09c3250b57fd61a403131dda2e7f2b97de22c",
+  "schema_digest": "sha256:1d4f3402297ade4b800a6e1a4d35e622d12dc11efa66032fadefc848ed2483c7",
   "schema_id": "https://data.moex.com/dams/v0.1",
   "schema_name": "moex_dams",
   "schema_version": "0.1.0",
@@ -1673,6 +1725,10 @@
     {
       "iri": "https://data.moex.com/dams/implementation_scope",
       "name": "implementation_scope"
+    },
+    {
+      "iri": "https://data.moex.com/dams/implementation_status",
+      "name": "implementation_status"
     },
     {
       "iri": "https://data.moex.com/dams/implementation_version",
@@ -2105,6 +2161,10 @@
     {
       "iri": "https://data.moex.com/dams/statement",
       "name": "statement"
+    },
+    {
+      "iri": "https://data.moex.com/dams/superseded_by",
+      "name": "superseded_by"
     },
     {
       "iri": "https://data.moex.com/dams/symmetric",

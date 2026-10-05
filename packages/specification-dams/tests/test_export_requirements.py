@@ -37,7 +37,7 @@ def test_requirement_row_flattens_checks() -> None:
             "statement": "У пакета должен быть идентификатор.",
             "requirement_level": "it_solution",
             "requirement_section": "GEN",
-            "lifecycle_status": "active",
+            "lifecycle_status": "approved",
             "applies_to": {
                 "applies_target_class": "ModelPackage",
                 "applies_target_kinds": ["table", "topic"],

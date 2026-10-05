@@ -5,7 +5,8 @@ requirements:
   name: model_package_identity
   title: Идентичность и ответственность пакета
   description: Identity, version, lifecycle и ownership пакета модели.
-  lifecycle_status: active
+  lifecycle_status: approved
+  implementation_status: verified
   code: GEN-001
   requirement_level: it_solution
   requirement_section: GEN
@@ -73,7 +74,7 @@ requirements:
   name: solution_binding
   title: Привязка к ИТ-решению
   description: Пакет уровня solution ссылается на ИТ-решение.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: GEN-002
   requirement_level: it_solution
   requirement_section: GEN
@@ -101,7 +102,7 @@ requirements:
   name: non_empty_model
   title: Непустой состав модели
   description: Пакет содержит logical или physical facet.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: GEN-003
   requirement_level: it_solution
   requirement_section: GEN
@@ -123,7 +124,7 @@ requirements:
   name: physical_object_semantic_link
   title: Физические объекты связаны со смыслом
   description: Data-carrying PhysicalObject имеет entity mapping или technical-only.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: GEN-004
   requirement_level: it_solution
   requirement_section: GEN
@@ -160,7 +161,8 @@ requirements:
   name: logical_entity_context
   title: Контекст и роль данных
   description: Обязательные context_ref и solution_data_role.
-  lifecycle_status: active
+  lifecycle_status: approved
+  implementation_status: implemented
   code: LDM-001
   requirement_level: it_solution
   requirement_section: LDM
@@ -196,7 +198,7 @@ requirements:
   name: logical_entity_identity_ownership
   title: Обозначение и ответственность сущности
   description: title/name/description/lifecycle и ownership.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: LDM-002
   requirement_level: it_solution
   requirement_section: LDM
@@ -251,7 +253,7 @@ requirements:
   name: logical_entity_classification
   title: Классификация сущности
   description: entity_type, data_class, business_importance, governance.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: LDM-003
   requirement_level: it_solution
   requirement_section: LDM
@@ -296,7 +298,7 @@ requirements:
   name: identity_rule_and_key
   title: Правило идентичности
   description: identity_rule и ключ; surrogate alone insufficient.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: LDM-004
   requirement_level: it_solution
   requirement_section: LDM
@@ -320,7 +322,7 @@ requirements:
   name: logical_entity_has_attributes
   title: Наличие характеристик
   description: ≥1 attribute unless technical with rationale.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: LDM-005
   requirement_level: it_solution
   requirement_section: LDM
@@ -341,7 +343,7 @@ requirements:
   name: conceptual_alignment
   title: Связь с корпоративными понятиями
   description: Status-driven conceptual alignment.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: LDM-006
   requirement_level: it_solution
   requirement_section: LDM
@@ -365,7 +367,7 @@ requirements:
   name: semantic_inclusion
   title: Семантическая включённость
   description: Relationship / conceptual / isolation — не physical mapping alone.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: LDM-007
   requirement_level: it_solution
   requirement_section: LDM
@@ -391,7 +393,7 @@ requirements:
   description: >
     Warning when an aligned LogicalEntity realizes a dependent enterprise concept
     without a logical Relationship to a peer that realizes each owner (ADR-029).
-  lifecycle_status: active
+  lifecycle_status: approved
   code: LDM-008
   requirement_level: it_solution
   requirement_section: LDM
@@ -419,7 +421,7 @@ requirements:
   name: logical_attribute_core
   title: Основные свойства атрибута
   description: owner, type, required, multivalued.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: ATR-001
   requirement_level: it_solution
   requirement_section: ATR
@@ -461,7 +463,7 @@ requirements:
   name: attribute_naming
   title: Именование атрибута
   description: Wave 2 soft — lower_snake_case technical name.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: ATR-002
   requirement_level: it_solution
   requirement_section: ATR
@@ -482,7 +484,7 @@ requirements:
   name: attribute_physical_coverage
   title: Отображение атрибута на реализацию
   description: Mapping coverage for applicable attributes.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: ATR-005
   requirement_level: it_solution
   requirement_section: ATR
@@ -515,7 +517,8 @@ requirements:
   name: relationship_endpoints
   title: Концы связи
   description: source/target refs resolve.
-  lifecycle_status: active
+  lifecycle_status: approved
+  implementation_status: not_started
   code: REF-001
   requirement_level: it_solution
   requirement_section: REF
@@ -557,7 +560,7 @@ requirements:
   name: relationship_cardinality
   title: Кардинальность связи
   description: Four cardinality slots when active.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: REF-002
   requirement_level: it_solution
   requirement_section: REF
@@ -579,7 +582,8 @@ requirements:
   name: physical_object_core
   title: Основные свойства физического объекта
   description: system, kind, name, technology, schema, lifecycle.
-  lifecycle_status: active
+  lifecycle_status: approved
+  implementation_status: in_progress
   code: PDM-001
   requirement_level: it_solution
   requirement_section: PDM
@@ -635,7 +639,7 @@ requirements:
   name: physical_field_core
   title: Основные свойства физического поля
   description: parent, native name/type, required.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: PDM-002
   requirement_level: it_solution
   requirement_section: PDM
@@ -677,7 +681,7 @@ requirements:
   name: entity_physical_mapping
   title: Отображение сущности и физического объекта
   description: Explicit entity_physical Mapping only.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: PDM-003
   requirement_level: it_solution
   requirement_section: PDM
@@ -711,7 +715,7 @@ requirements:
   name: field_attribute_mapping
   title: Отображение поля и атрибута
   description: Field-level mapping or exception.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: PDM-004
   requirement_level: it_solution
   requirement_section: PDM
@@ -734,7 +738,7 @@ requirements:
   name: classification_axes_independent
   title: Независимость осей классификации
   description: Wave 2 warning — entity_type vs data_class.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: CLS-001
   requirement_level: it_solution
   requirement_section: CLS
@@ -755,7 +759,7 @@ requirements:
   name: cross_solution_dataflow
   title: Потоки через границы решений
   description: Wave 2 soft — DataFlow when providing/consuming across solutions.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: FLW-001
   requirement_level: it_solution
   requirement_section: FLW
@@ -779,7 +783,7 @@ requirements:
   name: security_classification_soft
   title: Режим защиты данных
   description: Wave 2 warning — security_classification when governance is confidential/restricted.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: CLS-002
   requirement_level: it_solution
   requirement_section: CLS
@@ -802,7 +806,7 @@ requirements:
   name: relationship_kind_soft
   title: Тип логической связи
   description: Wave 2 warning — relationship_kind recommended for active links.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: REF-003
   requirement_level: it_solution
   requirement_section: REF
@@ -824,7 +828,7 @@ requirements:
   name: attribute_type_specific_soft
   title: Дополнительные свойства по типу атрибута
   description: Wave 2 warning — currency/unit/timezone when type implies them.
-  lifecycle_status: active
+  lifecycle_status: approved
   code: ATR-004
   requirement_level: it_solution
   requirement_section: ATR

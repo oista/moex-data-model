@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-05T04:58:17
+# Generation date: 2026-10-05T09:08:13
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -2969,13 +2969,15 @@ class SpecificationRequirement(ModelElement):
     element_id: Union[str, SpecificationRequirementElementId] = None
     name: str = None
     description: str = None
-    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     code: str = None
     requirement_level: Union[str, "RequirementLevelEnum"] = None
     requirement_section: Union[str, "RequirementSectionEnum"] = None
     statement: str = None
+    lifecycle_status: Union[str, "RequirementLifecycleStatus"] = 'draft'
     applies_to: Optional[Union[dict, RequirementApplicability]] = None
     formal_checks: Optional[Union[dict[Union[str, FormalCheckCheckId], Union[dict, FormalCheck]], list[Union[dict, FormalCheck]]]] = empty_dict()
+    implementation_status: Optional[Union[str, "RequirementImplementationStatus"]] = None
+    superseded_by: Optional[Union[str, SpecificationRequirementElementId]] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
@@ -3003,10 +3005,21 @@ class SpecificationRequirement(ModelElement):
         if not isinstance(self.statement, str):
             self.statement = str(self.statement)
 
+        if self._is_empty(self.lifecycle_status):
+            self.MissingRequiredField("lifecycle_status")
+        if not isinstance(self.lifecycle_status, RequirementLifecycleStatus):
+            self.lifecycle_status = RequirementLifecycleStatus(self.lifecycle_status)
+
         if self.applies_to is not None and not isinstance(self.applies_to, RequirementApplicability):
             self.applies_to = RequirementApplicability(**as_dict(self.applies_to))
 
         self._normalize_inlined_as_list(slot_name="formal_checks", slot_type=FormalCheck, key_name="check_id", keyed=True)
+
+        if self.implementation_status is not None and not isinstance(self.implementation_status, RequirementImplementationStatus):
+            self.implementation_status = RequirementImplementationStatus(self.implementation_status)
+
+        if self.superseded_by is not None and not isinstance(self.superseded_by, SpecificationRequirementElementId):
+            self.superseded_by = SpecificationRequirementElementId(self.superseded_by)
 
         super().__post_init__(**kwargs)
 
@@ -3671,6 +3684,58 @@ class RequirementLevelEnum(EnumDefinitionImpl):
     _defn = EnumDefinition(
         name="RequirementLevelEnum",
         description="Уровень применения требования к спецификации.",
+    )
+
+class RequirementLifecycleStatus(EnumDefinitionImpl):
+    """
+    Статус жизненного цикла нормативного требования (SpecificationRequirement). Не заменяет ApprovalStatusEnum
+    (согласование provenance у других элементов).
+    """
+    draft = PermissibleValue(
+        text="draft",
+        description="Черновик, формулируется")
+    proposed = PermissibleValue(
+        text="proposed",
+        description="Вынесено на согласование")
+    approved = PermissibleValue(
+        text="approved",
+        description="Принято как норма")
+    rejected = PermissibleValue(
+        text="rejected",
+        description="Отклонено")
+    deprecated = PermissibleValue(
+        text="deprecated",
+        description="Больше не актуально, замены нет")
+    superseded = PermissibleValue(
+        text="superseded",
+        description="Заменено другим требованием")
+
+    _defn = EnumDefinition(
+        name="RequirementLifecycleStatus",
+        description="""Статус жизненного цикла нормативного требования (SpecificationRequirement). Не заменяет ApprovalStatusEnum (согласование provenance у других элементов).""",
+    )
+
+class RequirementImplementationStatus(EnumDefinitionImpl):
+    """
+    Статус реализации утверждённого требования. Осмысленно при lifecycle_status=approved; не заменяет
+    ApprovalStatusEnum.
+    """
+    not_started = PermissibleValue(
+        text="not_started",
+        description="Не начато")
+    in_progress = PermissibleValue(
+        text="in_progress",
+        description="Реализуется")
+    implemented = PermissibleValue(
+        text="implemented",
+        description="Реализовано")
+    verified = PermissibleValue(
+        text="verified",
+        description="Проверено")
+
+    _defn = EnumDefinition(
+        name="RequirementImplementationStatus",
+        description="""Статус реализации утверждённого требования. Осмысленно при lifecycle_status=approved; не заменяет ApprovalStatusEnum.""",
     )
 
 class RequirementSectionEnum(EnumDefinitionImpl):
@@ -4402,6 +4467,12 @@ slots.applies_implementation_profile = Slot(uri=DAMS.applies_implementation_prof
 slots.formal_checks = Slot(uri=DAMS.formal_checks, name="formal_checks", curie=DAMS.curie('formal_checks'),
                    model_uri=DAMS.formal_checks, domain=None, range=Optional[Union[dict[Union[str, FormalCheckCheckId], Union[dict, FormalCheck]], list[Union[dict, FormalCheck]]]])
 
+slots.implementation_status = Slot(uri=DAMS.implementation_status, name="implementation_status", curie=DAMS.curie('implementation_status'),
+                   model_uri=DAMS.implementation_status, domain=None, range=Optional[Union[str, "RequirementImplementationStatus"]])
+
+slots.superseded_by = Slot(uri=DAMS.superseded_by, name="superseded_by", curie=DAMS.curie('superseded_by'),
+                   model_uri=DAMS.superseded_by, domain=None, range=Optional[Union[str, SpecificationRequirementElementId]])
+
 slots.catalog_id = Slot(uri=DAMS.catalog_id, name="catalog_id", curie=DAMS.curie('catalog_id'),
                    model_uri=DAMS.catalog_id, domain=None, range=URIRef)
 
@@ -4419,3 +4490,6 @@ slots.LogicalAttribute_description = Slot(uri=DAMS.description, name="LogicalAtt
 
 slots.RelationTerm_description = Slot(uri=DAMS.description, name="RelationTerm_description", curie=DAMS.curie('description'),
                    model_uri=DAMS.RelationTerm_description, domain=RelationTerm, range=str)
+
+slots.SpecificationRequirement_lifecycle_status = Slot(uri=DAMS.lifecycle_status, name="SpecificationRequirement_lifecycle_status", curie=DAMS.curie('lifecycle_status'),
+                   model_uri=DAMS.SpecificationRequirement_lifecycle_status, domain=SpecificationRequirement, range=Union[str, "RequirementLifecycleStatus"])

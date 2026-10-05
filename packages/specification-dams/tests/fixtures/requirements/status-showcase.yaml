@@ -1,0 +1,130 @@
+catalog_id: dams:req-catalog/status-showcase/0.1
+name: status_showcase_requirements
+requirements:
+  - element_id: dams:req/GEN-801
+    name: showcase_draft
+    title: Showcase draft
+    description: Fixture — lifecycle draft
+    lifecycle_status: draft
+    code: GEN-801
+    requirement_level: it_solution
+    requirement_section: GEN
+    statement: Черновик требования для демонстрации статусов.
+    applies_to:
+      applicability_id: appl:GEN-801
+      applies_target_class: ModelPackage
+    formal_checks:
+      - check_id: GEN-801.c1
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: name
+        severity: error
+        diagnostic_code: DAMS-REQ-GEN-801.c1
+        remediation: Укажите name.
+
+  - element_id: dams:req/GEN-802
+    name: showcase_proposed
+    title: Showcase proposed
+    description: Fixture — lifecycle proposed
+    lifecycle_status: proposed
+    code: GEN-802
+    requirement_level: it_solution
+    requirement_section: GEN
+    statement: Требование на согласовании для демонстрации статусов.
+    applies_to:
+      applicability_id: appl:GEN-802
+      applies_target_class: ModelPackage
+    formal_checks:
+      - check_id: GEN-802.c1
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: name
+        severity: error
+        diagnostic_code: DAMS-REQ-GEN-802.c1
+        remediation: Укажите name.
+
+  - element_id: dams:req/GEN-803
+    name: showcase_approved
+    title: Showcase approved
+    description: Fixture — lifecycle approved
+    lifecycle_status: approved
+    implementation_status: implemented
+    code: GEN-803
+    requirement_level: it_solution
+    requirement_section: GEN
+    statement: Утверждённое требование для демонстрации статусов.
+    applies_to:
+      applicability_id: appl:GEN-803
+      applies_target_class: ModelPackage
+    formal_checks:
+      - check_id: GEN-803.c1
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: name
+        severity: error
+        diagnostic_code: DAMS-REQ-GEN-803.c1
+        remediation: Укажите name.
+
+  - element_id: dams:req/GEN-804
+    name: showcase_rejected
+    title: Showcase rejected
+    description: Fixture — lifecycle rejected
+    lifecycle_status: rejected
+    code: GEN-804
+    requirement_level: it_solution
+    requirement_section: GEN
+    statement: Отклонённое требование для демонстрации статусов.
+    applies_to:
+      applicability_id: appl:GEN-804
+      applies_target_class: ModelPackage
+    formal_checks:
+      - check_id: GEN-804.c1
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: name
+        severity: error
+        diagnostic_code: DAMS-REQ-GEN-804.c1
+        remediation: Укажите name.
+
+  - element_id: dams:req/GEN-805
+    name: showcase_deprecated
+    title: Showcase deprecated
+    description: Fixture — lifecycle deprecated
+    lifecycle_status: deprecated
+    code: GEN-805
+    requirement_level: it_solution
+    requirement_section: GEN
+    statement: Устаревшее требование для демонстрации статусов.
+    applies_to:
+      applicability_id: appl:GEN-805
+      applies_target_class: ModelPackage
+    formal_checks:
+      - check_id: GEN-805.c1
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: name
+        severity: error
+        diagnostic_code: DAMS-REQ-GEN-805.c1
+        remediation: Укажите name.
+
+  - element_id: dams:req/GEN-806
+    name: showcase_superseded
+    title: Showcase superseded
+    description: Fixture — lifecycle superseded
+    lifecycle_status: superseded
+    superseded_by: dams:req/GEN-803
+    code: GEN-806
+    requirement_level: it_solution
+    requirement_section: GEN
+    statement: Заменённое требование для демонстрации статусов.
+    applies_to:
+      applicability_id: appl:GEN-806
+      applies_target_class: ModelPackage
+    formal_checks:
+      - check_id: GEN-806.c1
+        kind: slot_required
+        target_class: ModelPackage
+        target_slot: name
+        severity: error
+        diagnostic_code: DAMS-REQ-GEN-806.c1
+        remediation: Укажите name.
