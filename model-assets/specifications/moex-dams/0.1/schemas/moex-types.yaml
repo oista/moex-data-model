@@ -435,3 +435,76 @@ enums:
     permissible_values:
       error:
       warning:
+  ConceptualDomainKindEnum:
+    description: Вид концептуального домена (ISO 11179 Conceptual Domain).
+    permissible_values:
+      enumerated:
+        description: Домен с явным набором ValueMeaning или внешней concept scheme.
+      described:
+        description: Домен, заданный описанием без перечисления смыслов.
+  ValueDomainKindEnum:
+    description: Вид домена представления значений (ISO 11179 Value Domain).
+    permissible_values:
+      enumerated:
+        description: Явный список PermissibleValue.
+      described:
+        description: Описание через формат, min/max, единицу.
+      reference_set:
+        description: Внешний или динамический набор значений.
+  TypeFamilyEnum:
+    description: Семейство корпоративного DataType.
+    permissible_values:
+      boolean:
+      integer:
+      decimal:
+      float:
+      string:
+      binary:
+      date:
+      time:
+      datetime:
+      duration:
+      identifier:
+      uri:
+      object:
+      array:
+      other:
+  TimezonePolicyEnum:
+    description: Политика часового пояса для временных DataType.
+    permissible_values:
+      none:
+      utc:
+      with_offset:
+      local:
+  LossinessEnum:
+    description: Оценка потери точности NativeTypeBinding.
+    permissible_values:
+      lossless:
+      lossy:
+      unknown:
+  SignificanceBasisEnum:
+    description: Основание существования ConceptualProperty в КМД (вариант B).
+    permissible_values:
+      identifying:
+        description: Входит в бизнес-ключ сущности.
+      externally_aligned:
+        description: Выравнивается с внешним термином (FIBO, ISO, API).
+      cross_solution:
+        description: Используется в двух и более решениях.
+      regulatory:
+        description: Упомянуто в нормативном требовании или отчётности.
+      critical_data:
+        description: Критичный элемент данных (CDE), поднятый с логического уровня.
+      governance_anchor:
+        description: Привязаны политика или классификация предприятия.
+      explicit_decision:
+        description: Решение архитектурного комитета (нужен significance_rationale).
+  PropertyKindEnum:
+    description: Вид концептуального свойства.
+    permissible_values:
+      descriptive:
+      identifying:
+      relational:
+      measure:
+      temporal:
+      status:

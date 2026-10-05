@@ -47,6 +47,16 @@ def _ident(raw: str | None, *, fallback: str) -> str:
     return cleaned or fallback
 
 
+def effective_attr_type(attr: dict[str, Any]) -> str:
+    """Prefer data_type_ref leaf, then deprecated logical_type."""
+    dtr = str(attr.get("data_type_ref") or "").strip()
+    if dtr:
+        leaf = dtr.rsplit("/", 1)[-1]
+        if leaf:
+            return leaf
+    return str(attr.get("logical_type") or "string")
+
+
 def _escape_note(text: str) -> str:
     return text.replace("'", "\\'")
 
@@ -162,7 +172,7 @@ def project_model_package_to_dbml(
                 if not isinstance(attr, dict):
                     continue
                 cname = _ident(attr.get("name"), fallback="attr")
-                ctype = _ident(attr.get("logical_type"), fallback="string")
+                ctype = _ident(effective_attr_type(attr), fallback="string")
                 required = bool(attr.get("required"))
                 aid = attr.get("element_id")
                 note = str(aid) if aid else None
@@ -178,7 +188,7 @@ def project_model_package_to_dbml(
                     col_index[str(aid)] = (tname, cname)
                 if default_col is None:
                     default_col = cname
-                elif attr.get("logical_type") == "identifier":
+                elif effective_attr_type(attr) == "identifier":
                     default_col = cname
             if eid and default_col:
                 entity_default_col[str(eid)] = default_col

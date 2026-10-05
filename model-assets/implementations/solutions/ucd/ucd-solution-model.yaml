@@ -44,6 +44,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/ucd/AGREEMENT/organizationId
     name: organizationId
     title: ID организации
@@ -55,6 +56,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/ucd/AGREEMENT/type
     name: type
     title: Тип соглашения
@@ -66,6 +68,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/ucd/AGREEMENT/status
     name: status
     title: Статус соглашения
@@ -77,6 +80,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/ucd/AGREEMENT/conclusionDate
     name: conclusionDate
     title: Дата заключения
@@ -88,12 +92,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/date
   key_attribute_refs:
   - dams:logical/ucd/AGREEMENT/id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: aligned
   alignment_rationale: UCD AGREEMENT реализует корпоративный Agreement.
 - element_id: dams:logical/ucd/AUTHORIZATION
@@ -119,6 +125,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/ucd/AUTHORIZATION/employeeId
     name: employeeId
     title: ID сотрудника
@@ -130,6 +137,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/ucd/AUTHORIZATION/type
     name: type
     title: Тип полномочий
@@ -141,6 +149,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/ucd/AUTHORIZATION/valid_from
     name: valid_from
     title: Действует с
@@ -152,6 +161,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/date
   - element_id: dams:logical/ucd/AUTHORIZATION/valid_to
     name: valid_to
     title: Действует по
@@ -163,6 +173,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/date
   - element_id: dams:logical/ucd/AUTHORIZATION/status
     name: status
     title: Статус полномочий
@@ -174,12 +185,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   key_attribute_refs:
   - dams:logical/ucd/AUTHORIZATION/id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: local-only
   alignment_rationale: Полномочия сотрудника UCD; RoleAssignment в CDM — IAM User↔Role, не Employee↔тип полномочия.
 - element_id: dams:logical/ucd/EMPOYEE
@@ -207,6 +220,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/ucd/EMPOYEE/organizationId
     name: organizationId
     title: ID организации
@@ -218,6 +232,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/ucd/EMPOYEE/personId
     name: personId
     title: ID физического лица
@@ -229,6 +244,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/ucd/EMPOYEE/positionId
     name: positionId
     title: ID должности
@@ -240,6 +256,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/ucd/EMPOYEE/full_name
     name: full_name
     title: Полное наименование
@@ -251,6 +268,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/ucd/EMPOYEE/inn
     name: inn
     title: ИНН физического лица
@@ -262,6 +280,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/ucd/EMPOYEE/snils
     name: snils
     title: СНИЛС
@@ -273,6 +292,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/ucd/EMPOYEE/status
     name: status
     title: Статус сотрудника
@@ -284,6 +304,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/ucd/EMPOYEE/hire_date
     name: hire_date
     title: Дата приема на работу
@@ -295,6 +316,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/date
   - element_id: dams:logical/ucd/EMPOYEE/termination_date
     name: termination_date
     title: Дата увольнения
@@ -306,15 +328,17 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/date
   key_attribute_refs:
   - dams:logical/ucd/EMPOYEE/id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: aligned
-  alignment_rationale: UCD EMPOYEE реализует Employee (reified роль Person); Person уже на UCD PERSON. Связь EMPOYEE→PERSON
-    закрывает LDM-008.
+  alignment_rationale: UCD EMPOYEE реализует Employee (reified роль Person); Person уже на UCD PERSON. Связь 
+    EMPOYEE→PERSON закрывает LDM-008.
 - element_id: dams:logical/ucd/ORGANIZATION
   name: ORGANIZATION
   title: Организация
@@ -340,6 +364,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/ucd/ORGANIZATION/typeId
     name: typeId
     title: Тип организации
@@ -351,6 +376,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/integer
   - element_id: dams:logical/ucd/ORGANIZATION/inn
     name: inn
     title: ИНН организации
@@ -362,6 +388,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/ucd/ORGANIZATION/shortName
     name: shortName
     title: Краткое наименование
@@ -373,6 +400,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/ucd/ORGANIZATION/kpp
     name: kpp
     title: КПП организации
@@ -384,6 +412,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/ucd/ORGANIZATION/ogrn
     name: ogrn
     title: ОГРН организации
@@ -395,6 +424,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/ucd/ORGANIZATION/fullName
     name: fullName
     title: Полное наименование
@@ -406,6 +436,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/ucd/ORGANIZATION/mcdbId
     name: mcdbId
     title: MCDB (ЕКБД) ID
@@ -417,12 +448,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/integer
   key_attribute_refs:
   - dams:logical/ucd/ORGANIZATION/id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: aligned
   alignment_rationale: UCD ORGANIZATION (ИНН, typeId) реализует LegalEntity.
 - element_id: dams:logical/ucd/ORGANIZATION_TYPE
@@ -448,6 +481,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/ucd/ORGANIZATION_TYPE/typeName
     name: typeName
     title: Тип организации
@@ -459,6 +493,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/ucd/ORGANIZATION_TYPE/code
     name: code
     title: Код типа организации
@@ -470,12 +505,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   key_attribute_refs:
   - dams:logical/ucd/ORGANIZATION_TYPE/Id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: local-only
   alignment_rationale: Классификатор типа организации в контуре UCD; отдельного корпоративного концепта нет.
 - element_id: dams:logical/ucd/PERSON
@@ -503,6 +540,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/ucd/PERSON/fullName
     name: fullName
     title: ФИО
@@ -514,6 +552,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/ucd/PERSON/birthDate
     name: birthDate
     title: Дата рождения
@@ -525,6 +564,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/date
   - element_id: dams:logical/ucd/PERSON/inn
     name: inn
     title: ИНН физического лица
@@ -536,6 +576,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/ucd/PERSON/snils
     name: snils
     title: СНИЛС
@@ -547,12 +588,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   key_attribute_refs:
   - dams:logical/ucd/PERSON/id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: aligned
   alignment_rationale: UCD PERSON реализует корпоративный Person.
 - element_id: dams:logical/ucd/POSITION
@@ -580,6 +623,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/ucd/POSITION/name
     name: name
     title: Имя должности
@@ -591,6 +635,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/ucd/POSITION/code
     name: code
     title: Код должности
@@ -602,15 +647,17 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   key_attribute_refs:
   - dams:logical/ucd/POSITION/id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: aligned
-  alignment_rationale: UCD POSITION — каталог должностей; ближайший корпоративный концепт StaffPosition (штатная единица).
-    Зерно без Department — осознанно.
+  alignment_rationale: UCD POSITION — каталог должностей; ближайший корпоративный концепт StaffPosition (штатная 
+    единица). Зерно без Department — осознанно.
 relationships:
 - element_id: dams:rel/ucd/AGREEMENT_to_ORGANIZATION_via_organizationId
   name: AGREEMENT_to_ORGANIZATION_via_organizationId
@@ -1220,7 +1267,8 @@ mappings:
 implementation_scope: solution
 conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
 data_owner_ref: org:role/DATA_OWNER_PENDING
-ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при отсутствии локального override на сущности.
+ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при отсутствии локального override на 
+  сущности.
 data_carriers:
 - element_id: dams:physical/ucd/phys_AGREEMENT
   name: phys_AGREEMENT
@@ -1699,3 +1747,4 @@ data_carriers:
   tags:
   - transitional
   - namespace_heuristic
+value_domains: []

@@ -44,6 +44,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/mdm/ENTERPRISE/SHORT_NAME
     name: SHORT_NAME
     title: Краткое наименование ЮЛ
@@ -55,6 +56,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG
     name: SHORT_NAME_ENG
     title: Краткое наименование ЮЛ (на английском языке)
@@ -66,6 +68,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/FULL_NAME
     name: FULL_NAME
     title: Полное наименование ЮЛ
@@ -77,6 +80,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG
     name: FULL_NAME_ENG
     title: Полное наименование ЮЛ (на английском языке)
@@ -88,6 +92,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/COUNTRY_CODE
     name: COUNTRY_CODE
     title: Код страны
@@ -99,6 +104,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/INN
     name: INN
     title: ИНН
@@ -110,6 +116,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/KPP
     name: KPP
     title: КПП
@@ -121,6 +128,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/OGRN
     name: OGRN
     title: ОГРН
@@ -132,6 +140,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION
     name: ADDR_EGRUL_REGION
     title: '13'
@@ -143,6 +152,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/TERMINATION_DATE
     name: TERMINATION_DATE
     title: Дата прекращения юридического лица
@@ -154,6 +164,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT
     name: INN_NONRESIDENT
     title: ИНН организации-нерезидента (ИНН в стране нерезидента)
@@ -165,6 +176,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/LEI
     name: LEI
     title: Международный код идентификации юридического лица LEI
@@ -176,6 +188,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/KIO
     name: KIO
     title: КИО
@@ -187,6 +200,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT
     name: REG_NUM_NONRESIDENT
     title: Регистрационный номер организации-нерезидента
@@ -198,6 +212,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME
     name: CEO_FIRSTNAME
     title: ЕИО:Имя руководителя
@@ -209,6 +224,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/CEO_INN
     name: CEO_INN
     title: 'ЕИО:Сведения о лице, имеющем право без доверенности действовать от имени ЮЛ: ИНН'
@@ -220,6 +236,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC
     name: CEO_PATRONYMIC
     title: ЕИО:Отчество руководителя
@@ -231,6 +248,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/CEO_POSITION
     name: CEO_POSITION
     title: ЕИО:Должность руководителя
@@ -242,6 +260,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/CEO_SURNAME
     name: CEO_SURNAME
     title: ЕИО:Фамилия руководителя
@@ -253,6 +272,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER
     name: TRUST_RULE_NUMBER
     title: Номер правил доверительного управления
@@ -264,6 +284,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/ECBD_ID
     name: ECBD_ID
     title: ID в ЕКБД
@@ -275,6 +296,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/decimal
   - element_id: dams:logical/mdm/ENTERPRISE/UNICODE
     name: UNICODE
     title: Унифицированный код участника в ЕКБД
@@ -286,6 +308,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/CODE_NSD
     name: CODE_NSD
     title: Код НРД
@@ -297,6 +320,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/ENTERPRISE/KBD_FIRMID
     name: KBD_FIRMID
     title: ID в КБД
@@ -308,6 +332,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/decimal
   - element_id: dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG
     name: ACTIVE_FLAG
     title: Является ли запись удаленной (0) или активной (1) хотя бы на одном из источников в последней загрузке
@@ -319,14 +344,17 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/decimal
   key_attribute_refs:
   - dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: aligned
-  alignment_rationale: MDM ENTERPRISE — золотая запись ЮЛ; реализует LegalEntity (Organization — parent_concept, не дублируем).
+  alignment_rationale: MDM ENTERPRISE — золотая запись ЮЛ; реализует LegalEntity (Organization — parent_concept, не 
+    дублируем).
 - element_id: dams:logical/mdm/PERSON
   name: PERSON
   title: Физические лица (ФЛ)
@@ -352,6 +380,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/mdm/PERSON/FIO
     name: FIO
     title: ФИО
@@ -363,6 +392,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/PERSON/LAST_NAME
     name: LAST_NAME
     title: Фамилия
@@ -374,6 +404,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/PERSON/FIRST_NAME
     name: FIRST_NAME
     title: Имя
@@ -385,6 +416,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/PERSON/PATRONYMIC
     name: PATRONYMIC
     title: Отчество
@@ -396,6 +428,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/PERSON/DATEBIRTH
     name: DATEBIRTH
     title: Дата рождения
@@ -407,6 +440,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/date
   - element_id: dams:logical/mdm/PERSON/ADDRESS_F
     name: ADDRESS_F
     title: Адрес физический
@@ -418,6 +452,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/PERSON/INN
     name: INN
     title: ИНН
@@ -429,6 +464,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/PERSON/SNILS
     name: SNILS
     title: СНИЛС
@@ -440,6 +476,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE
     name: IDENTITY_DOCUMENT_CODE
     title: Код документа, удостоверяющего личность
@@ -451,6 +488,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/decimal
   - element_id: dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA
     name: IDENTITY_DOCUMENT_CODE_OMEGA
     title: Код документа, удостоверяющего личность (по классификации ОМЕГА)
@@ -462,6 +500,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/decimal
   - element_id: dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE
     name: IDENTITY_DOCUMENT_TYPE
     title: Тип документа, удостоверяющего личность
@@ -473,12 +512,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   key_attribute_refs:
   - dams:logical/mdm/PERSON/PERSON_ID
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: aligned
   alignment_rationale: MDM PERSON — золотая запись ФЛ; реализует корпоративный Person.
 - element_id: dams:logical/mdm/PERSON_CEO
@@ -504,6 +545,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/mdm/PERSON_CEO/PERSON_ID
     name: PERSON_ID
     title: PERSON_ID
@@ -515,12 +557,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   key_attribute_refs:
   - dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: local-only
   alignment_rationale: 'Ассоциация ЮЛ–ФЛ (ЕИО / T_CEO), не Person и не LegalEntity. Волна B: концепт SoleExecutive — follow-up.'
 - element_id: dams:logical/mdm/PERSON_REPRESENTATIVE
@@ -546,6 +590,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID
     name: PERSON_ID
     title: PERSON_ID
@@ -557,12 +602,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   key_attribute_refs:
   - dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: local-only
   alignment_rationale: 'Ассоциация ЮЛ–ФЛ (представитель / T_REPRESENTATIVE). Волна B: концепт LegalRepresentative — follow-up.'
 relationships:
@@ -1019,7 +1066,8 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_PERSON_REPRESENTATIVE_ENTERPRISE_ID
   name: map_PERSON_REPRESENTATIVE_ENTERPRISE_ID
-  description: Mapping map_PERSON_REPRESENTATIVE_ENTERPRISE_ID. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_REF_REPRESENTATIVE
+  description: Mapping map_PERSON_REPRESENTATIVE_ENTERPRISE_ID. BaseSrc=ECBD/Единая клиентская база 
+    данных/V_ECBD_REF_REPRESENTATIVE
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID
@@ -1029,7 +1077,8 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_PERSON_REPRESENTATIVE_PERSON_ID
   name: map_PERSON_REPRESENTATIVE_PERSON_ID
-  description: Mapping map_PERSON_REPRESENTATIVE_PERSON_ID. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_REF_REPRESENTATIVE
+  description: Mapping map_PERSON_REPRESENTATIVE_PERSON_ID. BaseSrc=ECBD/Единая клиентская база 
+    данных/V_ECBD_REF_REPRESENTATIVE
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID
@@ -1106,7 +1155,8 @@ mappings:
 implementation_scope: solution
 conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
 data_owner_ref: org:role/DATA_OWNER_PENDING
-ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при отсутствии локального override на сущности.
+ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при отсутствии локального override на 
+  сущности.
 data_carriers:
 - element_id: dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE
   name: INTERNALDM_MDM_V_ENTERPRISE
@@ -1558,3 +1608,4 @@ data_carriers:
   tags:
   - transitional
   - namespace_heuristic
+value_domains: []

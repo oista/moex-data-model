@@ -1,0 +1,40 @@
+id: https://data.moex.com/dams/deprecated-slots/v0.1
+name: moex_deprecated_slots
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  dams: https://data.moex.com/dams/
+imports:
+  - linkml:types
+  - moex-types
+default_prefix: dams
+default_range: string
+
+# Step 2 deprecation (ADR-034 / ADR-037): slots moved out of moex-core body.
+# Still imported so transitional data validates. Removal of this import = next release.
+
+slots:
+  logical_type:
+    range: LogicalDataTypeEnum
+    required: false
+    deprecated: >
+      Заменён data_type_ref / value_domain_ref. На переходном этапе допускается
+      наряду с ними; при расхождении приоритет у домена (ADR-034).
+    deprecated_element_has_possible_replacement: dams:data_type_ref
+  value_set_ref:
+    range: uri
+    deprecated: >
+      Заменён ValueDomain.value_set_source / reference_set (value_domain_ref).
+    deprecated_element_has_possible_replacement: dams:value_domain_ref
+  format_pattern:
+    range: string
+    deprecated: >
+      Заменён ValueDomain.format_pattern через value_domain_ref.
+    deprecated_element_has_possible_replacement: dams:value_domain_ref
+  unit_code:
+    range: string
+    description: Код единицы измерения (UCUM / корпоративный код).
+    deprecated: >
+      Заменён ValueDomain.unit_code через value_domain_ref.
+    deprecated_element_has_possible_replacement: dams:value_domain_ref

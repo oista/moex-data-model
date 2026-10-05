@@ -4,6 +4,7 @@ version: 0.1.0
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml: https://w3id.org/linkml/
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   dams: https://data.moex.com/dams/
 imports:
   - linkml:types
@@ -11,6 +12,9 @@ imports:
   - moex-registries
   - moex-governance
   - moex-technical
+  - moex-deprecated-slots
+  - moex-semantic
+  - moex-datatypes
 default_prefix: dams
 default_range: string
 
@@ -58,6 +62,11 @@ classes:
       - data_containers
       - execution_assets
       - mappings
+      - conceptual_properties
+      - conceptual_domains
+      - value_domains
+      - data_types
+      - native_type_bindings
 
   DomainContext:
     is_a: ModelElement
@@ -91,6 +100,55 @@ classes:
         description: >
           Reference definition (skos:definition). Absent means inherit via
           definition_source_ref (ontology class or GlossaryTerm) per ADR-025.
+
+  ConceptualProperty:
+    is_a: ModelElement
+    mixins:
+      - HasOwnership
+      - HasDefinition
+      - HasProvenance
+      - HasPolicyBindings
+    class_uri: dams:ConceptualProperty
+    close_mappings:
+      - rdf:Property
+    comments:
+      - >
+        ISO/IEC 11179 Property (close). Облегчённый концептуальный слой — только
+        для значимых атрибутов (вариант B, ADR-034). IRI ISO 11179 не используются.
+    description: >
+      Значимое концептуальное свойство сущности КМД. Создаётся только при наличии
+      significance_basis; не обязательно для каждого LogicalAttribute.
+    slots:
+      - property_owner_entity_ref
+      - significance_basis
+      - significance_rationale
+      - property_kind
+      - conceptual_domain_ref
+      - is_identifying
+      - genesis_kind
+    unique_keys:
+      conceptual_property_key:
+        unique_key_slots:
+          - property_owner_entity_ref
+          - name
+    slot_usage:
+      description:
+        required: false
+        description: >
+          Reference definition (skos:definition). Absent means inherit via
+          definition_source_ref per ADR-025.
+      genesis_kind:
+        required: true
+    rules:
+      - description: identifying property_kind требует is_identifying
+        preconditions:
+          slot_conditions:
+            property_kind:
+              equals_string: identifying
+        postconditions:
+          slot_conditions:
+            is_identifying:
+              equals_string: "true"
 
   LogicalEntity:
     is_a: ModelElement
@@ -128,9 +186,16 @@ classes:
       - HasGovernanceClassification
       - HasPolicyBindings
       - HasDefinition
-    description: Логический атрибут сущности с бизнес-смыслом, типом, обязательностью и классификацией.
+    description: >
+      Логический атрибут сущности: идентификация, обязательность, кардинальность
+      и ссылки на представление (DataType/ValueDomain) и опционально на
+      ConceptualProperty (вариант B, ADR-034).
     slots:
       - owner_entity_ref
+      - concept_ref
+      - value_domain_ref
+      - data_type_ref
+      - critical_data_element
       - logical_type
       - required
       - multivalued
@@ -150,8 +215,21 @@ classes:
       description:
         required: false
         description: >
-          Reference definition (skos:definition). v1 attributes are own-only;
-          inheritance from conceptual attributes is out of scope (ADR-025).
+          Reference definition (skos:definition). Prefer ADR-025
+          (definition_source_ref / scoped_definitions); do not copy from
+          ConceptualProperty.
+      data_type_ref:
+        required: false
+        description: >
+          Ссылка на корпоративный DataType. На переходе достаточно одного из
+          value_domain_ref, data_type_ref или logical_type.
+      logical_type:
+        required: false
+      concept_ref:
+        required: false
+        description: >
+          Опциональная ссылка на ConceptualProperty. Отсутствие не является
+          ошибкой и не порождает предупреждение (вариант B).
 
   Relationship:
     is_a: ModelElement
@@ -348,6 +426,36 @@ slots:
     inlined: true
     inlined_as_list: true
     description: Коллекция исполняемых активов пакета (Variant B, ADR-031).
+  conceptual_properties:
+    range: ConceptualProperty
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Значимые концептуальные свойства (только enterprise-пакеты).
+  conceptual_domains:
+    range: ConceptualDomain
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Концептуальные домены смыслов (только enterprise-пакеты).
+  value_domains:
+    range: ValueDomain
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Домены представления значений (enterprise или solution).
+  data_types:
+    range: DataType
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Корпоративный реестр типов данных.
+  native_type_bindings:
+    range: NativeTypeBinding
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Привязки нативных типов диалектов к DataType.
   carrier_ref:
     range: DataCarrier
     inlined: false
@@ -434,9 +542,43 @@ slots:
       Structural parent LogicalEntity of this attribute (containment), not the
       data owner role. Data ownership uses data_owner_ref via HasOwnership /
       ADR-023 cascade.
-  logical_type:
-    range: LogicalDataTypeEnum
+  property_owner_entity_ref:
+    range: ConceptualEntity
+    inlined: false
     required: true
+    description: >
+      ConceptualEntity-владелец ConceptualProperty (концептуальный containment).
+  concept_ref:
+    range: ConceptualProperty
+    inlined: false
+    description: >
+      Опциональная ссылка LogicalAttribute → ConceptualProperty. Никогда не
+      обязательна (вариант B, ADR-034).
+  value_domain_ref:
+    range: ValueDomain
+    inlined: false
+    description: Ссылка на домен представления значений.
+  critical_data_element:
+    range: boolean
+    description: >
+      Признак критичного элемента данных (CDE). Единственный источник правды
+      для critical_data; термин CDE в ClassificationAssignment не вводится (ADR-034).
+  significance_basis:
+    range: SignificanceBasisEnum
+    multivalued: true
+    required: true
+    description: Основания существования ConceptualProperty (минимум одно).
+  significance_rationale:
+    range: string
+    description: >
+      Обязательное обоснование, если significance_basis содержит explicit_decision.
+  property_kind:
+    range: PropertyKindEnum
+    required: true
+    description: Вид концептуального свойства.
+  is_identifying:
+    range: boolean
+    description: Является ли свойство идентифицирующим (бизнес-ключ).
   required:
     range: boolean
     required: true
@@ -449,10 +591,6 @@ slots:
   maximum_cardinality:
     range: integer
     minimum_value: 1
-  value_set_ref:
-    range: uri
-  format_pattern:
-    range: string
   default_value:
     range: string
   derived_expression:
@@ -479,9 +617,6 @@ slots:
   mapping_rationale:
     range: string
     description: Обоснование для planned / technical-only / not-applicable / inherited.
-  unit_code:
-    range: string
-    description: Код единицы измерения (Wave 2 soft).
   currency_attribute_ref:
     range: uriorcurie
     description: Ссылка на атрибут валюты для денежной величины (Wave 2 soft).

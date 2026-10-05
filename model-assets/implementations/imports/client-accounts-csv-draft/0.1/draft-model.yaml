@@ -20,11 +20,13 @@ logical_entities:
     title: Идентификатор счёта
     logical_type: identifier
     required: true
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/csv-draft/ClientAccount/clientName
     name: clientName
     title: Имя клиента
     logical_type: string
     required: true
+    data_type_ref: dams:datatype/string
 mappings:
 - element_id: dams:mapping/csv-draft/account-id
   name: map_account_id
@@ -57,3 +59,4 @@ data_carriers:
   tags:
   - transitional
   - namespace_heuristic
+value_domains: []

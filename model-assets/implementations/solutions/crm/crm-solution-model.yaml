@@ -44,6 +44,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/crm/CONTACT/Account
     name: Account
     title: Клиент
@@ -55,6 +56,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/crm/CONTACT/Name
     name: Name
     title: ФИО
@@ -66,6 +68,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CONTACT/MoexFullNameEn
     name: MoexFullNameEn
     title: Полное имя по-английски
@@ -77,6 +80,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CONTACT/MoexEio
     name: MoexEio
     title: Является ЕИО
@@ -88,6 +92,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/boolean
   - element_id: dams:logical/crm/CONTACT/Surname
     name: Surname
     title: Фамилия
@@ -99,6 +104,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CONTACT/GivenName
     name: GivenName
     title: Имя
@@ -110,6 +116,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CONTACT/MiddleName
     name: MiddleName
     title: Отчество
@@ -121,6 +128,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CONTACT/Gender
     name: Gender
     title: Пол
@@ -132,6 +140,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/crm/CONTACT/BirthDate
     name: BirthDate
     title: Дата рождения
@@ -143,6 +152,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/date
   - element_id: dams:logical/crm/CONTACT/Phone
     name: Phone
     title: Рабочий телефон
@@ -154,6 +164,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CONTACT/MobilePhone
     name: MobilePhone
     title: Мобильный телефон
@@ -165,6 +176,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CONTACT/Email
     name: Email
     title: Электронная почта
@@ -176,6 +188,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CONTACT/Type
     name: Type
     title: Тип
@@ -187,6 +200,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/crm/CONTACT/MoexPassportId
     name: MoexPassportId
     title: MOEX паспорт (MOEX ID)
@@ -198,6 +212,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CONTACT/MoexMdmId
     name: MoexMdmId
     title: Идентификатор MDM
@@ -209,6 +224,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CONTACT/MoexUCDId
     name: MoexUCDId
     title: ID UCD
@@ -220,15 +236,17 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   key_attribute_refs:
   - dams:logical/crm/CONTACT/Id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: aligned
-  alignment_rationale: CRM CONTACT — локальная проекция корпоративного Person (ФИО, контакты, MDM/UCD id); флаг ЕИО остаётся
-    атрибутом (ADR-029).
+  alignment_rationale: CRM CONTACT — локальная проекция корпоративного Person (ФИО, контакты, MDM/UCD id); флаг ЕИО 
+    остаётся атрибутом (ADR-029).
 - element_id: dams:logical/crm/CUSTOMER
   name: CUSTOMER
   title: Клиент
@@ -255,6 +273,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/crm/CUSTOMER/PrimaryContact
     name: PrimaryContact
     title: Первое лицо
@@ -266,6 +285,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/crm/CUSTOMER/PrimaryAccount
     name: PrimaryAccount
     title: Первое лицо
@@ -277,6 +297,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/crm/CUSTOMER/Parent
     name: Parent
     title: Родительский контрагент
@@ -288,6 +309,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/crm/CUSTOMER/MoexPaarentCompanyHolding
     name: MoexPaarentCompanyHolding
     title: Головная компания холдинга
@@ -299,6 +321,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/boolean
   - element_id: dams:logical/crm/CUSTOMER/Name
     name: Name
     title: Название
@@ -310,6 +333,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/MoexFullAlternativeName
     name: MoexFullAlternativeName
     title: Полное наименование
@@ -321,6 +345,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/AlternativeName
     name: AlternativeName
     title: Краткое наименование
@@ -332,6 +357,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/MoexEngFullAlternativeName
     name: MoexEngFullAlternativeName
     title: Полное наименование на английском
@@ -343,6 +369,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/Phone
     name: Phone (Основной телефон)
     title: Основной телефон
@@ -354,6 +381,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/MoexEmail
     name: MoexEmail
     title: Email
@@ -365,6 +393,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/MoexINN
     name: MoexINN
     title: ИНН
@@ -376,6 +405,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/MoexKPP
     name: MoexKPP
     title: КПП
@@ -387,6 +417,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/MoexOGRN
     name: MoexOGRN
     title: ОГРН
@@ -398,6 +429,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/MoexOKVED
     name: MoexOKVED
     title: ОКВЭД
@@ -409,6 +441,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/MoexCountryCode
     name: MoexCountryCode
     title: Цифровой код страны
@@ -420,6 +453,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/crm/CUSTOMER/MoexRegNumNonResident
     name: MoexRegNumNonResident
     title: Регистрационный номер клиента-нерезидента
@@ -431,6 +465,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/MoexKIO
     name: MoexKIO
     title: Код иностранной организации (КИО)
@@ -442,6 +477,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/MoexMDMId
     name: MoexMDMId
     title: MDM Id
@@ -453,6 +489,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/MoexCBDId
     name: MoexCBDId
     title: ЕКБД Id
@@ -464,6 +501,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/MoexKBDId
     name: MoexKBDId
     title: КБД Id
@@ -475,6 +513,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/MoexUnicodeCBD
     name: MoexUnicodeCBD
     title: Unicode ЕКБД
@@ -486,6 +525,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/MoexUCDId
     name: MoexUCDId
     title: UCD Id
@@ -497,6 +537,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/CUSTOMER/MoexCodeNsd
     name: MoexCodeNsd
     title: Код НРД
@@ -508,12 +549,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   key_attribute_refs:
   - dams:logical/crm/CUSTOMER/Id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: aligned
   alignment_rationale: 'CRM CUSTOMER реализует Client (клиентская роль) и LegalEntity (карточка ЮЛ: ИНН/КПП/ОГРН, наименования);
     не Counterparty (ADR-029).'
@@ -540,6 +583,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/crm/LEAD/MoexAccount
     name: MoexAccount
     title: Клиент
@@ -551,6 +595,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/crm/LEAD/MoexApplicationNumber
     name: MoexApplicationNumber
     title: Номер заявки
@@ -562,6 +607,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/LEAD/MoexApplicationTitle
     name: MoexApplicationTitle
     title: Тема заявки
@@ -573,6 +619,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/LEAD/MoexApplicationSource
     name: MoexApplicationSource
     title: Канал привлечения
@@ -584,6 +631,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/crm/LEAD/MoexFunnelType
     name: MoexFunnelType
     title: Тип заявки
@@ -595,6 +643,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/crm/LEAD/MoexContact
     name: MoexContact
     title: Контакт
@@ -606,6 +655,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/crm/LEAD/MobilePhone
     name: MobilePhone
     title: Мобильный телефон
@@ -617,6 +667,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/LEAD/Email
     name: Email
     title: Электронная почта
@@ -628,6 +679,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/LEAD/ModifiedOn
     name: ModifiedOn
     title: Дата последнего изменения
@@ -639,6 +691,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/datetime
   - element_id: dams:logical/crm/LEAD/CreatedOn
     name: CreatedOn
     title: Дата создания
@@ -650,6 +703,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/datetime
   - element_id: dams:logical/crm/LEAD/MoexSiteCreatedOn
     name: MoexSiteCreatedOn
     title: Дата заполнения формы на сайте
@@ -661,6 +715,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/datetime
   - element_id: dams:logical/crm/LEAD/MoexInn
     name: MoexInn
     title: ИНН
@@ -672,6 +727,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/LEAD/MoexPassportId
     name: MoexPassportId
     title: MOEX паспорт
@@ -683,6 +739,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/LEAD/MoexIDApplications
     name: MoexIDApplications
     title: ЦП Id
@@ -694,6 +751,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/crm/LEAD/MoexLkkStatus
     name: MoexLkkStatus
     title: Статус ЦП
@@ -705,6 +763,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/crm/LEAD/MoexUcdId
     name: MoexUcdId
     title: UCD Id
@@ -716,15 +775,17 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   key_attribute_refs:
   - dams:logical/crm/LEAD/ApplicationId
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: local-only
-  alignment_rationale: Заявка привлечения CRM; в enterprise CDM нет концепта Lead/Attraction. SalesFunnel — справочник воронки,
-    не экземпляр заявки. Волна B — follow-up.
+  alignment_rationale: Заявка привлечения CRM; в enterprise CDM нет концепта Lead/Attraction. SalesFunnel — справочник 
+    воронки, не экземпляр заявки. Волна B — follow-up.
 relationships:
 - element_id: dams:rel/crm/CONTACT_to_CUSTOMER_via_Account
   name: CONTACT_to_CUSTOMER_via_Account
@@ -1426,7 +1487,8 @@ mappings:
 implementation_scope: solution
 conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
 data_owner_ref: org:role/DATA_OWNER_PENDING
-ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при отсутствии локального override на сущности.
+ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при отсутствии локального override на 
+  сущности.
 data_carriers:
 - element_id: dams:physical/crm/phys_CONTACT
   name: phys_CONTACT
@@ -2004,3 +2066,4 @@ data_carriers:
   tags:
   - transitional
   - namespace_heuristic
+value_domains: []

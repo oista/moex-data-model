@@ -44,6 +44,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/attorney_check_info/validation_status
     name: validation_status
     title: Статус проверки полномочий
@@ -55,6 +56,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/integer
   - element_id: dams:logical/esed/attorney_check_info/signature_status
     name: signature_status
     title: Статус подписи документа
@@ -66,6 +68,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/integer
   - element_id: dams:logical/esed/attorney_check_info/representative_signature_status
     name: representative_signature_status
     title: Статус подписи представителя
@@ -77,6 +80,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/integer
   - element_id: dams:logical/esed/attorney_check_info/validation_json_data
     name: validation_json_data
     title: JSON-данные валидации (Контур)
@@ -88,12 +92,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   key_attribute_refs:
   - dams:logical/esed/attorney_check_info/instance_id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: aligned
   alignment_rationale: Проверка доверенности на карточке — характеристика SupportingDocument.
 - element_id: dams:logical/esed/common_state
@@ -119,6 +125,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/common_state/state_name
     name: state_name
     title: Название состояния
@@ -130,12 +137,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   key_attribute_refs:
   - dams:logical/esed/common_state/state_id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: local-only
   alignment_rationale: Workflow/lookup состояние ЕСЭД; корпоративного концепта нет.
 - element_id: dams:logical/esed/common_type
@@ -161,6 +170,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/common_type/type_name
     name: type_name
     title: Название вида документа
@@ -172,12 +182,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   key_attribute_refs:
   - dams:logical/esed/common_type/type_id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: local-only
   alignment_rationale: Workflow/lookup вид ЕСЭД; корпоративного концепта нет.
 - element_id: dams:logical/esed/division
@@ -205,6 +217,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/division/division_name
     name: division_name
     title: Название
@@ -216,6 +229,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/division/parent_id
     name: parent_id
     title: Родительское подразделение (иерархия)
@@ -227,12 +241,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   key_attribute_refs:
   - dams:logical/esed/division/division_id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: aligned
   alignment_rationale: ЕСЭД division реализует корпоративный Department.
 - element_id: dams:logical/esed/document
@@ -260,6 +276,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/document/register_date
     name: register_date
     title: Дата регистрации
@@ -271,6 +288,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/datetime
   - element_id: dams:logical/esed/document/register_number
     name: register_number
     title: Регистрационный номер
@@ -282,6 +300,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/document/register_external_number
     name: register_external_number
     title: Исходящий номер (внешний номер документа)
@@ -293,6 +312,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/document/register_employee_id
     name: register_employee_id
     title: Регистратор
@@ -304,6 +324,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/document/author_employee_id
     name: author_employee_id
     title: Автор
@@ -315,6 +336,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/document/document_name
     name: document_name
     title: Название (заголовок, тема документа)
@@ -326,6 +348,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/document/content
     name: content
     title: Содержание
@@ -337,6 +360,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/document/division_id
     name: division_id
     title: Ответственное подразделение (ЮЛ ГК МБ)
@@ -348,6 +372,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/document/type_id
     name: type_id
     title: Вид документа
@@ -359,6 +384,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/document/state_id
     name: state_id
     title: Состояние (статус) документа
@@ -370,6 +396,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/document/status_id
     name: status_id
     title: Статус (тип документа)
@@ -381,6 +408,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/document/delivery_type_id
     name: delivery_type_id
     title: ID типа доставки (способ получения)
@@ -392,6 +420,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/document/delivery_date
     name: delivery_date
     title: Дата от (дата получения документа)
@@ -403,6 +432,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/datetime
   - element_id: dams:logical/esed/document/sender_organization_id
     name: sender_organization_id
     title: Организация-отправитель
@@ -414,6 +444,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/document/sender_employee_id
     name: sender_employee_id
     title: Сотрудник организации-отправителя
@@ -425,6 +456,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/document/answer_not_need
     name: answer_not_need
     title: Ответ не требуется
@@ -436,6 +468,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/boolean
   - element_id: dams:logical/esed/document/item_id
     name: item_id
     title: Строка справочника (рубрика)
@@ -447,6 +480,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/document/indoc_processing_status
     name: indoc_processing_status
     title: Статус обработки в InDoc
@@ -458,6 +492,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/document/document_type_indoc
     name: document_type_indoc
     title: Тип документа в InDoc
@@ -469,6 +504,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/document/document_type_kbd
     name: document_type_kbd
     title: Тип документа КБД
@@ -480,6 +516,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/integer
   - element_id: dams:logical/esed/document/kbd_sync_status
     name: kbd_sync_status
     title: Статус отправки в КБД
@@ -491,6 +528,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/integer
   - element_id: dams:logical/esed/document/kbd_lku_document_id
     name: kbd_lku_document_id
     title: ID ЛКУ КБД
@@ -502,6 +540,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/integer
   - element_id: dams:logical/esed/document/creation_date_time
     name: creation_date_time
     title: Дата и время создания
@@ -513,6 +552,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/datetime
   - element_id: dams:logical/esed/document/change_date_time
     name: change_date_time
     title: Дата и время изменения
@@ -524,12 +564,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/datetime
   key_attribute_refs:
   - dams:logical/esed/document/document_id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: aligned
   alignment_rationale: ЕСЭД document реализует SupportingDocument.
 - element_id: dams:logical/esed/employee
@@ -557,6 +599,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/employee/last_name
     name: last_name
     title: Фамилия
@@ -568,6 +611,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/employee/first_name
     name: first_name
     title: Имя
@@ -579,6 +623,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/employee/middle_name
     name: middle_name
     title: Отчество
@@ -590,6 +635,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/employee/ad_login
     name: ad_login
     title: Пользователь (AD-логин)
@@ -601,6 +647,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/employee/division_id
     name: division_id
     title: Подразделение сотрудника
@@ -612,15 +659,17 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   key_attribute_refs:
   - dams:logical/esed/employee/employee_id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: aligned
-  alignment_rationale: ЕСЭД employee реализует Employee. Отдельного Person в пакете нет; Person живёт в MDM/UCD (LDM-008 warning
-    допустим).
+  alignment_rationale: ЕСЭД employee реализует Employee. Отдельного Person в пакете нет; Person живёт в MDM/UCD (LDM-008
+    warning допустим).
 - element_id: dams:logical/esed/file
   name: file
   title: file
@@ -644,6 +693,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/file/owner_card_id
     name: owner_card_id
     title: Карточка-владелец файла
@@ -655,6 +705,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/file/file_name
     name: file_name
     title: Имя файла
@@ -666,6 +717,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/file/binary_id
     name: binary_id
     title: ID бинарных данных
@@ -677,6 +729,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/file/file_type
     name: file_type
     title: Тип файла
@@ -688,12 +741,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/integer
   key_attribute_refs:
   - dams:logical/esed/file/id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: not-applicable
   alignment_rationale: Физическое хранилище вложения ЕСЭД; не бизнес-понятие CDM.
 - element_id: dams:logical/esed/file_binary
@@ -719,6 +774,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/file_binary/path
     name: path
     title: Путь к файлу (Nuxeo ID)
@@ -730,6 +786,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/file_binary/storage_id
     name: storage_id
     title: ID хранилища
@@ -741,12 +798,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   key_attribute_refs:
   - dams:logical/esed/file_binary/id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: not-applicable
   alignment_rationale: Бинарные данные файла ЕСЭД; не бизнес-понятие CDM.
 - element_id: dams:logical/esed/instance
@@ -774,6 +833,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/instance/deleted
     name: deleted
     title: Признак мягкого удаления
@@ -785,14 +845,17 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/boolean
   key_attribute_refs:
   - dams:logical/esed/instance/instance_id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: aligned
-  alignment_rationale: Карточка/экземпляр документа ЕСЭД — то же понятие SupportingDocument, другое зерно относительно document.
+  alignment_rationale: Карточка/экземпляр документа ЕСЭД — то же понятие SupportingDocument, другое зерно относительно 
+    document.
 - element_id: dams:logical/esed/organization
   name: organization
   title: organization
@@ -818,6 +881,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/organization/organization_name
     name: organization_name
     title: Название (краткое)
@@ -829,6 +893,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/organization/organization_full_name
     name: organization_full_name
     title: Полное название
@@ -840,6 +905,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/organization/inn
     name: inn
     title: ИНН
@@ -851,6 +917,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/organization/kpp
     name: kpp
     title: КПП
@@ -862,6 +929,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/organization/ogrn
     name: ogrn
     title: ОГРН
@@ -873,6 +941,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/organization/comments
     name: comments
     title: Дополнительная информация (MDM ID организации)
@@ -884,6 +953,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/organization/fax
     name: fax
     title: Факс (ICDB ID организации)
@@ -895,15 +965,17 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   key_attribute_refs:
   - dams:logical/esed/organization/organization_id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: aligned
-  alignment_rationale: ЕСЭД organization (партнёр ЭДО, ИНН/КПП/ОГРН) реализует LegalEntity; не Counterparty (коммерческая
-    роль).
+  alignment_rationale: ЕСЭД organization (партнёр ЭДО, ИНН/КПП/ОГРН) реализует LegalEntity; не Counterparty 
+    (коммерческая роль).
 - element_id: dams:logical/esed/organization_employee
   name: organization_employee
   title: organization_employee
@@ -929,6 +1001,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/organization_employee/last_name
     name: last_name
     title: Фамилия
@@ -940,6 +1013,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/organization_employee/first_name
     name: first_name
     title: Имя
@@ -951,6 +1025,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/organization_employee/middle_name
     name: middle_name
     title: Отчество
@@ -962,12 +1037,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   key_attribute_refs:
   - dams:logical/esed/organization_employee/employee_id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: aligned
   alignment_rationale: Сотрудник контрагента в ЕСЭД — Person, не Employee МОЕХ.
 - element_id: dams:logical/esed/universal_item
@@ -993,6 +1070,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/esed/universal_item/item_name
     name: item_name
     title: Имя (наименование справочного значения)
@@ -1004,6 +1082,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/string
   - element_id: dams:logical/esed/universal_item/item_card
     name: item_card
     title: Ссылка на карточку
@@ -1015,12 +1094,14 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     governance_classification: internal
+    data_type_ref: dams:datatype/identifier
   key_attribute_refs:
   - dams:logical/esed/universal_item/item_id
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем 
+    данных).
   conceptual_alignment_status: local-only
   alignment_rationale: Универсальный справочник значений ЕСЭД; корпоративного концепта нет.
 relationships:
@@ -2111,7 +2192,8 @@ mappings:
 implementation_scope: solution
 conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
 data_owner_ref: org:role/DATA_OWNER_PENDING
-ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при отсутствии локального override на сущности.
+ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при отсутствии локального override на 
+  сущности.
 data_carriers:
 - element_id: dams:physical/esed/CardDocument_ExternalPoaInfo
   name: CardDocument_ExternalPoaInfo
@@ -2941,3 +3023,4 @@ data_carriers:
   tags:
   - transitional
   - namespace_heuristic
+value_domains: []

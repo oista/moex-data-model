@@ -9,6 +9,9 @@ type AttrSummary = {
   name: string;
   title: string;
   logical_type: string;
+  data_type_ref?: string;
+  value_domain_ref?: string;
+  concept_ref?: string;
   required: boolean;
 };
 
@@ -41,6 +44,9 @@ function parseEntities(content: string): ParseResult {
           name?: string;
           title?: string;
           logical_type?: string;
+          data_type_ref?: string;
+          value_domain_ref?: string;
+          concept_ref?: string;
           required?: boolean;
         }>;
       }>;
@@ -59,7 +65,21 @@ function parseEntities(content: string): ParseResult {
             element_id: String(a.element_id),
             name: String(a.name || ""),
             title: String(a.title || ""),
-            logical_type: String(a.logical_type || "string"),
+            logical_type: String(
+              a.logical_type ||
+                (typeof a.data_type_ref === "string"
+                  ? a.data_type_ref.split("/").pop()
+                  : "") ||
+                "string"
+            ),
+            data_type_ref:
+              typeof a.data_type_ref === "string" ? a.data_type_ref : undefined,
+            value_domain_ref:
+              typeof a.value_domain_ref === "string"
+                ? a.value_domain_ref
+                : undefined,
+            concept_ref:
+              typeof a.concept_ref === "string" ? a.concept_ref : undefined,
             required: Boolean(a.required),
           })),
       }));

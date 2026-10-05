@@ -12,7 +12,7 @@ from typing import Any, Literal
 
 import yaml
 
-from moex_dams.projection.dbml import _ident
+from moex_dams.projection.dbml import _ident, effective_attr_type
 from moex_dams.projection.er_common import (
     MANY as _MANY,
     attr_keys_for_entity as _attr_keys_for_entity,
@@ -261,16 +261,16 @@ def project_model_package_to_er_diagram(
                 if not isinstance(attr, dict):
                     continue
                 cname = _ident(attr.get("name"), fallback="attr")
-                ctype = _ident(attr.get("logical_type"), fallback="string")
+                ctype = _ident(effective_attr_type(attr), fallback="string")
                 aid = str(attr.get("element_id") or "")
                 pk = (
-                    attr.get("logical_type") == "identifier"
+                    effective_attr_type(attr) == "identifier"
                     or (aid and aid in key_refs)
                     or bool(attr.get("business_key_kind"))
                 )
                 # identifier alone is often PK; FK when role matches and not sole PK marker
                 fk = str(attr.get("name") or "") in fk_roles
-                if fk and attr.get("logical_type") == "identifier" and not (
+                if fk and effective_attr_type(attr) == "identifier" and not (
                     aid in key_refs or attr.get("business_key_kind")
                 ):
                     # role-matched identifier acting as FK — keep FK, drop PK unless key

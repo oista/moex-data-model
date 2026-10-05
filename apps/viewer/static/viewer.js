@@ -4114,7 +4114,16 @@
       const nameTd = document.createElement("td");
       nameTd.textContent = attrs.name || slot.title || slot.id || "";
       const rangeTd = document.createElement("td");
-      rangeTd.textContent = attrs.logical_type || attrs.native_type || attrs.range || "";
+      rangeTd.textContent =
+        attrs.data_type_ref ||
+        attrs.value_domain_ref ||
+        attrs.logical_type ||
+        attrs.native_type ||
+        attrs.range ||
+        "";
+      if (attrs.concept_ref) {
+        rangeTd.title = `concept_ref: ${attrs.concept_ref}`;
+      }
       tr.appendChild(nameTd);
       tr.appendChild(rangeTd);
       [["required", attrs.required], ["multivalued", attrs.multivalued]].forEach(([, flag]) => {

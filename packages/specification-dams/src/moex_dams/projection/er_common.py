@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from moex_dams.projection.dbml import _ident
+from moex_dams.projection.dbml import _ident, effective_attr_type
 
 MANY = 999999
 

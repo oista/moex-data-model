@@ -138,9 +138,15 @@ def add_logical_attribute(
     eid = str(attr.get("element_id") or "").strip()
     name = str(attr.get("name") or "").strip()
     logical_type = str(attr.get("logical_type") or "").strip()
-    if not owner or not eid or not name or not logical_type:
+    data_type_ref = str(attr.get("data_type_ref") or "").strip()
+    value_domain_ref = str(attr.get("value_domain_ref") or "").strip()
+    if not owner or not eid or not name:
         raise MutationError(
-            "owner_element_id, element_id, name, and logical_type are required"
+            "owner_element_id, element_id, and name are required"
+        )
+    if not (logical_type or data_type_ref or value_domain_ref):
+        raise MutationError(
+            "logical_type, data_type_ref, or value_domain_ref is required"
         )
     if eid in _collect_ids(data):
         raise MutationConflict(f"duplicate element_id: {eid}")
@@ -172,7 +178,16 @@ def add_logical_attribute(
     )
     row["lifecycle_status"] = str(attr.get("lifecycle_status") or "draft")
     row["owner_entity_ref"] = str(attr.get("owner_entity_ref") or owner)
-    row["logical_type"] = logical_type
+    if logical_type:
+        row["logical_type"] = logical_type
+    if data_type_ref:
+        row["data_type_ref"] = data_type_ref
+    if value_domain_ref:
+        row["value_domain_ref"] = value_domain_ref
+    if attr.get("concept_ref"):
+        row["concept_ref"] = str(attr["concept_ref"])
+    if "critical_data_element" in attr:
+        row["critical_data_element"] = bool(attr.get("critical_data_element"))
     row["required"] = bool(attr.get("required", False))
     row["multivalued"] = bool(attr.get("multivalued", False))
     attrs.append(row)
@@ -194,6 +209,10 @@ _ATTR_PATCH_KEYS = frozenset(
         "title",
         "description",
         "logical_type",
+        "data_type_ref",
+        "value_domain_ref",
+        "concept_ref",
+        "critical_data_element",
         "required",
         "multivalued",
         "lifecycle_status",

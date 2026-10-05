@@ -1,0 +1,142 @@
+# Corporate DataType starter set (ADR-036)
+data_types:
+- element_id: dams:datatype/string
+  name: string
+  description: Корпоративный тип string (стартовый набор ADR-036).
+  lifecycle_status: active
+  type_name: string
+  type_family: string
+  xsd_datatype: xsd:string
+  linkml_type: string
+  tags:
+  - starter
+- element_id: dams:datatype/integer
+  name: integer
+  description: Корпоративный тип integer (стартовый набор ADR-036).
+  lifecycle_status: active
+  type_name: integer
+  type_family: integer
+  xsd_datatype: xsd:integer
+  linkml_type: integer
+  tags:
+  - starter
+- element_id: dams:datatype/decimal
+  name: decimal
+  description: Корпоративный тип decimal (стартовый набор ADR-036).
+  lifecycle_status: active
+  type_name: decimal
+  type_family: decimal
+  xsd_datatype: xsd:decimal
+  linkml_type: decimal
+  tags:
+  - starter
+- element_id: dams:datatype/boolean
+  name: boolean
+  description: Корпоративный тип boolean (стартовый набор ADR-036).
+  lifecycle_status: active
+  type_name: boolean
+  type_family: boolean
+  xsd_datatype: xsd:boolean
+  linkml_type: boolean
+  tags:
+  - starter
+- element_id: dams:datatype/date
+  name: date
+  description: Корпоративный тип date (стартовый набор ADR-036).
+  lifecycle_status: active
+  type_name: date
+  type_family: date
+  xsd_datatype: xsd:date
+  linkml_type: date
+  tags:
+  - starter
+- element_id: dams:datatype/datetime
+  name: datetime
+  description: Корпоративный тип datetime (стартовый набор ADR-036).
+  lifecycle_status: active
+  type_name: datetime
+  type_family: datetime
+  xsd_datatype: xsd:dateTime
+  linkml_type: datetime
+  tags:
+  - starter
+- element_id: dams:datatype/time
+  name: time
+  description: Корпоративный тип time (стартовый набор ADR-036).
+  lifecycle_status: active
+  type_name: time
+  type_family: time
+  xsd_datatype: xsd:time
+  linkml_type: time
+  tags:
+  - starter
+- element_id: dams:datatype/binary
+  name: binary
+  description: Корпоративный тип binary (стартовый набор ADR-036).
+  lifecycle_status: active
+  type_name: binary
+  type_family: binary
+  xsd_datatype: xsd:base64Binary
+  linkml_type: base64binary
+  tags:
+  - starter
+- element_id: dams:datatype/identifier
+  name: identifier
+  description: Корпоративный тип identifier (стартовый набор ADR-036).
+  lifecycle_status: active
+  type_name: identifier
+  type_family: identifier
+  xsd_datatype: xsd:string
+  linkml_type: string
+  tags:
+  - starter
+- element_id: dams:datatype/uri
+  name: uri
+  description: Корпоративный тип uri (стартовый набор ADR-036).
+  lifecycle_status: active
+  type_name: uri
+  type_family: uri
+  xsd_datatype: xsd:anyURI
+  linkml_type: uri
+  tags:
+  - starter
+- element_id: dams:datatype/object
+  name: object
+  description: Корпоративный тип object (стартовый набор ADR-036).
+  lifecycle_status: active
+  type_name: object
+  type_family: object
+  xsd_datatype: xsd:anyType
+  linkml_type: object
+  tags:
+  - starter
+- element_id: dams:datatype/float
+  name: float
+  description: Корпоративный тип float (стартовый набор ADR-036).
+  lifecycle_status: active
+  type_name: float
+  type_family: float
+  xsd_datatype: xsd:float
+  linkml_type: float
+  tags:
+  - starter
+- element_id: dams:datatype/duration
+  name: duration
+  description: Корпоративный тип duration (стартовый набор ADR-036).
+  lifecycle_status: active
+  type_name: duration
+  type_family: duration
+  xsd_datatype: xsd:duration
+  linkml_type: duration
+  tags:
+  - starter
+- element_id: dams:datatype/array
+  name: array
+  description: Корпоративный тип array (стартовый набор ADR-036).
+  lifecycle_status: active
+  type_name: array
+  type_family: array
+  xsd_datatype: xsd:anyType
+  linkml_type: string
+  tags:
+  - starter

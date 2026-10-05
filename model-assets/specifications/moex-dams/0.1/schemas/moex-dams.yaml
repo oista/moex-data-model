@@ -13,6 +13,9 @@ imports:
   - moex-governance
   - moex-core
   - moex-technical
+  - moex-deprecated-slots
+  - moex-semantic
+  - moex-datatypes
   - moex-integration
   - moex-contract-binding
   - moex-analytics

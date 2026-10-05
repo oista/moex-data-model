@@ -54,3 +54,8 @@ Viewer-решения живут отдельно: [viewer-decisions.md](../arch
 1. Ревью по [CHECKLIST.md](../architecture/CHECKLIST.md), если правка затрагивает ядро.
 2. Сменить `status: Proposed` → `Accepted` только после явного решения.
 3. Не дублировать инварианты §14 MODELING_ARCHITECTURE — ADR ссылается на них.
+
+| [ADR-034](ADR-034-lightweight-conceptual-property.md) | ����������� ConceptualProperty (������� B) | Accepted; critical_data_element; deprecated slots |
+| [ADR-035](ADR-035-value-domains.md) | ConceptualDomain / ValueDomain / SKOS | Accepted |
+| [ADR-036](ADR-036-datatype-system.md) | DataType / NativeTypeBinding | Accepted |
+| [ADR-037](ADR-037-attribute-semantics-migration.md) | �������� ��������� LogicalAttribute | Accepted |
