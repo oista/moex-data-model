@@ -85,10 +85,13 @@ Schema: `schema/package-docs-toc.schema.json`.
 
 Implementation modules may publish pre-generated Mermaid erDiagram artifacts:
 
-- `publications/logical.erd.md` + sibling `.svg` + sibling `logical.dbml`
-- `publications/physical.erd.md` + sibling `.svg` + sibling `physical.dbml`
+- `publications/logical.erd.md` + sibling `.svg` / `.dbml` / `.scene.json` / `.layout.json`
+- `publications/physical.erd.md` + sibling `.svg` / `.dbml` / `.scene.json` / `.layout.json`
+- `publications/conceptual.erd.md` (+ `.clickmap.json` for deep-links) + same siblings
 
-Generate Mermaid with `moex-model diagram --format mermaid --profile logical|physical|conceptual` (SVG needs Node/`npx`), and DBML with `moex-model diagram --format dbml --profile logical|physical|conceptual` (default out: `publications/{profile}.dbml`; conceptual ER siblings use `conceptual.dbml`). The player shows the SVG by default, an **Исходник** tab for Mermaid text, and a **DBML** tab for the DBML projection — no mermaid.js / CDN in `index.html`.
+Generate Mermaid with `moex-model diagram --format mermaid --profile logical|physical|conceptual` (SVG needs Node/`npx`; also writes scene + seeds layout). DBML: `moex-model diagram --format dbml --profile …`. Use `--reset-layout` only when you want to discard saved positions/colors.
+
+The player prefers the interactive **Диаграмма** tab (custom SVG from `scene` + `layout`: drag tables, bend edges, colors). Fallback **Mermaid** tab shows the themed SVG. **Исходник** / **DBML** tabs expose text. No mermaid.js / CDN in `index.html`. Layout save requires `moex-viewer serve` (`POST /api/layout`); static builds can download `layout.json`.
 
 ## FIBO glossary
 

@@ -4838,15 +4838,599 @@
     return null;
   }
 
+  function erdNodeKey(node) {
+    return String(node.element_id || node.name || "");
+  }
+
+  function erdEdgeKey(edge) {
+    return String(edge.element_id || edge.id || "");
+  }
+
+  function measureErdNode(node) {
+    const cols = node.columns || [];
+    const headerH = 36;
+    const rowH = 22;
+    const pad = 10;
+    let maxType = 48;
+    let maxName = 80;
+    let maxComment = 60;
+    cols.forEach((c) => {
+      maxType = Math.max(maxType, String(c.type || "").length * 7);
+      maxName = Math.max(maxName, String(c.name || "").length * 7.2);
+      maxComment = Math.max(maxComment, Math.min(220, String(c.comment || "").length * 6.5));
+    });
+    const titleW = Math.max(
+      String(node.title || "").length * 7.5,
+      String(node.name || "").length * 6.5
+    );
+    const width = Math.max(220, Math.min(420, Math.max(titleW + 40, maxType + maxName + maxComment + 70)));
+    const height = headerH + Math.max(1, cols.length) * rowH + pad;
+    return { width, height, headerH, rowH, maxType, maxName };
+  }
+
+  function orthogonalErdPath(x1, y1, x2, y2, bend) {
+    if (bend && Number.isFinite(bend.x) && Number.isFinite(bend.y)) {
+      return `M ${x1} ${y1} L ${bend.x} ${y1} L ${bend.x} ${y2} L ${x2} ${y2}`;
+    }
+    const mx = (x1 + x2) / 2;
+    return `M ${x1} ${y1} L ${mx} ${y1} L ${mx} ${y2} L ${x2} ${y2}`;
+  }
+
+  function renderErdScene(mod, section, scene, layout, onSelect) {
+    const wrap = document.createElement("div");
+    wrap.className = "erd-scene-wrap";
+    wrap.setAttribute("data-ui", "erd-scene");
+
+    const state = {
+      layout: JSON.parse(JSON.stringify(layout || { version: 1, nodes: {}, edges: {} })),
+      layoutPath: String((section.attributes || {}).erd_layout_path || ""),
+      layoutHash: String((section.attributes || {}).erd_layout_hash || ""),
+      panX: 0,
+      panY: 0,
+      scale: 1,
+      selectedNode: null,
+      selectedEdge: null,
+      editMode: false,
+      dirty: false,
+    };
+
+    const tools = document.createElement("div");
+    tools.className = "erd-scene-toolbar";
+
+    const btnEdit = document.createElement("button");
+    btnEdit.type = "button";
+    btnEdit.className = "erd-tool-btn";
+    btnEdit.textContent = "Правка";
+    const btnSave = document.createElement("button");
+    btnSave.type = "button";
+    btnSave.className = "erd-tool-btn";
+    btnSave.textContent = "Сохранить layout";
+    btnSave.disabled = true;
+    const btnDownload = document.createElement("button");
+    btnDownload.type = "button";
+    btnDownload.className = "erd-tool-btn";
+    btnDownload.textContent = "Скачать layout.json";
+    const colorInput = document.createElement("input");
+    colorInput.type = "color";
+    colorInput.className = "erd-color-input";
+    colorInput.title = "Цвет выбранной таблицы";
+    colorInput.disabled = true;
+    const status = document.createElement("span");
+    status.className = "muted";
+    status.style.fontSize = "var(--font-sm)";
+
+    tools.appendChild(btnEdit);
+    tools.appendChild(btnSave);
+    tools.appendChild(btnDownload);
+    tools.appendChild(colorInput);
+    tools.appendChild(status);
+    wrap.appendChild(tools);
+
+    const NS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(NS, "svg");
+    svg.classList.add("erd-scene");
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", "ER diagram");
+    wrap.appendChild(svg);
+
+    const defs = document.createElementNS(NS, "defs");
+    const markerSpecs = [
+      ["onlyOne", "M0,0 L0,12 M4,0 L4,12"],
+      ["zeroOrOne", "M8,6 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M0,0 L0,12"],
+      ["oneOrMore", "M0,6 L8,0 L8,12 Z M12,0 L12,12"],
+      ["zeroOrMore", "M14,6 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M0,6 L8,0 L8,12 Z"],
+    ];
+    markerSpecs.forEach(([name, d]) => {
+      ["Start", "End"].forEach((side) => {
+        const m = document.createElementNS(NS, "marker");
+        m.setAttribute("id", `erd-m-${name}-${side}`);
+        m.setAttribute("viewBox", "0 0 18 12");
+        m.setAttribute("refX", side === "End" ? "18" : "0");
+        m.setAttribute("refY", "6");
+        m.setAttribute("markerWidth", "12");
+        m.setAttribute("markerHeight", "10");
+        m.setAttribute("orient", "auto");
+        const p = document.createElementNS(NS, "path");
+        p.setAttribute("d", d);
+        p.setAttribute("fill", "none");
+        p.setAttribute("stroke", "var(--erd-edge)");
+        p.setAttribute("stroke-width", "1.25");
+        m.appendChild(p);
+        defs.appendChild(m);
+      });
+    });
+    svg.appendChild(defs);
+
+    const rootG = document.createElementNS(NS, "g");
+    rootG.classList.add("erd-scene-root");
+    svg.appendChild(rootG);
+    const edgesG = document.createElementNS(NS, "g");
+    edgesG.classList.add("erd-edges");
+    const nodesG = document.createElementNS(NS, "g");
+    nodesG.classList.add("erd-nodes");
+    rootG.appendChild(edgesG);
+    rootG.appendChild(nodesG);
+
+    const nodeMetrics = {};
+    (scene.nodes || []).forEach((n) => {
+      nodeMetrics[erdNodeKey(n)] = measureErdNode(n);
+    });
+
+    function nodePos(key) {
+      const p = (state.layout.nodes || {})[key];
+      if (p) return { x: Number(p.x) || 0, y: Number(p.y) || 0, color: p.color };
+      return { x: 40, y: 40, color: null };
+    }
+
+    function applyTransform() {
+      rootG.setAttribute(
+        "transform",
+        `translate(${state.panX},${state.panY}) scale(${state.scale})`
+      );
+    }
+
+    function markDirty() {
+      state.dirty = true;
+      btnSave.disabled = !state.editMode;
+      status.textContent = state.editMode ? "есть несохранённые изменения" : "";
+    }
+
+    function markerUrl(kind, side) {
+      const k = kind || "onlyOne";
+      return `url(#erd-m-${k}-${side})`;
+    }
+
+    function redraw() {
+      edgesG.replaceChildren();
+      nodesG.replaceChildren();
+      const byName = {};
+      (scene.nodes || []).forEach((n) => {
+        byName[n.name] = n;
+      });
+
+      (scene.edges || []).forEach((edge) => {
+        const srcNode = byName[edge.source];
+        const tgtNode = byName[edge.target];
+        if (!srcNode || !tgtNode) return;
+        const sk = erdNodeKey(srcNode);
+        const tk = erdNodeKey(tgtNode);
+        const sp = nodePos(sk);
+        const tp = nodePos(tk);
+        const sm = nodeMetrics[sk];
+        const tm = nodeMetrics[tk];
+        const x1 = sp.x + sm.width;
+        const y1 = sp.y + sm.height / 2;
+        const x2 = tp.x;
+        const y2 = tp.y + tm.height / 2;
+        const ek = erdEdgeKey(edge);
+        const edgeLayout = (state.layout.edges || {})[ek] || {};
+        const bend = (edgeLayout.points && edgeLayout.points[0]) || null;
+        const path = document.createElementNS(NS, "path");
+        path.setAttribute("d", orthogonalErdPath(x1, y1, x2, y2, bend));
+        path.classList.add("erd-edge-path");
+        if (state.selectedEdge === ek) path.classList.add("is-selected");
+        path.setAttribute("marker-start", markerUrl(edge.source_cardinality, "Start"));
+        path.setAttribute("marker-end", markerUrl(edge.target_cardinality, "End"));
+        path.dataset.edgeId = ek;
+        path.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          state.selectedEdge = ek;
+          state.selectedNode = null;
+          colorInput.disabled = true;
+          if (typeof onSelect === "function" && edge.element_id) {
+            onSelect({
+              element_id: edge.element_id,
+              section_id: "relationships",
+              kind: "edge",
+            });
+          }
+          redraw();
+        });
+        edgesG.appendChild(path);
+
+        if (edge.label) {
+          const lx = bend ? bend.x : (x1 + x2) / 2;
+          const ly = bend ? (y1 + y2) / 2 : (y1 + y2) / 2 - 8;
+          const labelPos = edgeLayout.label || { x: lx, y: ly };
+          const bg = document.createElementNS(NS, "rect");
+          bg.classList.add("erd-edge-label-bg");
+          const text = document.createElementNS(NS, "text");
+          text.classList.add("erd-edge-label");
+          text.setAttribute("x", labelPos.x);
+          text.setAttribute("y", labelPos.y);
+          text.setAttribute("text-anchor", "middle");
+          text.textContent = edge.label;
+          edgesG.appendChild(bg);
+          edgesG.appendChild(text);
+          try {
+            const bbox = text.getBBox();
+            bg.setAttribute("x", bbox.x - 4);
+            bg.setAttribute("y", bbox.y - 2);
+            bg.setAttribute("width", bbox.width + 8);
+            bg.setAttribute("height", bbox.height + 4);
+          } catch (_) {
+            bg.setAttribute("x", labelPos.x - 30);
+            bg.setAttribute("y", labelPos.y - 12);
+            bg.setAttribute("width", 60);
+            bg.setAttribute("height", 16);
+          }
+        }
+
+        if (state.editMode) {
+          const hx = bend ? bend.x : (x1 + x2) / 2;
+          const hy = bend ? bend.y : (y1 + y2) / 2;
+          const handle = document.createElementNS(NS, "circle");
+          handle.classList.add("erd-edge-handle");
+          handle.setAttribute("cx", hx);
+          handle.setAttribute("cy", hy);
+          handle.dataset.edgeId = ek;
+          handle.addEventListener("pointerdown", (ev) => {
+            ev.stopPropagation();
+            ev.preventDefault();
+            handle.setPointerCapture(ev.pointerId);
+            const move = (e) => {
+              const pt = clientToScene(e.clientX, e.clientY);
+              if (!state.layout.edges) state.layout.edges = {};
+              state.layout.edges[ek] = {
+                ...(state.layout.edges[ek] || {}),
+                points: [{ x: Math.round(pt.x), y: Math.round(pt.y) }],
+              };
+              markDirty();
+              redraw();
+            };
+            const up = (e) => {
+              handle.releasePointerCapture(e.pointerId);
+              handle.removeEventListener("pointermove", move);
+              handle.removeEventListener("pointerup", up);
+            };
+            handle.addEventListener("pointermove", move);
+            handle.addEventListener("pointerup", up);
+          });
+          edgesG.appendChild(handle);
+        }
+      });
+
+      (scene.nodes || []).forEach((node) => {
+        const key = erdNodeKey(node);
+        const m = nodeMetrics[key];
+        const pos = nodePos(key);
+        const g = document.createElementNS(NS, "g");
+        g.classList.add("erd-node");
+        if (state.selectedNode === key) g.classList.add("is-selected");
+        g.setAttribute("transform", `translate(${pos.x},${pos.y})`);
+        g.dataset.nodeKey = key;
+
+        const rect = document.createElementNS(NS, "rect");
+        rect.classList.add("erd-node-rect");
+        rect.setAttribute("width", m.width);
+        rect.setAttribute("height", m.height);
+        rect.setAttribute("rx", "6");
+        rect.setAttribute("fill", "var(--erd-row-odd)");
+        g.appendChild(rect);
+
+        const header = document.createElementNS(NS, "rect");
+        header.classList.add("erd-node-header");
+        header.setAttribute("width", m.width);
+        header.setAttribute("height", m.headerH);
+        header.setAttribute("rx", "6");
+        if (pos.color) header.setAttribute("fill", pos.color);
+        g.appendChild(header);
+        // square bottom of header
+        const headerFix = document.createElementNS(NS, "rect");
+        headerFix.setAttribute("y", m.headerH - 6);
+        headerFix.setAttribute("width", m.width);
+        headerFix.setAttribute("height", 6);
+        headerFix.setAttribute("fill", pos.color || "var(--erd-header-bg)");
+        g.appendChild(headerFix);
+
+        const title = document.createElementNS(NS, "text");
+        title.classList.add("erd-node-title");
+        title.setAttribute("x", 10);
+        title.setAttribute("y", 15);
+        title.textContent = node.title || node.name;
+        g.appendChild(title);
+        const name = document.createElementNS(NS, "text");
+        name.classList.add("erd-node-name");
+        name.setAttribute("x", 10);
+        name.setAttribute("y", 28);
+        name.textContent = node.name;
+        g.appendChild(name);
+
+        const cols = node.columns || [];
+        if (!cols.length) {
+          const empty = document.createElementNS(NS, "text");
+          empty.classList.add("erd-col-comment");
+          empty.setAttribute("x", 10);
+          empty.setAttribute("y", m.headerH + 16);
+          empty.textContent = "—";
+          g.appendChild(empty);
+        }
+        cols.forEach((col, i) => {
+          const y = m.headerH + i * m.rowH;
+          if (i % 2 === 1) {
+            const rowBg = document.createElementNS(NS, "rect");
+            rowBg.setAttribute("y", y);
+            rowBg.setAttribute("width", m.width);
+            rowBg.setAttribute("height", m.rowH);
+            rowBg.setAttribute("fill", "var(--erd-row-even)");
+            g.appendChild(rowBg);
+          }
+          const typeT = document.createElementNS(NS, "text");
+          typeT.classList.add("erd-col-type");
+          typeT.setAttribute("x", 8);
+          typeT.setAttribute("y", y + 15);
+          typeT.textContent = col.type || "";
+          g.appendChild(typeT);
+          const nameT = document.createElementNS(NS, "text");
+          nameT.classList.add("erd-col-name");
+          nameT.setAttribute("x", 8 + Math.min(m.maxType, 90));
+          nameT.setAttribute("y", y + 15);
+          nameT.textContent = col.name || "";
+          g.appendChild(nameT);
+          let badgeX = m.width - 8;
+          (col.keys || []).slice().reverse().forEach((k) => {
+            badgeX -= 22;
+            const br = document.createElementNS(NS, "rect");
+            br.classList.add("erd-key-badge");
+            br.setAttribute("x", badgeX);
+            br.setAttribute("y", y + 4);
+            br.setAttribute("width", 20);
+            br.setAttribute("height", 14);
+            br.setAttribute("rx", "3");
+            g.appendChild(br);
+            const bt = document.createElementNS(NS, "text");
+            bt.classList.add("erd-key-badge-text");
+            bt.setAttribute("x", badgeX + 10);
+            bt.setAttribute("y", y + 14);
+            bt.setAttribute("text-anchor", "middle");
+            bt.textContent = k;
+            g.appendChild(bt);
+          });
+          if (col.comment) {
+            const ct = document.createElementNS(NS, "text");
+            ct.classList.add("erd-col-comment");
+            ct.setAttribute("x", 8 + Math.min(m.maxType, 90) + Math.min(m.maxName, 120));
+            ct.setAttribute("y", y + 15);
+            const maxLen = 28;
+            const t = String(col.comment);
+            ct.textContent = t.length > maxLen ? t.slice(0, maxLen - 1) + "…" : t;
+            g.appendChild(ct);
+          }
+        });
+
+        g.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          state.selectedNode = key;
+          state.selectedEdge = null;
+          colorInput.disabled = !state.editMode;
+          const c = nodePos(key).color || "#4285F4";
+          colorInput.value = /^#[0-9a-fA-F]{6}$/.test(c) ? c : "#4285F4";
+          if (typeof onSelect === "function" && node.element_id) {
+            const profileSec =
+              scene.profile === "conceptual"
+                ? "conceptual"
+                : scene.profile === "physical"
+                  ? "physical"
+                  : "logical";
+            onSelect({
+              element_id: node.element_id,
+              section_id: profileSec,
+              kind: "entity",
+            });
+          }
+          redraw();
+        });
+
+        if (state.editMode) {
+          g.addEventListener("pointerdown", (ev) => {
+            if (ev.target.closest(".erd-edge-handle")) return;
+            ev.stopPropagation();
+            ev.preventDefault();
+            g.classList.add("is-dragging");
+            g.setPointerCapture(ev.pointerId);
+            const start = clientToScene(ev.clientX, ev.clientY);
+            const origin = nodePos(key);
+            const move = (e) => {
+              const cur = clientToScene(e.clientX, e.clientY);
+              const nx = Math.round(origin.x + (cur.x - start.x));
+              const ny = Math.round(origin.y + (cur.y - start.y));
+              if (!state.layout.nodes) state.layout.nodes = {};
+              state.layout.nodes[key] = {
+                ...(state.layout.nodes[key] || {}),
+                x: nx,
+                y: ny,
+                color: (state.layout.nodes[key] || {}).color || origin.color,
+              };
+              markDirty();
+              redraw();
+            };
+            const up = (e) => {
+              g.classList.remove("is-dragging");
+              g.releasePointerCapture(e.pointerId);
+              g.removeEventListener("pointermove", move);
+              g.removeEventListener("pointerup", up);
+            };
+            g.addEventListener("pointermove", move);
+            g.addEventListener("pointerup", up);
+          });
+        }
+
+        nodesG.appendChild(g);
+      });
+      applyTransform();
+    }
+
+    function clientToScene(clientX, clientY) {
+      const rect = svg.getBoundingClientRect();
+      const x = (clientX - rect.left - state.panX) / state.scale;
+      const y = (clientY - rect.top - state.panY) / state.scale;
+      return { x, y };
+    }
+
+    let panning = false;
+    let panOrigin = null;
+    svg.addEventListener("pointerdown", (ev) => {
+      if (ev.target !== svg && !ev.target.classList?.contains("erd-scene-root")) {
+        if (ev.target.closest(".erd-node") || ev.target.closest(".erd-edge-path") || ev.target.closest(".erd-edge-handle")) {
+          return;
+        }
+      }
+      panning = true;
+      wrap.classList.add("is-panning");
+      panOrigin = { x: ev.clientX - state.panX, y: ev.clientY - state.panY };
+      svg.setPointerCapture(ev.pointerId);
+    });
+    svg.addEventListener("pointermove", (ev) => {
+      if (!panning || !panOrigin) return;
+      state.panX = ev.clientX - panOrigin.x;
+      state.panY = ev.clientY - panOrigin.y;
+      applyTransform();
+    });
+    svg.addEventListener("pointerup", (ev) => {
+      panning = false;
+      wrap.classList.remove("is-panning");
+      try {
+        svg.releasePointerCapture(ev.pointerId);
+      } catch (_) {
+        /* ignore */
+      }
+    });
+    svg.addEventListener(
+      "wheel",
+      (ev) => {
+        ev.preventDefault();
+        const delta = ev.deltaY > 0 ? 0.9 : 1.1;
+        const next = Math.min(2.5, Math.max(0.35, state.scale * delta));
+        const rect = svg.getBoundingClientRect();
+        const cx = ev.clientX - rect.left;
+        const cy = ev.clientY - rect.top;
+        state.panX = cx - ((cx - state.panX) / state.scale) * next;
+        state.panY = cy - ((cy - state.panY) / state.scale) * next;
+        state.scale = next;
+        applyTransform();
+      },
+      { passive: false }
+    );
+
+    btnEdit.addEventListener("click", () => {
+      state.editMode = !state.editMode;
+      btnEdit.classList.toggle("is-active", state.editMode);
+      btnEdit.textContent = state.editMode ? "Просмотр" : "Правка";
+      colorInput.disabled = !(state.editMode && state.selectedNode);
+      btnSave.disabled = !(state.editMode && state.dirty);
+      const canServe = typeof window.__moexCanEditLayout === "function" && window.__moexCanEditLayout();
+      if (state.editMode && !canServe) {
+        status.textContent = "serve недоступен — используйте «Скачать layout.json»";
+      } else {
+        status.textContent = state.dirty ? "есть несохранённые изменения" : "";
+      }
+      redraw();
+    });
+
+    colorInput.addEventListener("input", () => {
+      if (!state.selectedNode || !state.editMode) return;
+      if (!state.layout.nodes) state.layout.nodes = {};
+      const prev = state.layout.nodes[state.selectedNode] || nodePos(state.selectedNode);
+      state.layout.nodes[state.selectedNode] = {
+        x: prev.x,
+        y: prev.y,
+        color: colorInput.value,
+      };
+      markDirty();
+      redraw();
+    });
+
+    btnDownload.addEventListener("click", () => {
+      const blob = new Blob(
+        [JSON.stringify(state.layout, null, 2) + "\n"],
+        { type: "application/json" }
+      );
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = (state.layoutPath.split("/").pop() || "layout.json");
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    btnSave.addEventListener("click", async () => {
+      const token =
+        typeof window.__moexGetEditToken === "function"
+          ? window.__moexGetEditToken()
+          : null;
+      if (!token || !state.layoutPath) {
+        status.textContent = "Нет serve API — скачайте layout.json";
+        return;
+      }
+      btnSave.disabled = true;
+      try {
+        const resp = await fetch("/api/layout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            token,
+            path: state.layoutPath,
+            layout: state.layout,
+            base_hash: state.layoutHash,
+          }),
+        });
+        const data = await resp.json().catch(() => ({}));
+        if (resp.status === 409) {
+          status.textContent = "Конфликт: layout изменился на диске";
+          if (data.current_hash) state.layoutHash = data.current_hash;
+          btnSave.disabled = false;
+          return;
+        }
+        if (!resp.ok || !data.ok) {
+          status.textContent = data.error || `Ошибка ${resp.status}`;
+          btnSave.disabled = false;
+          return;
+        }
+        state.layoutHash = data.new_hash || state.layoutHash;
+        state.dirty = false;
+        status.textContent = "layout сохранён";
+        btnSave.disabled = true;
+      } catch (e) {
+        status.textContent = e && e.message ? e.message : String(e);
+        btnSave.disabled = false;
+      }
+    });
+
+    redraw();
+    return wrap;
+  }
+
   function renderMermaidDiagram(mod, section) {
     const attrs = section.attributes || {};
     const source = String(attrs.mermaid_source || "");
     const dbmlSource = String(attrs.dbml_source || "");
     const clickmap = attrs.erd_clickmap || null;
+    const scene = attrs.erd_scene || null;
+    const layout = attrs.erd_layout || null;
+    const hasScene = !!(scene && Array.isArray(scene.nodes));
     const panel = document.createElement("div");
     panel.className = "erd-panel";
     panel.setAttribute("data-ui", "mermaid-diagram");
-    if (clickmap) panel.classList.add("erd-panel--interactive");
+    if (clickmap || hasScene) panel.classList.add("erd-panel--interactive");
 
     const toolbar = document.createElement("div");
     toolbar.className = "erd-toolbar";
@@ -4859,6 +5443,15 @@
     tabDiagram.setAttribute("role", "tab");
     tabDiagram.setAttribute("aria-selected", "true");
     tabDiagram.textContent = "Диаграмма";
+
+    const tabMermaid = document.createElement("button");
+    tabMermaid.type = "button";
+    tabMermaid.className = "erd-tab";
+    tabMermaid.setAttribute("data-erd-tab", "mermaid");
+    tabMermaid.setAttribute("role", "tab");
+    tabMermaid.setAttribute("aria-selected", "false");
+    tabMermaid.textContent = "Mermaid";
+    if (!hasScene) tabMermaid.hidden = true;
 
     const tabSource = document.createElement("button");
     tabSource.type = "button";
@@ -4877,6 +5470,7 @@
     tabDbml.textContent = "DBML";
 
     toolbar.appendChild(tabDiagram);
+    toolbar.appendChild(tabMermaid);
     toolbar.appendChild(tabSource);
     toolbar.appendChild(tabDbml);
 
@@ -4886,7 +5480,82 @@
     const canvas = document.createElement("div");
     canvas.className = "erd-canvas";
     canvas.setAttribute("data-erd-pane", "diagram");
-    if (section.content) {
+
+    const mermaidCanvas = document.createElement("div");
+    mermaidCanvas.className = "erd-canvas is-hidden";
+    mermaidCanvas.setAttribute("data-erd-pane", "mermaid");
+    mermaidCanvas.hidden = true;
+
+    const detailPane = document.createElement("aside");
+    detailPane.className = "erd-detail";
+    detailPane.setAttribute("data-erd-detail", "");
+    const showDetail = !!(clickmap || hasScene);
+    detailPane.hidden = !showDetail;
+    if (showDetail) {
+      const hint = document.createElement("p");
+      hint.className = "muted erd-detail-hint";
+      hint.textContent =
+        "Кликните сущность или связь на диаграмме, чтобы прочитать определение.";
+      detailPane.appendChild(hint);
+    }
+
+    function showErdDetail(target) {
+      if (!target || !mod) return;
+      const sec =
+        mod.sections.find((s) => s.id === target.section_id) ||
+        mod.sections.find((s) =>
+          (s.items || []).some((it) => it.id === target.element_id)
+        ) ||
+        mod.sections.find((s) =>
+          (s.items || []).some((it) => it.id === target.element_id)
+        );
+      // Broader search across all sections for element_id
+      let row = null;
+      let hitSec = sec;
+      if (hitSec) row = findSectionItem(hitSec, target.element_id);
+      if (!row) {
+        for (const s of mod.sections || []) {
+          const r = findSectionItem(s, target.element_id);
+          if (r) {
+            row = r;
+            hitSec = s;
+            break;
+          }
+        }
+      }
+      if (!row || !hitSec) return;
+      detailPane.replaceChildren();
+      const openLink = document.createElement("a");
+      openLink.className = "erd-detail-open";
+      openLink.href = itemHref({
+        module: shortModule(mod.module_id),
+        section: hitSec.id,
+        item: row.id,
+        node: nodeForModule(mod.module_id)?.id || null,
+        card: true,
+      });
+      openLink.textContent = "Открыть карточку";
+      detailPane.appendChild(openLink);
+      if (hitSec.instance_of) {
+        detailPane.appendChild(renderInstanceDetail(mod, hitSec, row));
+      } else {
+        const fallback = document.createElement("article");
+        fallback.className = "detail-card content-card";
+        fallback.innerHTML = `<header class="detail-head"><h1>${escapeHtml(
+          row.title || row.id
+        )}</h1><p class="muted">${escapeHtml(row.id)}</p></header>
+          <p class="detail-desc">${escapeHtml(
+            row.description || "No description."
+          )}</p>`;
+        detailPane.appendChild(fallback);
+      }
+    }
+
+    if (hasScene) {
+      canvas.appendChild(
+        renderErdScene(mod, section, scene, layout || { version: 1, nodes: {}, edges: {} }, showErdDetail)
+      );
+    } else if (section.content) {
       const svgWrap = document.createElement("div");
       svgWrap.className = "erd-svg";
       if (clickmap) svgWrap.classList.add("erd-svg--clickable");
@@ -4900,16 +5569,34 @@
       canvas.appendChild(miss);
     }
 
-    const detailPane = document.createElement("aside");
-    detailPane.className = "erd-detail";
-    detailPane.setAttribute("data-erd-detail", "");
-    detailPane.hidden = !clickmap;
-    if (clickmap) {
-      const hint = document.createElement("p");
-      hint.className = "muted erd-detail-hint";
-      hint.textContent =
-        "Кликните сущность или связь на диаграмме, чтобы прочитать определение.";
-      detailPane.appendChild(hint);
+    if (section.content) {
+      const svgWrap = document.createElement("div");
+      svgWrap.className = "erd-svg";
+      if (clickmap) svgWrap.classList.add("erd-svg--clickable");
+      svgWrap.innerHTML = section.content;
+      mermaidCanvas.appendChild(svgWrap);
+      if (clickmap) {
+        mermaidCanvas.addEventListener("click", (ev) => {
+          const hit = resolveErdClickTarget(clickmap, ev.target);
+          if (!hit) return;
+          ev.preventDefault();
+          showErdDetail(hit);
+        });
+      }
+    } else {
+      const miss = document.createElement("p");
+      miss.className = "muted";
+      miss.textContent = "Mermaid SVG недоступен.";
+      mermaidCanvas.appendChild(miss);
+    }
+
+    if (!hasScene && clickmap && section.content) {
+      canvas.addEventListener("click", (ev) => {
+        const hit = resolveErdClickTarget(clickmap, ev.target);
+        if (!hit) return;
+        ev.preventDefault();
+        showErdDetail(hit);
+      });
     }
 
     function makeSourcePane(paneName, text) {
@@ -4965,74 +5652,32 @@
     function showPane(name) {
       const panes = {
         diagram: { tab: tabDiagram, el: canvas },
+        mermaid: { tab: tabMermaid, el: mermaidCanvas },
         source: { tab: tabSource, el: sourcePane },
         dbml: { tab: tabDbml, el: dbmlPane },
       };
       for (const [key, entry] of Object.entries(panes)) {
+        if (!entry.tab || entry.tab.hidden) continue;
         const active = key === name;
         entry.tab.classList.toggle("is-active", active);
         entry.tab.setAttribute("aria-selected", active ? "true" : "false");
         entry.el.classList.toggle("is-hidden", !active);
         entry.el.hidden = !active;
       }
-      if (clickmap) {
-        const isDiagram = name === "diagram";
+      if (showDetail) {
+        const isDiagram = name === "diagram" || name === "mermaid";
         detailPane.classList.toggle("is-hidden", !isDiagram);
         detailPane.hidden = !isDiagram;
       }
     }
     tabDiagram.addEventListener("click", () => showPane("diagram"));
+    tabMermaid.addEventListener("click", () => showPane("mermaid"));
     tabSource.addEventListener("click", () => showPane("source"));
     tabDbml.addEventListener("click", () => showPane("dbml"));
 
-    function showErdDetail(target) {
-      if (!target || !mod) return;
-      const sec =
-        mod.sections.find((s) => s.id === target.section_id) ||
-        mod.sections.find((s) =>
-          (s.items || []).some((it) => it.id === target.element_id)
-        );
-      if (!sec) return;
-      const row = findSectionItem(sec, target.element_id);
-      if (!row) return;
-      detailPane.replaceChildren();
-      const openLink = document.createElement("a");
-      openLink.className = "erd-detail-open";
-      openLink.href = itemHref({
-        module: shortModule(mod.module_id),
-        section: sec.id,
-        item: row.id,
-        node: nodeForModule(mod.module_id)?.id || null,
-        card: true,
-      });
-      openLink.textContent = "Открыть карточку";
-      detailPane.appendChild(openLink);
-      if (sec.instance_of) {
-        detailPane.appendChild(renderInstanceDetail(mod, sec, row));
-      } else {
-        const fallback = document.createElement("article");
-        fallback.className = "detail-card content-card";
-        fallback.innerHTML = `<header class="detail-head"><h1>${escapeHtml(
-          row.title || row.id
-        )}</h1><p class="muted">${escapeHtml(row.id)}</p></header>
-          <p class="detail-desc">${escapeHtml(
-            row.description || "No description."
-          )}</p>`;
-        detailPane.appendChild(fallback);
-      }
-    }
-
-    if (clickmap && section.content) {
-      canvas.addEventListener("click", (ev) => {
-        const hit = resolveErdClickTarget(clickmap, ev.target);
-        if (!hit) return;
-        ev.preventDefault();
-        showErdDetail(hit);
-      });
-    }
-
     bodyRow.appendChild(canvas);
-    if (clickmap) bodyRow.appendChild(detailPane);
+    bodyRow.appendChild(mermaidCanvas);
+    if (showDetail) bodyRow.appendChild(detailPane);
     panel.appendChild(toolbar);
     panel.appendChild(bodyRow);
     panel.appendChild(sourcePane);

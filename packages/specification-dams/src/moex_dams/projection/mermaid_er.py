@@ -14,7 +14,7 @@ import yaml
 
 from moex_dams.projection.dbml import _ident
 from moex_dams.projection.er_common import (
-    _MANY,
+    MANY as _MANY,
     attr_keys_for_entity as _attr_keys_for_entity,
     fk_roles_for_entity as _fk_roles_for_entity,
     is_many as _is_many,
@@ -410,8 +410,12 @@ def write_er_diagram_artifact(
     implementation_path: Path,
     out_md: Path,
     profile: Profile,
+    reset_layout: bool = False,
 ) -> ErDiagramManifest:
-    """Load ModelPackage YAML, write fenced Mermaid markdown + sidecar manifest."""
+    """Load ModelPackage YAML, write Mermaid md + scene + layout sidecars."""
+    from moex_dams.projection.er_layout import write_or_merge_layout
+    from moex_dams.projection.er_scene import project_model_package_to_er_scene
+
     raw = yaml.safe_load(implementation_path.read_text(encoding="utf-8"))
     if not isinstance(raw, dict):
         raise ValueError(f"expected ModelPackage mapping in {implementation_path}")
@@ -442,6 +446,26 @@ def write_er_diagram_artifact(
             json.dumps(clickmap, indent=2, ensure_ascii=False) + "\n",
             encoding="utf-8",
         )
+
+    # logical.erd.md → logical.scene.json / logical.layout.json
+    stem = out_md.name
+    if stem.endswith(".erd.md"):
+        base = stem[: -len(".erd.md")]
+    else:
+        base = out_md.stem
+    scene = project_model_package_to_er_scene(raw, profile=profile)
+    scene_path = out_md.parent / f"{base}.scene.json"
+    scene_path.write_text(
+        json.dumps(scene, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    layout_path = out_md.parent / f"{base}.layout.json"
+    write_or_merge_layout(
+        scene=scene,
+        layout_path=layout_path,
+        profile=profile,
+        reset=reset_layout,
+    )
     return manifest
 
 
@@ -482,20 +506,23 @@ def try_render_er_svg(md_path: Path, *, out_svg: Path | None = None) -> Path | N
     tmp_mmd = dest.with_suffix(".mmd")
     try:
         tmp_mmd.write_text(body, encoding="utf-8")
+        cmd = [
+            npx,
+            "--yes",
+            MERMAID_CLI_PACKAGE,
+            "-i",
+            str(tmp_mmd),
+            "-o",
+            str(dest),
+            "-b",
+            "transparent",
+        ]
+        if MERMAID_CONFIG_PATH.is_file():
+            cmd.extend(["-c", str(MERMAID_CONFIG_PATH)])
+        else:
+            cmd.extend(["-t", "neutral"])
         proc = subprocess.run(
-            [
-                npx,
-                "--yes",
-                MERMAID_CLI_PACKAGE,
-                "-i",
-                str(tmp_mmd),
-                "-o",
-                str(dest),
-                "-t",
-                "neutral",
-                "-b",
-                "transparent",
-            ],
+            cmd,
             check=False,
             capture_output=True,
             text=True,

@@ -4,25 +4,25 @@ overview: Сначала тема и CSS для Mermaid-SVG в Viewer (быст�
 todos:
   - id: mermaid-theme
     content: Mermaid config (themeVariables/themeCSS with --erd-* vars) passed via -c in try_render_er_svg and render-mermaid-erd.ps1; --erd-* variables and styles in 50-renderers.css; verify class names and click ids
-    status: in_progress
+    status: completed
   - id: er-scene
     content: Add er_scene.py projection (*.scene.json) reusing mermaid_er helpers; write it from write_er_diagram_artifact for all profiles
-    status: pending
+    status: completed
   - id: er-layout
     content: "Add er_layout.py: seed/merge layout (*.layout.json), never overwrite existing, --reset-layout flag in moex-model diagram; check digests/golden/publish gate exclusions"
-    status: pending
+    status: completed
   - id: viewer-normalizer
     content: MermaidDiagramNormalizer loads scene and layout into attributes; fallback to Mermaid SVG when absent
-    status: pending
+    status: completed
   - id: viewer-renderer
     content: "renderErdScene in viewer.js: tables, crow's-foot edges, pan/zoom, drag nodes, edge bend handle, color picker, tabs and detail card hookup; CSS and template updates"
-    status: pending
+    status: completed
   - id: layout-save
     content: serve.py POST /api/layout with path validation, hash conflict check, capabilities flag; static build download fallback
-    status: pending
+    status: completed
   - id: tests-docs
     content: Tests in specification-dams and viewer, browser visual check in light/dark, ADR-006 addendum and viewer README
-    status: pending
+    status: completed
 isProject: false
 ---
 

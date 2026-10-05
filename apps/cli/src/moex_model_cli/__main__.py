@@ -69,6 +69,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Skip SVG render for --format mermaid (md only)",
     )
+    diagram.add_argument(
+        "--reset-layout",
+        action="store_true",
+        help="Regenerate {profile}.layout.json from scratch (discard saved positions)",
+    )
 
     diff = sub.add_parser("diff", help="Unified diff of an asset between two git revisions")
     _add_slice_args(diff)
@@ -384,6 +389,7 @@ def main(argv: list[str] | None = None) -> int:
             profile=args.profile,
             fmt=args.fmt,
             render_svg=not getattr(args, "no_svg", False),
+            reset_layout=bool(getattr(args, "reset_layout", False)),
         )
     elif args.command == "diff":
         from moex_model_cli.commands.diff import run_diff

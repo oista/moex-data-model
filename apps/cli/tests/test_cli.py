@@ -177,6 +177,10 @@ def test_diagram_projects_mermaid_logical(
     assert "erDiagram" in text
     assert "TradingClient" in text
     assert "digest=sha256:" in capsys.readouterr().out
+    scene = out.parent / "logical.scene.json"
+    layout = out.parent / "logical.layout.json"
+    assert scene.is_file()
+    assert layout.is_file()
 
 
 def test_import_er_dictionary_fixture(

@@ -411,6 +411,68 @@ def test_mermaid_diagram_loads_clickmap(tmp_path: Path):
     ] == "dams:concept/LegalEntity"
 
 
+def test_mermaid_diagram_loads_scene_and_layout(tmp_path: Path):
+    # Nest under model-assets so erd_layout_path is repo-relative.
+    pub = tmp_path / "model-assets" / "impl" / "publications"
+    pub.mkdir(parents=True)
+    md = pub / "logical.erd.md"
+    md.write_text(
+        "```mermaid\nerDiagram\n    Client {\n        string id PK\n    }\n```\n",
+        encoding="utf-8",
+    )
+    scene = {
+        "version": 1,
+        "profile": "logical",
+        "nodes": [
+            {
+                "name": "Client",
+                "title": "Client",
+                "element_id": "dams:logical/Client",
+                "columns": [{"name": "id", "type": "identifier", "keys": ["PK"]}],
+            }
+        ],
+        "edges": [],
+    }
+    layout = {
+        "version": 1,
+        "profile": "logical",
+        "nodes": {"dams:logical/Client": {"x": 10, "y": 20, "color": "#4285F4"}},
+        "edges": {},
+    }
+    (pub / "logical.scene.json").write_text(json.dumps(scene), encoding="utf-8")
+    (pub / "logical.layout.json").write_text(json.dumps(layout), encoding="utf-8")
+    sec = _section(
+        type="mermaid-diagram",
+        source={"format": "markdown", "path": "logical.erd.md"},
+    )
+    out = MermaidDiagramNormalizer().normalize(sec, md)
+    assert out.attributes["erd_scene"]["nodes"][0]["name"] == "Client"
+    assert out.attributes["erd_layout"]["nodes"]["dams:logical/Client"]["x"] == 10
+    assert out.attributes["erd_layout_path"].endswith(
+        "model-assets/impl/publications/logical.layout.json"
+    )
+    assert out.attributes["erd_layout_hash"]
+
+
+def test_mermaid_diagram_without_scene_keeps_svg_path(tmp_path: Path):
+    md = tmp_path / "logical.erd.md"
+    md.write_text(
+        "```mermaid\nerDiagram\n    Client {\n        string id PK\n    }\n```\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "logical.erd.svg").write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg"><rect/></svg>',
+        encoding="utf-8",
+    )
+    sec = _section(
+        type="mermaid-diagram",
+        source={"format": "markdown", "path": "logical.erd.md"},
+    )
+    out = MermaidDiagramNormalizer().normalize(sec, md)
+    assert "erd_scene" not in out.attributes
+    assert out.content.startswith("<svg")
+
+
 def test_linkml_with_import():
     root = FIXTURES / "linkml"
     schema = root / "root.yaml"

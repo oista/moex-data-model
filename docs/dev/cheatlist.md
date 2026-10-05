@@ -21,5 +21,4 @@ moex-model map --extract-schema packages/semantic-mappings/tests/fixtures/mapped
 
 # serv
 cd c:\Users\bons1\IdeaProjects\moex-data-model\apps\viewer
-python -m pip install -e ".[dev]"
-python -m moex_publication_viewer.cli serve --root ../.. --port 8765
+python -m moex_publication_viewer.cli serve --root . --port 8877

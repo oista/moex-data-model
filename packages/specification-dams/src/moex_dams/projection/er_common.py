@@ -6,7 +6,7 @@ from typing import Any
 
 from moex_dams.projection.dbml import _ident
 
-_MANY = 999999
+MANY = 999999
 
 
 def unique_table_name(raw: str | None, *, fallback: str, used: set[str]) -> str:

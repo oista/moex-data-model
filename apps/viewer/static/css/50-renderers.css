@@ -265,6 +265,44 @@
   font-weight: 600;
 }
 
+/* ER diagram tokens (Mermaid SVG fallback + custom scene renderer) */
+:root,
+[data-theme="light"] {
+  --erd-canvas-bg: #f5f6f8;
+  --erd-header-bg: #e8eef7;
+  --erd-header-text: #17191d;
+  --erd-row-odd: #ffffff;
+  --erd-row-even: #f0f2f5;
+  --erd-border: #9aa8bc;
+  --erd-text: #17191d;
+  --erd-type: #545c68;
+  --erd-comment: #7d8794;
+  --erd-key: #9b6300;
+  --erd-key-bg: #fef3d0;
+  --erd-edge: #315da8;
+  --erd-label-bg: #ffffff;
+  --erd-node-shadow: 0 1px 3px rgba(18, 24, 33, 0.08);
+  --erd-selected: #d71920;
+}
+
+[data-theme="dark"] {
+  --erd-canvas-bg: #12151a;
+  --erd-header-bg: #1e2a3a;
+  --erd-header-text: #f1f3f5;
+  --erd-row-odd: #171a20;
+  --erd-row-even: #1c2027;
+  --erd-border: #3a4556;
+  --erd-text: #f1f3f5;
+  --erd-type: #858f9d;
+  --erd-comment: #858f9d;
+  --erd-key: #e2ae55;
+  --erd-key-bg: rgba(226, 174, 85, 0.16);
+  --erd-edge: #5eb0ff;
+  --erd-label-bg: #1c2027;
+  --erd-node-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --erd-selected: #ff5a61;
+}
+
 /* Mermaid erDiagram (SVG + source) */
 .erd-panel {
   display: flex;
@@ -357,8 +395,9 @@
   max-width: 100%;
   border: 1px solid var(--border-subtle);
   border-radius: 10px;
-  background: var(--surface-1);
+  background: var(--erd-canvas-bg);
   padding: 0.75rem;
+  position: relative;
 }
 
 .erd-svg {
@@ -369,6 +408,195 @@
   max-width: none;
   height: auto;
   display: block;
+  font-family: var(--font-ui-family);
+}
+
+/* Theme Mermaid-embedded path fills via CSS variables (themeCSS fallbacks). */
+.erd-svg svg .outer-path > path:first-child {
+  fill: var(--erd-header-bg) !important;
+}
+.erd-svg svg .row-rect-odd > path:first-child {
+  fill: var(--erd-row-odd) !important;
+}
+.erd-svg svg .row-rect-even > path:first-child {
+  fill: var(--erd-row-even) !important;
+}
+.erd-svg svg .relationshipLine {
+  stroke: var(--erd-edge) !important;
+  stroke-width: 1.5px !important;
+}
+.erd-svg svg .marker {
+  stroke: var(--erd-edge) !important;
+}
+.erd-svg svg .nodeLabel,
+.erd-svg svg .nodeLabel p {
+  color: var(--erd-text) !important;
+}
+.erd-svg svg .attribute-keys .nodeLabel p {
+  color: var(--erd-key) !important;
+  font-weight: 600;
+}
+.erd-svg svg .attribute-comment .nodeLabel p {
+  color: var(--erd-comment) !important;
+}
+.erd-svg svg .attribute-type .nodeLabel p {
+  color: var(--erd-type) !important;
+}
+
+/* Custom ER scene renderer */
+.erd-scene-wrap {
+  position: relative;
+  width: 100%;
+  min-height: 320px;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.erd-scene-wrap svg.erd-scene {
+  width: 100%;
+  height: min(80vh, 900px);
+  display: block;
+  cursor: grab;
+  background: transparent;
+}
+
+.erd-scene-wrap.is-panning svg.erd-scene {
+  cursor: grabbing;
+}
+
+.erd-scene-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.erd-scene-toolbar .erd-tool-btn {
+  appearance: none;
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  padding: 0.3rem 0.65rem;
+  font-size: var(--font-sm);
+  cursor: pointer;
+}
+
+.erd-scene-toolbar .erd-tool-btn.is-active {
+  border-color: var(--brand);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.erd-scene-toolbar .erd-color-input {
+  width: 2rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.erd-node-rect {
+  stroke: var(--erd-border);
+  stroke-width: 1.25;
+  filter: drop-shadow(var(--erd-node-shadow));
+}
+
+.erd-node-header {
+  fill: var(--erd-header-bg);
+}
+
+.erd-node.is-selected .erd-node-rect {
+  stroke: var(--erd-selected);
+  stroke-width: 2;
+}
+
+.erd-node-title {
+  fill: var(--erd-header-text);
+  font-weight: 600;
+  font-size: 12px;
+  font-family: var(--font-ui-family);
+}
+
+.erd-node-name {
+  fill: var(--erd-comment);
+  font-size: 10px;
+  font-family: var(--font-code);
+}
+
+.erd-col-type {
+  fill: var(--erd-type);
+  font-size: 11px;
+  font-family: var(--font-code);
+}
+
+.erd-col-name {
+  fill: var(--erd-text);
+  font-size: 11px;
+  font-family: var(--font-ui-family);
+}
+
+.erd-col-comment {
+  fill: var(--erd-comment);
+  font-size: 11px;
+  font-family: var(--font-ui-family);
+}
+
+.erd-key-badge {
+  fill: var(--erd-key-bg);
+  stroke: none;
+}
+
+.erd-key-badge-text {
+  fill: var(--erd-key);
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--font-ui-family);
+}
+
+.erd-edge-path {
+  fill: none;
+  stroke: var(--erd-edge);
+  stroke-width: 1.5;
+  cursor: pointer;
+}
+
+.erd-edge-path.is-selected {
+  stroke: var(--erd-selected);
+  stroke-width: 2.25;
+}
+
+.erd-edge-label {
+  fill: var(--erd-text);
+  font-size: 10px;
+  font-family: var(--font-ui-family);
+}
+
+.erd-edge-label-bg {
+  fill: var(--erd-label-bg);
+  stroke: var(--erd-border);
+  stroke-width: 0.75;
+  rx: 3;
+}
+
+.erd-edge-handle {
+  fill: var(--erd-edge);
+  stroke: var(--surface-1);
+  stroke-width: 1.5;
+  cursor: grab;
+  r: 5;
+}
+
+.erd-node {
+  cursor: grab;
+}
+
+.erd-node.is-dragging {
+  cursor: grabbing;
+  opacity: 0.92;
 }
 
 .erd-source-actions {

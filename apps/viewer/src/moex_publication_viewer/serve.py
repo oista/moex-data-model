@@ -28,6 +28,7 @@ from moex_publication_viewer.edits import (
     EditTarget,
     apply_edit,
     collect_edit_registry,
+    value_hash,
 )
 from moex_publication_viewer.renderers.html_renderer import (
     modules_payload,
@@ -196,7 +197,11 @@ class ViewerHandler(BaseHTTPRequestHandler):
         if parsed.path == "/api/capabilities":
             self._send_json(
                 200,
-                {"edit": True, "token": self.state.token},
+                {
+                    "edit": True,
+                    "layout_edit": True,
+                    "token": self.state.token,
+                },
             )
             return
         if parsed.path in ("/", "/index.html"):
@@ -243,6 +248,9 @@ class ViewerHandler(BaseHTTPRequestHandler):
         if not self._check_host():
             return
         parsed = urlparse(self.path)
+        if parsed.path == "/api/layout":
+            self._handle_layout_post()
+            return
         if parsed.path != "/api/edit":
             self.send_error(404)
             return
@@ -338,6 +346,99 @@ class ViewerHandler(BaseHTTPRequestHandler):
                     "new_hash": result.new_hash,
                 },
             )
+
+    def _handle_layout_post(self) -> None:
+        origin = self.headers.get("Origin")
+        if not self.state.allowed_origin(origin):
+            self._send_json(403, {"ok": False, "error": "bad origin"})
+            return
+        length = int(self.headers.get("Content-Length") or 0)
+        raw = self.rfile.read(length) if length else b"{}"
+        try:
+            body = json.loads(raw.decode("utf-8"))
+        except json.JSONDecodeError:
+            self._send_json(422, {"ok": False, "error": "invalid JSON"})
+            return
+        if body.get("token") != self.state.token:
+            self._send_json(403, {"ok": False, "error": "bad token"})
+            return
+        rel = str(body.get("path") or "")
+        layout = body.get("layout")
+        base_hash = str(body.get("base_hash") or "")
+        if not isinstance(layout, dict):
+            self._send_json(422, {"ok": False, "error": "missing layout object"})
+            return
+        try:
+            target = _resolve_layout_path(self.state.root, rel)
+        except EditError as exc:
+            self._send_json(exc.status, {"ok": False, "error": exc.message})
+            return
+
+        from moex_dams.projection.er_layout import validate_layout
+
+        errors = validate_layout(layout)
+        if errors:
+            self._send_json(422, {"ok": False, "error": "; ".join(errors)})
+            return
+
+        with self.state.lock:
+            if target.is_file():
+                try:
+                    current = json.loads(target.read_text(encoding="utf-8"))
+                except (OSError, json.JSONDecodeError):
+                    current = None
+                if isinstance(current, dict) and base_hash:
+                    current_hash = value_hash(current)
+                    if current_hash != base_hash:
+                        self._send_json(
+                            409,
+                            {
+                                "ok": False,
+                                "error": "layout changed on disk; reload and retry",
+                                "current_hash": current_hash,
+                            },
+                        )
+                        return
+            text = json.dumps(layout, indent=2, ensure_ascii=False) + "\n"
+            tmp = target.with_suffix(target.suffix + ".tmp")
+            tmp.write_text(text, encoding="utf-8")
+            tmp.replace(target)
+            new_hash = value_hash(layout)
+            # Refresh modules so next navigation sees updated layout
+            self.state.refresh_from_disk(write_html=True)
+            self._send_json(
+                200,
+                {"ok": True, "path": rel.replace("\\", "/"), "new_hash": new_hash},
+            )
+
+
+def _resolve_layout_path(root: Path, rel: str) -> Path:
+    """Resolve ``*.layout.json`` under repo root; reject escapes."""
+    root = root.resolve()
+    if not rel or rel.startswith("/") or rel.startswith("\\") or ".." in Path(rel).parts:
+        raise EditError(f"path escapes root: {rel}", status=403)
+    if not rel.endswith(".layout.json"):
+        raise EditError("path must end with .layout.json", status=422)
+    candidate = (root / rel).resolve()
+    try:
+        candidate.relative_to(root)
+    except ValueError as exc:
+        raise EditError(f"path escapes root: {rel}", status=403) from exc
+    # Parent must exist (file may be created)
+    if not candidate.parent.is_dir():
+        raise EditError(f"directory not found: {candidate.parent}", status=404)
+    cur = candidate.parent
+    while True:
+        if cur.is_symlink():
+            real = cur.resolve()
+            try:
+                real.relative_to(root)
+            except ValueError as exc:
+                raise EditError(f"symlink escapes root: {rel}", status=403) from exc
+        if cur == root or cur.parent == cur:
+            break
+        cur = cur.parent
+    return candidate
 
 
 def serve(

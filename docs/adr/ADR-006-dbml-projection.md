@@ -24,13 +24,16 @@ DBML — **derived projection** (`GENERATED_FROM`) из каноническог
 
 Режимы первой версии Workbench: physical — управляемый round-trip; logical — частичный; conceptual — ограниченно; governance/ontology — не через ERD.
 
-**Mermaid erDiagram** (`moex_dams.projection.mermaid_er`) — ещё одна односторонняя derived projection для Publication Viewer: `publications/{logical,physical}.erd.md` + SVG. Канон остаётся YAML/LinkML; viewer не строит диаграмму из модели, а только показывает уже сгенерированные артефакты (без mermaid.js в `index.html`).
+**Mermaid erDiagram** (`moex_dams.projection.mermaid_er`) — ещё одна односторонняя derived projection для Publication Viewer: `publications/{logical,physical,conceptual}.erd.md` + SVG. Канон остаётся YAML/LinkML; viewer не строит диаграмму из модели, а только показывает уже сгенерированные артефакты (без mermaid.js в `index.html`).
+
+**Viewer ER scene + layout (2026-10):** рядом с Mermaid пишутся `publications/{profile}.scene.json` (структура узлов/рёбер) и `publications/{profile}.layout.json` (позиции, цвета, изгибы связей). Layout правится вручную в Viewer и **не** входит в golden digests (ADR-011): при `moex-model diagram --format mermaid` существующий layout не перезаписывается, только дополняется новыми узлами (`--reset-layout` для полной пересборки). Ключ узла — `element_id` (как в Workbench `diagram_layout.nodes_json`). Workbench по-прежнему держит layout в Postgres; Viewer — в файле рядом с публикацией. Оба хранилища совместимы по ключам, но пока не синхронизированы.
 
 ## Consequences
 
 - `moex-dams-drawdb-colored.dbml` — golden sample генератора, не ручной master.
 - Запрет «экспортировали DBML и заменили YAML».
 - Нужны round-trip golden tests, когда появится adapter.
+- `*.layout.json` — authored presentation state; не сравнивать в publish-gate digests.
 
 **MVP landed (2026-09-28):** adapter round-trip + Workbench confirm via semantic diff before workspace apply. Metamodel DBML golden regen remains Stage 6.
 

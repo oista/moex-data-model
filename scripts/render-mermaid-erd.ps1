@@ -30,11 +30,19 @@ if ($text -match '(?s)```mermaid\s*(.*?)```') {
     Copy-Item -LiteralPath $md.Path -Destination $mmdPath -Force
 }
 
+$config = Join-Path $PSScriptRoot "..\packages\specification-dams\src\moex_dams\projection\mermaid_er_config.json"
+$configArgs = @()
+if (Test-Path -LiteralPath $config) {
+    $configArgs = @("-c", (Resolve-Path -LiteralPath $config).Path)
+} else {
+    $configArgs = @("-t", "neutral")
+}
+
 try {
     & npx.cmd --yes "@mermaid-js/mermaid-cli@11" `
         -i $mmdPath `
         -o $OutSvg `
-        -t neutral `
+        @configArgs `
         -b transparent
     if ($LASTEXITCODE -ne 0) {
         Write-Error "mmdc failed with exit $LASTEXITCODE"

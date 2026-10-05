@@ -298,6 +298,7 @@ def test_js_class_icon_badges_and_section_majority():
 def test_js_erd_clickmap_panel():
     assert "function resolveErdClickTarget" in JS
     assert "function renderMermaidDiagram(mod, section)" in JS
+    assert "function renderErdScene" in JS
     assert 'textContent = "DBML"' in JS
     assert 'data-erd-tab", "dbml"' in JS
     assert "erd_clickmap" in JS
@@ -307,6 +308,9 @@ def test_js_erd_clickmap_panel():
     assert ".erd-panel--interactive .erd-body" in css
     assert ".erd-svg--clickable" in css
     assert ".erd-detail" in css
+    assert "--erd-header-bg" in css
+    assert ".erd-scene" in css
+    assert ".erd-node-rect" in css
 
 
 def test_build_strips_emoji_from_nav_html():

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "profile": "logical",
+  "nodes": {
+    "dams:logical/trading/Client": {
+      "x": 40,
+      "y": 40,
+      "color": "#4285F4"
+    }
+  },
+  "edges": {}
+}

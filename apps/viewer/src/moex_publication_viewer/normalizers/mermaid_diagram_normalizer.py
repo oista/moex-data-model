@@ -69,8 +69,36 @@ def _load_clickmap(source_path: Path) -> dict[str, Any] | None:
     return raw if isinstance(raw, dict) else None
 
 
+def _profile_base(source_path: Path) -> str:
+    """``logical.erd.md`` → ``logical``; otherwise stem."""
+    name = source_path.name
+    if name.endswith(".erd.md"):
+        return name[: -len(".erd.md")]
+    return source_path.stem
+
+
+def _load_json_sibling(path: Path) -> dict[str, Any] | None:
+    if not path.is_file():
+        return None
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    return raw if isinstance(raw, dict) else None
+
+
+def _repo_relative_path(path: Path) -> str:
+    """Prefer path under ``model-assets/…``; else basename."""
+    resolved = path.resolve()
+    parts = resolved.parts
+    if "model-assets" in parts:
+        i = parts.index("model-assets")
+        return "/".join(parts[i:])
+    return resolved.name
+
+
 class MermaidDiagramNormalizer:
-    """Load ``*.erd.md``; embed sibling ``*.erd.svg`` and ``*.dbml`` when present."""
+    """Load ``*.erd.md``; embed sibling SVG / DBML / scene / layout when present."""
 
     def normalize(self, section: ManifestSection, source_path: Path) -> PublicationSection:
         try:
@@ -91,6 +119,11 @@ class MermaidDiagramNormalizer:
                 svg_missing = True
 
         dbml_source, dbml_missing = _load_dbml_source(source_path)
+        base = _profile_base(source_path)
+        scene_path = source_path.parent / f"{base}.scene.json"
+        layout_path = source_path.parent / f"{base}.layout.json"
+        scene = _load_json_sibling(scene_path)
+        layout = _load_json_sibling(layout_path)
 
         attrs: dict[str, Any] = {
             "mermaid_source": mermaid_source,
@@ -101,6 +134,14 @@ class MermaidDiagramNormalizer:
         clickmap = _load_clickmap(source_path)
         if clickmap is not None:
             attrs["erd_clickmap"] = clickmap
+        if scene is not None:
+            attrs["erd_scene"] = scene
+        if layout is not None:
+            from moex_publication_viewer.edits import value_hash
+
+            attrs["erd_layout"] = layout
+            attrs["erd_layout_path"] = _repo_relative_path(layout_path)
+            attrs["erd_layout_hash"] = value_hash(layout)
 
         meta = section_meta(section)
         return PublicationSection(

@@ -22,6 +22,7 @@ def run_diagram(
     profile: str = "logical",
     fmt: str = "dbml",
     render_svg: bool = True,
+    reset_layout: bool = False,
 ) -> tuple[int, str]:
     if fmt not in SUPPORTED_FORMATS:
         return 2, f"unsupported --format {fmt!r} (dbml|mermaid)\n"
@@ -65,6 +66,7 @@ def run_diagram(
             implementation_path=paths.implementation,
             out_md=dest,
             profile=profile,  # type: ignore[arg-type]
+            reset_layout=reset_layout,
         )
     except (OSError, ValueError, TypeError) as exc:
         return 1, f"diagram failed: {exc}\n"

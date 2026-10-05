@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "profile": "physical",
+  "nodes": {
+    "dams:physical/trading/client-topic": {
+      "x": 40,
+      "y": 40,
+      "color": "#0F9D58"
+    }
+  },
+  "edges": {}
+}

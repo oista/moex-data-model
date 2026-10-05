@@ -4,11 +4,16 @@
   <div class="erd-panel" data-ui="mermaid-diagram">
     <div class="erd-toolbar" role="tablist">
       <button type="button" class="erd-tab is-active" data-erd-tab="diagram" role="tab" aria-selected="true">Диаграмма</button>
+      {% if (section.attributes or {}).get('erd_scene') %}
+      <button type="button" class="erd-tab" data-erd-tab="mermaid" role="tab" aria-selected="false">Mermaid</button>
+      {% endif %}
       <button type="button" class="erd-tab" data-erd-tab="source" role="tab" aria-selected="false">Исходник</button>
       <button type="button" class="erd-tab" data-erd-tab="dbml" role="tab" aria-selected="false">DBML</button>
     </div>
     <div class="erd-canvas" data-erd-pane="diagram">
-      {% if section.content %}
+      {% if (section.attributes or {}).get('erd_scene') %}
+      <p class="muted">Интерактивная диаграмма загружается в player (scene + layout).</p>
+      {% elif section.content %}
       <div class="erd-svg">{{ section.content | safe }}</div>
       {% else %}
       <p class="muted">SVG не сгенерирован. Откройте вкладку «Исходник» или выполните scripts/render-mermaid-erd.ps1.</p>

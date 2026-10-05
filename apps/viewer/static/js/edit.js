@@ -1,7 +1,11 @@
 (() => {
   /** Inline edit layer — active only when /api/capabilities responds. */
   let editToken = null;
+  let layoutEdit = false;
   let enhancing = false;
+
+  window.__moexGetEditToken = () => editToken;
+  window.__moexCanEditLayout = () => !!(editToken && layoutEdit);
 
   function findItem(moduleId, sectionId, itemId) {
     const mods = typeof window.__moexGetModules === "function"
@@ -265,6 +269,7 @@
         return;
       }
       editToken = data.token;
+      layoutEdit = !!data.layout_edit;
       announce("Edit mode: on — open an entity/class card to see «Править».");
     } catch (e) {
       announce("Edit mode: off — " + (e && e.message ? e.message : String(e)));

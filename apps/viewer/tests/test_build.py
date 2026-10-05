@@ -123,6 +123,7 @@ sections:
     assert "dbml_source" in html
     js = (dist / "viewer.js").read_text(encoding="utf-8")
     assert "renderMermaidDiagram" in js
+    assert "function renderErdScene" in js
     assert 'data-erd-tab", "dbml"' in js or 'textContent = "DBML"' in js
     assert_no_required_cdn(html)
 
