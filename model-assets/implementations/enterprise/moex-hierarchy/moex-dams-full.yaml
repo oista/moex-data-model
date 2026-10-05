@@ -1,0 +1,2960 @@
+# Generated: merged MOEX DAMS LinkML (all modules flattened).
+# Source of truth: model-assets/specifications/moex-dams/*/schemas/
+# Do not edit by hand — regenerated at viewer publication build.
+name: moex_dams
+id: https://data.moex.com/dams/v0.1
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml:
+    prefix_prefix: linkml
+    prefix_reference: https://w3id.org/linkml/
+  dams:
+    prefix_prefix: dams
+    prefix_reference: https://data.moex.com/dams/
+  moex:
+    prefix_prefix: moex
+    prefix_reference: https://data.moex.com/
+  xsd:
+    prefix_prefix: xsd
+    prefix_reference: http://www.w3.org/2001/XMLSchema#
+  shex:
+    prefix_prefix: shex
+    prefix_reference: http://www.w3.org/ns/shex#
+  schema:
+    prefix_prefix: schema
+    prefix_reference: http://schema.org/
+default_prefix: dams
+default_range: string
+types:
+  string:
+    name: string
+    description: A character string
+    notes:
+    - In RDF serializations, a slot with range of string is treated as a literal or
+      type xsd:string. If you are authoring schemas in LinkML YAML, the type is referenced
+      with the lower case "string".
+    from_schema: https://w3id.org/linkml/types
+    exact_mappings:
+    - schema:Text
+    base: str
+    uri: xsd:string
+  integer:
+    name: integer
+    description: An integer
+    notes:
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "integer".
+    from_schema: https://w3id.org/linkml/types
+    exact_mappings:
+    - schema:Integer
+    base: int
+    uri: xsd:integer
+  boolean:
+    name: boolean
+    description: A binary (true or false) value
+    notes:
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "boolean".
+    from_schema: https://w3id.org/linkml/types
+    exact_mappings:
+    - schema:Boolean
+    base: Bool
+    uri: xsd:boolean
+    repr: bool
+  float:
+    name: float
+    description: A real number that conforms to the xsd:float specification
+    notes:
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "float".
+    from_schema: https://w3id.org/linkml/types
+    exact_mappings:
+    - schema:Float
+    base: float
+    uri: xsd:float
+  double:
+    name: double
+    description: A real number that conforms to the xsd:double specification
+    notes:
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "double".
+    from_schema: https://w3id.org/linkml/types
+    close_mappings:
+    - schema:Float
+    base: float
+    uri: xsd:double
+  decimal:
+    name: decimal
+    description: A real number with arbitrary precision that conforms to the xsd:decimal
+      specification
+    notes:
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "decimal".
+    from_schema: https://w3id.org/linkml/types
+    broad_mappings:
+    - schema:Number
+    base: Decimal
+    uri: xsd:decimal
+  time:
+    name: time
+    description: A time object represents a (local) time of day, independent of any
+      particular day
+    notes:
+    - URI is dateTime because OWL reasoners do not work with straight date or time
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "time".
+    from_schema: https://w3id.org/linkml/types
+    exact_mappings:
+    - schema:Time
+    base: XSDTime
+    uri: xsd:time
+    repr: str
+  date:
+    name: date
+    description: a date (year, month and day) in an idealized calendar
+    notes:
+    - URI is dateTime because OWL reasoners don't work with straight date or time
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "date".
+    from_schema: https://w3id.org/linkml/types
+    exact_mappings:
+    - schema:Date
+    base: XSDDate
+    uri: xsd:date
+    repr: str
+  datetime:
+    name: datetime
+    description: The combination of a date and time
+    notes:
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "datetime".
+    from_schema: https://w3id.org/linkml/types
+    exact_mappings:
+    - schema:DateTime
+    base: XSDDateTime
+    uri: xsd:dateTime
+    repr: str
+  date_or_datetime:
+    name: date_or_datetime
+    description: Either a date or a datetime
+    notes:
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "date_or_datetime".
+    from_schema: https://w3id.org/linkml/types
+    base: str
+    uri: linkml:DateOrDatetime
+    repr: str
+  uriorcurie:
+    name: uriorcurie
+    description: a URI or a CURIE
+    notes:
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "uriorcurie".
+    from_schema: https://w3id.org/linkml/types
+    base: URIorCURIE
+    uri: xsd:anyURI
+    repr: str
+  curie:
+    name: curie
+    conforms_to: https://www.w3.org/TR/curie/
+    description: a compact URI
+    notes:
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "curie".
+    comments:
+    - in RDF serializations this MUST be expanded to a URI
+    - in non-RDF serializations MAY be serialized as the compact representation
+    from_schema: https://w3id.org/linkml/types
+    base: Curie
+    uri: xsd:string
+    repr: str
+  uri:
+    name: uri
+    conforms_to: https://www.ietf.org/rfc/rfc3987.txt
+    description: a complete URI
+    notes:
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "uri".
+    comments:
+    - in RDF serializations a slot with range of uri is treated as a literal or type
+      xsd:anyURI unless it is an identifier or a reference to an identifier, in which
+      case it is translated directly to a node
+    from_schema: https://w3id.org/linkml/types
+    close_mappings:
+    - schema:URL
+    base: URI
+    uri: xsd:anyURI
+    repr: str
+  ncname:
+    name: ncname
+    description: Prefix part of CURIE
+    notes:
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "ncname".
+    from_schema: https://w3id.org/linkml/types
+    base: NCName
+    uri: xsd:string
+    repr: str
+  objectidentifier:
+    name: objectidentifier
+    description: A URI or CURIE that represents an object in the model.
+    notes:
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "objectidentifier".
+    comments:
+    - Used for inheritance and type checking
+    from_schema: https://w3id.org/linkml/types
+    base: ElementIdentifier
+    uri: shex:iri
+    repr: str
+  nodeidentifier:
+    name: nodeidentifier
+    description: A URI, CURIE or BNODE that represents a node in a model.
+    notes:
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "nodeidentifier".
+    from_schema: https://w3id.org/linkml/types
+    base: NodeIdentifier
+    uri: shex:nonLiteral
+    repr: str
+  jsonpointer:
+    name: jsonpointer
+    conforms_to: https://datatracker.ietf.org/doc/html/rfc6901
+    description: A string encoding a JSON Pointer. The value of the string MUST conform
+      to JSON Point syntax and SHOULD dereference to a valid object within the current
+      instance document when encoded in tree form.
+    notes:
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "jsonpointer".
+    from_schema: https://w3id.org/linkml/types
+    base: str
+    uri: xsd:string
+    repr: str
+  jsonpath:
+    name: jsonpath
+    conforms_to: https://www.ietf.org/archive/id/draft-goessner-dispatch-jsonpath-00.html
+    description: A string encoding a JSON Path. The value of the string MUST conform
+      to JSON Point syntax and SHOULD dereference to zero or more valid objects within
+      the current instance document when encoded in tree form.
+    notes:
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "jsonpath".
+    from_schema: https://w3id.org/linkml/types
+    base: str
+    uri: xsd:string
+    repr: str
+  sparqlpath:
+    name: sparqlpath
+    conforms_to: https://www.w3.org/TR/sparql11-query/#propertypaths
+    description: A string encoding a SPARQL Property Path. The value of the string
+      MUST conform to SPARQL syntax and SHOULD dereference to zero or more valid objects
+      within the current instance document when encoded as RDF.
+    notes:
+    - If you are authoring schemas in LinkML YAML, the type is referenced with the
+      lower case "sparqlpath".
+    from_schema: https://w3id.org/linkml/types
+    base: str
+    uri: xsd:string
+    repr: str
+  SemVer:
+    name: SemVer
+    from_schema: https://data.moex.com/dams/types/v0.1
+    typeof: string
+    uri: xsd:string
+    pattern: ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$
+  Sha256Digest:
+    name: Sha256Digest
+    from_schema: https://data.moex.com/dams/types/v0.1
+    typeof: string
+    uri: xsd:string
+    pattern: ^sha256:[a-fA-F0-9]{64}$
+enums:
+  LifecycleStatusEnum:
+    name: LifecycleStatusEnum
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      draft:
+        text: draft
+      active:
+        text: active
+      deprecated:
+        text: deprecated
+      retired:
+        text: retired
+  ApprovalStatusEnum:
+    name: ApprovalStatusEnum
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      proposed:
+        text: proposed
+      approved:
+        text: approved
+      rejected:
+        text: rejected
+      superseded:
+        text: superseded
+  ModelLevelEnum:
+    name: ModelLevelEnum
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      conceptual:
+        text: conceptual
+      logical:
+        text: logical
+      physical:
+        text: physical
+  EntityTypeEnum:
+    name: EntityTypeEnum
+    description: Роль логической сущности в модели решения.
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      core:
+        text: core
+        description: Базовая сущность, создаваемая и управляемая решением.
+      derived:
+        text: derived
+        description: 'Результат вычисления, агрегации, трансформации или правила;
+          обязательны derivation rule и sources (Wave 2).
+
+          '
+      reference:
+        text: reference
+        description: Справочная сущность или представление управляемого справочника.
+      projection:
+        text: projection
+        description: 'Представление существующей сущности или набора сущностей для
+          конкретного use case (API DTO, read model, витрина).
+
+          '
+      technical:
+        text: technical
+        description: Не имеет самостоятельного бизнес-смысла вне технической реализации.
+  DataClassEnum:
+    name: DataClassEnum
+    description: Класс данных для наследования модельной спецификацией дата-контракта;
+      не совпадает с entity_type.
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      reference_data:
+        text: reference_data
+        description: Нормативно-справочная информация (НСИ).
+      master_data:
+        text: master_data
+        description: Мастер-данные.
+      transactional_data:
+        text: transactional_data
+        description: Транзакционные данные.
+      analytical_data:
+        text: analytical_data
+        description: Аналитические или производные наборы данных.
+      metadata:
+        text: metadata
+        description: Метаданные.
+      operational_data:
+        text: operational_data
+        description: 'Операционные данные — данные для непосредственного выполнения
+          операций решения, не являющиеся master/reference, transactional событием,
+          analytical результатом или metadata.
+
+          '
+  BusinessImportanceEnum:
+    name: BusinessImportanceEnum
+    description: Важность сущности в модели решения (не criticality бизнес-процесса).
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      critical:
+        text: critical
+      high:
+        text: high
+      medium:
+        text: medium
+      low:
+        text: low
+  BusinessKeyKindEnum:
+    name: BusinessKeyKindEnum
+    description: Характер бизнес-ключа логической сущности.
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      natural:
+        text: natural
+        description: Устойчивый бизнес-идентификатор, независимый от технической реализации.
+      composite:
+        text: composite
+        description: Комбинация нескольких бизнес-атрибутов, уникальная в контексте.
+      external:
+        text: external
+        description: Идентификатор внешней системы, реестра или контрагента.
+      local:
+        text: local
+        description: Идентификатор, уникальный только в границе ИТ-решения или контекста.
+      surrogate:
+        text: surrogate
+        description: Технический ключ реализации; не заменяет identity_rule.
+      derived:
+        text: derived
+        description: Идентификатор, вычисляемый из других атрибутов по документированному
+          правилу.
+  ConceptualAlignmentStatusEnum:
+    name: ConceptualAlignmentStatusEnum
+    description: Статус выравнивания логической сущности с корпоративным концептуальным
+      уровнем.
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      aligned:
+        text: aligned
+        description: Есть ссылка на одну или несколько концептуальных сущностей.
+      pending:
+        text: pending
+        description: Связь должна быть установлена, но пока не утверждена; rationale
+          обязателен.
+      local-only:
+        text: local-only
+        description: 'Бизнес-смысл только в контексте данного решения; корпоративный
+          аналог сейчас не требуется; rationale обязателен.
+
+          '
+      not-applicable:
+        text: not-applicable
+        description: 'Сущность техническая/служебная и не относится к conceptual layer;
+          допустимо только при entity_type technical.
+
+          '
+  DefinitionScopeKindEnum:
+    name: DefinitionScopeKindEnum
+    description: 'Kind of scope for a ScopedDefinition (ADR-025). v1 supports system
+      only; enum is intentionally extensible.
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      system:
+        text: system
+        description: Definition applies within one ITSystem of the solution.
+  ScopedDefinitionRelationEnum:
+    name: ScopedDefinitionRelationEnum
+    description: 'How a scoped definition relates to the element''s reference definition
+      (ADR-025).
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      refines:
+        text: refines
+        description: Clarifies the reference definition without changing extension.
+      narrows:
+        text: narrows
+        description: Restricts the meaning to a subset in this scope.
+      alternative:
+        text: alternative
+        description: Parallel wording for the same concept in this scope.
+      replaces:
+        text: replaces
+        description: Scope-local replacement; does not change the reference outside
+          scope.
+  EntityTierEnum:
+    name: EntityTierEnum
+    description: 'Structural independence of a ConceptualEntity (ADR-026). Orthogonal
+      to entity_type, data_class, and business_importance.
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      primary:
+        text: primary
+        description: 'Existence does not depend on other conceptual entities (FK presence
+          alone does not make an entity dependent).
+
+          '
+      dependent:
+        text: dependent
+        description: 'Cannot exist without owner entity/entities listed in depends_on_refs.
+
+          '
+  DependencyKindEnum:
+    name: DependencyKindEnum
+    description: 'Kind of structural dependency for a dependent ConceptualEntity (ADR-026).
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      characteristic:
+        text: characteristic
+        description: Part or detail of an owning entity (owner key in identity).
+      associative:
+        text: associative
+        description: Resolves an M:N association between owner entities.
+  GenesisKindEnum:
+    name: GenesisKindEnum
+    description: 'Whether a ConceptualEntity is aligned to an external class/term
+      or is native to MOEX (ADR-026).
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      external:
+        text: external
+        description: 'Aligns to one or more ontology classes or external-specification
+          terms (corporate architecture, business models, API/data standards).
+
+          '
+      native:
+        text: native
+        description: Modelled in MOEX without external parent classes.
+  ExternalMatchKindEnum:
+    name: ExternalMatchKindEnum
+    description: 'Strength of ConceptualEntity ↔ external class alignment (ADR-026).
+      Mirrors SKOS mapping relations plus owl:equivalentClass; used for definition
+      inheritance (exact/equivalent only).
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      exact:
+        text: exact
+        description: skos:exactMatch — substitutable; definition may inherit.
+      equivalent:
+        text: equivalent
+        description: owl:equivalentClass — substitutable; definition may inherit.
+      close:
+        text: close
+        description: skos:closeMatch — not substitutable; own description required.
+      broad:
+        text: broad
+        description: skos:broadMatch — external is broader; own description required.
+      narrow:
+        text: narrow
+        description: skos:narrowMatch — external is narrower; own description required.
+  ExternalSourceKindEnum:
+    name: ExternalSourceKindEnum
+    description: 'Kind of external source for a ConceptualEntity alignment (ADR-026).
+      Aligned with ExternalSpecificationKind where values overlap.
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      ontology:
+        text: ontology
+      corporate-architecture:
+        text: corporate-architecture
+      business-model:
+        text: business-model
+      api-spec:
+        text: api-spec
+      other:
+        text: other
+  TermDirectionEnum:
+    name: TermDirectionEnum
+    description: 'Which side of a RelationTerm a Relationship assertion uses (ADR-026).
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      forward:
+        text: forward
+        description: Assertion reads with forward_label (source → target).
+      inverse:
+        text: inverse
+        description: Assertion reads with inverse_label (source → target uses inverse
+          wording).
+  MappingCoverageStatusEnum:
+    name: MappingCoverageStatusEnum
+    description: 'Статус покрытия элемента mapping’ом на соседнем уровне модели (logical
+      ↔ physical). Не статус самой логической модели.
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      mapped:
+        text: mapped
+        description: Есть формальное mapping.
+      derived:
+        text: derived
+        description: Значение выводится из источников по documented expression.
+      planned:
+        text: planned
+        description: 'Физическая реализация или mapping ещё не введены. Требует mapping_rationale;
+          не постоянный обход для active артефактов.
+
+          '
+      inherited:
+        text: inherited
+        description: Mapping наследуется/делегируется из родительского элемента.
+      technical-only:
+        text: technical-only
+        description: Поле/объект имеет только техническое назначение.
+      not-applicable:
+        text: not-applicable
+        description: Mapping неприменим по характеру элемента.
+  RelationshipKindEnum:
+    name: RelationshipKindEnum
+    description: Тип логической связи (Wave 2).
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      association:
+        text: association
+      composition:
+        text: composition
+      aggregation:
+        text: aggregation
+      specialization:
+        text: specialization
+      reference:
+        text: reference
+      derivation:
+        text: derivation
+      realization:
+        text: realization
+      lineage:
+        text: lineage
+      event_participation:
+        text: event_participation
+  SecurityClassificationEnum:
+    name: SecurityClassificationEnum
+    description: Режим защиты данных (Wave 2); ортогонален governance_classification.
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      internal:
+        text: internal
+      confidential:
+        text: confidential
+      restricted:
+        text: restricted
+  GovernanceClassificationEnum:
+    name: GovernanceClassificationEnum
+    description: Базовая шкала ограничения доступа; специальные виды тайны задаются
+      отдельными терминами классификации.
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      public:
+        text: public
+      internal:
+        text: internal
+      confidential:
+        text: confidential
+      restricted:
+        text: restricted
+  LogicalDataTypeEnum:
+    name: LogicalDataTypeEnum
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      string:
+        text: string
+      integer:
+        text: integer
+      decimal:
+        text: decimal
+      boolean:
+        text: boolean
+      date:
+        text: date
+      datetime:
+        text: datetime
+      time:
+        text: time
+      binary:
+        text: binary
+      identifier:
+        text: identifier
+      uri:
+        text: uri
+      object:
+        text: object
+  PhysicalObjectKindEnum:
+    name: PhysicalObjectKindEnum
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      database:
+        text: database
+      schema:
+        text: schema
+      table:
+        text: table
+      view:
+        text: view
+      column:
+        text: column
+      api:
+        text: api
+      endpoint:
+        text: endpoint
+      payload:
+        text: payload
+      topic:
+        text: topic
+      queue:
+        text: queue
+      message:
+        text: message
+      file:
+        text: file
+      dataset:
+        text: dataset
+      pipeline:
+        text: pipeline
+  FlowDirectionEnum:
+    name: FlowDirectionEnum
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      inbound:
+        text: inbound
+      outbound:
+        text: outbound
+      internal:
+        text: internal
+      bidirectional:
+        text: bidirectional
+  SolutionDataRoleEnum:
+    name: SolutionDataRoleEnum
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      producer:
+        text: producer
+      consumer:
+        text: consumer
+      intermediary:
+        text: intermediary
+  IntegrationChannelEnum:
+    name: IntegrationChannelEnum
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      api:
+        text: api
+      queue:
+        text: queue
+      database:
+        text: database
+      file:
+        text: file
+      other:
+        text: other
+  IntegrationClassEnum:
+    name: IntegrationClassEnum
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      EAP:
+        text: EAP
+      EDA:
+        text: EDA
+  IntegrationLevelEnum:
+    name: IntegrationLevelEnum
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      intraplatform:
+        text: intraplatform
+      interplatform:
+        text: interplatform
+  MappingTypeEnum:
+    name: MappingTypeEnum
+    description: 'Kind of Mapping assertion. realizes = solution element → enterprise
+      conceptual; entity_physical = PhysicalObject ↔ LogicalEntity; field_mapping
+      = mapsTo (physical field ↔ logical attribute); aligns_with = enterprise conceptual
+      ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to
+      / publication implements).
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      semantic_equivalence:
+        text: semantic_equivalence
+      specialization:
+        text: specialization
+      implementation:
+        text: implementation
+      entity_physical:
+        text: entity_physical
+        description: 'Explicit entity-level link between PhysicalObject and LogicalEntity
+          (PDM-003). Do not infer from field_mapping alone.
+
+          '
+      field_mapping:
+        text: field_mapping
+        description: Technical/structural mapsTo between physical and logical.
+      transformation:
+        text: transformation
+      aggregation:
+        text: aggregation
+      derivation:
+        text: derivation
+      realizes:
+        text: realizes
+        description: Solution logical/concept realizes an enterprise conceptual entity.
+      aligns_with:
+        text: aligns_with
+        description: Enterprise conceptual aligns with an external reference term.
+  ImplementationProfileEnum:
+    name: ImplementationProfileEnum
+    description: 'DAMS-side mirror of kernel ImplementationProfile for ModelPackage
+      metadata. Package-level dams_model_level applies only to dams-data-model.
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      dams-data-model:
+        text: dams-data-model
+        description: MOEX DAMS corporate data-model implementation.
+      ontology-application:
+        text: ontology-application
+        description: Not a DAMS model Impl — ontology application profile.
+      api-specification:
+        text: api-specification
+      data-contract:
+        text: data-contract
+      other:
+        text: other
+  DAMSModelLevelEnum:
+    name: DAMSModelLevelEnum
+    description: 'Package-level DAMS model layer (ADR-021). Distinct from ModelLevelEnum
+      (element conceptual/logical/physical). No domain-logical value.
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      enterprise-conceptual:
+        text: enterprise-conceptual
+        description: Enterprise corporate conceptual model (solution-independent).
+      solution:
+        text: solution
+        description: IT-solution model with local logical/physical facets.
+  ImplementationScopeEnum:
+    name: ImplementationScopeEnum
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      enterprise:
+        text: enterprise
+        description: Enterprise-wide scope (no solution_ref).
+      solution:
+        text: solution
+        description: Scoped to a specific IT solution.
+  MappingCardinalityEnum:
+    name: MappingCardinalityEnum
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      one_to_one:
+        text: one_to_one
+      one_to_many:
+        text: one_to_many
+      many_to_one:
+        text: many_to_one
+      many_to_many:
+        text: many_to_many
+  CompatibilityModeEnum:
+    name: CompatibilityModeEnum
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      backward:
+        text: backward
+      forward:
+        text: forward
+      full:
+        text: full
+      none:
+        text: none
+  SpecificationKindEnum:
+    name: SpecificationKindEnum
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      integration:
+        text: integration
+      data_model:
+        text: data_model
+      data_quality:
+        text: data_quality
+  EnforcementResultEnum:
+    name: EnforcementResultEnum
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      pass:
+        text: pass
+      warn:
+        text: warn
+      fail:
+        text: fail
+      not_applicable:
+        text: not_applicable
+  RequirementLevelEnum:
+    name: RequirementLevelEnum
+    description: Уровень применения требования к спецификации.
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      conceptual_model:
+        text: conceptual_model
+        description: Концептуальная модель
+      it_solution:
+        text: it_solution
+        description: ИТ-решение
+      it_system:
+        text: it_system
+        description: ИТ-система
+  RequirementLifecycleStatus:
+    name: RequirementLifecycleStatus
+    description: 'Статус жизненного цикла нормативного требования (SpecificationRequirement).
+      Не заменяет ApprovalStatusEnum (согласование provenance у других элементов).
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      draft:
+        text: draft
+        description: Черновик, формулируется
+      proposed:
+        text: proposed
+        description: Вынесено на согласование
+      approved:
+        text: approved
+        description: Принято как норма
+      rejected:
+        text: rejected
+        description: Отклонено
+      deprecated:
+        text: deprecated
+        description: Больше не актуально, замены нет
+      superseded:
+        text: superseded
+        description: Заменено другим требованием
+  RequirementImplementationStatus:
+    name: RequirementImplementationStatus
+    description: 'Статус реализации утверждённого требования. Осмысленно при lifecycle_status=approved;
+      не заменяет ApprovalStatusEnum.
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      not_started:
+        text: not_started
+        description: Не начато
+      in_progress:
+        text: in_progress
+        description: Реализуется
+      implemented:
+        text: implemented
+        description: Реализовано
+      verified:
+        text: verified
+        description: Проверено
+  RequirementSectionEnum:
+    name: RequirementSectionEnum
+    description: Раздел каталога требований (трёхбуквенный код в code).
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      LDM:
+        text: LDM
+        description: Логическая модель
+      PDM:
+        text: PDM
+        description: Физическая модель
+      REF:
+        text: REF
+        description: Связи сущностей
+      ATR:
+        text: ATR
+        description: Атрибуты
+      FLW:
+        text: FLW
+        description: Потоки данных
+      CLS:
+        text: CLS
+        description: Классификация данных
+      GEN:
+        text: GEN
+        description: Общие требования
+  FormalCheckKindEnum:
+    name: FormalCheckKindEnum
+    description: Вид формальной проверки в нотации, близкой к LinkML constraints.
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      slot_required:
+        text: slot_required
+      slot_min_cardinality:
+        text: slot_min_cardinality
+      ref_resolves:
+        text: ref_resolves
+      key_subset:
+        text: key_subset
+      at_least_one_slots:
+        text: at_least_one_slots
+        description: Хотя бы один из target_slots заполнен (override обоих допустим).
+      definition_resolvable:
+        text: definition_resolvable
+        description: 'Effective definition must resolve (ADR-025): own description,
+          definition_source_ref, or single conceptual_entity_refs inheritance.
+
+          '
+      conditional_branch:
+        text: conditional_branch
+        description: 'Фиксированный шаблон (имя в expression): status→slots, allowlist
+          kinds, planned guard, semantic inclusion и т.п. Без произвольного mini-language.
+
+          '
+      custom:
+        text: custom
+  CheckSeverityEnum:
+    name: CheckSeverityEnum
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      error:
+        text: error
+      warning:
+        text: warning
+slots:
+  repository_id:
+    name: repository_id
+    from_schema: https://data.moex.com/dams/v0.1
+    identifier: true
+    range: uriorcurie
+    required: true
+  registry_entries:
+    name: registry_entries
+    from_schema: https://data.moex.com/dams/v0.1
+    range: RegistryEntry
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  model_packages:
+    name: model_packages
+    from_schema: https://data.moex.com/dams/v0.1
+    range: ModelPackage
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  data_flows:
+    name: data_flows
+    from_schema: https://data.moex.com/dams/v0.1
+    range: DataFlow
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  data_model_bindings:
+    name: data_model_bindings
+    from_schema: https://data.moex.com/dams/v0.1
+    range: DataModelBinding
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  metrics:
+    name: metrics
+    from_schema: https://data.moex.com/dams/v0.1
+    range: Metric
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  dimensions:
+    name: dimensions
+    from_schema: https://data.moex.com/dams/v0.1
+    range: Dimension
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  classification_assignments:
+    name: classification_assignments
+    from_schema: https://data.moex.com/dams/v0.1
+    range: ClassificationAssignment
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  policy_bindings:
+    name: policy_bindings
+    from_schema: https://data.moex.com/dams/v0.1
+    range: PolicyBinding
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  registry_id:
+    name: registry_id
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    identifier: true
+    range: uriorcurie
+    required: true
+  registry_name:
+    name: registry_name
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    range: string
+    required: true
+  registry_description:
+    name: registry_description
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    range: string
+  master_system:
+    name: master_system
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    range: string
+    required: true
+  source_uri:
+    name: source_uri
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    range: uri
+  registry_status:
+    name: registry_status
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    range: LifecycleStatusEnum
+    required: true
+  member_system_refs:
+    name: member_system_refs
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    range: ITSystem
+    multivalued: true
+    inlined: false
+  platform_ref:
+    name: platform_ref
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    range: ITPlatform
+    inlined: false
+  parent_domain_ref:
+    name: parent_domain_ref
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    range: BusinessDomain
+    inlined: false
+  assignment_id:
+    name: assignment_id
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    identifier: true
+    range: uriorcurie
+    required: true
+  classified_element_ref:
+    name: classified_element_ref
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: uriorcurie
+    required: true
+  classification_term_ref:
+    name: classification_term_ref
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: DataClassificationTerm
+    inlined: false
+  policy_binding_id:
+    name: policy_binding_id
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    identifier: true
+    range: uriorcurie
+    required: true
+  policy_target_ref:
+    name: policy_target_ref
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: uriorcurie
+    required: true
+  policy_ref:
+    name: policy_ref
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: Policy
+    required: true
+    inlined: false
+  lifecycle_status:
+    name: lifecycle_status
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: LifecycleStatusEnum
+    required: true
+  valid_from:
+    name: valid_from
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: datetime
+  valid_to:
+    name: valid_to
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: datetime
+  deprecated_by_ref:
+    name: deprecated_by_ref
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: uriorcurie
+  data_owner_ref:
+    name: data_owner_ref
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: Role
+    inlined: false
+  data_steward_ref:
+    name: data_steward_ref
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: Role
+    inlined: false
+  owning_unit_ref:
+    name: owning_unit_ref
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: OrganizationUnit
+    inlined: false
+  ownership_inheritance_rule:
+    name: ownership_inheritance_rule
+    description: 'Deprecated as source of truth (ADR-023). Human-readable rationale
+      for ownership inheritance/override only; does not substitute data_owner_ref.
+      Effective ownership is resolved by the containment cascade.
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: string
+  entity_type:
+    name: entity_type
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: EntityTypeEnum
+  data_class:
+    name: data_class
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: DataClassEnum
+  business_importance:
+    name: business_importance
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: BusinessImportanceEnum
+  governance_classification:
+    name: governance_classification
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: GovernanceClassificationEnum
+  security_classification:
+    name: security_classification
+    description: Режим защиты (Wave 2); ортогонален governance_classification.
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: SecurityClassificationEnum
+  sensitivity_term_refs:
+    name: sensitivity_term_refs
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: DataClassificationTerm
+    multivalued: true
+    inlined: false
+  classification_source:
+    name: classification_source
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: string
+  classification_rationale:
+    name: classification_rationale
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: string
+  policy_refs:
+    name: policy_refs
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: Policy
+    multivalued: true
+    inlined: false
+  source_artifact_ref:
+    name: source_artifact_ref
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: uri
+  evidence_refs:
+    name: evidence_refs
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: uri
+    multivalued: true
+  approval_status:
+    name: approval_status
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: ApprovalStatusEnum
+  approved_by_ref:
+    name: approved_by_ref
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: Role
+    inlined: false
+  approved_at:
+    name: approved_at
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: datetime
+  definition_source_ref:
+    name: definition_source_ref
+    description: 'Reference to the element or external term whose definition is inherited
+      or adapted (ADR-025). Orthogonal to glossary_term_refs (term assignment).
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: uriorcurie
+  definition_rationale:
+    name: definition_rationale
+    description: 'Human rationale for declaring an own definition when a source is
+      also cited, or for overriding an inherited definition.
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: string
+  scoped_definitions:
+    name: scoped_definitions
+    description: Context-scoped definitions (ADR-025); v1 scope_kind = system.
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: ScopedDefinition
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  scoped_definition_id:
+    name: scoped_definition_id
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    identifier: true
+    range: uriorcurie
+    required: true
+  scope_kind:
+    name: scope_kind
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: DefinitionScopeKindEnum
+    required: true
+  scope_ref:
+    name: scope_ref
+    description: 'Target of the scope (e.g. ITSystem registry id). For scope_kind=system
+      must be a member of the solution''s ITSolution.member_system_refs.
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: uriorcurie
+    required: true
+  text:
+    name: text
+    description: Scoped definition text (skos:definition in this context).
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: string
+    required: true
+  relation_to_reference:
+    name: relation_to_reference
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: ScopedDefinitionRelationEnum
+    required: true
+  rationale:
+    name: rationale
+    description: Why this scoped wording differs from the reference definition.
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: string
+  element_id:
+    name: element_id
+    from_schema: https://data.moex.com/dams/core/v0.1
+    identifier: true
+    range: uriorcurie
+    required: true
+  name:
+    name: name
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+    required: true
+  title:
+    name: title
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  description:
+    name: description
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+    required: true
+  aliases:
+    name: aliases
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+    multivalued: true
+  glossary_term_refs:
+    name: glossary_term_refs
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: GlossaryTerm
+    multivalued: true
+    inlined: false
+  tags:
+    name: tags
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+    multivalued: true
+  api_version:
+    name: api_version
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+    required: true
+  model_version:
+    name: model_version
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: SemVer
+    required: true
+  implementation_scope:
+    name: implementation_scope
+    description: 'Body-level scope: enterprise (no solution_ref) or solution. Must
+      align with envelope dams_model_level when profile is dams-data-model.
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: ImplementationScopeEnum
+  conceptual_implementation_ref:
+    name: conceptual_implementation_ref
+    description: 'Required for solution packages: reference to the enterprise-conceptual
+      SpecImpl / ModelPackage id (e.g. moex-enterprise-conceptual-model).
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: uriorcurie
+  solution_ref:
+    name: solution_ref
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: ITSolution
+    inlined: false
+  domain_refs:
+    name: domain_refs
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: BusinessDomain
+    multivalued: true
+    inlined: false
+  imports_refs:
+    name: imports_refs
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: uri
+    multivalued: true
+  conceptual_entities:
+    name: conceptual_entities
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: ConceptualEntity
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  domain_contexts:
+    name: domain_contexts
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: DomainContext
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  logical_entities:
+    name: logical_entities
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: LogicalEntity
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  relationships:
+    name: relationships
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: Relationship
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  physical_objects:
+    name: physical_objects
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: PhysicalObject
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  mappings:
+    name: mappings
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: Mapping
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  domain_ref:
+    name: domain_ref
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: BusinessDomain
+    required: true
+    inlined: false
+  namespace:
+    name: namespace
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: uri
+    required: true
+  business_process_refs:
+    name: business_process_refs
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: BusinessProcess
+    multivalued: true
+    inlined: false
+  parent_concept_ref:
+    name: parent_concept_ref
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: ConceptualEntity
+    inlined: false
+  key_attribute_refs:
+    name: key_attribute_refs
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: uriorcurie
+    multivalued: true
+  entity_tier:
+    name: entity_tier
+    description: 'Structural independence of the conceptual entity (ADR-026). primary
+      = independent existence; dependent = requires depends_on_refs.
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: EntityTierEnum
+  dependency_kind:
+    name: dependency_kind
+    description: 'Required when entity_tier=dependent. characteristic = part/detail
+      of an owner; associative = M:N resolver between owners (ADR-026).
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: DependencyKindEnum
+  depends_on_refs:
+    name: depends_on_refs
+    description: 'Owner conceptual entities this dependent entity requires. Empty
+      for primary; at least one for dependent (ADR-026).
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: ConceptualEntity
+    multivalued: true
+    inlined: false
+  genesis_kind:
+    name: genesis_kind
+    description: 'external = aligns to ontology/external class(es); native = modelled
+      without external parents (ADR-026).
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: GenesisKindEnum
+  external_class_refs:
+    name: external_class_refs
+    description: 'Canonical ConceptualEntity → external class/term alignments with
+      match_kind (ADR-026). Non-empty iff genesis_kind=external.
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: ExternalClassRef
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  relation_terms:
+    name: relation_terms
+    description: Governed relation-term dictionary for the package (ADR-026).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: RelationTerm
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  context_ref:
+    name: context_ref
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: DomainContext
+    required: true
+    inlined: false
+  conceptual_entity_refs:
+    name: conceptual_entity_refs
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: ConceptualEntity
+    multivalued: true
+    inlined: false
+  solution_data_role:
+    name: solution_data_role
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: SolutionDataRoleEnum
+    required: true
+  attributes:
+    name: attributes
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: LogicalAttribute
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  invariant_refs:
+    name: invariant_refs
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: Policy
+    multivalued: true
+    inlined: false
+  owner_entity_ref:
+    name: owner_entity_ref
+    description: 'Structural parent LogicalEntity of this attribute (containment),
+      not the data owner role. Data ownership uses data_owner_ref via HasOwnership
+      / ADR-023 cascade.
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: LogicalEntity
+    required: true
+    inlined: false
+  logical_type:
+    name: logical_type
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: LogicalDataTypeEnum
+    required: true
+  required:
+    name: required
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: boolean
+    required: true
+  multivalued:
+    name: multivalued
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: boolean
+    required: true
+  minimum_cardinality:
+    name: minimum_cardinality
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: integer
+    minimum_value: 0
+  maximum_cardinality:
+    name: maximum_cardinality
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: integer
+    minimum_value: 1
+  value_set_ref:
+    name: value_set_ref
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: uri
+  format_pattern:
+    name: format_pattern
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  default_value:
+    name: default_value
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  derived_expression:
+    name: derived_expression
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  identity_rule:
+    name: identity_rule
+    description: 'Деловое правило идентичности экземпляров сущности в контексте ИТ-решения.
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  business_key_kind:
+    name: business_key_kind
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: BusinessKeyKindEnum
+  conceptual_alignment_status:
+    name: conceptual_alignment_status
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: ConceptualAlignmentStatusEnum
+  alignment_rationale:
+    name: alignment_rationale
+    description: Обоснование статуса выравнивания с концептуальным уровнем.
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  isolation_rationale:
+    name: isolation_rationale
+    description: Обоснование семантической изоляции сущности (LDM-007).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  mapping_coverage_status:
+    name: mapping_coverage_status
+    description: 'Статус покрытия элемента mapping’ом на соседнем уровне модели (logical
+      ↔ physical).
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: MappingCoverageStatusEnum
+  mapping_rationale:
+    name: mapping_rationale
+    description: Обоснование для planned / technical-only / not-applicable / inherited.
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  unit_code:
+    name: unit_code
+    description: Код единицы измерения (Wave 2 soft).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  currency_attribute_ref:
+    name: currency_attribute_ref
+    description: Ссылка на атрибут валюты для денежной величины (Wave 2 soft).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: uriorcurie
+  timezone_policy:
+    name: timezone_policy
+    description: Политика часового пояса для timestamp (Wave 2 soft).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  temporal_semantics:
+    name: temporal_semantics
+    description: Семантика даты/времени (Wave 2 soft).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  relationship_kind:
+    name: relationship_kind
+    description: Тип логической связи (Wave 2).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: RelationshipKindEnum
+  cardinality_rationale:
+    name: cardinality_rationale
+    description: Обоснование отсутствия кардинальности для draft/imported связей.
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  relation_term_ref:
+    name: relation_term_ref
+    description: 'Reference to a governed RelationTerm providing forward/inverse labels
+      (ADR-026). One Relationship record per pair; labels are derived.
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: RelationTerm
+    inlined: false
+  term_direction:
+    name: term_direction
+    description: 'Whether this Relationship assertion uses the forward or inverse
+      wording of relation_term_ref (ADR-026). Default forward when omitted.
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: TermDirectionEnum
+  forward_label:
+    name: forward_label
+    description: Natural-language label source → target (ADR-026).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+    required: true
+  forward_label_en:
+    name: forward_label_en
+    description: English forward label (ADR-026).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  inverse_label:
+    name: inverse_label
+    description: 'Natural-language label target → source. Required unless symmetric
+      (ADR-026).
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  inverse_label_en:
+    name: inverse_label_en
+    description: English inverse label (ADR-026).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  symmetric:
+    name: symmetric
+    description: 'When true, forward and inverse labels are the same; inverse_label
+      may be omitted (ADR-026).
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: boolean
+  default_relationship_kind:
+    name: default_relationship_kind
+    description: Optional default relationship_kind when this term is used.
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: RelationshipKindEnum
+  ontology_property_ref:
+    name: ontology_property_ref
+    description: 'Optional owl:ObjectProperty IRI. Reserve for future property import;
+      not required in v1 (ADR-026 / ADR-024 §7).
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: uriorcurie
+  external_class_ref_id:
+    name: external_class_ref_id
+    from_schema: https://data.moex.com/dams/core/v0.1
+    identifier: true
+    range: uriorcurie
+    required: true
+  target_ref:
+    name: target_ref
+    description: IRI/CURIE of the external class or term (ADR-026).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: uriorcurie
+    required: true
+  match_kind:
+    name: match_kind
+    description: 'Alignment strength. exact/equivalent allow definition inheritance
+      (ADR-025 / ADR-026); close/broad/narrow do not.
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: ExternalMatchKindEnum
+    required: true
+  source_kind:
+    name: source_kind
+    description: Kind of external source (ontology, corp architecture, …).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: ExternalSourceKindEnum
+    required: true
+  external_specification_ref:
+    name: external_specification_ref
+    description: Optional ExternalSpecification / version pin (ADR-020).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: uriorcurie
+  selection_ref:
+    name: selection_ref
+    description: Optional ExternalTermSelection id (ADR-020).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: uriorcurie
+  source_entity_ref:
+    name: source_entity_ref
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: uriorcurie
+    required: true
+  target_entity_ref:
+    name: target_entity_ref
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: uriorcurie
+    required: true
+  source_role:
+    name: source_role
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  target_role:
+    name: target_role
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  source_min_cardinality:
+    name: source_min_cardinality
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: integer
+    minimum_value: 0
+  source_max_cardinality:
+    name: source_max_cardinality
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: integer
+    minimum_value: 1
+  target_min_cardinality:
+    name: target_min_cardinality
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: integer
+    minimum_value: 0
+  target_max_cardinality:
+    name: target_max_cardinality
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: integer
+    minimum_value: 1
+  identifying:
+    name: identifying
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: boolean
+  associative:
+    name: associative
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: boolean
+  system_ref:
+    name: system_ref
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: ITSystem
+    required: true
+    inlined: false
+  object_kind:
+    name: object_kind
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: PhysicalObjectKindEnum
+    required: true
+  qualified_name:
+    name: qualified_name
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+    required: true
+  technology:
+    name: technology
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+    required: true
+  native_schema_ref:
+    name: native_schema_ref
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: uri
+    required: true
+  direction:
+    name: direction
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: FlowDirectionEnum
+    required: true
+  physical_fields:
+    name: physical_fields
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: PhysicalField
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  physical_object_ref:
+    name: physical_object_ref
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: PhysicalObject
+    required: true
+    inlined: false
+  native_name:
+    name: native_name
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+    required: true
+  native_type:
+    name: native_type
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+    required: true
+  ordinal_position:
+    name: ordinal_position
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: integer
+    minimum_value: 1
+  schema_path:
+    name: schema_path
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  source_refs:
+    name: source_refs
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: uriorcurie
+    multivalued: true
+    minimum_cardinality: 1
+  target_refs:
+    name: target_refs
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: uriorcurie
+    multivalued: true
+    minimum_cardinality: 1
+  mapping_type:
+    name: mapping_type
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: MappingTypeEnum
+    required: true
+  mapping_cardinality:
+    name: mapping_cardinality
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: MappingCardinalityEnum
+    required: true
+  transformation_ref:
+    name: transformation_ref
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: uri
+  transformation_expression:
+    name: transformation_expression
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: string
+  confidence:
+    name: confidence
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: decimal
+    minimum_value: 0
+    maximum_value: 1
+  integration_ref:
+    name: integration_ref
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: IntegrationReference
+    required: true
+    inlined: false
+  contract_ref:
+    name: contract_ref
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: DataContractReference
+    inlined: false
+  source_solution_ref:
+    name: source_solution_ref
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: ITSolution
+    required: true
+    inlined: false
+  target_solution_ref:
+    name: target_solution_ref
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: ITSolution
+    required: true
+    inlined: false
+  source_system_ref:
+    name: source_system_ref
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: ITSystem
+    required: true
+    inlined: false
+  target_system_ref:
+    name: target_system_ref
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: ITSystem
+    required: true
+    inlined: false
+  source_platform_ref:
+    name: source_platform_ref
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: ITPlatform
+    required: true
+    inlined: false
+  target_platform_ref:
+    name: target_platform_ref
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: ITPlatform
+    required: true
+    inlined: false
+  integration_level:
+    name: integration_level
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: IntegrationLevelEnum
+    required: true
+  integration_class:
+    name: integration_class
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: IntegrationClassEnum
+    required: true
+  integration_channel:
+    name: integration_channel
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: IntegrationChannelEnum
+    required: true
+  integration_spec_ref:
+    name: integration_spec_ref
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: uri
+    required: true
+  entity_bindings:
+    name: entity_bindings
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: DataFlowEntityBinding
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  flow_ref:
+    name: flow_ref
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: DataFlow
+    required: true
+    inlined: false
+  source_model_ref:
+    name: source_model_ref
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: uri
+    required: true
+  logical_entity_ref:
+    name: logical_entity_ref
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: LogicalEntity
+    required: true
+    inlined: false
+  logical_attribute_refs:
+    name: logical_attribute_refs
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: LogicalAttribute
+    multivalued: true
+    inlined: false
+    minimum_cardinality: 1
+  physical_object_refs:
+    name: physical_object_refs
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: PhysicalObject
+    multivalued: true
+    inlined: false
+    minimum_cardinality: 1
+  physical_field_refs:
+    name: physical_field_refs
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: PhysicalField
+    multivalued: true
+    inlined: false
+  transformation_mapping_refs:
+    name: transformation_mapping_refs
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: Mapping
+    multivalued: true
+    inlined: false
+  specification_version:
+    name: specification_version
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    range: SemVer
+    required: true
+  implementation_version:
+    name: implementation_version
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    range: SemVer
+    required: true
+  model_package_ref:
+    name: model_package_ref
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    range: uri
+    required: true
+  model_revision:
+    name: model_revision
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    range: string
+    required: true
+  selections:
+    name: selections
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    range: ModelSelection
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    minimum_cardinality: 1
+  compatibility_mode:
+    name: compatibility_mode
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    range: CompatibilityModeEnum
+    required: true
+  compatibility_baseline_ref:
+    name: compatibility_baseline_ref
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    range: uri
+  integrity_digest:
+    name: integrity_digest
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    range: Sha256Digest
+    required: true
+  generated_at:
+    name: generated_at
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    range: datetime
+    required: true
+  selected_entities:
+    name: selected_entities
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    range: SelectedEntity
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    minimum_cardinality: 1
+  selected_attributes:
+    name: selected_attributes
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    range: SelectedAttribute
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    minimum_cardinality: 1
+  logical_attribute_ref:
+    name: logical_attribute_ref
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    range: LogicalAttribute
+    required: true
+    inlined: false
+  transformation_mapping_ref:
+    name: transformation_mapping_ref
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    range: Mapping
+    inlined: false
+  metric_expression:
+    name: metric_expression
+    from_schema: https://data.moex.com/dams/analytics/v0.1
+    range: string
+    required: true
+  aggregation_function:
+    name: aggregation_function
+    from_schema: https://data.moex.com/dams/analytics/v0.1
+    range: string
+    required: true
+  grain_entity_refs:
+    name: grain_entity_refs
+    from_schema: https://data.moex.com/dams/analytics/v0.1
+    range: LogicalEntity
+    multivalued: true
+    inlined: false
+    minimum_cardinality: 1
+  dimension_attribute_refs:
+    name: dimension_attribute_refs
+    from_schema: https://data.moex.com/dams/analytics/v0.1
+    range: LogicalAttribute
+    multivalued: true
+    inlined: false
+  measure_attribute_refs:
+    name: measure_attribute_refs
+    from_schema: https://data.moex.com/dams/analytics/v0.1
+    range: LogicalAttribute
+    multivalued: true
+    inlined: false
+    minimum_cardinality: 1
+  unit:
+    name: unit
+    from_schema: https://data.moex.com/dams/analytics/v0.1
+    range: string
+  filter_expression:
+    name: filter_expression
+    from_schema: https://data.moex.com/dams/analytics/v0.1
+    range: string
+  applicability_id:
+    name: applicability_id
+    description: Stable id for applies_to blocks (e.g. appl:LDM-001).
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    identifier: true
+    range: string
+    required: true
+  check_id:
+    name: check_id
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    identifier: true
+    range: string
+    required: true
+  kind:
+    name: kind
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: FormalCheckKindEnum
+    required: true
+  target_class:
+    name: target_class
+    description: Имя класса LinkML (например LogicalEntity).
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: string
+  target_slot:
+    name: target_slot
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: string
+  target_slots:
+    name: target_slots
+    description: Список слотов для kind=at_least_one_slots.
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: string
+    multivalued: true
+  target_path:
+    name: target_path
+    description: JSON Pointer или path hint в теле ModelPackage.
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: string
+  severity:
+    name: severity
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: CheckSeverityEnum
+    required: true
+  diagnostic_code:
+    name: diagnostic_code
+    description: Мост к DAMS-STRUCT-* / DAMS-REF-* / DAMS-REQ-*.
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: string
+  expression:
+    name: expression
+    description: 'Имя фиксированного шаблона для conditional_branch / custom (например
+      ldm006_alignment, planned_on_active_warning).
+
+      '
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: string
+  remediation:
+    name: remediation
+    description: Actionable remediation text for CI / Cursor / authors.
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: string
+  code:
+    name: code
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: string
+    required: true
+    pattern: ^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$
+  requirement_level:
+    name: requirement_level
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: RequirementLevelEnum
+    required: true
+  requirement_section:
+    name: requirement_section
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: RequirementSectionEnum
+    required: true
+  statement:
+    name: statement
+    description: 'Полная нормативная формулировка на русском для человека: без имён
+      LinkML-классов, слотов, kinds проверок и сленга метамодели.
+
+      '
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: string
+    required: true
+  applies_to:
+    name: applies_to
+    description: Область применимости требования для formal_checks runner.
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: RequirementApplicability
+    inlined: true
+  applies_target_class:
+    name: applies_target_class
+    description: Имя класса LinkML, к экземплярам которого применяется требование.
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: string
+  applies_target_kinds:
+    name: applies_target_kinds
+    description: Опциональный allowlist object_kind / facet (например table, topic).
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: string
+    multivalued: true
+  applies_implementation_scope:
+    name: applies_implementation_scope
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: ImplementationScopeEnum
+  applies_dams_model_level:
+    name: applies_dams_model_level
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: DAMSModelLevelEnum
+  applies_implementation_profile:
+    name: applies_implementation_profile
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: ImplementationProfileEnum
+  formal_checks:
+    name: formal_checks
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: FormalCheck
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    minimum_cardinality: 1
+  implementation_status:
+    name: implementation_status
+    description: 'Статус реализации требования. Осмысленно при lifecycle_status=approved;
+      обязательность при approved не проверяется в этой версии схемы.
+
+      '
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: RequirementImplementationStatus
+  superseded_by:
+    name: superseded_by
+    description: 'Ссылка на требование, которым данное заменено (при lifecycle_status=superseded).
+      Отличается от deprecated_by_ref (HasLifecycle): deprecated_by_ref означает «устарело
+      из-за …» без обязательной замены нормой; superseded_by — «заменено указанным
+      требованием». Обязательность при superseded не проверяется здесь.
+
+      '
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: SpecificationRequirement
+    inlined: false
+  catalog_id:
+    name: catalog_id
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    identifier: true
+    range: uriorcurie
+    required: true
+  requirements:
+    name: requirements
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: SpecificationRequirement
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+classes:
+  MOEXModelRepository:
+    name: MOEXModelRepository
+    description: Корневой контейнер для проверки набора моделей, ссылочных проекций
+      справочников, потоков и контрактных bindings.
+    from_schema: https://data.moex.com/dams/v0.1
+    slots:
+    - repository_id
+    - registry_entries
+    - model_packages
+    - data_flows
+    - data_model_bindings
+    - metrics
+    - dimensions
+    - classification_assignments
+    - policy_bindings
+    tree_root: true
+  RegistryEntry:
+    name: RegistryEntry
+    description: Локальная ссылочная проекция записи внешней мастер-системы; не является
+      мастер-копией справочника.
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    abstract: true
+    slots:
+    - registry_id
+    - registry_name
+    - registry_description
+    - master_system
+    - source_uri
+    - registry_status
+  ITSystem:
+    name: ITSystem
+    description: ИТ-система; мастер данных — EAM.
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    is_a: RegistryEntry
+  ITSolution:
+    name: ITSolution
+    description: ИТ-решение, объединяющее одну или несколько ИТ-систем; мастер данных
+      — EAM.
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    is_a: RegistryEntry
+    slots:
+    - member_system_refs
+    - platform_ref
+  ITPlatform:
+    name: ITPlatform
+    description: ИТ-платформа; мастер данных — EAM.
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    is_a: RegistryEntry
+  BusinessDomain:
+    name: BusinessDomain
+    description: Бизнес-домен или предметная область; мастер определяется архитектурным
+      governance
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    is_a: RegistryEntry
+    slots:
+    - parent_domain_ref
+  GlossaryTerm:
+    name: GlossaryTerm
+    description: Термин корпоративного бизнес-глоссария.
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    is_a: RegistryEntry
+  OrganizationUnit:
+    name: OrganizationUnit
+    description: Организационное подразделение.
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    is_a: RegistryEntry
+  Role:
+    name: Role
+    description: Управляемая роль владельца, стюарда, потребителя или согласующего.
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    is_a: RegistryEntry
+  DataClassificationTerm:
+    name: DataClassificationTerm
+    description: Специальная категория чувствительности или регулирования, например
+      ПДн или инсайдерская информация.
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    is_a: RegistryEntry
+  Policy:
+    name: Policy
+    description: Политика доступа, хранения, качества или архитектурный инвариант.
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    is_a: RegistryEntry
+  BusinessProcess:
+    name: BusinessProcess
+    description: Ссылка на бизнес-процесс или его шаг в BPMN-репозитории.
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    is_a: RegistryEntry
+  DataContractReference:
+    name: DataContractReference
+    description: Ссылка на дата-контракт в корпоративном дата-каталоге.
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    is_a: RegistryEntry
+  IntegrationReference:
+    name: IntegrationReference
+    description: Ссылка на интеграцию в Clinkr.
+    from_schema: https://data.moex.com/dams/registries/v0.1
+    is_a: RegistryEntry
+  ClassificationAssignment:
+    name: ClassificationAssignment
+    description: Версионируемое назначение категории классификации элементу модели
+      с основанием и периодом действия.
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    slots:
+    - assignment_id
+    - classified_element_ref
+    - classification_term_ref
+    - governance_classification
+    - classification_source
+    - classification_rationale
+    - valid_from
+    - valid_to
+    - approval_status
+  PolicyBinding:
+    name: PolicyBinding
+    description: Применение управляемой политики к элементу модели.
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    slots:
+    - policy_binding_id
+    - policy_target_ref
+    - policy_ref
+    - valid_from
+    - valid_to
+    - approval_status
+  HasLifecycle:
+    name: HasLifecycle
+    description: 'Mixin жизненного цикла: статус, период действия и ссылка на заменяющий
+      элемент.'
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    mixin: true
+    slots:
+    - lifecycle_status
+    - valid_from
+    - valid_to
+    - deprecated_by_ref
+  HasOwnership:
+    name: HasOwnership
+    description: 'Mixin владения: data owner, data steward и организационное подразделение.
+      Отсутствие слота означает наследование эффективного значения по containment
+      cascade (ADR-023); заданное значение — локальный override.
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    mixin: true
+    slots:
+    - data_owner_ref
+    - data_steward_ref
+    - owning_unit_ref
+    - ownership_inheritance_rule
+  HasBusinessClassification:
+    name: HasBusinessClassification
+    description: Классификация роли и бизнес-значимости логической сущности.
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    mixin: true
+    slots:
+    - entity_type
+    - data_class
+    - business_importance
+  HasGovernanceClassification:
+    name: HasGovernanceClassification
+    description: 'Базовая и специальная классификация чувствительности данных. governance_classification
+      участвует в containment cascade (ADR-023): пустой слот наследуется от родителя,
+      заданный — override.
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    mixin: true
+    slots:
+    - governance_classification
+    - security_classification
+    - sensitivity_term_refs
+    - classification_source
+    - classification_rationale
+  HasPolicyBindings:
+    name: HasPolicyBindings
+    description: 'Mixin привязки управляемых политик к элементу модели. policy_refs
+      участвует в containment cascade (ADR-023): отсутствие ключа — наследование;
+      присутствующий список (в т.ч. пустой) — полная замена.
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    mixin: true
+    slots:
+    - policy_refs
+  HasProvenance:
+    name: HasProvenance
+    description: 'Mixin происхождения и согласования: исходный артефакт, evidence,
+      статус и согласующий.'
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    mixin: true
+    slots:
+    - source_artifact_ref
+    - evidence_refs
+    - approval_status
+    - approved_by_ref
+    - approved_at
+  HasDefinition:
+    name: HasDefinition
+    description: 'Mixin эталонного определения (ADR-025). Слот description остаётся
+      skos:definition (own text). Отсутствие description при наличии definition_source_ref
+      означает наследование; заданный description — own (опционально adapted from
+      source). scoped_definitions — контекстные определения (v1: уровень ITSystem),
+      не заменяющие эталон вне scope.
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    mixin: true
+    slots:
+    - definition_source_ref
+    - definition_rationale
+    - scoped_definitions
+  ScopedDefinition:
+    name: ScopedDefinition
+    description: 'Контекстное определение элемента модели (ADR-025 / ISO 11179 Context).
+      Не является отдельным термином глоссария и не заменяет эталонное определение
+      вне указанного scope.
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    mixins:
+    - HasProvenance
+    slots:
+    - scoped_definition_id
+    - scope_kind
+    - scope_ref
+    - text
+    - relation_to_reference
+    - rationale
+  ModelElement:
+    name: ModelElement
+    description: 'Абстрактный корень иерархии элементов модели: общая идентичность
+      (element_id), имя, описание и жизненный цикл.'
+    from_schema: https://data.moex.com/dams/core/v0.1
+    abstract: true
+    mixins:
+    - HasLifecycle
+    slots:
+    - element_id
+    - name
+    - title
+    - description
+    - aliases
+    - glossary_term_refs
+    - tags
+  ModelPackage:
+    name: ModelPackage
+    description: 'Версионируемый артефакт модели данных: либо корпоративная conceptual
+      модель (enterprise), либо модель конкретного ИТ-решения (solution). Package-level
+      DAMS layer is dams_model_level on the SpecImpl envelope (ADR-021); implementation_scope
+      here mirrors that body-level semantics.
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    is_a: ModelElement
+    mixins:
+    - HasOwnership
+    - HasGovernanceClassification
+    - HasPolicyBindings
+    slots:
+    - api_version
+    - model_version
+    - implementation_scope
+    - conceptual_implementation_ref
+    - solution_ref
+    - domain_refs
+    - imports_refs
+    - conceptual_entities
+    - domain_contexts
+    - logical_entities
+    - relationships
+    - relation_terms
+    - physical_objects
+    - mappings
+  DomainContext:
+    name: DomainContext
+    description: Ограниченный логический контекст с собственной терминологией и областью
+      ответственности.
+    from_schema: https://data.moex.com/dams/core/v0.1
+    is_a: ModelElement
+    mixins:
+    - HasOwnership
+    slots:
+    - domain_ref
+    - solution_ref
+    - namespace
+    - business_process_refs
+  ConceptualEntity:
+    name: ConceptualEntity
+    description: Корпоративное бизнес-понятие верхнего уровня, независимое от конкретной
+      реализации.
+    from_schema: https://data.moex.com/dams/core/v0.1
+    is_a: ModelElement
+    mixins:
+    - HasOwnership
+    - HasBusinessClassification
+    - HasDefinition
+    slots:
+    - parent_concept_ref
+    - key_attribute_refs
+    - entity_tier
+    - dependency_kind
+    - depends_on_refs
+    - genesis_kind
+    - external_class_refs
+    slot_usage:
+      description:
+        name: description
+        description: 'Reference definition (skos:definition). Absent means inherit
+          via definition_source_ref (ontology class or GlossaryTerm) per ADR-025.
+
+          '
+        required: false
+  LogicalEntity:
+    name: LogicalEntity
+    description: Представление бизнес-сущности в доменном контексте и модели конкретного
+      решения.
+    from_schema: https://data.moex.com/dams/core/v0.1
+    is_a: ModelElement
+    mixins:
+    - HasOwnership
+    - HasBusinessClassification
+    - HasGovernanceClassification
+    - HasPolicyBindings
+    - HasDefinition
+    slots:
+    - context_ref
+    - conceptual_entity_refs
+    - solution_ref
+    - solution_data_role
+    - attributes
+    - key_attribute_refs
+    - invariant_refs
+    - identity_rule
+    - business_key_kind
+    - conceptual_alignment_status
+    - alignment_rationale
+    - isolation_rationale
+    slot_usage:
+      description:
+        name: description
+        description: 'Reference definition (skos:definition). Absent means inherit
+          from conceptual_entity_refs or definition_source_ref per ADR-025.
+
+          '
+        required: false
+  LogicalAttribute:
+    name: LogicalAttribute
+    description: Логический атрибут сущности с бизнес-смыслом, типом, обязательностью
+      и классификацией.
+    from_schema: https://data.moex.com/dams/core/v0.1
+    is_a: ModelElement
+    mixins:
+    - HasOwnership
+    - HasGovernanceClassification
+    - HasPolicyBindings
+    - HasDefinition
+    slots:
+    - owner_entity_ref
+    - logical_type
+    - required
+    - multivalued
+    - minimum_cardinality
+    - maximum_cardinality
+    - value_set_ref
+    - format_pattern
+    - default_value
+    - derived_expression
+    - mapping_coverage_status
+    - mapping_rationale
+    - unit_code
+    - currency_attribute_ref
+    - timezone_policy
+    - temporal_semantics
+    slot_usage:
+      description:
+        name: description
+        description: 'Reference definition (skos:definition). v1 attributes are own-only;
+          inheritance from conceptual attributes is out of scope (ADR-025).
+
+          '
+        required: false
+  Relationship:
+    name: Relationship
+    description: Именованная связь между логическими или концептуальными сущностями.
+    from_schema: https://data.moex.com/dams/core/v0.1
+    is_a: ModelElement
+    slots:
+    - source_entity_ref
+    - target_entity_ref
+    - source_role
+    - target_role
+    - source_min_cardinality
+    - source_max_cardinality
+    - target_min_cardinality
+    - target_max_cardinality
+    - identifying
+    - associative
+    - relationship_kind
+    - cardinality_rationale
+    - relation_term_ref
+    - term_direction
+  RelationTerm:
+    name: RelationTerm
+    description: 'Governed dictionary term for a conceptual/logical relationship (ADR-026).
+      Provides forward and inverse natural-language labels so a single Relationship
+      assertion can be read from either side.
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    is_a: ModelElement
+    mixins:
+    - HasDefinition
+    slots:
+    - forward_label
+    - forward_label_en
+    - inverse_label
+    - inverse_label_en
+    - symmetric
+    - default_relationship_kind
+    - ontology_property_ref
+    slot_usage:
+      description:
+        name: description
+        description: 'Reference definition of the relation term (skos:definition).
+          Absent means inherit via definition_source_ref per ADR-025.
+
+          '
+        required: false
+  ExternalClassRef:
+    name: ExternalClassRef
+    description: 'Alignment of a ConceptualEntity to an external class or term (ADR-026).
+      Canonical store for conceptual↔external links; Mapping(aligns_with) may mirror
+      for ExternalTermSelection projections.
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    mixins:
+    - HasProvenance
+    slots:
+    - external_class_ref_id
+    - target_ref
+    - match_kind
+    - source_kind
+    - external_specification_ref
+    - selection_ref
+  PhysicalObject:
+    name: PhysicalObject
+    description: Квант данных или техническая точка публикации/потребления.
+    from_schema: https://data.moex.com/dams/core/v0.1
+    is_a: ModelElement
+    mixins:
+    - HasOwnership
+    - HasGovernanceClassification
+    - HasPolicyBindings
+    slots:
+    - solution_ref
+    - system_ref
+    - object_kind
+    - qualified_name
+    - technology
+    - native_schema_ref
+    - direction
+    - physical_fields
+    - mapping_coverage_status
+    - mapping_rationale
+  PhysicalField:
+    name: PhysicalField
+    description: Поле физического объекта; его семантика задаётся Mapping к LogicalAttribute.
+    from_schema: https://data.moex.com/dams/core/v0.1
+    is_a: ModelElement
+    mixins:
+    - HasOwnership
+    - HasGovernanceClassification
+    - HasPolicyBindings
+    slots:
+    - physical_object_ref
+    - native_name
+    - native_type
+    - required
+    - ordinal_position
+    - schema_path
+    - mapping_coverage_status
+    - mapping_rationale
+  Mapping:
+    name: Mapping
+    description: 'Явное соответствие между элементами. Discriminate via mapping_type:
+      realizes (solution→enterprise conceptual), entity_physical (PhysicalObject↔LogicalEntity),
+      field_mapping/mapsTo (physical↔logical), aligns_with (enterprise↔external term).
+      Not used for SpecImpl implements/conforms_to.
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    is_a: ModelElement
+    mixins:
+    - HasProvenance
+    slots:
+    - source_refs
+    - target_refs
+    - mapping_type
+    - mapping_cardinality
+    - transformation_ref
+    - transformation_expression
+    - confidence
+    - valid_from
+    - valid_to
+  DataFlow:
+    name: DataFlow
+    description: Ссылочная проекция зарегистрированной интеграции; топология и канал
+      являются данными Clinkr, а семантика — модели данных.
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    is_a: ModelElement
+    mixins:
+    - HasOwnership
+    - HasLifecycle
+    slots:
+    - integration_ref
+    - contract_ref
+    - source_solution_ref
+    - target_solution_ref
+    - source_system_ref
+    - target_system_ref
+    - source_platform_ref
+    - target_platform_ref
+    - integration_level
+    - integration_class
+    - integration_channel
+    - integration_spec_ref
+    - entity_bindings
+  DataFlowEntityBinding:
+    name: DataFlowEntityBinding
+    description: Связь потока с логическими сущностями, атрибутами и физическими объектами
+      модели решения.
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    is_a: ModelElement
+    slots:
+    - flow_ref
+    - source_model_ref
+    - logical_entity_ref
+    - logical_attribute_refs
+    - physical_object_refs
+    - physical_field_refs
+    - transformation_mapping_refs
+    - direction
+  DataModelBinding:
+    name: DataModelBinding
+    description: Дочерняя модельная спецификация дата-контракта, фиксирующая неизменяемую
+      ревизию модели и передаваемый срез.
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    is_a: ModelElement
+    mixins:
+    - HasLifecycle
+    - HasOwnership
+    slots:
+    - specification_version
+    - implementation_version
+    - contract_ref
+    - integration_ref
+    - model_package_ref
+    - model_version
+    - model_revision
+    - selections
+    - compatibility_mode
+    - compatibility_baseline_ref
+    - integrity_digest
+    - generated_at
+  ModelSelection:
+    name: ModelSelection
+    description: Переиспользуемый набор выбранных сущностей, атрибутов и физических
+      представлений.
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    is_a: ModelElement
+    slots:
+    - selected_entities
+  SelectedEntity:
+    name: SelectedEntity
+    description: Выбранная для интеграции логическая сущность.
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    is_a: ModelElement
+    slots:
+    - logical_entity_ref
+    - selected_attributes
+    - physical_object_refs
+  SelectedAttribute:
+    name: SelectedAttribute
+    description: Выбранный атрибут и соответствующее физическое поле payload, таблицы
+      или сообщения.
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    is_a: ModelElement
+    slots:
+    - logical_attribute_ref
+    - physical_field_refs
+    - transformation_mapping_ref
+  Metric:
+    name: Metric
+    description: Управляемое определение бизнес- или технической метрики; является
+      опциональным аналитическим профилем.
+    from_schema: https://data.moex.com/dams/analytics/v0.1
+    is_a: ModelElement
+    mixins:
+    - HasOwnership
+    - HasPolicyBindings
+    slots:
+    - metric_expression
+    - aggregation_function
+    - grain_entity_refs
+    - dimension_attribute_refs
+    - measure_attribute_refs
+    - unit
+    - filter_expression
+  Dimension:
+    name: Dimension
+    description: Переиспользуемое аналитическое измерение, связанное с логическими
+      атрибутами.
+    from_schema: https://data.moex.com/dams/analytics/v0.1
+    is_a: ModelElement
+    slots:
+    - dimension_attribute_refs
+    - grain_entity_refs
+  RequirementApplicability:
+    name: RequirementApplicability
+    description: 'Область применимости требования (без graph queries): класс цели,
+      профиль и уровень модели.
+
+      '
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    slots:
+    - applicability_id
+    - applies_target_class
+    - applies_target_kinds
+    - applies_implementation_scope
+    - applies_dams_model_level
+    - applies_implementation_profile
+  FormalCheck:
+    name: FormalCheck
+    description: Одна машиночитаемая проверка требования. Kind выровнен с LinkML constraints
+      и DAMS reference/structural diagnostics. formal_checks — исполняемое подмножество
+      нормы; исполняется assess (ADR-013).
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    slots:
+    - check_id
+    - kind
+    - target_class
+    - target_slot
+    - target_slots
+    - target_path
+    - severity
+    - diagnostic_code
+    - expression
+    - remediation
+  SpecificationRequirement:
+    name: SpecificationRequirement
+    description: Нормативное требование к модели, соответствующей reference specification
+      (каталог для уровня ИТ-решения и др.).
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    is_a: ModelElement
+    slots:
+    - code
+    - requirement_level
+    - requirement_section
+    - statement
+    - applies_to
+    - formal_checks
+    - implementation_status
+    - superseded_by
+    slot_usage:
+      lifecycle_status:
+        name: lifecycle_status
+        ifabsent: string(draft)
+        range: RequirementLifecycleStatus
+        required: true
+  RequirementCatalog:
+    name: RequirementCatalog
+    description: Контейнер инстансов SpecificationRequirement вне ModelPackage.
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    slots:
+    - catalog_id
+    - name
+    - requirements
+source_file: C:\Users\bons1\IdeaProjects\moex-data-model\model-assets\specifications\moex-dams\0.1\schemas\moex-dams.yaml

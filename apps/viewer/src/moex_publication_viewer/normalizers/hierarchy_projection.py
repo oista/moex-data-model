@@ -6,6 +6,7 @@ and a generated ModelPackage YAML without attributes or physical objects.
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 import yaml
@@ -36,6 +37,8 @@ HIERARCHY_MODULE_ID = "moex:module:hierarchy"
 HIERARCHY_CATALOG_ID = "moex-hierarchy"
 HIERARCHY_SECTION_ID = "entity-hierarchy"
 HIERARCHY_ARTIFACT_BODY_ID = "artifact-model-body"
+HIERARCHY_ARTIFACT_FULL_SPEC_ID = "artifact-full-specification"
+HIERARCHY_FULL_SPEC_FILENAME = "moex-dams-full.yaml"
 
 _ENTITY_INSTANCES = frozenset({"ConceptualEntity", "LogicalEntity"})
 _SKIP_IMPL_IDS = frozenset({HIERARCHY_CATALOG_ID, "moex-dsp"})
@@ -567,16 +570,22 @@ def enrich_dams_hierarchy_module(
             attributes=attrs,
         )
 
+    full_spec_text = _inject_full_specification_artifact(hierarchy)
+
     # Persist generated body next to the package for inspectability.
     if hierarchy.manifest_path:
-        from pathlib import Path
-
         manifest = Path(hierarchy.manifest_path)
         out = manifest.parent / "moex-hierarchy-model.yaml"
         try:
             out.write_text(yaml_text, encoding="utf-8")
         except OSError:
             pass
+        if full_spec_text:
+            full_out = manifest.parent / HIERARCHY_FULL_SPEC_FILENAME
+            try:
+                full_out.write_text(full_spec_text, encoding="utf-8")
+            except OSError:
+                pass
 
     # Fail-closed: hierarchy UI tabs depend on this attribute.
     secured = next(
@@ -587,6 +596,59 @@ def enrich_dams_hierarchy_module(
             f"{HIERARCHY_MODULE_ID}: entity-hierarchy missing "
             "glossary_scope=hierarchy after enrich"
         )
+
+
+def _repo_root_from_manifest(manifest_path: Path) -> Path | None:
+    """Walk up from publish.yaml until ``model-assets/specifications`` is found."""
+    for parent in [manifest_path.parent, *manifest_path.parents]:
+        if (parent / "model-assets" / "specifications").is_dir():
+            return parent
+    return None
+
+
+def _inject_full_specification_artifact(hierarchy: PublicationModule) -> str | None:
+    """Fill «Полная спецификация» card with merged DAMS LinkML; return YAML text."""
+    from moex_publication_viewer.normalizers.dams_full_spec import (
+        dams_schema_root_path,
+        dump_merged_dams_schema,
+    )
+    from moex_publication_viewer.publication_contract import spec_asset_dir
+
+    full = next(
+        (s for s in hierarchy.sections if s.id == HIERARCHY_ARTIFACT_FULL_SPEC_ID),
+        None,
+    )
+    if full is None or not full.items:
+        return None
+    if not hierarchy.manifest_path:
+        return None
+    root = _repo_root_from_manifest(Path(hierarchy.manifest_path))
+    if root is None:
+        return None
+    spec_dir = spec_asset_dir(root, "moex-dams@0.1")
+    if spec_dir is None:
+        return None
+    schema_path = dams_schema_root_path(spec_dir)
+    try:
+        text = dump_merged_dams_schema(schema_path)
+    except (OSError, FileNotFoundError, ValueError, TypeError):
+        return None
+    item = full.items[0]
+    attrs = dict(item.attributes or {})
+    attrs["text"] = text
+    attrs["file_name"] = HIERARCHY_FULL_SPEC_FILENAME
+    attrs["path"] = HIERARCHY_FULL_SPEC_FILENAME
+    attrs["description"] = (
+        full.description
+        or "Слитый LinkML YAML всей DAMS-спеки (все модули, без imports)."
+    )
+    full.items[0] = PublicationItem(
+        id=item.id,
+        title=full.title or item.title or "Полная спецификация",
+        description=attrs["description"],
+        attributes=attrs,
+    )
+    return text
 
 
 def _hierarchy_entity_nav_leaf(

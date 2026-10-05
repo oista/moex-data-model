@@ -696,6 +696,7 @@
     "relation-terms": "glossary",
     vocabularies: "glossary",
     "implementations-glossary": "glossary",
+    "artifact-full-specification": "source_file",
     "artifact-model-body": "source_file",
     "artifact-envelope": "source_file",
     "artifact-relation-terms": "source_file",

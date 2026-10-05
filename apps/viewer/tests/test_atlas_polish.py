@@ -269,6 +269,7 @@ def test_js_nav_glyph_helpers():
     assert "nav-kind-requirements" in JS
     assert 'if (g === "requirements") return requirementsFileMarkHtml()' in JS
     assert 'requirements: "R"' in JS
+    assert '"artifact-full-specification": "source_file"' in JS
     assert '"artifact-model-body": "source_file"' in JS
 
     assert "function renderSourceFileSection" in JS

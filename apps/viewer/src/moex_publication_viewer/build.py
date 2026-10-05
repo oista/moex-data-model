@@ -277,6 +277,7 @@ _SECTION_ID_NAV_GLYPH: dict[str, str] = {
     "vocabularies": "glossary",
     "implementations-glossary": "glossary",
     "entity-hierarchy": "glossary",
+    "artifact-full-specification": "source_file",
     "artifact-model-body": "source_file",
     "artifact-envelope": "source_file",
     "artifact-relation-terms": "source_file",
@@ -346,7 +347,11 @@ _HIERARCHY_NAV_REQUIRED_SECTION_IDS = frozenset(
 )
 _HIERARCHY_NAV_OVERVIEW_IDS = ("overview", "conformance")
 _HIERARCHY_NAV_ENTITY_IDS = ("entity-hierarchy",)
-_HIERARCHY_NAV_ARTIFACT_IDS = ("artifact-model-body", "artifact-envelope")
+_HIERARCHY_NAV_ARTIFACT_IDS = (
+    "artifact-full-specification",
+    "artifact-model-body",
+    "artifact-envelope",
+)
 
 
 def group_hierarchy_impl_nav(
@@ -416,7 +421,10 @@ def group_hierarchy_impl_nav(
             _impl_folder(
                 folder_id=f"implnav:{catalog_impl_id}:group:artifacts",
                 title="Артефакты",
-                description="Generated hierarchy YAML and implementation envelope.",
+                description=(
+                    "Merged DAMS LinkML dump, generated hierarchy YAML, "
+                    "and implementation envelope."
+                ),
                 children=artifact_kids,
                 extra_attrs={
                     "nav_glyph": "source_file",

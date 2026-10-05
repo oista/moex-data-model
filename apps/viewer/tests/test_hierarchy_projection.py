@@ -62,6 +62,14 @@ def test_hierarchy_nav_groups_three_folders():
             attributes={"kind": "section_ref", "section_id": "entity-hierarchy"},
         ),
         PublicationItem(
+            id="implnav:moex-hierarchy:artifact-full-specification",
+            title="Полная спецификация",
+            attributes={
+                "kind": "section_ref",
+                "section_id": "artifact-full-specification",
+            },
+        ),
+        PublicationItem(
             id="implnav:moex-hierarchy:artifact-model-body",
             title="Полная модель moex",
             attributes={"kind": "section_ref", "section_id": "artifact-model-body"},
@@ -77,6 +85,11 @@ def test_hierarchy_nav_groups_three_folders():
     assert grouped[1].attributes.get("kind") == "section_ref"
     assert grouped[1].attributes.get("section_id") == "entity-hierarchy"
     assert grouped[1].children == []
+    assert [c.attributes["section_id"] for c in grouped[2].children] == [
+        "artifact-full-specification",
+        "artifact-model-body",
+        "artifact-envelope",
+    ]
 
 
 def test_hierarchy_impl_section_nav_from_module():
@@ -90,6 +103,11 @@ def test_hierarchy_impl_section_nav_from_module():
                 id="entity-hierarchy", title="Entity hierarchy", type="glossary"
             ),
             PublicationSection(
+                id="artifact-full-specification",
+                title="Полная спецификация",
+                type="source-file",
+            ),
+            PublicationSection(
                 id="artifact-model-body", title="Body", type="source-file"
             ),
             PublicationSection(
@@ -99,6 +117,11 @@ def test_hierarchy_impl_section_nav_from_module():
     )
     kids = impl_section_nav_children("moex-hierarchy", mod)
     assert [c.title for c in kids] == ["Overview", "Entity hierarchy", "Артефакты"]
+    assert [c.attributes["section_id"] for c in kids[2].children] == [
+        "artifact-full-specification",
+        "artifact-model-body",
+        "artifact-envelope",
+    ]
 
 
 def test_build_hierarchy_graph_has_owl_and_ldm_links():
@@ -275,6 +298,25 @@ def test_enrich_publication_modules_sets_hierarchy_scope():
     catalog = compile_catalog(REPO, modules)
     enrich_publication_modules(modules, catalog)
     _assert_hierarchy_section_enriched(modules)
+
+
+def test_enrich_injects_full_specification_artifact():
+    """«Полная спецификация» card holds merged DAMS LinkML (C/L/P classes)."""
+    modules = compile_modules(
+        REPO, enforce_publication_contract=False, dist_dir=REPO / "apps" / "viewer" / "dist"
+    )
+    catalog = compile_catalog(REPO, modules)
+    enrich_publication_modules(modules, catalog)
+    hierarchy = next(m for m in modules if m.module_id == HIERARCHY_MODULE_ID)
+    full = next(
+        s for s in hierarchy.sections if s.id == "artifact-full-specification"
+    )
+    assert full.items
+    text = (full.items[0].attributes or {}).get("text") or ""
+    assert "ConceptualEntity" in text
+    assert "LogicalEntity" in text
+    assert "PhysicalObject" in text
+    assert full.title == "Полная спецификация"
 
 
 def test_build_and_serve_share_enrich_publication_modules():

@@ -248,6 +248,16 @@ def test_repo_golden_three_modules():
         "Logical Entities",
         "Артефакты",
     ]
+    artifacts = hierarchy["children"][-1]
+    assert artifacts["title"] == "Артефакты"
+    assert [
+        (c.get("attributes") or {}).get("section_id")
+        for c in artifacts.get("children") or []
+    ] == [
+        "artifact-full-specification",
+        "artifact-model-body",
+        "artifact-envelope",
+    ]
     entity_nav = hierarchy["children"][1]
     assert (entity_nav.get("attributes") or {}).get("kind") == "section_ref"
     assert (entity_nav.get("attributes") or {}).get("section_id") == (

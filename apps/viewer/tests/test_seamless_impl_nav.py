@@ -540,6 +540,18 @@ def test_repo_dams_impl_folders_group_solutions_and_projects() -> None:
         "Logical Entities",
         "Артефакты",
     ]
+    artifacts = hierarchy.children[-1]
+    assert artifacts.title == "Артефакты"
+    assert [c.attributes["section_id"] for c in artifacts.children] == [
+        "artifact-full-specification",
+        "artifact-model-body",
+        "artifact-envelope",
+    ]
+    assert [c.title for c in artifacts.children] == [
+        "Полная спецификация",
+        "Полная модель moex",
+        "Конверт реализации",
+    ]
     entity_nav = hierarchy.children[1]
     assert entity_nav.attributes.get("kind") == "section_ref"
     assert entity_nav.attributes.get("section_id") == "entity-hierarchy"
