@@ -274,9 +274,17 @@ def test_js_nav_glyph_helpers():
 
     assert "function renderSourceFileSection" in JS
     assert 'section.type === "source-file"' in JS
+    assert 'className = "badge-pill source-download"' in JS
+    assert 'dlBtn.textContent = "Download"' in JS
     # Spec explorer top-level section_ref (Глоссарий) omits glyph; impl keeps it.
     assert "omitGlyph: true" in JS
     assert "opts.omitGlyph" in JS
+
+
+def test_css_source_download_chip():
+    css = assemble_css()
+    assert ".detail-block-head" in css
+    assert "button.badge-pill.source-download" in css
 
 
 def test_css_nav_kind_fixed_square_and_section_frame():

@@ -478,6 +478,20 @@
 .requirement-checks th { color: var(--muted); font-weight: 600; }
 .detail-block { margin-top: 20px; }
 .detail-block h2 { font-size: 15px; margin: 0 0 10px; }
+.detail-block-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+.detail-block-head h2 { margin: 0; }
+button.badge-pill.source-download {
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+}
 .badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
 .badge-pill {
   font-size: 11px; padding: 2px 8px; border-radius: 999px;

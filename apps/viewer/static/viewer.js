@@ -3291,8 +3291,33 @@
           const body = document.createElement("section");
           body.className = "detail-block";
           body.setAttribute("data-renderer", "source-code");
-          body.innerHTML = `<h2>Source</h2>`;
-          body.appendChild(renderYamlFold(attrs.text || ""));
+          const text = attrs.text || "";
+          const head = document.createElement("div");
+          head.className = "detail-block-head";
+          const h2 = document.createElement("h2");
+          h2.textContent = "Source";
+          head.appendChild(h2);
+          if (text) {
+            const dlBtn = document.createElement("button");
+            dlBtn.type = "button";
+            dlBtn.className = "badge-pill source-download";
+            dlBtn.textContent = "Download";
+            const fname =
+              fileName && /\.ya?ml$/i.test(fileName)
+                ? fileName
+                : fileName
+                  ? `${fileName}.yaml`
+                  : "source.yaml";
+            dlBtn.addEventListener("click", () => {
+              downloadBlob(
+                fname,
+                new Blob([text], { type: "text/yaml;charset=utf-8" })
+              );
+            });
+            head.appendChild(dlBtn);
+          }
+          body.appendChild(head);
+          body.appendChild(renderYamlFold(text));
           panel.appendChild(body);
         },
       },
