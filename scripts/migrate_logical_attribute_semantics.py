@@ -4,6 +4,8 @@
 Modes:
   --apply   create DataType/ValueDomain, set data_type_ref/value_domain_ref
   --propose write ConceptualProperty candidates (does not modify model)
+  --demo    with --apply: recompute integrity_digest in place (fixtures);
+            without --demo: issue new model_revision + compatibility_baseline_ref
 
 Does NOT auto-create ConceptualProperty. Denylist includes moex-dams-full.yaml.
 Idempotent: re-run yields empty diff when already migrated.
@@ -18,6 +20,14 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
+
+_SRC = Path(__file__).resolve().parents[1] / "packages" / "specification-dams" / "src"
+if str(_SRC) not in sys.path:
+    sys.path.insert(0, str(_SRC))
+
+from moex_dams.application.binding_revision import (  # noqa: E402
+    apply_binding_revision_policy,
+)
 
 DENYLIST_NAMES = frozenset({"moex-dams-full.yaml"})
 DENYLIST_MARKERS = ("не редактировать вручную", "do not edit", "auto-generated")
@@ -213,7 +223,12 @@ def _needs_domain(key: tuple[Any, ...]) -> bool:
     return bool(fmt or unit or vs)
 
 
-def migrate_package(data: dict[str, Any], *, apply: bool) -> dict[str, Any]:
+def migrate_package(
+    data: dict[str, Any],
+    *,
+    apply: bool,
+    demo: bool = False,
+) -> dict[str, Any]:
     """Mutate package in place when apply=True; always return report."""
     report: dict[str, Any] = {
         "attributes_before": 0,
@@ -374,6 +389,19 @@ def migrate_package(data: dict[str, Any], *, apply: bool) -> dict[str, Any]:
             )
 
     report["attributes_after"] = len(attrs_flat)
+
+    # Close integrity_digest / revision when apply mutated content or bindings present
+    content_changed = bool(report["attrs_updated"] or report["domains_created"])
+    if apply and content_changed:
+        rev_lines = apply_binding_revision_policy(
+            data,
+            demo=demo,
+            reason="attribute-semantics-migration",
+        )
+        report["binding_revisions"] = rev_lines
+    else:
+        report["binding_revisions"] = []
+
     return report
 
 
@@ -385,6 +413,11 @@ def main(argv: list[str] | None = None) -> int:
         "--propose",
         action="store_true",
         help="Write proposed-properties.yaml (no model changes for properties)",
+    )
+    parser.add_argument(
+        "--demo",
+        action="store_true",
+        help="Recompute integrity_digest in place (fixtures only); else new revision",
     )
     parser.add_argument(
         "--report",
@@ -418,7 +451,7 @@ def main(argv: list[str] | None = None) -> int:
         if not isinstance(data, dict):
             print(f"SKIP (not mapping): {path}")
             continue
-        report = migrate_package(data, apply=args.apply)
+        report = migrate_package(data, apply=args.apply, demo=args.demo)
         report["path"] = str(path)
         all_reports.append(report)
         all_proposals.extend(report.get("proposed_properties") or [])
@@ -429,6 +462,8 @@ def main(argv: list[str] | None = None) -> int:
                 f"updated={len(report['attrs_updated'])} "
                 f"domains={len(report['domains_created'])}"
             )
+            for line in report.get("binding_revisions") or []:
+                print(f"  {line}")
         else:
             print(f"PROPOSE-scan {path}: candidates={len(report['proposed_properties'])}")
 

@@ -28,6 +28,10 @@ superseded_by: []
 - `--propose`: кандидаты ConceptualProperty в отчёт и `proposed-properties.yaml`;
   модель не менять. Автосоздание свойств **отключено**.
 - `moex-dams-full.yaml` — denylist (сгенерированный дамп); только регенерация.
-- `integrity_digest`: пересчёт только fixtures/demo; иначе — политика новой ревизии
-  (зависит от хвоста фазы 1 п.5; до закрытия — не угадывать baseline).
+- `integrity_digest` / ревизии: модуль
+  `moex_dams.application.binding_revision` (ADR-031 п.5 закрыт).
+  Миграция с `--demo` пересчитывает digest на месте; иначе — новая
+  `model_revision` + `compatibility_baseline_ref` на предыдущую ревизию.
+  Подключено в `migrate_logical_attribute_semantics.py` и
+  `migrate_physical_to_technical_asset.py`.
 - Атрибуты без концептуальной пары остаются валидными навсегда (вариант B).

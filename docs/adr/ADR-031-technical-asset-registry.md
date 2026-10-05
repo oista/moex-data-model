@@ -60,10 +60,15 @@ superseded_by: MODELING_ARCHITECTURE.md
 
 ### integrity_digest
 
-При миграции `PhysicalObject` → `TechnicalAsset`:
+При миграции содержимого модели (TechnicalAsset, attribute semantics и др.):
 
-- `integrity_digest` в `DataModelBinding` **пересчитывается только** для fixtures / demo.
-- Для прочих моделей — новая ревизия с `compatibility_baseline_ref` на предыдущую (неизменяемость ревизии).
+- Реализация: `moex_dams.application.binding_revision.apply_binding_revision_policy`.
+- `integrity_digest` в `DataModelBinding` **пересчитывается только** для fixtures / demo
+  (`demo=True`).
+- Для прочих моделей — новая ревизия: bump `model_revision`,
+  `compatibility_baseline_ref` на URI предыдущей ревизии
+  (`{element_id}/rev/{old_model_revision}`), digest считается для *новой* ревизии.
+  Существующий снимок не мутируется «тихо».
 
 ### Breaking change
 

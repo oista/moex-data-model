@@ -106,3 +106,40 @@ def test_denylist_does_not_mutate(tmp_path: Path):
     p = tmp_path / "moex-dams-full.yaml"
     p.write_text("# не редактировать вручную\nx: 1\n", encoding="utf-8")
     assert is_denied(p)
+
+
+def test_apply_with_binding_issues_new_revision():
+    data = {
+        "implementation_scope": "solution",
+        "logical_entities": [
+            {
+                "element_id": "dams:logical/t/E",
+                "attributes": [
+                    {
+                        "element_id": "dams:logical/t/E/a",
+                        "name": "a",
+                        "logical_type": "string",
+                        "required": True,
+                        "multivalued": False,
+                    }
+                ],
+            }
+        ],
+        "data_model_bindings": [
+            {
+                "element_id": "dams:binding/t/1.0.0",
+                "model_package_ref": "pkg",
+                "model_version": "0.1.0",
+                "model_revision": "oldrev",
+                "selections": [],
+                "compatibility_mode": "backward",
+                "integrity_digest": "sha256:" + ("a" * 64),
+            }
+        ],
+    }
+    report = migrate_package(data, apply=True, demo=False)
+    assert report["attrs_updated"]
+    b = data["data_model_bindings"][0]
+    assert b["model_revision"] != "oldrev"
+    assert b["compatibility_baseline_ref"].endswith("/rev/oldrev")
+    assert any("NEW_REVISION" in line for line in report["binding_revisions"])
