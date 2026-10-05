@@ -6913,10 +6913,15 @@
     return root;
   }
 
-  function renderGlossaryRelations(mod, section) {
+  function renderGlossaryRelations(mod, section, opts) {
     const columns = pickGlossaryListColumns(section);
     const cols = columns.length ? columns : ["title", "description"];
-    const selected = new Set();
+    const selected =
+      opts && opts.selected instanceof Set ? opts.selected : new Set();
+    const onSelectionChange =
+      opts && typeof opts.onSelectionChange === "function"
+        ? opts.onSelectionChange
+        : null;
     const state = {
       sortCol: null,
       sortDir: "asc",
@@ -7290,6 +7295,7 @@
           else selected.delete(id);
           state.page = 0;
           paint();
+          if (onSelectionChange) onSelectionChange(selected);
         });
       });
 
@@ -7325,10 +7331,620 @@
     return layout;
   }
 
+  function hierarchyGraphIndex(section) {
+    const graph = (section.attributes || {}).hierarchy_graph || {};
+    const nodes = Array.isArray(graph.nodes) ? graph.nodes : [];
+    const edges = Array.isArray(graph.edges) ? graph.edges : [];
+    const byId = new Map();
+    nodes.forEach((n) => {
+      if (n && n.id) byId.set(String(n.id), n);
+    });
+    // Fall back to glossary items when graph node missing (OWL stubs in items).
+    (section.items || []).forEach((item) => {
+      if (byId.has(item.id)) return;
+      const layer =
+        item.attributes?.layer || item.attributes?.model_level || "CDM";
+      byId.set(item.id, {
+        id: item.id,
+        layer,
+        title: item.title || item.id,
+        name: item.attributes?.name || item.title || item.id,
+        solution: item.attributes?.solution || "",
+        solution_id: item.attributes?.solution_id || "",
+        kind: item.attributes?.kind || "entity",
+        description: item.description || "",
+      });
+    });
+    return { byId, edges, nodes: [...byId.values()] };
+  }
+
+  /** BFS neighborhood with per-layer hop limits (OWL / CDM / LDM). */
+  function collectHierarchyNeighborhood(section, seedIds, hops) {
+    const { byId, edges } = hierarchyGraphIndex(section);
+    const hop = {
+      OWL: Math.max(0, Number(hops?.OWL) || 0),
+      CDM: Math.max(0, Number(hops?.CDM) || 0),
+      LDM: Math.max(0, Number(hops?.LDM) || 0),
+    };
+    const adj = new Map();
+    edges.forEach((e) => {
+      if (!e || !e.source || !e.target) return;
+      const s = String(e.source);
+      const t = String(e.target);
+      if (!adj.has(s)) adj.set(s, []);
+      if (!adj.has(t)) adj.set(t, []);
+      adj.get(s).push(t);
+      adj.get(t).push(s);
+    });
+
+    function bandOf(id) {
+      const layer = String(byId.get(id)?.layer || "CDM").toUpperCase();
+      return layer === "OWL" || layer === "LDM" ? layer : "CDM";
+    }
+
+    // Best per-layer depth vector found for each node (sum of depths as score).
+    const best = new Map();
+    const queue = [];
+    (seedIds || []).forEach((id) => {
+      const sid = String(id);
+      if (!byId.has(sid)) return;
+      const depths = { OWL: 0, CDM: 0, LDM: 0 };
+      best.set(sid, depths);
+      queue.push({ id: sid, depths });
+    });
+
+    function score(d) {
+      return (d.OWL || 0) + (d.CDM || 0) + (d.LDM || 0);
+    }
+
+    while (queue.length) {
+      const cur = queue.shift();
+      (adj.get(cur.id) || []).forEach((to) => {
+        if (!byId.has(to)) return;
+        const band = bandOf(to);
+        const next = {
+          OWL: cur.depths.OWL || 0,
+          CDM: cur.depths.CDM || 0,
+          LDM: cur.depths.LDM || 0,
+        };
+        next[band] = (next[band] || 0) + 1;
+        if (next[band] > hop[band]) return;
+        const prev = best.get(to);
+        if (prev && score(prev) <= score(next)) return;
+        best.set(to, next);
+        queue.push({ id: to, depths: next });
+      });
+    }
+
+    const nodeIds = new Set(best.keys());
+    const outEdges = edges.filter(
+      (e) => nodeIds.has(String(e.source)) && nodeIds.has(String(e.target))
+    );
+    const outNodes = [...nodeIds].map((id) => byId.get(id)).filter(Boolean);
+    return { nodes: outNodes, edges: outEdges };
+  }
+
+  function hierarchyNodeSize(title) {
+    const t = String(title || "");
+    const w = Math.min(220, Math.max(120, 10 + t.length * 7.2));
+    return { width: w, height: 40 };
+  }
+
+  function buildElkHierarchyGraph(nodes, edges) {
+    const layers = { OWL: [], CDM: [], LDM: [] };
+    const nodeBand = new Map();
+    nodes.forEach((n) => {
+      const layer = String(n.layer || "CDM").toUpperCase();
+      const band = layer === "OWL" || layer === "LDM" ? layer : "CDM";
+      layers[band].push(n);
+      nodeBand.set(n.id, band);
+    });
+    const bandRank = { OWL: 0, CDM: 1, LDM: 2 };
+
+    function solutionClusters(bandNodes, band) {
+      const bySol = new Map();
+      bandNodes.forEach((n) => {
+        const sid = String(n.solution_id || n.solution || "other");
+        if (!bySol.has(sid)) bySol.set(sid, []);
+        bySol.get(sid).push(n);
+      });
+      return [...bySol.entries()].map(([sid, kids]) => {
+        const label = kids[0]?.solution || sid;
+        return {
+          id: `cluster:${band}:${sid}`,
+          labels: [{ text: label }],
+          layoutOptions: {
+            "elk.padding": "[top=28,left=16,bottom=16,right=16]",
+          },
+          children: kids.map((n) => {
+            const size = hierarchyNodeSize(n.title || n.name || n.id);
+            return {
+              id: n.id,
+              width: size.width,
+              height: size.height,
+              labels: [{ text: n.title || n.name || n.id }],
+            };
+          }),
+        };
+      });
+    }
+
+    const children = [];
+    ["OWL", "CDM", "LDM"].forEach((band) => {
+      if (!layers[band].length) return;
+      children.push({
+        id: `band:${band}`,
+        labels: [{ text: band }],
+        layoutOptions: {
+          "elk.padding": "[top=32,left=20,bottom=20,right=20]",
+          "elk.algorithm": "layered",
+          "elk.direction": "RIGHT",
+        },
+        children: solutionClusters(layers[band], band),
+      });
+    });
+
+    // Orient edges OWL→CDM→LDM so layered DOWN keeps bands top→bottom.
+    const elkEdges = edges.map((e, i) => {
+      let s = String(e.source);
+      let t = String(e.target);
+      const sb = bandRank[nodeBand.get(s)] ?? 1;
+      const tb = bandRank[nodeBand.get(t)] ?? 1;
+      if (sb > tb) {
+        const tmp = s;
+        s = t;
+        t = tmp;
+      }
+      return {
+        id: `e${i}:${e.source}->${e.target}`,
+        sources: [s],
+        targets: [t],
+        labels: e.rel ? [{ text: String(e.rel) }] : [],
+      };
+    });
+
+    return {
+      id: "root",
+      layoutOptions: {
+        "elk.algorithm": "layered",
+        "elk.direction": "DOWN",
+        "elk.edgeRouting": "ORTHOGONAL",
+        "elk.spacing.nodeNode": "40",
+        "elk.layered.spacing.nodeNodeBetweenLayers": "56",
+        "elk.hierarchyHandling": "INCLUDE_CHILDREN",
+        "elk.padding": "[top=24,left=24,bottom=24,right=24]",
+      },
+      children,
+      edges: elkEdges,
+    };
+  }
+
+  function flattenElkNodes(node, absX, absY, out) {
+    const x = (node.x || 0) + absX;
+    const y = (node.y || 0) + absY;
+    out.push({
+      id: node.id,
+      x,
+      y,
+      width: node.width || 0,
+      height: node.height || 0,
+      labels: node.labels || [],
+      isCompound: !!(node.children && node.children.length),
+    });
+    (node.children || []).forEach((ch) => flattenElkNodes(ch, x, y, out));
+  }
+
+  function elkEdgePoints(edge) {
+    const sections = edge.sections || [];
+    const pts = [];
+    sections.forEach((sec) => {
+      if (sec.startPoint) pts.push(sec.startPoint);
+      (sec.bendPoints || []).forEach((b) => pts.push(b));
+      if (sec.endPoint) pts.push(sec.endPoint);
+    });
+    return pts;
+  }
+
+  function downloadBlob(filename, blob) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function exportHierarchySvg(svgEl, basename) {
+    if (!svgEl) return;
+    const clone = svgEl.cloneNode(true);
+    clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    const bg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    bg.setAttribute("x", "0");
+    bg.setAttribute("y", "0");
+    bg.setAttribute("width", "100%");
+    bg.setAttribute("height", "100%");
+    bg.setAttribute("fill", "#ffffff");
+    clone.insertBefore(bg, clone.firstChild);
+    const xml = new XMLSerializer().serializeToString(clone);
+    downloadBlob(
+      `${basename || "moex-hierarchy"}.svg`,
+      new Blob([xml], { type: "image/svg+xml;charset=utf-8" })
+    );
+  }
+
+  function exportHierarchyPng(svgEl, basename) {
+    if (!svgEl) return;
+    const clone = svgEl.cloneNode(true);
+    clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    const vb = (clone.getAttribute("viewBox") || "0 0 800 600").split(/\s+/).map(Number);
+    const w = vb[2] || 800;
+    const h = vb[3] || 600;
+    const bg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    bg.setAttribute("x", String(vb[0] || 0));
+    bg.setAttribute("y", String(vb[1] || 0));
+    bg.setAttribute("width", String(w));
+    bg.setAttribute("height", String(h));
+    bg.setAttribute("fill", "#ffffff");
+    clone.insertBefore(bg, clone.firstChild);
+    const xml = new XMLSerializer().serializeToString(clone);
+    const img = new Image();
+    const url = URL.createObjectURL(
+      new Blob([xml], { type: "image/svg+xml;charset=utf-8" })
+    );
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(w * 2));
+      canvas.height = Math.max(1, Math.round(h * 2));
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      canvas.toBlob((blob) => {
+        if (blob) downloadBlob(`${basename || "moex-hierarchy"}@2x.png`, blob);
+      }, "image/png");
+    };
+    img.onerror = () => URL.revokeObjectURL(url);
+    img.src = url;
+  }
+
+  function renderHierarchyVisualization(mod, section, opts) {
+    const selected =
+      opts && opts.selected instanceof Set ? opts.selected : new Set();
+    const hops = opts && opts.hops ? opts.hops : { OWL: 1, CDM: 1, LDM: 1 };
+    const onToggleSeed =
+      opts && typeof opts.onToggleSeed === "function" ? opts.onToggleSeed : null;
+
+    const root = document.createElement("div");
+    root.className = "hierarchy-viz";
+
+    const toolbar = document.createElement("div");
+    toolbar.className = "hierarchy-viz-toolbar section-toolbar";
+    const hopWrap = document.createElement("div");
+    hopWrap.className = "hierarchy-hop-controls chips";
+    ["OWL", "CDM", "LDM"].forEach((band) => {
+      const label = document.createElement("label");
+      label.className = "hierarchy-hop-label";
+      label.textContent = `${band} hop `;
+      const input = document.createElement("input");
+      input.type = "number";
+      input.min = "0";
+      input.max = "5";
+      input.value = String(hops[band] ?? 1);
+      input.dataset.band = band;
+      input.addEventListener("change", () => {
+        hops[band] = Math.max(0, Math.min(5, Number(input.value) || 0));
+        paint();
+      });
+      label.appendChild(input);
+      hopWrap.appendChild(label);
+    });
+    const btnSvg = document.createElement("button");
+    btnSvg.type = "button";
+    btnSvg.className = "erd-tool-btn";
+    btnSvg.textContent = "Скачать SVG";
+    const btnPng = document.createElement("button");
+    btnPng.type = "button";
+    btnPng.className = "erd-tool-btn";
+    btnPng.textContent = "Скачать PNG";
+    const status = document.createElement("span");
+    status.className = "muted";
+    toolbar.appendChild(hopWrap);
+    toolbar.appendChild(btnSvg);
+    toolbar.appendChild(btnPng);
+    toolbar.appendChild(status);
+
+    const canvas = document.createElement("div");
+    canvas.className = "hierarchy-viz-canvas";
+    root.appendChild(toolbar);
+    root.appendChild(canvas);
+
+    let svgEl = null;
+    const view = { panX: 0, panY: 0, scale: 1 };
+
+    btnSvg.addEventListener("click", () => exportHierarchySvg(svgEl, "moex-hierarchy"));
+    btnPng.addEventListener("click", () => exportHierarchyPng(svgEl, "moex-hierarchy"));
+
+    function paintEmpty(msg) {
+      canvas.replaceChildren();
+      svgEl = null;
+      const p = document.createElement("p");
+      p.className = "muted hierarchy-viz-empty";
+      p.textContent = msg;
+      canvas.appendChild(p);
+    }
+
+    async function paint() {
+      if (!selected.size) {
+        status.textContent = "";
+        paintEmpty("Отметьте сущности на вкладке «Связи», чтобы построить схему.");
+        return;
+      }
+      if (typeof ELK !== "function") {
+        paintEmpty("Движок раскладки elkjs не загружен.");
+        return;
+      }
+      const neigh = collectHierarchyNeighborhood(section, [...selected], hops);
+      if (!neigh.nodes.length) {
+        paintEmpty("Нет узлов в окрестности с текущими hop.");
+        return;
+      }
+      status.textContent = `${neigh.nodes.length} узлов · ${neigh.edges.length} рёбер`;
+      const elkGraph = buildElkHierarchyGraph(neigh.nodes, neigh.edges);
+      let laid;
+      try {
+        laid = await new ELK().layout(elkGraph);
+      } catch (err) {
+        paintEmpty(`Ошибка раскладки ELK: ${err?.message || err}`);
+        return;
+      }
+      const flat = [];
+      flattenElkNodes(laid, 0, 0, flat);
+      const byId = new Map(neigh.nodes.map((n) => [n.id, n]));
+      const width = Math.max(400, (laid.width || 800) + 40);
+      const height = Math.max(300, (laid.height || 600) + 40);
+
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("class", "hierarchy-scene");
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.setAttribute("width", "100%");
+      svg.setAttribute("height", "100%");
+
+      // Legend
+      const legend = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      legend.setAttribute("class", "hierarchy-legend");
+      [
+        ["OWL", "#e8eef7"],
+        ["CDM", "#eef6ee"],
+        ["LDM", "#f7f0e8"],
+      ].forEach(([name, fill], i) => {
+        const x = 16 + i * 88;
+        const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        r.setAttribute("x", String(x));
+        r.setAttribute("y", "8");
+        r.setAttribute("width", "16");
+        r.setAttribute("height", "16");
+        r.setAttribute("rx", "3");
+        r.setAttribute("fill", fill);
+        r.setAttribute("stroke", "#9aa8bc");
+        const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        t.setAttribute("x", String(x + 22));
+        t.setAttribute("y", "20");
+        t.setAttribute("class", "hierarchy-legend-label");
+        t.textContent = name;
+        legend.appendChild(r);
+        legend.appendChild(t);
+      });
+      svg.appendChild(legend);
+
+      const gWorld = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      gWorld.setAttribute("class", "hierarchy-world");
+
+      // Compounds (bands / clusters)
+      flat
+        .filter((n) => n.isCompound)
+        .forEach((n) => {
+          const isBand = String(n.id).startsWith("band:");
+          const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+          rect.setAttribute("x", String(n.x));
+          rect.setAttribute("y", String(n.y));
+          rect.setAttribute("width", String(n.width));
+          rect.setAttribute("height", String(n.height));
+          rect.setAttribute("rx", isBand ? "10" : "8");
+          rect.setAttribute(
+            "class",
+            isBand
+              ? `hierarchy-band hierarchy-band--${String(n.id).slice(5)}`
+              : "hierarchy-cluster"
+          );
+          gWorld.appendChild(rect);
+          const label = (n.labels && n.labels[0] && n.labels[0].text) || "";
+          if (label) {
+            const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            t.setAttribute("x", String(n.x + 12));
+            t.setAttribute("y", String(n.y + 18));
+            t.setAttribute("class", "hierarchy-band-label");
+            t.textContent = label;
+            gWorld.appendChild(t);
+          }
+        });
+
+      // Edges
+      (laid.edges || []).forEach((edge) => {
+        const pts = elkEdgePoints(edge);
+        if (pts.length < 2) return;
+        const d = pts
+          .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`)
+          .join(" ");
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", d);
+        path.setAttribute("class", "hierarchy-edge");
+        path.setAttribute("fill", "none");
+        gWorld.appendChild(path);
+        const rel =
+          edge.labels && edge.labels[0] && edge.labels[0].text
+            ? String(edge.labels[0].text)
+            : "";
+        if (rel && pts.length >= 2) {
+          const mid = pts[Math.floor(pts.length / 2)];
+          const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          t.setAttribute("x", String(mid.x));
+          t.setAttribute("y", String(mid.y - 4));
+          t.setAttribute("class", "hierarchy-edge-label");
+          t.textContent = rel.length > 28 ? rel.slice(0, 27) + "…" : rel;
+          gWorld.appendChild(t);
+        }
+      });
+
+      // Leaf nodes
+      flat
+        .filter((n) => !n.isCompound)
+        .forEach((n) => {
+          const meta = byId.get(n.id) || {};
+          const layer = String(meta.layer || "CDM").toUpperCase();
+          const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+          g.setAttribute("class", "hierarchy-node");
+          g.dataset.nodeId = n.id;
+          if (selected.has(n.id)) g.classList.add("is-seed");
+          const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+          rect.setAttribute("x", String(n.x));
+          rect.setAttribute("y", String(n.y));
+          rect.setAttribute("width", String(n.width));
+          rect.setAttribute("height", String(n.height));
+          rect.setAttribute("rx", "6");
+          rect.setAttribute(
+            "class",
+            `hierarchy-node-rect hierarchy-node-rect--${
+              layer === "OWL" || layer === "LDM" ? layer : "CDM"
+            }`
+          );
+          const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          t.setAttribute("x", String(n.x + n.width / 2));
+          t.setAttribute("y", String(n.y + n.height / 2 + 4));
+          t.setAttribute("text-anchor", "middle");
+          t.setAttribute("class", "hierarchy-node-label");
+          const label = meta.title || meta.name || n.id;
+          t.textContent =
+            label.length > 32 ? label.slice(0, 31) + "…" : label;
+          g.appendChild(rect);
+          g.appendChild(t);
+          g.style.cursor = "pointer";
+          g.addEventListener("click", (ev) => {
+            ev.stopPropagation();
+            if (onToggleSeed) onToggleSeed(n.id);
+            else {
+              if (selected.has(n.id)) selected.delete(n.id);
+              else selected.add(n.id);
+              paint();
+            }
+          });
+          gWorld.appendChild(g);
+        });
+
+      svg.appendChild(gWorld);
+      canvas.replaceChildren();
+      canvas.appendChild(svg);
+      svgEl = svg;
+
+      // Simple pan/zoom
+      let dragging = false;
+      let lastX = 0;
+      let lastY = 0;
+      function applyTransform() {
+        gWorld.setAttribute(
+          "transform",
+          `translate(${view.panX},${view.panY}) scale(${view.scale})`
+        );
+      }
+      applyTransform();
+      svg.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const factor = e.deltaY < 0 ? 1.08 : 0.92;
+        view.scale = Math.min(2.5, Math.max(0.35, view.scale * factor));
+        applyTransform();
+      }, { passive: false });
+      svg.addEventListener("pointerdown", (e) => {
+        if (e.button !== 0) return;
+        dragging = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        svg.classList.add("is-panning");
+        svg.setPointerCapture(e.pointerId);
+      });
+      svg.addEventListener("pointermove", (e) => {
+        if (!dragging) return;
+        view.panX += e.clientX - lastX;
+        view.panY += e.clientY - lastY;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        applyTransform();
+      });
+      svg.addEventListener("pointerup", () => {
+        dragging = false;
+        svg.classList.remove("is-panning");
+      });
+    }
+
+    // Expose repaint for shared selection updates when tab already mounted.
+    root._hierarchyRepaint = paint;
+    paint();
+    return root;
+  }
+
   function renderGlossary(mod, section) {
     const root = document.createElement("div");
     root.className = "glossary-section-tabs";
     const n = (section.items || []).length;
+    const scope = (section.attributes || {}).glossary_scope || "";
+
+    if (scope === "hierarchy") {
+      const sharedSelected = new Set();
+      const hops = { OWL: 1, CDM: 1, LDM: 1 };
+      let vizRoot = null;
+      mountTabs(
+        root,
+        [
+          {
+            id: "glossary-relations",
+            label: "Связи",
+            count: n,
+            render(panel) {
+              panel.appendChild(
+                renderGlossaryRelations(mod, section, {
+                  selected: sharedSelected,
+                  onSelectionChange() {
+                    if (vizRoot && vizRoot._hierarchyRepaint) {
+                      vizRoot._hierarchyRepaint();
+                    }
+                  },
+                })
+              );
+            },
+          },
+          {
+            id: "hierarchy-visualization",
+            label: "Визуализация",
+            render(panel) {
+              vizRoot = renderHierarchyVisualization(mod, section, {
+                selected: sharedSelected,
+                hops,
+                onToggleSeed(id) {
+                  if (sharedSelected.has(id)) sharedSelected.delete(id);
+                  else sharedSelected.add(id);
+                  if (vizRoot && vizRoot._hierarchyRepaint) {
+                    vizRoot._hierarchyRepaint();
+                  }
+                },
+              });
+              panel.appendChild(vizRoot);
+            },
+          },
+        ],
+        { initial: "glossary-relations" }
+      );
+      return root;
+    }
+
     mountTabs(
       root,
       [

@@ -1,0 +1,9 @@
+conformance_status: draft-conformant
+semantic_assertion_status: derived-view
+implementation_profile: dams-data-model
+dams_model_level: hierarchy-view
+publication_profile: dams-hierarchy-view
+notes: >
+  Derived cross-implementation hierarchy view (OWL / CDM / LDM). Not a
+  ModelPackage SoT; body regenerated at publication build from enterprise
+  and solution implementations.

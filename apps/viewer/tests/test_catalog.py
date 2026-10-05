@@ -104,6 +104,7 @@ def test_repo_catalog_passes_validation_with_modules():
         "moex:module:fibo-profile",
         "moex:module:fibo-application",
         "moex:module:enterprise-conceptual",
+        "moex:module:hierarchy",
         "moex:module:trading-solution",
         "moex:module:mdm-solution",
         "moex:module:ucd-solution",
@@ -138,6 +139,16 @@ def test_repo_catalog_includes_enterprise_conceptual():
         "moex:module:enterprise-conceptual"
     )
     assert by_id["moex-enterprise-conceptual-model"].conforms_to == "moex-dams"
+
+
+def test_repo_catalog_includes_hierarchy_view():
+    repo = Path(__file__).resolve().parents[3]
+    catalog = load_architecture_catalog(repo)
+    assert catalog is not None
+    by_id = {n.id: n for n in catalog.nodes}
+    assert by_id["moex-hierarchy"].module_id == "moex:module:hierarchy"
+    assert by_id["moex-hierarchy"].conforms_to == "moex-dams"
+    assert by_id["moex-hierarchy"].contract_exempt is True
 
 
 def test_repo_catalog_includes_fibo_application_impl():

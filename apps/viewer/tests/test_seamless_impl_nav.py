@@ -532,6 +532,13 @@ def test_repo_dams_impl_folders_group_solutions_and_projects() -> None:
     ]
     assert "moex-dsp" in top_ids
     assert "moex-enterprise-conceptual-model" in top_ids
+    assert "moex-hierarchy" in top_ids
+    hierarchy = next(c for c in impls.children if c.id == "moex-hierarchy")
+    assert [c.title for c in hierarchy.children] == [
+        "Overview",
+        "Entity hierarchy",
+        "Артефакты",
+    ]
     ecm = next(c for c in impls.children if c.id == "moex-enterprise-conceptual-model")
     assert [c.title for c in ecm.children] == [
         "Overview",

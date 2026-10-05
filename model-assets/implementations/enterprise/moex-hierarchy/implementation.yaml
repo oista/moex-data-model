@@ -1,0 +1,20 @@
+# SpecificationImplementation descriptor — MOEX hierarchy view
+id: moex:implementation:moex-hierarchy:0.1
+name: moex.hierarchy
+description: >
+  Derived OWL/CDM/LDM entity hierarchy view across DAMS implementations.
+  Not a solution model and not the enterprise conceptual SoT.
+version: "0.1.0"
+revision: "0.1.0"
+content_digest: "sha256:preview-moex-hierarchy"
+conforms_to:
+  specification_id: moex:specification:moex-dams:0.1
+  specification_version: "0.1.0"
+  specification_revision: "0.1.0"
+implementation_kind: linkml
+implementation_profile: dams-data-model
+dams_model_level: hierarchy-view
+lifecycle_status: draft
+body_ref: moex-hierarchy-model.yaml
+implementation_body: moex-hierarchy-model.yaml
+specification_envelope: ../../../specifications/moex-dams/0.1/specification.yaml

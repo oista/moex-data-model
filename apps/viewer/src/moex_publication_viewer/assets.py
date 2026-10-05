@@ -99,11 +99,20 @@ def assemble_css() -> str:
 
 def assemble_js() -> str:
     parts: list[str] = []
+    # elkjs layout engine (vendored; no CDN) — before viewer.js so ELK is global.
+    elk_js = STATIC / "vendor" / "elk.bundled.js"
+    if elk_js.is_file():
+        parts.append(
+            f"/* === vendor/elk.bundled.js (elkjs, EPL-2.0) === */\n"
+            f"{elk_js.read_text(encoding='utf-8')}"
+        )
+    layered = False
     for name in JS_ORDER:
         path = JS_DIR / name
         if path.is_file():
             parts.append(f"/* === {name} === */\n{path.read_text(encoding='utf-8')}")
-    if not parts:
+            layered = True
+    if not layered:
         legacy = STATIC / "viewer.js"
         if legacy.is_file():
             parts.append(legacy.read_text(encoding="utf-8"))

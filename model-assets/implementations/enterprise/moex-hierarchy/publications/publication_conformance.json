@@ -1,0 +1,10 @@
+{
+  "id": "pubconf:moex:module:hierarchy:dams-hierarchy-view",
+  "title": "moex.hierarchy",
+  "description": "Publication contract assessment for dams-hierarchy-view against moex-dams@0.1",
+  "implementation_ref": "moex:module:hierarchy",
+  "reference_specification_ref": "moex-dams@0.1",
+  "profile_ref": "dams-hierarchy-view",
+  "overall_publication_status": "draft-conformant",
+  "requirement_results": []
+}

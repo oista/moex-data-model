@@ -1,0 +1,78 @@
+# Derived hierarchy view publication (OWL / CDM / LDM)
+module_id: moex:module:hierarchy
+kind: publication_module
+version: "1"
+order: 109
+icon: "🕸"
+title: moex.hierarchy
+description: >
+  Обобщённая иерархия сущностей DAMS (OWL → CDM → LDM) без атрибутов и PDM.
+  Производный вид поверх enterprise и моделей ИТ-решений.
+profile: implementation
+implementation_profile: dams-data-model
+dams_model_level: hierarchy-view
+conformance_status: draft-conformant
+implements:
+  - specification_ref: moex-dams@0.1
+    profile_ref: dams-hierarchy-view
+    conformance_target: draft
+sections:
+  - id: overview
+    title: Overview
+    kind: overview
+    type: markdown-doc
+    satisfies:
+      - dams:overview
+      - implementation:overview
+    source:
+      format: markdown
+      path: README.md
+
+  - id: conformance
+    title: Conformance
+    kind: conformance
+    type: key-value
+    satisfies:
+      - dams:conformance
+      - implementation:conformance
+      - dams:declared-binding
+    source:
+      format: yaml
+      path: publications/conformance.yaml
+
+  - id: entity-hierarchy
+    title: Entity hierarchy
+    kind: glossary
+    type: glossary
+    description: >
+      Отбор сущностей и послойная визуализация связей OWL / CDM / LDM.
+    source:
+      format: yaml
+      path: moex-hierarchy-model.yaml
+      select: conceptual_entities
+    key_column: element_id
+    filterable:
+      - model_level
+      - solution
+      - kind
+    # Items and hierarchy_graph are injected at build (hierarchy_projection).
+
+  - id: artifact-model-body
+    title: Полная модель moex
+    description: Сгенерированный YAML обобщённой модели (сущности и связи, без атрибутов/PDM).
+    kind: source
+    type: source-file
+    satisfies:
+      - dams:source
+    source:
+      format: yaml
+      path: moex-hierarchy-model.yaml
+
+  - id: artifact-envelope
+    title: Конверт реализации
+    description: SpecificationImplementation envelope (conforms_to, body_ref, provenance).
+    kind: source
+    type: source-file
+    source:
+      format: yaml
+      path: implementation.yaml

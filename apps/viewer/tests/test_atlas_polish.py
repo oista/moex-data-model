@@ -89,6 +89,11 @@ def test_js_glossary_section_tabs_and_term_links():
     assert 'label: "Список"' in gloss
     assert 'label: "Иерархия"' in gloss
     assert 'label: "Связи"' in gloss
+    assert 'scope === "hierarchy"' in gloss
+    assert 'label: "Визуализация"' in gloss
+    assert "function renderHierarchyVisualization" in JS
+    assert "function collectHierarchyNeighborhood" in JS
+    assert ".hierarchy-viz" in assemble_css()
     assert "Отметьте термины сверху, чтобы увидеть связанные." in JS
     assert "Нет ассоциативных связей у выбранных терминов." in JS
     assert "Все связанные термины уже входят в выборку." in JS

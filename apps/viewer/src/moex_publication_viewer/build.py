@@ -23,6 +23,10 @@ from moex_publication_viewer.normalizers.implementation_glossary import (
     IMPLEMENTATIONS_GLOSSARY_NAV_ID,
     build_implementation_glossary_section,
 )
+from moex_publication_viewer.normalizers.hierarchy_projection import (
+    HIERARCHY_CATALOG_ID,
+    enrich_dams_hierarchy_module,
+)
 from moex_publication_viewer.normalizers.spec_glossary_tree import (
     OVERVIEW_GLOSSARY_ID,
     build_ontology_glossary_tree,
@@ -54,6 +58,7 @@ _DAMS_IMPL_ROOT_IDS = frozenset(
     {
         "moex-dsp",
         "moex-enterprise-conceptual-model",
+        HIERARCHY_CATALOG_ID,
     }
 )
 # Nested under «ИТ-решения»; everything else (except root) → «Проекты».
@@ -270,6 +275,7 @@ _SECTION_ID_NAV_GLYPH: dict[str, str] = {
     "relation-terms": "glossary",
     "vocabularies": "glossary",
     "implementations-glossary": "glossary",
+    "entity-hierarchy": "glossary",
     "artifact-model-body": "source_file",
     "artifact-envelope": "source_file",
     "artifact-relation-terms": "source_file",
@@ -327,6 +333,98 @@ _ENTERPRISE_CONCEPTUAL_NAV_ARTIFACT_IDS = (
     "artifact-vocabularies",
     "artifact-envelope",
 )
+
+# moex.hierarchy → Overview / Entity hierarchy / Артефакты
+_HIERARCHY_NAV_REQUIRED_SECTION_IDS = frozenset(
+    {
+        "overview",
+        "conformance",
+        "entity-hierarchy",
+        "artifact-model-body",
+    }
+)
+_HIERARCHY_NAV_OVERVIEW_IDS = ("overview", "conformance")
+_HIERARCHY_NAV_ENTITY_IDS = ("entity-hierarchy",)
+_HIERARCHY_NAV_ARTIFACT_IDS = ("artifact-model-body", "artifact-envelope")
+
+
+def group_hierarchy_impl_nav(
+    catalog_impl_id: str,
+    leaves: list[PublicationItem],
+) -> list[PublicationItem]:
+    """Nest moex.hierarchy section_refs under Overview / Entity hierarchy / Артефакты."""
+    by_sid: dict[str, PublicationItem] = {}
+    for leaf in leaves:
+        sid = (leaf.attributes or {}).get("section_id")
+        if isinstance(sid, str) and sid:
+            by_sid[sid] = leaf
+    if not _HIERARCHY_NAV_REQUIRED_SECTION_IDS.issubset(by_sid):
+        return leaves
+
+    claimed: set[str] = set()
+
+    def take(ids: tuple[str, ...]) -> list[PublicationItem]:
+        out: list[PublicationItem] = []
+        for sid in ids:
+            leaf = by_sid.get(sid)
+            if leaf is not None:
+                out.append(leaf)
+                claimed.add(sid)
+        return out
+
+    overview_kids = take(_HIERARCHY_NAV_OVERVIEW_IDS)
+    overview = PublicationItem(
+        id=f"implnav:{catalog_impl_id}:group:overview",
+        title="Overview",
+        description="Overview and conformance for the hierarchy view.",
+        attributes={
+            "kind": "group",
+            "nav_group": "overview",
+            "member_ids": [c.id for c in overview_kids],
+        },
+        children=overview_kids,
+    )
+    entity_kids = take(_HIERARCHY_NAV_ENTITY_IDS)
+    for leaf in entity_kids:
+        attrs = dict(leaf.attributes or {})
+        attrs["nav_glyph"] = "glossary"
+        leaf.attributes = attrs
+    entity = _impl_folder(
+        folder_id=f"implnav:{catalog_impl_id}:group:entity-hierarchy",
+        title="Entity hierarchy",
+        description="Entity relations picker and layered OWL/CDM/LDM visualization.",
+        children=entity_kids,
+        extra_attrs={
+            "nav_glyph": "glossary",
+            "nav_group": "entity-hierarchy",
+        },
+    )
+    artifact_kids = take(_HIERARCHY_NAV_ARTIFACT_IDS)
+    for leaf in artifact_kids:
+        attrs = dict(leaf.attributes or {})
+        attrs["nav_glyph"] = "source_file"
+        leaf.attributes = attrs
+    leftovers = [
+        leaf
+        for leaf in leaves
+        if (leaf.attributes or {}).get("section_id") not in claimed
+    ]
+    grouped: list[PublicationItem] = [overview, entity]
+    if artifact_kids:
+        grouped.append(
+            _impl_folder(
+                folder_id=f"implnav:{catalog_impl_id}:group:artifacts",
+                title="Артефакты",
+                description="Generated hierarchy YAML and implementation envelope.",
+                children=artifact_kids,
+                extra_attrs={
+                    "nav_glyph": "source_file",
+                    "nav_group": "artifacts",
+                },
+            )
+        )
+    grouped.extend(leftovers)
+    return grouped
 
 
 def group_enterprise_conceptual_impl_nav(
@@ -573,6 +671,9 @@ def impl_section_nav_children(
                 attributes=attrs,
             )
         )
+    grouped = group_hierarchy_impl_nav(catalog_impl_id, leaves)
+    if grouped is not leaves:
+        return grouped
     grouped = group_enterprise_conceptual_impl_nav(catalog_impl_id, leaves)
     if grouped is not leaves:
         return grouped
@@ -1144,6 +1245,8 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
         check_catalog_publication_contract_gate(catalog, modules, root)
     enrich_dams_explorer_implementations(modules, catalog)
     enrich_dams_implementation_glossary(modules, catalog)
+    if catalog is not None:
+        enrich_dams_hierarchy_module(modules, catalog.nodes)
     enrich_fibo_explorer_classes(modules)
     enrich_fibo_explorer_implementations(modules, catalog)
     enrich_linkml_glossary_sections(modules)

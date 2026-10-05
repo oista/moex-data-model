@@ -239,6 +239,13 @@ def test_repo_golden_three_modules():
     ]
     assert "moex-dsp" in impl_ids
     assert "moex-enterprise-conceptual-model" in impl_ids
+    assert "moex-hierarchy" in impl_ids
+    hierarchy = next(c for c in top if c["id"] == "moex-hierarchy")
+    assert [c["title"] for c in hierarchy.get("children") or []] == [
+        "Overview",
+        "Entity hierarchy",
+        "Артефакты",
+    ]
     glossary_nav = top[0]
     assert (glossary_nav.get("attributes") or {}).get("section_id") == (
         "implementations-glossary"

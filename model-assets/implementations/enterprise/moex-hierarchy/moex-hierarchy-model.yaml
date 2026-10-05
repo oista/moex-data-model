@@ -1,0 +1,1475 @@
+element_id: dams:model/hierarchy/0.1.0
+api_version: dams.moex/v0.1
+model_version: 0.1.0
+implementation_scope: enterprise
+name: moex.hierarchy
+title: moex.hierarchy
+description: Derived hierarchy projection across DAMS implementations (entities and relationships only;
+  no attributes / physical).
+conceptual_entities:
+- element_id: dams:concept/AccountingSystem
+  name: AccountingSystem
+  title: АБС
+  description: Автоматизированная банковская / учётная система (АБС).
+- element_id: dams:concept/Act
+  name: Act
+  title: Акт
+  description: Акт (документальный факт). В ER-черновике — тонкая заглушка без атрибутов; концепт без
+    PK/FK-колонок (ADR-029).
+- element_id: dams:concept/Asset
+  name: Asset
+  title: Актив
+  description: Базовый актив / underlying в торговом и риск-контексте.
+- element_id: dams:concept/Benchmark
+  name: Benchmark
+  title: Бенчмарк
+  description: Бенчмарк / эталонный индикатор в торговом контуре.
+- element_id: dams:concept/Budget
+  name: Budget
+  title: Бюджет
+  description: Бюджет, связанный с проектом.
+- element_id: dams:concept/Currency
+  name: Currency
+  title: Валюта
+  description: Валюта номинала / расчётов (из FK на счетах пользователя).
+- element_id: dams:concept/SalesFunnel
+  name: SalesFunnel
+  title: Воронка продаж
+  description: Воронка продаж / CRM-воронка. Атрибуты черновика (дата рождения) игнорируются — только
+    концепт.
+- element_id: dams:concept/AssetGroup
+  name: AssetGroup
+  title: Группа активов
+  description: Группировка активов для классификации / риск-параметров.
+- element_id: dams:concept/CorporateGroup
+  name: CorporateGroup
+  title: Группа компаний
+  description: Группа компаний / холдинговая структура для членства LegalEntity.
+- element_id: dams:concept/Department
+  name: Department
+  title: Департамент
+  description: Организационное подразделение; может относиться к группе компаний.
+- element_id: dams:concept/Deposit
+  name: Deposit
+  title: Депозит
+  description: Депозит; в черновике связан со счётом.
+- element_id: dams:concept/ContractAmendment
+  name: ContractAmendment
+  title: Дополнительное соглашение
+  description: Доп. соглашение к договору (Agreement); может быть связано с сотрудником.
+- element_id: dams:concept/Admission
+  name: Admission
+  title: Допуск к торгам
+  description: Решение/факт допуска LegalEntity к площадке или секции с lifecycle-статусом. MOEX-local
+    extension concept (no-mapping к FIBO по умолчанию).
+- element_id: dams:concept/Income
+  name: Income
+  title: Доход
+  description: Доходная статья / факт дохода по ЦФО и группе компаний.
+- element_id: dams:concept/UnifiedLimit
+  name: UnifiedLimit
+  title: Единый лимит
+  description: Единый лимит участника по расчётному коду / рынку.
+- element_id: dams:concept/Task
+  name: Task
+  title: Задача
+  description: Задача проекта.
+- element_id: dams:concept/Order
+  name: Order
+  title: Заявка
+  description: Заявка ТКС на инструмент от участника торгов.
+- element_id: dams:concept/OrganizationIdentifier
+  name: OrganizationIdentifier
+  title: Идентификатор организации
+  description: Идентификатор организации (LEI, ИНН, ОГРН, внутренний код участника и др.). Значения типов
+    — MOEX-local controlled vocabulary, не FIBO terms.
+- element_id: dams:concept/Instrument
+  name: Instrument
+  title: Инструмент
+  description: Торговый инструмент, основанный на активе и связанный с эмитентом.
+- element_id: dams:concept/InformationSystem
+  name: InformationSystem
+  title: Инфо-система
+  description: Информационная система / приложение корпоративного контура.
+- element_id: dams:concept/CalendarDay
+  name: CalendarDay
+  title: Календарный день
+  description: День торгового календаря.
+- element_id: dams:concept/Client
+  name: Client
+  title: Клиент
+  description: Клиент биржевого/торгового контура со своим идентификатором. Может относиться к Person
+    и/или LegalEntity (XOR на логическом уровне; обе связи концептуально необязательны — не AND depends_on).
+- element_id: dams:concept/Counterparty
+  name: Counterparty
+  title: Контрагент
+  description: Роль LegalEntity как контрагента по договорам и платежам. Reified role, не подкласс LegalEntity.
+- element_id: dams:concept/CorporateAction
+  name: CorporateAction
+  title: Корпоративное событие
+  description: Корпоративное событие по инструменту / эмитенту.
+- element_id: dams:concept/Curve
+  name: Curve
+  title: Кривая
+  description: Кривая (доходности / ставок и т.п.).
+- element_id: dams:concept/CouponPayment
+  name: CouponPayment
+  title: Купонная выплата
+  description: Купонная выплата по инструменту; может относиться к корпоративному событию.
+- element_id: dams:concept/SubledgerAccount
+  name: SubledgerAccount
+  title: Лицевой счёт
+  description: Лицевой счёт (субсчёт) при счёте АБС.
+- element_id: dams:concept/TradingLogin
+  name: TradingLogin
+  title: Логин ТКС
+  description: Логин участника торгов; связан с типом подключения.
+- element_id: dams:concept/MarketingCampaign
+  name: MarketingCampaign
+  title: Маркетинговая кампания
+  description: Маркетинговая кампания.
+- element_id: dams:concept/RoleAssignment
+  name: RoleAssignment
+  title: Назначение роли
+  description: Ассоциация роли и пользователя (Состав ролей).
+- element_id: dams:concept/Collateral
+  name: Collateral
+  title: Обеспечение участника
+  description: Обеспечение участника торгов активами на рынке.
+- element_id: dams:concept/Organization
+  name: Organization
+  title: Организация
+  description: Организация как бизнес-актор (включая юридические лица и иные организационные формы в корпоративном
+    контексте МОЕХ).
+- element_id: dams:concept/OpenPosition
+  name: OpenPosition
+  title: Открытая позиция
+  description: Открытая позиция участника по инструменту.
+- element_id: dams:concept/Payment
+  name: Payment
+  title: Платёж
+  description: Платёж по продукту с участием клиента и/или контрагента.
+- element_id: dams:concept/SupportingDocument
+  name: SupportingDocument
+  title: Подтверждающий документ
+  description: Документ/запись, подтверждающая допуск, действие или соглашение.
+- element_id: dams:concept/User
+  name: User
+  title: Пользователь
+  description: Учётная запись пользователя приложений (IAM). Связь с инфо-системами отложена.
+- element_id: dams:concept/Portfolio
+  name: Portfolio
+  title: Портфель
+  description: Портфель активов, связанный со счётом АБС.
+- element_id: dams:concept/JournalEntry
+  name: JournalEntry
+  title: Проводка
+  description: Бухгалтерская / учётная проводка по счёту АБС.
+- element_id: dams:concept/MarketMakingProgram
+  name: MarketMakingProgram
+  title: Программа маркет-мейкинга
+  description: Программа маркет-мейкинга (ММ).
+- element_id: dams:concept/Sale
+  name: Sale
+  title: Продажа
+  description: Факт продажи продукта клиенту.
+- element_id: dams:concept/Product
+  name: Product
+  title: Продукт
+  description: Коммерческий продукт биржи / группы, связанный с услугой и тарифом.
+- element_id: dams:concept/Project
+  name: Project
+  title: Проект
+  description: Проект / инициатива (управление работами и бюджетом).
+- element_id: dams:concept/AssetPool
+  name: AssetPool
+  title: Пул активов
+  description: Пул активов (состав через AssetPoolMembership).
+- element_id: dams:concept/Expense
+  name: Expense
+  title: Расход
+  description: Расходная статья / факт расхода по ЦФО и группе компаний.
+- element_id: dams:concept/SettlementCode
+  name: SettlementCode
+  title: Расчётный код
+  description: Расчётный код участника торгов. Специализация AccountRelationship (parent_concept_ref),
+    characteristic of TradingParticipation.
+  parent_concept_ref: dams:concept/AccountRelationship
+- element_id: dams:concept/RegistrationAction
+  name: RegistrationAction
+  title: Регистрационное действие
+  description: Действие, меняющее lifecycle организации или допуска (registration, suspension, termination,
+    …). MOEX-local extension concept.
+- element_id: dams:concept/TradingMode
+  name: TradingMode
+  title: Режим торгов
+  description: Режим торгов (не TradingSection и не TradingVenue). Определяет правила исполнения заявок
+    и сделок.
+- element_id: dams:concept/Rating
+  name: Rating
+  title: Рейтинг
+  description: Рейтинг юридического лица.
+- element_id: dams:concept/AssetRiskParameter
+  name: AssetRiskParameter
+  title: Риск-параметр актива
+  description: Риск-параметр / характеристика актива на дату.
+- element_id: dams:concept/Role
+  name: Role
+  title: Роль
+  description: Роль доступа / полномочия в прикладных системах (без привязки к инфо-системе в этой волне).
+- element_id: dams:concept/Trade
+  name: Trade
+  title: Сделка
+  description: Сделка ТКС — самостоятельная транзакционная сущность (primary), несмотря на FK на участника/инструмент
+    в ER-черновике.
+- element_id: dams:concept/LoginEvent
+  name: LoginEvent
+  title: Событие логина
+  description: Событие логина ТКС; зависит от TradingLogin.
+- element_id: dams:concept/Agreement
+  name: Agreement
+  title: Соглашение
+  description: Договор или соглашение, регулирующее участие / допуск.
+- element_id: dams:concept/AssetPoolMembership
+  name: AssetPoolMembership
+  title: Состав пула активов
+  description: Ассоциация актива и пула активов (M:N).
+- element_id: dams:concept/Employee
+  name: Employee
+  title: Сотрудник
+  description: Роль Person как сотрудника (reified). Не подкласс Person. Связан со штатной единицей.
+- element_id: dams:concept/LedgerAccount
+  name: LedgerAccount
+  title: Счёт АБС
+  description: Счёт в АБС / главной книге.
+- element_id: dams:concept/UserLedgerLink
+  name: UserLedgerLink
+  title: Счёт пользователя
+  description: Связь пользователя приложений со счётом АБС (associative).
+- element_id: dams:concept/AccountRelationship
+  name: AccountRelationship
+  title: Счётное отношение
+  description: Учётное/счётное отношение организации или участия (trading, clearing, settlement и др.).
+    MOEX-local extension concept.
+- element_id: dams:concept/Tariff
+  name: Tariff
+  title: Тариф
+  description: Тариф / прайс для продукта или услуги.
+- element_id: dams:concept/ConnectionType
+  name: ConnectionType
+  title: Тип подключения
+  description: Тип подключения / логина к торговой системе.
+- element_id: dams:concept/TradingVenue
+  name: TradingVenue
+  title: Торговая площадка
+  description: Торговая площадка / рынок, к которому относится допуск. Принадлежит торговой системе (TradingSystem);
+    не путать с режимом торгов (TradingMode) и секцией (TradingSection).
+- element_id: dams:concept/TradingSection
+  name: TradingSection
+  title: Торговая секция
+  description: Торговая секция / сегмент площадки (MOEX-local extension concept).
+- element_id: dams:concept/TradingSession
+  name: TradingSession
+  title: Торговая сессия
+  description: Сессия торгов на площадке / системе в календарный день.
+- element_id: dams:concept/TradingSystem
+  name: TradingSystem
+  title: Торговая система
+  description: Торговая система / ТКС, на которой ведутся рынки и сессии.
+- element_id: dams:concept/TradingCalendar
+  name: TradingCalendar
+  title: Торговый календарь
+  description: Календарь торговых дней / сессий.
+- element_id: dams:concept/TradingAccount
+  name: TradingAccount
+  title: Торговый счёт
+  description: Торговый счёт ТКС при расчётном коде. Специализация AccountRelationship.
+  parent_concept_ref: dams:concept/AccountRelationship
+- element_id: dams:concept/TradingTerminal
+  name: TradingTerminal
+  title: Торговый терминал
+  description: Торговый терминал. В ER-черновике поля похожи на сделку — в КМД только концепт и опциональные
+    связи.
+- element_id: dams:concept/Obligation
+  name: Obligation
+  title: Требования и обязательства
+  description: Требования и обязательства участника по активу / расчётному коду.
+- element_id: dams:concept/EmploymentContract
+  name: EmploymentContract
+  title: Трудовой договор
+  description: Трудовой договор сотрудника. Специализация Agreement (parent_concept_ref).
+  parent_concept_ref: dams:concept/Agreement
+- element_id: dams:concept/TimeEntry
+  name: TimeEntry
+  title: Трудозатрата
+  description: Учёт трудозатрат сотрудника по задаче (associative).
+- element_id: dams:concept/Service
+  name: Service
+  title: Услуга
+  description: Услуга, оказываемая в рамках коммерческого каталога.
+- element_id: dams:concept/CampaignMembership
+  name: CampaignMembership
+  title: Участие в кампании
+  description: Ассоциация маркетинговой кампании и пользователя (Состав компаний в drawio).
+- element_id: dams:concept/MarketMakingParticipation
+  name: MarketMakingParticipation
+  title: Участие в программе ММ
+  description: Ассоциация участия в торгах и программы маркет-мейкинга.
+- element_id: dams:concept/TradingParticipation
+  name: TradingParticipation
+  title: Участие в торгах
+  description: 'Reified отношение: LegalEntity участвует в торгах на площадке/секции с собственным статусом,
+    допуском, договором, счетами и документами. Не моделируется как подкласс LegalEntity (одна организация
+    — много участий).'
+- element_id: dams:concept/ClientAccount
+  name: ClientAccount
+  title: Учётная запись клиента
+  description: 'Учётная запись клиента, через которую участие в торгах связывается с Client (drawio: Учетные
+    записи клиентов).'
+- element_id: dams:concept/Person
+  name: Person
+  title: Физическое лицо
+  description: Физическое лицо как бизнес-актор (sibling Organization; общий Party отложен). Не подкласс
+    Organization.
+- element_id: dams:concept/FinancialReport
+  name: FinancialReport
+  title: Финансовая отчётность
+  description: Финансовая отчётность юридического лица.
+- element_id: dams:concept/CostCenter
+  name: CostCenter
+  title: ЦФО
+  description: Центр финансовой ответственности.
+- element_id: dams:concept/ClearingPositionDetail
+  name: ClearingPositionDetail
+  title: ЧПД
+  description: 'ЧПД (черновик: счётоподобная сущность). Тонкий концепт; опциональная связь со счётом АБС.'
+- element_id: dams:concept/StaffPosition
+  name: StaffPosition
+  title: Штатная единица
+  description: Позиция штатного расписания в департаменте.
+- element_id: dams:concept/Issuer
+  name: Issuer
+  title: Эмитент
+  description: Роль LegalEntity как эмитента инструментов. Reified role, не подкласс LegalEntity (одна
+    организация — много эмиссионных контекстов).
+- element_id: dams:concept/LegalEntity
+  name: LegalEntity
+  title: Юридическое лицо
+  description: Юридическое лицо / формальная организация, субъект прав и обязанностей в регуляторном и
+    биржевом контексте.
+  parent_concept_ref: dams:concept/Organization
+  external_class_refs:
+  - external_class_ref_id: dams:extref/LegalEntity/fibo-LegalPerson
+    target_ref: https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
+    match_kind: close
+    source_kind: ontology
+logical_entities:
+- element_id: dams:logical/esed/attorney_check_info
+  name: attorney_check_info
+  title: attorney_check_info
+  description: attorney_check_info
+  conceptual_entity_refs:
+  - dams:concept/attorney_check_info
+- element_id: dams:logical/esed/common_state
+  name: common_state
+  title: common_state
+  description: common_state
+  conceptual_entity_refs:
+  - dams:concept/common_state
+- element_id: dams:logical/esed/common_type
+  name: common_type
+  title: common_type
+  description: common_type
+  conceptual_entity_refs:
+  - dams:concept/common_type
+- element_id: dams:logical/esed/division
+  name: division
+  title: division
+  description: division
+  conceptual_entity_refs:
+  - dams:concept/division
+- element_id: dams:logical/esed/document
+  name: document
+  title: document
+  description: document
+  conceptual_entity_refs:
+  - dams:concept/document
+- element_id: dams:logical/esed/employee
+  name: employee
+  title: employee
+  description: employee
+  conceptual_entity_refs:
+  - dams:concept/employee
+- element_id: dams:logical/esed/file
+  name: file
+  title: file
+  description: file
+  conceptual_entity_refs:
+  - dams:concept/file
+- element_id: dams:logical/esed/file_binary
+  name: file_binary
+  title: file_binary
+  description: file_binary
+  conceptual_entity_refs:
+  - dams:concept/file_binary
+- element_id: dams:logical/esed/instance
+  name: instance
+  title: instance
+  description: instance
+  conceptual_entity_refs:
+  - dams:concept/instance
+- element_id: dams:logical/esed/organization
+  name: organization
+  title: organization
+  description: organization
+  conceptual_entity_refs:
+  - dams:concept/organization
+- element_id: dams:logical/esed/organization_employee
+  name: organization_employee
+  title: organization_employee
+  description: organization_employee
+  conceptual_entity_refs:
+  - dams:concept/organization_employee
+- element_id: dams:logical/esed/universal_item
+  name: universal_item
+  title: universal_item
+  description: universal_item
+  conceptual_entity_refs:
+  - dams:concept/universal_item
+- element_id: dams:logical/ucd/POSITION
+  name: POSITION
+  title: Должность сотрудника
+  description: Должность сотрудника
+  conceptual_entity_refs:
+  - dams:concept/POSITION
+- element_id: dams:logical/mdm/PERSON_CEO
+  name: PERSON_CEO
+  title: ЕИО (СЕО) Единоличный исполнительный орган
+  description: MOSCOW_EXCHANGE.T_CEO
+  conceptual_entity_refs:
+  - dams:concept/PERSON_CEO
+- element_id: dams:logical/crm/CUSTOMER
+  name: CUSTOMER
+  title: Клиент
+  description: Клиент
+  conceptual_entity_refs:
+  - dams:concept/CUSTOMER
+- element_id: dams:logical/trading/Client
+  name: TradingClient
+  title: Клиент торгового решения
+  description: Локальное логическое представление клиента в торговом решении.
+  conceptual_entity_refs:
+  - dams:concept/Client
+- element_id: dams:logical/crm/CONTACT
+  name: CONTACT
+  title: Контакт
+  description: Контакт
+  conceptual_entity_refs:
+  - dams:concept/CONTACT
+- element_id: dams:logical/ucd/ORGANIZATION
+  name: ORGANIZATION
+  title: Организация
+  description: Организация
+  conceptual_entity_refs:
+  - dams:concept/ORGANIZATION
+- element_id: dams:logical/ucd/PERSON
+  name: PERSON
+  title: Персона
+  description: Персона
+  conceptual_entity_refs:
+  - dams:concept/PERSON
+- element_id: dams:logical/ucd/AUTHORIZATION
+  name: AUTHORIZATION
+  title: Полномочия сотрудника
+  description: Полномочия сотрудника
+  conceptual_entity_refs:
+  - dams:concept/AUTHORIZATION
+- element_id: dams:logical/mdm/PERSON_REPRESENTATIVE
+  name: PERSON_REPRESENTATIVE
+  title: Представители ЮЛ
+  description: MOSCOW_EXCHANGE.T_REPRESENTATIVE
+  conceptual_entity_refs:
+  - dams:concept/PERSON_REPRESENTATIVE
+- element_id: dams:logical/crm/LEAD
+  name: LEAD
+  title: Привлечение
+  description: Привлечение
+  conceptual_entity_refs:
+  - dams:concept/LEAD
+- element_id: dams:logical/ucd/AGREEMENT
+  name: AGREEMENT
+  title: Соглашение
+  description: Соглашение
+  conceptual_entity_refs:
+  - dams:concept/AGREEMENT
+- element_id: dams:logical/ucd/EMPOYEE
+  name: EMPOYEE
+  title: Сотрудник
+  description: Сотрудник
+  conceptual_entity_refs:
+  - dams:concept/EMPOYEE
+- element_id: dams:logical/ucd/ORGANIZATION_TYPE
+  name: ORGANIZATION_TYPE
+  title: Тип организации
+  description: Тип организации
+  conceptual_entity_refs:
+  - dams:concept/ORGANIZATION_TYPE
+- element_id: dams:logical/mdm/PERSON
+  name: PERSON
+  title: Физические лица (ФЛ)
+  description: Физические лица (ФЛ)
+  conceptual_entity_refs:
+  - dams:concept/PERSON
+- element_id: dams:logical/mdm/ENTERPRISE
+  name: ENTERPRISE
+  title: Юридические лица (ЮЛ)
+  description: Юридические лица (ЮЛ)
+  conceptual_entity_refs:
+  - dams:concept/ENTERPRISE
+relationships:
+- element_id: dams:rel/LegalEntity/memberOf
+  name: memberOf
+  title: memberOf
+  description: LegalEntity входит в CorporateGroup.
+  source_entity_ref: dams:concept/LegalEntity
+  target_entity_ref: dams:concept/CorporateGroup
+  relation_term_ref: dams:relterm/memberOf
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/OrganizationIdentifier/ofLegalEntity
+  name: ofLegalEntity
+  title: identifies / identifiedBy
+  description: 'OrganizationIdentifier identifies LegalEntity (mandatory owner). Opposite label «идентифицируется»
+    is derived from the relation term.
+
+    '
+  source_entity_ref: dams:concept/OrganizationIdentifier
+  target_entity_ref: dams:concept/LegalEntity
+  relation_term_ref: dams:relterm/identifiedBy
+  term_direction: inverse
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingParticipation/ofLegalEntity
+  name: ofLegalEntity
+  title: belongsTo / hasParticipation
+  description: 'TradingParticipation принадлежит LegalEntity (mandatory, identifying). Former duplicate
+    LegalEntity/hasTradingParticipation + TradingParticipation/participant edges merged into this single
+    record (ADR-026).
+
+    '
+  source_entity_ref: dams:concept/TradingParticipation
+  target_entity_ref: dams:concept/LegalEntity
+  relation_term_ref: dams:relterm/hasParticipation
+  term_direction: inverse
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/AccountRelationship/ofLegalEntity
+  name: ofLegalEntity
+  title: belongsTo / hasAccountRelationship
+  description: 'AccountRelationship относится к LegalEntity (mandatory owner).
+
+    '
+  source_entity_ref: dams:concept/AccountRelationship
+  target_entity_ref: dams:concept/LegalEntity
+  relation_term_ref: dams:relterm/hasAccountRelationship
+  term_direction: inverse
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingParticipation/admittedTo
+  name: admittedTo
+  title: admittedTo
+  description: Участие относится к TradingVenue.
+  source_entity_ref: dams:concept/TradingParticipation
+  target_entity_ref: dams:concept/TradingVenue
+  relation_term_ref: dams:relterm/admittedTo
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingParticipation/appliesTo
+  name: appliesTo
+  title: appliesTo
+  description: Участие может применяться к TradingSection.
+  source_entity_ref: dams:concept/TradingParticipation
+  target_entity_ref: dams:concept/TradingSection
+  relation_term_ref: dams:relterm/appliesTo
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingParticipation/hasAdmission
+  name: hasAdmission
+  title: hasAdmission
+  description: Участие связано с Admission.
+  source_entity_ref: dams:concept/TradingParticipation
+  target_entity_ref: dams:concept/Admission
+  relation_term_ref: dams:relterm/hasAdmission
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingParticipation/governedBy
+  name: governedBy
+  title: governedBy
+  description: Участие регулируется Agreement.
+  source_entity_ref: dams:concept/TradingParticipation
+  target_entity_ref: dams:concept/Agreement
+  relation_term_ref: dams:relterm/governedBy
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingParticipation/evidencedBy
+  name: evidencedBy
+  title: evidencedBy
+  description: Участие подтверждается SupportingDocument.
+  source_entity_ref: dams:concept/TradingParticipation
+  target_entity_ref: dams:concept/SupportingDocument
+  relation_term_ref: dams:relterm/evidencedBy
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Admission/grantedTo
+  name: grantedTo
+  title: grantedTo
+  description: Admission выдан LegalEntity.
+  source_entity_ref: dams:concept/Admission
+  target_entity_ref: dams:concept/LegalEntity
+  relation_term_ref: dams:relterm/grantedTo
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Admission/grantsAccessToVenue
+  name: grantsAccessTo
+  title: grantsAccessTo (venue)
+  description: Admission даёт доступ к TradingVenue.
+  source_entity_ref: dams:concept/Admission
+  target_entity_ref: dams:concept/TradingVenue
+  relation_term_ref: dams:relterm/grantsAccessTo
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Admission/basedOnAgreement
+  name: basedOn
+  title: basedOn (agreement)
+  description: Admission основан на Agreement.
+  source_entity_ref: dams:concept/Admission
+  target_entity_ref: dams:concept/Agreement
+  relation_term_ref: dams:relterm/basedOn
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/RegistrationAction/concernsLegalEntity
+  name: concerns
+  title: concerns (LegalEntity)
+  description: RegistrationAction касается LegalEntity.
+  source_entity_ref: dams:concept/RegistrationAction
+  target_entity_ref: dams:concept/LegalEntity
+  relation_term_ref: dams:relterm/concerns
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/RegistrationAction/evidencedBy
+  name: evidencedBy
+  title: evidencedBy
+  description: RegistrationAction подтверждается SupportingDocument.
+  source_entity_ref: dams:concept/RegistrationAction
+  target_entity_ref: dams:concept/SupportingDocument
+  relation_term_ref: dams:relterm/evidencedBy
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Client/asPerson
+  name: asPerson
+  title: asPerson
+  description: Клиент может относиться к Person (необязательно; XOR с LegalEntity на ЛМД).
+  source_entity_ref: dams:concept/Client
+  target_entity_ref: dams:concept/Person
+  relation_term_ref: dams:relterm/asPerson
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Client/asLegalEntity
+  name: asLegalEntity
+  title: asLegalEntity
+  description: Клиент может относиться к LegalEntity (необязательно).
+  source_entity_ref: dams:concept/Client
+  target_entity_ref: dams:concept/LegalEntity
+  relation_term_ref: dams:relterm/asLegalEntity
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Issuer/ofLegalEntity
+  name: ofLegalEntity
+  title: belongsTo / hasIssuerRole
+  description: Issuer принадлежит LegalEntity (mandatory owner).
+  source_entity_ref: dams:concept/Issuer
+  target_entity_ref: dams:concept/LegalEntity
+  relation_term_ref: dams:relterm/hasIssuerRole
+  term_direction: inverse
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/ClientAccount/ofClient
+  name: ofClient
+  title: ofClient
+  description: ClientAccount принадлежит Client (mandatory owner).
+  source_entity_ref: dams:concept/ClientAccount
+  target_entity_ref: dams:concept/Client
+  relation_term_ref: dams:relterm/hasAccountRelationship
+  term_direction: inverse
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingParticipation/usesAccount
+  name: usesAccount
+  title: usesAccount
+  description: Участие использует учётную запись клиента.
+  source_entity_ref: dams:concept/TradingParticipation
+  target_entity_ref: dams:concept/ClientAccount
+  relation_term_ref: dams:relterm/usesAccount
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Instrument/basedOnAsset
+  name: basedOnAsset
+  title: basedOnAsset
+  description: Инструмент основан на активе.
+  source_entity_ref: dams:concept/Instrument
+  target_entity_ref: dams:concept/Asset
+  relation_term_ref: dams:relterm/basedOnAsset
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Instrument/issuedBy
+  name: issuedBy
+  title: issuedBy
+  description: Инструмент выпущен эмитентом.
+  source_entity_ref: dams:concept/Instrument
+  target_entity_ref: dams:concept/Issuer
+  relation_term_ref: dams:relterm/issuedBy
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Asset/groupedIn
+  name: groupedIn
+  title: groupedIn
+  description: Актив может входить в группу активов.
+  source_entity_ref: dams:concept/Asset
+  target_entity_ref: dams:concept/AssetGroup
+  relation_term_ref: dams:relterm/groupedIn
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingVenue/listedOn
+  name: listedOn
+  title: ofTradingSystem
+  description: Рынок относится к торговой системе.
+  source_entity_ref: dams:concept/TradingVenue
+  target_entity_ref: dams:concept/TradingSystem
+  relation_term_ref: dams:relterm/listedOn
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Trade/executedBy
+  name: executedBy
+  title: executedBy
+  description: Сделка исполнена участником торгов.
+  source_entity_ref: dams:concept/Trade
+  target_entity_ref: dams:concept/TradingParticipation
+  relation_term_ref: dams:relterm/executedBy
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Trade/tradedIn
+  name: tradedIn
+  title: tradedIn
+  description: Сделка по инструменту.
+  source_entity_ref: dams:concept/Trade
+  target_entity_ref: dams:concept/Instrument
+  relation_term_ref: dams:relterm/tradedIn
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Trade/inMode
+  name: inMode
+  title: inMode
+  description: Сделка в режиме торгов.
+  source_entity_ref: dams:concept/Trade
+  target_entity_ref: dams:concept/TradingMode
+  relation_term_ref: dams:relterm/inMode
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Trade/onBehalfOf
+  name: onBehalfOf
+  title: onBehalfOf
+  description: Сделка может быть в интересах клиента.
+  source_entity_ref: dams:concept/Trade
+  target_entity_ref: dams:concept/Client
+  relation_term_ref: dams:relterm/onBehalfOf
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Order/placedBy
+  name: placedBy
+  title: placedBy
+  description: Заявка подана участником торгов.
+  source_entity_ref: dams:concept/Order
+  target_entity_ref: dams:concept/TradingParticipation
+  relation_term_ref: dams:relterm/placedBy
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Order/tradedIn
+  name: tradedIn
+  title: tradedIn
+  description: Заявка по инструменту.
+  source_entity_ref: dams:concept/Order
+  target_entity_ref: dams:concept/Instrument
+  relation_term_ref: dams:relterm/tradedIn
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/SettlementCode/ofParticipation
+  name: ofParticipation
+  title: ofParticipation
+  description: Расчётный код принадлежит участию в торгах (mandatory owner).
+  source_entity_ref: dams:concept/SettlementCode
+  target_entity_ref: dams:concept/TradingParticipation
+  relation_term_ref: dams:relterm/hasAccountRelationship
+  term_direction: inverse
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingAccount/ofSettlementCode
+  name: ofSettlementCode
+  title: ofSettlementCode
+  description: Торговый счёт принадлежит расчётному коду (mandatory owner).
+  source_entity_ref: dams:concept/TradingAccount
+  target_entity_ref: dams:concept/SettlementCode
+  relation_term_ref: dams:relterm/hasAccountRelationship
+  term_direction: inverse
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/CalendarDay/ofCalendar
+  name: ofCalendar
+  title: ofCalendar
+  description: Календарный день принадлежит торговому календарю.
+  source_entity_ref: dams:concept/CalendarDay
+  target_entity_ref: dams:concept/TradingCalendar
+  relation_term_ref: dams:relterm/memberOf
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingSession/onVenue
+  name: onVenue
+  title: onVenue
+  description: Сессия на торговой площадке.
+  source_entity_ref: dams:concept/TradingSession
+  target_entity_ref: dams:concept/TradingVenue
+  relation_term_ref: dams:relterm/onSession
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingSession/ofSystem
+  name: ofSystem
+  title: ofSystem
+  description: Сессия принадлежит торговой системе.
+  source_entity_ref: dams:concept/TradingSession
+  target_entity_ref: dams:concept/TradingSystem
+  relation_term_ref: dams:relterm/ofSystem
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingSession/onDay
+  name: onDay
+  title: onDay
+  description: Сессия в календарный день.
+  source_entity_ref: dams:concept/TradingSession
+  target_entity_ref: dams:concept/CalendarDay
+  relation_term_ref: dams:relterm/onSession
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/AssetPoolMembership/ofPool
+  name: ofPool
+  title: ofPool
+  description: Членство принадлежит пулу (mandatory).
+  source_entity_ref: dams:concept/AssetPoolMembership
+  target_entity_ref: dams:concept/AssetPool
+  relation_term_ref: dams:relterm/memberOf
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/AssetPoolMembership/ofAsset
+  name: ofAsset
+  title: ofAsset
+  description: Членство ссылается на актив (mandatory).
+  source_entity_ref: dams:concept/AssetPoolMembership
+  target_entity_ref: dams:concept/Asset
+  relation_term_ref: dams:relterm/memberOf
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/MarketMakingParticipation/ofProgram
+  name: ofProgram
+  title: ofProgram
+  description: Участие в ММ принадлежит программе (mandatory).
+  source_entity_ref: dams:concept/MarketMakingParticipation
+  target_entity_ref: dams:concept/MarketMakingProgram
+  relation_term_ref: dams:relterm/memberOf
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/MarketMakingParticipation/ofParticipation
+  name: ofParticipation
+  title: ofParticipation
+  description: Участие в ММ принадлежит участию в торгах (mandatory).
+  source_entity_ref: dams:concept/MarketMakingParticipation
+  target_entity_ref: dams:concept/TradingParticipation
+  relation_term_ref: dams:relterm/hasParticipation
+  term_direction: inverse
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingLogin/ofParticipation
+  name: ofParticipation
+  title: ofParticipation
+  description: Логин принадлежит участию в торгах (mandatory owner).
+  source_entity_ref: dams:concept/TradingLogin
+  target_entity_ref: dams:concept/TradingParticipation
+  relation_term_ref: dams:relterm/hasLogin
+  term_direction: inverse
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingLogin/typedAs
+  name: typedAs
+  title: typedAs
+  description: Логин типизирован типом подключения.
+  source_entity_ref: dams:concept/TradingLogin
+  target_entity_ref: dams:concept/ConnectionType
+  relation_term_ref: dams:relterm/typedAs
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/CouponPayment/ofInstrument
+  name: ofInstrument
+  title: ofInstrument
+  description: Купонная выплата по инструменту (mandatory owner).
+  source_entity_ref: dams:concept/CouponPayment
+  target_entity_ref: dams:concept/Instrument
+  relation_term_ref: dams:relterm/concerns
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/CouponPayment/ofCorporateAction
+  name: ofCorporateAction
+  title: ofCorporateAction
+  description: Купонная выплата может относиться к корпоративному событию.
+  source_entity_ref: dams:concept/CouponPayment
+  target_entity_ref: dams:concept/CorporateAction
+  relation_term_ref: dams:relterm/basedOn
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/AssetRiskParameter/ofAsset
+  name: ofAsset
+  title: ofAsset
+  description: Риск-параметр принадлежит активу (mandatory owner).
+  source_entity_ref: dams:concept/AssetRiskParameter
+  target_entity_ref: dams:concept/Asset
+  relation_term_ref: dams:relterm/concerns
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/OpenPosition/holdsPosition
+  name: holdsPosition
+  title: holdsPosition
+  description: Позиция участника по инструменту.
+  source_entity_ref: dams:concept/OpenPosition
+  target_entity_ref: dams:concept/TradingParticipation
+  relation_term_ref: dams:relterm/holdsPosition
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/OpenPosition/tradedIn
+  name: tradedIn
+  title: tradedIn
+  description: Позиция по инструменту.
+  source_entity_ref: dams:concept/OpenPosition
+  target_entity_ref: dams:concept/Instrument
+  relation_term_ref: dams:relterm/tradedIn
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Collateral/ofParticipation
+  name: ofParticipation
+  title: ofParticipation
+  description: Обеспечение относится к участию.
+  source_entity_ref: dams:concept/Collateral
+  target_entity_ref: dams:concept/TradingParticipation
+  relation_term_ref: dams:relterm/collateralizes
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Collateral/ofAsset
+  name: ofAsset
+  title: ofAsset
+  description: Обеспечение активом.
+  source_entity_ref: dams:concept/Collateral
+  target_entity_ref: dams:concept/Asset
+  relation_term_ref: dams:relterm/collateralizes
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Collateral/onVenue
+  name: onVenue
+  title: onVenue
+  description: Обеспечение на рынке.
+  source_entity_ref: dams:concept/Collateral
+  target_entity_ref: dams:concept/TradingVenue
+  relation_term_ref: dams:relterm/admittedTo
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/UnifiedLimit/ofParticipation
+  name: ofParticipation
+  title: ofParticipation
+  description: Лимит относится к участию.
+  source_entity_ref: dams:concept/UnifiedLimit
+  target_entity_ref: dams:concept/TradingParticipation
+  relation_term_ref: dams:relterm/limits
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/UnifiedLimit/ofSettlementCode
+  name: ofSettlementCode
+  title: ofSettlementCode
+  description: Лимит может относиться к расчётному коду.
+  source_entity_ref: dams:concept/UnifiedLimit
+  target_entity_ref: dams:concept/SettlementCode
+  relation_term_ref: dams:relterm/limits
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/UnifiedLimit/onVenue
+  name: onVenue
+  title: onVenue
+  description: Лимит может относиться к рынку.
+  source_entity_ref: dams:concept/UnifiedLimit
+  target_entity_ref: dams:concept/TradingVenue
+  relation_term_ref: dams:relterm/limits
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Obligation/ofParticipation
+  name: ofParticipation
+  title: ofParticipation
+  description: Требования/обязательства участника.
+  source_entity_ref: dams:concept/Obligation
+  target_entity_ref: dams:concept/TradingParticipation
+  relation_term_ref: dams:relterm/owes
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Obligation/ofAsset
+  name: ofAsset
+  title: ofAsset
+  description: Требования/обязательства по активу.
+  source_entity_ref: dams:concept/Obligation
+  target_entity_ref: dams:concept/Asset
+  relation_term_ref: dams:relterm/owes
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Obligation/ofSettlementCode
+  name: ofSettlementCode
+  title: ofSettlementCode
+  description: Требования/обязательства по расчётному коду.
+  source_entity_ref: dams:concept/Obligation
+  target_entity_ref: dams:concept/SettlementCode
+  relation_term_ref: dams:relterm/owes
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/CorporateAction/ofIssuer
+  name: ofIssuer
+  title: ofIssuer
+  description: Корпоративное событие эмитента.
+  source_entity_ref: dams:concept/CorporateAction
+  target_entity_ref: dams:concept/Issuer
+  relation_term_ref: dams:relterm/concerns
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/CorporateAction/ofInstrument
+  name: ofInstrument
+  title: ofInstrument
+  description: Корпоративное событие по инструменту.
+  source_entity_ref: dams:concept/CorporateAction
+  target_entity_ref: dams:concept/Instrument
+  relation_term_ref: dams:relterm/concerns
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Counterparty/ofLegalEntity
+  name: ofLegalEntity
+  title: belongsTo / hasCounterpartyRole
+  description: Counterparty принадлежит LegalEntity (mandatory owner).
+  source_entity_ref: dams:concept/Counterparty
+  target_entity_ref: dams:concept/LegalEntity
+  relation_term_ref: dams:relterm/hasCounterpartyRole
+  term_direction: inverse
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Agreement/withCounterparty
+  name: withCounterparty
+  title: partyTo (counterparty)
+  description: Договор со стороной-контрагентом.
+  source_entity_ref: dams:concept/Agreement
+  target_entity_ref: dams:concept/Counterparty
+  relation_term_ref: dams:relterm/partyTo
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Agreement/withCorporateGroup
+  name: withCorporateGroup
+  title: partyTo (group)
+  description: Договор с компанией группы.
+  source_entity_ref: dams:concept/Agreement
+  target_entity_ref: dams:concept/CorporateGroup
+  relation_term_ref: dams:relterm/partyTo
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/ContractAmendment/ofAgreement
+  name: ofAgreement
+  title: amends
+  description: Доп. соглашение дополняет Agreement (mandatory owner).
+  source_entity_ref: dams:concept/ContractAmendment
+  target_entity_ref: dams:concept/Agreement
+  relation_term_ref: dams:relterm/amends
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/ContractAmendment/signedBy
+  name: signedBy
+  title: signedBy
+  description: Доп. соглашение может быть связано с сотрудником.
+  source_entity_ref: dams:concept/ContractAmendment
+  target_entity_ref: dams:concept/Employee
+  relation_term_ref: dams:relterm/signedBy
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Product/ofService
+  name: ofService
+  title: ofService
+  description: Продукт связан с услугой.
+  source_entity_ref: dams:concept/Product
+  target_entity_ref: dams:concept/Service
+  relation_term_ref: dams:relterm/ofService
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Product/pricedBy
+  name: pricedBy
+  title: pricedBy
+  description: Продукт связан с тарифом.
+  source_entity_ref: dams:concept/Product
+  target_entity_ref: dams:concept/Tariff
+  relation_term_ref: dams:relterm/pricedBy
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Payment/paidByClient
+  name: paidByClient
+  title: paidBy (client)
+  description: Платёж от клиента.
+  source_entity_ref: dams:concept/Payment
+  target_entity_ref: dams:concept/Client
+  relation_term_ref: dams:relterm/paidBy
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Payment/paidByCounterparty
+  name: paidByCounterparty
+  title: paidBy (counterparty)
+  description: Платёж с участием контрагента.
+  source_entity_ref: dams:concept/Payment
+  target_entity_ref: dams:concept/Counterparty
+  relation_term_ref: dams:relterm/paidBy
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Payment/forProduct
+  name: forProduct
+  title: forProduct
+  description: Платёж по продукту.
+  source_entity_ref: dams:concept/Payment
+  target_entity_ref: dams:concept/Product
+  relation_term_ref: dams:relterm/forProduct
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Sale/soldTo
+  name: soldTo
+  title: soldTo
+  description: Продажа клиенту.
+  source_entity_ref: dams:concept/Sale
+  target_entity_ref: dams:concept/Client
+  relation_term_ref: dams:relterm/soldTo
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Sale/forProduct
+  name: forProduct
+  title: forProduct
+  description: Продажа продукта.
+  source_entity_ref: dams:concept/Sale
+  target_entity_ref: dams:concept/Product
+  relation_term_ref: dams:relterm/forProduct
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Rating/ofLegalEntity
+  name: ofLegalEntity
+  title: rates
+  description: Рейтинг принадлежит LegalEntity (mandatory).
+  source_entity_ref: dams:concept/Rating
+  target_entity_ref: dams:concept/LegalEntity
+  relation_term_ref: dams:relterm/rates
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/FinancialReport/ofLegalEntity
+  name: ofLegalEntity
+  title: reportsOn
+  description: Отчётность принадлежит LegalEntity (mandatory).
+  source_entity_ref: dams:concept/FinancialReport
+  target_entity_ref: dams:concept/LegalEntity
+  relation_term_ref: dams:relterm/reportsOn
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Income/ofCostCenter
+  name: ofCostCenter
+  title: ofCostCenter
+  description: Доход относится к ЦФО.
+  source_entity_ref: dams:concept/Income
+  target_entity_ref: dams:concept/CostCenter
+  relation_term_ref: dams:relterm/ofCostCenter
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Income/ofCorporateGroup
+  name: ofCorporateGroup
+  title: memberOf (group)
+  description: Доход относится к группе компаний.
+  source_entity_ref: dams:concept/Income
+  target_entity_ref: dams:concept/CorporateGroup
+  relation_term_ref: dams:relterm/memberOf
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Expense/ofCostCenter
+  name: ofCostCenter
+  title: ofCostCenter
+  description: Расход относится к ЦФО.
+  source_entity_ref: dams:concept/Expense
+  target_entity_ref: dams:concept/CostCenter
+  relation_term_ref: dams:relterm/ofCostCenter
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Expense/ofCorporateGroup
+  name: ofCorporateGroup
+  title: memberOf (group)
+  description: Расход относится к группе компаний.
+  source_entity_ref: dams:concept/Expense
+  target_entity_ref: dams:concept/CorporateGroup
+  relation_term_ref: dams:relterm/memberOf
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Budget/ofProject
+  name: ofProject
+  title: budgets
+  description: Бюджет относится к проекту.
+  source_entity_ref: dams:concept/Budget
+  target_entity_ref: dams:concept/Project
+  relation_term_ref: dams:relterm/budgets
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Task/ofProject
+  name: ofProject
+  title: ofProject
+  description: Задача принадлежит проекту (mandatory owner).
+  source_entity_ref: dams:concept/Task
+  target_entity_ref: dams:concept/Project
+  relation_term_ref: dams:relterm/ofProject
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TimeEntry/ofTask
+  name: ofTask
+  title: loggedAgainst (task)
+  description: Трудозатрата по задаче (mandatory).
+  source_entity_ref: dams:concept/TimeEntry
+  target_entity_ref: dams:concept/Task
+  relation_term_ref: dams:relterm/loggedAgainst
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TimeEntry/ofEmployee
+  name: ofEmployee
+  title: loggedAgainst (employee)
+  description: Трудозатрата сотрудника (mandatory).
+  source_entity_ref: dams:concept/TimeEntry
+  target_entity_ref: dams:concept/Employee
+  relation_term_ref: dams:relterm/loggedAgainst
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/CampaignMembership/ofCampaign
+  name: ofCampaign
+  title: inCampaign
+  description: Членство в кампании (mandatory).
+  source_entity_ref: dams:concept/CampaignMembership
+  target_entity_ref: dams:concept/MarketingCampaign
+  relation_term_ref: dams:relterm/inCampaign
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/CampaignMembership/ofUser
+  name: ofUser
+  title: inCampaign (user)
+  description: Участник кампании — пользователь (mandatory).
+  source_entity_ref: dams:concept/CampaignMembership
+  target_entity_ref: dams:concept/User
+  relation_term_ref: dams:relterm/inCampaign
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Department/ofCorporateGroup
+  name: ofCorporateGroup
+  title: memberOf
+  description: Департамент может относиться к группе компаний.
+  source_entity_ref: dams:concept/Department
+  target_entity_ref: dams:concept/CorporateGroup
+  relation_term_ref: dams:relterm/memberOf
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/StaffPosition/ofDepartment
+  name: ofDepartment
+  title: ofDepartment
+  description: Штатная единица принадлежит департаменту (mandatory).
+  source_entity_ref: dams:concept/StaffPosition
+  target_entity_ref: dams:concept/Department
+  relation_term_ref: dams:relterm/ofDepartment
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Employee/ofPerson
+  name: ofPerson
+  title: belongsTo / hasEmployeeRole
+  description: Сотрудник принадлежит Person (mandatory owner).
+  source_entity_ref: dams:concept/Employee
+  target_entity_ref: dams:concept/Person
+  relation_term_ref: dams:relterm/hasEmployeeRole
+  term_direction: inverse
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Employee/holdsStaffPosition
+  name: holdsStaffPosition
+  title: holdsStaffPosition
+  description: Сотрудник занимает штатную единицу.
+  source_entity_ref: dams:concept/Employee
+  target_entity_ref: dams:concept/StaffPosition
+  relation_term_ref: dams:relterm/holdsStaffPosition
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/EmploymentContract/ofEmployee
+  name: ofEmployee
+  title: ofEmployee
+  description: Трудовой договор принадлежит сотруднику (mandatory).
+  source_entity_ref: dams:concept/EmploymentContract
+  target_entity_ref: dams:concept/Employee
+  relation_term_ref: dams:relterm/concerns
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/RoleAssignment/ofRole
+  name: ofRole
+  title: assignedRole
+  description: Назначение принадлежит роли (mandatory).
+  source_entity_ref: dams:concept/RoleAssignment
+  target_entity_ref: dams:concept/Role
+  relation_term_ref: dams:relterm/assignedRole
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/RoleAssignment/ofUser
+  name: ofUser
+  title: assignedRole (user)
+  description: Назначение принадлежит пользователю (mandatory).
+  source_entity_ref: dams:concept/RoleAssignment
+  target_entity_ref: dams:concept/User
+  relation_term_ref: dams:relterm/assignedRole
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/LedgerAccount/ofAccountingSystem
+  name: ofAccountingSystem
+  title: ofAccountingSystem
+  description: Счёт АБС принадлежит AccountingSystem (mandatory).
+  source_entity_ref: dams:concept/LedgerAccount
+  target_entity_ref: dams:concept/AccountingSystem
+  relation_term_ref: dams:relterm/ofAccountingSystem
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/SubledgerAccount/ofLedger
+  name: ofLedger
+  title: ofLedger
+  description: Лицевой счёт принадлежит счёту АБС (mandatory).
+  source_entity_ref: dams:concept/SubledgerAccount
+  target_entity_ref: dams:concept/LedgerAccount
+  relation_term_ref: dams:relterm/ofLedger
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/UserLedgerLink/ofUser
+  name: ofUser
+  title: ofUser
+  description: Связь принадлежит пользователю (mandatory).
+  source_entity_ref: dams:concept/UserLedgerLink
+  target_entity_ref: dams:concept/User
+  relation_term_ref: dams:relterm/memberOf
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/UserLedgerLink/ofLedger
+  name: ofLedger
+  title: ofLedger
+  description: Связь принадлежит счёту АБС (mandatory).
+  source_entity_ref: dams:concept/UserLedgerLink
+  target_entity_ref: dams:concept/LedgerAccount
+  relation_term_ref: dams:relterm/ofLedger
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/UserLedgerLink/denominatedIn
+  name: denominatedIn
+  title: denominatedIn
+  description: Связь может быть номинирована в валюте.
+  source_entity_ref: dams:concept/UserLedgerLink
+  target_entity_ref: dams:concept/Currency
+  relation_term_ref: dams:relterm/denominatedIn
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/JournalEntry/postsTo
+  name: postsTo
+  title: postsTo
+  description: Проводка проводится на счёт АБС.
+  source_entity_ref: dams:concept/JournalEntry
+  target_entity_ref: dams:concept/LedgerAccount
+  relation_term_ref: dams:relterm/postsTo
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/JournalEntry/ofSubledger
+  name: ofSubledger
+  title: ofSubledger
+  description: Проводка может относиться к лицевому счёту.
+  source_entity_ref: dams:concept/JournalEntry
+  target_entity_ref: dams:concept/SubledgerAccount
+  relation_term_ref: dams:relterm/ofSubledger
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/User/hostedOn
+  name: hostedOn
+  title: hostedOn
+  description: Пользователь работает в инфо-системе.
+  source_entity_ref: dams:concept/User
+  target_entity_ref: dams:concept/InformationSystem
+  relation_term_ref: dams:relterm/hostedOn
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Portfolio/holdsAsset
+  name: holdsAsset
+  title: holdsAsset
+  description: Портфель держит актив.
+  source_entity_ref: dams:concept/Portfolio
+  target_entity_ref: dams:concept/Asset
+  relation_term_ref: dams:relterm/holdsAsset
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Portfolio/ofLedger
+  name: ofLedger
+  title: ofLedger
+  description: Портфель связан со счётом АБС.
+  source_entity_ref: dams:concept/Portfolio
+  target_entity_ref: dams:concept/LedgerAccount
+  relation_term_ref: dams:relterm/ofLedger
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/Deposit/ofLedger
+  name: ofLedger
+  title: ofLedger
+  description: Депозит может относиться к счёту АБС.
+  source_entity_ref: dams:concept/Deposit
+  target_entity_ref: dams:concept/LedgerAccount
+  relation_term_ref: dams:relterm/ofLedger
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/ClearingPositionDetail/ofLedger
+  name: ofLedger
+  title: ofLedger
+  description: ЧПД может относиться к счёту АБС.
+  source_entity_ref: dams:concept/ClearingPositionDetail
+  target_entity_ref: dams:concept/LedgerAccount
+  relation_term_ref: dams:relterm/ofLedger
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/LoginEvent/ofLogin
+  name: ofLogin
+  title: occurredOnLogin
+  description: Событие принадлежит логину ТКС (mandatory).
+  source_entity_ref: dams:concept/LoginEvent
+  target_entity_ref: dams:concept/TradingLogin
+  relation_term_ref: dams:relterm/occurredOnLogin
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingTerminal/ofParticipation
+  name: ofParticipation
+  title: ofTerminal (participation)
+  description: Терминал может относиться к участию в торгах.
+  source_entity_ref: dams:concept/TradingTerminal
+  target_entity_ref: dams:concept/TradingParticipation
+  relation_term_ref: dams:relterm/ofTerminal
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingTerminal/ofInstrument
+  name: ofInstrument
+  title: ofTerminal (instrument)
+  description: Терминал может относиться к инструменту (черновик).
+  source_entity_ref: dams:concept/TradingTerminal
+  target_entity_ref: dams:concept/Instrument
+  relation_term_ref: dams:relterm/ofTerminal
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+- element_id: dams:rel/TradingTerminal/ofVenue
+  name: ofVenue
+  title: ofTerminal (venue)
+  description: Терминал может относиться к площадке (черновик).
+  source_entity_ref: dams:concept/TradingTerminal
+  target_entity_ref: dams:concept/TradingVenue
+  relation_term_ref: dams:relterm/ofTerminal
+  term_direction: forward
+  _source_implementation: moex-enterprise-conceptual-model
+mappings: []

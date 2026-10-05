@@ -93,6 +93,18 @@ nodes:
       Canonical enterprise-conceptual DAMS Impl (Party & Trading Participation).
       Primary target for ExternalTermSelection alignsWith (ADR-021).
 
+  - id: moex-hierarchy
+    role: specification_implementation
+    title: moex.hierarchy
+    version: "0.1.0"
+    conforms_to: moex-dams
+    module_id: moex:module:hierarchy
+    order: 109
+    contract_exempt: true
+    description: >
+      Derived OWL/CDM/LDM entity hierarchy view across DAMS implementations.
+      Not a ModelPackage SoT — regenerated at publication build.
+
   - id: client-accounts-csv-draft
     role: specification_implementation
     title: DSP — Client Accounts CSV (draft)
