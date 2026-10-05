@@ -474,7 +474,7 @@ def test_export_requirements_xlsx(
     captured = capsys.readouterr()
     assert code == 0, captured.out
     assert out.is_file()
-    assert "rows=42" in captured.out
+    assert "rows=45" in captured.out
     assert "catalogs=2" in captured.out
     wb = load_workbook(out)
     ws = wb.active

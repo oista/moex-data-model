@@ -85,6 +85,7 @@ slots:
     inlined: false
     description: Более широкий концептуальный домен.
   meaning_key:
+    identifier: true
     range: string
     required: true
     description: Ключ смысла, уникальный внутри ConceptualDomain.

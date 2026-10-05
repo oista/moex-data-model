@@ -99,7 +99,7 @@ def test_real_catalogs_row_count() -> None:
     codes = [r["code"] for r in rows]
     assert "GEN-001" in codes
     assert "CM-GEN-001" in codes
-    assert len(rows) == 42
+    assert len(rows) == 45
     assert rows == sorted(
         rows,
         key=lambda r: (

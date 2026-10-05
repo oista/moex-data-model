@@ -1020,3 +1020,53 @@ requirements:
     diagnostic_code: DAMS-REQ-ATR-004.c1
     remediation: Для decimal/datetime при необходимости добавьте currency_attribute_ref, unit_code или
       timezone_policy.
+
+- element_id: dams:req/ATR-006
+  name: attribute_representation_present
+  title: Представление атрибута (тип или домен)
+  description: >
+    Переходный ATR: value_domain_ref, data_type_ref или deprecated logical_type.
+    Реализовано в packages/specification-dams/.../semantic_layer.py (DAMS-SEM-ATTR-TYPE).
+  lifecycle_status: approved
+  code: ATR-006
+  requirement_level: it_solution
+  requirement_section: ATR
+  statement: >
+    У логического атрибута должно быть задано представление значений: value_domain_ref,
+    data_type_ref или (на переходном этапе) logical_type. Отсутствие concept_ref не является
+    нарушением (вариант B, ADR-034).
+  applies_to:
+    applicability_id: appl:ATR-006
+    applies_target_class: LogicalAttribute
+  formal_checks:
+  - check_id: ATR-006.c1
+    kind: custom
+    target_class: LogicalAttribute
+    expression: semantic_layer_attr_type
+    severity: error
+    diagnostic_code: DAMS-SEM-ATTR-TYPE
+    remediation: Укажите data_type_ref и/или value_domain_ref (или logical_type на переходе).
+- element_id: dams:req/ATR-007
+  name: attribute_concept_ref_optional
+  title: concept_ref опционален
+  description: >
+    Негативное требование: отсутствие concept_ref не даёт error/warning.
+    Проверка — тест test_missing_concept_ref_is_silent.
+  lifecycle_status: approved
+  code: ATR-007
+  requirement_level: it_solution
+  requirement_section: ATR
+  statement: >
+    Ссылка LogicalAttribute.concept_ref на ConceptualProperty необязательна. Её отсутствие
+    не должно порождать ошибку или предупреждение валидатора.
+  applies_to:
+    applicability_id: appl:ATR-007
+    applies_target_class: LogicalAttribute
+  formal_checks:
+  - check_id: ATR-007.c1
+    kind: custom
+    target_class: LogicalAttribute
+    expression: concept_ref_never_required
+    severity: warning
+    diagnostic_code: DAMS-SEM-ATTR-CONCEPT-OPTIONAL
+    remediation: Не добавляйте обязательность concept_ref.

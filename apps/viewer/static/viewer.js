@@ -4121,8 +4121,17 @@
         attrs.native_type ||
         attrs.range ||
         "";
-      if (attrs.concept_ref) {
-        rangeTd.title = `concept_ref: ${attrs.concept_ref}`;
+      const hints = [];
+      if (attrs.concept_ref) hints.push(`property: ${attrs.concept_ref}`);
+      if (attrs.value_domain_ref) hints.push(`domain: ${attrs.value_domain_ref}`);
+      if (attrs.significance_basis) {
+        const sb = Array.isArray(attrs.significance_basis)
+          ? attrs.significance_basis.join(", ")
+          : attrs.significance_basis;
+        hints.push(`significance: ${sb}`);
+      }
+      if (hints.length) {
+        rangeTd.title = hints.join(" · ");
       }
       tr.appendChild(nameTd);
       tr.appendChild(rangeTd);

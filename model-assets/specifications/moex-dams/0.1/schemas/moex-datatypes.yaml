@@ -94,7 +94,7 @@ classes:
     slots:
       - binding_id
       - dialect
-      - native_type
+      - dialect_native_type
       - data_type_ref
       - lossiness
       - parameter_mapping
@@ -102,7 +102,7 @@ classes:
       native_type_binding_key:
         unique_key_slots:
           - dialect
-          - native_type
+          - dialect_native_type
           - data_type_ref
 
   ValueDomain:
@@ -174,6 +174,7 @@ classes:
       Динамический запрос набора значений по образцу LinkML reachable_from
       (source ontology, узлы, типы связей).
     slots:
+      - value_set_query_id
       - source_ontology
       - source_nodes
       - relationship_types
@@ -228,10 +229,12 @@ slots:
     range: string
     required: true
     description: Диалект/платформа нативного типа (postgresql, oracle, json, …).
-  native_type:
+  dialect_native_type:
     range: string
     required: true
-    description: Имя нативного типа в диалекте.
+    description: >
+      Имя нативного типа в диалекте. Отдельный слот от PhysicalField.native_type
+      (другой контекст; общий URI ломает SchemaLoader merge — ADR-036).
   data_type_ref:
     range: DataType
     inlined: false
@@ -272,6 +275,7 @@ slots:
     inlined: true
     description: Динамический запрос набора (reachable_from).
   value_code:
+    identifier: true
     range: string
     required: true
     description: Код значения, уникальный внутри ValueDomain.
@@ -290,6 +294,11 @@ slots:
   value_status:
     range: LifecycleStatusEnum
     description: Статус допустимого значения.
+  value_set_query_id:
+    identifier: true
+    range: string
+    required: true
+    description: Локальный идентификатор динамического запроса внутри ValueDomain.
   source_ontology:
     range: uriorcurie
     required: true

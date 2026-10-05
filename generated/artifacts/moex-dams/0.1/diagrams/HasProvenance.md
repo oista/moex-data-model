@@ -7,10 +7,14 @@
     click HasProvenance href "../HasProvenance"
       HasProvenance <|-- ScopedDefinition
         click ScopedDefinition href "../ScopedDefinition"
+      HasProvenance <|-- ConceptualProperty
+        click ConceptualProperty href "../ConceptualProperty"
       HasProvenance <|-- ExternalClassRef
         click ExternalClassRef href "../ExternalClassRef"
       HasProvenance <|-- Mapping
         click Mapping href "../Mapping"
+      HasProvenance <|-- ConceptualDomain
+        click ConceptualDomain href "../ConceptualDomain"
       
       HasProvenance : approval_status
         

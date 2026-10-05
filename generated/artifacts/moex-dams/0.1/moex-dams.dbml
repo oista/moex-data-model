@@ -248,6 +248,11 @@ access_points varchar
 data_containers varchar
 execution_assets varchar
 mappings varchar
+conceptual_properties varchar
+conceptual_domains varchar
+value_domains varchar
+data_types varchar
+native_type_bindings varchar
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
@@ -314,6 +319,41 @@ scoped_definitions varchar
 description varchar [not null]
 }
 
+Table ConceptualProperty {
+element_id varchar [not null, primary key]
+name varchar [not null]
+title varchar
+aliases varchar
+glossary_term_refs varchar
+tags varchar
+lifecycle_status varchar [not null]
+valid_from datetime
+valid_to datetime
+deprecated_by_ref varchar
+property_owner_entity_ref varchar [not null]
+significance_basis varchar [not null]
+significance_rationale varchar
+property_kind varchar [not null]
+conceptual_domain_ref varchar
+is_identifying boolean
+ConceptualProperty_genesis_kind varchar [not null]
+ConceptualProperty_description varchar [not null]
+data_owner_ref varchar
+data_steward_ref varchar
+owning_unit_ref varchar
+ownership_inheritance_rule varchar
+definition_source_ref varchar
+definition_rationale varchar
+scoped_definitions varchar
+source_artifact_ref varchar
+evidence_refs varchar
+approval_status varchar
+approved_by_ref varchar
+approved_at datetime
+policy_refs varchar
+description varchar [not null]
+}
+
 Table LogicalEntity {
 element_id varchar [not null, primary key]
 name varchar [not null]
@@ -369,7 +409,11 @@ valid_from datetime
 valid_to datetime
 deprecated_by_ref varchar
 owner_entity_ref varchar [not null]
-logical_type varchar [not null]
+LogicalAttribute_concept_ref varchar
+value_domain_ref varchar
+LogicalAttribute_data_type_ref varchar [not null]
+critical_data_element boolean
+LogicalAttribute_logical_type varchar
 required boolean [not null]
 multivalued boolean [not null]
 minimum_cardinality int
@@ -751,6 +795,119 @@ TechnicalAsset_direction varchar
 description varchar [not null]
 }
 
+Table ConceptualDomain {
+element_id varchar [not null, primary key]
+name varchar [not null]
+title varchar
+description varchar [not null]
+aliases varchar
+glossary_term_refs varchar
+tags varchar
+lifecycle_status varchar [not null]
+valid_from datetime
+valid_to datetime
+deprecated_by_ref varchar
+conceptual_domain_kind varchar [not null]
+value_meanings varchar
+concept_scheme_uri varchar
+broader_domain_ref varchar
+data_owner_ref varchar
+data_steward_ref varchar
+owning_unit_ref varchar
+ownership_inheritance_rule varchar
+source_artifact_ref varchar
+evidence_refs varchar
+approval_status varchar
+approved_by_ref varchar
+approved_at datetime
+}
+
+Table ValueMeaning {
+meaning_key varchar [not null, primary key]
+meaning_label varchar
+meaning_definition varchar
+aliases varchar
+meaning_term_ref varchar
+broader_meaning_key varchar
+meaning_status varchar
+}
+
+Table DataType {
+element_id varchar [not null, primary key]
+name varchar [not null]
+title varchar
+description varchar [not null]
+aliases varchar
+glossary_term_refs varchar
+tags varchar
+lifecycle_status varchar [not null]
+valid_from datetime
+valid_to datetime
+deprecated_by_ref varchar
+type_name varchar [not null]
+type_family varchar [not null]
+precision int
+scale int
+max_length int
+min_length int
+datatype_timezone_policy varchar
+charset varchar
+xsd_datatype varchar
+linkml_type varchar
+base_type_ref varchar
+}
+
+Table NativeTypeBinding {
+binding_id varchar [not null, primary key]
+dialect varchar [not null]
+dialect_native_type varchar [not null]
+data_type_ref varchar [not null]
+lossiness varchar [not null]
+parameter_mapping varchar
+}
+
+Table ValueDomain {
+element_id varchar [not null, primary key]
+name varchar [not null]
+title varchar
+description varchar [not null]
+aliases varchar
+glossary_term_refs varchar
+tags varchar
+lifecycle_status varchar [not null]
+valid_from datetime
+valid_to datetime
+deprecated_by_ref varchar
+value_domain_kind varchar [not null]
+data_type_ref varchar [not null]
+conceptual_domain_ref varchar
+unit_code varchar
+format_pattern varchar
+min_value varchar
+max_value varchar
+permissible_values varchar
+value_set_source varchar
+dynamic_query varchar
+}
+
+Table PermissibleValue {
+value_code varchar [not null, primary key]
+value_label varchar
+value_definition varchar
+value_meaning_key varchar
+meaning_term_ref varchar
+ordinal int
+value_status varchar
+}
+
+Table ValueSetQuery {
+value_set_query_id varchar [not null, primary key]
+source_ontology varchar [not null]
+source_nodes varchar
+relationship_types varchar
+include_self boolean
+}
+
 Table DataFlow {
 element_id varchar [not null, primary key]
 name varchar [not null]
@@ -1015,6 +1172,11 @@ Ref: ModelPackage.access_points > AccessPoint.element_id
 Ref: ModelPackage.data_containers > DataContainer.element_id
 Ref: ModelPackage.execution_assets > ExecutionAsset.element_id
 Ref: ModelPackage.mappings > Mapping.element_id
+Ref: ModelPackage.conceptual_properties > ConceptualProperty.element_id
+Ref: ModelPackage.conceptual_domains > ConceptualDomain.element_id
+Ref: ModelPackage.value_domains > ValueDomain.element_id
+Ref: ModelPackage.data_types > DataType.element_id
+Ref: ModelPackage.native_type_bindings > NativeTypeBinding.binding_id
 Ref: ModelPackage.data_owner_ref > Role.registry_id
 Ref: ModelPackage.data_steward_ref > Role.registry_id
 Ref: ModelPackage.owning_unit_ref > OrganizationUnit.registry_id
@@ -1035,6 +1197,15 @@ Ref: ConceptualEntity.data_owner_ref > Role.registry_id
 Ref: ConceptualEntity.data_steward_ref > Role.registry_id
 Ref: ConceptualEntity.owning_unit_ref > OrganizationUnit.registry_id
 Ref: ConceptualEntity.scoped_definitions > ScopedDefinition.scoped_definition_id
+Ref: ConceptualProperty.glossary_term_refs > GlossaryTerm.registry_id
+Ref: ConceptualProperty.property_owner_entity_ref > ConceptualEntity.element_id
+Ref: ConceptualProperty.conceptual_domain_ref > ConceptualDomain.element_id
+Ref: ConceptualProperty.data_owner_ref > Role.registry_id
+Ref: ConceptualProperty.data_steward_ref > Role.registry_id
+Ref: ConceptualProperty.owning_unit_ref > OrganizationUnit.registry_id
+Ref: ConceptualProperty.scoped_definitions > ScopedDefinition.scoped_definition_id
+Ref: ConceptualProperty.approved_by_ref > Role.registry_id
+Ref: ConceptualProperty.policy_refs > Policy.registry_id
 Ref: LogicalEntity.glossary_term_refs > GlossaryTerm.registry_id
 Ref: LogicalEntity.context_ref > DomainContext.element_id
 Ref: LogicalEntity.conceptual_entity_refs > ConceptualEntity.element_id
@@ -1049,6 +1220,9 @@ Ref: LogicalEntity.policy_refs > Policy.registry_id
 Ref: LogicalEntity.scoped_definitions > ScopedDefinition.scoped_definition_id
 Ref: LogicalAttribute.glossary_term_refs > GlossaryTerm.registry_id
 Ref: LogicalAttribute.owner_entity_ref > LogicalEntity.element_id
+Ref: LogicalAttribute.LogicalAttribute_concept_ref > ConceptualProperty.element_id
+Ref: LogicalAttribute.value_domain_ref > ValueDomain.element_id
+Ref: LogicalAttribute.LogicalAttribute_data_type_ref > DataType.element_id
 Ref: LogicalAttribute.data_owner_ref > Role.registry_id
 Ref: LogicalAttribute.data_steward_ref > Role.registry_id
 Ref: LogicalAttribute.owning_unit_ref > OrganizationUnit.registry_id
@@ -1119,6 +1293,21 @@ Ref: ExecutionAsset.sensitivity_term_refs > DataClassificationTerm.registry_id
 Ref: ExecutionAsset.policy_refs > Policy.registry_id
 Ref: ExecutionAsset.produces_refs > TechnicalAsset.element_id
 Ref: ExecutionAsset.consumes_refs > TechnicalAsset.element_id
+Ref: ConceptualDomain.glossary_term_refs > GlossaryTerm.registry_id
+Ref: ConceptualDomain.value_meanings > ValueMeaning.meaning_key
+Ref: ConceptualDomain.broader_domain_ref > ConceptualDomain.element_id
+Ref: ConceptualDomain.data_owner_ref > Role.registry_id
+Ref: ConceptualDomain.data_steward_ref > Role.registry_id
+Ref: ConceptualDomain.owning_unit_ref > OrganizationUnit.registry_id
+Ref: ConceptualDomain.approved_by_ref > Role.registry_id
+Ref: DataType.glossary_term_refs > GlossaryTerm.registry_id
+Ref: DataType.base_type_ref > DataType.element_id
+Ref: NativeTypeBinding.data_type_ref > DataType.element_id
+Ref: ValueDomain.glossary_term_refs > GlossaryTerm.registry_id
+Ref: ValueDomain.data_type_ref > DataType.element_id
+Ref: ValueDomain.conceptual_domain_ref > ConceptualDomain.element_id
+Ref: ValueDomain.permissible_values > PermissibleValue.value_code
+Ref: ValueDomain.dynamic_query > ValueSetQuery.value_set_query_id
 Ref: DataFlow.glossary_term_refs > GlossaryTerm.registry_id
 Ref: DataFlow.integration_ref > IntegrationReference.registry_id
 Ref: DataFlow.contract_ref > DataContractReference.registry_id

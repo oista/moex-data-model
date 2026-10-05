@@ -33,6 +33,16 @@
       "parents": []
     },
     {
+      "iri": "https://data.moex.com/dams/ConceptualDomain",
+      "is_mixin": false,
+      "name": "ConceptualDomain",
+      "parents": [
+        "HasOwnership",
+        "HasProvenance",
+        "ModelElement"
+      ]
+    },
+    {
       "iri": "https://data.moex.com/dams/ConceptualEntity",
       "is_mixin": false,
       "name": "ConceptualEntity",
@@ -40,6 +50,18 @@
         "HasBusinessClassification",
         "HasDefinition",
         "HasOwnership",
+        "ModelElement"
+      ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/ConceptualProperty",
+      "is_mixin": false,
+      "name": "ConceptualProperty",
+      "parents": [
+        "HasDefinition",
+        "HasOwnership",
+        "HasPolicyBindings",
+        "HasProvenance",
         "ModelElement"
       ]
     },
@@ -110,6 +132,14 @@
       "parents": [
         "HasLifecycle",
         "HasOwnership",
+        "ModelElement"
+      ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/DataType",
+      "is_mixin": false,
+      "name": "DataType",
+      "parents": [
         "ModelElement"
       ]
     },
@@ -330,12 +360,24 @@
       ]
     },
     {
+      "iri": "https://data.moex.com/dams/NativeTypeBinding",
+      "is_mixin": false,
+      "name": "NativeTypeBinding",
+      "parents": []
+    },
+    {
       "iri": "https://data.moex.com/dams/OrganizationUnit",
       "is_mixin": false,
       "name": "OrganizationUnit",
       "parents": [
         "RegistryEntry"
       ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/PermissibleValue",
+      "is_mixin": false,
+      "name": "PermissibleValue",
+      "parents": []
     },
     {
       "iri": "https://data.moex.com/dams/PhysicalField",
@@ -447,6 +489,26 @@
         "HasPolicyBindings",
         "ModelElement"
       ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/ValueDomain",
+      "is_mixin": false,
+      "name": "ValueDomain",
+      "parents": [
+        "ModelElement"
+      ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/ValueMeaning",
+      "is_mixin": false,
+      "name": "ValueMeaning",
+      "parents": []
+    },
+    {
+      "iri": "https://data.moex.com/dams/ValueSetQuery",
+      "is_mixin": false,
+      "name": "ValueSetQuery",
+      "parents": []
     }
   ],
   "default_prefix": "dams",
@@ -598,6 +660,20 @@
         {
           "iri": "https://data.moex.com/dams/ConceptualAlignmentStatusEnum#pending",
           "name": "pending"
+        }
+      ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/ConceptualDomainKindEnum",
+      "name": "ConceptualDomainKindEnum",
+      "values": [
+        {
+          "iri": "https://data.moex.com/dams/ConceptualDomainKindEnum#described",
+          "name": "described"
+        },
+        {
+          "iri": "https://data.moex.com/dams/ConceptualDomainKindEnum#enumerated",
+          "name": "enumerated"
         }
       ]
     },
@@ -1176,6 +1252,24 @@
       ]
     },
     {
+      "iri": "https://data.moex.com/dams/LossinessEnum",
+      "name": "LossinessEnum",
+      "values": [
+        {
+          "iri": "https://data.moex.com/dams/LossinessEnum#lossless",
+          "name": "lossless"
+        },
+        {
+          "iri": "https://data.moex.com/dams/LossinessEnum#lossy",
+          "name": "lossy"
+        },
+        {
+          "iri": "https://data.moex.com/dams/LossinessEnum#unknown",
+          "name": "unknown"
+        }
+      ]
+    },
+    {
       "iri": "https://data.moex.com/dams/MappingCardinalityEnum",
       "name": "MappingCardinalityEnum",
       "values": [
@@ -1288,6 +1382,36 @@
         {
           "iri": "https://data.moex.com/dams/ModelLevelEnum#physical",
           "name": "physical"
+        }
+      ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/PropertyKindEnum",
+      "name": "PropertyKindEnum",
+      "values": [
+        {
+          "iri": "https://data.moex.com/dams/PropertyKindEnum#descriptive",
+          "name": "descriptive"
+        },
+        {
+          "iri": "https://data.moex.com/dams/PropertyKindEnum#identifying",
+          "name": "identifying"
+        },
+        {
+          "iri": "https://data.moex.com/dams/PropertyKindEnum#measure",
+          "name": "measure"
+        },
+        {
+          "iri": "https://data.moex.com/dams/PropertyKindEnum#relational",
+          "name": "relational"
+        },
+        {
+          "iri": "https://data.moex.com/dams/PropertyKindEnum#status",
+          "name": "status"
+        },
+        {
+          "iri": "https://data.moex.com/dams/PropertyKindEnum#temporal",
+          "name": "temporal"
         }
       ]
     },
@@ -1478,6 +1602,40 @@
       ]
     },
     {
+      "iri": "https://data.moex.com/dams/SignificanceBasisEnum",
+      "name": "SignificanceBasisEnum",
+      "values": [
+        {
+          "iri": "https://data.moex.com/dams/SignificanceBasisEnum#critical_data",
+          "name": "critical_data"
+        },
+        {
+          "iri": "https://data.moex.com/dams/SignificanceBasisEnum#cross_solution",
+          "name": "cross_solution"
+        },
+        {
+          "iri": "https://data.moex.com/dams/SignificanceBasisEnum#explicit_decision",
+          "name": "explicit_decision"
+        },
+        {
+          "iri": "https://data.moex.com/dams/SignificanceBasisEnum#externally_aligned",
+          "name": "externally_aligned"
+        },
+        {
+          "iri": "https://data.moex.com/dams/SignificanceBasisEnum#governance_anchor",
+          "name": "governance_anchor"
+        },
+        {
+          "iri": "https://data.moex.com/dams/SignificanceBasisEnum#identifying",
+          "name": "identifying"
+        },
+        {
+          "iri": "https://data.moex.com/dams/SignificanceBasisEnum#regulatory",
+          "name": "regulatory"
+        }
+      ]
+    },
+    {
       "iri": "https://data.moex.com/dams/SolutionDataRoleEnum",
       "name": "SolutionDataRoleEnum",
       "values": [
@@ -1526,6 +1684,112 @@
           "name": "inverse"
         }
       ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/TimezonePolicyEnum",
+      "name": "TimezonePolicyEnum",
+      "values": [
+        {
+          "iri": "https://data.moex.com/dams/TimezonePolicyEnum#local",
+          "name": "local"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TimezonePolicyEnum#none",
+          "name": "none"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TimezonePolicyEnum#utc",
+          "name": "utc"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TimezonePolicyEnum#with_offset",
+          "name": "with_offset"
+        }
+      ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/TypeFamilyEnum",
+      "name": "TypeFamilyEnum",
+      "values": [
+        {
+          "iri": "https://data.moex.com/dams/TypeFamilyEnum#array",
+          "name": "array"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TypeFamilyEnum#binary",
+          "name": "binary"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TypeFamilyEnum#boolean",
+          "name": "boolean"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TypeFamilyEnum#date",
+          "name": "date"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TypeFamilyEnum#datetime",
+          "name": "datetime"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TypeFamilyEnum#decimal",
+          "name": "decimal"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TypeFamilyEnum#duration",
+          "name": "duration"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TypeFamilyEnum#float",
+          "name": "float"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TypeFamilyEnum#identifier",
+          "name": "identifier"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TypeFamilyEnum#integer",
+          "name": "integer"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TypeFamilyEnum#object",
+          "name": "object"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TypeFamilyEnum#other",
+          "name": "other"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TypeFamilyEnum#string",
+          "name": "string"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TypeFamilyEnum#time",
+          "name": "time"
+        },
+        {
+          "iri": "https://data.moex.com/dams/TypeFamilyEnum#uri",
+          "name": "uri"
+        }
+      ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/ValueDomainKindEnum",
+      "name": "ValueDomainKindEnum",
+      "values": [
+        {
+          "iri": "https://data.moex.com/dams/ValueDomainKindEnum#described",
+          "name": "described"
+        },
+        {
+          "iri": "https://data.moex.com/dams/ValueDomainKindEnum#enumerated",
+          "name": "enumerated"
+        },
+        {
+          "iri": "https://data.moex.com/dams/ValueDomainKindEnum#reference_set",
+          "name": "reference_set"
+        }
+      ]
     }
   ],
   "issues": [],
@@ -1533,11 +1797,14 @@
     "dams": "https://data.moex.com/dams/",
     "linkml": "https://w3id.org/linkml/",
     "moex": "https://data.moex.com/",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
     "schema": "http://schema.org/",
     "shex": "http://www.w3.org/ns/shex#",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
     "xsd": "http://www.w3.org/2001/XMLSchema#"
   },
-  "schema_digest": "sha256:816da1529d551e11f4933376f1c1b55c6ca00b980633c82cc51d5da335295d02",
+  "schema_digest": "sha256:9c3b0a554694d1b1a3cbf972e49149c9a75e2c45006ad19eb2801cdab31024a3",
   "schema_id": "https://data.moex.com/dams/v0.1",
   "schema_name": "moex_dams",
   "schema_version": "0.1.0",
@@ -1623,8 +1890,24 @@
       "name": "attributes"
     },
     {
+      "iri": "https://data.moex.com/dams/base_type_ref",
+      "name": "base_type_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/binding_id",
+      "name": "binding_id"
+    },
+    {
       "iri": "https://data.moex.com/dams/binding_ref",
       "name": "binding_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/broader_domain_ref",
+      "name": "broader_domain_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/broader_meaning_key",
+      "name": "broader_meaning_key"
     },
     {
       "iri": "https://data.moex.com/dams/business_importance",
@@ -1653,6 +1936,10 @@
     {
       "iri": "https://data.moex.com/dams/catalog_id",
       "name": "catalog_id"
+    },
+    {
+      "iri": "https://data.moex.com/dams/charset",
+      "name": "charset"
     },
     {
       "iri": "https://data.moex.com/dams/check_id",
@@ -1691,8 +1978,28 @@
       "name": "compatibility_mode"
     },
     {
+      "iri": "https://data.moex.com/dams/concept_ref",
+      "name": "concept_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/concept_scheme_uri",
+      "name": "concept_scheme_uri"
+    },
+    {
       "iri": "https://data.moex.com/dams/conceptual_alignment_status",
       "name": "conceptual_alignment_status"
+    },
+    {
+      "iri": "https://data.moex.com/dams/conceptual_domain_kind",
+      "name": "conceptual_domain_kind"
+    },
+    {
+      "iri": "https://data.moex.com/dams/conceptual_domain_ref",
+      "name": "conceptual_domain_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/conceptual_domains",
+      "name": "conceptual_domains"
     },
     {
       "iri": "https://data.moex.com/dams/conceptual_entities",
@@ -1705,6 +2012,10 @@
     {
       "iri": "https://data.moex.com/dams/conceptual_implementation_ref",
       "name": "conceptual_implementation_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/conceptual_properties",
+      "name": "conceptual_properties"
     },
     {
       "iri": "https://data.moex.com/dams/confidence",
@@ -1725,6 +2036,10 @@
     {
       "iri": "https://data.moex.com/dams/contract_ref",
       "name": "contract_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/critical_data_element",
+      "name": "critical_data_element"
     },
     {
       "iri": "https://data.moex.com/dams/currency_attribute_ref",
@@ -1761,6 +2076,18 @@
     {
       "iri": "https://data.moex.com/dams/data_steward_ref",
       "name": "data_steward_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/data_type_ref",
+      "name": "data_type_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/data_types",
+      "name": "data_types"
+    },
+    {
+      "iri": "https://data.moex.com/dams/datatype_timezone_policy",
+      "name": "datatype_timezone_policy"
     },
     {
       "iri": "https://data.moex.com/dams/default_relationship_kind",
@@ -1803,6 +2130,14 @@
       "name": "diagnostic_code"
     },
     {
+      "iri": "https://data.moex.com/dams/dialect",
+      "name": "dialect"
+    },
+    {
+      "iri": "https://data.moex.com/dams/dialect_native_type",
+      "name": "dialect_native_type"
+    },
+    {
       "iri": "https://data.moex.com/dams/dimension_attribute_refs",
       "name": "dimension_attribute_refs"
     },
@@ -1825,6 +2160,10 @@
     {
       "iri": "https://data.moex.com/dams/domain_refs",
       "name": "domain_refs"
+    },
+    {
+      "iri": "https://data.moex.com/dams/dynamic_query",
+      "name": "dynamic_query"
     },
     {
       "iri": "https://data.moex.com/dams/element_id",
@@ -1939,6 +2278,10 @@
       "name": "imports_refs"
     },
     {
+      "iri": "https://data.moex.com/dams/include_self",
+      "name": "include_self"
+    },
+    {
       "iri": "https://data.moex.com/dams/integration_channel",
       "name": "integration_channel"
     },
@@ -1979,6 +2322,10 @@
       "name": "inverse_label_en"
     },
     {
+      "iri": "https://data.moex.com/dams/is_identifying",
+      "name": "is_identifying"
+    },
+    {
       "iri": "https://data.moex.com/dams/isolation_rationale",
       "name": "isolation_rationale"
     },
@@ -1997,6 +2344,10 @@
     {
       "iri": "https://data.moex.com/dams/lineage_role",
       "name": "lineage_role"
+    },
+    {
+      "iri": "https://data.moex.com/dams/linkml_type",
+      "name": "linkml_type"
     },
     {
       "iri": "https://data.moex.com/dams/location_uri",
@@ -2021,6 +2372,10 @@
     {
       "iri": "https://data.moex.com/dams/logical_type",
       "name": "logical_type"
+    },
+    {
+      "iri": "https://data.moex.com/dams/lossiness",
+      "name": "lossiness"
     },
     {
       "iri": "https://data.moex.com/dams/mapping_cardinality",
@@ -2051,8 +2406,36 @@
       "name": "match_kind"
     },
     {
+      "iri": "https://data.moex.com/dams/max_length",
+      "name": "max_length"
+    },
+    {
+      "iri": "https://data.moex.com/dams/max_value",
+      "name": "max_value"
+    },
+    {
       "iri": "https://data.moex.com/dams/maximum_cardinality",
       "name": "maximum_cardinality"
+    },
+    {
+      "iri": "https://data.moex.com/dams/meaning_definition",
+      "name": "meaning_definition"
+    },
+    {
+      "iri": "https://data.moex.com/dams/meaning_key",
+      "name": "meaning_key"
+    },
+    {
+      "iri": "https://data.moex.com/dams/meaning_label",
+      "name": "meaning_label"
+    },
+    {
+      "iri": "https://data.moex.com/dams/meaning_status",
+      "name": "meaning_status"
+    },
+    {
+      "iri": "https://data.moex.com/dams/meaning_term_ref",
+      "name": "meaning_term_ref"
     },
     {
       "iri": "https://data.moex.com/dams/measure_attribute_refs",
@@ -2069,6 +2452,14 @@
     {
       "iri": "https://data.moex.com/dams/metrics",
       "name": "metrics"
+    },
+    {
+      "iri": "https://data.moex.com/dams/min_length",
+      "name": "min_length"
+    },
+    {
+      "iri": "https://data.moex.com/dams/min_value",
+      "name": "min_value"
     },
     {
       "iri": "https://data.moex.com/dams/minimum_cardinality",
@@ -2111,12 +2502,20 @@
       "name": "native_type"
     },
     {
+      "iri": "https://data.moex.com/dams/native_type_bindings",
+      "name": "native_type_bindings"
+    },
+    {
       "iri": "https://data.moex.com/dams/ontology_property_ref",
       "name": "ontology_property_ref"
     },
     {
       "iri": "https://data.moex.com/dams/operation_name",
       "name": "operation_name"
+    },
+    {
+      "iri": "https://data.moex.com/dams/ordinal",
+      "name": "ordinal"
     },
     {
       "iri": "https://data.moex.com/dams/ordinal_position",
@@ -2135,6 +2534,10 @@
       "name": "owning_unit_ref"
     },
     {
+      "iri": "https://data.moex.com/dams/parameter_mapping",
+      "name": "parameter_mapping"
+    },
+    {
       "iri": "https://data.moex.com/dams/parent_concept_ref",
       "name": "parent_concept_ref"
     },
@@ -2149,6 +2552,10 @@
     {
       "iri": "https://data.moex.com/dams/path_template",
       "name": "path_template"
+    },
+    {
+      "iri": "https://data.moex.com/dams/permissible_values",
+      "name": "permissible_values"
     },
     {
       "iri": "https://data.moex.com/dams/physical_field_refs",
@@ -2183,8 +2590,20 @@
       "name": "policy_target_ref"
     },
     {
+      "iri": "https://data.moex.com/dams/precision",
+      "name": "precision"
+    },
+    {
       "iri": "https://data.moex.com/dams/produces_refs",
       "name": "produces_refs"
+    },
+    {
+      "iri": "https://data.moex.com/dams/property_kind",
+      "name": "property_kind"
+    },
+    {
+      "iri": "https://data.moex.com/dams/property_owner_entity_ref",
+      "name": "property_owner_entity_ref"
     },
     {
       "iri": "https://data.moex.com/dams/protocol",
@@ -2243,6 +2662,10 @@
       "name": "relationship_kind"
     },
     {
+      "iri": "https://data.moex.com/dams/relationship_types",
+      "name": "relationship_types"
+    },
+    {
       "iri": "https://data.moex.com/dams/relationships",
       "name": "relationships"
     },
@@ -2269,6 +2692,10 @@
     {
       "iri": "https://data.moex.com/dams/requirements",
       "name": "requirements"
+    },
+    {
+      "iri": "https://data.moex.com/dams/scale",
+      "name": "scale"
     },
     {
       "iri": "https://data.moex.com/dams/schema_dialect",
@@ -2327,6 +2754,14 @@
       "name": "severity"
     },
     {
+      "iri": "https://data.moex.com/dams/significance_basis",
+      "name": "significance_basis"
+    },
+    {
+      "iri": "https://data.moex.com/dams/significance_rationale",
+      "name": "significance_rationale"
+    },
+    {
       "iri": "https://data.moex.com/dams/solution_data_role",
       "name": "solution_data_role"
     },
@@ -2357,6 +2792,14 @@
     {
       "iri": "https://data.moex.com/dams/source_model_ref",
       "name": "source_model_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/source_nodes",
+      "name": "source_nodes"
+    },
+    {
+      "iri": "https://data.moex.com/dams/source_ontology",
+      "name": "source_ontology"
     },
     {
       "iri": "https://data.moex.com/dams/source_platform_ref",
@@ -2503,6 +2946,14 @@
       "name": "transformation_ref"
     },
     {
+      "iri": "https://data.moex.com/dams/type_family",
+      "name": "type_family"
+    },
+    {
+      "iri": "https://data.moex.com/dams/type_name",
+      "name": "type_name"
+    },
+    {
       "iri": "https://data.moex.com/dams/unit",
       "name": "unit"
     },
@@ -2519,8 +2970,56 @@
       "name": "valid_to"
     },
     {
+      "iri": "https://data.moex.com/dams/value_code",
+      "name": "value_code"
+    },
+    {
+      "iri": "https://data.moex.com/dams/value_definition",
+      "name": "value_definition"
+    },
+    {
+      "iri": "https://data.moex.com/dams/value_domain_kind",
+      "name": "value_domain_kind"
+    },
+    {
+      "iri": "https://data.moex.com/dams/value_domain_ref",
+      "name": "value_domain_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/value_domains",
+      "name": "value_domains"
+    },
+    {
+      "iri": "https://data.moex.com/dams/value_label",
+      "name": "value_label"
+    },
+    {
+      "iri": "https://data.moex.com/dams/value_meaning_key",
+      "name": "value_meaning_key"
+    },
+    {
+      "iri": "https://data.moex.com/dams/value_meanings",
+      "name": "value_meanings"
+    },
+    {
+      "iri": "https://data.moex.com/dams/value_set_query_id",
+      "name": "value_set_query_id"
+    },
+    {
       "iri": "https://data.moex.com/dams/value_set_ref",
       "name": "value_set_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/value_set_source",
+      "name": "value_set_source"
+    },
+    {
+      "iri": "https://data.moex.com/dams/value_status",
+      "name": "value_status"
+    },
+    {
+      "iri": "https://data.moex.com/dams/xsd_datatype",
+      "name": "xsd_datatype"
     }
   ]
 }

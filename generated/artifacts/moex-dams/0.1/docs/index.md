@@ -16,7 +16,9 @@ Name: moex_dams
 | [BusinessDomain](BusinessDomain.md) | Бизнес-домен или предметная область; мастер определяется архитектурным govern... |
 | [BusinessProcess](BusinessProcess.md) | Ссылка на бизнес-процесс или его шаг в BPMN-репозитории |
 | [ClassificationAssignment](ClassificationAssignment.md) | Версионируемое назначение категории классификации элементу модели с основание... |
+| [ConceptualDomain](ConceptualDomain.md) | Концептуальный домен значений: набор смыслов (ValueMeaning) или ссылка на вне... |
 | [ConceptualEntity](ConceptualEntity.md) | Корпоративное бизнес-понятие верхнего уровня, независимое от конкретной реали... |
+| [ConceptualProperty](ConceptualProperty.md) | Значимое концептуальное свойство сущности КМД |
 | [Contains](Contains.md) | Mixin контейнерности |
 | [DataCarrier](DataCarrier.md) | Носитель данных: хранит или передаёт данные (таблица, файл, топик, сообщение ... |
 | [DataClassificationTerm](DataClassificationTerm.md) | Специальная категория чувствительности или регулирования, например ПДн или ин... |
@@ -25,6 +27,7 @@ Name: moex_dams
 | [DataFlow](DataFlow.md) | Ссылочная проекция зарегистрированной интеграции; топология и канал являются ... |
 | [DataFlowEntityBinding](DataFlowEntityBinding.md) | Связь потока с логическими сущностями, атрибутами и носителями данных модели ... |
 | [DataModelBinding](DataModelBinding.md) | Дочерняя модельная спецификация дата-контракта, фиксирующая неизменяемую реви... |
+| [DataType](DataType.md) | Корпоративный тип данных: семейство, параметры представления и соответствие X... |
 | [Dimension](Dimension.md) | Переиспользуемое аналитическое измерение, связанное с логическими атрибутами |
 | [DomainContext](DomainContext.md) | Ограниченный логический контекст с собственной терминологией и областью ответ... |
 | [ExecutionAsset](ExecutionAsset.md) | Исполняемый актив (pipeline / job) с минимальной lineage-ролью |
@@ -45,7 +48,7 @@ Name: moex_dams
 | [ITPlatform](ITPlatform.md) | ИТ-платформа; мастер данных — EAM |
 | [ITSolution](ITSolution.md) | ИТ-решение, объединяющее одну или несколько ИТ-систем; мастер данных — EAM |
 | [ITSystem](ITSystem.md) | ИТ-система; мастер данных — EAM |
-| [LogicalAttribute](LogicalAttribute.md) | Логический атрибут сущности с бизнес-смыслом, типом, обязательностью и класси... |
+| [LogicalAttribute](LogicalAttribute.md) | Логический атрибут сущности: идентификация, обязательность, кардинальность и ... |
 | [LogicalEntity](LogicalEntity.md) | Представление бизнес-сущности в доменном контексте и модели конкретного решен... |
 | [Mapping](Mapping.md) | Явное соответствие между элементами |
 | [Metric](Metric.md) | Управляемое определение бизнес- или технической метрики; является опциональны... |
@@ -53,7 +56,9 @@ Name: moex_dams
 | [ModelPackage](ModelPackage.md) | Версионируемый артефакт модели данных: либо корпоративная conceptual модель (... |
 | [ModelSelection](ModelSelection.md) | Переиспользуемый набор выбранных сущностей, атрибутов и физических представле... |
 | [MOEXModelRepository](MOEXModelRepository.md) | Корневой контейнер для проверки набора моделей, ссылочных проекций справочник... |
+| [NativeTypeBinding](NativeTypeBinding.md) | Привязка нативного типа диалекта (SQL, JSON Schema и т |
 | [OrganizationUnit](OrganizationUnit.md) | Организационное подразделение |
+| [PermissibleValue](PermissibleValue.md) | Допустимое значение внутри ValueDomain (встраиваемый) |
 | [PhysicalField](PhysicalField.md) | Поле носителя данных (DataCarrier); семантика задаётся Mapping к LogicalAttri... |
 | [Policy](Policy.md) | Политика доступа, хранения, качества или архитектурный инвариант |
 | [PolicyBinding](PolicyBinding.md) | Применение управляемой политики к элементу модели |
@@ -68,6 +73,9 @@ Name: moex_dams
 | [SelectedEntity](SelectedEntity.md) | Выбранная для интеграции логическая сущность |
 | [SpecificationRequirement](SpecificationRequirement.md) | Нормативное требование к модели, соответствующей reference specification (кат... |
 | [TechnicalAsset](TechnicalAsset.md) | Квант данных: адресуемый технический объект управления |
+| [ValueDomain](ValueDomain.md) | Представление значений: тип, формат, единица, допустимые значения или ссылка ... |
+| [ValueMeaning](ValueMeaning.md) | Смысл допустимого значения внутри ConceptualDomain (встраиваемый, без lifecyc... |
+| [ValueSetQuery](ValueSetQuery.md) | Динамический запрос набора значений по образцу LinkML reachable_from (source ... |
 
 
 
@@ -95,7 +103,11 @@ Name: moex_dams
 | [assignment_id](assignment_id.md) |  |
 | [associative](associative.md) |  |
 | [attributes](attributes.md) |  |
+| [base_type_ref](base_type_ref.md) | Базовый тип, от которого наследуются параметры |
+| [binding_id](binding_id.md) |  |
 | [binding_ref](binding_ref.md) | Ссылка на внешнее описание binding |
+| [broader_domain_ref](broader_domain_ref.md) | Более широкий концептуальный домен |
+| [broader_meaning_key](broader_meaning_key.md) | Ключ более широкого ValueMeaning в том же домене |
 | [business_importance](business_importance.md) |  |
 | [business_key_kind](business_key_kind.md) |  |
 | [business_process_refs](business_process_refs.md) |  |
@@ -103,6 +115,7 @@ Name: moex_dams
 | [carrier_ref](carrier_ref.md) | Носитель данных, которому принадлежит поле |
 | [carrier_refs](carrier_refs.md) | Носители данных, участвующие в binding (не контейнеры) |
 | [catalog_id](catalog_id.md) |  |
+| [charset](charset.md) | Кодировка для string/binary |
 | [check_id](check_id.md) |  |
 | [classification_assignments](classification_assignments.md) |  |
 | [classification_rationale](classification_rationale.md) |  |
@@ -112,15 +125,22 @@ Name: moex_dams
 | [code](code.md) |  |
 | [compatibility_baseline_ref](compatibility_baseline_ref.md) |  |
 | [compatibility_mode](compatibility_mode.md) |  |
+| [concept_ref](concept_ref.md) | Опциональная ссылка LogicalAttribute → ConceptualProperty |
+| [concept_scheme_uri](concept_scheme_uri.md) | Внешняя схема понятий (SKOS ConceptScheme / онтология) |
 | [conceptual_alignment_status](conceptual_alignment_status.md) |  |
+| [conceptual_domain_kind](conceptual_domain_kind.md) | Вид концептуального домена (enumerated | described) |
+| [conceptual_domain_ref](conceptual_domain_ref.md) | Опциональная ссылка на концептуальный домен смыслов |
+| [conceptual_domains](conceptual_domains.md) | Концептуальные домены смыслов (только enterprise-пакеты) |
 | [conceptual_entities](conceptual_entities.md) |  |
 | [conceptual_entity_refs](conceptual_entity_refs.md) |  |
 | [conceptual_implementation_ref](conceptual_implementation_ref.md) | Required for solution packages: reference to the enterprise-conceptual SpecIm... |
+| [conceptual_properties](conceptual_properties.md) | Значимые концептуальные свойства (только enterprise-пакеты) |
 | [confidence](confidence.md) |  |
 | [consumes_refs](consumes_refs.md) |  |
 | [containment_kind](containment_kind.md) |  |
 | [context_ref](context_ref.md) |  |
 | [contract_ref](contract_ref.md) |  |
+| [critical_data_element](critical_data_element.md) | Признак критичного элемента данных (CDE) |
 | [currency_attribute_ref](currency_attribute_ref.md) | Ссылка на атрибут валюты для денежной величины (Wave 2 soft) |
 | [data_carriers](data_carriers.md) | Коллекция носителей данных пакета (Variant B, ADR-031) |
 | [data_class](data_class.md) |  |
@@ -130,6 +150,9 @@ Name: moex_dams
 | [data_model_bindings](data_model_bindings.md) |  |
 | [data_owner_ref](data_owner_ref.md) |  |
 | [data_steward_ref](data_steward_ref.md) |  |
+| [data_type_ref](data_type_ref.md) | Ссылка на корпоративный DataType |
+| [data_types](data_types.md) | Корпоративный реестр типов данных |
+| [datatype_timezone_policy](datatype_timezone_policy.md) | Политика часового пояса для date/time/datetime типов |
 | [default_relationship_kind](default_relationship_kind.md) | Optional default relationship_kind when this term is used |
 | [default_value](default_value.md) |  |
 | [definition_rationale](definition_rationale.md) | Human rationale for declaring an own definition when a source is also cited, ... |
@@ -140,12 +163,15 @@ Name: moex_dams
 | [derived_expression](derived_expression.md) |  |
 | [description](description.md) |  |
 | [diagnostic_code](diagnostic_code.md) | Мост к DAMS-STRUCT-* / DAMS-REF-* / DAMS-REQ-* |
+| [dialect](dialect.md) | Диалект/платформа нативного типа (postgresql, oracle, json, …) |
+| [dialect_native_type](dialect_native_type.md) | Имя нативного типа в диалекте |
 | [dimension_attribute_refs](dimension_attribute_refs.md) |  |
 | [dimensions](dimensions.md) |  |
 | [direction](direction.md) |  |
 | [domain_contexts](domain_contexts.md) |  |
 | [domain_ref](domain_ref.md) |  |
 | [domain_refs](domain_refs.md) |  |
+| [dynamic_query](dynamic_query.md) | Динамический запрос набора (reachable_from) |
 | [element_id](element_id.md) |  |
 | [entity_bindings](entity_bindings.md) |  |
 | [entity_tier](entity_tier.md) | Structural independence of the conceptual entity (ADR-026) |
@@ -174,6 +200,7 @@ Name: moex_dams
 | [implementation_status](implementation_status.md) | Статус реализации требования |
 | [implementation_version](implementation_version.md) |  |
 | [imports_refs](imports_refs.md) |  |
+| [include_self](include_self.md) | Включать стартовые узлы в результат |
 | [integration_channel](integration_channel.md) |  |
 | [integration_class](integration_class.md) |  |
 | [integration_level](integration_level.md) |  |
@@ -184,17 +211,20 @@ Name: moex_dams
 | [invariant_refs](invariant_refs.md) |  |
 | [inverse_label](inverse_label.md) | Natural-language label target → source |
 | [inverse_label_en](inverse_label_en.md) | English inverse label (ADR-026) |
+| [is_identifying](is_identifying.md) | Является ли свойство идентифицирующим (бизнес-ключ) |
 | [isolation_rationale](isolation_rationale.md) | Обоснование семантической изоляции сущности (LDM-007) |
 | [key_attribute_refs](key_attribute_refs.md) |  |
 | [kind](kind.md) |  |
 | [lifecycle_status](lifecycle_status.md) |  |
 | [lineage_role](lineage_role.md) | Роль актива в lineage (source, sink, intermediate, none) |
+| [linkml_type](linkml_type.md) | Имя типа LinkML (string, integer, …) |
 | [location_uri](location_uri.md) |  |
 | [logical_attribute_ref](logical_attribute_ref.md) |  |
 | [logical_attribute_refs](logical_attribute_refs.md) |  |
 | [logical_entities](logical_entities.md) |  |
 | [logical_entity_ref](logical_entity_ref.md) |  |
 | [logical_type](logical_type.md) |  |
+| [lossiness](lossiness.md) | Оценка потери точности при отображении |
 | [mapping_cardinality](mapping_cardinality.md) |  |
 | [mapping_coverage_status](mapping_coverage_status.md) | Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ phys... |
 | [mapping_rationale](mapping_rationale.md) | Обоснование для planned / technical-only / not-applicable / inherited |
@@ -202,11 +232,20 @@ Name: moex_dams
 | [mappings](mappings.md) |  |
 | [master_system](master_system.md) |  |
 | [match_kind](match_kind.md) | Alignment strength |
+| [max_length](max_length.md) | Максимальная длина для string/binary |
+| [max_value](max_value.md) | Максимальное допустимое значение (described) |
 | [maximum_cardinality](maximum_cardinality.md) |  |
+| [meaning_definition](meaning_definition.md) | Определение смысла (skos:definition) |
+| [meaning_key](meaning_key.md) | Ключ смысла, уникальный внутри ConceptualDomain |
+| [meaning_label](meaning_label.md) | Предпочтительная метка смысла (skos:prefLabel в OWL-проекции) |
+| [meaning_status](meaning_status.md) | Статус смысла значения |
+| [meaning_term_ref](meaning_term_ref.md) | CURIE внешнего термина, уточняющего смысл |
 | [measure_attribute_refs](measure_attribute_refs.md) |  |
 | [member_system_refs](member_system_refs.md) |  |
 | [metric_expression](metric_expression.md) |  |
 | [metrics](metrics.md) |  |
+| [min_length](min_length.md) | Минимальная длина для string/binary |
+| [min_value](min_value.md) | Минимальное допустимое значение (described) |
 | [minimum_cardinality](minimum_cardinality.md) |  |
 | [model_package_ref](model_package_ref.md) |  |
 | [model_packages](model_packages.md) |  |
@@ -217,16 +256,20 @@ Name: moex_dams
 | [namespace](namespace.md) |  |
 | [native_name](native_name.md) |  |
 | [native_type](native_type.md) |  |
+| [native_type_bindings](native_type_bindings.md) | Привязки нативных типов диалектов к DataType |
 | [ontology_property_ref](ontology_property_ref.md) | Optional owl:ObjectProperty IRI |
 | [operation_name](operation_name.md) |  |
+| [ordinal](ordinal.md) | Порядок значения в перечислении |
 | [ordinal_position](ordinal_position.md) |  |
 | [owner_entity_ref](owner_entity_ref.md) | Structural parent LogicalEntity of this attribute (containment), not the data... |
 | [ownership_inheritance_rule](ownership_inheritance_rule.md) | Deprecated as source of truth (ADR-023) |
 | [owning_unit_ref](owning_unit_ref.md) |  |
+| [parameter_mapping](parameter_mapping.md) | Описание отображения параметров (precision/scale/length) |
 | [parent_concept_ref](parent_concept_ref.md) |  |
 | [parent_domain_ref](parent_domain_ref.md) |  |
 | [parent_ref](parent_ref.md) | Родитель в контейнерной иерархии (без циклов) |
 | [path_template](path_template.md) |  |
+| [permissible_values](permissible_values.md) | Встроенный список допустимых значений |
 | [physical_field_refs](physical_field_refs.md) |  |
 | [physical_fields](physical_fields.md) |  |
 | [platform_ref](platform_ref.md) |  |
@@ -235,7 +278,10 @@ Name: moex_dams
 | [policy_ref](policy_ref.md) |  |
 | [policy_refs](policy_refs.md) |  |
 | [policy_target_ref](policy_target_ref.md) |  |
+| [precision](precision.md) | Точность для decimal (общее число цифр) |
 | [produces_refs](produces_refs.md) |  |
+| [property_kind](property_kind.md) | Вид концептуального свойства |
+| [property_owner_entity_ref](property_owner_entity_ref.md) | ConceptualEntity-владелец ConceptualProperty (концептуальный containment) |
 | [protocol](protocol.md) | Протокол доступа (например https, jdbc, kafka) |
 | [protocol_version](protocol_version.md) |  |
 | [qualified_name](qualified_name.md) |  |
@@ -250,6 +296,7 @@ Name: moex_dams
 | [relation_terms](relation_terms.md) | Governed relation-term dictionary for the package (ADR-026) |
 | [relation_to_reference](relation_to_reference.md) |  |
 | [relationship_kind](relationship_kind.md) | Тип логической связи (Wave 2) |
+| [relationship_types](relationship_types.md) | Типы связей для обхода |
 | [relationships](relationships.md) |  |
 | [remediation](remediation.md) | Actionable remediation text for CI / Cursor / authors |
 | [repository_id](repository_id.md) |  |
@@ -257,6 +304,7 @@ Name: moex_dams
 | [requirement_level](requirement_level.md) |  |
 | [requirement_section](requirement_section.md) |  |
 | [requirements](requirements.md) |  |
+| [scale](scale.md) | Масштаб для decimal (число цифр после запятой); scale ≤ precision |
 | [schema_dialect](schema_dialect.md) | Диалект схемы (например avro, json-schema, sql-ddl) |
 | [schema_path](schema_path.md) |  |
 | [scope_kind](scope_kind.md) |  |
@@ -271,6 +319,8 @@ Name: moex_dams
 | [sensitivity_term_refs](sensitivity_term_refs.md) |  |
 | [serves_refs](serves_refs.md) | Носители, доступные через эту точку доступа |
 | [severity](severity.md) |  |
+| [significance_basis](significance_basis.md) | Основания существования ConceptualProperty (минимум одно) |
+| [significance_rationale](significance_rationale.md) | Обязательное обоснование, если significance_basis содержит explicit_decision |
 | [solution_data_role](solution_data_role.md) |  |
 | [solution_ref](solution_ref.md) |  |
 | [source_artifact_ref](source_artifact_ref.md) |  |
@@ -279,6 +329,8 @@ Name: moex_dams
 | [source_max_cardinality](source_max_cardinality.md) |  |
 | [source_min_cardinality](source_min_cardinality.md) |  |
 | [source_model_ref](source_model_ref.md) |  |
+| [source_nodes](source_nodes.md) | Стартовые узлы reachable_from |
+| [source_ontology](source_ontology.md) | IRI/CURIE исходной онтологии для динамического набора |
 | [source_platform_ref](source_platform_ref.md) |  |
 | [source_refs](source_refs.md) |  |
 | [source_role](source_role.md) |  |
@@ -315,11 +367,25 @@ Name: moex_dams
 | [transformation_mapping_ref](transformation_mapping_ref.md) |  |
 | [transformation_mapping_refs](transformation_mapping_refs.md) |  |
 | [transformation_ref](transformation_ref.md) |  |
+| [type_family](type_family.md) | Семейство типа (boolean, integer, decimal, …) |
+| [type_name](type_name.md) | Каноническое имя типа в корпоративном реестре |
 | [unit](unit.md) |  |
-| [unit_code](unit_code.md) | Код единицы измерения (Wave 2 soft) |
+| [unit_code](unit_code.md) | Код единицы измерения (UCUM / корпоративный код) |
 | [valid_from](valid_from.md) |  |
 | [valid_to](valid_to.md) |  |
+| [value_code](value_code.md) | Код значения, уникальный внутри ValueDomain |
+| [value_definition](value_definition.md) | Определение допустимого значения |
+| [value_domain_kind](value_domain_kind.md) | Вид домена значений (enumerated | described | reference_set) |
+| [value_domain_ref](value_domain_ref.md) | Ссылка на домен представления значений |
+| [value_domains](value_domains.md) | Домены представления значений (enterprise или solution) |
+| [value_label](value_label.md) | Метка допустимого значения |
+| [value_meaning_key](value_meaning_key.md) | Ключ ValueMeaning в связанном ConceptualDomain |
+| [value_meanings](value_meanings.md) | Встроенный список смыслов значений |
+| [value_set_query_id](value_set_query_id.md) | Локальный идентификатор динамического запроса внутри ValueDomain |
 | [value_set_ref](value_set_ref.md) |  |
+| [value_set_source](value_set_source.md) | Внешний источник набора значений (reference_set) |
+| [value_status](value_status.md) | Статус допустимого значения |
+| [xsd_datatype](xsd_datatype.md) | Соответствующий XSD datatype (например xsd:string) |
 
 
 ## Enumerations
@@ -333,6 +399,7 @@ Name: moex_dams
 | [CheckSeverityEnum](CheckSeverityEnum.md) |  |
 | [CompatibilityModeEnum](CompatibilityModeEnum.md) |  |
 | [ConceptualAlignmentStatusEnum](ConceptualAlignmentStatusEnum.md) | Статус выравнивания логической сущности с корпоративным концептуальным уровне... |
+| [ConceptualDomainKindEnum](ConceptualDomainKindEnum.md) | Вид концептуального домена (ISO 11179 Conceptual Domain) |
 | [ContainmentKindEnum](ContainmentKindEnum.md) |  |
 | [DAMSModelLevelEnum](DAMSModelLevelEnum.md) | Package-level DAMS model layer (ADR-021) |
 | [DataCarrierKindEnum](DataCarrierKindEnum.md) |  |
@@ -358,10 +425,12 @@ Name: moex_dams
 | [LifecycleStatusEnum](LifecycleStatusEnum.md) |  |
 | [LineageRoleEnum](LineageRoleEnum.md) |  |
 | [LogicalDataTypeEnum](LogicalDataTypeEnum.md) |  |
+| [LossinessEnum](LossinessEnum.md) | Оценка потери точности NativeTypeBinding |
 | [MappingCardinalityEnum](MappingCardinalityEnum.md) |  |
 | [MappingCoverageStatusEnum](MappingCoverageStatusEnum.md) | Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ phys... |
 | [MappingTypeEnum](MappingTypeEnum.md) | Kind of Mapping assertion |
 | [ModelLevelEnum](ModelLevelEnum.md) |  |
+| [PropertyKindEnum](PropertyKindEnum.md) | Вид концептуального свойства |
 | [RelationshipKindEnum](RelationshipKindEnum.md) | Тип логической связи (Wave 2) |
 | [RequirementImplementationStatus](RequirementImplementationStatus.md) | Статус реализации утверждённого требования |
 | [RequirementLevelEnum](RequirementLevelEnum.md) | Уровень применения требования к спецификации |
@@ -369,9 +438,13 @@ Name: moex_dams
 | [RequirementSectionEnum](RequirementSectionEnum.md) | Раздел каталога требований (трёхбуквенный код в code) |
 | [ScopedDefinitionRelationEnum](ScopedDefinitionRelationEnum.md) | How a scoped definition relates to the element's reference definition (ADR-02... |
 | [SecurityClassificationEnum](SecurityClassificationEnum.md) | Режим защиты данных (Wave 2); ортогонален governance_classification |
+| [SignificanceBasisEnum](SignificanceBasisEnum.md) | Основание существования ConceptualProperty в КМД (вариант B) |
 | [SolutionDataRoleEnum](SolutionDataRoleEnum.md) |  |
 | [SpecificationKindEnum](SpecificationKindEnum.md) |  |
 | [TermDirectionEnum](TermDirectionEnum.md) | Which side of a RelationTerm a Relationship assertion uses (ADR-026) |
+| [TimezonePolicyEnum](TimezonePolicyEnum.md) | Политика часового пояса для временных DataType |
+| [TypeFamilyEnum](TypeFamilyEnum.md) | Семейство корпоративного DataType |
+| [ValueDomainKindEnum](ValueDomainKindEnum.md) | Вид домена представления значений (ISO 11179 Value Domain) |
 
 
 ## Types

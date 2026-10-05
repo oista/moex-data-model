@@ -62,6 +62,36 @@ LinkML `deprecated` + `deprecated_element_has_possible_replacement`
 `ConceptualProperty` живёт в `moex-core.yaml` (рядом с `ConceptualEntity`).
 `ConceptualDomain` — `moex-semantic.yaml`; типы/ValueDomain — `moex-datatypes.yaml`.
 
+### Слот владельца: `property_owner_entity_ref`
+
+У `LogicalAttribute` уже есть слот `owner_entity_ref` с range `LogicalEntity`
+(структурный parent). Переиспользовать то же имя для ConceptualProperty нельзя:
+один URI слота с двумя range ломает OWL/viewer (тот же принцип, что `asset_namespace`
+вместо `namespace` в ADR-031). Поэтому владелец свойства — отдельный слот
+`property_owner_entity_ref` (range `ConceptualEntity`, required). Unique key
+`conceptual_property_key` = (`property_owner_entity_ref`, `name`).
+
+### Цикл импортов схем (известный долг)
+
+До этой задачи уже существовал цикл `moex-core` ↔ `moex-technical` (ModelElement /
+коллекции TechnicalAsset, ADR-031).
+
+Новые рёбра:
+
+| Ребро | Причина |
+|---|---|
+| `moex-semantic` → `moex-core` | `ConceptualDomain is_a ModelElement` |
+| `moex-core` → `moex-semantic` | коллекции `conceptual_domains`; `ConceptualProperty.conceptual_domain_ref` |
+| `moex-datatypes` → `moex-core` | `DataType` / `ValueDomain is_a ModelElement` |
+| `moex-core` → `moex-datatypes` | коллекции + `LogicalAttribute.data_type_ref` / `value_domain_ref` |
+| `moex-datatypes` → `moex-semantic` | `ValueDomain.conceptual_domain_ref` |
+
+SchemaView / генераторы LinkML 1.11 цикл принимают (как technical). **Рекомендуемый
+вынос (не в этом релизе):** модуль `moex-model-element.yaml` (только `ModelElement` +
+импорт governance/types), на который ссылаются `semantic`, `datatypes`, `technical`
+и `core` без обратных импортов leaf→core. До выноса цикл — **известный долг**,
+не расширять третьими рёбрами без ADR.
+
 ### Выравнивание (открыто)
 
 Субъектом будущего `SemanticAlignment` может быть `ConceptualProperty` **или**
@@ -72,3 +102,5 @@ LinkML `deprecated` + `deprecated_element_has_possible_replacement`
 - `concept_ref` никогда не обязателен; отсутствие не даёт diagnostic.
 - Миграция (`--apply`) создаёт только типы/домены; свойства — только `--propose`.
 - Пометки генерации — через `tags` (`generated`), не `annotations` (слота нет).
+- Владелец ConceptualProperty — только `property_owner_entity_ref`, не `owner_entity_ref`.
+- Цикл импортов semantic/datatypes↔core зафиксирован как долг до `moex-model-element`.

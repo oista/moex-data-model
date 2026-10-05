@@ -11,6 +11,8 @@
         click DomainContext href "../DomainContext"
       HasOwnership <|-- ConceptualEntity
         click ConceptualEntity href "../ConceptualEntity"
+      HasOwnership <|-- ConceptualProperty
+        click ConceptualProperty href "../ConceptualProperty"
       HasOwnership <|-- LogicalEntity
         click LogicalEntity href "../LogicalEntity"
       HasOwnership <|-- LogicalAttribute
@@ -19,6 +21,8 @@
         click PhysicalField href "../PhysicalField"
       HasOwnership <|-- TechnicalAsset
         click TechnicalAsset href "../TechnicalAsset"
+      HasOwnership <|-- ConceptualDomain
+        click ConceptualDomain href "../ConceptualDomain"
       HasOwnership <|-- DataFlow
         click DataFlow href "../DataFlow"
       HasOwnership <|-- DataModelBinding

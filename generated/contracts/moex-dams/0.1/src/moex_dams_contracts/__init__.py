@@ -1533,7 +1533,7 @@ class PhysicalField(ModelElement, HasPolicyBindings, HasGovernanceClassification
     """
     carrier_ref: str = Field(default=..., description="""Носитель данных, которому принадлежит поле.""")
     native_name: str = Field(default=...)
-    native_type: str = Field(default=..., description="""Имя нативного типа в диалекте.""")
+    native_type: str = Field(default=...)
     required: bool = Field(default=...)
     ordinal_position: Optional[int] = Field(default=None, ge=1)
     schema_path: Optional[str] = Field(default=None)
@@ -1943,7 +1943,8 @@ class NativeTypeBinding(ConfiguredBaseModel):
     """
     binding_id: str = Field(default=...)
     dialect: str = Field(default=..., description="""Диалект/платформа нативного типа (postgresql, oracle, json, …).""")
-    native_type: str = Field(default=..., description="""Имя нативного типа в диалекте.""")
+    dialect_native_type: str = Field(default=..., description="""Имя нативного типа в диалекте. Отдельный слот от PhysicalField.native_type (другой контекст; общий URI ломает SchemaLoader merge — ADR-036).
+""")
     data_type_ref: str = Field(default=..., description="""Ссылка на корпоративный DataType.""")
     lossiness: LossinessEnum = Field(default=..., description="""Оценка потери точности при отображении.""")
     parameter_mapping: Optional[str] = Field(default=None, description="""Описание отображения параметров (precision/scale/length).""")
@@ -1995,6 +1996,7 @@ class ValueSetQuery(ConfiguredBaseModel):
     Динамический запрос набора значений по образцу LinkML reachable_from (source ontology, узлы, типы связей).
 
     """
+    value_set_query_id: str = Field(default=..., description="""Локальный идентификатор динамического запроса внутри ValueDomain.""")
     source_ontology: str = Field(default=..., description="""IRI/CURIE исходной онтологии для динамического набора.""")
     source_nodes: Optional[list[str]] = Field(default=None, description="""Стартовые узлы reachable_from.""")
     relationship_types: Optional[list[str]] = Field(default=None, description="""Типы связей для обхода.""")

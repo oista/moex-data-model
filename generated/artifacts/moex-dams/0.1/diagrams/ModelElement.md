@@ -15,6 +15,8 @@
         click DomainContext href "../DomainContext"
       ModelElement <|-- ConceptualEntity
         click ConceptualEntity href "../ConceptualEntity"
+      ModelElement <|-- ConceptualProperty
+        click ConceptualProperty href "../ConceptualProperty"
       ModelElement <|-- LogicalEntity
         click LogicalEntity href "../LogicalEntity"
       ModelElement <|-- LogicalAttribute
@@ -29,6 +31,12 @@
         click Mapping href "../Mapping"
       ModelElement <|-- TechnicalAsset
         click TechnicalAsset href "../TechnicalAsset"
+      ModelElement <|-- ConceptualDomain
+        click ConceptualDomain href "../ConceptualDomain"
+      ModelElement <|-- DataType
+        click DataType href "../DataType"
+      ModelElement <|-- ValueDomain
+        click ValueDomain href "../ValueDomain"
       ModelElement <|-- DataFlow
         click DataFlow href "../DataFlow"
       ModelElement <|-- DataFlowEntityBinding

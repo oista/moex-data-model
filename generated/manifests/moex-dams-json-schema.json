@@ -4,8 +4,8 @@
   "generator_module": "linkml.generators.jsonschemagen",
   "generator_version": "1.11.1",
   "schema_path": "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml",
-  "schema_digest": "sha256:5bfbb9fb1af31231f78caafbb19c8186cb7438c41f537f881dbe8bbdaf86edef",
+  "schema_digest": "sha256:28d77cc328b5530237f0c69cb41548df9764a4ae56526843a812c455eb5dab23",
   "output_path": "generated/artifacts/moex-dams/0.1/moex-dams.schema.json",
-  "content_digest": "sha256:47c801fad06293b895fae435259ca98ba20f4f4d2fd719a152ce71986555f8d7",
-  "generated_at": "2026-10-05T18:35:46.269873+00:00"
+  "content_digest": "sha256:e9ae0a4f6c7574a6b507a7b3742d145ad12a000f4d806552c187a010cd43ab01",
+  "generated_at": "2026-10-05T19:39:30.602215+00:00"
 }

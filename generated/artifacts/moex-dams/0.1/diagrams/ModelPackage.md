@@ -33,6 +33,17 @@
         
       ModelPackage : classification_source
         
+      ModelPackage : conceptual_domains
+        
+          
+    
+        
+        
+        ModelPackage --> "*" ConceptualDomain : conceptual_domains
+        click ConceptualDomain href "../ConceptualDomain"
+    
+
+        
       ModelPackage : conceptual_entities
         
           
@@ -45,6 +56,17 @@
 
         
       ModelPackage : conceptual_implementation_ref
+        
+      ModelPackage : conceptual_properties
+        
+          
+    
+        
+        
+        ModelPackage --> "*" ConceptualProperty : conceptual_properties
+        click ConceptualProperty href "../ConceptualProperty"
+    
+
         
       ModelPackage : data_carriers
         
@@ -87,6 +109,17 @@
         
         ModelPackage --> "0..1" Role : data_steward_ref
         click Role href "../Role"
+    
+
+        
+      ModelPackage : data_types
+        
+          
+    
+        
+        
+        ModelPackage --> "*" DataType : data_types
+        click DataType href "../DataType"
     
 
         
@@ -201,6 +234,17 @@
         
       ModelPackage : name
         
+      ModelPackage : native_type_bindings
+        
+          
+    
+        
+        
+        ModelPackage --> "*" NativeTypeBinding : native_type_bindings
+        click NativeTypeBinding href "../NativeTypeBinding"
+    
+
+        
       ModelPackage : ownership_inheritance_rule
         
       ModelPackage : owning_unit_ref
@@ -287,6 +331,17 @@
       ModelPackage : valid_from
         
       ModelPackage : valid_to
+        
+      ModelPackage : value_domains
+        
+          
+    
+        
+        
+        ModelPackage --> "*" ValueDomain : value_domains
+        click ValueDomain href "../ValueDomain"
+    
+
         
       
 ```

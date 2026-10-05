@@ -55,12 +55,24 @@ package "Логический уровень" #D9EAD3 {
     +alignment_rationale : string [0..1]
     +isolation_rationale : string [0..1]
   }
+  class ConceptualProperty {
+    +property_owner_entity_ref : ConceptualEntity [1]
+    +significance_basis : SignificanceBasisEnum [1..*]
+    +property_kind : PropertyKindEnum [1]
+    +conceptual_domain_ref : ConceptualDomain [0..1]
+    +is_identifying : boolean [0..1]
+    +genesis_kind : GenesisKindEnum [1]
+  }
   class LogicalAttribute {
     +owner_entity_ref : LogicalEntity [1]
-    +logical_type : LogicalDataTypeEnum [1]
+    +concept_ref : ConceptualProperty [0..1]
+    +value_domain_ref : ValueDomain [0..1]
+    +data_type_ref : DataType [0..1]
+    +critical_data_element : boolean [0..1]
+    +logical_type : LogicalDataTypeEnum [0..1] <<deprecated>>
     +required : boolean [1]
     +multivalued : boolean [1]
-    +value_set_ref : uri [0..1]
+    +value_set_ref : uri [0..1] <<deprecated>>
     +mapping_coverage_status : MappingCoverageStatusEnum [0..1]
     +mapping_rationale : string [0..1]
   }
@@ -133,6 +145,7 @@ package "Реестры (RegistryEntry)" #F5F5F5 {
 }
 
 ModelElement <|-- ConceptualEntity
+ModelElement <|-- ConceptualProperty
 ModelElement <|-- DomainContext
 ModelElement <|-- LogicalEntity
 ModelElement <|-- LogicalAttribute
@@ -156,6 +169,8 @@ DomainContext "1" <-- "0..*" LogicalEntity : context_ref
 LogicalEntity "1" *-- "0..*" LogicalAttribute : attributes
 LogicalEntity "0..*" --> "0..*" ConceptualEntity : conceptual_entity_refs
 LogicalEntity "0..*" --> "0..1" ITSolution : solution_ref
+ConceptualProperty "0..*" --> "1" ConceptualEntity : property_owner_entity_ref
+LogicalAttribute "0..*" --> "0..1" ConceptualProperty : concept_ref
 Relationship "0..*" --> "1" ConceptualEntity : source/target\n(via uriorcurie)
 Relationship "0..*" --> "1" LogicalEntity : source/target\n(via uriorcurie)
 

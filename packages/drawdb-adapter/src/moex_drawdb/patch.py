@@ -167,6 +167,7 @@ def _attr_from_col(col: Any, owner_eid: str) -> dict[str, Any]:
         "element_id": col.element_id or _new_id(f"{owner_eid}"),
         "name": col.name,
         "logical_type": ltype,
+        "data_type_ref": f"dams:datatype/{ltype}",
         "required": col.required,
         "multivalued": False,
     }
@@ -207,6 +208,12 @@ def _patch_attributes(
                             col.type_name
                             if col.type_name in _LOGICAL_TYPES
                             else existing.get("logical_type") or "string"
+                        ),
+                        "data_type_ref": (
+                            f"dams:datatype/{col.type_name}"
+                            if col.type_name in _LOGICAL_TYPES
+                            else existing.get("data_type_ref")
+                            or f"dams:datatype/{existing.get('logical_type') or 'string'}"
                         ),
                         "required": col.required,
                     },
@@ -249,6 +256,11 @@ def _patch_attributes(
                                 col.type_name
                                 if col.type_name in _LOGICAL_TYPES
                                 else "string"
+                            ),
+                            "data_type_ref": (
+                                f"dams:datatype/{col.type_name}"
+                                if col.type_name in _LOGICAL_TYPES
+                                else "dams:datatype/string"
                             ),
                             "required": col.required,
                             "multivalued": False,
@@ -685,6 +697,12 @@ def apply_model_patch(
                     if attr.get("element_id") == p["element_id"]:
                         attr["name"] = p["name"]
                         attr["logical_type"] = p["logical_type"]
+                        if p.get("data_type_ref"):
+                            attr["data_type_ref"] = p["data_type_ref"]
+                        elif p.get("logical_type"):
+                            attr["data_type_ref"] = (
+                                f"dams:datatype/{p['logical_type']}"
+                            )
                         attr["required"] = p["required"]
         elif kind is PatchOpKind.DELETE_ATTRIBUTE:
             for ent in out.get("logical_entities") or []:

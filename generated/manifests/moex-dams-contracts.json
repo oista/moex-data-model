@@ -6,7 +6,7 @@
   "schema_path": "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml",
   "schema_digest": "sha256:28d77cc328b5530237f0c69cb41548df9764a4ae56526843a812c455eb5dab23",
   "output_path": "generated/contracts/moex-dams/0.1/src/moex_dams_contracts/__init__.py",
-  "content_digest": "sha256:8dd3b1045759a89de8ef47d17181818c9290eca42fbfe7cfe4ffbe9e00985d5f",
+  "content_digest": "sha256:e82629f4f091b9e0ac801b76425ebd5f5dd77176bdbbde9ef41fef150363184f",
   "package": "moex-dams-contracts",
-  "generated_at": "2026-10-05T19:29:50.255800+00:00"
+  "generated_at": "2026-10-05T19:48:01.686452+00:00"
 }

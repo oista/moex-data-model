@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-05T21:35:07
+# Generation date: 2026-10-05T22:39:18
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -66,6 +66,9 @@ version = "0.1.0"
 DAMS = CurieNamespace('dams', 'https://data.moex.com/dams/')
 LINKML = CurieNamespace('linkml', 'https://w3id.org/linkml/')
 MOEX = CurieNamespace('moex', 'https://data.moex.com/')
+RDF = CurieNamespace('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+RDFS = CurieNamespace('rdfs', 'http://www.w3.org/2000/01/rdf-schema#')
+SKOS = CurieNamespace('skos', 'http://www.w3.org/2004/02/skos/core#')
 XSD = CurieNamespace('xsd', 'http://www.w3.org/2001/XMLSchema#')
 DEFAULT_ = DAMS
 
@@ -170,6 +173,10 @@ class ConceptualEntityElementId(ModelElementElementId):
     pass
 
 
+class ConceptualPropertyElementId(ModelElementElementId):
+    pass
+
+
 class LogicalEntityElementId(ModelElementElementId):
     pass
 
@@ -215,6 +222,34 @@ class DataContainerElementId(TechnicalAssetElementId):
 
 
 class ExecutionAssetElementId(TechnicalAssetElementId):
+    pass
+
+
+class ConceptualDomainElementId(ModelElementElementId):
+    pass
+
+
+class ValueMeaningMeaningKey(extended_str):
+    pass
+
+
+class DataTypeElementId(ModelElementElementId):
+    pass
+
+
+class NativeTypeBindingBindingId(URIorCURIE):
+    pass
+
+
+class ValueDomainElementId(ModelElementElementId):
+    pass
+
+
+class PermissibleValueValueCode(extended_str):
+    pass
+
+
+class ValueSetQueryValueSetQueryId(extended_str):
     pass
 
 
@@ -1200,6 +1235,11 @@ class ModelPackage(ModelElement):
     data_containers: Optional[Union[dict[Union[str, DataContainerElementId], Union[dict, "DataContainer"]], list[Union[dict, "DataContainer"]]]] = empty_dict()
     execution_assets: Optional[Union[dict[Union[str, ExecutionAssetElementId], Union[dict, "ExecutionAsset"]], list[Union[dict, "ExecutionAsset"]]]] = empty_dict()
     mappings: Optional[Union[dict[Union[str, MappingElementId], Union[dict, "Mapping"]], list[Union[dict, "Mapping"]]]] = empty_dict()
+    conceptual_properties: Optional[Union[dict[Union[str, ConceptualPropertyElementId], Union[dict, "ConceptualProperty"]], list[Union[dict, "ConceptualProperty"]]]] = empty_dict()
+    conceptual_domains: Optional[Union[dict[Union[str, ConceptualDomainElementId], Union[dict, "ConceptualDomain"]], list[Union[dict, "ConceptualDomain"]]]] = empty_dict()
+    value_domains: Optional[Union[dict[Union[str, ValueDomainElementId], Union[dict, "ValueDomain"]], list[Union[dict, "ValueDomain"]]]] = empty_dict()
+    data_types: Optional[Union[dict[Union[str, DataTypeElementId], Union[dict, "DataType"]], list[Union[dict, "DataType"]]]] = empty_dict()
+    native_type_bindings: Optional[Union[dict[Union[str, NativeTypeBindingBindingId], Union[dict, "NativeTypeBinding"]], list[Union[dict, "NativeTypeBinding"]]]] = empty_dict()
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
     data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
     owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
@@ -1263,6 +1303,16 @@ class ModelPackage(ModelElement):
         self._normalize_inlined_as_list(slot_name="execution_assets", slot_type=ExecutionAsset, key_name="element_id", keyed=True)
 
         self._normalize_inlined_as_list(slot_name="mappings", slot_type=Mapping, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="conceptual_properties", slot_type=ConceptualProperty, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="conceptual_domains", slot_type=ConceptualDomain, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="value_domains", slot_type=ValueDomain, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="data_types", slot_type=DataType, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="native_type_bindings", slot_type=NativeTypeBinding, key_name="binding_id", keyed=True)
 
         if self.data_owner_ref is not None and not isinstance(self.data_owner_ref, RoleRegistryId):
             self.data_owner_ref = RoleRegistryId(self.data_owner_ref)
@@ -1462,6 +1512,128 @@ class ConceptualEntity(ModelElement):
 
 
 @dataclass(repr=False)
+class ConceptualProperty(ModelElement):
+    """
+    Значимое концептуальное свойство сущности КМД. Создаётся только при наличии significance_basis; не обязательно для
+    каждого LogicalAttribute.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["ConceptualProperty"]
+    class_class_curie: ClassVar[str] = "dams:ConceptualProperty"
+    class_name: ClassVar[str] = "ConceptualProperty"
+    class_model_uri: ClassVar[URIRef] = DAMS.ConceptualProperty
+
+    element_id: Union[str, ConceptualPropertyElementId] = None
+    name: str = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    property_owner_entity_ref: Union[str, ConceptualEntityElementId] = None
+    significance_basis: Union[Union[str, "SignificanceBasisEnum"], list[Union[str, "SignificanceBasisEnum"]]] = None
+    property_kind: Union[str, "PropertyKindEnum"] = None
+    genesis_kind: Union[str, "GenesisKindEnum"] = None
+    description: str = None
+    significance_rationale: Optional[str] = None
+    conceptual_domain_ref: Optional[Union[str, ConceptualDomainElementId]] = None
+    is_identifying: Optional[Union[bool, Bool]] = None
+    data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
+    data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
+    owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+    ownership_inheritance_rule: Optional[str] = None
+    definition_source_ref: Optional[Union[str, URIorCURIE]] = None
+    definition_rationale: Optional[str] = None
+    scoped_definitions: Optional[Union[dict[Union[str, ScopedDefinitionScopedDefinitionId], Union[dict, ScopedDefinition]], list[Union[dict, ScopedDefinition]]]] = empty_dict()
+    source_artifact_ref: Optional[Union[str, URI]] = None
+    evidence_refs: Optional[Union[Union[str, URI], list[Union[str, URI]]]] = empty_list()
+    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
+    approved_by_ref: Optional[Union[str, RoleRegistryId]] = None
+    approved_at: Optional[Union[str, XSDDateTime]] = None
+    policy_refs: Optional[Union[Union[str, PolicyRegistryId], list[Union[str, PolicyRegistryId]]]] = empty_list()
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, ConceptualPropertyElementId):
+            self.element_id = ConceptualPropertyElementId(self.element_id)
+
+        if self._is_empty(self.property_owner_entity_ref):
+            self.MissingRequiredField("property_owner_entity_ref")
+        if not isinstance(self.property_owner_entity_ref, ConceptualEntityElementId):
+            self.property_owner_entity_ref = ConceptualEntityElementId(self.property_owner_entity_ref)
+
+        if self._is_empty(self.significance_basis):
+            self.MissingRequiredField("significance_basis")
+        if not isinstance(self.significance_basis, list):
+            self.significance_basis = [self.significance_basis] if self.significance_basis is not None else []
+        self.significance_basis = [v if isinstance(v, SignificanceBasisEnum) else SignificanceBasisEnum(v) for v in self.significance_basis]
+
+        if self._is_empty(self.property_kind):
+            self.MissingRequiredField("property_kind")
+        if not isinstance(self.property_kind, PropertyKindEnum):
+            self.property_kind = PropertyKindEnum(self.property_kind)
+
+        if self._is_empty(self.genesis_kind):
+            self.MissingRequiredField("genesis_kind")
+        if not isinstance(self.genesis_kind, GenesisKindEnum):
+            self.genesis_kind = GenesisKindEnum(self.genesis_kind)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
+
+        if self.significance_rationale is not None and not isinstance(self.significance_rationale, str):
+            self.significance_rationale = str(self.significance_rationale)
+
+        if self.conceptual_domain_ref is not None and not isinstance(self.conceptual_domain_ref, ConceptualDomainElementId):
+            self.conceptual_domain_ref = ConceptualDomainElementId(self.conceptual_domain_ref)
+
+        if self.is_identifying is not None and not isinstance(self.is_identifying, Bool):
+            self.is_identifying = Bool(self.is_identifying)
+
+        if self.data_owner_ref is not None and not isinstance(self.data_owner_ref, RoleRegistryId):
+            self.data_owner_ref = RoleRegistryId(self.data_owner_ref)
+
+        if self.data_steward_ref is not None and not isinstance(self.data_steward_ref, RoleRegistryId):
+            self.data_steward_ref = RoleRegistryId(self.data_steward_ref)
+
+        if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
+            self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
+
+        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
+            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
+
+        if self.definition_source_ref is not None and not isinstance(self.definition_source_ref, URIorCURIE):
+            self.definition_source_ref = URIorCURIE(self.definition_source_ref)
+
+        if self.definition_rationale is not None and not isinstance(self.definition_rationale, str):
+            self.definition_rationale = str(self.definition_rationale)
+
+        self._normalize_inlined_as_list(slot_name="scoped_definitions", slot_type=ScopedDefinition, key_name="scoped_definition_id", keyed=True)
+
+        if self.source_artifact_ref is not None and not isinstance(self.source_artifact_ref, URI):
+            self.source_artifact_ref = URI(self.source_artifact_ref)
+
+        if not isinstance(self.evidence_refs, list):
+            self.evidence_refs = [self.evidence_refs] if self.evidence_refs is not None else []
+        self.evidence_refs = [v if isinstance(v, URI) else URI(v) for v in self.evidence_refs]
+
+        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
+            self.approval_status = ApprovalStatusEnum(self.approval_status)
+
+        if self.approved_by_ref is not None and not isinstance(self.approved_by_ref, RoleRegistryId):
+            self.approved_by_ref = RoleRegistryId(self.approved_by_ref)
+
+        if self.approved_at is not None and not isinstance(self.approved_at, XSDDateTime):
+            self.approved_at = XSDDateTime(self.approved_at)
+
+        if not isinstance(self.policy_refs, list):
+            self.policy_refs = [self.policy_refs] if self.policy_refs is not None else []
+        self.policy_refs = [v if isinstance(v, PolicyRegistryId) else PolicyRegistryId(v) for v in self.policy_refs]
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
 class LogicalEntity(ModelElement):
     """
     Представление бизнес-сущности в доменном контексте и модели конкретного решения.
@@ -1614,7 +1786,8 @@ class LogicalEntity(ModelElement):
 @dataclass(repr=False)
 class LogicalAttribute(ModelElement):
     """
-    Логический атрибут сущности с бизнес-смыслом, типом, обязательностью и классификацией.
+    Логический атрибут сущности: идентификация, обязательность, кардинальность и ссылки на представление
+    (DataType/ValueDomain) и опционально на ConceptualProperty (вариант B, ADR-034).
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -1627,10 +1800,14 @@ class LogicalAttribute(ModelElement):
     name: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     owner_entity_ref: Union[str, LogicalEntityElementId] = None
-    logical_type: Union[str, "LogicalDataTypeEnum"] = None
+    data_type_ref: Union[str, DataTypeElementId] = None
     required: Union[bool, Bool] = None
     multivalued: Union[bool, Bool] = None
     description: str = None
+    concept_ref: Optional[Union[str, ConceptualPropertyElementId]] = None
+    value_domain_ref: Optional[Union[str, ValueDomainElementId]] = None
+    critical_data_element: Optional[Union[bool, Bool]] = None
+    logical_type: Optional[Union[str, "LogicalDataTypeEnum"]] = None
     minimum_cardinality: Optional[int] = None
     maximum_cardinality: Optional[int] = None
     value_set_ref: Optional[Union[str, URI]] = None
@@ -1668,10 +1845,10 @@ class LogicalAttribute(ModelElement):
         if not isinstance(self.owner_entity_ref, LogicalEntityElementId):
             self.owner_entity_ref = LogicalEntityElementId(self.owner_entity_ref)
 
-        if self._is_empty(self.logical_type):
-            self.MissingRequiredField("logical_type")
-        if not isinstance(self.logical_type, LogicalDataTypeEnum):
-            self.logical_type = LogicalDataTypeEnum(self.logical_type)
+        if self._is_empty(self.data_type_ref):
+            self.MissingRequiredField("data_type_ref")
+        if not isinstance(self.data_type_ref, DataTypeElementId):
+            self.data_type_ref = DataTypeElementId(self.data_type_ref)
 
         if self._is_empty(self.required):
             self.MissingRequiredField("required")
@@ -1687,6 +1864,18 @@ class LogicalAttribute(ModelElement):
             self.MissingRequiredField("description")
         if not isinstance(self.description, str):
             self.description = str(self.description)
+
+        if self.concept_ref is not None and not isinstance(self.concept_ref, ConceptualPropertyElementId):
+            self.concept_ref = ConceptualPropertyElementId(self.concept_ref)
+
+        if self.value_domain_ref is not None and not isinstance(self.value_domain_ref, ValueDomainElementId):
+            self.value_domain_ref = ValueDomainElementId(self.value_domain_ref)
+
+        if self.critical_data_element is not None and not isinstance(self.critical_data_element, Bool):
+            self.critical_data_element = Bool(self.critical_data_element)
+
+        if self.logical_type is not None and not isinstance(self.logical_type, LogicalDataTypeEnum):
+            self.logical_type = LogicalDataTypeEnum(self.logical_type)
 
         if self.minimum_cardinality is not None and not isinstance(self.minimum_cardinality, int):
             self.minimum_cardinality = int(self.minimum_cardinality)
@@ -2665,6 +2854,421 @@ class ExecutionAsset(TechnicalAsset):
 
         if self.direction is not None and not isinstance(self.direction, FlowDirectionEnum):
             self.direction = FlowDirectionEnum(self.direction)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class ConceptualDomain(ModelElement):
+    """
+    Концептуальный домен значений: набор смыслов (ValueMeaning) или ссылка на внешнюю схему понятий. Допустим только в
+    пакетах implementation_scope=enterprise.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["ConceptualDomain"]
+    class_class_curie: ClassVar[str] = "dams:ConceptualDomain"
+    class_name: ClassVar[str] = "ConceptualDomain"
+    class_model_uri: ClassVar[URIRef] = DAMS.ConceptualDomain
+
+    element_id: Union[str, ConceptualDomainElementId] = None
+    name: str = None
+    description: str = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    conceptual_domain_kind: Union[str, "ConceptualDomainKindEnum"] = None
+    value_meanings: Optional[Union[dict[Union[str, ValueMeaningMeaningKey], Union[dict, "ValueMeaning"]], list[Union[dict, "ValueMeaning"]]]] = empty_dict()
+    concept_scheme_uri: Optional[Union[str, URIorCURIE]] = None
+    broader_domain_ref: Optional[Union[str, ConceptualDomainElementId]] = None
+    data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
+    data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
+    owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+    ownership_inheritance_rule: Optional[str] = None
+    source_artifact_ref: Optional[Union[str, URI]] = None
+    evidence_refs: Optional[Union[Union[str, URI], list[Union[str, URI]]]] = empty_list()
+    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
+    approved_by_ref: Optional[Union[str, RoleRegistryId]] = None
+    approved_at: Optional[Union[str, XSDDateTime]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, ConceptualDomainElementId):
+            self.element_id = ConceptualDomainElementId(self.element_id)
+
+        if self._is_empty(self.conceptual_domain_kind):
+            self.MissingRequiredField("conceptual_domain_kind")
+        if not isinstance(self.conceptual_domain_kind, ConceptualDomainKindEnum):
+            self.conceptual_domain_kind = ConceptualDomainKindEnum(self.conceptual_domain_kind)
+
+        self._normalize_inlined_as_list(slot_name="value_meanings", slot_type=ValueMeaning, key_name="meaning_key", keyed=True)
+
+        if self.concept_scheme_uri is not None and not isinstance(self.concept_scheme_uri, URIorCURIE):
+            self.concept_scheme_uri = URIorCURIE(self.concept_scheme_uri)
+
+        if self.broader_domain_ref is not None and not isinstance(self.broader_domain_ref, ConceptualDomainElementId):
+            self.broader_domain_ref = ConceptualDomainElementId(self.broader_domain_ref)
+
+        if self.data_owner_ref is not None and not isinstance(self.data_owner_ref, RoleRegistryId):
+            self.data_owner_ref = RoleRegistryId(self.data_owner_ref)
+
+        if self.data_steward_ref is not None and not isinstance(self.data_steward_ref, RoleRegistryId):
+            self.data_steward_ref = RoleRegistryId(self.data_steward_ref)
+
+        if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
+            self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
+
+        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
+            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
+
+        if self.source_artifact_ref is not None and not isinstance(self.source_artifact_ref, URI):
+            self.source_artifact_ref = URI(self.source_artifact_ref)
+
+        if not isinstance(self.evidence_refs, list):
+            self.evidence_refs = [self.evidence_refs] if self.evidence_refs is not None else []
+        self.evidence_refs = [v if isinstance(v, URI) else URI(v) for v in self.evidence_refs]
+
+        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
+            self.approval_status = ApprovalStatusEnum(self.approval_status)
+
+        if self.approved_by_ref is not None and not isinstance(self.approved_by_ref, RoleRegistryId):
+            self.approved_by_ref = RoleRegistryId(self.approved_by_ref)
+
+        if self.approved_at is not None and not isinstance(self.approved_at, XSDDateTime):
+            self.approved_at = XSDDateTime(self.approved_at)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class ValueMeaning(YAMLRoot):
+    """
+    Смысл допустимого значения внутри ConceptualDomain (встраиваемый, без lifecycle).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["ValueMeaning"]
+    class_class_curie: ClassVar[str] = "dams:ValueMeaning"
+    class_name: ClassVar[str] = "ValueMeaning"
+    class_model_uri: ClassVar[URIRef] = DAMS.ValueMeaning
+
+    meaning_key: Union[str, ValueMeaningMeaningKey] = None
+    meaning_label: Optional[str] = None
+    meaning_definition: Optional[str] = None
+    aliases: Optional[Union[str, list[str]]] = empty_list()
+    meaning_term_ref: Optional[Union[str, URIorCURIE]] = None
+    broader_meaning_key: Optional[str] = None
+    meaning_status: Optional[Union[str, "LifecycleStatusEnum"]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.meaning_key):
+            self.MissingRequiredField("meaning_key")
+        if not isinstance(self.meaning_key, ValueMeaningMeaningKey):
+            self.meaning_key = ValueMeaningMeaningKey(self.meaning_key)
+
+        if self.meaning_label is not None and not isinstance(self.meaning_label, str):
+            self.meaning_label = str(self.meaning_label)
+
+        if self.meaning_definition is not None and not isinstance(self.meaning_definition, str):
+            self.meaning_definition = str(self.meaning_definition)
+
+        if not isinstance(self.aliases, list):
+            self.aliases = [self.aliases] if self.aliases is not None else []
+        self.aliases = [v if isinstance(v, str) else str(v) for v in self.aliases]
+
+        if self.meaning_term_ref is not None and not isinstance(self.meaning_term_ref, URIorCURIE):
+            self.meaning_term_ref = URIorCURIE(self.meaning_term_ref)
+
+        if self.broader_meaning_key is not None and not isinstance(self.broader_meaning_key, str):
+            self.broader_meaning_key = str(self.broader_meaning_key)
+
+        if self.meaning_status is not None and not isinstance(self.meaning_status, LifecycleStatusEnum):
+            self.meaning_status = LifecycleStatusEnum(self.meaning_status)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class DataType(ModelElement):
+    """
+    Корпоративный тип данных: семейство, параметры представления и соответствие XSD/LinkML. Допустим только в
+    корпоративном реестре типов.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["DataType"]
+    class_class_curie: ClassVar[str] = "dams:DataType"
+    class_name: ClassVar[str] = "DataType"
+    class_model_uri: ClassVar[URIRef] = DAMS.DataType
+
+    element_id: Union[str, DataTypeElementId] = None
+    name: str = None
+    description: str = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    type_name: str = None
+    type_family: Union[str, "TypeFamilyEnum"] = None
+    precision: Optional[int] = None
+    scale: Optional[int] = None
+    max_length: Optional[int] = None
+    min_length: Optional[int] = None
+    datatype_timezone_policy: Optional[Union[str, "TimezonePolicyEnum"]] = None
+    charset: Optional[str] = None
+    xsd_datatype: Optional[Union[str, URIorCURIE]] = None
+    linkml_type: Optional[str] = None
+    base_type_ref: Optional[Union[str, DataTypeElementId]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, DataTypeElementId):
+            self.element_id = DataTypeElementId(self.element_id)
+
+        if self._is_empty(self.type_name):
+            self.MissingRequiredField("type_name")
+        if not isinstance(self.type_name, str):
+            self.type_name = str(self.type_name)
+
+        if self._is_empty(self.type_family):
+            self.MissingRequiredField("type_family")
+        if not isinstance(self.type_family, TypeFamilyEnum):
+            self.type_family = TypeFamilyEnum(self.type_family)
+
+        if self.precision is not None and not isinstance(self.precision, int):
+            self.precision = int(self.precision)
+
+        if self.scale is not None and not isinstance(self.scale, int):
+            self.scale = int(self.scale)
+
+        if self.max_length is not None and not isinstance(self.max_length, int):
+            self.max_length = int(self.max_length)
+
+        if self.min_length is not None and not isinstance(self.min_length, int):
+            self.min_length = int(self.min_length)
+
+        if self.datatype_timezone_policy is not None and not isinstance(self.datatype_timezone_policy, TimezonePolicyEnum):
+            self.datatype_timezone_policy = TimezonePolicyEnum(self.datatype_timezone_policy)
+
+        if self.charset is not None and not isinstance(self.charset, str):
+            self.charset = str(self.charset)
+
+        if self.xsd_datatype is not None and not isinstance(self.xsd_datatype, URIorCURIE):
+            self.xsd_datatype = URIorCURIE(self.xsd_datatype)
+
+        if self.linkml_type is not None and not isinstance(self.linkml_type, str):
+            self.linkml_type = str(self.linkml_type)
+
+        if self.base_type_ref is not None and not isinstance(self.base_type_ref, DataTypeElementId):
+            self.base_type_ref = DataTypeElementId(self.base_type_ref)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class NativeTypeBinding(YAMLRoot):
+    """
+    Привязка нативного типа диалекта (SQL, JSON Schema и т.п.) к корпоративному DataType с оценкой потери точности.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["NativeTypeBinding"]
+    class_class_curie: ClassVar[str] = "dams:NativeTypeBinding"
+    class_name: ClassVar[str] = "NativeTypeBinding"
+    class_model_uri: ClassVar[URIRef] = DAMS.NativeTypeBinding
+
+    binding_id: Union[str, NativeTypeBindingBindingId] = None
+    dialect: str = None
+    dialect_native_type: str = None
+    data_type_ref: Union[str, DataTypeElementId] = None
+    lossiness: Union[str, "LossinessEnum"] = None
+    parameter_mapping: Optional[str] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.binding_id):
+            self.MissingRequiredField("binding_id")
+        if not isinstance(self.binding_id, NativeTypeBindingBindingId):
+            self.binding_id = NativeTypeBindingBindingId(self.binding_id)
+
+        if self._is_empty(self.dialect):
+            self.MissingRequiredField("dialect")
+        if not isinstance(self.dialect, str):
+            self.dialect = str(self.dialect)
+
+        if self._is_empty(self.dialect_native_type):
+            self.MissingRequiredField("dialect_native_type")
+        if not isinstance(self.dialect_native_type, str):
+            self.dialect_native_type = str(self.dialect_native_type)
+
+        if self._is_empty(self.data_type_ref):
+            self.MissingRequiredField("data_type_ref")
+        if not isinstance(self.data_type_ref, DataTypeElementId):
+            self.data_type_ref = DataTypeElementId(self.data_type_ref)
+
+        if self._is_empty(self.lossiness):
+            self.MissingRequiredField("lossiness")
+        if not isinstance(self.lossiness, LossinessEnum):
+            self.lossiness = LossinessEnum(self.lossiness)
+
+        if self.parameter_mapping is not None and not isinstance(self.parameter_mapping, str):
+            self.parameter_mapping = str(self.parameter_mapping)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class ValueDomain(ModelElement):
+    """
+    Представление значений: тип, формат, единица, допустимые значения или ссылка на внешний набор. Допустим в пакетах
+    enterprise и solution.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["ValueDomain"]
+    class_class_curie: ClassVar[str] = "dams:ValueDomain"
+    class_name: ClassVar[str] = "ValueDomain"
+    class_model_uri: ClassVar[URIRef] = DAMS.ValueDomain
+
+    element_id: Union[str, ValueDomainElementId] = None
+    name: str = None
+    description: str = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    value_domain_kind: Union[str, "ValueDomainKindEnum"] = None
+    data_type_ref: Union[str, DataTypeElementId] = None
+    conceptual_domain_ref: Optional[Union[str, ConceptualDomainElementId]] = None
+    unit_code: Optional[str] = None
+    format_pattern: Optional[str] = None
+    min_value: Optional[str] = None
+    max_value: Optional[str] = None
+    permissible_values: Optional[Union[dict[Union[str, PermissibleValueValueCode], Union[dict, "PermissibleValue"]], list[Union[dict, "PermissibleValue"]]]] = empty_dict()
+    value_set_source: Optional[Union[str, URIorCURIE]] = None
+    dynamic_query: Optional[Union[dict, "ValueSetQuery"]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, ValueDomainElementId):
+            self.element_id = ValueDomainElementId(self.element_id)
+
+        if self._is_empty(self.value_domain_kind):
+            self.MissingRequiredField("value_domain_kind")
+        if not isinstance(self.value_domain_kind, ValueDomainKindEnum):
+            self.value_domain_kind = ValueDomainKindEnum(self.value_domain_kind)
+
+        if self._is_empty(self.data_type_ref):
+            self.MissingRequiredField("data_type_ref")
+        if not isinstance(self.data_type_ref, DataTypeElementId):
+            self.data_type_ref = DataTypeElementId(self.data_type_ref)
+
+        if self.conceptual_domain_ref is not None and not isinstance(self.conceptual_domain_ref, ConceptualDomainElementId):
+            self.conceptual_domain_ref = ConceptualDomainElementId(self.conceptual_domain_ref)
+
+        if self.unit_code is not None and not isinstance(self.unit_code, str):
+            self.unit_code = str(self.unit_code)
+
+        if self.format_pattern is not None and not isinstance(self.format_pattern, str):
+            self.format_pattern = str(self.format_pattern)
+
+        if self.min_value is not None and not isinstance(self.min_value, str):
+            self.min_value = str(self.min_value)
+
+        if self.max_value is not None and not isinstance(self.max_value, str):
+            self.max_value = str(self.max_value)
+
+        self._normalize_inlined_as_list(slot_name="permissible_values", slot_type=PermissibleValue, key_name="value_code", keyed=True)
+
+        if self.value_set_source is not None and not isinstance(self.value_set_source, URIorCURIE):
+            self.value_set_source = URIorCURIE(self.value_set_source)
+
+        if self.dynamic_query is not None and not isinstance(self.dynamic_query, ValueSetQuery):
+            self.dynamic_query = ValueSetQuery(**as_dict(self.dynamic_query))
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class PermissibleValue(YAMLRoot):
+    """
+    Допустимое значение внутри ValueDomain (встраиваемый).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["PermissibleValue"]
+    class_class_curie: ClassVar[str] = "dams:PermissibleValue"
+    class_name: ClassVar[str] = "PermissibleValue"
+    class_model_uri: ClassVar[URIRef] = DAMS.PermissibleValue
+
+    value_code: Union[str, PermissibleValueValueCode] = None
+    value_label: Optional[str] = None
+    value_definition: Optional[str] = None
+    value_meaning_key: Optional[str] = None
+    meaning_term_ref: Optional[Union[str, URIorCURIE]] = None
+    ordinal: Optional[int] = None
+    value_status: Optional[Union[str, "LifecycleStatusEnum"]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.value_code):
+            self.MissingRequiredField("value_code")
+        if not isinstance(self.value_code, PermissibleValueValueCode):
+            self.value_code = PermissibleValueValueCode(self.value_code)
+
+        if self.value_label is not None and not isinstance(self.value_label, str):
+            self.value_label = str(self.value_label)
+
+        if self.value_definition is not None and not isinstance(self.value_definition, str):
+            self.value_definition = str(self.value_definition)
+
+        if self.value_meaning_key is not None and not isinstance(self.value_meaning_key, str):
+            self.value_meaning_key = str(self.value_meaning_key)
+
+        if self.meaning_term_ref is not None and not isinstance(self.meaning_term_ref, URIorCURIE):
+            self.meaning_term_ref = URIorCURIE(self.meaning_term_ref)
+
+        if self.ordinal is not None and not isinstance(self.ordinal, int):
+            self.ordinal = int(self.ordinal)
+
+        if self.value_status is not None and not isinstance(self.value_status, LifecycleStatusEnum):
+            self.value_status = LifecycleStatusEnum(self.value_status)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class ValueSetQuery(YAMLRoot):
+    """
+    Динамический запрос набора значений по образцу LinkML reachable_from (source ontology, узлы, типы связей).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["ValueSetQuery"]
+    class_class_curie: ClassVar[str] = "dams:ValueSetQuery"
+    class_name: ClassVar[str] = "ValueSetQuery"
+    class_model_uri: ClassVar[URIRef] = DAMS.ValueSetQuery
+
+    value_set_query_id: Union[str, ValueSetQueryValueSetQueryId] = None
+    source_ontology: Union[str, URIorCURIE] = None
+    source_nodes: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
+    relationship_types: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
+    include_self: Optional[Union[bool, Bool]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.value_set_query_id):
+            self.MissingRequiredField("value_set_query_id")
+        if not isinstance(self.value_set_query_id, ValueSetQueryValueSetQueryId):
+            self.value_set_query_id = ValueSetQueryValueSetQueryId(self.value_set_query_id)
+
+        if self._is_empty(self.source_ontology):
+            self.MissingRequiredField("source_ontology")
+        if not isinstance(self.source_ontology, URIorCURIE):
+            self.source_ontology = URIorCURIE(self.source_ontology)
+
+        if not isinstance(self.source_nodes, list):
+            self.source_nodes = [self.source_nodes] if self.source_nodes is not None else []
+        self.source_nodes = [v if isinstance(v, URIorCURIE) else URIorCURIE(v) for v in self.source_nodes]
+
+        if not isinstance(self.relationship_types, list):
+            self.relationship_types = [self.relationship_types] if self.relationship_types is not None else []
+        self.relationship_types = [v if isinstance(v, URIorCURIE) else URIorCURIE(v) for v in self.relationship_types]
+
+        if self.include_self is not None and not isinstance(self.include_self, Bool):
+            self.include_self = Bool(self.include_self)
 
         super().__post_init__(**kwargs)
 
@@ -4158,6 +4762,140 @@ class CheckSeverityEnum(EnumDefinitionImpl):
         name="CheckSeverityEnum",
     )
 
+class ConceptualDomainKindEnum(EnumDefinitionImpl):
+    """
+    Вид концептуального домена (ISO 11179 Conceptual Domain).
+    """
+    enumerated = PermissibleValue(
+        text="enumerated",
+        description="Домен с явным набором ValueMeaning или внешней concept scheme.")
+    described = PermissibleValue(
+        text="described",
+        description="Домен, заданный описанием без перечисления смыслов.")
+
+    _defn = EnumDefinition(
+        name="ConceptualDomainKindEnum",
+        description="Вид концептуального домена (ISO 11179 Conceptual Domain).",
+    )
+
+class ValueDomainKindEnum(EnumDefinitionImpl):
+    """
+    Вид домена представления значений (ISO 11179 Value Domain).
+    """
+    enumerated = PermissibleValue(
+        text="enumerated",
+        description="Явный список PermissibleValue.")
+    described = PermissibleValue(
+        text="described",
+        description="Описание через формат, min/max, единицу.")
+    reference_set = PermissibleValue(
+        text="reference_set",
+        description="Внешний или динамический набор значений.")
+
+    _defn = EnumDefinition(
+        name="ValueDomainKindEnum",
+        description="Вид домена представления значений (ISO 11179 Value Domain).",
+    )
+
+class TypeFamilyEnum(EnumDefinitionImpl):
+    """
+    Семейство корпоративного DataType.
+    """
+    boolean = PermissibleValue(text="boolean")
+    integer = PermissibleValue(text="integer")
+    decimal = PermissibleValue(text="decimal")
+    float = PermissibleValue(text="float")
+    string = PermissibleValue(text="string")
+    binary = PermissibleValue(text="binary")
+    date = PermissibleValue(text="date")
+    time = PermissibleValue(text="time")
+    datetime = PermissibleValue(text="datetime")
+    duration = PermissibleValue(text="duration")
+    identifier = PermissibleValue(text="identifier")
+    uri = PermissibleValue(text="uri")
+    object = PermissibleValue(text="object")
+    array = PermissibleValue(text="array")
+    other = PermissibleValue(text="other")
+
+    _defn = EnumDefinition(
+        name="TypeFamilyEnum",
+        description="Семейство корпоративного DataType.",
+    )
+
+class TimezonePolicyEnum(EnumDefinitionImpl):
+    """
+    Политика часового пояса для временных DataType.
+    """
+    none = PermissibleValue(text="none")
+    utc = PermissibleValue(text="utc")
+    with_offset = PermissibleValue(text="with_offset")
+    local = PermissibleValue(text="local")
+
+    _defn = EnumDefinition(
+        name="TimezonePolicyEnum",
+        description="Политика часового пояса для временных DataType.",
+    )
+
+class LossinessEnum(EnumDefinitionImpl):
+    """
+    Оценка потери точности NativeTypeBinding.
+    """
+    lossless = PermissibleValue(text="lossless")
+    lossy = PermissibleValue(text="lossy")
+    unknown = PermissibleValue(text="unknown")
+
+    _defn = EnumDefinition(
+        name="LossinessEnum",
+        description="Оценка потери точности NativeTypeBinding.",
+    )
+
+class SignificanceBasisEnum(EnumDefinitionImpl):
+    """
+    Основание существования ConceptualProperty в КМД (вариант B).
+    """
+    identifying = PermissibleValue(
+        text="identifying",
+        description="Входит в бизнес-ключ сущности.")
+    externally_aligned = PermissibleValue(
+        text="externally_aligned",
+        description="Выравнивается с внешним термином (FIBO, ISO, API).")
+    cross_solution = PermissibleValue(
+        text="cross_solution",
+        description="Используется в двух и более решениях.")
+    regulatory = PermissibleValue(
+        text="regulatory",
+        description="Упомянуто в нормативном требовании или отчётности.")
+    critical_data = PermissibleValue(
+        text="critical_data",
+        description="Критичный элемент данных (CDE), поднятый с логического уровня.")
+    governance_anchor = PermissibleValue(
+        text="governance_anchor",
+        description="Привязаны политика или классификация предприятия.")
+    explicit_decision = PermissibleValue(
+        text="explicit_decision",
+        description="Решение архитектурного комитета (нужен significance_rationale).")
+
+    _defn = EnumDefinition(
+        name="SignificanceBasisEnum",
+        description="Основание существования ConceptualProperty в КМД (вариант B).",
+    )
+
+class PropertyKindEnum(EnumDefinitionImpl):
+    """
+    Вид концептуального свойства.
+    """
+    descriptive = PermissibleValue(text="descriptive")
+    identifying = PermissibleValue(text="identifying")
+    relational = PermissibleValue(text="relational")
+    measure = PermissibleValue(text="measure")
+    temporal = PermissibleValue(text="temporal")
+    status = PermissibleValue(text="status")
+
+    _defn = EnumDefinition(
+        name="PropertyKindEnum",
+        description="Вид концептуального свойства.",
+    )
+
 class DataCarrierKindEnum(EnumDefinitionImpl):
 
     relational_table = PermissibleValue(text="relational_table")
@@ -4468,6 +5206,21 @@ slots.data_containers = Slot(uri=DAMS.data_containers, name="data_containers", c
 slots.execution_assets = Slot(uri=DAMS.execution_assets, name="execution_assets", curie=DAMS.curie('execution_assets'),
                    model_uri=DAMS.execution_assets, domain=None, range=Optional[Union[dict[Union[str, ExecutionAssetElementId], Union[dict, ExecutionAsset]], list[Union[dict, ExecutionAsset]]]])
 
+slots.conceptual_properties = Slot(uri=DAMS.conceptual_properties, name="conceptual_properties", curie=DAMS.curie('conceptual_properties'),
+                   model_uri=DAMS.conceptual_properties, domain=None, range=Optional[Union[dict[Union[str, ConceptualPropertyElementId], Union[dict, ConceptualProperty]], list[Union[dict, ConceptualProperty]]]])
+
+slots.conceptual_domains = Slot(uri=DAMS.conceptual_domains, name="conceptual_domains", curie=DAMS.curie('conceptual_domains'),
+                   model_uri=DAMS.conceptual_domains, domain=None, range=Optional[Union[dict[Union[str, ConceptualDomainElementId], Union[dict, ConceptualDomain]], list[Union[dict, ConceptualDomain]]]])
+
+slots.value_domains = Slot(uri=DAMS.value_domains, name="value_domains", curie=DAMS.curie('value_domains'),
+                   model_uri=DAMS.value_domains, domain=None, range=Optional[Union[dict[Union[str, ValueDomainElementId], Union[dict, ValueDomain]], list[Union[dict, ValueDomain]]]])
+
+slots.data_types = Slot(uri=DAMS.data_types, name="data_types", curie=DAMS.curie('data_types'),
+                   model_uri=DAMS.data_types, domain=None, range=Optional[Union[dict[Union[str, DataTypeElementId], Union[dict, DataType]], list[Union[dict, DataType]]]])
+
+slots.native_type_bindings = Slot(uri=DAMS.native_type_bindings, name="native_type_bindings", curie=DAMS.curie('native_type_bindings'),
+                   model_uri=DAMS.native_type_bindings, domain=None, range=Optional[Union[dict[Union[str, NativeTypeBindingBindingId], Union[dict, NativeTypeBinding]], list[Union[dict, NativeTypeBinding]]]])
+
 slots.carrier_ref = Slot(uri=DAMS.carrier_ref, name="carrier_ref", curie=DAMS.curie('carrier_ref'),
                    model_uri=DAMS.carrier_ref, domain=None, range=Union[str, DataCarrierElementId])
 
@@ -4522,8 +5275,29 @@ slots.invariant_refs = Slot(uri=DAMS.invariant_refs, name="invariant_refs", curi
 slots.owner_entity_ref = Slot(uri=DAMS.owner_entity_ref, name="owner_entity_ref", curie=DAMS.curie('owner_entity_ref'),
                    model_uri=DAMS.owner_entity_ref, domain=None, range=Union[str, LogicalEntityElementId])
 
-slots.logical_type = Slot(uri=DAMS.logical_type, name="logical_type", curie=DAMS.curie('logical_type'),
-                   model_uri=DAMS.logical_type, domain=None, range=Union[str, "LogicalDataTypeEnum"])
+slots.property_owner_entity_ref = Slot(uri=DAMS.property_owner_entity_ref, name="property_owner_entity_ref", curie=DAMS.curie('property_owner_entity_ref'),
+                   model_uri=DAMS.property_owner_entity_ref, domain=None, range=Union[str, ConceptualEntityElementId])
+
+slots.concept_ref = Slot(uri=DAMS.concept_ref, name="concept_ref", curie=DAMS.curie('concept_ref'),
+                   model_uri=DAMS.concept_ref, domain=None, range=Optional[Union[str, ConceptualPropertyElementId]])
+
+slots.value_domain_ref = Slot(uri=DAMS.value_domain_ref, name="value_domain_ref", curie=DAMS.curie('value_domain_ref'),
+                   model_uri=DAMS.value_domain_ref, domain=None, range=Optional[Union[str, ValueDomainElementId]])
+
+slots.critical_data_element = Slot(uri=DAMS.critical_data_element, name="critical_data_element", curie=DAMS.curie('critical_data_element'),
+                   model_uri=DAMS.critical_data_element, domain=None, range=Optional[Union[bool, Bool]])
+
+slots.significance_basis = Slot(uri=DAMS.significance_basis, name="significance_basis", curie=DAMS.curie('significance_basis'),
+                   model_uri=DAMS.significance_basis, domain=None, range=Union[Union[str, "SignificanceBasisEnum"], list[Union[str, "SignificanceBasisEnum"]]])
+
+slots.significance_rationale = Slot(uri=DAMS.significance_rationale, name="significance_rationale", curie=DAMS.curie('significance_rationale'),
+                   model_uri=DAMS.significance_rationale, domain=None, range=Optional[str])
+
+slots.property_kind = Slot(uri=DAMS.property_kind, name="property_kind", curie=DAMS.curie('property_kind'),
+                   model_uri=DAMS.property_kind, domain=None, range=Union[str, "PropertyKindEnum"])
+
+slots.is_identifying = Slot(uri=DAMS.is_identifying, name="is_identifying", curie=DAMS.curie('is_identifying'),
+                   model_uri=DAMS.is_identifying, domain=None, range=Optional[Union[bool, Bool]])
 
 slots.required = Slot(uri=DAMS.required, name="required", curie=DAMS.curie('required'),
                    model_uri=DAMS.required, domain=None, range=Union[bool, Bool])
@@ -4536,12 +5310,6 @@ slots.minimum_cardinality = Slot(uri=DAMS.minimum_cardinality, name="minimum_car
 
 slots.maximum_cardinality = Slot(uri=DAMS.maximum_cardinality, name="maximum_cardinality", curie=DAMS.curie('maximum_cardinality'),
                    model_uri=DAMS.maximum_cardinality, domain=None, range=Optional[int])
-
-slots.value_set_ref = Slot(uri=DAMS.value_set_ref, name="value_set_ref", curie=DAMS.curie('value_set_ref'),
-                   model_uri=DAMS.value_set_ref, domain=None, range=Optional[Union[str, URI]])
-
-slots.format_pattern = Slot(uri=DAMS.format_pattern, name="format_pattern", curie=DAMS.curie('format_pattern'),
-                   model_uri=DAMS.format_pattern, domain=None, range=Optional[str])
 
 slots.default_value = Slot(uri=DAMS.default_value, name="default_value", curie=DAMS.curie('default_value'),
                    model_uri=DAMS.default_value, domain=None, range=Optional[str])
@@ -4569,9 +5337,6 @@ slots.mapping_coverage_status = Slot(uri=DAMS.mapping_coverage_status, name="map
 
 slots.mapping_rationale = Slot(uri=DAMS.mapping_rationale, name="mapping_rationale", curie=DAMS.curie('mapping_rationale'),
                    model_uri=DAMS.mapping_rationale, domain=None, range=Optional[str])
-
-slots.unit_code = Slot(uri=DAMS.unit_code, name="unit_code", curie=DAMS.curie('unit_code'),
-                   model_uri=DAMS.unit_code, domain=None, range=Optional[str])
 
 slots.currency_attribute_ref = Slot(uri=DAMS.currency_attribute_ref, name="currency_attribute_ref", curie=DAMS.curie('currency_attribute_ref'),
                    model_uri=DAMS.currency_attribute_ref, domain=None, range=Optional[Union[str, URIorCURIE]])
@@ -4770,6 +5535,153 @@ slots.produces_refs = Slot(uri=DAMS.produces_refs, name="produces_refs", curie=D
 
 slots.consumes_refs = Slot(uri=DAMS.consumes_refs, name="consumes_refs", curie=DAMS.curie('consumes_refs'),
                    model_uri=DAMS.consumes_refs, domain=None, range=Optional[Union[Union[str, TechnicalAssetElementId], list[Union[str, TechnicalAssetElementId]]]])
+
+slots.logical_type = Slot(uri=DAMS.logical_type, name="logical_type", curie=DAMS.curie('logical_type'),
+                   model_uri=DAMS.logical_type, domain=None, range=Optional[Union[str, "LogicalDataTypeEnum"]])
+
+slots.value_set_ref = Slot(uri=DAMS.value_set_ref, name="value_set_ref", curie=DAMS.curie('value_set_ref'),
+                   model_uri=DAMS.value_set_ref, domain=None, range=Optional[Union[str, URI]])
+
+slots.format_pattern = Slot(uri=DAMS.format_pattern, name="format_pattern", curie=DAMS.curie('format_pattern'),
+                   model_uri=DAMS.format_pattern, domain=None, range=Optional[str])
+
+slots.unit_code = Slot(uri=DAMS.unit_code, name="unit_code", curie=DAMS.curie('unit_code'),
+                   model_uri=DAMS.unit_code, domain=None, range=Optional[str])
+
+slots.conceptual_domain_kind = Slot(uri=DAMS.conceptual_domain_kind, name="conceptual_domain_kind", curie=DAMS.curie('conceptual_domain_kind'),
+                   model_uri=DAMS.conceptual_domain_kind, domain=None, range=Union[str, "ConceptualDomainKindEnum"])
+
+slots.value_meanings = Slot(uri=DAMS.value_meanings, name="value_meanings", curie=DAMS.curie('value_meanings'),
+                   model_uri=DAMS.value_meanings, domain=None, range=Optional[Union[dict[Union[str, ValueMeaningMeaningKey], Union[dict, ValueMeaning]], list[Union[dict, ValueMeaning]]]])
+
+slots.concept_scheme_uri = Slot(uri=DAMS.concept_scheme_uri, name="concept_scheme_uri", curie=DAMS.curie('concept_scheme_uri'),
+                   model_uri=DAMS.concept_scheme_uri, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.broader_domain_ref = Slot(uri=DAMS.broader_domain_ref, name="broader_domain_ref", curie=DAMS.curie('broader_domain_ref'),
+                   model_uri=DAMS.broader_domain_ref, domain=None, range=Optional[Union[str, ConceptualDomainElementId]])
+
+slots.meaning_key = Slot(uri=DAMS.meaning_key, name="meaning_key", curie=DAMS.curie('meaning_key'),
+                   model_uri=DAMS.meaning_key, domain=None, range=URIRef)
+
+slots.meaning_label = Slot(uri=DAMS.meaning_label, name="meaning_label", curie=DAMS.curie('meaning_label'),
+                   model_uri=DAMS.meaning_label, domain=None, range=Optional[str])
+
+slots.meaning_definition = Slot(uri=DAMS.meaning_definition, name="meaning_definition", curie=DAMS.curie('meaning_definition'),
+                   model_uri=DAMS.meaning_definition, domain=None, range=Optional[str])
+
+slots.meaning_term_ref = Slot(uri=DAMS.meaning_term_ref, name="meaning_term_ref", curie=DAMS.curie('meaning_term_ref'),
+                   model_uri=DAMS.meaning_term_ref, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.broader_meaning_key = Slot(uri=DAMS.broader_meaning_key, name="broader_meaning_key", curie=DAMS.curie('broader_meaning_key'),
+                   model_uri=DAMS.broader_meaning_key, domain=None, range=Optional[str])
+
+slots.meaning_status = Slot(uri=DAMS.meaning_status, name="meaning_status", curie=DAMS.curie('meaning_status'),
+                   model_uri=DAMS.meaning_status, domain=None, range=Optional[Union[str, "LifecycleStatusEnum"]])
+
+slots.type_name = Slot(uri=DAMS.type_name, name="type_name", curie=DAMS.curie('type_name'),
+                   model_uri=DAMS.type_name, domain=None, range=str)
+
+slots.type_family = Slot(uri=DAMS.type_family, name="type_family", curie=DAMS.curie('type_family'),
+                   model_uri=DAMS.type_family, domain=None, range=Union[str, "TypeFamilyEnum"])
+
+slots.precision = Slot(uri=DAMS.precision, name="precision", curie=DAMS.curie('precision'),
+                   model_uri=DAMS.precision, domain=None, range=Optional[int])
+
+slots.scale = Slot(uri=DAMS.scale, name="scale", curie=DAMS.curie('scale'),
+                   model_uri=DAMS.scale, domain=None, range=Optional[int])
+
+slots.max_length = Slot(uri=DAMS.max_length, name="max_length", curie=DAMS.curie('max_length'),
+                   model_uri=DAMS.max_length, domain=None, range=Optional[int])
+
+slots.min_length = Slot(uri=DAMS.min_length, name="min_length", curie=DAMS.curie('min_length'),
+                   model_uri=DAMS.min_length, domain=None, range=Optional[int])
+
+slots.datatype_timezone_policy = Slot(uri=DAMS.datatype_timezone_policy, name="datatype_timezone_policy", curie=DAMS.curie('datatype_timezone_policy'),
+                   model_uri=DAMS.datatype_timezone_policy, domain=None, range=Optional[Union[str, "TimezonePolicyEnum"]])
+
+slots.charset = Slot(uri=DAMS.charset, name="charset", curie=DAMS.curie('charset'),
+                   model_uri=DAMS.charset, domain=None, range=Optional[str])
+
+slots.xsd_datatype = Slot(uri=DAMS.xsd_datatype, name="xsd_datatype", curie=DAMS.curie('xsd_datatype'),
+                   model_uri=DAMS.xsd_datatype, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.linkml_type = Slot(uri=DAMS.linkml_type, name="linkml_type", curie=DAMS.curie('linkml_type'),
+                   model_uri=DAMS.linkml_type, domain=None, range=Optional[str])
+
+slots.base_type_ref = Slot(uri=DAMS.base_type_ref, name="base_type_ref", curie=DAMS.curie('base_type_ref'),
+                   model_uri=DAMS.base_type_ref, domain=None, range=Optional[Union[str, DataTypeElementId]])
+
+slots.binding_id = Slot(uri=DAMS.binding_id, name="binding_id", curie=DAMS.curie('binding_id'),
+                   model_uri=DAMS.binding_id, domain=None, range=URIRef)
+
+slots.dialect = Slot(uri=DAMS.dialect, name="dialect", curie=DAMS.curie('dialect'),
+                   model_uri=DAMS.dialect, domain=None, range=str)
+
+slots.dialect_native_type = Slot(uri=DAMS.dialect_native_type, name="dialect_native_type", curie=DAMS.curie('dialect_native_type'),
+                   model_uri=DAMS.dialect_native_type, domain=None, range=str)
+
+slots.data_type_ref = Slot(uri=DAMS.data_type_ref, name="data_type_ref", curie=DAMS.curie('data_type_ref'),
+                   model_uri=DAMS.data_type_ref, domain=None, range=Union[str, DataTypeElementId])
+
+slots.lossiness = Slot(uri=DAMS.lossiness, name="lossiness", curie=DAMS.curie('lossiness'),
+                   model_uri=DAMS.lossiness, domain=None, range=Union[str, "LossinessEnum"])
+
+slots.parameter_mapping = Slot(uri=DAMS.parameter_mapping, name="parameter_mapping", curie=DAMS.curie('parameter_mapping'),
+                   model_uri=DAMS.parameter_mapping, domain=None, range=Optional[str])
+
+slots.value_domain_kind = Slot(uri=DAMS.value_domain_kind, name="value_domain_kind", curie=DAMS.curie('value_domain_kind'),
+                   model_uri=DAMS.value_domain_kind, domain=None, range=Union[str, "ValueDomainKindEnum"])
+
+slots.conceptual_domain_ref = Slot(uri=DAMS.conceptual_domain_ref, name="conceptual_domain_ref", curie=DAMS.curie('conceptual_domain_ref'),
+                   model_uri=DAMS.conceptual_domain_ref, domain=None, range=Optional[Union[str, ConceptualDomainElementId]])
+
+slots.min_value = Slot(uri=DAMS.min_value, name="min_value", curie=DAMS.curie('min_value'),
+                   model_uri=DAMS.min_value, domain=None, range=Optional[str])
+
+slots.max_value = Slot(uri=DAMS.max_value, name="max_value", curie=DAMS.curie('max_value'),
+                   model_uri=DAMS.max_value, domain=None, range=Optional[str])
+
+slots.permissible_values = Slot(uri=DAMS.permissible_values, name="permissible_values", curie=DAMS.curie('permissible_values'),
+                   model_uri=DAMS.permissible_values, domain=None, range=Optional[Union[dict[Union[str, PermissibleValueValueCode], Union[dict, PermissibleValue]], list[Union[dict, PermissibleValue]]]])
+
+slots.value_set_source = Slot(uri=DAMS.value_set_source, name="value_set_source", curie=DAMS.curie('value_set_source'),
+                   model_uri=DAMS.value_set_source, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.dynamic_query = Slot(uri=DAMS.dynamic_query, name="dynamic_query", curie=DAMS.curie('dynamic_query'),
+                   model_uri=DAMS.dynamic_query, domain=None, range=Optional[Union[dict, ValueSetQuery]])
+
+slots.value_code = Slot(uri=DAMS.value_code, name="value_code", curie=DAMS.curie('value_code'),
+                   model_uri=DAMS.value_code, domain=None, range=URIRef)
+
+slots.value_label = Slot(uri=DAMS.value_label, name="value_label", curie=DAMS.curie('value_label'),
+                   model_uri=DAMS.value_label, domain=None, range=Optional[str])
+
+slots.value_definition = Slot(uri=DAMS.value_definition, name="value_definition", curie=DAMS.curie('value_definition'),
+                   model_uri=DAMS.value_definition, domain=None, range=Optional[str])
+
+slots.value_meaning_key = Slot(uri=DAMS.value_meaning_key, name="value_meaning_key", curie=DAMS.curie('value_meaning_key'),
+                   model_uri=DAMS.value_meaning_key, domain=None, range=Optional[str])
+
+slots.ordinal = Slot(uri=DAMS.ordinal, name="ordinal", curie=DAMS.curie('ordinal'),
+                   model_uri=DAMS.ordinal, domain=None, range=Optional[int])
+
+slots.value_status = Slot(uri=DAMS.value_status, name="value_status", curie=DAMS.curie('value_status'),
+                   model_uri=DAMS.value_status, domain=None, range=Optional[Union[str, "LifecycleStatusEnum"]])
+
+slots.value_set_query_id = Slot(uri=DAMS.value_set_query_id, name="value_set_query_id", curie=DAMS.curie('value_set_query_id'),
+                   model_uri=DAMS.value_set_query_id, domain=None, range=URIRef)
+
+slots.source_ontology = Slot(uri=DAMS.source_ontology, name="source_ontology", curie=DAMS.curie('source_ontology'),
+                   model_uri=DAMS.source_ontology, domain=None, range=Union[str, URIorCURIE])
+
+slots.source_nodes = Slot(uri=DAMS.source_nodes, name="source_nodes", curie=DAMS.curie('source_nodes'),
+                   model_uri=DAMS.source_nodes, domain=None, range=Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]])
+
+slots.relationship_types = Slot(uri=DAMS.relationship_types, name="relationship_types", curie=DAMS.curie('relationship_types'),
+                   model_uri=DAMS.relationship_types, domain=None, range=Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]])
+
+slots.include_self = Slot(uri=DAMS.include_self, name="include_self", curie=DAMS.curie('include_self'),
+                   model_uri=DAMS.include_self, domain=None, range=Optional[Union[bool, Bool]])
 
 slots.integration_ref = Slot(uri=DAMS.integration_ref, name="integration_ref", curie=DAMS.curie('integration_ref'),
                    model_uri=DAMS.integration_ref, domain=None, range=Union[str, IntegrationReferenceRegistryId])
@@ -4973,11 +5885,26 @@ slots.requirements = Slot(uri=DAMS.requirements, name="requirements", curie=DAMS
 slots.ConceptualEntity_description = Slot(uri=DAMS.description, name="ConceptualEntity_description", curie=DAMS.curie('description'),
                    model_uri=DAMS.ConceptualEntity_description, domain=ConceptualEntity, range=str)
 
+slots.ConceptualProperty_description = Slot(uri=DAMS.description, name="ConceptualProperty_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.ConceptualProperty_description, domain=ConceptualProperty, range=str)
+
+slots.ConceptualProperty_genesis_kind = Slot(uri=DAMS.genesis_kind, name="ConceptualProperty_genesis_kind", curie=DAMS.curie('genesis_kind'),
+                   model_uri=DAMS.ConceptualProperty_genesis_kind, domain=ConceptualProperty, range=Union[str, "GenesisKindEnum"])
+
 slots.LogicalEntity_description = Slot(uri=DAMS.description, name="LogicalEntity_description", curie=DAMS.curie('description'),
                    model_uri=DAMS.LogicalEntity_description, domain=LogicalEntity, range=str)
 
 slots.LogicalAttribute_description = Slot(uri=DAMS.description, name="LogicalAttribute_description", curie=DAMS.curie('description'),
                    model_uri=DAMS.LogicalAttribute_description, domain=LogicalAttribute, range=str)
+
+slots.LogicalAttribute_data_type_ref = Slot(uri=DAMS.data_type_ref, name="LogicalAttribute_data_type_ref", curie=DAMS.curie('data_type_ref'),
+                   model_uri=DAMS.LogicalAttribute_data_type_ref, domain=LogicalAttribute, range=Union[str, DataTypeElementId])
+
+slots.LogicalAttribute_logical_type = Slot(uri=DAMS.logical_type, name="LogicalAttribute_logical_type", curie=DAMS.curie('logical_type'),
+                   model_uri=DAMS.LogicalAttribute_logical_type, domain=LogicalAttribute, range=Optional[Union[str, "LogicalDataTypeEnum"]])
+
+slots.LogicalAttribute_concept_ref = Slot(uri=DAMS.concept_ref, name="LogicalAttribute_concept_ref", curie=DAMS.curie('concept_ref'),
+                   model_uri=DAMS.LogicalAttribute_concept_ref, domain=LogicalAttribute, range=Optional[Union[str, ConceptualPropertyElementId]])
 
 slots.RelationTerm_description = Slot(uri=DAMS.description, name="RelationTerm_description", curie=DAMS.curie('description'),
                    model_uri=DAMS.RelationTerm_description, domain=RelationTerm, range=str)

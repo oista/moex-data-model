@@ -7,6 +7,8 @@
     click HasPolicyBindings href "../HasPolicyBindings"
       HasPolicyBindings <|-- ModelPackage
         click ModelPackage href "../ModelPackage"
+      HasPolicyBindings <|-- ConceptualProperty
+        click ConceptualProperty href "../ConceptualProperty"
       HasPolicyBindings <|-- LogicalEntity
         click LogicalEntity href "../LogicalEntity"
       HasPolicyBindings <|-- LogicalAttribute

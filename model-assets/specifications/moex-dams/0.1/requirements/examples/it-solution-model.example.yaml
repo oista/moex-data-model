@@ -57,6 +57,7 @@ logical_entities:
     required: true
     multivalued: false
     mapping_coverage_status: mapped
+    data_type_ref: dams:datatype/identifier
 - element_id: dams:logical/example-min/Account
   name: ExampleAccount
   title: Счёт
@@ -90,6 +91,7 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: planned
     mapping_rationale: Физическое представление счёта будет добавлено в следующей итерации.
+    data_type_ref: dams:datatype/identifier
 relationships:
 - element_id: dams:rel/example-min/party-account
   name: party_has_account
@@ -152,3 +154,4 @@ data_carriers:
   tags:
   - transitional
   - namespace_heuristic
+value_domains: []

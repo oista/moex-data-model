@@ -22,6 +22,19 @@
         
       LogicalAttribute : classification_source
         
+      LogicalAttribute : concept_ref
+        
+          
+    
+        
+        
+        LogicalAttribute --> "0..1" ConceptualProperty : concept_ref
+        click ConceptualProperty href "../ConceptualProperty"
+    
+
+        
+      LogicalAttribute : critical_data_element
+        
       LogicalAttribute : currency_attribute_ref
         
       LogicalAttribute : data_owner_ref
@@ -43,6 +56,17 @@
         
         LogicalAttribute --> "0..1" Role : data_steward_ref
         click Role href "../Role"
+    
+
+        
+      LogicalAttribute : data_type_ref
+        
+          
+    
+        
+        
+        LogicalAttribute --> "0..1" DataType : data_type_ref
+        click DataType href "../DataType"
     
 
         
@@ -101,7 +125,7 @@
     
         
         
-        LogicalAttribute --> "1" LogicalDataTypeEnum : logical_type
+        LogicalAttribute --> "0..1" LogicalDataTypeEnum : logical_type
         click LogicalDataTypeEnum href "../LogicalDataTypeEnum"
     
 
@@ -210,6 +234,17 @@
       LogicalAttribute : valid_from
         
       LogicalAttribute : valid_to
+        
+      LogicalAttribute : value_domain_ref
+        
+          
+    
+        
+        
+        LogicalAttribute --> "0..1" ValueDomain : value_domain_ref
+        click ValueDomain href "../ValueDomain"
+    
+
         
       LogicalAttribute : value_set_ref
         

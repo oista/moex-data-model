@@ -229,3 +229,198 @@ def test_is_identifying_without_basis_errors():
         ],
     }
     assert "DAMS-SEM-PROP-IDENT" in _codes(check_semantic_layer(data))
+
+
+def test_duplicate_value_code_errors():
+    data = {
+        "implementation_scope": "enterprise",
+        "data_types": [
+            {
+                "element_id": "dams:datatype/string",
+                "name": "string",
+                "description": "s",
+                "lifecycle_status": "active",
+                "type_name": "string",
+                "type_family": "string",
+            }
+        ],
+        "value_domains": [
+            {
+                "element_id": "dams:vd/1",
+                "name": "vd",
+                "description": "d",
+                "lifecycle_status": "active",
+                "value_domain_kind": "enumerated",
+                "data_type_ref": "dams:datatype/string",
+                "permissible_values": [
+                    {"value_code": "a", "value_label": "A"},
+                    {"value_code": "a", "value_label": "A2"},
+                ],
+            }
+        ],
+    }
+    assert "DAMS-SEM-PV-DUP" in _codes(check_semantic_layer(data))
+
+
+def test_value_meaning_key_missing_errors():
+    data = {
+        "implementation_scope": "enterprise",
+        "data_types": [
+            {
+                "element_id": "dams:datatype/string",
+                "name": "string",
+                "description": "s",
+                "lifecycle_status": "active",
+                "type_name": "string",
+                "type_family": "string",
+            }
+        ],
+        "conceptual_domains": [
+            {
+                "element_id": "dams:cd/1",
+                "name": "cd",
+                "description": "d",
+                "lifecycle_status": "active",
+                "conceptual_domain_kind": "enumerated",
+                "value_meanings": [{"meaning_key": "yes"}],
+            }
+        ],
+        "value_domains": [
+            {
+                "element_id": "dams:vd/1",
+                "name": "vd",
+                "description": "d",
+                "lifecycle_status": "active",
+                "value_domain_kind": "enumerated",
+                "data_type_ref": "dams:datatype/string",
+                "conceptual_domain_ref": "dams:cd/1",
+                "permissible_values": [
+                    {"value_code": "Y", "value_meaning_key": "nope"},
+                ],
+            }
+        ],
+    }
+    assert "DAMS-SEM-PV-MEANING" in _codes(check_semantic_layer(data))
+
+
+def test_reference_set_without_source_errors():
+    data = {
+        "implementation_scope": "enterprise",
+        "data_types": [
+            {
+                "element_id": "dams:datatype/string",
+                "name": "string",
+                "description": "s",
+                "lifecycle_status": "active",
+                "type_name": "string",
+                "type_family": "string",
+            }
+        ],
+        "value_domains": [
+            {
+                "element_id": "dams:vd/1",
+                "name": "vd",
+                "description": "d",
+                "lifecycle_status": "active",
+                "value_domain_kind": "reference_set",
+                "data_type_ref": "dams:datatype/string",
+            }
+        ],
+    }
+    assert "DAMS-SEM-VD-REF" in _codes(check_semantic_layer(data))
+
+
+def test_duplicate_property_name_in_entity_errors():
+    data = {
+        "implementation_scope": "enterprise",
+        "conceptual_entities": [
+            {"element_id": "dams:concept/C", "name": "C", "description": "c", "lifecycle_status": "active"}
+        ],
+        "conceptual_properties": [
+            {
+                "element_id": "dams:concept/C/p1",
+                "name": "same",
+                "description": "p",
+                "lifecycle_status": "active",
+                "property_owner_entity_ref": "dams:concept/C",
+                "significance_basis": ["identifying"],
+                "property_kind": "identifying",
+                "is_identifying": True,
+                "genesis_kind": "native",
+            },
+            {
+                "element_id": "dams:concept/C/p2",
+                "name": "same",
+                "description": "p2",
+                "lifecycle_status": "active",
+                "property_owner_entity_ref": "dams:concept/C",
+                "significance_basis": ["identifying"],
+                "property_kind": "identifying",
+                "is_identifying": True,
+                "genesis_kind": "native",
+            },
+        ],
+    }
+    assert "DAMS-SEM-PROP-DUP" in _codes(check_semantic_layer(data))
+
+
+def test_concept_ref_foreign_entity_errors():
+    data = {
+        "implementation_scope": "solution",
+        "conceptual_properties": [],  # props live in enterprise; simulate local index empty
+        "logical_entities": [
+            {
+                "element_id": "dams:logical/x/E",
+                "name": "E",
+                "description": "e",
+                "lifecycle_status": "active",
+                "context_ref": "dams:ctx/x",
+                "solution_data_role": "producer",
+                "attributes": [
+                    {
+                        "element_id": "dams:logical/x/E/a",
+                        "name": "a",
+                        "description": "a",
+                        "lifecycle_status": "active",
+                        "owner_entity_ref": "dams:logical/x/E",
+                        "logical_type": "string",
+                        "concept_ref": "dams:concept/Other/p",
+                        "required": True,
+                        "multivalued": False,
+                    }
+                ],
+            }
+        ],
+        # Put property in same package so resolver finds it with wrong owner
+        "conceptual_entities": [
+            {"element_id": "dams:concept/Other", "name": "Other", "description": "o", "lifecycle_status": "active"},
+            {"element_id": "dams:concept/Mine", "name": "Mine", "description": "m", "lifecycle_status": "active"},
+        ],
+        "mappings": [
+            {
+                "element_id": "dams:map/1",
+                "name": "r",
+                "description": "r",
+                "lifecycle_status": "active",
+                "mapping_type": "realizes",
+                "source_refs": ["dams:logical/x/E"],
+                "target_refs": ["dams:concept/Mine"],
+            }
+        ],
+    }
+    # conceptual_properties in solution will also trigger SCOPE; add as enterprise-like check:
+    data["implementation_scope"] = "enterprise"
+    data["conceptual_properties"] = [
+        {
+            "element_id": "dams:concept/Other/p",
+            "name": "p",
+            "description": "p",
+            "lifecycle_status": "active",
+            "property_owner_entity_ref": "dams:concept/Other",
+            "significance_basis": ["identifying"],
+            "property_kind": "identifying",
+            "is_identifying": True,
+            "genesis_kind": "native",
+        }
+    ]
+    assert "DAMS-SEM-ATTR-CONCEPT" in _codes(check_semantic_layer(data))

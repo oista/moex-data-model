@@ -33,3 +33,7 @@ superseded_by: []
 - Коллекции `data_types` / `native_type_bindings` на `ModelPackage`; корпоративный
   реестр — enterprise-пакет (имя/путь — open: рядом с КМД или отдельный SpecImpl).
 - DataType / NativeTypeBinding допустимы только в корпоративном реестре типов.
+- Слот `dialect_native_type` (не `native_type`): у `PhysicalField` уже есть
+  `native_type` в `moex-core`; повторное объявление в `moex-datatypes` даёт
+  `Conflicting URIs` в SchemaLoader (ломает `gen-dbml` / compare-golden).
+  Имя нативного типа диалекта — отдельный слот.
