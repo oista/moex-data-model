@@ -48,13 +48,13 @@ def _ident(raw: str | None, *, fallback: str) -> str:
 
 
 def effective_attr_type(attr: dict[str, Any]) -> str:
-    """Prefer data_type_ref leaf, then deprecated logical_type."""
+    """Leaf type name from data_type_ref (required representation after PR-5)."""
     dtr = str(attr.get("data_type_ref") or "").strip()
     if dtr:
         leaf = dtr.rsplit("/", 1)[-1]
         if leaf:
             return leaf
-    return str(attr.get("logical_type") or "string")
+    return "string"
 
 
 def _escape_note(text: str) -> str:

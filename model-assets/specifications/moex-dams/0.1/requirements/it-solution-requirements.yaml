@@ -425,8 +425,8 @@ requirements:
   code: ATR-001
   requirement_level: it_solution
   requirement_section: ATR
-  statement: У логического атрибута должны быть указаны владеющая сущность, логический тип, обязательность
-    заполнения и признак множественности.
+  statement: У логического атрибута должны быть указаны владеющая сущность, представление
+    типа (data_type_ref и/или value_domain_ref), обязательность заполнения и признак множественности.
   applies_to:
     applicability_id: appl:ATR-001
     applies_target_class: LogicalAttribute
@@ -439,12 +439,12 @@ requirements:
     remediation: Укажите owner_entity_ref родительской сущности.
     diagnostic_code: DAMS-REQ-ATR-001.c1
   - check_id: ATR-001.c2
-    kind: slot_required
+    kind: custom
     target_class: LogicalAttribute
-    target_slot: logical_type
+    expression: semantic_layer_attr_type
     severity: error
-    remediation: Укажите logical_type атрибута.
-    diagnostic_code: DAMS-REQ-ATR-001.c2
+    remediation: Укажите data_type_ref и/или value_domain_ref.
+    diagnostic_code: DAMS-SEM-ATTR-TYPE
   - check_id: ATR-001.c3
     kind: slot_required
     target_class: LogicalAttribute
@@ -1025,16 +1025,15 @@ requirements:
   name: attribute_representation_present
   title: Представление атрибута (тип или домен)
   description: >
-    Переходный ATR: value_domain_ref, data_type_ref или deprecated logical_type.
+    Строгое представление: value_domain_ref и/или data_type_ref (PR-5 / ADR-034 шаг 2).
     Реализовано в packages/specification-dams/.../semantic_layer.py (DAMS-SEM-ATTR-TYPE).
   lifecycle_status: approved
   code: ATR-006
   requirement_level: it_solution
   requirement_section: ATR
   statement: >
-    У логического атрибута должно быть задано представление значений: value_domain_ref,
-    data_type_ref или (на переходном этапе) logical_type. Отсутствие concept_ref не является
-    нарушением (вариант B, ADR-034).
+    У логического атрибута должно быть задано представление значений: value_domain_ref
+    и/или data_type_ref. Отсутствие concept_ref не является нарушением (вариант B, ADR-034).
   applies_to:
     applicability_id: appl:ATR-006
     applies_target_class: LogicalAttribute
@@ -1045,7 +1044,7 @@ requirements:
     expression: semantic_layer_attr_type
     severity: error
     diagnostic_code: DAMS-SEM-ATTR-TYPE
-    remediation: Укажите data_type_ref и/или value_domain_ref (или logical_type на переходе).
+    remediation: Укажите data_type_ref и/или value_domain_ref.
 - element_id: dams:req/ATR-007
   name: attribute_concept_ref_optional
   title: concept_ref опционален

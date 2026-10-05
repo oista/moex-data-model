@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-05T22:39:18
+# Generation date: 2026-10-05T23:32:10
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -1800,23 +1800,19 @@ class LogicalAttribute(ModelElement):
     name: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     owner_entity_ref: Union[str, LogicalEntityElementId] = None
-    data_type_ref: Union[str, DataTypeElementId] = None
     required: Union[bool, Bool] = None
     multivalued: Union[bool, Bool] = None
     description: str = None
     concept_ref: Optional[Union[str, ConceptualPropertyElementId]] = None
     value_domain_ref: Optional[Union[str, ValueDomainElementId]] = None
+    data_type_ref: Optional[Union[str, DataTypeElementId]] = None
     critical_data_element: Optional[Union[bool, Bool]] = None
-    logical_type: Optional[Union[str, "LogicalDataTypeEnum"]] = None
     minimum_cardinality: Optional[int] = None
     maximum_cardinality: Optional[int] = None
-    value_set_ref: Optional[Union[str, URI]] = None
-    format_pattern: Optional[str] = None
     default_value: Optional[str] = None
     derived_expression: Optional[str] = None
     mapping_coverage_status: Optional[Union[str, "MappingCoverageStatusEnum"]] = None
     mapping_rationale: Optional[str] = None
-    unit_code: Optional[str] = None
     currency_attribute_ref: Optional[Union[str, URIorCURIE]] = None
     timezone_policy: Optional[str] = None
     temporal_semantics: Optional[str] = None
@@ -1845,11 +1841,6 @@ class LogicalAttribute(ModelElement):
         if not isinstance(self.owner_entity_ref, LogicalEntityElementId):
             self.owner_entity_ref = LogicalEntityElementId(self.owner_entity_ref)
 
-        if self._is_empty(self.data_type_ref):
-            self.MissingRequiredField("data_type_ref")
-        if not isinstance(self.data_type_ref, DataTypeElementId):
-            self.data_type_ref = DataTypeElementId(self.data_type_ref)
-
         if self._is_empty(self.required):
             self.MissingRequiredField("required")
         if not isinstance(self.required, Bool):
@@ -1871,23 +1862,17 @@ class LogicalAttribute(ModelElement):
         if self.value_domain_ref is not None and not isinstance(self.value_domain_ref, ValueDomainElementId):
             self.value_domain_ref = ValueDomainElementId(self.value_domain_ref)
 
+        if self.data_type_ref is not None and not isinstance(self.data_type_ref, DataTypeElementId):
+            self.data_type_ref = DataTypeElementId(self.data_type_ref)
+
         if self.critical_data_element is not None and not isinstance(self.critical_data_element, Bool):
             self.critical_data_element = Bool(self.critical_data_element)
-
-        if self.logical_type is not None and not isinstance(self.logical_type, LogicalDataTypeEnum):
-            self.logical_type = LogicalDataTypeEnum(self.logical_type)
 
         if self.minimum_cardinality is not None and not isinstance(self.minimum_cardinality, int):
             self.minimum_cardinality = int(self.minimum_cardinality)
 
         if self.maximum_cardinality is not None and not isinstance(self.maximum_cardinality, int):
             self.maximum_cardinality = int(self.maximum_cardinality)
-
-        if self.value_set_ref is not None and not isinstance(self.value_set_ref, URI):
-            self.value_set_ref = URI(self.value_set_ref)
-
-        if self.format_pattern is not None and not isinstance(self.format_pattern, str):
-            self.format_pattern = str(self.format_pattern)
 
         if self.default_value is not None and not isinstance(self.default_value, str):
             self.default_value = str(self.default_value)
@@ -1900,9 +1885,6 @@ class LogicalAttribute(ModelElement):
 
         if self.mapping_rationale is not None and not isinstance(self.mapping_rationale, str):
             self.mapping_rationale = str(self.mapping_rationale)
-
-        if self.unit_code is not None and not isinstance(self.unit_code, str):
-            self.unit_code = str(self.unit_code)
 
         if self.currency_attribute_ref is not None and not isinstance(self.currency_attribute_ref, URIorCURIE):
             self.currency_attribute_ref = URIorCURIE(self.currency_attribute_ref)
@@ -5536,18 +5518,6 @@ slots.produces_refs = Slot(uri=DAMS.produces_refs, name="produces_refs", curie=D
 slots.consumes_refs = Slot(uri=DAMS.consumes_refs, name="consumes_refs", curie=DAMS.curie('consumes_refs'),
                    model_uri=DAMS.consumes_refs, domain=None, range=Optional[Union[Union[str, TechnicalAssetElementId], list[Union[str, TechnicalAssetElementId]]]])
 
-slots.logical_type = Slot(uri=DAMS.logical_type, name="logical_type", curie=DAMS.curie('logical_type'),
-                   model_uri=DAMS.logical_type, domain=None, range=Optional[Union[str, "LogicalDataTypeEnum"]])
-
-slots.value_set_ref = Slot(uri=DAMS.value_set_ref, name="value_set_ref", curie=DAMS.curie('value_set_ref'),
-                   model_uri=DAMS.value_set_ref, domain=None, range=Optional[Union[str, URI]])
-
-slots.format_pattern = Slot(uri=DAMS.format_pattern, name="format_pattern", curie=DAMS.curie('format_pattern'),
-                   model_uri=DAMS.format_pattern, domain=None, range=Optional[str])
-
-slots.unit_code = Slot(uri=DAMS.unit_code, name="unit_code", curie=DAMS.curie('unit_code'),
-                   model_uri=DAMS.unit_code, domain=None, range=Optional[str])
-
 slots.conceptual_domain_kind = Slot(uri=DAMS.conceptual_domain_kind, name="conceptual_domain_kind", curie=DAMS.curie('conceptual_domain_kind'),
                    model_uri=DAMS.conceptual_domain_kind, domain=None, range=Union[str, "ConceptualDomainKindEnum"])
 
@@ -5621,7 +5591,13 @@ slots.dialect_native_type = Slot(uri=DAMS.dialect_native_type, name="dialect_nat
                    model_uri=DAMS.dialect_native_type, domain=None, range=str)
 
 slots.data_type_ref = Slot(uri=DAMS.data_type_ref, name="data_type_ref", curie=DAMS.curie('data_type_ref'),
-                   model_uri=DAMS.data_type_ref, domain=None, range=Union[str, DataTypeElementId])
+                   model_uri=DAMS.data_type_ref, domain=None, range=Optional[Union[str, DataTypeElementId]])
+
+slots.unit_code = Slot(uri=DAMS.unit_code, name="unit_code", curie=DAMS.curie('unit_code'),
+                   model_uri=DAMS.unit_code, domain=None, range=Optional[str])
+
+slots.format_pattern = Slot(uri=DAMS.format_pattern, name="format_pattern", curie=DAMS.curie('format_pattern'),
+                   model_uri=DAMS.format_pattern, domain=None, range=Optional[str])
 
 slots.lossiness = Slot(uri=DAMS.lossiness, name="lossiness", curie=DAMS.curie('lossiness'),
                    model_uri=DAMS.lossiness, domain=None, range=Union[str, "LossinessEnum"])
@@ -5898,10 +5874,7 @@ slots.LogicalAttribute_description = Slot(uri=DAMS.description, name="LogicalAtt
                    model_uri=DAMS.LogicalAttribute_description, domain=LogicalAttribute, range=str)
 
 slots.LogicalAttribute_data_type_ref = Slot(uri=DAMS.data_type_ref, name="LogicalAttribute_data_type_ref", curie=DAMS.curie('data_type_ref'),
-                   model_uri=DAMS.LogicalAttribute_data_type_ref, domain=LogicalAttribute, range=Union[str, DataTypeElementId])
-
-slots.LogicalAttribute_logical_type = Slot(uri=DAMS.logical_type, name="LogicalAttribute_logical_type", curie=DAMS.curie('logical_type'),
-                   model_uri=DAMS.LogicalAttribute_logical_type, domain=LogicalAttribute, range=Optional[Union[str, "LogicalDataTypeEnum"]])
+                   model_uri=DAMS.LogicalAttribute_data_type_ref, domain=LogicalAttribute, range=Optional[Union[str, DataTypeElementId]])
 
 slots.LogicalAttribute_concept_ref = Slot(uri=DAMS.concept_ref, name="LogicalAttribute_concept_ref", curie=DAMS.curie('concept_ref'),
                    model_uri=DAMS.LogicalAttribute_concept_ref, domain=LogicalAttribute, range=Optional[Union[str, ConceptualPropertyElementId]])
@@ -5947,6 +5920,12 @@ slots.ExecutionAsset_asset_kind = Slot(uri=DAMS.asset_kind, name="ExecutionAsset
 
 slots.ExecutionAsset_direction = Slot(uri=DAMS.direction, name="ExecutionAsset_direction", curie=DAMS.curie('direction'),
                    model_uri=DAMS.ExecutionAsset_direction, domain=ExecutionAsset, range=Optional[Union[str, "FlowDirectionEnum"]])
+
+slots.NativeTypeBinding_data_type_ref = Slot(uri=DAMS.data_type_ref, name="NativeTypeBinding_data_type_ref", curie=DAMS.curie('data_type_ref'),
+                   model_uri=DAMS.NativeTypeBinding_data_type_ref, domain=NativeTypeBinding, range=Union[str, DataTypeElementId])
+
+slots.ValueDomain_data_type_ref = Slot(uri=DAMS.data_type_ref, name="ValueDomain_data_type_ref", curie=DAMS.curie('data_type_ref'),
+                   model_uri=DAMS.ValueDomain_data_type_ref, domain=ValueDomain, range=Union[str, DataTypeElementId])
 
 slots.SpecificationRequirement_lifecycle_status = Slot(uri=DAMS.lifecycle_status, name="SpecificationRequirement_lifecycle_status", curie=DAMS.curie('lifecycle_status'),
                    model_uri=DAMS.SpecificationRequirement_lifecycle_status, domain=SpecificationRequirement, range=Union[str, "RequirementLifecycleStatus"])

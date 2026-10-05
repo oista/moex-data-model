@@ -261,16 +261,21 @@ function mutateData(
       const ownerId = String(payload.owner_element_id || "").trim();
       const eid = String(attr.element_id || "").trim();
       const name = String(attr.name || "").trim();
-      const logicalType = String(attr.logical_type || "").trim();
-      if (!ownerId || !eid || !name || !logicalType) {
+      const legacyLt = String(attr.logical_type || "").trim();
+      let dataTypeRef = String(attr.data_type_ref || "").trim();
+      const valueDomainRef = String(attr.value_domain_ref || "").trim();
+      if (legacyLt && !dataTypeRef && !valueDomainRef) {
+        dataTypeRef = `dams:datatype/${legacyLt}`;
+      }
+      if (!ownerId || !eid || !name || !(dataTypeRef || valueDomainRef)) {
         throw new YamlMutateError(
-          "owner_element_id, element_id, name, and logical_type are required",
+          "owner_element_id, element_id, name, and data_type_ref or value_domain_ref are required",
         );
       }
       if (ids().has(eid)) throw new YamlMutateError(`duplicate element_id: ${eid}`);
       const { row: owner } = findLogicalEntity(data, ownerId);
       if (!Array.isArray(owner.attributes)) owner.attributes = [];
-      (owner.attributes as Record<string, unknown>[]).push({
+      const row: Record<string, unknown> = {
         element_id: eid,
         name,
         title: attr.title || name,
@@ -278,10 +283,12 @@ function mutateData(
           attr.description || `Logical attribute ${name} (workbench draft).`,
         lifecycle_status: "draft",
         owner_entity_ref: ownerId,
-        logical_type: logicalType,
         required: Boolean(attr.required),
         multivalued: false,
-      });
+      };
+      if (dataTypeRef) row.data_type_ref = dataTypeRef;
+      if (valueDomainRef) row.value_domain_ref = valueDomainRef;
+      (owner.attributes as Record<string, unknown>[]).push(row);
       break;
     }
     case "update_logical_entity": {
@@ -314,7 +321,8 @@ function mutateData(
           "name",
           "title",
           "description",
-          "logical_type",
+          "data_type_ref",
+          "value_domain_ref",
           "required",
           "multivalued",
           "lifecycle_status",

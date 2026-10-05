@@ -23,7 +23,7 @@ logical_entities:
     attributes:
       - element_id: dams:logical/mdm/Client/ENTERPRISE_ID
         name: ENTERPRISE_ID
-        logical_type: identifier
+        data_type_ref: dams:datatype/identifier
 """
 
 
@@ -51,7 +51,7 @@ def test_add_entity_and_attribute() -> None:
             "attribute": {
                 "element_id": "dams:logical/mdm/Client/nick",
                 "name": "nick",
-                "logical_type": "string",
+                "data_type_ref": "dams:datatype/string",
             },
         },
     )

@@ -26,14 +26,14 @@ MINI = {
                 {
                     "element_id": "dams:logical/mini/Client/clientId",
                     "name": "clientId",
-                    "logical_type": "identifier",
+                    "data_type_ref": "dams:datatype/identifier",
                     "required": True,
                 },
                 {
                     "element_id": "dams:logical/mini/Client/fullName",
                     "name": "fullName",
                     "title": "Full name",
-                    "logical_type": "string",
+                    "data_type_ref": "dams:datatype/string",
                 },
             ],
         },
@@ -44,13 +44,13 @@ MINI = {
                 {
                     "element_id": "dams:logical/mini/Account/accountId",
                     "name": "accountId",
-                    "logical_type": "identifier",
+                    "data_type_ref": "dams:datatype/identifier",
                     "required": True,
                 },
                 {
                     "element_id": "dams:logical/mini/Account/clientId",
                     "name": "clientId",
-                    "logical_type": "identifier",
+                    "data_type_ref": "dams:datatype/identifier",
                     "required": True,
                 },
             ],
@@ -123,7 +123,7 @@ def test_merge_keeps_positions_adds_and_drops(tmp_path: Path):
                     {
                         "element_id": "dams:logical/mini/Contact/id",
                         "name": "id",
-                        "logical_type": "identifier",
+                        "data_type_ref": "dams:datatype/identifier",
                     }
                 ],
             },

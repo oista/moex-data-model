@@ -1,4 +1,4 @@
-"""Schema metadata checks for deprecated LogicalAttribute slots."""
+"""Schema checks after PR-5 removal of deprecated LogicalAttribute slots."""
 
 from __future__ import annotations
 
@@ -11,28 +11,27 @@ SCHEMA = (
     / "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml"
 )
 
-DEPRECATED_SLOTS = {
-    "logical_type": "dams:data_type_ref",
-    "format_pattern": "dams:value_domain_ref",
-    "value_set_ref": "dams:value_domain_ref",
-    "unit_code": "dams:value_domain_ref",
-}
+REMOVED = ("logical_type", "format_pattern", "value_set_ref", "unit_code")
 
 
-def test_deprecated_slots_have_linkml_metadata():
+def test_deprecated_attr_slots_removed_from_logical_attribute():
     sv = SchemaView(str(SCHEMA))
-    for name, replacement in DEPRECATED_SLOTS.items():
-        slot = sv.get_slot(name)
-        assert slot is not None, name
-        assert slot.deprecated, f"{name} missing deprecated text"
-        assert (
-            str(slot.deprecated_element_has_possible_replacement) == replacement
-        ), name
+    induced = {s.name for s in sv.class_induced_slots("LogicalAttribute")}
+    for name in REMOVED:
+        assert name not in induced, name
+    assert "data_type_ref" in induced
+    assert "value_domain_ref" in induced
 
 
 def test_concept_ref_not_required_on_logical_attribute():
     sv = SchemaView(str(SCHEMA))
-    cls = sv.get_class("LogicalAttribute")
-    assert cls is not None
     induced = sv.induced_slot("concept_ref", "LogicalAttribute")
     assert induced.required is not True
+
+
+def test_moex_deprecated_slots_module_gone():
+    path = (
+        Path(__file__).resolve().parents[3]
+        / "model-assets/specifications/moex-dams/0.1/schemas/moex-deprecated-slots.yaml"
+    )
+    assert not path.exists()

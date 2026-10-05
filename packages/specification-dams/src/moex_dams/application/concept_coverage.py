@@ -40,11 +40,7 @@ def compute_concept_coverage(packages: list[dict[str, Any]]) -> dict[str, Any]:
                 if attr.get("critical_data_element") is True and not cref:
                     critical_without.append(aid)
                 nm = str(attr.get("name") or "")
-                lt = str(
-                    attr.get("logical_type")
-                    or attr.get("data_type_ref")
-                    or ""
-                )
+                lt = str(attr.get("data_type_ref") or "")
                 if nm and lt and sol:
                     name_type[(nm, lt)].append(aid)
 

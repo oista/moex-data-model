@@ -411,20 +411,16 @@ deprecated_by_ref varchar
 owner_entity_ref varchar [not null]
 LogicalAttribute_concept_ref varchar
 value_domain_ref varchar
-LogicalAttribute_data_type_ref varchar [not null]
+LogicalAttribute_data_type_ref varchar
 critical_data_element boolean
-LogicalAttribute_logical_type varchar
 required boolean [not null]
 multivalued boolean [not null]
 minimum_cardinality int
 maximum_cardinality int
-value_set_ref varchar
-format_pattern varchar
 default_value varchar
 derived_expression varchar
 mapping_coverage_status varchar
 mapping_rationale varchar
-unit_code varchar
 currency_attribute_ref varchar
 timezone_policy varchar
 temporal_semantics varchar
@@ -861,7 +857,7 @@ Table NativeTypeBinding {
 binding_id varchar [not null, primary key]
 dialect varchar [not null]
 dialect_native_type varchar [not null]
-data_type_ref varchar [not null]
+NativeTypeBinding_data_type_ref varchar [not null]
 lossiness varchar [not null]
 parameter_mapping varchar
 }
@@ -879,7 +875,7 @@ valid_from datetime
 valid_to datetime
 deprecated_by_ref varchar
 value_domain_kind varchar [not null]
-data_type_ref varchar [not null]
+ValueDomain_data_type_ref varchar [not null]
 conceptual_domain_ref varchar
 unit_code varchar
 format_pattern varchar
@@ -1302,9 +1298,9 @@ Ref: ConceptualDomain.owning_unit_ref > OrganizationUnit.registry_id
 Ref: ConceptualDomain.approved_by_ref > Role.registry_id
 Ref: DataType.glossary_term_refs > GlossaryTerm.registry_id
 Ref: DataType.base_type_ref > DataType.element_id
-Ref: NativeTypeBinding.data_type_ref > DataType.element_id
+Ref: NativeTypeBinding.NativeTypeBinding_data_type_ref > DataType.element_id
 Ref: ValueDomain.glossary_term_refs > GlossaryTerm.registry_id
-Ref: ValueDomain.data_type_ref > DataType.element_id
+Ref: ValueDomain.ValueDomain_data_type_ref > DataType.element_id
 Ref: ValueDomain.conceptual_domain_ref > ConceptualDomain.element_id
 Ref: ValueDomain.permissible_values > PermissibleValue.value_code
 Ref: ValueDomain.dynamic_query > ValueSetQuery.value_set_query_id

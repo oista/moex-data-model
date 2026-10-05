@@ -36,14 +36,14 @@ def test_map_fixture_er_dictionary(
         "dams:logical/pilot/TradingClient/clientId"
     ]
     client_id = next(a for a in client["attributes"] if a["name"] == "clientId")
-    assert client_id["logical_type"] == "identifier"
+    assert client_id["data_type_ref"] == "dams:datatype/identifier"
     assert client_id["required"] is True
 
     trade = next(e for e in pkg["logical_entities"] if e["name"] == "Trade")
     qty = next(a for a in trade["attributes"] if a["name"] == "quantity")
-    assert qty["logical_type"] == "decimal"
+    assert qty["data_type_ref"] == "dams:datatype/decimal"
     trade_date = next(a for a in trade["attributes"] if a["name"] == "tradeDate")
-    assert trade_date["logical_type"] == "date"
+    assert trade_date["data_type_ref"] == "dams:datatype/date"
     assert trade_date["required"] is False
 
     rel = pkg["relationships"][0]

@@ -386,11 +386,18 @@ def test_ldm007_physical_mapping_alone_insufficient() -> None:
 # --- ATR ----------------------------------------------------------------------
 
 
-def test_atr001_logical_type_required() -> None:
+def test_atr001_typed_ref_required() -> None:
     data = _example()
+    data["logical_entities"][0]["attributes"][0].pop("data_type_ref", None)
+    data["logical_entities"][0]["attributes"][0].pop("value_domain_ref", None)
     data["logical_entities"][0]["attributes"][0].pop("logical_type", None)
     errs = _errors(data)
-    assert any("ATR-001" in d.diagnostic_code and "logical_type" in d.diagnostic_message for d in errs)
+    assert any(
+        "DAMS-SEM-ATTR-TYPE" in d.diagnostic_code
+        or ("ATR-001" in d.diagnostic_code and "ATTR-TYPE" in d.diagnostic_code)
+        for d in errs
+    )
+    assert any("DAMS-SEM-ATTR-TYPE" in d.diagnostic_code for d in errs)
 
 
 def test_atr002_snake_case_warning() -> None:
@@ -554,7 +561,7 @@ def test_atr004_datetime_timezone_soft() -> None:
             "description": "Timestamp",
             "lifecycle_status": "draft",
             "owner_entity_ref": "dams:logical/example-min/Party",
-            "logical_type": "datetime",
+            "data_type_ref": "dams:datatype/datetime",
             "required": False,
             "multivalued": False,
             "mapping_coverage_status": "not-applicable",
@@ -621,7 +628,7 @@ def _ldm008_base() -> dict:
                         "description": "Identifier",
                         "lifecycle_status": "active",
                         "owner_entity_ref": "dams:logical/ldm008/IssuerView",
-                        "logical_type": "identifier",
+                        "data_type_ref": "dams:datatype/identifier",
                         "required": True,
                         "multivalued": False,
                         "mapping_coverage_status": "not-applicable",
@@ -685,7 +692,7 @@ def test_ldm008_passes_when_owner_realizer_linked() -> None:
                     "description": "Identifier",
                     "lifecycle_status": "active",
                     "owner_entity_ref": "dams:logical/ldm008/LegalEntityView",
-                    "logical_type": "identifier",
+                    "data_type_ref": "dams:datatype/identifier",
                     "required": True,
                     "multivalued": False,
                     "mapping_coverage_status": "not-applicable",

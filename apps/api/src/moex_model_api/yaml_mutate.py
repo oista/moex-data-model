@@ -137,16 +137,19 @@ def add_logical_attribute(
     owner = str(owner_element_id or "").strip()
     eid = str(attr.get("element_id") or "").strip()
     name = str(attr.get("name") or "").strip()
-    logical_type = str(attr.get("logical_type") or "").strip()
     data_type_ref = str(attr.get("data_type_ref") or "").strip()
     value_domain_ref = str(attr.get("value_domain_ref") or "").strip()
+    # Legacy input: map logical_type → data_type_ref when typed refs absent
+    legacy_lt = str(attr.get("logical_type") or "").strip()
+    if legacy_lt and not data_type_ref and not value_domain_ref:
+        data_type_ref = f"dams:datatype/{legacy_lt}"
     if not owner or not eid or not name:
         raise MutationError(
             "owner_element_id, element_id, and name are required"
         )
-    if not (logical_type or data_type_ref or value_domain_ref):
+    if not (data_type_ref or value_domain_ref):
         raise MutationError(
-            "logical_type, data_type_ref, or value_domain_ref is required"
+            "data_type_ref or value_domain_ref is required"
         )
     if eid in _collect_ids(data):
         raise MutationConflict(f"duplicate element_id: {eid}")
@@ -178,8 +181,6 @@ def add_logical_attribute(
     )
     row["lifecycle_status"] = str(attr.get("lifecycle_status") or "draft")
     row["owner_entity_ref"] = str(attr.get("owner_entity_ref") or owner)
-    if logical_type:
-        row["logical_type"] = logical_type
     if data_type_ref:
         row["data_type_ref"] = data_type_ref
     if value_domain_ref:
@@ -208,7 +209,6 @@ _ATTR_PATCH_KEYS = frozenset(
         "name",
         "title",
         "description",
-        "logical_type",
         "data_type_ref",
         "value_domain_ref",
         "concept_ref",

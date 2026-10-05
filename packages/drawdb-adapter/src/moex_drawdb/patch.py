@@ -161,12 +161,18 @@ def _patch_logical(
     _patch_relationships(base, diagram, table_to_entity_id, ops, rejected)
 
 
+def _attr_type_leaf(attr: dict[str, Any]) -> str:
+    dtr = str(attr.get("data_type_ref") or "").strip()
+    if dtr:
+        return dtr.rsplit("/", 1)[-1]
+    return "string"
+
+
 def _attr_from_col(col: Any, owner_eid: str) -> dict[str, Any]:
     ltype = col.type_name if col.type_name in _LOGICAL_TYPES else "string"
     return {
         "element_id": col.element_id or _new_id(f"{owner_eid}"),
         "name": col.name,
-        "logical_type": ltype,
         "data_type_ref": f"dams:datatype/{ltype}",
         "required": col.required,
         "multivalued": False,
@@ -188,10 +194,13 @@ def _patch_attributes(
     for col in table.columns:
         if col.element_id and col.element_id in by_id:
             existing = by_id[col.element_id]
-            if existing.get("name") == col.name and bool(
-                existing.get("required")
-            ) == col.required and existing.get("logical_type") == (
-                col.type_name if col.type_name in _LOGICAL_TYPES else existing.get("logical_type")
+            want_type = (
+                col.type_name if col.type_name in _LOGICAL_TYPES else _attr_type_leaf(existing)
+            )
+            if (
+                existing.get("name") == col.name
+                and bool(existing.get("required")) == col.required
+                and _attr_type_leaf(existing) == want_type
             ):
                 seen.add(col.element_id)
                 continue
@@ -204,16 +213,11 @@ def _patch_attributes(
                         "owner_element_id": eid,
                         "element_id": col.element_id,
                         "name": col.name,
-                        "logical_type": (
-                            col.type_name
-                            if col.type_name in _LOGICAL_TYPES
-                            else existing.get("logical_type") or "string"
-                        ),
                         "data_type_ref": (
                             f"dams:datatype/{col.type_name}"
                             if col.type_name in _LOGICAL_TYPES
                             else existing.get("data_type_ref")
-                            or f"dams:datatype/{existing.get('logical_type') or 'string'}"
+                            or f"dams:datatype/{_attr_type_leaf(existing)}"
                         ),
                         "required": col.required,
                     },
@@ -252,11 +256,6 @@ def _patch_attributes(
                             "owner_element_id": eid,
                             "element_id": new_id,
                             "name": col.name,
-                            "logical_type": (
-                                col.type_name
-                                if col.type_name in _LOGICAL_TYPES
-                                else "string"
-                            ),
                             "data_type_ref": (
                                 f"dams:datatype/{col.type_name}"
                                 if col.type_name in _LOGICAL_TYPES
@@ -696,14 +695,10 @@ def apply_model_patch(
                 for attr in ent.get("attributes") or []:
                     if attr.get("element_id") == p["element_id"]:
                         attr["name"] = p["name"]
-                        attr["logical_type"] = p["logical_type"]
                         if p.get("data_type_ref"):
                             attr["data_type_ref"] = p["data_type_ref"]
-                        elif p.get("logical_type"):
-                            attr["data_type_ref"] = (
-                                f"dams:datatype/{p['logical_type']}"
-                            )
                         attr["required"] = p["required"]
+                        attr.pop("logical_type", None)
         elif kind is PatchOpKind.DELETE_ATTRIBUTE:
             for ent in out.get("logical_entities") or []:
                 if ent.get("element_id") != p["owner_element_id"]:

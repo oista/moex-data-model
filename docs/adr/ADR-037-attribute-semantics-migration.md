@@ -35,3 +35,8 @@ superseded_by: []
   Подключено в `migrate_logical_attribute_semantics.py` и
   `migrate_physical_to_technical_asset.py`.
 - Атрибуты без концептуальной пары остаются валидными навсегда (вариант B).
+- **PR-5 (шаг 2):** слоты `logical_type` / `format_pattern` / `value_set_ref` /
+  `unit_code` сняты с `LogicalAttribute`; модуль `moex-deprecated-slots.yaml`
+  удалён. Строгое правило: `data_type_ref` и/или `value_domain_ref`
+  (`DAMS-SEM-ATTR-TYPE`). Миграция при `--apply` дополнительно снимает
+  устаревшие ключи с атрибутов.

@@ -185,7 +185,7 @@ Name: moex_dams
 | [filter_expression](filter_expression.md) |  |
 | [flow_ref](flow_ref.md) |  |
 | [formal_checks](formal_checks.md) |  |
-| [format_pattern](format_pattern.md) |  |
+| [format_pattern](format_pattern.md) | Шаблон/формат значения для ValueDomain (regex или маска) |
 | [forward_label](forward_label.md) | Natural-language label source → target (ADR-026) |
 | [forward_label_en](forward_label_en.md) | English forward label (ADR-026) |
 | [generated_at](generated_at.md) |  |
@@ -223,7 +223,6 @@ Name: moex_dams
 | [logical_attribute_refs](logical_attribute_refs.md) |  |
 | [logical_entities](logical_entities.md) |  |
 | [logical_entity_ref](logical_entity_ref.md) |  |
-| [logical_type](logical_type.md) |  |
 | [lossiness](lossiness.md) | Оценка потери точности при отображении |
 | [mapping_cardinality](mapping_cardinality.md) |  |
 | [mapping_coverage_status](mapping_coverage_status.md) | Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ phys... |
@@ -370,7 +369,7 @@ Name: moex_dams
 | [type_family](type_family.md) | Семейство типа (boolean, integer, decimal, …) |
 | [type_name](type_name.md) | Каноническое имя типа в корпоративном реестре |
 | [unit](unit.md) |  |
-| [unit_code](unit_code.md) | Код единицы измерения (UCUM / корпоративный код) |
+| [unit_code](unit_code.md) | Код единицы измерения (UCUM / корпоративный код) для ValueDomain |
 | [valid_from](valid_from.md) |  |
 | [valid_to](valid_to.md) |  |
 | [value_code](value_code.md) | Код значения, уникальный внутри ValueDomain |
@@ -382,7 +381,6 @@ Name: moex_dams
 | [value_meaning_key](value_meaning_key.md) | Ключ ValueMeaning в связанном ConceptualDomain |
 | [value_meanings](value_meanings.md) | Встроенный список смыслов значений |
 | [value_set_query_id](value_set_query_id.md) | Локальный идентификатор динамического запроса внутри ValueDomain |
-| [value_set_ref](value_set_ref.md) |  |
 | [value_set_source](value_set_source.md) | Внешний источник набора значений (reference_set) |
 | [value_status](value_status.md) | Статус допустимого значения |
 | [xsd_datatype](xsd_datatype.md) | Соответствующий XSD datatype (например xsd:string) |

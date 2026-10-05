@@ -99,7 +99,7 @@ def test_add_optional_attribute_compatible(
             "description": "Optional nickname",
             "lifecycle_status": "active",
             "owner_entity_ref": "dams:logical/mdm/ENTERPRISE",
-            "logical_type": "string",
+            "data_type_ref": "dams:datatype/string",
             "required": False,
             "multivalued": False,
         }

@@ -23,13 +23,13 @@ MINI = {
                 {
                     "element_id": "dams:logical/mini/Client/clientId",
                     "name": "clientId",
-                    "logical_type": "identifier",
+                    "data_type_ref": "dams:datatype/identifier",
                     "required": True,
                 },
                 {
                     "element_id": "dams:logical/mini/Client/fullName",
                     "name": "fullName",
-                    "logical_type": "string",
+                    "data_type_ref": "dams:datatype/string",
                     "required": False,
                 },
             ],
@@ -41,13 +41,13 @@ MINI = {
                 {
                     "element_id": "dams:logical/mini/Account/accountId",
                     "name": "accountId",
-                    "logical_type": "identifier",
+                    "data_type_ref": "dams:datatype/identifier",
                     "required": True,
                 },
                 {
                     "element_id": "dams:logical/mini/Account/clientId",
                     "name": "clientId",
-                    "logical_type": "identifier",
+                    "data_type_ref": "dams:datatype/identifier",
                     "required": True,
                 },
             ],

@@ -1804,7 +1804,7 @@
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "xsd": "http://www.w3.org/2001/XMLSchema#"
   },
-  "schema_digest": "sha256:9c3b0a554694d1b1a3cbf972e49149c9a75e2c45006ad19eb2801cdab31024a3",
+  "schema_digest": "sha256:575e1761479f238c58d6e559d6fb1982cf56c490aeff46484b3e62addc519daa",
   "schema_id": "https://data.moex.com/dams/v0.1",
   "schema_name": "moex_dams",
   "schema_version": "0.1.0",
@@ -2368,10 +2368,6 @@
     {
       "iri": "https://data.moex.com/dams/logical_entity_ref",
       "name": "logical_entity_ref"
-    },
-    {
-      "iri": "https://data.moex.com/dams/logical_type",
-      "name": "logical_type"
     },
     {
       "iri": "https://data.moex.com/dams/lossiness",
@@ -3004,10 +3000,6 @@
     {
       "iri": "https://data.moex.com/dams/value_set_query_id",
       "name": "value_set_query_id"
-    },
-    {
-      "iri": "https://data.moex.com/dams/value_set_ref",
-      "name": "value_set_ref"
     },
     {
       "iri": "https://data.moex.com/dams/value_set_source",

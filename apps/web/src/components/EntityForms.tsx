@@ -8,7 +8,7 @@ type AttrSummary = {
   element_id: string;
   name: string;
   title: string;
-  logical_type: string;
+  type_leaf: string;
   data_type_ref?: string;
   value_domain_ref?: string;
   concept_ref?: string;
@@ -43,7 +43,6 @@ function parseEntities(content: string): ParseResult {
           element_id?: string;
           name?: string;
           title?: string;
-          logical_type?: string;
           data_type_ref?: string;
           value_domain_ref?: string;
           concept_ref?: string;
@@ -65,12 +64,10 @@ function parseEntities(content: string): ParseResult {
             element_id: String(a.element_id),
             name: String(a.name || ""),
             title: String(a.title || ""),
-            logical_type: String(
-              a.logical_type ||
-                (typeof a.data_type_ref === "string"
-                  ? a.data_type_ref.split("/").pop()
-                  : "") ||
-                "string"
+            type_leaf: String(
+              (typeof a.data_type_ref === "string"
+                ? a.data_type_ref.split("/").pop()
+                : "") || "string"
             ),
             data_type_ref:
               typeof a.data_type_ref === "string" ? a.data_type_ref : undefined,
@@ -176,7 +173,7 @@ export function EntityForms({
       if (attr) {
         setEditAttrId(attr.element_id);
         setEditAttrName(attr.name);
-        setEditAttrType(attr.logical_type);
+        setEditAttrType(attr.type_leaf);
         setEditAttrRequired(attr.required);
         setPendingAttrFocus(null);
         return;
@@ -186,7 +183,7 @@ export function EntityForms({
       const attr = selected.attributes.find((a) => a.element_id === editAttrId);
       if (attr) {
         setEditAttrName(attr.name);
-        setEditAttrType(attr.logical_type);
+        setEditAttrType(attr.type_leaf);
         setEditAttrRequired(attr.required);
         return;
       }
@@ -245,7 +242,7 @@ export function EntityForms({
       attribute: {
         element_id: attrId.trim(),
         name: attrName.trim(),
-        logical_type: attrType.trim() || "string",
+        data_type_ref: `dams:datatype/${attrType.trim() || "string"}`,
       },
     });
   }
@@ -282,7 +279,7 @@ export function EntityForms({
       element_id: editAttrId,
       patch: {
         name: editAttrName.trim(),
-        logical_type: editAttrType.trim() || "string",
+        data_type_ref: `dams:datatype/${editAttrType.trim() || "string"}`,
         required: editAttrRequired,
       },
     });
@@ -300,7 +297,7 @@ export function EntityForms({
   function selectAttr(attr: AttrSummary) {
     setEditAttrId(attr.element_id);
     setEditAttrName(attr.name);
-    setEditAttrType(attr.logical_type);
+    setEditAttrType(attr.type_leaf);
     setEditAttrRequired(attr.required);
   }
 
@@ -434,7 +431,7 @@ export function EntityForms({
                 />
               </label>
               <label>
-                logical_type
+                data_type
                 <input
                   type="text"
                   value={editAttrType}
@@ -534,7 +531,7 @@ export function EntityForms({
           />
         </label>
         <label>
-          logical_type
+          data_type
           <input
             type="text"
             value={attrType}

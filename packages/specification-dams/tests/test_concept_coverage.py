@@ -18,13 +18,13 @@ def test_coverage_ratio_and_critical():
                         {
                             "element_id": "dams:a/1",
                             "name": "inn",
-                            "logical_type": "string",
+                            "data_type_ref": "dams:datatype/string",
                             "concept_ref": "dams:concept/C/p",
                         },
                         {
                             "element_id": "dams:a/2",
                             "name": "x",
-                            "logical_type": "string",
+                            "data_type_ref": "dams:datatype/string",
                             "critical_data_element": True,
                         },
                     ]
@@ -40,7 +40,7 @@ def test_coverage_ratio_and_critical():
                         {
                             "element_id": "dams:b/1",
                             "name": "inn",
-                            "logical_type": "string",
+                            "data_type_ref": "dams:datatype/string",
                         }
                     ]
                 }

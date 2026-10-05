@@ -227,7 +227,7 @@ def test_document_mutations_seed_and_conflict(client: TestClient) -> None:
             "attribute": {
                 "element_id": "dams:logical/mdm/ENTERPRISE/nickname",
                 "name": "nickname",
-                "logical_type": "string",
+                "data_type_ref": "dams:datatype/string",
                 "required": False,
             },
         },

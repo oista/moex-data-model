@@ -204,8 +204,12 @@ def _ensure_data_types(data: dict[str, Any], *, allow_create: bool) -> dict[str,
 
 
 def _domain_key(attr: dict[str, Any]) -> tuple[Any, ...]:
+    lt = attr.get("logical_type")
+    if not lt:
+        dtr = str(attr.get("data_type_ref") or "").strip()
+        lt = dtr.rsplit("/", 1)[-1] if dtr else None
     return (
-        attr.get("logical_type"),
+        lt,
         attr.get("format_pattern"),
         attr.get("unit_code"),
         attr.get("value_set_ref"),
@@ -392,11 +396,24 @@ def migrate_package(
 
     # Close integrity_digest / revision when apply mutated content or bindings present
     content_changed = bool(report["attrs_updated"] or report["domains_created"])
-    if apply and content_changed:
-        rev_lines = apply_binding_revision_policy(
-            data,
-            demo=demo,
-            reason="attribute-semantics-migration",
+    if apply:
+        removed_keys = 0
+        for attr in attrs_flat:
+            for k in ("logical_type", "format_pattern", "value_set_ref", "unit_code"):
+                if k in attr:
+                    del attr[k]
+                    removed_keys += 1
+                    content_changed = True
+        if removed_keys:
+            report["deprecated_keys_stripped"] = removed_keys
+        rev_lines = (
+            apply_binding_revision_policy(
+                data,
+                demo=demo,
+                reason="attribute-semantics-migration",
+            )
+            if content_changed
+            else []
         )
         report["binding_revisions"] = rev_lines
     else:

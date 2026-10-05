@@ -247,7 +247,6 @@ def map_er_dictionary(
             "description": description,
             "lifecycle_status": defaults.lifecycle_status,
             "owner_entity_ref": owner,
-            "logical_type": logical_type,
             "data_type_ref": f"dams:datatype/{logical_type}",
             "required": required,
             "multivalued": False,

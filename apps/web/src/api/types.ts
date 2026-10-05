@@ -81,7 +81,7 @@ export type DocumentMutation =
       attribute: {
         element_id: string;
         name: string;
-        logical_type: string;
+        data_type_ref: string;
         title?: string;
         description?: string;
         required?: boolean;
@@ -110,7 +110,7 @@ export type DocumentMutation =
         name?: string;
         title?: string;
         description?: string;
-        logical_type?: string;
+        data_type_ref?: string;
         required?: boolean;
         multivalued?: boolean;
         lifecycle_status?: string;

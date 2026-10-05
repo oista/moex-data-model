@@ -43,8 +43,10 @@ def test_migrate_attr_without_domain():
     }
     report = migrate_package(data, apply=True)
     assert report["attributes_before"] == 1
-    assert data["logical_entities"][0]["attributes"][0]["data_type_ref"] == "dams:datatype/string"
-    assert "value_domain_ref" not in data["logical_entities"][0]["attributes"][0]
+    attr = data["logical_entities"][0]["attributes"][0]
+    assert attr["data_type_ref"] == "dams:datatype/string"
+    assert "logical_type" not in attr
+    assert "value_domain_ref" not in attr
     report2 = migrate_package(data, apply=True)
     assert report2["attrs_updated"] == []
 
@@ -71,6 +73,8 @@ def test_migrate_attr_with_format():
     attr = data["logical_entities"][0]["attributes"][0]
     assert attr.get("value_domain_ref")
     assert attr.get("data_type_ref") == "dams:datatype/string"
+    assert "format_pattern" not in attr
+    assert "logical_type" not in attr
     assert report["domains_created"]
     vd = data["value_domains"][0]
     assert "generated" in (vd.get("tags") or [])
@@ -89,7 +93,7 @@ def test_propose_identifying():
                     {
                         "element_id": "dams:logical/a/E/id",
                         "name": "inn",
-                        "logical_type": "string",
+                        "data_type_ref": "dams:datatype/string",
                         "required": True,
                         "multivalued": False,
                     }
@@ -138,8 +142,9 @@ def test_apply_with_binding_issues_new_revision():
         ],
     }
     report = migrate_package(data, apply=True, demo=False)
-    assert report["attrs_updated"]
+    assert report["attrs_updated"] or report.get("deprecated_keys_stripped")
     b = data["data_model_bindings"][0]
     assert b["model_revision"] != "oldrev"
     assert b["compatibility_baseline_ref"].endswith("/rev/oldrev")
     assert any("NEW_REVISION" in line for line in report["binding_revisions"])
+    assert "logical_type" not in data["logical_entities"][0]["attributes"][0]

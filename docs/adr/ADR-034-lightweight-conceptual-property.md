@@ -46,10 +46,10 @@ superseded_by: []
 
 ### Деприкация представления
 
-Слоты `logical_type`, `format_pattern`, `value_set_ref`, `unit_code` получают
-LinkML `deprecated` + `deprecated_element_has_possible_replacement`
-(`logical_type` → `data_type_ref`; остальные → `value_domain_ref`). Удаление —
-отдельный релиз (шаг 2).
+Слоты `logical_type`, `format_pattern`, `value_set_ref`, `unit_code` на
+`LogicalAttribute` **удалены** (шаг 2 / PR-5). Представление — только
+`data_type_ref` и/или `value_domain_ref`. `format_pattern` / `unit_code`
+остаются на `ValueDomain`. Модуль `moex-deprecated-slots.yaml` удалён.
 
 ### `key_attribute_refs` на ConceptualEntity
 

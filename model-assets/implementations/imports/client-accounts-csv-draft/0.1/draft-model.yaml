@@ -18,13 +18,11 @@ logical_entities:
   - element_id: dams:logical/csv-draft/ClientAccount/accountId
     name: accountId
     title: Идентификатор счёта
-    logical_type: identifier
     required: true
     data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/csv-draft/ClientAccount/clientName
     name: clientName
     title: Имя клиента
-    logical_type: string
     required: true
     data_type_ref: dams:datatype/string
 mappings:

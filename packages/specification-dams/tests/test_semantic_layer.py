@@ -29,7 +29,7 @@ def test_missing_concept_ref_is_silent():
                         "description": "a",
                         "lifecycle_status": "active",
                         "owner_entity_ref": "dams:logical/x/E",
-                        "logical_type": "string",
+                        "data_type_ref": "dams:datatype/string",
                         "required": True,
                         "multivalued": False,
                     }
@@ -383,7 +383,7 @@ def test_concept_ref_foreign_entity_errors():
                         "description": "a",
                         "lifecycle_status": "active",
                         "owner_entity_ref": "dams:logical/x/E",
-                        "logical_type": "string",
+                        "data_type_ref": "dams:datatype/string",
                         "concept_ref": "dams:concept/Other/p",
                         "required": True,
                         "multivalued": False,

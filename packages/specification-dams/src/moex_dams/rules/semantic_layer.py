@@ -443,13 +443,12 @@ def check_semantic_layer(data: dict[str, Any]) -> list[Diagnostic]:
         aid = str(attr.get("element_id") or "")
         has_vd = bool(str(attr.get("value_domain_ref") or "").strip())
         has_dt = bool(str(attr.get("data_type_ref") or "").strip())
-        has_lt = attr.get("logical_type") is not None and str(attr.get("logical_type") or "").strip() != ""
-        if not (has_vd or has_dt or has_lt):
+        if not (has_vd or has_dt):
             out.append(
                 _diag(
                     "DAMS-SEM-ATTR-TYPE",
                     DiagnosticSeverity.ERROR,
-                    "Атрибут должен иметь value_domain_ref, data_type_ref или logical_type.",
+                    "Атрибут должен иметь value_domain_ref и/или data_type_ref.",
                     aid,
                 )
             )
@@ -466,29 +465,6 @@ def check_semantic_layer(data: dict[str, Any]) -> list[Diagnostic]:
                         aid,
                     )
                 )
-        # deprecated vs domain divergence → warning
-        if has_vd and vd_ref in vd_index:
-            vd = vd_index[vd_ref]
-            if attr.get("format_pattern") and vd.get("format_pattern"):
-                if str(attr["format_pattern"]) != str(vd["format_pattern"]):
-                    out.append(
-                        _diag(
-                            "DAMS-SEM-ATTR-FMT-WARN",
-                            DiagnosticSeverity.WARNING,
-                            "format_pattern атрибута расходится с ValueDomain; приоритет у домена.",
-                            aid,
-                        )
-                    )
-            if attr.get("unit_code") and vd.get("unit_code"):
-                if str(attr["unit_code"]) != str(vd["unit_code"]):
-                    out.append(
-                        _diag(
-                            "DAMS-SEM-ATTR-UNIT-WARN",
-                            DiagnosticSeverity.WARNING,
-                            "unit_code атрибута расходится с ValueDomain; приоритет у домена.",
-                            aid,
-                        )
-                    )
 
         concept_ref = str(attr.get("concept_ref") or "").strip()
         if not concept_ref:

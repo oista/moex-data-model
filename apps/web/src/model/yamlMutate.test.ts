@@ -10,7 +10,7 @@ logical_entities:
     attributes:
       - element_id: dams:logical/mdm/Client/clientId
         name: clientId
-        logical_type: identifier
+        data_type_ref: dams:datatype/identifier
         required: true
 data_carriers:
   - element_id: dams:physical/mdm/client-topic

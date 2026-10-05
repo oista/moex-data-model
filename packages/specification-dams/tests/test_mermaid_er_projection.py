@@ -24,14 +24,14 @@ MINI = {
                 {
                     "element_id": "dams:logical/mini/Client/clientId",
                     "name": "clientId",
-                    "logical_type": "identifier",
+                    "data_type_ref": "dams:datatype/identifier",
                     "required": True,
                 },
                 {
                     "element_id": "dams:logical/mini/Client/fullName",
                     "name": "fullName",
                     "title": 'Name "quoted"',
-                    "logical_type": "string",
+                    "data_type_ref": "dams:datatype/string",
                     "required": False,
                 },
             ],
@@ -43,13 +43,13 @@ MINI = {
                 {
                     "element_id": "dams:logical/mini/Account/accountId",
                     "name": "accountId",
-                    "logical_type": "identifier",
+                    "data_type_ref": "dams:datatype/identifier",
                     "required": True,
                 },
                 {
                     "element_id": "dams:logical/mini/Account/clientId",
                     "name": "clientId",
-                    "logical_type": "identifier",
+                    "data_type_ref": "dams:datatype/identifier",
                     "required": True,
                 },
             ],
@@ -62,7 +62,7 @@ MINI = {
                 {
                     "element_id": "dams:logical/mini/Contact/Id",
                     "name": "Id",
-                    "logical_type": "identifier",
+                    "data_type_ref": "dams:datatype/identifier",
                     "required": True,
                 },
             ],
@@ -74,7 +74,7 @@ MINI = {
                 {
                     "element_id": "dams:logical/mini/Weird/x",
                     "name": "x",
-                    "logical_type": "string",
+                    "data_type_ref": "dams:datatype/string",
                 },
             ],
         },

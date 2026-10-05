@@ -84,8 +84,6 @@
         
       LogicalAttribute : element_id
         
-      LogicalAttribute : format_pattern
-        
       LogicalAttribute : glossary_term_refs
         
           
@@ -116,17 +114,6 @@
         
         LogicalAttribute --> "1" LifecycleStatusEnum : lifecycle_status
         click LifecycleStatusEnum href "../LifecycleStatusEnum"
-    
-
-        
-      LogicalAttribute : logical_type
-        
-          
-    
-        
-        
-        LogicalAttribute --> "0..1" LogicalDataTypeEnum : logical_type
-        click LogicalDataTypeEnum href "../LogicalDataTypeEnum"
     
 
         
@@ -229,8 +216,6 @@
         
       LogicalAttribute : title
         
-      LogicalAttribute : unit_code
-        
       LogicalAttribute : valid_from
         
       LogicalAttribute : valid_to
@@ -245,8 +230,6 @@
         click ValueDomain href "../ValueDomain"
     
 
-        
-      LogicalAttribute : value_set_ref
         
       
 ```

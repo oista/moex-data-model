@@ -1088,10 +1088,9 @@ def _run_conditional(
         return out
 
     if template == "atr004_type_specific_soft":
-        ltype = str(el.get("logical_type") or "")
-        if ltype == "decimal" and not (
-            _filled(el.get("unit_code")) or _filled(el.get("currency_attribute_ref"))
-        ):
+        dtr = str(el.get("data_type_ref") or "").strip()
+        leaf = dtr.rsplit("/", 1)[-1] if dtr else ""
+        if leaf == "decimal" and not _filled(el.get("currency_attribute_ref")):
             # Soft hint only when name suggests money/amount/quantity
             name = str(el.get("name") or "").lower()
             if any(t in name for t in ("amount", "rate", "quantity", "price", "sum")):
@@ -1101,7 +1100,7 @@ def _run_conditional(
                         severity=DiagnosticSeverity.WARNING,
                         message=(
                             f'LogicalAttribute "{subject}" looks quantitative; '
-                            "consider unit_code or currency_attribute_ref."
+                            "consider currency_attribute_ref or ValueDomain.unit_code."
                         ),
                         subject=subject,
                         remediation=rem,
@@ -1109,7 +1108,7 @@ def _run_conditional(
                         requirement_code=requirement_code,
                     )
                 )
-        if ltype == "datetime" and not _filled(el.get("timezone_policy")):
+        if leaf == "datetime" and not _filled(el.get("timezone_policy")):
             out.append(
                 _diag(
                     code=code,

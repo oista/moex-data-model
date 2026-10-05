@@ -1390,23 +1390,19 @@ class LogicalAttribute(ModelElement, HasDefinition, HasPolicyBindings, HasGovern
     concept_ref: Optional[str] = Field(default=None, description="""Опциональная ссылка на ConceptualProperty. Отсутствие не является ошибкой и не порождает предупреждение (вариант B).
 """)
     value_domain_ref: Optional[str] = Field(default=None, description="""Ссылка на домен представления значений.""")
-    data_type_ref: Optional[str] = Field(default=None, description="""Ссылка на корпоративный DataType. На переходе достаточно одного из value_domain_ref, data_type_ref или logical_type.
+    data_type_ref: Optional[str] = Field(default=None, description="""Ссылка на корпоративный DataType. Обязателен data_type_ref и/или value_domain_ref (ADR-034 шаг 2 / PR-5).
 """)
     critical_data_element: Optional[bool] = Field(default=None, description="""Признак критичного элемента данных (CDE). Единственный источник правды для critical_data; термин CDE в ClassificationAssignment не вводится (ADR-034).
 """)
-    logical_type: Optional[LogicalDataTypeEnum] = Field(default=None)
     required: bool = Field(default=...)
     multivalued: bool = Field(default=...)
     minimum_cardinality: Optional[int] = Field(default=None, ge=0)
     maximum_cardinality: Optional[int] = Field(default=None, ge=1)
-    value_set_ref: Optional[str] = Field(default=None)
-    format_pattern: Optional[str] = Field(default=None)
     default_value: Optional[str] = Field(default=None)
     derived_expression: Optional[str] = Field(default=None)
     mapping_coverage_status: Optional[MappingCoverageStatusEnum] = Field(default=None, description="""Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
 """)
     mapping_rationale: Optional[str] = Field(default=None, description="""Обоснование для planned / technical-only / not-applicable / inherited.""")
-    unit_code: Optional[str] = Field(default=None, description="""Код единицы измерения (UCUM / корпоративный код).""")
     currency_attribute_ref: Optional[str] = Field(default=None, description="""Ссылка на атрибут валюты для денежной величины (Wave 2 soft).""")
     timezone_policy: Optional[str] = Field(default=None, description="""Политика часового пояса для timestamp (Wave 2 soft).""")
     temporal_semantics: Optional[str] = Field(default=None, description="""Семантика даты/времени (Wave 2 soft).""")
@@ -1958,8 +1954,8 @@ class ValueDomain(ModelElement):
     value_domain_kind: ValueDomainKindEnum = Field(default=..., description="""Вид домена значений (enumerated | described | reference_set).""")
     data_type_ref: str = Field(default=..., description="""Ссылка на корпоративный DataType.""")
     conceptual_domain_ref: Optional[str] = Field(default=None, description="""Опциональная ссылка на концептуальный домен смыслов.""")
-    unit_code: Optional[str] = Field(default=None, description="""Код единицы измерения (UCUM / корпоративный код).""")
-    format_pattern: Optional[str] = Field(default=None)
+    unit_code: Optional[str] = Field(default=None, description="""Код единицы измерения (UCUM / корпоративный код) для ValueDomain.""")
+    format_pattern: Optional[str] = Field(default=None, description="""Шаблон/формат значения для ValueDomain (regex или маска).""")
     min_value: Optional[str] = Field(default=None, description="""Минимальное допустимое значение (described).""")
     max_value: Optional[str] = Field(default=None, description="""Максимальное допустимое значение (described).""")
     permissible_values: Optional[list[PermissibleValue]] = Field(default=None, description="""Встроенный список допустимых значений.""")

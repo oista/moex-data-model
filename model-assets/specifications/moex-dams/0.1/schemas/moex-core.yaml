@@ -12,7 +12,6 @@ imports:
   - moex-registries
   - moex-governance
   - moex-technical
-  - moex-deprecated-slots
   - moex-semantic
   - moex-datatypes
 default_prefix: dams
@@ -196,18 +195,14 @@ classes:
       - value_domain_ref
       - data_type_ref
       - critical_data_element
-      - logical_type
       - required
       - multivalued
       - minimum_cardinality
       - maximum_cardinality
-      - value_set_ref
-      - format_pattern
       - default_value
       - derived_expression
       - mapping_coverage_status
       - mapping_rationale
-      - unit_code
       - currency_attribute_ref
       - timezone_policy
       - temporal_semantics
@@ -221,10 +216,8 @@ classes:
       data_type_ref:
         required: false
         description: >
-          Ссылка на корпоративный DataType. На переходе достаточно одного из
-          value_domain_ref, data_type_ref или logical_type.
-      logical_type:
-        required: false
+          Ссылка на корпоративный DataType. Обязателен data_type_ref и/или
+          value_domain_ref (ADR-034 шаг 2 / PR-5).
       concept_ref:
         required: false
         description: >
