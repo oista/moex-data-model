@@ -1,0 +1,20 @@
+{
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "MOEX UI, Segoe UI, Arial, sans-serif",
+    "fontSize": "13px",
+    "primaryColor": "#e8eef7",
+    "primaryTextColor": "#17191d",
+    "primaryBorderColor": "#9aa8bc",
+    "secondaryColor": "#f5f6f8",
+    "tertiaryColor": "#ffffff",
+    "lineColor": "#315da8",
+    "textColor": "#17191d",
+    "mainBkg": "#e8eef7",
+    "nodeBorder": "#9aa8bc",
+    "clusterBkg": "#f5f6f8",
+    "titleColor": "#17191d",
+    "edgeLabelBackground": "#ffffff"
+  },
+  "themeCSS": ".entityBox{fill:var(--erd-header-bg,#e8eef7)!important;stroke:var(--erd-border,#9aa8bc)!important}.row-rect-odd>path:first-child{fill:var(--erd-row-odd,#ffffff)!important}.row-rect-even>path:first-child{fill:var(--erd-row-even,#f0f2f5)!important}.outer-path>path:first-child{fill:var(--erd-header-bg,#e8eef7)!important}.relationshipLine{stroke:var(--erd-edge,#315da8)!important;stroke-width:1.5px!important}.marker{stroke:var(--erd-edge,#315da8)!important;fill:none!important}.relationshipLabelBox{fill:var(--erd-label-bg,#ffffff)!important}.nodeLabel,.nodeLabel p{color:var(--erd-text,#17191d)!important}.label.name .nodeLabel p{font-weight:600}.attribute-keys .nodeLabel p{color:var(--erd-key,#9b6300)!important;font-weight:600;font-size:11px}.attribute-comment .nodeLabel p{color:var(--erd-comment,#7d8794)!important}.attribute-type .nodeLabel p{color:var(--erd-type,#545c68)!important;font-family:var(--font-code,monospace);font-size:12px}.divider path{stroke:var(--erd-border,#9aa8bc)!important}"
+}

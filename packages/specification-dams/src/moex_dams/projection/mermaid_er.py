@@ -13,8 +13,18 @@ from typing import Any, Literal
 import yaml
 
 from moex_dams.projection.dbml import _ident
+from moex_dams.projection.er_common import (
+    _MANY,
+    attr_keys_for_entity as _attr_keys_for_entity,
+    fk_roles_for_entity as _fk_roles_for_entity,
+    is_many as _is_many,
+    is_optional as _is_optional,
+    relation_term_label as _relation_term_label,
+    unique_table_name as _unique_table_name,
+)
 
 MERMAID_CLI_PACKAGE = "@mermaid-js/mermaid-cli@11"
+MERMAID_CONFIG_PATH = Path(__file__).with_name("mermaid_er_config.json")
 
 Profile = Literal["logical", "physical", "conceptual"]
 
@@ -23,8 +33,6 @@ GENERATOR = "moex-dams-mermaid-er/0.1"
 # Viewer section ids for conceptual clickmap deep-links / detail panels.
 _CONCEPTUAL_ENTITY_SECTION = "conceptual"
 _CONCEPTUAL_RELATIONSHIP_SECTION = "relationships"
-
-_MANY = 999999
 
 
 @dataclass(frozen=True)
@@ -45,24 +53,6 @@ class ErDiagramManifest:
 
 def _escape_label(text: str) -> str:
     return text.replace("\\", "\\\\").replace('"', '\\"')
-
-
-def _is_many(max_card: Any) -> bool:
-    if max_card is None:
-        return True
-    try:
-        return int(max_card) > 1
-    except (TypeError, ValueError):
-        return True
-
-
-def _is_optional(min_card: Any) -> bool:
-    if min_card is None:
-        return True
-    try:
-        return int(min_card) == 0
-    except (TypeError, ValueError):
-        return True
 
 
 def _cardinality_edge(
@@ -96,26 +86,6 @@ def _cardinality_edge(
     return f'    {target_name} {left}--{right} {source_name} : "{safe}"'
 
 
-def _attr_keys_for_entity(entity: dict[str, Any]) -> set[str]:
-    keys: set[str] = set()
-    for ref in entity.get("key_attribute_refs") or []:
-        keys.add(str(ref))
-    return keys
-
-
-def _fk_roles_for_entity(
-    entity_id: str, relationships: list[dict[str, Any]]
-) -> set[str]:
-    roles: set[str] = set()
-    for rel in relationships:
-        if str(rel.get("source_entity_ref") or "") != entity_id:
-            continue
-        role = rel.get("source_role")
-        if role:
-            roles.add(str(role))
-    return roles
-
-
 def _attr_line(
     *,
     type_name: str,
@@ -137,45 +107,11 @@ def _attr_line(
         bits.append(f'"{_escape_label(comment)}"')
     return "        " + " ".join(bits)
 
-def _unique_table_name(raw: str | None, *, fallback: str, used: set[str]) -> str:
-    tname = _ident(raw, fallback=fallback)
-    base = tname
-    n = 2
-    while tname in used:
-        tname = f"{base}_{n}"
-        n += 1
-    used.add(tname)
-    return tname
-
 
 def _entity_header(tname: str, title: Any) -> str:
     if title and str(title).strip() and str(title).strip() != tname:
         return f'    {tname}["{_escape_label(str(title).strip())}"] {{'
     return f"    {tname} {{"
-
-
-def _relation_term_label(
-    rel: dict[str, Any], terms_by_id: dict[str, dict[str, Any]]
-) -> str:
-    """Prefer RelationTerm forward/inverse label; fall back to relationship name."""
-    term = terms_by_id.get(str(rel.get("relation_term_ref") or ""))
-    direction = str(rel.get("term_direction") or "forward").lower()
-    if term:
-        if direction == "inverse":
-            for key in ("inverse_label", "inverse_label_en", "title", "name"):
-                val = term.get(key)
-                if val:
-                    return str(val)
-        else:
-            for key in ("forward_label", "forward_label_en", "title", "name"):
-                val = term.get(key)
-                if val:
-                    return str(val)
-    for key in ("title", "name"):
-        val = rel.get(key)
-        if val:
-            return str(val)
-    return "rel"
 
 
 def build_er_clickmap(

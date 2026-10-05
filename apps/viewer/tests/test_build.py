@@ -231,12 +231,18 @@ def test_repo_golden_three_modules():
     impls_root = next(i for i in dams_expl["items"] if i["id"] == "group:implementations")
     top = impls_root.get("children") or []
     impl_ids = [c["id"] for c in top]
-    assert impl_ids[:2] == [
+    assert impl_ids[0] == "implnav:glossary"
+    assert impl_ids[1:3] == [
         "group:implementations-it-solutions",
         "group:implementations-projects",
     ]
     assert "moex-dsp" in impl_ids
     assert "moex-enterprise-conceptual-model" in impl_ids
+    glossary_nav = top[0]
+    assert (glossary_nav.get("attributes") or {}).get("section_id") == (
+        "implementations-glossary"
+    )
+    assert any(s["id"] == "implementations-glossary" for s in dams_pub["sections"])
     projects = next(c for c in top if c["id"] == "group:implementations-projects")
     assert "trading-solution" in {c["id"] for c in projects.get("children") or []}
     it_sols = next(c for c in top if c["id"] == "group:implementations-it-solutions")
@@ -245,6 +251,8 @@ def test_repo_golden_three_modules():
     }
     assert (projects.get("attributes") or {}).get("group_style") == "section_folder"
     assert (it_sols.get("attributes") or {}).get("group_style") == "section_folder"
+    assert "renderImplTermDetail" in js
+    assert "term_cards" in js
     assert by_id["moex-dams"].get("description")
     assert by_id["trading-solution"].get("description")
     assert by_id["moex-fibo-profile"].get("description")

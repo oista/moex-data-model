@@ -119,23 +119,39 @@ def test_diagram_projects_logical(
     assert "digest=sha256:" in capsys.readouterr().out
 
 
-def test_diagram_rejects_conceptual_dbml(
-    repo_root: Path, capsys: pytest.CaptureFixture[str]
+def test_diagram_projects_conceptual_dbml(
+    repo_root: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
+    impl = (
+        repo_root
+        / "model-assets"
+        / "implementations"
+        / "enterprise"
+        / "moex-enterprise-conceptual-model"
+        / "0.1"
+        / "enterprise-conceptual-model.yaml"
+    )
+    out = tmp_path / "conceptual.dbml"
     assert main(
         [
             "diagram",
             "--root",
             str(repo_root),
+            "--implementation",
+            str(impl),
             "--profile",
             "conceptual",
             "--format",
             "dbml",
+            "--out",
+            str(out),
         ]
-    ) == 2
-    err = capsys.readouterr().out + capsys.readouterr().err
-    assert "conceptual" in err
-    assert "dbml" in err.lower()
+    ) == 0
+    text = out.read_text(encoding="utf-8")
+    assert "Table Organization" in text
+    assert "headercolor: #F4B400" in text
+    assert "concept string" in text
+    assert "digest=sha256:" in capsys.readouterr().out
 
 
 def test_diagram_projects_mermaid_logical(

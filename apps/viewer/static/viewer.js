@@ -620,7 +620,7 @@
           });
           return;
         }
-        const card = !!sec.instance_of;
+        const card = !!sec.instance_of || !!sec.attributes?.term_cards;
         (sec.items || []).forEach((item) => {
           const target = {
             module: short,
@@ -693,6 +693,7 @@
     glossary: "glossary",
     "relation-terms": "glossary",
     vocabularies: "glossary",
+    "implementations-glossary": "glossary",
     "artifact-model-body": "source_file",
     "artifact-envelope": "source_file",
     "artifact-relation-terms": "source_file",
@@ -1259,11 +1260,14 @@
           findExplorerItem({ items: explorerItems }, focus.item) ||
           findExplorerItem(expl, focus.item);
         if (focused) {
-          // Open ancestors/group so the selected item is visible; do not
-          // force-open the item itself (label click toggles children).
+          // Open ancestors so the selected item is visible.
           (focused.ancestors || []).forEach((a) => openGroups.add(a.id));
           if (focused.group && focused.group.id !== focus.item) {
             openGroups.add(focused.group.id);
+          }
+          // Focused folder: expand children (startup / hash restore).
+          if ((focused.item?.children || []).length) {
+            openGroups.add(focused.item.id);
           }
         }
       }
@@ -2207,12 +2211,19 @@
       }
     }
 
-    // Instance card for entity-table rows with instance_of
+    // Instance card for entity-table rows with instance_of,
+    // or term card for aggregated implementations glossary (term_cards).
     if (focus?.section && focus?.item) {
       const section = mod.sections.find((s) => s.id === focus.section);
-      if (section && section.instance_of && section.type !== "explorer") {
+      if (section && section.type !== "explorer") {
         const row = findSectionItem(section, focus.item);
-        if (row) {
+        if (row && section.attributes?.term_cards) {
+          crumb.textContent = `${mod.title} / ${section.title} / ${row.title || row.id}`;
+          content.appendChild(crumb);
+          content.appendChild(renderImplTermDetail(mod, section, row));
+          return;
+        }
+        if (row && section.instance_of) {
           crumb.textContent = `${mod.title} / ${section.title} / ${row.title || row.id}`;
           content.appendChild(crumb);
           content.appendChild(renderInstanceDetail(mod, section, row));
@@ -3954,6 +3965,390 @@
     return slotBlock;
   }
 
+  function implGlossaryTermHref(mod, section, termId) {
+    if (!termId || !section) return null;
+    const hit = resolveItemInGlossary(section, termId);
+    if (!hit) return null;
+    return itemHref({
+      module: shortModule(mod.module_id),
+      section: section.id,
+      item: hit.id,
+      node: nodeForModule(mod.module_id)?.id || currentNodeId,
+    });
+  }
+
+  function appendImplTermLink(parent, mod, section, termId, label) {
+    const href = implGlossaryTermHref(mod, section, termId);
+    const text = label || termId || "—";
+    if (!href) {
+      const span = document.createElement("span");
+      span.className = "muted";
+      span.textContent = text;
+      parent.appendChild(span);
+      return;
+    }
+    parent.appendChild(makeBlankAnchor(href, text, "spec-link"));
+  }
+
+  function renderImplTermDetail(mod, section, item) {
+    const attrs = item.attributes || {};
+    const card = document.createElement("article");
+    card.className = "detail-card content-card";
+    card.setAttribute("data-publication-item", "");
+    card.setAttribute("data-module-id", mod.module_id || "");
+    card.setAttribute("data-section-id", section.id || "");
+    card.setAttribute("data-item-id", item.id);
+    card.setAttribute("data-item-type", "impl-term");
+    card.setAttribute("data-instance-of", attrs.instance_of || "");
+
+    const level = String(attrs.model_level || "").trim();
+    const solution = String(attrs.solution || "").trim();
+    const mode = String(attrs.definition_mode || "").trim();
+    const kind = String(attrs.kind || "").trim();
+    const badges = [];
+    if (level) {
+      badges.push(
+        `<span class="badge-pill glossary-level-badge" data-level="${escapeHtml(level)}">${escapeHtml(level)}</span>`
+      );
+    }
+    if (kind) badges.push(`<span class="badge-pill">${escapeHtml(kind)}</span>`);
+    if (mode) {
+      badges.push(
+        `<span class="badge-pill glossary-mode-badge" data-mode="${escapeHtml(mode)}">${escapeHtml(mode)}</span>`
+      );
+    }
+    if (attrs.redundant_override) {
+      badges.push(`<span class="badge-pill glossary-redundant-badge">redundant override</span>`);
+    }
+    card.innerHTML = `
+      <header class="detail-head">
+        <h1>${escapeHtml(item.title || item.id)}</h1>
+        <div class="badge-row">${badges.join("")}</div>
+        <p class="muted">${escapeHtml(
+          [solution, level, attrs.source_item_id || item.id].filter(Boolean).join(" · ")
+        )}</p>
+      </header>
+    `;
+
+    function linkToSourceElement(elementId) {
+      if (!elementId) return null;
+      // Prefer a glossary row that carries this source_item_id.
+      const bySource = (section.items || []).find(
+        (i) =>
+          i.attributes?.source_item_id === elementId ||
+          i.id === elementId ||
+          String(i.id).endsWith(":" + elementId)
+      );
+      if (bySource) {
+        return {
+          href: itemHref({
+            module: shortModule(mod.module_id),
+            section: section.id,
+            item: bySource.id,
+            node: nodeForModule(mod.module_id)?.id || currentNodeId,
+          }),
+          label: bySource.title || elementId,
+        };
+      }
+      return null;
+    }
+
+    function renderDefinitionTab(panel) {
+      const def = document.createElement("section");
+      def.className = "detail-block";
+      def.setAttribute("data-renderer", "definition");
+      def.innerHTML = `<h2>Определение</h2>
+        <p class="detail-desc">${escapeHtml(
+          displayText(item.description || attrs.definition || "No definition.")
+        )}</p>`;
+      panel.appendChild(def);
+
+      const override = document.createElement("section");
+      override.className = "detail-block";
+      override.innerHTML = `<h2>Переопределение</h2>`;
+      const dl = document.createElement("dl");
+      dl.className = "detail-meta definition-list";
+      appendMetaRow(dl, "режим", mode || "—");
+      const sourceId = attrs.definition_source;
+      if (sourceId) {
+        const linked = linkToSourceElement(String(sourceId));
+        if (linked) {
+          appendMetaValue(
+            dl,
+            "источник",
+            makeBlankAnchor(linked.href, linked.label, "spec-link")
+          );
+        } else {
+          appendMetaRow(dl, "источник", String(sourceId));
+        }
+      } else {
+        appendMetaRow(dl, "источник", "—");
+      }
+      if (attrs.definition_rationale) {
+        appendMetaRow(dl, "rationale", String(attrs.definition_rationale));
+      }
+      if (attrs.definition_diagnostic) {
+        appendMetaRow(dl, "диагностика", String(attrs.definition_diagnostic));
+      }
+      if (attrs.redundant_override) {
+        appendMetaRow(
+          dl,
+          "избыточное переопределение",
+          "собственный текст совпадает с эталонным (ADR-025)"
+        );
+      }
+      override.appendChild(dl);
+      panel.appendChild(override);
+
+      const ownText =
+        displayText(item.description || attrs.definition || "").trim();
+      const refText = displayText(attrs.reference_definition || "").trim();
+      if (ownText || refText) {
+        const cmp = document.createElement("section");
+        cmp.className = "detail-block";
+        cmp.innerHTML = `<h2>Сравнение с эталоном</h2>`;
+        const table = document.createElement("table");
+        table.className = "data-table";
+        table.innerHTML = `<thead><tr><th>Собственный текст</th><th>Эталонный (из концепта / источника)</th></tr></thead>
+          <tbody><tr>
+            <td>${escapeHtml(ownText || "—")}</td>
+            <td>${escapeHtml(refText || "—")}</td>
+          </tr></tbody>`;
+        const scroll = document.createElement("div");
+        scroll.className = "table-scroll data-table-shell";
+        scroll.appendChild(table);
+        cmp.appendChild(scroll);
+        panel.appendChild(cmp);
+      }
+
+      const scoped = Array.isArray(attrs.scoped_definitions)
+        ? attrs.scoped_definitions
+        : [];
+      const scopedBlock = document.createElement("section");
+      scopedBlock.className = "detail-block";
+      scopedBlock.innerHTML = `<h2>Scoped definitions</h2>`;
+      if (!scoped.length) {
+        scopedBlock.innerHTML += `<p class="muted">Нет scoped definitions.</p>`;
+      } else {
+        const table = document.createElement("table");
+        table.className = "data-table";
+        table.innerHTML = `<thead><tr>
+          <th>scope_ref</th><th>relation</th><th>text</th><th>rationale</th>
+        </tr></thead>`;
+        const tbody = document.createElement("tbody");
+        scoped.forEach((sd) => {
+          if (!sd || typeof sd !== "object") return;
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${escapeHtml(String(sd.scope_ref || ""))}</td>
+            <td>${escapeHtml(String(sd.relation_to_reference || ""))}</td>
+            <td>${escapeHtml(String(sd.text || ""))}</td>
+            <td>${escapeHtml(String(sd.rationale || ""))}</td>`;
+          tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+        const scroll = document.createElement("div");
+        scroll.className = "table-scroll data-table-shell";
+        scroll.appendChild(table);
+        scopedBlock.appendChild(scroll);
+      }
+      panel.appendChild(scopedBlock);
+    }
+
+    function renderChainTab(panel) {
+      const cascade = document.createElement("section");
+      cascade.className = "detail-block";
+      cascade.innerHTML = `<h2>Каскад CDM → LDM</h2>`;
+      const parents = Array.isArray(attrs.taxonomy_parents)
+        ? attrs.taxonomy_parents
+        : [];
+      const children = Array.isArray(attrs.taxonomy_children)
+        ? attrs.taxonomy_children
+        : [];
+      if (!parents.length && !children.length) {
+        cascade.innerHTML += `<p class="muted">Нет связей каскада для этого термина.</p>`;
+      } else {
+        const row = document.createElement("div");
+        row.className = "link-row";
+        if (parents.length) {
+          const lab = document.createElement("div");
+          lab.className = "muted mixin-label";
+          lab.textContent = "родители:";
+          row.appendChild(lab);
+          parents.forEach((p) => {
+            const tid = relTargetId(p);
+            const hit = resolveItemInGlossary(section, tid);
+            appendImplTermLink(
+              row,
+              mod,
+              section,
+              tid,
+              hit ? `${hit.title || tid} (${p.rel || "parent"})` : relLabel(p)
+            );
+          });
+        }
+        if (children.length) {
+          const lab = document.createElement("div");
+          lab.className = "muted mixin-label";
+          lab.textContent = "дети / реализации:";
+          row.appendChild(lab);
+          children.forEach((c) => {
+            const tid = relTargetId(c);
+            const hit = resolveItemInGlossary(section, tid);
+            appendImplTermLink(
+              row,
+              mod,
+              section,
+              tid,
+              hit ? `${hit.title || tid} (${c.rel || "child"})` : relLabel(c)
+            );
+          });
+        }
+        cascade.appendChild(row);
+      }
+      panel.appendChild(cascade);
+
+      const same = Array.isArray(attrs.see_also) ? attrs.see_also : [];
+      const sameBlock = document.createElement("section");
+      sameBlock.className = "detail-block";
+      sameBlock.innerHTML = `<h2>Тот же концепт в других решениях</h2>`;
+      if (!same.length) {
+        sameBlock.innerHTML += `<p class="muted">Нет дубликатов в других реализациях.</p>`;
+      } else {
+        const row = document.createElement("div");
+        row.className = "link-row";
+        same.forEach((entry) => {
+          const tid = relTargetId(entry);
+          const hit = resolveItemInGlossary(section, tid);
+          const sol = hit?.attributes?.solution || "";
+          appendImplTermLink(
+            row,
+            mod,
+            section,
+            tid,
+            hit
+              ? `${hit.title || tid}${sol ? " · " + sol : ""}`
+              : tid
+          );
+        });
+        sameBlock.appendChild(row);
+      }
+      panel.appendChild(sameBlock);
+
+      const ext = Array.isArray(attrs.external_class_refs)
+        ? attrs.external_class_refs
+        : [];
+      const extBlock = document.createElement("section");
+      extBlock.className = "detail-block";
+      extBlock.innerHTML = `<h2>Внешние соответствия</h2>`;
+      if (!ext.length) {
+        extBlock.innerHTML += `<p class="muted">Нет external_class_refs.</p>`;
+      } else {
+        const row = document.createElement("div");
+        row.className = "link-row";
+        ext.forEach((entry) => {
+          const span = document.createElement("span");
+          span.className = "spec-link disabled glossary-rel-chip";
+          const id = relTargetId(entry) || String(entry);
+          const mk = entry && entry.match_kind ? ` [${entry.match_kind}]` : "";
+          span.textContent = id + mk;
+          row.appendChild(span);
+        });
+        extBlock.appendChild(row);
+      }
+      panel.appendChild(extBlock);
+    }
+
+    function renderImplTab(panel) {
+      const meta = document.createElement("section");
+      meta.className = "detail-block";
+      meta.innerHTML = `<h2>Реализация</h2>`;
+      const dl = document.createElement("dl");
+      dl.className = "detail-meta definition-list";
+      appendMetaRow(dl, "решение", solution || "—");
+      appendMetaRow(dl, "уровень", level || "—");
+      appendMetaRow(dl, "element_id", String(attrs.source_item_id || item.id));
+      if (attrs.entity_tier) appendMetaRow(dl, "entity_tier", String(attrs.entity_tier));
+      if (attrs.genesis_kind) appendMetaRow(dl, "genesis_kind", String(attrs.genesis_kind));
+      if (attrs.lifecycle_status) {
+        appendMetaRow(dl, "lifecycle_status", String(attrs.lifecycle_status));
+      }
+      const aliases = attrs.aliases;
+      if (Array.isArray(aliases) && aliases.length) {
+        appendMetaRow(dl, "aliases", aliases.map(String).join(", "));
+      } else if (aliases) {
+        appendMetaRow(dl, "aliases", String(aliases));
+      }
+      meta.appendChild(dl);
+      panel.appendChild(meta);
+
+      const links = document.createElement("section");
+      links.className = "detail-block";
+      links.innerHTML = `<h2>Ссылки</h2>`;
+      const row = document.createElement("div");
+      row.className = "link-row";
+      const implMid = attrs.impl_module_id;
+      const implSec = attrs.impl_section_id;
+      const sourceId = attrs.source_item_id;
+      if (implMid && implSec && sourceId) {
+        const node = nodeForModule(implMid);
+        const href = itemHref({
+          node: node ? node.id : currentNodeId,
+          module: shortModule(implMid),
+          section: implSec,
+          item: sourceId,
+        });
+        row.appendChild(
+          makeBlankAnchor(href, "Карточка сущности в реализации", "spec-link")
+        );
+      }
+      if (implMid) {
+        const node = nodeForModule(implMid);
+        const href = itemHref({
+          node: node ? node.id : null,
+          module: shortModule(implMid),
+          section: null,
+          item: null,
+        });
+        row.appendChild(
+          makeBlankAnchor(
+            href,
+            `Модуль: ${solution || shortModule(implMid)}`,
+            "spec-link"
+          )
+        );
+      }
+      if (!row.childNodes.length) {
+        links.innerHTML += `<p class="muted">Нет ссылок на реализацию.</p>`;
+      } else {
+        links.appendChild(row);
+      }
+      panel.appendChild(links);
+    }
+
+    mountTabs(
+      card,
+      [
+        {
+          id: "definition",
+          label: "Определение",
+          render: renderDefinitionTab,
+        },
+        {
+          id: "chain",
+          label: "Цепочка",
+          render: renderChainTab,
+        },
+        {
+          id: "implementation",
+          label: "Реализация",
+          render: renderImplTab,
+        },
+      ],
+      { initial: "definition" }
+    );
+    return card;
+  }
+
   function renderInstanceDetail(mod, section, item) {
     const className = section.instance_of;
     const damsClass = findDamsClassItem(className);
@@ -4268,11 +4663,64 @@
         );
         break;
       default:
-        body.appendChild(renderTable(mod, section));
+        if (!appendClassesHierarchyTabs(body, mod, section)) {
+          body.appendChild(renderTable(mod, section));
+        }
         break;
     }
     wrap.appendChild(body);
     return wrap;
+  }
+
+  // moex.dams "All classes": flat table (as before) + Hierarchy tab that shows
+  // the whole class tree the same way the explorer "Состав" block draws it.
+  function appendClassesHierarchyTabs(body, mod, section) {
+    if (
+      shortModule(mod.module_id) !== "dams" ||
+      section.kind !== "classes" ||
+      section.type !== "entity-table"
+    ) {
+      return false;
+    }
+    const expl = explorerSection(mod);
+    const classesRoot = (expl?.items || []).find(
+      (g) => g.attributes?.section_root === "classes"
+    );
+    if (!classesRoot) return false;
+
+    mountTabs(
+      body,
+      [
+        {
+          id: "overview",
+          label: "Overview",
+          render(panel) {
+            panel.appendChild(renderTable(mod, section));
+          },
+        },
+        {
+          id: "hierarchy",
+          label: "Hierarchy",
+          render(panel) {
+            const packages = classesRoot.children || [];
+            if (!packages.length) {
+              panel.innerHTML = `<p class="muted">Нет классов.</p>`;
+              return;
+            }
+            packages.forEach((pkg) => {
+              appendExplorerCompositionBlock(panel, pkg.title || pkg.id, pkg.children || [], {
+                mod,
+                expl,
+                openGroupId: pkg.id,
+                emptyMessage: "Пустой пакет.",
+              });
+            });
+          },
+        },
+      ],
+      { initial: "overview" }
+    );
+    return true;
   }
 
   function renderPackageDocs(section) {
@@ -4504,7 +4952,7 @@
         miss.className = "muted";
         miss.textContent =
           paneName === "dbml"
-            ? "DBML не сгенерирован. Выполните moex-model diagram --format dbml --profile logical|physical."
+            ? "DBML не сгенерирован. Выполните moex-model diagram --format dbml --profile logical|physical|conceptual."
             : "Исходник недоступен.";
         pane.appendChild(miss);
       }
@@ -4658,6 +5106,17 @@
 
   function resolveGlossaryTermPageTarget(mod, section, item) {
     if (!mod || !item) return null;
+    // Aggregated implementations glossary: always open the term card, never
+    // a class explorer card (ADR-025 definition override details).
+    if (section?.attributes?.term_cards) {
+      return {
+        module: shortModule(mod.module_id),
+        section: section.id,
+        item: item.id,
+        node: nodeForModule(mod.module_id)?.id || currentNodeId,
+        card: true,
+      };
+    }
     const cid = canonicalGlossaryId(item.id);
     const name = item.attributes?.name || item.title || cid;
     const byExplorer =
@@ -4734,6 +5193,9 @@
     if (!raw || !mod) return null;
     const index = ensureLinkIndex();
     if (col === "name" || col === "title") {
+      if (section?.attributes?.term_cards) {
+        return resolveGlossaryTermPageTarget(mod, section, item);
+      }
       if (section?.type === "glossary") {
         return resolveGlossaryTermPageTarget(mod, section, item);
       }
@@ -5224,6 +5686,8 @@
     const candidates = [
       "title",
       "kind",
+      "model_level",
+      "solution",
       "description",
       "defined_in",
       "origin",
@@ -5323,70 +5787,93 @@
         const domain = item.attributes?.source_domain || "";
         const defMode = (item.attributes?.definition_mode || "").trim();
         const kind = (item.attributes?.kind || "").trim();
+        const termCards = !!section.attributes?.term_cards;
+        const modelLevel = (item.attributes?.model_level || "").trim();
+        const solution = (item.attributes?.solution || "").trim();
         const modeBadge = defMode
           ? `<span class="glossary-mode-badge" data-mode="${escapeHtml(defMode)}">${escapeHtml(defMode)}</span>`
           : "";
         const kindBadge = kind
           ? `<span class="glossary-kind-badge">${escapeHtml(kind)}</span>`
           : "";
+        const levelBadge =
+          termCards && modelLevel
+            ? `<span class="glossary-level-badge" data-level="${escapeHtml(modelLevel)}">${escapeHtml(modelLevel)}</span>`
+            : "";
+        const solutionBadge =
+          termCards && solution
+            ? `<span class="glossary-solution-badge">${escapeHtml(solution)}</span>`
+            : "";
         const origin = (item.attributes?.origin || "").trim();
-        const originBadge = origin
-          ? `<span class="glossary-origin-badge" data-origin="${escapeHtml(origin)}">${escapeHtml(origin)}</span>`
-          : "";
+        const originBadge =
+          !termCards && origin
+            ? `<span class="glossary-origin-badge" data-origin="${escapeHtml(origin)}">${escapeHtml(origin)}</span>`
+            : "";
         const definedIn = (item.attributes?.defined_in || "").trim();
-        card.innerHTML = `<h3>${escapeHtml(title)} ${kindBadge}${modeBadge}${originBadge}</h3>
+        const metaLine = termCards
+          ? [item.attributes?.source_item_id || item.id, solution, modelLevel]
+              .filter(Boolean)
+              .map((s) => escapeHtml(String(s)))
+              .join(" · ")
+          : `${escapeHtml(item.id)}${domain ? " · " + escapeHtml(domain) : ""}${
+              definedIn ? " · " + escapeHtml(definedIn) : ""
+            }`;
+        card.innerHTML = `<h3>${escapeHtml(title)} ${levelBadge}${kindBadge}${modeBadge}${solutionBadge}${originBadge}</h3>
           <p>${escapeHtml(defEn)}</p>
           ${defRu ? `<p class="muted">${escapeHtml(defRu)}</p>` : ""}
-          <div class="muted">${escapeHtml(item.id)}${domain ? " · " + escapeHtml(domain) : ""}${definedIn ? " · " + escapeHtml(definedIn) : ""}</div>`;
+          <div class="muted">${metaLine}</div>`;
         // ADR-027 blocks (Taxonomy / See also / Assignment / Origin).
+        // Skip for aggregated implementations glossary (term_cards).
         // Keep legacy "extends" only when taxonomy_parents is absent.
-        const hasTaxonomyAttrs = Array.isArray(item.attributes?.taxonomy_parents);
-        if (!hasTaxonomyAttrs) {
-          const parentRow = parentMeta(item, section);
-          if (parentRow) {
-            const parentLine = document.createElement("div");
-            parentLine.className = "glossary-parent";
-            parentLine.appendChild(document.createTextNode("extends "));
-            if (parentRow.inSection) {
-              const link = document.createElement("button");
-              link.type = "button";
-              link.className = "glossary-parent-link";
-              link.textContent = parentRow.label;
-              link.addEventListener("click", (e) => {
-                e.stopPropagation();
-                setHash({
-                  node: nodeForModule(mod.module_id)?.id || currentNodeId,
-                  module: shortModule(mod.module_id),
-                  section: section.id,
-                  item: parentRow.id,
+        if (!termCards) {
+          const hasTaxonomyAttrs = Array.isArray(item.attributes?.taxonomy_parents);
+          if (!hasTaxonomyAttrs) {
+            const parentRow = parentMeta(item, section);
+            if (parentRow) {
+              const parentLine = document.createElement("div");
+              parentLine.className = "glossary-parent";
+              parentLine.appendChild(document.createTextNode("extends "));
+              if (parentRow.inSection) {
+                const link = document.createElement("button");
+                link.type = "button";
+                link.className = "glossary-parent-link";
+                link.textContent = parentRow.label;
+                link.addEventListener("click", (e) => {
+                  e.stopPropagation();
+                  setHash({
+                    node: nodeForModule(mod.module_id)?.id || currentNodeId,
+                    module: shortModule(mod.module_id),
+                    section: section.id,
+                    item: parentRow.id,
+                  });
                 });
-              });
-              parentLine.appendChild(link);
-            } else {
-              const span = document.createElement("span");
-              span.className = "muted";
-              span.textContent = parentRow.label;
-              parentLine.appendChild(span);
+                parentLine.appendChild(link);
+              } else {
+                const span = document.createElement("span");
+                span.className = "muted";
+                span.textContent = parentRow.label;
+                parentLine.appendChild(span);
+              }
+              card.appendChild(parentLine);
             }
-            card.appendChild(parentLine);
           }
-        }
-        const showAdr027 =
-          item.attributes?.glossary_view ||
-          item.attributes?.origin ||
-          Array.isArray(item.attributes?.taxonomy_parents) ||
-          Array.isArray(item.attributes?.see_also);
-        if (showAdr027) {
-          const known = new Set((section.items || []).map((i) => i.id));
-          const expl = explorerSection(mod);
-          if (expl) {
-            collectExplorerIds(expl).forEach((id) => known.add(id));
+          const showAdr027 =
+            item.attributes?.glossary_view ||
+            item.attributes?.origin ||
+            Array.isArray(item.attributes?.taxonomy_parents) ||
+            Array.isArray(item.attributes?.see_also);
+          if (showAdr027) {
+            const known = new Set((section.items || []).map((i) => i.id));
+            const expl = explorerSection(mod);
+            if (expl) {
+              collectExplorerIds(expl).forEach((id) => known.add(id));
+            }
+            appendAdr027RelationBlocks(card, mod, item, {
+              known,
+              expl: null,
+              sectionId: section.id,
+            });
           }
-          appendAdr027RelationBlocks(card, mod, item, {
-            known,
-            expl: null,
-            sectionId: section.id,
-          });
         }
         card.addEventListener("click", (e) => {
           if (e.target.closest("a, button")) return;
@@ -6444,7 +6931,21 @@
     }
     const firstSpec = rootSpecifications()[0];
     if (firstSpec) {
-      navigateToNode(firstSpec);
+      const mod = firstSpec.module_id
+        ? modules.find((m) => m.module_id === firstSpec.module_id)
+        : null;
+      const expl = explorerSection(mod);
+      const hasImpls =
+        expl &&
+        (expl.items || []).some((i) => i.id === "group:implementations");
+      if (hasImpls) {
+        navigateToNode(firstSpec, {
+          section: expl.id,
+          item: "group:implementations",
+        });
+      } else {
+        navigateToNode(firstSpec);
+      }
       return;
     }
     if (modules[0]) {

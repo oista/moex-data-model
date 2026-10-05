@@ -152,6 +152,43 @@ def test_physical_profile_notes_object_kind() -> None:
     assert "element_id=dams:map/mini/account-client-fk" in text
 
 
+CONCEPTUAL_MINI = {
+    "element_id": "dams:model/mini-conceptual/1.0.0",
+    "name": "mini_conceptual",
+    "conceptual_entities": [
+        {
+            "element_id": "dams:concept/Client",
+            "name": "Client",
+            "title": "Клиент",
+        },
+        {
+            "element_id": "dams:concept/Account",
+            "name": "Account",
+            "title": "Счёт",
+        },
+    ],
+    "relationships": [
+        {
+            "element_id": "dams:rel/mini/Account-Client",
+            "name": "Account_owned_by_Client",
+            "source_entity_ref": "dams:concept/Account",
+            "target_entity_ref": "dams:concept/Client",
+        }
+    ],
+}
+
+
+def test_conceptual_profile_emits_marker_column_and_refs() -> None:
+    text = project_model_package_to_dbml(CONCEPTUAL_MINI, profile="conceptual")
+    assert "Table Client" in text
+    assert "Table Account" in text
+    assert "headercolor: #F4B400" in text
+    assert "concept string [note: 'concept']" in text
+    assert "Ref Account_owned_by_Client:" in text
+    assert "Account.concept > Client.concept" in text
+    assert "element_id=dams:rel/mini/Account-Client" in text
+
+
 def test_write_dbml_artifact_writes_manifest(tmp_path: Path) -> None:
     src = tmp_path / "pkg.yaml"
     src.write_text(yaml.safe_dump(MINI), encoding="utf-8")

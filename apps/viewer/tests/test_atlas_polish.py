@@ -55,12 +55,14 @@ def test_js_table_links_and_instance_cards():
     assert "function itemHref" in JS
     assert "function ensureLinkIndex" in JS
     assert "function renderInstanceDetail" in JS
+    assert "function renderImplTermDetail" in JS
     assert "function findDamsClassItem" in JS
     assert "function findExplorerLinkTarget" in JS
     assert 'target = "_blank"' in JS or 'target="_blank"' in JS
     assert "table-item-link" in JS
     assert "content--wide" in JS
     assert "instance_of" in JS
+    assert "term_cards" in JS
 
 
 def test_js_glossary_section_tabs_and_term_links():

@@ -18,6 +18,11 @@ from moex_publication_viewer.normalizers.base import NormalizeError
 from moex_publication_viewer.normalizers.edit_targets import relativize_module_edit_targets
 from moex_publication_viewer.normalizers.helpers import items_to_domain_explorer
 from moex_publication_viewer.normalizers.linkml_normalizer import clear_schema_view_cache
+from moex_publication_viewer.normalizers.implementation_glossary import (
+    IMPLEMENTATIONS_GLOSSARY_ID,
+    IMPLEMENTATIONS_GLOSSARY_NAV_ID,
+    build_implementation_glossary_section,
+)
 from moex_publication_viewer.normalizers.spec_glossary_tree import (
     OVERVIEW_GLOSSARY_ID,
     build_ontology_glossary_tree,
@@ -264,6 +269,7 @@ _SECTION_ID_NAV_GLYPH: dict[str, str] = {
     "glossary": "glossary",
     "relation-terms": "glossary",
     "vocabularies": "glossary",
+    "implementations-glossary": "glossary",
     "artifact-model-body": "source_file",
     "artifact-envelope": "source_file",
     "artifact-relation-terms": "source_file",
@@ -739,6 +745,72 @@ def enrich_dams_explorer_implementations(
     impls_root.children = children
 
 
+def enrich_dams_implementation_glossary(
+    modules: list[PublicationModule],
+    catalog: ArchitectureCatalog | None,
+) -> None:
+    """Add aggregated implementations glossary under DAMS Реализации (first child)."""
+    if catalog is None:
+        return
+    dams = next((m for m in modules if m.module_id == DAMS_MODULE_ID), None)
+    if dams is None:
+        return
+    explorer = next((s for s in dams.sections if s.type == "explorer"), None)
+    if explorer is None:
+        return
+    impls_root = next(
+        (i for i in explorer.items if i.id == "group:implementations"),
+        None,
+    )
+    if impls_root is None:
+        return
+
+    impl_nodes = [
+        n
+        for n in catalog.nodes
+        if n.role == "specification_implementation"
+        and n.conforms_to == DAMS_CATALOG_SPEC_ID
+    ]
+    impl_nodes.sort(key=lambda n: (n.order, n.title))
+    section = build_implementation_glossary_section(modules, impl_nodes)
+    if section is None:
+        return
+
+    # Replace or append the glossary section on the DAMS module.
+    existing = next(
+        (s for s in dams.sections if s.id == IMPLEMENTATIONS_GLOSSARY_ID),
+        None,
+    )
+    if existing is not None:
+        idx = dams.sections.index(existing)
+        dams.sections[idx] = section
+    else:
+        dams.sections.append(section)
+
+    glossary_ref = PublicationItem(
+        id=IMPLEMENTATIONS_GLOSSARY_NAV_ID,
+        title="Глоссарий",
+        description=section.description
+        or "Термины из всех реализаций моделей данных.",
+        attributes={
+            "kind": "section_ref",
+            "section_id": IMPLEMENTATIONS_GLOSSARY_ID,
+            "target_module_id": DAMS_MODULE_ID,
+            "target_section_id": IMPLEMENTATIONS_GLOSSARY_ID,
+            "nav_glyph": "glossary",
+            "description": section.description
+            or "Термины из всех реализаций моделей данных.",
+        },
+    )
+    kids = list(impls_root.children or [])
+    kids = [c for c in kids if c.id != IMPLEMENTATIONS_GLOSSARY_NAV_ID]
+    kids.insert(0, glossary_ref)
+    attrs = dict(impls_root.attributes or {})
+    attrs["member_ids"] = [c.id for c in kids]
+    impls_root.attributes = attrs
+    impls_root.children = kids
+
+
 def _collect_class_leaf_ids(nodes: list[PublicationItem]) -> set[str]:
     ids: set[str] = set()
     for node in nodes:
@@ -1087,6 +1159,7 @@ def build(root: Path, dist_dir: Path | None = None) -> Path:
     if catalog is not None:
         check_catalog_publication_contract_gate(catalog, modules, root)
     enrich_dams_explorer_implementations(modules, catalog)
+    enrich_dams_implementation_glossary(modules, catalog)
     enrich_fibo_explorer_classes(modules)
     enrich_fibo_explorer_implementations(modules, catalog)
     enrich_linkml_glossary_sections(modules)

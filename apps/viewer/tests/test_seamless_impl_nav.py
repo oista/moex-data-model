@@ -14,6 +14,7 @@ from moex_publication_viewer.build import (
     compile_modules,
     build_dsp_documentation_sidebar_siblings,
     enrich_dams_explorer_implementations,
+    enrich_dams_implementation_glossary,
     enrich_fibo_explorer_classes,
     enrich_fibo_explorer_implementations,
     group_enterprise_conceptual_impl_nav,
@@ -501,11 +502,13 @@ def test_repo_dams_impl_folders_group_solutions_and_projects() -> None:
     modules = compile_modules(REPO, enforce_publication_contract=False)
     catalog = compile_catalog(REPO, modules)
     enrich_dams_explorer_implementations(modules, catalog)
+    enrich_dams_implementation_glossary(modules, catalog)
     dams = next(m for m in modules if m.module_id == DAMS_MODULE)
     explorer = next(s for s in dams.sections if s.type == "explorer")
     impls = next(i for i in explorer.items if i.id == "group:implementations")
     top_ids = [c.id for c in impls.children or []]
-    assert top_ids[:2] == [
+    assert top_ids[0] == "implnav:glossary"
+    assert top_ids[1:3] == [
         "group:implementations-it-solutions",
         "group:implementations-projects",
     ]

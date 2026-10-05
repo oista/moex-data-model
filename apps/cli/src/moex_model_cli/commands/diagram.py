@@ -31,8 +31,6 @@ def run_diagram(
         return 1, f"missing implementation: {paths.implementation}\n"
 
     if fmt == "dbml":
-        if profile == "conceptual":
-            return 2, "unsupported --profile 'conceptual' for --format dbml (logical|physical)\n"
         dest = (
             out
             if out is not None

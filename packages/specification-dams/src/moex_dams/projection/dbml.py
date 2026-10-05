@@ -11,12 +11,13 @@ from typing import Any, Literal
 
 import yaml
 
-Profile = Literal["logical", "physical"]
+Profile = Literal["logical", "physical", "conceptual"]
 
 GENERATOR = "moex-dams-dbml/0.1"
 HEADER_COLORS = {
     "logical": "#4285F4",
     "physical": "#0F9D58",
+    "conceptual": "#F4B400",
 }
 
 _IDENT_RE = re.compile(r"[^A-Za-z0-9_]+")
@@ -67,13 +68,24 @@ def _column_line(
     return f"  {name} {type_name} [{', '.join(settings)}]"
 
 
+def _unique_table_name(raw: str | None, *, fallback: str, used: set[str]) -> str:
+    tname = _ident(raw, fallback=fallback)
+    base = tname
+    n = 2
+    while tname in used:
+        tname = f"{base}_{n}"
+        n += 1
+    used.add(tname)
+    return tname
+
+
 def project_model_package_to_dbml(
     data: dict[str, Any],
     *,
     profile: Profile,
 ) -> str:
     """Project a ModelPackage mapping into DBML text for drawDB import."""
-    if profile not in ("logical", "physical"):
+    if profile not in ("logical", "physical", "conceptual"):
         raise ValueError(f"unsupported profile: {profile}")
 
     color = HEADER_COLORS[profile]
@@ -96,18 +108,44 @@ def project_model_package_to_dbml(
     entity_default_col: dict[str, str] = {}
     table_names: set[str] = set()
 
-    if profile == "logical":
+    if profile == "conceptual":
+        # Conceptual layer has no PK/FK columns (ADR-029); emit a marker column
+        # so drawDB Tables/Refs are well-formed (same idea as Mermaid erDiagram).
+        for entity in data.get("conceptual_entities") or []:
+            if not isinstance(entity, dict):
+                continue
+            tname = _unique_table_name(
+                entity.get("name"), fallback="ConceptualEntity", used=table_names
+            )
+            eid = entity.get("element_id")
+            if eid:
+                entity_table[str(eid)] = tname
+                entity_default_col[str(eid)] = "concept"
+            note_bits = []
+            if eid:
+                note_bits.append(f"element_id={eid}")
+            if entity.get("title"):
+                note_bits.append(str(entity["title"]))
+            lines.append(f"Table {tname} [headercolor: {color}] {{")
+            if note_bits:
+                lines.append(f"  Note: '{_escape_note('; '.join(note_bits))}'")
+            lines.append(
+                _column_line(
+                    name="concept",
+                    type_name="string",
+                    required=False,
+                    note="concept",
+                )
+            )
+            lines.append("}")
+            lines.append("")
+    elif profile == "logical":
         for entity in data.get("logical_entities") or []:
             if not isinstance(entity, dict):
                 continue
-            tname = _ident(entity.get("name"), fallback="LogicalEntity")
-            # uniquify
-            base = tname
-            n = 2
-            while tname in table_names:
-                tname = f"{base}_{n}"
-                n += 1
-            table_names.add(tname)
+            tname = _unique_table_name(
+                entity.get("name"), fallback="LogicalEntity", used=table_names
+            )
             eid = entity.get("element_id")
             if eid:
                 entity_table[str(eid)] = tname
@@ -150,13 +188,9 @@ def project_model_package_to_dbml(
         for obj in data.get("physical_objects") or []:
             if not isinstance(obj, dict):
                 continue
-            tname = _ident(obj.get("name"), fallback="PhysicalObject")
-            base = tname
-            n = 2
-            while tname in table_names:
-                tname = f"{base}_{n}"
-                n += 1
-            table_names.add(tname)
+            tname = _unique_table_name(
+                obj.get("name"), fallback="PhysicalObject", used=table_names
+            )
             oid = obj.get("element_id")
             if oid:
                 entity_table[str(oid)] = tname
@@ -168,7 +202,7 @@ def project_model_package_to_dbml(
                 note_bits.append(str(obj["title"]))
             lines.append(f"Table {tname} [headercolor: {color}] {{")
             lines.append(f"  Note: '{_escape_note('; '.join(note_bits))}'")
-            default_col: str | None = None
+            default_col = None
             for field in obj.get("physical_fields") or []:
                 if not isinstance(field, dict):
                     continue
@@ -199,8 +233,8 @@ def project_model_package_to_dbml(
 
     refs: list[str] = []
 
-    # Logical relationships → named Refs (entity ends via default columns).
-    if profile == "logical":
+    # Conceptual / logical relationships → named Refs (entity ends via default columns).
+    if profile in ("logical", "conceptual"):
         for rel in data.get("relationships") or []:
             if not isinstance(rel, dict):
                 continue

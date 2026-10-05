@@ -657,7 +657,10 @@ a.table-item-link:hover {
 .glossary-card h3 { margin: 0 0 4px; font-size: 14px; }
 .glossary-mode-badge,
 .glossary-kind-badge,
-.glossary-origin-badge {
+.glossary-origin-badge,
+.glossary-level-badge,
+.glossary-solution-badge,
+.glossary-redundant-badge {
   display: inline-block;
   margin-left: 6px;
   padding: 1px 6px;
@@ -677,6 +680,28 @@ a.table-item-link:hover {
 .glossary-mode-badge[data-mode="inherited"],
 .glossary-origin-badge[data-origin="imported"] {
   color: var(--muted);
+}
+.glossary-mode-badge[data-mode="unresolved"] {
+  color: var(--danger, #b42318);
+  border-color: var(--danger, #b42318);
+}
+.glossary-mode-badge[data-mode="scoped"] {
+  color: var(--text);
+  border-style: dashed;
+}
+.glossary-level-badge[data-level="CDM"],
+.glossary-level-badge[data-level="LDM"] {
+  color: var(--text);
+  font-weight: 600;
+}
+.glossary-solution-badge {
+  max-width: 16rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.glossary-redundant-badge {
+  border-style: dashed;
 }
 .glossary-adr027-taxonomy .glossary-isa-chain,
 .glossary-adr027-see-also .link-row,
