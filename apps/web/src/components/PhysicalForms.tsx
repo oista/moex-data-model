@@ -29,7 +29,6 @@ const ASSET_KIND_OPTIONS: Record<string, string[]> = {
     "stream_queue",
     "file",
     "dataset",
-    "message_type",
     "in_memory",
     "api_resource",
     "other",
@@ -44,8 +43,6 @@ const LEGACY_KIND: Record<string, string> = {
   view: "relational_view",
   topic: "stream_topic",
   queue: "stream_queue",
-  message: "message_type",
-  payload: "message_type",
   api: "interface",
   endpoint: "operation",
 };
@@ -62,12 +59,20 @@ type TechItem = {
   description?: string;
   asset_kind?: string;
   object_kind?: string;
-  physical_fields?: Array<{
-    element_id?: string;
-    name?: string;
-    native_type?: string;
-    required?: boolean;
-  }>;
+  structure_ref?: string;
+};
+
+type SchemaNodeItem = {
+  local_key?: string;
+  node_kind?: string;
+  native_name?: string;
+  native_type?: string;
+  required?: boolean;
+};
+
+type DataStructureItem = {
+  element_id?: string;
+  nodes?: SchemaNodeItem[];
 };
 
 function parsePhysical(content: string): {
@@ -83,7 +88,12 @@ function parsePhysical(content: string): {
       access_points?: TechItem[];
       data_containers?: TechItem[];
       execution_assets?: TechItem[];
+      data_structures?: DataStructureItem[];
     } | null;
+    const structuresById = new Map<string, DataStructureItem>();
+    for (const st of data?.data_structures ?? []) {
+      if (st?.element_id) structuresById.set(String(st.element_id), st);
+    }
     const objects: ObjectSummary[] = [];
     for (const [collection, items] of [
       ["data_carriers", data?.data_carriers],
@@ -93,6 +103,17 @@ function parsePhysical(content: string): {
     ] as const) {
       for (const o of items ?? []) {
         if (!o?.element_id) continue;
+        const st = o.structure_ref
+          ? structuresById.get(String(o.structure_ref))
+          : undefined;
+        const fields = (st?.nodes ?? [])
+          .filter((n) => n?.node_kind === "scalar" && n.local_key)
+          .map((n) => ({
+            element_id: `${st!.element_id}#${n.local_key}`,
+            name: String(n.native_name || n.local_key),
+            native_type: String(n.native_type || "string"),
+            required: Boolean(n.required),
+          }));
         objects.push({
           element_id: String(o.element_id),
           name: String(o.name || ""),
@@ -100,14 +121,7 @@ function parsePhysical(content: string): {
           description: String(o.description || ""),
           asset_kind: normalizeKind(o.asset_kind || o.object_kind),
           collection,
-          fields: (Array.isArray(o.physical_fields) ? o.physical_fields : [])
-            .filter((f) => f?.element_id)
-            .map((f) => ({
-              element_id: String(f.element_id),
-              name: String(f.name || ""),
-              native_type: String(f.native_type || "string"),
-              required: Boolean(f.required),
-            })),
+          fields,
         });
       }
     }
@@ -276,12 +290,12 @@ export function PhysicalForms({
     const owner = ownerId || selected?.element_id || objects[0]?.element_id;
     if (!owner) return;
     mutate.mutate({
-      op: "add_physical_field",
+      op: "add_schema_node",
       owner_element_id: owner,
-      physical_field: {
-        element_id: fieldId.trim(),
-        name: fieldName.trim(),
+      schema_node: {
+        name: fieldName.trim() || fieldId.trim(),
         native_type: fieldType.trim() || "string",
+        local_key: fieldId.trim() || undefined,
       },
     });
   }
@@ -317,10 +331,10 @@ export function PhysicalForms({
     e.preventDefault();
     if (!editFieldId) return;
     mutate.mutate({
-      op: "update_physical_field",
+      op: "update_schema_node",
       element_id: editFieldId,
       patch: {
-        name: editFieldName.trim(),
+        native_name: editFieldName.trim(),
         native_type: editFieldType.trim() || "string",
         required: editFieldRequired,
       },
@@ -328,9 +342,9 @@ export function PhysicalForms({
   }
 
   function onDeleteField(elementId: string) {
-    if (!window.confirm(`Delete physical field ${elementId}?`)) return;
+    if (!window.confirm(`Delete schema node ${elementId}?`)) return;
     mutate.mutate({
-      op: "delete_physical_field",
+      op: "delete_schema_node",
       element_id: elementId,
     });
     if (editFieldId === elementId) setEditFieldId(null);
@@ -585,7 +599,7 @@ export function PhysicalForms({
       </form>
 
       <form className="form-block" onSubmit={onAddField}>
-        <h3>Add PhysicalField</h3>
+        <h3>Add SchemaNode</h3>
         <label>
           owner
           <select

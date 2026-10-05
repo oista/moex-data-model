@@ -11,6 +11,11 @@ from typing import Any, Literal
 
 import yaml
 
+from moex_dams.rules.data_structure import (
+    scalar_nodes_for_carrier,
+    structures_by_id,
+)
+
 Profile = Literal["logical", "physical", "conceptual"]
 
 GENERATOR = "moex-dams-dbml/0.1"
@@ -195,6 +200,7 @@ def project_model_package_to_dbml(
             lines.append("}")
             lines.append("")
     else:
+        by_structure = structures_by_id(data)
         for obj in data.get("data_carriers") or []:
             if not isinstance(obj, dict):
                 continue
@@ -213,27 +219,22 @@ def project_model_package_to_dbml(
             lines.append(f"Table {tname} [headercolor: {color}] {{")
             lines.append(f"  Note: '{_escape_note('; '.join(note_bits))}'")
             default_col = None
-            for field in obj.get("physical_fields") or []:
-                if not isinstance(field, dict):
-                    continue
+            for node_ref, field in scalar_nodes_for_carrier(obj, by_structure):
                 cname = _ident(
-                    field.get("native_name") or field.get("name"),
+                    field.get("native_name") or field.get("local_key"),
                     fallback="field",
                 )
                 ctype = _ident(field.get("native_type"), fallback="string")
                 required = bool(field.get("required"))
-                fid = field.get("element_id")
-                note = str(fid) if fid else None
                 lines.append(
                     _column_line(
                         name=cname,
                         type_name=ctype,
                         required=required,
-                        note=note,
+                        note=node_ref,
                     )
                 )
-                if fid:
-                    col_index[str(fid)] = (tname, cname)
+                col_index[node_ref] = (tname, cname)
                 if default_col is None:
                     default_col = cname
             if oid and default_col:

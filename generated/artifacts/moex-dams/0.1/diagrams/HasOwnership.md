@@ -17,8 +17,6 @@
         click LogicalEntity href "../LogicalEntity"
       HasOwnership <|-- LogicalAttribute
         click LogicalAttribute href "../LogicalAttribute"
-      HasOwnership <|-- PhysicalField
-        click PhysicalField href "../PhysicalField"
       HasOwnership <|-- TechnicalAsset
         click TechnicalAsset href "../TechnicalAsset"
       HasOwnership <|-- ConceptualDomain

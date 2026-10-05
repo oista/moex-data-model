@@ -10,7 +10,6 @@ from moex_standard_linkml.ingest import ids
 from moex_standard_linkml.ingest.profile import IngestProfile
 from moex_standard_linkml.ingest.technical_asset import (
     CARRIER_COLLECTIONS,
-    TRANSITIONAL_KINDS,
     ensure_container,
     heuristic_namespace,
     infer_parent_names,
@@ -21,6 +20,9 @@ from moex_standard_linkml.ingest.workbook import WorkbookTables
 _CARD_RE = re.compile(
     r"^\s*(\d+)\s*(?:\.\.\s*(\d+|\*|n|N))?\s*$"
 )
+_LOCAL_KEY_RE = re.compile(r"^[a-z0-9_.-]+$")
+_HTTP_URI_RE = re.compile(r"^https?://", re.IGNORECASE)
+_ROOT_KEY = "root"
 
 
 @dataclass
@@ -477,22 +479,28 @@ def map_er_dictionary(
                 obj["parent_ref"] = _opt_str(row.get("parent_ref"))
 
             if coll in CARRIER_COLLECTIONS:
+                # URI schema refs become DataStructure.source_artifact_ref when
+                # fields are ingested; otherwise leave as provisional structure_ref.
                 if native_schema_ref:
-                    obj["structure_ref"] = native_schema_ref
-                obj["physical_fields"] = []
-                if kind_raw in TRANSITIONAL_KINDS or asset_kind in TRANSITIONAL_KINDS:
-                    obj["annotations"] = {"transitional": "true"}
+                    if _HTTP_URI_RE.match(native_schema_ref):
+                        obj["_source_artifact_ref"] = native_schema_ref
+                    else:
+                        obj["structure_ref"] = native_schema_ref
 
             collections[coll].append(obj)
             phys_obj_by_name[name] = obj
 
-    if tables.physical_fields is not None:
-        for i, row in enumerate(tables.physical_fields.rows, start=2):
+    # StructureFields sheet (legacy workbook name also accepted) → DataStructure
+    fields_sheet = getattr(tables, "structure_fields", None)
+    fields_by_carrier: dict[str, list[dict[str, Any]]] = {}
+    if fields_sheet is not None:
+        sheet_label = "structure_fields"
+        for i, row in enumerate(fields_sheet.rows, start=2):
             object_name = _req_str(
-                row.get("object"), "physical_fields", i, "object", errors
+                row.get("object"), sheet_label, i, "object", errors
             )
             field_name = _req_str(
-                row.get("name"), "physical_fields", i, "name", errors
+                row.get("name"), sheet_label, i, "name", errors
             )
             if object_name is None or field_name is None:
                 continue
@@ -500,18 +508,19 @@ def map_er_dictionary(
             if owner is None:
                 errors.append(
                     MapperError(
-                        "physical_fields",
+                        sheet_label,
                         i,
                         f"unknown data carrier '{object_name}'",
                     )
                 )
                 continue
-            if "physical_fields" not in owner:
+            carrier_ids = {c["element_id"] for c in collections["data_carriers"]}
+            if owner["element_id"] not in carrier_ids:
                 errors.append(
                     MapperError(
-                        "physical_fields",
+                        sheet_label,
                         i,
-                        f"'{object_name}' is not a DataCarrier (no physical_fields)",
+                        f"'{object_name}' is not a DataCarrier",
                     )
                 )
                 continue
@@ -522,28 +531,53 @@ def map_er_dictionary(
             )
             native_name = _opt_str(row.get("native_name")) or field_name
             native_type = _req_str(
-                row.get("native_type"), "physical_fields", i, "native_type", errors
+                row.get("native_type"), sheet_label, i, "native_type", errors
             )
             if native_type is None:
                 continue
-            field_curie = ids.physical_field_id(
-                prefix, slug, object_name, field_name
-            )
-            pf: dict[str, Any] = {
-                "element_id": field_curie,
+            field_row: dict[str, Any] = {
                 "name": field_name,
                 "description": description,
-                "lifecycle_status": defaults.lifecycle_status,
-                "carrier_ref": owner["element_id"],
                 "native_name": native_name,
                 "native_type": native_type,
                 "required": _as_bool(row.get("required")),
             }
             schema_path = _opt_str(row.get("schema_path"))
             if schema_path:
-                pf["schema_path"] = schema_path
-            owner["physical_fields"].append(pf)
-            field_by_dotted[f"{object_name}.{field_name}"] = field_curie
+                field_row["schema_path"] = schema_path
+            fields_by_carrier.setdefault(object_name, []).append(field_row)
+
+    data_structures: list[dict[str, Any]] = []
+    for object_name, field_rows in fields_by_carrier.items():
+        owner = phys_obj_by_name[object_name]
+        structure_curie = ids.data_structure_id(prefix, slug, object_name)
+        nodes, leaf_keys = _build_relational_nodes(field_rows)
+        structure: dict[str, Any] = {
+            "element_id": structure_curie,
+            "name": object_name,
+            "title": owner.get("title") or object_name,
+            "description": (
+                f"Structure for {object_name}"
+            ),
+            "lifecycle_status": defaults.lifecycle_status,
+            "schema_format": "relational",
+            "structure_version": "1.0.0",
+            "root_local_key": _ROOT_KEY,
+            "nodes": nodes,
+        }
+        src_art = owner.pop("_source_artifact_ref", None)
+        if src_art:
+            structure["source_artifact_ref"] = src_art
+        data_structures.append(structure)
+        owner["structure_ref"] = structure_curie
+        for field_name, local_key in leaf_keys.items():
+            field_by_dotted[f"{object_name}.{field_name}"] = (
+                f"{structure_curie}#{local_key}"
+            )
+
+    # Drop provisional private keys on carriers without fields
+    for obj in phys_obj_by_name.values():
+        obj.pop("_source_artifact_ref", None)
 
     mappings: list[dict[str, Any]] = []
     if tables.mappings is not None:
@@ -622,6 +656,8 @@ def map_er_dictionary(
     for key, items in collections.items():
         if items:
             package[key] = items
+    if data_structures:
+        package["data_structures"] = data_structures
     if mappings:
         package["mappings"] = mappings
 
@@ -629,6 +665,104 @@ def map_er_dictionary(
     if raise_on_error and errors:
         raise MappingFailed(errors)
     return result
+
+
+def _slug_token(text: str) -> str:
+    """Lowercase slug; alphabet [a-z0-9_.-]; other chars → _."""
+    s = str(text or "").strip().lower()
+    out: list[str] = []
+    for ch in s:
+        if ("a" <= ch <= "z") or ("0" <= ch <= "9") or ch in "_.-":
+            out.append(ch)
+        else:
+            out.append("_")
+    token = "".join(out)
+    token = re.sub(r"_+", "_", token).strip("_.-")
+    return token or "_"
+
+
+def _path_segments(field: dict[str, Any]) -> list[str]:
+    raw = field.get("schema_path")
+    if raw is None or str(raw).strip() == "":
+        raw = field.get("native_name") or field.get("name") or "field"
+    # Prefer dotted paths; also split on /
+    text = str(raw).strip().lstrip("/")
+    parts = [p for p in re.split(r"[./]+", text) if p != ""]
+    if not parts:
+        parts = ["field"]
+    return [_slug_token(p) for p in parts]
+
+
+def _allocate_key(preferred: str, used: set[str]) -> str:
+    key = preferred if _LOCAL_KEY_RE.match(preferred) else _slug_token(preferred)
+    if key not in used:
+        used.add(key)
+        return key
+    n = 2
+    while f"{key}-{n}" in used:
+        n += 1
+    alt = f"{key}-{n}"
+    used.add(alt)
+    return alt
+
+
+def _build_relational_nodes(
+    fields: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], dict[str, str]]:
+    """Build flat SchemaNode list; return (nodes, field_name→local_key)."""
+    used: set[str] = {_ROOT_KEY}
+    nodes: dict[str, dict[str, Any]] = {
+        _ROOT_KEY: {
+            "local_key": _ROOT_KEY,
+            "node_kind": "object",
+            "children": [],
+        }
+    }
+    leaf_keys: dict[str, str] = {}
+
+    for field in fields:
+        segments = _path_segments(field)
+        preferred_leaf = ".".join(segments)
+        parent_key = _ROOT_KEY
+        for i in range(len(segments) - 1):
+            obj_key = ".".join(segments[: i + 1])
+            if obj_key not in nodes:
+                used.add(obj_key)
+                nodes[obj_key] = {
+                    "local_key": obj_key,
+                    "node_kind": "object",
+                    "children": [],
+                }
+                parent = nodes[parent_key]
+                children = list(parent.get("children") or [])
+                if obj_key not in children:
+                    children.append(obj_key)
+                    parent["children"] = children
+            parent_key = obj_key
+
+        leaf_key = _allocate_key(preferred_leaf, used)
+        node: dict[str, Any] = {
+            "local_key": leaf_key,
+            "node_kind": "scalar",
+            "native_name": field.get("native_name") or field.get("name"),
+            "native_type": field.get("native_type"),
+            "required": bool(field.get("required")),
+        }
+        if field.get("description"):
+            node["description"] = field["description"]
+        nodes[leaf_key] = node
+        parent = nodes[parent_key]
+        children = list(parent.get("children") or [])
+        if leaf_key not in children:
+            children.append(leaf_key)
+            parent["children"] = children
+        field_name = str(field.get("name") or leaf_key)
+        leaf_keys[field_name] = leaf_key
+
+    ordered = [nodes[_ROOT_KEY]] + [
+        nodes[k] for k in sorted(nodes.keys()) if k != _ROOT_KEY
+    ]
+    return ordered, leaf_keys
 
 
 def _resolve_mapping_refs(

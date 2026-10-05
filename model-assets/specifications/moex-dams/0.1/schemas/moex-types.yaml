@@ -283,7 +283,7 @@ enums:
     description: >
       Kind of Mapping assertion. realizes = solution element → enterprise
       conceptual; entity_physical = DataCarrier ↔ LogicalEntity;
-      field_mapping = mapsTo (PhysicalField ↔ LogicalAttribute); aligns_with =
+      field_mapping = mapsTo (SchemaNode ↔ LogicalAttribute); aligns_with =
       enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl
       implements (that is conforms_to / publication implements).
     permissible_values:
@@ -295,7 +295,9 @@ enums:
           Explicit entity-level link between DataCarrier and LogicalEntity
           (PDM-003). Do not infer from field_mapping alone.
       field_mapping:
-        description: Technical/structural mapsTo between physical and logical.
+        description: >
+          mapsTo between SchemaNode (structure_id#local_key) and LogicalAttribute
+          (ADR-038).
       transformation:
       aggregation:
       derivation:
@@ -508,3 +510,30 @@ enums:
       measure:
       temporal:
       status:
+  SchemaFormatEnum:
+    description: >
+      Формат схемы DataStructure (стартовый набор; перенос в реестр — отдельно).
+    permissible_values:
+      json_schema:
+      avro:
+      protobuf:
+      xml_schema:
+      relational:
+      openapi_schema:
+      other:
+  SchemaNodeKindEnum:
+    description: Вид узла SchemaNode.
+    permissible_values:
+      scalar:
+      object:
+      array:
+      map:
+      union:
+      enum:
+      reference:
+  EnvelopeKindEnum:
+    description: Вид конверта сообщения (Message.envelope_kind).
+    permissible_values:
+      none:
+      cloudevents:
+      custom:

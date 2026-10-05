@@ -1,0 +1,307 @@
+id: https://data.moex.com/dams/structure/v0.1
+name: moex_structure
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  dams: https://data.moex.com/dams/
+imports:
+  - linkml:types
+  - moex-types
+  - moex-registries
+  - moex-governance
+  - moex-core
+  - moex-datatypes
+default_prefix: dams
+default_range: string
+
+classes:
+  EmbeddedElement:
+    abstract: true
+    description: >
+      Встраиваемый вспомогательный объект без собственного жизненного цикла и
+      глобального element_id. Идентичность локальна относительно родителя
+      (local_key). Не путать с будущим IdentifiedElement (ADR-038).
+    slots:
+      - local_key
+      - description
+    slot_usage:
+      description:
+        required: false
+
+  DataStructure:
+    is_a: ModelElement
+    description: >
+      Именованная версия структуры данных: корень дерева SchemaNode с форматом
+      и опциональным диалектом (ADR-038). Хранит плоский список узлов
+      (nodes + root_local_key).
+    slots:
+      - schema_format
+      - schema_dialect
+      - structure_version
+      - root_local_key
+      - nodes
+      - source_artifact_ref
+      - source_pointer
+      - content_digest
+      - previous_version_ref
+    id_prefixes:
+      - dams
+    unique_keys:
+      data_structure_version_key:
+        unique_key_slots:
+          - name
+          - structure_version
+    rules:
+      - description: source_pointer требует source_artifact_ref
+        preconditions:
+          slot_conditions:
+            source_pointer:
+              value_presence: PRESENT
+        postconditions:
+          slot_conditions:
+            source_artifact_ref:
+              value_presence: PRESENT
+      - description: schema_dialect только для семейства JSON Schema
+        preconditions:
+          slot_conditions:
+            schema_dialect:
+              value_presence: PRESENT
+        postconditions:
+          slot_conditions:
+            schema_format:
+              any_of:
+                - equals_string: json_schema
+                - equals_string: openapi_schema
+
+  SchemaNode:
+    is_a: EmbeddedElement
+    description: >
+      Узел дерева структуры. Идентичность (DataStructure.element_id, local_key).
+      Рёбра children/item_node — строки local_key (плоская форма, ADR-038).
+      Форма и физика в одном узле (как ODCS).
+    slots:
+      - native_name
+      - node_kind
+      - children
+      - item_node
+      - data_type_ref
+      - native_type
+      - nullable
+      - required
+      - min_occurs
+      - max_occurs
+      - ordinal_position
+      - reference_target
+      - realizes_attribute_ref
+      - constraint_expressions
+      - default_value
+      - mapping_coverage_status
+      - mapping_rationale
+      - column_position
+      - is_primary_key
+      - is_unique
+      - foreign_key_target
+    slot_usage:
+      description:
+        required: false
+      native_name:
+        required: false
+      native_type:
+        required: false
+      required:
+        required: false
+      local_key:
+        required: true
+        pattern: '^[a-z0-9_.-]+$'
+    rules:
+      - description: array|map требуют item_node и запрещают children
+        preconditions:
+          slot_conditions:
+            node_kind:
+              any_of:
+                - equals_string: array
+                - equals_string: map
+        postconditions:
+          slot_conditions:
+            item_node:
+              value_presence: PRESENT
+            children:
+              value_presence: ABSENT
+      - description: scalar|enum запрещают children и item_node
+        preconditions:
+          slot_conditions:
+            node_kind:
+              any_of:
+                - equals_string: scalar
+                - equals_string: enum
+        postconditions:
+          slot_conditions:
+            children:
+              value_presence: ABSENT
+            item_node:
+              value_presence: ABSENT
+      - description: reference требует reference_target
+        preconditions:
+          slot_conditions:
+            node_kind:
+              equals_string: reference
+        postconditions:
+          slot_conditions:
+            reference_target:
+              value_presence: PRESENT
+
+  Message:
+    is_a: ModelElement
+    description: >
+      Элемент интеграционной модели: сообщение с payload/headers структурами.
+      Не TechnicalAsset (нет asset_namespace / qualified_name; не carrier_refs).
+      AccessPoint (operation|channel) ссылается через message_refs (ADR-040).
+      Класс в moex-structure, чтобы ModelPackage и AccessPoint ссылались
+      без цикла core↔integration (ADR-040).
+    slots:
+      - payload_structure_ref
+      - headers_structure_ref
+      - content_type
+      - envelope_kind
+      - envelope_ref
+      - correlation_hint
+    id_prefixes:
+      - dams
+    slot_usage:
+      description:
+        required: false
+
+slots:
+  local_key:
+    range: string
+    required: true
+    identifier: true
+    description: >
+      Локальный ключ узла внутри DataStructure. Алфавит ^[a-z0-9_.-]+$
+      (ADR-039). Стабилен после записи; не пересчитывается при смене native_name.
+  schema_format:
+    range: SchemaFormatEnum
+    required: true
+    description: Формат схемы (стартовый enum; реестр форматов — отдельная задача).
+  schema_dialect:
+    range: uri
+    description: >
+      Диалект / версия языка схемы (JSON Schema dialect IRI, AsyncAPI format id).
+      Канон — на DataStructure; на HasStructure deprecated (ADR-038).
+    deprecated: >
+      Deprecated on HasStructure in DAMS 1.1.0. Prefer DataStructure.schema_dialect.
+      Removed from mixin in 2.0.0.
+    deprecated_element_has_possible_replacement: dams:schema_dialect
+  structure_version:
+    range: SemVer
+    required: true
+    description: Версия структуры (SemVer).
+  root_local_key:
+    range: string
+    required: true
+    description: local_key корневого узла в nodes.
+    pattern: '^[a-z0-9_.-]+$'
+  nodes:
+    range: SchemaNode
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    required: true
+    description: Плоский список узлов структуры.
+  source_pointer:
+    range: string
+    description: JSON Pointer или аналог внутри source_artifact_ref.
+  content_digest:
+    range: Sha256Digest
+    description: Дайджест содержимого структуры (опционально).
+  previous_version_ref:
+    range: DataStructure
+    inlined: false
+    description: Предыдущая версия этой структуры.
+  node_kind:
+    range: SchemaNodeKindEnum
+    required: true
+    description: Вид узла (scalar, object, array, map, union, enum, reference).
+  children:
+    range: string
+    multivalued: true
+    description: local_key дочерних узлов (object / union).
+  item_node:
+    range: string
+    description: local_key узла элемента массива или значения map.
+  nullable:
+    range: boolean
+    description: Допустимость null (отдельно от required).
+  min_occurs:
+    range: integer
+    minimum_value: 0
+    description: Минимальная кратность.
+  max_occurs:
+    range: integer
+    minimum_value: 0
+    description: Максимальная кратность; без верхней границы слот отсутствует.
+  reference_target:
+    range: uriorcurie
+    description: Цель для node_kind=reference (другая DataStructure или узел).
+  realizes_attribute_ref:
+    range: LogicalAttribute
+    inlined: false
+    description: Опциональная связь с логическим атрибутом (как concept_ref).
+  constraint_expressions:
+    range: string
+    multivalued: true
+    description: Временные выражения ограничений до введения Expression.
+  column_position:
+    range: integer
+    minimum_value: 1
+    description: Позиция колонки (только schema_format=relational; DAMS-валидатор).
+  is_primary_key:
+    range: boolean
+    description: Признак первичного ключа (только relational; DAMS-валидатор).
+  is_unique:
+    range: boolean
+    description: Признак уникальности колонки (только relational; DAMS-валидатор).
+  foreign_key_target:
+    range: uriorcurie
+    description: Цель внешнего ключа как structure_id#local_key (только relational).
+  payload_structure_ref:
+    range: DataStructure
+    inlined: false
+    required: true
+    description: Структура тела сообщения.
+  headers_structure_ref:
+    range: DataStructure
+    inlined: false
+    description: Структура заголовков сообщения.
+  content_type:
+    range: string
+    description: MIME / content-type сообщения.
+  envelope_kind:
+    range: EnvelopeKindEnum
+    description: Вид конверта (none, cloudevents, custom).
+  envelope_ref:
+    range: uriorcurie
+    description: Ссылка на описание конверта (для custom / профиля).
+  correlation_hint:
+    range: string
+    description: Подсказка корреляции (имя поля / путь).
+  data_structures:
+    range: DataStructure
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Коллекция структур данных пакета.
+  messages:
+    range: Message
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Коллекция сообщений пакета (интеграционная модель).
+  message_refs:
+    range: Message
+    multivalued: true
+    inlined: false
+    description: >
+      Сообщения точки доступа. Допустимо для AccessPoint kind=operation|channel;
+      запрещено для interface (LinkML rule + DAMS).

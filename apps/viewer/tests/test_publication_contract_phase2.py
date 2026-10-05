@@ -41,12 +41,23 @@ FIXTURE_MODEL = {
             "element_id": "p1",
             "name": "P1",
             "asset_kind": "relational_table",
-            "physical_fields": [
+            "structure_ref": "dams:structure/p1",
+        }
+    ],
+    "data_structures": [
+        {
+            "element_id": "dams:structure/p1",
+            "name": "P1",
+            "schema_format": "relational",
+            "root_local_key": "root",
+            "nodes": [
+                {"local_key": "root", "node_kind": "object", "children": ["f1"]},
                 {
-                    "element_id": "f1",
-                    "name": "f1",
-                    "carrier_ref": "p1",
-                }
+                    "local_key": "f1",
+                    "node_kind": "scalar",
+                    "native_name": "f1",
+                    "native_type": "string",
+                },
             ],
         }
     ],
@@ -62,7 +73,8 @@ def test_count_logical_entities_and_nested_attributes():
     )
     assert count_semantic_entities(FIXTURE_MODEL, ["DataCarrier"], select="data_carriers") == 1
     assert (
-        count_semantic_entities(FIXTURE_MODEL, ["PhysicalField"], select="data_carriers") == 1
+        count_semantic_entities(FIXTURE_MODEL, ["SchemaNode"], select="data_structures")
+        == 1
     )
     assert (
         count_semantic_entities(

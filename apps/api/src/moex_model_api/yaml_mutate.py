@@ -74,13 +74,16 @@ def _collect_ids(data: CommentedMap) -> set[str]:
             eid = item.get("element_id")
             if eid:
                 ids.add(str(eid))
-            for nested_key in ("attributes", "physical_fields", "fields"):
+            for nested_key in ("attributes",):
                 nested = item.get(nested_key) or []
                 if not isinstance(nested, list):
                     continue
                 for n in nested:
                     if isinstance(n, dict) and n.get("element_id"):
                         ids.add(str(n["element_id"]))
+    for st in data.get("data_structures") or []:
+        if isinstance(st, dict) and st.get("element_id"):
+            ids.add(str(st["element_id"]))
     return ids
 
 
@@ -496,7 +499,6 @@ _ASSET_KIND_TO_COLLECTION: dict[str, str] = {
     "dataset": "data_carriers",
     "stream_topic": "data_carriers",
     "stream_queue": "data_carriers",
-    "message_type": "data_carriers",
     "in_memory": "data_carriers",
     "api_resource": "data_carriers",
     "other": "data_carriers",
@@ -504,8 +506,6 @@ _ASSET_KIND_TO_COLLECTION: dict[str, str] = {
     "view": "data_carriers",
     "topic": "data_carriers",
     "queue": "data_carriers",
-    "message": "data_carriers",
-    "payload": "data_carriers",
     "interface": "access_points",
     "operation": "access_points",
     "channel": "access_points",
@@ -526,8 +526,6 @@ _LEGACY_KIND_MAP: dict[str, str] = {
     "view": "relational_view",
     "topic": "stream_topic",
     "queue": "stream_queue",
-    "message": "message_type",
-    "payload": "message_type",
     "api": "interface",
     "endpoint": "operation",
 }
@@ -550,24 +548,28 @@ _PHYSICAL_OBJECT_PATCH_KEYS = frozenset(
         "parent_ref",
     }
 )
-_PHYSICAL_FIELD_PATCH_KEYS = frozenset(
+_SCHEMA_NODE_PATCH_KEYS = frozenset(
     {
-        "name",
-        "title",
-        "description",
-        "lifecycle_status",
         "native_name",
         "native_type",
         "required",
+        "description",
         "nullable",
-        "logical_attribute_ref",
-        "schema_path",
+        "column_position",
+        "ordinal_position",
+        "is_primary_key",
+        "is_unique",
     }
 )
 
 
 def _normalize_asset_kind(raw: str | None) -> str:
     kind = str(raw or "relational_table").strip() or "relational_table"
+    removed = {"message", "payload", "message" + "_type"}
+    if kind in removed:
+        raise MutationError(
+            f"asset_kind {kind!r} removed; use Message + DataStructure (ADR-040)"
+        )
     return _LEGACY_KIND_MAP.get(kind, kind)
 
 
@@ -598,26 +600,85 @@ def _find_physical_object(
     return idx, item
 
 
-def _find_physical_field(
-    data: CommentedMap, element_id: str
+def _slug_local_key(text: str) -> str:
+    s = str(text or "").strip().lower()
+    out: list[str] = []
+    for ch in s:
+        if ("a" <= ch <= "z") or ("0" <= ch <= "9") or ch in "_.-":
+            out.append(ch)
+        else:
+            out.append("_")
+    token = "".join(out).strip("_.-") or "_"
+    return token
+
+
+def _ensure_structure_for_carrier(
+    data: CommentedMap, carrier: CommentedMap | dict[str, Any]
+) -> CommentedMap | dict[str, Any]:
+    sid = str(carrier.get("structure_ref") or "").strip()
+    structures = _ensure_seq(data, "data_structures")
+    if sid:
+        for st in structures:
+            if isinstance(st, dict) and str(st.get("element_id")) == sid:
+                if "nodes" not in st or st["nodes"] is None:
+                    st["nodes"] = CommentedSeq()
+                return st
+    # Create a new relational DataStructure
+    name = str(carrier.get("name") or "structure")
+    eid = str(carrier.get("element_id") or "")
+    slug = "unknown"
+    parts = eid.split("/")
+    if len(parts) >= 3:
+        slug = parts[1]
+    structure_id = f"dams:structure/{slug}/{name}"
+    row = CommentedMap()
+    row["element_id"] = structure_id
+    row["name"] = name
+    row["title"] = str(carrier.get("title") or name)
+    row["description"] = f"Structure for {name}"
+    row["lifecycle_status"] = str(carrier.get("lifecycle_status") or "draft")
+    row["schema_format"] = "relational"
+    row["structure_version"] = "1.0.0"
+    row["root_local_key"] = "root"
+    root = CommentedMap()
+    root["local_key"] = "root"
+    root["node_kind"] = "object"
+    root["children"] = CommentedSeq()
+    row["nodes"] = CommentedSeq([root])
+    structures.append(row)
+    carrier["structure_ref"] = structure_id
+    return row
+
+
+def _parse_node_ref(ref: str) -> tuple[str, str]:
+    text = str(ref or "").strip()
+    if "#" not in text:
+        raise MutationError(
+            f"schema node ref must be structure_id#local_key, got: {ref!r}"
+        )
+    sid, key = text.split("#", 1)
+    if not sid or not key:
+        raise MutationError(f"invalid schema node ref: {ref!r}")
+    return sid, key
+
+
+def _find_schema_node(
+    data: CommentedMap, node_ref: str
 ) -> tuple[CommentedMap | dict[str, Any], int, CommentedMap | dict[str, Any]]:
-    eid = str(element_id or "").strip()
-    if not eid:
-        raise MutationError("element_id is required")
-    for key in _TECHNICAL_COLLECTIONS:
-        objects = data.get(key) or []
-        if not isinstance(objects, list):
+    sid, local_key = _parse_node_ref(node_ref)
+    structures = data.get("data_structures") or []
+    if not isinstance(structures, list):
+        raise MutationError("data_structures missing")
+    for st in structures:
+        if not isinstance(st, dict) or str(st.get("element_id")) != sid:
             continue
-        for obj in objects:
-            if not isinstance(obj, dict):
-                continue
-            fields = obj.get("physical_fields") or []
-            if not isinstance(fields, list):
-                continue
-            for idx, field in enumerate(fields):
-                if isinstance(field, dict) and str(field.get("element_id")) == eid:
-                    return obj, idx, field
-    raise MutationError(f"physical field not found: {eid}")
+        nodes = st.get("nodes") or []
+        if not isinstance(nodes, list):
+            continue
+        for idx, node in enumerate(nodes):
+            if isinstance(node, dict) and str(node.get("local_key")) == local_key:
+                return st, idx, node
+    raise MutationError(f"schema node not found: {node_ref}")
 
 
 def add_physical_object(data: CommentedMap, obj: dict[str, Any]) -> None:
@@ -657,13 +718,10 @@ def add_physical_object(data: CommentedMap, obj: dict[str, Any]) -> None:
         "native_schema_ref",
     ):
         if obj.get(key) is not None:
-            # native_schema_ref → structure_ref for carriers
             if key == "native_schema_ref":
                 row["structure_ref"] = str(obj[key])
             else:
                 row[key] = str(obj[key])
-    if collection == "data_carriers":
-        row["physical_fields"] = CommentedSeq()
     seq = _ensure_seq(data, collection)
     seq.append(row)
 
@@ -687,62 +745,81 @@ def delete_physical_object(data: CommentedMap, element_id: str) -> None:
     del seq[idx]
 
 
-def add_physical_field(
+def add_schema_node(
     data: CommentedMap,
     owner_element_id: str,
-    field: dict[str, Any],
+    node: dict[str, Any],
 ) -> None:
     owner = str(owner_element_id or "").strip()
-    eid = str(field.get("element_id") or "").strip()
-    name = str(field.get("name") or "").strip()
-    native_type = str(field.get("native_type") or "").strip()
-    if not owner or not eid or not name or not native_type:
+    name = str(node.get("name") or node.get("native_name") or node.get("local_key") or "").strip()
+    native_type = str(node.get("native_type") or "").strip()
+    if not owner or not name or not native_type:
         raise MutationError(
-            "owner_element_id, element_id, name, and native_type are required"
+            "owner_element_id, name (or local_key), and native_type are required"
         )
-    if eid in _collect_ids(data):
-        raise MutationConflict(f"duplicate element_id: {eid}")
+    _, carrier = _find_physical_object(data, owner)
+    structure = _ensure_structure_for_carrier(data, carrier)
+    nodes = structure["nodes"]
+    if not isinstance(nodes, CommentedSeq):
+        structure["nodes"] = CommentedSeq(list(nodes) if nodes else [])
+        nodes = structure["nodes"]
 
-    _, target = _find_physical_object(data, owner)
-    if "physical_fields" not in target or target["physical_fields"] is None:
-        target["physical_fields"] = CommentedSeq()
-    fields = target["physical_fields"]
-    if not isinstance(fields, CommentedSeq):
-        target["physical_fields"] = CommentedSeq(list(fields) if fields else [])
-        fields = target["physical_fields"]
+    local_key = str(node.get("local_key") or _slug_local_key(name)).strip()
+    used = {
+        str(n.get("local_key"))
+        for n in nodes
+        if isinstance(n, dict) and n.get("local_key")
+    }
+    if local_key in used:
+        base = local_key
+        n = 2
+        while f"{base}-{n}" in used:
+            n += 1
+        local_key = f"{base}-{n}"
 
     row = CommentedMap()
-    row["element_id"] = eid
-    row["name"] = name
-    row["description"] = str(
-        field.get("description") or f"Physical field {name} (workbench draft)."
-    )
-    row["lifecycle_status"] = str(field.get("lifecycle_status") or "draft")
-    row["carrier_ref"] = str(
-        field.get("carrier_ref") or field.get("physical_object_ref") or owner
-    )
-    row["native_name"] = str(field.get("native_name") or name)
+    row["local_key"] = local_key
+    row["node_kind"] = "scalar"
+    row["native_name"] = str(node.get("native_name") or name)
     row["native_type"] = native_type
-    row["required"] = bool(field.get("required", False))
-    if "nullable" in field and field["nullable"] is not None:
-        row["nullable"] = bool(field["nullable"])
-    if field.get("logical_attribute_ref"):
-        row["logical_attribute_ref"] = str(field["logical_attribute_ref"])
-    if field.get("schema_path"):
-        row["schema_path"] = str(field["schema_path"])
-    fields.append(row)
+    row["required"] = bool(node.get("required", False))
+    if node.get("description"):
+        row["description"] = str(node["description"])
+    nodes.append(row)
+
+    # Attach under root children
+    root_key = str(structure.get("root_local_key") or "root")
+    for n in nodes:
+        if isinstance(n, dict) and str(n.get("local_key")) == root_key:
+            children = n.get("children")
+            if not isinstance(children, list):
+                n["children"] = CommentedSeq()
+                children = n["children"]
+            if local_key not in children:
+                children.append(local_key)
+            break
 
 
-def update_physical_field(
-    data: CommentedMap, element_id: str, patch: dict[str, Any]
+def update_schema_node(
+    data: CommentedMap, node_ref: str, patch: dict[str, Any]
 ) -> None:
-    _, _, field = _find_physical_field(data, element_id)
-    _apply_patch(field, patch or {}, _PHYSICAL_FIELD_PATCH_KEYS)
+    _, _, node = _find_schema_node(data, node_ref)
+    _apply_patch(node, patch or {}, _SCHEMA_NODE_PATCH_KEYS)
 
-def delete_physical_field(data: CommentedMap, element_id: str) -> None:
-    obj, idx, _ = _find_physical_field(data, element_id)
-    fields = obj["physical_fields"]
-    del fields[idx]
+
+def delete_schema_node(data: CommentedMap, node_ref: str) -> None:
+    st, idx, node = _find_schema_node(data, node_ref)
+    local_key = str(node.get("local_key"))
+    nodes = st["nodes"]
+    del nodes[idx]
+    # Drop from parent children lists
+    for n in nodes:
+        if not isinstance(n, dict):
+            continue
+        children = n.get("children")
+        if isinstance(children, list) and local_key in children:
+            while local_key in children:
+                children.remove(local_key)
 
 
 def apply_mutation(text: str, payload: dict[str, Any]) -> str:
@@ -802,20 +879,23 @@ def apply_mutation(text: str, payload: dict[str, Any]) -> str:
         )
     elif op == "delete_physical_object":
         delete_physical_object(data, str(payload.get("element_id") or ""))
-    elif op == "add_physical_field":
-        add_physical_field(
+    elif op == "add_schema_node":
+        add_schema_node(
             data,
             str(payload.get("owner_element_id") or ""),
-            payload.get("physical_field") or {},
+            payload.get("schema_node") or payload.get("node") or {},
         )
-    elif op == "update_physical_field":
-        update_physical_field(
+    elif op == "update_schema_node":
+        update_schema_node(
             data,
-            str(payload.get("element_id") or ""),
+            str(payload.get("element_id") or payload.get("node_ref") or ""),
             payload.get("patch") or {},
         )
-    elif op == "delete_physical_field":
-        delete_physical_field(data, str(payload.get("element_id") or ""))
+    elif op == "delete_schema_node":
+        delete_schema_node(
+            data,
+            str(payload.get("element_id") or payload.get("node_ref") or ""),
+        )
     else:
         raise MutationError(f"unsupported op: {op!r}")
     return dump_yaml(data)

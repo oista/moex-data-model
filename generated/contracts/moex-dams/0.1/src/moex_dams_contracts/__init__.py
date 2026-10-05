@@ -34,7 +34,7 @@ from pydantic import (
 
 
 metamodel_version = "1.11.0"
-version = "1.0.0"
+version = "2.0.0"
 
 
 class ConfiguredBaseModel(BaseModel):
@@ -464,7 +464,7 @@ class IntegrationLevelEnum(str, Enum):
 
 class MappingTypeEnum(str, Enum):
     """
-    Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = DataCarrier ↔ LogicalEntity; field_mapping = mapsTo (PhysicalField ↔ LogicalAttribute); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).
+    Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = DataCarrier ↔ LogicalEntity; field_mapping = mapsTo (SchemaNode ↔ LogicalAttribute); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).
 
     """
     semantic_equivalence = "semantic_equivalence"
@@ -477,7 +477,8 @@ class MappingTypeEnum(str, Enum):
     """
     field_mapping = "field_mapping"
     """
-    Technical/structural mapsTo between physical and logical.
+    mapsTo between SchemaNode (structure_id#local_key) and LogicalAttribute (ADR-038).
+
     """
     transformation = "transformation"
     aggregation = "aggregation"
@@ -817,6 +818,42 @@ class PropertyKindEnum(str, Enum):
     status = "status"
 
 
+class SchemaFormatEnum(str, Enum):
+    """
+    Формат схемы DataStructure (стартовый набор; перенос в реестр — отдельно).
+
+    """
+    json_schema = "json_schema"
+    avro = "avro"
+    protobuf = "protobuf"
+    xml_schema = "xml_schema"
+    relational = "relational"
+    openapi_schema = "openapi_schema"
+    other = "other"
+
+
+class SchemaNodeKindEnum(str, Enum):
+    """
+    Вид узла SchemaNode.
+    """
+    scalar = "scalar"
+    object = "object"
+    array = "array"
+    map = "map"
+    union = "union"
+    enum = "enum"
+    reference = "reference"
+
+
+class EnvelopeKindEnum(str, Enum):
+    """
+    Вид конверта сообщения (Message.envelope_kind).
+    """
+    none = "none"
+    cloudevents = "cloudevents"
+    custom = "custom"
+
+
 class DataCarrierKindEnum(str, Enum):
     relational_table = "relational_table"
     relational_view = "relational_view"
@@ -824,10 +861,6 @@ class DataCarrierKindEnum(str, Enum):
     dataset = "dataset"
     stream_topic = "stream_topic"
     stream_queue = "stream_queue"
-    message_type = "message_type"
-    """
-    Transitional; будет заменён Message/DataStructure (ADR-C).
-    """
     in_memory = "in_memory"
     api_resource = "api_resource"
     other = "other"
@@ -1192,6 +1225,8 @@ class ModelPackage(ModelElement, HasPolicyBindings, HasGovernanceClassification,
     value_domains: Optional[list[ValueDomain]] = Field(default=None, description="""Домены представления значений (enterprise или solution).""")
     data_types: Optional[list[DataType]] = Field(default=None, description="""Корпоративный реестр типов данных.""")
     native_type_bindings: Optional[list[NativeTypeBinding]] = Field(default=None, description="""Привязки нативных типов диалектов к DataType.""")
+    data_structures: Optional[list[DataStructure]] = Field(default=None, description="""Коллекция структур данных пакета.""")
+    messages: Optional[list[Message]] = Field(default=None, description="""Коллекция сообщений пакета (интеграционная модель).""")
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
@@ -1522,47 +1557,9 @@ class ExternalClassRef(HasProvenance):
     approved_at: Optional[datetime ] = Field(default=None)
 
 
-class PhysicalField(ModelElement, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
-    """
-    Поле носителя данных (DataCarrier); семантика задаётся Mapping к LogicalAttribute.
-
-    """
-    carrier_ref: str = Field(default=..., description="""Носитель данных, которому принадлежит поле.""")
-    native_name: str = Field(default=...)
-    native_type: str = Field(default=...)
-    required: bool = Field(default=...)
-    ordinal_position: Optional[int] = Field(default=None, ge=1)
-    schema_path: Optional[str] = Field(default=None)
-    mapping_coverage_status: Optional[MappingCoverageStatusEnum] = Field(default=None, description="""Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
-""")
-    mapping_rationale: Optional[str] = Field(default=None, description="""Обоснование для planned / technical-only / not-applicable / inherited.""")
-    data_owner_ref: Optional[str] = Field(default=None)
-    data_steward_ref: Optional[str] = Field(default=None)
-    owning_unit_ref: Optional[str] = Field(default=None)
-    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
-""")
-    governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
-    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
-    sensitivity_term_refs: Optional[list[str]] = Field(default=None)
-    classification_source: Optional[str] = Field(default=None)
-    classification_rationale: Optional[str] = Field(default=None)
-    policy_refs: Optional[list[str]] = Field(default=None)
-    element_id: str = Field(default=...)
-    name: str = Field(default=...)
-    title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
-    aliases: Optional[list[str]] = Field(default=None)
-    glossary_term_refs: Optional[list[str]] = Field(default=None)
-    tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
-    valid_from: Optional[datetime ] = Field(default=None)
-    valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
-
-
 class Mapping(ModelElement, HasProvenance):
     """
-    Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (PhysicalField↔LogicalAttribute), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
+    Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
 
     """
     source_refs: Optional[list[str]] = Field(default=None, min_length=1)
@@ -1592,13 +1589,12 @@ class Mapping(ModelElement, HasProvenance):
 
 class HasStructure(ConfiguredBaseModel):
     """
-    Mixin структуры данных носителя. structure_ref — временная ссылка (uriorcurie); в будущем заменяется классом DataStructure (ADR-C).
+    Mixin структуры данных носителя. structure_ref — ссылка на DataStructure (range=DataStructure, ADR-038). Диалект схемы живёт на DataStructure.schema_dialect.
 
     """
-    structure_ref: Optional[str] = Field(default=None, description="""Ссылка на структуру данных (пока uriorcurie; в будущем DataStructure).
+    structure_ref: Optional[str] = Field(default=None, description="""Ссылка на структуру данных (DataStructure, ADR-038).
 """)
-    schema_dialect: Optional[str] = Field(default=None, description="""Диалект схемы (например avro, json-schema, sql-ddl).""")
-    data_format: Optional[str] = Field(default=None, description="""Формат данных (например parquet, csv, json).""")
+    data_format: Optional[str] = Field(default=None, description="""Wire-формат носителя (parquet, csv, json); не путать с schema_format.""")
 
 
 class HasProtocolBinding(ConfiguredBaseModel):
@@ -1673,14 +1669,12 @@ class DataCarrier(TechnicalAsset, HasLocation, Contains, HasStructure):
     Носитель данных: хранит или передаёт данные (таблица, файл, топик, сообщение и т.п.).
 
     """
-    physical_fields: Optional[list[PhysicalField]] = Field(default=None)
     mapping_coverage_status: Optional[MappingCoverageStatusEnum] = Field(default=None, description="""Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
 """)
     mapping_rationale: Optional[str] = Field(default=None, description="""Обоснование для planned / technical-only / not-applicable / inherited.""")
-    structure_ref: Optional[str] = Field(default=None, description="""Ссылка на структуру данных (пока uriorcurie; в будущем DataStructure).
+    structure_ref: Optional[str] = Field(default=None, description="""Ссылка на структуру данных (DataStructure, ADR-038).
 """)
-    schema_dialect: Optional[str] = Field(default=None, description="""Диалект схемы (например avro, json-schema, sql-ddl).""")
-    data_format: Optional[str] = Field(default=None, description="""Формат данных (например parquet, csv, json).""")
+    data_format: Optional[str] = Field(default=None, description="""Wire-формат носителя (parquet, csv, json); не путать с schema_format.""")
     location_uri: Optional[str] = Field(default=None)
     region: Optional[str] = Field(default=None)
     containment_kind: Optional[ContainmentKindEnum] = Field(default=None)
@@ -1731,6 +1725,8 @@ class AccessPoint(TechnicalAsset, HasLocation, HasProtocolBinding):
     operation_name: Optional[str] = Field(default=None)
     http_method: Optional[str] = Field(default=None)
     path_template: Optional[str] = Field(default=None)
+    message_refs: Optional[list[str]] = Field(default=None, description="""Сообщения точки доступа. Допустимо для AccessPoint kind=operation|channel; запрещено для interface (LinkML rule + DAMS).
+""")
     protocol: Optional[str] = Field(default=None, description="""Протокол доступа (например https, jdbc, kafka).""")
     protocol_version: Optional[str] = Field(default=None)
     binding_ref: Optional[str] = Field(default=None, description="""Ссылка на внешнее описание binding.""")
@@ -1939,7 +1935,7 @@ class NativeTypeBinding(ConfiguredBaseModel):
     """
     binding_id: str = Field(default=...)
     dialect: str = Field(default=..., description="""Диалект/платформа нативного типа (postgresql, oracle, json, …).""")
-    dialect_native_type: str = Field(default=..., description="""Имя нативного типа в диалекте. Отдельный слот от PhysicalField.native_type (другой контекст; общий URI ломает SchemaLoader merge — ADR-036).
+    dialect_native_type: str = Field(default=..., description="""Имя нативного типа в диалекте. Отдельный слот от SchemaNode.native_type (другой контекст; общий URI ломает SchemaLoader merge — ADR-036).
 """)
     data_type_ref: str = Field(default=..., description="""Ссылка на корпоративный DataType.""")
     lossiness: LossinessEnum = Field(default=..., description="""Оценка потери точности при отображении.""")
@@ -1999,6 +1995,126 @@ class ValueSetQuery(ConfiguredBaseModel):
     include_self: Optional[bool] = Field(default=None, description="""Включать стартовые узлы в результат.""")
 
 
+class EmbeddedElement(ConfiguredBaseModel):
+    """
+    Встраиваемый вспомогательный объект без собственного жизненного цикла и глобального element_id. Идентичность локальна относительно родителя (local_key). Не путать с будущим IdentifiedElement (ADR-038).
+
+    """
+    local_key: str = Field(default=..., description="""Локальный ключ узла внутри DataStructure. Алфавит ^[a-z0-9_.-]+$ (ADR-039). Стабилен после записи; не пересчитывается при смене native_name.
+""")
+    description: Optional[str] = Field(default=None)
+
+
+class DataStructure(ModelElement):
+    """
+    Именованная версия структуры данных: корень дерева SchemaNode с форматом и опциональным диалектом (ADR-038). Хранит плоский список узлов (nodes + root_local_key).
+
+    """
+    schema_format: SchemaFormatEnum = Field(default=..., description="""Формат схемы (стартовый enum; реестр форматов — отдельная задача).""")
+    schema_dialect: Optional[str] = Field(default=None, description="""Диалект / версия языка схемы (JSON Schema dialect IRI, AsyncAPI format id). Канон — на DataStructure; на HasStructure deprecated (ADR-038).
+""")
+    structure_version: str = Field(default=..., description="""Версия структуры (SemVer).""")
+    root_local_key: str = Field(default=..., description="""local_key корневого узла в nodes.""")
+    nodes: list[SchemaNode] = Field(default=..., description="""Плоский список узлов структуры.""")
+    source_artifact_ref: Optional[str] = Field(default=None)
+    source_pointer: Optional[str] = Field(default=None, description="""JSON Pointer или аналог внутри source_artifact_ref.""")
+    content_digest: Optional[str] = Field(default=None, description="""Дайджест содержимого структуры (опционально).""")
+    previous_version_ref: Optional[str] = Field(default=None, description="""Предыдущая версия этой структуры.""")
+    element_id: str = Field(default=...)
+    name: str = Field(default=...)
+    title: Optional[str] = Field(default=None)
+    description: str = Field(default=...)
+    aliases: Optional[list[str]] = Field(default=None)
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+
+    @field_validator('root_local_key')
+    def pattern_root_local_key(cls, v):
+        pattern=re.compile(r"^[a-z0-9_.-]+$")
+        if isinstance(v, list):
+            for element in v:
+                if isinstance(element, str) and not pattern.match(element):
+                    err_msg = f"Invalid root_local_key format: {element}"
+                    raise ValueError(err_msg)
+        elif isinstance(v, str) and not pattern.match(v):
+            err_msg = f"Invalid root_local_key format: {v}"
+            raise ValueError(err_msg)
+        return v
+
+
+class SchemaNode(EmbeddedElement):
+    """
+    Узел дерева структуры. Идентичность (DataStructure.element_id, local_key). Рёбра children/item_node — строки local_key (плоская форма, ADR-038). Форма и физика в одном узле (как ODCS).
+
+    """
+    native_name: Optional[str] = Field(default=None)
+    node_kind: SchemaNodeKindEnum = Field(default=..., description="""Вид узла (scalar, object, array, map, union, enum, reference).""")
+    children: Optional[list[str]] = Field(default=None, description="""local_key дочерних узлов (object / union).""")
+    item_node: Optional[str] = Field(default=None, description="""local_key узла элемента массива или значения map.""")
+    data_type_ref: Optional[str] = Field(default=None, description="""Ссылка на корпоративный DataType.""")
+    native_type: Optional[str] = Field(default=None)
+    nullable: Optional[bool] = Field(default=None, description="""Допустимость null (отдельно от required).""")
+    required: Optional[bool] = Field(default=None)
+    min_occurs: Optional[int] = Field(default=None, description="""Минимальная кратность.""", ge=0)
+    max_occurs: Optional[int] = Field(default=None, description="""Максимальная кратность; без верхней границы слот отсутствует.""", ge=0)
+    ordinal_position: Optional[int] = Field(default=None, ge=1)
+    reference_target: Optional[str] = Field(default=None, description="""Цель для node_kind=reference (другая DataStructure или узел).""")
+    realizes_attribute_ref: Optional[str] = Field(default=None, description="""Опциональная связь с логическим атрибутом (как concept_ref).""")
+    constraint_expressions: Optional[list[str]] = Field(default=None, description="""Временные выражения ограничений до введения Expression.""")
+    default_value: Optional[str] = Field(default=None)
+    mapping_coverage_status: Optional[MappingCoverageStatusEnum] = Field(default=None, description="""Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
+""")
+    mapping_rationale: Optional[str] = Field(default=None, description="""Обоснование для planned / technical-only / not-applicable / inherited.""")
+    column_position: Optional[int] = Field(default=None, description="""Позиция колонки (только schema_format=relational; DAMS-валидатор).""", ge=1)
+    is_primary_key: Optional[bool] = Field(default=None, description="""Признак первичного ключа (только relational; DAMS-валидатор).""")
+    is_unique: Optional[bool] = Field(default=None, description="""Признак уникальности колонки (только relational; DAMS-валидатор).""")
+    foreign_key_target: Optional[str] = Field(default=None, description="""Цель внешнего ключа как structure_id#local_key (только relational).""")
+    local_key: str = Field(default=..., description="""Локальный ключ узла внутри DataStructure. Алфавит ^[a-z0-9_.-]+$ (ADR-039). Стабилен после записи; не пересчитывается при смене native_name.
+""")
+    description: Optional[str] = Field(default=None)
+
+    @field_validator('local_key')
+    def pattern_local_key(cls, v):
+        pattern=re.compile(r"^[a-z0-9_.-]+$")
+        if isinstance(v, list):
+            for element in v:
+                if isinstance(element, str) and not pattern.match(element):
+                    err_msg = f"Invalid local_key format: {element}"
+                    raise ValueError(err_msg)
+        elif isinstance(v, str) and not pattern.match(v):
+            err_msg = f"Invalid local_key format: {v}"
+            raise ValueError(err_msg)
+        return v
+
+
+class Message(ModelElement):
+    """
+    Элемент интеграционной модели: сообщение с payload/headers структурами. Не TechnicalAsset (нет asset_namespace / qualified_name; не carrier_refs). AccessPoint (operation|channel) ссылается через message_refs (ADR-040). Класс в moex-structure, чтобы ModelPackage и AccessPoint ссылались без цикла core↔integration (ADR-040).
+
+    """
+    payload_structure_ref: str = Field(default=..., description="""Структура тела сообщения.""")
+    headers_structure_ref: Optional[str] = Field(default=None, description="""Структура заголовков сообщения.""")
+    content_type: Optional[str] = Field(default=None, description="""MIME / content-type сообщения.""")
+    envelope_kind: Optional[EnvelopeKindEnum] = Field(default=None, description="""Вид конверта (none, cloudevents, custom).""")
+    envelope_ref: Optional[str] = Field(default=None, description="""Ссылка на описание конверта (для custom / профиля).""")
+    correlation_hint: Optional[str] = Field(default=None, description="""Подсказка корреляции (имя поля / путь).""")
+    element_id: str = Field(default=...)
+    name: str = Field(default=...)
+    title: Optional[str] = Field(default=None)
+    description: Optional[str] = Field(default=None)
+    aliases: Optional[list[str]] = Field(default=None)
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+
+
 class DataFlow(ModelElement, HasOwnership, HasLifecycle):
     """
     Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr, а семантика — модели данных.
@@ -2043,7 +2159,7 @@ class DataFlowEntityBinding(ModelElement):
     logical_entity_ref: str = Field(default=...)
     logical_attribute_refs: Optional[list[str]] = Field(default=None, min_length=1)
     carrier_refs: Optional[list[str]] = Field(default=None, description="""Носители данных, участвующие в binding (не контейнеры).""", min_length=1)
-    physical_field_refs: Optional[list[str]] = Field(default=None)
+    schema_node_refs: Optional[list[str]] = Field(default=None, description="""Ссылки на узлы схемы (SchemaNode) в DataStructure.""")
     transformation_mapping_refs: Optional[list[str]] = Field(default=None)
     direction: Optional[FlowDirectionEnum] = Field(default=None)
     element_id: str = Field(default=...)
@@ -2136,7 +2252,7 @@ class SelectedAttribute(ModelElement):
     Выбранный атрибут и соответствующее физическое поле payload, таблицы или сообщения.
     """
     logical_attribute_ref: str = Field(default=...)
-    physical_field_refs: Optional[list[str]] = Field(default=None)
+    schema_node_refs: Optional[list[str]] = Field(default=None, description="""Ссылки на узлы схемы (SchemaNode) в DataStructure.""")
     transformation_mapping_ref: Optional[str] = Field(default=None)
     element_id: str = Field(default=...)
     name: str = Field(default=...)
@@ -2330,7 +2446,6 @@ LogicalAttribute.model_rebuild()
 Relationship.model_rebuild()
 RelationTerm.model_rebuild()
 ExternalClassRef.model_rebuild()
-PhysicalField.model_rebuild()
 Mapping.model_rebuild()
 HasStructure.model_rebuild()
 HasProtocolBinding.model_rebuild()
@@ -2348,6 +2463,10 @@ NativeTypeBinding.model_rebuild()
 ValueDomain.model_rebuild()
 PermissibleValue.model_rebuild()
 ValueSetQuery.model_rebuild()
+EmbeddedElement.model_rebuild()
+DataStructure.model_rebuild()
+SchemaNode.model_rebuild()
+Message.model_rebuild()
 DataFlow.model_rebuild()
 DataFlowEntityBinding.model_rebuild()
 DataModelBinding.model_rebuild()

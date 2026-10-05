@@ -317,8 +317,8 @@ def system_to_ingest_profile(system: SystemDefaults, profile: SolutionXlsxProfil
                     database="database",
                 ),
             ),
-            physical_fields=IngestSheetSpec(
-                sheet="PhysicalFields",
+            structure_fields=IngestSheetSpec(
+                sheet="StructureFields",
                 required=False,
                 columns=IngestSheetColumns(
                     object="object",

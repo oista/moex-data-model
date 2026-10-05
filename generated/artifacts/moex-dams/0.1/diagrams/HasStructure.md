@@ -10,9 +10,16 @@
       
       HasStructure : data_format
         
-      HasStructure : schema_dialect
-        
       HasStructure : structure_ref
+        
+          
+    
+        
+        
+        HasStructure --> "0..1" DataStructure : structure_ref
+        click DataStructure href "../DataStructure"
+    
+
         
       
 ```

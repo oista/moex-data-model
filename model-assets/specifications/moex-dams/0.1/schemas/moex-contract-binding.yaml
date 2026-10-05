@@ -56,7 +56,7 @@ classes:
     description: Выбранный атрибут и соответствующее физическое поле payload, таблицы или сообщения.
     slots:
       - logical_attribute_ref
-      - physical_field_refs
+      - schema_node_refs
       - transformation_mapping_ref
 
 slots:

@@ -16,12 +16,22 @@ data_carriers:
   - element_id: dams:physical/mdm/client-topic
     name: client_changed_topic
     asset_kind: stream_topic
-    physical_fields:
-      - element_id: dams:physical/mdm/client-topic/client_id
-        name: client_id
+    structure_ref: dams:structure/mdm/client_changed_topic
+data_structures:
+  - element_id: dams:structure/mdm/client_changed_topic
+    name: client_changed_topic
+    schema_format: relational
+    root_local_key: root
+    nodes:
+      - local_key: root
+        node_kind: object
+        children:
+          - client_id
+      - local_key: client_id
+        node_kind: scalar
+        native_name: client_id
         native_type: string
         required: true
-        carrier_ref: dams:physical/mdm/client-topic
 `;
 
 describe("applyMutationOptimistic", () => {
@@ -35,7 +45,7 @@ describe("applyMutationOptimistic", () => {
     expect(out).toContain("dams:logical/mdm/Client");
   });
 
-  it("adds data carrier and field", () => {
+  it("adds data carrier and schema node", () => {
     const withObj = applyMutationOptimistic(SAMPLE, {
       op: "add_physical_object",
       physical_object: {
@@ -48,24 +58,23 @@ describe("applyMutationOptimistic", () => {
     expect(withObj).toContain("data_carriers:");
     expect(withObj).toContain("asset_kind: relational_table");
     const withField = applyMutationOptimistic(withObj, {
-      op: "add_physical_field",
+      op: "add_schema_node",
       owner_element_id: "dams:physical/mdm/orders",
-      physical_field: {
-        element_id: "dams:physical/mdm/orders/id",
+      schema_node: {
         name: "id",
         native_type: "uuid",
       },
     });
-    expect(withField).toContain("dams:physical/mdm/orders/id");
     expect(withField).toContain("native_type: uuid");
-    expect(withField).toContain("carrier_ref:");
+    expect(withField).toContain("data_structures:");
+    expect(withField).toContain("structure_ref:");
   });
 
-  it("deletes physical field", () => {
+  it("deletes schema node", () => {
     const out = applyMutationOptimistic(SAMPLE, {
-      op: "delete_physical_field",
-      element_id: "dams:physical/mdm/client-topic/client_id",
+      op: "delete_schema_node",
+      element_id: "dams:structure/mdm/client_changed_topic#client_id",
     });
-    expect(out).not.toContain("dams:physical/mdm/client-topic/client_id");
+    expect(out).not.toContain("local_key: client_id");
   });
 });

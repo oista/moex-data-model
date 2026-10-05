@@ -1,0 +1,65 @@
+element_id: dams:pkg/fixture-message
+name: fixture_message
+description: Message with headers fixture
+lifecycle_status: draft
+api_version: v1
+model_version: 0.1.0
+access_points:
+- element_id: dams:physical/fixture/CH
+  name: party-events
+  description: Kafka channel
+  lifecycle_status: active
+  system_ref: eam:system/MDM
+  asset_namespace: kafka://MDM
+  qualified_name: party.events
+  asset_kind: channel
+  message_refs:
+  - dams:message/fixture/PartyChanged
+messages:
+- element_id: dams:message/fixture/PartyChanged
+  name: PartyChanged
+  description: Party changed event
+  lifecycle_status: active
+  payload_structure_ref: dams:structure/fixture/party-payload
+  headers_structure_ref: dams:structure/fixture/party-headers
+  content_type: application/json
+  envelope_kind: none
+data_structures:
+- element_id: dams:structure/fixture/party-payload
+  name: party-payload
+  description: Payload structure
+  lifecycle_status: active
+  schema_format: json_schema
+  structure_version: 1.0.0
+  root_local_key: root
+  nodes:
+  - local_key: root
+    native_name: payload
+    node_kind: object
+    description: root
+    children: [party_id]
+  - local_key: party_id
+    native_name: party_id
+    node_kind: scalar
+    description: id
+    native_type: string
+    required: true
+- element_id: dams:structure/fixture/party-headers
+  name: party-headers
+  description: Headers structure
+  lifecycle_status: active
+  schema_format: json_schema
+  structure_version: 1.0.0
+  root_local_key: root
+  nodes:
+  - local_key: root
+    native_name: headers
+    node_kind: object
+    description: root
+    children: [correlation_id]
+  - local_key: correlation_id
+    native_name: correlation_id
+    node_kind: scalar
+    description: correlation
+    native_type: string
+    required: false

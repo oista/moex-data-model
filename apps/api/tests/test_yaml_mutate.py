@@ -357,10 +357,9 @@ def test_add_update_delete_physical_object_and_field() -> None:
     out2 = apply_mutation(
         out,
         {
-            "op": "add_physical_field",
+            "op": "add_schema_node",
             "owner_element_id": "dams:physical/mdm/orders",
-            "physical_field": {
-                "element_id": "dams:physical/mdm/orders/id",
+            "schema_node": {
                 "name": "id",
                 "native_type": "uuid",
                 "required": True,
@@ -373,9 +372,16 @@ def test_add_update_delete_physical_object_and_field() -> None:
         for o in data2["data_carriers"]
         if o["element_id"] == "dams:physical/mdm/orders"
     )
-    assert obj["physical_fields"][0]["native_type"] == "uuid"
-    assert obj["physical_fields"][0]["carrier_ref"] == "dams:physical/mdm/orders"
+    assert obj["structure_ref"]
+    st = next(
+        s
+        for s in data2["data_structures"]
+        if s["element_id"] == obj["structure_ref"]
+    )
+    scalars = [n for n in st["nodes"] if n.get("node_kind") == "scalar"]
+    assert scalars[0]["native_type"] == "uuid"
     assert obj["asset_kind"] == "relational_table"
+    node_ref = f"{st['element_id']}#{scalars[0]['local_key']}"
 
     out3 = apply_mutation(
         out2,
@@ -396,9 +402,9 @@ def test_add_update_delete_physical_object_and_field() -> None:
     out4 = apply_mutation(
         out3,
         {
-            "op": "update_physical_field",
-            "element_id": "dams:physical/mdm/orders/id",
-            "patch": {"nullable": False, "native_type": "varchar"},
+            "op": "update_schema_node",
+            "element_id": node_ref,
+            "patch": {"native_type": "varchar"},
         },
     )
     data4 = load_yaml(out4)
@@ -407,14 +413,19 @@ def test_add_update_delete_physical_object_and_field() -> None:
         for o in data4["data_carriers"]
         if o["element_id"] == "dams:physical/mdm/orders"
     )
-    assert obj4["physical_fields"][0]["native_type"] == "varchar"
-    assert obj4["physical_fields"][0]["nullable"] is False
+    st4 = next(
+        s
+        for s in data4["data_structures"]
+        if s["element_id"] == obj4["structure_ref"]
+    )
+    scalars4 = [n for n in st4["nodes"] if n.get("node_kind") == "scalar"]
+    assert scalars4[0]["native_type"] == "varchar"
 
     out5 = apply_mutation(
         out4,
         {
-            "op": "delete_physical_field",
-            "element_id": "dams:physical/mdm/orders/id",
+            "op": "delete_schema_node",
+            "element_id": node_ref,
         },
     )
     data5 = load_yaml(out5)
@@ -423,7 +434,12 @@ def test_add_update_delete_physical_object_and_field() -> None:
         for o in data5["data_carriers"]
         if o["element_id"] == "dams:physical/mdm/orders"
     )
-    assert list(obj5.get("physical_fields") or []) == []
+    st5 = next(
+        s
+        for s in data5["data_structures"]
+        if s["element_id"] == obj5["structure_ref"]
+    )
+    assert [n for n in st5["nodes"] if n.get("node_kind") == "scalar"] == []
 
     out6 = apply_mutation(
         out5,

@@ -21,6 +21,8 @@ _LIST_KINDS: tuple[tuple[str, str, str], ...] = (
     ("access_points", "AccessPoint", "physical"),
     ("data_containers", "DataContainer", "physical"),
     ("execution_assets", "ExecutionAsset", "physical"),
+    ("data_structures", "DataStructure", "physical"),
+    ("messages", "Message", "physical"),
     ("mappings", "Mapping", "mapping"),
     ("relationships", "Relationship", "logical"),
 )
@@ -57,23 +59,35 @@ def build_element_index(data: dict[str, Any]) -> list[ElementIndexEntry]:
                     layer=layer,
                 )
             )
-            nested_lists = (
-                ("attributes", "LogicalAttribute"),
-                ("physical_fields", "PhysicalField"),
-                ("fields", "PhysicalField"),
-            )
-            for nested_key, nested_kind in nested_lists:
-                attrs = item.get(nested_key) or []
-                if not isinstance(attrs, list):
-                    continue
-                for nested in attrs:
+            if key == "logical_entities":
+                for nested in item.get("attributes") or []:
                     if isinstance(nested, dict) and nested.get("element_id"):
                         out.append(
                             ElementIndexEntry(
                                 element_id=str(nested["element_id"]),
-                                element_kind=nested_kind,
+                                element_kind="LogicalAttribute",
                                 name=str(nested.get("name") or ""),
                                 layer=layer,
                             )
                         )
+            if key == "data_structures":
+                sid = str(eid)
+                for nested in item.get("nodes") or []:
+                    if not isinstance(nested, dict):
+                        continue
+                    local_key = nested.get("local_key")
+                    if not local_key:
+                        continue
+                    out.append(
+                        ElementIndexEntry(
+                            element_id=f"{sid}#{local_key}",
+                            element_kind="SchemaNode",
+                            name=str(
+                                nested.get("native_name")
+                                or nested.get("local_key")
+                                or ""
+                            ),
+                            layer=layer,
+                        )
+                    )
     return out

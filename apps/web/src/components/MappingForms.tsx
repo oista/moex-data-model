@@ -37,11 +37,15 @@ function collectRefOptions(content: string): string[] {
       }>;
       data_carriers?: Array<{
         element_id?: string;
-        physical_fields?: Array<{ element_id?: string }>;
+        structure_ref?: string;
       }>;
       access_points?: Array<{ element_id?: string }>;
       data_containers?: Array<{ element_id?: string }>;
       execution_assets?: Array<{ element_id?: string }>;
+      data_structures?: Array<{
+        element_id?: string;
+        nodes?: Array<{ local_key?: string; node_kind?: string }>;
+      }>;
     } | null;
     const ids: string[] = [];
     for (const ent of data?.logical_entities ?? []) {
@@ -58,10 +62,14 @@ function collectRefOptions(content: string): string[] {
     ] as const) {
       for (const obj of data?.[key] ?? []) {
         if (obj?.element_id) ids.push(String(obj.element_id));
-        const fields = (obj as { physical_fields?: Array<{ element_id?: string }> })
-          .physical_fields;
-        for (const f of fields ?? []) {
-          if (f?.element_id) ids.push(String(f.element_id));
+      }
+    }
+    for (const st of data?.data_structures ?? []) {
+      if (!st?.element_id) continue;
+      ids.push(String(st.element_id));
+      for (const n of st.nodes ?? []) {
+        if (n?.local_key && n.node_kind === "scalar") {
+          ids.push(`${st.element_id}#${n.local_key}`);
         }
       }
     }

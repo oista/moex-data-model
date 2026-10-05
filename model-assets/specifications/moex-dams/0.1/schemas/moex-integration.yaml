@@ -46,7 +46,7 @@ classes:
       - logical_entity_ref
       - logical_attribute_refs
       - carrier_refs
-      - physical_field_refs
+      - schema_node_refs
       - transformation_mapping_refs
       - direction
 
@@ -121,10 +121,11 @@ slots:
     inlined: false
     minimum_cardinality: 1
     description: Носители данных, участвующие в binding (не контейнеры).
-  physical_field_refs:
-    range: PhysicalField
+  schema_node_refs:
+    range: uriorcurie
     multivalued: true
     inlined: false
+    description: Ссылки на узлы схемы (SchemaNode) в DataStructure.
   transformation_mapping_refs:
     range: Mapping
     multivalued: true

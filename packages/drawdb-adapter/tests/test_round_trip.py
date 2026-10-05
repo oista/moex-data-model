@@ -75,20 +75,35 @@ MINI = {
             "name": "client_tbl",
             "title": "Client table",
             "asset_kind": "relational_table",
-            "physical_fields": [
+            "structure_ref": "dams:structure/mini/client_tbl",
+        }
+    ],
+    "data_structures": [
+        {
+            "element_id": "dams:structure/mini/client_tbl",
+            "name": "client_tbl",
+            "schema_format": "relational",
+            "structure_version": "1.0.0",
+            "root_local_key": "root",
+            "nodes": [
                 {
-                    "element_id": "dams:physical/mini/client_tbl/client_id",
-                    "name": "client_id",
-                    "native_type": "varchar",
-                    "required": True,
-                    "carrier_ref": "dams:physical/mini/client_tbl",
+                    "local_key": "root",
+                    "node_kind": "object",
+                    "children": ["client_id", "full_name"],
                 },
                 {
-                    "element_id": "dams:physical/mini/client_tbl/full_name",
-                    "name": "full_name",
+                    "local_key": "client_id",
+                    "node_kind": "scalar",
+                    "native_name": "client_id",
+                    "native_type": "varchar",
+                    "required": True,
+                },
+                {
+                    "local_key": "full_name",
+                    "node_kind": "scalar",
+                    "native_name": "full_name",
                     "native_type": "varchar",
                     "required": False,
-                    "carrier_ref": "dams:physical/mini/client_tbl",
                 },
             ],
         }
@@ -184,7 +199,7 @@ def test_physical_identity_round_trip() -> None:
 def test_physical_add_field_produces_op() -> None:
     svc = DrawDbProjectionService()
     dbml = svc.to_dbml(MINI, profile="physical")
-    marker = "full_name varchar [note: 'dams:physical/mini/client_tbl/full_name']"
+    marker = "full_name varchar [note: 'dams:structure/mini/client_tbl#full_name']"
     if marker not in dbml:
         # tolerate alternate note formatting from projector
         marker = "full_name"

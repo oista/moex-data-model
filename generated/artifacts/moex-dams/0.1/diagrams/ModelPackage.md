@@ -112,6 +112,17 @@
     
 
         
+      ModelPackage : data_structures
+        
+          
+    
+        
+        
+        ModelPackage --> "*" DataStructure : data_structures
+        click DataStructure href "../DataStructure"
+    
+
+        
       ModelPackage : data_types
         
           
@@ -227,6 +238,17 @@
         
         ModelPackage --> "*" Mapping : mappings
         click Mapping href "../Mapping"
+    
+
+        
+      ModelPackage : messages
+        
+          
+    
+        
+        
+        ModelPackage --> "*" Message : messages
+        click Message href "../Message"
     
 
         

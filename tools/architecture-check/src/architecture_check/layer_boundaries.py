@@ -20,7 +20,7 @@ FORBIDDEN_RANGES_FROM_CONCEPTUAL = frozenset(
     {
         "LogicalEntity",
         "LogicalAttribute",
-        "PhysicalField",
+        "SchemaNode",
         "TechnicalAsset",
         "DataCarrier",
         "AccessPoint",
@@ -63,7 +63,7 @@ def check_layer_boundaries(schema_path: str | Path) -> list[str]:
             continue
         for sname in sv.class_slots(cname):
             slot = sv.induced_slot(sname, cname)
-            if slot.range in {"LogicalAttribute", "LogicalEntity", "PhysicalField"}:
+            if slot.range in {"LogicalAttribute", "LogicalEntity", "SchemaNode"}:
                 errors.append(f"{cname}.{sname} must not range to {slot.range}")
 
     return sorted(errors)

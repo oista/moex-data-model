@@ -239,7 +239,7 @@ slots:
     range: string
     required: true
     description: >
-      Имя нативного типа в диалекте. Отдельный слот от PhysicalField.native_type
+      Имя нативного типа в диалекте. Отдельный слот от SchemaNode.native_type
       (другой контекст; общий URI ломает SchemaLoader merge — ADR-036).
   data_type_ref:
     range: DataType

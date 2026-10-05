@@ -137,7 +137,7 @@ class MutationRequest(BaseModel):
             "add_relationship|update_relationship|delete_relationship|"
             "add_mapping|update_mapping|delete_mapping|"
             "add_physical_object|update_physical_object|delete_physical_object|"
-            "add_physical_field|update_physical_field|delete_physical_field)$"
+            "add_schema_node|update_schema_node|delete_schema_node)$"
         )
     )
     entity: dict | None = None
@@ -145,9 +145,11 @@ class MutationRequest(BaseModel):
     relationship: dict | None = None
     mapping: dict | None = None
     physical_object: dict | None = None
-    physical_field: dict | None = None
+    schema_node: dict | None = None
+    node: dict | None = None
     owner_element_id: str | None = None
     element_id: str | None = None
+    node_ref: str | None = None
     patch: dict | None = None
 
 

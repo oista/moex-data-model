@@ -16,8 +16,13 @@ from moex_dams.projection.er_common import (
     attr_keys_for_entity,
     cardinality_kind,
     fk_roles_for_entity,
+    is_structure_node_ref,
     relation_term_label,
     unique_table_name,
+)
+from moex_dams.rules.data_structure import (
+    scalar_nodes_for_carrier,
+    structures_by_id,
 )
 
 Profile = Literal["logical", "physical", "conceptual"]
@@ -89,9 +94,7 @@ def project_model_package_to_er_scene(
             targets = [str(x) for x in (mapping.get("target_refs") or [])]
             for src in sources:
                 for tgt in targets:
-                    if src.startswith("dams:physical/") and tgt.startswith(
-                        "dams:physical/"
-                    ):
+                    if is_structure_node_ref(src) and is_structure_node_ref(tgt):
                         fk_field_ids.add(src)
 
     if profile == "conceptual":
@@ -229,6 +232,7 @@ def project_model_package_to_er_scene(
                 }
             )
     else:
+        by_structure = structures_by_id(data)
         for obj in data.get("data_carriers") or []:
             if not isinstance(obj, dict):
                 continue
@@ -239,19 +243,17 @@ def project_model_package_to_er_scene(
             if oid:
                 entity_table[oid] = tname
             columns = []
-            for field in obj.get("physical_fields") or []:
-                if not isinstance(field, dict):
-                    continue
+            for node_ref, field in scalar_nodes_for_carrier(obj, by_structure):
                 cname = _ident(
-                    field.get("native_name") or field.get("name"),
+                    field.get("native_name") or field.get("local_key"),
                     fallback="field",
                 )
                 ctype = _ident(field.get("native_type"), fallback="string")
-                fid = str(field.get("element_id") or "")
-                pk = bool(field.get("business_key_kind")) or (
-                    field.get("native_name") == "id" or field.get("name") == "id"
+                pk = bool(field.get("is_primary_key")) or (
+                    field.get("native_name") == "id"
+                    or field.get("local_key") == "id"
                 )
-                fk = bool(fid and fid in fk_field_ids)
+                fk = bool(node_ref in fk_field_ids)
                 if fk:
                     pk = False
                 keys = []
@@ -259,20 +261,19 @@ def project_model_package_to_er_scene(
                     keys.append("PK")
                 if fk:
                     keys.append("FK")
-                if field.get("unique"):
+                if field.get("is_unique") or field.get("unique"):
                     keys.append("UQ")
-                comment = field.get("title")
+                comment = field.get("title") or field.get("description")
                 columns.append(
                     _column(
                         name=cname,
                         type_name=ctype,
-                        element_id=fid,
+                        element_id=node_ref,
                         keys=keys,
                         comment=str(comment) if comment else None,
                     )
                 )
-                if fid:
-                    col_index[fid] = (tname, cname)
+                col_index[node_ref] = (tname, cname)
             nodes.append(
                 {
                     "name": tname,

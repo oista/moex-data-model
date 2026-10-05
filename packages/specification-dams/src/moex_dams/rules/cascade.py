@@ -63,22 +63,37 @@ _CHILD_COLLECTIONS: tuple[tuple[str, str, str | None], ...] = (
     # (collection_key, level_name, nested_collection_key)
     ("logical_entities", "LogicalEntity", "attributes"),
     ("conceptual_entities", "ConceptualEntity", None),
-    ("data_carriers", "DataCarrier", "physical_fields"),
+    ("data_carriers", "DataCarrier", None),
     ("access_points", "AccessPoint", None),
     ("data_containers", "DataContainer", None),
     ("execution_assets", "ExecutionAsset", None),
+    ("data_structures", "DataStructure", "nodes"),
+    ("messages", "Message", None),
 )
 
 _NESTED_LEVEL: dict[str, str] = {
     "attributes": "LogicalAttribute",
-    "physical_fields": "PhysicalField",
+    "nodes": "SchemaNode",
 }
 
 DATA_OWNER_PLACEHOLDER = "org:role/DATA_OWNER_PENDING"
 
 
-def _element_id(el: dict[str, Any], fallback: str) -> str:
-    return str(el.get("element_id") or el.get("name") or fallback)
+def _element_id(
+    el: dict[str, Any],
+    fallback: str,
+    *,
+    parent_id: str | None = None,
+) -> str:
+    if el.get("element_id"):
+        return str(el["element_id"])
+    if parent_id and el.get("local_key"):
+        return f"{parent_id}#{el['local_key']}"
+    if el.get("name"):
+        return str(el["name"])
+    if el.get("local_key"):
+        return str(el["local_key"])
+    return fallback
 
 
 def _slot_declared(el: dict[str, Any], slot: str) -> bool:
@@ -157,15 +172,28 @@ def resolve_governed(body_data: dict[str, Any]) -> dict[str, dict[str, SlotProve
             if not nested_key:
                 continue
             nested_level = _NESTED_LEVEL[nested_key]
+            parent_id = str(child.get("element_id") or child.get("name") or "")
             for nested in child.get(nested_key) or []:
                 if not isinstance(nested, dict):
                     continue
-                _resolve_element(
-                    nested,
-                    level=nested_level,
-                    parent_eff=child_eff,
-                    out=out,
-                )
+                if nested_key == "nodes":
+                    lk = str(nested.get("local_key") or "")
+                    node_for_resolve = dict(nested)
+                    if parent_id and lk:
+                        node_for_resolve["element_id"] = f"{parent_id}#{lk}"
+                    _resolve_element(
+                        node_for_resolve,
+                        level=nested_level,
+                        parent_eff=child_eff,
+                        out=out,
+                    )
+                else:
+                    _resolve_element(
+                        nested,
+                        level=nested_level,
+                        parent_eff=child_eff,
+                        out=out,
+                    )
     return out
 
 
@@ -193,8 +221,17 @@ def iter_cascade_nodes(
             if not nested_key:
                 continue
             nested_level = _NESTED_LEVEL[nested_key]
+            parent_id = str(child.get("element_id") or child.get("name") or "")
             for nested in child.get(nested_key) or []:
-                if isinstance(nested, dict):
+                if not isinstance(nested, dict):
+                    continue
+                if nested_key == "nodes":
+                    lk = str(nested.get("local_key") or "")
+                    node_view = dict(nested)
+                    if parent_id and lk:
+                        node_view["element_id"] = f"{parent_id}#{lk}"
+                    nodes.append((node_view, nested_level, child, level))
+                else:
                     nodes.append((nested, nested_level, child, level))
     return nodes
 

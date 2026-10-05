@@ -22,10 +22,20 @@ data_carriers:
   - element_id: dams:physical/mdm/topic
     name: topic
     asset_kind: stream_topic
-    physical_fields:
-      - element_id: dams:physical/mdm/topic/id
-        name: id
-        carrier_ref: dams:physical/mdm/topic
+    structure_ref: dams:structure/mdm/topic
+data_structures:
+  - element_id: dams:structure/mdm/topic
+    name: topic
+    schema_format: relational
+    root_local_key: root
+    nodes:
+      - local_key: root
+        node_kind: object
+        children: [id]
+      - local_key: id
+        node_kind: scalar
+        native_name: id
+        native_type: string
 mappings:
   - element_id: dams:mapping/mdm/m
     name: m

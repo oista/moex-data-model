@@ -160,6 +160,8 @@ def _collect_ids(data: dict[str, Any]) -> set[str]:
         "execution_assets",
         "mappings",
         "conceptual_entities",
+        "data_structures",
+        "messages",
     ):
         for item in data.get(key) or []:
             if isinstance(item, dict) and item.get("element_id"):
@@ -168,10 +170,11 @@ def _collect_ids(data: dict[str, Any]) -> set[str]:
                 for attr in item.get("attributes") or []:
                     if isinstance(attr, dict) and attr.get("element_id"):
                         ids.add(str(attr["element_id"]))
-            if key == "data_carriers" and isinstance(item, dict):
-                for field in item.get("physical_fields") or []:
-                    if isinstance(field, dict) and field.get("element_id"):
-                        ids.add(str(field["element_id"]))
+            if key == "data_structures" and isinstance(item, dict):
+                sid = str(item.get("element_id") or "")
+                for node in item.get("nodes") or []:
+                    if isinstance(node, dict) and node.get("local_key") and sid:
+                        ids.add(f"{sid}#{node['local_key']}")
     return ids
 
 
@@ -229,14 +232,39 @@ def _iter_targets(
             if isinstance(p, dict):
                 out.append((p, str(p.get("element_id") or p.get("name"))))
         return out
-    if target_class == "PhysicalField":
+    if target_class == "DataStructure":
         out = []
-        for p in data.get("data_carriers") or []:
-            if not isinstance(p, dict):
+        for ds in data.get("data_structures") or []:
+            if isinstance(ds, dict):
+                out.append((ds, str(ds.get("element_id") or ds.get("name"))))
+        return out
+    if target_class == "SchemaNode":
+        out = []
+        for s in data.get("data_structures") or []:
+            if not isinstance(s, dict):
                 continue
-            for f in p.get("physical_fields") or []:
-                if isinstance(f, dict):
-                    out.append((f, str(f.get("element_id") or f.get("name"))))
+            sid = str(s.get("element_id") or "")
+            for n in s.get("nodes") or []:
+                if not isinstance(n, dict):
+                    continue
+                # Leaf field-like nodes (SchemaNode scalars); skip containers.
+                if str(n.get("node_kind") or "") not in ("scalar", "enum"):
+                    continue
+                key = str(n.get("local_key") or "")
+                subject = f"{sid}#{key}" if sid and key else (key or sid or None)
+                out.append((n, subject))
+        return out
+    if target_class == "Message":
+        out = []
+        for msg in data.get("messages") or []:
+            if isinstance(msg, dict):
+                out.append((msg, str(msg.get("element_id") or msg.get("name"))))
+        return out
+    if target_class == "Mapping":
+        out = []
+        for m in data.get("mappings") or []:
+            if isinstance(m, dict):
+                out.append((m, str(m.get("element_id") or m.get("name"))))
         return out
     return []
 
@@ -245,8 +273,7 @@ def _is_data_carrying(obj: dict[str, Any]) -> bool:
     kind = str(obj.get("asset_kind") or "")
     if kind in DATA_CARRYING_KINDS:
         return True
-    fields = obj.get("physical_fields") or []
-    return bool(fields)
+    return bool(obj.get("structure_ref"))
 
 
 def _has_entity_physical_mapping(data: dict[str, Any], physical_id: str) -> bool:
@@ -272,7 +299,7 @@ def _has_field_mapping(
     data: dict[str, Any],
     *,
     logical_attr_id: str | None = None,
-    physical_field_id: str | None = None,
+    schema_node_ref: str | None = None,
 ) -> bool:
     for m in data.get("mappings") or []:
         if not isinstance(m, dict):
@@ -282,7 +309,7 @@ def _has_field_mapping(
         refs = {str(x) for x in (m.get("source_refs") or []) + (m.get("target_refs") or [])}
         if logical_attr_id and logical_attr_id in refs:
             return True
-        if physical_field_id and physical_field_id in refs:
+        if schema_node_ref and schema_node_ref in refs:
             return True
     return False
 
@@ -934,7 +961,51 @@ def _run_conditional(
         )
         return out
 
+    if template == "pdm002_scalar_type":
+        if str(el.get("node_kind") or "") != "scalar":
+            return out
+        if _filled(el.get("native_type")) or _filled(el.get("data_type_ref")):
+            return out
+        out.append(
+            _diag(
+                code=code,
+                severity=sev,
+                message=(
+                    f'SchemaNode "{subject}" (scalar) needs native_type or data_type_ref.'
+                ),
+                subject=subject,
+                remediation=rem,
+                statement=statement,
+                requirement_code=requirement_code,
+            )
+        )
+        return out
+
+    if template == "pdm002_scalar_required":
+        if str(el.get("node_kind") or "") != "scalar":
+            return out
+        if "required" in el:
+            return out
+        out.append(
+            _diag(
+                code=code,
+                severity=sev,
+                message=(
+                    f'SchemaNode "{subject}" (scalar) must declare required '
+                    "(nullable/presence semantics)."
+                ),
+                subject=subject,
+                remediation=rem,
+                statement=statement,
+                requirement_code=requirement_code,
+            )
+        )
+        return out
+
     if template == "pdm004_field_mapping":
+        # Mapping coverage applies to leaf scalar/enum nodes (SchemaNode).
+        if str(el.get("node_kind") or "") not in ("scalar", "enum"):
+            return out
         status = str(el.get("mapping_coverage_status") or "")
         if status in (
             "planned",
@@ -951,7 +1022,7 @@ def _run_conditional(
                         code=code,
                         severity=sev,
                         message=(
-                            f'PhysicalField "{subject}" status {status} '
+                            f'SchemaNode "{subject}" status {status} '
                             "requires mapping_rationale."
                         ),
                         subject=subject,
@@ -961,9 +1032,8 @@ def _run_conditional(
                     )
                 )
             return out
-        fid = str(el.get("element_id") or "")
-        # Also accept mapping with transformation_expression mentioning field
-        has_map = _has_field_mapping(data, physical_field_id=fid)
+        node_ref = str(subject or "")
+        has_map = _has_field_mapping(data, schema_node_ref=node_ref)
         if has_map:
             return out
         out.append(
@@ -971,7 +1041,7 @@ def _run_conditional(
                 code=code,
                 severity=sev,
                 message=(
-                    f'PhysicalField "{subject}" needs field_mapping or '
+                    f'SchemaNode "{subject}" needs field_mapping or '
                     "mapping_coverage_status exception."
                 ),
                 subject=subject,

@@ -61,16 +61,19 @@ class SheetsConfig(BaseModel):
     relationships: SheetSpec | None = None
     conceptual: SheetSpec | None = None
     data_carriers: SheetSpec | None = None
-    physical_fields: SheetSpec | None = None
+    structure_fields: SheetSpec | None = None
     mappings: SheetSpec | None = None
 
     @classmethod
     def model_validate(cls, obj, *args, **kwargs):  # type: ignore[override]
         if isinstance(obj, dict):
-            legacy = "physical" + "_objects"
-            if legacy in obj and "data_carriers" not in obj:
-                obj = dict(obj)
-                obj["data_carriers"] = obj.pop(legacy)
+            obj = dict(obj)
+            legacy_objects = "physical" + "_objects"
+            if legacy_objects in obj and "data_carriers" not in obj:
+                obj["data_carriers"] = obj.pop(legacy_objects)
+            legacy_fields = "physical" + "_fields"
+            if legacy_fields in obj and "structure_fields" not in obj:
+                obj["structure_fields"] = obj.pop(legacy_fields)
         return super().model_validate(obj, *args, **kwargs)
 
 

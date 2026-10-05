@@ -118,6 +118,8 @@ def test_catalog_expressions_all_have_runner_templates() -> None:
         "ref002_cardinality",
         "pdm004_field_mapping",
         "pdm001_structure_ref",
+        "pdm002_scalar_type",
+        "pdm002_scalar_required",
         "atr002_snake_case",
         "cls001_axes_present",
         "flw001_soft_presence",
@@ -492,9 +494,15 @@ def test_pdm001_system_ref_required() -> None:
     assert any("PDM-001" in d.diagnostic_code and "system_ref" in d.diagnostic_message for d in _errors(data))
 
 
-def test_pdm002_native_name_required() -> None:
+def test_pdm002_scalar_type_required() -> None:
     data = _example()
-    data["data_carriers"][0]["physical_fields"][0].pop("native_name", None)
+    node = next(
+        n
+        for n in data["data_structures"][0]["nodes"]
+        if n.get("node_kind") == "scalar"
+    )
+    node.pop("native_type", None)
+    node.pop("data_type_ref", None)
     assert any("PDM-002" in d.diagnostic_code for d in _errors(data))
 
 
@@ -520,8 +528,12 @@ def test_pdm003_technical_only_with_rationale_ok() -> None:
 
 def test_pdm004_field_needs_mapping() -> None:
     data = _example()
-    field = data["data_carriers"][0]["physical_fields"][0]
-    field.pop("mapping_coverage_status", None)
+    node = next(
+        n
+        for n in data["data_structures"][0]["nodes"]
+        if n.get("node_kind") == "scalar"
+    )
+    node.pop("mapping_coverage_status", None)
     data["mappings"] = [
         m for m in data["mappings"] if m.get("mapping_type") != "field_mapping"
     ]

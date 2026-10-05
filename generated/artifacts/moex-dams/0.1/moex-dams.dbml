@@ -253,6 +253,8 @@ conceptual_domains varchar
 value_domains varchar
 data_types varchar
 native_type_bindings varchar
+data_structures varchar
+messages varchar
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
@@ -508,38 +510,6 @@ approved_by_ref varchar
 approved_at datetime
 }
 
-Table PhysicalField {
-element_id varchar [not null, primary key]
-name varchar [not null]
-title varchar
-description varchar [not null]
-aliases varchar
-glossary_term_refs varchar
-tags varchar
-lifecycle_status varchar [not null]
-valid_from datetime
-valid_to datetime
-deprecated_by_ref varchar
-carrier_ref varchar [not null]
-native_name varchar [not null]
-native_type varchar [not null]
-required boolean [not null]
-ordinal_position int
-schema_path varchar
-mapping_coverage_status varchar
-mapping_rationale varchar
-data_owner_ref varchar
-data_steward_ref varchar
-owning_unit_ref varchar
-ownership_inheritance_rule varchar
-governance_classification varchar
-security_classification varchar
-sensitivity_term_refs varchar
-classification_source varchar
-classification_rationale varchar
-policy_refs varchar
-}
-
 Table Mapping {
 element_id varchar [not null, primary key]
 name varchar [not null]
@@ -568,7 +538,6 @@ approved_at datetime
 
 Table HasStructure {
 structure_ref varchar
-schema_dialect varchar
 data_format varchar
 }
 
@@ -653,12 +622,10 @@ sensitivity_term_refs varchar
 classification_source varchar
 classification_rationale varchar
 policy_refs varchar
-physical_fields varchar
 mapping_coverage_status varchar
 mapping_rationale varchar
 DataCarrier_asset_kind varchar [not null]
 structure_ref varchar
-schema_dialect varchar
 data_format varchar
 location_uri varchar
 region varchar
@@ -702,6 +669,7 @@ interface_ref varchar
 operation_name varchar
 http_method varchar
 path_template varchar
+message_refs varchar
 AccessPoint_asset_kind varchar [not null]
 AccessPoint_direction varchar
 protocol varchar
@@ -904,6 +872,83 @@ relationship_types varchar
 include_self boolean
 }
 
+Table EmbeddedElement {
+local_key varchar [not null, primary key]
+EmbeddedElement_description varchar [not null]
+}
+
+Table DataStructure {
+element_id varchar [not null, primary key]
+name varchar [not null]
+title varchar
+description varchar [not null]
+aliases varchar
+glossary_term_refs varchar
+tags varchar
+lifecycle_status varchar [not null]
+valid_from datetime
+valid_to datetime
+deprecated_by_ref varchar
+schema_format varchar [not null]
+schema_dialect varchar
+structure_version varchar [not null]
+root_local_key varchar [not null]
+nodes varchar [not null]
+source_artifact_ref varchar
+source_pointer varchar
+content_digest varchar
+previous_version_ref varchar
+}
+
+Table SchemaNode {
+SchemaNode_native_name varchar [not null]
+node_kind varchar [not null]
+children varchar
+item_node varchar
+data_type_ref varchar
+SchemaNode_native_type varchar [not null]
+nullable boolean
+SchemaNode_required boolean [not null]
+min_occurs int
+max_occurs int
+ordinal_position int
+reference_target varchar
+realizes_attribute_ref varchar
+constraint_expressions varchar
+default_value varchar
+mapping_coverage_status varchar
+mapping_rationale varchar
+column_position int
+is_primary_key boolean
+is_unique boolean
+foreign_key_target varchar
+SchemaNode_description varchar [not null]
+SchemaNode_local_key varchar [not null, primary key]
+local_key varchar [not null, primary key]
+EmbeddedElement_description varchar [not null]
+}
+
+Table Message {
+element_id varchar [not null, primary key]
+name varchar [not null]
+title varchar
+aliases varchar
+glossary_term_refs varchar
+tags varchar
+lifecycle_status varchar [not null]
+valid_from datetime
+valid_to datetime
+deprecated_by_ref varchar
+payload_structure_ref varchar [not null]
+headers_structure_ref varchar
+content_type varchar
+envelope_kind varchar
+envelope_ref varchar
+correlation_hint varchar
+Message_description varchar [not null]
+description varchar [not null]
+}
+
 Table DataFlow {
 element_id varchar [not null, primary key]
 name varchar [not null]
@@ -952,7 +997,7 @@ source_model_ref varchar [not null]
 logical_entity_ref varchar [not null]
 logical_attribute_refs varchar
 carrier_refs varchar
-physical_field_refs varchar
+schema_node_refs varchar
 transformation_mapping_refs varchar
 direction varchar
 }
@@ -1032,7 +1077,7 @@ valid_from datetime
 valid_to datetime
 deprecated_by_ref varchar
 logical_attribute_ref varchar [not null]
-physical_field_refs varchar
+schema_node_refs varchar
 transformation_mapping_ref varchar
 }
 
@@ -1173,6 +1218,8 @@ Ref: ModelPackage.conceptual_domains > ConceptualDomain.element_id
 Ref: ModelPackage.value_domains > ValueDomain.element_id
 Ref: ModelPackage.data_types > DataType.element_id
 Ref: ModelPackage.native_type_bindings > NativeTypeBinding.binding_id
+Ref: ModelPackage.data_structures > DataStructure.element_id
+Ref: ModelPackage.messages > Message.element_id
 Ref: ModelPackage.data_owner_ref > Role.registry_id
 Ref: ModelPackage.data_steward_ref > Role.registry_id
 Ref: ModelPackage.owning_unit_ref > OrganizationUnit.registry_id
@@ -1230,15 +1277,9 @@ Ref: Relationship.relation_term_ref > RelationTerm.element_id
 Ref: RelationTerm.glossary_term_refs > GlossaryTerm.registry_id
 Ref: RelationTerm.scoped_definitions > ScopedDefinition.scoped_definition_id
 Ref: ExternalClassRef.approved_by_ref > Role.registry_id
-Ref: PhysicalField.glossary_term_refs > GlossaryTerm.registry_id
-Ref: PhysicalField.carrier_ref > DataCarrier.element_id
-Ref: PhysicalField.data_owner_ref > Role.registry_id
-Ref: PhysicalField.data_steward_ref > Role.registry_id
-Ref: PhysicalField.owning_unit_ref > OrganizationUnit.registry_id
-Ref: PhysicalField.sensitivity_term_refs > DataClassificationTerm.registry_id
-Ref: PhysicalField.policy_refs > Policy.registry_id
 Ref: Mapping.glossary_term_refs > GlossaryTerm.registry_id
 Ref: Mapping.approved_by_ref > Role.registry_id
+Ref: HasStructure.structure_ref > DataStructure.element_id
 Ref: TechnicalAsset.glossary_term_refs > GlossaryTerm.registry_id
 Ref: TechnicalAsset.TechnicalAsset_system_ref > ITSystem.registry_id
 Ref: TechnicalAsset.parent_ref > TechnicalAsset.element_id
@@ -1257,7 +1298,7 @@ Ref: DataCarrier.data_steward_ref > Role.registry_id
 Ref: DataCarrier.owning_unit_ref > OrganizationUnit.registry_id
 Ref: DataCarrier.sensitivity_term_refs > DataClassificationTerm.registry_id
 Ref: DataCarrier.policy_refs > Policy.registry_id
-Ref: DataCarrier.physical_fields > PhysicalField.element_id
+Ref: DataCarrier.structure_ref > DataStructure.element_id
 Ref: AccessPoint.glossary_term_refs > GlossaryTerm.registry_id
 Ref: AccessPoint.TechnicalAsset_system_ref > ITSystem.registry_id
 Ref: AccessPoint.parent_ref > TechnicalAsset.element_id
@@ -1269,6 +1310,7 @@ Ref: AccessPoint.sensitivity_term_refs > DataClassificationTerm.registry_id
 Ref: AccessPoint.policy_refs > Policy.registry_id
 Ref: AccessPoint.serves_refs > DataCarrier.element_id
 Ref: AccessPoint.interface_ref > AccessPoint.element_id
+Ref: AccessPoint.message_refs > Message.element_id
 Ref: DataContainer.glossary_term_refs > GlossaryTerm.registry_id
 Ref: DataContainer.TechnicalAsset_system_ref > ITSystem.registry_id
 Ref: DataContainer.parent_ref > TechnicalAsset.element_id
@@ -1304,6 +1346,14 @@ Ref: ValueDomain.ValueDomain_data_type_ref > DataType.element_id
 Ref: ValueDomain.conceptual_domain_ref > ConceptualDomain.element_id
 Ref: ValueDomain.permissible_values > PermissibleValue.value_code
 Ref: ValueDomain.dynamic_query > ValueSetQuery.value_set_query_id
+Ref: DataStructure.glossary_term_refs > GlossaryTerm.registry_id
+Ref: DataStructure.nodes > SchemaNode.SchemaNode_local_key
+Ref: DataStructure.previous_version_ref > DataStructure.element_id
+Ref: SchemaNode.data_type_ref > DataType.element_id
+Ref: SchemaNode.realizes_attribute_ref > LogicalAttribute.element_id
+Ref: Message.glossary_term_refs > GlossaryTerm.registry_id
+Ref: Message.payload_structure_ref > DataStructure.element_id
+Ref: Message.headers_structure_ref > DataStructure.element_id
 Ref: DataFlow.glossary_term_refs > GlossaryTerm.registry_id
 Ref: DataFlow.integration_ref > IntegrationReference.registry_id
 Ref: DataFlow.contract_ref > DataContractReference.registry_id
@@ -1322,7 +1372,6 @@ Ref: DataFlowEntityBinding.flow_ref > DataFlow.element_id
 Ref: DataFlowEntityBinding.logical_entity_ref > LogicalEntity.element_id
 Ref: DataFlowEntityBinding.logical_attribute_refs > LogicalAttribute.element_id
 Ref: DataFlowEntityBinding.carrier_refs > DataCarrier.element_id
-Ref: DataFlowEntityBinding.physical_field_refs > PhysicalField.element_id
 Ref: DataFlowEntityBinding.transformation_mapping_refs > Mapping.element_id
 Ref: DataModelBinding.glossary_term_refs > GlossaryTerm.registry_id
 Ref: DataModelBinding.contract_ref > DataContractReference.registry_id
@@ -1339,7 +1388,6 @@ Ref: SelectedEntity.selected_attributes > SelectedAttribute.element_id
 Ref: SelectedEntity.carrier_refs > DataCarrier.element_id
 Ref: SelectedAttribute.glossary_term_refs > GlossaryTerm.registry_id
 Ref: SelectedAttribute.logical_attribute_ref > LogicalAttribute.element_id
-Ref: SelectedAttribute.physical_field_refs > PhysicalField.element_id
 Ref: SelectedAttribute.transformation_mapping_ref > Mapping.element_id
 Ref: Metric.glossary_term_refs > GlossaryTerm.registry_id
 Ref: Metric.grain_entity_refs > LogicalEntity.element_id

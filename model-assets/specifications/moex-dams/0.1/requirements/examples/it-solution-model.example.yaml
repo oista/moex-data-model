@@ -1,16 +1,15 @@
 element_id: dams:model/example-min/1.0.0
 name: example_min_solution_model
 title: Минимальный пример модели ИТ-решения
-description: Кураторский пример ModelPackage, заполняющий референсный скелет из formal_checks
-  каталога требований уровня ИТ-решения.
+description: Кураторский пример ModelPackage, заполняющий референсный скелет из formal_checks каталога требований уровня ИТ-решения.
 lifecycle_status: draft
 api_version: dams.moex/v0.1
 model_version: 1.0.0
 implementation_scope: solution
 solution_ref: eam:solution/EXAMPLE_MIN
 data_owner_ref: org:role/EXAMPLE_DATA_OWNER
-ownership_inheritance_rule: Владелец данных наследуется от ИТ-решения eam:solution/EXAMPLE_MIN,
-  если на сущности не задан локальный override.
+ownership_inheritance_rule: Владелец данных наследуется от ИТ-решения eam:solution/EXAMPLE_MIN, если на сущности не задан
+  локальный override.
 domain_contexts:
 - element_id: dams:context/example-min
   name: ExampleMinContext
@@ -34,14 +33,12 @@ logical_entities:
   business_importance: high
   governance_classification: internal
   data_owner_ref: org:role/EXAMPLE_DATA_OWNER
-  identity_rule: Сторона идентифицируется стабильным идентификатором стороны в контуре
-    данного ИТ-решения.
+  identity_rule: Сторона идентифицируется стабильным идентификатором стороны в контуре данного ИТ-решения.
   business_key_kind: local
   key_attribute_refs:
   - dams:logical/example-min/Party/party_id
   conceptual_alignment_status: local-only
-  alignment_rationale: Демонстрационная сущность примера; корпоративный аналог не
-    требуется в минимальном пакете.
+  alignment_rationale: Демонстрационная сущность примера; корпоративный аналог не требуется в минимальном пакете.
   attributes:
   - element_id: dams:logical/example-min/Party/party_id
     name: party_id
@@ -71,8 +68,7 @@ logical_entities:
   key_attribute_refs:
   - dams:logical/example-min/Account/account_id
   conceptual_alignment_status: pending
-  alignment_rationale: Связь с корпоративным понятием счёта будет утверждена после
-    согласования.
+  alignment_rationale: Связь с корпоративным понятием счёта будет утверждена после согласования.
   attributes:
   - element_id: dams:logical/example-min/Account/account_id
     name: account_id
@@ -83,8 +79,7 @@ logical_entities:
     required: true
     multivalued: false
     mapping_coverage_status: planned
-    mapping_rationale: Физическое представление счёта будет добавлено в следующей
-      итерации.
+    mapping_rationale: Физическое представление счёта будет добавлено в следующей итерации.
     data_type_ref: dams:datatype/identifier
 relationships:
 - element_id: dams:rel/example-min/party-account
@@ -117,7 +112,7 @@ mappings:
   source_refs:
   - dams:logical/example-min/Party/party_id
   target_refs:
-  - dams:physical/example-min/party-topic/party_id
+  - dams:structure/example-min/party-topic#party_id
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 data_carriers:
@@ -132,20 +127,34 @@ data_carriers:
   technology: Apache Kafka
   direction: outbound
   mapping_coverage_status: mapped
-  physical_fields:
-  - element_id: dams:physical/example-min/party-topic/party_id
-    name: party_id
-    description: Физическое поле идентификатора стороны.
-    lifecycle_status: active
-    native_name: party_id
-    native_type: string
-    required: true
-    mapping_coverage_status: mapped
-    carrier_ref: dams:physical/example-min/party-topic
   asset_namespace: apache kafka://EXAMPLE_CORE
   asset_kind: stream_topic
-  structure_ref: https://schemas.moex.com/example-min/party-changed/1.0.0
+  structure_ref: dams:structure/example-min/party-topic
   tags:
-  - transitional
   - namespace_heuristic
 value_domains: []
+data_structures:
+- element_id: dams:structure/example-min/party-topic
+  name: party_changed_topic
+  description: Relational structure for party_changed_topic
+  lifecycle_status: active
+  schema_format: relational
+  structure_version: 1.0.0
+  root_local_key: root
+  nodes:
+  - local_key: root
+    native_name: party_changed_topic
+    node_kind: object
+    description: root of party_changed_topic
+    children:
+    - party_id
+  - local_key: party_id
+    native_name: party_id
+    node_kind: scalar
+    description: Физическое поле идентификатора стороны.
+    native_type: string
+    required: true
+    ordinal_position: 1
+    column_position: 1
+    mapping_coverage_status: mapped
+  source_artifact_ref: https://schemas.moex.com/example-min/party-changed/1.0.0

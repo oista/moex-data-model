@@ -13,8 +13,6 @@
         click LogicalEntity href "../LogicalEntity"
       HasPolicyBindings <|-- LogicalAttribute
         click LogicalAttribute href "../LogicalAttribute"
-      HasPolicyBindings <|-- PhysicalField
-        click PhysicalField href "../PhysicalField"
       HasPolicyBindings <|-- TechnicalAsset
         click TechnicalAsset href "../TechnicalAsset"
       HasPolicyBindings <|-- Metric
