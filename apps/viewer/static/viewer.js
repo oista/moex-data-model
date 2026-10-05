@@ -6838,8 +6838,7 @@
     const layout = document.createElement("div");
     layout.className = "glossary-relations-layout";
 
-    const upper = document.createElement("div");
-    upper.className = "glossary-relations-pane glossary-relations-pane--picker";
+    // Toolbar above the split so filter/search rows do not crush the picker table.
     const toolbar = document.createElement("div");
     toolbar.className = "section-toolbar";
     const filterSelects = document.createElement("div");
@@ -6882,7 +6881,9 @@
     const chips = document.createElement("div");
     chips.className = "chips";
     toolbar.appendChild(chips);
-    upper.appendChild(toolbar);
+
+    const upper = document.createElement("div");
+    upper.className = "glossary-relations-pane glossary-relations-pane--picker";
     const upperScroll = document.createElement("div");
     upperScroll.className = "table-scroll";
     const upperTable = document.createElement("table");
@@ -6905,6 +6906,7 @@
     lower.appendChild(lowerEmpty);
     lower.appendChild(lowerScroll);
 
+    layout.appendChild(toolbar);
     layout.appendChild(upper);
     layout.appendChild(lower);
 
@@ -6985,6 +6987,46 @@
         .join("");
     }
 
+    function emptyNeighboursMessage() {
+      let withEdges = 0;
+      let hiddenBecauseSelected = 0;
+      const selectedKeys = new Set();
+      selected.forEach((id) => {
+        selectedKeys.add(String(id));
+        selectedKeys.add(canonicalGlossaryId(id));
+      });
+      selected.forEach((fromId) => {
+        const fromItem = resolveItemInGlossary(section, fromId);
+        const seeAlso = Array.isArray(fromItem?.attributes?.see_also)
+          ? fromItem.attributes.see_also
+          : [];
+        if (seeAlso.length) withEdges += 1;
+        seeAlso.forEach((entry) => {
+          const target = resolveItemInGlossary(section, relTargetId(entry));
+          if (!target) return;
+          if (
+            selectedKeys.has(target.id) ||
+            selectedKeys.has(canonicalGlossaryId(target.id))
+          ) {
+            hiddenBecauseSelected += 1;
+          }
+        });
+      });
+      if (withEdges === 0) {
+        return (
+          "Нет ассоциативных связей (see also) у выбранных терминов. " +
+          "Иерархия is_a/mixin — на вкладке «Иерархия»."
+        );
+      }
+      if (hiddenBecauseSelected > 0) {
+        return (
+          "Все связанные термины уже входят в выборку. " +
+          "Снимите часть отметок, чтобы увидеть их внизу."
+        );
+      }
+      return "Нет ассоциативных связей у выбранных терминов.";
+    }
+
     function paintLower() {
       if (!selected.size) {
         lowerEmpty.hidden = false;
@@ -6997,8 +7039,7 @@
       const neigh = collectGlossarySeeAlsoNeighbours(section, selected);
       if (!neigh.size) {
         lowerEmpty.hidden = false;
-        lowerEmpty.textContent =
-          "Нет ассоциативных связей у выбранных терминов.";
+        lowerEmpty.textContent = emptyNeighboursMessage();
         lowerScroll.hidden = true;
         lowerTable.innerHTML = "";
         return;

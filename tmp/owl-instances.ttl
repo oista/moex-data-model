@@ -1,0 +1,11 @@
+@prefix dams: <https://data.moex.com/dams/> .
+
+<https://data.moex.com/dams/model/ontology-fixture/1.0.0> a dams:ModelPackage ;
+    dams:api_version "dams.moex/v0.1" ;
+    dams:description "Minimal ModelPackage that conforms to moex-dams SHACL shapes." ;
+    dams:implementation_scope "solution" ;
+    dams:lifecycle_status "draft" ;
+    dams:model_version "1.0.0" ;
+    dams:name "ontology_fixture_valid" ;
+    dams:title "Ontology SHACL fixture (valid)" .
+
