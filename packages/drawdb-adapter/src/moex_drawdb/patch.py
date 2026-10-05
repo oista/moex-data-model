@@ -699,6 +699,9 @@ def apply_model_patch(
                             attr["data_type_ref"] = p["data_type_ref"]
                         attr["required"] = p["required"]
                         attr.pop("logical_type", None)
+                        attr.pop("format_pattern", None)
+                        attr.pop("value_set_ref", None)
+                        attr.pop("unit_code", None)
         elif kind is PatchOpKind.DELETE_ATTRIBUTE:
             for ent in out.get("logical_entities") or []:
                 if ent.get("element_id") != p["owner_element_id"]:

@@ -1,0 +1,46 @@
+# ARCHIVED — not imported by moex-dams / moex-core (PR-5 / ADR-034 step 2).
+# Historical LinkML module that held deprecated LogicalAttribute slots during the
+# deprecation window. Kept for migration archaeology only.
+#
+# Original id: https://data.moex.com/dams/deprecated-slots/v0.1
+# Do not re-import into the live schema.
+
+id: https://data.moex.com/dams/deprecated-slots/v0.1-archived
+name: moex_deprecated_slots_archived
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  dams: https://data.moex.com/dams/
+imports:
+  - linkml:types
+default_prefix: dams
+default_range: string
+
+comments:
+  - >
+    ARCHIVE ONLY. Slots below were removed from LogicalAttribute in PR-5.
+    format_pattern / unit_code live on ValueDomain in moex-datatypes.yaml.
+
+slots:
+  logical_type:
+    range: string
+    required: false
+    deprecated: >
+      ARCHIVED. Replaced by data_type_ref / value_domain_ref.
+    deprecated_element_has_possible_replacement: dams:data_type_ref
+  value_set_ref:
+    range: uri
+    deprecated: >
+      ARCHIVED. Replaced by ValueDomain.value_set_source / value_domain_ref.
+    deprecated_element_has_possible_replacement: dams:value_domain_ref
+  format_pattern:
+    range: string
+    deprecated: >
+      ARCHIVED on LogicalAttribute. ValueDomain.format_pattern remains live.
+    deprecated_element_has_possible_replacement: dams:value_domain_ref
+  unit_code:
+    range: string
+    deprecated: >
+      ARCHIVED on LogicalAttribute. ValueDomain.unit_code remains live.
+    deprecated_element_has_possible_replacement: dams:value_domain_ref

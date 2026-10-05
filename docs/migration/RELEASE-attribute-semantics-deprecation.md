@@ -1,7 +1,8 @@
 # Release: Attribute semantics — PR-5 slot removal
 
 **Date:** 2026-10-05  
-**Scope:** in-repository models and DAMS 0.1 draft only  
+**Schema version:** **1.0.0** (major; asset path `moex-dams/0.1/` unchanged)  
+**Scope:** in-repository models and DAMS  
 **Status:** complete (deprecated LogicalAttribute slots removed)
 
 ## What changed vs deprecation window
@@ -9,20 +10,23 @@
 | Artifact | After PR-5 |
 |---|---|
 | Schema slots `logical_type`, `format_pattern`, `value_set_ref`, `unit_code` on LogicalAttribute | **Removed** |
-| `moex-deprecated-slots.yaml` | **Deleted** |
+| Live `moex-deprecated-slots.yaml` | **Not imported**; archive at `docs/migration/archive/moex-deprecated-slots.yaml` |
 | Solution ModelPackage YAML | Must expose `data_type_ref` and/or `value_domain_ref` only |
 | ValueDomain `format_pattern` / `unit_code` | Unchanged |
-| DataModelBinding digests | Unchanged policy (ADR-031) |
+| Semantic diff clearing was-deprecated keys | **BREAKING** (`DAMS-DIFF-DEPRECATE-REMOVE`, message contains «was deprecated») |
+| DataModelBinding digests | Non-demo: new revision + `compatibility_baseline_ref` (ADR-031); demo may recompute |
 | ConceptualProperty | Propose-only; never auto-created |
+| `LogicalDataTypeEnum` | Kept as starter DataType name catalogue (ADR-036) |
 
 ## Compatibility
 
-This is a **breaking** schema change for any payload still carrying the removed
-attribute keys. In-repo models and fixtures were stripped; migration `--apply`
-continues to accept legacy keys as input and strips them on write.
+Breaking schema change for payloads still carrying removed attribute keys.
+In-repo models stripped; migration `--apply` accepts legacy keys as input and strips them on write. Consumers no longer fall back to removed slots.
 
 ## References
 
 - [CHANGELOG-attribute-semantics.md](CHANGELOG-attribute-semantics.md)
+- [golden-diff-attribute-semantics.md](golden-diff-attribute-semantics.md)
 - [ADR-034](../adr/ADR-034-lightweight-conceptual-property.md)
+- [ADR-036](../adr/ADR-036-datatype-system.md)
 - [ADR-037](../adr/ADR-037-attribute-semantics-migration.md)

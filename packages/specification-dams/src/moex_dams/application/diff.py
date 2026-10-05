@@ -290,11 +290,11 @@ def _classify_item_delta(
         if only_deprecation:
             out.append(
                 SemanticChange(
-                    change_code="DAMS-DIFF-DEPRECATE",
-                    category=ChangeCategory.DEPRECATION,
+                    change_code="DAMS-DIFF-DEPRECATE-REMOVE",
+                    category=ChangeCategory.BREAKING,
                     subject_ref=eid,
                     message=(
-                        f"Deprecated representation slots cleared on {eid}: "
+                        f"Removed slots (was deprecated) on {eid}: "
                         f"{sorted(remaining)}"
                     ),
                     path=",".join(sorted(remaining)),

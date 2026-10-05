@@ -1,17 +1,20 @@
 ﻿# Attribute semantics migration (ConceptualProperty / Domains)
 
-## 2026-10-05 — PR-5 removal (strict typing)
+## 2026-10-05 — PR-5 removal (strict typing) — schema **1.0.0** (major)
 
-Breaking for DAMS 0.1 draft (in-repo only):
+Breaking for DAMS (path `0.1/` retained; schema `version` field → `1.0.0`):
 
 - Removed LogicalAttribute slots: `logical_type`, `format_pattern`, `value_set_ref`,
   `unit_code`.
-- Deleted schema module `moex-deprecated-slots.yaml` (imports dropped from
-  `moex-core` / `moex-dams`).
+- Live schema no longer imports `moex-deprecated-slots`; archive kept at
+  `docs/migration/archive/moex-deprecated-slots.yaml`.
 - `format_pattern` / `unit_code` retained on `ValueDomain` (`moex-datatypes.yaml`).
 - Strict rule: attributes require `data_type_ref` and/or `value_domain_ref`
   (`DAMS-SEM-ATTR-TYPE` / ATR-001.c2 / ATR-006).
+- Semantic diff: clearing was-deprecated slots → `BREAKING` /
+  `DAMS-DIFF-DEPRECATE-REMOVE` (message contains «was deprecated»).
 - Migration `--apply` strips remaining deprecated keys; consumers write typed refs only.
+- `LogicalDataTypeEnum` retained as seed catalogue for starter DataType (ADR-036).
 - Residue: `tests/architecture/test_attribute_semantics_residue.py`
 
 ## 2026-10-05 — Deprecation release (pre–PR-5)

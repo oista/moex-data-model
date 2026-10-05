@@ -176,3 +176,53 @@ def test_governance_change(
     gov = [c for c in report.changes if c.change_code == "DAMS-DIFF-GOV"]
     assert gov
     assert gov[0].category is ChangeCategory.GOVERNANCE
+
+
+def test_clearing_was_deprecated_slots_is_breaking(
+    dams_schema: Path, tmp_path: Path
+) -> None:
+    """PR-5: removing formerly-deprecated attr keys is BREAKING + 'was deprecated'."""
+    left_data = {
+        "element_id": "dams:model/t/0.1",
+        "name": "t",
+        "implementation_scope": "solution",
+        "logical_entities": [
+            {
+                "element_id": "dams:logical/t/E",
+                "name": "E",
+                "description": "e",
+                "lifecycle_status": "active",
+                "attributes": [
+                    {
+                        "element_id": "dams:logical/t/E/a",
+                        "name": "a",
+                        "description": "a",
+                        "lifecycle_status": "active",
+                        "owner_entity_ref": "dams:logical/t/E",
+                        "logical_type": "string",
+                        "data_type_ref": "dams:datatype/string",
+                        "required": True,
+                        "multivalued": False,
+                    }
+                ],
+            }
+        ],
+    }
+    right_data = copy.deepcopy(left_data)
+    del right_data["logical_entities"][0]["attributes"][0]["logical_type"]
+    left = _write_yaml(tmp_path / "left.yaml", left_data)
+    right = _write_yaml(tmp_path / "right.yaml", right_data)
+    report = diff_implementations(
+        schema_path=dams_schema,
+        left_path=left,
+        right_path=right,
+    )
+    hits = [
+        c
+        for c in report.changes
+        if c.change_code == "DAMS-DIFF-DEPRECATE-REMOVE"
+    ]
+    assert hits
+    assert hits[0].category is ChangeCategory.BREAKING
+    assert "was deprecated" in hits[0].message
+    assert report.has_breaking is True

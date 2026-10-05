@@ -238,7 +238,7 @@ def map_er_dictionary(
         required = _as_bool(row.get("required"))
         if is_pk:
             required = True
-        logical_type = profile.map_type(_opt_str(row.get("type")), is_pk=is_pk)
+        type_leaf = profile.map_type(_opt_str(row.get("type")), is_pk=is_pk)
         attr_curie = ids.logical_attr_id(prefix, slug, entity_name, attr_name)
         attr = {
             "element_id": attr_curie,
@@ -247,7 +247,7 @@ def map_er_dictionary(
             "description": description,
             "lifecycle_status": defaults.lifecycle_status,
             "owner_entity_ref": owner,
-            "data_type_ref": f"dams:datatype/{logical_type}",
+            "data_type_ref": f"dams:datatype/{type_leaf}",
             "required": required,
             "multivalued": False,
         }

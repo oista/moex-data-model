@@ -186,6 +186,26 @@ def test_attribute_without_type_errors():
     assert "DAMS-SEM-ATTR-TYPE" in _codes(check_semantic_layer(data))
 
 
+def test_attribute_with_only_removed_slots_errors():
+    """PR-5 negative: legacy keys alone do not satisfy typed representation."""
+    from pathlib import Path
+
+    import yaml
+
+    fixture = (
+        Path(__file__).resolve().parent
+        / "fixtures"
+        / "semantic"
+        / "attr-removed-slots-only.yaml"
+    )
+    data = yaml.safe_load(fixture.read_text(encoding="utf-8"))
+    diags = check_semantic_layer(data)
+    assert "DAMS-SEM-ATTR-TYPE" in _codes(diags)
+    errs = [d for d in diags if d.diagnostic_code == "DAMS-SEM-ATTR-TYPE"]
+    assert errs
+    assert errs[0].severity is DiagnosticSeverity.ERROR
+
+
 def test_explicit_decision_requires_rationale():
     data = {
         "implementation_scope": "enterprise",

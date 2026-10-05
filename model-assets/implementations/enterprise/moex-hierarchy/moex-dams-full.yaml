@@ -2,7 +2,7 @@
 # Source: model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml
 name: moex_dams
 id: https://data.moex.com/dams/v0.1
-version: 0.1.0
+version: 1.0.0
 imports:
 - linkml:types
 - moex-types
@@ -7614,6 +7614,6 @@ classes:
     class_uri: dams:RequirementCatalog
 metamodel_version: 1.11.0
 source_file: moex-dams.yaml
-source_file_date: '2026-10-05T23:25:53'
+source_file_date: '2026-10-05T23:37:18'
 source_file_size: 1969
-generation_date: '2026-10-05T23:33:27'
+generation_date: '2026-10-05T23:39:08'

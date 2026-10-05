@@ -261,12 +261,8 @@ function mutateData(
       const ownerId = String(payload.owner_element_id || "").trim();
       const eid = String(attr.element_id || "").trim();
       const name = String(attr.name || "").trim();
-      const legacyLt = String(attr.logical_type || "").trim();
-      let dataTypeRef = String(attr.data_type_ref || "").trim();
+      const dataTypeRef = String(attr.data_type_ref || "").trim();
       const valueDomainRef = String(attr.value_domain_ref || "").trim();
-      if (legacyLt && !dataTypeRef && !valueDomainRef) {
-        dataTypeRef = `dams:datatype/${legacyLt}`;
-      }
       if (!ownerId || !eid || !name || !(dataTypeRef || valueDomainRef)) {
         throw new YamlMutateError(
           "owner_element_id, element_id, name, and data_type_ref or value_domain_ref are required",

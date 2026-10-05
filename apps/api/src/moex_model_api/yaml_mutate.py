@@ -139,10 +139,6 @@ def add_logical_attribute(
     name = str(attr.get("name") or "").strip()
     data_type_ref = str(attr.get("data_type_ref") or "").strip()
     value_domain_ref = str(attr.get("value_domain_ref") or "").strip()
-    # Legacy input: map logical_type → data_type_ref when typed refs absent
-    legacy_lt = str(attr.get("logical_type") or "").strip()
-    if legacy_lt and not data_type_ref and not value_domain_ref:
-        data_type_ref = f"dams:datatype/{legacy_lt}"
     if not owner or not eid or not name:
         raise MutationError(
             "owner_element_id, element_id, and name are required"

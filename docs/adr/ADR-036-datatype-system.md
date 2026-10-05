@@ -27,9 +27,11 @@ superseded_by: []
   (не переиспользовать строковый `timezone_policy` атрибута).
 - Стартовый набор: значения `LogicalDataTypeEnum` + `float`, `duration`, `array`;
   у каждого — `xsd_datatype` / `linkml_type`.
-- `LogicalDataTypeEnum` остаётся на переходном этапе (deprecated `logical_type`);
-  судьба после удаления deprecated-слотов — open question (оставить как projection
-  или удалить).
+- `LogicalDataTypeEnum` **оставлен** как каталог имён стартового набора
+  `DataType` (seed values + `float` / `duration` / `array`). После PR-5 слот
+  `logical_type` удалён; enum **не** является range атрибута и не участвует в
+  валидации представления. Миграция/ingest могут маппить имя типа →
+  `dams:datatype/{name}`.
 - Коллекции `data_types` / `native_type_bindings` на `ModelPackage`; корпоративный
   реестр — enterprise-пакет (имя/путь — open: рядом с КМД или отдельный SpecImpl).
 - DataType / NativeTypeBinding допустимы только в корпоративном реестре типов.
