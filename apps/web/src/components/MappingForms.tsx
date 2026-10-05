@@ -17,6 +17,8 @@ type MapSummary = {
 
 type Props = {
   workspaceId: string;
+  implementationId: string;
+  idNamespace: string;
   content: string;
   onDocument: (doc: WorkspaceDocument) => void;
   onBeforeMutate?: () => Promise<void>;
@@ -121,6 +123,8 @@ function textToRefs(text: string): string[] {
 
 export function MappingForms({
   workspaceId,
+  implementationId,
+  idNamespace,
   content,
   onDocument,
   onBeforeMutate,
@@ -182,7 +186,7 @@ export function MappingForms({
     selected?.target_refs,
   ]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [newId, setNewId] = useState("dams:mapping/trading/new");
+  const [newId, setNewId] = useState(`dams:mapping/${idNamespace}/new`);
   const [newName, setNewName] = useState("map_new");
   const [newDescription, setNewDescription] = useState("New mapping");
   const [newSources, setNewSources] = useState("");
@@ -194,7 +198,7 @@ export function MappingForms({
     mutationFn: async (body: DocumentMutation) => {
       if (onBeforeMutate) await onBeforeMutate();
       onOptimisticOp?.(body);
-      return api.mutateDocument(workspaceId, body);
+      return api.mutateDocument(workspaceId, implementationId, body);
     },
     onSuccess: onDocument,
     onError: () => onOptimisticRollback?.(),

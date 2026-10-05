@@ -165,7 +165,13 @@ class ModelIndexProvider(Protocol):
         elements: list[IndexElement],
     ) -> str: ...
 
-    def search(self, q: str, *, limit: int = 50) -> list[ElementHit]: ...
+    def search(
+        self,
+        q: str,
+        *,
+        limit: int = 50,
+        implementation_id: str | None = None,
+    ) -> list[ElementHit]: ...
 
 
 class AuditStore(Protocol):

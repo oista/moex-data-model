@@ -71,6 +71,8 @@ function parsePhysical(content: string): {
 
 type Props = {
   workspaceId: string;
+  implementationId: string;
+  idNamespace: string;
   content: string;
   onDocument: (doc: WorkspaceDocument) => void;
   onBeforeMutate?: () => Promise<void>;
@@ -82,6 +84,8 @@ type Props = {
 
 export function PhysicalForms({
   workspaceId,
+  implementationId,
+  idNamespace,
   content,
   onDocument,
   onBeforeMutate,
@@ -180,7 +184,7 @@ export function PhysicalForms({
     pendingFieldFocus,
   ]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [objId, setObjId] = useState("dams:physical/trading/new-object");
+  const [objId, setObjId] = useState(`dams:physical/${idNamespace}/new-object`);
   const [objName, setObjName] = useState("new_object");
   const [objTitle, setObjTitle] = useState("");
   const [objKind, setObjKind] = useState("table");
@@ -193,7 +197,7 @@ export function PhysicalForms({
     mutationFn: async (body: DocumentMutation) => {
       if (onBeforeMutate) await onBeforeMutate();
       onOptimisticOp?.(body);
-      return api.mutateDocument(workspaceId, body);
+      return api.mutateDocument(workspaceId, implementationId, body);
     },
     onSuccess: onDocument,
     onError: () => onOptimisticRollback?.(),

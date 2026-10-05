@@ -11,8 +11,8 @@ from pathlib import Path
 from uuid import uuid4
 
 import yaml
-from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, Request, Response, UploadFile
-from fastapi.responses import PlainTextResponse
+from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, Query, Request, Response, UploadFile
+from fastapi.responses import JSONResponse, PlainTextResponse
 from pydantic import BaseModel, Field
 from ruamel.yaml import YAML
 from sqlalchemy.orm import Session, sessionmaker
@@ -22,7 +22,8 @@ from moex_dams.application.diff import diff_implementations
 from moex_drawdb import DrawDbProjectionService
 from moex_git import FileChange, make_git_provider
 from moex_git.ports import GitProvider
-from moex_model_cli.bootstrap import SlicePaths, find_repo_root
+from moex_model_cli.asset_registry import FilesystemImplementationCatalog
+from moex_model_cli.bootstrap import find_repo_root
 from moex_model_cli.commands.compile import run_compile
 from moex_model_api.auth import DevAuthMiddleware
 from moex_model_api.db import models as orm
@@ -39,6 +40,11 @@ from moex_model_api.db.stores import (
 )
 from moex_model_api.diagnostics import diagnostic_record
 from moex_model_api.diagram_sessions import DiagramSession, DiagramSessionStore
+from moex_model_api.implementation_support import (
+    is_workbench_editable,
+    paths_for_asset,
+    relative_body_path,
+)
 from moex_model_api.indexing import elements_from_package
 from moex_model_api.ports import (
     ArtifactRecord,
@@ -53,6 +59,12 @@ from moex_model_api.transform_catalog import (
     resolve_spec_path,
 )
 from moex_model_api.yaml_mutate import MutationConflict, MutationError, apply_mutation
+from moex_modeling import (
+    AssetResolutionError,
+    ImplementationAsset,
+    ImplementationCatalog,
+    ImplementationNotFound,
+)
 
 
 class ConformanceResponse(BaseModel):
@@ -63,7 +75,7 @@ class ConformanceResponse(BaseModel):
 
 
 class ValidationRunRequest(BaseModel):
-    implementation_id: str = Field(default="moex:implementation:trading:1.0.0")
+    implementation_id: str
     workspace_id: str = Field(default="ws-default")
 
 
@@ -93,7 +105,7 @@ class WorkspaceOut(BaseModel):
 class JobCreate(BaseModel):
     kind: str = Field(pattern="^(validate|compile)$")
     workspace_id: str
-    implementation_id: str = "moex:implementation:trading:1.0.0"
+    implementation_id: str
     source: str = Field(default="published", pattern="^(published|draft)$")
 
 
@@ -158,8 +170,8 @@ class SemanticDiffOut(BaseModel):
 
 class PublicationCreate(BaseModel):
     workspace_id: str
-    implementation_id: str = "moex:implementation:trading:1.0.0"
-    title: str = "Workbench publish trading draft"
+    implementation_id: str
+    title: str = "Workbench publish draft"
     base_ref: str = "HEAD"
 
 
@@ -265,6 +277,7 @@ class ElementHitOut(BaseModel):
 
 
 class DiagramCreate(BaseModel):
+    implementation_id: str
     profile: str = Field(default="logical", pattern="^(logical|physical)$")
 
 
@@ -316,7 +329,11 @@ class ImplementationOut(BaseModel):
     id: str
     slug: str
     title: str
+    version: str
     implementation_path: str
+    implementation_kind: str
+    implementation_profile: str | None = None
+    workbench_editable: bool = False
 
 
 def _actor(request: Request) -> str:
@@ -349,20 +366,39 @@ def create_app(
     *,
     database_url: str | None = None,
     git_provider: GitProvider | None = None,
+    implementation_catalog: ImplementationCatalog | None = None,
 ) -> FastAPI:
     engine = make_engine(database_url)
     init_db(engine)
     factory: sessionmaker[Session] = session_factory(engine)
+    repo_root = find_repo_root()
+    catalog: ImplementationCatalog = (
+        implementation_catalog
+        if implementation_catalog is not None
+        else FilesystemImplementationCatalog(repo_root)
+    )
 
     app = FastAPI(title="MOEX Model API", version="0.5.0")
     app.add_middleware(DevAuthMiddleware)
     app.state.engine = engine
     app.state.session_factory = factory
-    app.state.git_provider = git_provider or make_git_provider(
-        repo_root=find_repo_root()
-    )
+    app.state.git_provider = git_provider or make_git_provider(repo_root=repo_root)
     app.state.diagram_sessions = DiagramSessionStore()
     app.state.drawdb = DrawDbProjectionService()
+    app.state.implementation_catalog = catalog
+    app.state.repo_root = repo_root
+
+    @app.exception_handler(ImplementationNotFound)
+    async def _not_found_handler(
+        _request: Request, exc: ImplementationNotFound
+    ) -> JSONResponse:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
+
+    @app.exception_handler(AssetResolutionError)
+    async def _asset_error_handler(
+        _request: Request, exc: AssetResolutionError
+    ) -> JSONResponse:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
 
     def get_session():
         session = factory()
@@ -380,56 +416,73 @@ def create_app(
         SqlIdentityStore(session).ensure_user(actor)
         return actor
 
+    def _asset(token: str) -> ImplementationAsset:
+        return catalog.resolve(token)
+
+    def _paths(asset: ImplementationAsset):
+        return paths_for_asset(root=repo_root, catalog=catalog, asset=asset)
+
+    def _require_editable(asset: ImplementationAsset) -> None:
+        if not is_workbench_editable(asset):
+            raise HTTPException(
+                status_code=409,
+                detail=(
+                    f"{asset.id} is not editable in Workbench "
+                    "(requires linkml + dams-data-model)"
+                ),
+            )
+
+    def _implementation_out(asset: ImplementationAsset) -> ImplementationOut:
+        return ImplementationOut(
+            id=asset.id,
+            slug=asset.slug,
+            title=asset.title,
+            version=asset.version,
+            implementation_path=relative_body_path(repo_root, asset),
+            implementation_kind=asset.implementation_kind,
+            implementation_profile=asset.implementation_profile,
+            workbench_editable=is_workbench_editable(asset),
+        )
+
     @app.get("/health")
     def health() -> dict[str, str]:
         return {"status": "ok"}
 
     @app.get("/implementations", response_model=list[ImplementationOut])
     def list_implementations() -> list[ImplementationOut]:
-        root = find_repo_root()
-        paths = SlicePaths.resolve(root=root)
-        try:
-            rel = paths.implementation.relative_to(paths.root).as_posix()
-        except ValueError:
-            rel = paths.implementation.as_posix()
-        return [
-            ImplementationOut(
-                id="moex:implementation:trading:1.0.0",
-                slug="trading",
-                title="Trading platform",
-                implementation_path=rel,
-            )
-        ]
+        return [_implementation_out(a) for a in catalog.list()]
 
     @app.get(
-        "/implementations/trading/body",
+        "/implementations/{implementation_id}",
+        response_model=ImplementationOut,
+    )
+    def get_implementation(implementation_id: str) -> ImplementationOut:
+        return _implementation_out(_asset(implementation_id))
+
+    @app.get(
+        "/implementations/{implementation_id}/body",
         response_model=ImplementationBodyOut,
     )
-    def trading_body() -> ImplementationBodyOut:
-        root = find_repo_root()
-        paths = SlicePaths.resolve(root=root)
-        text = paths.implementation.read_text(encoding="utf-8")
-        try:
-            rel = paths.implementation.relative_to(paths.root).as_posix()
-        except ValueError:
-            rel = paths.implementation.as_posix()
+    def implementation_body(implementation_id: str) -> ImplementationBodyOut:
+        asset = _asset(implementation_id)
+        text = catalog.load_body(asset.id)
         return ImplementationBodyOut(
             content=text,
             content_digest=_content_digest(text),
-            path=rel,
+            path=relative_body_path(repo_root, asset),
         )
 
     @app.get(
-        "/implementations/trading/conformance",
+        "/implementations/{implementation_id}/conformance",
         response_model=ConformanceResponse,
     )
-    def trading_conformance() -> ConformanceResponse:
-        root = find_repo_root()
-        paths = SlicePaths.resolve(root=root)
+    def implementation_conformance(implementation_id: str) -> ConformanceResponse:
+        asset = _asset(implementation_id)
+        paths = _paths(asset)
         result = assess_implementation(
             schema_path=paths.schema,
             implementation_path=paths.implementation,
-            implementation_id="moex:implementation:trading:1.0.0",
+            implementation_id=asset.id,
         )
         diags = []
         for assessment in result.report.assessments:
@@ -881,16 +934,19 @@ def create_app(
                     pass
 
     @app.get(
-        "/workspaces/{workspace_id}/documents/trading",
+        "/workspaces/{workspace_id}/documents/{implementation_id}",
         response_model=DocumentOut,
     )
-    def get_trading_document(
+    def get_document(
         workspace_id: str,
+        implementation_id: str,
         request: Request,
         session: Session = Depends(get_session),
     ) -> DocumentOut:
         ensure_actor(request, session)
-        doc = SqlDocumentStore(session).get(workspace_id, "trading")
+        asset = _asset(implementation_id)
+        _require_editable(asset)
+        doc = SqlDocumentStore(session).get(workspace_id, asset.id)
         if doc is None:
             raise HTTPException(status_code=404, detail="document not found")
         return DocumentOut(
@@ -902,16 +958,19 @@ def create_app(
         )
 
     @app.put(
-        "/workspaces/{workspace_id}/documents/trading",
+        "/workspaces/{workspace_id}/documents/{implementation_id}",
         response_model=DocumentOut,
     )
-    def put_trading_document(
+    def put_document(
         workspace_id: str,
+        implementation_id: str,
         body: DocumentPut,
         request: Request,
         session: Session = Depends(get_session),
     ) -> DocumentOut:
         actor = ensure_actor(request, session)
+        asset = _asset(implementation_id)
+        _require_editable(asset)
         workspaces = SqlWorkspaceStore(session)
         if workspaces.get(workspace_id) is None:
             workspaces.create(workspace_id, workspace_id)
@@ -921,13 +980,13 @@ def create_app(
         digest = body.base_digest or _content_digest(body.content)
         doc = SqlDocumentStore(session).upsert(
             workspace_id=workspace_id,
-            doc_key="trading",
+            doc_key=asset.id,
             content=body.content,
             base_digest=digest,
             updated_by=actor,
         )
         SqlAuditStore(session).record(
-            "document.put", actor, f"{workspace_id}:trading"
+            "document.put", actor, f"{workspace_id}:{asset.id}"
         )
         return DocumentOut(
             workspace_id=doc.workspace_id,
@@ -938,16 +997,19 @@ def create_app(
         )
 
     @app.post(
-        "/workspaces/{workspace_id}/documents/trading/mutations",
+        "/workspaces/{workspace_id}/documents/{implementation_id}/mutations",
         response_model=DocumentOut,
     )
-    def mutate_trading_document(
+    def mutate_document(
         workspace_id: str,
+        implementation_id: str,
         body: MutationRequest,
         request: Request,
         session: Session = Depends(get_session),
     ) -> DocumentOut:
         actor = ensure_actor(request, session)
+        asset = _asset(implementation_id)
+        _require_editable(asset)
         workspaces = SqlWorkspaceStore(session)
         docs = SqlDocumentStore(session)
         if workspaces.get(workspace_id) is None:
@@ -956,9 +1018,8 @@ def create_app(
         else:
             workspaces.add_member(workspace_id, actor, role="editor")
 
-        existing = docs.get(workspace_id, "trading")
-        root = find_repo_root()
-        paths = SlicePaths.resolve(root=root)
+        existing = docs.get(workspace_id, asset.id)
+        paths = _paths(asset)
         published = paths.implementation.read_text(encoding="utf-8")
         published_digest = _content_digest(published)
         if existing is None:
@@ -978,13 +1039,13 @@ def create_app(
 
         doc = docs.upsert(
             workspace_id=workspace_id,
-            doc_key="trading",
+            doc_key=asset.id,
             content=new_text,
             base_digest=base_digest,
             updated_by=actor,
         )
         SqlAuditStore(session).record(
-            "document.mutate", actor, f"{workspace_id}:trading:{body.op}"
+            "document.mutate", actor, f"{workspace_id}:{asset.id}:{body.op}"
         )
         return DocumentOut(
             workspace_id=doc.workspace_id,
@@ -995,22 +1056,24 @@ def create_app(
         )
 
     @app.post(
-        "/workspaces/{workspace_id}/semantic-diff",
+        "/workspaces/{workspace_id}/documents/{implementation_id}/semantic-diff",
         response_model=SemanticDiffOut,
     )
     def preview_semantic_diff(
         workspace_id: str,
+        implementation_id: str,
         request: Request,
         session: Session = Depends(get_session),
     ) -> SemanticDiffOut:
-        """Compare published trading YAML (base) vs workspace draft (target)."""
+        """Compare published YAML (base) vs workspace draft (target)."""
         actor = ensure_actor(request, session)
-        draft = SqlDocumentStore(session).get(workspace_id, "trading")
+        asset = _asset(implementation_id)
+        _require_editable(asset)
+        draft = SqlDocumentStore(session).get(workspace_id, asset.id)
         if draft is None:
             raise HTTPException(status_code=400, detail="draft document missing")
 
-        root = find_repo_root()
-        paths = SlicePaths.resolve(root=root)
+        paths = _paths(asset)
         tmp_path: Path | None = None
         try:
             tmp = tempfile.NamedTemporaryFile(
@@ -1033,7 +1096,7 @@ def create_app(
         SqlAuditStore(session).record(
             "semantic_diff.preview",
             actor,
-            f"{workspace_id}:trading",
+            f"{workspace_id}:{asset.id}",
         )
         return SemanticDiffOut(
             id=report.id,
@@ -1053,13 +1116,13 @@ def create_app(
             counts=report.counts_by_category(),
         )
 
-    def _draft_yaml(workspace_id: str, session: Session) -> str:
-        draft = SqlDocumentStore(session).get(workspace_id, "trading")
+    def _draft_yaml(
+        workspace_id: str, session: Session, asset: ImplementationAsset
+    ) -> str:
+        draft = SqlDocumentStore(session).get(workspace_id, asset.id)
         if draft is not None:
             return draft.content
-        root = find_repo_root()
-        paths = SlicePaths.resolve(root=root)
-        return paths.implementation.read_text(encoding="utf-8")
+        return catalog.load_body(asset.id)
 
     def _dump_yaml(data: dict) -> str:
         y = YAML()
@@ -1079,11 +1142,13 @@ def create_app(
         session: Session = Depends(get_session),
     ) -> DiagramSessionOut:
         actor = ensure_actor(request, session)
+        asset = _asset(body.implementation_id)
+        _require_editable(asset)
         workspaces = SqlWorkspaceStore(session)
         if workspaces.get(workspace_id) is None:
             workspaces.create(workspace_id, workspace_id)
             workspaces.add_member(workspace_id, actor, role="owner")
-        yaml_text = _draft_yaml(workspace_id, session)
+        yaml_text = _draft_yaml(workspace_id, session, asset)
         data = yaml.safe_load(yaml_text)
         if not isinstance(data, dict):
             raise HTTPException(status_code=400, detail="draft is not a mapping")
@@ -1094,13 +1159,14 @@ def create_app(
             DiagramSession(
                 session_id=sid,
                 workspace_id=workspace_id,
+                implementation_id=asset.id,
                 profile=profile,
                 dbml=dbml,
                 base_yaml=yaml_text,
             )
         )
         SqlAuditStore(session).record(
-            "diagram.open", actor, f"{workspace_id}:{profile}:{sid}"
+            "diagram.open", actor, f"{workspace_id}:{asset.id}:{profile}:{sid}"
         )
         return DiagramSessionOut(
             session_id=sid,
@@ -1145,14 +1211,16 @@ def create_app(
         ds = app.state.diagram_sessions.get(session_id)
         if ds is None or ds.workspace_id != workspace_id:
             raise HTTPException(status_code=404, detail="diagram session not found")
-        diagram_id = f"moex:diagram:{workspace_id}:{ds.profile}"
+        diagram_id = (
+            f"moex:diagram:{workspace_id}:{ds.implementation_id}:{ds.profile}"
+        )
         nodes_json = json.dumps(body.nodes, sort_keys=True)
         row = session.get(orm.DiagramLayout, diagram_id)
         if row is None:
             row = orm.DiagramLayout(
                 diagram_id=diagram_id,
                 workspace_id=workspace_id,
-                implementation_id="moex:implementation:trading:1.0.0",
+                implementation_id=ds.implementation_id,
                 profile=ds.profile,
                 model_revision=body.model_revision,
                 nodes_json=nodes_json,
@@ -1201,8 +1269,8 @@ def create_app(
         ds.last_rejected = [r.model_dump() for r in patch.rejected]
         app.state.diagram_sessions.put(ds)
 
-        root = find_repo_root()
-        paths = SlicePaths.resolve(root=root)
+        asset = _asset(ds.implementation_id)
+        paths = _paths(asset)
         left_tmp = right_tmp = None
         try:
             left = tempfile.NamedTemporaryFile(
@@ -1286,18 +1354,18 @@ def create_app(
                 status_code=400,
                 detail="cannot apply while rejected ops remain; fix DBML and re-submit",
             )
-        root = find_repo_root()
-        paths = SlicePaths.resolve(root=root)
-        published = paths.implementation.read_text(encoding="utf-8")
+        asset = _asset(ds.implementation_id)
+        _require_editable(asset)
+        published = catalog.load_body(asset.id)
         published_digest = _content_digest(published)
         docs = SqlDocumentStore(session)
-        existing = docs.get(workspace_id, "trading")
+        existing = docs.get(workspace_id, asset.id)
         base_digest = (
             existing.base_digest if existing is not None else published_digest
         )
         doc = docs.upsert(
             workspace_id=workspace_id,
-            doc_key="trading",
+            doc_key=asset.id,
             content=ds.last_merged_yaml,
             base_digest=base_digest,
             updated_by=actor,
@@ -1337,12 +1405,14 @@ def create_app(
         docs = SqlDocumentStore(session)
         pubs = SqlPublicationStore(session)
 
-        draft = docs.get(body.workspace_id, "trading")
+        asset = _asset(body.implementation_id)
+        _require_editable(asset)
+        draft = docs.get(body.workspace_id, asset.id)
         if draft is None:
             raise HTTPException(status_code=400, detail="draft document missing")
 
         fp = _publication_fingerprint(
-            body.workspace_id, body.implementation_id, draft.content
+            body.workspace_id, asset.id, draft.content
         )
         if idempotency_key:
             prior = pubs.get_by_idempotency(idempotency_key)
@@ -1357,12 +1427,15 @@ def create_app(
         if workspaces.get(body.workspace_id) is None:
             raise HTTPException(status_code=404, detail="workspace not found")
 
-        root = find_repo_root()
-        paths = SlicePaths.resolve(root=root)
+        paths = _paths(asset)
 
         from moex_model_cli.gates.publish_gate import verify_publish_gate
 
-        gate_errors = verify_publish_gate(root=root, refresh_bundle=False)
+        gate_errors = verify_publish_gate(
+            root=repo_root,
+            refresh_bundle=False,
+            publish_target=asset.body_path,
+        )
         if gate_errors:
             raise HTTPException(
                 status_code=422,
@@ -1383,7 +1456,7 @@ def create_app(
             result = assess_implementation(
                 schema_path=paths.schema,
                 implementation_path=tmp_path,
-                implementation_id=body.implementation_id,
+                implementation_id=asset.id,
             )
         finally:
             if tmp_path is not None:
@@ -1398,10 +1471,7 @@ def create_app(
                 ),
             )
 
-        try:
-            rel = paths.implementation.relative_to(paths.root).as_posix()
-        except ValueError:
-            rel = paths.implementation.name
+        rel = catalog.publication_target(asset.id).repo_path
 
         git: GitProvider = request.app.state.git_provider
         base_revision = git.resolve_revision(body.base_ref)
@@ -1426,8 +1496,8 @@ def create_app(
             failed = PublicationRecord(
                 id=pub_id,
                 workspace_id=body.workspace_id,
-                implementation_id=body.implementation_id,
-                doc_key="trading",
+                implementation_id=asset.id,
+                doc_key=asset.id,
                 branch_name=branch_name,
                 base_revision=base_revision,
                 commit_sha="",
@@ -1449,8 +1519,8 @@ def create_app(
         row = PublicationRecord(
             id=pub_id,
             workspace_id=body.workspace_id,
-            implementation_id=body.implementation_id,
-            doc_key="trading",
+            implementation_id=asset.id,
+            doc_key=asset.id,
             branch_name=branch_name,
             base_revision=base_revision,
             commit_sha=commit_sha,
@@ -1491,10 +1561,13 @@ def create_app(
             raise HTTPException(
                 status_code=400, detail="compile does not support source=draft"
             )
+        asset = _asset(body.implementation_id)
+        if body.source == "draft":
+            _require_editable(asset)
         jobs = SqlJobStore(session)
         workspaces = SqlWorkspaceStore(session)
         fp = _fingerprint(
-            body.kind, body.workspace_id, body.implementation_id, body.source
+            body.kind, body.workspace_id, asset.id, body.source
         )
 
         if idempotency_key:
@@ -1526,7 +1599,7 @@ def create_app(
                 workspace_id=body.workspace_id,
                 kind=body.kind,
                 status="running",
-                implementation_id=body.implementation_id,
+                implementation_id=asset.id,
                 idempotency_key=idempotency_key,
                 payload_fingerprint=fp,
                 result_summary="",
@@ -1534,8 +1607,7 @@ def create_app(
         )
         SqlAuditStore(session).record("job.create", actor, job_id)
 
-        root = find_repo_root()
-        paths = SlicePaths.resolve(root=root)
+        paths = _paths(asset)
         finished = _now()
         tmp_path: Path | None = None
         summary = ""
@@ -1546,7 +1618,7 @@ def create_app(
                 impl_path = paths.implementation
                 if body.source == "draft":
                     draft = SqlDocumentStore(session).get(
-                        body.workspace_id, "trading"
+                        body.workspace_id, asset.id
                     )
                     if draft is None:
                         jobs.update_status(
@@ -1571,7 +1643,7 @@ def create_app(
                 result = assess_implementation(
                     schema_path=paths.schema,
                     implementation_path=impl_path,
-                    implementation_id=body.implementation_id,
+                    implementation_id=asset.id,
                 )
                 run_id = f"run:{uuid4().hex[:12]}"
                 diags = []
@@ -1738,11 +1810,11 @@ def create_app(
     def rebuild_model_index(
         request: Request,
         session: Session = Depends(get_session),
-        implementation_id: str = "moex:implementation:trading:1.0.0",
+        implementation_id: str = Query(...),
     ) -> ModelIndexRebuildOut:
         actor = ensure_actor(request, session)
-        root = find_repo_root()
-        paths = SlicePaths.resolve(root=root)
+        asset = _asset(implementation_id)
+        paths = _paths(asset)
         raw = paths.implementation.read_bytes()
         digest = "sha256:" + hashlib.sha256(raw).hexdigest()
         revision = digest.removeprefix("sha256:")[:12]
@@ -1750,10 +1822,10 @@ def create_app(
         if not isinstance(data, dict):
             raise HTTPException(status_code=400, detail="invalid implementation YAML")
         elements = elements_from_package(data)
-        index_id = f"idx:{implementation_id}:{revision}"
+        index_id = f"idx:{asset.id}:{revision}"
         SqlModelIndexProvider(session).rebuild(
             index_id=index_id,
-            implementation_id=implementation_id,
+            implementation_id=asset.id,
             revision=revision,
             content_digest=digest,
             indexed_at=_now(),
@@ -1762,7 +1834,7 @@ def create_app(
         SqlAuditStore(session).record("model_index.rebuild", actor, index_id)
         return ModelIndexRebuildOut(
             index_id=index_id,
-            implementation_id=implementation_id,
+            implementation_id=asset.id,
             revision=revision,
             element_count=len(elements),
         )
@@ -1772,9 +1844,15 @@ def create_app(
         q: str,
         request: Request,
         session: Session = Depends(get_session),
+        implementation_id: str | None = None,
     ) -> list[ElementHitOut]:
         ensure_actor(request, session)
-        hits = SqlModelIndexProvider(session).search(q)
+        filter_id: str | None = None
+        if implementation_id:
+            filter_id = _asset(implementation_id).id
+        hits = SqlModelIndexProvider(session).search(
+            q, implementation_id=filter_id
+        )
         return [
             ElementHitOut(
                 element_id=h.element_id,
@@ -1793,12 +1871,12 @@ def create_app(
         session: Session = Depends(get_session),
     ) -> ValidationRunResponse:
         actor = ensure_actor(request, session)
-        root = find_repo_root()
-        paths = SlicePaths.resolve(root=root)
+        asset = _asset(body.implementation_id)
+        paths = _paths(asset)
         result = assess_implementation(
             schema_path=paths.schema,
             implementation_path=paths.implementation,
-            implementation_id=body.implementation_id,
+            implementation_id=asset.id,
         )
         SqlWorkspaceStore(session).ensure_workspace(body.workspace_id, body.workspace_id)
         run_id = f"run:{uuid4().hex[:12]}"

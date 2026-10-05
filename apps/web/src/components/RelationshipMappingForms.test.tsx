@@ -65,6 +65,8 @@ describe("RelationshipForms", () => {
       <QueryClientProvider client={qc}>
         <RelationshipForms
           workspaceId="ws-workbench"
+          implementationId="moex:implementation:trading:1.0.0"
+          idNamespace="trading"
           content={SAMPLE}
           onDocument={onDocument}
         />
@@ -101,6 +103,8 @@ describe("MappingForms", () => {
       <QueryClientProvider client={qc}>
         <MappingForms
           workspaceId="ws-workbench"
+          implementationId="moex:implementation:trading:1.0.0"
+          idNamespace="trading"
           content={SAMPLE}
           onDocument={onDocument}
         />

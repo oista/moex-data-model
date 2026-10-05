@@ -50,6 +50,8 @@ describe("PhysicalForms", () => {
       <QueryClientProvider client={qc}>
         <PhysicalForms
           workspaceId="ws-workbench"
+          implementationId="moex:implementation:trading:1.0.0"
+          idNamespace="trading"
           content={SAMPLE}
           onDocument={onDocument}
         />
@@ -71,7 +73,7 @@ describe("PhysicalForms", () => {
 
     await waitFor(() => expect(onDocument).toHaveBeenCalled());
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/workspaces/ws-workbench/documents/trading/mutations",
+      "/api/workspaces/ws-workbench/documents/moex%3Aimplementation%3Atrading%3A1.0.0/mutations",
       expect.objectContaining({ method: "POST" }),
     );
   });

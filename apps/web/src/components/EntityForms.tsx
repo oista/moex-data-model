@@ -74,6 +74,8 @@ function parseEntities(content: string): ParseResult {
 
 type Props = {
   workspaceId: string;
+  implementationId: string;
+  idNamespace: string;
   content: string;
   onDocument: (doc: WorkspaceDocument) => void;
   onBeforeMutate?: () => Promise<void>;
@@ -85,6 +87,8 @@ type Props = {
 
 export function EntityForms({
   workspaceId,
+  implementationId,
+  idNamespace,
   content,
   onDocument,
   onBeforeMutate,
@@ -177,7 +181,7 @@ export function EntityForms({
     pendingAttrFocus,
   ]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [entityId, setEntityId] = useState("dams:logical/trading/NewEntity");
+  const [entityId, setEntityId] = useState(`dams:logical/${idNamespace}/NewEntity`);
   const [entityName, setEntityName] = useState("NewEntity");
   const [entityTitle, setEntityTitle] = useState("");
   const [ownerId, setOwnerId] = useState("");
@@ -191,7 +195,7 @@ export function EntityForms({
         await onBeforeMutate();
       }
       onOptimisticOp?.(body);
-      return api.mutateDocument(workspaceId, body);
+      return api.mutateDocument(workspaceId, implementationId, body);
     },
     onSuccess: onDocument,
     onError: () => onOptimisticRollback?.(),

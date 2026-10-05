@@ -19,6 +19,10 @@ describe("ModelsPage", () => {
           {
             id: "moex:implementation:trading:1.0.0",
             slug: "trading",
+            version: "1.0.0",
+            implementation_kind: "linkml",
+            implementation_profile: "dams-data-model",
+            workbench_editable: true,
             title: "Trading platform",
             implementation_path: "model-assets/…/trading-solution-model.yaml",
           },

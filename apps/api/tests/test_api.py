@@ -12,6 +12,9 @@ from fastapi.testclient import TestClient
 from moex_git import LocalGitProvider
 from moex_model_api.app import create_app
 
+TRADING_ID = "moex:implementation:trading:1.0.0"
+TRADING_SLUG = "trading"
+
 
 @pytest.fixture()
 def client() -> TestClient:
@@ -66,10 +69,12 @@ def test_list_implementations(client: TestClient) -> None:
     r = client.get("/implementations")
     assert r.status_code == 200
     body = r.json()
-    assert len(body) == 1
-    assert body[0]["slug"] == "trading"
-    assert body[0]["id"] == "moex:implementation:trading:1.0.0"
-    assert "trading" in body[0]["implementation_path"]
+    assert len(body) >= 5
+    by_slug = {row["slug"]: row for row in body}
+    assert "trading" in by_slug
+    assert by_slug["trading"]["id"] == TRADING_ID
+    assert "trading" in by_slug["trading"]["implementation_path"]
+    assert by_slug["trading"]["workbench_editable"] is True
 
 
 def test_trading_conformance(client: TestClient) -> None:
@@ -499,7 +504,7 @@ def test_workspace_document_put_get_and_validate_draft(client: TestClient) -> No
 def test_semantic_diff_preview_identical_and_breaking(client: TestClient) -> None:
     headers = {"X-Moex-Actor": "diff-user"}
     missing = client.post(
-        "/workspaces/ws-diff-missing/semantic-diff",
+        "/workspaces/ws-diff-missing/documents/trading/semantic-diff",
         headers=headers,
     )
     assert missing.status_code == 400
@@ -517,7 +522,7 @@ def test_semantic_diff_preview_identical_and_breaking(client: TestClient) -> Non
     assert put.status_code == 200
 
     identical = client.post(
-        "/workspaces/ws-diff/semantic-diff",
+        "/workspaces/ws-diff/documents/trading/semantic-diff",
         headers=headers,
     )
     assert identical.status_code == 200
@@ -539,7 +544,7 @@ def test_semantic_diff_preview_identical_and_breaking(client: TestClient) -> Non
     assert deleted.status_code == 200
 
     breaking = client.post(
-        "/workspaces/ws-diff/semantic-diff",
+        "/workspaces/ws-diff/documents/trading/semantic-diff",
         headers=headers,
     )
     assert breaking.status_code == 200
@@ -653,16 +658,26 @@ def test_publication_gate_rejects_bad_digest(
 
 def test_model_index_rebuild_and_search(client: TestClient) -> None:
     headers = {"X-Moex-Actor": "carol"}
-    r = client.post("/model-index/rebuild", headers=headers)
+    r = client.post(
+        "/model-index/rebuild",
+        params={"implementation_id": TRADING_ID},
+        headers=headers,
+    )
     assert r.status_code == 200
     body = r.json()
     assert body["element_count"] > 0
+    assert body["implementation_id"] == TRADING_ID
 
-    search = client.get("/model-index/search", params={"q": "Client"}, headers=headers)
+    search = client.get(
+        "/model-index/search",
+        params={"q": "Client", "implementation_id": TRADING_ID},
+        headers=headers,
+    )
     assert search.status_code == 200
     hits = search.json()
     assert hits
     assert any("Client" in h["element_id"] or "Client" in h["name"] for h in hits)
+    assert all(h["implementation_id"] == TRADING_ID for h in hits)
 
 
 def test_diagram_open_submit_apply(client: TestClient) -> None:
@@ -683,7 +698,7 @@ def test_diagram_open_submit_apply(client: TestClient) -> None:
 
     opened = client.post(
         "/workspaces/ws-diagram/diagrams",
-        json={"profile": "logical"},
+        json={"implementation_id": TRADING_ID, "profile": "logical"},
         headers=headers,
     )
     assert opened.status_code == 200, opened.text
@@ -752,7 +767,7 @@ def test_diagram_reject_element_id_strip(client: TestClient) -> None:
     )
     opened = client.post(
         "/workspaces/ws-diagram2/diagrams",
-        json={"profile": "logical"},
+        json={"implementation_id": TRADING_ID, "profile": "logical"},
         headers=headers,
     )
     dbml = opened.json()["dbml"]

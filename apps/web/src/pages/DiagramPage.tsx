@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { api } from "../api/client";
 import type {
   DiagramSubmitResult,
   SemanticDiffReport,
 } from "../api/types";
+import { useImplementation } from "../model/useImplementation";
 
 const WS_ID = "ws-workbench";
 
@@ -24,6 +25,8 @@ function categoryBadgeClass(category: string): string {
 }
 
 export function DiagramPage() {
+  const { slug = "" } = useParams();
+  const { asset, editable, isLoading: implLoading } = useImplementation(slug);
   const [params, setParams] = useSearchParams();
   const profile =
     params.get("profile") === "physical" ? "physical" : "logical";
@@ -45,6 +48,7 @@ export function DiagramPage() {
   };
 
   const openSession = useCallback(async () => {
+    if (!asset?.id || !editable) return;
     setError(null);
     setBusy(true);
     setSubmitResult(null);
@@ -52,15 +56,15 @@ export function DiagramPage() {
     try {
       await api.createWorkspace({ id: WS_ID, name: "Workbench" });
       try {
-        await api.getDocument(WS_ID);
+        await api.getDocument(WS_ID, asset.id);
       } catch {
-        const published = await api.tradingBody();
-        await api.putDocument(WS_ID, {
+        const published = await api.implementationBody(asset.id);
+        await api.putDocument(WS_ID, asset.id, {
           content: published.content,
           base_digest: published.content_digest,
         });
       }
-      const session = await api.openDiagram(WS_ID, profile);
+      const session = await api.openDiagram(WS_ID, asset.id, profile);
       setSessionId(session.session_id);
       setDbml(session.dbml);
       if (iframeRef.current?.contentWindow && bridgeReady) {
@@ -74,7 +78,7 @@ export function DiagramPage() {
     } finally {
       setBusy(false);
     }
-  }, [profile, bridgeReady]);
+  }, [profile, bridgeReady, asset?.id, editable]);
 
   useEffect(() => {
     void openSession();
@@ -205,14 +209,18 @@ export function DiagramPage() {
           >
             Confirm apply
           </button>
-          <Link to="/models/trading/edit?reload=1">Open editor</Link>
+          <Link to={`/models/${slug}/edit?reload=1`}>Open editor</Link>
         </div>
       </header>
+      {implLoading && <p className="lede">Loading implementation…</p>}
+      {!implLoading && !editable && (
+        <p className="error">Not editable in Workbench.</p>
+      )}
       {error && <p className="error">{error}</p>}
       {applied && (
         <p className="ok" data-testid="diagram-applied">
           Applied to workspace draft.{" "}
-          <Link to="/models/trading/edit?reload=1">Open editor</Link> to review
+          <Link to={`/models/${slug}/edit?reload=1`}>Open editor</Link> to review
           the updated YAML.
         </p>
       )}

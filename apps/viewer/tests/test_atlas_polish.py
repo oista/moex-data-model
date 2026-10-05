@@ -335,6 +335,17 @@ def test_js_erd_clickmap_panel():
     assert ".erd-node-rect" in css
 
 
+def test_js_erd_hides_distant_edges_in_local_mode():
+    """Large CDM diagrams must not paint every association across empty space."""
+    assert "function erdEdgeIsLocal" in JS
+    assert "ERD_LOCAL_EDGE_PX" in JS
+    assert 'edgeMode: "local"' in JS or 'edgeMode === "local"' in JS
+    assert '"Все связи"' in JS
+    assert '"Ближние связи"' in JS
+    css = assemble_css()
+    assert ".erd-edge-path.is-distant" in css
+
+
 def test_build_strips_emoji_from_nav_html():
     repo = Path(__file__).resolve().parents[3]
     dist = repo / "apps" / "viewer" / "dist"

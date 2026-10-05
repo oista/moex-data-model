@@ -1,6 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useMemo, useState, type FormEvent } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { api } from "../api/client";
 import type { Job, JobArtifact } from "../api/types";
 import { ArtifactsPanel } from "../components/ArtifactsPanel";
@@ -25,6 +25,18 @@ const ENRICH_FIELDS = ["id", "description", "range", "registry_link"] as const;
 
 export function ImportWizardPage() {
   const { workspaceId = "ws-workbench" } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const impls = useQuery({
+    queryKey: ["implementations"],
+    queryFn: api.listImplementations,
+  });
+  const editable = useMemo(
+    () => (impls.data ?? []).filter((a) => a.workbench_editable),
+    [impls.data],
+  );
+  const selectedSlug =
+    searchParams.get("impl") || editable[0]?.slug || "";
+  const selected = editable.find((a) => a.slug === selectedSlug);
   const [sourceType, setSourceType] = useState<SourceType>("json_schema");
   const [file, setFile] = useState<File | null>(null);
   const [job, setJob] = useState<Job | null>(null);
@@ -76,10 +88,11 @@ export function ImportWizardPage() {
   const openDraft = useMutation({
     mutationFn: async () => {
       if (!inferred.trim()) throw new Error("no inferred schema");
+      if (!selected) throw new Error("choose a target implementation");
       const banner =
         "# status: generated-draft\n" +
         "# Stage 7b import — enrich IDs/descriptions before ModelPackage publish\n";
-      return api.putDocument(workspaceId, {
+      return api.putDocument(workspaceId, selected.id, {
         content: banner + inferred,
       });
     },
@@ -142,11 +155,36 @@ export function ImportWizardPage() {
         to ModelPackage.
       </div>
       <p className="lede">
-        Workspace: <code>{workspaceId}</code> ·{" "}
-        <Link to={`/models/trading/edit`}>Open editor</Link>
+        Workspace: <code>{workspaceId}</code>
+        {selected && (
+          <>
+            {" "}
+            ·{" "}
+            <Link to={`/models/${selected.slug}/edit`}>Open editor</Link>
+          </>
+        )}
       </p>
 
       <form className="panel" onSubmit={onSubmit} data-testid="import-form">
+        <label>
+          Target implementation
+          <select
+            value={selectedSlug}
+            onChange={(e) => {
+              const next = new URLSearchParams(searchParams);
+              next.set("impl", e.target.value);
+              setSearchParams(next, { replace: true });
+            }}
+            data-testid="target-implementation"
+            disabled={editable.length === 0}
+          >
+            {editable.map((a) => (
+              <option key={a.id} value={a.slug}>
+                {a.title} ({a.slug})
+              </option>
+            ))}
+          </select>
+        </label>
         <label>
           Source type
           <select
@@ -224,7 +262,10 @@ export function ImportWizardPage() {
                 )}
               </ul>
               <p>
-                <Link to="/models/trading/edit" data-testid="enrich-monaco-link">
+                <Link
+                  to={`/models/${selected?.slug || selectedSlug}/edit`}
+                  data-testid="enrich-monaco-link"
+                >
                   Open Monaco to enrich
                 </Link>
               </p>
@@ -255,7 +296,9 @@ export function ImportWizardPage() {
           {draftOpened && (
             <p data-testid="draft-opened">
               Draft saved to workspace document (generated-draft banner).{" "}
-              <Link to="/models/trading/edit">Edit in Monaco</Link>
+              <Link to={`/models/${selected?.slug || selectedSlug}/edit`}>
+                Edit in Monaco
+              </Link>
             </p>
           )}
           <ArtifactsPanel jobId={job.id} />

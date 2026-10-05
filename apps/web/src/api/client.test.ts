@@ -14,7 +14,7 @@ describe("api client", () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
-      json: async () => [{ id: "x", slug: "trading", title: "T", implementation_path: "p" }],
+      json: async () => [{ id: "x", slug: "trading", title: "T", version: "1.0.0", implementation_path: "p", implementation_kind: "linkml", implementation_profile: "dams-data-model", workbench_editable: true }],
     });
     vi.stubGlobal("fetch", fetchMock);
 

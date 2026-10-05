@@ -1,6 +1,9 @@
 import { expect, test } from "@playwright/test";
 
 const DEMO_DBML = "Table Demo {\n  id integer [pk]\n}\n";
+const TRADING_ID = "moex:implementation:trading:1.0.0";
+const TRADING_DOC =
+  `/api/workspaces/ws-workbench/documents/${encodeURIComponent(TRADING_ID)}`;
 
 async function mockDiagramApi(page: import("@playwright/test").Page) {
   await page.route("**/api/**", async (route) => {
@@ -14,6 +17,26 @@ async function mockDiagramApi(page: import("@playwright/test").Page) {
     const method = req.method();
     const path = url.pathname;
 
+    if (method === "GET" && path === "/api/implementations") {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify([
+          {
+            id: TRADING_ID,
+            slug: "trading",
+            title: "Trading platform",
+            version: "1.0.0",
+            implementation_path: "p",
+            implementation_kind: "linkml",
+            implementation_profile: "dams-data-model",
+            workbench_editable: true,
+          },
+        ]),
+      });
+      return;
+    }
+
     if (method === "POST" && path === "/api/workspaces") {
       await route.fulfill({
         status: 200,
@@ -23,16 +46,16 @@ async function mockDiagramApi(page: import("@playwright/test").Page) {
       return;
     }
 
-    if (
-      method === "GET" &&
-      path === "/api/workspaces/ws-workbench/documents/trading"
-    ) {
+    if (method === "GET" && path === TRADING_DOC) {
       await route.fulfill({
         status: 200,
         contentType: "application/json",
         body: JSON.stringify({
-          content: "name: trading\n",
+          content: "name: demo\n",
           base_digest: "sha256:e2e",
+          doc_key: TRADING_ID,
+          workspace_id: "ws-workbench",
+          updated_by: "dev",
         }),
       });
       return;

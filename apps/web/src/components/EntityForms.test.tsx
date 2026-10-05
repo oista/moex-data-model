@@ -55,6 +55,8 @@ describe("EntityForms", () => {
       <QueryClientProvider client={qc}>
         <EntityForms
           workspaceId="ws-workbench"
+          implementationId="moex:implementation:trading:1.0.0"
+          idNamespace="trading"
           content={SAMPLE}
           onDocument={onDocument}
         />
@@ -77,7 +79,7 @@ describe("EntityForms", () => {
       expect(onDocument).toHaveBeenCalled();
     });
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/workspaces/ws-workbench/documents/trading/mutations",
+      "/api/workspaces/ws-workbench/documents/moex%3Aimplementation%3Atrading%3A1.0.0/mutations",
       expect.objectContaining({ method: "POST" }),
     );
   });
@@ -105,6 +107,8 @@ describe("EntityForms", () => {
       <QueryClientProvider client={qc}>
         <EntityForms
           workspaceId="ws-workbench"
+          implementationId="moex:implementation:trading:1.0.0"
+          idNamespace="trading"
           content={SAMPLE}
           onDocument={onDocument}
         />
@@ -153,6 +157,8 @@ describe("EntityForms", () => {
       <QueryClientProvider client={qc}>
         <EntityForms
           workspaceId="ws-workbench"
+          implementationId="moex:implementation:trading:1.0.0"
+          idNamespace="trading"
           content={"logical_entities: [\n  - broken"}
           onDocument={vi.fn()}
         />
@@ -186,6 +192,8 @@ describe("EntityForms", () => {
       <QueryClientProvider client={qc}>
         <EntityForms
           workspaceId="ws-workbench"
+          implementationId="moex:implementation:trading:1.0.0"
+          idNamespace="trading"
           content={SAMPLE}
           onDocument={onDocument}
           onBeforeMutate={onBeforeMutate}
@@ -217,6 +225,8 @@ describe("EntityForms", () => {
       <QueryClientProvider client={qc}>
         <EntityForms
           workspaceId="ws-workbench"
+          implementationId="moex:implementation:trading:1.0.0"
+          idNamespace="trading"
           content={SAMPLE}
           onDocument={onDocument}
           onOptimisticOp={onOptimisticOp}

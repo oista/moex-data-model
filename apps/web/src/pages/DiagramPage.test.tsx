@@ -1,11 +1,24 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { DiagramPage } from "./DiagramPage";
 import { api } from "../api/client";
 
 vi.mock("../api/client", () => ({
   api: {
+    listImplementations: vi.fn().mockResolvedValue([
+      {
+        id: "moex:implementation:trading:1.0.0",
+        slug: "trading",
+        title: "Trading platform",
+        version: "1.0.0",
+        implementation_path: "p",
+        implementation_kind: "linkml",
+        implementation_profile: "dams-data-model",
+        workbench_editable: true,
+      },
+    ]),
     createWorkspace: vi.fn().mockResolvedValue({ id: "ws-workbench" }),
     getDocument: vi.fn().mockResolvedValue({
       content: "name: x",
@@ -22,17 +35,28 @@ vi.mock("../api/client", () => ({
   },
 }));
 
+function renderAt(path: string) {
+  const qc = new QueryClient({
+    defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
+  });
+  return render(
+    <QueryClientProvider client={qc}>
+      <MemoryRouter initialEntries={[path]}>
+        <Routes>
+          <Route path="models/:slug/diagram" element={<DiagramPage />} />
+        </Routes>
+      </MemoryRouter>
+    </QueryClientProvider>,
+  );
+}
+
 describe("DiagramPage", () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
   it("renders diagram chrome, profile toggle, and iframe", async () => {
-    render(
-      <MemoryRouter initialEntries={["/models/trading/diagram"]}>
-        <DiagramPage />
-      </MemoryRouter>,
-    );
+    renderAt("/models/trading/diagram");
     expect(await screen.findByRole("heading", { name: /Diagram/i })).toBeTruthy();
     expect(screen.getByTitle("drawDB")).toBeTruthy();
     expect(screen.getByRole("button", { name: /Submit for review/i })).toBeTruthy();
@@ -48,13 +72,13 @@ describe("DiagramPage", () => {
       profile: "physical",
       dbml: "Table Phys {}",
     });
-    render(
-      <MemoryRouter initialEntries={["/models/trading/diagram?profile=physical"]}>
-        <DiagramPage />
-      </MemoryRouter>,
-    );
+    renderAt("/models/trading/diagram?profile=physical");
     await waitFor(() => {
-      expect(api.openDiagram).toHaveBeenCalledWith("ws-workbench", "physical");
+      expect(api.openDiagram).toHaveBeenCalledWith(
+        "ws-workbench",
+        "moex:implementation:trading:1.0.0",
+        "physical",
+      );
     });
     expect(screen.getByText(/profile: physical/i)).toBeTruthy();
   });

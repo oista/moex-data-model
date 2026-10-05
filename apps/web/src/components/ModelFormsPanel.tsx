@@ -12,6 +12,8 @@ export type FormsTab =
 
 type Props = {
   workspaceId: string;
+  implementationId: string;
+  idNamespace: string;
   content: string;
   onDocument: (doc: WorkspaceDocument) => void;
   onBeforeMutate?: () => Promise<void>;
@@ -25,6 +27,8 @@ type Props = {
 
 export function ModelFormsPanel({
   workspaceId,
+  implementationId,
+  idNamespace,
   content,
   onDocument,
   onBeforeMutate,
@@ -37,6 +41,8 @@ export function ModelFormsPanel({
 }: Props) {
   const formProps = {
     workspaceId,
+    implementationId,
+    idNamespace,
     content,
     onDocument,
     onBeforeMutate,

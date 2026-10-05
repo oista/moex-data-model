@@ -10,6 +10,7 @@ from typing import Any
 class DiagramSession:
     session_id: str
     workspace_id: str
+    implementation_id: str
     profile: str
     dbml: str
     base_yaml: str

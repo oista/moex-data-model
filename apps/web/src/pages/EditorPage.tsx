@@ -1,7 +1,7 @@
 import Editor from "@monaco-editor/react";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { api, setLastJobId } from "../api/client";
 import type { Job, Publication, SemanticDiffReport } from "../api/types";
 import {
@@ -14,10 +14,10 @@ import {
 } from "../components/ModelExplorer";
 import { ArtifactsPanel } from "../components/ArtifactsPanel";
 import { StatusBadge } from "../components/StatusBadge";
+import { useImplementation } from "../model/useImplementation";
 import { useModelDraft } from "../model/useModelDraft";
 
 const WS_ID = "ws-workbench";
-const IMPL = "moex:implementation:trading:1.0.0";
 
 function categoryBadgeClass(category: string): string {
   if (category === "breaking") return "badge bad";
@@ -31,7 +31,10 @@ function categoryBadgeClass(category: string): string {
 }
 
 export function EditorPage() {
-  const draft = useModelDraft(WS_ID);
+  const { slug = "" } = useParams();
+  const { asset, editable, isLoading: implLoading, error: implError } =
+    useImplementation(slug);
+  const draft = useModelDraft(WS_ID, asset?.id);
   const [job, setJob] = useState<Job | null>(null);
   const [publication, setPublication] = useState<Publication | null>(null);
   const [diff, setDiff] = useState<SemanticDiffReport | null>(null);
@@ -47,10 +50,11 @@ export function EditorPage() {
 
   const reloadPublished = useMutation({
     mutationFn: async () => {
+      if (!asset) return null;
       if (draft.dirty && !window.confirm("Discard unsaved changes?")) {
         return null;
       }
-      return api.tradingBody();
+      return api.implementationBody(asset.id);
     },
     onSuccess: (body) => {
       if (!body) return;
@@ -60,12 +64,13 @@ export function EditorPage() {
 
   const validate = useMutation({
     mutationFn: async () => {
+      if (!asset) throw new Error("implementation not resolved");
       await draft.putNow();
       const result = await api.createJob(
         {
           kind: "validate",
           workspace_id: WS_ID,
-          implementation_id: IMPL,
+          implementation_id: asset.id,
           source: "draft",
         },
         `validate-draft-${Date.now()}`,
@@ -78,11 +83,12 @@ export function EditorPage() {
 
   const compile = useMutation({
     mutationFn: async () => {
+      if (!asset) throw new Error("implementation not resolved");
       const result = await api.createJob(
         {
           kind: "compile",
           workspace_id: WS_ID,
-          implementation_id: IMPL,
+          implementation_id: asset.id,
           source: "published",
         },
         `compile-${Date.now()}`,
@@ -95,20 +101,22 @@ export function EditorPage() {
 
   const reviewChanges = useMutation({
     mutationFn: async () => {
+      if (!asset) throw new Error("implementation not resolved");
       await draft.putNow();
-      return api.previewSemanticDiff(WS_ID);
+      return api.previewSemanticDiff(WS_ID, asset.id);
     },
     onSuccess: setDiff,
   });
 
   const publish = useMutation({
     mutationFn: async () => {
+      if (!asset) throw new Error("implementation not resolved");
       await draft.putNow();
       return api.createPublication(
         {
           workspace_id: WS_ID,
-          implementation_id: IMPL,
-          title: "Workbench publish trading draft",
+          implementation_id: asset.id,
+          title: `Workbench publish ${asset.slug} draft`,
           base_ref: "HEAD",
         },
         `publish-${Date.now()}`,
@@ -125,9 +133,40 @@ export function EditorPage() {
 
   const formsDisabled = formsBusy || Boolean(draft.parseError);
 
+  if (implLoading) {
+    return (
+      <section>
+        <h1>Model editor</h1>
+        <p className="lede">Loading…</p>
+      </section>
+    );
+  }
+
+  if (implError || !asset) {
+    return (
+      <section>
+        <h1>Model editor</h1>
+        <p className="error">{implError?.message || `Unknown model “${slug}”`}</p>
+        <Link to="/models">Back</Link>
+      </section>
+    );
+  }
+
+  if (!editable) {
+    return (
+      <section>
+        <h1>{asset.title}</h1>
+        <p className="lede">
+          Not editable in Workbench (requires LinkML DAMS data model).
+        </p>
+        <Link to={`/models/${asset.slug}`}>Back to model</Link>
+      </section>
+    );
+  }
+
   return (
     <section>
-      <h1>Model editor</h1>
+      <h1>Model editor — {asset.title}</h1>
       <p className="lede">
         Edit workspace draft YAML, validate/compile via jobs, review semantic
         diff, or publish a GitHub review from the draft.
@@ -178,8 +217,10 @@ export function EditorPage() {
         >
           Publish draft
         </button>
-        <Link to="/models/trading">Back to model</Link>
-        <Link to="/models/trading/diagram?profile=logical">Open diagram</Link>
+        <Link to={`/models/${asset.slug}`}>Back to model</Link>
+        <Link to={`/models/${asset.slug}/diagram?profile=logical`}>
+          Open diagram
+        </Link>
         {draft.sourceLabel && (
           <span className="badge neutral">loaded: {draft.sourceLabel}</span>
         )}
@@ -297,6 +338,8 @@ export function EditorPage() {
             />
             <ModelFormsPanel
               workspaceId={WS_ID}
+              implementationId={asset.id}
+              idNamespace={asset.slug}
               content={draft.content}
               onDocument={draft.replaceFromServer}
               onBeforeMutate={draft.ensureSaved}
@@ -309,23 +352,19 @@ export function EditorPage() {
             />
           </div>
         )}
-        <div className="editor-frame">
+        <div className="editor-main">
           {draft.loading ? (
-            <p>Loading…</p>
+            <p>Loading draft…</p>
           ) : (
             <Editor
-              height="60vh"
+              height="70vh"
               defaultLanguage="yaml"
-              theme="vs-light"
               value={draft.content}
-              onChange={(next) => {
-                draft.setContentFromMonaco(next ?? "");
-              }}
+              onChange={(v) => draft.setContentFromMonaco(v ?? "")}
               options={{
                 minimap: { enabled: false },
                 fontSize: 13,
                 wordWrap: "on",
-                scrollBeyondLastLine: false,
               }}
             />
           )}

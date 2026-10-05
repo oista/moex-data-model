@@ -46,8 +46,10 @@ Playwright bridge smoke (static-bridge + Diagram page, API mocked):
 | `/workspaces` | List / create workspaces |
 | `/workspaces/:workspaceId/import` | Stage 7b schema-automator import wizard (`generated-draft`) |
 | `/workspaces/:workspaceId/transform` | Stage 7 map/transform preview|sample (linkml-map, object\|sql) |
-| `/models` | Implementation registry |
-| `/models/trading` | Conformance + model-index search |
-| `/models/trading/edit` | Monaco YAML + entity forms + draft + Review changes + Publish draft |
-| `/models/trading/diagram` | drawDB iframe + DBML submit/apply (`?profile=logical\|physical`) |
-| `/models/trading/validate` | Sync validate job report |
+| `/models` | Implementation registry (from API catalog) |
+| `/models/:slug` | Conformance + model-index search (`slug` is a presentation alias) |
+| `/models/:slug/edit` | Monaco YAML + entity forms + draft + Review changes + Publish draft |
+| `/models/:slug/diagram` | drawDB iframe + DBML submit/apply (`?profile=logical\|physical`) |
+| `/models/:slug/validate` | Sync validate job report |
+
+Only LinkML DAMS data-model implementations are editable. Import wizard targets `?impl=<slug>` (or a select of editable assets).

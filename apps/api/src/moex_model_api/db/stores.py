@@ -340,20 +340,29 @@ class SqlModelIndexProvider:
         self._session.flush()
         return index_id
 
-    def search(self, q: str, *, limit: int = 50) -> list[ElementHit]:
+    def search(
+        self,
+        q: str,
+        *,
+        limit: int = 50,
+        implementation_id: str | None = None,
+    ) -> list[ElementHit]:
         needle = f"%{q}%"
+        filters = [
+            or_(
+                orm.ModelElementIndex.element_id.ilike(needle),
+                orm.ModelElementIndex.name.ilike(needle),
+            )
+        ]
+        if implementation_id:
+            filters.append(orm.ModelIndex.implementation_id == implementation_id)
         rows = self._session.execute(
             select(orm.ModelElementIndex, orm.ModelIndex)
             .join(
                 orm.ModelIndex,
                 orm.ModelElementIndex.index_id == orm.ModelIndex.id,
             )
-            .where(
-                or_(
-                    orm.ModelElementIndex.element_id.ilike(needle),
-                    orm.ModelElementIndex.name.ilike(needle),
-                )
-            )
+            .where(*filters)
             .limit(limit)
         ).all()
         return [

@@ -59,7 +59,7 @@ class WorkspaceDocument(Base):
     workspace_id: Mapped[str] = mapped_column(
         String(128), ForeignKey("workspace.id"), primary_key=True
     )
-    doc_key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    doc_key: Mapped[str] = mapped_column(String(256), primary_key=True)
     content: Mapped[str] = mapped_column(Text, nullable=False)
     base_digest: Mapped[str] = mapped_column(String(128), nullable=False, default="")
     updated_by: Mapped[str] = mapped_column(String(128), nullable=False, default="dev")
@@ -209,7 +209,7 @@ class PublicationRequest(Base):
         String(128), ForeignKey("workspace.id"), nullable=False
     )
     implementation_id: Mapped[str] = mapped_column(String(256), nullable=False)
-    doc_key: Mapped[str] = mapped_column(String(64), nullable=False, default="trading")
+    doc_key: Mapped[str] = mapped_column(String(256), nullable=False)
     branch_name: Mapped[str] = mapped_column(String(256), nullable=False)
     base_revision: Mapped[str] = mapped_column(String(128), nullable=False)
     commit_sha: Mapped[str] = mapped_column(String(128), nullable=False, default="")

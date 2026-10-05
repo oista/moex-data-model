@@ -26,7 +26,10 @@ export type UseModelDraftResult = {
   discardToPublished: (content: string, digest: string) => void;
 };
 
-export function useModelDraft(workspaceId: string): UseModelDraftResult {
+export function useModelDraft(
+  workspaceId: string,
+  implementationId: string | undefined,
+): UseModelDraftResult {
   const [content, setContent] = useState("");
   const [baseDigest, setBaseDigest] = useState("");
   const [dirty, setDirty] = useState(false);
@@ -58,8 +61,11 @@ export function useModelDraft(workspaceId: string): UseModelDraftResult {
   }, []);
 
   const putNow = useCallback(async () => {
+    if (!implementationId) {
+      throw new Error("implementation not resolved");
+    }
     clearPutTimer();
-    const doc = await api.putDocument(workspaceId, {
+    const doc = await api.putDocument(workspaceId, implementationId, {
       content: contentRef.current,
       base_digest: digestRef.current,
     });
@@ -69,7 +75,7 @@ export function useModelDraft(workspaceId: string): UseModelDraftResult {
     setDirty(false);
     dirtyRef.current = false;
     return doc;
-  }, [workspaceId, clearPutTimer]);
+  }, [workspaceId, implementationId, clearPutTimer]);
 
   const schedulePut = useCallback(() => {
     clearPutTimer();
@@ -84,18 +90,22 @@ export function useModelDraft(workspaceId: string): UseModelDraftResult {
   useEffect(() => () => clearPutTimer(), [clearPutTimer]);
 
   const load = useCallback(async () => {
+    if (!implementationId) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setLoadError(null);
     clearPutTimer();
     try {
       await api.createWorkspace({ id: workspaceId, name: "Workbench" });
       try {
-        const draft = await api.getDocument(workspaceId);
+        const draft = await api.getDocument(workspaceId, implementationId);
         setContent(draft.content);
         setBaseDigest(draft.base_digest);
         setSourceLabel("draft");
       } catch {
-        const published = await api.tradingBody();
+        const published = await api.implementationBody(implementationId);
         setContent(published.content);
         setBaseDigest(published.content_digest);
         setSourceLabel("published");
@@ -107,7 +117,7 @@ export function useModelDraft(workspaceId: string): UseModelDraftResult {
     } finally {
       setLoading(false);
     }
-  }, [workspaceId, clearPutTimer]);
+  }, [workspaceId, implementationId, clearPutTimer]);
 
   useEffect(() => {
     void load();
@@ -123,15 +133,12 @@ export function useModelDraft(workspaceId: string): UseModelDraftResult {
     [schedulePut],
   );
 
-  const applyLocalOp = useCallback(
-    (op: DocumentMutation) => {
-      rollbackRef.current = contentRef.current;
-      const next = applyMutationOptimistic(contentRef.current, op);
-      setContent(next);
-      contentRef.current = next;
-    },
-    [],
-  );
+  const applyLocalOp = useCallback((op: DocumentMutation) => {
+    rollbackRef.current = contentRef.current;
+    const next = applyMutationOptimistic(contentRef.current, op);
+    setContent(next);
+    contentRef.current = next;
+  }, []);
 
   const rollbackOptimistic = useCallback(() => {
     if (rollbackRef.current === null) return;

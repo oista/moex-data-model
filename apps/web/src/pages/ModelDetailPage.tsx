@@ -3,37 +3,59 @@ import { useState, type FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api } from "../api/client";
 import { StatusBadge } from "../components/StatusBadge";
+import { useImplementation } from "../model/useImplementation";
 
 export function ModelDetailPage() {
-  const { slug = "trading" } = useParams();
-  const [q, setQ] = useState("Client");
+  const { slug = "" } = useParams();
+  const { asset, editable, isLoading, error } = useImplementation(slug);
+  const [q, setQ] = useState("");
   const [hits, setHits] = useState<
     Awaited<ReturnType<typeof api.searchIndex>> | null
   >(null);
 
   const conformance = useQuery({
-    queryKey: ["conformance", slug],
-    queryFn: api.tradingConformance,
-    enabled: slug === "trading",
+    queryKey: ["conformance", asset?.id],
+    queryFn: () => api.implementationConformance(asset!.id),
+    enabled: Boolean(asset?.id),
   });
 
   const rebuild = useMutation({
-    mutationFn: api.rebuildIndex,
+    mutationFn: () => api.rebuildIndex(asset!.id),
     onSuccess: async () => {
-      setHits(await api.searchIndex(q));
+      setHits(await api.searchIndex(q || "a", asset!.id));
     },
   });
 
   async function onSearch(e: FormEvent) {
     e.preventDefault();
-    setHits(await api.searchIndex(q));
+    if (!asset) return;
+    setHits(await api.searchIndex(q, asset.id));
   }
 
-  if (slug !== "trading") {
+  if (isLoading) {
+    return (
+      <section>
+        <h1>Model</h1>
+        <p className="lede">Loading…</p>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section>
+        <h1>Model</h1>
+        <p className="error">{error.message}</p>
+        <Link to="/models">Back</Link>
+      </section>
+    );
+  }
+
+  if (!asset) {
     return (
       <section>
         <h1>Unknown model</h1>
-        <p className="lede">Only trading is wired in this MVP.</p>
+        <p className="lede">No implementation registered for “{slug}”.</p>
         <Link to="/models">Back</Link>
       </section>
     );
@@ -41,8 +63,10 @@ export function ModelDetailPage() {
 
   return (
     <section>
-      <h1>Trading platform</h1>
-      <p className="lede">Conformance and searchable model index.</p>
+      <h1>{asset.title}</h1>
+      <p className="lede">
+        <code>{asset.id}</code> · Conformance and searchable model index.
+      </p>
 
       <div className="panel">
         <div className="row">
@@ -59,8 +83,17 @@ export function ModelDetailPage() {
           )}
         </div>
         <div className="row">
-          <Link to="/models/trading/edit">Edit YAML</Link>
-          <Link to="/models/trading/validate">Run validation job</Link>
+          {editable ? (
+            <>
+              <Link to={`/models/${asset.slug}/edit`}>Edit YAML</Link>
+              <Link to={`/models/${asset.slug}/validate`}>Run validation job</Link>
+              <Link to={`/models/${asset.slug}/diagram`}>Open diagram</Link>
+            </>
+          ) : (
+            <span className="lede">
+              Not editable in Workbench (requires LinkML DAMS data model).
+            </span>
+          )}
         </div>
       </div>
 
@@ -81,41 +114,23 @@ export function ModelDetailPage() {
             </span>
           )}
         </div>
-        {rebuild.isError && (
-          <p className="error">{(rebuild.error as Error).message}</p>
-        )}
         <form className="row" onSubmit={onSearch}>
           <input
-            type="text"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search elements"
+            aria-label="Search elements"
           />
           <button type="submit">Search</button>
         </form>
         {hits && (
-          <table>
-            <thead>
-              <tr>
-                <th>Element</th>
-                <th>Kind</th>
-                <th>Name</th>
-                <th>Layer</th>
-              </tr>
-            </thead>
-            <tbody>
-              {hits.map((h) => (
-                <tr key={`${h.element_id}-${h.element_kind}`}>
-                  <td>
-                    <code>{h.element_id}</code>
-                  </td>
-                  <td>{h.element_kind}</td>
-                  <td>{h.name}</td>
-                  <td>{h.layer}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <ul className="model-list">
+            {hits.map((h) => (
+              <li key={`${h.implementation_id}:${h.element_id}`}>
+                <code>{h.element_id}</code> · {h.name} · {h.element_kind}
+              </li>
+            ))}
+          </ul>
         )}
       </div>
     </section>

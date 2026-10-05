@@ -21,6 +21,24 @@ describe("ImportWizardPage", () => {
 
   it("runs import and opens generated-draft without promote", async () => {
     const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
+      if (url === "/api/implementations") {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => [
+            {
+              id: "moex:implementation:trading:1.0.0",
+              slug: "trading",
+              title: "Trading platform",
+              version: "1.0.0",
+              implementation_path: "p",
+              implementation_kind: "linkml",
+              implementation_profile: "dams-data-model",
+              workbench_editable: true,
+            },
+          ],
+        };
+      }
       if (url.includes("/imports") && init?.method === "POST") {
         return {
           ok: true,
@@ -109,7 +127,10 @@ describe("ImportWizardPage", () => {
             ]),
         };
       }
-      if (url.includes("/documents/trading") && init?.method === "PUT") {
+      if (
+        url.includes("/documents/moex%3Aimplementation%3Atrading%3A1.0.0") &&
+        init?.method === "PUT"
+      ) {
         const body = JSON.parse(String(init.body || "{}")) as {
           content: string;
         };
@@ -120,7 +141,7 @@ describe("ImportWizardPage", () => {
           status: 200,
           json: async () => ({
             workspace_id: "ws-1",
-            doc_key: "trading",
+            doc_key: "moex:implementation:trading:1.0.0",
             content: body.content,
             base_digest: "sha256:x",
             updated_by: "dev",

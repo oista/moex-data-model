@@ -2462,6 +2462,11 @@ h2 .edit-toolbar {
   cursor: pointer;
 }
 
+.erd-edge-path.is-distant {
+  stroke-opacity: 0.12;
+  pointer-events: none;
+}
+
 .erd-edge-path.is-selected {
   stroke: var(--erd-selected);
   stroke-width: 2.25;

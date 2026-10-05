@@ -252,3 +252,16 @@ def test_atlas_hierarchy_tabs_in_js():
     assert 'id: "overview"' in gloss
     assert 'id: "list"' in gloss
     assert 'label: "Связи"' in gloss
+
+
+def test_js_hierarchy_edges_snap_to_leaf_boxes():
+    """Hierarchy viz must connect leaf boxes, not ELK compound-port polylines."""
+    js = (VIEWER / "static" / "viewer.js").read_text(encoding="utf-8")
+    assert "function hierarchyConnectPath" in js
+    paint = js.split("function renderHierarchyVisualization")[1].split(
+        "function renderGlossary("
+    )[0]
+    assert "neigh.edges" in paint
+    assert "hierarchyConnectPath(" in paint
+    # Must not paint from ELK edge sections inside the hierarchy viz.
+    assert "elkEdgePoints(" not in paint

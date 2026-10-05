@@ -15,6 +15,8 @@ type RelSummary = {
 
 type Props = {
   workspaceId: string;
+  implementationId: string;
+  idNamespace: string;
   content: string;
   onDocument: (doc: WorkspaceDocument) => void;
   onBeforeMutate?: () => Promise<void>;
@@ -69,6 +71,8 @@ function parseRelationships(content: string): {
 
 export function RelationshipForms({
   workspaceId,
+  implementationId,
+  idNamespace,
   content,
   onDocument,
   onBeforeMutate,
@@ -128,7 +132,7 @@ export function RelationshipForms({
     selected?.target_entity_ref,
   ]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [newId, setNewId] = useState("dams:rel/trading/NewRel");
+  const [newId, setNewId] = useState(`dams:rel/${idNamespace}/NewRel`);
   const [newName, setNewName] = useState("new_rel");
   const [newDescription, setNewDescription] = useState("New relationship");
   const [newSource, setNewSource] = useState("");
@@ -138,7 +142,7 @@ export function RelationshipForms({
     mutationFn: async (body: DocumentMutation) => {
       if (onBeforeMutate) await onBeforeMutate();
       onOptimisticOp?.(body);
-      return api.mutateDocument(workspaceId, body);
+      return api.mutateDocument(workspaceId, implementationId, body);
     },
     onSuccess: onDocument,
     onError: () => onOptimisticRollback?.(),

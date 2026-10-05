@@ -1,6 +1,13 @@
 """Stable public API for moex-modeling-kernel."""
 
-from moex_modeling.assets.public import SchemaRepository
+from moex_modeling.assets.public import (
+    AssetResolutionError,
+    ImplementationAsset,
+    ImplementationCatalog,
+    ImplementationNotFound,
+    PublicationTarget,
+    SchemaRepository,
+)
 from moex_modeling.external_sources.public import (
     LocalArtifact,
     LockEntry,
@@ -82,6 +89,7 @@ from moex_modeling.universe.domain import ModelUniverse, TypedRelation
 
 __all__ = [
     "AnnotationPair",
+    "AssetResolutionError",
     "ChangeCategory",
     "ConformanceAssessment",
     "ConformancePhase",
@@ -94,6 +102,9 @@ __all__ = [
     "DiagnosticSeverity",
     "ExternalTermSelection",
     "GENERATED_DRAFT_STATUS",
+    "ImplementationAsset",
+    "ImplementationCatalog",
+    "ImplementationNotFound",
     "ImplementationProfile",
     "ImplementationRef",
     "ImportDraftEngine",
@@ -110,6 +121,7 @@ __all__ = [
     "ModelUniverse",
     "ModelingStandard",
     "ProvenanceRecord",
+    "PublicationTarget",
     "RawArtifactBundle",
     "ReferenceSpecification",
     "RelationKind",

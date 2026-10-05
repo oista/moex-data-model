@@ -49,7 +49,6 @@ export function DashboardPage() {
       <div className="row">
         <Link to="/models">Open models</Link>
         <Link to="/workspaces">Workspaces</Link>
-        <Link to="/models/trading/validate">Validate trading</Link>
       </div>
     </section>
   );

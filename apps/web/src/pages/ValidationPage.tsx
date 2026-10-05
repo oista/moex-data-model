@@ -1,21 +1,25 @@
 import { useMutation } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { api, setLastJobId } from "../api/client";
 import { StatusBadge } from "../components/StatusBadge";
+import { useImplementation } from "../model/useImplementation";
 
 const WS_ID = "ws-workbench";
-const IMPL = "moex:implementation:trading:1.0.0";
 
 export function ValidationPage() {
+  const { slug = "" } = useParams();
+  const { asset, isLoading, error } = useImplementation(slug);
+
   const run = useMutation({
     mutationFn: async () => {
+      if (!asset) throw new Error("implementation not resolved");
       await api.createWorkspace({ id: WS_ID, name: "Workbench" });
-      const key = `validate-${IMPL}-${Date.now()}`;
+      const key = `validate-${asset.id}-${Date.now()}`;
       const job = await api.createJob(
         {
           kind: "validate",
           workspace_id: WS_ID,
-          implementation_id: IMPL,
+          implementation_id: asset.id,
         },
         key,
       );
@@ -24,11 +28,31 @@ export function ValidationPage() {
     },
   });
 
+  if (isLoading) {
+    return (
+      <section>
+        <h1>Validation report</h1>
+        <p className="lede">Loading…</p>
+      </section>
+    );
+  }
+
+  if (error || !asset) {
+    return (
+      <section>
+        <h1>Validation report</h1>
+        <p className="error">{error?.message || `Unknown model “${slug}”`}</p>
+        <Link to="/models">Back</Link>
+      </section>
+    );
+  }
+
   return (
     <section>
       <h1>Validation report</h1>
       <p className="lede">
-        Synchronous validate job for trading via <code>POST /jobs</code>.
+        Synchronous validate job for <code>{asset.slug}</code> via{" "}
+        <code>POST /jobs</code>.
       </p>
 
       <div className="row">
@@ -40,7 +64,7 @@ export function ValidationPage() {
         >
           Run validate
         </button>
-        <Link to="/models/trading">Back to model</Link>
+        <Link to={`/models/${asset.slug}`}>Back to model</Link>
       </div>
 
       {run.isError && (

@@ -25,8 +25,8 @@ export function App() {
           element={<TransformPage />}
         />
         <Route path="models" element={<ModelsPage />} />
-        <Route path="models/trading/edit" element={<EditorPage />} />
-        <Route path="models/trading/diagram" element={<DiagramPage />} />
+        <Route path="models/:slug/edit" element={<EditorPage />} />
+        <Route path="models/:slug/diagram" element={<DiagramPage />} />
         <Route path="models/:slug" element={<ModelDetailPage />} />
         <Route path="models/:slug/validate" element={<ValidationPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />

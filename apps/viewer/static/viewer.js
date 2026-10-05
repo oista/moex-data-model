@@ -4913,6 +4913,15 @@
     return `M ${x1} ${y1} L ${midX} ${y1} L ${midX} ${y2} L ${x2} ${y2}`;
   }
 
+  const ERD_LOCAL_EDGE_PX = 720;
+
+  function erdEdgeIsLocal(sp, sm, tp, tm, limit) {
+    const sc = erdNodeCenter(sp, sm);
+    const tc = erdNodeCenter(tp, tm);
+    const man = Math.abs(sc.x - tc.x) + Math.abs(sc.y - tc.y);
+    return man <= (Number.isFinite(limit) ? limit : ERD_LOCAL_EDGE_PX);
+  }
+
   function renderErdScene(mod, section, scene, layout, onSelect) {
     const wrap = document.createElement("div");
     wrap.className = "erd-scene-wrap";
@@ -4927,6 +4936,11 @@
       scale: 1,
       selectedNode: null,
       selectedEdge: null,
+      edgeMode:
+        String(scene.profile || "") === "conceptual" ||
+        (scene.edges || []).length >= 24
+          ? "local"
+          : "all",
       editMode: false,
       dirty: false,
       dragging: false,
@@ -4950,6 +4964,23 @@
     btnDownload.type = "button";
     btnDownload.className = "erd-tool-btn";
     btnDownload.textContent = "Скачать layout.json";
+    const btnEdges = document.createElement("button");
+    btnEdges.type = "button";
+    btnEdges.className = "erd-tool-btn";
+    function syncEdgeModeBtn() {
+      const local = state.edgeMode === "local";
+      btnEdges.textContent = local ? "Все связи" : "Ближние связи";
+      btnEdges.classList.toggle("is-active", local);
+      btnEdges.title = local
+        ? "Показаны короткие связи; дальние — у выбранной сущности"
+        : "Скрыть дальние hop'ы, которые оставляют подписи в пустом месте";
+    }
+    syncEdgeModeBtn();
+    btnEdges.addEventListener("click", () => {
+      state.edgeMode = state.edgeMode === "local" ? "all" : "local";
+      syncEdgeModeBtn();
+      redraw();
+    });
     const colorInput = document.createElement("input");
     colorInput.type = "color";
     colorInput.className = "erd-color-input";
@@ -4962,6 +4993,7 @@
     tools.appendChild(btnEdit);
     tools.appendChild(btnSave);
     tools.appendChild(btnDownload);
+    tools.appendChild(btnEdges);
     tools.appendChild(colorInput);
     tools.appendChild(status);
     wrap.appendChild(tools);
@@ -5066,6 +5098,13 @@
         const x2 = a2.x;
         const y2 = a2.y;
         const ek = erdEdgeKey(edge);
+        const focused =
+          state.selectedNode === sk ||
+          state.selectedNode === tk ||
+          state.selectedEdge === ek;
+        const local = erdEdgeIsLocal(sp, sm, tp, tm);
+        const distant = state.edgeMode === "local" && !focused && !local;
+        if (distant) return;
         const edgeLayout = (state.layout.edges || {})[ek] || {};
         const bend = (edgeLayout.points && edgeLayout.points[0]) || null;
         const path = document.createElementNS(NS, "path");
@@ -7545,6 +7584,23 @@
     return pts;
   }
 
+  /** Orthogonal path between two leaf boxes (ELK layout positions only). */
+  function hierarchyConnectPath(srcBox, tgtBox) {
+    if (!srcBox || !tgtBox) return null;
+    const sp = { x: srcBox.x, y: srcBox.y };
+    const tp = { x: tgtBox.x, y: tgtBox.y };
+    const sm = { width: srcBox.width, height: srcBox.height };
+    const tm = { width: tgtBox.width, height: tgtBox.height };
+    const [side1, side2] = erdPickSides(sp, sm, tp, tm);
+    const a1 = erdAnchorOnSide(sp, sm, side1);
+    const a2 = erdAnchorOnSide(tp, tm, side2);
+    return {
+      d: orthogonalErdPath(a1.x, a1.y, a2.x, a2.y, null, side1, side2),
+      midX: (a1.x + a2.x) / 2,
+      midY: (a1.y + a2.y) / 2,
+    };
+  }
+
   function downloadBlob(filename, blob) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -7769,27 +7825,27 @@
           }
         });
 
-      // Edges
-      (laid.edges || []).forEach((edge) => {
-        const pts = elkEdgePoints(edge);
-        if (pts.length < 2) return;
-        const d = pts
-          .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`)
-          .join(" ");
+      // Edges: snap to leaf boxes (ignore ELK compound-port polylines).
+      const leafBoxes = new Map();
+      flat
+        .filter((n) => !n.isCompound)
+        .forEach((n) => leafBoxes.set(n.id, n));
+      (neigh.edges || []).forEach((edge) => {
+        const srcBox = leafBoxes.get(String(edge.source));
+        const tgtBox = leafBoxes.get(String(edge.target));
+        if (!srcBox || !tgtBox) return;
+        const conn = hierarchyConnectPath(srcBox, tgtBox);
+        if (!conn) return;
         const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        path.setAttribute("d", d);
+        path.setAttribute("d", conn.d);
         path.setAttribute("class", "hierarchy-edge");
         path.setAttribute("fill", "none");
         gWorld.appendChild(path);
-        const rel =
-          edge.labels && edge.labels[0] && edge.labels[0].text
-            ? String(edge.labels[0].text)
-            : "";
-        if (rel && pts.length >= 2) {
-          const mid = pts[Math.floor(pts.length / 2)];
+        const rel = edge.rel ? String(edge.rel) : "";
+        if (rel) {
           const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
-          t.setAttribute("x", String(mid.x));
-          t.setAttribute("y", String(mid.y - 4));
+          t.setAttribute("x", String(conn.midX));
+          t.setAttribute("y", String(conn.midY - 4));
           t.setAttribute("class", "hierarchy-edge-label");
           t.textContent = rel.length > 28 ? rel.slice(0, 27) + "…" : rel;
           gWorld.appendChild(t);

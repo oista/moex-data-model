@@ -6,7 +6,7 @@ import {
   screen,
   waitFor,
 } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@monaco-editor/react", () => ({
@@ -39,6 +39,24 @@ describe("EditorPage", () => {
 
   it("loads published body when no draft", async () => {
     const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
+      if (url === "/api/implementations" && (!init || !init.method || init.method === "GET")) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ([
+            {
+              id: "moex:implementation:trading:1.0.0",
+              slug: "trading",
+              title: "Trading platform",
+              version: "1.0.0",
+              implementation_path: "p",
+              implementation_kind: "linkml",
+              implementation_profile: "dams-data-model",
+              workbench_editable: true,
+            },
+          ]),
+        };
+      }
       if (url === "/api/workspaces" && init?.method === "POST") {
         return {
           ok: true,
@@ -51,7 +69,7 @@ describe("EditorPage", () => {
         };
       }
       if (
-        url.includes("/documents/trading") &&
+        url.includes("/documents/moex%3Aimplementation%3Atrading%3A1.0.0") &&
         !url.includes("/mutations") &&
         init?.method !== "PUT"
       ) {
@@ -62,7 +80,7 @@ describe("EditorPage", () => {
           text: async () => "missing",
         };
       }
-      if (url === "/api/implementations/trading/body") {
+      if (url === "/api/implementations/moex%3Aimplementation%3Atrading%3A1.0.0/body") {
         return {
           ok: true,
           status: 200,
@@ -87,8 +105,10 @@ describe("EditorPage", () => {
     });
     render(
       <QueryClientProvider client={qc}>
-        <MemoryRouter>
-          <EditorPage />
+        <MemoryRouter initialEntries={["/models/trading/edit"]}>
+          <Routes>
+            <Route path="models/:slug/edit" element={<EditorPage />} />
+          </Routes>
         </MemoryRouter>
       </QueryClientProvider>,
     );
@@ -101,6 +121,24 @@ describe("EditorPage", () => {
 
   it("PUTs dirty Monaco content before mutation", async () => {
     const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
+      if (url === "/api/implementations" && (!init || !init.method || init.method === "GET")) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ([
+            {
+              id: "moex:implementation:trading:1.0.0",
+              slug: "trading",
+              title: "Trading platform",
+              version: "1.0.0",
+              implementation_path: "p",
+              implementation_kind: "linkml",
+              implementation_profile: "dams-data-model",
+              workbench_editable: true,
+            },
+          ]),
+        };
+      }
       if (url === "/api/workspaces" && init?.method === "POST") {
         return {
           ok: true,
@@ -113,7 +151,7 @@ describe("EditorPage", () => {
         };
       }
       if (
-        url.includes("/documents/trading") &&
+        url.includes("/documents/moex%3Aimplementation%3Atrading%3A1.0.0") &&
         !url.includes("/mutations") &&
         init?.method !== "PUT"
       ) {
@@ -124,7 +162,7 @@ describe("EditorPage", () => {
           text: async () => "missing",
         };
       }
-      if (url === "/api/implementations/trading/body") {
+      if (url === "/api/implementations/moex%3Aimplementation%3Atrading%3A1.0.0/body") {
         return {
           ok: true,
           status: 200,
@@ -135,7 +173,7 @@ describe("EditorPage", () => {
           }),
         };
       }
-      if (url.includes("/documents/trading") && init?.method === "PUT") {
+      if (url.includes("/documents/moex%3Aimplementation%3Atrading%3A1.0.0") && init?.method === "PUT") {
         const body = JSON.parse(String(init.body));
         return {
           ok: true,
@@ -176,8 +214,10 @@ describe("EditorPage", () => {
     });
     render(
       <QueryClientProvider client={qc}>
-        <MemoryRouter>
-          <EditorPage />
+        <MemoryRouter initialEntries={["/models/trading/edit"]}>
+          <Routes>
+            <Route path="models/:slug/edit" element={<EditorPage />} />
+          </Routes>
         </MemoryRouter>
       </QueryClientProvider>,
     );
@@ -194,7 +234,7 @@ describe("EditorPage", () => {
 
     await waitFor(() => {
       const put = fetchMock.mock.calls.find(
-        (c) => c[1]?.method === "PUT" && String(c[0]).includes("/documents/trading"),
+        (c) => c[1]?.method === "PUT" && String(c[0]).includes("/documents/moex%3Aimplementation%3Atrading%3A1.0.0"),
       );
       expect(put).toBeTruthy();
       expect(String(put![1]!.body)).toContain("dirty edit");
@@ -210,6 +250,24 @@ describe("EditorPage", () => {
 
   it("saves draft then previews semantic diff", async () => {
     const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
+      if (url === "/api/implementations" && (!init || !init.method || init.method === "GET")) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ([
+            {
+              id: "moex:implementation:trading:1.0.0",
+              slug: "trading",
+              title: "Trading platform",
+              version: "1.0.0",
+              implementation_path: "p",
+              implementation_kind: "linkml",
+              implementation_profile: "dams-data-model",
+              workbench_editable: true,
+            },
+          ]),
+        };
+      }
       if (url === "/api/workspaces" && init?.method === "POST") {
         return {
           ok: true,
@@ -222,9 +280,10 @@ describe("EditorPage", () => {
         };
       }
       if (
-        url.includes("/documents/trading") &&
+        url.includes("/documents/moex%3Aimplementation%3Atrading%3A1.0.0") &&
         !url.includes("/mutations") &&
-        init?.method !== "PUT"
+        !url.includes("/semantic-diff") &&
+        (!init?.method || init.method === "GET")
       ) {
         return {
           ok: false,
@@ -233,7 +292,7 @@ describe("EditorPage", () => {
           text: async () => "missing",
         };
       }
-      if (url === "/api/implementations/trading/body") {
+      if (url === "/api/implementations/moex%3Aimplementation%3Atrading%3A1.0.0/body") {
         return {
           ok: true,
           status: 200,
@@ -244,7 +303,7 @@ describe("EditorPage", () => {
           }),
         };
       }
-      if (url.includes("/documents/trading") && init?.method === "PUT") {
+      if (url.includes("/documents/moex%3Aimplementation%3Atrading%3A1.0.0") && init?.method === "PUT") {
         const body = JSON.parse(String(init.body));
         return {
           ok: true,
@@ -300,8 +359,10 @@ describe("EditorPage", () => {
     });
     render(
       <QueryClientProvider client={qc}>
-        <MemoryRouter>
-          <EditorPage />
+        <MemoryRouter initialEntries={["/models/trading/edit"]}>
+          <Routes>
+            <Route path="models/:slug/edit" element={<EditorPage />} />
+          </Routes>
         </MemoryRouter>
       </QueryClientProvider>,
     );
@@ -316,7 +377,7 @@ describe("EditorPage", () => {
     expect(screen.getByText(/DAMS-DIFF-REMOVE/)).toBeTruthy();
 
     const put = fetchMock.mock.calls.find(
-      (c) => c[1]?.method === "PUT" && String(c[0]).includes("/documents/trading"),
+      (c) => c[1]?.method === "PUT" && String(c[0]).includes("/documents/moex%3Aimplementation%3Atrading%3A1.0.0"),
     );
     expect(put).toBeTruthy();
     const diffCall = fetchMock.mock.calls.find(

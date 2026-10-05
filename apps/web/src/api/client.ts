@@ -37,17 +37,29 @@ async function request<T>(
   return (await res.json()) as T;
 }
 
+function implPath(implementationId: string, suffix = ""): string {
+  const enc = encodeURIComponent(implementationId);
+  return `/implementations/${enc}${suffix}`;
+}
+
+function docPath(workspaceId: string, implementationId: string, suffix = ""): string {
+  const enc = encodeURIComponent(implementationId);
+  return `/workspaces/${workspaceId}/documents/${enc}${suffix}`;
+}
+
 export const api = {
   health: () => request<{ status: string }>("/health"),
   listImplementations: () =>
     request<import("./types").Implementation[]>("/implementations"),
-  tradingConformance: () =>
+  getImplementation: (implementationId: string) =>
+    request<import("./types").Implementation>(implPath(implementationId)),
+  implementationConformance: (implementationId: string) =>
     request<import("./types").Conformance>(
-      "/implementations/trading/conformance",
+      implPath(implementationId, "/conformance"),
     ),
-  tradingBody: () =>
+  implementationBody: (implementationId: string) =>
     request<import("./types").ImplementationBody>(
-      "/implementations/trading/body",
+      implPath(implementationId, "/body"),
     ),
   listWorkspaces: () =>
     request<import("./types").Workspace[]>("/workspaces"),
@@ -58,16 +70,17 @@ export const api = {
     }),
   getWorkspace: (id: string) =>
     request<import("./types").Workspace>(`/workspaces/${id}`),
-  getDocument: (workspaceId: string) =>
+  getDocument: (workspaceId: string, implementationId: string) =>
     request<import("./types").WorkspaceDocument>(
-      `/workspaces/${workspaceId}/documents/trading`,
+      docPath(workspaceId, implementationId),
     ),
   putDocument: (
     workspaceId: string,
+    implementationId: string,
     body: { content: string; base_digest?: string },
   ) =>
     request<import("./types").WorkspaceDocument>(
-      `/workspaces/${workspaceId}/documents/trading`,
+      docPath(workspaceId, implementationId),
       {
         method: "PUT",
         body: JSON.stringify(body),
@@ -75,10 +88,11 @@ export const api = {
     ),
   mutateDocument: (
     workspaceId: string,
+    implementationId: string,
     body: import("./types").DocumentMutation,
   ) =>
     request<import("./types").WorkspaceDocument>(
-      `/workspaces/${workspaceId}/documents/trading/mutations`,
+      docPath(workspaceId, implementationId, "/mutations"),
       {
         method: "POST",
         body: JSON.stringify(body),
@@ -87,7 +101,7 @@ export const api = {
   createPublication: (
     body: {
       workspace_id: string;
-      implementation_id?: string;
+      implementation_id: string;
       title?: string;
       base_ref?: string;
     },
@@ -103,9 +117,9 @@ export const api = {
       body: JSON.stringify(body),
     });
   },
-  previewSemanticDiff: (workspaceId: string) =>
+  previewSemanticDiff: (workspaceId: string, implementationId: string) =>
     request<import("./types").SemanticDiffReport>(
-      `/workspaces/${workspaceId}/semantic-diff`,
+      docPath(workspaceId, implementationId, "/semantic-diff"),
       { method: "POST" },
     ),
   getPublication: (id: string) =>
@@ -176,23 +190,33 @@ export const api = {
     }
     return (await res.json()) as import("./types").Job;
   },
-  rebuildIndex: () =>
-    request<import("./types").ModelIndexRebuild>("/model-index/rebuild", {
-      method: "POST",
-    }),
-  searchIndex: (q: string) =>
-    request<import("./types").ElementHit[]>(
-      `/model-index/search?q=${encodeURIComponent(q)}`,
+  rebuildIndex: (implementationId: string) =>
+    request<import("./types").ModelIndexRebuild>(
+      `/model-index/rebuild?implementation_id=${encodeURIComponent(implementationId)}`,
+      { method: "POST" },
     ),
+  searchIndex: (q: string, implementationId?: string) => {
+    const params = new URLSearchParams({ q });
+    if (implementationId) {
+      params.set("implementation_id", implementationId);
+    }
+    return request<import("./types").ElementHit[]>(
+      `/model-index/search?${params.toString()}`,
+    );
+  },
   openDiagram: (
     workspaceId: string,
+    implementationId: string,
     profile: "logical" | "physical" = "logical",
   ) =>
     request<import("./types").DiagramSession>(
       `/workspaces/${workspaceId}/diagrams`,
       {
         method: "POST",
-        body: JSON.stringify({ profile }),
+        body: JSON.stringify({
+          implementation_id: implementationId,
+          profile,
+        }),
       },
     ),
   getDiagram: (workspaceId: string, sessionId: string) =>

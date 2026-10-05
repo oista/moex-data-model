@@ -379,6 +379,8 @@ Toolchain bump: обновить [`requirements-linkml.txt`](../requirements-lin
 
 **Progress (2026-09-28 residual + CURIE):** `SchemaRepository` Protocol + `DamsAssetRepository` wired into `assess_implementation` / `diff_implementations`; `ConformanceRuleRunner` + `diagnostic_to_wire` in CLI/API; unified `build_element_index`; `DamsModelGraphView` covers ModelPackage collections including `relationships`; kernel `CurieUriResolver` + assess rule `MOEX-ID-001` (unknown CURIE prefix). «ModelGraph для DAMS» = bounded `DamsModelGraphView` (MODELING_ARCHITECTURE §8), not a kernel abstract class. Deferred: repository-root (`MOEXModelRepository`) graph, abstract kernel `ModelGraph`, separate `SchemaLoader`/`ModelInstanceLoader` types.
 
+**Progress (2026-10-05 ImplementationCatalog P0):** Kernel `ImplementationCatalog` + `FilesystemImplementationCatalog` over `model-assets/implementations/**/implementation.yaml`. Workbench API/Web use universal routes (`/implementations/{id}`, `/documents/{id}`, `/models/:slug/*`); `doc_key` = canonical coordinate; contract suite covers trading/MDM/UCD/CRM/ЕСЭД.
+
 ### Задачи
 
 - Создать `SchemaRepository`.

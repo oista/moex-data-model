@@ -4,7 +4,11 @@ export type Implementation = {
   id: string;
   slug: string;
   title: string;
+  version: string;
   implementation_path: string;
+  implementation_kind: string;
+  implementation_profile: string | null;
+  workbench_editable: boolean;
 };
 
 export type Conformance = {
