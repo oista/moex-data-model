@@ -2,47 +2,13 @@
 element_id: dams:model/mdm/0.1.0
 name: mdm_solution_model
 title: Модель данных MDM
-description: 'Модель данных ИТ-решения MDM (золотые записи ЮЛ/ФЛ и связи) импортирована
-  из Object/ObjectAttribute.
+description: 'Модель данных ИТ-решения MDM (золотые записи ЮЛ/ФЛ и связи) импортирована из Object/ObjectAttribute.
 
   '
 lifecycle_status: draft
 api_version: dams.moex/v0.1
 model_version: 0.1.0
 solution_ref: eam:solution/MDM
-conceptual_entities:
-- element_id: dams:concept/ENTERPRISE
-  name: ENTERPRISE
-  title: Юридические лица (ЮЛ)
-  description: Юридические лица (ЮЛ)
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/PERSON
-  name: PERSON
-  title: Физические лица (ФЛ)
-  description: Физические лица (ФЛ)
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/PERSON_CEO
-  name: PERSON_CEO
-  title: ЕИО (СЕО) Единоличный исполнительный орган
-  description: MOSCOW_EXCHANGE.T_CEO
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/PERSON_REPRESENTATIVE
-  name: PERSON_REPRESENTATIVE
-  title: Представители ЮЛ
-  description: MOSCOW_EXCHANGE.T_REPRESENTATIVE
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
 domain_contexts:
 - element_id: dams:context/mdm
   name: MdmContext
@@ -60,7 +26,7 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/mdm
   conceptual_entity_refs:
-  - dams:concept/ENTERPRISE
+  - dams:concept/LegalEntity
   solution_ref: eam:solution/MDM
   solution_data_role: producer
   entity_type: core
@@ -245,10 +211,8 @@ logical_entities:
     governance_classification: internal
   - element_id: dams:logical/mdm/ENTERPRISE/CEO_INN
     name: CEO_INN
-    title: 'ЕИО:Сведения о лице, имеющем право без доверенности действовать от имени
-      ЮЛ: ИНН'
-    description: 'ЕИО:Сведения о лице, имеющем право без доверенности действовать
-      от имени ЮЛ: ИНН'
+    title: 'ЕИО:Сведения о лице, имеющем право без доверенности действовать от имени ЮЛ: ИНН'
+    description: 'ЕИО:Сведения о лице, имеющем право без доверенности действовать от имени ЮЛ: ИНН'
     lifecycle_status: draft
     owner_entity_ref: dams:logical/mdm/ENTERPRISE
     logical_type: string
@@ -346,10 +310,10 @@ logical_entities:
     governance_classification: internal
   - element_id: dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG
     name: ACTIVE_FLAG
-    title: Является ли запись удаленной (0) или активной (1) хотя бы на одном из источников
-      в последней загрузке
-    description: Является ли запись удаленной (0) или активной (1) хотя бы на одном
-      из источников в последней загрузке
+    title: Является ли запись удаленной (0) или активной (1) хотя бы на одном из источников в 
+      последней загрузке
+    description: Является ли запись удаленной (0) или активной (1) хотя бы на одном из источников в 
+      последней загрузке
     lifecycle_status: draft
     owner_entity_ref: dams:logical/mdm/ENTERPRISE
     logical_type: decimal
@@ -362,11 +326,11 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: aligned
+  alignment_rationale: MDM ENTERPRISE — золотая запись ЮЛ; реализует LegalEntity (Organization — 
+    parent_concept, не дублируем).
 - element_id: dams:logical/mdm/PERSON
   name: PERSON
   title: Физические лица (ФЛ)
@@ -374,7 +338,7 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/mdm
   conceptual_entity_refs:
-  - dams:concept/PERSON
+  - dams:concept/Person
   solution_ref: eam:solution/MDM
   solution_data_role: producer
   entity_type: core
@@ -518,19 +482,16 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: aligned
+  alignment_rationale: MDM PERSON — золотая запись ФЛ; реализует корпоративный Person.
 - element_id: dams:logical/mdm/PERSON_CEO
   name: PERSON_CEO
   title: ЕИО (СЕО) Единоличный исполнительный орган
   description: MOSCOW_EXCHANGE.T_CEO
   lifecycle_status: draft
   context_ref: dams:context/mdm
-  conceptual_entity_refs:
-  - dams:concept/PERSON_CEO
   solution_ref: eam:solution/MDM
   solution_data_role: producer
   entity_type: core
@@ -564,19 +525,17 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: local-only
+  alignment_rationale: 'Ассоциация ЮЛ–ФЛ (ЕИО / T_CEO), не Person и не LegalEntity. Волна B: концепт SoleExecutive
+    — follow-up.'
 - element_id: dams:logical/mdm/PERSON_REPRESENTATIVE
   name: PERSON_REPRESENTATIVE
   title: Представители ЮЛ
   description: MOSCOW_EXCHANGE.T_REPRESENTATIVE
   lifecycle_status: draft
   context_ref: dams:context/mdm
-  conceptual_entity_refs:
-  - dams:concept/PERSON_REPRESENTATIVE
   solution_ref: eam:solution/MDM
   solution_data_role: producer
   entity_type: core
@@ -610,11 +569,11 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: local-only
+  alignment_rationale: 'Ассоциация ЮЛ–ФЛ (представитель / T_REPRESENTATIVE). Волна B: концепт LegalRepresentative
+    — follow-up.'
 relationships:
 - element_id: dams:rel/mdm/PERSON_CEO_to_ENTERPRISE_via_ENTERPRISE_ID
   name: PERSON_CEO_to_ENTERPRISE_via_ENTERPRISE_ID
@@ -826,8 +785,7 @@ physical_objects:
     mapping_coverage_status: mapped
   - element_id: dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_INN
     name: CEO_INN
-    description: 'Сведения о лице, имеющем право без доверенности действовать от имени
-      ЮЛ: ИНН'
+    description: 'Сведения о лице, имеющем право без доверенности действовать от имени ЮЛ: ИНН'
     lifecycle_status: draft
     physical_object_ref: dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE
     native_name: CEO_INN
@@ -908,8 +866,8 @@ physical_objects:
     mapping_coverage_status: mapped
   - element_id: dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ACTIVE_FLAG
     name: ACTIVE_FLAG
-    description: Является ли запись удаленной (0) или активной (1) хотя бы на одном
-      из источников в последней загрузке
+    description: Является ли запись удаленной (0) или активной (1) хотя бы на одном из источников в 
+      последней загрузке
     lifecycle_status: draft
     physical_object_ref: dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE
     native_name: ACTIVE_FLAG
@@ -1196,8 +1154,8 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_ENTERPRISE_ADDR_EGRUL_REGION
   name: map_ENTERPRISE_ADDR_EGRUL_REGION
-  description: Mapping map_ENTERPRISE_ADDR_EGRUL_REGION. BaseSrc=ECBD/Единая клиентская
-    база данных/V_ECBD_UR
+  description: Mapping map_ENTERPRISE_ADDR_EGRUL_REGION. BaseSrc=ECBD/Единая клиентская база 
+    данных/V_ECBD_UR
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION
@@ -1217,8 +1175,8 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_ENTERPRISE_INN_NONRESIDENT
   name: map_ENTERPRISE_INN_NONRESIDENT
-  description: Mapping map_ENTERPRISE_INN_NONRESIDENT. BaseSrc=ECBD/Единая клиентская
-    база данных/V_ECBD_UR
+  description: Mapping map_ENTERPRISE_INN_NONRESIDENT. BaseSrc=ECBD/Единая клиентская база 
+    данных/V_ECBD_UR
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT
@@ -1248,8 +1206,8 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_ENTERPRISE_REG_NUM_NONRESIDENT
   name: map_ENTERPRISE_REG_NUM_NONRESIDENT
-  description: Mapping map_ENTERPRISE_REG_NUM_NONRESIDENT. BaseSrc=ECBD/Единая клиентская
-    база данных/V_ECBD_UR
+  description: Mapping map_ENTERPRISE_REG_NUM_NONRESIDENT. BaseSrc=ECBD/Единая клиентская база 
+    данных/V_ECBD_UR
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT
@@ -1319,8 +1277,7 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_ENTERPRISE_ECBD_ID
   name: map_ENTERPRISE_ECBD_ID
-  description: Mapping map_ENTERPRISE_ECBD_ID. BaseSrc=ECBD/Единая клиентская база
-    данных/V_ECBD_UR
+  description: Mapping map_ENTERPRISE_ECBD_ID. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_UR
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/ENTERPRISE/ECBD_ID
@@ -1330,8 +1287,7 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_ENTERPRISE_UNICODE
   name: map_ENTERPRISE_UNICODE
-  description: Mapping map_ENTERPRISE_UNICODE. BaseSrc=ECBD/Единая клиентская база
-    данных/V_ECBD_UR
+  description: Mapping map_ENTERPRISE_UNICODE. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_UR
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/ENTERPRISE/UNICODE
@@ -1391,7 +1347,8 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_PERSON_LAST_NAME
   name: map_PERSON_LAST_NAME
-  description: Mapping map_PERSON_LAST_NAME. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
+  description: Mapping map_PERSON_LAST_NAME. BaseSrc=ECBD/Единая клиентская база 
+    данных/V_ECBD_PERSON
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/PERSON/LAST_NAME
@@ -1401,7 +1358,7 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_PERSON_FIRST_NAME
   name: map_PERSON_FIRST_NAME
-  description: Mapping map_PERSON_FIRST_NAME. BaseSrc=ECBD/Единая клиентская база
+  description: Mapping map_PERSON_FIRST_NAME. BaseSrc=ECBD/Единая клиентская база 
     данных/V_ECBD_PERSON
   lifecycle_status: draft
   source_refs:
@@ -1412,7 +1369,7 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_PERSON_PATRONYMIC
   name: map_PERSON_PATRONYMIC
-  description: Mapping map_PERSON_PATRONYMIC. BaseSrc=ECBD/Единая клиентская база
+  description: Mapping map_PERSON_PATRONYMIC. BaseSrc=ECBD/Единая клиентская база 
     данных/V_ECBD_PERSON
   lifecycle_status: draft
   source_refs:
@@ -1423,7 +1380,8 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_PERSON_DATEBIRTH
   name: map_PERSON_DATEBIRTH
-  description: Mapping map_PERSON_DATEBIRTH. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
+  description: Mapping map_PERSON_DATEBIRTH. BaseSrc=ECBD/Единая клиентская база 
+    данных/V_ECBD_PERSON
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/PERSON/DATEBIRTH
@@ -1463,8 +1421,8 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_CODE
   name: map_PERSON_IDENTITY_DOCUMENT_CODE
-  description: Mapping map_PERSON_IDENTITY_DOCUMENT_CODE. BaseSrc=ECBD/Единая клиентская
-    база данных/V_ECBD_PERSON
+  description: Mapping map_PERSON_IDENTITY_DOCUMENT_CODE. BaseSrc=ECBD/Единая клиентская база 
+    данных/V_ECBD_PERSON
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE
@@ -1474,8 +1432,8 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_CODE_OMEGA
   name: map_PERSON_IDENTITY_DOCUMENT_CODE_OMEGA
-  description: Mapping map_PERSON_IDENTITY_DOCUMENT_CODE_OMEGA. BaseSrc=ECBD/Единая
-    клиентская база данных/V_ECBD_PERSON
+  description: Mapping map_PERSON_IDENTITY_DOCUMENT_CODE_OMEGA. BaseSrc=ECBD/Единая клиентская база 
+    данных/V_ECBD_PERSON
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA
@@ -1485,8 +1443,8 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_TYPE
   name: map_PERSON_IDENTITY_DOCUMENT_TYPE
-  description: Mapping map_PERSON_IDENTITY_DOCUMENT_TYPE. BaseSrc=ECBD/Единая клиентская
-    база данных/V_ECBD_PERSON
+  description: Mapping map_PERSON_IDENTITY_DOCUMENT_TYPE. BaseSrc=ECBD/Единая клиентская база 
+    данных/V_ECBD_PERSON
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE
@@ -1496,8 +1454,8 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_PERSON_CEO_ENTERPRISE_ID
   name: map_PERSON_CEO_ENTERPRISE_ID
-  description: Mapping map_PERSON_CEO_ENTERPRISE_ID. BaseSrc=ECBD/Единая клиентская
-    база данных/V_ECBD_REF_CEO
+  description: Mapping map_PERSON_CEO_ENTERPRISE_ID. BaseSrc=ECBD/Единая клиентская база 
+    данных/V_ECBD_REF_CEO
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID
@@ -1507,7 +1465,7 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_PERSON_CEO_PERSON_ID
   name: map_PERSON_CEO_PERSON_ID
-  description: Mapping map_PERSON_CEO_PERSON_ID. BaseSrc=ECBD/Единая клиентская база
+  description: Mapping map_PERSON_CEO_PERSON_ID. BaseSrc=ECBD/Единая клиентская база 
     данных/V_ECBD_REF_CEO
   lifecycle_status: draft
   source_refs:
@@ -1518,8 +1476,8 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_PERSON_REPRESENTATIVE_ENTERPRISE_ID
   name: map_PERSON_REPRESENTATIVE_ENTERPRISE_ID
-  description: Mapping map_PERSON_REPRESENTATIVE_ENTERPRISE_ID. BaseSrc=ECBD/Единая
-    клиентская база данных/V_ECBD_REF_REPRESENTATIVE
+  description: Mapping map_PERSON_REPRESENTATIVE_ENTERPRISE_ID. BaseSrc=ECBD/Единая клиентская база 
+    данных/V_ECBD_REF_REPRESENTATIVE
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID
@@ -1529,8 +1487,8 @@ mappings:
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/mdm/map_PERSON_REPRESENTATIVE_PERSON_ID
   name: map_PERSON_REPRESENTATIVE_PERSON_ID
-  description: Mapping map_PERSON_REPRESENTATIVE_PERSON_ID. BaseSrc=ECBD/Единая клиентская
-    база данных/V_ECBD_REF_REPRESENTATIVE
+  description: Mapping map_PERSON_REPRESENTATIVE_PERSON_ID. BaseSrc=ECBD/Единая клиентская база 
+    данных/V_ECBD_REF_REPRESENTATIVE
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID
@@ -1584,54 +1542,28 @@ mappings:
   approval_status: proposed
 - element_id: dams:mapping/mdm/realizes_ENTERPRISE
   name: realizes_ENTERPRISE
-  description: 'Локальный stub: ENTERPRISE realizes conceptual ENTERPRISE (импорт
-    xlsx; выверка с enterprise — follow-up).'
+  description: MDM ENTERPRISE realizes enterprise dams:concept/LegalEntity (ADR-021/029).
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/ENTERPRISE
   target_refs:
-  - dams:concept/ENTERPRISE
+  - dams:concept/LegalEntity
   mapping_type: realizes
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/mdm/realizes_PERSON
   name: realizes_PERSON
-  description: 'Локальный stub: PERSON realizes conceptual PERSON (импорт xlsx; выверка
-    с enterprise — follow-up).'
+  description: MDM PERSON realizes enterprise dams:concept/Person (ADR-021/029).
   lifecycle_status: draft
   source_refs:
   - dams:logical/mdm/PERSON
   target_refs:
-  - dams:concept/PERSON
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/mdm/realizes_PERSON_CEO
-  name: realizes_PERSON_CEO
-  description: 'Локальный stub: PERSON_CEO realizes conceptual PERSON_CEO (импорт
-    xlsx; выверка с enterprise — follow-up).'
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON_CEO
-  target_refs:
-  - dams:concept/PERSON_CEO
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/mdm/realizes_PERSON_REPRESENTATIVE
-  name: realizes_PERSON_REPRESENTATIVE
-  description: 'Локальный stub: PERSON_REPRESENTATIVE realizes conceptual PERSON_REPRESENTATIVE
-    (импорт xlsx; выверка с enterprise — follow-up).'
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON_REPRESENTATIVE
-  target_refs:
-  - dams:concept/PERSON_REPRESENTATIVE
+  - dams:concept/Person
   mapping_type: realizes
   mapping_cardinality: one_to_one
   approval_status: proposed
 implementation_scope: solution
 conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
 data_owner_ref: org:role/DATA_OWNER_PENDING
-ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при
-  отсутствии локального override на сущности.
+ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при отсутствии 
+  локального override на сущности.

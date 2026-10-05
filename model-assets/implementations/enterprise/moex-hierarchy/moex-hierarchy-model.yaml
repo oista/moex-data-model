@@ -369,91 +369,80 @@ logical_entities:
   title: attorney_check_info
   description: attorney_check_info
   conceptual_entity_refs:
-  - dams:concept/attorney_check_info
+  - dams:concept/SupportingDocument
 - element_id: dams:logical/esed/common_state
   name: common_state
   title: common_state
   description: common_state
-  conceptual_entity_refs:
-  - dams:concept/common_state
 - element_id: dams:logical/esed/common_type
   name: common_type
   title: common_type
   description: common_type
-  conceptual_entity_refs:
-  - dams:concept/common_type
 - element_id: dams:logical/esed/division
   name: division
   title: division
   description: division
   conceptual_entity_refs:
-  - dams:concept/division
+  - dams:concept/Department
 - element_id: dams:logical/esed/document
   name: document
   title: document
   description: document
   conceptual_entity_refs:
-  - dams:concept/document
+  - dams:concept/SupportingDocument
 - element_id: dams:logical/esed/employee
   name: employee
   title: employee
   description: employee
   conceptual_entity_refs:
-  - dams:concept/employee
+  - dams:concept/Employee
 - element_id: dams:logical/esed/file
   name: file
   title: file
   description: file
-  conceptual_entity_refs:
-  - dams:concept/file
 - element_id: dams:logical/esed/file_binary
   name: file_binary
   title: file_binary
   description: file_binary
-  conceptual_entity_refs:
-  - dams:concept/file_binary
 - element_id: dams:logical/esed/instance
   name: instance
   title: instance
   description: instance
   conceptual_entity_refs:
-  - dams:concept/instance
+  - dams:concept/SupportingDocument
 - element_id: dams:logical/esed/organization
   name: organization
   title: organization
   description: organization
   conceptual_entity_refs:
-  - dams:concept/organization
+  - dams:concept/LegalEntity
 - element_id: dams:logical/esed/organization_employee
   name: organization_employee
   title: organization_employee
   description: organization_employee
   conceptual_entity_refs:
-  - dams:concept/organization_employee
+  - dams:concept/Person
 - element_id: dams:logical/esed/universal_item
   name: universal_item
   title: universal_item
   description: universal_item
-  conceptual_entity_refs:
-  - dams:concept/universal_item
 - element_id: dams:logical/ucd/POSITION
   name: POSITION
   title: Должность сотрудника
   description: Должность сотрудника
   conceptual_entity_refs:
-  - dams:concept/POSITION
+  - dams:concept/StaffPosition
 - element_id: dams:logical/mdm/PERSON_CEO
   name: PERSON_CEO
   title: ЕИО (СЕО) Единоличный исполнительный орган
   description: MOSCOW_EXCHANGE.T_CEO
-  conceptual_entity_refs:
-  - dams:concept/PERSON_CEO
 - element_id: dams:logical/crm/CUSTOMER
   name: CUSTOMER
   title: Клиент
   description: Клиент
   conceptual_entity_refs:
-  - dams:concept/CUSTOMER
+  - dams:concept/Client
+  - dams:concept/LegalEntity
 - element_id: dams:logical/trading/Client
   name: TradingClient
   title: Клиент торгового решения
@@ -465,67 +454,59 @@ logical_entities:
   title: Контакт
   description: Контакт
   conceptual_entity_refs:
-  - dams:concept/CONTACT
+  - dams:concept/Person
 - element_id: dams:logical/ucd/ORGANIZATION
   name: ORGANIZATION
   title: Организация
   description: Организация
   conceptual_entity_refs:
-  - dams:concept/ORGANIZATION
+  - dams:concept/LegalEntity
 - element_id: dams:logical/ucd/PERSON
   name: PERSON
   title: Персона
   description: Персона
   conceptual_entity_refs:
-  - dams:concept/PERSON
+  - dams:concept/Person
 - element_id: dams:logical/ucd/AUTHORIZATION
   name: AUTHORIZATION
   title: Полномочия сотрудника
   description: Полномочия сотрудника
-  conceptual_entity_refs:
-  - dams:concept/AUTHORIZATION
 - element_id: dams:logical/mdm/PERSON_REPRESENTATIVE
   name: PERSON_REPRESENTATIVE
   title: Представители ЮЛ
   description: MOSCOW_EXCHANGE.T_REPRESENTATIVE
-  conceptual_entity_refs:
-  - dams:concept/PERSON_REPRESENTATIVE
 - element_id: dams:logical/crm/LEAD
   name: LEAD
   title: Привлечение
   description: Привлечение
-  conceptual_entity_refs:
-  - dams:concept/LEAD
 - element_id: dams:logical/ucd/AGREEMENT
   name: AGREEMENT
   title: Соглашение
   description: Соглашение
   conceptual_entity_refs:
-  - dams:concept/AGREEMENT
+  - dams:concept/Agreement
 - element_id: dams:logical/ucd/EMPOYEE
   name: EMPOYEE
   title: Сотрудник
   description: Сотрудник
   conceptual_entity_refs:
-  - dams:concept/EMPOYEE
+  - dams:concept/Employee
 - element_id: dams:logical/ucd/ORGANIZATION_TYPE
   name: ORGANIZATION_TYPE
   title: Тип организации
   description: Тип организации
-  conceptual_entity_refs:
-  - dams:concept/ORGANIZATION_TYPE
 - element_id: dams:logical/mdm/PERSON
   name: PERSON
   title: Физические лица (ФЛ)
   description: Физические лица (ФЛ)
   conceptual_entity_refs:
-  - dams:concept/PERSON
+  - dams:concept/Person
 - element_id: dams:logical/mdm/ENTERPRISE
   name: ENTERPRISE
   title: Юридические лица (ЮЛ)
   description: Юридические лица (ЮЛ)
   conceptual_entity_refs:
-  - dams:concept/ENTERPRISE
+  - dams:concept/LegalEntity
 relationships:
 - element_id: dams:rel/LegalEntity/memberOf
   name: memberOf

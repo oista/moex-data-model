@@ -2,111 +2,13 @@
 element_id: dams:model/esed/0.1.0
 name: esed_solution_model
 title: Модель данных ЕСЭД
-description: 'Модель данных ИТ-решения ЕСЭД (документный контур) импортирована из
-  Object/ObjectAttribute.
+description: 'Модель данных ИТ-решения ЕСЭД (документный контур) импортирована из Object/ObjectAttribute.
 
   '
 lifecycle_status: draft
 api_version: dams.moex/v0.1
 model_version: 0.1.0
 solution_ref: eam:solution/ESED
-conceptual_entities:
-- element_id: dams:concept/attorney_check_info
-  name: attorney_check_info
-  title: attorney_check_info
-  description: attorney_check_info
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/common_state
-  name: common_state
-  title: common_state
-  description: common_state
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/common_type
-  name: common_type
-  title: common_type
-  description: common_type
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/division
-  name: division
-  title: division
-  description: division
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/document
-  name: document
-  title: document
-  description: document
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/employee
-  name: employee
-  title: employee
-  description: employee
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/file
-  name: file
-  title: file
-  description: file
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/file_binary
-  name: file_binary
-  title: file_binary
-  description: file_binary
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/instance
-  name: instance
-  title: instance
-  description: instance
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/organization
-  name: organization
-  title: organization
-  description: organization
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/organization_employee
-  name: organization_employee
-  title: organization_employee
-  description: organization_employee
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/universal_item
-  name: universal_item
-  title: universal_item
-  description: universal_item
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
 domain_contexts:
 - element_id: dams:context/esed
   name: EsedContext
@@ -124,7 +26,7 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/esed
   conceptual_entity_refs:
-  - dams:concept/attorney_check_info
+  - dams:concept/SupportingDocument
   solution_ref: eam:solution/ESED
   solution_data_role: producer
   entity_type: core
@@ -191,19 +93,16 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: aligned
+  alignment_rationale: Проверка доверенности на карточке — характеристика SupportingDocument.
 - element_id: dams:logical/esed/common_state
   name: common_state
   title: common_state
   description: common_state
   lifecycle_status: draft
   context_ref: dams:context/esed
-  conceptual_entity_refs:
-  - dams:concept/common_state
   solution_ref: eam:solution/ESED
   solution_data_role: producer
   entity_type: core
@@ -237,19 +136,16 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: local-only
+  alignment_rationale: Workflow/lookup состояние ЕСЭД; корпоративного концепта нет.
 - element_id: dams:logical/esed/common_type
   name: common_type
   title: common_type
   description: common_type
   lifecycle_status: draft
   context_ref: dams:context/esed
-  conceptual_entity_refs:
-  - dams:concept/common_type
   solution_ref: eam:solution/ESED
   solution_data_role: producer
   entity_type: core
@@ -283,11 +179,10 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: local-only
+  alignment_rationale: Workflow/lookup вид ЕСЭД; корпоративного концепта нет.
 - element_id: dams:logical/esed/division
   name: division
   title: division
@@ -295,7 +190,7 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/esed
   conceptual_entity_refs:
-  - dams:concept/division
+  - dams:concept/Department
   solution_ref: eam:solution/ESED
   solution_data_role: producer
   entity_type: core
@@ -340,11 +235,10 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: aligned
+  alignment_rationale: ЕСЭД division реализует корпоративный Department.
 - element_id: dams:logical/esed/document
   name: document
   title: document
@@ -352,7 +246,7 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/esed
   conceptual_entity_refs:
-  - dams:concept/document
+  - dams:concept/SupportingDocument
   solution_ref: eam:solution/ESED
   solution_data_role: producer
   entity_type: core
@@ -639,11 +533,10 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: aligned
+  alignment_rationale: ЕСЭД document реализует SupportingDocument.
 - element_id: dams:logical/esed/employee
   name: employee
   title: employee
@@ -651,7 +544,7 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/esed
   conceptual_entity_refs:
-  - dams:concept/employee
+  - dams:concept/Employee
   solution_ref: eam:solution/ESED
   solution_data_role: producer
   entity_type: core
@@ -729,22 +622,20 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: aligned
+  alignment_rationale: ЕСЭД employee реализует Employee. Отдельного Person в пакете нет; Person 
+    живёт в MDM/UCD (LDM-008 warning допустим).
 - element_id: dams:logical/esed/file
   name: file
   title: file
   description: file
   lifecycle_status: draft
   context_ref: dams:context/esed
-  conceptual_entity_refs:
-  - dams:concept/file
   solution_ref: eam:solution/ESED
   solution_data_role: producer
-  entity_type: core
+  entity_type: technical
   data_class: master_data
   business_importance: medium
   attributes:
@@ -808,22 +699,19 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: not-applicable
+  alignment_rationale: Физическое хранилище вложения ЕСЭД; не бизнес-понятие CDM.
 - element_id: dams:logical/esed/file_binary
   name: file_binary
   title: file_binary
   description: file_binary
   lifecycle_status: draft
   context_ref: dams:context/esed
-  conceptual_entity_refs:
-  - dams:concept/file_binary
   solution_ref: eam:solution/ESED
   solution_data_role: producer
-  entity_type: core
+  entity_type: technical
   data_class: master_data
   business_importance: medium
   attributes:
@@ -865,11 +753,10 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: not-applicable
+  alignment_rationale: Бинарные данные файла ЕСЭД; не бизнес-понятие CDM.
 - element_id: dams:logical/esed/instance
   name: instance
   title: instance
@@ -877,7 +764,7 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/esed
   conceptual_entity_refs:
-  - dams:concept/instance
+  - dams:concept/SupportingDocument
   solution_ref: eam:solution/ESED
   solution_data_role: producer
   entity_type: core
@@ -911,11 +798,11 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: aligned
+  alignment_rationale: Карточка/экземпляр документа ЕСЭД — то же понятие SupportingDocument, другое 
+    зерно относительно document.
 - element_id: dams:logical/esed/organization
   name: organization
   title: organization
@@ -923,7 +810,7 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/esed
   conceptual_entity_refs:
-  - dams:concept/organization
+  - dams:concept/LegalEntity
   solution_ref: eam:solution/ESED
   solution_data_role: producer
   entity_type: core
@@ -1023,11 +910,11 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: aligned
+  alignment_rationale: ЕСЭД organization (партнёр ЭДО, ИНН/КПП/ОГРН) реализует LegalEntity; не 
+    Counterparty (коммерческая роль).
 - element_id: dams:logical/esed/organization_employee
   name: organization_employee
   title: organization_employee
@@ -1035,7 +922,7 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/esed
   conceptual_entity_refs:
-  - dams:concept/organization_employee
+  - dams:concept/Person
   solution_ref: eam:solution/ESED
   solution_data_role: producer
   entity_type: core
@@ -1091,19 +978,16 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: aligned
+  alignment_rationale: Сотрудник контрагента в ЕСЭД — Person, не Employee МОЕХ.
 - element_id: dams:logical/esed/universal_item
   name: universal_item
   title: universal_item
   description: universal_item
   lifecycle_status: draft
   context_ref: dams:context/esed
-  conceptual_entity_refs:
-  - dams:concept/universal_item
   solution_ref: eam:solution/ESED
   solution_data_role: producer
   entity_type: core
@@ -1148,11 +1032,10 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: local-only
+  alignment_rationale: Универсальный справочник значений ЕСЭД; корпоративного концепта нет.
 relationships:
 - element_id: dams:rel/esed/attorney_check_info_to_instance_via_instance_id
   name: attorney_check_info_to_instance_via_instance_id
@@ -1389,7 +1272,8 @@ physical_objects:
     native_type: Integer
     required: false
     mapping_coverage_status: mapped
-  - element_id: dams:physical/esed/CardDocument_ExternalPoaInfo/MainFilesRepresentativeSignatureStatus
+  - element_id: 
+      dams:physical/esed/CardDocument_ExternalPoaInfo/MainFilesRepresentativeSignatureStatus
     name: MainFilesRepresentativeSignatureStatus
     description: Статус подписи представителя
     lifecycle_status: draft
@@ -2942,152 +2826,86 @@ mappings:
   mapping_type: entity_physical
   mapping_cardinality: one_to_one
   approval_status: proposed
-- element_id: dams:mapping/esed/realizes_attorney_check_info
-  name: realizes_attorney_check_info
-  description: 'Локальный stub: attorney_check_info realizes conceptual attorney_check_info
-    (импорт xlsx; выверка с enterprise — follow-up).'
+- element_id: dams:mapping/esed/realizes_organization
+  name: realizes_organization
+  description: ESED organization realizes enterprise dams:concept/LegalEntity (ADR-021/029).
   lifecycle_status: draft
   source_refs:
-  - dams:logical/esed/attorney_check_info
+  - dams:logical/esed/organization
   target_refs:
-  - dams:concept/attorney_check_info
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/esed/realizes_common_state
-  name: realizes_common_state
-  description: 'Локальный stub: common_state realizes conceptual common_state (импорт
-    xlsx; выверка с enterprise — follow-up).'
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/esed/common_state
-  target_refs:
-  - dams:concept/common_state
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/esed/realizes_common_type
-  name: realizes_common_type
-  description: 'Локальный stub: common_type realizes conceptual common_type (импорт
-    xlsx; выверка с enterprise — follow-up).'
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/esed/common_type
-  target_refs:
-  - dams:concept/common_type
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/esed/realizes_division
-  name: realizes_division
-  description: 'Локальный stub: division realizes conceptual division (импорт xlsx;
-    выверка с enterprise — follow-up).'
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/esed/division
-  target_refs:
-  - dams:concept/division
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/esed/realizes_document
-  name: realizes_document
-  description: 'Локальный stub: document realizes conceptual document (импорт xlsx;
-    выверка с enterprise — follow-up).'
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/esed/document
-  target_refs:
-  - dams:concept/document
+  - dams:concept/LegalEntity
   mapping_type: realizes
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/realizes_employee
   name: realizes_employee
-  description: 'Локальный stub: employee realizes conceptual employee (импорт xlsx;
-    выверка с enterprise — follow-up).'
+  description: ESED employee realizes enterprise dams:concept/Employee (ADR-021/029).
   lifecycle_status: draft
   source_refs:
   - dams:logical/esed/employee
   target_refs:
-  - dams:concept/employee
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/esed/realizes_file
-  name: realizes_file
-  description: 'Локальный stub: file realizes conceptual file (импорт xlsx; выверка
-    с enterprise — follow-up).'
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/esed/file
-  target_refs:
-  - dams:concept/file
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/esed/realizes_file_binary
-  name: realizes_file_binary
-  description: 'Локальный stub: file_binary realizes conceptual file_binary (импорт
-    xlsx; выверка с enterprise — follow-up).'
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/esed/file_binary
-  target_refs:
-  - dams:concept/file_binary
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/esed/realizes_instance
-  name: realizes_instance
-  description: 'Локальный stub: instance realizes conceptual instance (импорт xlsx;
-    выверка с enterprise — follow-up).'
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/esed/instance
-  target_refs:
-  - dams:concept/instance
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/esed/realizes_organization
-  name: realizes_organization
-  description: 'Локальный stub: organization realizes conceptual organization (импорт
-    xlsx; выверка с enterprise — follow-up).'
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/esed/organization
-  target_refs:
-  - dams:concept/organization
+  - dams:concept/Employee
   mapping_type: realizes
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/realizes_organization_employee
   name: realizes_organization_employee
-  description: 'Локальный stub: organization_employee realizes conceptual organization_employee
-    (импорт xlsx; выверка с enterprise — follow-up).'
+  description: ESED organization_employee realizes enterprise dams:concept/Person (ADR-021/029).
   lifecycle_status: draft
   source_refs:
   - dams:logical/esed/organization_employee
   target_refs:
-  - dams:concept/organization_employee
+  - dams:concept/Person
   mapping_type: realizes
   mapping_cardinality: one_to_one
   approval_status: proposed
-- element_id: dams:mapping/esed/realizes_universal_item
-  name: realizes_universal_item
-  description: 'Локальный stub: universal_item realizes conceptual universal_item
-    (импорт xlsx; выверка с enterprise — follow-up).'
+- element_id: dams:mapping/esed/realizes_division
+  name: realizes_division
+  description: ESED division realizes enterprise dams:concept/Department (ADR-021/029).
   lifecycle_status: draft
   source_refs:
-  - dams:logical/esed/universal_item
+  - dams:logical/esed/division
   target_refs:
-  - dams:concept/universal_item
+  - dams:concept/Department
+  mapping_type: realizes
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/esed/realizes_document
+  name: realizes_document
+  description: ESED document realizes enterprise dams:concept/SupportingDocument (ADR-021/029).
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/esed/document
+  target_refs:
+  - dams:concept/SupportingDocument
+  mapping_type: realizes
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/esed/realizes_instance
+  name: realizes_instance
+  description: ESED instance realizes enterprise dams:concept/SupportingDocument (ADR-021/029).
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/esed/instance
+  target_refs:
+  - dams:concept/SupportingDocument
+  mapping_type: realizes
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/esed/realizes_attorney_check_info
+  name: realizes_attorney_check_info
+  description: ESED attorney_check_info realizes enterprise dams:concept/SupportingDocument 
+    (ADR-021/029).
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/esed/attorney_check_info
+  target_refs:
+  - dams:concept/SupportingDocument
   mapping_type: realizes
   mapping_cardinality: one_to_one
   approval_status: proposed
 implementation_scope: solution
 conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
 data_owner_ref: org:role/DATA_OWNER_PENDING
-ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при
-  отсутствии локального override на сущности.
+ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при отсутствии 
+  локального override на сущности.

@@ -2,13 +2,13 @@
   "summary": {
     "overall_result": "conformant_with_warnings",
     "implementation_id": "moex:implementation:mdm:0.1.0",
-    "revision": "1f8e35215478",
-    "content_digest": "sha256:1f8e35215478312fc63493082f57a20ec9314c638436a93ca2ec7cfe9dc1d4c2",
+    "revision": "ab6c77ae533a",
+    "content_digest": "sha256:ab6c77ae533a9ef186e03d46e8ae2b0da7122bebe2dad5793b192161dbb05431",
     "package_id": "dams:model/mdm/0.1.0",
-    "node_count": 152,
-    "edge_count": 351,
+    "node_count": 146,
+    "edge_count": 339,
     "is_conformant": true,
-    "bundle_digest": "sha256:0e47a2c46a8ad370647588724c8f8d5f8abe0fce9fcc3d4592d66c8911749f81"
+    "bundle_digest": "sha256:e05165018343d5303a59289ecb527ecf35574049619ae9bf4a01442902ee9a93"
   },
   "nodes": [
     {
@@ -17,34 +17,6 @@
       "title": "Модель данных MDM",
       "description": "Модель данных ИТ-решения MDM (золотые записи ЮЛ/ФЛ и связи) импортирована из Object/ObjectAttribute.\n",
       "kind": "package"
-    },
-    {
-      "id": "dams:concept/ENTERPRISE",
-      "name": "ENTERPRISE",
-      "title": "Юридические лица (ЮЛ)",
-      "description": "Юридические лица (ЮЛ)",
-      "kind": "conceptual_entity"
-    },
-    {
-      "id": "dams:concept/PERSON",
-      "name": "PERSON",
-      "title": "Физические лица (ФЛ)",
-      "description": "Физические лица (ФЛ)",
-      "kind": "conceptual_entity"
-    },
-    {
-      "id": "dams:concept/PERSON_CEO",
-      "name": "PERSON_CEO",
-      "title": "ЕИО (СЕО) Единоличный исполнительный орган",
-      "description": "MOSCOW_EXCHANGE.T_CEO",
-      "kind": "conceptual_entity"
-    },
-    {
-      "id": "dams:concept/PERSON_REPRESENTATIVE",
-      "name": "PERSON_REPRESENTATIVE",
-      "title": "Представители ЮЛ",
-      "description": "MOSCOW_EXCHANGE.T_REPRESENTATIVE",
-      "kind": "conceptual_entity"
     },
     {
       "id": "dams:context/mdm",
@@ -1051,56 +1023,18 @@
       "id": "dams:mapping/mdm/realizes_ENTERPRISE",
       "name": "realizes_ENTERPRISE",
       "title": null,
-      "description": "Локальный stub: ENTERPRISE realizes conceptual ENTERPRISE (импорт xlsx; выверка с enterprise — follow-up).",
+      "description": "MDM ENTERPRISE realizes enterprise dams:concept/LegalEntity (ADR-021/029).",
       "kind": "mapping"
     },
     {
       "id": "dams:mapping/mdm/realizes_PERSON",
       "name": "realizes_PERSON",
       "title": null,
-      "description": "Локальный stub: PERSON realizes conceptual PERSON (импорт xlsx; выверка с enterprise — follow-up).",
-      "kind": "mapping"
-    },
-    {
-      "id": "dams:mapping/mdm/realizes_PERSON_CEO",
-      "name": "realizes_PERSON_CEO",
-      "title": null,
-      "description": "Локальный stub: PERSON_CEO realizes conceptual PERSON_CEO (импорт xlsx; выверка с enterprise — follow-up).",
-      "kind": "mapping"
-    },
-    {
-      "id": "dams:mapping/mdm/realizes_PERSON_REPRESENTATIVE",
-      "name": "realizes_PERSON_REPRESENTATIVE",
-      "title": null,
-      "description": "Локальный stub: PERSON_REPRESENTATIVE realizes conceptual PERSON_REPRESENTATIVE (импорт xlsx; выверка с enterprise — follow-up).",
+      "description": "MDM PERSON realizes enterprise dams:concept/Person (ADR-021/029).",
       "kind": "mapping"
     }
   ],
   "edges": [
-    {
-      "id": "dams:model/mdm/0.1.0->dams:concept/ENTERPRISE:contains",
-      "source": "dams:model/mdm/0.1.0",
-      "target": "dams:concept/ENTERPRISE",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:model/mdm/0.1.0->dams:concept/PERSON:contains",
-      "source": "dams:model/mdm/0.1.0",
-      "target": "dams:concept/PERSON",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:model/mdm/0.1.0->dams:concept/PERSON_CEO:contains",
-      "source": "dams:model/mdm/0.1.0",
-      "target": "dams:concept/PERSON_CEO",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:model/mdm/0.1.0->dams:concept/PERSON_REPRESENTATIVE:contains",
-      "source": "dams:model/mdm/0.1.0",
-      "target": "dams:concept/PERSON_REPRESENTATIVE",
-      "kind": "contains"
-    },
     {
       "id": "dams:model/mdm/0.1.0->dams:context/mdm:contains",
       "source": "dams:model/mdm/0.1.0",
@@ -1114,9 +1048,9 @@
       "kind": "contains"
     },
     {
-      "id": "dams:logical/mdm/ENTERPRISE->dams:concept/ENTERPRISE:conceptual_ref",
+      "id": "dams:logical/mdm/ENTERPRISE->dams:concept/LegalEntity:conceptual_ref",
       "source": "dams:logical/mdm/ENTERPRISE",
-      "target": "dams:concept/ENTERPRISE",
+      "target": "dams:concept/LegalEntity",
       "kind": "conceptual_ref"
     },
     {
@@ -1444,9 +1378,9 @@
       "kind": "contains"
     },
     {
-      "id": "dams:logical/mdm/PERSON->dams:concept/PERSON:conceptual_ref",
+      "id": "dams:logical/mdm/PERSON->dams:concept/Person:conceptual_ref",
       "source": "dams:logical/mdm/PERSON",
-      "target": "dams:concept/PERSON",
+      "target": "dams:concept/Person",
       "kind": "conceptual_ref"
     },
     {
@@ -1606,12 +1540,6 @@
       "kind": "contains"
     },
     {
-      "id": "dams:logical/mdm/PERSON_CEO->dams:concept/PERSON_CEO:conceptual_ref",
-      "source": "dams:logical/mdm/PERSON_CEO",
-      "target": "dams:concept/PERSON_CEO",
-      "kind": "conceptual_ref"
-    },
-    {
       "id": "dams:logical/mdm/PERSON_CEO->dams:context/mdm:context_ref",
       "source": "dams:logical/mdm/PERSON_CEO",
       "target": "dams:context/mdm",
@@ -1646,12 +1574,6 @@
       "source": "dams:model/mdm/0.1.0",
       "target": "dams:logical/mdm/PERSON_REPRESENTATIVE",
       "kind": "contains"
-    },
-    {
-      "id": "dams:logical/mdm/PERSON_REPRESENTATIVE->dams:concept/PERSON_REPRESENTATIVE:conceptual_ref",
-      "source": "dams:logical/mdm/PERSON_REPRESENTATIVE",
-      "target": "dams:concept/PERSON_REPRESENTATIVE",
-      "kind": "conceptual_ref"
     },
     {
       "id": "dams:logical/mdm/PERSON_REPRESENTATIVE->dams:context/mdm:context_ref",
@@ -3124,9 +3046,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/realizes_ENTERPRISE->dams:concept/ENTERPRISE:maps_to",
+      "id": "dams:mapping/mdm/realizes_ENTERPRISE->dams:concept/LegalEntity:maps_to",
       "source": "dams:mapping/mdm/realizes_ENTERPRISE",
-      "target": "dams:concept/ENTERPRISE",
+      "target": "dams:concept/LegalEntity",
       "kind": "maps_to"
     },
     {
@@ -3142,45 +3064,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/realizes_PERSON->dams:concept/PERSON:maps_to",
+      "id": "dams:mapping/mdm/realizes_PERSON->dams:concept/Person:maps_to",
       "source": "dams:mapping/mdm/realizes_PERSON",
-      "target": "dams:concept/PERSON",
-      "kind": "maps_to"
-    },
-    {
-      "id": "dams:model/mdm/0.1.0->dams:mapping/mdm/realizes_PERSON_CEO:contains",
-      "source": "dams:model/mdm/0.1.0",
-      "target": "dams:mapping/mdm/realizes_PERSON_CEO",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:mapping/mdm/realizes_PERSON_CEO->dams:logical/mdm/PERSON_CEO:maps_to",
-      "source": "dams:mapping/mdm/realizes_PERSON_CEO",
-      "target": "dams:logical/mdm/PERSON_CEO",
-      "kind": "maps_to"
-    },
-    {
-      "id": "dams:mapping/mdm/realizes_PERSON_CEO->dams:concept/PERSON_CEO:maps_to",
-      "source": "dams:mapping/mdm/realizes_PERSON_CEO",
-      "target": "dams:concept/PERSON_CEO",
-      "kind": "maps_to"
-    },
-    {
-      "id": "dams:model/mdm/0.1.0->dams:mapping/mdm/realizes_PERSON_REPRESENTATIVE:contains",
-      "source": "dams:model/mdm/0.1.0",
-      "target": "dams:mapping/mdm/realizes_PERSON_REPRESENTATIVE",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:mapping/mdm/realizes_PERSON_REPRESENTATIVE->dams:logical/mdm/PERSON_REPRESENTATIVE:maps_to",
-      "source": "dams:mapping/mdm/realizes_PERSON_REPRESENTATIVE",
-      "target": "dams:logical/mdm/PERSON_REPRESENTATIVE",
-      "kind": "maps_to"
-    },
-    {
-      "id": "dams:mapping/mdm/realizes_PERSON_REPRESENTATIVE->dams:concept/PERSON_REPRESENTATIVE:maps_to",
-      "source": "dams:mapping/mdm/realizes_PERSON_REPRESENTATIVE",
-      "target": "dams:concept/PERSON_REPRESENTATIVE",
+      "target": "dams:concept/Person",
       "kind": "maps_to"
     }
   ],
@@ -3519,6 +3405,766 @@
       "severity": "warning",
       "phase": "corporate_semantics",
       "message": "LogicalAttribute \"dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID\" name \"PERSON_ID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
+      "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID"
+    },
+    {
+      "id": "DAMS-REQ-GEN-001.placeholder:42",
+      "code": "DAMS-REQ-GEN-001.placeholder",
+      "severity": "warning",
+      "phase": "corporate_semantics",
+      "message": "Effective data_owner_ref on \"dams:model/mdm/0.1.0\" is placeholder 'org:role/DATA_OWNER_PENDING'. Remediation: Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
+      "subject_ref": "dams:model/mdm/0.1.0"
+    },
+    {
+      "id": "DAMS-REQ-GEN-001.placeholder:43",
+      "code": "DAMS-REQ-GEN-001.placeholder",
+      "severity": "warning",
+      "phase": "corporate_semantics",
+      "message": "Effective data_owner_ref on \"dams:logical/mdm/ENTERPRISE\" is placeholder 'org:role/DATA_OWNER_PENDING'. Remediation: Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE"
+    },
+    {
+      "id": "DAMS-REQ-GEN-001.placeholder:44",
+      "code": "DAMS-REQ-GEN-001.placeholder",
+      "severity": "warning",
+      "phase": "corporate_semantics",
+      "message": "Effective data_owner_ref on \"dams:logical/mdm/PERSON\" is placeholder 'org:role/DATA_OWNER_PENDING'. Remediation: Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
+      "subject_ref": "dams:logical/mdm/PERSON"
+    },
+    {
+      "id": "DAMS-REQ-GEN-001.placeholder:45",
+      "code": "DAMS-REQ-GEN-001.placeholder",
+      "severity": "warning",
+      "phase": "corporate_semantics",
+      "message": "Effective data_owner_ref on \"dams:logical/mdm/PERSON_CEO\" is placeholder 'org:role/DATA_OWNER_PENDING'. Remediation: Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
+      "subject_ref": "dams:logical/mdm/PERSON_CEO"
+    },
+    {
+      "id": "DAMS-REQ-GEN-001.placeholder:46",
+      "code": "DAMS-REQ-GEN-001.placeholder",
+      "severity": "warning",
+      "phase": "corporate_semantics",
+      "message": "Effective data_owner_ref on \"dams:logical/mdm/PERSON_REPRESENTATIVE\" is placeholder 'org:role/DATA_OWNER_PENDING'. Remediation: Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
+      "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:47",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE\" declares data_owner_ref equal to effective value inherited from \"dams:model/mdm/0.1.0\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:48",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:49",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/SHORT_NAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/SHORT_NAME"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:50",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:51",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/FULL_NAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/FULL_NAME"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:52",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:53",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/COUNTRY_CODE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/COUNTRY_CODE"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:54",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/INN\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/INN"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:55",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/KPP\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/KPP"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:56",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/OGRN\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/OGRN"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:57",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:58",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/TERMINATION_DATE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/TERMINATION_DATE"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:59",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:60",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/LEI\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/LEI"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:61",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/KIO\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/KIO"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:62",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:63",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:64",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/CEO_INN\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_INN"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:65",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:66",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/CEO_POSITION\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_POSITION"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:67",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/CEO_SURNAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_SURNAME"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:68",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:69",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/ECBD_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/ECBD_ID"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:70",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/UNICODE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/UNICODE"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:71",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/CODE_NSD\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/CODE_NSD"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:72",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/KBD_FIRMID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/KBD_FIRMID"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:73",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:74",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON\" declares data_owner_ref equal to effective value inherited from \"dams:model/mdm/0.1.0\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:75",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON/PERSON_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON/PERSON_ID"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:76",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON/FIO\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON/FIO"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:77",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON/LAST_NAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON/LAST_NAME"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:78",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON/FIRST_NAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON/FIRST_NAME"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:79",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON/PATRONYMIC\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON/PATRONYMIC"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:80",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON/DATEBIRTH\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON/DATEBIRTH"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:81",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON/ADDRESS_F\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON/ADDRESS_F"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:82",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON/INN\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON/INN"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:83",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON/SNILS\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON/SNILS"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:84",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:85",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:86",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:87",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON_CEO\" declares data_owner_ref equal to effective value inherited from \"dams:model/mdm/0.1.0\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON_CEO"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:88",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON_CEO\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:89",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON_CEO/PERSON_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON_CEO\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON_CEO/PERSON_ID"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:90",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON_REPRESENTATIVE\" declares data_owner_ref equal to effective value inherited from \"dams:model/mdm/0.1.0\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:91",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON_REPRESENTATIVE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:92",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON_REPRESENTATIVE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:93",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalEntity \"dams:logical/mdm/ENTERPRISE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:94",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalEntity \"dams:logical/mdm/PERSON\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/PERSON"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:95",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:96",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/SHORT_NAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/SHORT_NAME"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:97",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:98",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/FULL_NAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/FULL_NAME"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:99",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:100",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/COUNTRY_CODE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/COUNTRY_CODE"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:101",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/INN\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/INN"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:102",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KPP\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/KPP"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:103",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/OGRN\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/OGRN"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:104",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:105",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/TERMINATION_DATE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/TERMINATION_DATE"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:106",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:107",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/LEI\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/LEI"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:108",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KIO\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/KIO"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:109",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:110",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:111",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_INN\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_INN"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:112",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:113",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_POSITION\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_POSITION"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:114",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_SURNAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_SURNAME"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:115",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:116",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ECBD_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/ECBD_ID"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:117",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/UNICODE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/UNICODE"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:118",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CODE_NSD\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/CODE_NSD"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:119",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KBD_FIRMID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/KBD_FIRMID"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:120",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:121",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/PERSON_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/PERSON/PERSON_ID"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:122",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/FIO\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/PERSON/FIO"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:123",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/LAST_NAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/PERSON/LAST_NAME"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:124",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/FIRST_NAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/PERSON/FIRST_NAME"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:125",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/PATRONYMIC\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/PERSON/PATRONYMIC"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:126",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/DATEBIRTH\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/PERSON/DATEBIRTH"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:127",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/ADDRESS_F\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/PERSON/ADDRESS_F"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:128",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/INN\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/PERSON/INN"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:129",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/SNILS\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/PERSON/SNILS"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:130",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:131",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:132",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:133",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:134",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/PERSON_CEO/PERSON_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/PERSON_CEO/PERSON_ID"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:135",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:136",
+      "code": "DAMS-DEF-description-eq-title",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "LogicalAttribute \"dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
       "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID"
     }
   ],
@@ -4026,6 +4672,1146 @@
       "remediation": "Переименуйте name в lower_snake_case (например party_id).",
       "source_location": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID",
       "diagnostic_code": "DAMS-REQ-ATR-002.c1"
+    },
+    {
+      "id": "DAMS-REQ-GEN-001.placeholder:42",
+      "status": "warn",
+      "requirement_code": "GEN-001",
+      "statement": null,
+      "subject": "dams:model/mdm/0.1.0",
+      "finding": "Effective data_owner_ref on \"dams:model/mdm/0.1.0\" is placeholder 'org:role/DATA_OWNER_PENDING'.",
+      "severity": "warning",
+      "remediation": "Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
+      "source_location": "dams:model/mdm/0.1.0",
+      "diagnostic_code": "DAMS-REQ-GEN-001.placeholder"
+    },
+    {
+      "id": "DAMS-REQ-GEN-001.placeholder:43",
+      "status": "warn",
+      "requirement_code": "GEN-001",
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE",
+      "finding": "Effective data_owner_ref on \"dams:logical/mdm/ENTERPRISE\" is placeholder 'org:role/DATA_OWNER_PENDING'.",
+      "severity": "warning",
+      "remediation": "Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
+      "source_location": "dams:logical/mdm/ENTERPRISE",
+      "diagnostic_code": "DAMS-REQ-GEN-001.placeholder"
+    },
+    {
+      "id": "DAMS-REQ-GEN-001.placeholder:44",
+      "status": "warn",
+      "requirement_code": "GEN-001",
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON",
+      "finding": "Effective data_owner_ref on \"dams:logical/mdm/PERSON\" is placeholder 'org:role/DATA_OWNER_PENDING'.",
+      "severity": "warning",
+      "remediation": "Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
+      "source_location": "dams:logical/mdm/PERSON",
+      "diagnostic_code": "DAMS-REQ-GEN-001.placeholder"
+    },
+    {
+      "id": "DAMS-REQ-GEN-001.placeholder:45",
+      "status": "warn",
+      "requirement_code": "GEN-001",
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON_CEO",
+      "finding": "Effective data_owner_ref on \"dams:logical/mdm/PERSON_CEO\" is placeholder 'org:role/DATA_OWNER_PENDING'.",
+      "severity": "warning",
+      "remediation": "Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
+      "source_location": "dams:logical/mdm/PERSON_CEO",
+      "diagnostic_code": "DAMS-REQ-GEN-001.placeholder"
+    },
+    {
+      "id": "DAMS-REQ-GEN-001.placeholder:46",
+      "status": "warn",
+      "requirement_code": "GEN-001",
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON_REPRESENTATIVE",
+      "finding": "Effective data_owner_ref on \"dams:logical/mdm/PERSON_REPRESENTATIVE\" is placeholder 'org:role/DATA_OWNER_PENDING'.",
+      "severity": "warning",
+      "remediation": "Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
+      "source_location": "dams:logical/mdm/PERSON_REPRESENTATIVE",
+      "diagnostic_code": "DAMS-REQ-GEN-001.placeholder"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:47",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE\" declares data_owner_ref equal to effective value inherited from \"dams:model/mdm/0.1.0\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:48",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:49",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/SHORT_NAME",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/SHORT_NAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/SHORT_NAME",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:50",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:51",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/FULL_NAME",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/FULL_NAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/FULL_NAME",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:52",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:53",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/COUNTRY_CODE",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/COUNTRY_CODE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/COUNTRY_CODE",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:54",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/INN",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/INN\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/INN",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:55",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/KPP",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/KPP\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/KPP",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:56",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/OGRN",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/OGRN\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/OGRN",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:57",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:58",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/TERMINATION_DATE",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/TERMINATION_DATE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/TERMINATION_DATE",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:59",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:60",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/LEI",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/LEI\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/LEI",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:61",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/KIO",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/KIO\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/KIO",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:62",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:63",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:64",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/CEO_INN",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/CEO_INN\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/CEO_INN",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:65",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:66",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/CEO_POSITION",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/CEO_POSITION\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/CEO_POSITION",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:67",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/CEO_SURNAME",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/CEO_SURNAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/CEO_SURNAME",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:68",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:69",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/ECBD_ID",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/ECBD_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/ECBD_ID",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:70",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/UNICODE",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/UNICODE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/UNICODE",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:71",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/CODE_NSD",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/CODE_NSD\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/CODE_NSD",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:72",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/KBD_FIRMID",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/KBD_FIRMID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/KBD_FIRMID",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:73",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG",
+      "finding": "Element \"dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:74",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON",
+      "finding": "Element \"dams:logical/mdm/PERSON\" declares data_owner_ref equal to effective value inherited from \"dams:model/mdm/0.1.0\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:75",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/PERSON_ID",
+      "finding": "Element \"dams:logical/mdm/PERSON/PERSON_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON/PERSON_ID",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:76",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/FIO",
+      "finding": "Element \"dams:logical/mdm/PERSON/FIO\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON/FIO",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:77",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/LAST_NAME",
+      "finding": "Element \"dams:logical/mdm/PERSON/LAST_NAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON/LAST_NAME",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:78",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/FIRST_NAME",
+      "finding": "Element \"dams:logical/mdm/PERSON/FIRST_NAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON/FIRST_NAME",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:79",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/PATRONYMIC",
+      "finding": "Element \"dams:logical/mdm/PERSON/PATRONYMIC\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON/PATRONYMIC",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:80",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/DATEBIRTH",
+      "finding": "Element \"dams:logical/mdm/PERSON/DATEBIRTH\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON/DATEBIRTH",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:81",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/ADDRESS_F",
+      "finding": "Element \"dams:logical/mdm/PERSON/ADDRESS_F\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON/ADDRESS_F",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:82",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/INN",
+      "finding": "Element \"dams:logical/mdm/PERSON/INN\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON/INN",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:83",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/SNILS",
+      "finding": "Element \"dams:logical/mdm/PERSON/SNILS\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON/SNILS",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:84",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE",
+      "finding": "Element \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:85",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA",
+      "finding": "Element \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:86",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE",
+      "finding": "Element \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:87",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON_CEO",
+      "finding": "Element \"dams:logical/mdm/PERSON_CEO\" declares data_owner_ref equal to effective value inherited from \"dams:model/mdm/0.1.0\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON_CEO",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:88",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID",
+      "finding": "Element \"dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON_CEO\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:89",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON_CEO/PERSON_ID",
+      "finding": "Element \"dams:logical/mdm/PERSON_CEO/PERSON_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON_CEO\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON_CEO/PERSON_ID",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:90",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON_REPRESENTATIVE",
+      "finding": "Element \"dams:logical/mdm/PERSON_REPRESENTATIVE\" declares data_owner_ref equal to effective value inherited from \"dams:model/mdm/0.1.0\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON_REPRESENTATIVE",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:91",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID",
+      "finding": "Element \"dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON_REPRESENTATIVE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:92",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID",
+      "finding": "Element \"dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON_REPRESENTATIVE\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:93",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE",
+      "finding": "LogicalEntity \"dams:logical/mdm/ENTERPRISE\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:94",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON",
+      "finding": "LogicalEntity \"dams:logical/mdm/PERSON\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:95",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:96",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/SHORT_NAME",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/SHORT_NAME\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/SHORT_NAME",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:97",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:98",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/FULL_NAME",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/FULL_NAME\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/FULL_NAME",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:99",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:100",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/COUNTRY_CODE",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/COUNTRY_CODE\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/COUNTRY_CODE",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:101",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/INN",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/INN\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/INN",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:102",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/KPP",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KPP\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/KPP",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:103",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/OGRN",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/OGRN\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/OGRN",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:104",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:105",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/TERMINATION_DATE",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/TERMINATION_DATE\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/TERMINATION_DATE",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:106",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:107",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/LEI",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/LEI\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/LEI",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:108",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/KIO",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KIO\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/KIO",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:109",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:110",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:111",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/CEO_INN",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_INN\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/CEO_INN",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:112",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:113",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/CEO_POSITION",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_POSITION\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/CEO_POSITION",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:114",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/CEO_SURNAME",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_SURNAME\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/CEO_SURNAME",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:115",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:116",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/ECBD_ID",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ECBD_ID\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/ECBD_ID",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:117",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/UNICODE",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/UNICODE\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/UNICODE",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:118",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/CODE_NSD",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CODE_NSD\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/CODE_NSD",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:119",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/KBD_FIRMID",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KBD_FIRMID\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/KBD_FIRMID",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:120",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG",
+      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:121",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/PERSON_ID",
+      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/PERSON_ID\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON/PERSON_ID",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:122",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/FIO",
+      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/FIO\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON/FIO",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:123",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/LAST_NAME",
+      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/LAST_NAME\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON/LAST_NAME",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:124",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/FIRST_NAME",
+      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/FIRST_NAME\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON/FIRST_NAME",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:125",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/PATRONYMIC",
+      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/PATRONYMIC\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON/PATRONYMIC",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:126",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/DATEBIRTH",
+      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/DATEBIRTH\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON/DATEBIRTH",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:127",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/ADDRESS_F",
+      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/ADDRESS_F\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON/ADDRESS_F",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:128",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/INN",
+      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/INN\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON/INN",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:129",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/SNILS",
+      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/SNILS\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON/SNILS",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:130",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE",
+      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:131",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA",
+      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:132",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE",
+      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:133",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID",
+      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:134",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON_CEO/PERSON_ID",
+      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON_CEO/PERSON_ID\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON_CEO/PERSON_ID",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:135",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID",
+      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
+    },
+    {
+      "id": "DAMS-DEF-description-eq-title:136",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID",
+      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID\" description equals title (likely not a real definition).",
+      "severity": "info",
+      "remediation": "Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+      "source_location": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID",
+      "diagnostic_code": "DAMS-DEF-description-eq-title"
     }
   ],
   "relations": [
@@ -4094,7 +5880,7 @@
             "title": "revision",
             "description": null,
             "attributes": {
-              "value": "1f8e35215478"
+              "value": "ab6c77ae533a"
             },
             "children": [],
             "tags": [],
@@ -4105,7 +5891,7 @@
             "title": "content_digest",
             "description": null,
             "attributes": {
-              "value": "sha256:1f8e35215478312fc63493082f57a20ec9314c638436a93ca2ec7cfe9dc1d4c2"
+              "value": "sha256:ab6c77ae533a9ef186e03d46e8ae2b0da7122bebe2dad5793b192161dbb05431"
             },
             "children": [],
             "tags": [],
@@ -4116,7 +5902,7 @@
             "title": "nodes",
             "description": null,
             "attributes": {
-              "value": 152
+              "value": 146
             },
             "children": [],
             "tags": [],
@@ -4127,7 +5913,7 @@
             "title": "edges",
             "description": null,
             "attributes": {
-              "value": 351
+              "value": 339
             },
             "children": [],
             "tags": [],
@@ -4160,54 +5946,6 @@
             "attributes": {
               "kind": "package",
               "name": "mdm_solution_model"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:concept/ENTERPRISE",
-            "title": "Юридические лица (ЮЛ)",
-            "description": "Юридические лица (ЮЛ)",
-            "attributes": {
-              "kind": "conceptual_entity",
-              "name": "ENTERPRISE"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:concept/PERSON",
-            "title": "Физические лица (ФЛ)",
-            "description": "Физические лица (ФЛ)",
-            "attributes": {
-              "kind": "conceptual_entity",
-              "name": "PERSON"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:concept/PERSON_CEO",
-            "title": "ЕИО (СЕО) Единоличный исполнительный орган",
-            "description": "MOSCOW_EXCHANGE.T_CEO",
-            "attributes": {
-              "kind": "conceptual_entity",
-              "name": "PERSON_CEO"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:concept/PERSON_REPRESENTATIVE",
-            "title": "Представители ЮЛ",
-            "description": "MOSCOW_EXCHANGE.T_REPRESENTATIVE",
-            "attributes": {
-              "kind": "conceptual_entity",
-              "name": "PERSON_REPRESENTATIVE"
             },
             "children": [],
             "tags": [],
@@ -5932,7 +7670,7 @@
           {
             "id": "dams:mapping/mdm/realizes_ENTERPRISE",
             "title": "realizes_ENTERPRISE",
-            "description": "Локальный stub: ENTERPRISE realizes conceptual ENTERPRISE (импорт xlsx; выверка с enterprise — follow-up).",
+            "description": "MDM ENTERPRISE realizes enterprise dams:concept/LegalEntity (ADR-021/029).",
             "attributes": {
               "kind": "mapping",
               "name": "realizes_ENTERPRISE"
@@ -5944,34 +7682,10 @@
           {
             "id": "dams:mapping/mdm/realizes_PERSON",
             "title": "realizes_PERSON",
-            "description": "Локальный stub: PERSON realizes conceptual PERSON (импорт xlsx; выверка с enterprise — follow-up).",
+            "description": "MDM PERSON realizes enterprise dams:concept/Person (ADR-021/029).",
             "attributes": {
               "kind": "mapping",
               "name": "realizes_PERSON"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:mapping/mdm/realizes_PERSON_CEO",
-            "title": "realizes_PERSON_CEO",
-            "description": "Локальный stub: PERSON_CEO realizes conceptual PERSON_CEO (импорт xlsx; выверка с enterprise — follow-up).",
-            "attributes": {
-              "kind": "mapping",
-              "name": "realizes_PERSON_CEO"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:mapping/mdm/realizes_PERSON_REPRESENTATIVE",
-            "title": "realizes_PERSON_REPRESENTATIVE",
-            "description": "Локальный stub: PERSON_REPRESENTATIVE realizes conceptual PERSON_REPRESENTATIVE (импорт xlsx; выверка с enterprise — follow-up).",
-            "attributes": {
-              "kind": "mapping",
-              "name": "realizes_PERSON_REPRESENTATIVE"
             },
             "children": [],
             "tags": [],
@@ -6537,6 +8251,1241 @@
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID\" name \"PERSON_ID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
             "attributes": {
               "severity": "warning",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-REQ-GEN-001.placeholder:42",
+            "title": "DAMS-REQ-GEN-001.placeholder",
+            "description": "Effective data_owner_ref on \"dams:model/mdm/0.1.0\" is placeholder 'org:role/DATA_OWNER_PENDING'. Remediation: Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
+            "attributes": {
+              "severity": "warning",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:model/mdm/0.1.0"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-REQ-GEN-001.placeholder:43",
+            "title": "DAMS-REQ-GEN-001.placeholder",
+            "description": "Effective data_owner_ref on \"dams:logical/mdm/ENTERPRISE\" is placeholder 'org:role/DATA_OWNER_PENDING'. Remediation: Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
+            "attributes": {
+              "severity": "warning",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-REQ-GEN-001.placeholder:44",
+            "title": "DAMS-REQ-GEN-001.placeholder",
+            "description": "Effective data_owner_ref on \"dams:logical/mdm/PERSON\" is placeholder 'org:role/DATA_OWNER_PENDING'. Remediation: Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
+            "attributes": {
+              "severity": "warning",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-REQ-GEN-001.placeholder:45",
+            "title": "DAMS-REQ-GEN-001.placeholder",
+            "description": "Effective data_owner_ref on \"dams:logical/mdm/PERSON_CEO\" is placeholder 'org:role/DATA_OWNER_PENDING'. Remediation: Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
+            "attributes": {
+              "severity": "warning",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON_CEO"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-REQ-GEN-001.placeholder:46",
+            "title": "DAMS-REQ-GEN-001.placeholder",
+            "description": "Effective data_owner_ref on \"dams:logical/mdm/PERSON_REPRESENTATIVE\" is placeholder 'org:role/DATA_OWNER_PENDING'. Remediation: Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
+            "attributes": {
+              "severity": "warning",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:47",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE\" declares data_owner_ref equal to effective value inherited from \"dams:model/mdm/0.1.0\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:48",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:49",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/SHORT_NAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/SHORT_NAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:50",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:51",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/FULL_NAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/FULL_NAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:52",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:53",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/COUNTRY_CODE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/COUNTRY_CODE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:54",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/INN\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/INN"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:55",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/KPP\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/KPP"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:56",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/OGRN\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/OGRN"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:57",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:58",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/TERMINATION_DATE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/TERMINATION_DATE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:59",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:60",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/LEI\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/LEI"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:61",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/KIO\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/KIO"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:62",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:63",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:64",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/CEO_INN\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_INN"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:65",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:66",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/CEO_POSITION\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_POSITION"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:67",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/CEO_SURNAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_SURNAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:68",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:69",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/ECBD_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/ECBD_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:70",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/UNICODE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/UNICODE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:71",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/CODE_NSD\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/CODE_NSD"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:72",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/KBD_FIRMID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/KBD_FIRMID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:73",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:74",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON\" declares data_owner_ref equal to effective value inherited from \"dams:model/mdm/0.1.0\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:75",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON/PERSON_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/PERSON_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:76",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON/FIO\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/FIO"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:77",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON/LAST_NAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/LAST_NAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:78",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON/FIRST_NAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/FIRST_NAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:79",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON/PATRONYMIC\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/PATRONYMIC"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:80",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON/DATEBIRTH\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/DATEBIRTH"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:81",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON/ADDRESS_F\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/ADDRESS_F"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:82",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON/INN\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/INN"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:83",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON/SNILS\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/SNILS"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:84",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:85",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:86",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:87",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON_CEO\" declares data_owner_ref equal to effective value inherited from \"dams:model/mdm/0.1.0\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON_CEO"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:88",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON_CEO\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:89",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON_CEO/PERSON_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON_CEO\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON_CEO/PERSON_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:90",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON_REPRESENTATIVE\" declares data_owner_ref equal to effective value inherited from \"dams:model/mdm/0.1.0\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:91",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON_REPRESENTATIVE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:92",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON_REPRESENTATIVE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:93",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalEntity \"dams:logical/mdm/ENTERPRISE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:94",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalEntity \"dams:logical/mdm/PERSON\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:95",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:96",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/SHORT_NAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/SHORT_NAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:97",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:98",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/FULL_NAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/FULL_NAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:99",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:100",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/COUNTRY_CODE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/COUNTRY_CODE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:101",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/INN\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/INN"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:102",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KPP\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/KPP"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:103",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/OGRN\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/OGRN"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:104",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:105",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/TERMINATION_DATE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/TERMINATION_DATE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:106",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:107",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/LEI\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/LEI"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:108",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KIO\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/KIO"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:109",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:110",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:111",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_INN\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_INN"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:112",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:113",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_POSITION\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_POSITION"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:114",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_SURNAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_SURNAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:115",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:116",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ECBD_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/ECBD_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:117",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/UNICODE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/UNICODE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:118",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CODE_NSD\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/CODE_NSD"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:119",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KBD_FIRMID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/KBD_FIRMID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:120",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:121",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/PERSON_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/PERSON_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:122",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/FIO\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/FIO"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:123",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/LAST_NAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/LAST_NAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:124",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/FIRST_NAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/FIRST_NAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:125",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/PATRONYMIC\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/PATRONYMIC"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:126",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/DATEBIRTH\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/DATEBIRTH"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:127",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/ADDRESS_F\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/ADDRESS_F"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:128",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/INN\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/INN"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:129",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/SNILS\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/SNILS"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:130",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:131",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:132",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:133",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:134",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/PERSON_CEO/PERSON_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON_CEO/PERSON_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:135",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-DEF-description-eq-title:136",
+            "title": "DAMS-DEF-description-eq-title",
+            "description": "LogicalAttribute \"dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
+            "attributes": {
+              "severity": "info",
               "phase": "corporate_semantics",
               "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID"
             },

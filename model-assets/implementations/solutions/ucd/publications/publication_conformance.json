@@ -112,7 +112,7 @@
         "slice-nodes"
       ],
       "result_status": "pass",
-      "result_message": "semantic count=54 (>= 1); slice-nodes: 54",
+      "result_message": "semantic count=52 (>= 1); slice-nodes: 52",
       "obligation": "required"
     },
     {

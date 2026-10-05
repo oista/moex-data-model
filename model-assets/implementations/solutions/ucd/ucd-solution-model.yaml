@@ -2,71 +2,13 @@
 element_id: dams:model/ucd/0.1.0
 name: ucd_solution_model
 title: Модель данных UCD
-description: 'Модель данных ИТ-решения UCD (организации, сотрудники, соглашения) импортирована
-  из Object/ObjectAttribute.
+description: 'Модель данных ИТ-решения UCD (организации, сотрудники, соглашения) импортирована из Object/ObjectAttribute.
 
   '
 lifecycle_status: draft
 api_version: dams.moex/v0.1
 model_version: 0.1.0
 solution_ref: eam:solution/UCD
-conceptual_entities:
-- element_id: dams:concept/AGREEMENT
-  name: AGREEMENT
-  title: Соглашение
-  description: Соглашение
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/AUTHORIZATION
-  name: AUTHORIZATION
-  title: Полномочия сотрудника
-  description: Полномочия сотрудника
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/EMPOYEE
-  name: EMPOYEE
-  title: Сотрудник
-  description: Сотрудник
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/ORGANIZATION
-  name: ORGANIZATION
-  title: Организация
-  description: Организация
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/ORGANIZATION_TYPE
-  name: ORGANIZATION_TYPE
-  title: Тип организации
-  description: Тип организации
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/PERSON
-  name: PERSON
-  title: Персона
-  description: Персона
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/POSITION
-  name: POSITION
-  title: Должность сотрудника
-  description: Должность сотрудника
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
 domain_contexts:
 - element_id: dams:context/ucd
   name: UcdContext
@@ -84,7 +26,7 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/ucd
   conceptual_entity_refs:
-  - dams:concept/AGREEMENT
+  - dams:concept/Agreement
   solution_ref: eam:solution/UCD
   solution_data_role: producer
   entity_type: core
@@ -151,19 +93,16 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: aligned
+  alignment_rationale: UCD AGREEMENT реализует корпоративный Agreement.
 - element_id: dams:logical/ucd/AUTHORIZATION
   name: AUTHORIZATION
   title: Полномочия сотрудника
   description: Полномочия сотрудника
   lifecycle_status: draft
   context_ref: dams:context/ucd
-  conceptual_entity_refs:
-  - dams:concept/AUTHORIZATION
   solution_ref: eam:solution/UCD
   solution_data_role: producer
   entity_type: core
@@ -241,11 +180,11 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: local-only
+  alignment_rationale: Полномочия сотрудника UCD; RoleAssignment в CDM — IAM User↔Role, не 
+    Employee↔тип полномочия.
 - element_id: dams:logical/ucd/EMPOYEE
   name: EMPOYEE
   title: Сотрудник
@@ -253,7 +192,7 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/ucd
   conceptual_entity_refs:
-  - dams:concept/EMPOYEE
+  - dams:concept/Employee
   solution_ref: eam:solution/UCD
   solution_data_role: producer
   entity_type: core
@@ -375,11 +314,11 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: aligned
+  alignment_rationale: UCD EMPOYEE реализует Employee (reified роль Person); Person уже на UCD 
+    PERSON. Связь EMPOYEE→PERSON закрывает LDM-008.
 - element_id: dams:logical/ucd/ORGANIZATION
   name: ORGANIZATION
   title: Организация
@@ -387,7 +326,7 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/ucd
   conceptual_entity_refs:
-  - dams:concept/ORGANIZATION
+  - dams:concept/LegalEntity
   solution_ref: eam:solution/UCD
   solution_data_role: producer
   entity_type: core
@@ -487,19 +426,16 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: aligned
+  alignment_rationale: UCD ORGANIZATION (ИНН, typeId) реализует LegalEntity.
 - element_id: dams:logical/ucd/ORGANIZATION_TYPE
   name: ORGANIZATION_TYPE
   title: Тип организации
   description: Тип организации
   lifecycle_status: draft
   context_ref: dams:context/ucd
-  conceptual_entity_refs:
-  - dams:concept/ORGANIZATION_TYPE
   solution_ref: eam:solution/UCD
   solution_data_role: producer
   entity_type: core
@@ -544,11 +480,11 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: local-only
+  alignment_rationale: Классификатор типа организации в контуре UCD; отдельного корпоративного 
+    концепта нет.
 - element_id: dams:logical/ucd/PERSON
   name: PERSON
   title: Персона
@@ -556,7 +492,7 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/ucd
   conceptual_entity_refs:
-  - dams:concept/PERSON
+  - dams:concept/Person
   solution_ref: eam:solution/UCD
   solution_data_role: producer
   entity_type: core
@@ -623,11 +559,10 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: aligned
+  alignment_rationale: UCD PERSON реализует корпоративный Person.
 - element_id: dams:logical/ucd/POSITION
   name: POSITION
   title: Должность сотрудника
@@ -635,7 +570,7 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/ucd
   conceptual_entity_refs:
-  - dams:concept/POSITION
+  - dams:concept/StaffPosition
   solution_ref: eam:solution/UCD
   solution_data_role: producer
   entity_type: core
@@ -680,11 +615,11 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: aligned
+  alignment_rationale: UCD POSITION — каталог должностей; ближайший корпоративный концепт 
+    StaffPosition (штатная единица). Зерно без Department — осознанно.
 relationships:
 - element_id: dams:rel/ucd/AGREEMENT_to_ORGANIZATION_via_organizationId
   name: AGREEMENT_to_ORGANIZATION_via_organizationId
@@ -1688,90 +1623,61 @@ mappings:
   approval_status: proposed
 - element_id: dams:mapping/ucd/realizes_AGREEMENT
   name: realizes_AGREEMENT
-  description: 'Локальный stub: AGREEMENT realizes conceptual AGREEMENT (импорт xlsx;
-    выверка с enterprise — follow-up).'
+  description: UCD AGREEMENT realizes enterprise dams:concept/Agreement (ADR-021/029).
   lifecycle_status: draft
   source_refs:
   - dams:logical/ucd/AGREEMENT
   target_refs:
-  - dams:concept/AGREEMENT
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/ucd/realizes_AUTHORIZATION
-  name: realizes_AUTHORIZATION
-  description: 'Локальный stub: AUTHORIZATION realizes conceptual AUTHORIZATION (импорт
-    xlsx; выверка с enterprise — follow-up).'
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/AUTHORIZATION
-  target_refs:
-  - dams:concept/AUTHORIZATION
+  - dams:concept/Agreement
   mapping_type: realizes
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/ucd/realizes_EMPOYEE
   name: realizes_EMPOYEE
-  description: 'Локальный stub: EMPOYEE realizes conceptual EMPOYEE (импорт xlsx;
-    выверка с enterprise — follow-up).'
+  description: UCD EMPOYEE realizes enterprise dams:concept/Employee (ADR-021/029).
   lifecycle_status: draft
   source_refs:
   - dams:logical/ucd/EMPOYEE
   target_refs:
-  - dams:concept/EMPOYEE
+  - dams:concept/Employee
   mapping_type: realizes
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/ucd/realizes_ORGANIZATION
   name: realizes_ORGANIZATION
-  description: 'Локальный stub: ORGANIZATION realizes conceptual ORGANIZATION (импорт
-    xlsx; выверка с enterprise — follow-up).'
+  description: UCD ORGANIZATION realizes enterprise dams:concept/LegalEntity (ADR-021/029).
   lifecycle_status: draft
   source_refs:
   - dams:logical/ucd/ORGANIZATION
   target_refs:
-  - dams:concept/ORGANIZATION
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/ucd/realizes_ORGANIZATION_TYPE
-  name: realizes_ORGANIZATION_TYPE
-  description: 'Локальный stub: ORGANIZATION_TYPE realizes conceptual ORGANIZATION_TYPE
-    (импорт xlsx; выверка с enterprise — follow-up).'
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/ORGANIZATION_TYPE
-  target_refs:
-  - dams:concept/ORGANIZATION_TYPE
+  - dams:concept/LegalEntity
   mapping_type: realizes
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/ucd/realizes_PERSON
   name: realizes_PERSON
-  description: 'Локальный stub: PERSON realizes conceptual PERSON (импорт xlsx; выверка
-    с enterprise — follow-up).'
+  description: UCD PERSON realizes enterprise dams:concept/Person (ADR-021/029).
   lifecycle_status: draft
   source_refs:
   - dams:logical/ucd/PERSON
   target_refs:
-  - dams:concept/PERSON
+  - dams:concept/Person
   mapping_type: realizes
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/ucd/realizes_POSITION
   name: realizes_POSITION
-  description: 'Локальный stub: POSITION realizes conceptual POSITION (импорт xlsx;
-    выверка с enterprise — follow-up).'
+  description: UCD POSITION realizes enterprise dams:concept/StaffPosition (ADR-021/029).
   lifecycle_status: draft
   source_refs:
   - dams:logical/ucd/POSITION
   target_refs:
-  - dams:concept/POSITION
+  - dams:concept/StaffPosition
   mapping_type: realizes
   mapping_cardinality: one_to_one
   approval_status: proposed
 implementation_scope: solution
 conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
 data_owner_ref: org:role/DATA_OWNER_PENDING
-ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при
-  отсутствии локального override на сущности.
+ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при отсутствии 
+  локального override на сущности.

@@ -2,39 +2,13 @@
 element_id: dams:model/crm/0.1.0
 name: crm_solution_model
 title: Модель данных CRM
-description: 'Модель данных ИТ-решения CRM (клиент, контакт, привлечение) импортирована
-  из Object/ObjectAttribute.
+description: 'Модель данных ИТ-решения CRM (клиент, контакт, привлечение) импортирована из Object/ObjectAttribute.
 
   '
 lifecycle_status: draft
 api_version: dams.moex/v0.1
 model_version: 0.1.0
 solution_ref: eam:solution/CRM
-conceptual_entities:
-- element_id: dams:concept/CONTACT
-  name: CONTACT
-  title: Контакт
-  description: Контакт
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/CUSTOMER
-  name: CUSTOMER
-  title: Клиент
-  description: Клиент
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
-- element_id: dams:concept/LEAD
-  name: LEAD
-  title: Привлечение
-  description: Привлечение
-  lifecycle_status: draft
-  entity_type: core
-  data_class: master_data
-  business_importance: medium
 domain_contexts:
 - element_id: dams:context/crm
   name: CrmContext
@@ -52,7 +26,7 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/crm
   conceptual_entity_refs:
-  - dams:concept/CONTACT
+  - dams:concept/Person
   solution_ref: eam:solution/CRM
   solution_data_role: producer
   entity_type: core
@@ -251,11 +225,11 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: aligned
+  alignment_rationale: CRM CONTACT — локальная проекция корпоративного Person (ФИО, контакты, 
+    MDM/UCD id); флаг ЕИО остаётся атрибутом (ADR-029).
 - element_id: dams:logical/crm/CUSTOMER
   name: CUSTOMER
   title: Клиент
@@ -263,7 +237,8 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/crm
   conceptual_entity_refs:
-  - dams:concept/CUSTOMER
+  - dams:concept/Client
+  - dams:concept/LegalEntity
   solution_ref: eam:solution/CRM
   solution_data_role: producer
   entity_type: core
@@ -539,19 +514,17 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: aligned
+  alignment_rationale: 'CRM CUSTOMER реализует Client (клиентская роль) и LegalEntity (карточка ЮЛ: ИНН/КПП/ОГРН,
+    наименования); не Counterparty (ADR-029).'
 - element_id: dams:logical/crm/LEAD
   name: LEAD
   title: Привлечение
   description: Привлечение
   lifecycle_status: draft
   context_ref: dams:context/crm
-  conceptual_entity_refs:
-  - dams:concept/LEAD
   solution_ref: eam:solution/CRM
   solution_data_role: producer
   entity_type: core
@@ -750,11 +723,11 @@ logical_entities:
   data_owner_ref: org:role/DATA_OWNER_PENDING
   governance_classification: internal
   business_key_kind: surrogate
-  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения
-    (требует уточнения владельцем данных).
-  conceptual_alignment_status: pending
-  alignment_rationale: Локальный stub из импорта xlsx; выверка с enterprise conceptual
-    — follow-up.
+  identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует 
+    уточнения владельцем данных).
+  conceptual_alignment_status: local-only
+  alignment_rationale: Заявка привлечения CRM; в enterprise CDM нет концепта Lead/Attraction. 
+    SalesFunnel — справочник воронки, не экземпляр заявки. Волна B — follow-up.
 relationships:
 - element_id: dams:rel/crm/CONTACT_to_CUSTOMER_via_Account
   name: CONTACT_to_CUSTOMER_via_Account
@@ -1997,42 +1970,30 @@ mappings:
   approval_status: proposed
 - element_id: dams:mapping/crm/realizes_CONTACT
   name: realizes_CONTACT
-  description: 'Локальный stub: CONTACT realizes conceptual CONTACT (импорт xlsx;
-    выверка с enterprise — follow-up).'
+  description: CRM CONTACT realizes enterprise dams:concept/Person (ADR-021/029).
   lifecycle_status: draft
   source_refs:
   - dams:logical/crm/CONTACT
   target_refs:
-  - dams:concept/CONTACT
+  - dams:concept/Person
   mapping_type: realizes
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/crm/realizes_CUSTOMER
   name: realizes_CUSTOMER
-  description: 'Локальный stub: CUSTOMER realizes conceptual CUSTOMER (импорт xlsx;
-    выверка с enterprise — follow-up).'
+  description: CRM CUSTOMER realizes enterprise dams:concept/Client, dams:concept/LegalEntity 
+    (ADR-021/029).
   lifecycle_status: draft
   source_refs:
   - dams:logical/crm/CUSTOMER
   target_refs:
-  - dams:concept/CUSTOMER
+  - dams:concept/Client
+  - dams:concept/LegalEntity
   mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/crm/realizes_LEAD
-  name: realizes_LEAD
-  description: 'Локальный stub: LEAD realizes conceptual LEAD (импорт xlsx; выверка
-    с enterprise — follow-up).'
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD
-  target_refs:
-  - dams:concept/LEAD
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
+  mapping_cardinality: one_to_many
   approval_status: proposed
 implementation_scope: solution
 conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
 data_owner_ref: org:role/DATA_OWNER_PENDING
-ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при
-  отсутствии локального override на сущности.
+ownership_inheritance_rule: Ответственность за данные наследуется от ИТ-решения при отсутствии 
+  локального override на сущности.
