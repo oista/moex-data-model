@@ -2,9 +2,28 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
+
+# Explorer nav node kinds (stored in PublicationItem.attributes["kind"]).
+# Breadcrumb trail uses these via moex_publication_viewer.nav_crumb.
+ExplorerItemKind = Literal[
+    "group",
+    "class",
+    "enum",
+    "enum_value",
+    "slot",
+    "source_file",
+    "requirement",
+    "section_ref",
+    "implementation_ref",
+    "hierarchy_entity",
+    "entity",
+    "relation-term",
+    "owl-class",
+    "doc_page",
+]
 
 
 class PublicationItem(BaseModel):

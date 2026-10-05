@@ -953,6 +953,29 @@
     return found;
   }
 
+  /** Module + every ancestor + item; collapse consecutive duplicate titles.
+   *  Mirrors Python ``moex_publication_viewer.nav_crumb.explorer_crumb``. */
+  function explorerCrumbPath(moduleTitle, ancestors, item) {
+    const segments = [];
+    function push(title, id) {
+      const t = String(title || id || "").trim();
+      if (!t) return;
+      if (segments.length && segments[segments.length - 1] === t) return;
+      segments.push(t);
+    }
+    push(moduleTitle, null);
+    for (const a of ancestors || []) {
+      push(a.title, a.id);
+    }
+    if (item) push(item.title, item.id);
+    return segments;
+  }
+
+  function explorerCrumbFromFound(moduleTitle, found) {
+    if (!found?.item) return [];
+    return explorerCrumbPath(moduleTitle, found.ancestors || [], found.item);
+  }
+
   function collectExplorerIds(section) {
     const ids = new Set();
     walkExplorerItems(section, (node) => {
@@ -1295,7 +1318,7 @@
         }
       }
 
-      function openPublicationSection(sectionId, targetModuleId, itemId) {
+      function openPublicationSection(sectionId, targetModuleId, itemId, trailFound) {
         selectedItemId = itemId || null;
         const mid = targetModuleId || mod.module_id;
         const node = nodeForModule(mid) || nodeForModule(mod.module_id);
@@ -1309,13 +1332,21 @@
           openGroups.add("group:implementations");
           openGroups.add(node.id);
         }
+        // Full Spec-explorer trail (includes implementation_ref); not stored in hash.
+        const explorerCrumb = trailFound
+          ? explorerCrumbFromFound(mod.title, trailFound)
+          : null;
         setHash({
           node: node ? node.id : null,
           module: shortModule(mid),
           section: sectionId,
           item: itemId || null,
         });
-        showModule(mid, { section: sectionId, item: itemId || null });
+        showModule(mid, {
+          section: sectionId,
+          item: itemId || null,
+          explorerCrumb,
+        });
       }
 
       function openExplorerItem(itemId) {
@@ -1335,7 +1366,8 @@
           openPublicationSection(
             attrs.section_id,
             attrs.target_module_id || null,
-            attrs.kind === "hierarchy_entity" ? itemId : null
+            attrs.kind === "hierarchy_entity" ? itemId : null,
+            found
           );
           return;
         }
@@ -2158,6 +2190,14 @@
   }
 
   function prependArchitectureChrome(mod, focus) {
+    // Object cards / section_ref trails carry a full muted crumb — skip catalog
+    // chrome to avoid Spec title duplication (e.g. moex.dams twice).
+    if (focus?.explorerCrumb?.length) return null;
+    if (focus?.item) {
+      const expl = explorerSection(mod);
+      if (expl && findExplorerItem(expl, focus.item)) return null;
+    }
+
     const node =
       (currentNodeId && catalogNode(currentNodeId)) || nodeForModule(mod.module_id);
     if (!node) return null;
@@ -2224,6 +2264,22 @@
     const crumb = document.createElement("div");
     crumb.className = "breadcrumb muted";
 
+    function applyExplorerCrumbTrail(basePath) {
+      const path = (basePath || []).slice();
+      if (focus?.section && focus?.item) {
+        const section = mod.sections.find((s) => s.id === focus.section);
+        if (section && section.type !== "explorer") {
+          const row = findSectionItem(section, focus.item);
+          if (row) {
+            const t = row.title || row.id;
+            if (path[path.length - 1] !== t) path.push(t);
+          }
+        }
+      }
+      crumb.textContent = path.join(" / ");
+      return path;
+    }
+
     // Catalog identity landing (Spec/Impl selected, no section/item focus)
     if (linkedNode && !focus?.item && !focus?.section) {
       crumb.textContent = linkedNode.title;
@@ -2238,10 +2294,7 @@
     if (expl && focus?.item) {
       const found = findExplorerItem(expl, focus.item);
       if (found) {
-        const path = [mod.title];
-        if (found.group) path.push(found.group.title || found.group.id);
-        path.push(found.item.title || found.item.id);
-        crumb.textContent = path.join(" / ");
+        crumb.textContent = explorerCrumbFromFound(mod.title, found).join(" / ");
         content.appendChild(crumb);
         content.appendChild(renderExplorerDetail(mod, expl, found.item, found.group));
         return;
@@ -2251,6 +2304,7 @@
     // Instance card for entity-table rows with instance_of,
     // or term card for aggregated implementations glossary (term_cards).
     // Hierarchy scope: card + Entity hierarchy tabs with the entity selected.
+    // When opened via section_ref from Spec explorer, prefer full explorerCrumb.
     if (focus?.section && focus?.item) {
       const section = mod.sections.find((s) => s.id === focus.section);
       if (section && section.type !== "explorer") {
@@ -2261,20 +2315,32 @@
           section.attributes?.term_cards
         ) {
           setContentWide(true);
-          crumb.textContent = `${mod.title} / ${section.title} / ${row.title || row.id}`;
+          if (focus.explorerCrumb?.length) {
+            applyExplorerCrumbTrail(focus.explorerCrumb);
+          } else {
+            crumb.textContent = `${mod.title} / ${section.title} / ${row.title || row.id}`;
+          }
           content.appendChild(crumb);
           content.appendChild(renderImplTermDetail(mod, section, row));
           content.appendChild(renderGlossary(mod, section));
           return;
         }
         if (row && section.attributes?.term_cards) {
-          crumb.textContent = `${mod.title} / ${section.title} / ${row.title || row.id}`;
+          if (focus.explorerCrumb?.length) {
+            applyExplorerCrumbTrail(focus.explorerCrumb);
+          } else {
+            crumb.textContent = `${mod.title} / ${section.title} / ${row.title || row.id}`;
+          }
           content.appendChild(crumb);
           content.appendChild(renderImplTermDetail(mod, section, row));
           return;
         }
         if (row && section.instance_of) {
-          crumb.textContent = `${mod.title} / ${section.title} / ${row.title || row.id}`;
+          if (focus.explorerCrumb?.length) {
+            applyExplorerCrumbTrail(focus.explorerCrumb);
+          } else {
+            crumb.textContent = `${mod.title} / ${section.title} / ${row.title || row.id}`;
+          }
           content.appendChild(crumb);
           content.appendChild(renderInstanceDetail(mod, section, row));
           return;
@@ -2287,7 +2353,11 @@
       const section = mod.sections.find((s) => s.id === focus.section);
       if (section && section.type === "source-file") {
         setContentWide(false);
-        crumb.textContent = `${mod.title} / ${section.title}`;
+        if (focus.explorerCrumb?.length) {
+          applyExplorerCrumbTrail(focus.explorerCrumb);
+        } else {
+          crumb.textContent = `${mod.title} / ${section.title}`;
+        }
         content.appendChild(crumb);
         content.appendChild(renderSourceFileSection(mod, section));
         return;
@@ -2300,7 +2370,11 @@
           section.type === "glossary" ||
           section.type === "mermaid-diagram";
         setContentWide(isWide);
-        crumb.textContent = `${mod.title} / ${section.title}`;
+        if (focus.explorerCrumb?.length) {
+          applyExplorerCrumbTrail(focus.explorerCrumb);
+        } else {
+          crumb.textContent = `${mod.title} / ${section.title}`;
+        }
         content.appendChild(crumb);
         content.appendChild(renderSection(mod, section, { forceOpen: true }));
         if (focus.item) highlightItem(content, focus.item);

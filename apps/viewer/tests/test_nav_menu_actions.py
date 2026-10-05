@@ -123,3 +123,26 @@ def test_keyboard_expand_collapse_uses_aria_and_tree_toggle() -> None:
     assert ".tree-toggle:not(.is-leaf)" in kb
     assert "aria-expanded" in kb
     assert "toggle.click()" in kb
+
+
+def test_explorer_crumb_uses_full_ancestor_trail() -> None:
+    """Object-card muted crumb must walk ancestors (incl. implementation_ref)."""
+    assert "function explorerCrumbPath" in JS
+    assert "function explorerCrumbFromFound" in JS
+    crumb_fn = _fn_body("explorerCrumbPath", "explorerCrumbFromFound")
+    assert "ancestors" in crumb_fn
+    show = _fn_body("showModule")
+    # Explorer item branch uses ancestor trail, not nearest-group shortcut alone.
+    assert "explorerCrumbFromFound(mod.title, found)" in show
+    assert "found.group.title || found.group.id" not in show
+    # section_ref navigation carries Spec-explorer trail into impl module.
+    open_pub = _fn_body("openPublicationSection", "openExplorerItem")
+    assert "explorerCrumb" in open_pub
+    assert "explorerCrumbFromFound" in open_pub
+    open_item = _fn_body("openExplorerItem", "appendNavClassNode")
+    assert "openPublicationSection(" in open_item
+    # Fourth arg = found (trail), not only section/module/item.
+    assert "found\n          )" in open_item or "found)" in open_item.replace(" ", "")
+    chrome = _fn_body("prependArchitectureChrome", "showModule")
+    assert "focus?.explorerCrumb" in chrome
+    assert "findExplorerItem(expl, focus.item)" in chrome
