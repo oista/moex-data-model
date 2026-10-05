@@ -72,6 +72,8 @@ def test_js_glossary_section_tabs_and_term_links():
     assert "function renderGlossaryHierarchyTable" in JS
     assert "function renderGlossaryRelations" in JS
     assert "function collectGlossarySeeAlsoNeighbours" in JS
+    assert "function collectGlossaryAlignmentNeighbours" in JS
+    assert "function resolveAlignmentAcrossModules" in JS
     assert "function resolveGlossaryTermPageTarget" in JS
     assert "function pickGlossaryListColumns" in JS
     assert "function buildGlossaryChildrenIndex" in JS
@@ -90,16 +92,24 @@ def test_js_glossary_section_tabs_and_term_links():
     assert "Отметьте термины сверху, чтобы увидеть связанные." in JS
     assert "Нет ассоциативных связей у выбранных терминов." in JS
     assert "Все связанные термины уже входят в выборку." in JS
+    assert "Нет ассоциативных связей и связей эквивалентности" in JS
     assert "function emptyNeighboursMessage" in JS
     assert 'placeholder = "Поиск по имени"' in JS
     assert 'placeholder = "Поиск по описанию"' in JS
     assert "Toolbar above the split" in JS
     neigh = JS.split("function collectGlossarySeeAlsoNeighbours")[1].split(
-        "function glossaryTaxonomyParentIds"
+        "function resolveAlignmentAcrossModules"
     )[0]
     assert "see_also" in neigh
     assert "taxonomy_parents" not in neigh
     assert "definition_source" not in neigh
+    align = JS.split("function collectGlossaryAlignmentNeighbours")[1].split(
+        "function glossaryTaxonomyParentIds"
+    )[0]
+    assert "external_class_refs" in align
+    assert "glossary_term_refs" in align
+    assert "unresolved" in align
+    assert "taxonomy_parents" not in align
     assert 'col === "name" || col === "title"' in JS
     assert 'section.type === "glossary"' in JS
     assert (

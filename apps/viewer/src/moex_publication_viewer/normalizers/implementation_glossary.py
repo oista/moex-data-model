@@ -110,8 +110,14 @@ def _attrs_as_element(item: PublicationItem) -> dict[str, Any]:
         "aliases",
         "forward_label",
         "inverse_label",
+        "forward_label_en",
+        "inverse_label_en",
         "symmetric",
         "dependency_kind",
+        "source_entity_ref",
+        "target_entity_ref",
+        "relation_term_ref",
+        "term_direction",
     ):
         if key in attrs:
             out[key] = attrs[key]
@@ -344,6 +350,95 @@ def _rel_entry(target_id: str, rel: str) -> dict[str, str]:
     return {"id": target_id, "rel": rel}
 
 
+def _resolve_glossary_row(
+    impl_catalog_id: str,
+    element_id: str,
+    row_ids: dict[tuple[str, str], str],
+    index: DefinitionIndex,
+) -> str | None:
+    """Prefer same-solution glossary row, else first known row for element."""
+    eid = str(element_id or "").strip()
+    if not eid:
+        return None
+    return row_ids.get((impl_catalog_id, eid)) or index.first_row_for_element.get(eid)
+
+
+def _collect_relationship_elements(
+    modules: list[PublicationModule],
+    impl_nodes: list[CatalogNode],
+) -> list[tuple[str, dict[str, Any]]]:
+    """Collect Relationship section rows (not glossary terms) per implementation."""
+    out: list[tuple[str, dict[str, Any]]] = []
+    for node in impl_nodes:
+        mod = _module_by_id(modules, node.module_id)
+        if mod is None:
+            continue
+        for sec in mod.sections:
+            if (sec.instance_of or "") != "Relationship":
+                continue
+            for item in sec.items or []:
+                attrs = _attrs_as_element(item)
+                out.append((node.id, attrs))
+    return out
+
+
+def _relationship_edge_labels(
+    rel: dict[str, Any], term: dict[str, Any] | None
+) -> tuple[str, str]:
+    """Return (source→target rel, target→source rel) labels for see_also."""
+    term = term or {}
+    term_name = str(term.get("name") or rel.get("name") or "related").strip() or "related"
+    inv = str(
+        term.get("inverse_label_en")
+        or term.get("inverse_label")
+        or f"~{term_name}"
+    ).strip()
+    direction = str(rel.get("term_direction") or "forward").strip().lower()
+    if direction == "inverse":
+        # Edge stored from dependent side: source uses inverse wording.
+        return f"relationship:{inv}", f"relationship:{term_name}"
+    return f"relationship:{term_name}", f"relationship:{inv}"
+
+
+def _build_relationship_see_also(
+    modules: list[PublicationModule],
+    impl_nodes: list[CatalogNode],
+    sources: list[_TermSource],
+    row_ids: dict[tuple[str, str], str],
+    index: DefinitionIndex,
+) -> dict[str, list[dict[str, str]]]:
+    """Map glossary row id → see_also entries derived from Relationship edges."""
+    term_by_id: dict[str, dict[str, Any]] = {}
+    for src in sources:
+        if src.instance_of == "RelationTerm":
+            term_by_id.setdefault(src.item.id, src.element)
+
+    see_map: dict[str, list[dict[str, str]]] = {}
+    seen: set[tuple[str, str, str]] = set()
+
+    for impl_id, rel in _collect_relationship_elements(modules, impl_nodes):
+        src_ref = str(rel.get("source_entity_ref") or "").strip()
+        tgt_ref = str(rel.get("target_entity_ref") or "").strip()
+        if not src_ref or not tgt_ref:
+            continue
+        src_row = _resolve_glossary_row(impl_id, src_ref, row_ids, index)
+        tgt_row = _resolve_glossary_row(impl_id, tgt_ref, row_ids, index)
+        if not src_row or not tgt_row or src_row == tgt_row:
+            continue
+        term_ref = str(rel.get("relation_term_ref") or "").strip()
+        src_rel, tgt_rel = _relationship_edge_labels(rel, term_by_id.get(term_ref))
+        for from_row, to_row, label in (
+            (src_row, tgt_row, src_rel),
+            (tgt_row, src_row, tgt_rel),
+        ):
+            key = (from_row, to_row, label)
+            if key in seen:
+                continue
+            seen.add(key)
+            see_map.setdefault(from_row, []).append(_rel_entry(to_row, label))
+    return see_map
+
+
 def build_implementation_glossary_items(
     modules: list[PublicationModule],
     impl_nodes: list[CatalogNode],
@@ -409,6 +504,10 @@ def build_implementation_glossary_items(
             _rel_entry(rid, "child_concept")
         )
 
+    rel_see_also = _build_relationship_see_also(
+        modules, impl_nodes, sources, row_ids, index
+    )
+
     items: list[PublicationItem] = []
     for src in sources:
         rid = row_ids[(src.impl_catalog_id, src.item.id)]
@@ -433,6 +532,7 @@ def build_implementation_glossary_items(
         for other_rid in by_element.get(src.item.id, []):
             if other_rid != rid:
                 see_also.append(_rel_entry(other_rid, "same_concept"))
+        see_also.extend(rel_see_also.get(rid, []))
 
         attrs: dict[str, Any] = {
             "kind": src.kind,

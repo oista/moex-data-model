@@ -134,7 +134,28 @@ def test_synthetic_composite_ids_levels_and_redundant_override():
                             "name": "PERSON",
                             "title": "Физическое лицо",
                             "description": "ФЛ.",
-                        }
+                        },
+                        {
+                            "element_id": "dams:concept/LegalEntity",
+                            "name": "LegalEntity",
+                            "title": "Юридическое лицо",
+                            "description": "ЮЛ.",
+                            "external_class_refs": [
+                                {
+                                    "target_ref": (
+                                        "https://spec.edmcouncil.org/fibo/ontology/"
+                                        "BE/LegalEntities/LegalPersons/LegalPerson"
+                                    ),
+                                    "match_kind": "close",
+                                }
+                            ],
+                        },
+                        {
+                            "element_id": "dams:concept/CorporateGroup",
+                            "name": "CorporateGroup",
+                            "title": "Группа компаний",
+                            "description": "Группа.",
+                        },
                     ],
                 ),
                 _entity_section(
@@ -148,6 +169,31 @@ def test_synthetic_composite_ids_levels_and_redundant_override():
                             "description": "Владение.",
                             "forward_label": "владеет",
                             "inverse_label": "принадлежит",
+                        },
+                        {
+                            "element_id": "dams:relterm/memberOf",
+                            "name": "memberOf",
+                            "title": "входит в / включает",
+                            "description": "Членство.",
+                            "forward_label": "входит в",
+                            "forward_label_en": "member of",
+                            "inverse_label": "включает",
+                            "inverse_label_en": "has member",
+                        },
+                    ],
+                ),
+                _entity_section(
+                    "relationships",
+                    "Relationship",
+                    [
+                        {
+                            "element_id": "dams:rel/LegalEntity/memberOf",
+                            "name": "memberOf",
+                            "title": "memberOf",
+                            "source_entity_ref": "dams:concept/LegalEntity",
+                            "target_entity_ref": "dams:concept/CorporateGroup",
+                            "relation_term_ref": "dams:relterm/memberOf",
+                            "term_direction": "forward",
                         }
                     ],
                 ),
@@ -257,6 +303,34 @@ def test_synthetic_composite_ids_levels_and_redundant_override():
     assert "ucd-solution:dams:concept/PERSON" in see_ids
     assert "moex-enterprise-conceptual-model:dams:concept/PERSON" in see_ids
 
+    legal = next(
+        i
+        for i in items
+        if i.id == "moex-enterprise-conceptual-model:dams:concept/LegalEntity"
+    )
+    legal_see = {
+        (e["id"], e["rel"]) for e in (legal.attributes.get("see_also") or [])
+    }
+    assert (
+        "moex-enterprise-conceptual-model:dams:concept/CorporateGroup",
+        "relationship:memberOf",
+    ) in legal_see
+    group = next(
+        i
+        for i in items
+        if i.id == "moex-enterprise-conceptual-model:dams:concept/CorporateGroup"
+    )
+    group_see = {
+        (e["id"], e["rel"]) for e in (group.attributes.get("see_also") or [])
+    }
+    assert (
+        "moex-enterprise-conceptual-model:dams:concept/LegalEntity",
+        "relationship:has member",
+    ) in group_see
+    # Relationship rows are not glossary terms
+    assert not any(i.id.endswith("dams:rel/LegalEntity/memberOf") for i in items)
+    assert legal.attributes.get("external_class_refs")
+
     section = build_implementation_glossary_section(modules, nodes)
     assert section is not None
     assert section.id == IMPLEMENTATIONS_GLOSSARY_ID
@@ -291,6 +365,24 @@ def test_repo_implementations_glossary_nav_and_coverage():
     kinds = {i.attributes.get("kind") for i in gloss.items}
     assert "entity" in kinds
     assert "relation-term" in kinds
+
+    legal = next(
+        (
+            i
+            for i in gloss.items
+            if i.id.endswith(":dams:concept/LegalEntity")
+            and i.id.startswith("moex-enterprise-conceptual-model:")
+        ),
+        None,
+    )
+    assert legal is not None
+    legal_see = {
+        (e.get("id"), e.get("rel")) for e in (legal.attributes.get("see_also") or [])
+    }
+    assert any(
+        tid and tid.endswith(":dams:concept/CorporateGroup") and rel == "relationship:memberOf"
+        for tid, rel in legal_see
+    )
 
     explorer = next(s for s in dams.sections if s.type == "explorer")
     impls = next(i for i in explorer.items if i.id == "group:implementations")

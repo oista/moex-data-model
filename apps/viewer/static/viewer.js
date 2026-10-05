@@ -6440,6 +6440,97 @@
     return out;
   }
 
+  /** Resolve alignment target across glossary sections (IRI / curie / local_name). */
+  function resolveAlignmentAcrossModules(modList, raw) {
+    const key = String(raw || "").trim();
+    if (!key) return null;
+    for (const m of modList || []) {
+      for (const sec of m.sections || []) {
+        if (sec.type !== "glossary") continue;
+        const hit = resolveItemInGlossary(sec, key);
+        if (hit) return hit;
+        const byIri = (sec.items || []).find(
+          (i) =>
+            String(i.attributes?.iri || "") === key ||
+            String(i.attributes?.upstream_iri || "") === key ||
+            String(i.attributes?.curie || "") === key
+        );
+        if (byIri) return byIri;
+      }
+    }
+    return null;
+  }
+
+  function alignmentRelLabel(entry) {
+    if (entry && typeof entry === "object") {
+      if (entry.rel) return String(entry.rel);
+      const mk = entry.match_kind != null ? String(entry.match_kind).trim() : "";
+      if (mk) {
+        if (/match$/i.test(mk)) return `alignment:${mk}`;
+        return `alignment:${mk}Match`;
+      }
+    }
+    return "alignment:related";
+  }
+
+  /**
+   * ADR-027 equivalence / assignment neighbours (external_class_refs,
+   * glossary_term_refs). Unresolved IRIs become stub rows (no silent drop).
+   * Returns Map<key, { item, edges, unresolved }>.
+   */
+  function collectGlossaryAlignmentNeighbours(section, selectedIds, modList) {
+    const selected = selectedIds instanceof Set ? selectedIds : new Set(selectedIds || []);
+    const selectedKeys = new Set();
+    selected.forEach((id) => {
+      selectedKeys.add(String(id));
+      selectedKeys.add(canonicalGlossaryId(id));
+    });
+    const out = new Map();
+
+    function addEdge(key, item, fromId, rel, unresolved) {
+      if (!key) return;
+      if (selectedKeys.has(key) || selectedKeys.has(canonicalGlossaryId(key))) return;
+      if (!out.has(key)) {
+        out.set(key, { item, edges: [], unresolved: !!unresolved });
+      }
+      out.get(key).edges.push({ fromId, rel });
+    }
+
+    selected.forEach((fromId) => {
+      const fromItem = resolveItemInGlossary(section, fromId);
+      if (!fromItem) return;
+      const attrs = fromItem.attributes || {};
+      const refs = []
+        .concat(Array.isArray(attrs.external_class_refs) ? attrs.external_class_refs : [])
+        .concat(Array.isArray(attrs.glossary_term_refs) ? attrs.glossary_term_refs : []);
+      refs.forEach((entry) => {
+        const raw = relTargetId(entry);
+        if (!raw) return;
+        const rel = alignmentRelLabel(entry);
+        let target = resolveItemInGlossary(section, raw);
+        if (!target) target = resolveAlignmentAcrossModules(modList, raw);
+        if (target) {
+          if (
+            selectedKeys.has(target.id) ||
+            selectedKeys.has(canonicalGlossaryId(target.id))
+          ) {
+            return;
+          }
+          addEdge(target.id, target, fromItem.id, rel, false);
+          return;
+        }
+        const stub = {
+          id: raw,
+          title: shortIriLabel(raw) || raw,
+          description: "",
+          attributes: { kind: "external", iri: raw },
+        };
+        addEdge(raw, stub, fromItem.id, rel, true);
+      });
+    });
+    return out;
+  }
+
   function glossaryTaxonomyParentIds(item) {
     const attrs = item?.attributes || {};
     if (Array.isArray(attrs.taxonomy_parents) && attrs.taxonomy_parents.length) {
@@ -6987,8 +7078,9 @@
         .join("");
     }
 
-    function emptyNeighboursMessage() {
-      let withEdges = 0;
+    function emptyNeighboursMessage(assocCount, alignCount) {
+      let withAssoc = 0;
+      let withAlign = 0;
       let hiddenBecauseSelected = 0;
       const selectedKeys = new Set();
       selected.forEach((id) => {
@@ -7000,7 +7092,7 @@
         const seeAlso = Array.isArray(fromItem?.attributes?.see_also)
           ? fromItem.attributes.see_also
           : [];
-        if (seeAlso.length) withEdges += 1;
+        if (seeAlso.length) withAssoc += 1;
         seeAlso.forEach((entry) => {
           const target = resolveItemInGlossary(section, relTargetId(entry));
           if (!target) return;
@@ -7011,18 +7103,29 @@
             hiddenBecauseSelected += 1;
           }
         });
+        const attrs = fromItem?.attributes || {};
+        const refs = []
+          .concat(Array.isArray(attrs.external_class_refs) ? attrs.external_class_refs : [])
+          .concat(Array.isArray(attrs.glossary_term_refs) ? attrs.glossary_term_refs : []);
+        if (refs.length) withAlign += 1;
       });
-      if (withEdges === 0) {
+      if (assocCount === 0 && alignCount === 0 && withAlign > 0) {
+        return "Нет отображаемых связей эквивалентности у выбранных терминов.";
+      }
+      if (withAssoc === 0 && withAlign === 0) {
         return (
-          "Нет ассоциативных связей (see also) у выбранных терминов. " +
-          "Иерархия is_a/mixin — на вкладке «Иерархия»."
+          "Нет ассоциативных связей и связей эквивалентности у выбранных терминов. " +
+          "Иерархия — на вкладке «Иерархия»."
         );
       }
-      if (hiddenBecauseSelected > 0) {
+      if (hiddenBecauseSelected > 0 && assocCount === 0 && alignCount === 0) {
         return (
           "Все связанные термины уже входят в выборку. " +
           "Снимите часть отметок, чтобы увидеть их внизу."
         );
+      }
+      if (withAssoc === 0) {
+        return "Нет ассоциативных связей (see also / Relationship) у выбранных терминов.";
       }
       return "Нет ассоциативных связей у выбранных терминов.";
     }
@@ -7036,26 +7139,55 @@
         lowerTable.innerHTML = "";
         return;
       }
-      const neigh = collectGlossarySeeAlsoNeighbours(section, selected);
-      if (!neigh.size) {
+      const assoc = collectGlossarySeeAlsoNeighbours(section, selected);
+      const align = collectGlossaryAlignmentNeighbours(section, selected, modules);
+      const byKey = new Map();
+      assoc.forEach((edges, tid) => {
+        const item = resolveItemInGlossary(section, tid);
+        if (!item) return;
+        byKey.set(tid, { item, edges: edges.slice(), unresolved: false });
+      });
+      align.forEach((rec, key) => {
+        if (byKey.has(key)) {
+          byKey.get(key).edges.push(...rec.edges);
+        } else {
+          byKey.set(key, {
+            item: rec.item,
+            edges: rec.edges.slice(),
+            unresolved: !!rec.unresolved,
+          });
+        }
+      });
+      if (!byKey.size) {
         lowerEmpty.hidden = false;
-        lowerEmpty.textContent = emptyNeighboursMessage();
+        lowerEmpty.textContent = emptyNeighboursMessage(assoc.size, align.size);
         lowerScroll.hidden = true;
         lowerTable.innerHTML = "";
         return;
       }
       lowerEmpty.hidden = true;
       lowerScroll.hidden = false;
-      const targets = [...neigh.keys()]
-        .map((id) => resolveItemInGlossary(section, id))
+      const rows = [...byKey.values()];
+      const resolved = rows.filter((r) => !r.unresolved).map((r) => r.item);
+      const sortedResolved = sortRows(resolved);
+      const unresolved = rows
+        .filter((r) => r.unresolved)
+        .sort((a, b) =>
+          (a.item.title || a.item.id).localeCompare(b.item.title || b.item.id, undefined, {
+            numeric: true,
+          })
+        );
+      const ordered = sortedResolved
+        .map((item) => byKey.get(item.id))
+        .concat(unresolved)
         .filter(Boolean);
-      const sorted = sortRows(targets);
       const thead = `<thead><tr>${cols
         .map((c) => `<th>${escapeHtml(c)}</th>`)
         .join("")}<th>Связь</th></tr></thead>`;
-      const tbody = `<tbody>${sorted
-        .map((item) => {
-          const edges = neigh.get(item.id) || [];
+      const tbody = `<tbody>${ordered
+        .map((rec) => {
+          const item = rec.item;
+          const edges = rec.edges || [];
           const linkText = edges
             .map((e) => {
               const from = resolveItemInGlossary(section, e.fromId);
@@ -7063,9 +7195,26 @@
               return e.rel ? `${fromLabel} → ${e.rel}` : fromLabel;
             })
             .join(", ");
-          return `<tr data-item-id="${escapeHtml(item.id)}">${rowCellsHtml(
-            item
-          )}<td>${escapeHtml(linkText)}</td></tr>`;
+          const cells = rec.unresolved
+            ? cols
+                .map((c) => {
+                  if (c === "title" || c === "name") {
+                    return `<td><span class="spec-link disabled glossary-rel-chip" title="${escapeHtml(
+                      item.id
+                    )}">${escapeHtml(item.title || item.id)}</span></td>`;
+                  }
+                  if (c === "description") {
+                    return `<td><span class="muted">${escapeHtml(
+                      item.id
+                    )}</span></td>`;
+                  }
+                  return `<td>—</td>`;
+                })
+                .join("")
+            : rowCellsHtml(item);
+          return `<tr data-item-id="${escapeHtml(item.id)}">${cells}<td>${escapeHtml(
+            linkText
+          )}</td></tr>`;
         })
         .join("")}</tbody>`;
       lowerTable.innerHTML = thead + tbody;
