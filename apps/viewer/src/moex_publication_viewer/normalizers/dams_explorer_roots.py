@@ -278,12 +278,16 @@ def _load_requirement_items(
     if not isinstance(data, dict):
         return []
     items: list[PublicationItem] = []
+    by_element: dict[str, str] = {}
     for req in data.get("requirements") or []:
         if not isinstance(req, dict):
             continue
         code = str(req.get("code") or "")
         if not code:
             continue
+        element_id = str(req.get("element_id") or "").strip()
+        if element_id:
+            by_element[element_id] = f"req:{code}"
         items.append(
             PublicationItem(
                 id=f"req:{code}",
@@ -299,11 +303,23 @@ def _load_requirement_items(
                     "statement": req.get("statement"),
                     "description": req.get("description"),
                     "lifecycle_status": req.get("lifecycle_status"),
+                    "implementation_status": req.get("implementation_status"),
+                    "superseded_by": req.get("superseded_by"),
                     "formal_checks": req.get("formal_checks") or [],
                     "element_id": req.get("element_id"),
                 },
             )
         )
+    for item in items:
+        attrs = item.attributes or {}
+        raw = str(attrs.get("superseded_by") or "").strip()
+        if not raw:
+            continue
+        resolved = by_element.get(raw)
+        if resolved:
+            attrs["superseded_by_item"] = resolved
+        elif raw.startswith("req:"):
+            attrs["superseded_by_item"] = raw
     return items
 
 

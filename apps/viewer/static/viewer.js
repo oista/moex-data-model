@@ -704,7 +704,7 @@
     individual: "I",
     source_file: "F",
     requirements: "R",
-    requirement: "T",
+    requirement: "R",
     implementation_ref: "M",
     section_ref: "S",
     group: "G",
@@ -760,13 +760,37 @@
     return `<span class="nav-kind nav-kind-yaml" aria-hidden="true">${yamlFileSvg()}</span>`;
   }
 
+  const REQUIREMENT_STATUS = {
+    draft: { label: "Черновик", cls: "draft" },
+    proposed: { label: "На согласовании", cls: "proposed" },
+    approved: { label: "Утверждено", cls: "approved" },
+    rejected: { label: "Отклонено", cls: "inactive" },
+    deprecated: { label: "Устарело", cls: "inactive" },
+    superseded: { label: "Заменено", cls: "inactive" },
+  };
+
+  function requirementStatusInfo(raw) {
+    const key = String(raw || "").trim().toLowerCase();
+    if (REQUIREMENT_STATUS[key]) return { key, ...REQUIREMENT_STATUS[key] };
+    return { key: key || "draft", label: key || REQUIREMENT_STATUS.draft.label, cls: "draft" };
+  }
+
   function requirementsFileSvg() {
     // font-size 52 in viewBox 80×89 ≈ 9.5px at 14×16 slot (matches .nav-kind letters)
-    return `<svg class="nav-kind-requirements-shape" viewBox="0 0 80 89" fill="none" aria-hidden="true" focusable="false"><g stroke="#ff6641" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.8 18.2A8.2 8.2 0 0 1 23 10h27.6L66.2 23.6v47.6A8.2 8.2 0 0 1 58 79.4H23A8.2 8.2 0 0 1 14.8 71.2V18.2Z"/><path d="M50.6 10v13.6h15.6"/></g><text x="40" y="54" text-anchor="middle" dominant-baseline="central" fill="#ff6641" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="52" font-weight="700">R</text></svg>`;
+    // Stroke/fill via currentColor → --nav-requirements-accent on .nav-kind-requirements
+    return `<svg class="nav-kind-requirements-shape" viewBox="0 0 80 89" fill="none" aria-hidden="true" focusable="false"><g stroke="currentColor" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.8 18.2A8.2 8.2 0 0 1 23 10h27.6L66.2 23.6v47.6A8.2 8.2 0 0 1 58 79.4H23A8.2 8.2 0 0 1 14.8 71.2V18.2Z"/><path d="M50.6 10v13.6h15.6"/></g><text x="40" y="54" text-anchor="middle" dominant-baseline="central" fill="currentColor" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="52" font-weight="700">R</text></svg>`;
   }
 
   function requirementsFileMarkHtml() {
     return `<span class="nav-kind nav-kind-requirements" aria-hidden="true">${requirementsFileSvg()}</span>`;
+  }
+
+  function requirementMarkHtml(status, opts) {
+    const info = requirementStatusInfo(status);
+    const o = opts || {};
+    const title = escapeHtml(info.label);
+    const aria = o.ariaHidden === false ? "" : ' aria-hidden="true"';
+    return `<span class="nav-kind nav-kind-requirement-status req-status--${info.cls}" title="${title}"${aria}>R</span>`;
   }
 
   function navGlyphHtml(glyph, slot, opts) {
@@ -1055,7 +1079,7 @@
         btn.innerHTML = `<span class="nav-kind ${classKindClassNames(child.attributes)}">E</span>
           <span>${escapeHtml(child.title || child.id)}</span>`;
       } else if (childKind === "requirement") {
-        btn.innerHTML = `<span class="nav-kind">T</span>
+        btn.innerHTML = `${requirementMarkHtml(child.attributes?.lifecycle_status)}
           <span>${escapeHtml(child.title || child.id)}</span>`;
       } else if (childKind === "source_file") {
         btn.innerHTML = `${yamlFileMarkHtml()}
@@ -1403,6 +1427,10 @@
           }
         } else if (isPackageGroup) {
           markHtml = sectionMajorityGlyphHtml(node);
+        } else if (kind === "requirement") {
+          markHtml = requirementMarkHtml(node.attributes?.lifecycle_status, {
+            ariaHidden: false,
+          });
         } else if (LEVEL_GLYPHS.has(glyph)) {
           markHtml = navGlyphHtml(glyph, "menu");
         } else {
@@ -1410,9 +1438,14 @@
         }
         label.innerHTML = `${markHtml}
           <span class="tree-label">${escapeHtml(node.title || node.id)}</span>`;
-        label.title = isSectionFolder && sectionCode
-          ? `${sectionCode} — ${node.title || node.id}`
-          : node.title || node.id;
+        if (kind === "requirement") {
+          const st = requirementStatusInfo(node.attributes?.lifecycle_status);
+          label.title = `${node.title || node.id} — ${st.label}`;
+        } else {
+          label.title = isSectionFolder && sectionCode
+            ? `${sectionCode} — ${node.title || node.id}`
+            : node.title || node.id;
+        }
         label.addEventListener("click", (e) => {
           e.stopPropagation();
           if (hasKids) {
@@ -2948,6 +2981,7 @@
     const level = attrs.requirement_level || "";
     const section = attrs.requirement_section || "";
     const title = attrs.title || attrs.name || "";
+    const statusInfo = requirementStatusInfo(attrs.lifecycle_status);
     const reqGlyph = resolveNavGlyph(attrs);
     const levelSection =
       String(section).toUpperCase() === "LDM" ||
@@ -2959,10 +2993,31 @@
       : levelSection || (level === "conceptual_model" ? "cdm" : "");
     const titleBadge = LEVEL_GLYPHS.has(cardGlyph)
       ? navGlyphHtml(cardGlyph, "card")
-      : "";
+      : requirementMarkHtml(attrs.lifecycle_status);
+    const statusChipClass = `req-status-chip req-status--${statusInfo.cls}`;
+    let statusChipHtml = `<span class="${statusChipClass}">${escapeHtml(statusInfo.label)}</span>`;
+    if (statusInfo.key === "superseded" && attrs.superseded_by_item) {
+      const targetId = String(attrs.superseded_by_item);
+      const damsMod =
+        modules.find(
+          (m) =>
+            m.module_id === "moex:module:dams" || shortModule(m.module_id) === "dams"
+        ) || null;
+      const explSec = damsMod ? explorerSection(damsMod) : null;
+      const node = damsMod ? nodeForModule(damsMod.module_id) : null;
+      const href = itemHref({
+        node: node ? node.id : currentNodeId,
+        module: damsMod ? shortModule(damsMod.module_id) : "dams",
+        section: explSec ? explSec.id : null,
+        item: targetId,
+      });
+      statusChipHtml = `<a class="${statusChipClass}" href="${escapeHtml(href)}" title="${escapeHtml(String(attrs.superseded_by || targetId))}">${escapeHtml(statusInfo.label)}</a>`;
+    } else if (statusInfo.key === "superseded" && attrs.superseded_by) {
+      statusChipHtml = `<span class="${statusChipClass}" title="${escapeHtml(String(attrs.superseded_by))}">${escapeHtml(statusInfo.label)}</span>`;
+    }
     card.innerHTML = `
       <header class="detail-head">
-        <h1>${titleBadge}${escapeHtml(String(code))}</h1>
+        <h1>${titleBadge}${escapeHtml(String(code))}${statusChipHtml}</h1>
         <div class="badge-row">
           <span class="badge-pill">requirement</span>
           ${section && !LEVEL_GLYPHS.has(cardGlyph) ? `<span class="badge-pill">${escapeHtml(String(section))}</span>` : ""}

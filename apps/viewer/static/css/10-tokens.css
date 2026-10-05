@@ -220,4 +220,12 @@
   --level-glossary-start: #7a1830;
   --level-glossary-end: #1a0a0e;
   --level-glossary-text: #ffffff;
+
+  --status-draft: #8fa3b5;
+  --status-proposed: #b8c6d2;
+  --status-approved: #ffffff;
+  --status-inactive: #9a8a7c;
+  --status-outline: #c8d0d8;
+  --status-chip-bg: #3a424c;
+  --nav-requirements-accent: #ff6641;
 }

@@ -169,6 +169,16 @@ svg {
   --class-color-abstract: #2e8fad;
   --class-color-enum: #9a7a18;
   --class-color-has-mixins: #3d6eb5;
+
+  /* Requirement lifecycle status (SpecificationRequirement) */
+  --status-draft: #7a8fa3;
+  --status-proposed: #a8b8c6;
+  --status-approved: #ffffff;
+  --status-inactive: #8a7a6e;
+  --status-outline: #3a4450;
+  --status-chip-bg: #2c333c;
+  /* Requirements section folder glyph (document mark) */
+  --nav-requirements-accent: #ff6641;
 }
 
 [data-palette="default"] {
@@ -259,6 +269,14 @@ svg {
   --level-glossary-start: #7a1830;
   --level-glossary-end: #1a0a0e;
   --level-glossary-text: #ffffff;
+
+  --status-draft: #8fa3b5;
+  --status-proposed: #b8c6d2;
+  --status-approved: #ffffff;
+  --status-inactive: #9a8a7c;
+  --status-outline: #c8d0d8;
+  --status-chip-bg: #3a424c;
+  --nav-requirements-accent: #ff6641;
 }
 
 
@@ -968,6 +986,49 @@ a {
   overflow: visible;
   pointer-events: none;
   object-fit: contain;
+  color: var(--nav-requirements-accent);
+}
+.nav-kind.nav-kind-requirement-status {
+  width: 16px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--req-status-color, var(--status-draft));
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
+  -webkit-text-stroke: 0.6px var(--status-outline);
+  paint-order: stroke fill;
+}
+.req-status--draft { --req-status-color: var(--status-draft); }
+.req-status--proposed { --req-status-color: var(--status-proposed); }
+.req-status--approved { --req-status-color: var(--status-approved); }
+.req-status--inactive { --req-status-color: var(--status-inactive); }
+.req-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  margin-left: 0.5rem;
+  padding: 0.1em 0.55em;
+  border-radius: var(--radius-full);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--req-status-color, var(--status-draft));
+  background: var(--status-chip-bg);
+  vertical-align: middle;
+  text-decoration: none;
+}
+.req-status-chip:hover {
+  text-decoration: underline;
+}
+.detail-head h1 .req-status-chip {
+  font-size: var(--font-sm);
+  font-weight: 600;
 }
 .nav-kind.kind-plain {
   color: var(--class-color-plain);
