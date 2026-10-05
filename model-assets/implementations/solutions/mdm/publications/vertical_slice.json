@@ -2,13 +2,13 @@
   "summary": {
     "overall_result": "conformant_with_warnings",
     "implementation_id": "moex:implementation:mdm:0.1.0",
-    "revision": "ab6c77ae533a",
-    "content_digest": "sha256:ab6c77ae533a9ef186e03d46e8ae2b0da7122bebe2dad5793b192161dbb05431",
+    "revision": "98c818f20e38",
+    "content_digest": "sha256:98c818f20e38187a5023654222289d53ccdfdd0c01b54bb87e04c4753a62f9ef",
     "package_id": "dams:model/mdm/0.1.0",
     "node_count": 146,
     "edge_count": 339,
     "is_conformant": true,
-    "bundle_digest": "sha256:f2d3c696709b6aaa717c8792df396daf25c77023b1a0713b1c76a3bfac54c85e"
+    "bundle_digest": "sha256:0eb202b71e09e86ddddd309b6c4bba6667a254b9bae994b3b0f94e74122b5799"
   },
   "nodes": [
     {
@@ -352,7 +352,7 @@
       "name": "INTERNALDM_MDM_V_ENTERPRISE",
       "title": "Юридические лица (ЮЛ)",
       "description": "Юридические лица (ЮЛ)",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/GOLD_ID",
@@ -541,7 +541,7 @@
       "name": "INTERNALDM_MDM_V_PERSON",
       "title": "Физические лица (ФЛ)",
       "description": "Физические лица (ФЛ)",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/GOLD_ID",
@@ -632,7 +632,7 @@
       "name": "MOSCOW_EXCHANGE_T_REF_CEO",
       "title": "ЕИО (СЕО): Отношение ЮЛ к ФЛ",
       "description": "MOSCOW_EXCHANGE.T_CEO",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY2",
@@ -653,7 +653,7 @@
       "name": "MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
       "title": "Представители:Отношение ЮЛ - ФЛ",
       "description": "MOSCOW_EXCHANGE.T_REPRESENTATIVE",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY2",
@@ -1618,10 +1618,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/GOLD_ID->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/GOLD_ID->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/GOLD_ID",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME:contains",
@@ -1630,10 +1630,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME_ENG:contains",
@@ -1642,10 +1642,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME_ENG->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME_ENG->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME_ENG",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME:contains",
@@ -1654,10 +1654,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME_ENG:contains",
@@ -1666,10 +1666,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME_ENG->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME_ENG->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME_ENG",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/COUNTRY_CODE:contains",
@@ -1678,10 +1678,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/COUNTRY_CODE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/COUNTRY_CODE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/COUNTRY_CODE",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN:contains",
@@ -1690,10 +1690,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KPP:contains",
@@ -1702,10 +1702,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KPP->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KPP->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KPP",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/OGRN:contains",
@@ -1714,10 +1714,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/OGRN->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/OGRN->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/OGRN",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ADDR_EGRUL_REGION:contains",
@@ -1726,10 +1726,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ADDR_EGRUL_REGION->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ADDR_EGRUL_REGION->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ADDR_EGRUL_REGION",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TERMINATION_DATE:contains",
@@ -1738,10 +1738,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TERMINATION_DATE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TERMINATION_DATE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TERMINATION_DATE",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN_NONRESIDENT:contains",
@@ -1750,10 +1750,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN_NONRESIDENT->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN_NONRESIDENT->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN_NONRESIDENT",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/LEI:contains",
@@ -1762,10 +1762,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/LEI->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/LEI->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/LEI",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KIO:contains",
@@ -1774,10 +1774,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KIO->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KIO->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KIO",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/REG_NUM_NONRESIDENT:contains",
@@ -1786,10 +1786,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/REG_NUM_NONRESIDENT->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/REG_NUM_NONRESIDENT->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/REG_NUM_NONRESIDENT",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_FIRSTNAME:contains",
@@ -1798,10 +1798,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_FIRSTNAME->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_FIRSTNAME->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_FIRSTNAME",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_INN:contains",
@@ -1810,10 +1810,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_INN->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_INN->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_INN",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_PATRONYMIC:contains",
@@ -1822,10 +1822,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_PATRONYMIC->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_PATRONYMIC->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_PATRONYMIC",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_POSITION:contains",
@@ -1834,10 +1834,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_POSITION->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_POSITION->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_POSITION",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_SURNAME:contains",
@@ -1846,10 +1846,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_SURNAME->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_SURNAME->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_SURNAME",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TRUST_RULE_NUMBER:contains",
@@ -1858,10 +1858,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TRUST_RULE_NUMBER->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TRUST_RULE_NUMBER->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TRUST_RULE_NUMBER",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ECBD_ID:contains",
@@ -1870,10 +1870,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ECBD_ID->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ECBD_ID->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ECBD_ID",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/UNICODE:contains",
@@ -1882,10 +1882,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/UNICODE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/UNICODE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/UNICODE",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CODE_NSD:contains",
@@ -1894,10 +1894,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CODE_NSD->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CODE_NSD->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CODE_NSD",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KBD_FIRMID:contains",
@@ -1906,10 +1906,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KBD_FIRMID->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KBD_FIRMID->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KBD_FIRMID",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ACTIVE_FLAG:contains",
@@ -1918,10 +1918,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ACTIVE_FLAG->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ACTIVE_FLAG->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ACTIVE_FLAG",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/mdm/0.1.0->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:contains",
@@ -1936,10 +1936,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/GOLD_ID->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/GOLD_ID->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/GOLD_ID",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIO:contains",
@@ -1948,10 +1948,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIO->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIO->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIO",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/LAST_NAME:contains",
@@ -1960,10 +1960,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/LAST_NAME->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/LAST_NAME->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/LAST_NAME",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIRST_NAME:contains",
@@ -1972,10 +1972,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIRST_NAME->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIRST_NAME->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIRST_NAME",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/PATRONYMIC:contains",
@@ -1984,10 +1984,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/PATRONYMIC->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/PATRONYMIC->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/PATRONYMIC",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/DATEBIRTH:contains",
@@ -1996,10 +1996,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/DATEBIRTH->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/DATEBIRTH->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/DATEBIRTH",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/ADDRESS_F:contains",
@@ -2008,10 +2008,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/ADDRESS_F->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/ADDRESS_F->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/ADDRESS_F",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/INN:contains",
@@ -2020,10 +2020,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/INN->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/INN->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/INN",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/SNILS:contains",
@@ -2032,10 +2032,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/SNILS->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/SNILS->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/SNILS",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE:contains",
@@ -2044,10 +2044,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE_OMEGA:contains",
@@ -2056,10 +2056,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE_OMEGA->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE_OMEGA->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE_OMEGA",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_TYPE:contains",
@@ -2068,10 +2068,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_TYPE->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:physical_object_ref",
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_TYPE->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
       "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_TYPE",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/mdm/0.1.0->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO:contains",
@@ -2086,10 +2086,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY2->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO:physical_object_ref",
+      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY2->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO:carrier_ref",
       "source": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY2",
       "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY1:contains",
@@ -2098,10 +2098,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY1->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO:physical_object_ref",
+      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY1->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO:carrier_ref",
       "source": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY1",
       "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/mdm/0.1.0->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE:contains",
@@ -2116,10 +2116,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY2->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE:physical_object_ref",
+      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY2->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE:carrier_ref",
       "source": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY2",
       "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY3:contains",
@@ -2128,10 +2128,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY3->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE:physical_object_ref",
+      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY3->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE:carrier_ref",
       "source": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY3",
       "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/mdm/0.1.0->dams:rel/mdm/PERSON_CEO_to_ENTERPRISE_via_ENTERPRISE_ID:contains",
@@ -5880,7 +5880,7 @@
             "title": "revision",
             "description": null,
             "attributes": {
-              "value": "ab6c77ae533a"
+              "value": "98c818f20e38"
             },
             "children": [],
             "tags": [],
@@ -5891,7 +5891,7 @@
             "title": "content_digest",
             "description": null,
             "attributes": {
-              "value": "sha256:ab6c77ae533a9ef186e03d46e8ae2b0da7122bebe2dad5793b192161dbb05431"
+              "value": "sha256:98c818f20e38187a5023654222289d53ccdfdd0c01b54bb87e04c4753a62f9ef"
             },
             "children": [],
             "tags": [],
@@ -6520,7 +6520,7 @@
             "title": "Юридические лица (ЮЛ)",
             "description": "Юридические лица (ЮЛ)",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "INTERNALDM_MDM_V_ENTERPRISE"
             },
             "children": [],
@@ -6844,7 +6844,7 @@
             "title": "Физические лица (ФЛ)",
             "description": "Физические лица (ФЛ)",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "INTERNALDM_MDM_V_PERSON"
             },
             "children": [],
@@ -7000,7 +7000,7 @@
             "title": "ЕИО (СЕО): Отношение ЮЛ к ФЛ",
             "description": "MOSCOW_EXCHANGE.T_CEO",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "MOSCOW_EXCHANGE_T_REF_CEO"
             },
             "children": [],
@@ -7036,7 +7036,7 @@
             "title": "Представители:Отношение ЮЛ - ФЛ",
             "description": "MOSCOW_EXCHANGE.T_REPRESENTATIVE",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE"
             },
             "children": [],

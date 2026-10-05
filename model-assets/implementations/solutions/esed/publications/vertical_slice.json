@@ -2,13 +2,13 @@
   "summary": {
     "overall_result": "conformant_with_warnings",
     "implementation_id": "moex:implementation:esed:0.1.0",
-    "revision": "d005ce9d69a8",
-    "content_digest": "sha256:d005ce9d69a88f63800c5d48bd3ac0dde28bcbd3506ecde68e1be5aa95058100",
+    "revision": "a2efdd4d25ea",
+    "content_digest": "sha256:a2efdd4d25eaadd332d44d6efa3f5d2033cf8d31ad9536ae9f1458136c699c03",
     "package_id": "dams:model/esed/0.1.0",
     "node_count": 265,
     "edge_count": 625,
     "is_conformant": true,
-    "bundle_digest": "sha256:f2d3c696709b6aaa717c8792df396daf25c77023b1a0713b1c76a3bfac54c85e"
+    "bundle_digest": "sha256:0eb202b71e09e86ddddd309b6c4bba6667a254b9bae994b3b0f94e74122b5799"
   },
   "nodes": [
     {
@@ -590,7 +590,7 @@
       "name": "CardDocument_ExternalPoaInfo",
       "title": "attorney_check_info",
       "description": "attorney_check_info",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/esed/CardDocument_ExternalPoaInfo/InstanceID",
@@ -632,7 +632,7 @@
       "name": "RefStates_States",
       "title": "common_state",
       "description": "common_state",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/esed/RefStates_States/RowID",
@@ -653,7 +653,7 @@
       "name": "RefKinds_CardKinds",
       "title": "common_type",
       "description": "common_type",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/esed/RefKinds_CardKinds/RowID",
@@ -674,7 +674,7 @@
       "name": "RefStaff_Units",
       "title": "division",
       "description": "division",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/esed/RefStaff_Units/RowID",
@@ -702,7 +702,7 @@
       "name": "dvsys_instances_date",
       "title": "document",
       "description": "document",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date/InstanceID",
@@ -884,7 +884,7 @@
       "name": "RefStaff_Employees",
       "title": "employee",
       "description": "employee",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/esed/RefStaff_Employees/RowID",
@@ -933,7 +933,7 @@
       "name": "dvsys_files",
       "title": "file",
       "description": "file",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/esed/dvsys_files/ID",
@@ -975,7 +975,7 @@
       "name": "dvsys_binaries",
       "title": "file_binary",
       "description": "file_binary",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/esed/dvsys_binaries/ID",
@@ -1003,7 +1003,7 @@
       "name": "dvsys_instances",
       "title": "instance",
       "description": "instance",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/esed/dvsys_instances/InstanceID",
@@ -1024,7 +1024,7 @@
       "name": "RefPartners_Companies",
       "title": "organization",
       "description": "organization",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/esed/RefPartners_Companies/RowID",
@@ -1087,7 +1087,7 @@
       "name": "RefPartners_Employees",
       "title": "organization_employee",
       "description": "organization_employee",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/esed/RefPartners_Employees/RowID",
@@ -1122,7 +1122,7 @@
       "name": "RefBaseUniversal_Items",
       "title": "universal_item",
       "description": "universal_item",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/esed/RefBaseUniversal_Items/RowID",
@@ -2889,10 +2889,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/CardDocument_ExternalPoaInfo/InstanceID->dams:physical/esed/CardDocument_ExternalPoaInfo:physical_object_ref",
+      "id": "dams:physical/esed/CardDocument_ExternalPoaInfo/InstanceID->dams:physical/esed/CardDocument_ExternalPoaInfo:carrier_ref",
       "source": "dams:physical/esed/CardDocument_ExternalPoaInfo/InstanceID",
       "target": "dams:physical/esed/CardDocument_ExternalPoaInfo",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/CardDocument_ExternalPoaInfo->dams:physical/esed/CardDocument_ExternalPoaInfo/PowersValidationStatus:contains",
@@ -2901,10 +2901,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/CardDocument_ExternalPoaInfo/PowersValidationStatus->dams:physical/esed/CardDocument_ExternalPoaInfo:physical_object_ref",
+      "id": "dams:physical/esed/CardDocument_ExternalPoaInfo/PowersValidationStatus->dams:physical/esed/CardDocument_ExternalPoaInfo:carrier_ref",
       "source": "dams:physical/esed/CardDocument_ExternalPoaInfo/PowersValidationStatus",
       "target": "dams:physical/esed/CardDocument_ExternalPoaInfo",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/CardDocument_ExternalPoaInfo->dams:physical/esed/CardDocument_ExternalPoaInfo/MainFilesSignatureStatus:contains",
@@ -2913,10 +2913,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/CardDocument_ExternalPoaInfo/MainFilesSignatureStatus->dams:physical/esed/CardDocument_ExternalPoaInfo:physical_object_ref",
+      "id": "dams:physical/esed/CardDocument_ExternalPoaInfo/MainFilesSignatureStatus->dams:physical/esed/CardDocument_ExternalPoaInfo:carrier_ref",
       "source": "dams:physical/esed/CardDocument_ExternalPoaInfo/MainFilesSignatureStatus",
       "target": "dams:physical/esed/CardDocument_ExternalPoaInfo",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/CardDocument_ExternalPoaInfo->dams:physical/esed/CardDocument_ExternalPoaInfo/MainFilesRepresentativeSignatureStatus:contains",
@@ -2925,10 +2925,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/CardDocument_ExternalPoaInfo/MainFilesRepresentativeSignatureStatus->dams:physical/esed/CardDocument_ExternalPoaInfo:physical_object_ref",
+      "id": "dams:physical/esed/CardDocument_ExternalPoaInfo/MainFilesRepresentativeSignatureStatus->dams:physical/esed/CardDocument_ExternalPoaInfo:carrier_ref",
       "source": "dams:physical/esed/CardDocument_ExternalPoaInfo/MainFilesRepresentativeSignatureStatus",
       "target": "dams:physical/esed/CardDocument_ExternalPoaInfo",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/CardDocument_ExternalPoaInfo->dams:physical/esed/CardDocument_ExternalPoaInfo/ValidationJsonData:contains",
@@ -2937,10 +2937,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/CardDocument_ExternalPoaInfo/ValidationJsonData->dams:physical/esed/CardDocument_ExternalPoaInfo:physical_object_ref",
+      "id": "dams:physical/esed/CardDocument_ExternalPoaInfo/ValidationJsonData->dams:physical/esed/CardDocument_ExternalPoaInfo:carrier_ref",
       "source": "dams:physical/esed/CardDocument_ExternalPoaInfo/ValidationJsonData",
       "target": "dams:physical/esed/CardDocument_ExternalPoaInfo",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/esed/0.1.0->dams:physical/esed/RefStates_States:contains",
@@ -2955,10 +2955,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefStates_States/RowID->dams:physical/esed/RefStates_States:physical_object_ref",
+      "id": "dams:physical/esed/RefStates_States/RowID->dams:physical/esed/RefStates_States:carrier_ref",
       "source": "dams:physical/esed/RefStates_States/RowID",
       "target": "dams:physical/esed/RefStates_States",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefStates_States->dams:physical/esed/RefStates_States/DefaultName:contains",
@@ -2967,10 +2967,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefStates_States/DefaultName->dams:physical/esed/RefStates_States:physical_object_ref",
+      "id": "dams:physical/esed/RefStates_States/DefaultName->dams:physical/esed/RefStates_States:carrier_ref",
       "source": "dams:physical/esed/RefStates_States/DefaultName",
       "target": "dams:physical/esed/RefStates_States",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/esed/0.1.0->dams:physical/esed/RefKinds_CardKinds:contains",
@@ -2985,10 +2985,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefKinds_CardKinds/RowID->dams:physical/esed/RefKinds_CardKinds:physical_object_ref",
+      "id": "dams:physical/esed/RefKinds_CardKinds/RowID->dams:physical/esed/RefKinds_CardKinds:carrier_ref",
       "source": "dams:physical/esed/RefKinds_CardKinds/RowID",
       "target": "dams:physical/esed/RefKinds_CardKinds",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefKinds_CardKinds->dams:physical/esed/RefKinds_CardKinds/Name:contains",
@@ -2997,10 +2997,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefKinds_CardKinds/Name->dams:physical/esed/RefKinds_CardKinds:physical_object_ref",
+      "id": "dams:physical/esed/RefKinds_CardKinds/Name->dams:physical/esed/RefKinds_CardKinds:carrier_ref",
       "source": "dams:physical/esed/RefKinds_CardKinds/Name",
       "target": "dams:physical/esed/RefKinds_CardKinds",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/esed/0.1.0->dams:physical/esed/RefStaff_Units:contains",
@@ -3015,10 +3015,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefStaff_Units/RowID->dams:physical/esed/RefStaff_Units:physical_object_ref",
+      "id": "dams:physical/esed/RefStaff_Units/RowID->dams:physical/esed/RefStaff_Units:carrier_ref",
       "source": "dams:physical/esed/RefStaff_Units/RowID",
       "target": "dams:physical/esed/RefStaff_Units",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefStaff_Units->dams:physical/esed/RefStaff_Units/Name:contains",
@@ -3027,10 +3027,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefStaff_Units/Name->dams:physical/esed/RefStaff_Units:physical_object_ref",
+      "id": "dams:physical/esed/RefStaff_Units/Name->dams:physical/esed/RefStaff_Units:carrier_ref",
       "source": "dams:physical/esed/RefStaff_Units/Name",
       "target": "dams:physical/esed/RefStaff_Units",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefStaff_Units->dams:physical/esed/RefStaff_Units/ParentTreeRowID:contains",
@@ -3039,10 +3039,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefStaff_Units/ParentTreeRowID->dams:physical/esed/RefStaff_Units:physical_object_ref",
+      "id": "dams:physical/esed/RefStaff_Units/ParentTreeRowID->dams:physical/esed/RefStaff_Units:carrier_ref",
       "source": "dams:physical/esed/RefStaff_Units/ParentTreeRowID",
       "target": "dams:physical/esed/RefStaff_Units",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/esed/0.1.0->dams:physical/esed/dvsys_instances_date:contains",
@@ -3057,10 +3057,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/InstanceID->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/InstanceID->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/InstanceID",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/RegDate:contains",
@@ -3069,10 +3069,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/RegDate->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/RegDate->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/RegDate",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/RegNumber:contains",
@@ -3081,10 +3081,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/RegNumber->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/RegNumber->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/RegNumber",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/ExternalNumber:contains",
@@ -3093,10 +3093,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/ExternalNumber->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/ExternalNumber->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/ExternalNumber",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/Registrar:contains",
@@ -3105,10 +3105,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/Registrar->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/Registrar->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/Registrar",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/Author:contains",
@@ -3117,10 +3117,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/Author->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/Author->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/Author",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/Name:contains",
@@ -3129,10 +3129,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/Name->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/Name->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/Name",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/Content:contains",
@@ -3141,10 +3141,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/Content->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/Content->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/Content",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/ResponsDepartment:contains",
@@ -3153,10 +3153,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/ResponsDepartment->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/ResponsDepartment->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/ResponsDepartment",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/Kind:contains",
@@ -3165,10 +3165,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/Kind->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/Kind->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/Kind",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/State:contains",
@@ -3177,10 +3177,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/State->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/State->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/State",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/StatusId:contains",
@@ -3189,10 +3189,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/StatusId->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/StatusId->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/StatusId",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/DeliveryTypeId:contains",
@@ -3201,10 +3201,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/DeliveryTypeId->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/DeliveryTypeId->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/DeliveryTypeId",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/DeliveryDate:contains",
@@ -3213,10 +3213,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/DeliveryDate->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/DeliveryDate->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/DeliveryDate",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/SenderOrg:contains",
@@ -3225,10 +3225,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/SenderOrg->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/SenderOrg->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/SenderOrg",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/SenderPerson:contains",
@@ -3237,10 +3237,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/SenderPerson->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/SenderPerson->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/SenderPerson",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/AnswerNotNeed:contains",
@@ -3249,10 +3249,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/AnswerNotNeed->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/AnswerNotNeed->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/AnswerNotNeed",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/ItemID:contains",
@@ -3261,10 +3261,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/ItemID->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/ItemID->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/ItemID",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/IndocProcessingStatus:contains",
@@ -3273,10 +3273,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/IndocProcessingStatus->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/IndocProcessingStatus->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/IndocProcessingStatus",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/DocumentTypeIndoc:contains",
@@ -3285,10 +3285,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/DocumentTypeIndoc->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/DocumentTypeIndoc->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/DocumentTypeIndoc",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/DocumentTypeKbd:contains",
@@ -3297,10 +3297,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/DocumentTypeKbd->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/DocumentTypeKbd->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/DocumentTypeKbd",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/KBD_DvSyncStatus:contains",
@@ -3309,10 +3309,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/KBD_DvSyncStatus->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/KBD_DvSyncStatus->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/KBD_DvSyncStatus",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/KBD_LkuDocumentId:contains",
@@ -3321,10 +3321,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/KBD_LkuDocumentId->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/KBD_LkuDocumentId->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/KBD_LkuDocumentId",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/CreationDateTime:contains",
@@ -3333,10 +3333,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/CreationDateTime->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/CreationDateTime->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/CreationDateTime",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances_date->dams:physical/esed/dvsys_instances_date/ChangeDateTime:contains",
@@ -3345,10 +3345,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances_date/ChangeDateTime->dams:physical/esed/dvsys_instances_date:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances_date/ChangeDateTime->dams:physical/esed/dvsys_instances_date:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances_date/ChangeDateTime",
       "target": "dams:physical/esed/dvsys_instances_date",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/esed/0.1.0->dams:physical/esed/RefStaff_Employees:contains",
@@ -3363,10 +3363,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefStaff_Employees/RowID->dams:physical/esed/RefStaff_Employees:physical_object_ref",
+      "id": "dams:physical/esed/RefStaff_Employees/RowID->dams:physical/esed/RefStaff_Employees:carrier_ref",
       "source": "dams:physical/esed/RefStaff_Employees/RowID",
       "target": "dams:physical/esed/RefStaff_Employees",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefStaff_Employees->dams:physical/esed/RefStaff_Employees/LastName:contains",
@@ -3375,10 +3375,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefStaff_Employees/LastName->dams:physical/esed/RefStaff_Employees:physical_object_ref",
+      "id": "dams:physical/esed/RefStaff_Employees/LastName->dams:physical/esed/RefStaff_Employees:carrier_ref",
       "source": "dams:physical/esed/RefStaff_Employees/LastName",
       "target": "dams:physical/esed/RefStaff_Employees",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefStaff_Employees->dams:physical/esed/RefStaff_Employees/FirstName:contains",
@@ -3387,10 +3387,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefStaff_Employees/FirstName->dams:physical/esed/RefStaff_Employees:physical_object_ref",
+      "id": "dams:physical/esed/RefStaff_Employees/FirstName->dams:physical/esed/RefStaff_Employees:carrier_ref",
       "source": "dams:physical/esed/RefStaff_Employees/FirstName",
       "target": "dams:physical/esed/RefStaff_Employees",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefStaff_Employees->dams:physical/esed/RefStaff_Employees/MiddleName:contains",
@@ -3399,10 +3399,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefStaff_Employees/MiddleName->dams:physical/esed/RefStaff_Employees:physical_object_ref",
+      "id": "dams:physical/esed/RefStaff_Employees/MiddleName->dams:physical/esed/RefStaff_Employees:carrier_ref",
       "source": "dams:physical/esed/RefStaff_Employees/MiddleName",
       "target": "dams:physical/esed/RefStaff_Employees",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefStaff_Employees->dams:physical/esed/RefStaff_Employees/AccountName:contains",
@@ -3411,10 +3411,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefStaff_Employees/AccountName->dams:physical/esed/RefStaff_Employees:physical_object_ref",
+      "id": "dams:physical/esed/RefStaff_Employees/AccountName->dams:physical/esed/RefStaff_Employees:carrier_ref",
       "source": "dams:physical/esed/RefStaff_Employees/AccountName",
       "target": "dams:physical/esed/RefStaff_Employees",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefStaff_Employees->dams:physical/esed/RefStaff_Employees/ParentRowID:contains",
@@ -3423,10 +3423,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefStaff_Employees/ParentRowID->dams:physical/esed/RefStaff_Employees:physical_object_ref",
+      "id": "dams:physical/esed/RefStaff_Employees/ParentRowID->dams:physical/esed/RefStaff_Employees:carrier_ref",
       "source": "dams:physical/esed/RefStaff_Employees/ParentRowID",
       "target": "dams:physical/esed/RefStaff_Employees",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/esed/0.1.0->dams:physical/esed/dvsys_files:contains",
@@ -3441,10 +3441,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_files/ID->dams:physical/esed/dvsys_files:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_files/ID->dams:physical/esed/dvsys_files:carrier_ref",
       "source": "dams:physical/esed/dvsys_files/ID",
       "target": "dams:physical/esed/dvsys_files",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_files->dams:physical/esed/dvsys_files/OwnerCardID:contains",
@@ -3453,10 +3453,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_files/OwnerCardID->dams:physical/esed/dvsys_files:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_files/OwnerCardID->dams:physical/esed/dvsys_files:carrier_ref",
       "source": "dams:physical/esed/dvsys_files/OwnerCardID",
       "target": "dams:physical/esed/dvsys_files",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_files->dams:physical/esed/dvsys_files/Name:contains",
@@ -3465,10 +3465,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_files/Name->dams:physical/esed/dvsys_files:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_files/Name->dams:physical/esed/dvsys_files:carrier_ref",
       "source": "dams:physical/esed/dvsys_files/Name",
       "target": "dams:physical/esed/dvsys_files",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_files->dams:physical/esed/dvsys_files/BinaryID:contains",
@@ -3477,10 +3477,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_files/BinaryID->dams:physical/esed/dvsys_files:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_files/BinaryID->dams:physical/esed/dvsys_files:carrier_ref",
       "source": "dams:physical/esed/dvsys_files/BinaryID",
       "target": "dams:physical/esed/dvsys_files",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_files->dams:physical/esed/dvsys_files/FileType:contains",
@@ -3489,10 +3489,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_files/FileType->dams:physical/esed/dvsys_files:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_files/FileType->dams:physical/esed/dvsys_files:carrier_ref",
       "source": "dams:physical/esed/dvsys_files/FileType",
       "target": "dams:physical/esed/dvsys_files",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/esed/0.1.0->dams:physical/esed/dvsys_binaries:contains",
@@ -3507,10 +3507,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_binaries/ID->dams:physical/esed/dvsys_binaries:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_binaries/ID->dams:physical/esed/dvsys_binaries:carrier_ref",
       "source": "dams:physical/esed/dvsys_binaries/ID",
       "target": "dams:physical/esed/dvsys_binaries",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_binaries->dams:physical/esed/dvsys_binaries/Path:contains",
@@ -3519,10 +3519,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_binaries/Path->dams:physical/esed/dvsys_binaries:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_binaries/Path->dams:physical/esed/dvsys_binaries:carrier_ref",
       "source": "dams:physical/esed/dvsys_binaries/Path",
       "target": "dams:physical/esed/dvsys_binaries",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_binaries->dams:physical/esed/dvsys_binaries/StorageID:contains",
@@ -3531,10 +3531,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_binaries/StorageID->dams:physical/esed/dvsys_binaries:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_binaries/StorageID->dams:physical/esed/dvsys_binaries:carrier_ref",
       "source": "dams:physical/esed/dvsys_binaries/StorageID",
       "target": "dams:physical/esed/dvsys_binaries",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/esed/0.1.0->dams:physical/esed/dvsys_instances:contains",
@@ -3549,10 +3549,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances/InstanceID->dams:physical/esed/dvsys_instances:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances/InstanceID->dams:physical/esed/dvsys_instances:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances/InstanceID",
       "target": "dams:physical/esed/dvsys_instances",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/dvsys_instances->dams:physical/esed/dvsys_instances/Deleted:contains",
@@ -3561,10 +3561,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/dvsys_instances/Deleted->dams:physical/esed/dvsys_instances:physical_object_ref",
+      "id": "dams:physical/esed/dvsys_instances/Deleted->dams:physical/esed/dvsys_instances:carrier_ref",
       "source": "dams:physical/esed/dvsys_instances/Deleted",
       "target": "dams:physical/esed/dvsys_instances",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/esed/0.1.0->dams:physical/esed/RefPartners_Companies:contains",
@@ -3579,10 +3579,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefPartners_Companies/RowID->dams:physical/esed/RefPartners_Companies:physical_object_ref",
+      "id": "dams:physical/esed/RefPartners_Companies/RowID->dams:physical/esed/RefPartners_Companies:carrier_ref",
       "source": "dams:physical/esed/RefPartners_Companies/RowID",
       "target": "dams:physical/esed/RefPartners_Companies",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefPartners_Companies->dams:physical/esed/RefPartners_Companies/Name:contains",
@@ -3591,10 +3591,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefPartners_Companies/Name->dams:physical/esed/RefPartners_Companies:physical_object_ref",
+      "id": "dams:physical/esed/RefPartners_Companies/Name->dams:physical/esed/RefPartners_Companies:carrier_ref",
       "source": "dams:physical/esed/RefPartners_Companies/Name",
       "target": "dams:physical/esed/RefPartners_Companies",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefPartners_Companies->dams:physical/esed/RefPartners_Companies/FullName:contains",
@@ -3603,10 +3603,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefPartners_Companies/FullName->dams:physical/esed/RefPartners_Companies:physical_object_ref",
+      "id": "dams:physical/esed/RefPartners_Companies/FullName->dams:physical/esed/RefPartners_Companies:carrier_ref",
       "source": "dams:physical/esed/RefPartners_Companies/FullName",
       "target": "dams:physical/esed/RefPartners_Companies",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefPartners_Companies->dams:physical/esed/RefPartners_Companies/INN:contains",
@@ -3615,10 +3615,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefPartners_Companies/INN->dams:physical/esed/RefPartners_Companies:physical_object_ref",
+      "id": "dams:physical/esed/RefPartners_Companies/INN->dams:physical/esed/RefPartners_Companies:carrier_ref",
       "source": "dams:physical/esed/RefPartners_Companies/INN",
       "target": "dams:physical/esed/RefPartners_Companies",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefPartners_Companies->dams:physical/esed/RefPartners_Companies/KPP:contains",
@@ -3627,10 +3627,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefPartners_Companies/KPP->dams:physical/esed/RefPartners_Companies:physical_object_ref",
+      "id": "dams:physical/esed/RefPartners_Companies/KPP->dams:physical/esed/RefPartners_Companies:carrier_ref",
       "source": "dams:physical/esed/RefPartners_Companies/KPP",
       "target": "dams:physical/esed/RefPartners_Companies",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefPartners_Companies->dams:physical/esed/RefPartners_Companies/OGRN:contains",
@@ -3639,10 +3639,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefPartners_Companies/OGRN->dams:physical/esed/RefPartners_Companies:physical_object_ref",
+      "id": "dams:physical/esed/RefPartners_Companies/OGRN->dams:physical/esed/RefPartners_Companies:carrier_ref",
       "source": "dams:physical/esed/RefPartners_Companies/OGRN",
       "target": "dams:physical/esed/RefPartners_Companies",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefPartners_Companies->dams:physical/esed/RefPartners_Companies/Comments:contains",
@@ -3651,10 +3651,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefPartners_Companies/Comments->dams:physical/esed/RefPartners_Companies:physical_object_ref",
+      "id": "dams:physical/esed/RefPartners_Companies/Comments->dams:physical/esed/RefPartners_Companies:carrier_ref",
       "source": "dams:physical/esed/RefPartners_Companies/Comments",
       "target": "dams:physical/esed/RefPartners_Companies",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefPartners_Companies->dams:physical/esed/RefPartners_Companies/Fax:contains",
@@ -3663,10 +3663,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefPartners_Companies/Fax->dams:physical/esed/RefPartners_Companies:physical_object_ref",
+      "id": "dams:physical/esed/RefPartners_Companies/Fax->dams:physical/esed/RefPartners_Companies:carrier_ref",
       "source": "dams:physical/esed/RefPartners_Companies/Fax",
       "target": "dams:physical/esed/RefPartners_Companies",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/esed/0.1.0->dams:physical/esed/RefPartners_Employees:contains",
@@ -3681,10 +3681,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefPartners_Employees/RowID->dams:physical/esed/RefPartners_Employees:physical_object_ref",
+      "id": "dams:physical/esed/RefPartners_Employees/RowID->dams:physical/esed/RefPartners_Employees:carrier_ref",
       "source": "dams:physical/esed/RefPartners_Employees/RowID",
       "target": "dams:physical/esed/RefPartners_Employees",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefPartners_Employees->dams:physical/esed/RefPartners_Employees/LastName:contains",
@@ -3693,10 +3693,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefPartners_Employees/LastName->dams:physical/esed/RefPartners_Employees:physical_object_ref",
+      "id": "dams:physical/esed/RefPartners_Employees/LastName->dams:physical/esed/RefPartners_Employees:carrier_ref",
       "source": "dams:physical/esed/RefPartners_Employees/LastName",
       "target": "dams:physical/esed/RefPartners_Employees",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefPartners_Employees->dams:physical/esed/RefPartners_Employees/FirstName:contains",
@@ -3705,10 +3705,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefPartners_Employees/FirstName->dams:physical/esed/RefPartners_Employees:physical_object_ref",
+      "id": "dams:physical/esed/RefPartners_Employees/FirstName->dams:physical/esed/RefPartners_Employees:carrier_ref",
       "source": "dams:physical/esed/RefPartners_Employees/FirstName",
       "target": "dams:physical/esed/RefPartners_Employees",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefPartners_Employees->dams:physical/esed/RefPartners_Employees/MiddleName:contains",
@@ -3717,10 +3717,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefPartners_Employees/MiddleName->dams:physical/esed/RefPartners_Employees:physical_object_ref",
+      "id": "dams:physical/esed/RefPartners_Employees/MiddleName->dams:physical/esed/RefPartners_Employees:carrier_ref",
       "source": "dams:physical/esed/RefPartners_Employees/MiddleName",
       "target": "dams:physical/esed/RefPartners_Employees",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/esed/0.1.0->dams:physical/esed/RefBaseUniversal_Items:contains",
@@ -3735,10 +3735,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefBaseUniversal_Items/RowID->dams:physical/esed/RefBaseUniversal_Items:physical_object_ref",
+      "id": "dams:physical/esed/RefBaseUniversal_Items/RowID->dams:physical/esed/RefBaseUniversal_Items:carrier_ref",
       "source": "dams:physical/esed/RefBaseUniversal_Items/RowID",
       "target": "dams:physical/esed/RefBaseUniversal_Items",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefBaseUniversal_Items->dams:physical/esed/RefBaseUniversal_Items/Name:contains",
@@ -3747,10 +3747,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefBaseUniversal_Items/Name->dams:physical/esed/RefBaseUniversal_Items:physical_object_ref",
+      "id": "dams:physical/esed/RefBaseUniversal_Items/Name->dams:physical/esed/RefBaseUniversal_Items:carrier_ref",
       "source": "dams:physical/esed/RefBaseUniversal_Items/Name",
       "target": "dams:physical/esed/RefBaseUniversal_Items",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/esed/RefBaseUniversal_Items->dams:physical/esed/RefBaseUniversal_Items/ItemCard:contains",
@@ -3759,10 +3759,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/esed/RefBaseUniversal_Items/ItemCard->dams:physical/esed/RefBaseUniversal_Items:physical_object_ref",
+      "id": "dams:physical/esed/RefBaseUniversal_Items/ItemCard->dams:physical/esed/RefBaseUniversal_Items:carrier_ref",
       "source": "dams:physical/esed/RefBaseUniversal_Items/ItemCard",
       "target": "dams:physical/esed/RefBaseUniversal_Items",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/esed/0.1.0->dams:rel/esed/attorney_check_info_to_instance_via_instance_id:contains",
@@ -9249,7 +9249,7 @@
             "title": "revision",
             "description": null,
             "attributes": {
-              "value": "d005ce9d69a8"
+              "value": "a2efdd4d25ea"
             },
             "children": [],
             "tags": [],
@@ -9260,7 +9260,7 @@
             "title": "content_digest",
             "description": null,
             "attributes": {
-              "value": "sha256:d005ce9d69a88f63800c5d48bd3ac0dde28bcbd3506ecde68e1be5aa95058100"
+              "value": "sha256:a2efdd4d25eaadd332d44d6efa3f5d2033cf8d31ad9536ae9f1458136c699c03"
             },
             "children": [],
             "tags": [],
@@ -10297,7 +10297,7 @@
             "title": "attorney_check_info",
             "description": "attorney_check_info",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "CardDocument_ExternalPoaInfo"
             },
             "children": [],
@@ -10369,7 +10369,7 @@
             "title": "common_state",
             "description": "common_state",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "RefStates_States"
             },
             "children": [],
@@ -10405,7 +10405,7 @@
             "title": "common_type",
             "description": "common_type",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "RefKinds_CardKinds"
             },
             "children": [],
@@ -10441,7 +10441,7 @@
             "title": "division",
             "description": "division",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "RefStaff_Units"
             },
             "children": [],
@@ -10489,7 +10489,7 @@
             "title": "document",
             "description": "document",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "dvsys_instances_date"
             },
             "children": [],
@@ -10801,7 +10801,7 @@
             "title": "employee",
             "description": "employee",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "RefStaff_Employees"
             },
             "children": [],
@@ -10885,7 +10885,7 @@
             "title": "file",
             "description": "file",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "dvsys_files"
             },
             "children": [],
@@ -10957,7 +10957,7 @@
             "title": "file_binary",
             "description": "file_binary",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "dvsys_binaries"
             },
             "children": [],
@@ -11005,7 +11005,7 @@
             "title": "instance",
             "description": "instance",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "dvsys_instances"
             },
             "children": [],
@@ -11041,7 +11041,7 @@
             "title": "organization",
             "description": "organization",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "RefPartners_Companies"
             },
             "children": [],
@@ -11149,7 +11149,7 @@
             "title": "organization_employee",
             "description": "organization_employee",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "RefPartners_Employees"
             },
             "children": [],
@@ -11209,7 +11209,7 @@
             "title": "universal_item",
             "description": "universal_item",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "RefBaseUniversal_Items"
             },
             "children": [],

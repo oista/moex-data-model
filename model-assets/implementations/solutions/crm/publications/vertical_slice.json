@@ -2,13 +2,13 @@
   "summary": {
     "overall_result": "conformant_with_warnings",
     "implementation_id": "moex:implementation:crm:0.1.0",
-    "revision": "65ac30b9a76e",
-    "content_digest": "sha256:65ac30b9a76ea6faf28fe3be880a8dbdcf0fa53ed5c7285572ce18ae98111640",
+    "revision": "cd8f9e294696",
+    "content_digest": "sha256:cd8f9e2946961a3920b62911de89e0f58e2a824da7c334a7902df00e56a1631b",
     "package_id": "dams:model/crm/0.1.0",
     "node_count": 192,
     "edge_count": 450,
     "is_conformant": true,
-    "bundle_digest": "sha256:f2d3c696709b6aaa717c8792df396daf25c77023b1a0713b1c76a3bfac54c85e"
+    "bundle_digest": "sha256:0eb202b71e09e86ddddd309b6c4bba6667a254b9bae994b3b0f94e74122b5799"
   },
   "nodes": [
     {
@@ -457,7 +457,7 @@
       "name": "phys_CONTACT",
       "title": "Контакт",
       "description": "Контакт",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT/Id",
@@ -583,7 +583,7 @@
       "name": "ACCOUNT",
       "title": "Клиент",
       "description": "Клиент",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/crm/ACCOUNT/ID",
@@ -758,7 +758,7 @@
       "name": "phys_LEAD",
       "title": "Привлечение",
       "description": "Привлечение",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/crm/phys_LEAD/ApplicationId",
@@ -2126,10 +2126,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/Id->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/Id->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/Id",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT->dams:physical/crm/phys_CONTACT/Account:contains",
@@ -2138,10 +2138,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/Account->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/Account->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/Account",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT->dams:physical/crm/phys_CONTACT/Name:contains",
@@ -2150,10 +2150,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/Name->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/Name->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/Name",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT->dams:physical/crm/phys_CONTACT/MoexFullNameEn:contains",
@@ -2162,10 +2162,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/MoexFullNameEn->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/MoexFullNameEn->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/MoexFullNameEn",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT->dams:physical/crm/phys_CONTACT/MoexEio:contains",
@@ -2174,10 +2174,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/MoexEio->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/MoexEio->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/MoexEio",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT->dams:physical/crm/phys_CONTACT/Surname:contains",
@@ -2186,10 +2186,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/Surname->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/Surname->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/Surname",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT->dams:physical/crm/phys_CONTACT/GivenName:contains",
@@ -2198,10 +2198,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/GivenName->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/GivenName->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/GivenName",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT->dams:physical/crm/phys_CONTACT/MiddleName:contains",
@@ -2210,10 +2210,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/MiddleName->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/MiddleName->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/MiddleName",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT->dams:physical/crm/phys_CONTACT/Gender:contains",
@@ -2222,10 +2222,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/Gender->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/Gender->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/Gender",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT->dams:physical/crm/phys_CONTACT/BirthDate:contains",
@@ -2234,10 +2234,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/BirthDate->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/BirthDate->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/BirthDate",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT->dams:physical/crm/phys_CONTACT/Phone:contains",
@@ -2246,10 +2246,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/Phone->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/Phone->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/Phone",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT->dams:physical/crm/phys_CONTACT/MobilePhone:contains",
@@ -2258,10 +2258,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/MobilePhone->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/MobilePhone->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/MobilePhone",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT->dams:physical/crm/phys_CONTACT/Email:contains",
@@ -2270,10 +2270,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/Email->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/Email->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/Email",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT->dams:physical/crm/phys_CONTACT/Type:contains",
@@ -2282,10 +2282,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/Type->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/Type->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/Type",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT->dams:physical/crm/phys_CONTACT/MoexPassportId:contains",
@@ -2294,10 +2294,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/MoexPassportId->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/MoexPassportId->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/MoexPassportId",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT->dams:physical/crm/phys_CONTACT/MoexMdmId:contains",
@@ -2306,10 +2306,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/MoexMdmId->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/MoexMdmId->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/MoexMdmId",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_CONTACT->dams:physical/crm/phys_CONTACT/MoexUCDId:contains",
@@ -2318,10 +2318,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_CONTACT/MoexUCDId->dams:physical/crm/phys_CONTACT:physical_object_ref",
+      "id": "dams:physical/crm/phys_CONTACT/MoexUCDId->dams:physical/crm/phys_CONTACT:carrier_ref",
       "source": "dams:physical/crm/phys_CONTACT/MoexUCDId",
       "target": "dams:physical/crm/phys_CONTACT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/crm/0.1.0->dams:physical/crm/ACCOUNT:contains",
@@ -2336,10 +2336,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/ID->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/ID->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/ID",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/PrimaryContact:contains",
@@ -2348,10 +2348,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/PrimaryContact->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/PrimaryContact->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/PrimaryContact",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/PrimaryAccount:contains",
@@ -2360,10 +2360,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/PrimaryAccount->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/PrimaryAccount->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/PrimaryAccount",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/Parent:contains",
@@ -2372,10 +2372,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/Parent->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/Parent->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/Parent",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexPaarentCompanyHolding:contains",
@@ -2384,10 +2384,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexPaarentCompanyHolding->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexPaarentCompanyHolding->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexPaarentCompanyHolding",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/Name:contains",
@@ -2396,10 +2396,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/Name->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/Name->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/Name",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexFullAlternativeName:contains",
@@ -2408,10 +2408,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexFullAlternativeName->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexFullAlternativeName->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexFullAlternativeName",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/AlternativeName:contains",
@@ -2420,10 +2420,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/AlternativeName->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/AlternativeName->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/AlternativeName",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexEngFullAlternativeName:contains",
@@ -2432,10 +2432,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexEngFullAlternativeName->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexEngFullAlternativeName->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexEngFullAlternativeName",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/Phone:contains",
@@ -2444,10 +2444,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/Phone->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/Phone->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/Phone",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexEmail:contains",
@@ -2456,10 +2456,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexEmail->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexEmail->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexEmail",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexINN:contains",
@@ -2468,10 +2468,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexINN->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexINN->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexINN",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexKPP:contains",
@@ -2480,10 +2480,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexKPP->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexKPP->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexKPP",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexOGRN:contains",
@@ -2492,10 +2492,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexOGRN->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexOGRN->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexOGRN",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexOKVED:contains",
@@ -2504,10 +2504,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexOKVED->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexOKVED->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexOKVED",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexCountryCode:contains",
@@ -2516,10 +2516,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexCountryCode->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexCountryCode->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexCountryCode",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexRegNumNonResident:contains",
@@ -2528,10 +2528,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexRegNumNonResident->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexRegNumNonResident->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexRegNumNonResident",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexKIO:contains",
@@ -2540,10 +2540,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexKIO->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexKIO->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexKIO",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexMDMId:contains",
@@ -2552,10 +2552,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexMDMId->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexMDMId->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexMDMId",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexCBDId:contains",
@@ -2564,10 +2564,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexCBDId->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexCBDId->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexCBDId",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexKBDId:contains",
@@ -2576,10 +2576,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexKBDId->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexKBDId->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexKBDId",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexUnicodeCBD:contains",
@@ -2588,10 +2588,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexUnicodeCBD->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexUnicodeCBD->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexUnicodeCBD",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexUCDId:contains",
@@ -2600,10 +2600,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexUCDId->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexUCDId->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexUCDId",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/ACCOUNT->dams:physical/crm/ACCOUNT/MoexCodeNsd:contains",
@@ -2612,10 +2612,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/ACCOUNT/MoexCodeNsd->dams:physical/crm/ACCOUNT:physical_object_ref",
+      "id": "dams:physical/crm/ACCOUNT/MoexCodeNsd->dams:physical/crm/ACCOUNT:carrier_ref",
       "source": "dams:physical/crm/ACCOUNT/MoexCodeNsd",
       "target": "dams:physical/crm/ACCOUNT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/crm/0.1.0->dams:physical/crm/phys_LEAD:contains",
@@ -2630,10 +2630,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/ApplicationId->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/ApplicationId->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/ApplicationId",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_LEAD->dams:physical/crm/phys_LEAD/MoexAccount:contains",
@@ -2642,10 +2642,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/MoexAccount->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/MoexAccount->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/MoexAccount",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_LEAD->dams:physical/crm/phys_LEAD/MoexApplicationNumber:contains",
@@ -2654,10 +2654,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/MoexApplicationNumber->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/MoexApplicationNumber->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/MoexApplicationNumber",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_LEAD->dams:physical/crm/phys_LEAD/MoexApplicationTitle:contains",
@@ -2666,10 +2666,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/MoexApplicationTitle->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/MoexApplicationTitle->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/MoexApplicationTitle",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_LEAD->dams:physical/crm/phys_LEAD/MoexApplicationSource:contains",
@@ -2678,10 +2678,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/MoexApplicationSource->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/MoexApplicationSource->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/MoexApplicationSource",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_LEAD->dams:physical/crm/phys_LEAD/MoexFunnelType:contains",
@@ -2690,10 +2690,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/MoexFunnelType->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/MoexFunnelType->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/MoexFunnelType",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_LEAD->dams:physical/crm/phys_LEAD/MoexContact:contains",
@@ -2702,10 +2702,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/MoexContact->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/MoexContact->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/MoexContact",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_LEAD->dams:physical/crm/phys_LEAD/MobilePhone:contains",
@@ -2714,10 +2714,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/MobilePhone->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/MobilePhone->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/MobilePhone",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_LEAD->dams:physical/crm/phys_LEAD/Email:contains",
@@ -2726,10 +2726,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/Email->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/Email->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/Email",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_LEAD->dams:physical/crm/phys_LEAD/ModifiedOn:contains",
@@ -2738,10 +2738,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/ModifiedOn->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/ModifiedOn->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/ModifiedOn",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_LEAD->dams:physical/crm/phys_LEAD/CreatedOn:contains",
@@ -2750,10 +2750,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/CreatedOn->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/CreatedOn->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/CreatedOn",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_LEAD->dams:physical/crm/phys_LEAD/MoexSiteCreatedOn:contains",
@@ -2762,10 +2762,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/MoexSiteCreatedOn->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/MoexSiteCreatedOn->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/MoexSiteCreatedOn",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_LEAD->dams:physical/crm/phys_LEAD/MoexInn:contains",
@@ -2774,10 +2774,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/MoexInn->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/MoexInn->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/MoexInn",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_LEAD->dams:physical/crm/phys_LEAD/MoexPassportId:contains",
@@ -2786,10 +2786,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/MoexPassportId->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/MoexPassportId->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/MoexPassportId",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_LEAD->dams:physical/crm/phys_LEAD/MoexIDApplications:contains",
@@ -2798,10 +2798,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/MoexIDApplications->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/MoexIDApplications->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/MoexIDApplications",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_LEAD->dams:physical/crm/phys_LEAD/MoexLkkStatus:contains",
@@ -2810,10 +2810,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/MoexLkkStatus->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/MoexLkkStatus->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/MoexLkkStatus",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/crm/phys_LEAD->dams:physical/crm/phys_LEAD/MoexUcdId:contains",
@@ -2822,10 +2822,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/crm/phys_LEAD/MoexUcdId->dams:physical/crm/phys_LEAD:physical_object_ref",
+      "id": "dams:physical/crm/phys_LEAD/MoexUcdId->dams:physical/crm/phys_LEAD:carrier_ref",
       "source": "dams:physical/crm/phys_LEAD/MoexUcdId",
       "target": "dams:physical/crm/phys_LEAD",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/crm/0.1.0->dams:rel/crm/CONTACT_to_CUSTOMER_via_Account:contains",
@@ -7868,7 +7868,7 @@
             "title": "revision",
             "description": null,
             "attributes": {
-              "value": "65ac30b9a76e"
+              "value": "cd8f9e294696"
             },
             "children": [],
             "tags": [],
@@ -7879,7 +7879,7 @@
             "title": "content_digest",
             "description": null,
             "attributes": {
-              "value": "sha256:65ac30b9a76ea6faf28fe3be880a8dbdcf0fa53ed5c7285572ce18ae98111640"
+              "value": "sha256:cd8f9e2946961a3920b62911de89e0f58e2a824da7c334a7902df00e56a1631b"
             },
             "children": [],
             "tags": [],
@@ -8688,7 +8688,7 @@
             "title": "Контакт",
             "description": "Контакт",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "phys_CONTACT"
             },
             "children": [],
@@ -8904,7 +8904,7 @@
             "title": "Клиент",
             "description": "Клиент",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "ACCOUNT"
             },
             "children": [],
@@ -9204,7 +9204,7 @@
             "title": "Привлечение",
             "description": "Привлечение",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "phys_LEAD"
             },
             "children": [],

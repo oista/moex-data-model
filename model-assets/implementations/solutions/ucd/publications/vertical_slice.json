@@ -2,13 +2,13 @@
   "summary": {
     "overall_result": "conformant_with_warnings",
     "implementation_id": "moex:implementation:ucd:0.1.0",
-    "revision": "941aad298ea0",
-    "content_digest": "sha256:941aad298ea0e7b0b9f62db792054395d94cd7e3b5adc4e165d68f7d658d38be",
+    "revision": "4425758236a9",
+    "content_digest": "sha256:4425758236a9dad66505bf3d840705e85fb8e5a23a294c4aaa7a9be4d2e5eed6",
     "package_id": "dams:model/ucd/0.1.0",
     "node_count": 153,
     "edge_count": 359,
     "is_conformant": true,
-    "bundle_digest": "sha256:f2d3c696709b6aaa717c8792df396daf25c77023b1a0713b1c76a3bfac54c85e"
+    "bundle_digest": "sha256:0eb202b71e09e86ddddd309b6c4bba6667a254b9bae994b3b0f94e74122b5799"
   },
   "nodes": [
     {
@@ -359,7 +359,7 @@
       "name": "phys_AGREEMENT",
       "title": "Соглашение",
       "description": "Соглашение",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/ucd/phys_AGREEMENT/id",
@@ -401,7 +401,7 @@
       "name": "phys_AUTHORIZATION",
       "title": "Полномочия",
       "description": "Полномочия сотрудника",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/ucd/phys_AUTHORIZATION/id",
@@ -450,7 +450,7 @@
       "name": "phys_EMPOYEE",
       "title": "Сотрудник",
       "description": "Сотрудник",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/ucd/phys_EMPOYEE/id",
@@ -520,7 +520,7 @@
       "name": "phys_ORGANIZATION",
       "title": "Организация",
       "description": "Организация",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/ucd/phys_ORGANIZATION/id",
@@ -583,7 +583,7 @@
       "name": "phys_ORGANIZATION_TYPE",
       "title": "Тип организации",
       "description": "Тип организации",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/ucd/phys_ORGANIZATION_TYPE/Id",
@@ -611,7 +611,7 @@
       "name": "phys_PERSON",
       "title": "Персона",
       "description": "Персона",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/ucd/phys_PERSON/id",
@@ -653,7 +653,7 @@
       "name": "phys_POSITION",
       "title": "Должность",
       "description": "Должность сотрудника",
-      "kind": "physical_object"
+      "kind": "technical_asset"
     },
     {
       "id": "dams:physical/ucd/phys_POSITION/id",
@@ -1697,10 +1697,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_AGREEMENT/id->dams:physical/ucd/phys_AGREEMENT:physical_object_ref",
+      "id": "dams:physical/ucd/phys_AGREEMENT/id->dams:physical/ucd/phys_AGREEMENT:carrier_ref",
       "source": "dams:physical/ucd/phys_AGREEMENT/id",
       "target": "dams:physical/ucd/phys_AGREEMENT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_AGREEMENT->dams:physical/ucd/phys_AGREEMENT/organizationId:contains",
@@ -1709,10 +1709,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_AGREEMENT/organizationId->dams:physical/ucd/phys_AGREEMENT:physical_object_ref",
+      "id": "dams:physical/ucd/phys_AGREEMENT/organizationId->dams:physical/ucd/phys_AGREEMENT:carrier_ref",
       "source": "dams:physical/ucd/phys_AGREEMENT/organizationId",
       "target": "dams:physical/ucd/phys_AGREEMENT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_AGREEMENT->dams:physical/ucd/phys_AGREEMENT/type:contains",
@@ -1721,10 +1721,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_AGREEMENT/type->dams:physical/ucd/phys_AGREEMENT:physical_object_ref",
+      "id": "dams:physical/ucd/phys_AGREEMENT/type->dams:physical/ucd/phys_AGREEMENT:carrier_ref",
       "source": "dams:physical/ucd/phys_AGREEMENT/type",
       "target": "dams:physical/ucd/phys_AGREEMENT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_AGREEMENT->dams:physical/ucd/phys_AGREEMENT/status:contains",
@@ -1733,10 +1733,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_AGREEMENT/status->dams:physical/ucd/phys_AGREEMENT:physical_object_ref",
+      "id": "dams:physical/ucd/phys_AGREEMENT/status->dams:physical/ucd/phys_AGREEMENT:carrier_ref",
       "source": "dams:physical/ucd/phys_AGREEMENT/status",
       "target": "dams:physical/ucd/phys_AGREEMENT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_AGREEMENT->dams:physical/ucd/phys_AGREEMENT/conclusionDate:contains",
@@ -1745,10 +1745,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_AGREEMENT/conclusionDate->dams:physical/ucd/phys_AGREEMENT:physical_object_ref",
+      "id": "dams:physical/ucd/phys_AGREEMENT/conclusionDate->dams:physical/ucd/phys_AGREEMENT:carrier_ref",
       "source": "dams:physical/ucd/phys_AGREEMENT/conclusionDate",
       "target": "dams:physical/ucd/phys_AGREEMENT",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/ucd/0.1.0->dams:physical/ucd/phys_AUTHORIZATION:contains",
@@ -1763,10 +1763,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_AUTHORIZATION/id->dams:physical/ucd/phys_AUTHORIZATION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_AUTHORIZATION/id->dams:physical/ucd/phys_AUTHORIZATION:carrier_ref",
       "source": "dams:physical/ucd/phys_AUTHORIZATION/id",
       "target": "dams:physical/ucd/phys_AUTHORIZATION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_AUTHORIZATION->dams:physical/ucd/phys_AUTHORIZATION/employeeId:contains",
@@ -1775,10 +1775,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_AUTHORIZATION/employeeId->dams:physical/ucd/phys_AUTHORIZATION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_AUTHORIZATION/employeeId->dams:physical/ucd/phys_AUTHORIZATION:carrier_ref",
       "source": "dams:physical/ucd/phys_AUTHORIZATION/employeeId",
       "target": "dams:physical/ucd/phys_AUTHORIZATION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_AUTHORIZATION->dams:physical/ucd/phys_AUTHORIZATION/type:contains",
@@ -1787,10 +1787,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_AUTHORIZATION/type->dams:physical/ucd/phys_AUTHORIZATION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_AUTHORIZATION/type->dams:physical/ucd/phys_AUTHORIZATION:carrier_ref",
       "source": "dams:physical/ucd/phys_AUTHORIZATION/type",
       "target": "dams:physical/ucd/phys_AUTHORIZATION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_AUTHORIZATION->dams:physical/ucd/phys_AUTHORIZATION/valid_from:contains",
@@ -1799,10 +1799,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_AUTHORIZATION/valid_from->dams:physical/ucd/phys_AUTHORIZATION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_AUTHORIZATION/valid_from->dams:physical/ucd/phys_AUTHORIZATION:carrier_ref",
       "source": "dams:physical/ucd/phys_AUTHORIZATION/valid_from",
       "target": "dams:physical/ucd/phys_AUTHORIZATION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_AUTHORIZATION->dams:physical/ucd/phys_AUTHORIZATION/valid_to:contains",
@@ -1811,10 +1811,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_AUTHORIZATION/valid_to->dams:physical/ucd/phys_AUTHORIZATION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_AUTHORIZATION/valid_to->dams:physical/ucd/phys_AUTHORIZATION:carrier_ref",
       "source": "dams:physical/ucd/phys_AUTHORIZATION/valid_to",
       "target": "dams:physical/ucd/phys_AUTHORIZATION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_AUTHORIZATION->dams:physical/ucd/phys_AUTHORIZATION/status:contains",
@@ -1823,10 +1823,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_AUTHORIZATION/status->dams:physical/ucd/phys_AUTHORIZATION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_AUTHORIZATION/status->dams:physical/ucd/phys_AUTHORIZATION:carrier_ref",
       "source": "dams:physical/ucd/phys_AUTHORIZATION/status",
       "target": "dams:physical/ucd/phys_AUTHORIZATION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/ucd/0.1.0->dams:physical/ucd/phys_EMPOYEE:contains",
@@ -1841,10 +1841,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_EMPOYEE/id->dams:physical/ucd/phys_EMPOYEE:physical_object_ref",
+      "id": "dams:physical/ucd/phys_EMPOYEE/id->dams:physical/ucd/phys_EMPOYEE:carrier_ref",
       "source": "dams:physical/ucd/phys_EMPOYEE/id",
       "target": "dams:physical/ucd/phys_EMPOYEE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_EMPOYEE->dams:physical/ucd/phys_EMPOYEE/organizationId:contains",
@@ -1853,10 +1853,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_EMPOYEE/organizationId->dams:physical/ucd/phys_EMPOYEE:physical_object_ref",
+      "id": "dams:physical/ucd/phys_EMPOYEE/organizationId->dams:physical/ucd/phys_EMPOYEE:carrier_ref",
       "source": "dams:physical/ucd/phys_EMPOYEE/organizationId",
       "target": "dams:physical/ucd/phys_EMPOYEE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_EMPOYEE->dams:physical/ucd/phys_EMPOYEE/personId:contains",
@@ -1865,10 +1865,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_EMPOYEE/personId->dams:physical/ucd/phys_EMPOYEE:physical_object_ref",
+      "id": "dams:physical/ucd/phys_EMPOYEE/personId->dams:physical/ucd/phys_EMPOYEE:carrier_ref",
       "source": "dams:physical/ucd/phys_EMPOYEE/personId",
       "target": "dams:physical/ucd/phys_EMPOYEE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_EMPOYEE->dams:physical/ucd/phys_EMPOYEE/full_name:contains",
@@ -1877,10 +1877,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_EMPOYEE/full_name->dams:physical/ucd/phys_EMPOYEE:physical_object_ref",
+      "id": "dams:physical/ucd/phys_EMPOYEE/full_name->dams:physical/ucd/phys_EMPOYEE:carrier_ref",
       "source": "dams:physical/ucd/phys_EMPOYEE/full_name",
       "target": "dams:physical/ucd/phys_EMPOYEE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_EMPOYEE->dams:physical/ucd/phys_EMPOYEE/inn:contains",
@@ -1889,10 +1889,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_EMPOYEE/inn->dams:physical/ucd/phys_EMPOYEE:physical_object_ref",
+      "id": "dams:physical/ucd/phys_EMPOYEE/inn->dams:physical/ucd/phys_EMPOYEE:carrier_ref",
       "source": "dams:physical/ucd/phys_EMPOYEE/inn",
       "target": "dams:physical/ucd/phys_EMPOYEE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_EMPOYEE->dams:physical/ucd/phys_EMPOYEE/snils:contains",
@@ -1901,10 +1901,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_EMPOYEE/snils->dams:physical/ucd/phys_EMPOYEE:physical_object_ref",
+      "id": "dams:physical/ucd/phys_EMPOYEE/snils->dams:physical/ucd/phys_EMPOYEE:carrier_ref",
       "source": "dams:physical/ucd/phys_EMPOYEE/snils",
       "target": "dams:physical/ucd/phys_EMPOYEE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_EMPOYEE->dams:physical/ucd/phys_EMPOYEE/status:contains",
@@ -1913,10 +1913,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_EMPOYEE/status->dams:physical/ucd/phys_EMPOYEE:physical_object_ref",
+      "id": "dams:physical/ucd/phys_EMPOYEE/status->dams:physical/ucd/phys_EMPOYEE:carrier_ref",
       "source": "dams:physical/ucd/phys_EMPOYEE/status",
       "target": "dams:physical/ucd/phys_EMPOYEE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_EMPOYEE->dams:physical/ucd/phys_EMPOYEE/hire_date:contains",
@@ -1925,10 +1925,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_EMPOYEE/hire_date->dams:physical/ucd/phys_EMPOYEE:physical_object_ref",
+      "id": "dams:physical/ucd/phys_EMPOYEE/hire_date->dams:physical/ucd/phys_EMPOYEE:carrier_ref",
       "source": "dams:physical/ucd/phys_EMPOYEE/hire_date",
       "target": "dams:physical/ucd/phys_EMPOYEE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_EMPOYEE->dams:physical/ucd/phys_EMPOYEE/termination_date:contains",
@@ -1937,10 +1937,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_EMPOYEE/termination_date->dams:physical/ucd/phys_EMPOYEE:physical_object_ref",
+      "id": "dams:physical/ucd/phys_EMPOYEE/termination_date->dams:physical/ucd/phys_EMPOYEE:carrier_ref",
       "source": "dams:physical/ucd/phys_EMPOYEE/termination_date",
       "target": "dams:physical/ucd/phys_EMPOYEE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/ucd/0.1.0->dams:physical/ucd/phys_ORGANIZATION:contains",
@@ -1955,10 +1955,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_ORGANIZATION/id->dams:physical/ucd/phys_ORGANIZATION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_ORGANIZATION/id->dams:physical/ucd/phys_ORGANIZATION:carrier_ref",
       "source": "dams:physical/ucd/phys_ORGANIZATION/id",
       "target": "dams:physical/ucd/phys_ORGANIZATION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_ORGANIZATION->dams:physical/ucd/phys_ORGANIZATION/typeId:contains",
@@ -1967,10 +1967,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_ORGANIZATION/typeId->dams:physical/ucd/phys_ORGANIZATION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_ORGANIZATION/typeId->dams:physical/ucd/phys_ORGANIZATION:carrier_ref",
       "source": "dams:physical/ucd/phys_ORGANIZATION/typeId",
       "target": "dams:physical/ucd/phys_ORGANIZATION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_ORGANIZATION->dams:physical/ucd/phys_ORGANIZATION/inn:contains",
@@ -1979,10 +1979,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_ORGANIZATION/inn->dams:physical/ucd/phys_ORGANIZATION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_ORGANIZATION/inn->dams:physical/ucd/phys_ORGANIZATION:carrier_ref",
       "source": "dams:physical/ucd/phys_ORGANIZATION/inn",
       "target": "dams:physical/ucd/phys_ORGANIZATION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_ORGANIZATION->dams:physical/ucd/phys_ORGANIZATION/shortName:contains",
@@ -1991,10 +1991,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_ORGANIZATION/shortName->dams:physical/ucd/phys_ORGANIZATION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_ORGANIZATION/shortName->dams:physical/ucd/phys_ORGANIZATION:carrier_ref",
       "source": "dams:physical/ucd/phys_ORGANIZATION/shortName",
       "target": "dams:physical/ucd/phys_ORGANIZATION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_ORGANIZATION->dams:physical/ucd/phys_ORGANIZATION/kpp:contains",
@@ -2003,10 +2003,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_ORGANIZATION/kpp->dams:physical/ucd/phys_ORGANIZATION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_ORGANIZATION/kpp->dams:physical/ucd/phys_ORGANIZATION:carrier_ref",
       "source": "dams:physical/ucd/phys_ORGANIZATION/kpp",
       "target": "dams:physical/ucd/phys_ORGANIZATION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_ORGANIZATION->dams:physical/ucd/phys_ORGANIZATION/ogrn:contains",
@@ -2015,10 +2015,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_ORGANIZATION/ogrn->dams:physical/ucd/phys_ORGANIZATION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_ORGANIZATION/ogrn->dams:physical/ucd/phys_ORGANIZATION:carrier_ref",
       "source": "dams:physical/ucd/phys_ORGANIZATION/ogrn",
       "target": "dams:physical/ucd/phys_ORGANIZATION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_ORGANIZATION->dams:physical/ucd/phys_ORGANIZATION/fullName:contains",
@@ -2027,10 +2027,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_ORGANIZATION/fullName->dams:physical/ucd/phys_ORGANIZATION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_ORGANIZATION/fullName->dams:physical/ucd/phys_ORGANIZATION:carrier_ref",
       "source": "dams:physical/ucd/phys_ORGANIZATION/fullName",
       "target": "dams:physical/ucd/phys_ORGANIZATION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_ORGANIZATION->dams:physical/ucd/phys_ORGANIZATION/mcdbId:contains",
@@ -2039,10 +2039,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_ORGANIZATION/mcdbId->dams:physical/ucd/phys_ORGANIZATION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_ORGANIZATION/mcdbId->dams:physical/ucd/phys_ORGANIZATION:carrier_ref",
       "source": "dams:physical/ucd/phys_ORGANIZATION/mcdbId",
       "target": "dams:physical/ucd/phys_ORGANIZATION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/ucd/0.1.0->dams:physical/ucd/phys_ORGANIZATION_TYPE:contains",
@@ -2057,10 +2057,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_ORGANIZATION_TYPE/Id->dams:physical/ucd/phys_ORGANIZATION_TYPE:physical_object_ref",
+      "id": "dams:physical/ucd/phys_ORGANIZATION_TYPE/Id->dams:physical/ucd/phys_ORGANIZATION_TYPE:carrier_ref",
       "source": "dams:physical/ucd/phys_ORGANIZATION_TYPE/Id",
       "target": "dams:physical/ucd/phys_ORGANIZATION_TYPE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_ORGANIZATION_TYPE->dams:physical/ucd/phys_ORGANIZATION_TYPE/typeName:contains",
@@ -2069,10 +2069,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_ORGANIZATION_TYPE/typeName->dams:physical/ucd/phys_ORGANIZATION_TYPE:physical_object_ref",
+      "id": "dams:physical/ucd/phys_ORGANIZATION_TYPE/typeName->dams:physical/ucd/phys_ORGANIZATION_TYPE:carrier_ref",
       "source": "dams:physical/ucd/phys_ORGANIZATION_TYPE/typeName",
       "target": "dams:physical/ucd/phys_ORGANIZATION_TYPE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_ORGANIZATION_TYPE->dams:physical/ucd/phys_ORGANIZATION_TYPE/code:contains",
@@ -2081,10 +2081,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_ORGANIZATION_TYPE/code->dams:physical/ucd/phys_ORGANIZATION_TYPE:physical_object_ref",
+      "id": "dams:physical/ucd/phys_ORGANIZATION_TYPE/code->dams:physical/ucd/phys_ORGANIZATION_TYPE:carrier_ref",
       "source": "dams:physical/ucd/phys_ORGANIZATION_TYPE/code",
       "target": "dams:physical/ucd/phys_ORGANIZATION_TYPE",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/ucd/0.1.0->dams:physical/ucd/phys_PERSON:contains",
@@ -2099,10 +2099,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_PERSON/id->dams:physical/ucd/phys_PERSON:physical_object_ref",
+      "id": "dams:physical/ucd/phys_PERSON/id->dams:physical/ucd/phys_PERSON:carrier_ref",
       "source": "dams:physical/ucd/phys_PERSON/id",
       "target": "dams:physical/ucd/phys_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_PERSON->dams:physical/ucd/phys_PERSON/fullName:contains",
@@ -2111,10 +2111,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_PERSON/fullName->dams:physical/ucd/phys_PERSON:physical_object_ref",
+      "id": "dams:physical/ucd/phys_PERSON/fullName->dams:physical/ucd/phys_PERSON:carrier_ref",
       "source": "dams:physical/ucd/phys_PERSON/fullName",
       "target": "dams:physical/ucd/phys_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_PERSON->dams:physical/ucd/phys_PERSON/birthDate:contains",
@@ -2123,10 +2123,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_PERSON/birthDate->dams:physical/ucd/phys_PERSON:physical_object_ref",
+      "id": "dams:physical/ucd/phys_PERSON/birthDate->dams:physical/ucd/phys_PERSON:carrier_ref",
       "source": "dams:physical/ucd/phys_PERSON/birthDate",
       "target": "dams:physical/ucd/phys_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_PERSON->dams:physical/ucd/phys_PERSON/inn:contains",
@@ -2135,10 +2135,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_PERSON/inn->dams:physical/ucd/phys_PERSON:physical_object_ref",
+      "id": "dams:physical/ucd/phys_PERSON/inn->dams:physical/ucd/phys_PERSON:carrier_ref",
       "source": "dams:physical/ucd/phys_PERSON/inn",
       "target": "dams:physical/ucd/phys_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_PERSON->dams:physical/ucd/phys_PERSON/snils:contains",
@@ -2147,10 +2147,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_PERSON/snils->dams:physical/ucd/phys_PERSON:physical_object_ref",
+      "id": "dams:physical/ucd/phys_PERSON/snils->dams:physical/ucd/phys_PERSON:carrier_ref",
       "source": "dams:physical/ucd/phys_PERSON/snils",
       "target": "dams:physical/ucd/phys_PERSON",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/ucd/0.1.0->dams:physical/ucd/phys_POSITION:contains",
@@ -2165,10 +2165,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_POSITION/id->dams:physical/ucd/phys_POSITION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_POSITION/id->dams:physical/ucd/phys_POSITION:carrier_ref",
       "source": "dams:physical/ucd/phys_POSITION/id",
       "target": "dams:physical/ucd/phys_POSITION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_POSITION->dams:physical/ucd/phys_POSITION/name:contains",
@@ -2177,10 +2177,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_POSITION/name->dams:physical/ucd/phys_POSITION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_POSITION/name->dams:physical/ucd/phys_POSITION:carrier_ref",
       "source": "dams:physical/ucd/phys_POSITION/name",
       "target": "dams:physical/ucd/phys_POSITION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:physical/ucd/phys_POSITION->dams:physical/ucd/phys_POSITION/code:contains",
@@ -2189,10 +2189,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/ucd/phys_POSITION/code->dams:physical/ucd/phys_POSITION:physical_object_ref",
+      "id": "dams:physical/ucd/phys_POSITION/code->dams:physical/ucd/phys_POSITION:carrier_ref",
       "source": "dams:physical/ucd/phys_POSITION/code",
       "target": "dams:physical/ucd/phys_POSITION",
-      "kind": "physical_object_ref"
+      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/ucd/0.1.0->dams:rel/ucd/AGREEMENT_to_ORGANIZATION_via_organizationId:contains",
@@ -5649,7 +5649,7 @@
             "title": "revision",
             "description": null,
             "attributes": {
-              "value": "941aad298ea0"
+              "value": "4425758236a9"
             },
             "children": [],
             "tags": [],
@@ -5660,7 +5660,7 @@
             "title": "content_digest",
             "description": null,
             "attributes": {
-              "value": "sha256:941aad298ea0e7b0b9f62db792054395d94cd7e3b5adc4e165d68f7d658d38be"
+              "value": "sha256:4425758236a9dad66505bf3d840705e85fb8e5a23a294c4aaa7a9be4d2e5eed6"
             },
             "children": [],
             "tags": [],
@@ -6301,7 +6301,7 @@
             "title": "Соглашение",
             "description": "Соглашение",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "phys_AGREEMENT"
             },
             "children": [],
@@ -6373,7 +6373,7 @@
             "title": "Полномочия",
             "description": "Полномочия сотрудника",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "phys_AUTHORIZATION"
             },
             "children": [],
@@ -6457,7 +6457,7 @@
             "title": "Сотрудник",
             "description": "Сотрудник",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "phys_EMPOYEE"
             },
             "children": [],
@@ -6577,7 +6577,7 @@
             "title": "Организация",
             "description": "Организация",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "phys_ORGANIZATION"
             },
             "children": [],
@@ -6685,7 +6685,7 @@
             "title": "Тип организации",
             "description": "Тип организации",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "phys_ORGANIZATION_TYPE"
             },
             "children": [],
@@ -6733,7 +6733,7 @@
             "title": "Персона",
             "description": "Персона",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "phys_PERSON"
             },
             "children": [],
@@ -6805,7 +6805,7 @@
             "title": "Должность",
             "description": "Должность сотрудника",
             "attributes": {
-              "kind": "physical_object",
+              "kind": "technical_asset",
               "name": "phys_POSITION"
             },
             "children": [],
