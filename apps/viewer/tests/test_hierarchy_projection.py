@@ -55,7 +55,9 @@ def test_hierarchy_nav_groups_three_folders():
     ]
     grouped = group_hierarchy_impl_nav("moex-hierarchy", leaves)
     assert [g.title for g in grouped] == ["Overview", "Entity hierarchy", "Артефакты"]
-    assert grouped[1].children[0].attributes["section_id"] == "entity-hierarchy"
+    assert grouped[1].attributes.get("kind") == "section_ref"
+    assert grouped[1].attributes.get("section_id") == "entity-hierarchy"
+    assert grouped[1].children == []
 
 
 def test_hierarchy_impl_section_nav_from_module():

@@ -246,6 +246,11 @@ def test_repo_golden_three_modules():
         "Entity hierarchy",
         "Артефакты",
     ]
+    entity_nav = hierarchy["children"][1]
+    assert (entity_nav.get("attributes") or {}).get("kind") == "section_ref"
+    assert (entity_nav.get("attributes") or {}).get("section_id") == (
+        "entity-hierarchy"
+    )
     glossary_nav = top[0]
     assert (glossary_nav.get("attributes") or {}).get("section_id") == (
         "implementations-glossary"

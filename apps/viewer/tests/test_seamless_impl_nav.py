@@ -539,6 +539,9 @@ def test_repo_dams_impl_folders_group_solutions_and_projects() -> None:
         "Entity hierarchy",
         "Артефакты",
     ]
+    entity_nav = hierarchy.children[1]
+    assert entity_nav.attributes.get("kind") == "section_ref"
+    assert entity_nav.attributes.get("section_id") == "entity-hierarchy"
     ecm = next(c for c in impls.children if c.id == "moex-enterprise-conceptual-model")
     assert [c.title for c in ecm.children] == [
         "Overview",

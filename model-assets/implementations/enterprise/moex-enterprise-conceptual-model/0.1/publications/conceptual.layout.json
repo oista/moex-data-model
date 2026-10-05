@@ -3,414 +3,414 @@
   "profile": "conceptual",
   "nodes": {
     "dams:concept/AccountRelationship": {
-      "x": 40,
-      "y": 40,
-      "color": "#F4B400"
-    },
-    "dams:concept/Act": {
-      "x": 40,
-      "y": 320,
-      "color": "#F4B400"
-    },
-    "dams:concept/AssetPoolMembership": {
-      "x": 40,
-      "y": 600,
-      "color": "#F4B400"
-    },
-    "dams:concept/AssetRiskParameter": {
-      "x": 40,
-      "y": 880,
-      "color": "#F4B400"
-    },
-    "dams:concept/Benchmark": {
-      "x": 40,
-      "y": 1160,
-      "color": "#F4B400"
-    },
-    "dams:concept/Budget": {
-      "x": 40,
-      "y": 1440,
-      "color": "#F4B400"
-    },
-    "dams:concept/CampaignMembership": {
-      "x": 40,
-      "y": 1720,
-      "color": "#F4B400"
-    },
-    "dams:concept/ClearingPositionDetail": {
-      "x": 40,
-      "y": 2000,
-      "color": "#F4B400"
-    },
-    "dams:concept/Collateral": {
-      "x": 40,
-      "y": 2280,
-      "color": "#F4B400"
-    },
-    "dams:concept/ContractAmendment": {
-      "x": 40,
-      "y": 2560,
-      "color": "#F4B400"
-    },
-    "dams:concept/CouponPayment": {
-      "x": 40,
-      "y": 2840,
-      "color": "#F4B400"
-    },
-    "dams:concept/Curve": {
-      "x": 40,
-      "y": 3120,
-      "color": "#F4B400"
-    },
-    "dams:concept/Deposit": {
-      "x": 40,
-      "y": 3400,
-      "color": "#F4B400"
-    },
-    "dams:concept/EmploymentContract": {
-      "x": 40,
-      "y": 3680,
-      "color": "#F4B400"
-    },
-    "dams:concept/Expense": {
-      "x": 40,
-      "y": 3960,
-      "color": "#F4B400"
-    },
-    "dams:concept/FinancialReport": {
-      "x": 40,
-      "y": 4240,
-      "color": "#F4B400"
-    },
-    "dams:concept/Income": {
-      "x": 40,
-      "y": 4520,
-      "color": "#F4B400"
-    },
-    "dams:concept/JournalEntry": {
-      "x": 40,
-      "y": 4800,
-      "color": "#F4B400"
-    },
-    "dams:concept/LoginEvent": {
-      "x": 40,
-      "y": 5080,
-      "color": "#F4B400"
-    },
-    "dams:concept/MarketMakingParticipation": {
-      "x": 40,
-      "y": 5360,
-      "color": "#F4B400"
-    },
-    "dams:concept/Obligation": {
-      "x": 40,
-      "y": 5640,
-      "color": "#F4B400"
-    },
-    "dams:concept/OpenPosition": {
-      "x": 40,
-      "y": 5920,
-      "color": "#F4B400"
-    },
-    "dams:concept/Order": {
-      "x": 40,
-      "y": 6200,
-      "color": "#F4B400"
-    },
-    "dams:concept/Organization": {
-      "x": 40,
-      "y": 6480,
-      "color": "#F4B400"
-    },
-    "dams:concept/OrganizationIdentifier": {
-      "x": 40,
-      "y": 6760,
-      "color": "#F4B400"
-    },
-    "dams:concept/Payment": {
-      "x": 40,
-      "y": 7040,
-      "color": "#F4B400"
-    },
-    "dams:concept/Portfolio": {
-      "x": 40,
-      "y": 7320,
-      "color": "#F4B400"
-    },
-    "dams:concept/Rating": {
-      "x": 40,
-      "y": 7600,
-      "color": "#F4B400"
-    },
-    "dams:concept/RegistrationAction": {
-      "x": 40,
-      "y": 7880,
-      "color": "#F4B400"
-    },
-    "dams:concept/RoleAssignment": {
-      "x": 40,
-      "y": 8160,
-      "color": "#F4B400"
-    },
-    "dams:concept/Sale": {
-      "x": 40,
-      "y": 8440,
-      "color": "#F4B400"
-    },
-    "dams:concept/SalesFunnel": {
-      "x": 40,
-      "y": 8720,
-      "color": "#F4B400"
-    },
-    "dams:concept/TimeEntry": {
-      "x": 40,
-      "y": 9000,
-      "color": "#F4B400"
-    },
-    "dams:concept/Trade": {
-      "x": 40,
-      "y": 9280,
-      "color": "#F4B400"
-    },
-    "dams:concept/TradingAccount": {
-      "x": 40,
-      "y": 9560,
-      "color": "#F4B400"
-    },
-    "dams:concept/TradingSession": {
-      "x": 40,
-      "y": 9840,
-      "color": "#F4B400"
-    },
-    "dams:concept/TradingTerminal": {
-      "x": 40,
-      "y": 10120,
-      "color": "#F4B400"
-    },
-    "dams:concept/UnifiedLimit": {
-      "x": 40,
-      "y": 10400,
-      "color": "#F4B400"
-    },
-    "dams:concept/UserLedgerLink": {
-      "x": 40,
-      "y": 10680,
-      "color": "#F4B400"
-    },
-    "dams:concept/Agreement": {
-      "x": 400,
-      "y": 40,
-      "color": "#F4B400"
-    },
-    "dams:concept/Asset": {
-      "x": 400,
-      "y": 320,
-      "color": "#F4B400"
-    },
-    "dams:concept/AssetPool": {
-      "x": 400,
-      "y": 600,
-      "color": "#F4B400"
-    },
-    "dams:concept/CalendarDay": {
-      "x": 400,
-      "y": 880,
-      "color": "#F4B400"
-    },
-    "dams:concept/Client": {
-      "x": 400,
-      "y": 1160,
-      "color": "#F4B400"
-    },
-    "dams:concept/CorporateAction": {
-      "x": 400,
-      "y": 1440,
-      "color": "#F4B400"
-    },
-    "dams:concept/CorporateGroup": {
-      "x": 400,
-      "y": 1720,
-      "color": "#F4B400"
-    },
-    "dams:concept/CostCenter": {
-      "x": 400,
-      "y": 2000,
-      "color": "#F4B400"
-    },
-    "dams:concept/Counterparty": {
-      "x": 400,
-      "y": 2280,
-      "color": "#F4B400"
-    },
-    "dams:concept/Currency": {
-      "x": 400,
-      "y": 2560,
-      "color": "#F4B400"
-    },
-    "dams:concept/Employee": {
-      "x": 400,
-      "y": 2840,
-      "color": "#F4B400"
-    },
-    "dams:concept/Instrument": {
-      "x": 400,
-      "y": 3120,
-      "color": "#F4B400"
-    },
-    "dams:concept/LedgerAccount": {
-      "x": 400,
-      "y": 3400,
-      "color": "#F4B400"
-    },
-    "dams:concept/LegalEntity": {
-      "x": 400,
-      "y": 3680,
-      "color": "#F4B400"
-    },
-    "dams:concept/MarketMakingProgram": {
-      "x": 400,
-      "y": 3960,
-      "color": "#F4B400"
-    },
-    "dams:concept/MarketingCampaign": {
-      "x": 400,
-      "y": 4240,
-      "color": "#F4B400"
-    },
-    "dams:concept/Product": {
-      "x": 400,
-      "y": 4520,
-      "color": "#F4B400"
-    },
-    "dams:concept/Project": {
-      "x": 400,
-      "y": 4800,
-      "color": "#F4B400"
-    },
-    "dams:concept/Role": {
-      "x": 400,
-      "y": 5080,
-      "color": "#F4B400"
-    },
-    "dams:concept/SettlementCode": {
-      "x": 400,
-      "y": 5360,
-      "color": "#F4B400"
-    },
-    "dams:concept/SubledgerAccount": {
-      "x": 400,
-      "y": 5640,
-      "color": "#F4B400"
-    },
-    "dams:concept/SupportingDocument": {
-      "x": 400,
-      "y": 5920,
-      "color": "#F4B400"
-    },
-    "dams:concept/Task": {
-      "x": 400,
-      "y": 6200,
-      "color": "#F4B400"
-    },
-    "dams:concept/TradingLogin": {
-      "x": 400,
-      "y": 6480,
-      "color": "#F4B400"
-    },
-    "dams:concept/TradingMode": {
-      "x": 400,
-      "y": 6760,
-      "color": "#F4B400"
-    },
-    "dams:concept/TradingParticipation": {
-      "x": 400,
-      "y": 7040,
-      "color": "#F4B400"
-    },
-    "dams:concept/TradingSystem": {
-      "x": 400,
-      "y": 7320,
-      "color": "#F4B400"
-    },
-    "dams:concept/TradingVenue": {
-      "x": 400,
-      "y": 7600,
-      "color": "#F4B400"
-    },
-    "dams:concept/User": {
-      "x": 400,
-      "y": 7880,
-      "color": "#F4B400"
+      "x": 2570,
+      "y": 1585,
+      "color": "#0050ef"
     },
     "dams:concept/AccountingSystem": {
-      "x": 760,
-      "y": 40,
-      "color": "#F4B400"
+      "x": 810,
+      "y": 3002,
+      "color": "#0050ef"
+    },
+    "dams:concept/Act": {
+      "x": 2918,
+      "y": 1640,
+      "color": "#0050ef"
     },
     "dams:concept/Admission": {
-      "x": 760,
-      "y": 320,
-      "color": "#F4B400"
+      "x": 1870,
+      "y": 1365,
+      "color": "#60a917"
+    },
+    "dams:concept/Agreement": {
+      "x": 2570,
+      "y": 1675,
+      "color": "#0050ef"
+    },
+    "dams:concept/Asset": {
+      "x": 1284,
+      "y": 2465,
+      "color": "#60a917"
     },
     "dams:concept/AssetGroup": {
-      "x": 760,
-      "y": 600,
-      "color": "#F4B400"
+      "x": 1020,
+      "y": 2585,
+      "color": "#60a917"
+    },
+    "dams:concept/AssetPool": {
+      "x": 510,
+      "y": 2627,
+      "color": "#60a917"
+    },
+    "dams:concept/AssetPoolMembership": {
+      "x": 725,
+      "y": 2597,
+      "color": "#60a917"
+    },
+    "dams:concept/AssetRiskParameter": {
+      "x": 1570,
+      "y": 2275,
+      "color": "#60a917"
+    },
+    "dams:concept/Benchmark": {
+      "x": 320,
+      "y": 2335,
+      "color": "#60a917"
+    },
+    "dams:concept/Budget": {
+      "x": 4030,
+      "y": 1085,
+      "color": "#0050ef"
+    },
+    "dams:concept/CalendarDay": {
+      "x": 250,
+      "y": 1580,
+      "color": "#60a917"
+    },
+    "dams:concept/CampaignMembership": {
+      "x": 2520,
+      "y": 190,
+      "color": "#0050ef"
+    },
+    "dams:concept/ClearingPositionDetail": {
+      "x": 1255,
+      "y": 3155,
+      "color": "#60a917"
+    },
+    "dams:concept/Client": {
+      "x": 2570,
+      "y": 1015,
+      "color": "#0050ef"
     },
     "dams:concept/ClientAccount": {
-      "x": 760,
-      "y": 880,
-      "color": "#F4B400"
+      "x": 2100,
+      "y": 1035,
+      "color": "#0050ef"
+    },
+    "dams:concept/Collateral": {
+      "x": 1020,
+      "y": 1905,
+      "color": "#60a917"
     },
     "dams:concept/ConnectionType": {
-      "x": 760,
-      "y": 1160,
-      "color": "#F4B400"
+      "x": 1655,
+      "y": 750,
+      "color": "#60a917"
     },
-    "dams:concept/InformationSystem": {
-      "x": 760,
-      "y": 1440,
-      "color": "#F4B400"
+    "dams:concept/ContractAmendment": {
+      "x": 3760,
+      "y": 305,
+      "color": "#0050ef"
     },
-    "dams:concept/Issuer": {
-      "x": 760,
-      "y": 1720,
-      "color": "#F4B400"
+    "dams:concept/CorporateAction": {
+      "x": 1580,
+      "y": 2815,
+      "color": "#60a917"
     },
-    "dams:concept/Person": {
-      "x": 760,
-      "y": 2000,
-      "color": "#F4B400"
+    "dams:concept/CorporateGroup": {
+      "x": 3380,
+      "y": 1785,
+      "color": "#0050ef"
     },
-    "dams:concept/Service": {
-      "x": 760,
-      "y": 2280,
-      "color": "#F4B400"
+    "dams:concept/CostCenter": {
+      "x": 3950,
+      "y": 1435,
+      "color": "#0050ef"
     },
-    "dams:concept/StaffPosition": {
-      "x": 760,
-      "y": 2560,
-      "color": "#F4B400"
+    "dams:concept/Counterparty": {
+      "x": 2570,
+      "y": 1485,
+      "color": "#0050ef"
     },
-    "dams:concept/Tariff": {
-      "x": 760,
-      "y": 2840,
-      "color": "#F4B400"
+    "dams:concept/CouponPayment": {
+      "x": 1580,
+      "y": 2609,
+      "color": "#60a917"
     },
-    "dams:concept/TradingCalendar": {
-      "x": 760,
-      "y": 3120,
-      "color": "#F4B400"
+    "dams:concept/Currency": {
+      "x": 1535,
+      "y": 3155,
+      "color": "#0050ef"
     },
-    "dams:concept/TradingSection": {
-      "x": 760,
-      "y": 3400,
-      "color": "#F4B400"
+    "dams:concept/Curve": {
+      "x": 100,
+      "y": 2335,
+      "color": "#60a917"
     },
     "dams:concept/Department": {
-      "x": 1120,
+      "x": 3980,
+      "y": 645,
+      "color": "#0050ef"
+    },
+    "dams:concept/Deposit": {
+      "x": 1035,
+      "y": 3155,
+      "color": "#60a917"
+    },
+    "dams:concept/Employee": {
+      "x": 3760,
+      "y": 465,
+      "color": "#0050ef"
+    },
+    "dams:concept/EmploymentContract": {
+      "x": 3980,
+      "y": 465,
+      "color": "#0050ef"
+    },
+    "dams:concept/Expense": {
+      "x": 4080,
+      "y": 1561,
+      "color": "#0050ef"
+    },
+    "dams:concept/FinancialReport": {
+      "x": 2260,
+      "y": 1351,
+      "color": "#0050ef"
+    },
+    "dams:concept/Income": {
+      "x": 3820,
+      "y": 1561,
+      "color": "#0050ef"
+    },
+    "dams:concept/InformationSystem": {
+      "x": 2100,
+      "y": 803,
+      "color": "#0050ef"
+    },
+    "dams:concept/Instrument": {
+      "x": 1865,
+      "y": 2355,
+      "color": "#60a917"
+    },
+    "dams:concept/Issuer": {
+      "x": 1930,
+      "y": 2935,
+      "color": "#60a917"
+    },
+    "dams:concept/JournalEntry": {
+      "x": 3140,
+      "y": 1640,
+      "color": "#0050ef"
+    },
+    "dams:concept/LedgerAccount": {
+      "x": 1035,
+      "y": 2972,
+      "color": "#0050ef"
+    },
+    "dams:concept/LegalEntity": {
+      "x": 2260,
+      "y": 1515,
+      "color": "#0050ef"
+    },
+    "dams:concept/LoginEvent": {
+      "x": 1877,
+      "y": 805,
+      "color": "#60a917"
+    },
+    "dams:concept/MarketMakingParticipation": {
+      "x": 1270,
+      "y": 810,
+      "color": "#60a917"
+    },
+    "dams:concept/MarketMakingProgram": {
+      "x": 1270,
+      "y": 695,
+      "color": "#60a917"
+    },
+    "dams:concept/MarketingCampaign": {
+      "x": 2520,
       "y": 40,
-      "color": "#F4B400"
+      "color": "#0050ef"
+    },
+    "dams:concept/Obligation": {
+      "x": 1284,
+      "y": 2193,
+      "color": "#60a917"
+    },
+    "dams:concept/OpenPosition": {
+      "x": 1970,
+      "y": 2065,
+      "color": "#60a917"
+    },
+    "dams:concept/Order": {
+      "x": 1550,
+      "y": 1970,
+      "color": "#60a917"
+    },
+    "dams:concept/Organization": {
+      "x": 1980,
+      "y": 1495,
+      "color": "#0050ef"
+    },
+    "dams:concept/OrganizationIdentifier": {
+      "x": 1980,
+      "y": 1585,
+      "color": "#0050ef"
+    },
+    "dams:concept/Payment": {
+      "x": 2918,
+      "y": 1460,
+      "color": "#0050ef"
+    },
+    "dams:concept/Person": {
+      "x": 3170,
+      "y": 665,
+      "color": "#0050ef"
+    },
+    "dams:concept/Portfolio": {
+      "x": 1255,
+      "y": 2935,
+      "color": "#60a917"
+    },
+    "dams:concept/Product": {
+      "x": 3400,
+      "y": 1153,
+      "color": "#0050ef"
+    },
+    "dams:concept/Project": {
+      "x": 3790,
+      "y": 1115,
+      "color": "#0050ef"
+    },
+    "dams:concept/Rating": {
+      "x": 2260,
+      "y": 1675,
+      "color": "#0050ef"
+    },
+    "dams:concept/RegistrationAction": {
+      "x": 1980,
+      "y": 1675,
+      "color": "#0050ef"
+    },
+    "dams:concept/Role": {
+      "x": 2201,
+      "y": 285,
+      "color": "#0050ef"
+    },
+    "dams:concept/RoleAssignment": {
+      "x": 2201,
+      "y": 404,
+      "color": "#0050ef"
+    },
+    "dams:concept/Sale": {
+      "x": 2930,
+      "y": 1094,
+      "color": "#0050ef"
+    },
+    "dams:concept/SalesFunnel": {
+      "x": 2738,
+      "y": 40,
+      "color": "#0050ef"
+    },
+    "dams:concept/Service": {
+      "x": 3400,
+      "y": 1333,
+      "color": "#0050ef"
+    },
+    "dams:concept/SettlementCode": {
+      "x": 1270,
+      "y": 1700,
+      "color": "#60a917"
+    },
+    "dams:concept/StaffPosition": {
+      "x": 3760,
+      "y": 645,
+      "color": "#0050ef"
+    },
+    "dams:concept/SubledgerAccount": {
+      "x": 1035,
+      "y": 2815,
+      "color": "#0050ef"
+    },
+    "dams:concept/SupportingDocument": {
+      "x": 2290,
+      "y": 1765,
+      "color": "#0050ef"
+    },
+    "dams:concept/Tariff": {
+      "x": 3198,
+      "y": 1243,
+      "color": "#0050ef"
+    },
+    "dams:concept/Task": {
+      "x": 3760,
+      "y": 975,
+      "color": "#0050ef"
+    },
+    "dams:concept/TimeEntry": {
+      "x": 3760,
+      "y": 803,
+      "color": "#0050ef"
+    },
+    "dams:concept/Trade": {
+      "x": 1550,
+      "y": 1760,
+      "color": "#60a917"
+    },
+    "dams:concept/TradingAccount": {
+      "x": 810,
+      "y": 1135,
+      "color": "#60a917"
+    },
+    "dams:concept/TradingCalendar": {
+      "x": 40,
+      "y": 1610,
+      "color": "#60a917"
+    },
+    "dams:concept/TradingLogin": {
+      "x": 1657,
+      "y": 895,
+      "color": "#60a917"
+    },
+    "dams:concept/TradingMode": {
+      "x": 1865,
+      "y": 1820,
+      "color": "#60a917"
+    },
+    "dams:concept/TradingParticipation": {
+      "x": 1590,
+      "y": 1455,
+      "color": "#60a917"
+    },
+    "dams:concept/TradingSection": {
+      "x": 690,
+      "y": 1670,
+      "color": "#60a917"
+    },
+    "dams:concept/TradingSession": {
+      "x": 460,
+      "y": 1550,
+      "color": "#60a917"
+    },
+    "dams:concept/TradingSystem": {
+      "x": 460,
+      "y": 1746,
+      "color": "#60a917"
+    },
+    "dams:concept/TradingTerminal": {
+      "x": 1530,
+      "y": 445,
+      "color": "#60a917"
+    },
+    "dams:concept/TradingVenue": {
+      "x": 690,
+      "y": 1580,
+      "color": "#60a917"
+    },
+    "dams:concept/UnifiedLimit": {
+      "x": 1030,
+      "y": 1415,
+      "color": "#60a917"
+    },
+    "dams:concept/User": {
+      "x": 2201,
+      "y": 565,
+      "color": "#0050ef"
+    },
+    "dams:concept/UserLedgerLink": {
+      "x": 2489,
+      "y": 705,
+      "color": "#0050ef"
     }
   },
   "edges": {}

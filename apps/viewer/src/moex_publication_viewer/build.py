@@ -384,21 +384,19 @@ def group_hierarchy_impl_nav(
         },
         children=overview_kids,
     )
+    # Single section — leaf section_ref, not a one-child folder (folder click
+    # would open a group card without Связи/Визуализация tabs).
     entity_kids = take(_HIERARCHY_NAV_ENTITY_IDS)
-    for leaf in entity_kids:
-        attrs = dict(leaf.attributes or {})
+    entity_leaf = entity_kids[0] if entity_kids else None
+    if entity_leaf is not None:
+        attrs = dict(entity_leaf.attributes or {})
         attrs["nav_glyph"] = "glossary"
-        leaf.attributes = attrs
-    entity = _impl_folder(
-        folder_id=f"implnav:{catalog_impl_id}:group:entity-hierarchy",
-        title="Entity hierarchy",
-        description="Entity relations picker and layered OWL/CDM/LDM visualization.",
-        children=entity_kids,
-        extra_attrs={
-            "nav_glyph": "glossary",
-            "nav_group": "entity-hierarchy",
-        },
-    )
+        attrs["description"] = (
+            entity_leaf.description
+            or "Entity relations picker and layered OWL/CDM/LDM visualization."
+        )
+        entity_leaf.attributes = attrs
+        entity_leaf.title = "Entity hierarchy"
     artifact_kids = take(_HIERARCHY_NAV_ARTIFACT_IDS)
     for leaf in artifact_kids:
         attrs = dict(leaf.attributes or {})
@@ -409,7 +407,9 @@ def group_hierarchy_impl_nav(
         for leaf in leaves
         if (leaf.attributes or {}).get("section_id") not in claimed
     ]
-    grouped: list[PublicationItem] = [overview, entity]
+    grouped: list[PublicationItem] = [overview]
+    if entity_leaf is not None:
+        grouped.append(entity_leaf)
     if artifact_kids:
         grouped.append(
             _impl_folder(
