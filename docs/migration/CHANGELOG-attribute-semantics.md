@@ -2,6 +2,12 @@
 
 ## 2026-10-05 — PR-5 removal (strict typing) — schema **1.0.0** (major)
 
+**Stability note:** `1.0.0` is the first declared-stable DAMS schema release for this
+stack — TechnicalAsset hierarchy (ADR-031..033), semantic layer / ConceptualProperty
+(ADR-034..035), and the DataType / ValueDomain type system (ADR-036..037). Prior
+`0.1.0` was initial development; the jump `0.1 → 1.0.0` is both «first stable» and
+a breaking change (removed deprecated LogicalAttribute slots).
+
 Breaking for DAMS (path `0.1/` retained; schema `version` field → `1.0.0`):
 
 - Removed LogicalAttribute slots: `logical_type`, `format_pattern`, `value_set_ref`,

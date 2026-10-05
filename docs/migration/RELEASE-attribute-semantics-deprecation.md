@@ -5,6 +5,10 @@
 **Scope:** in-repository models and DAMS  
 **Status:** complete (deprecated LogicalAttribute slots removed)
 
+**Stability:** `1.0.0` declares stable this stack — TechnicalAsset hierarchy,
+semantic layer / ConceptualProperty, and DataType / ValueDomain. Prior `0.1`
+was initial development; `0.1 → 1.0.0` is first-stable **and** breaking.
+
 ## What changed vs deprecation window
 
 | Artifact | After PR-5 |
