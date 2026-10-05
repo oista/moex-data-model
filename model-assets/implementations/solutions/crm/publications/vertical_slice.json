@@ -8,7 +8,7 @@
     "node_count": 192,
     "edge_count": 450,
     "is_conformant": true,
-    "bundle_digest": "sha256:e05165018343d5303a59289ecb527ecf35574049619ae9bf4a01442902ee9a93"
+    "bundle_digest": "sha256:f2d3c696709b6aaa717c8792df396daf25c77023b1a0713b1c76a3bfac54c85e"
   },
   "nodes": [
     {
@@ -7824,8 +7824,8 @@
   ],
   "module": {
     "module_id": "moex:module:vertical-slice",
-    "title": "Vertical slice (trading)",
-    "description": "Conformance report and DamsModelGraphView projected from linkml → dams → trading-solution",
+    "title": "Vertical slice (crm_solution_model)",
+    "description": "Conformance report and DamsModelGraphView projected from linkml → dams → crm",
     "icon": "📐",
     "version": "0.1.0",
     "order": 350,

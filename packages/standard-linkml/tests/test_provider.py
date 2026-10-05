@@ -22,13 +22,13 @@ DAMS_SCHEMA = (
     / "schemas"
     / "moex-dams.yaml"
 )
-TRADING = (
+MDM = (
     REPO_ROOT
     / "model-assets"
     / "implementations"
     / "solutions"
-    / "trading-platform"
-    / "trading-solution-model.yaml"
+    / "mdm"
+    / "mdm-solution-model.yaml"
 )
 
 
@@ -40,12 +40,12 @@ def test_load_specification_and_implementation_are_distinct_types() -> None:
         specification_revision="0.1.0",
     )
     impl_ref = ImplementationRef(
-        implementation_id="moex:implementation:trading:1.0.0",
-        implementation_revision="1.0.0",
+        implementation_id="moex:implementation:mdm:0.1.0",
+        implementation_revision="0.1.0",
     )
 
     spec_body = provider.load_specification_body(spec_ref, path=str(DAMS_SCHEMA))
-    impl_body = provider.load_implementation_body(impl_ref, path=str(TRADING))
+    impl_body = provider.load_implementation_body(impl_ref, path=str(MDM))
 
     assert isinstance(spec_body, LinkMLSpecificationBody)
     assert isinstance(impl_body, LinkMLImplementationBody)
@@ -54,10 +54,10 @@ def test_load_specification_and_implementation_are_distinct_types() -> None:
     assert "ModelPackage" in spec_body.class_names or "MOEXModelRepository" in (
         spec_body.root_class or ""
     )
-    assert impl_body.element_id == "dams:model/trading/1.0.0"
+    assert impl_body.element_id == "dams:model/mdm/0.1.0"
 
 
-def test_enumerate_and_validate_trading_solution() -> None:
+def test_enumerate_and_validate_mdm_solution() -> None:
     provider = LinkMLStandardProvider(default_schema_path=DAMS_SCHEMA)
     spec_ref = SpecificationRef(
         specification_id="moex:spec:dams",
@@ -65,18 +65,16 @@ def test_enumerate_and_validate_trading_solution() -> None:
         specification_revision="0.1.0",
     )
     impl_ref = ImplementationRef(
-        implementation_id="moex:implementation:trading:1.0.0",
-        implementation_revision="1.0.0",
+        implementation_id="moex:implementation:mdm:0.1.0",
+        implementation_revision="0.1.0",
     )
     provider.load_specification_body(spec_ref, path=str(DAMS_SCHEMA))
-    impl_body = provider.load_implementation_body(impl_ref, path=str(TRADING))
+    impl_body = provider.load_implementation_body(impl_ref, path=str(MDM))
 
     elements = provider.enumerate_elements(impl_body)
     ids = {e.element_id for e in elements}
-    # ADR-029: Client concept lives in enterprise SoT, not local conceptual_entities
-    assert "dams:concept/Client" not in ids
-    assert "dams:logical/trading/Client" in ids
-    assert "dams:mapping/trading/client-realizes-client" in ids
+    assert "dams:logical/mdm/ENTERPRISE" in ids
+    assert "dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID" in ids
 
     diagnostics = provider.validate_standard(impl_body)
     errors = [d for d in diagnostics if d.severity.value in {"error", "fatal"}]

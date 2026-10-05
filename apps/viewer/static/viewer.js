@@ -521,6 +521,8 @@
             ? {}
             : defaultFocusForModule(mod);
       }
+      // Expand focus folder on navigate (not on every renderModuleNav).
+      if (f && f.item) openGroups.add(f.item);
       setHash({
         node: node.id,
         module: shortModule(node.module_id),
@@ -1284,14 +1286,11 @@
           findExplorerItem({ items: explorerItems }, focus.item) ||
           findExplorerItem(expl, focus.item);
         if (focused) {
-          // Open ancestors so the selected item is visible.
+          // Open ancestors/group so the selected item is visible; do not
+          // force-open the item itself (label click / chevron toggles children).
           (focused.ancestors || []).forEach((a) => openGroups.add(a.id));
           if (focused.group && focused.group.id !== focus.item) {
             openGroups.add(focused.group.id);
-          }
-          // Focused folder: expand children (startup / hash restore).
-          if ((focused.item?.children || []).length) {
-            openGroups.add(focused.item.id);
           }
         }
       }
@@ -8859,6 +8858,8 @@
 
   function applyRoute() {
     const { node, module, section, item } = parseHash();
+    // Hash/deep-link restore: expand focus folder once (not on every re-render).
+    if (item) openGroups.add(item);
     if (node) {
       const catalogEntry = catalogNode(node);
       if (catalogEntry) {

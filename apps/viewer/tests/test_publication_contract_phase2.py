@@ -350,26 +350,26 @@ profiles:
     assert reports[0].overall_publication_status == "draft-conformant"
 
 
-def test_repo_trading_and_csv_draft_assess():
+def test_repo_mdm_and_csv_draft_assess():
     root = Path(__file__).resolve().parents[3]
-    trading_pub = (
+    mdm_pub = (
         root
         / "model-assets"
         / "implementations"
         / "solutions"
-        / "trading-platform"
+        / "mdm"
         / "publish.yaml"
     )
-    if not trading_pub.is_file():
-        pytest.skip("repo trading publish.yaml missing")
+    if not mdm_pub.is_file():
+        pytest.skip("repo mdm publish.yaml missing")
     from moex_publication_viewer.build import compile_modules
 
     modules = compile_modules(root, enforce_publication_contract=True, dist_dir=None)
     ids = {m.module_id for m in modules}
-    assert "moex:module:trading-solution" in ids
+    assert "moex:module:mdm-solution" in ids
     assert "moex:module:client-accounts-csv-draft" in ids
-    trading = next(m for m in modules if m.module_id == "moex:module:trading-solution")
-    reports = assess_module_implements(trading, root)
+    mdm = next(m for m in modules if m.module_id == "moex:module:mdm-solution")
+    reports = assess_module_implements(mdm, root)
     assert reports
     assert reports[0].overall_publication_status in (
         "conformant",

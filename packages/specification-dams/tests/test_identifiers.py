@@ -33,13 +33,13 @@ def test_merged_prefix_map_includes_import_prefixes(dams_schema: Path) -> None:
     assert resolver.expand("xsd:string") == "http://www.w3.org/2001/XMLSchema#string"
 
 
-def test_trading_ids_pass_identifier_check(
-    dams_schema: Path, trading_solution: Path
+def test_mdm_ids_pass_identifier_check(
+    dams_schema: Path, mdm_solution: Path
 ) -> None:
     resolver = build_dams_curie_resolver(dams_schema)
-    data = yaml.safe_load(trading_solution.read_text(encoding="utf-8"))
+    data = yaml.safe_load(mdm_solution.read_text(encoding="utf-8"))
     body = LinkMLImplementationBody(
-        source_path=str(trading_solution),
+        source_path=str(mdm_solution),
         target_class="ModelPackage",
         data=data,
     )

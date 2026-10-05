@@ -12,23 +12,23 @@ import { MappingForms } from "./MappingForms";
 
 const SAMPLE = `
 logical_entities:
-  - element_id: dams:logical/trading/Client
-    name: TradingClient
+  - element_id: dams:logical/mdm/ENTERPRISE
+    name: ENTERPRISE
     attributes:
-      - element_id: dams:logical/trading/Client/clientId
+      - element_id: dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID
         name: clientId
 physical_objects:
-  - element_id: dams:physical/trading/topic
+  - element_id: dams:physical/mdm/topic
     physical_fields:
-      - element_id: dams:physical/trading/topic/id
+      - element_id: dams:physical/mdm/topic/id
 mappings:
-  - element_id: dams:mapping/trading/client-id
+  - element_id: dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID
     name: map_client_id
     description: existing
     source_refs:
-      - dams:logical/trading/Client/clientId
+      - dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID
     target_refs:
-      - dams:physical/trading/topic/id
+      - dams:physical/mdm/topic/id
     mapping_type: field_mapping
     mapping_cardinality: one_to_one
 `;
@@ -39,7 +39,7 @@ function mockDoc(content: string) {
     status: 200,
     json: async () => ({
       workspace_id: "ws-workbench",
-      doc_key: "trading",
+      doc_key: "mdm",
       content,
       base_digest: "sha256:x",
       updated_by: "dev",
@@ -65,8 +65,8 @@ describe("RelationshipForms", () => {
       <QueryClientProvider client={qc}>
         <RelationshipForms
           workspaceId="ws-workbench"
-          implementationId="moex:implementation:trading:1.0.0"
-          idNamespace="trading"
+          implementationId="moex:implementation:mdm:0.1.0"
+          idNamespace="mdm"
           content={SAMPLE}
           onDocument={onDocument}
         />
@@ -79,7 +79,7 @@ describe("RelationshipForms", () => {
     const body = JSON.parse(fetchMock.mock.calls[0][1].body as string);
     expect(body.op).toBe("add_relationship");
     expect(body.relationship.source_entity_ref).toBe(
-      "dams:logical/trading/Client",
+      "dams:logical/mdm/ENTERPRISE",
     );
   });
 });
@@ -103,8 +103,8 @@ describe("MappingForms", () => {
       <QueryClientProvider client={qc}>
         <MappingForms
           workspaceId="ws-workbench"
-          implementationId="moex:implementation:trading:1.0.0"
-          idNamespace="trading"
+          implementationId="moex:implementation:mdm:0.1.0"
+          idNamespace="mdm"
           content={SAMPLE}
           onDocument={onDocument}
         />
@@ -112,7 +112,7 @@ describe("MappingForms", () => {
     );
 
     expect(screen.getByTestId("mapping-list").textContent).toContain(
-      "dams:mapping/trading/client-id",
+      "dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID",
     );
     fireEvent.click(screen.getByTestId("delete-mapping"));
 
@@ -120,7 +120,7 @@ describe("MappingForms", () => {
     const body = JSON.parse(fetchMock.mock.calls[0][1].body as string);
     expect(body).toMatchObject({
       op: "delete_mapping",
-      element_id: "dams:mapping/trading/client-id",
+      element_id: "dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID",
     });
   });
 });

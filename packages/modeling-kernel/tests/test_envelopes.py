@@ -36,9 +36,9 @@ def test_modeling_standard_frozen() -> None:
 
 def test_implementation_envelope() -> None:
     impl = SpecificationImplementation(
-        id="moex:implementation:trading:1.0.0",
-        name="trading_solution_model",
-        version="1.0.0",
+        id="moex:implementation:mdm:0.1.0",
+        name="mdm_solution_model",
+        version="0.1.0",
         revision="deadbeef",
         content_digest="sha256:deadbeef",
         conforms_to=SpecificationRef(
@@ -52,7 +52,7 @@ def test_implementation_envelope() -> None:
             source_uri="file:///tmp/model.yaml",
             source_root_type="ModelPackage",
         ),
-        body_ref="trading-solution-model.yaml",
+        body_ref="mdm-solution-model.yaml",
     )
     assert impl.conforms_to.specification_id == "moex:spec:dams"
 

@@ -12,7 +12,7 @@ match = re.search(
 )
 assert match, "publication-data script not found"
 data = json.loads(match.group(1))
-wanted = ("mdm", "ucd", "crm", "esed", "trading")
+wanted = ("mdm", "ucd", "crm", "esed")
 found = []
 for mod in data:
     mid = str(mod.get("module_id") or "")

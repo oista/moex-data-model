@@ -13,11 +13,11 @@ from moex_publication import (
 )
 
 
-def test_build_publication_module(dams_schema: Path, trading_solution: Path) -> None:
+def test_build_publication_module(dams_schema: Path, mdm_solution: Path) -> None:
     result = assess_implementation(
         schema_path=dams_schema,
-        implementation_path=trading_solution,
-        implementation_id="moex:implementation:trading:1.0.0",
+        implementation_path=mdm_solution,
+        implementation_id="moex:implementation:mdm:0.1.0",
     )
     module = build_publication_module(result)
     assert module.module_id == "moex:module:vertical-slice"
@@ -25,32 +25,30 @@ def test_build_publication_module(dams_schema: Path, trading_solution: Path) -> 
     assert "summary" in section_ids
     assert "graph-nodes" in section_ids
     nodes_section = next(s for s in module.sections if s.id == "graph-nodes")
-    # ADR-029: concept Client is enterprise SoT; solution graph has logical + realizes
-    assert any(i.id == "dams:logical/trading/Client" for i in nodes_section.items)
+    assert any(i.id == "dams:logical/mdm/ENTERPRISE" for i in nodes_section.items)
     assert any(
-        i.id == "dams:mapping/trading/client-realizes-client" for i in nodes_section.items
+        i.id == "dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID" for i in nodes_section.items
     )
 
 
 def test_export_slice_json(
     dams_schema: Path,
-    trading_solution: Path,
+    mdm_solution: Path,
     tmp_path: Path,
 ) -> None:
     out = tmp_path / "vertical_slice.json"
     result = export_slice_projection(
         schema_path=dams_schema,
-        implementation_path=trading_solution,
+        implementation_path=mdm_solution,
         out_path=out,
-        implementation_id="moex:implementation:trading:1.0.0",
+        implementation_id="moex:implementation:mdm:0.1.0",
     )
     assert out.is_file()
     data = json.loads(out.read_text(encoding="utf-8"))
     assert data["summary"]["is_conformant"] is True
-    assert data["summary"]["package_id"] == "dams:model/trading/1.0.0"
-    assert any(n["id"] == "dams:logical/trading/Client" for n in data["nodes"])
+    assert data["summary"]["package_id"] == "dams:model/mdm/0.1.0"
+    assert any(n["id"] == "dams:logical/mdm/ENTERPRISE" for n in data["nodes"])
     assert data["module"]["module_id"] == "moex:module:vertical-slice"
-    # projection helper stays consistent with export
     assert build_slice_projection(result)["summary"]["revision"] == data["summary"][
         "revision"
     ]

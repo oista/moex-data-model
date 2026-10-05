@@ -40,7 +40,7 @@ describe("diagram API client", () => {
       });
     vi.stubGlobal("fetch", fetchMock);
 
-    const opened = await api.openDiagram("ws-workbench", "moex:implementation:trading:1.0.0", "logical");
+    const opened = await api.openDiagram("ws-workbench", "moex:implementation:mdm:0.1.0", "logical");
     expect(opened.session_id).toBe("s1");
     expect(fetchMock.mock.calls[0][0]).toBe(
       "/api/workspaces/ws-workbench/diagrams",

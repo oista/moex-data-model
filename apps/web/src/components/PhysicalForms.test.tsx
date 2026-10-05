@@ -11,12 +11,12 @@ import { PhysicalForms } from "./PhysicalForms";
 
 const SAMPLE = `
 physical_objects:
-  - element_id: dams:physical/trading/client-topic
+  - element_id: dams:physical/mdm/client-topic
     name: client_changed_topic
     title: Client topic
     object_kind: topic
     physical_fields:
-      - element_id: dams:physical/trading/client-topic/client_id
+      - element_id: dams:physical/mdm/client-topic/client_id
         name: client_id
         native_type: string
         required: true
@@ -35,7 +35,7 @@ describe("PhysicalForms", () => {
       status: 200,
       json: async () => ({
         workspace_id: "ws-workbench",
-        doc_key: "trading",
+        doc_key: "mdm",
         content: SAMPLE,
         base_digest: "sha256:x",
         updated_by: "dev",
@@ -50,8 +50,8 @@ describe("PhysicalForms", () => {
       <QueryClientProvider client={qc}>
         <PhysicalForms
           workspaceId="ws-workbench"
-          implementationId="moex:implementation:trading:1.0.0"
-          idNamespace="trading"
+          implementationId="moex:implementation:mdm:0.1.0"
+          idNamespace="mdm"
           content={SAMPLE}
           onDocument={onDocument}
         />
@@ -59,12 +59,12 @@ describe("PhysicalForms", () => {
     );
 
     expect(screen.getByTestId("physical-object-list").textContent).toContain(
-      "dams:physical/trading/client-topic",
+      "dams:physical/mdm/client-topic",
     );
 
     fireEvent.change(
-      screen.getByDisplayValue("dams:physical/trading/new-object"),
-      { target: { value: "dams:physical/trading/orders" } },
+      screen.getByDisplayValue("dams:physical/mdm/new-object"),
+      { target: { value: "dams:physical/mdm/orders" } },
     );
     fireEvent.change(screen.getByDisplayValue("new_object"), {
       target: { value: "orders" },
@@ -73,7 +73,7 @@ describe("PhysicalForms", () => {
 
     await waitFor(() => expect(onDocument).toHaveBeenCalled());
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/workspaces/ws-workbench/documents/moex%3Aimplementation%3Atrading%3A1.0.0/mutations",
+      "/api/workspaces/ws-workbench/documents/moex%3Aimplementation%3Amdm%3A0.1.0/mutations",
       expect.objectContaining({ method: "POST" }),
     );
   });

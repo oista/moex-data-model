@@ -70,7 +70,7 @@ flowchart LR
 - **spec root type** (`tree_root` схемы) — `MOEXModelRepository` ([moex-dams.yaml](../../model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml));
 - **типичный implementation document** решения — `ModelPackage` (conceptual / logical / physical entities), вложенный в repository при полной проверке.
 
-Vertical slice «trading-solution» работает с instance package; validate относительно полного среза идёт через repository wrapper.
+Vertical slice «mdm-solution» работает с instance package; validate относительно полного среза идёт через repository wrapper.
 
 ### SpecificationImplementation
 
@@ -412,7 +412,7 @@ apps/
 ```text
 linkml@1.x
     → moex-dams@0.1
-        → trading-solution implementation
+        → mdm-solution implementation
             → LinkML native validation
                 → DAMS semantic validation
                     → ConformanceReport

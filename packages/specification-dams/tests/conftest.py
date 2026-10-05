@@ -21,13 +21,13 @@ DAMS_SCHEMA = (
     / "schemas"
     / "moex-dams.yaml"
 )
-TRADING = (
+MDM = (
     REPO_ROOT
     / "model-assets"
     / "implementations"
     / "solutions"
-    / "trading-platform"
-    / "trading-solution-model.yaml"
+    / "mdm"
+    / "mdm-solution-model.yaml"
 )
 
 
@@ -38,6 +38,6 @@ def dams_schema() -> Path:
 
 
 @pytest.fixture
-def trading_solution() -> Path:
-    assert TRADING.is_file()
-    return TRADING
+def mdm_solution() -> Path:
+    assert MDM.is_file()
+    return MDM

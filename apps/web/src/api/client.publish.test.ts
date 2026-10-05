@@ -15,7 +15,7 @@ describe("createPublication", () => {
       json: async () => ({
         id: "pub:1",
         workspace_id: "ws-workbench",
-        implementation_id: "moex:implementation:trading:1.0.0",
+        implementation_id: "moex:implementation:mdm:0.1.0",
         branch_name: "workbench/publish-1",
         base_revision: "abc",
         commit_sha: "def4567890ab",
@@ -29,7 +29,7 @@ describe("createPublication", () => {
     const pub = await api.createPublication(
       {
         workspace_id: "ws-workbench",
-        implementation_id: "moex:implementation:trading:1.0.0",
+        implementation_id: "moex:implementation:mdm:0.1.0",
       },
       "idem-1",
     );

@@ -9,9 +9,9 @@ vi.mock("../api/client", () => ({
   api: {
     listImplementations: vi.fn().mockResolvedValue([
       {
-        id: "moex:implementation:trading:1.0.0",
-        slug: "trading",
-        title: "Trading platform",
+        id: "moex:implementation:mdm:0.1.0",
+        slug: "mdm",
+        title: "MDM data model",
         version: "1.0.0",
         implementation_path: "p",
         implementation_kind: "linkml",
@@ -56,7 +56,7 @@ describe("DiagramPage", () => {
   });
 
   it("renders diagram chrome, profile toggle, and iframe", async () => {
-    renderAt("/models/trading/diagram");
+    renderAt("/models/mdm/diagram");
     expect(await screen.findByRole("heading", { name: /Diagram/i })).toBeTruthy();
     expect(screen.getByTitle("drawDB")).toBeTruthy();
     expect(screen.getByRole("button", { name: /Submit for review/i })).toBeTruthy();
@@ -72,11 +72,11 @@ describe("DiagramPage", () => {
       profile: "physical",
       dbml: "Table Phys {}",
     });
-    renderAt("/models/trading/diagram?profile=physical");
+    renderAt("/models/mdm/diagram?profile=physical");
     await waitFor(() => {
       expect(api.openDiagram).toHaveBeenCalledWith(
         "ws-workbench",
-        "moex:implementation:trading:1.0.0",
+        "moex:implementation:mdm:0.1.0",
         "physical",
       );
     });

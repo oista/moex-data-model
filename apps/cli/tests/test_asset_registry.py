@@ -15,7 +15,7 @@ from moex_model_cli.asset_registry import (
 from moex_model_cli.bootstrap import find_repo_root
 from moex_modeling import ImplementationNotFound
 
-REQUIRED_SOLUTION_SLUGS = {"trading", "mdm", "ucd", "crm", "esed"}
+REQUIRED_SOLUTION_SLUGS = {"mdm", "ucd", "crm", "esed"}
 
 
 def _write_repo_marker(root: Path) -> None:
@@ -55,19 +55,19 @@ def test_resolve_slug_equals_coordinate(
     assert by_slug.publication_manifest_path.name == "publish.yaml"
 
 
-def test_trading_publication_manifest(
+def test_mdm_publication_manifest(
     catalog: FilesystemImplementationCatalog,
 ) -> None:
-    trading = catalog.resolve("trading")
-    assert trading.id == "moex:implementation:trading:1.0.0"
-    assert trading.publication_manifest_path is not None
-    assert trading.publication_manifest_path.is_file()
+    mdm = catalog.resolve("mdm")
+    assert mdm.id == "moex:implementation:mdm:0.1.0"
+    assert mdm.publication_manifest_path is not None
+    assert mdm.publication_manifest_path.is_file()
 
 
 def test_load_body_and_schema(catalog: FilesystemImplementationCatalog) -> None:
-    text = catalog.load_body("trading")
+    text = catalog.load_body("mdm")
     assert text.strip()
-    schema = catalog.resolve_schema("trading")
+    schema = catalog.resolve_schema("mdm")
     assert schema.is_file()
     assert schema.name == "moex-dams.yaml"
 

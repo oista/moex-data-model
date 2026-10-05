@@ -61,8 +61,8 @@ py -3.14 -m moex_model_cli export-requirements --root . --out tmp/requirements.x
 Defaults are resolved from asset envelopes (relative to `--root`):
 
 - specification: `model-assets/specifications/moex-dams/0.1/specification.yaml` → `schema_body`
-- implementation: `model-assets/implementations/solutions/trading-platform/implementation.yaml` → `implementation_body`
-- publish out: `model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json`
+- implementation: `model-assets/implementations/solutions/mdm/implementation.yaml` → `implementation_body`
+- publish out: `model-assets/implementations/solutions/mdm/publications/vertical_slice.json`
 
 `import`:
 

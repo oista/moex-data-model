@@ -1,4 +1,4 @@
-# Lint DAMS schema, validate trading-solution instance, run architecture-check.
+# Lint DAMS schema, validate MDM solution instance, run architecture-check.
 # Usage from repo root:
 #   powershell -NoProfile -ExecutionPolicy Bypass -File scripts/validate-schemas.ps1
 
@@ -6,7 +6,7 @@ $ErrorActionPreference = "Stop"
 $RepoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 . (Join-Path $PSScriptRoot "lib.ps1")
 $Schema = Join-Path $RepoRoot "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml"
-$Impl = Join-Path $RepoRoot "model-assets/implementations/solutions/trading-platform/trading-solution-model.yaml"
+$Impl = Join-Path $RepoRoot "model-assets/implementations/solutions/mdm/mdm-solution-model.yaml"
 
 if (-not (Test-Path $Schema)) { Write-Error "Missing schema: $Schema" }
 if (-not (Test-Path $Impl)) { Write-Error "Missing implementation: $Impl" }

@@ -10,7 +10,7 @@ from moex_dams import DamsAssetRepository, assess_implementation, default_dams_r
 from moex_dams.application.repository import DAMS_SPEC_ID, DAMS_VERSION
 
 
-def test_repository_loads_trading(dams_schema: Path, trading_solution: Path) -> None:
+def test_repository_loads_mdm(dams_schema: Path, mdm_solution: Path) -> None:
     repo = DamsAssetRepository(default_schema_path=dams_schema)
     spec = repo.load_specification(
         SpecificationRef(
@@ -24,20 +24,20 @@ def test_repository_loads_trading(dams_schema: Path, trading_solution: Path) -> 
 
     body = repo.load_implementation(
         ImplementationRef(
-            implementation_id="moex:implementation:trading",
+            implementation_id="moex:implementation:mdm",
             implementation_revision="1",
         ),
-        path=trading_solution,
+        path=mdm_solution,
     )
-    assert body.data.get("element_id") == "dams:model/trading/1.0.0"
+    assert body.data.get("element_id") == "dams:model/mdm/0.1.0"
 
 
 def test_assess_uses_repository_not_bare_provider(
-    dams_schema: Path, trading_solution: Path
+    dams_schema: Path, mdm_solution: Path
 ) -> None:
     result = assess_implementation(
         schema_path=dams_schema,
-        implementation_path=trading_solution,
+        implementation_path=mdm_solution,
     )
     assert result.report.is_conformant
     sets = default_dams_rule_sets(DamsAssetRepository(default_schema_path=dams_schema))

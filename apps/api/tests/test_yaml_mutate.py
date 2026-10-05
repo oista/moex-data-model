@@ -13,16 +13,16 @@ from moex_model_api.yaml_mutate import (
 
 
 SAMPLE = """\
-element_id: dams:model/trading/1.0.0
-name: trading_solution_model
+element_id: dams:model/mdm/0.1.0
+name: mdm_solution_model
 domain_contexts:
-  - element_id: dams:context/trading
+  - element_id: dams:context/mdm
 logical_entities:
-  - element_id: dams:logical/trading/Client
-    name: TradingClient
+  - element_id: dams:logical/mdm/Client
+    name: ENTERPRISE
     attributes:
-      - element_id: dams:logical/trading/Client/clientId
-        name: clientId
+      - element_id: dams:logical/mdm/Client/ENTERPRISE_ID
+        name: ENTERPRISE_ID
         logical_type: identifier
 """
 
@@ -33,29 +33,29 @@ def test_add_entity_and_attribute() -> None:
         {
             "op": "add_logical_entity",
             "entity": {
-                "element_id": "dams:logical/trading/Order",
-                "name": "Order",
-                "title": "Order",
+                "element_id": "dams:logical/mdm/OrderBook",
+                "name": "OrderBook",
+                "title": "OrderBook",
             },
         },
     )
     data = load_yaml(out)
     ids = [e["element_id"] for e in data["logical_entities"]]
-    assert "dams:logical/trading/Order" in ids
+    assert "dams:logical/mdm/OrderBook" in ids
 
     out2 = apply_mutation(
         out,
         {
             "op": "add_logical_attribute",
-            "owner_element_id": "dams:logical/trading/Client",
+            "owner_element_id": "dams:logical/mdm/Client",
             "attribute": {
-                "element_id": "dams:logical/trading/Client/nick",
+                "element_id": "dams:logical/mdm/Client/nick",
                 "name": "nick",
                 "logical_type": "string",
             },
         },
     )
-    assert "dams:logical/trading/Client/nick" in out2
+    assert "dams:logical/mdm/Client/nick" in out2
 
 
 def test_duplicate_entity_conflict() -> None:
@@ -65,7 +65,7 @@ def test_duplicate_entity_conflict() -> None:
             {
                 "op": "add_logical_entity",
                 "entity": {
-                    "element_id": "dams:logical/trading/Client",
+                    "element_id": "dams:logical/mdm/Client",
                     "name": "Dup",
                 },
             },
@@ -77,7 +77,7 @@ def test_update_logical_entity() -> None:
         SAMPLE,
         {
             "op": "update_logical_entity",
-            "element_id": "dams:logical/trading/Client",
+            "element_id": "dams:logical/mdm/Client",
             "patch": {"title": "Updated Client", "description": "Patched"},
         },
     )
@@ -85,7 +85,7 @@ def test_update_logical_entity() -> None:
     client = next(
         e
         for e in data["logical_entities"]
-        if e["element_id"] == "dams:logical/trading/Client"
+        if e["element_id"] == "dams:logical/mdm/Client"
     )
     assert client["title"] == "Updated Client"
     assert client["description"] == "Patched"
@@ -96,13 +96,13 @@ def test_delete_logical_entity_cascades_attributes() -> None:
         SAMPLE,
         {
             "op": "delete_logical_entity",
-            "element_id": "dams:logical/trading/Client",
+            "element_id": "dams:logical/mdm/Client",
         },
     )
     data = load_yaml(out)
     ids = [e["element_id"] for e in data.get("logical_entities") or []]
-    assert "dams:logical/trading/Client" not in ids
-    assert "dams:logical/trading/Client/clientId" not in out
+    assert "dams:logical/mdm/Client" not in ids
+    assert "dams:logical/mdm/Client/ENTERPRISE_ID" not in out
 
 
 def test_update_and_delete_logical_attribute() -> None:
@@ -110,7 +110,7 @@ def test_update_and_delete_logical_attribute() -> None:
         SAMPLE,
         {
             "op": "update_logical_attribute",
-            "element_id": "dams:logical/trading/Client/clientId",
+            "element_id": "dams:logical/mdm/Client/ENTERPRISE_ID",
             "patch": {"required": True, "title": "Client ID"},
         },
     )
@@ -118,7 +118,7 @@ def test_update_and_delete_logical_attribute() -> None:
     client = next(
         e
         for e in data["logical_entities"]
-        if e["element_id"] == "dams:logical/trading/Client"
+        if e["element_id"] == "dams:logical/mdm/Client"
     )
     attr = client["attributes"][0]
     assert attr["required"] is True
@@ -128,14 +128,14 @@ def test_update_and_delete_logical_attribute() -> None:
         out,
         {
             "op": "delete_logical_attribute",
-            "element_id": "dams:logical/trading/Client/clientId",
+            "element_id": "dams:logical/mdm/Client/ENTERPRISE_ID",
         },
     )
     data2 = load_yaml(out2)
     client2 = next(
         e
         for e in data2["logical_entities"]
-        if e["element_id"] == "dams:logical/trading/Client"
+        if e["element_id"] == "dams:logical/mdm/Client"
     )
     assert client2.get("attributes") in (None, [], [])
     assert not list(client2.get("attributes") or [])
@@ -147,7 +147,7 @@ def test_update_missing_and_empty_patch() -> None:
             SAMPLE,
             {
                 "op": "update_logical_entity",
-                "element_id": "dams:logical/trading/Missing",
+                "element_id": "dams:logical/mdm/Missing",
                 "patch": {"name": "X"},
             },
         )
@@ -156,7 +156,7 @@ def test_update_missing_and_empty_patch() -> None:
             SAMPLE,
             {
                 "op": "update_logical_entity",
-                "element_id": "dams:logical/trading/Client",
+                "element_id": "dams:logical/mdm/Client",
                 "patch": {},
             },
         )
@@ -165,7 +165,7 @@ def test_update_missing_and_empty_patch() -> None:
             SAMPLE,
             {
                 "op": "update_logical_attribute",
-                "element_id": "dams:logical/trading/Client/clientId",
+                "element_id": "dams:logical/mdm/Client/ENTERPRISE_ID",
                 "patch": {"element_id": "other"},
             },
         )
@@ -175,14 +175,14 @@ SAMPLE_WITH_MAP = (
     SAMPLE
     + """\
 mappings:
-  - element_id: dams:mapping/trading/client-id
+  - element_id: dams:mapping/mdm/wb-map-id
     name: map_client_id
     description: existing
     lifecycle_status: active
     source_refs:
-      - dams:logical/trading/Client/clientId
+      - dams:logical/mdm/Client/ENTERPRISE_ID
     target_refs:
-      - dams:physical/trading/client-topic/client_id
+      - dams:physical/mdm/client-topic/client_id
     mapping_type: field_mapping
     mapping_cardinality: one_to_one
 """
@@ -195,28 +195,28 @@ def test_add_update_delete_relationship() -> None:
         {
             "op": "add_relationship",
             "relationship": {
-                "element_id": "dams:rel/trading/Client-Order",
+                "element_id": "dams:rel/mdm/ENTERPRISE-OrderBook",
                 "name": "client_orders",
                 "description": "Client places orders",
                 "lifecycle_status": "draft",
-                "source_entity_ref": "dams:logical/trading/Client",
-                "target_entity_ref": "dams:logical/trading/Order",
+                "source_entity_ref": "dams:logical/mdm/Client",
+                "target_entity_ref": "dams:logical/mdm/OrderBook",
             },
         },
     )
     data = load_yaml(out)
     rels = data["relationships"]
     assert len(rels) == 1
-    assert rels[0]["element_id"] == "dams:rel/trading/Client-Order"
-    assert rels[0]["source_entity_ref"] == "dams:logical/trading/Client"
+    assert rels[0]["element_id"] == "dams:rel/mdm/ENTERPRISE-OrderBook"
+    assert rels[0]["source_entity_ref"] == "dams:logical/mdm/Client"
 
     out2 = apply_mutation(
         out,
         {
             "op": "update_relationship",
-            "element_id": "dams:rel/trading/Client-Order",
+            "element_id": "dams:rel/mdm/ENTERPRISE-OrderBook",
             "patch": {
-                "title": "Client Orders",
+                "title": "Client OrderBooks",
                 "source_role": "client",
                 "target_min_cardinality": 0,
             },
@@ -224,7 +224,7 @@ def test_add_update_delete_relationship() -> None:
     )
     data2 = load_yaml(out2)
     rel = data2["relationships"][0]
-    assert rel["title"] == "Client Orders"
+    assert rel["title"] == "Client OrderBooks"
     assert rel["source_role"] == "client"
     assert rel["target_min_cardinality"] == 0
 
@@ -232,7 +232,7 @@ def test_add_update_delete_relationship() -> None:
         out2,
         {
             "op": "delete_relationship",
-            "element_id": "dams:rel/trading/Client-Order",
+            "element_id": "dams:rel/mdm/ENTERPRISE-OrderBook",
         },
     )
     data3 = load_yaml(out3)
@@ -245,12 +245,12 @@ def test_add_update_delete_mapping() -> None:
         {
             "op": "add_mapping",
             "mapping": {
-                "element_id": "dams:mapping/trading/new",
+                "element_id": "dams:mapping/mdm/new",
                 "name": "map_new",
                 "description": "New mapping",
                 "lifecycle_status": "draft",
-                "source_refs": ["dams:logical/trading/Client/clientId"],
-                "target_refs": ["dams:physical/trading/x/id"],
+                "source_refs": ["dams:logical/mdm/Client/ENTERPRISE_ID"],
+                "target_refs": ["dams:physical/mdm/x/id"],
                 "mapping_type": "field_mapping",
                 "mapping_cardinality": "one_to_one",
             },
@@ -258,13 +258,13 @@ def test_add_update_delete_mapping() -> None:
     )
     data = load_yaml(out)
     maps = data["mappings"]
-    assert any(m["element_id"] == "dams:mapping/trading/new" for m in maps)
+    assert any(m["element_id"] == "dams:mapping/mdm/new" for m in maps)
 
     out2 = apply_mutation(
         SAMPLE_WITH_MAP,
         {
             "op": "update_mapping",
-            "element_id": "dams:mapping/trading/client-id",
+            "element_id": "dams:mapping/mdm/wb-map-id",
             "patch": {
                 "title": "Client ID map",
                 "transformation_expression": "identity",
@@ -275,7 +275,7 @@ def test_add_update_delete_mapping() -> None:
     m = next(
         x
         for x in data2["mappings"]
-        if x["element_id"] == "dams:mapping/trading/client-id"
+        if x["element_id"] == "dams:mapping/mdm/wb-map-id"
     )
     assert m["title"] == "Client ID map"
     assert m["transformation_expression"] == "identity"
@@ -284,12 +284,12 @@ def test_add_update_delete_mapping() -> None:
         out2,
         {
             "op": "delete_mapping",
-            "element_id": "dams:mapping/trading/client-id",
+            "element_id": "dams:mapping/mdm/wb-map-id",
         },
     )
     data3 = load_yaml(out3)
     ids = [x["element_id"] for x in data3.get("mappings") or []]
-    assert "dams:mapping/trading/client-id" not in ids
+    assert "dams:mapping/mdm/wb-map-id" not in ids
 
 
 def test_duplicate_relationship_and_mapping_conflict() -> None:
@@ -299,7 +299,7 @@ def test_duplicate_relationship_and_mapping_conflict() -> None:
             {
                 "op": "add_mapping",
                 "mapping": {
-                    "element_id": "dams:mapping/trading/client-id",
+                    "element_id": "dams:mapping/mdm/wb-map-id",
                     "name": "dup",
                     "description": "d",
                     "source_refs": ["a"],
@@ -314,11 +314,11 @@ def test_duplicate_relationship_and_mapping_conflict() -> None:
         {
             "op": "add_relationship",
             "relationship": {
-                "element_id": "dams:rel/trading/X",
+                "element_id": "dams:rel/mdm/X",
                 "name": "x",
                 "description": "d",
-                "source_entity_ref": "dams:logical/trading/Client",
-                "target_entity_ref": "dams:logical/trading/Client",
+                "source_entity_ref": "dams:logical/mdm/Client",
+                "target_entity_ref": "dams:logical/mdm/Client",
             },
         },
     )
@@ -328,7 +328,7 @@ def test_duplicate_relationship_and_mapping_conflict() -> None:
             {
                 "op": "add_relationship",
                 "relationship": {
-                    "element_id": "dams:rel/trading/X",
+                    "element_id": "dams:rel/mdm/X",
                     "name": "x2",
                     "description": "d",
                     "source_entity_ref": "a",
@@ -343,24 +343,24 @@ def test_add_update_delete_physical_object_and_field() -> None:
         {
             "op": "add_physical_object",
             "physical_object": {
-                "element_id": "dams:physical/trading/orders",
+                "element_id": "dams:physical/mdm/orders",
                 "name": "orders_table",
-                "title": "Orders",
+                "title": "OrderBooks",
                 "object_kind": "table",
             },
         },
     )
     data = load_yaml(out)
     objs = data["physical_objects"]
-    assert any(o["element_id"] == "dams:physical/trading/orders" for o in objs)
+    assert any(o["element_id"] == "dams:physical/mdm/orders" for o in objs)
 
     out2 = apply_mutation(
         out,
         {
             "op": "add_physical_field",
-            "owner_element_id": "dams:physical/trading/orders",
+            "owner_element_id": "dams:physical/mdm/orders",
             "physical_field": {
-                "element_id": "dams:physical/trading/orders/id",
+                "element_id": "dams:physical/mdm/orders/id",
                 "name": "id",
                 "native_type": "uuid",
                 "required": True,
@@ -371,7 +371,7 @@ def test_add_update_delete_physical_object_and_field() -> None:
     obj = next(
         o
         for o in data2["physical_objects"]
-        if o["element_id"] == "dams:physical/trading/orders"
+        if o["element_id"] == "dams:physical/mdm/orders"
     )
     assert obj["physical_fields"][0]["native_type"] == "uuid"
 
@@ -379,23 +379,23 @@ def test_add_update_delete_physical_object_and_field() -> None:
         out2,
         {
             "op": "update_physical_object",
-            "element_id": "dams:physical/trading/orders",
-            "patch": {"title": "Orders Table", "object_kind": "table"},
+            "element_id": "dams:physical/mdm/orders",
+            "patch": {"title": "OrderBooks Table", "object_kind": "table"},
         },
     )
     data3 = load_yaml(out3)
     obj3 = next(
         o
         for o in data3["physical_objects"]
-        if o["element_id"] == "dams:physical/trading/orders"
+        if o["element_id"] == "dams:physical/mdm/orders"
     )
-    assert obj3["title"] == "Orders Table"
+    assert obj3["title"] == "OrderBooks Table"
 
     out4 = apply_mutation(
         out3,
         {
             "op": "update_physical_field",
-            "element_id": "dams:physical/trading/orders/id",
+            "element_id": "dams:physical/mdm/orders/id",
             "patch": {"nullable": False, "native_type": "varchar"},
         },
     )
@@ -403,7 +403,7 @@ def test_add_update_delete_physical_object_and_field() -> None:
     obj4 = next(
         o
         for o in data4["physical_objects"]
-        if o["element_id"] == "dams:physical/trading/orders"
+        if o["element_id"] == "dams:physical/mdm/orders"
     )
     assert obj4["physical_fields"][0]["native_type"] == "varchar"
     assert obj4["physical_fields"][0]["nullable"] is False
@@ -412,14 +412,14 @@ def test_add_update_delete_physical_object_and_field() -> None:
         out4,
         {
             "op": "delete_physical_field",
-            "element_id": "dams:physical/trading/orders/id",
+            "element_id": "dams:physical/mdm/orders/id",
         },
     )
     data5 = load_yaml(out5)
     obj5 = next(
         o
         for o in data5["physical_objects"]
-        if o["element_id"] == "dams:physical/trading/orders"
+        if o["element_id"] == "dams:physical/mdm/orders"
     )
     assert list(obj5.get("physical_fields") or []) == []
 
@@ -427,9 +427,9 @@ def test_add_update_delete_physical_object_and_field() -> None:
         out5,
         {
             "op": "delete_physical_object",
-            "element_id": "dams:physical/trading/orders",
+            "element_id": "dams:physical/mdm/orders",
         },
     )
     data6 = load_yaml(out6)
     ids = [o["element_id"] for o in data6.get("physical_objects") or []]
-    assert "dams:physical/trading/orders" not in ids
+    assert "dams:physical/mdm/orders" not in ids

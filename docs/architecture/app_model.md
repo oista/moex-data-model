@@ -14,7 +14,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 **Уже совпало с репо:** `model-assets/`, `generated/`, `apps/cli/`, `apps/viewer/`, пакеты slice (`modeling-kernel`, `standard-linkml`, `specification-dams`, `publication`), `standard-owl`, `ontology-catalog`.  
 **Уже совпало (roadmap 1–4):** `generated/contracts` (moex_dams_contracts), `OWLStandardProvider`, `packages/git-adapter`, CLI `lint|compile|diagram|diff|validate|publish|import|map|semantic-diff`, `apps/api` operational slice.  
 **Уже совпало (Stage 3 narrow-v2):** identity/members/jobs/artifacts/model_index tables + ports; workspace/job/index API + Idempotency-Key; GitHub read-only `GitProvider`.  
-**Уже совпало (Web Workbench MVP):** `apps/web` React/Vite shell — dashboard, workspaces, trading model page, validation job report.  
+**Уже совпало (Web Workbench MVP):** `apps/web` React/Vite shell — dashboard, workspaces, MDM model page, validation job report.  
 **Уже совпало (Workbench editors):** Monaco YAML + `workspace_document` draft API + validate `source=draft`.  
 **Уже совпало (Entity form slice):** controlled mutations add/update/delete LogicalEntity/LogicalAttribute; dirty Monaco → PUT before mutation.  
 **Уже совпало (Stage 3 narrow-v3):** `publication_request` + publish API + GitHub write / local branch+stub review into this repo.  
@@ -46,9 +46,9 @@ ModelUniverse
 │   └── quality profile…
 │
 ├── SpecificationImplementation (envelopes; typed body in provider)
-│   ├── trading-solution@2.4     # conforms_to: moex-dams@0.1; kind: linkml
+│   ├── mdm-solution@0.1         # conforms_to: moex-dams@0.1; kind: linkml
 │   ├── order-service openapi…
-│   └── trading ontology…
+│   └── domain ontology…
 │
 └── StandardMapping (instances)
     ├── projection / import / export / migration mappings
@@ -331,9 +331,9 @@ moex-data-model/
 │   │   └── moex-ontology-profile/1.0/
 │   │
 │   ├── implementations/
-│   │   ├── solutions/trade-platform/
+│   │   ├── solutions/mdm/
 │   │   ├── services/order-api/
-│   │   └── ontologies/trading/
+│   │   └── ontologies/fibo-party/
 │   │
 │   └── transformations/
 │

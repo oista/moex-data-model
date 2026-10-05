@@ -145,7 +145,7 @@ def test_validate_package_docs_adr_requires_template_and_toc(tmp_path: Path):
 
 def test_validate_package_docs_adr_ok(tmp_path: Path):
     adr = """---
-id: trading-platform:adr:001
+id: mdm-solution:adr:001
 title: Demo vertical slice
 date: 2026-10-04
 status: accepted
@@ -161,7 +161,7 @@ supersedes: []
 Need a first published slice.
 
 ## Decision
-Publish trading-platform as the demo.
+Publish mdm-solution as the demo slice.
 
 ## Consequences
 Consumers treat it as illustrative.
@@ -272,31 +272,19 @@ def test_group_solution_impl_nav_documentation_folder():
         ),
     ]
     kids = impl_section_nav_children(
-        "trading-solution",
-        PublicationModule(module_id="moex:module:trading-solution", title="T", sections=sections),
+        "mdm-solution",
+        PublicationModule(module_id="moex:module:mdm-solution", title="T", sections=sections),
     )
-    logical = next(c for c in kids if c.id == "implnav:trading-solution:group:logical")
+    logical = next(c for c in kids if c.id == "implnav:mdm-solution:group:logical")
     assert [c.attributes["section_id"] for c in logical.children] == [
         "logical",
         "conceptual",
         "logical-erd",
     ]
-    assert kids[-1].id == "implnav:trading-solution:group:documentation"
+    assert kids[-1].id == "implnav:mdm-solution:group:documentation"
     assert kids[-1].title == "Documentation"
     assert [c.attributes["section_id"] for c in kids[-1].children] == ["documentation"]
     assert kids[-1].children[0].children == []
-
-
-def test_repo_trading_platform_compiles_documentation():
-    from moex_publication_viewer.build import compile_modules
-
-    repo = Path(__file__).resolve().parents[3]
-    modules = compile_modules(repo, enforce_publication_contract=False)
-    trading = next(m for m in modules if m.module_id == "moex:module:trading-solution")
-    doc = next(s for s in trading.sections if s.kind == "documentation")
-    assert doc.content
-    assert any(i.id == "consumer-context" for i in doc.items)
-    assert any(i.id == "group:decisions" for i in doc.items)
 
 
 def test_viewer_js_renders_package_docs():

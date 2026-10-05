@@ -65,11 +65,11 @@ try {
         -q
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-    $OutJson = Join-Path $RepoRoot "model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json"
+    $OutJson = Join-Path $RepoRoot "model-assets/implementations/solutions/mdm/publications/vertical_slice.json"
     Write-Host "Publishing slice projection via moex-model → $OutJson"
     & $VenvPython -m moex_model_cli publish `
         --root $RepoRoot `
-        --implementation-id "moex:implementation:trading:1.0.0" `
+        --implementation-id "moex:implementation:mdm:0.1.0" `
         --out $OutJson
     exit $LASTEXITCODE
 } finally {

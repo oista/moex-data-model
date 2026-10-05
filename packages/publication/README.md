@@ -13,9 +13,9 @@ py -3.14 -m pip install -e "./packages/modeling-kernel" `
 
 py -3.14 -m moex_publication.cli export-slice `
   --schema model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml `
-  --implementation model-assets/implementations/solutions/trading-platform/trading-solution-model.yaml `
-  --out model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json
+  --implementation model-assets/implementations/solutions/mdm/mdm-solution-model.yaml `
+  --out model-assets/implementations/solutions/mdm/publications/vertical_slice.json
 ```
 
-Manifest: [`publish.yaml`](../../model-assets/implementations/solutions/trading-platform/publish.yaml)
+Manifest: [`publish.yaml`](../../model-assets/implementations/solutions/mdm/publish.yaml)
 includes sections that read this JSON.

@@ -443,12 +443,6 @@ logical_entities:
   conceptual_entity_refs:
   - dams:concept/Client
   - dams:concept/LegalEntity
-- element_id: dams:logical/trading/Client
-  name: TradingClient
-  title: Клиент торгового решения
-  description: Локальное логическое представление клиента в торговом решении.
-  conceptual_entity_refs:
-  - dams:concept/Client
 - element_id: dams:logical/crm/CONTACT
   name: CONTACT
   title: Контакт

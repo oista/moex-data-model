@@ -6,6 +6,8 @@
 
 > **Верхний канон архитектуры платформы:** [docs/architecture/MODELING_ARCHITECTURE.md](architecture/MODELING_ARCHITECTURE.md) (Proposed 0.2). Этот план ориентирован на Workbench MVP; деревья вроде `apps/web` и `model-core` ниже — исторический/Workbench-контур и не отменяют modeling kernel (`ModelingStandard` / `ReferenceSpecification` / `SpecificationImplementation`).
 
+**Reference solution (2026-10):** демо `trading-platform` снято с поддержки; эталонный DAMS implementation для доков, CLI defaults и Workbench — **MDM** (`model-assets/implementations/solutions/mdm/`).
+
 ## Исходное состояние
 
 В текущем репозитории (https://github.com/oista/moex-data-model) уже присутствуют:
@@ -379,7 +381,7 @@ Toolchain bump: обновить [`requirements-linkml.txt`](../requirements-lin
 
 **Progress (2026-09-28 residual + CURIE):** `SchemaRepository` Protocol + `DamsAssetRepository` wired into `assess_implementation` / `diff_implementations`; `ConformanceRuleRunner` + `diagnostic_to_wire` in CLI/API; unified `build_element_index`; `DamsModelGraphView` covers ModelPackage collections including `relationships`; kernel `CurieUriResolver` + assess rule `MOEX-ID-001` (unknown CURIE prefix). «ModelGraph для DAMS» = bounded `DamsModelGraphView` (MODELING_ARCHITECTURE §8), not a kernel abstract class. Deferred: repository-root (`MOEXModelRepository`) graph, abstract kernel `ModelGraph`, separate `SchemaLoader`/`ModelInstanceLoader` types.
 
-**Progress (2026-10-05 ImplementationCatalog P0):** Kernel `ImplementationCatalog` + `FilesystemImplementationCatalog` over `model-assets/implementations/**/implementation.yaml`. Workbench API/Web use universal routes (`/implementations/{id}`, `/documents/{id}`, `/models/:slug/*`); `doc_key` = canonical coordinate; contract suite covers trading/MDM/UCD/CRM/ЕСЭД.
+**Progress (2026-10-05 ImplementationCatalog P0):** Kernel `ImplementationCatalog` + `FilesystemImplementationCatalog` over `model-assets/implementations/**/implementation.yaml`. Workbench API/Web use universal routes (`/implementations/{id}`, `/documents/{id}`, `/models/:slug/*`); `doc_key` = canonical coordinate; contract suite covers MDM/UCD/CRM/ЕСЭД.
 
 ### Задачи
 
@@ -441,8 +443,8 @@ moex-model publish
 Примеры:
 
 ```bash
-moex-model validate models/solutions/trading/model.yaml
-moex-model compile models/solutions/trading/model.yaml --target all
+moex-model validate model-assets/implementations/solutions/mdm/mdm-solution-model.yaml
+moex-model compile model-assets/implementations/solutions/mdm/mdm-solution-model.yaml --target all
 moex-model diff --from v0.1.0 --to HEAD
 moex-model diagram model.yaml --profile logical --format dbml
 ```
@@ -542,7 +544,7 @@ audit_event
 
 ## Этап 5. drawDB MVP
 
-**Progress (2026-09-28 Stage 5 MVP + deepen):** `packages/drawdb-adapter` (parse DBML → ModelPatch → apply); extended `moex_dams.projection.dbml` Relationships/FK Refs; API diagram session + `diagram_layout` (Alembic `0006`); `apps/drawdb` pin + postMessage overlay + compose; Workbench `/models/trading/diagram` with **Logical | Physical** profile toggle, rejected-ops panel, semantic-diff confirm before apply, editor link after apply; physical golden identity + add-field round-trip tests; conceptual ids asserted unchanged after logical apply. Out: deep drawDB internal JSON sync, OIDC, conceptual edit round-trip.
+**Progress (2026-09-28 Stage 5 MVP + deepen):** `packages/drawdb-adapter` (parse DBML → ModelPatch → apply); extended `moex_dams.projection.dbml` Relationships/FK Refs; API diagram session + `diagram_layout` (Alembic `0006`); `apps/drawdb` pin + postMessage overlay + compose; Workbench `/models/mdm/diagram` with **Logical | Physical** profile toggle, rejected-ops panel, semantic-diff confirm before apply, editor link after apply; physical golden identity + add-field round-trip tests; conceptual ids asserted unchanged after logical apply. Out: deep drawDB internal JSON sync, OIDC, conceptual edit round-trip.
 
 ### Задачи
 

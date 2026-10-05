@@ -23,10 +23,10 @@ describe("previewSemanticDiff", () => {
     });
     vi.stubGlobal("fetch", fetchMock);
 
-    const report = await api.previewSemanticDiff("ws-workbench", "moex:implementation:trading:1.0.0");
+    const report = await api.previewSemanticDiff("ws-workbench", "moex:implementation:mdm:0.1.0");
     expect(report.has_breaking).toBe(false);
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/workspaces/ws-workbench/documents/moex%3Aimplementation%3Atrading%3A1.0.0/semantic-diff",
+      "/api/workspaces/ws-workbench/documents/moex%3Aimplementation%3Amdm%3A0.1.0/semantic-diff",
       expect.objectContaining({ method: "POST" }),
     );
     const headers = fetchMock.mock.calls[0][1].headers as Headers;

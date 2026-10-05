@@ -27,17 +27,6 @@ nodes:
       Metamodel of Data Specification Player (publication projection).
       Not a DAMS logical-model Impl — publication profile is linkml-specification.
 
-  - id: trading-solution
-    role: specification_implementation
-    title: Trading solution (demo)
-    version: "1.0.0"
-    conforms_to: moex-dams
-    module_id: moex:module:trading-solution
-    order: 110
-    description: >
-      Demo IT-solution DAMS Impl (dams-data-model / solution). Realizes
-      enterprise conceptual entities; not the enterprise SoT.
-
   - id: mdm-solution
     role: specification_implementation
     title: Модель данных MDM

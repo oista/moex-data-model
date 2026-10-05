@@ -8,30 +8,30 @@ specification_version: 0.1.0
 implementation_version: 1.0.0
 contract_ref: catalog:contract/DC-01425
 integration_ref: clinkr:integration/INT-00421
-model_package_ref: https://modelhub.moex.com/models/trading/1.0.0
-model_version: 1.0.0
+model_package_ref: https://modelhub.moex.com/models/mdm/0.1.0
+model_version: 0.1.0
 model_revision: 9f2c8ab
 selections:
   - element_id: dams:selection/DC-01425/Client
     name: client_selection
-    description: Передаваемый срез сущности Клиент.
+    description: Передаваемый срез сущности ЮЛ (MDM).
     lifecycle_status: active
     selected_entities:
       - element_id: dams:selected-entity/DC-01425/Client
         name: selected_client
-        description: Выбранная логическая сущность Клиент.
+        description: Выбранная логическая сущность ЮЛ (MDM).
         lifecycle_status: active
-        logical_entity_ref: dams:logical/trading/Client
+        logical_entity_ref: dams:logical/mdm/ENTERPRISE
         physical_object_refs:
-          - dams:physical/trading/client-topic
+          - dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE
         selected_attributes:
           - element_id: dams:selected-attribute/DC-01425/clientId
             name: selected_client_id
-            description: Выбранный идентификатор клиента.
+            description: Выбранный идентификатор золотой записи ЮЛ.
             lifecycle_status: active
-            logical_attribute_ref: dams:logical/trading/Client/clientId
+            logical_attribute_ref: dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID
             physical_field_refs:
-              - dams:physical/trading/client-topic/client_id
+              - dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/GOLD_ID
 compatibility_mode: backward
 integrity_digest: sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 generated_at: '2026-09-16T20:30:00+03:00'

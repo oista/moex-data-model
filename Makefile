@@ -62,7 +62,7 @@ linkml-ingest-check:
 vertical-slice-check:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File packages/publication/scripts/check.ps1
 
-# linkml-lint + validate trading-solution (uses apps/cli .venv when present)
+# linkml-lint + validate MDM solution (uses apps/cli .venv when present)
 validate-schemas:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/validate-schemas.ps1
 

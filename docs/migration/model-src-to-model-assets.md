@@ -11,9 +11,9 @@ Physical move of model assets after the first vertical slice. Identities (`eleme
 | Old path | New path |
 |---|---|
 | `model_src/schemas/*` | `model-assets/specifications/moex-dams/0.1/schemas/` |
-| `model_src/examples/trading-solution-model.yaml` | `model-assets/implementations/solutions/trading-platform/trading-solution-model.yaml` |
-| `model_src/examples/publish.yaml` | `model-assets/implementations/solutions/trading-platform/publish.yaml` |
-| `model_src/examples/publications/*` | `model-assets/implementations/solutions/trading-platform/publications/` |
+| `model_src/examples/trading-solution-model.yaml` | *(retired)* demo moved under `trading-platform/`, then removed; reference solution is `model-assets/implementations/solutions/mdm/mdm-solution-model.yaml` |
+| `model_src/examples/publish.yaml` | *(retired with demo)* see `model-assets/implementations/solutions/mdm/publish.yaml` |
+| `model_src/examples/publications/*` | *(retired with demo)* see `model-assets/implementations/solutions/mdm/publications/` |
 | `model_src/examples/*` (other YAML) | `model-assets/specifications/moex-dams/0.1/examples/` |
 | `model_src/publish.yaml` | `model-assets/specifications/moex-dams/0.1/publish.yaml` |
 | `model_src/README.md` | `model-assets/specifications/moex-dams/0.1/README.md` |
@@ -38,7 +38,7 @@ Physical move of model assets after the first vertical slice. Identities (`eleme
 |---|---|
 | `model-assets/standards/linkml/1.x/standard.yaml` | `ModelingStandard` descriptor |
 | `model-assets/specifications/moex-dams/0.1/specification.yaml` | `ReferenceSpecification` descriptor |
-| `model-assets/implementations/solutions/trading-platform/implementation.yaml` | `SpecificationImplementation` descriptor |
+| `model-assets/implementations/solutions/mdm/implementation.yaml` | `SpecificationImplementation` descriptor (reference solution) |
 
 ## Repo root marker
 

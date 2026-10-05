@@ -42,13 +42,13 @@ SCHEMA = (
     / "schemas"
     / "moex-dams.yaml"
 )
-TRADING = (
+MDM = (
     REPO
     / "model-assets"
     / "implementations"
     / "solutions"
-    / "trading-platform"
-    / "trading-solution-model.yaml"
+    / "mdm"
+    / "mdm-solution-model.yaml"
 )
 
 
@@ -134,10 +134,11 @@ def test_catalog_expressions_all_have_runner_templates() -> None:
 
 def test_assess_includes_formal_requirement_diagnostics() -> None:
     """Assess emits formal_checks in assessment:model-requirements (third bucket)."""
+    # Curated example (not a large imported solution) — stable enrichment shape.
     result = assess_implementation(
         schema_path=SCHEMA,
-        implementation_path=TRADING,
-        implementation_id="moex:implementation:trading:formal",
+        implementation_path=EXAMPLE,
+        implementation_id="moex:implementation:it-solution-example:formal",
     )
     ids = {a.id for a in result.report.assessments}
     assert "assessment:corporate-semantics" in ids
@@ -731,10 +732,10 @@ def test_ldm008_passes_when_owner_realizer_linked() -> None:
 
 def test_ldm008_skips_primary_concepts() -> None:
     """TradingClient realizes primary Client — no LDM-008 warning."""
-    data = yaml.safe_load(TRADING.read_text(encoding="utf-8"))
+    data = yaml.safe_load(MDM.read_text(encoding="utf-8"))
     warns = [
         d
-        for d in check_formal_requirements(_body(data, str(TRADING)), catalog_path=CATALOG)
+        for d in check_formal_requirements(_body(data, str(MDM)), catalog_path=CATALOG)
         if d.severity == DiagnosticSeverity.WARNING
         and "LDM-008" in d.diagnostic_code
     ]

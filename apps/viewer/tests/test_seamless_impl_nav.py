@@ -434,27 +434,26 @@ def _iter_section_refs(items: list[PublicationItem]):
         yield from _iter_section_refs(item.children or [])
 
 
-def test_repo_dams_trading_has_nested_section_refs() -> None:
+def test_repo_dams_mdm_has_nested_section_refs() -> None:
     modules = compile_modules(REPO, enforce_publication_contract=False)
     catalog = compile_catalog(REPO, modules)
     enrich_dams_explorer_implementations(modules, catalog)
     dams = next(m for m in modules if m.module_id == DAMS_MODULE)
     explorer = next(s for s in dams.sections if s.type == "explorer")
     impls = next(i for i in explorer.items if i.id == "group:implementations")
-    trading = _find_item(impls.children or [], "trading-solution")
-    assert trading is not None
-    assert trading.children
-    top_ids = [c.id for c in trading.children]
+    mdm = _find_item(impls.children or [], "mdm-solution")
+    assert mdm is not None
+    assert mdm.children
+    top_ids = [c.id for c in mdm.children]
     # No solution CDM folder: conceptual links nest under logical (ADR-029).
     assert top_ids == [
-        "implnav:trading-solution:group:overview",
-        "implnav:trading-solution:group:logical",
-        "implnav:trading-solution:group:physical",
-        "implnav:trading-solution:group:requirements",
-        "implnav:trading-solution:group:documentation",
-        "implnav:trading-solution:group:artifacts",
+        "implnav:mdm-solution:group:overview",
+        "implnav:mdm-solution:group:logical",
+        "implnav:mdm-solution:group:physical",
+        "implnav:mdm-solution:group:requirements",
+        "implnav:mdm-solution:group:artifacts",
     ]
-    logical = trading.children[1]
+    logical = mdm.children[1]
     assert logical.title == "Логическая модель"
     assert [c.attributes["section_id"] for c in logical.children] == [
         "logical",
@@ -464,7 +463,7 @@ def test_repo_dams_trading_has_nested_section_refs() -> None:
     assert next(
         c for c in logical.children if c.attributes["section_id"] == "conceptual"
     ).title == "Conceptual entities links"
-    artifacts = trading.children[-1]
+    artifacts = mdm.children[-1]
     assert artifacts.title == "Артефакты"
     assert artifacts.attributes.get("nav_glyph") == "source_file"
     assert [c.attributes["section_id"] for c in artifacts.children] == [
@@ -473,11 +472,11 @@ def test_repo_dams_trading_has_nested_section_refs() -> None:
     ]
     leaves = [
         c
-        for c in _iter_section_refs(trading.children or [])
+        for c in _iter_section_refs(mdm.children or [])
     ]
     assert leaves
     assert all(
-        c.attributes.get("target_module_id") == "moex:module:trading-solution"
+        c.attributes.get("target_module_id") == "moex:module:mdm-solution"
         for c in leaves
     )
 
@@ -590,7 +589,7 @@ def test_repo_dams_impl_folders_group_solutions_and_projects() -> None:
         "crm-solution",
         "esed-solution",
     }
-    assert "trading-solution" in {c.id for c in proj_folder.children}
+    assert "trading-solution" not in {c.id for c in proj_folder.children}
     assert "client-accounts-csv-draft" in {c.id for c in proj_folder.children}
     assert it_folder.attributes.get("group_style") == "section_folder"
     assert proj_folder.attributes.get("group_style") == "section_folder"

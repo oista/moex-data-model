@@ -12,12 +12,10 @@ DAMS_SPEC_DIR = Path("model-assets") / "specifications" / "moex-dams" / "0.1"
 DEFAULT_SCHEMA = DAMS_SPEC_DIR / "schemas" / "moex-dams.yaml"
 DEFAULT_SPECIFICATION_ENVELOPE = DAMS_SPEC_DIR / "specification.yaml"
 
-TRADING_IMPL_DIR = (
-    Path("model-assets") / "implementations" / "solutions" / "trading-platform"
-)
-DEFAULT_IMPLEMENTATION = TRADING_IMPL_DIR / "trading-solution-model.yaml"
-DEFAULT_IMPLEMENTATION_ENVELOPE = TRADING_IMPL_DIR / "implementation.yaml"
-DEFAULT_SLICE_JSON = TRADING_IMPL_DIR / "publications" / "vertical_slice.json"
+MDM_IMPL_DIR = Path("model-assets") / "implementations" / "solutions" / "mdm"
+DEFAULT_IMPLEMENTATION = MDM_IMPL_DIR / "mdm-solution-model.yaml"
+DEFAULT_IMPLEMENTATION_ENVELOPE = MDM_IMPL_DIR / "implementation.yaml"
+DEFAULT_SLICE_JSON = MDM_IMPL_DIR / "publications" / "vertical_slice.json"
 
 DEFAULT_STANDARD_ENVELOPE = (
     Path("model-assets") / "standards" / "linkml" / "1.x" / "standard.yaml"

@@ -112,7 +112,7 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help=(
             "Output JSON path (default: model-assets/implementations/"
-            "solutions/trading-platform/publications/vertical_slice.json)"
+            "solutions/mdm/publications/vertical_slice.json)"
         ),
     )
 

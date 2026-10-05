@@ -139,7 +139,7 @@ def test_repo_golden_three_modules():
         "moex:module:dsp",
         "moex:module:fibo",
         "moex:module:fibo-profile",
-        "moex:module:trading-solution",
+        "moex:module:mdm-solution",
     ):
         assert module_id in html
     assert "LogicalEntity" in html
@@ -165,7 +165,7 @@ def test_repo_golden_three_modules():
         "moex:module:dams",
         "moex:module:fibo",
         "moex:module:fibo-profile",
-        "moex:module:trading-solution",
+        "moex:module:mdm-solution",
     }.issubset(ids)
     dams = next(m for m in registry["modules"] if m["module_id"] == "moex:module:dams")
     assert "explorer" in dams["sections"]
@@ -203,7 +203,7 @@ def test_repo_golden_three_modules():
     catalog = registry.get("catalog")
     assert catalog is not None
     by_id = {n["id"]: n for n in catalog["nodes"]}
-    assert by_id["trading-solution"]["conforms_to"] == "moex-dams"
+    assert by_id["mdm-solution"]["conforms_to"] == "moex-dams"
     assert by_id["moex-dams"]["expressed_in"] == "LinkML"
     assert by_id["moex-fibo-profile"]["role"] == "reference_specification"
     assert by_id["moex:ontology:fibo"]["role"] == "specification_implementation"
@@ -257,7 +257,7 @@ def test_repo_golden_three_modules():
     )
     assert any(s["id"] == "implementations-glossary" for s in dams_pub["sections"])
     projects = next(c for c in top if c["id"] == "group:implementations-projects")
-    assert "trading-solution" in {c["id"] for c in projects.get("children") or []}
+    assert "client-accounts-csv-draft" in {c["id"] for c in projects.get("children") or []}
     it_sols = next(c for c in top if c["id"] == "group:implementations-it-solutions")
     assert {"mdm-solution", "ucd-solution", "crm-solution", "esed-solution"} <= {
         c["id"] for c in it_sols.get("children") or []
@@ -267,7 +267,7 @@ def test_repo_golden_three_modules():
     assert "renderImplTermDetail" in js
     assert "term_cards" in js
     assert by_id["moex-dams"].get("description")
-    assert by_id["trading-solution"].get("description")
+    assert by_id["mdm-solution"].get("description")
     assert by_id["moex-fibo-profile"].get("description")
 
 

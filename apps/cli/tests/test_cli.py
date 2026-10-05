@@ -32,18 +32,18 @@ def test_envelopes_resolve_schema_and_body(repo_root: Path) -> None:
     schema = resolve_schema_from_specification_envelope(spec_env)
     body = resolve_body_from_implementation_envelope(impl_env)
     assert schema.name == "moex-dams.yaml"
-    assert body.name == "trading-solution-model.yaml"
+    assert body.name == "mdm-solution-model.yaml"
     paths = SlicePaths.resolve(root=repo_root)
     assert paths.schema == schema
     assert paths.implementation == body
 
 
-def test_validate_trading_solution(repo_root: Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_validate_mdm_solution(repo_root: Path, capsys: pytest.CaptureFixture[str]) -> None:
     code = main(["validate", "--root", str(repo_root)])
     captured = capsys.readouterr()
     assert code == 0
     assert "overall=conformant_with_warnings" in captured.out
-    assert "dams:model/trading/1.0.0" in captured.out
+    assert "dams:model/mdm/0.1.0" in captured.out
 
 
 def test_validate_json(repo_root: Path, capsys: pytest.CaptureFixture[str]) -> None:
@@ -69,7 +69,7 @@ def test_publish_writes_json(
             "--out",
             str(out),
             "--implementation-id",
-            "moex:implementation:trading:1.0.0",
+            "moex:implementation:mdm:0.1.0",
         ]
     )
     captured = capsys.readouterr()
@@ -77,7 +77,7 @@ def test_publish_writes_json(
     assert out.is_file()
     data = json.loads(out.read_text(encoding="utf-8"))
     assert data["summary"]["is_conformant"] is True
-    assert data["summary"]["package_id"] == "dams:model/trading/1.0.0"
+    assert data["summary"]["package_id"] == "dams:model/mdm/0.1.0"
     assert "wrote" in captured.out
 
 
@@ -113,8 +113,8 @@ def test_diagram_projects_logical(
         ]
     ) == 0
     text = out.read_text(encoding="utf-8")
-    assert "Table TradingClient" in text
-    assert "clientId" in text
+    assert "Table ENTERPRISE" in text
+    assert "ENTERPRISE_ID" in text
     assert (tmp_path / "out.dbml.manifest.json").is_file()
     assert "digest=sha256:" in capsys.readouterr().out
 
@@ -175,7 +175,7 @@ def test_diagram_projects_mermaid_logical(
     text = out.read_text(encoding="utf-8")
     assert "```mermaid" in text
     assert "erDiagram" in text
-    assert "TradingClient" in text
+    assert "ENTERPRISE" in text
     assert "digest=sha256:" in capsys.readouterr().out
     scene = out.parent / "logical.scene.json"
     layout = out.parent / "logical.layout.json"
@@ -328,17 +328,17 @@ def test_semantic_diff_identical_exit_0(
     tmp_path: Path,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    trading = (
+    mdm = (
         repo_root
         / "model-assets"
         / "implementations"
         / "solutions"
-        / "trading-platform"
-        / "trading-solution-model.yaml"
+        / "mdm"
+        / "mdm-solution-model.yaml"
     )
     left = tmp_path / "left.yaml"
     right = tmp_path / "right.yaml"
-    text = trading.read_text(encoding="utf-8")
+    text = mdm.read_text(encoding="utf-8")
     left.write_text(text, encoding="utf-8")
     right.write_text(text, encoding="utf-8")
     code = main(
@@ -366,24 +366,24 @@ def test_semantic_diff_breaking_exit_1(
 ) -> None:
     import yaml
 
-    trading = (
+    mdm = (
         repo_root
         / "model-assets"
         / "implementations"
         / "solutions"
-        / "trading-platform"
-        / "trading-solution-model.yaml"
+        / "mdm"
+        / "mdm-solution-model.yaml"
     )
     left = tmp_path / "left.yaml"
     right = tmp_path / "right.yaml"
-    left.write_text(trading.read_text(encoding="utf-8"), encoding="utf-8")
-    data = yaml.safe_load(trading.read_text(encoding="utf-8"))
+    left.write_text(mdm.read_text(encoding="utf-8"), encoding="utf-8")
+    data = yaml.safe_load(mdm.read_text(encoding="utf-8"))
     for entity in data["logical_entities"]:
-        if entity.get("element_id") == "dams:logical/trading/Client":
+        if entity.get("element_id") == "dams:logical/mdm/ENTERPRISE":
             entity["attributes"] = [
                 a
                 for a in entity["attributes"]
-                if a.get("element_id") != "dams:logical/trading/Client/fullName"
+                if a.get("element_id") != "dams:logical/mdm/ENTERPRISE/SHORT_NAME"
             ]
     right.write_text(
         yaml.safe_dump(data, sort_keys=False, allow_unicode=True),

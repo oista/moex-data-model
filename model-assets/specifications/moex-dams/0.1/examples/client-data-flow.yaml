@@ -1,11 +1,11 @@
 element_id: dams:flow/INT-00421
 name: client_change_flow
 title: Передача изменений клиента
-description: Проекция интеграции из Clinkr с привязкой к семантике модели торгового решения.
+description: Проекция интеграции из Clinkr с привязкой к семантике модели MDM.
 lifecycle_status: active
 integration_ref: clinkr:integration/INT-00421
 contract_ref: catalog:contract/DC-01425
-source_solution_ref: eam:solution/TRADING
+source_solution_ref: eam:solution/MDM
 target_solution_ref: eam:solution/CRM
 source_system_ref: eam:system/TRADING_CORE
 target_system_ref: eam:system/CRM_CORE
@@ -18,14 +18,14 @@ integration_spec_ref: https://clinkr.moex.com/specifications/INT-00421/asyncapi/
 entity_bindings:
   - element_id: dams:flow-binding/INT-00421/Client
     name: client_binding
-    description: Семантическая привязка payload потока к логической сущности Клиент.
+    description: Семантическая привязка payload потока к логической сущности ЮЛ (MDM).
     lifecycle_status: active
     flow_ref: dams:flow/INT-00421
-    source_model_ref: https://modelhub.moex.com/models/trading/1.0.0
-    logical_entity_ref: dams:logical/trading/Client
+    source_model_ref: https://modelhub.moex.com/models/mdm/0.1.0
+    logical_entity_ref: dams:logical/mdm/ENTERPRISE
     logical_attribute_refs:
-      - dams:logical/trading/Client/clientId
-      - dams:logical/trading/Client/fullName
+      - dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID
+      - dams:logical/mdm/ENTERPRISE/FULL_NAME
     physical_object_refs:
-      - dams:physical/trading/client-topic
+      - dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE
     direction: outbound

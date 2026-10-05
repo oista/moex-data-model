@@ -5,7 +5,7 @@
 
 Нормативная архитектура платформы: [`docs/architecture/MODELING_ARCHITECTURE.md`](../../../docs/architecture/MODELING_ARCHITECTURE.md).  
 Конверт спецификации: [`specification.yaml`](specification.yaml).  
-Пример implementation: [`trading-platform`](../../../implementations/solutions/trading-platform/).
+Пример implementation: [`mdm`](../../../implementations/solutions/mdm/).
 
 ## Смысл уровней
 
@@ -13,7 +13,7 @@
 |---|---|
 | Spec root (`tree_root`) | `MOEXModelRepository` в `schemas/moex-dams.yaml` |
 | Типичный документ решения | `ModelPackage` (conceptual / logical / physical) |
-| Пример implementation | `model-assets/implementations/solutions/trading-platform/` |
+| Пример implementation | `model-assets/implementations/solutions/mdm/` |
 
 ## Состав
 
@@ -26,7 +26,7 @@
 - `schemas/moex-analytics.yaml` — опциональные метрики и измерения.
 - `schemas/moex-contract-binding.yaml` — модельная дочерняя спецификация дата-контракта.
 - `schemas/moex-dams.yaml` — корневая схема (`tree_root: MOEXModelRepository`).
-- `examples/` — дополнительные instance fixtures (не trading-platform).
+- `examples/` — дополнительные instance fixtures (не привязаны к одному solution slug).
 - `publish.yaml` — манифест Publication Viewer для тела спецификации.
 - `architecture-catalog.yaml` — навигация sidebar viewer.
 

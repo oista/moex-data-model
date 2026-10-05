@@ -27,9 +27,9 @@ describe("ImportWizardPage", () => {
           status: 200,
           json: async () => [
             {
-              id: "moex:implementation:trading:1.0.0",
-              slug: "trading",
-              title: "Trading platform",
+              id: "moex:implementation:mdm:0.1.0",
+              slug: "mdm",
+              title: "MDM data model",
               version: "1.0.0",
               implementation_path: "p",
               implementation_kind: "linkml",
@@ -128,7 +128,7 @@ describe("ImportWizardPage", () => {
         };
       }
       if (
-        url.includes("/documents/moex%3Aimplementation%3Atrading%3A1.0.0") &&
+        url.includes("/documents/moex%3Aimplementation%3Amdm%3A0.1.0") &&
         init?.method === "PUT"
       ) {
         const body = JSON.parse(String(init.body || "{}")) as {
@@ -141,7 +141,7 @@ describe("ImportWizardPage", () => {
           status: 200,
           json: async () => ({
             workspace_id: "ws-1",
-            doc_key: "moex:implementation:trading:1.0.0",
+            doc_key: "moex:implementation:mdm:0.1.0",
             content: body.content,
             base_digest: "sha256:x",
             updated_by: "dev",

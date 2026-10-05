@@ -14,12 +14,12 @@ describe("api client", () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
-      json: async () => [{ id: "x", slug: "trading", title: "T", version: "1.0.0", implementation_path: "p", implementation_kind: "linkml", implementation_profile: "dams-data-model", workbench_editable: true }],
+      json: async () => [{ id: "x", slug: "mdm", title: "T", version: "1.0.0", implementation_path: "p", implementation_kind: "linkml", implementation_profile: "dams-data-model", workbench_editable: true }],
     });
     vi.stubGlobal("fetch", fetchMock);
 
     const rows = await api.listImplementations();
-    expect(rows[0].slug).toBe("trading");
+    expect(rows[0].slug).toBe("mdm");
     expect(fetchMock).toHaveBeenCalledWith(
       "/api/implementations",
       expect.objectContaining({

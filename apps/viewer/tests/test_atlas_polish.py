@@ -183,6 +183,10 @@ def test_js_explorer_roots_collapse_symmetrically():
     assert 'attrs.kind === "section_ref"' in open_item
     assert "openPublicationSection" in open_item
     assert "openGroups.add(found.group.id)" in open_item
+    focus = subtree.split("if (focus?.item)")[1].split(
+        "function openPublicationSection"
+    )[0]
+    assert "openGroups.add(focused.item.id)" not in focus
 
 
 def test_js_nav_implementations_band_class():

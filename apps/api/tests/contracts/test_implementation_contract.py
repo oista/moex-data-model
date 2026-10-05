@@ -19,7 +19,7 @@ from moex_model_cli.asset_registry import FilesystemImplementationCatalog
 from moex_model_cli.bootstrap import find_repo_root
 from moex_modeling import ImplementationAsset
 
-REQUIRED_SOLUTION_SLUGS = frozenset({"trading", "mdm", "ucd", "crm", "esed"})
+REQUIRED_SOLUTION_SLUGS = frozenset({"mdm", "ucd", "crm", "esed"})
 
 
 @pytest.fixture(scope="module")

@@ -198,7 +198,7 @@ def ir_to_workbook_tables(
         )
 
     # Entity-level physical mappings (one per logical entity → its phys object)
-    # Prefer physical→logical order (matches trading-platform / GEN-004).
+    # Prefer physical→logical order (matches mdm / GEN-004).
     for key in sorted(ir.objects.keys()):
         obj = ir.objects[key]
         phys_name = physical_name(

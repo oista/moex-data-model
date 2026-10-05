@@ -12,13 +12,13 @@ import { EntityForms } from "./EntityForms";
 
 const SAMPLE = `
 logical_entities:
-  - element_id: dams:logical/trading/Client
-    name: TradingClient
-    title: Client
-    description: A client
+  - element_id: dams:logical/mdm/ENTERPRISE
+    name: ENTERPRISE
+    title: Legal entity
+    description: A legal entity
     attributes:
-      - element_id: dams:logical/trading/Client/clientId
-        name: clientId
+      - element_id: dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID
+        name: enterpriseId
         logical_type: identifier
         required: true
 `;
@@ -36,9 +36,9 @@ describe("EntityForms", () => {
       status: 200,
       json: async () => ({
         workspace_id: "ws-workbench",
-        doc_key: "trading",
+        doc_key: "mdm",
         content: `${SAMPLE}
-  - element_id: dams:logical/trading/OrderBook
+  - element_id: dams:logical/mdm/OrderBook
     name: OrderBook
     attributes: []
 `,
@@ -55,8 +55,8 @@ describe("EntityForms", () => {
       <QueryClientProvider client={qc}>
         <EntityForms
           workspaceId="ws-workbench"
-          implementationId="moex:implementation:trading:1.0.0"
-          idNamespace="trading"
+          implementationId="moex:implementation:mdm:0.1.0"
+          idNamespace="mdm"
           content={SAMPLE}
           onDocument={onDocument}
         />
@@ -64,11 +64,11 @@ describe("EntityForms", () => {
     );
 
     expect(screen.getByTestId("entity-list").textContent).toContain(
-      "dams:logical/trading/Client",
+      "dams:logical/mdm/ENTERPRISE",
     );
 
-    fireEvent.change(screen.getByDisplayValue("dams:logical/trading/NewEntity"), {
-      target: { value: "dams:logical/trading/OrderBook" },
+    fireEvent.change(screen.getByDisplayValue("dams:logical/mdm/NewEntity"), {
+      target: { value: "dams:logical/mdm/OrderBook" },
     });
     fireEvent.change(screen.getByDisplayValue("NewEntity"), {
       target: { value: "OrderBook" },
@@ -79,7 +79,7 @@ describe("EntityForms", () => {
       expect(onDocument).toHaveBeenCalled();
     });
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/workspaces/ws-workbench/documents/moex%3Aimplementation%3Atrading%3A1.0.0/mutations",
+      "/api/workspaces/ws-workbench/documents/moex%3Aimplementation%3Amdm%3A0.1.0/mutations",
       expect.objectContaining({ method: "POST" }),
     );
   });
@@ -91,7 +91,7 @@ describe("EntityForms", () => {
       status: 200,
       json: async () => ({
         workspace_id: "ws-workbench",
-        doc_key: "trading",
+        doc_key: "mdm",
         content: SAMPLE,
         base_digest: "sha256:y",
         updated_by: "dev",
@@ -107,8 +107,8 @@ describe("EntityForms", () => {
       <QueryClientProvider client={qc}>
         <EntityForms
           workspaceId="ws-workbench"
-          implementationId="moex:implementation:trading:1.0.0"
-          idNamespace="trading"
+          implementationId="moex:implementation:mdm:0.1.0"
+          idNamespace="mdm"
           content={SAMPLE}
           onDocument={onDocument}
         />
@@ -116,8 +116,8 @@ describe("EntityForms", () => {
     );
 
     const editForm = screen.getByTestId("edit-entity-form");
-    fireEvent.change(within(editForm).getByDisplayValue("TradingClient"), {
-      target: { value: "TradingClient2" },
+    fireEvent.change(within(editForm).getByDisplayValue("ENTERPRISE"), {
+      target: { value: "ENTERPRISE2" },
     });
     fireEvent.click(within(editForm).getByRole("button", { name: /save entity/i }));
 
@@ -132,8 +132,8 @@ describe("EntityForms", () => {
     expect(updateCall).toBeTruthy();
     expect(JSON.parse(String(updateCall![1]!.body))).toMatchObject({
       op: "update_logical_entity",
-      element_id: "dams:logical/trading/Client",
-      patch: { name: "TradingClient2" },
+      element_id: "dams:logical/mdm/ENTERPRISE",
+      patch: { name: "ENTERPRISE2" },
     });
 
     onDocument.mockClear();
@@ -145,7 +145,7 @@ describe("EntityForms", () => {
     );
     expect(JSON.parse(String(deleteCall![1]!.body))).toMatchObject({
       op: "delete_logical_entity",
-      element_id: "dams:logical/trading/Client",
+      element_id: "dams:logical/mdm/ENTERPRISE",
     });
   });
 
@@ -157,8 +157,8 @@ describe("EntityForms", () => {
       <QueryClientProvider client={qc}>
         <EntityForms
           workspaceId="ws-workbench"
-          implementationId="moex:implementation:trading:1.0.0"
-          idNamespace="trading"
+          implementationId="moex:implementation:mdm:0.1.0"
+          idNamespace="mdm"
           content={"logical_entities: [\n  - broken"}
           onDocument={vi.fn()}
         />
@@ -177,7 +177,7 @@ describe("EntityForms", () => {
         status: 200,
         json: async () => ({
           workspace_id: "ws-workbench",
-          doc_key: "trading",
+          doc_key: "mdm",
           content: SAMPLE,
           base_digest: "sha256:z",
           updated_by: "dev",
@@ -192,8 +192,8 @@ describe("EntityForms", () => {
       <QueryClientProvider client={qc}>
         <EntityForms
           workspaceId="ws-workbench"
-          implementationId="moex:implementation:trading:1.0.0"
-          idNamespace="trading"
+          implementationId="moex:implementation:mdm:0.1.0"
+          idNamespace="mdm"
           content={SAMPLE}
           onDocument={onDocument}
           onBeforeMutate={onBeforeMutate}
@@ -225,8 +225,8 @@ describe("EntityForms", () => {
       <QueryClientProvider client={qc}>
         <EntityForms
           workspaceId="ws-workbench"
-          implementationId="moex:implementation:trading:1.0.0"
-          idNamespace="trading"
+          implementationId="moex:implementation:mdm:0.1.0"
+          idNamespace="mdm"
           content={SAMPLE}
           onDocument={onDocument}
           onOptimisticOp={onOptimisticOp}
@@ -235,8 +235,8 @@ describe("EntityForms", () => {
     );
 
     const form = screen.getByTestId("edit-entity-form");
-    fireEvent.change(within(form).getByDisplayValue("Client"), {
-      target: { value: "Client Optimistic" },
+    fireEvent.change(within(form).getByDisplayValue("Legal entity"), {
+      target: { value: "ENTERPRISE Optimistic" },
     });
     fireEvent.click(within(form).getByRole("button", { name: /^save entity$/i }));
 
@@ -244,8 +244,8 @@ describe("EntityForms", () => {
     expect(onDocument).not.toHaveBeenCalled();
     expect(onOptimisticOp.mock.calls[0][0]).toMatchObject({
       op: "update_logical_entity",
-      element_id: "dams:logical/trading/Client",
-      patch: { title: "Client Optimistic" },
+      element_id: "dams:logical/mdm/ENTERPRISE",
+      patch: { title: "ENTERPRISE Optimistic" },
     });
 
     resolveFetch({
@@ -253,8 +253,8 @@ describe("EntityForms", () => {
       status: 200,
       json: async () => ({
         workspace_id: "ws-workbench",
-        doc_key: "trading",
-        content: SAMPLE.replace("title: Client", "title: Client Optimistic"),
+        doc_key: "mdm",
+        content: SAMPLE.replace("title: Legal entity", "title: ENTERPRISE Optimistic"),
         base_digest: "sha256:x",
         updated_by: "dev",
       }),

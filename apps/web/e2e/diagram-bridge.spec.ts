@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
 
 const DEMO_DBML = "Table Demo {\n  id integer [pk]\n}\n";
-const TRADING_ID = "moex:implementation:trading:1.0.0";
-const TRADING_DOC =
-  `/api/workspaces/ws-workbench/documents/${encodeURIComponent(TRADING_ID)}`;
+const MDM_ID = "moex:implementation:mdm:0.1.0";
+const MDM_DOC =
+  `/api/workspaces/ws-workbench/documents/${encodeURIComponent(MDM_ID)}`;
 
 async function mockDiagramApi(page: import("@playwright/test").Page) {
   await page.route("**/api/**", async (route) => {
@@ -23,9 +23,9 @@ async function mockDiagramApi(page: import("@playwright/test").Page) {
         contentType: "application/json",
         body: JSON.stringify([
           {
-            id: TRADING_ID,
-            slug: "trading",
-            title: "Trading platform",
+            id: MDM_ID,
+            slug: "mdm",
+            title: "Модель данных MDM",
             version: "1.0.0",
             implementation_path: "p",
             implementation_kind: "linkml",
@@ -46,14 +46,14 @@ async function mockDiagramApi(page: import("@playwright/test").Page) {
       return;
     }
 
-    if (method === "GET" && path === TRADING_DOC) {
+    if (method === "GET" && path === MDM_DOC) {
       await route.fulfill({
         status: 200,
         contentType: "application/json",
         body: JSON.stringify({
           content: "name: demo\n",
           base_digest: "sha256:e2e",
-          doc_key: TRADING_ID,
+          doc_key: MDM_ID,
           workspace_id: "ws-workbench",
           updated_by: "dev",
         }),
@@ -91,7 +91,7 @@ test.describe("drawDB bridge", () => {
     page,
   }) => {
     await mockDiagramApi(page);
-    await page.goto("/models/trading/diagram");
+    await page.goto("/models/mdm/diagram");
 
     await expect(page.getByRole("heading", { name: /Diagram/i })).toBeVisible({
       timeout: 20_000,

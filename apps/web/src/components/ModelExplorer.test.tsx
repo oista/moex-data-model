@@ -4,28 +4,28 @@ import { ModelExplorer } from "./ModelExplorer";
 
 const SAMPLE = `
 conceptual_entities:
-  - element_id: dams:concept/Client
-    name: Client
+  - element_id: dams:concept/ENTERPRISE
+    name: ENTERPRISE
 domain_contexts:
-  - element_id: dams:context/trading
+  - element_id: dams:context/mdm
     name: TradingContext
 logical_entities:
-  - element_id: dams:logical/trading/Client
-    name: TradingClient
+  - element_id: dams:logical/mdm/ENTERPRISE
+    name: ENTERPRISE
     attributes:
-      - element_id: dams:logical/trading/Client/clientId
+      - element_id: dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID
         name: clientId
 relationships:
-  - element_id: dams:rel/trading/X
+  - element_id: dams:rel/mdm/X
     name: x
 physical_objects:
-  - element_id: dams:physical/trading/topic
+  - element_id: dams:physical/mdm/topic
     name: topic
     physical_fields:
-      - element_id: dams:physical/trading/topic/id
+      - element_id: dams:physical/mdm/topic/id
         name: id
 mappings:
-  - element_id: dams:mapping/trading/m
+  - element_id: dams:mapping/mdm/m
     name: m
 `;
 
@@ -46,10 +46,10 @@ describe("ModelExplorer", () => {
     );
 
     fireEvent.click(
-      screen.getByTestId("explorer-node-dams:logical/trading/Client/clientId"),
+      screen.getByTestId("explorer-node-dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID"),
     );
     expect(onSelect).toHaveBeenCalledWith({
-      elementId: "dams:logical/trading/Client/clientId",
+      elementId: "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID",
       kind: "logical_attribute",
       tab: "entities",
     });

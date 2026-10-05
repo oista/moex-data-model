@@ -10,7 +10,7 @@
 |---|---|---|
 | **ModelingStandard** | формализм | LinkML |
 | **ReferenceSpecification** | норма / профиль на стандарте | MOEX DAMS 0.1 |
-| **SpecificationImplementation** | конкретная версионированная модель | trading-platform |
+| **SpecificationImplementation** | конкретная версионированная модель | mdm |
 
 Нормативный документ: [`docs/architecture/MODELING_ARCHITECTURE.md`](docs/architecture/MODELING_ARCHITECTURE.md) (Proposed 0.2).  
 Схема ядра: [`docs/architecture/modeling-kernel.yaml`](docs/architecture/modeling-kernel.yaml).  
@@ -109,7 +109,7 @@ make generate-artifacts
 
 Пишет OWL/SHACL/`moex-dams.dbml`/Mermaid под [`generated/artifacts/moex-dams/0.1/`](generated/artifacts/moex-dams/0.1/) + manifests. `moex-dams-drawdb-colored.dbml` — ручной drawDB sample, не в golden.
 
-Пишет [`model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json`](model-assets/implementations/solutions/trading-platform/publications/vertical_slice.json) через `moex-model publish`.
+Пишет [`model-assets/implementations/solutions/mdm/publications/vertical_slice.json`](model-assets/implementations/solutions/mdm/publications/vertical_slice.json) через `moex-model publish`.
 
 ```bash
 py -3.14 -m moex_model_cli validate --root .

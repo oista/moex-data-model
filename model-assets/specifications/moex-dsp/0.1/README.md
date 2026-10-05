@@ -55,4 +55,4 @@
 
 - **moex.dams** — эталонная спецификация модели данных (`profile: linkml-specification`); `moex.dsp` вложен под неё в навигации.
 - **edmc.fibo** — эталонный профиль FIBO (`profile: ontology`); primary nav = classes (+ glossary view, ADR-024).
-- Data / draft implementations (trading-solution, future CSV DSP units) — `profile: implementation` + `satisfies` к dams publication requirements.
+- Data / draft implementations (mdm-solution, future CSV DSP units) — `profile: implementation` + `satisfies` к dams publication requirements.

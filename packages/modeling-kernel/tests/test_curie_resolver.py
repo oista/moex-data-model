@@ -13,11 +13,11 @@ def test_expand_and_compact_round_trip() -> None:
         },
         default_prefix="dams",
     )
-    assert r.expand("dams:model/trading/1.0.0") == (
-        "https://data.moex.com/dams/model/trading/1.0.0"
+    assert r.expand("dams:model/mdm/0.1.0") == (
+        "https://data.moex.com/dams/model/mdm/0.1.0"
     )
-    assert r.compact("https://data.moex.com/dams/model/trading/1.0.0") == (
-        "dams:model/trading/1.0.0"
+    assert r.compact("https://data.moex.com/dams/model/mdm/0.1.0") == (
+        "dams:model/mdm/0.1.0"
     )
     assert r.expand("https://data.moex.com/dams/x") == "https://data.moex.com/dams/x"
     assert r.expand("bare-local") == "https://data.moex.com/dams/bare-local"

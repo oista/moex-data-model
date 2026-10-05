@@ -24,9 +24,9 @@ vi.mock("@monaco-editor/react", () => ({
 
 import { EditorPage } from "./EditorPage";
 
-const PUBLISHED = `element_id: dams:model/trading/1.0.0
+const PUBLISHED = `element_id: dams:model/mdm/0.1.0
 logical_entities:
-  - element_id: dams:logical/trading/Client
+  - element_id: dams:logical/mdm/Client
     name: TradingClient
     attributes: []
 `;
@@ -45,9 +45,9 @@ describe("EditorPage", () => {
           status: 200,
           json: async () => ([
             {
-              id: "moex:implementation:trading:1.0.0",
-              slug: "trading",
-              title: "Trading platform",
+              id: "moex:implementation:mdm:0.1.0",
+              slug: "mdm",
+              title: "MDM data model",
               version: "1.0.0",
               implementation_path: "p",
               implementation_kind: "linkml",
@@ -69,7 +69,7 @@ describe("EditorPage", () => {
         };
       }
       if (
-        url.includes("/documents/moex%3Aimplementation%3Atrading%3A1.0.0") &&
+        url.includes("/documents/moex%3Aimplementation%3Amdm%3A0.1.0") &&
         !url.includes("/mutations") &&
         init?.method !== "PUT"
       ) {
@@ -80,14 +80,14 @@ describe("EditorPage", () => {
           text: async () => "missing",
         };
       }
-      if (url === "/api/implementations/moex%3Aimplementation%3Atrading%3A1.0.0/body") {
+      if (url === "/api/implementations/moex%3Aimplementation%3Amdm%3A0.1.0/body") {
         return {
           ok: true,
           status: 200,
           json: async () => ({
-            content: "element_id: dams:model/trading/1.0.0\n",
+            content: "element_id: dams:model/mdm/0.1.0\n",
             content_digest: "sha256:abc",
-            path: "trading.yaml",
+            path: "mdm.yaml",
           }),
         };
       }
@@ -105,7 +105,7 @@ describe("EditorPage", () => {
     });
     render(
       <QueryClientProvider client={qc}>
-        <MemoryRouter initialEntries={["/models/trading/edit"]}>
+        <MemoryRouter initialEntries={["/models/mdm/edit"]}>
           <Routes>
             <Route path="models/:slug/edit" element={<EditorPage />} />
           </Routes>
@@ -127,9 +127,9 @@ describe("EditorPage", () => {
           status: 200,
           json: async () => ([
             {
-              id: "moex:implementation:trading:1.0.0",
-              slug: "trading",
-              title: "Trading platform",
+              id: "moex:implementation:mdm:0.1.0",
+              slug: "mdm",
+              title: "MDM data model",
               version: "1.0.0",
               implementation_path: "p",
               implementation_kind: "linkml",
@@ -151,7 +151,7 @@ describe("EditorPage", () => {
         };
       }
       if (
-        url.includes("/documents/moex%3Aimplementation%3Atrading%3A1.0.0") &&
+        url.includes("/documents/moex%3Aimplementation%3Amdm%3A0.1.0") &&
         !url.includes("/mutations") &&
         init?.method !== "PUT"
       ) {
@@ -162,25 +162,25 @@ describe("EditorPage", () => {
           text: async () => "missing",
         };
       }
-      if (url === "/api/implementations/moex%3Aimplementation%3Atrading%3A1.0.0/body") {
+      if (url === "/api/implementations/moex%3Aimplementation%3Amdm%3A0.1.0/body") {
         return {
           ok: true,
           status: 200,
           json: async () => ({
             content: PUBLISHED,
             content_digest: "sha256:pub",
-            path: "trading.yaml",
+            path: "mdm.yaml",
           }),
         };
       }
-      if (url.includes("/documents/moex%3Aimplementation%3Atrading%3A1.0.0") && init?.method === "PUT") {
+      if (url.includes("/documents/moex%3Aimplementation%3Amdm%3A0.1.0") && init?.method === "PUT") {
         const body = JSON.parse(String(init.body));
         return {
           ok: true,
           status: 200,
           json: async () => ({
             workspace_id: "ws-workbench",
-            doc_key: "trading",
+            doc_key: "mdm",
             content: body.content,
             base_digest: "sha256:saved",
             updated_by: "dev",
@@ -193,8 +193,8 @@ describe("EditorPage", () => {
           status: 200,
           json: async () => ({
             workspace_id: "ws-workbench",
-            doc_key: "trading",
-            content: `${PUBLISHED}\n  - element_id: dams:logical/trading/Order\n    name: Order\n`,
+            doc_key: "mdm",
+            content: `${PUBLISHED}\n  - element_id: dams:logical/mdm/Order\n    name: Order\n`,
             base_digest: "sha256:mut",
             updated_by: "dev",
           }),
@@ -214,7 +214,7 @@ describe("EditorPage", () => {
     });
     render(
       <QueryClientProvider client={qc}>
-        <MemoryRouter initialEntries={["/models/trading/edit"]}>
+        <MemoryRouter initialEntries={["/models/mdm/edit"]}>
           <Routes>
             <Route path="models/:slug/edit" element={<EditorPage />} />
           </Routes>
@@ -234,7 +234,7 @@ describe("EditorPage", () => {
 
     await waitFor(() => {
       const put = fetchMock.mock.calls.find(
-        (c) => c[1]?.method === "PUT" && String(c[0]).includes("/documents/moex%3Aimplementation%3Atrading%3A1.0.0"),
+        (c) => c[1]?.method === "PUT" && String(c[0]).includes("/documents/moex%3Aimplementation%3Amdm%3A0.1.0"),
       );
       expect(put).toBeTruthy();
       expect(String(put![1]!.body)).toContain("dirty edit");
@@ -256,9 +256,9 @@ describe("EditorPage", () => {
           status: 200,
           json: async () => ([
             {
-              id: "moex:implementation:trading:1.0.0",
-              slug: "trading",
-              title: "Trading platform",
+              id: "moex:implementation:mdm:0.1.0",
+              slug: "mdm",
+              title: "MDM data model",
               version: "1.0.0",
               implementation_path: "p",
               implementation_kind: "linkml",
@@ -280,7 +280,7 @@ describe("EditorPage", () => {
         };
       }
       if (
-        url.includes("/documents/moex%3Aimplementation%3Atrading%3A1.0.0") &&
+        url.includes("/documents/moex%3Aimplementation%3Amdm%3A0.1.0") &&
         !url.includes("/mutations") &&
         !url.includes("/semantic-diff") &&
         (!init?.method || init.method === "GET")
@@ -292,25 +292,25 @@ describe("EditorPage", () => {
           text: async () => "missing",
         };
       }
-      if (url === "/api/implementations/moex%3Aimplementation%3Atrading%3A1.0.0/body") {
+      if (url === "/api/implementations/moex%3Aimplementation%3Amdm%3A0.1.0/body") {
         return {
           ok: true,
           status: 200,
           json: async () => ({
             content: PUBLISHED,
             content_digest: "sha256:pub",
-            path: "trading.yaml",
+            path: "mdm.yaml",
           }),
         };
       }
-      if (url.includes("/documents/moex%3Aimplementation%3Atrading%3A1.0.0") && init?.method === "PUT") {
+      if (url.includes("/documents/moex%3Aimplementation%3Amdm%3A0.1.0") && init?.method === "PUT") {
         const body = JSON.parse(String(init.body));
         return {
           ok: true,
           status: 200,
           json: async () => ({
             workspace_id: "ws-workbench",
-            doc_key: "trading",
+            doc_key: "mdm",
             content: body.content,
             base_digest: "sha256:saved",
             updated_by: "dev",
@@ -329,7 +329,7 @@ describe("EditorPage", () => {
               {
                 change_code: "DAMS-DIFF-REMOVE",
                 category: "breaking",
-                subject_ref: "dams:logical/trading/Client/fullName",
+                subject_ref: "dams:logical/mdm/Client/fullName",
                 message: "Removed attribute",
                 path: "logical_attribute",
               },
@@ -359,7 +359,7 @@ describe("EditorPage", () => {
     });
     render(
       <QueryClientProvider client={qc}>
-        <MemoryRouter initialEntries={["/models/trading/edit"]}>
+        <MemoryRouter initialEntries={["/models/mdm/edit"]}>
           <Routes>
             <Route path="models/:slug/edit" element={<EditorPage />} />
           </Routes>
@@ -377,7 +377,7 @@ describe("EditorPage", () => {
     expect(screen.getByText(/DAMS-DIFF-REMOVE/)).toBeTruthy();
 
     const put = fetchMock.mock.calls.find(
-      (c) => c[1]?.method === "PUT" && String(c[0]).includes("/documents/moex%3Aimplementation%3Atrading%3A1.0.0"),
+      (c) => c[1]?.method === "PUT" && String(c[0]).includes("/documents/moex%3Aimplementation%3Amdm%3A0.1.0"),
     );
     expect(put).toBeTruthy();
     const diffCall = fetchMock.mock.calls.find(

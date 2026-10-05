@@ -612,31 +612,27 @@ classes:
 ## Пример модели решения
 
 ```yaml
-element_id: dams:model/trading/1.0.0
-name: trading_solution_model
-description: Модель данных торгового решения.
+element_id: dams:model/mdm/0.1.0
+name: mdm_solution_model
+description: Модель данных ИТ-решения MDM.
 lifecycle_status: draft
 api_version: dams.moex/v0.1
-model_version: 1.0.0
-solution_ref: eam:solution/TRADING
+model_version: 0.1.0
+solution_ref: eam:solution/MDM
 
 logical_entities:
-  - element_id: dams:logical/trading/Client
-    name: TradingClient
-    description: Локальное представление клиента.
-    lifecycle_status: active
-    context_ref: dams:context/trading
+  - element_id: dams:logical/mdm/ENTERPRISE
+    name: ENTERPRISE
+    description: Юридические лица (ЮЛ).
+    lifecycle_status: draft
+    context_ref: dams:context/mdm
     conceptual_entity_refs:
-      - dams:concept/Client
-    solution_ref: eam:solution/TRADING
+      - dams:concept/LegalEntity
+    solution_ref: eam:solution/MDM
     solution_data_role: producer
     entity_type: core
     data_class: master_data
-    business_importance: high
-    data_owner_ref: org:role/CLIENT_DATA_OWNER
-    governance_classification: confidential
-    sensitivity_term_refs:
-      - catalog:classification/PDN
+    business_importance: medium
 ```
 
 ## Проверенный результат

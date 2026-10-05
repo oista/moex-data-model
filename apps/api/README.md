@@ -40,7 +40,7 @@ Dev header only: `X-Moex-Actor` (default `dev`). Upserts `user_identity` + `edit
 
 ## Implementation catalog
 
-Workbench resolves implementations via `FilesystemImplementationCatalog` (scans `model-assets/implementations/**/implementation.yaml`). Path parameter `{implementation_id}` accepts the **canonical coordinate** (`moex:implementation:mdm:0.1.0`) or a **presentation slug** (`mdm`, `trading`). Responses and `doc_key` always use the coordinate.
+Workbench resolves implementations via `FilesystemImplementationCatalog` (scans `model-assets/implementations/**/implementation.yaml`). Path parameter `{implementation_id}` accepts the **canonical coordinate** (`moex:implementation:mdm:0.1.0`) or a **presentation slug** (`mdm`, `crm`, `ucd`, `esed`). Responses and `doc_key` always use the coordinate.
 
 `doc_key` includes the version segment. Bumping an implementation version orphans prior workspace drafts until they are migrated.
 

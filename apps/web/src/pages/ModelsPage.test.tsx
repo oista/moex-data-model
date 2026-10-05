@@ -17,14 +17,14 @@ describe("ModelsPage", () => {
         status: 200,
         json: async () => [
           {
-            id: "moex:implementation:trading:1.0.0",
-            slug: "trading",
+            id: "moex:implementation:mdm:0.1.0",
+            slug: "mdm",
             version: "1.0.0",
             implementation_kind: "linkml",
             implementation_profile: "dams-data-model",
             workbench_editable: true,
-            title: "Trading platform",
-            implementation_path: "model-assets/…/trading-solution-model.yaml",
+            title: "MDM data model",
+            implementation_path: "model-assets/.../mdm-solution-model.yaml",
           },
         ],
       }),
@@ -42,7 +42,7 @@ describe("ModelsPage", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Trading platform")).toBeTruthy();
+      expect(screen.getByText("MDM data model")).toBeTruthy();
     });
   });
 });

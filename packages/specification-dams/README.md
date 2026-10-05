@@ -6,7 +6,7 @@ DAMS specification module: MOEX semantic rules, `DamsModelGraphView`, and
 Does **not** hand-copy ConceptualEntity / LogicalEntity — instance data stays
 as dicts loaded by `standard-linkml`; this package owns rules and graph views.
 
-## Assess trading-solution
+## Assess MDM solution
 
 ```powershell
 py -3.14 -m pip install -e "./packages/modeling-kernel" `
@@ -15,7 +15,7 @@ py -3.14 -m pip install -e "./packages/modeling-kernel" `
 
 py -3.14 -m moex_dams.cli assess `
   --schema model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml `
-  --implementation model-assets/implementations/solutions/trading-platform/trading-solution-model.yaml
+  --implementation model-assets/implementations/solutions/mdm/mdm-solution-model.yaml
 ```
 
 ## Projections (ADR-006)

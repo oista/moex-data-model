@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from moex_dams.application.assess import SliceResult, assess_implementation
+from moex_modeling.assets.domain import slug_and_version_from_id
 
 from moex_publication.domain.read_models import (
     PublicationItem,
@@ -92,12 +93,18 @@ def build_publication_module(result: SliceResult) -> PublicationModule:
         for r in result.universe.relations
     )
 
+    try:
+        impl_slug, _ = slug_and_version_from_id(impl.id)
+    except ValueError:
+        impl_slug = impl.id
+    slice_label = impl.name or impl_slug
+
     return PublicationModule(
         module_id="moex:module:vertical-slice",
-        title="Vertical slice (trading)",
+        title=f"Vertical slice ({slice_label})",
         description=(
             "Conformance report and DamsModelGraphView projected from "
-            "linkml → dams → trading-solution"
+            f"linkml → dams → {impl_slug}"
         ),
         icon="📐",
         version=impl.version,

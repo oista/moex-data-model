@@ -47,9 +47,9 @@ def test_implementation_catalog_protocol_is_runtime_checkable() -> None:
 
 
 def test_slug_and_version_from_id() -> None:
-    assert slug_and_version_from_id("moex:implementation:trading:1.0.0") == (
-        "trading",
-        "1.0.0",
+    assert slug_and_version_from_id("moex:implementation:mdm:0.1.0") == (
+        "mdm",
+        "0.1.0",
     )
     assert slug_and_version_from_id(
         "moex:implementation:client-accounts-csv-draft:0.1"

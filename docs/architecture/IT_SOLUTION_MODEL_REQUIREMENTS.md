@@ -883,9 +883,9 @@ Attribute-level mappings не должны автоматически счита
 
 ```yaml
 mapping_type: entity-physical
-source_ref: trading-platform:TRADING_MEMBER
+source_ref: mdm:ENTERPRISE
 target_refs:
-  - trading-platform:TradingMember
+  - mdm:INTERNALDM_MDM_V_ENTERPRISE
 mapping_coverage_status: mapped
 ```
 
@@ -903,8 +903,8 @@ Attribute-level mapping доказывает, как physical field соотно
 
 ```yaml
 mapping_type: attribute-physical
-source_ref: trading-platform:TRADING_MEMBER.MEMBER_CODE
-target_ref: trading-platform:TradingMember.member_code
+source_ref: mdm:ENTERPRISE.ENTERPRISE_ID
+target_ref: mdm:INTERNALDM_MDM_V_ENTERPRISE.ENTERPRISE_ID
 mapping_coverage_status: mapped
 ```
 

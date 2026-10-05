@@ -77,7 +77,7 @@ def test_load_repo_catalog():
     assert catalog is not None
     by_id = {n.id: n for n in catalog.nodes}
     assert "moex-dams" in by_id
-    assert by_id["trading-solution"].conforms_to == "moex-dams"
+    assert by_id["mdm-solution"].conforms_to == "moex-dams"
     assert by_id["moex-dams"].role == "reference_specification"
     assert by_id["moex-fibo-profile"].role == "reference_specification"
     assert by_id["moex-fibo-profile"].module_id == "moex:module:fibo-profile"
@@ -105,7 +105,6 @@ def test_repo_catalog_passes_validation_with_modules():
         "moex:module:fibo-application",
         "moex:module:enterprise-conceptual",
         "moex:module:hierarchy",
-        "moex:module:trading-solution",
         "moex:module:mdm-solution",
         "moex:module:ucd-solution",
         "moex:module:crm-solution",

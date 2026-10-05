@@ -357,7 +357,7 @@ def test_repo_implementations_glossary_nav_and_coverage():
     ids = {i.id for i in gloss.items}
     assert any(i.startswith("moex-enterprise-conceptual-model:") for i in ids)
     assert any(i.startswith("mdm-solution:") for i in ids)
-    assert any(i.startswith("trading-solution:") for i in ids)
+    assert any(i.startswith("mdm-solution:") for i in ids)
 
     levels = {i.attributes.get("model_level") for i in gloss.items}
     assert "CDM" in levels
