@@ -15,6 +15,7 @@ class ChangeCategory(str, Enum):
     GOVERNANCE = "governance"
     OPERATIONAL = "operational"
     NON_BREAKING = "non_breaking"
+    DEPRECATION = "deprecation"
 
 
 class SemanticChange(BaseModel):
