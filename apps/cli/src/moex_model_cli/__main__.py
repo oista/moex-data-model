@@ -335,6 +335,29 @@ def build_parser() -> argparse.ArgumentParser:
     )
     selection_validate.add_argument("--json", action="store_true")
 
+    export_req = sub.add_parser(
+        "export-requirements",
+        help="Dump DAMS RequirementCatalog YAML to CSV (ADR-013)",
+    )
+    _add_slice_args(export_req)
+    export_req.add_argument(
+        "--out",
+        type=Path,
+        required=True,
+        help="Output CSV path",
+    )
+    export_req.add_argument(
+        "--catalog",
+        dest="catalogs",
+        type=Path,
+        action="append",
+        default=None,
+        help=(
+            "Catalog YAML (repeatable). "
+            "Default: moex-dams/0.1/requirements/*.yaml"
+        ),
+    )
+
     return parser
 
 
@@ -484,6 +507,14 @@ def main(argv: list[str] | None = None) -> int:
             paths,
             target=args.target,
             as_json=getattr(args, "json", False),
+        )
+    elif args.command == "export-requirements":
+        from moex_model_cli.commands.export_requirements import run_export_requirements
+
+        code, text = run_export_requirements(
+            paths,
+            out=args.out,
+            catalogs=args.catalogs,
         )
     else:
         return 2

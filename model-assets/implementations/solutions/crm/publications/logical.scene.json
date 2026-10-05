@@ -1,0 +1,512 @@
+{
+  "version": 1,
+  "profile": "logical",
+  "generator": "moex-dams-er-scene/0.1",
+  "package_id": "dams:model/crm/0.1.0",
+  "nodes": [
+    {
+      "name": "CONTACT",
+      "title": "Контакт",
+      "element_id": "dams:logical/crm/CONTACT",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "identifier",
+          "element_id": "dams:logical/crm/CONTACT/Id",
+          "keys": [
+            "PK"
+          ],
+          "comment": "Id"
+        },
+        {
+          "name": "Account",
+          "type": "identifier",
+          "element_id": "dams:logical/crm/CONTACT/Account",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Клиент"
+        },
+        {
+          "name": "Name",
+          "type": "string",
+          "element_id": "dams:logical/crm/CONTACT/Name",
+          "keys": [],
+          "comment": "ФИО"
+        },
+        {
+          "name": "MoexFullNameEn",
+          "type": "string",
+          "element_id": "dams:logical/crm/CONTACT/MoexFullNameEn",
+          "keys": [],
+          "comment": "Полное имя по-английски"
+        },
+        {
+          "name": "MoexEio",
+          "type": "boolean",
+          "element_id": "dams:logical/crm/CONTACT/MoexEio",
+          "keys": [],
+          "comment": "Является ЕИО"
+        },
+        {
+          "name": "Surname",
+          "type": "string",
+          "element_id": "dams:logical/crm/CONTACT/Surname",
+          "keys": [],
+          "comment": "Фамилия"
+        },
+        {
+          "name": "GivenName",
+          "type": "string",
+          "element_id": "dams:logical/crm/CONTACT/GivenName",
+          "keys": [],
+          "comment": "Имя"
+        },
+        {
+          "name": "MiddleName",
+          "type": "string",
+          "element_id": "dams:logical/crm/CONTACT/MiddleName",
+          "keys": [],
+          "comment": "Отчество"
+        },
+        {
+          "name": "Gender",
+          "type": "identifier",
+          "element_id": "dams:logical/crm/CONTACT/Gender",
+          "keys": [
+            "PK"
+          ],
+          "comment": "Пол"
+        },
+        {
+          "name": "BirthDate",
+          "type": "date",
+          "element_id": "dams:logical/crm/CONTACT/BirthDate",
+          "keys": [],
+          "comment": "Дата рождения"
+        },
+        {
+          "name": "Phone",
+          "type": "string",
+          "element_id": "dams:logical/crm/CONTACT/Phone",
+          "keys": [],
+          "comment": "Рабочий телефон"
+        },
+        {
+          "name": "MobilePhone",
+          "type": "string",
+          "element_id": "dams:logical/crm/CONTACT/MobilePhone",
+          "keys": [],
+          "comment": "Мобильный телефон"
+        },
+        {
+          "name": "Email",
+          "type": "string",
+          "element_id": "dams:logical/crm/CONTACT/Email",
+          "keys": [],
+          "comment": "Электронная почта"
+        },
+        {
+          "name": "Type",
+          "type": "identifier",
+          "element_id": "dams:logical/crm/CONTACT/Type",
+          "keys": [
+            "PK"
+          ],
+          "comment": "Тип"
+        },
+        {
+          "name": "MoexPassportId",
+          "type": "string",
+          "element_id": "dams:logical/crm/CONTACT/MoexPassportId",
+          "keys": [],
+          "comment": "MOEX паспорт (MOEX ID)"
+        },
+        {
+          "name": "MoexMdmId",
+          "type": "string",
+          "element_id": "dams:logical/crm/CONTACT/MoexMdmId",
+          "keys": [],
+          "comment": "Идентификатор MDM"
+        },
+        {
+          "name": "MoexUCDId",
+          "type": "string",
+          "element_id": "dams:logical/crm/CONTACT/MoexUCDId",
+          "keys": [],
+          "comment": "ID UCD"
+        }
+      ]
+    },
+    {
+      "name": "CUSTOMER",
+      "title": "Клиент",
+      "element_id": "dams:logical/crm/CUSTOMER",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "identifier",
+          "element_id": "dams:logical/crm/CUSTOMER/Id",
+          "keys": [
+            "PK"
+          ],
+          "comment": "ID клиента"
+        },
+        {
+          "name": "PrimaryContact",
+          "type": "identifier",
+          "element_id": "dams:logical/crm/CUSTOMER/PrimaryContact",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Первое лицо"
+        },
+        {
+          "name": "PrimaryAccount",
+          "type": "identifier",
+          "element_id": "dams:logical/crm/CUSTOMER/PrimaryAccount",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Первое лицо"
+        },
+        {
+          "name": "Parent",
+          "type": "identifier",
+          "element_id": "dams:logical/crm/CUSTOMER/Parent",
+          "keys": [
+            "PK"
+          ],
+          "comment": "Родительский контрагент"
+        },
+        {
+          "name": "MoexPaarentCompanyHolding",
+          "type": "boolean",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexPaarentCompanyHolding",
+          "keys": [],
+          "comment": "Головная компания холдинга"
+        },
+        {
+          "name": "Name",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/Name",
+          "keys": [],
+          "comment": "Название"
+        },
+        {
+          "name": "MoexFullAlternativeName",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexFullAlternativeName",
+          "keys": [],
+          "comment": "Полное наименование"
+        },
+        {
+          "name": "AlternativeName",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/AlternativeName",
+          "keys": [],
+          "comment": "Краткое наименование"
+        },
+        {
+          "name": "MoexEngFullAlternativeName",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexEngFullAlternativeName",
+          "keys": [],
+          "comment": "Полное наименование на английском"
+        },
+        {
+          "name": "Phone_",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/Phone",
+          "keys": [],
+          "comment": "Основной телефон"
+        },
+        {
+          "name": "MoexEmail",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexEmail",
+          "keys": [],
+          "comment": "Email"
+        },
+        {
+          "name": "MoexINN",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexINN",
+          "keys": [],
+          "comment": "ИНН"
+        },
+        {
+          "name": "MoexKPP",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexKPP",
+          "keys": [],
+          "comment": "КПП"
+        },
+        {
+          "name": "MoexOGRN",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexOGRN",
+          "keys": [],
+          "comment": "ОГРН"
+        },
+        {
+          "name": "MoexOKVED",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexOKVED",
+          "keys": [],
+          "comment": "ОКВЭД"
+        },
+        {
+          "name": "MoexCountryCode",
+          "type": "identifier",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexCountryCode",
+          "keys": [
+            "PK"
+          ],
+          "comment": "Цифровой код страны"
+        },
+        {
+          "name": "MoexRegNumNonResident",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexRegNumNonResident",
+          "keys": [],
+          "comment": "Регистрационный номер клиента-нерезидента"
+        },
+        {
+          "name": "MoexKIO",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexKIO",
+          "keys": [],
+          "comment": "Код иностранной организации (КИО)"
+        },
+        {
+          "name": "MoexMDMId",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexMDMId",
+          "keys": [],
+          "comment": "MDM Id"
+        },
+        {
+          "name": "MoexCBDId",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexCBDId",
+          "keys": [],
+          "comment": "ЕКБД Id"
+        },
+        {
+          "name": "MoexKBDId",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexKBDId",
+          "keys": [],
+          "comment": "КБД Id"
+        },
+        {
+          "name": "MoexUnicodeCBD",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexUnicodeCBD",
+          "keys": [],
+          "comment": "Unicode ЕКБД"
+        },
+        {
+          "name": "MoexUCDId",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexUCDId",
+          "keys": [],
+          "comment": "UCD Id"
+        },
+        {
+          "name": "MoexCodeNsd",
+          "type": "string",
+          "element_id": "dams:logical/crm/CUSTOMER/MoexCodeNsd",
+          "keys": [],
+          "comment": "Код НРД"
+        }
+      ]
+    },
+    {
+      "name": "LEAD",
+      "title": "Привлечение",
+      "element_id": "dams:logical/crm/LEAD",
+      "columns": [
+        {
+          "name": "ApplicationId",
+          "type": "identifier",
+          "element_id": "dams:logical/crm/LEAD/ApplicationId",
+          "keys": [
+            "PK"
+          ],
+          "comment": "Id заявки (привлечения)"
+        },
+        {
+          "name": "MoexAccount",
+          "type": "identifier",
+          "element_id": "dams:logical/crm/LEAD/MoexAccount",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Клиент"
+        },
+        {
+          "name": "MoexApplicationNumber",
+          "type": "string",
+          "element_id": "dams:logical/crm/LEAD/MoexApplicationNumber",
+          "keys": [],
+          "comment": "Номер заявки"
+        },
+        {
+          "name": "MoexApplicationTitle",
+          "type": "string",
+          "element_id": "dams:logical/crm/LEAD/MoexApplicationTitle",
+          "keys": [],
+          "comment": "Тема заявки"
+        },
+        {
+          "name": "MoexApplicationSource",
+          "type": "identifier",
+          "element_id": "dams:logical/crm/LEAD/MoexApplicationSource",
+          "keys": [
+            "PK"
+          ],
+          "comment": "Канал привлечения"
+        },
+        {
+          "name": "MoexFunnelType",
+          "type": "identifier",
+          "element_id": "dams:logical/crm/LEAD/MoexFunnelType",
+          "keys": [
+            "PK"
+          ],
+          "comment": "Тип заявки"
+        },
+        {
+          "name": "MoexContact",
+          "type": "identifier",
+          "element_id": "dams:logical/crm/LEAD/MoexContact",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Контакт"
+        },
+        {
+          "name": "MobilePhone",
+          "type": "string",
+          "element_id": "dams:logical/crm/LEAD/MobilePhone",
+          "keys": [],
+          "comment": "Мобильный телефон"
+        },
+        {
+          "name": "Email",
+          "type": "string",
+          "element_id": "dams:logical/crm/LEAD/Email",
+          "keys": [],
+          "comment": "Электронная почта"
+        },
+        {
+          "name": "ModifiedOn",
+          "type": "datetime",
+          "element_id": "dams:logical/crm/LEAD/ModifiedOn",
+          "keys": [],
+          "comment": "Дата последнего изменения"
+        },
+        {
+          "name": "CreatedOn",
+          "type": "datetime",
+          "element_id": "dams:logical/crm/LEAD/CreatedOn",
+          "keys": [],
+          "comment": "Дата создания"
+        },
+        {
+          "name": "MoexSiteCreatedOn",
+          "type": "datetime",
+          "element_id": "dams:logical/crm/LEAD/MoexSiteCreatedOn",
+          "keys": [],
+          "comment": "Дата заполнения формы на сайте"
+        },
+        {
+          "name": "MoexInn",
+          "type": "string",
+          "element_id": "dams:logical/crm/LEAD/MoexInn",
+          "keys": [],
+          "comment": "ИНН"
+        },
+        {
+          "name": "MoexPassportId",
+          "type": "string",
+          "element_id": "dams:logical/crm/LEAD/MoexPassportId",
+          "keys": [],
+          "comment": "MOEX паспорт"
+        },
+        {
+          "name": "MoexIDApplications",
+          "type": "string",
+          "element_id": "dams:logical/crm/LEAD/MoexIDApplications",
+          "keys": [],
+          "comment": "ЦП Id"
+        },
+        {
+          "name": "MoexLkkStatus",
+          "type": "identifier",
+          "element_id": "dams:logical/crm/LEAD/MoexLkkStatus",
+          "keys": [
+            "PK"
+          ],
+          "comment": "Статус ЦП"
+        },
+        {
+          "name": "MoexUcdId",
+          "type": "string",
+          "element_id": "dams:logical/crm/LEAD/MoexUcdId",
+          "keys": [],
+          "comment": "UCD Id"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "dams:rel/crm/CONTACT_to_CUSTOMER_via_Account",
+      "source": "CONTACT",
+      "target": "CUSTOMER",
+      "element_id": "dams:rel/crm/CONTACT_to_CUSTOMER_via_Account",
+      "label": "CONTACT_to_CUSTOMER_via_Account",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/crm/CUSTOMER_to_CONTACT_via_PrimaryContact",
+      "source": "CUSTOMER",
+      "target": "CONTACT",
+      "element_id": "dams:rel/crm/CUSTOMER_to_CONTACT_via_PrimaryContact",
+      "label": "CUSTOMER_to_CONTACT_via_PrimaryContact",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/crm/CUSTOMER_to_CUSTOMER_via_PrimaryAccount",
+      "source": "CUSTOMER",
+      "target": "CUSTOMER",
+      "element_id": "dams:rel/crm/CUSTOMER_to_CUSTOMER_via_PrimaryAccount",
+      "label": "CUSTOMER_to_CUSTOMER_via_PrimaryAccount",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/crm/LEAD_to_CUSTOMER_via_MoexAccount",
+      "source": "LEAD",
+      "target": "CUSTOMER",
+      "element_id": "dams:rel/crm/LEAD_to_CUSTOMER_via_MoexAccount",
+      "label": "LEAD_to_CUSTOMER_via_MoexAccount",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/crm/LEAD_to_CONTACT_via_MoexContact",
+      "source": "LEAD",
+      "target": "CONTACT",
+      "element_id": "dams:rel/crm/LEAD_to_CONTACT_via_MoexContact",
+      "label": "LEAD_to_CONTACT_via_MoexContact",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    }
+  ]
+}

@@ -4892,6 +4892,9 @@
       selectedEdge: null,
       editMode: false,
       dirty: false,
+      dragging: false,
+      dragMoved: false,
+      dragRaf: 0,
     };
 
     const tools = document.createElement("div");
@@ -5085,10 +5088,22 @@
           handle.setAttribute("cy", hy);
           handle.dataset.edgeId = ek;
           handle.addEventListener("pointerdown", (ev) => {
+            if (ev.button != null && ev.button !== 0) return;
             ev.stopPropagation();
             ev.preventDefault();
-            handle.setPointerCapture(ev.pointerId);
+            state.dragging = true;
+            state.dragMoved = false;
+            const pointerId = ev.pointerId;
+            const scheduleRedraw = () => {
+              if (state.dragRaf) return;
+              state.dragRaf = requestAnimationFrame(() => {
+                state.dragRaf = 0;
+                redraw();
+              });
+            };
             const move = (e) => {
+              if (e.pointerId !== pointerId) return;
+              state.dragMoved = true;
               const pt = clientToScene(e.clientX, e.clientY);
               if (!state.layout.edges) state.layout.edges = {};
               state.layout.edges[ek] = {
@@ -5096,15 +5111,23 @@
                 points: [{ x: Math.round(pt.x), y: Math.round(pt.y) }],
               };
               markDirty();
-              redraw();
+              scheduleRedraw();
             };
             const up = (e) => {
-              handle.releasePointerCapture(e.pointerId);
-              handle.removeEventListener("pointermove", move);
-              handle.removeEventListener("pointerup", up);
+              if (e.pointerId !== pointerId) return;
+              window.removeEventListener("pointermove", move);
+              window.removeEventListener("pointerup", up);
+              window.removeEventListener("pointercancel", up);
+              state.dragging = false;
+              if (state.dragRaf) {
+                cancelAnimationFrame(state.dragRaf);
+                state.dragRaf = 0;
+              }
+              redraw();
             };
-            handle.addEventListener("pointermove", move);
-            handle.addEventListener("pointerup", up);
+            window.addEventListener("pointermove", move);
+            window.addEventListener("pointerup", up);
+            window.addEventListener("pointercancel", up);
           });
           edgesG.appendChild(handle);
         }
@@ -5218,14 +5241,13 @@
           }
         });
 
-        g.addEventListener("click", (ev) => {
-          ev.stopPropagation();
+        function selectNode(openDetail) {
           state.selectedNode = key;
           state.selectedEdge = null;
           colorInput.disabled = !state.editMode;
           const c = nodePos(key).color || "#4285F4";
           colorInput.value = /^#[0-9a-fA-F]{6}$/.test(c) ? c : "#4285F4";
-          if (typeof onSelect === "function" && node.element_id) {
+          if (openDetail && typeof onSelect === "function" && node.element_id) {
             const profileSec =
               scene.profile === "conceptual"
                 ? "conceptual"
@@ -5238,22 +5260,47 @@
               kind: "entity",
             });
           }
+        }
+
+        g.addEventListener("click", (ev) => {
+          // Drag uses pointer handlers; ignore click after a real drag.
+          if (state.dragMoved) {
+            state.dragMoved = false;
+            ev.stopPropagation();
+            return;
+          }
+          ev.stopPropagation();
+          selectNode(true);
           redraw();
         });
 
         if (state.editMode) {
           g.addEventListener("pointerdown", (ev) => {
-            if (ev.target.closest(".erd-edge-handle")) return;
+            if (ev.button != null && ev.button !== 0) return;
+            if (ev.target.closest?.(".erd-edge-handle")) return;
             ev.stopPropagation();
             ev.preventDefault();
-            g.classList.add("is-dragging");
-            g.setPointerCapture(ev.pointerId);
+            selectNode(false);
+            state.dragging = true;
+            state.dragMoved = false;
+            const pointerId = ev.pointerId;
             const start = clientToScene(ev.clientX, ev.clientY);
             const origin = nodePos(key);
+            const scheduleRedraw = () => {
+              if (state.dragRaf) return;
+              state.dragRaf = requestAnimationFrame(() => {
+                state.dragRaf = 0;
+                redraw();
+              });
+            };
             const move = (e) => {
+              if (e.pointerId !== pointerId) return;
               const cur = clientToScene(e.clientX, e.clientY);
-              const nx = Math.round(origin.x + (cur.x - start.x));
-              const ny = Math.round(origin.y + (cur.y - start.y));
+              const dx = cur.x - start.x;
+              const dy = cur.y - start.y;
+              if (Math.abs(dx) + Math.abs(dy) > 2) state.dragMoved = true;
+              const nx = Math.round(origin.x + dx);
+              const ny = Math.round(origin.y + dy);
               if (!state.layout.nodes) state.layout.nodes = {};
               state.layout.nodes[key] = {
                 ...(state.layout.nodes[key] || {}),
@@ -5262,16 +5309,26 @@
                 color: (state.layout.nodes[key] || {}).color || origin.color,
               };
               markDirty();
-              redraw();
+              // Listeners live on window so full redraw cannot drop capture.
+              scheduleRedraw();
             };
             const up = (e) => {
-              g.classList.remove("is-dragging");
-              g.releasePointerCapture(e.pointerId);
-              g.removeEventListener("pointermove", move);
-              g.removeEventListener("pointerup", up);
+              if (e.pointerId !== pointerId) return;
+              window.removeEventListener("pointermove", move);
+              window.removeEventListener("pointerup", up);
+              window.removeEventListener("pointercancel", up);
+              state.dragging = false;
+              if (state.dragRaf) {
+                cancelAnimationFrame(state.dragRaf);
+                state.dragRaf = 0;
+              }
+              if (!state.dragMoved) selectNode(true);
+              redraw();
             };
-            g.addEventListener("pointermove", move);
-            g.addEventListener("pointerup", up);
+            window.addEventListener("pointermove", move);
+            window.addEventListener("pointerup", up);
+            window.addEventListener("pointercancel", up);
+            redraw();
           });
         }
 
@@ -5290,30 +5347,37 @@
     let panning = false;
     let panOrigin = null;
     svg.addEventListener("pointerdown", (ev) => {
+      if (state.dragging) return;
       if (ev.target !== svg && !ev.target.classList?.contains("erd-scene-root")) {
-        if (ev.target.closest(".erd-node") || ev.target.closest(".erd-edge-path") || ev.target.closest(".erd-edge-handle")) {
+        if (
+          ev.target.closest(".erd-node") ||
+          ev.target.closest(".erd-edge-path") ||
+          ev.target.closest(".erd-edge-handle")
+        ) {
           return;
         }
       }
       panning = true;
       wrap.classList.add("is-panning");
       panOrigin = { x: ev.clientX - state.panX, y: ev.clientY - state.panY };
-      svg.setPointerCapture(ev.pointerId);
-    });
-    svg.addEventListener("pointermove", (ev) => {
-      if (!panning || !panOrigin) return;
-      state.panX = ev.clientX - panOrigin.x;
-      state.panY = ev.clientY - panOrigin.y;
-      applyTransform();
-    });
-    svg.addEventListener("pointerup", (ev) => {
-      panning = false;
-      wrap.classList.remove("is-panning");
-      try {
-        svg.releasePointerCapture(ev.pointerId);
-      } catch (_) {
-        /* ignore */
-      }
+      const pointerId = ev.pointerId;
+      const move = (e) => {
+        if (!panning || e.pointerId !== pointerId || !panOrigin) return;
+        state.panX = e.clientX - panOrigin.x;
+        state.panY = e.clientY - panOrigin.y;
+        applyTransform();
+      };
+      const up = (e) => {
+        if (e.pointerId !== pointerId) return;
+        panning = false;
+        wrap.classList.remove("is-panning");
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", up);
+        window.removeEventListener("pointercancel", up);
+      };
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", up);
+      window.addEventListener("pointercancel", up);
     });
     svg.addEventListener(
       "wheel",

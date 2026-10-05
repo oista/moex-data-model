@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "profile": "logical",
+  "nodes": {
+    "dams:logical/crm/LEAD": {
+      "x": 40,
+      "y": 40,
+      "color": "#4285F4"
+    },
+    "dams:logical/crm/CONTACT": {
+      "x": 400,
+      "y": 40,
+      "color": "#4285F4"
+    },
+    "dams:logical/crm/CUSTOMER": {
+      "x": 400,
+      "y": 320,
+      "color": "#4285F4"
+    }
+  },
+  "edges": {}
+}

@@ -3,6 +3,12 @@
 from moex_dams.application.assess import SliceResult, assess_implementation
 from moex_dams.application.diff import diff_graphs, diff_implementations
 from moex_dams.application.element_index import ElementIndexEntry, build_element_index
+from moex_dams.application.export_requirements import (
+    CSV_COLUMNS,
+    collect_requirement_rows,
+    default_catalog_paths,
+    write_requirements_csv,
+)
 from moex_dams.application.repository import DamsAssetRepository
 from moex_dams.application.rules_runner import (
     RuleSet,
@@ -65,6 +71,7 @@ from moex_dams.rules.relation_terms import (
 from moex_dams.rules.structural import check_structural
 
 __all__ = [
+    "CSV_COLUMNS",
     "CascadeCardinality",
     "CascadeFamily",
     "DamsAssetRepository",
@@ -99,6 +106,8 @@ __all__ = [
     "check_relation_terms",
     "check_relation_terms_body",
     "check_structural",
+    "collect_requirement_rows",
+    "default_catalog_paths",
     "default_dams_rule_sets",
     "diff_graphs",
     "diff_implementations",
@@ -113,4 +122,5 @@ __all__ = [
     "run_rule_sets",
     "write_dbml_artifact",
     "write_er_diagram_artifact",
+    "write_requirements_csv",
 ]

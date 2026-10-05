@@ -1,0 +1,378 @@
+{
+  "version": 1,
+  "profile": "physical",
+  "generator": "moex-dams-er-scene/0.1",
+  "package_id": "dams:model/crm/0.1.0",
+  "nodes": [
+    {
+      "name": "phys_CONTACT",
+      "title": "Контакт",
+      "element_id": "dams:physical/crm/phys_CONTACT",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uuid",
+          "element_id": "dams:physical/crm/phys_CONTACT/Id",
+          "keys": []
+        },
+        {
+          "name": "Account",
+          "type": "uuid",
+          "element_id": "dams:physical/crm/phys_CONTACT/Account",
+          "keys": []
+        },
+        {
+          "name": "Name",
+          "type": "varchar_500_",
+          "element_id": "dams:physical/crm/phys_CONTACT/Name",
+          "keys": []
+        },
+        {
+          "name": "MoexFullNameEn",
+          "type": "varchar_500_",
+          "element_id": "dams:physical/crm/phys_CONTACT/MoexFullNameEn",
+          "keys": []
+        },
+        {
+          "name": "MoexEio",
+          "type": "boolean",
+          "element_id": "dams:physical/crm/phys_CONTACT/MoexEio",
+          "keys": []
+        },
+        {
+          "name": "Surname",
+          "type": "varchar_250_",
+          "element_id": "dams:physical/crm/phys_CONTACT/Surname",
+          "keys": []
+        },
+        {
+          "name": "GivenName",
+          "type": "varchar_250_",
+          "element_id": "dams:physical/crm/phys_CONTACT/GivenName",
+          "keys": []
+        },
+        {
+          "name": "MiddleName",
+          "type": "varchar_250_",
+          "element_id": "dams:physical/crm/phys_CONTACT/MiddleName",
+          "keys": []
+        },
+        {
+          "name": "Gender",
+          "type": "uuid",
+          "element_id": "dams:physical/crm/phys_CONTACT/Gender",
+          "keys": []
+        },
+        {
+          "name": "BirthDate",
+          "type": "date",
+          "element_id": "dams:physical/crm/phys_CONTACT/BirthDate",
+          "keys": []
+        },
+        {
+          "name": "Phone",
+          "type": "varchar_250_",
+          "element_id": "dams:physical/crm/phys_CONTACT/Phone",
+          "keys": []
+        },
+        {
+          "name": "MobilePhone",
+          "type": "varchar_250_",
+          "element_id": "dams:physical/crm/phys_CONTACT/MobilePhone",
+          "keys": []
+        },
+        {
+          "name": "Email",
+          "type": "varchar_250_",
+          "element_id": "dams:physical/crm/phys_CONTACT/Email",
+          "keys": []
+        },
+        {
+          "name": "Type",
+          "type": "uuid",
+          "element_id": "dams:physical/crm/phys_CONTACT/Type",
+          "keys": []
+        },
+        {
+          "name": "MoexPassportId",
+          "type": "varchar_250_",
+          "element_id": "dams:physical/crm/phys_CONTACT/MoexPassportId",
+          "keys": []
+        },
+        {
+          "name": "MoexMdmId",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/phys_CONTACT/MoexMdmId",
+          "keys": []
+        },
+        {
+          "name": "MoexUCDId",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/phys_CONTACT/MoexUCDId",
+          "keys": []
+        }
+      ]
+    },
+    {
+      "name": "ACCOUNT",
+      "title": "Клиент",
+      "element_id": "dams:physical/crm/ACCOUNT",
+      "columns": [
+        {
+          "name": "ID_",
+          "type": "uuid",
+          "element_id": "dams:physical/crm/ACCOUNT/ID",
+          "keys": []
+        },
+        {
+          "name": "PrimaryContact",
+          "type": "uuid",
+          "element_id": "dams:physical/crm/ACCOUNT/PrimaryContact",
+          "keys": []
+        },
+        {
+          "name": "PrimaryAccount",
+          "type": "uuid",
+          "element_id": "dams:physical/crm/ACCOUNT/PrimaryAccount",
+          "keys": []
+        },
+        {
+          "name": "Parent",
+          "type": "uuid",
+          "element_id": "dams:physical/crm/ACCOUNT/Parent",
+          "keys": []
+        },
+        {
+          "name": "MoexPaarentCompanyHolding",
+          "type": "boolean",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexPaarentCompanyHolding",
+          "keys": []
+        },
+        {
+          "name": "Name",
+          "type": "varchar_500_",
+          "element_id": "dams:physical/crm/ACCOUNT/Name",
+          "keys": []
+        },
+        {
+          "name": "MoexFullAlternativeName",
+          "type": "varchar_500_",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexFullAlternativeName",
+          "keys": []
+        },
+        {
+          "name": "AlternativeName",
+          "type": "varchar_500_",
+          "element_id": "dams:physical/crm/ACCOUNT/AlternativeName",
+          "keys": []
+        },
+        {
+          "name": "MoexEngFullAlternativeName",
+          "type": "varchar_500_",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexEngFullAlternativeName",
+          "keys": []
+        },
+        {
+          "name": "Phone_",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/ACCOUNT/Phone",
+          "keys": []
+        },
+        {
+          "name": "MoexEmail",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexEmail",
+          "keys": []
+        },
+        {
+          "name": "MoexINN",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexINN",
+          "keys": []
+        },
+        {
+          "name": "MoexKPP",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexKPP",
+          "keys": []
+        },
+        {
+          "name": "MoexOGRN",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexOGRN",
+          "keys": []
+        },
+        {
+          "name": "MoexOKVED",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexOKVED",
+          "keys": []
+        },
+        {
+          "name": "MoexCountryCode",
+          "type": "uuid",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexCountryCode",
+          "keys": []
+        },
+        {
+          "name": "MoexRegNumNonResident",
+          "type": "varchar_250_",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexRegNumNonResident",
+          "keys": []
+        },
+        {
+          "name": "MoexKIO",
+          "type": "varchar_250_",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexKIO",
+          "keys": []
+        },
+        {
+          "name": "MoexMDMId",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexMDMId",
+          "keys": []
+        },
+        {
+          "name": "MoexCBDId",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexCBDId",
+          "keys": []
+        },
+        {
+          "name": "MoexKBDId",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexKBDId",
+          "keys": []
+        },
+        {
+          "name": "MoexUnicodeCBD",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexUnicodeCBD",
+          "keys": []
+        },
+        {
+          "name": "MoexUCDId",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexUCDId",
+          "keys": []
+        },
+        {
+          "name": "MoexCodeNsd",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/ACCOUNT/MoexCodeNsd",
+          "keys": []
+        }
+      ]
+    },
+    {
+      "name": "phys_LEAD",
+      "title": "Привлечение",
+      "element_id": "dams:physical/crm/phys_LEAD",
+      "columns": [
+        {
+          "name": "ApplicationId",
+          "type": "uuid",
+          "element_id": "dams:physical/crm/phys_LEAD/ApplicationId",
+          "keys": []
+        },
+        {
+          "name": "MoexAccount",
+          "type": "varchar_250_",
+          "element_id": "dams:physical/crm/phys_LEAD/MoexAccount",
+          "keys": []
+        },
+        {
+          "name": "MoexApplicationNumber",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/phys_LEAD/MoexApplicationNumber",
+          "keys": []
+        },
+        {
+          "name": "MoexApplicationTitle",
+          "type": "varchar_250_",
+          "element_id": "dams:physical/crm/phys_LEAD/MoexApplicationTitle",
+          "keys": []
+        },
+        {
+          "name": "MoexApplicationSource",
+          "type": "uuid",
+          "element_id": "dams:physical/crm/phys_LEAD/MoexApplicationSource",
+          "keys": []
+        },
+        {
+          "name": "MoexFunnelType",
+          "type": "uuid",
+          "element_id": "dams:physical/crm/phys_LEAD/MoexFunnelType",
+          "keys": []
+        },
+        {
+          "name": "MoexContact",
+          "type": "varchar_250_",
+          "element_id": "dams:physical/crm/phys_LEAD/MoexContact",
+          "keys": []
+        },
+        {
+          "name": "MobilePhone",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/phys_LEAD/MobilePhone",
+          "keys": []
+        },
+        {
+          "name": "Email",
+          "type": "varchar_250_",
+          "element_id": "dams:physical/crm/phys_LEAD/Email",
+          "keys": []
+        },
+        {
+          "name": "ModifiedOn",
+          "type": "timestamp",
+          "element_id": "dams:physical/crm/phys_LEAD/ModifiedOn",
+          "keys": []
+        },
+        {
+          "name": "CreatedOn",
+          "type": "timestamp",
+          "element_id": "dams:physical/crm/phys_LEAD/CreatedOn",
+          "keys": []
+        },
+        {
+          "name": "MoexSiteCreatedOn",
+          "type": "timestamp",
+          "element_id": "dams:physical/crm/phys_LEAD/MoexSiteCreatedOn",
+          "keys": []
+        },
+        {
+          "name": "MoexInn",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/phys_LEAD/MoexInn",
+          "keys": []
+        },
+        {
+          "name": "MoexPassportId",
+          "type": "varchar_250_",
+          "element_id": "dams:physical/crm/phys_LEAD/MoexPassportId",
+          "keys": []
+        },
+        {
+          "name": "MoexIDApplications",
+          "type": "varchar_250_",
+          "element_id": "dams:physical/crm/phys_LEAD/MoexIDApplications",
+          "keys": []
+        },
+        {
+          "name": "MoexLkkStatus",
+          "type": "uuid",
+          "element_id": "dams:physical/crm/phys_LEAD/MoexLkkStatus",
+          "keys": []
+        },
+        {
+          "name": "MoexUcdId",
+          "type": "varchar_50_",
+          "element_id": "dams:physical/crm/phys_LEAD/MoexUcdId",
+          "keys": []
+        }
+      ]
+    }
+  ],
+  "edges": []
+}

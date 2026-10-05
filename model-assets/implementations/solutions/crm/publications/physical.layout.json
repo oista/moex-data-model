@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "profile": "physical",
+  "nodes": {
+    "dams:physical/crm/ACCOUNT": {
+      "x": 40,
+      "y": 40,
+      "color": "#0F9D58"
+    },
+    "dams:physical/crm/phys_CONTACT": {
+      "x": 40,
+      "y": 320,
+      "color": "#0F9D58"
+    },
+    "dams:physical/crm/phys_LEAD": {
+      "x": 40,
+      "y": 600,
+      "color": "#0F9D58"
+    }
+  },
+  "edges": {}
+}

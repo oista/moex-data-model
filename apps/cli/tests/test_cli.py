@@ -458,3 +458,25 @@ def test_import_solution_fixture(
     assert (out / "implementation.yaml").is_file()
     assert (out / "publish.yaml").is_file()
     assert "import-solution" in captured.out
+
+
+def test_export_requirements_csv(
+    repo_root: Path,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    out = tmp_path / "requirements.csv"
+    code = main(
+        ["export-requirements", "--root", str(repo_root), "--out", str(out)]
+    )
+    captured = capsys.readouterr()
+    assert code == 0, captured.out
+    assert out.is_file()
+    assert "rows=34" in captured.out
+    text = out.read_text(encoding="utf-8-sig")
+    assert text.splitlines()[0].startswith(
+        "catalog_id,catalog_name,source_path,element_id,code"
+    )
+    assert "GEN-001" in text
+    assert "CM-GEN-001" in text
+    assert "У пакета модели данных ИТ-решения" in text
