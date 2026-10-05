@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "profile": "physical",
+  "nodes": {
+    "dams:physical/esed/dvsys_binaries": {
+      "x": 20,
+      "y": 40,
+      "color": "#243044"
+    },
+    "dams:physical/esed/RefStaff_Employees": {
+      "x": 300,
+      "y": 40,
+      "color": "#243044"
+    },
+    "dams:physical/esed/RefStaff_Units": {
+      "x": 300,
+      "y": 260,
+      "color": "#243044"
+    },
+    "dams:physical/esed/dvsys_files": {
+      "x": 20,
+      "y": 320,
+      "color": "#243044"
+    },
+    "dams:physical/esed/dvsys_instances_date": {
+      "x": 560,
+      "y": 160,
+      "color": "#243044"
+    },
+    "dams:physical/esed/RefPartners_Companies": {
+      "x": 1060,
+      "y": 40,
+      "color": "#243044"
+    },
+    "dams:physical/esed/RefPartners_Employees": {
+      "x": 1060,
+      "y": 320,
+      "color": "#243044"
+    },
+    "dams:physical/esed/RefKinds_CardKinds": {
+      "x": 1060,
+      "y": 500,
+      "color": "#243044"
+    },
+    "dams:physical/esed/RefStates_States": {
+      "x": 1060,
+      "y": 620,
+      "color": "#243044"
+    },
+    "dams:physical/esed/dvsys_instances": {
+      "x": 280,
+      "y": 520,
+      "color": "#243044"
+    },
+    "dams:physical/esed/CardDocument_ExternalPoaInfo": {
+      "x": 20,
+      "y": 720,
+      "color": "#243044"
+    },
+    "dams:physical/esed/RefBaseUniversal_Items": {
+      "x": 600,
+      "y": 860,
+      "color": "#243044"
+    }
+  },
+  "edges": {}
+}

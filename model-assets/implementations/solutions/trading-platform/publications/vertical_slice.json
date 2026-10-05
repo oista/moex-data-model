@@ -2,28 +2,21 @@
   "summary": {
     "overall_result": "conformant_with_warnings",
     "implementation_id": "moex:implementation:trading:1.0.0",
-    "revision": "e0963cb9e394",
-    "content_digest": "sha256:e0963cb9e394021178ee08aa09f088c88a04f3368484d4edcb98e67570364419",
+    "revision": "2753b5d4c790",
+    "content_digest": "sha256:2753b5d4c790cc48ac31b23e58d728a93deedeb2435c3b543ef84fed983f7edc",
     "package_id": "dams:model/trading/1.0.0",
-    "node_count": 11,
-    "edge_count": 22,
+    "node_count": 10,
+    "edge_count": 20,
     "is_conformant": true,
-    "bundle_digest": "sha256:0e47a2c46a8ad370647588724c8f8d5f8abe0fce9fcc3d4592d66c8911749f81"
+    "bundle_digest": "sha256:e05165018343d5303a59289ecb527ecf35574049619ae9bf4a01442902ee9a93"
   },
   "nodes": [
     {
       "id": "dams:model/trading/1.0.0",
       "name": "trading_solution_model",
       "title": "Модель данных торгового решения",
-      "description": "Черновой пример модели одного ИТ-решения (dams-data-model / solution). Local Client conceptual entity is transitional; canonical Party concepts live in moex-enterprise-conceptual-model. TradingClient realizes LegalEntity.\n",
+      "description": "Черновой пример модели одного ИТ-решения (dams-data-model / solution). Canonical Client and Party concepts live in moex-enterprise-conceptual-model. TradingClient realizes enterprise dams:concept/Client (ADR-029).\n",
       "kind": "package"
-    },
-    {
-      "id": "dams:concept/Client",
-      "name": "Client",
-      "title": "Клиент",
-      "description": "Переходное локальное понятие решения. Canonical SoT — dams:concept/LegalEntity в enterprise conceptual model.\n",
-      "kind": "conceptual_entity"
     },
     {
       "id": "dams:context/trading",
@@ -68,10 +61,10 @@
       "kind": "field"
     },
     {
-      "id": "dams:mapping/trading/client-realizes-legal-entity",
-      "name": "realizes_TradingClient_LegalEntity",
+      "id": "dams:mapping/trading/client-realizes-client",
+      "name": "realizes_TradingClient_Client",
       "title": null,
-      "description": "Solution TradingClient realizes enterprise conceptual LegalEntity (ADR-021).\n",
+      "description": "Solution TradingClient realizes enterprise conceptual Client (ADR-021/029).\n",
       "kind": "mapping"
     },
     {
@@ -91,12 +84,6 @@
   ],
   "edges": [
     {
-      "id": "dams:model/trading/1.0.0->dams:concept/Client:contains",
-      "source": "dams:model/trading/1.0.0",
-      "target": "dams:concept/Client",
-      "kind": "contains"
-    },
-    {
       "id": "dams:model/trading/1.0.0->dams:context/trading:contains",
       "source": "dams:model/trading/1.0.0",
       "target": "dams:context/trading",
@@ -112,12 +99,6 @@
       "id": "dams:logical/trading/Client->dams:concept/Client:conceptual_ref",
       "source": "dams:logical/trading/Client",
       "target": "dams:concept/Client",
-      "kind": "conceptual_ref"
-    },
-    {
-      "id": "dams:logical/trading/Client->dams:concept/LegalEntity:conceptual_ref",
-      "source": "dams:logical/trading/Client",
-      "target": "dams:concept/LegalEntity",
       "kind": "conceptual_ref"
     },
     {
@@ -169,21 +150,21 @@
       "kind": "physical_object_ref"
     },
     {
-      "id": "dams:model/trading/1.0.0->dams:mapping/trading/client-realizes-legal-entity:contains",
+      "id": "dams:model/trading/1.0.0->dams:mapping/trading/client-realizes-client:contains",
       "source": "dams:model/trading/1.0.0",
-      "target": "dams:mapping/trading/client-realizes-legal-entity",
+      "target": "dams:mapping/trading/client-realizes-client",
       "kind": "contains"
     },
     {
-      "id": "dams:mapping/trading/client-realizes-legal-entity->dams:logical/trading/Client:maps_to",
-      "source": "dams:mapping/trading/client-realizes-legal-entity",
+      "id": "dams:mapping/trading/client-realizes-client->dams:logical/trading/Client:maps_to",
+      "source": "dams:mapping/trading/client-realizes-client",
       "target": "dams:logical/trading/Client",
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/trading/client-realizes-legal-entity->dams:concept/LegalEntity:maps_to",
-      "source": "dams:mapping/trading/client-realizes-legal-entity",
-      "target": "dams:concept/LegalEntity",
+      "id": "dams:mapping/trading/client-realizes-client->dams:concept/Client:maps_to",
+      "source": "dams:mapping/trading/client-realizes-client",
+      "target": "dams:concept/Client",
       "kind": "maps_to"
     },
     {
@@ -247,6 +228,22 @@
       "phase": "corporate_semantics",
       "message": "LogicalEntity \"dams:logical/trading/Client\" has governance confidential but no security_classification. Required by: Если к сущности применена повышенная классификация управления доступом, рекомендуется отдельно указать требуемый режим защиты данных. Remediation: Укажите security_classification (internal/confidential/restricted) для сущностей с confidential/restricted governance.",
       "subject_ref": "dams:logical/trading/Client"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:3",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/trading/Client\" declares data_owner_ref equal to effective value inherited from \"dams:model/trading/1.0.0\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/trading/Client"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:4",
+      "code": "DAMS-CASCADE-redundant-override",
+      "severity": "info",
+      "phase": "corporate_semantics",
+      "message": "Element \"dams:logical/trading/Client/clientId\" declares governance_classification equal to effective value inherited from \"dams:logical/trading/Client\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "subject_ref": "dams:logical/trading/Client/clientId"
     }
   ],
   "model_assessment": [
@@ -285,6 +282,30 @@
       "remediation": "Укажите security_classification (internal/confidential/restricted) для сущностей с confidential/restricted governance.",
       "source_location": "dams:logical/trading/Client",
       "diagnostic_code": "DAMS-REQ-CLS-002.c1"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:3",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/trading/Client",
+      "finding": "Element \"dams:logical/trading/Client\" declares data_owner_ref equal to effective value inherited from \"dams:model/trading/1.0.0\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/trading/Client",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
+    },
+    {
+      "id": "DAMS-CASCADE-redundant-override:4",
+      "status": "fail",
+      "requirement_code": null,
+      "statement": null,
+      "subject": "dams:logical/trading/Client/clientId",
+      "finding": "Element \"dams:logical/trading/Client/clientId\" declares governance_classification equal to effective value inherited from \"dams:logical/trading/Client\" (redundant override).",
+      "severity": "info",
+      "remediation": "Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+      "source_location": "dams:logical/trading/Client/clientId",
+      "diagnostic_code": "DAMS-CASCADE-redundant-override"
     }
   ],
   "relations": [
@@ -353,7 +374,7 @@
             "title": "revision",
             "description": null,
             "attributes": {
-              "value": "e0963cb9e394"
+              "value": "2753b5d4c790"
             },
             "children": [],
             "tags": [],
@@ -364,7 +385,7 @@
             "title": "content_digest",
             "description": null,
             "attributes": {
-              "value": "sha256:e0963cb9e394021178ee08aa09f088c88a04f3368484d4edcb98e67570364419"
+              "value": "sha256:2753b5d4c790cc48ac31b23e58d728a93deedeb2435c3b543ef84fed983f7edc"
             },
             "children": [],
             "tags": [],
@@ -375,7 +396,7 @@
             "title": "nodes",
             "description": null,
             "attributes": {
-              "value": 11
+              "value": 10
             },
             "children": [],
             "tags": [],
@@ -386,7 +407,7 @@
             "title": "edges",
             "description": null,
             "attributes": {
-              "value": 22
+              "value": 20
             },
             "children": [],
             "tags": [],
@@ -415,22 +436,10 @@
           {
             "id": "dams:model/trading/1.0.0",
             "title": "Модель данных торгового решения",
-            "description": "Черновой пример модели одного ИТ-решения (dams-data-model / solution). Local Client conceptual entity is transitional; canonical Party concepts live in moex-enterprise-conceptual-model. TradingClient realizes LegalEntity.\n",
+            "description": "Черновой пример модели одного ИТ-решения (dams-data-model / solution). Canonical Client and Party concepts live in moex-enterprise-conceptual-model. TradingClient realizes enterprise dams:concept/Client (ADR-029).\n",
             "attributes": {
               "kind": "package",
               "name": "trading_solution_model"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:concept/Client",
-            "title": "Клиент",
-            "description": "Переходное локальное понятие решения. Canonical SoT — dams:concept/LegalEntity в enterprise conceptual model.\n",
-            "attributes": {
-              "kind": "conceptual_entity",
-              "name": "Client"
             },
             "children": [],
             "tags": [],
@@ -509,12 +518,12 @@
             "source_ref": null
           },
           {
-            "id": "dams:mapping/trading/client-realizes-legal-entity",
-            "title": "realizes_TradingClient_LegalEntity",
-            "description": "Solution TradingClient realizes enterprise conceptual LegalEntity (ADR-021).\n",
+            "id": "dams:mapping/trading/client-realizes-client",
+            "title": "realizes_TradingClient_Client",
+            "description": "Solution TradingClient realizes enterprise conceptual Client (ADR-021/029).\n",
             "attributes": {
               "kind": "mapping",
-              "name": "realizes_TradingClient_LegalEntity"
+              "name": "realizes_TradingClient_Client"
             },
             "children": [],
             "tags": [],
@@ -599,6 +608,32 @@
               "severity": "warning",
               "phase": "corporate_semantics",
               "subject_ref": "dams:logical/trading/Client"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:3",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/trading/Client\" declares data_owner_ref equal to effective value inherited from \"dams:model/trading/1.0.0\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/trading/Client"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "DAMS-CASCADE-redundant-override:4",
+            "title": "DAMS-CASCADE-redundant-override",
+            "description": "Element \"dams:logical/trading/Client/clientId\" declares governance_classification equal to effective value inherited from \"dams:logical/trading/Client\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
+            "attributes": {
+              "severity": "info",
+              "phase": "corporate_semantics",
+              "subject_ref": "dams:logical/trading/Client/clientId"
             },
             "children": [],
             "tags": [],

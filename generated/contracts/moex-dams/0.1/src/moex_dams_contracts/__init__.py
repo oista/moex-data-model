@@ -715,7 +715,7 @@ class ITPlatform(RegistryEntry):
 
 class BusinessDomain(RegistryEntry):
     """
-    Бизнес-домен или предметная область; мастер определяется архитектурным governance.
+    Бизнес-домен или предметная область; мастер определяется архитектурным governance
     """
     parent_domain_ref: Optional[str] = Field(default=None)
     registry_id: str = Field(default=...)

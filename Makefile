@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check viewer-serve packages-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples validate-requirements generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate
+.PHONY: viewer viewer-check viewer-serve packages-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples validate-requirements generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate ontology-check
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -92,6 +92,10 @@ publish-gate:
 # Digest check: contracts + json-schema + Stage 6/7 artifact matrix + bundle vs regenerate
 compare-golden:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/compare-golden.ps1
+
+# Stage 8 ontology extras (pySHACL + linkml-owl); outside Stage 0 make check
+ontology-check:
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/ontology-check.ps1
 
 # Slice + CLI + architecture + schema lint/validate + path-layout guards.
 # Without make:

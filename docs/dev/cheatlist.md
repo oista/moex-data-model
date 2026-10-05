@@ -20,5 +20,9 @@ moex-model map --sssom model-assets/transformations/mappings/dams-fibo.sssom.yam
 moex-model map --extract-schema packages/semantic-mappings/tests/fixtures/mapped_schema.yaml --json
 
 # serv
-cd c:\Users\bons1\IdeaProjects\moex-data-model\apps\viewer
-python -m moex_publication_viewer.cli serve --root . --port 8877
+cd c:\Users\bons1\IdeaProjects\moex-data-model\
+py -3.14 -m moex_publication_viewer.cli serve --root . --port 8877
+
+#req import
+cd c:\Users\bons1\IdeaProjects\moex-data-model
+py -3.14 -m moex_model_cli export-requirements --root . --out tmp/requirements.xlsx

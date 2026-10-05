@@ -16,12 +16,16 @@ from moex_publication_viewer.normalizers.helpers import (
     section_meta,
     select_path,
 )
+from moex_publication_viewer.normalizers.conceptual_entity_links_projection import (
+    project_conceptual_entity_links,
+)
 from moex_publication_viewer.normalizers.model_glossary_projection import (
     project_model_glossary,
 )
 
 FLATTENED_REQUIREMENTS_SELECT = "flattened_requirements"
 MODEL_GLOSSARY_SELECT = "model_glossary"
+CONCEPTUAL_ENTITY_LINKS_SELECT = "conceptual_entity_links"
 
 
 class YamlNormalizer:
@@ -32,11 +36,17 @@ class YamlNormalizer:
             raise NormalizeError(f"cannot parse YAML {source_path}: {exc}") from exc
 
         select = section.source.select
-        skip_edit = select in (FLATTENED_REQUIREMENTS_SELECT, MODEL_GLOSSARY_SELECT)
+        skip_edit = select in (
+            FLATTENED_REQUIREMENTS_SELECT,
+            MODEL_GLOSSARY_SELECT,
+            CONCEPTUAL_ENTITY_LINKS_SELECT,
+        )
         if select == FLATTENED_REQUIREMENTS_SELECT:
             selected = flatten_publication_requirements(data)
         elif select == MODEL_GLOSSARY_SELECT:
             selected = project_model_glossary(data)
+        elif select == CONCEPTUAL_ENTITY_LINKS_SELECT:
+            selected = project_conceptual_entity_links(data)
         else:
             try:
                 selected = select_path(data, select)

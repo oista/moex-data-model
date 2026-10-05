@@ -563,6 +563,18 @@
 .section-head h2 { margin: 0; font-size: 16px; flex: 1; }
 .section-desc { color: var(--muted); margin: 8px 0 12px; }
 .section-toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; align-items: center; }
+.section-toolbar input[type="search"],
+.section-toolbar select {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  background: var(--surface-1);
+  color: var(--text-primary);
+}
+.section-toolbar input[type="search"]::placeholder {
+  color: var(--text-secondary);
+  opacity: 1;
+}
 .objects-pub-group { margin: 12px 0 4px; }
 .objects-pub-group h3 {
   margin: 0 0 8px;

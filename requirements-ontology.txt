@@ -1,0 +1,5 @@
+# Optional Stage 8 ontology extras (not part of Stage 0 / requirements-linkml.txt).
+# Install: pip install -r requirements-ontology.txt
+# Or: pip install -e "./apps/cli[ontology]"
+pyshacl==0.40.1
+linkml-owl>=1.7,<2.0

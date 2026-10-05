@@ -358,6 +358,33 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
 
+    ontology = sub.add_parser(
+        "ontology-report",
+        help="DAMS schema URI profile or URI semantic diff (ADR-030)",
+    )
+    _add_slice_args(ontology)
+    ontology.add_argument(
+        "--from",
+        dest="from_schema",
+        type=Path,
+        default=None,
+        help="Old schema YAML for URI diff",
+    )
+    ontology.add_argument(
+        "--to",
+        dest="to_schema",
+        type=Path,
+        default=None,
+        help="New schema YAML for URI diff",
+    )
+    ontology.add_argument(
+        "--out",
+        type=Path,
+        default=None,
+        help="Write ontology-profile JSON (also writes sibling .md)",
+    )
+    ontology.add_argument("--json", action="store_true", help="Print JSON")
+
     return parser
 
 
@@ -515,6 +542,17 @@ def main(argv: list[str] | None = None) -> int:
             paths,
             out=args.out,
             catalogs=args.catalogs,
+        )
+    elif args.command == "ontology-report":
+        from moex_model_cli.commands.ontology_report import run_ontology_report
+
+        code, text = run_ontology_report(
+            paths,
+            schema=getattr(args, "schema", None),
+            from_schema=getattr(args, "from_schema", None),
+            to_schema=getattr(args, "to_schema", None),
+            as_json=getattr(args, "json", False),
+            out=getattr(args, "out", None),
         )
     else:
         return 2

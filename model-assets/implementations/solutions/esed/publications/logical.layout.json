@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "profile": "logical",
+  "nodes": {
+    "dams:logical/esed/file_binary": {
+      "x": 20,
+      "y": 40,
+      "color": "#243044"
+    },
+    "dams:logical/esed/employee": {
+      "x": 300,
+      "y": 40,
+      "color": "#243044"
+    },
+    "dams:logical/esed/division": {
+      "x": 300,
+      "y": 260,
+      "color": "#243044"
+    },
+    "dams:logical/esed/file": {
+      "x": 20,
+      "y": 320,
+      "color": "#243044"
+    },
+    "dams:logical/esed/document": {
+      "x": 560,
+      "y": 160,
+      "color": "#243044"
+    },
+    "dams:logical/esed/organization": {
+      "x": 1060,
+      "y": 40,
+      "color": "#243044"
+    },
+    "dams:logical/esed/organization_employee": {
+      "x": 1060,
+      "y": 320,
+      "color": "#243044"
+    },
+    "dams:logical/esed/common_type": {
+      "x": 1060,
+      "y": 500,
+      "color": "#243044"
+    },
+    "dams:logical/esed/common_state": {
+      "x": 1060,
+      "y": 620,
+      "color": "#243044"
+    },
+    "dams:logical/esed/instance": {
+      "x": 280,
+      "y": 520,
+      "color": "#243044"
+    },
+    "dams:logical/esed/attorney_check_info": {
+      "x": 20,
+      "y": 720,
+      "color": "#243044"
+    },
+    "dams:logical/esed/universal_item": {
+      "x": 600,
+      "y": 860,
+      "color": "#243044"
+    }
+  },
+  "edges": {
+    "dams:rel/esed/document_to_instance_via_document_id": {
+      "points": [
+        {
+          "x": 500,
+          "y": 560
+        }
+      ]
+    }
+  }
+}

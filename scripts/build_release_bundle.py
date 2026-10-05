@@ -63,6 +63,11 @@ BUNDLE_PARTS: tuple[tuple[str, str, str | None], ...] = (
         "rdf",
         "generated/manifests/moex-dams-rdf.json",
     ),
+    (
+        "generated/artifacts/moex-dams/0.1/ontology-profile.json",
+        "ontology-profile",
+        "generated/manifests/moex-dams-ontology-profile.json",
+    ),
     ("requirements-linkml.txt", "toolchain", None),
 )
 

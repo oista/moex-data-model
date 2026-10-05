@@ -6,7 +6,7 @@ supersedes: []
 superseded_by: MODELING_ARCHITECTURE.md
 ---
 
-# ADR index (001–029)
+# ADR index (001–030)
 
 **Status:** Proposed drafts  
 **Date:** 2026-09-28  
@@ -47,6 +47,7 @@ Viewer-решения живут отдельно: [viewer-decisions.md](../arch
 | [ADR-027](ADR-027-glossary-term-relations.md) | Glossary term relations (hierarchy vs associative vs equivalence) | Proposed; See also derived; no related-in-tree; SKOS = corporate projection |
 | [ADR-028](ADR-028-package-documentation-section.md) | Package documentation section | Proposed; kind `documentation`; `docs/toc.yaml` + consumer-context + reserved `docs/adr/` |
 | [ADR-029](ADR-029-cdm-from-er-sketch-and-realization.md) | ER sketch → CDM; no ConceptualAttribute; realization completeness (LDM-008) | Proposed; trading/party slice; warning only |
+| [ADR-030](ADR-030-dams-uri-and-prefix-policy.md) | DAMS URI and prefix policy (Stage 8 Ontology) | Proposed; schema lint MOEX-ONT-*; ontology-profile |
 
 ## Как принимать
 

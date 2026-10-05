@@ -11,5 +11,7 @@
 | `python/moex_dams.py` | Regenerable gen-python |
 | `docs/` | Regenerable gen-doc — **git:** only `index.md` + `README.md`; full tree after `make generate-artifacts` |
 | `moex-dams.rdf.ttl` | Regenerable gen-rdf |
+| `ontology-profile.json` | Stage 8 URI/prefix report (`compare-golden` + release bundle) |
+| `ontology-profile.md` | Human-readable summary of the same report |
 
 Regenerate: `make generate-artifacts` or `moex-model compile --artifacts`.

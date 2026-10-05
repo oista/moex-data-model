@@ -1,0 +1,9 @@
+
+element_id: dams:model/spike/1.0.0
+name: spike_package
+title: Spike package
+description: Minimal ModelPackage for SHACL spike.
+lifecycle_status: draft
+api_version: dams.moex/v0.1
+model_version: 1.0.0
+implementation_scope: solution

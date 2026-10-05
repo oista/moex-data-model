@@ -1,0 +1,501 @@
+{
+  "version": 1,
+  "profile": "physical",
+  "generator": "moex-dams-er-scene/0.1",
+  "package_id": "dams:model/esed/0.1.0",
+  "nodes": [
+    {
+      "name": "CardDocument_ExternalPoaInfo",
+      "title": "attorney_check_info",
+      "element_id": "dams:physical/esed/CardDocument_ExternalPoaInfo",
+      "columns": [
+        {
+          "name": "InstanceID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/CardDocument_ExternalPoaInfo/InstanceID",
+          "keys": []
+        },
+        {
+          "name": "PowersValidationStatus",
+          "type": "Integer",
+          "element_id": "dams:physical/esed/CardDocument_ExternalPoaInfo/PowersValidationStatus",
+          "keys": []
+        },
+        {
+          "name": "MainFilesSignatureStatus",
+          "type": "Integer",
+          "element_id": "dams:physical/esed/CardDocument_ExternalPoaInfo/MainFilesSignatureStatus",
+          "keys": []
+        },
+        {
+          "name": "MainFilesRepresentativeSignatureStatus",
+          "type": "Integer",
+          "element_id": "dams:physical/esed/CardDocument_ExternalPoaInfo/MainFilesRepresentativeSignatureStatus",
+          "keys": []
+        },
+        {
+          "name": "ValidationJsonData",
+          "type": "Text",
+          "element_id": "dams:physical/esed/CardDocument_ExternalPoaInfo/ValidationJsonData",
+          "keys": []
+        }
+      ]
+    },
+    {
+      "name": "RefStates_States",
+      "title": "common_state",
+      "element_id": "dams:physical/esed/RefStates_States",
+      "columns": [
+        {
+          "name": "RowID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/RefStates_States/RowID",
+          "keys": []
+        },
+        {
+          "name": "DefaultName",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefStates_States/DefaultName",
+          "keys": []
+        }
+      ]
+    },
+    {
+      "name": "RefKinds_CardKinds",
+      "title": "common_type",
+      "element_id": "dams:physical/esed/RefKinds_CardKinds",
+      "columns": [
+        {
+          "name": "RowID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/RefKinds_CardKinds/RowID",
+          "keys": []
+        },
+        {
+          "name": "Name",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefKinds_CardKinds/Name",
+          "keys": []
+        }
+      ]
+    },
+    {
+      "name": "RefStaff_Units",
+      "title": "division",
+      "element_id": "dams:physical/esed/RefStaff_Units",
+      "columns": [
+        {
+          "name": "RowID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/RefStaff_Units/RowID",
+          "keys": []
+        },
+        {
+          "name": "Name",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefStaff_Units/Name",
+          "keys": []
+        },
+        {
+          "name": "ParentTreeRowID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/RefStaff_Units/ParentTreeRowID",
+          "keys": []
+        }
+      ]
+    },
+    {
+      "name": "dvsys_instances_date",
+      "title": "document",
+      "element_id": "dams:physical/esed/dvsys_instances_date",
+      "columns": [
+        {
+          "name": "InstanceID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_instances_date/InstanceID",
+          "keys": []
+        },
+        {
+          "name": "RegDate",
+          "type": "DateTime",
+          "element_id": "dams:physical/esed/dvsys_instances_date/RegDate",
+          "keys": []
+        },
+        {
+          "name": "RegNumber",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_instances_date/RegNumber",
+          "keys": []
+        },
+        {
+          "name": "ExternalNumber",
+          "type": "Text",
+          "element_id": "dams:physical/esed/dvsys_instances_date/ExternalNumber",
+          "keys": []
+        },
+        {
+          "name": "Registrar",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_instances_date/Registrar",
+          "keys": []
+        },
+        {
+          "name": "Author",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_instances_date/Author",
+          "keys": []
+        },
+        {
+          "name": "Name",
+          "type": "Text",
+          "element_id": "dams:physical/esed/dvsys_instances_date/Name",
+          "keys": []
+        },
+        {
+          "name": "Content",
+          "type": "Text",
+          "element_id": "dams:physical/esed/dvsys_instances_date/Content",
+          "keys": []
+        },
+        {
+          "name": "ResponsDepartment",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_instances_date/ResponsDepartment",
+          "keys": []
+        },
+        {
+          "name": "Kind",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_instances_date/Kind",
+          "keys": []
+        },
+        {
+          "name": "State",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_instances_date/State",
+          "keys": []
+        },
+        {
+          "name": "StatusId",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_instances_date/StatusId",
+          "keys": []
+        },
+        {
+          "name": "DeliveryTypeId",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_instances_date/DeliveryTypeId",
+          "keys": []
+        },
+        {
+          "name": "DeliveryDate",
+          "type": "DateTime",
+          "element_id": "dams:physical/esed/dvsys_instances_date/DeliveryDate",
+          "keys": []
+        },
+        {
+          "name": "SenderOrg",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_instances_date/SenderOrg",
+          "keys": []
+        },
+        {
+          "name": "SenderPerson",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_instances_date/SenderPerson",
+          "keys": []
+        },
+        {
+          "name": "AnswerNotNeed",
+          "type": "Boolean",
+          "element_id": "dams:physical/esed/dvsys_instances_date/AnswerNotNeed",
+          "keys": []
+        },
+        {
+          "name": "ItemID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_instances_date/ItemID",
+          "keys": []
+        },
+        {
+          "name": "IndocProcessingStatus",
+          "type": "Text",
+          "element_id": "dams:physical/esed/dvsys_instances_date/IndocProcessingStatus",
+          "keys": []
+        },
+        {
+          "name": "DocumentTypeIndoc",
+          "type": "Text",
+          "element_id": "dams:physical/esed/dvsys_instances_date/DocumentTypeIndoc",
+          "keys": []
+        },
+        {
+          "name": "DocumentTypeKbd",
+          "type": "Integer",
+          "element_id": "dams:physical/esed/dvsys_instances_date/DocumentTypeKbd",
+          "keys": []
+        },
+        {
+          "name": "KBD_DvSyncStatus",
+          "type": "Integer",
+          "element_id": "dams:physical/esed/dvsys_instances_date/KBD_DvSyncStatus",
+          "keys": []
+        },
+        {
+          "name": "KBD_LkuDocumentId",
+          "type": "Integer",
+          "element_id": "dams:physical/esed/dvsys_instances_date/KBD_LkuDocumentId",
+          "keys": []
+        },
+        {
+          "name": "CreationDateTime",
+          "type": "DateTime",
+          "element_id": "dams:physical/esed/dvsys_instances_date/CreationDateTime",
+          "keys": []
+        },
+        {
+          "name": "ChangeDateTime",
+          "type": "DateTime",
+          "element_id": "dams:physical/esed/dvsys_instances_date/ChangeDateTime",
+          "keys": []
+        }
+      ]
+    },
+    {
+      "name": "RefStaff_Employees",
+      "title": "employee",
+      "element_id": "dams:physical/esed/RefStaff_Employees",
+      "columns": [
+        {
+          "name": "RowID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/RefStaff_Employees/RowID",
+          "keys": []
+        },
+        {
+          "name": "LastName",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefStaff_Employees/LastName",
+          "keys": []
+        },
+        {
+          "name": "FirstName",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefStaff_Employees/FirstName",
+          "keys": []
+        },
+        {
+          "name": "MiddleName",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefStaff_Employees/MiddleName",
+          "keys": []
+        },
+        {
+          "name": "AccountName",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefStaff_Employees/AccountName",
+          "keys": []
+        },
+        {
+          "name": "ParentRowID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/RefStaff_Employees/ParentRowID",
+          "keys": []
+        }
+      ]
+    },
+    {
+      "name": "dvsys_files",
+      "title": "file",
+      "element_id": "dams:physical/esed/dvsys_files",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_files/ID",
+          "keys": []
+        },
+        {
+          "name": "OwnerCardID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_files/OwnerCardID",
+          "keys": []
+        },
+        {
+          "name": "Name",
+          "type": "Text",
+          "element_id": "dams:physical/esed/dvsys_files/Name",
+          "keys": []
+        },
+        {
+          "name": "BinaryID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_files/BinaryID",
+          "keys": []
+        },
+        {
+          "name": "FileType",
+          "type": "Integer",
+          "element_id": "dams:physical/esed/dvsys_files/FileType",
+          "keys": []
+        }
+      ]
+    },
+    {
+      "name": "dvsys_binaries",
+      "title": "file_binary",
+      "element_id": "dams:physical/esed/dvsys_binaries",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_binaries/ID",
+          "keys": []
+        },
+        {
+          "name": "Path",
+          "type": "Text",
+          "element_id": "dams:physical/esed/dvsys_binaries/Path",
+          "keys": []
+        },
+        {
+          "name": "StorageID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_binaries/StorageID",
+          "keys": []
+        }
+      ]
+    },
+    {
+      "name": "dvsys_instances",
+      "title": "instance",
+      "element_id": "dams:physical/esed/dvsys_instances",
+      "columns": [
+        {
+          "name": "InstanceID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/dvsys_instances/InstanceID",
+          "keys": []
+        },
+        {
+          "name": "Deleted",
+          "type": "Boolean",
+          "element_id": "dams:physical/esed/dvsys_instances/Deleted",
+          "keys": []
+        }
+      ]
+    },
+    {
+      "name": "RefPartners_Companies",
+      "title": "organization",
+      "element_id": "dams:physical/esed/RefPartners_Companies",
+      "columns": [
+        {
+          "name": "RowID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/RefPartners_Companies/RowID",
+          "keys": []
+        },
+        {
+          "name": "Name",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefPartners_Companies/Name",
+          "keys": []
+        },
+        {
+          "name": "FullName",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefPartners_Companies/FullName",
+          "keys": []
+        },
+        {
+          "name": "INN",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefPartners_Companies/INN",
+          "keys": []
+        },
+        {
+          "name": "KPP",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefPartners_Companies/KPP",
+          "keys": []
+        },
+        {
+          "name": "OGRN",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefPartners_Companies/OGRN",
+          "keys": []
+        },
+        {
+          "name": "Comments",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefPartners_Companies/Comments",
+          "keys": []
+        },
+        {
+          "name": "Fax",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefPartners_Companies/Fax",
+          "keys": []
+        }
+      ]
+    },
+    {
+      "name": "RefPartners_Employees",
+      "title": "organization_employee",
+      "element_id": "dams:physical/esed/RefPartners_Employees",
+      "columns": [
+        {
+          "name": "RowID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/RefPartners_Employees/RowID",
+          "keys": []
+        },
+        {
+          "name": "LastName",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefPartners_Employees/LastName",
+          "keys": []
+        },
+        {
+          "name": "FirstName",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefPartners_Employees/FirstName",
+          "keys": []
+        },
+        {
+          "name": "MiddleName",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefPartners_Employees/MiddleName",
+          "keys": []
+        }
+      ]
+    },
+    {
+      "name": "RefBaseUniversal_Items",
+      "title": "universal_item",
+      "element_id": "dams:physical/esed/RefBaseUniversal_Items",
+      "columns": [
+        {
+          "name": "RowID",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/RefBaseUniversal_Items/RowID",
+          "keys": []
+        },
+        {
+          "name": "Name",
+          "type": "Text",
+          "element_id": "dams:physical/esed/RefBaseUniversal_Items/Name",
+          "keys": []
+        },
+        {
+          "name": "ItemCard",
+          "type": "UUID",
+          "element_id": "dams:physical/esed/RefBaseUniversal_Items/ItemCard",
+          "keys": []
+        }
+      ]
+    }
+  ],
+  "edges": []
+}

@@ -8,56 +8,62 @@
     {
       "path": "generated/contracts/moex-dams/0.1",
       "role": "contracts",
-      "content_digest": "sha256:ad9616e0740cf2e6f8856e760121f63e82d9f70628ef5a7ebb2c6fe4dea51c6b",
+      "content_digest": "sha256:2fe29a5959a095902f7b8b7c5110fbd71fbb5fa8362737c690c6d8ad1cfe82f2",
       "manifest_path": "generated/manifests/moex-dams-contracts.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/moex-dams.schema.json",
       "role": "json-schema",
-      "content_digest": "sha256:34d2fde035968fffc01bb674cfd90126e0ca12e55eb58ec7687eeaa895810a82",
+      "content_digest": "sha256:a1a9957b698c1aeb8c8e4578ba94ac2b3f1efd085ced141913b06a575cfad72f",
       "manifest_path": "generated/manifests/moex-dams-json-schema.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/moex-dams.owl.ttl",
       "role": "owl",
-      "content_digest": "sha256:6aa2cd598ec2472bd264e2f278dcc7f5cdeef1d1ab455faedf1788903065dd54",
+      "content_digest": "sha256:f9113a37f0dd26512f2fb5df6b1a6e137618c1ae39038b975f4033cedd553ef6",
       "manifest_path": "generated/manifests/moex-dams-owl.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/moex-dams.shacl.ttl",
       "role": "shacl",
-      "content_digest": "sha256:f56887efc1f082020edce3f1d9a5cebee036811fe174336b4d6ab7ce41f639de",
+      "content_digest": "sha256:27fab9165730f4f557444b386cddac7f6f0a32f369f9817c5bd501cd5838d2a4",
       "manifest_path": "generated/manifests/moex-dams-shacl.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/moex-dams.dbml",
       "role": "dbml",
-      "content_digest": "sha256:0d3042da88db1cd03ff42da0eed8bd82bfdc6b8f5c7ccc44a74f830196db580b",
+      "content_digest": "sha256:ca686a5ba51f75f323ddfdac2359a4dfab24bba30d8aecab5a499463109e78c6",
       "manifest_path": "generated/manifests/moex-dams-dbml.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/diagrams",
       "role": "mermaid",
-      "content_digest": "sha256:4a8ed45d33b9273ad5ee8e5e1234c8488b98a9965f352ff48b7088bb16d094bc",
+      "content_digest": "sha256:44ed539b85accc64ad05a8c193a5ec55868ab182ba4076e17d67be5d957d6e72",
       "manifest_path": "generated/manifests/moex-dams-mermaid.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/python/moex_dams.py",
       "role": "python",
-      "content_digest": "sha256:725189d2f13487372a8313b4d282e8dad814e92054cddb73d5eb65f6e3d5ded2",
+      "content_digest": "sha256:b8af6d6975fb12918842b5f12d09cde4cc7e586577eddab2980c1ddc3c02f755",
       "manifest_path": "generated/manifests/moex-dams-python.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/docs",
       "role": "doc",
-      "content_digest": "sha256:b5f49411d8ffaa0e2f995088d4988426579577e4db9dee2286281def3a6a30e6",
+      "content_digest": "sha256:31d19efcfe50f565a929943ec635d5c7344085bfc7fbc9bc2f83d9a7b7c601b9",
       "manifest_path": "generated/manifests/moex-dams-doc.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/moex-dams.rdf.ttl",
       "role": "rdf",
-      "content_digest": "sha256:cc8dcfd390db27bd6e26725055308ef9654b526ebfd860f59f15eaf12175679e",
+      "content_digest": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
       "manifest_path": "generated/manifests/moex-dams-rdf.json"
+    },
+    {
+      "path": "generated/artifacts/moex-dams/0.1/ontology-profile.json",
+      "role": "ontology-profile",
+      "content_digest": "sha256:d05e0829855ffe4697fd2800b01ae8bf1aabacf5f6440d89c4b01933df83a6a6",
+      "manifest_path": "generated/manifests/moex-dams-ontology-profile.json"
     },
     {
       "path": "requirements-linkml.txt",
@@ -65,6 +71,6 @@
       "content_digest": "sha256:142f4b53cd297311e8e33fd64e46ddaa1688289122e08441e5c9a5ac028efaf9"
     }
   ],
-  "content_digest": "sha256:0e47a2c46a8ad370647588724c8f8d5f8abe0fce9fcc3d4592d66c8911749f81",
-  "generated_at": "2026-09-28T16:59:37.105801+00:00"
+  "content_digest": "sha256:e05165018343d5303a59289ecb527ecf35574049619ae9bf4a01442902ee9a93",
+  "generated_at": "2026-10-05T01:58:56.891336+00:00"
 }

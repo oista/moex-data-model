@@ -679,6 +679,8 @@ linkml → SHACL
 
 ## Этап 8. Ontology
 
+**Progress (2026-10-05):** ADR-030 URI/prefix policy; merged SchemaView prefix map; schema lint `MOEX-ONT-001`…`004`; schema URI semantic diff `MOEX-ONT-010`; regenerable `ontology-profile.json` in golden + release bundle; mixin/enum OWL assertion tests; fail-closed Turtle parse (existing `rdf_ground_digest`); optional `make ontology-check` (pySHACL via `RDFLibDumper` + linkml-owl smoke). Generators `gen-owl` / `gen-rdf` / `gen-shacl` remain Stage 6.
+
 ### Задачи
 
 - Зафиксировать URI policy.

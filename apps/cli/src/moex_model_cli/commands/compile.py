@@ -64,7 +64,8 @@ def run_compile(
             return art.returncode, "\n".join(lines) + "\n" + art_out
         lines.append(art_out.rstrip())
         lines.append(
-            "compile: artifacts OK (owl/shacl/dbml/mermaid/python/doc/rdf)"
+            "compile: artifacts OK "
+            "(owl/shacl/dbml/mermaid/python/doc/rdf/ontology-report)"
         )
 
     if with_bundle:

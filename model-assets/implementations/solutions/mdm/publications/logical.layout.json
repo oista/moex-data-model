@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "profile": "logical",
+  "nodes": {
+    "dams:logical/mdm/PERSON": {
+      "x": 310,
+      "y": 40,
+      "color": "#2b3a4a"
+    },
+    "dams:logical/mdm/PERSON_CEO": {
+      "x": 20,
+      "y": 400,
+      "color": "#2b3a4a"
+    },
+    "dams:logical/mdm/PERSON_REPRESENTATIVE": {
+      "x": 800,
+      "y": 400,
+      "color": "#2b3a4a"
+    },
+    "dams:logical/mdm/ENTERPRISE": {
+      "x": 310,
+      "y": 620,
+      "color": "#2b3a4a"
+    }
+  },
+  "edges": {
+    "dams:rel/mdm/PERSON_CEO_to_PERSON_via_PERSON_ID": {
+      "points": [
+        {
+          "x": 280,
+          "y": 370
+        }
+      ]
+    },
+    "dams:rel/mdm/PERSON_REPRESENTATIVE_to_PERSON_via_PERSON_ID": {
+      "points": [
+        {
+          "x": 760,
+          "y": 370
+        }
+      ]
+    },
+    "dams:rel/mdm/PERSON_CEO_to_ENTERPRISE_via_ENTERPRISE_ID": {
+      "points": [
+        {
+          "x": 260,
+          "y": 580
+        }
+      ]
+    },
+    "dams:rel/mdm/PERSON_REPRESENTATIVE_to_ENTERPRISE_via_ENTERPRISE_ID": {
+      "points": [
+        {
+          "x": 780,
+          "y": 580
+        }
+      ]
+    }
+  }
+}

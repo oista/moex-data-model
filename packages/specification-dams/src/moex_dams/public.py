@@ -9,6 +9,11 @@ from moex_dams.application.export_requirements import (
     default_catalog_paths,
     write_requirements_xlsx,
 )
+from moex_dams.application.ontology_report import (
+    build_ontology_profile,
+    diff_schema_element_uris,
+    write_ontology_profile,
+)
 from moex_dams.application.repository import DamsAssetRepository
 from moex_dams.application.rules_runner import (
     RuleSet,
@@ -59,7 +64,9 @@ from moex_dams.rules.definitions import (
 from moex_dams.rules.identifiers import (
     build_dams_curie_resolver,
     check_identifiers,
+    load_merged_schema_prefix_map,
 )
+from moex_dams.rules.ontology_uris import check_ontology_uris
 from moex_dams.rules.formal_checks import check_formal_requirements
 from moex_dams.rules.glossary import build_model_glossary
 from moex_dams.rules.references import check_references
@@ -98,11 +105,14 @@ __all__ = [
     "build_definition_index",
     "build_element_index",
     "build_model_glossary",
+    "build_ontology_profile",
     "check_conceptual_entities",
     "check_conceptual_entities_body",
     "check_identifiers",
     "check_formal_requirements",
+    "check_ontology_uris",
     "check_references",
+    "load_merged_schema_prefix_map",
     "check_relation_terms",
     "check_relation_terms_body",
     "check_structural",
@@ -111,6 +121,7 @@ __all__ = [
     "default_dams_rule_sets",
     "diff_graphs",
     "diff_implementations",
+    "diff_schema_element_uris",
     "find_redundant_definition_overrides",
     "find_redundant_overrides",
     "project_model_package_to_dbml",
@@ -122,5 +133,6 @@ __all__ = [
     "run_rule_sets",
     "write_dbml_artifact",
     "write_er_diagram_artifact",
+    "write_ontology_profile",
     "write_requirements_xlsx",
 ]

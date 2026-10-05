@@ -1,0 +1,774 @@
+{
+  "version": 1,
+  "profile": "logical",
+  "generator": "moex-dams-er-scene/0.1",
+  "package_id": "dams:model/esed/0.1.0",
+  "nodes": [
+    {
+      "name": "attorney_check_info",
+      "title": "attorney_check_info",
+      "element_id": "dams:logical/esed/attorney_check_info",
+      "columns": [
+        {
+          "name": "instance_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/attorney_check_info/instance_id",
+          "keys": [
+            "PK",
+            "FK"
+          ],
+          "comment": "ID экземпляра документа (карточки)"
+        },
+        {
+          "name": "validation_status",
+          "type": "integer",
+          "element_id": "dams:logical/esed/attorney_check_info/validation_status",
+          "keys": [],
+          "comment": "Статус проверки полномочий"
+        },
+        {
+          "name": "signature_status",
+          "type": "integer",
+          "element_id": "dams:logical/esed/attorney_check_info/signature_status",
+          "keys": [],
+          "comment": "Статус подписи документа"
+        },
+        {
+          "name": "representative_signature_status",
+          "type": "integer",
+          "element_id": "dams:logical/esed/attorney_check_info/representative_signature_status",
+          "keys": [],
+          "comment": "Статус подписи представителя"
+        },
+        {
+          "name": "validation_json_data",
+          "type": "string",
+          "element_id": "dams:logical/esed/attorney_check_info/validation_json_data",
+          "keys": [],
+          "comment": "JSON-данные валидации (Контур)"
+        }
+      ]
+    },
+    {
+      "name": "common_state",
+      "title": "common_state",
+      "element_id": "dams:logical/esed/common_state",
+      "columns": [
+        {
+          "name": "state_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/common_state/state_id",
+          "keys": [
+            "PK"
+          ],
+          "comment": "ID состояния"
+        },
+        {
+          "name": "state_name",
+          "type": "string",
+          "element_id": "dams:logical/esed/common_state/state_name",
+          "keys": [],
+          "comment": "Название состояния"
+        }
+      ]
+    },
+    {
+      "name": "common_type",
+      "title": "common_type",
+      "element_id": "dams:logical/esed/common_type",
+      "columns": [
+        {
+          "name": "type_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/common_type/type_id",
+          "keys": [
+            "PK"
+          ],
+          "comment": "ID вида"
+        },
+        {
+          "name": "type_name",
+          "type": "string",
+          "element_id": "dams:logical/esed/common_type/type_name",
+          "keys": [],
+          "comment": "Название вида документа"
+        }
+      ]
+    },
+    {
+      "name": "division",
+      "title": "division",
+      "element_id": "dams:logical/esed/division",
+      "columns": [
+        {
+          "name": "division_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/division/division_id",
+          "keys": [
+            "PK"
+          ],
+          "comment": "ID подразделения"
+        },
+        {
+          "name": "division_name",
+          "type": "string",
+          "element_id": "dams:logical/esed/division/division_name",
+          "keys": [],
+          "comment": "Название"
+        },
+        {
+          "name": "parent_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/division/parent_id",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Родительское подразделение (иерархия)"
+        }
+      ]
+    },
+    {
+      "name": "document",
+      "title": "document",
+      "element_id": "dams:logical/esed/document",
+      "columns": [
+        {
+          "name": "document_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/document/document_id",
+          "keys": [
+            "PK",
+            "FK"
+          ],
+          "comment": "ID документа"
+        },
+        {
+          "name": "register_date",
+          "type": "datetime",
+          "element_id": "dams:logical/esed/document/register_date",
+          "keys": [],
+          "comment": "Дата регистрации"
+        },
+        {
+          "name": "register_number",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/document/register_number",
+          "keys": [
+            "PK"
+          ],
+          "comment": "Регистрационный номер"
+        },
+        {
+          "name": "register_external_number",
+          "type": "string",
+          "element_id": "dams:logical/esed/document/register_external_number",
+          "keys": [],
+          "comment": "Исходящий номер (внешний номер документа)"
+        },
+        {
+          "name": "register_employee_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/document/register_employee_id",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Регистратор"
+        },
+        {
+          "name": "author_employee_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/document/author_employee_id",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Автор"
+        },
+        {
+          "name": "document_name",
+          "type": "string",
+          "element_id": "dams:logical/esed/document/document_name",
+          "keys": [],
+          "comment": "Название (заголовок, тема документа)"
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "element_id": "dams:logical/esed/document/content",
+          "keys": [],
+          "comment": "Содержание"
+        },
+        {
+          "name": "division_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/document/division_id",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Ответственное подразделение (ЮЛ ГК МБ)"
+        },
+        {
+          "name": "type_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/document/type_id",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Вид документа"
+        },
+        {
+          "name": "state_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/document/state_id",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Состояние (статус) документа"
+        },
+        {
+          "name": "status_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/document/status_id",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Статус (тип документа)"
+        },
+        {
+          "name": "delivery_type_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/document/delivery_type_id",
+          "keys": [
+            "FK"
+          ],
+          "comment": "ID типа доставки (способ получения)"
+        },
+        {
+          "name": "delivery_date",
+          "type": "datetime",
+          "element_id": "dams:logical/esed/document/delivery_date",
+          "keys": [],
+          "comment": "Дата от (дата получения документа)"
+        },
+        {
+          "name": "sender_organization_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/document/sender_organization_id",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Организация-отправитель"
+        },
+        {
+          "name": "sender_employee_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/document/sender_employee_id",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Сотрудник организации-отправителя"
+        },
+        {
+          "name": "answer_not_need",
+          "type": "boolean",
+          "element_id": "dams:logical/esed/document/answer_not_need",
+          "keys": [],
+          "comment": "Ответ не требуется"
+        },
+        {
+          "name": "item_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/document/item_id",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Строка справочника (рубрика)"
+        },
+        {
+          "name": "indoc_processing_status",
+          "type": "string",
+          "element_id": "dams:logical/esed/document/indoc_processing_status",
+          "keys": [],
+          "comment": "Статус обработки в InDoc"
+        },
+        {
+          "name": "document_type_indoc",
+          "type": "string",
+          "element_id": "dams:logical/esed/document/document_type_indoc",
+          "keys": [],
+          "comment": "Тип документа в InDoc"
+        },
+        {
+          "name": "document_type_kbd",
+          "type": "integer",
+          "element_id": "dams:logical/esed/document/document_type_kbd",
+          "keys": [],
+          "comment": "Тип документа КБД"
+        },
+        {
+          "name": "kbd_sync_status",
+          "type": "integer",
+          "element_id": "dams:logical/esed/document/kbd_sync_status",
+          "keys": [],
+          "comment": "Статус отправки в КБД"
+        },
+        {
+          "name": "kbd_lku_document_id",
+          "type": "integer",
+          "element_id": "dams:logical/esed/document/kbd_lku_document_id",
+          "keys": [],
+          "comment": "ID ЛКУ КБД"
+        },
+        {
+          "name": "creation_date_time",
+          "type": "datetime",
+          "element_id": "dams:logical/esed/document/creation_date_time",
+          "keys": [],
+          "comment": "Дата и время создания"
+        },
+        {
+          "name": "change_date_time",
+          "type": "datetime",
+          "element_id": "dams:logical/esed/document/change_date_time",
+          "keys": [],
+          "comment": "Дата и время изменения"
+        }
+      ]
+    },
+    {
+      "name": "employee",
+      "title": "employee",
+      "element_id": "dams:logical/esed/employee",
+      "columns": [
+        {
+          "name": "employee_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/employee/employee_id",
+          "keys": [
+            "PK"
+          ],
+          "comment": "ID сотрудника"
+        },
+        {
+          "name": "last_name",
+          "type": "string",
+          "element_id": "dams:logical/esed/employee/last_name",
+          "keys": [],
+          "comment": "Фамилия"
+        },
+        {
+          "name": "first_name",
+          "type": "string",
+          "element_id": "dams:logical/esed/employee/first_name",
+          "keys": [],
+          "comment": "Имя"
+        },
+        {
+          "name": "middle_name",
+          "type": "string",
+          "element_id": "dams:logical/esed/employee/middle_name",
+          "keys": [],
+          "comment": "Отчество"
+        },
+        {
+          "name": "ad_login",
+          "type": "string",
+          "element_id": "dams:logical/esed/employee/ad_login",
+          "keys": [],
+          "comment": "Пользователь (AD-логин)"
+        },
+        {
+          "name": "division_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/employee/division_id",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Подразделение сотрудника"
+        }
+      ]
+    },
+    {
+      "name": "file",
+      "title": "file",
+      "element_id": "dams:logical/esed/file",
+      "columns": [
+        {
+          "name": "id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/file/id",
+          "keys": [
+            "PK"
+          ],
+          "comment": "ID записи файла"
+        },
+        {
+          "name": "owner_card_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/file/owner_card_id",
+          "keys": [
+            "FK"
+          ],
+          "comment": "Карточка-владелец файла"
+        },
+        {
+          "name": "file_name",
+          "type": "string",
+          "element_id": "dams:logical/esed/file/file_name",
+          "keys": [],
+          "comment": "Имя файла"
+        },
+        {
+          "name": "binary_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/file/binary_id",
+          "keys": [
+            "FK"
+          ],
+          "comment": "ID бинарных данных"
+        },
+        {
+          "name": "file_type",
+          "type": "integer",
+          "element_id": "dams:logical/esed/file/file_type",
+          "keys": [],
+          "comment": "Тип файла"
+        }
+      ]
+    },
+    {
+      "name": "file_binary",
+      "title": "file_binary",
+      "element_id": "dams:logical/esed/file_binary",
+      "columns": [
+        {
+          "name": "id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/file_binary/id",
+          "keys": [
+            "PK"
+          ],
+          "comment": "ID бинарных данных"
+        },
+        {
+          "name": "path",
+          "type": "string",
+          "element_id": "dams:logical/esed/file_binary/path",
+          "keys": [],
+          "comment": "Путь к файлу (Nuxeo ID)"
+        },
+        {
+          "name": "storage_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/file_binary/storage_id",
+          "keys": [
+            "PK"
+          ],
+          "comment": "ID хранилища"
+        }
+      ]
+    },
+    {
+      "name": "instance",
+      "title": "instance",
+      "element_id": "dams:logical/esed/instance",
+      "columns": [
+        {
+          "name": "instance_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/instance/instance_id",
+          "keys": [
+            "PK"
+          ],
+          "comment": "ID экземпляра документа (карточки)"
+        },
+        {
+          "name": "deleted",
+          "type": "boolean",
+          "element_id": "dams:logical/esed/instance/deleted",
+          "keys": [],
+          "comment": "Признак мягкого удаления"
+        }
+      ]
+    },
+    {
+      "name": "organization",
+      "title": "organization",
+      "element_id": "dams:logical/esed/organization",
+      "columns": [
+        {
+          "name": "organization_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/organization/organization_id",
+          "keys": [
+            "PK"
+          ],
+          "comment": "ID организации"
+        },
+        {
+          "name": "organization_name",
+          "type": "string",
+          "element_id": "dams:logical/esed/organization/organization_name",
+          "keys": [],
+          "comment": "Название (краткое)"
+        },
+        {
+          "name": "organization_full_name",
+          "type": "string",
+          "element_id": "dams:logical/esed/organization/organization_full_name",
+          "keys": [],
+          "comment": "Полное название"
+        },
+        {
+          "name": "inn",
+          "type": "string",
+          "element_id": "dams:logical/esed/organization/inn",
+          "keys": [],
+          "comment": "ИНН"
+        },
+        {
+          "name": "kpp",
+          "type": "string",
+          "element_id": "dams:logical/esed/organization/kpp",
+          "keys": [],
+          "comment": "КПП"
+        },
+        {
+          "name": "ogrn",
+          "type": "string",
+          "element_id": "dams:logical/esed/organization/ogrn",
+          "keys": [],
+          "comment": "ОГРН"
+        },
+        {
+          "name": "comments",
+          "type": "string",
+          "element_id": "dams:logical/esed/organization/comments",
+          "keys": [],
+          "comment": "Дополнительная информация (MDM ID организации)"
+        },
+        {
+          "name": "fax",
+          "type": "string",
+          "element_id": "dams:logical/esed/organization/fax",
+          "keys": [],
+          "comment": "Факс (ICDB ID организации)"
+        }
+      ]
+    },
+    {
+      "name": "organization_employee",
+      "title": "organization_employee",
+      "element_id": "dams:logical/esed/organization_employee",
+      "columns": [
+        {
+          "name": "employee_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/organization_employee/employee_id",
+          "keys": [
+            "PK"
+          ],
+          "comment": "ID сотрудника контрагента"
+        },
+        {
+          "name": "last_name",
+          "type": "string",
+          "element_id": "dams:logical/esed/organization_employee/last_name",
+          "keys": [],
+          "comment": "Фамилия"
+        },
+        {
+          "name": "first_name",
+          "type": "string",
+          "element_id": "dams:logical/esed/organization_employee/first_name",
+          "keys": [],
+          "comment": "Имя"
+        },
+        {
+          "name": "middle_name",
+          "type": "string",
+          "element_id": "dams:logical/esed/organization_employee/middle_name",
+          "keys": [],
+          "comment": "Отчество"
+        }
+      ]
+    },
+    {
+      "name": "universal_item",
+      "title": "universal_item",
+      "element_id": "dams:logical/esed/universal_item",
+      "columns": [
+        {
+          "name": "item_id",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/universal_item/item_id",
+          "keys": [
+            "PK"
+          ],
+          "comment": "ID значения"
+        },
+        {
+          "name": "item_name",
+          "type": "string",
+          "element_id": "dams:logical/esed/universal_item/item_name",
+          "keys": [],
+          "comment": "Имя (наименование справочного значения)"
+        },
+        {
+          "name": "item_card",
+          "type": "identifier",
+          "element_id": "dams:logical/esed/universal_item/item_card",
+          "keys": [
+            "PK"
+          ],
+          "comment": "Ссылка на карточку"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "dams:rel/esed/attorney_check_info_to_instance_via_instance_id",
+      "source": "attorney_check_info",
+      "target": "instance",
+      "element_id": "dams:rel/esed/attorney_check_info_to_instance_via_instance_id",
+      "label": "attorney_check_info_to_instance_via_instance_id",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/esed/division_to_division_via_parent_id",
+      "source": "division",
+      "target": "division",
+      "element_id": "dams:rel/esed/division_to_division_via_parent_id",
+      "label": "division_to_division_via_parent_id",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/esed/document_to_instance_via_document_id",
+      "source": "document",
+      "target": "instance",
+      "element_id": "dams:rel/esed/document_to_instance_via_document_id",
+      "label": "document_to_instance_via_document_id",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/esed/document_to_employee_via_register_employee_id",
+      "source": "document",
+      "target": "employee",
+      "element_id": "dams:rel/esed/document_to_employee_via_register_employee_id",
+      "label": "document_to_employee_via_register_employee_id",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/esed/document_to_employee_via_author_employee_id",
+      "source": "document",
+      "target": "employee",
+      "element_id": "dams:rel/esed/document_to_employee_via_author_employee_id",
+      "label": "document_to_employee_via_author_employee_id",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/esed/document_to_division_via_division_id",
+      "source": "document",
+      "target": "division",
+      "element_id": "dams:rel/esed/document_to_division_via_division_id",
+      "label": "document_to_division_via_division_id",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/esed/document_to_common_type_via_type_id",
+      "source": "document",
+      "target": "common_type",
+      "element_id": "dams:rel/esed/document_to_common_type_via_type_id",
+      "label": "document_to_common_type_via_type_id",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/esed/document_to_common_state_via_state_id",
+      "source": "document",
+      "target": "common_state",
+      "element_id": "dams:rel/esed/document_to_common_state_via_state_id",
+      "label": "document_to_common_state_via_state_id",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/esed/document_to_universal_item_via_status_id",
+      "source": "document",
+      "target": "universal_item",
+      "element_id": "dams:rel/esed/document_to_universal_item_via_status_id",
+      "label": "document_to_universal_item_via_status_id",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/esed/document_to_universal_item_via_delivery_type_id",
+      "source": "document",
+      "target": "universal_item",
+      "element_id": "dams:rel/esed/document_to_universal_item_via_delivery_type_id",
+      "label": "document_to_universal_item_via_delivery_type_id",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/esed/document_to_organization_via_sender_organization_id",
+      "source": "document",
+      "target": "organization",
+      "element_id": "dams:rel/esed/document_to_organization_via_sender_organization_id",
+      "label": "document_to_organization_via_sender_organization_id",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/esed/document_to_organization_employee_via_sender_employee_id",
+      "source": "document",
+      "target": "organization_employee",
+      "element_id": "dams:rel/esed/document_to_organization_employee_via_sender_employee_id",
+      "label": "document_to_organization_employee_via_sender_employee_id",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/esed/document_to_universal_item_via_item_id",
+      "source": "document",
+      "target": "universal_item",
+      "element_id": "dams:rel/esed/document_to_universal_item_via_item_id",
+      "label": "document_to_universal_item_via_item_id",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/esed/employee_to_division_via_division_id",
+      "source": "employee",
+      "target": "division",
+      "element_id": "dams:rel/esed/employee_to_division_via_division_id",
+      "label": "employee_to_division_via_division_id",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/esed/file_to_instance_via_owner_card_id",
+      "source": "file",
+      "target": "instance",
+      "element_id": "dams:rel/esed/file_to_instance_via_owner_card_id",
+      "label": "file_to_instance_via_owner_card_id",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/esed/file_to_file_binary_via_binary_id",
+      "source": "file",
+      "target": "file_binary",
+      "element_id": "dams:rel/esed/file_to_file_binary_via_binary_id",
+      "label": "file_to_file_binary_via_binary_id",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    }
+  ]
+}

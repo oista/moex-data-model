@@ -485,3 +485,70 @@ def test_export_requirements_xlsx(
         ws.cell(row=r, column=9).value or "" for r in range(2, ws.max_row + 1)
     }
     assert any("У пакета модели данных ИТ-решения" in s for s in statements)
+
+
+def test_ontology_report_json(
+    repo_root: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    code = main(["ontology-report", "--root", str(repo_root), "--json"])
+    captured = capsys.readouterr()
+    assert code == 0, captured.out
+    payload = json.loads(captured.out)
+    assert payload["schema_name"] == "moex_dams"
+    assert payload["default_prefix"] == "dams"
+    assert payload["issues"] == []
+
+
+def test_ontology_report_uri_diff_breaking(
+    repo_root: Path,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    old = tmp_path / "old.yaml"
+    new = tmp_path / "new.yaml"
+    old.write_text(
+        """
+id: https://example.com/old
+name: old
+prefixes:
+  ex: https://example.com/
+default_prefix: ex
+classes:
+  Person:
+    attributes:
+      name:
+        range: string
+""",
+        encoding="utf-8",
+    )
+    new.write_text(
+        """
+id: https://example.com/new
+name: new
+prefixes:
+  ex: https://example.com/
+default_prefix: ex
+classes:
+  Human:
+    attributes:
+      name:
+        range: string
+""",
+        encoding="utf-8",
+    )
+    code = main(
+        [
+            "ontology-report",
+            "--root",
+            str(repo_root),
+            "--from",
+            str(old),
+            "--to",
+            str(new),
+        ]
+    )
+    captured = capsys.readouterr()
+    assert code == 1
+    assert "MOEX-ONT-010" in captured.out
+    assert "BREAKING" in captured.out

@@ -1,0 +1,8 @@
+element_id: dams:model/ontology-fixture/1.0.0
+name: ontology_fixture_valid
+title: Ontology SHACL fixture (valid)
+description: Minimal ModelPackage that conforms to moex-dams SHACL shapes.
+lifecycle_status: draft
+api_version: dams.moex/v0.1
+model_version: 1.0.0
+implementation_scope: solution

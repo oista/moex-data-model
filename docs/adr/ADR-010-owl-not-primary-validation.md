@@ -21,7 +21,7 @@ OWL/open-world и LinkML closed-world constraints отвечают на разн
 ## Decision
 
 - **Основная проверка YAML/JSON instances** — LinkML validation + DAMS semantic rules (ADR-007).
-- **RDF instances** — SHACL / pySHACL, когда появится RDF pipeline.
+- **RDF instances** — SHACL / pySHACL (`make ontology-check`, ADR-030); не gate для YAML.
 - **OWL** — reasoning, семантическая публикация, анализ непротиворечивости; **не** gate для решения «валиден ли ModelPackage».
 - `gen-owl` / `gen-rdf` — derived artifacts (ADR-011), не канон.
 - `linkml-owl` — optional experimental adapter, не зависимость ядра и не фундамент каталога.

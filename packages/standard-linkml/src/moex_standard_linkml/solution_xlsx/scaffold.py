@@ -47,17 +47,23 @@ def build_publish_module(
             },
             {
                 "id": "conceptual",
-                "title": "Conceptual entities",
+                "title": "Conceptual entities links",
                 "kind": "classes",
                 "type": "entity-table",
                 "source": {
                     "format": "yaml",
                     "path": package_filename,
-                    "select": "conceptual_entities",
+                    "select": "conceptual_entity_links",
                 },
                 "key_column": "element_id",
-                "columns": ["name", "title", "description", "entity_type", "data_class"],
-                "filterable": ["entity_type", "data_class"],
+                "columns": [
+                    "logical_title",
+                    "logical_entity_ref",
+                    "conceptual_entity_ref",
+                    "conceptual_alignment_status",
+                    "alignment_rationale",
+                ],
+                "filterable": ["conceptual_alignment_status"],
             },
             {
                 "id": "logical",

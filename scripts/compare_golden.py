@@ -33,6 +33,8 @@ from generate_artifacts import (  # noqa: E402
     JSON_SCHEMA_PATH,
     MERMAID_DIR,
     MERMAID_MANIFEST,
+    ONTOLOGY_PROFILE_MANIFEST,
+    ONTOLOGY_PROFILE_PATH,
     OWL_MANIFEST,
     OWL_PATH,
     PYTHON_MANIFEST,
@@ -45,6 +47,7 @@ from generate_artifacts import (  # noqa: E402
     generate_doc,
     generate_json_schema,
     generate_mermaid,
+    generate_ontology_report,
     generate_owl,
     generate_python,
     generate_rdf,
@@ -406,6 +409,15 @@ def _compare_bundle() -> list[str]:
     return []
 
 
+def _compare_ontology_report() -> list[str]:
+    return _compare_single_file(
+        name="ontology-report",
+        manifest_path=ONTOLOGY_PROFILE_MANIFEST,
+        committed_path=ONTOLOGY_PROFILE_PATH,
+        regenerate=generate_ontology_report,
+    )
+
+
 def main() -> int:
     parts = ["contracts"]
     errors = _compare_contracts() + _compare_json_schema()
@@ -420,12 +432,18 @@ def main() -> int:
         ("python", _compare_python),
         ("doc", _compare_doc),
         ("rdf", _compare_rdf),
+        ("ontology-profile", _compare_ontology_report),
     ):
         chunk = fn()
         errors.extend(chunk)
         if not chunk or all("missing" not in e for e in chunk):
             # Always list target once present in repo after Stage 6 baseline.
-            if (REPO / "generated" / "manifests" / f"moex-dams-{name}.json").is_file():
+            manifest_name = (
+                "moex-dams-ontology-profile.json"
+                if name == "ontology-profile"
+                else f"moex-dams-{name}.json"
+            )
+            if (REPO / "generated" / "manifests" / manifest_name).is_file():
                 parts.append(name)
 
     bundle_errors = _compare_bundle()

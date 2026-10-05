@@ -35,6 +35,8 @@ PYTHON_PATH = PYTHON_DIR / "moex_dams.py"
 DOC_DIR = ARTIFACTS_ROOT / "docs"
 RDF_PATH = ARTIFACTS_ROOT / "moex-dams.rdf.ttl"
 JSON_SCHEMA_PATH = ARTIFACTS_ROOT / "moex-dams.schema.json"
+ONTOLOGY_PROFILE_PATH = ARTIFACTS_ROOT / "ontology-profile.json"
+ONTOLOGY_PROFILE_MD_PATH = ARTIFACTS_ROOT / "ontology-profile.md"
 
 OWL_MANIFEST = MANIFESTS / "moex-dams-owl.json"
 SHACL_MANIFEST = MANIFESTS / "moex-dams-shacl.json"
@@ -44,6 +46,7 @@ PYTHON_MANIFEST = MANIFESTS / "moex-dams-python.json"
 DOC_MANIFEST = MANIFESTS / "moex-dams-doc.json"
 RDF_MANIFEST = MANIFESTS / "moex-dams-rdf.json"
 JSON_SCHEMA_MANIFEST = MANIFESTS / "moex-dams-json-schema.json"
+ONTOLOGY_PROFILE_MANIFEST = MANIFESTS / "moex-dams-ontology-profile.json"
 
 OWL_OPTIONS = {
     "format": "ttl",
@@ -52,7 +55,17 @@ OWL_OPTIONS = {
     "consolidate_cardinality_axioms": True,
 }
 
-ALL_TARGETS = ("owl", "shacl", "dbml", "mermaid", "python", "doc", "rdf", "json-schema")
+ALL_TARGETS = (
+    "owl",
+    "shacl",
+    "dbml",
+    "mermaid",
+    "python",
+    "doc",
+    "rdf",
+    "json-schema",
+    "ontology-report",
+)
 
 try:
     from moex_model_cli.gates.digests import (  # type: ignore
@@ -555,6 +568,47 @@ def generate_json_schema(
     return digest
 
 
+def generate_ontology_report(
+    *,
+    out_path: Path = ONTOLOGY_PROFILE_PATH,
+    manifest_path: Path = ONTOLOGY_PROFILE_MANIFEST,
+    md_path: Path | None = None,
+) -> str:
+    """Regenerate Stage 8 ontology-profile.json (+ sibling .md)."""
+    for rel in (
+        "packages/specification-dams/src",
+        "packages/modeling-kernel/src",
+        "packages/standard-linkml/src",
+        "generated/contracts/moex-dams/0.1",
+    ):
+        src = str(REPO / rel)
+        if src not in sys.path:
+            sys.path.insert(0, src)
+    from moex_dams.application.ontology_report import write_ontology_profile
+
+    md_out = md_path
+    if md_out is None:
+        if out_path == ONTOLOGY_PROFILE_PATH:
+            md_out = ONTOLOGY_PROFILE_MD_PATH
+        else:
+            md_out = out_path.with_suffix(".md")
+    digest = write_ontology_profile(SCHEMA, json_path=out_path, md_path=md_out)
+    try:
+        out_rel = out_path.relative_to(REPO).as_posix()
+    except ValueError:
+        out_rel = out_path.as_posix()
+    write_manifest(
+        path=manifest_path,
+        artifact_id="moex:artifact:dams-ontology-profile:0.1",
+        generator="ontology-report",
+        generator_module="moex_dams.application.ontology_report",
+        output_path=out_rel,
+        content_digest=digest,
+        generator_options={"digest_mode": "json_sorted"},
+    )
+    return digest
+
+
 def generate(targets: Sequence[str] = ALL_TARGETS) -> dict[str, str]:
     if not SCHEMA.is_file():
         raise FileNotFoundError(f"missing schema: {SCHEMA}")
@@ -576,6 +630,8 @@ def generate(targets: Sequence[str] = ALL_TARGETS) -> dict[str, str]:
             digests["rdf"] = generate_rdf()
         elif target == "json-schema":
             digests["json-schema"] = generate_json_schema()
+        elif target == "ontology-report":
+            digests["ontology-report"] = generate_ontology_report()
         else:
             raise ValueError(f"unknown target: {target}")
     return digests

@@ -25,9 +25,12 @@ def test_assess_trading_solution(dams_schema: Path, trading_solution: Path) -> N
     }
     assert result.report.is_conformant
     assert result.graph.package_id == "dams:model/trading/1.0.0"
-    assert result.graph.nodes_by_kind(NodeKind.CONCEPTUAL_ENTITY)
+    # ADR-029: solution packages reference enterprise concepts; no local CE nodes
+    assert not result.graph.nodes_by_kind(NodeKind.CONCEPTUAL_ENTITY)
     assert result.graph.nodes_by_kind(NodeKind.LOGICAL_ENTITY)
     assert result.graph.nodes_by_kind(NodeKind.MAPPING)
+    mapping_ids = {n.id for n in result.graph.nodes_by_kind(NodeKind.MAPPING)}
+    assert "dams:mapping/trading/client-realizes-client" in mapping_ids
 
     kinds = {r.relation_kind for r in result.universe.relations}
     assert RelationKind.CONFORMS_TO in kinds

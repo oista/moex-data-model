@@ -26,8 +26,9 @@ sections:
       format: yaml
       path: trading-solution-model.yaml
 
-  # Conceptual entities live in moex-enterprise-conceptual-model
-  # (conceptual_implementation_ref / ADR-029); solution body omits local copies.
+  # Conceptual SoT lives in moex-enterprise-conceptual-model
+  # (conceptual_implementation_ref / ADR-029). This section projects
+  # LogicalEntity → ConceptualEntity links, not local ConceptualEntity copies.
 
   - id: logical
     title: Logical entities
@@ -53,6 +54,24 @@ sections:
     filterable:
       - solution_data_role
       - governance_classification
+
+  - id: conceptual
+    title: Conceptual entities links
+    kind: classes
+    type: entity-table
+    source:
+      format: yaml
+      path: trading-solution-model.yaml
+      select: conceptual_entity_links
+    key_column: element_id
+    columns:
+      - logical_title
+      - logical_entity_ref
+      - conceptual_entity_ref
+      - conceptual_alignment_status
+      - alignment_rationale
+    filterable:
+      - conceptual_alignment_status
 
   - id: logical-erd
     title: Logical ER diagram

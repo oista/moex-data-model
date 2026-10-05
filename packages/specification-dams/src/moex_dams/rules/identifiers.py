@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 import yaml
+from linkml_runtime import SchemaView
 from moex_modeling import (
     ConformancePhase,
     CurieUriResolver,
@@ -17,6 +18,12 @@ from moex_modeling import (
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
 from moex_dams.mappings.dams_to_graph import package_index
+
+
+def _prefix_reference(value: Any) -> str:
+    if hasattr(value, "prefix_reference"):
+        return str(value.prefix_reference)
+    return str(value)
 
 
 def load_schema_prefix_map(schema_path: Path | str) -> tuple[dict[str, str], str | None]:
@@ -45,8 +52,38 @@ def load_schema_prefix_map(schema_path: Path | str) -> tuple[dict[str, str], str
     return resolved, str(default) if default else None
 
 
+def load_schema_view(
+    schema_path: Path | str, *, merge_imports: bool = False
+) -> SchemaView:
+    """Load SchemaView and force import closure so ``schema_map`` is populated."""
+    sv = SchemaView(str(schema_path), merge_imports=merge_imports)
+    sv.imports_closure()
+    return sv
+
+
+def load_merged_schema_prefix_map(
+    schema_path: Path | str,
+) -> tuple[dict[str, str], str | None]:
+    """
+    Merge prefixes from the root schema and all SchemaView imports.
+
+    On conflicting URI for the same key, keeps the first-seen value; callers
+    should run ``check_ontology_uris`` for ``MOEX-ONT-003``.
+    """
+    sv = load_schema_view(schema_path, merge_imports=False)
+    merged: dict[str, str] = {}
+    for schema in sv.schema_map.values():
+        for key, value in (schema.prefixes or {}).items():
+            text = _prefix_reference(value)
+            if not text:
+                continue
+            merged.setdefault(str(key), text)
+    default = sv.schema.default_prefix
+    return merged, str(default) if default else None
+
+
 def build_dams_curie_resolver(schema_path: Path | str) -> CurieUriResolver:
-    prefixes, default_prefix = load_schema_prefix_map(schema_path)
+    prefixes, default_prefix = load_merged_schema_prefix_map(schema_path)
     return CurieUriResolver.from_schema_prefixes(
         prefixes, default_prefix=default_prefix
     )
@@ -145,5 +182,7 @@ def check_identifiers(
 __all__ = [
     "build_dams_curie_resolver",
     "check_identifiers",
+    "load_merged_schema_prefix_map",
     "load_schema_prefix_map",
+    "load_schema_view",
 ]

@@ -67,7 +67,7 @@
 
 .data-table th {
   background: var(--surface-2);
-  color: var(--text-secondary);
+  color: var(--text-primary);
   font-size: var(--font-xs);
   font-weight: 600;
   height: 40px;

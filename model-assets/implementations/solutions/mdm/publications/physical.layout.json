@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "profile": "physical",
+  "nodes": {
+    "dams:physical/mdm/INTERNALDM_MDM_V_PERSON": {
+      "x": 310,
+      "y": 40,
+      "color": "#2b3a4a"
+    },
+    "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO": {
+      "x": 20,
+      "y": 400,
+      "color": "#2b3a4a"
+    },
+    "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE": {
+      "x": 800,
+      "y": 400,
+      "color": "#2b3a4a"
+    },
+    "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE": {
+      "x": 310,
+      "y": 620,
+      "color": "#2b3a4a"
+    }
+  },
+  "edges": {}
+}

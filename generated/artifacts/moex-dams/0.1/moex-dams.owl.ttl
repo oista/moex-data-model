@@ -281,32 +281,32 @@ dams:ClassificationAssignment a owl:Class,
         linkml:ClassDefinition ;
     rdfs:label "ClassificationAssignment" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:assignment_id ],
-        [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:classification_rationale ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:governance_classification ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:classified_element_ref ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:classification_term_ref ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:governance_classification ],
+            owl:onProperty dams:valid_from ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:valid_to ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
+            owl:onProperty dams:classification_source ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
             owl:onProperty dams:approval_status ],
         [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:valid_from ],
+            owl:cardinality 1 ;
+            owl:onProperty dams:assignment_id ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:classification_source ] ;
+            owl:onProperty dams:classification_term_ref ] ;
     skos:definition "Версионируемое назначение категории классификации элементу модели с основанием и периодом действия." ;
     skos:inScheme <https://data.moex.com/dams/governance/v0.1> .
 
@@ -321,22 +321,22 @@ dams:ExternalClassRef a owl:Class,
     rdfs:label "ExternalClassRef" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:source_kind ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:external_class_ref_id ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
             owl:onProperty dams:target_ref ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:selection_ref ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
+            owl:onProperty dams:external_class_ref_id ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
             owl:onProperty dams:match_kind ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:external_specification_ref ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:source_kind ],
         dams:HasProvenance ;
     skos:definition """Alignment of a ConceptualEntity to an external class or term (ADR-026). Canonical store for conceptual↔external links; Mapping(aligns_with) may mirror for ExternalTermSelection projections.
 """ ;
@@ -346,17 +346,11 @@ dams:FormalCheck a owl:Class,
         linkml:ClassDefinition ;
     rdfs:label "FormalCheck" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:check_id ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:target_class ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:kind ],
-        [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:diagnostic_code ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:expression ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:target_slot ],
@@ -364,14 +358,20 @@ dams:FormalCheck a owl:Class,
             owl:maxCardinality 1 ;
             owl:onProperty dams:target_path ],
         [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:kind ],
+        [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:remediation ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:severity ],
         [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:check_id ],
+        [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:expression ] ;
+            owl:onProperty dams:target_class ] ;
     skos:definition "Одна машиночитаемая проверка требования. Kind выровнен с LinkML constraints и DAMS reference/structural diagnostics. formal_checks — исполняемое подмножество нормы; исполняется assess (ADR-013)." ;
     skos:inScheme <https://data.moex.com/dams/requirements/v0.1> .
 
@@ -380,22 +380,22 @@ dams:PolicyBinding a owl:Class,
     rdfs:label "PolicyBinding" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:policy_ref ],
+            owl:onProperty dams:policy_target_ref ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:valid_from ],
+            owl:onProperty dams:approval_status ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:valid_to ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
+            owl:onProperty dams:policy_ref ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
             owl:onProperty dams:policy_binding_id ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:approval_status ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:policy_target_ref ] ;
+            owl:onProperty dams:valid_from ] ;
     skos:definition "Применение управляемой политики к элементу модели." ;
     skos:inScheme <https://data.moex.com/dams/governance/v0.1> .
 
@@ -404,19 +404,19 @@ dams:RequirementApplicability a owl:Class,
     rdfs:label "RequirementApplicability" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:applies_dams_model_level ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:applies_target_class ],
+            owl:onProperty dams:applies_implementation_scope ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:applicability_id ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:applies_implementation_scope ],
+            owl:onProperty dams:applies_implementation_profile ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:applies_implementation_profile ] ;
+            owl:onProperty dams:applies_target_class ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:applies_dams_model_level ] ;
     skos:definition """Область применимости требования (без graph queries): класс цели, профиль и уровень модели.
 """ ;
     skos:inScheme <https://data.moex.com/dams/requirements/v0.1> .
@@ -426,22 +426,22 @@ dams:ScopedDefinition a owl:Class,
     rdfs:label "ScopedDefinition" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:relation_to_reference ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:scope_ref ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
             owl:onProperty dams:scope_kind ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:scoped_definition_id ],
         [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:rationale ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:relation_to_reference ],
+        [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:text ],
         [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:rationale ],
+            owl:cardinality 1 ;
+            owl:onProperty dams:scope_ref ],
         dams:HasProvenance ;
     skos:definition """Контекстное определение элемента модели (ADR-025 / ISO 11179 Context). Не является отдельным термином глоссария и не заменяет эталонное определение вне указанного scope.
 """ ;
@@ -1638,23 +1638,23 @@ dams:DataFlowEntityBinding a owl:Class,
         linkml:ClassDefinition ;
     rdfs:label "DataFlowEntityBinding" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:minCardinality 1 ;
-            owl:onProperty dams:physical_object_refs ],
-        [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:source_model_ref ],
+            owl:onProperty dams:logical_entity_ref ],
         [ a owl:Restriction ;
             owl:minCardinality 1 ;
             owl:onProperty dams:logical_attribute_refs ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:logical_entity_ref ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
             owl:onProperty dams:direction ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty dams:physical_object_refs ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:flow_ref ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:source_model_ref ],
         dams:ModelElement ;
     skos:definition "Связь потока с логическими сущностями, атрибутами и физическими объектами модели решения." ;
     skos:inScheme <https://data.moex.com/dams/integration/v0.1> .
@@ -1663,23 +1663,8 @@ dams:DataModelBinding a owl:Class,
         linkml:ClassDefinition ;
     rdfs:label "DataModelBinding" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:minCardinality 1 ;
-            owl:onProperty dams:selections ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:specification_version ],
-        [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:model_package_ref ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:implementation_version ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:compatibility_baseline_ref ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:generated_at ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:integrity_digest ],
@@ -1687,17 +1672,32 @@ dams:DataModelBinding a owl:Class,
             owl:maxCardinality 1 ;
             owl:onProperty dams:contract_ref ],
         [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:model_revision ],
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:compatibility_baseline_ref ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:compatibility_mode ],
+            owl:onProperty dams:implementation_version ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty dams:selections ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:model_revision ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:integration_ref ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
+            owl:onProperty dams:specification_version ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:generated_at ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
             owl:onProperty dams:model_version ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:compatibility_mode ],
         dams:HasLifecycle,
         dams:HasOwnership,
         dams:ModelElement ;
@@ -1960,10 +1960,10 @@ dams:HasBusinessClassification a owl:Class,
             owl:onProperty dams:business_importance ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:data_class ],
+            owl:onProperty dams:entity_type ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:entity_type ] ;
+            owl:onProperty dams:data_class ] ;
     skos:definition "Классификация роли и бизнес-значимости логической сущности." ;
     skos:inScheme <https://data.moex.com/dams/governance/v0.1> .
 
@@ -2249,23 +2249,23 @@ dams:Metric a owl:Class,
         linkml:ClassDefinition ;
     rdfs:label "Metric" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:metric_expression ],
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:unit ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:filter_expression ],
-        [ a owl:Restriction ;
-            owl:minCardinality 1 ;
-            owl:onProperty dams:grain_entity_refs ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:aggregation_function ],
         [ a owl:Restriction ;
             owl:minCardinality 1 ;
+            owl:onProperty dams:grain_entity_refs ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
             owl:onProperty dams:measure_attribute_refs ],
         [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:unit ],
+            owl:cardinality 1 ;
+            owl:onProperty dams:metric_expression ],
         dams:HasOwnership,
         dams:HasPolicyBindings,
         dams:ModelElement ;
@@ -2294,17 +2294,17 @@ dams:ModelPackage a owl:Class,
             owl:maxCardinality 1 ;
             owl:onProperty dams:conceptual_implementation_ref ],
         [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:solution_ref ],
+            owl:cardinality 1 ;
+            owl:onProperty dams:api_version ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:implementation_scope ],
+            owl:onProperty dams:solution_ref ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:model_version ],
         [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:api_version ],
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:implementation_scope ],
         dams:HasGovernanceClassification,
         dams:HasOwnership,
         dams:HasPolicyBindings,
@@ -2405,18 +2405,36 @@ dams:Relationship a owl:Class,
     rdfs:label "Relationship" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:maxCardinality 1 ;
+            owl:onProperty dams:target_role ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:relationship_kind ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:source_role ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:target_max_cardinality ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:source_min_cardinality ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom [ a rdfs:Datatype ;
+                    owl:intersectionOf ( linkml:Integer [ a rdfs:Datatype ;
+                                owl:onDatatype xsd:integer ;
+                                owl:withRestrictions ( [ xsd:minInclusive 1 ] ) ] ) ] ;
             owl:onProperty dams:source_max_cardinality ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:cardinality_rationale ],
         [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:relation_term_ref ],
-        [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:source_entity_ref ],
         [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
+            owl:allValuesFrom [ a rdfs:Datatype ;
+                    owl:intersectionOf ( linkml:Integer [ a rdfs:Datatype ;
+                                owl:onDatatype xsd:integer ;
+                                owl:withRestrictions ( [ xsd:minInclusive 0 ] ) ] ) ] ;
             owl:onProperty dams:target_min_cardinality ],
         [ a owl:Restriction ;
             owl:allValuesFrom [ a rdfs:Datatype ;
@@ -2428,47 +2446,29 @@ dams:Relationship a owl:Class,
             owl:maxCardinality 1 ;
             owl:onProperty dams:term_direction ],
         [ a owl:Restriction ;
-            owl:allValuesFrom [ a rdfs:Datatype ;
-                    owl:intersectionOf ( linkml:Integer [ a rdfs:Datatype ;
-                                owl:onDatatype xsd:integer ;
-                                owl:withRestrictions ( [ xsd:minInclusive 1 ] ) ] ) ] ;
-            owl:onProperty dams:source_max_cardinality ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom [ a rdfs:Datatype ;
-                    owl:intersectionOf ( linkml:Integer [ a rdfs:Datatype ;
-                                owl:onDatatype xsd:integer ;
-                                owl:withRestrictions ( [ xsd:minInclusive 1 ] ) ] ) ] ;
-            owl:onProperty dams:target_max_cardinality ],
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:associative ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:target_entity_ref ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:identifying ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:relationship_kind ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:source_min_cardinality ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:associative ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:target_role ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:source_role ],
+            owl:onProperty dams:target_min_cardinality ],
         [ a owl:Restriction ;
             owl:allValuesFrom [ a rdfs:Datatype ;
                     owl:intersectionOf ( linkml:Integer [ a rdfs:Datatype ;
                                 owl:onDatatype xsd:integer ;
-                                owl:withRestrictions ( [ xsd:minInclusive 0 ] ) ] ) ] ;
-            owl:onProperty dams:target_min_cardinality ],
+                                owl:withRestrictions ( [ xsd:minInclusive 1 ] ) ] ) ] ;
+            owl:onProperty dams:target_max_cardinality ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:target_max_cardinality ],
+            owl:onProperty dams:identifying ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:source_max_cardinality ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:relation_term_ref ],
         dams:ModelElement ;
     skos:definition "Именованная связь между логическими или концептуальными сущностями." ;
     skos:inScheme <https://data.moex.com/dams/core/v0.1> .
@@ -2635,13 +2635,13 @@ dams:SelectedEntity a owl:Class,
     rdfs:label "SelectedEntity" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:minCardinality 1 ;
-            owl:onProperty dams:selected_attributes ],
+            owl:onProperty dams:physical_object_refs ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:logical_entity_ref ],
         [ a owl:Restriction ;
             owl:minCardinality 1 ;
-            owl:onProperty dams:physical_object_refs ],
+            owl:onProperty dams:selected_attributes ],
         dams:ModelElement ;
     skos:definition "Выбранная для интеграции логическая сущность." ;
     skos:inScheme <https://data.moex.com/dams/contract-binding/v0.1> .
@@ -2681,10 +2681,16 @@ dams:SpecificationRequirement a owl:Class,
     rdfs:label "SpecificationRequirement" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:requirement_level ],
+            owl:onProperty dams:requirement_section ],
         [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:applies_to ],
+            owl:cardinality 1 ;
+            owl:onProperty dams:code ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:statement ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:requirement_level ],
         [ a owl:Restriction ;
             owl:allValuesFrom [ a rdfs:Datatype ;
                     owl:intersectionOf ( linkml:String [ a rdfs:Datatype ;
@@ -2692,17 +2698,11 @@ dams:SpecificationRequirement a owl:Class,
                                 owl:withRestrictions ( [ xsd:pattern "^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$" ] ) ] ) ] ;
             owl:onProperty dams:code ],
         [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:requirement_section ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:code ],
-        [ a owl:Restriction ;
             owl:minCardinality 1 ;
             owl:onProperty dams:formal_checks ],
         [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:statement ],
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:applies_to ],
         dams:ModelElement ;
     skos:definition "Нормативное требование к модели, соответствующей reference specification (каталог для уровня ИТ-решения и др.)." ;
     skos:inScheme <https://data.moex.com/dams/requirements/v0.1> .
@@ -2886,13 +2886,13 @@ dams:DataFlow a owl:Class,
     rdfs:label "DataFlow" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:integration_spec_ref ],
+            owl:onProperty dams:integration_channel ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:target_system_ref ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:integration_ref ],
+            owl:onProperty dams:source_system_ref ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:contract_ref ],
@@ -2901,25 +2901,25 @@ dams:DataFlow a owl:Class,
             owl:onProperty dams:source_platform_ref ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:source_system_ref ],
+            owl:onProperty dams:integration_ref ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:target_platform_ref ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:integration_class ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:integration_channel ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
             owl:onProperty dams:target_solution_ref ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:source_solution_ref ],
+            owl:onProperty dams:integration_level ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:integration_level ],
+            owl:onProperty dams:integration_class ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:integration_spec_ref ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:source_solution_ref ],
         dams:HasLifecycle,
         dams:HasOwnership,
         dams:ModelElement ;
@@ -2938,14 +2938,14 @@ dams:DomainContext a owl:Class,
         linkml:ClassDefinition ;
     rdfs:label "DomainContext" ;
     rdfs:subClassOf [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:namespace ],
+        [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:solution_ref ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:domain_ref ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:namespace ],
         dams:HasOwnership,
         dams:ModelElement ;
     skos:definition "Ограниченный логический контекст с собственной терминологией и областью ответственности." ;
@@ -2955,17 +2955,17 @@ dams:HasLifecycle a owl:Class,
         linkml:ClassDefinition ;
     rdfs:label "HasLifecycle" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:deprecated_by_ref ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:valid_from ],
-        [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:lifecycle_status ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:valid_to ] ;
+            owl:onProperty dams:valid_to ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:valid_from ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:deprecated_by_ref ] ;
     skos:definition "Mixin жизненного цикла: статус, период действия и ссылка на заменяющий элемент." ;
     skos:inScheme <https://data.moex.com/dams/governance/v0.1> .
 
@@ -2974,16 +2974,16 @@ dams:HasProvenance a owl:Class,
     rdfs:label "HasProvenance" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:approval_status ],
+            owl:onProperty dams:source_artifact_ref ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:source_artifact_ref ],
+            owl:onProperty dams:approved_by_ref ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:approved_at ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:approved_by_ref ] ;
+            owl:onProperty dams:approval_status ] ;
     skos:definition "Mixin происхождения и согласования: исходный артефакт, evidence, статус и согласующий." ;
     skos:inScheme <https://data.moex.com/dams/governance/v0.1> .
 
@@ -2991,14 +2991,11 @@ dams:PhysicalField a owl:Class,
         linkml:ClassDefinition ;
     rdfs:label "PhysicalField" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:mapping_rationale ],
+            owl:cardinality 1 ;
+            owl:onProperty dams:physical_object_ref ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:native_type ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:native_name ],
+            owl:onProperty dams:required ],
         [ a owl:Restriction ;
             owl:allValuesFrom [ a rdfs:Datatype ;
                     owl:intersectionOf ( linkml:Integer [ a rdfs:Datatype ;
@@ -3007,19 +3004,22 @@ dams:PhysicalField a owl:Class,
             owl:onProperty dams:ordinal_position ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:mapping_coverage_status ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:required ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:physical_object_ref ],
+            owl:onProperty dams:schema_path ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:ordinal_position ],
         [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:native_type ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:native_name ],
+        [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:schema_path ],
+            owl:onProperty dams:mapping_rationale ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:mapping_coverage_status ],
         dams:HasGovernanceClassification,
         dams:HasOwnership,
         dams:HasPolicyBindings,
@@ -3031,11 +3031,14 @@ dams:RelationTerm a owl:Class,
         linkml:ClassDefinition ;
     rdfs:label "RelationTerm" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:description ],
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:inverse_label_en ],
         [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:forward_label ],
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:inverse_label ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:default_relationship_kind ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:ontology_property_ref ],
@@ -3043,17 +3046,14 @@ dams:RelationTerm a owl:Class,
             owl:maxCardinality 1 ;
             owl:onProperty dams:symmetric ],
         [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:default_relationship_kind ],
+            owl:cardinality 1 ;
+            owl:onProperty dams:description ],
         [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:inverse_label_en ],
+            owl:cardinality 1 ;
+            owl:onProperty dams:forward_label ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:forward_label_en ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:inverse_label ],
         dams:HasDefinition,
         dams:ModelElement ;
     skos:definition """Governed dictionary term for a conceptual/logical relationship (ADR-026). Provides forward and inverse natural-language labels so a single Relationship assertion can be read from either side.
@@ -3092,7 +3092,7 @@ dams:BusinessDomain a owl:Class,
             owl:maxCardinality 1 ;
             owl:onProperty dams:parent_domain_ref ],
         dams:RegistryEntry ;
-    skos:definition "Бизнес-домен или предметная область; мастер определяется архитектурным governance." ;
+    skos:definition "Бизнес-домен или предметная область; мастер определяется архитектурным governance" ;
     skos:inScheme <https://data.moex.com/dams/registries/v0.1> .
 
 dams:HasDefinition a owl:Class,
@@ -3132,8 +3132,26 @@ dams:Mapping a owl:Class,
             owl:cardinality 1 ;
             owl:onProperty dams:mapping_type ],
         [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty dams:target_refs ],
+        [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:transformation_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:confidence ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:transformation_expression ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty dams:source_refs ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:mapping_cardinality ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:valid_from ],
         [ a owl:Restriction ;
             owl:allValuesFrom [ a rdfs:Datatype ;
                     owl:intersectionOf ( linkml:Decimal [ a rdfs:Datatype ;
@@ -3143,26 +3161,8 @@ dams:Mapping a owl:Class,
                                 owl:withRestrictions ( [ xsd:maxInclusive 1 ] ) ] ) ] ;
             owl:onProperty dams:confidence ],
         [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:mapping_cardinality ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:confidence ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:valid_from ],
-        [ a owl:Restriction ;
-            owl:minCardinality 1 ;
-            owl:onProperty dams:target_refs ],
-        [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:valid_to ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:transformation_expression ],
-        [ a owl:Restriction ;
-            owl:minCardinality 1 ;
-            owl:onProperty dams:source_refs ],
         dams:HasProvenance,
         dams:ModelElement ;
     skos:definition """Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (PhysicalObject↔LogicalEntity), field_mapping/mapsTo (physical↔logical), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
@@ -3173,32 +3173,32 @@ dams:PhysicalObject a owl:Class,
         linkml:ClassDefinition ;
     rdfs:label "PhysicalObject" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:system_ref ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:mapping_coverage_status ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:native_schema_ref ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:technology ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:direction ],
-        [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:mapping_rationale ],
         [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:qualified_name ],
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:mapping_coverage_status ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:solution_ref ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
+            owl:onProperty dams:technology ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
             owl:onProperty dams:object_kind ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:qualified_name ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:system_ref ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:native_schema_ref ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:direction ],
         dams:HasGovernanceClassification,
         dams:HasOwnership,
         dams:HasPolicyBindings,
@@ -3250,20 +3250,20 @@ dams:ConceptualEntity a owl:Class,
         linkml:ClassDefinition ;
     rdfs:label "ConceptualEntity" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:description ],
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:parent_concept_ref ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:dependency_kind ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:parent_concept_ref ],
+            owl:onProperty dams:entity_tier ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:genesis_kind ],
         [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:entity_tier ],
+            owl:cardinality 1 ;
+            owl:onProperty dams:description ],
         dams:HasBusinessClassification,
         dams:HasDefinition,
         dams:HasOwnership,
@@ -3316,13 +3316,13 @@ dams:HasGovernanceClassification a owl:Class,
     rdfs:label "HasGovernanceClassification" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:classification_rationale ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
             owl:onProperty dams:governance_classification ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:classification_source ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:classification_rationale ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:security_classification ] ;
@@ -3358,31 +3358,31 @@ dams:LogicalEntity a owl:Class,
     rdfs:label "LogicalEntity" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:maxCardinality 1 ;
+            owl:onProperty dams:business_key_kind ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
             owl:onProperty dams:conceptual_alignment_status ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:alignment_rationale ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:isolation_rationale ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:solution_data_role ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:business_key_kind ],
+            owl:onProperty dams:solution_ref ],
         [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:isolation_rationale ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:identity_rule ],
+            owl:cardinality 1 ;
+            owl:onProperty dams:description ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:context_ref ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:alignment_rationale ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:description ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:solution_ref ],
+            owl:onProperty dams:identity_rule ],
         dams:HasBusinessClassification,
         dams:HasDefinition,
         dams:HasGovernanceClassification,
@@ -3430,8 +3430,17 @@ dams:LogicalAttribute a owl:Class,
             owl:maxCardinality 1 ;
             owl:onProperty dams:currency_attribute_ref ],
         [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty dams:logical_type ],
+        [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:derived_expression ],
+            owl:onProperty dams:mapping_coverage_status ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom [ a rdfs:Datatype ;
+                    owl:intersectionOf ( linkml:Integer [ a rdfs:Datatype ;
+                                owl:onDatatype xsd:integer ;
+                                owl:withRestrictions ( [ xsd:minInclusive 1 ] ) ] ) ] ;
+            owl:onProperty dams:maximum_cardinality ],
         [ a owl:Restriction ;
             owl:allValuesFrom [ a rdfs:Datatype ;
                     owl:intersectionOf ( linkml:Integer [ a rdfs:Datatype ;
@@ -3442,41 +3451,20 @@ dams:LogicalAttribute a owl:Class,
             owl:cardinality 1 ;
             owl:onProperty dams:description ],
         [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:mapping_coverage_status ],
+            owl:cardinality 1 ;
+            owl:onProperty dams:required ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:temporal_semantics ],
+            owl:onProperty dams:derived_expression ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:unit_code ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:maximum_cardinality ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:minimum_cardinality ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:timezone_policy ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:value_set_ref ],
-        [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:required ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom [ a rdfs:Datatype ;
-                    owl:intersectionOf ( linkml:Integer [ a rdfs:Datatype ;
-                                owl:onDatatype xsd:integer ;
-                                owl:withRestrictions ( [ xsd:minInclusive 1 ] ) ] ) ] ;
-            owl:onProperty dams:maximum_cardinality ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
             owl:onProperty dams:mapping_rationale ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:default_value ],
+            owl:onProperty dams:maximum_cardinality ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:multivalued ],
@@ -3484,11 +3472,23 @@ dams:LogicalAttribute a owl:Class,
             owl:maxCardinality 1 ;
             owl:onProperty dams:format_pattern ],
         [ a owl:Restriction ;
-            owl:cardinality 1 ;
-            owl:onProperty dams:logical_type ],
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:minimum_cardinality ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:owner_entity_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:temporal_semantics ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:value_set_ref ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:timezone_policy ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:default_value ],
         dams:HasDefinition,
         dams:HasGovernanceClassification,
         dams:HasOwnership,
@@ -3644,13 +3644,13 @@ dams:HasOwnership a owl:Class,
     rdfs:label "HasOwnership" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:data_owner_ref ],
+            owl:onProperty dams:ownership_inheritance_rule ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:data_steward_ref ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty dams:ownership_inheritance_rule ],
+            owl:onProperty dams:data_owner_ref ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:owning_unit_ref ] ;
@@ -3779,24 +3779,24 @@ dams:RegistryEntry a owl:Class,
         linkml:ClassDefinition ;
     rdfs:label "RegistryEntry" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:registry_description ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty dams:source_uri ],
-        [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:registry_name ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:registry_status ],
+            owl:onProperty dams:master_system ],
         [ owl:unionOf ( dams:BusinessDomain dams:BusinessProcess dams:DataClassificationTerm dams:DataContractReference dams:GlossaryTerm dams:ITPlatform dams:ITSolution dams:ITSystem dams:IntegrationReference dams:OrganizationUnit dams:Policy dams:Role ) ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:source_uri ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty dams:registry_description ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:registry_id ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:master_system ] ;
+            owl:onProperty dams:registry_status ] ;
     skos:definition "Локальная ссылочная проекция записи внешней мастер-системы; не является мастер-копией справочника." ;
     skos:inScheme <https://data.moex.com/dams/registries/v0.1> .
 
@@ -3832,19 +3832,19 @@ dams:FormalCheckKindEnum a owl:Class,
 dams:ModelElement a owl:Class,
         linkml:ClassDefinition ;
     rdfs:label "ModelElement" ;
-    rdfs:subClassOf [ owl:unionOf ( dams:ConceptualEntity dams:DataFlow dams:DataFlowEntityBinding dams:DataModelBinding dams:Dimension dams:DomainContext dams:LogicalAttribute dams:LogicalEntity dams:Mapping dams:Metric dams:ModelPackage dams:ModelSelection dams:PhysicalField dams:PhysicalObject dams:RelationTerm dams:Relationship dams:SelectedAttribute dams:SelectedEntity dams:SpecificationRequirement ) ],
-        [ a owl:Restriction ;
+    rdfs:subClassOf [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty dams:title ],
+        [ owl:unionOf ( dams:ConceptualEntity dams:DataFlow dams:DataFlowEntityBinding dams:DataModelBinding dams:Dimension dams:DomainContext dams:LogicalAttribute dams:LogicalEntity dams:Mapping dams:Metric dams:ModelPackage dams:ModelSelection dams:PhysicalField dams:PhysicalObject dams:RelationTerm dams:Relationship dams:SelectedAttribute dams:SelectedEntity dams:SpecificationRequirement ) ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:name ],
+            owl:onProperty dams:element_id ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
             owl:onProperty dams:description ],
         [ a owl:Restriction ;
             owl:cardinality 1 ;
-            owl:onProperty dams:element_id ],
+            owl:onProperty dams:name ],
         dams:HasLifecycle ;
     skos:definition "Абстрактный корень иерархии элементов модели: общая идентичность (element_id), имя, описание и жизненный цикл." ;
     skos:inScheme <https://data.moex.com/dams/core/v0.1> .

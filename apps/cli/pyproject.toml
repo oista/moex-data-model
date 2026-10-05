@@ -24,6 +24,10 @@ dependencies = [
 map = ["moex-linkml-tooling[map]"]
 automator = ["moex-linkml-tooling[automator]"]
 stage7 = ["moex-linkml-tooling[map,automator]"]
+ontology = [
+    "pyshacl==0.40.1",
+    "linkml-owl>=1.7,<2.0",
+]
 dev = [
     "pytest>=8.0,<9.0",
     "moex-modeling-kernel[dev]",

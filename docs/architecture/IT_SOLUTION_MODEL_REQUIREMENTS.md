@@ -1,4 +1,10 @@
-
+---
+status: Draft
+version: "0.1"
+normative: false
+supersedes: []
+superseded_by: MODELING_ARCHITECTURE.md
+---
 
 Связанные документы:
 

@@ -41,6 +41,9 @@ model-assets/external-sources/**/.cache/
 # Solution-xlsx import reports (ADR-022)
 tmp/solution-import/
 
+# Office lock files (Excel holds ~$*.xlsx open → git add Permission denied)
+**/~$*
+
 # IDE
 .idea/
 .vscode/

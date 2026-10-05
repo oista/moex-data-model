@@ -113,6 +113,9 @@ def artifact_paths(root: Path) -> dict[str, Path]:
         "rdf_manifest": mans / "moex-dams-rdf.json",
         "json_schema": arts / "moex-dams.schema.json",
         "json_schema_manifest": mans / "moex-dams-json-schema.json",
+        "ontology_profile": arts / "ontology-profile.json",
+        "ontology_profile_md": arts / "ontology-profile.md",
+        "ontology_profile_manifest": mans / "moex-dams-ontology-profile.json",
         "bundle_manifest": mans / "moex-dams-bundle.json",
     }
 

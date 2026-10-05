@@ -25,7 +25,11 @@ def test_build_publication_module(dams_schema: Path, trading_solution: Path) -> 
     assert "summary" in section_ids
     assert "graph-nodes" in section_ids
     nodes_section = next(s for s in module.sections if s.id == "graph-nodes")
-    assert any(i.id == "dams:concept/Client" for i in nodes_section.items)
+    # ADR-029: concept Client is enterprise SoT; solution graph has logical + realizes
+    assert any(i.id == "dams:logical/trading/Client" for i in nodes_section.items)
+    assert any(
+        i.id == "dams:mapping/trading/client-realizes-client" for i in nodes_section.items
+    )
 
 
 def test_export_slice_json(

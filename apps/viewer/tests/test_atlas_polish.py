@@ -89,6 +89,8 @@ def test_js_glossary_section_tabs_and_term_links():
     assert 'label: "Связи"' in gloss
     assert "Отметьте термины сверху, чтобы увидеть связанные." in JS
     assert "Нет ассоциативных связей у выбранных терминов." in JS
+    assert 'placeholder = "Поиск по имени"' in JS
+    assert 'placeholder = "Поиск по описанию"' in JS
     neigh = JS.split("function collectGlossarySeeAlsoNeighbours")[1].split(
         "function glossaryTaxonomyParentIds"
     )[0]
@@ -103,6 +105,8 @@ def test_js_glossary_section_tabs_and_term_links():
     css = assemble_css()
     assert ".glossary-relations-layout" in css
     assert ".glossary-relations-pane" in css
+    assert ".section-toolbar input[type=\"search\"]" in css
+    assert "color: var(--text-primary);" in css
 
 
 def test_section_payload_includes_instance_of():

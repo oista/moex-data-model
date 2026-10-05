@@ -38,6 +38,9 @@ jobs:
       - name: Ontology packages pytest
         run: make packages-check
 
+      - name: Stage 8 ontology-check (pySHACL + linkml-owl)
+        run: make ontology-check
+
       - name: Viewer pytest + check
         run: make viewer-check
 

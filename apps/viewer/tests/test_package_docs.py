@@ -247,7 +247,9 @@ def test_package_docs_normalizer_fails_on_invalid_toc(tmp_path: Path):
 def test_group_solution_impl_nav_documentation_folder():
     sections = [
         PublicationSection(id="package", title="Package", type="key-value", kind="overview"),
-        PublicationSection(id="conceptual", title="Conceptual entities", type="entity-table"),
+        PublicationSection(
+            id="conceptual", title="Conceptual entities links", type="entity-table"
+        ),
         PublicationSection(id="logical", title="Logical entities", type="entity-table"),
         PublicationSection(id="logical-erd", title="Logical ER diagram", type="mermaid-diagram"),
         PublicationSection(id="physical", title="Physical objects", type="entity-table"),
@@ -273,6 +275,12 @@ def test_group_solution_impl_nav_documentation_folder():
         "trading-solution",
         PublicationModule(module_id="moex:module:trading-solution", title="T", sections=sections),
     )
+    logical = next(c for c in kids if c.id == "implnav:trading-solution:group:logical")
+    assert [c.attributes["section_id"] for c in logical.children] == [
+        "logical",
+        "conceptual",
+        "logical-erd",
+    ]
     assert kids[-1].id == "implnav:trading-solution:group:documentation"
     assert kids[-1].title == "Documentation"
     assert [c.attributes["section_id"] for c in kids[-1].children] == ["documentation"]

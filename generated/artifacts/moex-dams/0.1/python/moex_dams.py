@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-04T21:32:32
+# Generation date: 2026-10-05T04:58:17
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -436,7 +436,7 @@ class ITPlatform(RegistryEntry):
 @dataclass(repr=False)
 class BusinessDomain(RegistryEntry):
     """
-    Бизнес-домен или предметная область; мастер определяется архитектурным governance.
+    Бизнес-домен или предметная область; мастер определяется архитектурным governance
     """
     _inherited_slots: ClassVar[list[str]] = []
 

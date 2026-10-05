@@ -10,6 +10,7 @@ from moex_standard_linkml.domain.body import LinkMLImplementationBody
 from moex_dams.rules.identifiers import (
     build_dams_curie_resolver,
     check_identifiers,
+    load_merged_schema_prefix_map,
     load_schema_prefix_map,
 )
 
@@ -21,6 +22,15 @@ def test_load_schema_prefix_map_has_dams(dams_schema: Path) -> None:
     assert "moex" in prefixes
     assert prefixes["moex"].startswith("https://")
     assert default == "dams"
+
+
+def test_merged_prefix_map_includes_import_prefixes(dams_schema: Path) -> None:
+    prefixes, default = load_merged_schema_prefix_map(dams_schema)
+    assert default == "dams"
+    assert "xsd" in prefixes
+    assert prefixes["xsd"].endswith("#")
+    resolver = build_dams_curie_resolver(dams_schema)
+    assert resolver.expand("xsd:string") == "http://www.w3.org/2001/XMLSchema#string"
 
 
 def test_trading_ids_pass_identifier_check(

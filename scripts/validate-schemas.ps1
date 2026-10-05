@@ -55,6 +55,31 @@ print('lint OK')
 "@
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+    Write-Host "DAMS ontology URI lint (MOEX-ONT-*)"
+    $DamsSrc = (Join-Path $RepoRoot "packages/specification-dams/src") -replace '\\','/'
+    $KernelSrc = (Join-Path $RepoRoot "packages/modeling-kernel/src") -replace '\\','/'
+    $LinkmlSrc = (Join-Path $RepoRoot "packages/standard-linkml/src") -replace '\\','/'
+    $ContractsSrc = (Join-Path $RepoRoot "generated/contracts/moex-dams/0.1") -replace '\\','/'
+    $SchemaPosix = $Schema -replace '\\','/'
+    & $Python -c @"
+import sys
+sys.path[:0] = [
+    r'$DamsSrc',
+    r'$KernelSrc',
+    r'$LinkmlSrc',
+    r'$ContractsSrc',
+]
+from pathlib import Path
+from moex_dams.rules.ontology_uris import check_ontology_uris
+diags = check_ontology_uris(Path(r'$SchemaPosix'))
+for d in diags:
+    print(f'{d.severity.value}\t{d.diagnostic_code}\t{d.diagnostic_message}')
+if diags:
+    raise SystemExit(1)
+print('ontology URI lint OK')
+"@
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
     Write-Host "linkml validate ModelPackage"
     & $Python -c @"
 from pathlib import Path

@@ -1,7 +1,8 @@
-"""lint — LinkML lint + DAMS structural/reference rules."""
+"""lint — LinkML lint + DAMS structural/reference rules + schema URI lint."""
 
 from __future__ import annotations
 
+from moex_dams.rules.ontology_uris import check_ontology_uris
 from moex_dams.rules.references import check_references
 from moex_dams.rules.structural import check_structural
 from moex_modeling import DiagnosticSeverity
@@ -26,7 +27,8 @@ def run_lint(paths: SlicePaths) -> tuple[int, str]:
         impl_ref, path=str(paths.implementation)
     )
     diags = (
-        list(provider.validate_standard(body))
+        list(check_ontology_uris(paths.schema))
+        + list(provider.validate_standard(body))
         + list(check_structural(body))
         + list(check_references(body))
     )

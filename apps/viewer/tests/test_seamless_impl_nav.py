@@ -101,7 +101,9 @@ def test_impl_section_nav_children_stamps_level_glyphs() -> None:
 def _solution_sections() -> list[PublicationSection]:
     return [
         PublicationSection(id="package", title="Package", type="key-value", kind="overview"),
-        PublicationSection(id="conceptual", title="Conceptual entities", type="entity-table"),
+        PublicationSection(
+            id="conceptual", title="Conceptual entities links", type="entity-table"
+        ),
         PublicationSection(id="logical", title="Logical entities", type="entity-table"),
         PublicationSection(
             id="logical-erd", title="Logical ER diagram", type="mermaid-diagram"
@@ -146,7 +148,6 @@ def test_group_solution_impl_nav_nests_five_folders() -> None:
     kids = impl_section_nav_children("crm-solution", mod)
     assert [c.id for c in kids] == [
         "implnav:crm-solution:group:overview",
-        "implnav:crm-solution:group:conceptual",
         "implnav:crm-solution:group:logical",
         "implnav:crm-solution:group:physical",
         "implnav:crm-solution:group:requirements",
@@ -163,23 +164,22 @@ def test_group_solution_impl_nav_nests_five_folders() -> None:
         "slice-relations",
         "slice-nodes",
     ]
-    assert kids[1].title == "Концептуальная модель"
+    assert kids[1].title == "Логическая модель"
     assert kids[1].attributes.get("group_style") == "section_folder"
-    assert kids[1].attributes.get("nav_glyph") == "cdm"
-    assert [c.attributes["section_id"] for c in kids[1].children] == ["conceptual"]
-    assert [c.attributes["section_id"] for c in kids[2].children] == [
+    assert kids[1].attributes.get("nav_glyph") == "ldm"
+    assert [c.attributes["section_id"] for c in kids[1].children] == [
         "logical",
+        "conceptual",
         "logical-erd",
     ]
-    assert kids[2].attributes.get("nav_glyph") == "ldm"
-    assert [c.attributes["section_id"] for c in kids[3].children] == [
+    assert [c.attributes["section_id"] for c in kids[2].children] == [
         "physical",
         "physical-erd",
     ]
-    assert kids[3].attributes.get("nav_glyph") == "pdm"
-    assert [c.attributes["section_id"] for c in kids[4].children] == ["model-assessment"]
-    assert kids[4].title == "Требования"
-    artifacts = kids[5]
+    assert kids[2].attributes.get("nav_glyph") == "pdm"
+    assert [c.attributes["section_id"] for c in kids[3].children] == ["model-assessment"]
+    assert kids[3].title == "Требования"
+    artifacts = kids[4]
     assert artifacts.title == "Артефакты"
     assert artifacts.attributes.get("nav_glyph") == "source_file"
     assert artifacts.attributes.get("nav_group") == "artifacts"
@@ -445,7 +445,7 @@ def test_repo_dams_trading_has_nested_section_refs() -> None:
     assert trading is not None
     assert trading.children
     top_ids = [c.id for c in trading.children]
-    # No local conceptual section: concepts live in enterprise (ADR-029).
+    # No solution CDM folder: conceptual links nest under logical (ADR-029).
     assert top_ids == [
         "implnav:trading-solution:group:overview",
         "implnav:trading-solution:group:logical",
@@ -454,6 +454,16 @@ def test_repo_dams_trading_has_nested_section_refs() -> None:
         "implnav:trading-solution:group:documentation",
         "implnav:trading-solution:group:artifacts",
     ]
+    logical = trading.children[1]
+    assert logical.title == "Логическая модель"
+    assert [c.attributes["section_id"] for c in logical.children] == [
+        "logical",
+        "conceptual",
+        "logical-erd",
+    ]
+    assert next(
+        c for c in logical.children if c.attributes["section_id"] == "conceptual"
+    ).title == "Conceptual entities links"
     artifacts = trading.children[-1]
     assert artifacts.title == "Артефакты"
     assert artifacts.attributes.get("nav_glyph") == "source_file"
@@ -483,12 +493,20 @@ def test_repo_dams_crm_solution_nav_folders() -> None:
     assert crm is not None
     assert [c.title for c in crm.children] == [
         "Overview",
-        "Концептуальная модель",
         "Логическая модель",
         "Физическая модель",
         "Требования",
         "Артефакты",
     ]
+    logical = crm.children[1]
+    assert [c.attributes["section_id"] for c in logical.children] == [
+        "logical",
+        "conceptual",
+        "logical-erd",
+    ]
+    assert next(
+        c for c in logical.children if c.attributes["section_id"] == "conceptual"
+    ).title == "Conceptual entities links"
     artifacts = crm.children[-1]
     assert artifacts.attributes.get("nav_glyph") == "source_file"
     assert [c.attributes["section_id"] for c in artifacts.children] == [

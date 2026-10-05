@@ -1,0 +1,382 @@
+{
+  "version": 1,
+  "profile": "logical",
+  "generator": "moex-dams-er-scene/0.1",
+  "package_id": "dams:model/mdm/0.1.0",
+  "nodes": [
+    {
+      "name": "ENTERPRISE",
+      "title": "Юридические лица (ЮЛ)",
+      "element_id": "dams:logical/mdm/ENTERPRISE",
+      "columns": [
+        {
+          "name": "ENTERPRISE_ID",
+          "type": "identifier",
+          "element_id": "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID",
+          "keys": [
+            "PK"
+          ],
+          "comment": "Уникальный GUID золотой записи (MDMID) ЮЛ"
+        },
+        {
+          "name": "SHORT_NAME",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/SHORT_NAME",
+          "keys": [],
+          "comment": "Краткое наименование ЮЛ"
+        },
+        {
+          "name": "SHORT_NAME_ENG",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG",
+          "keys": [],
+          "comment": "Краткое наименование ЮЛ (на английском языке)"
+        },
+        {
+          "name": "FULL_NAME",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/FULL_NAME",
+          "keys": [],
+          "comment": "Полное наименование ЮЛ"
+        },
+        {
+          "name": "FULL_NAME_ENG",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG",
+          "keys": [],
+          "comment": "Полное наименование ЮЛ (на английском языке)"
+        },
+        {
+          "name": "COUNTRY_CODE",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/COUNTRY_CODE",
+          "keys": [],
+          "comment": "Код страны"
+        },
+        {
+          "name": "INN",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/INN",
+          "keys": [],
+          "comment": "ИНН"
+        },
+        {
+          "name": "KPP",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/KPP",
+          "keys": [],
+          "comment": "КПП"
+        },
+        {
+          "name": "OGRN",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/OGRN",
+          "keys": [],
+          "comment": "ОГРН"
+        },
+        {
+          "name": "ADDR_EGRUL_REGION",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION",
+          "keys": [],
+          "comment": "13"
+        },
+        {
+          "name": "TERMINATION_DATE",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/TERMINATION_DATE",
+          "keys": [],
+          "comment": "Дата прекращения юридического лица"
+        },
+        {
+          "name": "INN_NONRESIDENT",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT",
+          "keys": [],
+          "comment": "ИНН организации-нерезидента (ИНН в стране нерезидента)"
+        },
+        {
+          "name": "LEI",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/LEI",
+          "keys": [],
+          "comment": "Международный код идентификации юридического лица LEI"
+        },
+        {
+          "name": "KIO",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/KIO",
+          "keys": [],
+          "comment": "КИО"
+        },
+        {
+          "name": "REG_NUM_NONRESIDENT",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT",
+          "keys": [],
+          "comment": "Регистрационный номер организации-нерезидента"
+        },
+        {
+          "name": "CEO_FIRSTNAME",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME",
+          "keys": [],
+          "comment": "ЕИО:Имя руководителя"
+        },
+        {
+          "name": "CEO_INN",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/CEO_INN",
+          "keys": [],
+          "comment": "ЕИО:Сведения о лице, имеющем право без доверенности действовать от имени ЮЛ: ИНН"
+        },
+        {
+          "name": "CEO_PATRONYMIC",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC",
+          "keys": [],
+          "comment": "ЕИО:Отчество руководителя"
+        },
+        {
+          "name": "CEO_POSITION",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/CEO_POSITION",
+          "keys": [],
+          "comment": "ЕИО:Должность руководителя"
+        },
+        {
+          "name": "CEO_SURNAME",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/CEO_SURNAME",
+          "keys": [],
+          "comment": "ЕИО:Фамилия руководителя"
+        },
+        {
+          "name": "TRUST_RULE_NUMBER",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER",
+          "keys": [],
+          "comment": "Номер правил доверительного управления"
+        },
+        {
+          "name": "ECBD_ID",
+          "type": "decimal",
+          "element_id": "dams:logical/mdm/ENTERPRISE/ECBD_ID",
+          "keys": [],
+          "comment": "ID в ЕКБД"
+        },
+        {
+          "name": "UNICODE",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/UNICODE",
+          "keys": [],
+          "comment": "Унифицированный код участника в ЕКБД"
+        },
+        {
+          "name": "CODE_NSD",
+          "type": "string",
+          "element_id": "dams:logical/mdm/ENTERPRISE/CODE_NSD",
+          "keys": [],
+          "comment": "Код НРД"
+        },
+        {
+          "name": "KBD_FIRMID",
+          "type": "decimal",
+          "element_id": "dams:logical/mdm/ENTERPRISE/KBD_FIRMID",
+          "keys": [],
+          "comment": "ID в КБД"
+        },
+        {
+          "name": "ACTIVE_FLAG",
+          "type": "decimal",
+          "element_id": "dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG",
+          "keys": [],
+          "comment": "Является ли запись удаленной (0) или активной (1) хотя бы на одном из источников в последней загрузке"
+        }
+      ]
+    },
+    {
+      "name": "PERSON",
+      "title": "Физические лица (ФЛ)",
+      "element_id": "dams:logical/mdm/PERSON",
+      "columns": [
+        {
+          "name": "PERSON_ID",
+          "type": "identifier",
+          "element_id": "dams:logical/mdm/PERSON/PERSON_ID",
+          "keys": [
+            "PK"
+          ],
+          "comment": "Уникальный GUID золотой записи (MDMID) ЮЛ"
+        },
+        {
+          "name": "FIO",
+          "type": "string",
+          "element_id": "dams:logical/mdm/PERSON/FIO",
+          "keys": [],
+          "comment": "ФИО"
+        },
+        {
+          "name": "LAST_NAME",
+          "type": "string",
+          "element_id": "dams:logical/mdm/PERSON/LAST_NAME",
+          "keys": [],
+          "comment": "Фамилия"
+        },
+        {
+          "name": "FIRST_NAME",
+          "type": "string",
+          "element_id": "dams:logical/mdm/PERSON/FIRST_NAME",
+          "keys": [],
+          "comment": "Имя"
+        },
+        {
+          "name": "PATRONYMIC",
+          "type": "string",
+          "element_id": "dams:logical/mdm/PERSON/PATRONYMIC",
+          "keys": [],
+          "comment": "Отчество"
+        },
+        {
+          "name": "DATEBIRTH",
+          "type": "date",
+          "element_id": "dams:logical/mdm/PERSON/DATEBIRTH",
+          "keys": [],
+          "comment": "Дата рождения"
+        },
+        {
+          "name": "ADDRESS_F",
+          "type": "string",
+          "element_id": "dams:logical/mdm/PERSON/ADDRESS_F",
+          "keys": [],
+          "comment": "Адрес физический"
+        },
+        {
+          "name": "INN",
+          "type": "string",
+          "element_id": "dams:logical/mdm/PERSON/INN",
+          "keys": [],
+          "comment": "ИНН"
+        },
+        {
+          "name": "SNILS",
+          "type": "string",
+          "element_id": "dams:logical/mdm/PERSON/SNILS",
+          "keys": [],
+          "comment": "СНИЛС"
+        },
+        {
+          "name": "IDENTITY_DOCUMENT_CODE",
+          "type": "decimal",
+          "element_id": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE",
+          "keys": [],
+          "comment": "Код документа, удостоверяющего личность"
+        },
+        {
+          "name": "IDENTITY_DOCUMENT_CODE_OMEGA",
+          "type": "decimal",
+          "element_id": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA",
+          "keys": [],
+          "comment": "Код документа, удостоверяющего личность (по классификации ОМЕГА)"
+        },
+        {
+          "name": "IDENTITY_DOCUMENT_TYPE",
+          "type": "string",
+          "element_id": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE",
+          "keys": [],
+          "comment": "Тип документа, удостоверяющего личность"
+        }
+      ]
+    },
+    {
+      "name": "PERSON_CEO",
+      "title": "ЕИО (СЕО) Единоличный исполнительный орган",
+      "element_id": "dams:logical/mdm/PERSON_CEO",
+      "columns": [
+        {
+          "name": "ENTERPRISE_ID",
+          "type": "identifier",
+          "element_id": "dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID",
+          "keys": [
+            "PK",
+            "FK"
+          ],
+          "comment": "ENTERPRISE_ID"
+        },
+        {
+          "name": "PERSON_ID",
+          "type": "string",
+          "element_id": "dams:logical/mdm/PERSON_CEO/PERSON_ID",
+          "keys": [
+            "FK"
+          ],
+          "comment": "PERSON_ID"
+        }
+      ]
+    },
+    {
+      "name": "PERSON_REPRESENTATIVE",
+      "title": "Представители ЮЛ",
+      "element_id": "dams:logical/mdm/PERSON_REPRESENTATIVE",
+      "columns": [
+        {
+          "name": "ENTERPRISE_ID",
+          "type": "identifier",
+          "element_id": "dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID",
+          "keys": [
+            "PK",
+            "FK"
+          ],
+          "comment": "ENTERPRISE_ID"
+        },
+        {
+          "name": "PERSON_ID",
+          "type": "string",
+          "element_id": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID",
+          "keys": [
+            "FK"
+          ],
+          "comment": "PERSON_ID"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "dams:rel/mdm/PERSON_CEO_to_ENTERPRISE_via_ENTERPRISE_ID",
+      "source": "PERSON_CEO",
+      "target": "ENTERPRISE",
+      "element_id": "dams:rel/mdm/PERSON_CEO_to_ENTERPRISE_via_ENTERPRISE_ID",
+      "label": "PERSON_CEO_to_ENTERPRISE_via_ENTERPRISE_ID",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/mdm/PERSON_CEO_to_PERSON_via_PERSON_ID",
+      "source": "PERSON_CEO",
+      "target": "PERSON",
+      "element_id": "dams:rel/mdm/PERSON_CEO_to_PERSON_via_PERSON_ID",
+      "label": "PERSON_CEO_to_PERSON_via_PERSON_ID",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/mdm/PERSON_REPRESENTATIVE_to_ENTERPRISE_via_ENTERPRISE_ID",
+      "source": "PERSON_REPRESENTATIVE",
+      "target": "ENTERPRISE",
+      "element_id": "dams:rel/mdm/PERSON_REPRESENTATIVE_to_ENTERPRISE_via_ENTERPRISE_ID",
+      "label": "PERSON_REPRESENTATIVE_to_ENTERPRISE_via_ENTERPRISE_ID",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    },
+    {
+      "id": "dams:rel/mdm/PERSON_REPRESENTATIVE_to_PERSON_via_PERSON_ID",
+      "source": "PERSON_REPRESENTATIVE",
+      "target": "PERSON",
+      "element_id": "dams:rel/mdm/PERSON_REPRESENTATIVE_to_PERSON_via_PERSON_ID",
+      "label": "PERSON_REPRESENTATIVE_to_PERSON_via_PERSON_ID",
+      "source_cardinality": "zeroOrMore",
+      "target_cardinality": "zeroOrOne"
+    }
+  ]
+}

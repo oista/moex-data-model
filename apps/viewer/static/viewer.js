@@ -4869,12 +4869,48 @@
     return { width, height, headerH, rowH, maxType, maxName };
   }
 
-  function orthogonalErdPath(x1, y1, x2, y2, bend) {
-    if (bend && Number.isFinite(bend.x) && Number.isFinite(bend.y)) {
-      return `M ${x1} ${y1} L ${bend.x} ${y1} L ${bend.x} ${y2} L ${x2} ${y2}`;
+  function erdNodeCenter(pos, metrics) {
+    return {
+      x: pos.x + metrics.width / 2,
+      y: pos.y + metrics.height / 2,
+    };
+  }
+
+  function erdAnchorOnSide(pos, metrics, side) {
+    const cx = pos.x + metrics.width / 2;
+    const cy = pos.y + metrics.height / 2;
+    if (side === "left") return { x: pos.x, y: cy };
+    if (side === "right") return { x: pos.x + metrics.width, y: cy };
+    if (side === "top") return { x: cx, y: pos.y };
+    return { x: cx, y: pos.y + metrics.height };
+  }
+
+  function erdPickSides(sp, sm, tp, tm) {
+    const sc = erdNodeCenter(sp, sm);
+    const tc = erdNodeCenter(tp, tm);
+    const dx = tc.x - sc.x;
+    const dy = tc.y - sc.y;
+    if (Math.abs(dx) >= Math.abs(dy)) {
+      return dx >= 0 ? ["right", "left"] : ["left", "right"];
     }
-    const mx = (x1 + x2) / 2;
-    return `M ${x1} ${y1} L ${mx} ${y1} L ${mx} ${y2} L ${x2} ${y2}`;
+    return dy >= 0 ? ["bottom", "top"] : ["top", "bottom"];
+  }
+
+  function orthogonalErdPath(x1, y1, x2, y2, bend, side1, side2) {
+    if (bend && Number.isFinite(bend.x) && Number.isFinite(bend.y)) {
+      // Route via bend with orthogonal segments from each end.
+      if (side1 === "left" || side1 === "right") {
+        return `M ${x1} ${y1} L ${bend.x} ${y1} L ${bend.x} ${y2} L ${x2} ${y2}`;
+      }
+      return `M ${x1} ${y1} L ${x1} ${bend.y} L ${x2} ${bend.y} L ${x2} ${y2}`;
+    }
+    const verticalStart = side1 === "top" || side1 === "bottom";
+    if (verticalStart) {
+      const midY = (y1 + y2) / 2;
+      return `M ${x1} ${y1} L ${x1} ${midY} L ${x2} ${midY} L ${x2} ${y2}`;
+    }
+    const midX = (x1 + x2) / 2;
+    return `M ${x1} ${y1} L ${midX} ${y1} L ${midX} ${y2} L ${x2} ${y2}`;
   }
 
   function renderErdScene(mod, section, scene, layout, onSelect) {
@@ -5022,15 +5058,21 @@
         const tp = nodePos(tk);
         const sm = nodeMetrics[sk];
         const tm = nodeMetrics[tk];
-        const x1 = sp.x + sm.width;
-        const y1 = sp.y + sm.height / 2;
-        const x2 = tp.x;
-        const y2 = tp.y + tm.height / 2;
+        const [side1, side2] = erdPickSides(sp, sm, tp, tm);
+        const a1 = erdAnchorOnSide(sp, sm, side1);
+        const a2 = erdAnchorOnSide(tp, tm, side2);
+        const x1 = a1.x;
+        const y1 = a1.y;
+        const x2 = a2.x;
+        const y2 = a2.y;
         const ek = erdEdgeKey(edge);
         const edgeLayout = (state.layout.edges || {})[ek] || {};
         const bend = (edgeLayout.points && edgeLayout.points[0]) || null;
         const path = document.createElementNS(NS, "path");
-        path.setAttribute("d", orthogonalErdPath(x1, y1, x2, y2, bend));
+        path.setAttribute(
+          "d",
+          orthogonalErdPath(x1, y1, x2, y2, bend, side1, side2)
+        );
         path.classList.add("erd-edge-path");
         if (state.selectedEdge === ek) path.classList.add("is-selected");
         path.setAttribute("marker-start", markerUrl(edge.source_cardinality, "Start"));
@@ -5345,6 +5387,33 @@
       return { x, y };
     }
 
+    function fitToContent() {
+      let minX = Infinity;
+      let minY = Infinity;
+      let maxX = -Infinity;
+      let maxY = -Infinity;
+      (scene.nodes || []).forEach((node) => {
+        const key = erdNodeKey(node);
+        const m = nodeMetrics[key];
+        const pos = nodePos(key);
+        if (!m) return;
+        minX = Math.min(minX, pos.x);
+        minY = Math.min(minY, pos.y);
+        maxX = Math.max(maxX, pos.x + m.width);
+        maxY = Math.max(maxY, pos.y + m.height);
+      });
+      if (!Number.isFinite(minX)) return;
+      const pad = 40;
+      const contentW = Math.max(1, maxX - minX + pad * 2);
+      const contentH = Math.max(1, maxY - minY + pad * 2);
+      const vw = Math.max(1, wrap.clientWidth || svg.clientWidth || 800);
+      const vh = Math.max(1, wrap.clientHeight || svg.clientHeight || 500);
+      const next = Math.min(1.25, Math.max(0.2, Math.min(vw / contentW, vh / contentH)));
+      state.scale = next;
+      state.panX = (vw - contentW * next) / 2 - (minX - pad) * next;
+      state.panY = (vh - contentH * next) / 2 - (minY - pad) * next;
+    }
+
     let panning = false;
     let panOrigin = null;
     svg.addEventListener("pointerdown", (ev) => {
@@ -5385,7 +5454,7 @@
       (ev) => {
         ev.preventDefault();
         const delta = ev.deltaY > 0 ? 0.9 : 1.1;
-        const next = Math.min(2.5, Math.max(0.35, state.scale * delta));
+        const next = Math.min(2.5, Math.max(0.15, state.scale * delta));
         const rect = svg.getBoundingClientRect();
         const cx = ev.clientX - rect.left;
         const cy = ev.clientY - rect.top;
@@ -5481,6 +5550,8 @@
     });
 
     redraw();
+    fitToContent();
+    applyTransform();
     return wrap;
   }
 
@@ -6058,7 +6129,8 @@
       sortDir: section.sort_order || "asc",
       filters: {},
       page: 0,
-      query: "",
+      nameQuery: "",
+      descQuery: "",
     };
 
     const toolbar = document.createElement("div");
@@ -6081,16 +6153,25 @@
       });
       filterSelects.appendChild(sel);
     });
-    const q = document.createElement("input");
-    q.type = "search";
-    q.placeholder = "Filter rows…";
-    q.addEventListener("input", () => {
-      state.query = q.value.trim().toLowerCase();
+    const nameQ = document.createElement("input");
+    nameQ.type = "search";
+    nameQ.placeholder = "Поиск по имени";
+    nameQ.addEventListener("input", () => {
+      state.nameQuery = nameQ.value.trim().toLowerCase();
+      state.page = 0;
+      paint();
+    });
+    const descQ = document.createElement("input");
+    descQ.type = "search";
+    descQ.placeholder = "Поиск по описанию";
+    descQ.addEventListener("input", () => {
+      state.descQuery = descQ.value.trim().toLowerCase();
       state.page = 0;
       paint();
     });
     toolbar.appendChild(filterSelects);
-    toolbar.appendChild(q);
+    toolbar.appendChild(nameQ);
+    toolbar.appendChild(descQ);
     const chips = document.createElement("div");
     chips.className = "chips";
     toolbar.appendChild(chips);
@@ -6111,11 +6192,21 @@
       Object.entries(state.filters).forEach(([col, val]) => {
         rows = rows.filter((r) => cellValue(r, col) === val);
       });
-      if (state.query) {
-        rows = rows.filter(
-          (r) =>
-            columns.some((c) => cellValue(r, c).toLowerCase().includes(state.query)) ||
-            (r.description || "").toLowerCase().includes(state.query)
+      if (state.nameQuery) {
+        const q = state.nameQuery;
+        rows = rows.filter((r) =>
+          [r.title, r.attributes?.name, r.attributes?.label, r.attributes?.label_ru, r.id]
+            .some((v) => String(v || "").toLowerCase().includes(q))
+        );
+      }
+      if (state.descQuery) {
+        const q = state.descQuery;
+        rows = rows.filter((r) =>
+          [
+            r.description,
+            r.attributes?.definition,
+            r.attributes?.definition_ru,
+          ].some((v) => String(v || "").toLowerCase().includes(q))
         );
       }
       if (state.sortCol) {
@@ -6740,7 +6831,8 @@
       sortDir: "asc",
       filters: {},
       page: 0,
-      query: "",
+      nameQuery: "",
+      descQuery: "",
     };
 
     const layout = document.createElement("div");
@@ -6768,16 +6860,25 @@
       });
       filterSelects.appendChild(sel);
     });
-    const q = document.createElement("input");
-    q.type = "search";
-    q.placeholder = "Filter rows…";
-    q.addEventListener("input", () => {
-      state.query = q.value.trim().toLowerCase();
+    const nameQ = document.createElement("input");
+    nameQ.type = "search";
+    nameQ.placeholder = "Поиск по имени";
+    nameQ.addEventListener("input", () => {
+      state.nameQuery = nameQ.value.trim().toLowerCase();
+      state.page = 0;
+      paint();
+    });
+    const descQ = document.createElement("input");
+    descQ.type = "search";
+    descQ.placeholder = "Поиск по описанию";
+    descQ.addEventListener("input", () => {
+      state.descQuery = descQ.value.trim().toLowerCase();
       state.page = 0;
       paint();
     });
     toolbar.appendChild(filterSelects);
-    toolbar.appendChild(q);
+    toolbar.appendChild(nameQ);
+    toolbar.appendChild(descQ);
     const chips = document.createElement("div");
     chips.className = "chips";
     toolbar.appendChild(chips);
@@ -6830,10 +6931,24 @@
       for (const [col, val] of Object.entries(state.filters)) {
         if (cellValue(item, col) !== val) return false;
       }
-      if (state.query) {
-        const hit =
-          cols.some((c) => cellValue(item, c).toLowerCase().includes(state.query)) ||
-          (item.description || "").toLowerCase().includes(state.query);
+      if (state.nameQuery) {
+        const q = state.nameQuery;
+        const hit = [
+          item.title,
+          item.attributes?.name,
+          item.attributes?.label,
+          item.attributes?.label_ru,
+          item.id,
+        ].some((v) => String(v || "").toLowerCase().includes(q));
+        if (!hit) return false;
+      }
+      if (state.descQuery) {
+        const q = state.descQuery;
+        const hit = [
+          item.description,
+          item.attributes?.definition,
+          item.attributes?.definition_ru,
+        ].some((v) => String(v || "").toLowerCase().includes(q));
         if (!hit) return false;
       }
       return true;

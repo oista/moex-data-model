@@ -277,8 +277,9 @@ _SECTION_ID_NAV_GLYPH: dict[str, str] = {
 }
 
 # Full solution-model publish.yaml set → nest under Overview / model folders.
-# ``conceptual`` is optional: ADR-029 solutions may omit local ConceptualEntity
-# and point at enterprise via conceptual_implementation_ref.
+# ``conceptual`` (Conceptual entities links) is optional and nests under
+# Логическая модель — solutions align to enterprise via conceptual_entity_refs
+# (ADR-021 / ADR-029); there is no solution CDM folder.
 _SOLUTION_NAV_REQUIRED_SECTION_IDS = frozenset(
     {
         "package",
@@ -291,8 +292,7 @@ _SOLUTION_NAV_REQUIRED_SECTION_IDS = frozenset(
     }
 )
 _SOLUTION_NAV_OVERVIEW_IDS = ("package", "slice-summary", "slice-relations", "slice-nodes")
-_SOLUTION_NAV_CONCEPTUAL_IDS = ("conceptual",)
-_SOLUTION_NAV_LOGICAL_IDS = ("logical", "logical-erd")
+_SOLUTION_NAV_LOGICAL_IDS = ("logical", "conceptual", "logical-erd")
 _SOLUTION_NAV_PHYSICAL_IDS = ("physical", "physical-erd")
 _SOLUTION_NAV_REQUIREMENTS_IDS = ("model-assessment",)
 _SOLUTION_NAV_DOCUMENTATION_IDS = ("documentation",)
@@ -471,11 +471,10 @@ def group_solution_impl_nav(
         },
         children=overview_kids,
     )
-    conceptual_kids = take(_SOLUTION_NAV_CONCEPTUAL_IDS)
     logical = _impl_folder(
         folder_id=f"implnav:{catalog_impl_id}:group:logical",
         title="Логическая модель",
-        description="Logical entities and ER diagram.",
+        description="Logical entities, conceptual entity links, and ER diagram.",
         children=take(_SOLUTION_NAV_LOGICAL_IDS),
         extra_attrs={
             "nav_glyph": "ldm",
@@ -508,22 +507,7 @@ def group_solution_impl_nav(
         attrs["nav_glyph"] = "source_file"
         leaf.attributes = attrs
     leftovers = [leaf for leaf in leaves if (leaf.attributes or {}).get("section_id") not in claimed]
-    grouped = [overview]
-    if conceptual_kids:
-        grouped.append(
-            _impl_folder(
-                folder_id=f"implnav:{catalog_impl_id}:group:conceptual",
-                title="Концептуальная модель",
-                description="Conceptual entities of the solution model.",
-                children=conceptual_kids,
-                extra_attrs={
-                    "nav_glyph": "cdm",
-                    "requirement_section": "CDM",
-                    "nav_group": "conceptual",
-                },
-            )
-        )
-    grouped.extend([logical, physical, requirements])
+    grouped = [overview, logical, physical, requirements]
     if docs_kids:
         grouped.append(
             PublicationItem(

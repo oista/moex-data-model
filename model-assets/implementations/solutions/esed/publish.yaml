@@ -25,24 +25,22 @@ sections:
     format: yaml
     path: esed-solution-model.yaml
 - id: conceptual
-  title: Conceptual entities
+  title: Conceptual entities links
   kind: classes
   type: entity-table
-  instance_of: ConceptualEntity
   source:
     format: yaml
     path: esed-solution-model.yaml
-    select: conceptual_entities
+    select: conceptual_entity_links
   key_column: element_id
   columns:
-  - name
-  - title
-  - description
-  - entity_type
-  - data_class
+  - logical_title
+  - logical_entity_ref
+  - conceptual_entity_ref
+  - conceptual_alignment_status
+  - alignment_rationale
   filterable:
-  - entity_type
-  - data_class
+  - conceptual_alignment_status
 - id: logical
   title: Logical entities
   kind: classes

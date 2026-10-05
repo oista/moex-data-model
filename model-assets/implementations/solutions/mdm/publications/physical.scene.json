@@ -1,0 +1,289 @@
+{
+  "version": 1,
+  "profile": "physical",
+  "generator": "moex-dams-er-scene/0.1",
+  "package_id": "dams:model/mdm/0.1.0",
+  "nodes": [
+    {
+      "name": "INTERNALDM_MDM_V_ENTERPRISE",
+      "title": "Юридические лица (ЮЛ)",
+      "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "columns": [
+        {
+          "name": "GOLD_ID",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/GOLD_ID",
+          "keys": []
+        },
+        {
+          "name": "SHORT_NAME",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME",
+          "keys": []
+        },
+        {
+          "name": "SHORT_NAME_ENG",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME_ENG",
+          "keys": []
+        },
+        {
+          "name": "FULL_NAME",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME",
+          "keys": []
+        },
+        {
+          "name": "FULL_NAME_ENG",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME_ENG",
+          "keys": []
+        },
+        {
+          "name": "COUNTRY_CODE",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/COUNTRY_CODE",
+          "keys": []
+        },
+        {
+          "name": "INN",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN",
+          "keys": []
+        },
+        {
+          "name": "KPP",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KPP",
+          "keys": []
+        },
+        {
+          "name": "OGRN",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/OGRN",
+          "keys": []
+        },
+        {
+          "name": "ADDR_EGRUL_REGION",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ADDR_EGRUL_REGION",
+          "keys": []
+        },
+        {
+          "name": "TERMINATION_DATE",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TERMINATION_DATE",
+          "keys": []
+        },
+        {
+          "name": "INN_NONRESIDENT",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN_NONRESIDENT",
+          "keys": []
+        },
+        {
+          "name": "LEI",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/LEI",
+          "keys": []
+        },
+        {
+          "name": "KIO",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KIO",
+          "keys": []
+        },
+        {
+          "name": "REG_NUM_NONRESIDENT",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/REG_NUM_NONRESIDENT",
+          "keys": []
+        },
+        {
+          "name": "CEO_FIRSTNAME",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_FIRSTNAME",
+          "keys": []
+        },
+        {
+          "name": "CEO_INN",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_INN",
+          "keys": []
+        },
+        {
+          "name": "CEO_PATRONYMIC",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_PATRONYMIC",
+          "keys": []
+        },
+        {
+          "name": "CEO_POSITION",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_POSITION",
+          "keys": []
+        },
+        {
+          "name": "CEO_SURNAME",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_SURNAME",
+          "keys": []
+        },
+        {
+          "name": "TRUST_RULE_NUMBER",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TRUST_RULE_NUMBER",
+          "keys": []
+        },
+        {
+          "name": "ECBD_ID",
+          "type": "NUMBER",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ECBD_ID",
+          "keys": []
+        },
+        {
+          "name": "UNICODE",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/UNICODE",
+          "keys": []
+        },
+        {
+          "name": "CODE_NSD",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CODE_NSD",
+          "keys": []
+        },
+        {
+          "name": "KBD_FIRMID",
+          "type": "NUMBER",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KBD_FIRMID",
+          "keys": []
+        },
+        {
+          "name": "ACTIVE_FLAG",
+          "type": "NUMBER",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ACTIVE_FLAG",
+          "keys": []
+        }
+      ]
+    },
+    {
+      "name": "INTERNALDM_MDM_V_PERSON",
+      "title": "Физические лица (ФЛ)",
+      "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
+      "columns": [
+        {
+          "name": "GOLD_ID",
+          "type": "VARCHAR1",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/GOLD_ID",
+          "keys": []
+        },
+        {
+          "name": "FIO",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIO",
+          "keys": []
+        },
+        {
+          "name": "LAST_NAME",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/LAST_NAME",
+          "keys": []
+        },
+        {
+          "name": "FIRST_NAME",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIRST_NAME",
+          "keys": []
+        },
+        {
+          "name": "PATRONYMIC",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/PATRONYMIC",
+          "keys": []
+        },
+        {
+          "name": "DATEBIRTH",
+          "type": "DATE",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/DATEBIRTH",
+          "keys": []
+        },
+        {
+          "name": "ADDRESS_F",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/ADDRESS_F",
+          "keys": []
+        },
+        {
+          "name": "INN",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/INN",
+          "keys": []
+        },
+        {
+          "name": "SNILS",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/SNILS",
+          "keys": []
+        },
+        {
+          "name": "IDENTITY_DOCUMENT_CODE",
+          "type": "NUMBER",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE",
+          "keys": []
+        },
+        {
+          "name": "IDENTITY_DOCUMENT_CODE_OMEGA",
+          "type": "NUMBER",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE_OMEGA",
+          "keys": []
+        },
+        {
+          "name": "IDENTITY_DOCUMENT_TYPE",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_TYPE",
+          "keys": []
+        }
+      ]
+    },
+    {
+      "name": "MOSCOW_EXCHANGE_T_REF_CEO",
+      "title": "ЕИО (СЕО): Отношение ЮЛ к ФЛ",
+      "element_id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
+      "columns": [
+        {
+          "name": "REFERENCE_KEY2",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY2",
+          "keys": []
+        },
+        {
+          "name": "REFERENCE_KEY1",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY1",
+          "keys": []
+        }
+      ]
+    },
+    {
+      "name": "MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
+      "title": "Представители:Отношение ЮЛ - ФЛ",
+      "element_id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
+      "columns": [
+        {
+          "name": "REFERENCE_KEY2",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY2",
+          "keys": []
+        },
+        {
+          "name": "REFERENCE_KEY3",
+          "type": "VARCHAR2",
+          "element_id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY3",
+          "keys": []
+        }
+      ]
+    }
+  ],
+  "edges": []
+}

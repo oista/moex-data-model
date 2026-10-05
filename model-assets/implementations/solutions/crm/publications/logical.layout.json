@@ -2,21 +2,62 @@
   "version": 1,
   "profile": "logical",
   "nodes": {
-    "dams:logical/crm/LEAD": {
+    "dams:logical/crm/CONTACT": {
       "x": 40,
       "y": 40,
-      "color": "#4285F4"
+      "color": "#1e2a3a"
     },
-    "dams:logical/crm/CONTACT": {
-      "x": 400,
+    "dams:logical/crm/LEAD": {
+      "x": 580,
       "y": 40,
-      "color": "#4285F4"
+      "color": "#1e2a3a"
     },
     "dams:logical/crm/CUSTOMER": {
-      "x": 400,
-      "y": 320,
-      "color": "#4285F4"
+      "x": 200,
+      "y": 560,
+      "color": "#1e2a3a"
     }
   },
-  "edges": {}
+  "edges": {
+    "dams:rel/crm/LEAD_to_CONTACT_via_MoexContact": {
+      "points": [
+        {
+          "x": 500,
+          "y": 180
+        }
+      ]
+    },
+    "dams:rel/crm/CONTACT_to_CUSTOMER_via_Account": {
+      "points": [
+        {
+          "x": 220,
+          "y": 520
+        }
+      ]
+    },
+    "dams:rel/crm/CUSTOMER_to_CONTACT_via_PrimaryContact": {
+      "points": [
+        {
+          "x": 300,
+          "y": 520
+        }
+      ]
+    },
+    "dams:rel/crm/LEAD_to_CUSTOMER_via_MoexAccount": {
+      "points": [
+        {
+          "x": 540,
+          "y": 520
+        }
+      ]
+    },
+    "dams:rel/crm/CUSTOMER_to_CUSTOMER_via_PrimaryAccount": {
+      "points": [
+        {
+          "x": 160,
+          "y": 760
+        }
+      ]
+    }
+  }
 }

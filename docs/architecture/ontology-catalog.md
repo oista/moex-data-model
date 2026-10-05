@@ -139,6 +139,7 @@ UI потребляет только:
 
 - [MODELING_ARCHITECTURE.md](MODELING_ARCHITECTURE.md) — норматив
 - [ADR-014](../adr/ADR-014-fibo-profile-metamodel.md) — FIBO profile vs release content
+- [ADR-030](../adr/ADR-030-dams-uri-and-prefix-policy.md) — DAMS URI / prefix policy; gen-owl ≠ catalog; RDF instances → SHACL
 - [app_model.md](app_model.md) — целевая раскладка пакетов
 - [viewer-decisions.md](viewer-decisions.md) — статический viewer, без RDF в UI
 - [linkml_architecture.md](linkml_architecture.md) — Workbench / Ontology Engine (gen-owl ≠ catalog)

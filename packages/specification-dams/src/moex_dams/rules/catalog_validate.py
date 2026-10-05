@@ -19,6 +19,7 @@ ALLOWED_KINDS = frozenset(
         "key_subset",
         "at_least_one_slots",
         "conditional_branch",
+        "definition_resolvable",
         "custom",
     }
 )

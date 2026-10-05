@@ -73,8 +73,10 @@ def test_enumerate_and_validate_trading_solution() -> None:
 
     elements = provider.enumerate_elements(impl_body)
     ids = {e.element_id for e in elements}
-    assert "dams:concept/Client" in ids
+    # ADR-029: Client concept lives in enterprise SoT, not local conceptual_entities
+    assert "dams:concept/Client" not in ids
     assert "dams:logical/trading/Client" in ids
+    assert "dams:mapping/trading/client-realizes-client" in ids
 
     diagnostics = provider.validate_standard(impl_body)
     errors = [d for d in diagnostics if d.severity.value in {"error", "fatal"}]
