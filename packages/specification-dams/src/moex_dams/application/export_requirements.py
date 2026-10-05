@@ -1,14 +1,16 @@
-"""One-way RequirementCatalog YAML → CSV projection (ADR-013)."""
+"""One-way RequirementCatalog YAML → XLSX projection (ADR-013)."""
 
 from __future__ import annotations
 
-import csv
 from pathlib import Path
 from typing import Any
 
 import yaml
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Font
+from openpyxl.utils import get_column_letter
 
-CSV_COLUMNS: tuple[str, ...] = (
+EXPORT_COLUMNS: tuple[str, ...] = (
     "catalog_id",
     "catalog_name",
     "source_path",
@@ -33,7 +35,73 @@ CSV_COLUMNS: tuple[str, ...] = (
     "diagnostic_codes",
 )
 
+# Human-readable header labels for Excel review.
+HEADER_LABELS: dict[str, str] = {
+    "catalog_id": "Каталог ID",
+    "catalog_name": "Каталог",
+    "source_path": "Источник",
+    "element_id": "Element ID",
+    "code": "Код",
+    "name": "Имя",
+    "title": "Заголовок",
+    "description": "Описание",
+    "statement": "Формулировка",
+    "requirement_level": "Уровень",
+    "requirement_section": "Раздел",
+    "lifecycle_status": "Статус",
+    "applies_target_class": "Класс цели",
+    "applies_target_kinds": "Виды цели",
+    "applies_implementation_scope": "Scope",
+    "applies_dams_model_level": "Уровень DAMS",
+    "applies_implementation_profile": "Профиль",
+    "check_count": "Число проверок",
+    "check_ids": "Check IDs",
+    "check_kinds": "Виды проверок",
+    "severities": "Severity",
+    "diagnostic_codes": "Diagnostic codes",
+}
+
+_COLUMN_WIDTHS: dict[str, float] = {
+    "catalog_id": 28,
+    "catalog_name": 22,
+    "source_path": 36,
+    "element_id": 28,
+    "code": 12,
+    "name": 28,
+    "title": 32,
+    "description": 36,
+    "statement": 64,
+    "requirement_level": 16,
+    "requirement_section": 10,
+    "lifecycle_status": 12,
+    "applies_target_class": 18,
+    "applies_target_kinds": 16,
+    "applies_implementation_scope": 12,
+    "applies_dams_model_level": 14,
+    "applies_implementation_profile": 14,
+    "check_count": 10,
+    "check_ids": 36,
+    "check_kinds": 28,
+    "severities": 18,
+    "diagnostic_codes": 36,
+}
+
+_WRAP_COLUMNS = frozenset(
+    {
+        "title",
+        "description",
+        "statement",
+        "source_path",
+        "check_ids",
+        "check_kinds",
+        "diagnostic_codes",
+    }
+)
+
 _JOIN = "; "
+
+# Keep old name as alias for callers/tests that imported CSV_COLUMNS.
+CSV_COLUMNS = EXPORT_COLUMNS
 
 
 def _s(value: Any) -> str:
@@ -89,7 +157,7 @@ def requirement_row(
         "severities": _s([c.get("severity") for c in checks]),
         "diagnostic_codes": _s([c.get("diagnostic_code") for c in checks]),
     }
-    return {k: row[k] for k in CSV_COLUMNS}
+    return {k: row[k] for k in EXPORT_COLUMNS}
 
 
 def iter_catalog_rows(path: Path, *, source_path: str) -> list[dict[str, str]]:
@@ -146,10 +214,41 @@ def collect_requirement_rows(
     )
 
 
-def write_requirements_csv(rows: list[dict[str, str]], out: Path) -> int:
+def write_requirements_xlsx(rows: list[dict[str, str]], out: Path) -> int:
     out.parent.mkdir(parents=True, exist_ok=True)
-    with out.open("w", encoding="utf-8-sig", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=list(CSV_COLUMNS), extrasaction="ignore")
-        writer.writeheader()
-        writer.writerows(rows)
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "requirements"
+
+    header_font = Font(bold=True)
+    header_align = Alignment(vertical="center", wrap_text=True)
+    wrap_align = Alignment(vertical="top", wrap_text=True)
+    top_align = Alignment(vertical="top", wrap_text=False)
+
+    for col_idx, key in enumerate(EXPORT_COLUMNS, start=1):
+        cell = ws.cell(row=1, column=col_idx, value=HEADER_LABELS.get(key, key))
+        cell.font = header_font
+        cell.alignment = header_align
+
+    for row_idx, row in enumerate(rows, start=2):
+        for col_idx, key in enumerate(EXPORT_COLUMNS, start=1):
+            cell = ws.cell(row=row_idx, column=col_idx, value=row.get(key, ""))
+            cell.alignment = wrap_align if key in _WRAP_COLUMNS else top_align
+
+    for col_idx, key in enumerate(EXPORT_COLUMNS, start=1):
+        ws.column_dimensions[get_column_letter(col_idx)].width = _COLUMN_WIDTHS.get(
+            key, 16
+        )
+
+    ws.freeze_panes = "A2"
+    ws.auto_filter.ref = ws.dimensions
+    ws.row_dimensions[1].height = 30
+    for row_idx in range(2, len(rows) + 2):
+        ws.row_dimensions[row_idx].height = 45
+
+    wb.save(out)
     return len(rows)
+
+
+# Back-compat alias (CSV path removed).
+write_requirements_csv = write_requirements_xlsx

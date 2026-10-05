@@ -2243,12 +2243,13 @@
         return;
       }
       if (section && section.type !== "explorer") {
-        const isTable =
+        const isWide =
           section.type === "entity-table" ||
           section.type === "enum-table" ||
           section.type === "markdown-doc" ||
-          section.type === "glossary";
-        setContentWide(isTable);
+          section.type === "glossary" ||
+          section.type === "mermaid-diagram";
+        setContentWide(isWide);
         crumb.textContent = `${mod.title} / ${section.title}`;
         content.appendChild(crumb);
         content.appendChild(renderSection(mod, section, { forceOpen: true }));
@@ -5491,6 +5492,8 @@
     const scene = attrs.erd_scene || null;
     const layout = attrs.erd_layout || null;
     const hasScene = !!(scene && Array.isArray(scene.nodes));
+    // SVG may live in attributes.mermaid_svg when scene is primary (payload shrink).
+    const svgHtml = String(section.content || attrs.mermaid_svg || "");
     const panel = document.createElement("div");
     panel.className = "erd-panel";
     panel.setAttribute("data-ui", "mermaid-diagram");
@@ -5616,45 +5619,83 @@
     }
 
     if (hasScene) {
-      canvas.appendChild(
-        renderErdScene(mod, section, scene, layout || { version: 1, nodes: {}, edges: {} }, showErdDetail)
-      );
-    } else if (section.content) {
+      try {
+        canvas.appendChild(
+          renderErdScene(
+            mod,
+            section,
+            scene,
+            layout || { version: 1, nodes: {}, edges: {} },
+            showErdDetail
+          )
+        );
+      } catch (err) {
+        const fail = document.createElement("p");
+        fail.className = "error";
+        fail.textContent =
+          "Не удалось отрисовать диаграмму: " +
+          (err && err.message ? err.message : String(err));
+        canvas.appendChild(fail);
+        if (svgHtml) {
+          const svgWrap = document.createElement("div");
+          svgWrap.className = "erd-svg";
+          svgWrap.innerHTML = svgHtml;
+          canvas.appendChild(svgWrap);
+        }
+      }
+    } else if (svgHtml) {
       const svgWrap = document.createElement("div");
       svgWrap.className = "erd-svg";
       if (clickmap) svgWrap.classList.add("erd-svg--clickable");
-      svgWrap.innerHTML = section.content;
+      svgWrap.innerHTML = svgHtml;
       canvas.appendChild(svgWrap);
     } else {
       const miss = document.createElement("p");
       miss.className = "muted";
       miss.textContent =
-        "SVG не сгенерирован. Откройте вкладку «Исходник» или выполните scripts/render-mermaid-erd.ps1.";
+        "Нет scene/layout и SVG. Выполните: moex-model diagram --format mermaid --profile logical|physical|conceptual";
       canvas.appendChild(miss);
     }
 
-    if (section.content) {
-      const svgWrap = document.createElement("div");
-      svgWrap.className = "erd-svg";
-      if (clickmap) svgWrap.classList.add("erd-svg--clickable");
-      svgWrap.innerHTML = section.content;
-      mermaidCanvas.appendChild(svgWrap);
-      if (clickmap) {
-        mermaidCanvas.addEventListener("click", (ev) => {
-          const hit = resolveErdClickTarget(clickmap, ev.target);
-          if (!hit) return;
-          ev.preventDefault();
-          showErdDetail(hit);
-        });
+    // Lazy-mount Mermaid SVG only when that tab is opened (avoids parsing huge SVG up front).
+    let mermaidMounted = false;
+    function ensureMermaidSvg() {
+      if (mermaidMounted) return;
+      mermaidMounted = true;
+      mermaidCanvas.replaceChildren();
+      if (svgHtml) {
+        const svgWrap = document.createElement("div");
+        svgWrap.className = "erd-svg";
+        if (clickmap) svgWrap.classList.add("erd-svg--clickable");
+        svgWrap.innerHTML = svgHtml;
+        mermaidCanvas.appendChild(svgWrap);
+        if (clickmap) {
+          mermaidCanvas.addEventListener("click", (ev) => {
+            const hit = resolveErdClickTarget(clickmap, ev.target);
+            if (!hit) return;
+            ev.preventDefault();
+            showErdDetail(hit);
+          });
+        }
+      } else {
+        const miss = document.createElement("p");
+        miss.className = "muted";
+        miss.textContent = "Mermaid SVG недоступен.";
+        mermaidCanvas.appendChild(miss);
       }
+    }
+    if (!hasScene) {
+      // Fallback path uses canvas; keep Mermaid tab content ready when visible.
+      ensureMermaidSvg();
     } else {
-      const miss = document.createElement("p");
-      miss.className = "muted";
-      miss.textContent = "Mermaid SVG недоступен.";
-      mermaidCanvas.appendChild(miss);
+      const hint = document.createElement("p");
+      hint.className = "muted";
+      hint.textContent =
+        "Интерактивная диаграмма на вкладке «Диаграмма». SVG не встроен в player (чтобы не раздувать страницу); текст Mermaid — на вкладке «Исходник».";
+      mermaidCanvas.appendChild(hint);
     }
 
-    if (!hasScene && clickmap && section.content) {
+    if (!hasScene && clickmap && svgHtml) {
       canvas.addEventListener("click", (ev) => {
         const hit = resolveErdClickTarget(clickmap, ev.target);
         if (!hit) return;
@@ -5735,7 +5776,10 @@
       }
     }
     tabDiagram.addEventListener("click", () => showPane("diagram"));
-    tabMermaid.addEventListener("click", () => showPane("mermaid"));
+    tabMermaid.addEventListener("click", () => {
+      if (!hasScene) ensureMermaidSvg();
+      showPane("mermaid");
+    });
     tabSource.addEventListener("click", () => showPane("source"));
     tabDbml.addEventListener("click", () => showPane("dbml"));
 

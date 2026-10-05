@@ -1,4 +1,4 @@
-"""export-requirements — dump DAMS RequirementCatalog YAML to CSV."""
+"""export-requirements — dump DAMS RequirementCatalog YAML to XLSX."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ from pathlib import Path
 from moex_dams.application.export_requirements import (
     collect_requirement_rows,
     default_catalog_paths,
-    write_requirements_csv,
+    write_requirements_xlsx,
 )
 from moex_model_cli.bootstrap import SlicePaths
 
@@ -28,7 +28,7 @@ def run_export_requirements(
         return 2, f"export-requirements: catalog not found: {names}\n"
     try:
         rows = collect_requirement_rows(catalog_paths, root=paths.root)
-        n = write_requirements_csv(rows, out)
+        n = write_requirements_xlsx(rows, out)
     except Exception as exc:
         return 2, f"export-requirements failed: {exc}\n"
     return 0, (

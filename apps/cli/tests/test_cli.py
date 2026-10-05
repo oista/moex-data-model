@@ -460,12 +460,14 @@ def test_import_solution_fixture(
     assert "import-solution" in captured.out
 
 
-def test_export_requirements_csv(
+def test_export_requirements_xlsx(
     repo_root: Path,
     tmp_path: Path,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    out = tmp_path / "requirements.csv"
+    from openpyxl import load_workbook
+
+    out = tmp_path / "requirements.xlsx"
     code = main(
         ["export-requirements", "--root", str(repo_root), "--out", str(out)]
     )
@@ -473,10 +475,13 @@ def test_export_requirements_csv(
     assert code == 0, captured.out
     assert out.is_file()
     assert "rows=34" in captured.out
-    text = out.read_text(encoding="utf-8-sig")
-    assert text.splitlines()[0].startswith(
-        "catalog_id,catalog_name,source_path,element_id,code"
-    )
-    assert "GEN-001" in text
-    assert "CM-GEN-001" in text
-    assert "У пакета модели данных ИТ-решения" in text
+    wb = load_workbook(out)
+    ws = wb.active
+    assert ws.title == "requirements"
+    codes = {ws.cell(row=r, column=5).value for r in range(2, ws.max_row + 1)}
+    assert "GEN-001" in codes
+    assert "CM-GEN-001" in codes
+    statements = {
+        ws.cell(row=r, column=9).value or "" for r in range(2, ws.max_row + 1)
+    }
+    assert any("У пакета модели данных ИТ-решения" in s for s in statements)

@@ -38,6 +38,14 @@ def _item_to_dict(item) -> dict[str, Any]:
 
 
 def section_payload(section: PublicationSection) -> dict[str, Any]:
+    attrs = dict(section.attributes or {})
+    content = section.content
+    # Interactive ER scene is the primary player view. Drop embedded Mermaid SVG
+    # from the wire payload so publication-data stays lean (multi‑100KB SVGs were
+    # freezing / blanking the Diagram tab). Mermaid text remains in attributes.
+    if section.type == "mermaid-diagram" and isinstance(attrs.get("erd_scene"), dict):
+        content = ""
+        attrs.pop("mermaid_svg", None)
     return {
         "id": section.id,
         "title": section.title,
@@ -52,8 +60,8 @@ def section_payload(section: PublicationSection) -> dict[str, Any]:
         "sort_by": section.sort_by,
         "sort_order": section.sort_order,
         "items": [_item_to_dict(i) for i in section.items],
-        "content": section.content,
-        "attributes": section.attributes or {},
+        "content": content,
+        "attributes": attrs,
         "tags": section.tags,
         "default_collapsed": section.default_collapsed,
         "instance_of": section.instance_of,

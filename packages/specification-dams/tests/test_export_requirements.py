@@ -1,16 +1,18 @@
-"""RequirementCatalog → CSV export (ADR-013)."""
+"""RequirementCatalog → XLSX export (ADR-013)."""
 
 from __future__ import annotations
 
-import csv
 from pathlib import Path
 
+from openpyxl import load_workbook
+
 from moex_dams.application.export_requirements import (
-    CSV_COLUMNS,
+    EXPORT_COLUMNS,
+    HEADER_LABELS,
     collect_requirement_rows,
     iter_catalog_rows,
     requirement_row,
-    write_requirements_csv,
+    write_requirements_xlsx,
 )
 
 FIXTURE = Path(__file__).parent / "fixtures" / "requirements" / "bad-missing-statement.yaml"
@@ -66,7 +68,7 @@ def test_requirement_row_flattens_checks() -> None:
     assert row["check_ids"] == "GEN-001.c1; GEN-001.c2"
     assert row["severities"] == "error; warning"
     assert row["diagnostic_codes"] == "DAMS-STRUCT-001; "
-    assert list(row) == list(CSV_COLUMNS)
+    assert list(row) == list(EXPORT_COLUMNS)
 
 
 def test_iter_catalog_rows_reads_fixture() -> None:
@@ -76,17 +78,19 @@ def test_iter_catalog_rows_reads_fixture() -> None:
     assert rows[0]["catalog_id"] == "dams:req-catalog/bad-missing-statement/0.1"
 
 
-def test_write_csv_roundtrip(tmp_path: Path) -> None:
+def test_write_xlsx_roundtrip(tmp_path: Path) -> None:
     rows = iter_catalog_rows(FIXTURE, source_path="fix.yaml")
-    out = tmp_path / "req.csv"
-    n = write_requirements_csv(rows, out)
+    out = tmp_path / "req.xlsx"
+    n = write_requirements_xlsx(rows, out)
     assert n == 1
-    raw = out.read_bytes()
-    assert raw.startswith(b"\xef\xbb\xbf")
-    with out.open(encoding="utf-8-sig", newline="") as f:
-        table = list(csv.DictReader(f))
-    assert table[0]["code"] == "GEN-901"
-    assert table[0]["statement"].strip() == ""
+    assert out.is_file()
+    wb = load_workbook(out)
+    ws = wb.active
+    assert ws.title == "requirements"
+    assert ws["A1"].value == HEADER_LABELS["catalog_id"]
+    assert ws["E2"].value == "GEN-901"
+    assert (ws["I2"].value or "").strip() == ""
+    assert ws.freeze_panes == "A2"
 
 
 def test_real_catalogs_row_count() -> None:

@@ -11,7 +11,7 @@ moex-model import         → ER-dictionary ingest OR schema-automator draft
 moex-model map            → SSSOM / LinkML extract / linkml-map transform
 moex-model semantic-diff  → diff_implementations
 moex-model source         → list / sync / diff external sources (ADR-017)
-moex-model export-requirements → RequirementCatalog YAML → CSV
+moex-model export-requirements → RequirementCatalog YAML → XLSX
 ```
 
 Publication Viewer lives at [`apps/viewer/`](../viewer/).
@@ -55,7 +55,7 @@ py -3.14 -m moex_model_cli import `
   --source packages/linkml-tooling/tests/fixtures/mini.schema.json `
   --out generated/imports `
   --name MiniPerson
-py -3.14 -m moex_model_cli export-requirements --root . --out tmp/requirements.csv
+py -3.14 -m moex_model_cli export-requirements --root . --out tmp/requirements.xlsx
 ```
 
 Defaults are resolved from asset envelopes (relative to `--root`):

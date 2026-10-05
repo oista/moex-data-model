@@ -19,6 +19,7 @@ from moex_publication_viewer.build import (
     compile_catalog,
     compile_modules,
     enrich_dams_explorer_implementations,
+    enrich_dams_implementation_glossary,
     enrich_fibo_explorer_classes,
     enrich_fibo_explorer_implementations,
     enrich_linkml_glossary_sections,
@@ -57,6 +58,7 @@ class ViewerServeState:
             )
             catalog = compile_catalog(self.root, modules)
             enrich_dams_explorer_implementations(modules, catalog)
+            enrich_dams_implementation_glossary(modules, catalog)
             enrich_fibo_explorer_classes(modules)
             enrich_fibo_explorer_implementations(modules, catalog)
             enrich_linkml_glossary_sections(modules)

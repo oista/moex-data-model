@@ -337,14 +337,14 @@ def build_parser() -> argparse.ArgumentParser:
 
     export_req = sub.add_parser(
         "export-requirements",
-        help="Dump DAMS RequirementCatalog YAML to CSV (ADR-013)",
+        help="Dump DAMS RequirementCatalog YAML to XLSX (ADR-013)",
     )
     _add_slice_args(export_req)
     export_req.add_argument(
         "--out",
         type=Path,
         required=True,
-        help="Output CSV path",
+        help="Output XLSX path",
     )
     export_req.add_argument(
         "--catalog",
