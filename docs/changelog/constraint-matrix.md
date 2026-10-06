@@ -40,3 +40,20 @@ superseded_by: []
 **Затронутые данные:** `requirements/examples/it-solution-model.example.yaml` (убран `name` у mappings).
 
 **Отложено:** `validate-requirements` остаётся на vacuous `Validator` — каталог `it-solution-requirements.yaml` даёт 18 ошибок под плагином (`description`/`effective` на FormalCheck). См. отчёт C1a.
+
+## PR-C1: constraint matrix
+
+**Добавлено**
+
+- `model-assets/.../constraints/constraint-matrix.schema.yaml` + `constraint-matrix.yaml` (INV-001..027).
+- `scripts/check_constraint_matrix.py`, цель `check-constraints` в Makefile и `scripts/check_all.py`.
+- Автогенерируемый [constraint-matrix.md](../architecture/constraint-matrix.md).
+- Руководство [adding-an-invariant.md](../guides/adding-an-invariant.md).
+- Тесты `packages/specification-dams/tests/test_constraint_matrix.py`.
+- Пин `ruamel.yaml==0.18.10` в `requirements-linkml.txt` + обновление `toolchain_digest` бандла.
+
+**Стало строже:** любой новый `rules` в схемах без строки матрицы ломает `check-constraints`; baseline 17 правил закреплён SHA + sha256.
+
+**Статусы:** INV-001..017 = `implemented-untested`; INV-018..027 = `planned` (нумерация закреплена).
+
+**Затронутые данные:** нет правок условий LinkML `rules`.
