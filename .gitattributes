@@ -3,3 +3,4 @@
 
 # Generated artifacts must stay LF so Windows/Linux digests match.
 generated/** text eol=lf
+
