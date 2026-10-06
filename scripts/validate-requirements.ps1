@@ -24,6 +24,10 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 Push-Location $RepoRoot
 try {
     Write-Host "validate-requirements LinkML RequirementCatalog"
+    # PR-C1a: JsonschemaValidationPlugin is ready via make_linkml_validator, but the
+    # live catalog still has undeclared FormalCheck fields (description, effective).
+    # Wiring the plugin here turns validate-requirements red (18 errors). Deferred
+    # until schema/data fix; see docs/architecture/validation-helper-c1a-report.md.
     & $Python -c @"
 from pathlib import Path
 import sys
@@ -33,6 +37,7 @@ from linkml.validator import Validator
 schema = Path(r'$Schema')
 catalog = Path(r'$Catalog')
 data = yaml.safe_load(catalog.read_text(encoding='utf-8'))
+# VACUOUS on purpose until catalog/schema fix (PR-C1a report).
 report = Validator(schema).validate(data, target_class='RequirementCatalog')
 bad = []
 for r in report.results:
@@ -43,7 +48,7 @@ if bad:
     for e in bad[:40]:
         print(e, file=sys.stderr)
     raise SystemExit(1)
-print('LinkML RequirementCatalog OK')
+print('LinkML RequirementCatalog OK (vacuous Validator; plugin deferred — see C1a report)')
 "@
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
