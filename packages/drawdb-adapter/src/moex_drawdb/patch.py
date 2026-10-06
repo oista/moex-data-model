@@ -49,6 +49,43 @@ def _index_by_name(items: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
     return {str(i.get("name")): i for i in items if i.get("name")}
 
 
+def _structure_for_carrier(
+    package: dict[str, Any], carrier: dict[str, Any]
+) -> dict[str, Any] | None:
+    sid = str(carrier.get("structure_ref") or "").strip()
+    if not sid:
+        return None
+    for st in package.get("data_structures") or []:
+        if isinstance(st, dict) and str(st.get("element_id")) == sid:
+            return st
+    return None
+
+
+def _scalar_nodes(structure: dict[str, Any] | None) -> list[dict[str, Any]]:
+    if not structure:
+        return []
+    return [
+        n
+        for n in (structure.get("nodes") or [])
+        if isinstance(n, dict) and str(n.get("node_kind") or "") == "scalar"
+    ]
+
+
+def _node_ref(structure_id: str, local_key: str) -> str:
+    return f"{structure_id}#{local_key}"
+
+
+def _slug_key(text: str) -> str:
+    s = str(text or "").strip().lower()
+    out: list[str] = []
+    for ch in s:
+        if ("a" <= ch <= "z") or ("0" <= ch <= "9") or ch in "_.-":
+            out.append(ch)
+        else:
+            out.append("_")
+    return "".join(out).strip("_.-") or "_"
+
+
 def compute_model_patch(
     base_package: dict[str, Any],
     diagram: ProjectedDiagram,
@@ -161,12 +198,19 @@ def _patch_logical(
     _patch_relationships(base, diagram, table_to_entity_id, ops, rejected)
 
 
+def _attr_type_leaf(attr: dict[str, Any]) -> str:
+    dtr = str(attr.get("data_type_ref") or "").strip()
+    if dtr:
+        return dtr.rsplit("/", 1)[-1]
+    return "string"
+
+
 def _attr_from_col(col: Any, owner_eid: str) -> dict[str, Any]:
     ltype = col.type_name if col.type_name in _LOGICAL_TYPES else "string"
     return {
         "element_id": col.element_id or _new_id(f"{owner_eid}"),
         "name": col.name,
-        "logical_type": ltype,
+        "data_type_ref": f"dams:datatype/{ltype}",
         "required": col.required,
         "multivalued": False,
     }
@@ -187,10 +231,13 @@ def _patch_attributes(
     for col in table.columns:
         if col.element_id and col.element_id in by_id:
             existing = by_id[col.element_id]
-            if existing.get("name") == col.name and bool(
-                existing.get("required")
-            ) == col.required and existing.get("logical_type") == (
-                col.type_name if col.type_name in _LOGICAL_TYPES else existing.get("logical_type")
+            want_type = (
+                col.type_name if col.type_name in _LOGICAL_TYPES else _attr_type_leaf(existing)
+            )
+            if (
+                existing.get("name") == col.name
+                and bool(existing.get("required")) == col.required
+                and _attr_type_leaf(existing) == want_type
             ):
                 seen.add(col.element_id)
                 continue
@@ -203,10 +250,11 @@ def _patch_attributes(
                         "owner_element_id": eid,
                         "element_id": col.element_id,
                         "name": col.name,
-                        "logical_type": (
-                            col.type_name
+                        "data_type_ref": (
+                            f"dams:datatype/{col.type_name}"
                             if col.type_name in _LOGICAL_TYPES
-                            else existing.get("logical_type") or "string"
+                            else existing.get("data_type_ref")
+                            or f"dams:datatype/{_attr_type_leaf(existing)}"
                         ),
                         "required": col.required,
                     },
@@ -245,10 +293,10 @@ def _patch_attributes(
                             "owner_element_id": eid,
                             "element_id": new_id,
                             "name": col.name,
-                            "logical_type": (
-                                col.type_name
+                            "data_type_ref": (
+                                f"dams:datatype/{col.type_name}"
                                 if col.type_name in _LOGICAL_TYPES
-                                else "string"
+                                else "dams:datatype/string"
                             ),
                             "required": col.required,
                             "multivalued": False,
@@ -383,7 +431,7 @@ def _patch_physical(
                 )
             seen_ids.add(table.element_id)
             table_to_obj[table.name] = table.element_id
-            _patch_fields(existing, table, ops, rejected)
+            _patch_fields(existing, table, ops, rejected, package=base)
         elif table.element_id and table.element_id not in by_id:
             rejected.append(
                 RejectedOp(
@@ -407,9 +455,31 @@ def _patch_physical(
                 )
                 seen_ids.add(str(existing["element_id"]))
                 table_to_obj[table.name] = str(existing["element_id"])
-                _patch_fields(existing, table, ops, rejected)
+                _patch_fields(existing, table, ops, rejected, package=base)
             else:
                 oid = _new_id("dams:physical/diagram")
+                structure_id = _new_id("dams:structure/diagram")
+                root_children = [
+                    _slug_key(c.name) for c in table.columns
+                ]
+                nodes: list[dict[str, Any]] = [
+                    {
+                        "local_key": "root",
+                        "node_kind": "object",
+                        "children": root_children,
+                    }
+                ]
+                for c in table.columns:
+                    lk = _slug_key(c.name)
+                    nodes.append(
+                        {
+                            "local_key": lk,
+                            "node_kind": "scalar",
+                            "native_name": c.name,
+                            "native_type": c.type_name,
+                            "required": c.required,
+                        }
+                    )
                 ops.append(
                     PatchOp(
                         kind=PatchOpKind.ADD_PHYSICAL_OBJECT,
@@ -419,18 +489,15 @@ def _patch_physical(
                             "name": table.name,
                             "asset_kind": kind,
                             "title": table.title or table.name,
-                            "physical_fields": [
-                                {
-                                    "element_id": c.element_id
-                                    or _new_id(oid),
-                                    "name": c.name,
-                                    "native_name": c.name,
-                                    "native_type": c.type_name,
-                                    "required": c.required,
-                                    "carrier_ref": oid,
-                                }
-                                for c in table.columns
-                            ],
+                            "structure_ref": structure_id,
+                            "_structure": {
+                                "element_id": structure_id,
+                                "name": table.name,
+                                "schema_format": "relational",
+                                "structure_version": "1.0.0",
+                                "root_local_key": "root",
+                                "nodes": nodes,
+                            },
                         },
                     )
                 )
@@ -457,30 +524,49 @@ def _patch_fields(
     table: ProjectedTable,
     ops: list[PatchOp],
     rejected: list[RejectedOp],
+    *,
+    package: dict[str, Any] | None = None,
 ) -> None:
     oid = str(obj["element_id"])
-    fields = list(obj.get("physical_fields") or [])
-    by_id = _index_by_id(fields)
-    by_name = _index_by_name(fields)
+    package = package or {}
+    structure = _structure_for_carrier(package, obj)
+    sid = str(
+        (structure or {}).get("element_id")
+        or obj.get("structure_ref")
+        or f"dams:structure/{obj.get('name') or oid}"
+    )
+    fields = _scalar_nodes(structure)
+    by_id = {
+        _node_ref(sid, str(f["local_key"])): f
+        for f in fields
+        if f.get("local_key")
+    }
+    by_name = {
+        str(f.get("native_name") or f.get("local_key")): f for f in fields
+    }
     seen: set[str] = set()
 
     for col in table.columns:
-        if col.element_id and col.element_id in by_id:
-            existing = by_id[col.element_id]
+        col_ref = col.element_id
+        if col_ref and col_ref in by_id:
+            existing = by_id[col_ref]
             if (
-                (existing.get("native_name") or existing.get("name")) == col.name
+                (existing.get("native_name") or existing.get("local_key"))
+                == col.name
                 and bool(existing.get("required")) == col.required
                 and existing.get("native_type") == col.type_name
             ):
-                seen.add(col.element_id)
+                seen.add(col_ref)
                 continue
             ops.append(
                 PatchOp(
                     kind=PatchOpKind.UPDATE_FIELD,
-                    path=f"data_carriers[{oid}].physical_fields[{col.element_id}]",
+                    path=f"data_structures[{sid}].nodes[{col_ref}]",
                     payload={
                         "owner_element_id": oid,
-                        "element_id": col.element_id,
+                        "structure_id": sid,
+                        "element_id": col_ref,
+                        "local_key": str(existing.get("local_key")),
                         "name": col.name,
                         "native_name": col.name,
                         "native_type": col.type_name,
@@ -488,8 +574,8 @@ def _patch_fields(
                     },
                 )
             )
-            seen.add(col.element_id)
-        elif col.element_id and col.element_id not in by_id:
+            seen.add(col_ref)
+        elif col_ref and col_ref not in by_id:
             rejected.append(
                 RejectedOp(
                     code=RejectCode.ELEMENT_ID_REWRITE,
@@ -499,46 +585,55 @@ def _patch_fields(
             )
         else:
             existing = by_name.get(col.name)
-            if existing and existing.get("element_id"):
+            if existing and existing.get("local_key"):
+                existing_ref = _node_ref(sid, str(existing["local_key"]))
                 rejected.append(
                     RejectedOp(
                         code=RejectCode.ELEMENT_ID_REWRITE,
                         message=(
                             f"column {table.name}.{col.name} must keep "
-                            f"element_id={existing['element_id']}"
+                            f"element_id={existing_ref}"
                         ),
                         path=f"{table.name}.{col.name}",
                     )
                 )
-                seen.add(str(existing["element_id"]))
+                seen.add(existing_ref)
             else:
-                fid = _new_id(oid)
+                lk = _slug_key(col.name)
+                fid = _node_ref(sid, lk)
                 ops.append(
                     PatchOp(
                         kind=PatchOpKind.ADD_FIELD,
-                        path=f"data_carriers[{oid}].physical_fields[{fid}]",
+                        path=f"data_structures[{sid}].nodes[{fid}]",
                         payload={
                             "owner_element_id": oid,
+                            "structure_id": sid,
                             "element_id": fid,
+                            "local_key": lk,
                             "name": col.name,
                             "native_name": col.name,
                             "native_type": col.type_name,
                             "required": col.required,
-                            "carrier_ref": oid,
                         },
                     )
                 )
 
     for field in fields:
-        fid = field.get("element_id")
+        lk = str(field.get("local_key") or "")
+        fid = _node_ref(sid, lk) if lk else ""
         if fid and fid not in seen:
-            fname = field.get("native_name") or field.get("name")
+            fname = field.get("native_name") or field.get("local_key")
             if not any(c.name == fname for c in table.columns):
                 ops.append(
                     PatchOp(
                         kind=PatchOpKind.DELETE_FIELD,
-                        path=f"data_carriers[{oid}].physical_fields[{fid}]",
-                        payload={"owner_element_id": oid, "element_id": fid},
+                        path=f"data_structures[{sid}].nodes[{fid}]",
+                        payload={
+                            "owner_element_id": oid,
+                            "structure_id": sid,
+                            "element_id": fid,
+                            "local_key": lk,
+                        },
                     )
                 )
 
@@ -566,10 +661,13 @@ def _patch_physical_refs(
 
     for obj in objects:
         tname = str(obj.get("name"))
-        for field in obj.get("physical_fields") or []:
-            fname = str(field.get("native_name") or field.get("name"))
-            if field.get("element_id"):
-                col_eid.setdefault((tname, fname), str(field["element_id"]))
+        st = _structure_for_carrier(base, obj)
+        sid = str((st or {}).get("element_id") or obj.get("structure_ref") or "")
+        for field in _scalar_nodes(st):
+            fname = str(field.get("native_name") or field.get("local_key"))
+            lk = str(field.get("local_key") or "")
+            if sid and lk:
+                col_eid.setdefault((tname, fname), _node_ref(sid, lk))
 
     by_id = _index_by_id(mappings)
     seen: set[str] = set()
@@ -684,8 +782,13 @@ def apply_model_patch(
                 for attr in ent.get("attributes") or []:
                     if attr.get("element_id") == p["element_id"]:
                         attr["name"] = p["name"]
-                        attr["logical_type"] = p["logical_type"]
+                        if p.get("data_type_ref"):
+                            attr["data_type_ref"] = p["data_type_ref"]
                         attr["required"] = p["required"]
+                        attr.pop("logical_type", None)
+                        attr.pop("format_pattern", None)
+                        attr.pop("value_set_ref", None)
+                        attr.pop("unit_code", None)
         elif kind is PatchOpKind.DELETE_ATTRIBUTE:
             for ent in out.get("logical_entities") or []:
                 if ent.get("element_id") != p["owner_element_id"]:
@@ -715,7 +818,11 @@ def apply_model_patch(
                 if r.get("element_id") != p["element_id"]
             ]
         elif kind is PatchOpKind.ADD_PHYSICAL_OBJECT:
-            out.setdefault("data_carriers", []).append(p)
+            payload = dict(p)
+            structure = payload.pop("_structure", None)
+            out.setdefault("data_carriers", []).append(payload)
+            if isinstance(structure, dict):
+                out.setdefault("data_structures", []).append(structure)
         elif kind is PatchOpKind.UPDATE_PHYSICAL_OBJECT:
             for obj in out.get("data_carriers") or []:
                 if obj.get("element_id") == p["element_id"]:
@@ -733,34 +840,97 @@ def apply_model_patch(
                 if o.get("element_id") != p["element_id"]
             ]
         elif kind is PatchOpKind.ADD_FIELD:
-            for obj in out.get("data_carriers") or []:
-                if obj.get("element_id") == p["owner_element_id"]:
-                    field = {
-                        k: v
-                        for k, v in p.items()
-                        if k != "owner_element_id"
+            carrier = next(
+                (
+                    o
+                    for o in (out.get("data_carriers") or [])
+                    if o.get("element_id") == p["owner_element_id"]
+                ),
+                None,
+            )
+            if carrier is None:
+                continue
+            sid = str(
+                p.get("structure_id")
+                or carrier.get("structure_ref")
+                or ""
+            )
+            if not sid:
+                sid = _new_id("dams:structure/diagram")
+                carrier["structure_ref"] = sid
+                out.setdefault("data_structures", []).append(
+                    {
+                        "element_id": sid,
+                        "name": carrier.get("name") or "structure",
+                        "schema_format": "relational",
+                        "structure_version": "1.0.0",
+                        "root_local_key": "root",
+                        "nodes": [
+                            {
+                                "local_key": "root",
+                                "node_kind": "object",
+                                "children": [],
+                            }
+                        ],
                     }
-                    field.setdefault("carrier_ref", p["owner_element_id"])
-                    obj.setdefault("physical_fields", []).append(field)
+                )
+            st = next(
+                (
+                    s
+                    for s in (out.get("data_structures") or [])
+                    if s.get("element_id") == sid
+                ),
+                None,
+            )
+            if st is None:
+                continue
+            lk = str(p.get("local_key") or _slug_key(p.get("name") or "field"))
+            st.setdefault("nodes", []).append(
+                {
+                    "local_key": lk,
+                    "node_kind": "scalar",
+                    "native_name": p.get("native_name") or p.get("name"),
+                    "native_type": p.get("native_type"),
+                    "required": p.get("required", False),
+                }
+            )
+            for n in st["nodes"]:
+                if n.get("local_key") == st.get("root_local_key", "root"):
+                    children = list(n.get("children") or [])
+                    if lk not in children:
+                        children.append(lk)
+                        n["children"] = children
+                    break
         elif kind is PatchOpKind.UPDATE_FIELD:
-            for obj in out.get("data_carriers") or []:
-                if obj.get("element_id") != p["owner_element_id"]:
+            sid = str(p.get("structure_id") or "")
+            lk = str(p.get("local_key") or "")
+            if "#" in str(p.get("element_id") or "") and not lk:
+                sid, lk = str(p["element_id"]).split("#", 1)
+            for st in out.get("data_structures") or []:
+                if sid and st.get("element_id") != sid:
                     continue
-                for field in obj.get("physical_fields") or []:
-                    if field.get("element_id") == p["element_id"]:
-                        field["name"] = p["name"]
-                        field["native_name"] = p["native_name"]
-                        field["native_type"] = p["native_type"]
-                        field["required"] = p["required"]
+                for node in st.get("nodes") or []:
+                    if str(node.get("local_key")) == lk:
+                        node["native_name"] = p["native_name"]
+                        node["native_type"] = p["native_type"]
+                        node["required"] = p["required"]
         elif kind is PatchOpKind.DELETE_FIELD:
-            for obj in out.get("data_carriers") or []:
-                if obj.get("element_id") != p["owner_element_id"]:
+            sid = str(p.get("structure_id") or "")
+            lk = str(p.get("local_key") or "")
+            if "#" in str(p.get("element_id") or "") and not lk:
+                sid, lk = str(p["element_id"]).split("#", 1)
+            for st in out.get("data_structures") or []:
+                if sid and st.get("element_id") != sid:
                     continue
-                obj["physical_fields"] = [
-                    f
-                    for f in (obj.get("physical_fields") or [])
-                    if f.get("element_id") != p["element_id"]
+                st["nodes"] = [
+                    n
+                    for n in (st.get("nodes") or [])
+                    if str(n.get("local_key")) != lk
                 ]
+                for n in st["nodes"]:
+                    children = n.get("children")
+                    if isinstance(children, list) and lk in children:
+                        n["children"] = [c for c in children if c != lk]
         elif kind is PatchOpKind.ADD_MAPPING_REF:
             out.setdefault("mappings", []).append(p)
         elif kind is PatchOpKind.DELETE_MAPPING_REF:

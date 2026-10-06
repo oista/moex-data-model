@@ -9,12 +9,18 @@ from __future__ import annotations
 
 import argparse
 import copy
-import hashlib
-import json
 import sys
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
+
+_SRC = Path(__file__).resolve().parents[1] / "packages" / "specification-dams" / "src"
+if str(_SRC) not in sys.path:
+    sys.path.insert(0, str(_SRC))
+
+from moex_dams.application.binding_revision import (  # noqa: E402
+    apply_binding_revision_policy,
+)
 
 KIND_MAP: dict[str, tuple[str, str]] = {
     # object_kind -> (collection_key, asset_kind)
@@ -328,17 +334,14 @@ def migrate_document(data: dict[str, Any], *, demo: bool = False) -> dict[str, A
     if n:
         report_lines.append(f"REWROTE {n} legacy ref keys")
 
-    # integrity_digest: only for demo/fixtures
-    if demo:
-        for binding_key in ("data_model_bindings",):
-            for b in data.get(binding_key) or []:
-                if isinstance(b, dict) and "integrity_digest" in b:
-                    payload = json.dumps(b.get("selections") or [], sort_keys=True)
-                    digest = "sha256:" + hashlib.sha256(payload.encode()).hexdigest()
-                    b["integrity_digest"] = digest
-                    report_lines.append(
-                        f"RECOMPUTED integrity_digest for {b.get('element_id')} (demo)"
-                    )
+    # integrity_digest / revision (ADR-031): demo recomputes; else new revision
+    report_lines.extend(
+        apply_binding_revision_policy(
+            data,
+            demo=demo,
+            reason="technical-asset-migration",
+        )
+    )
 
     after_ids = _collect_element_ids(data)
     after_fields = _count_fields(data)

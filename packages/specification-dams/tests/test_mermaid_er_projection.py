@@ -24,14 +24,14 @@ MINI = {
                 {
                     "element_id": "dams:logical/mini/Client/clientId",
                     "name": "clientId",
-                    "logical_type": "identifier",
+                    "data_type_ref": "dams:datatype/identifier",
                     "required": True,
                 },
                 {
                     "element_id": "dams:logical/mini/Client/fullName",
                     "name": "fullName",
                     "title": 'Name "quoted"',
-                    "logical_type": "string",
+                    "data_type_ref": "dams:datatype/string",
                     "required": False,
                 },
             ],
@@ -43,13 +43,13 @@ MINI = {
                 {
                     "element_id": "dams:logical/mini/Account/accountId",
                     "name": "accountId",
-                    "logical_type": "identifier",
+                    "data_type_ref": "dams:datatype/identifier",
                     "required": True,
                 },
                 {
                     "element_id": "dams:logical/mini/Account/clientId",
                     "name": "clientId",
-                    "logical_type": "identifier",
+                    "data_type_ref": "dams:datatype/identifier",
                     "required": True,
                 },
             ],
@@ -62,7 +62,7 @@ MINI = {
                 {
                     "element_id": "dams:logical/mini/Contact/Id",
                     "name": "Id",
-                    "logical_type": "identifier",
+                    "data_type_ref": "dams:datatype/identifier",
                     "required": True,
                 },
             ],
@@ -74,7 +74,7 @@ MINI = {
                 {
                     "element_id": "dams:logical/mini/Weird/x",
                     "name": "x",
-                    "logical_type": "string",
+                    "data_type_ref": "dams:datatype/string",
                 },
             ],
         },
@@ -103,31 +103,63 @@ MINI = {
             "element_id": "dams:physical/mini/client-topic",
             "name": "client_changed_topic",
             "asset_kind": "stream_topic",
-            "physical_fields": [
-                {
-                    "element_id": "dams:physical/mini/client-topic/client_id",
-                    "name": "client_id",
-                    "native_name": "client_id",
-                    "native_type": "string",
-                    "required": True,
-                }
-            ],
+            "structure_ref": "dams:structure/mini/client-topic",
         },
         {
             "element_id": "dams:physical/mini/account_table",
             "name": "account",
             "asset_kind": "relational_table",
-            "physical_fields": [
+            "structure_ref": "dams:structure/mini/account",
+        },
+        {
+            "element_id": "dams:physical/mini/client_table",
+            "name": "client",
+            "asset_kind": "relational_table",
+            "structure_ref": "dams:structure/mini/client",
+        },
+    ],
+    "data_structures": [
+        {
+            "element_id": "dams:structure/mini/client-topic",
+            "name": "client_changed_topic",
+            "schema_format": "relational",
+            "root_local_key": "root",
+            "nodes": [
                 {
-                    "element_id": "dams:physical/mini/account/id",
-                    "name": "id",
+                    "local_key": "root",
+                    "node_kind": "object",
+                    "children": ["client_id"],
+                },
+                {
+                    "local_key": "client_id",
+                    "node_kind": "scalar",
+                    "native_name": "client_id",
+                    "native_type": "string",
+                    "required": True,
+                },
+            ],
+        },
+        {
+            "element_id": "dams:structure/mini/account",
+            "name": "account",
+            "schema_format": "relational",
+            "root_local_key": "root",
+            "nodes": [
+                {
+                    "local_key": "root",
+                    "node_kind": "object",
+                    "children": ["id", "client_id"],
+                },
+                {
+                    "local_key": "id",
+                    "node_kind": "scalar",
                     "native_name": "id",
                     "native_type": "uuid",
                     "required": True,
                 },
                 {
-                    "element_id": "dams:physical/mini/account/client_id",
-                    "name": "client_id",
+                    "local_key": "client_id",
+                    "node_kind": "scalar",
                     "native_name": "client_id",
                     "native_type": "uuid",
                     "required": True,
@@ -135,17 +167,23 @@ MINI = {
             ],
         },
         {
-            "element_id": "dams:physical/mini/client_table",
+            "element_id": "dams:structure/mini/client",
             "name": "client",
-            "asset_kind": "relational_table",
-            "physical_fields": [
+            "schema_format": "relational",
+            "root_local_key": "root",
+            "nodes": [
                 {
-                    "element_id": "dams:physical/mini/client/id",
-                    "name": "id",
+                    "local_key": "root",
+                    "node_kind": "object",
+                    "children": ["id"],
+                },
+                {
+                    "local_key": "id",
+                    "node_kind": "scalar",
                     "native_name": "id",
                     "native_type": "uuid",
                     "required": True,
-                }
+                },
             ],
         },
     ],
@@ -153,14 +191,14 @@ MINI = {
         {
             "mapping_type": "field_mapping",
             "source_refs": ["dams:logical/mini/Client/clientId"],
-            "target_refs": ["dams:physical/mini/client-topic/client_id"],
+            "target_refs": ["dams:structure/mini/client-topic#client_id"],
         },
         {
             "element_id": "dams:map/mini/account-client-fk",
             "name": "account_client_fk",
             "mapping_type": "field_mapping",
-            "source_refs": ["dams:physical/mini/account/client_id"],
-            "target_refs": ["dams:physical/mini/client/id"],
+            "source_refs": ["dams:structure/mini/account#client_id"],
+            "target_refs": ["dams:structure/mini/client#id"],
         },
     ],
 }

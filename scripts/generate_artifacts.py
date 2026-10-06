@@ -376,6 +376,44 @@ def generate_mermaid(
     return digest
 
 
+def _fix_pythongen_permissible_value_shadow(text: str) -> str:
+    """Avoid DAMS class ``PermissibleValue`` shadowing LinkML metamodel enums.
+
+    gen-python imports ``PermissibleValue`` from ``linkml_runtime.linkml_model.meta``
+    for enum literals, then later emits DAMS class ``PermissibleValue`` (value-domain
+    member). Class body assignment rebinds the name, so subsequent
+    ``PermissibleValue(text=...)`` enum lines crash at import time.
+    """
+    import re
+
+    old_import = (
+        "from linkml_runtime.linkml_model.meta import (\n"
+        "    EnumDefinition,\n"
+        "    PermissibleValue,\n"
+        "    PvFormulaOptions\n"
+        ")"
+    )
+    new_import = (
+        "from linkml_runtime.linkml_model.meta import (\n"
+        "    EnumDefinition,\n"
+        "    PermissibleValue as LinkMLPermissibleValue,\n"
+        "    PvFormulaOptions\n"
+        ")"
+    )
+    if "PermissibleValue as LinkMLPermissibleValue" in text:
+        return text
+    if old_import not in text:
+        return text
+    text = text.replace(old_import, new_import, 1)
+    # Call sites / constructors only — never ``class PermissibleValue(...)``.
+    text = re.sub(
+        r"(?<!class )PermissibleValue\(",
+        "LinkMLPermissibleValue(",
+        text,
+    )
+    return text
+
+
 def generate_python(
     *, out_path: Path = PYTHON_PATH, manifest_path: Path = PYTHON_MANIFEST
 ) -> str:
@@ -383,6 +421,7 @@ def generate_python(
 
     with schema_cwd() as schema_name:
         text = PythonGenerator(schema_name).serialize()
+    text = _fix_pythongen_permissible_value_shadow(text)
     digest = write_text_artifact(out_path, text, strip_generation_date=True)
     try:
         out_rel = out_path.relative_to(REPO).as_posix()

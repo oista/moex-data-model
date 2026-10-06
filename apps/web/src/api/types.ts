@@ -81,7 +81,8 @@ export type DocumentMutation =
       attribute: {
         element_id: string;
         name: string;
-        logical_type: string;
+        data_type_ref?: string;
+        value_domain_ref?: string;
         title?: string;
         description?: string;
         required?: boolean;
@@ -110,7 +111,8 @@ export type DocumentMutation =
         name?: string;
         title?: string;
         description?: string;
-        logical_type?: string;
+        data_type_ref?: string;
+        value_domain_ref?: string;
         required?: boolean;
         multivalued?: boolean;
         lifecycle_status?: string;
@@ -234,38 +236,30 @@ export type DocumentMutation =
       element_id: string;
     }
   | {
-      op: "add_physical_field";
+      op: "add_schema_node";
       owner_element_id: string;
-      physical_field: {
-        element_id: string;
+      schema_node: {
         name: string;
         native_type: string;
+        local_key?: string;
         description?: string;
-        lifecycle_status?: string;
         native_name?: string;
         required?: boolean;
-        nullable?: boolean;
-        logical_attribute_ref?: string;
       };
     }
   | {
-      op: "update_physical_field";
+      op: "update_schema_node";
       element_id: string;
       patch: {
-        name?: string;
-        title?: string;
-        description?: string;
-        lifecycle_status?: string;
         native_name?: string;
         native_type?: string;
         required?: boolean;
+        description?: string;
         nullable?: boolean;
-        logical_attribute_ref?: string;
-        schema_path?: string;
       };
     }
   | {
-      op: "delete_physical_field";
+      op: "delete_schema_node";
       element_id: string;
     };
 

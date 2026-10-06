@@ -249,3 +249,25 @@ requirements:
           technical-asset collections
           (data_carriers, access_points, data_containers, execution_assets)
           must be absent or empty for implementation_scope: enterprise.
+
+  - element_id: dams:req/CM-PROP-001
+    name: conceptual_property_enterprise_only
+    title: ConceptualProperty только в enterprise
+    description: >
+      Реализовано в semantic_layer (DAMS-SEM-PROP-SCOPE). Значимые свойства КМД
+      не размещаются в solution-пакетах (ADR-034).
+    lifecycle_status: approved
+    code: CM-PROP-001
+    requirement_level: conceptual_model
+    requirement_section: LDM
+    statement: >
+      ConceptualProperty и ConceptualDomain допустимы только в пакетах
+      implementation_scope=enterprise. У ConceptualProperty обязательны
+      significance_basis и property_owner_entity_ref.
+    formal_checks:
+      - check_id: CM-PROP-001.c1
+        kind: custom
+        target_class: ConceptualProperty
+        severity: error
+        diagnostic_code: DAMS-SEM-PROP-SCOPE
+        description: Validated by check_semantic_layer (ADR-034).

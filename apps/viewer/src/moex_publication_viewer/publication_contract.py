@@ -29,7 +29,8 @@ _SELECT_SUFFIXES: dict[str, tuple[str, ...]] = {
     "AccessPoint": ("access_points",),
     "DataContainer": ("data_containers",),
     "ExecutionAsset": ("execution_assets",),
-    "PhysicalField": ("physical_fields", "physical-fields", "fields"),
+    "SchemaNode": ("data_structures", "nodes"),
+    "DataStructure": ("data_structures",),
     "EntityPhysicalMapping": ("mappings", "physical_mappings", "nodes"),
     "AttributePhysicalMapping": ("mappings", "physical_mappings", "nodes"),
 }
@@ -42,7 +43,8 @@ _KIND_MARKERS: dict[str, frozenset[str]] = {
     "AccessPoint": frozenset({"access_point", "AccessPoint"}),
     "DataContainer": frozenset({"data_container", "DataContainer"}),
     "ExecutionAsset": frozenset({"execution_asset", "ExecutionAsset"}),
-    "PhysicalField": frozenset({"field", "PhysicalField", "physical_field"}),
+    "SchemaNode": frozenset({"schema_node", "SchemaNode", "field"}),
+    "DataStructure": frozenset({"data_structure", "DataStructure"}),
     "EntityPhysicalMapping": frozenset(
         {
             "mapping",
@@ -256,25 +258,34 @@ def _count_one_type(
             ]
         )
 
-    if stype == "PhysicalField":
+    if stype == "SchemaNode":
         objs = _as_list(selected)
         leaf = select.split(".")[-1] if select else ""
-        if leaf in (
-            "data_carriers",
-            "physical-objects",
-        ):
+        if leaf in ("data_structures",):
             return sum(
-                len(_as_list(o.get("physical_fields") or o.get("fields")))
+                len(
+                    [
+                        n
+                        for n in _as_list(o.get("nodes"))
+                        if isinstance(n, dict)
+                        and str(n.get("node_kind") or "") == "scalar"
+                    ]
+                )
                 for o in objs
                 if isinstance(o, dict)
             )
         if isinstance(root, dict):
-            pobjs = _as_list(
-                root.get("data_carriers") or root.get("physical-objects")
-            )
+            structures = _as_list(root.get("data_structures"))
             nested = sum(
-                len(_as_list(o.get("physical_fields") or o.get("fields")))
-                for o in pobjs
+                len(
+                    [
+                        n
+                        for n in _as_list(o.get("nodes"))
+                        if isinstance(n, dict)
+                        and str(n.get("node_kind") or "") == "scalar"
+                    ]
+                )
+                for o in structures
                 if isinstance(o, dict)
             )
             if nested:

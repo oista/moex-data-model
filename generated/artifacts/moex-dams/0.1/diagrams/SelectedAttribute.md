@@ -51,16 +51,7 @@
         
       SelectedAttribute : name
         
-      SelectedAttribute : physical_field_refs
-        
-          
-    
-        
-        
-        SelectedAttribute --> "*" PhysicalField : physical_field_refs
-        click PhysicalField href "../PhysicalField"
-    
-
+      SelectedAttribute : schema_node_refs
         
       SelectedAttribute : tags
         

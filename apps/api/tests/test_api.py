@@ -227,7 +227,7 @@ def test_document_mutations_seed_and_conflict(client: TestClient) -> None:
             "attribute": {
                 "element_id": "dams:logical/mdm/ENTERPRISE/nickname",
                 "name": "nickname",
-                "logical_type": "string",
+                "data_type_ref": "dams:datatype/string",
                 "required": False,
             },
         },
@@ -413,10 +413,9 @@ def test_document_mutations_physical_object_and_field(client: TestClient) -> Non
     add_field = client.post(
         "/workspaces/ws-mut-phys/documents/mdm/mutations",
         json={
-            "op": "add_physical_field",
+            "op": "add_schema_node",
             "owner_element_id": "dams:physical/mdm/wb-orders",
-            "physical_field": {
-                "element_id": "dams:physical/mdm/wb-orders/id",
+            "schema_node": {
                 "name": "id",
                 "native_type": "uuid",
             },
@@ -424,7 +423,10 @@ def test_document_mutations_physical_object_and_field(client: TestClient) -> Non
         headers=headers,
     )
     assert add_field.status_code == 200
-    assert "dams:physical/mdm/wb-orders/id" in add_field.json()["content"]
+    content = add_field.json()["content"]
+    assert "native_type: uuid" in content
+    assert "data_structures:" in content
+    assert "structure_ref:" in content
 
     upd = client.post(
         "/workspaces/ws-mut-phys/documents/mdm/mutations",
@@ -438,11 +440,28 @@ def test_document_mutations_physical_object_and_field(client: TestClient) -> Non
     assert upd.status_code == 200
     assert "WB Orders" in upd.json()["content"]
 
+    # Resolve node ref from content
+    import yaml as _yaml
+
+    pkg = _yaml.safe_load(content)
+    carrier = next(
+        c
+        for c in pkg["data_carriers"]
+        if c["element_id"] == "dams:physical/mdm/wb-orders"
+    )
+    st = next(
+        s
+        for s in pkg["data_structures"]
+        if s["element_id"] == carrier["structure_ref"]
+    )
+    scalar = next(n for n in st["nodes"] if n.get("node_kind") == "scalar")
+    node_ref = f"{st['element_id']}#{scalar['local_key']}"
+
     del_field = client.post(
         "/workspaces/ws-mut-phys/documents/mdm/mutations",
         json={
-            "op": "delete_physical_field",
-            "element_id": "dams:physical/mdm/wb-orders/id",
+            "op": "delete_schema_node",
+            "element_id": node_ref,
         },
         headers=headers,
     )

@@ -43,7 +43,9 @@ superseded_by: MODELING_ARCHITECTURE.md
 
 ### Transitional payload / message
 
-Бывшие `payload` / `message` → `DataCarrier` с `asset_kind: message_type` и тегом `transitional` в `tags`. Структура — через `HasStructure` / `structure_ref` → `DataStructure` (новые классы Message/SchemaNode не вводим).
+Бывшие `payload` / `message` → `DataCarrier` с `asset_kind: message_type` (transitional)
+были заменены на `Message` + `DataStructure` (ADR-038 / ADR-040). Значение
+`message_type` удалено из `DataCarrierKindEnum` в DAMS 2.0.0.
 
 ### Пример: Kafka
 

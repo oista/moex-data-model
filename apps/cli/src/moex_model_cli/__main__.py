@@ -101,6 +101,13 @@ def build_parser() -> argparse.ArgumentParser:
     semantic.add_argument("--right", type=Path, default=None, help="Target YAML file")
     semantic.add_argument("--json", action="store_true", help="Print SemanticDiffReport JSON")
 
+    coverage = sub.add_parser(
+        "concept-coverage",
+        help="Informational ConceptualProperty coverage report (does not fail CI)",
+    )
+    _add_slice_args(coverage)
+    coverage.add_argument("--json", action="store_true", help="Print JSON report")
+
     schema_diff = sub.add_parser(
         "schema-diff",
         help="Classify DAMS LinkML schema changes (breaking / additive / …)",
@@ -522,6 +529,10 @@ def main(argv: list[str] | None = None) -> int:
             right=args.right,
             as_json=args.json,
         )
+    elif args.command == "concept-coverage":
+        from moex_model_cli.commands.concept_coverage import run_concept_coverage
+
+        code, text = run_concept_coverage(paths, as_json=args.json)
     elif args.command == "schema-diff":
         from moex_model_cli.commands.schema_diff import run_schema_diff
 

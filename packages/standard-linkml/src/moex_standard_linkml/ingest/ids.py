@@ -53,13 +53,8 @@ def physical_object_id(prefix: str, slug: str, object_name: str) -> str:
     return f"{prefix}:physical/{slugify(slug)}/{slugify(object_name)}"
 
 
-def physical_field_id(
-    prefix: str, slug: str, object_name: str, field_name: str
-) -> str:
-    return (
-        f"{prefix}:physical/{slugify(slug)}/"
-        f"{slugify(object_name)}/{slugify(field_name)}"
-    )
+def data_structure_id(prefix: str, slug: str, structure_name: str) -> str:
+    return f"{prefix}:structure/{slugify(slug)}/{slugify(structure_name)}"
 
 
 def mapping_id(prefix: str, slug: str, mapping_name: str) -> str:

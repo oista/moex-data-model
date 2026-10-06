@@ -1,0 +1,269 @@
+[
+  {
+    "attributes_before": 58,
+    "attributes_after": 58,
+    "domains_created": [],
+    "types_ensured": [],
+    "attrs_updated": [],
+    "proposed_properties": [
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/crm/CONTACT/Id",
+        "owner_logical_entity": "dams:logical/crm/CONTACT",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/crm/CUSTOMER/Id",
+        "owner_logical_entity": "dams:logical/crm/CUSTOMER",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/crm/LEAD/ApplicationId",
+        "owner_logical_entity": "dams:logical/crm/LEAD",
+        "mode": "propose"
+      }
+    ],
+    "ambiguous": [],
+    "skipped_denied": false,
+    "path": "model-assets\\implementations\\solutions\\crm\\crm-solution-model.yaml"
+  },
+  {
+    "attributes_before": 68,
+    "attributes_after": 68,
+    "domains_created": [],
+    "types_ensured": [],
+    "attrs_updated": [],
+    "proposed_properties": [
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/esed/attorney_check_info/instance_id",
+        "owner_logical_entity": "dams:logical/esed/attorney_check_info",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/esed/common_state/state_id",
+        "owner_logical_entity": "dams:logical/esed/common_state",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/esed/common_type/type_id",
+        "owner_logical_entity": "dams:logical/esed/common_type",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/esed/division/division_id",
+        "owner_logical_entity": "dams:logical/esed/division",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/esed/document/document_id",
+        "owner_logical_entity": "dams:logical/esed/document",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/esed/employee/employee_id",
+        "owner_logical_entity": "dams:logical/esed/employee",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/esed/file/id",
+        "owner_logical_entity": "dams:logical/esed/file",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/esed/file_binary/id",
+        "owner_logical_entity": "dams:logical/esed/file_binary",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/esed/instance/instance_id",
+        "owner_logical_entity": "dams:logical/esed/instance",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/esed/organization/organization_id",
+        "owner_logical_entity": "dams:logical/esed/organization",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/esed/organization_employee/employee_id",
+        "owner_logical_entity": "dams:logical/esed/organization_employee",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/esed/universal_item/item_id",
+        "owner_logical_entity": "dams:logical/esed/universal_item",
+        "mode": "propose"
+      }
+    ],
+    "ambiguous": [],
+    "skipped_denied": false,
+    "path": "model-assets\\implementations\\solutions\\esed\\esed-solution-model.yaml"
+  },
+  {
+    "attributes_before": 42,
+    "attributes_after": 42,
+    "domains_created": [],
+    "types_ensured": [],
+    "attrs_updated": [],
+    "proposed_properties": [
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID",
+        "owner_logical_entity": "dams:logical/mdm/ENTERPRISE",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/mdm/PERSON/PERSON_ID",
+        "owner_logical_entity": "dams:logical/mdm/PERSON",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID",
+        "owner_logical_entity": "dams:logical/mdm/PERSON_CEO",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID",
+        "owner_logical_entity": "dams:logical/mdm/PERSON_REPRESENTATIVE",
+        "mode": "propose"
+      }
+    ],
+    "ambiguous": [],
+    "skipped_denied": false,
+    "path": "model-assets\\implementations\\solutions\\mdm\\mdm-solution-model.yaml"
+  },
+  {
+    "attributes_before": 40,
+    "attributes_after": 40,
+    "domains_created": [],
+    "types_ensured": [],
+    "attrs_updated": [],
+    "proposed_properties": [
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/ucd/AGREEMENT/id",
+        "owner_logical_entity": "dams:logical/ucd/AGREEMENT",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/ucd/AUTHORIZATION/id",
+        "owner_logical_entity": "dams:logical/ucd/AUTHORIZATION",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/ucd/EMPOYEE/id",
+        "owner_logical_entity": "dams:logical/ucd/EMPOYEE",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/ucd/ORGANIZATION/id",
+        "owner_logical_entity": "dams:logical/ucd/ORGANIZATION",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/ucd/ORGANIZATION_TYPE/Id",
+        "owner_logical_entity": "dams:logical/ucd/ORGANIZATION_TYPE",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/ucd/PERSON/id",
+        "owner_logical_entity": "dams:logical/ucd/PERSON",
+        "mode": "propose"
+      },
+      {
+        "basis": [
+          "identifying"
+        ],
+        "attribute_ref": "dams:logical/ucd/POSITION/id",
+        "owner_logical_entity": "dams:logical/ucd/POSITION",
+        "mode": "propose"
+      }
+    ],
+    "ambiguous": [],
+    "skipped_denied": false,
+    "path": "model-assets\\implementations\\solutions\\ucd\\ucd-solution-model.yaml"
+  },
+  {
+    "attributes_before": 2,
+    "attributes_after": 2,
+    "domains_created": [],
+    "types_ensured": [],
+    "attrs_updated": [],
+    "proposed_properties": [],
+    "ambiguous": [],
+    "skipped_denied": false,
+    "path": "model-assets\\implementations\\imports\\client-accounts-csv-draft\\0.1\\draft-model.yaml"
+  }
+]

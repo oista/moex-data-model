@@ -1,0 +1,106 @@
+id: https://data.moex.com/dams/semantic/v0.1
+name: moex_semantic
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  skos: http://www.w3.org/2004/02/skos/core#
+  dams: https://data.moex.com/dams/
+imports:
+  - linkml:types
+  - moex-types
+  - moex-registries
+  - moex-governance
+  - moex-core
+default_prefix: dams
+default_range: string
+
+classes:
+  ConceptualDomain:
+    is_a: ModelElement
+    mixins:
+      - HasOwnership
+      - HasProvenance
+    class_uri: dams:ConceptualDomain
+    close_mappings:
+      - skos:ConceptScheme
+    comments:
+      - >
+        ISO/IEC 11179 Conceptual Domain — набор value meanings (смыслов значений).
+        IRI ISO 11179 не опубликованы стабильно; соответствие фиксируется в ADR-035.
+        SKOS: ConceptScheme (не Collection) — чтобы допускать семантические связи
+        между ValueMeaning (skos:Concept).
+    description: >
+      Концептуальный домен значений: набор смыслов (ValueMeaning) или ссылка на
+      внешнюю схему понятий. Допустим только в пакетах implementation_scope=enterprise.
+    slots:
+      - conceptual_domain_kind
+      - value_meanings
+      - concept_scheme_uri
+      - broader_domain_ref
+    rules:
+      - description: described-домен не содержит value_meanings
+        preconditions:
+          slot_conditions:
+            conceptual_domain_kind:
+              equals_string: described
+        postconditions:
+          slot_conditions:
+            value_meanings:
+              value_presence: ABSENT
+
+  ValueMeaning:
+    class_uri: dams:ValueMeaning
+    exact_mappings:
+      - skos:Concept
+    comments:
+      - ISO/IEC 11179 Value Meaning; IRI ISO не используются (ADR-035).
+    description: >
+      Смысл допустимого значения внутри ConceptualDomain (встраиваемый, без lifecycle).
+    slots:
+      - meaning_key
+      - meaning_label
+      - meaning_definition
+      - aliases
+      - meaning_term_ref
+      - broader_meaning_key
+      - meaning_status
+
+slots:
+  conceptual_domain_kind:
+    range: ConceptualDomainKindEnum
+    required: true
+    description: Вид концептуального домена (enumerated | described).
+  value_meanings:
+    range: ValueMeaning
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Встроенный список смыслов значений.
+  concept_scheme_uri:
+    range: uriorcurie
+    description: Внешняя схема понятий (SKOS ConceptScheme / онтология).
+  broader_domain_ref:
+    range: ConceptualDomain
+    inlined: false
+    description: Более широкий концептуальный домен.
+  meaning_key:
+    identifier: true
+    range: string
+    required: true
+    description: Ключ смысла, уникальный внутри ConceptualDomain.
+  meaning_label:
+    range: string
+    description: Предпочтительная метка смысла (skos:prefLabel в OWL-проекции).
+  meaning_definition:
+    range: string
+    description: Определение смысла (skos:definition).
+  meaning_term_ref:
+    range: uriorcurie
+    description: CURIE внешнего термина, уточняющего смысл.
+  broader_meaning_key:
+    range: string
+    description: Ключ более широкого ValueMeaning в том же домене.
+  meaning_status:
+    range: LifecycleStatusEnum
+    description: Статус смысла значения.

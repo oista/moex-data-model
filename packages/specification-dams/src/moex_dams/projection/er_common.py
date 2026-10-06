@@ -4,9 +4,14 @@ from __future__ import annotations
 
 from typing import Any
 
-from moex_dams.projection.dbml import _ident
+from moex_dams.projection.dbml import _ident, effective_attr_type
+from moex_dams.rules.data_structure import parse_structure_node_ref
 
 MANY = 999999
+
+
+def is_structure_node_ref(ref: str) -> bool:
+    return parse_structure_node_ref(ref) is not None
 
 
 def unique_table_name(raw: str | None, *, fallback: str, used: set[str]) -> str:

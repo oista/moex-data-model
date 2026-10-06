@@ -9,7 +9,7 @@ export type ExplorerKind =
   | "logical_attribute"
   | "relationship"
   | "physical_object"
-  | "physical_field"
+  | "schema_node"
   | "mapping";
 
 export type ExplorerSelect = {
@@ -180,7 +180,17 @@ function parseTree(content: string): { groups: Group[]; error: string | null } {
         }
       }
       const toNode = (e: Record<string, unknown>): TreeNode => {
-        const fields = Array.isArray(e.physical_fields) ? e.physical_fields : [];
+        const structures = Array.isArray(data.data_structures)
+          ? data.data_structures
+          : [];
+        const sid = e.structure_ref ? String(e.structure_ref) : "";
+        const st = structures.find(
+          (s): s is Record<string, unknown> =>
+            !!s &&
+            typeof s === "object" &&
+            String((s as Record<string, unknown>).element_id) === sid,
+        );
+        const nodes = st && Array.isArray(st.nodes) ? st.nodes : [];
         const nested = childrenOf.get(String(e.element_id)) || [];
         return {
           id: String(e.element_id),
@@ -189,16 +199,16 @@ function parseTree(content: string): { groups: Group[]; error: string | null } {
           tab: "physical" as FormsTab,
           children: [
             ...nested.map(toNode),
-            ...fields
+            ...nodes
               .filter(
                 (f): f is Record<string, unknown> =>
                   !!f && typeof f === "object",
               )
-              .filter((f) => f.element_id)
+              .filter((f) => f.node_kind === "scalar" && f.local_key)
               .map((f) => ({
-                id: String(f.element_id),
-                label: String(f.name || f.element_id),
-                kind: "physical_field" as const,
+                id: `${sid}#${String(f.local_key)}`,
+                label: String(f.native_name || f.local_key),
+                kind: "schema_node" as const,
                 tab: "physical" as FormsTab,
               })),
           ],

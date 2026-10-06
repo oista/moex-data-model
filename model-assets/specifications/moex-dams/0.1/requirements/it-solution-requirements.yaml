@@ -145,7 +145,6 @@ requirements:
     - dataset
     - stream_topic
     - stream_queue
-    - message_type
     - api_resource
     - other
   formal_checks:
@@ -425,8 +424,8 @@ requirements:
   code: ATR-001
   requirement_level: it_solution
   requirement_section: ATR
-  statement: У логического атрибута должны быть указаны владеющая сущность, логический тип, обязательность
-    заполнения и признак множественности.
+  statement: У логического атрибута должны быть указаны владеющая сущность, представление
+    типа (data_type_ref и/или value_domain_ref), обязательность заполнения и признак множественности.
   applies_to:
     applicability_id: appl:ATR-001
     applies_target_class: LogicalAttribute
@@ -439,12 +438,12 @@ requirements:
     remediation: Укажите owner_entity_ref родительской сущности.
     diagnostic_code: DAMS-REQ-ATR-001.c1
   - check_id: ATR-001.c2
-    kind: slot_required
+    kind: custom
     target_class: LogicalAttribute
-    target_slot: logical_type
+    expression: semantic_layer_attr_type
     severity: error
-    remediation: Укажите logical_type атрибута.
-    diagnostic_code: DAMS-REQ-ATR-001.c2
+    remediation: Укажите data_type_ref и/или value_domain_ref.
+    diagnostic_code: DAMS-SEM-ATTR-TYPE
   - check_id: ATR-001.c3
     kind: slot_required
     target_class: LogicalAttribute
@@ -644,47 +643,41 @@ requirements:
     remediation: Укажите asset_namespace (OpenLineage-подобное пространство имён).
     diagnostic_code: DAMS-REQ-PDM-001.c7
 - element_id: dams:req/PDM-002
-  name: physical_field_core
-  title: Основные свойства физического поля
-  description: parent carrier, native name/type, required.
+  name: schema_node_core
+  title: Основные свойства узла схемы
+  description: local_key; scalar needs type; required on scalar.
   lifecycle_status: approved
   code: PDM-002
   requirement_level: it_solution
   requirement_section: PDM
-  statement: У физического поля должны быть указаны родительский носитель данных (carrier_ref), нативное
-    имя, нативный тип и семантика обязательности (допустимость пустого значения).
+  statement: У узла схемы (SchemaNode) должен быть локальный ключ (local_key). Для скалярного
+    узла должны быть указаны нативный тип или ссылка на DataType, а также семантика обязательности
+    (слот required).
   applies_to:
     applicability_id: appl:PDM-002
-    applies_target_class: PhysicalField
+    applies_target_class: SchemaNode
   formal_checks:
   - check_id: PDM-002.c1
     kind: slot_required
-    target_class: PhysicalField
-    target_slot: carrier_ref
+    target_class: SchemaNode
+    target_slot: local_key
     severity: error
-    remediation: Укажите carrier_ref родительского DataCarrier.
+    remediation: Укажите local_key узла внутри DataStructure.
     diagnostic_code: DAMS-REQ-PDM-002.c1
   - check_id: PDM-002.c2
-    kind: slot_required
-    target_class: PhysicalField
-    target_slot: native_name
+    kind: conditional_branch
+    target_class: SchemaNode
+    expression: pdm002_scalar_type
     severity: error
-    remediation: Укажите native_name поля.
+    remediation: Для scalar укажите native_type или data_type_ref.
     diagnostic_code: DAMS-REQ-PDM-002.c2
   - check_id: PDM-002.c3
-    kind: slot_required
-    target_class: PhysicalField
-    target_slot: native_type
+    kind: conditional_branch
+    target_class: SchemaNode
+    expression: pdm002_scalar_required
     severity: error
-    remediation: Укажите native_type поля.
+    remediation: Для scalar явно укажите required (nullable/presence semantics).
     diagnostic_code: DAMS-REQ-PDM-002.c3
-  - check_id: PDM-002.c4
-    kind: slot_required
-    target_class: PhysicalField
-    target_slot: required
-    severity: error
-    remediation: Явно укажите required (nullable semantics).
-    diagnostic_code: DAMS-REQ-PDM-002.c4
 - element_id: dams:req/PDM-003
   name: entity_physical_mapping
   title: Отображение сущности и носителя данных
@@ -706,7 +699,6 @@ requirements:
     - dataset
     - stream_topic
     - stream_queue
-    - message_type
     - api_resource
     - other
   formal_checks:
@@ -720,22 +712,22 @@ requirements:
       либо technical-only + mapping_rationale.
 - element_id: dams:req/PDM-004
   name: field_attribute_mapping
-  title: Отображение поля и атрибута
-  description: Field-level mapping or exception.
+  title: Отображение узла схемы и атрибута
+  description: SchemaNode field-level mapping or exception.
   lifecycle_status: approved
   code: PDM-004
   requirement_level: it_solution
   requirement_section: PDM
-  statement: Для физического поля, не помеченного как только техническое, должно быть отображение на логический
-    атрибут и/или правило преобразования, либо письменное исключение. Источник-поле и выражение преобразования
-    могут быть указаны вместе.
+  statement: Для скалярного узла схемы, не помеченного как только технический, должно быть отображение
+    на логический атрибут и/или правило преобразования, либо письменное исключение. Концы field_mapping —
+    LogicalAttribute и structure_id#local_key.
   applies_to:
     applicability_id: appl:PDM-004
-    applies_target_class: PhysicalField
+    applies_target_class: SchemaNode
   formal_checks:
   - check_id: PDM-004.c1
     kind: conditional_branch
-    target_class: PhysicalField
+    target_class: SchemaNode
     expression: pdm004_field_mapping
     severity: error
     diagnostic_code: DAMS-REQ-PDM-004.c1
@@ -834,7 +826,7 @@ requirements:
   requirement_level: it_solution
   requirement_section: PDM
   statement: Mapping типа entity_physical связывает LogicalEntity и DataCarrier; Mapping типа field_mapping
-    связывает LogicalAttribute и PhysicalField.
+    связывает LogicalAttribute и SchemaNode (структура#local_key).
   applies_to:
     applicability_id: appl:PDM-009
     applies_target_class: Mapping
@@ -907,6 +899,171 @@ requirements:
     diagnostic_code: DAMS-REQ-PDM-012.c1
     remediation: Удалите location_uri и region у in_memory носителя.
     description: Enforced by check_in_memory_location.
+- element_id: dams:req/PDM-013
+  name: schema_node_local_key_unique
+  title: Уникальность local_key в DataStructure
+  description: local_key unique within DataStructure.nodes.
+  lifecycle_status: approved
+  code: PDM-013
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: Внутри одной DataStructure значение local_key узла должно быть уникально среди nodes.
+  applies_to:
+    applicability_id: appl:PDM-013
+    applies_target_class: DataStructure
+  formal_checks:
+  - check_id: PDM-013.c1
+    kind: custom
+    target_class: DataStructure
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-013.c1
+    remediation: Исправьте дублирующиеся local_key.
+    description: Enforced by check_local_key_unique.
+- element_id: dams:req/PDM-014
+  name: schema_node_acyclic
+  title: Ацикличность рёбер SchemaNode
+  description: children/item_node must form a tree.
+  lifecycle_status: approved
+  code: PDM-014
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: Рёбра children и item_node внутри DataStructure не должны образовывать циклы. Рекурсия схемы
+    моделируется через node_kind=reference.
+  applies_to:
+    applicability_id: appl:PDM-014
+    applies_target_class: DataStructure
+  formal_checks:
+  - check_id: PDM-014.c1
+    kind: custom
+    target_class: DataStructure
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-014.c1
+    remediation: Устраните цикл в children/item_node.
+    description: Enforced by check_node_edge_cycles.
+- element_id: dams:req/PDM-015
+  name: data_structure_root
+  title: Корень DataStructure
+  description: root_local_key exists; root kind by schema_format.
+  lifecycle_status: approved
+  code: PDM-015
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: root_local_key должен указывать на существующий узел. Для relational корень — object; иначе
+    object или array.
+  applies_to:
+    applicability_id: appl:PDM-015
+    applies_target_class: DataStructure
+  formal_checks:
+  - check_id: PDM-015.c1
+    kind: custom
+    target_class: DataStructure
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-015.c1
+    remediation: Укажите root_local_key на существующий local_key.
+    description: Enforced by check_root_local_key.
+- element_id: dams:req/PDM-016
+  name: relational_slots_only
+  title: Реляционные признаки только для relational
+  description: column_position/PK/UQ/FK only when schema_format=relational.
+  lifecycle_status: approved
+  code: PDM-016
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: Слоты column_position, is_primary_key, is_unique и foreign_key_target допустимы только при
+    schema_format=relational у родительской DataStructure.
+  applies_to:
+    applicability_id: appl:PDM-016
+    applies_target_class: SchemaNode
+  formal_checks:
+  - check_id: PDM-016.c1
+    kind: custom
+    target_class: SchemaNode
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-016.c1
+    remediation: Удалите реляционные слоты или смените schema_format на relational.
+    description: Enforced by check_relational_slots.
+- element_id: dams:req/PDM-017
+  name: occurs_bounds
+  title: Границы кратности узла
+  description: max_occurs >= min_occurs when both set.
+  lifecycle_status: approved
+  code: PDM-017
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: Если заданы и min_occurs, и max_occurs, то max_occurs не должен быть меньше min_occurs.
+  applies_to:
+    applicability_id: appl:PDM-017
+    applies_target_class: SchemaNode
+  formal_checks:
+  - check_id: PDM-017.c1
+    kind: custom
+    target_class: SchemaNode
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-017.c1
+    remediation: Исправьте max_occurs >= min_occurs.
+    description: Enforced by check_occurs_bounds.
+- element_id: dams:req/PDM-018
+  name: message_refs_kinds
+  title: message_refs по виду AccessPoint
+  description: message_refs forbidden on interface; allowed for operation|channel.
+  lifecycle_status: approved
+  code: PDM-018
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: Слот message_refs запрещён для AccessPoint с asset_kind=interface и допускается для operation
+    и channel.
+  applies_to:
+    applicability_id: appl:PDM-018
+    applies_target_class: AccessPoint
+  formal_checks:
+  - check_id: PDM-018.c1
+    kind: custom
+    target_class: AccessPoint
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-018.c1
+    remediation: Перенесите message_refs на operation или channel.
+    description: Enforced by check_message_refs_kinds.
+- element_id: dams:req/PDM-019
+  name: message_payload_structure
+  title: Payload Message
+  description: Message requires payload_structure_ref to existing DataStructure.
+  lifecycle_status: approved
+  code: PDM-019
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: У Message должен быть payload_structure_ref, указывающий на DataStructure из пакета.
+  applies_to:
+    applicability_id: appl:PDM-019
+    applies_target_class: Message
+  formal_checks:
+  - check_id: PDM-019.c1
+    kind: custom
+    target_class: Message
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-019.c1
+    remediation: Укажите payload_structure_ref на существующую DataStructure.
+    description: Enforced by check_message_payload.
+- element_id: dams:req/PDM-020
+  name: schema_node_kind_shape
+  title: Форма узла по node_kind
+  description: array/map item_node; scalar/enum no children.
+  lifecycle_status: approved
+  code: PDM-020
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: Узлы array и map требуют item_node и не должны иметь children; узлы scalar и enum не должны
+    иметь children и item_node.
+  applies_to:
+    applicability_id: appl:PDM-020
+    applies_target_class: SchemaNode
+  formal_checks:
+  - check_id: PDM-020.c1
+    kind: custom
+    target_class: SchemaNode
+    severity: error
+    diagnostic_code: DAMS-REQ-PDM-020.c1
+    remediation: Исправьте children/item_node в соответствии с node_kind.
+    description: Enforced by check_node_kind_shape.
 - element_id: dams:req/CLS-001
   name: classification_axes_independent
   title: Независимость осей классификации
@@ -1020,3 +1177,52 @@ requirements:
     diagnostic_code: DAMS-REQ-ATR-004.c1
     remediation: Для decimal/datetime при необходимости добавьте currency_attribute_ref, unit_code или
       timezone_policy.
+
+- element_id: dams:req/ATR-006
+  name: attribute_representation_present
+  title: Представление атрибута (тип или домен)
+  description: >
+    Строгое представление: value_domain_ref и/или data_type_ref (PR-5 / ADR-034 шаг 2).
+    Реализовано в packages/specification-dams/.../semantic_layer.py (DAMS-SEM-ATTR-TYPE).
+  lifecycle_status: approved
+  code: ATR-006
+  requirement_level: it_solution
+  requirement_section: ATR
+  statement: >
+    У логического атрибута должно быть задано представление значений: value_domain_ref
+    и/или data_type_ref. Отсутствие concept_ref не является нарушением (вариант B, ADR-034).
+  applies_to:
+    applicability_id: appl:ATR-006
+    applies_target_class: LogicalAttribute
+  formal_checks:
+  - check_id: ATR-006.c1
+    kind: custom
+    target_class: LogicalAttribute
+    expression: semantic_layer_attr_type
+    severity: error
+    diagnostic_code: DAMS-SEM-ATTR-TYPE
+    remediation: Укажите data_type_ref и/или value_domain_ref.
+- element_id: dams:req/ATR-007
+  name: attribute_concept_ref_optional
+  title: concept_ref опционален
+  description: >
+    Негативное требование: отсутствие concept_ref не даёт error/warning.
+    Проверка — тест test_missing_concept_ref_is_silent.
+  lifecycle_status: approved
+  code: ATR-007
+  requirement_level: it_solution
+  requirement_section: ATR
+  statement: >
+    Ссылка LogicalAttribute.concept_ref на ConceptualProperty необязательна. Её отсутствие
+    не должно порождать ошибку или предупреждение валидатора.
+  applies_to:
+    applicability_id: appl:ATR-007
+    applies_target_class: LogicalAttribute
+  formal_checks:
+  - check_id: ATR-007.c1
+    kind: custom
+    target_class: LogicalAttribute
+    expression: concept_ref_never_required
+    severity: warning
+    diagnostic_code: DAMS-SEM-ATTR-CONCEPT-OPTIONAL
+    remediation: Не добавляйте обязательность concept_ref.

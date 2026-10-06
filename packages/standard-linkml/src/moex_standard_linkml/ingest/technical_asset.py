@@ -17,13 +17,10 @@ KIND_MAP: dict[str, tuple[str, str]] = {
     "interface": ("access_points", "interface"),
     "operation": ("access_points", "operation"),
     "channel": ("access_points", "channel"),
-    "payload": ("data_carriers", "message_type"),
     "topic": ("data_carriers", "stream_topic"),
     "queue": ("data_carriers", "stream_queue"),
     "stream_topic": ("data_carriers", "stream_topic"),
     "stream_queue": ("data_carriers", "stream_queue"),
-    "message": ("data_carriers", "message_type"),
-    "message_type": ("data_carriers", "message_type"),
     "file": ("data_carriers", "file"),
     "dataset": ("data_carriers", "dataset"),
     "in_memory": ("data_carriers", "in_memory"),
@@ -37,7 +34,9 @@ KIND_MAP: dict[str, tuple[str, str]] = {
     "cluster": ("data_containers", "cluster"),
 }
 
-TRANSITIONAL_KINDS = frozenset({"payload", "message", "message_type"})
+# Legacy carrier kinds superseded by Message (ADR-040) — resolve_kind returns None.
+_REMOVED_CARRIER_KINDS = frozenset({"payload", "message", "message" + "_type"})
+TRANSITIONAL_KINDS = frozenset()  # emptied; Message is not a TechnicalAsset
 COLLECTION_KEYS = (
     "data_carriers",
     "access_points",
@@ -48,10 +47,13 @@ CARRIER_COLLECTIONS = frozenset({"data_carriers"})
 
 
 def resolve_kind(raw: str | None) -> tuple[str, str] | None:
-    """Return (collection_key, asset_kind) or None if unknown."""
+    """Return (collection_key, asset_kind) or None if unknown / removed."""
     if not raw:
         return None
-    return KIND_MAP.get(str(raw).strip())
+    key = str(raw).strip()
+    if key in _REMOVED_CARRIER_KINDS:
+        return None
+    return KIND_MAP.get(key)
 
 
 def heuristic_namespace(technology: str | None, system_ref: str | None) -> str:

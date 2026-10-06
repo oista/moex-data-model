@@ -65,8 +65,8 @@ sheets:
       system_ref: system_ref
       direction: direction
       structure_ref: structure_ref
-  physical_fields:
-    sheet: PhysicalFields
+  structure_fields:
+    sheet: StructureFields
     required: false
     columns:
       object: object

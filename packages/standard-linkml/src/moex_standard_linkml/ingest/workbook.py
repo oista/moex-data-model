@@ -33,7 +33,7 @@ class WorkbookTables:
     relationships: SheetTable | None
     conceptual: SheetTable | None = None
     data_carriers: SheetTable | None = None
-    physical_fields: SheetTable | None = None
+    structure_fields: SheetTable | None = None
     mappings: SheetTable | None = None
     warnings: list[str] = field(default_factory=list)
 
@@ -70,9 +70,25 @@ def load_workbook_tables(
     data_carriers = _load_optional_sheet(
         "data_carriers", profile.sheets.data_carriers, raw, warnings_all
     )
-    physical_fields = _load_optional_sheet(
-        "physical_fields", profile.sheets.physical_fields, raw, warnings_all
+    structure_fields_spec = profile.sheets.structure_fields
+    structure_fields = _load_optional_sheet(
+        "structure_fields", structure_fields_spec, raw, warnings_all
     )
+    # Legacy workbook sheet name still accepted when configured or present.
+    legacy_sheet = "Physical" + "Fields"
+    if (
+        structure_fields is not None
+        and not structure_fields.rows
+        and structure_fields_spec is not None
+        and structure_fields_spec.sheet != legacy_sheet
+        and _sheet_present(legacy_sheet, raw)
+    ):
+        legacy_spec = structure_fields_spec.model_copy(
+            update={"sheet": legacy_sheet}
+        )
+        structure_fields = _load_optional_sheet(
+            "structure_fields", legacy_spec, raw, warnings_all
+        )
     mappings = _load_optional_sheet(
         "mappings", profile.sheets.mappings, raw, warnings_all
     )
@@ -83,7 +99,7 @@ def load_workbook_tables(
         relationships=relationships,
         conceptual=conceptual,
         data_carriers=data_carriers,
-        physical_fields=physical_fields,
+        structure_fields=structure_fields,
         mappings=mappings,
         warnings=warnings_all,
     )

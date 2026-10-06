@@ -92,15 +92,40 @@ def dict_to_item(
     ]
     if nested_children:
         children = nested_children + children
-    # Nested physical_fields list → children when present on DataCarrier
-    fields = attrs.pop("physical_fields", None)
-    if isinstance(fields, list):
-        field_children = [
-            dict_to_item(c, key_column="element_id", index=i)
-            for i, c in enumerate(fields)
-            if isinstance(c, dict)
-        ]
-        children = children + field_children
+    # DataStructure.nodes (flat) → tree children via children keys
+    flat_nodes = attrs.pop("nodes", None)
+    if isinstance(flat_nodes, list) and flat_nodes:
+        by_key: dict[str, dict[str, Any]] = {}
+        for n in flat_nodes:
+            if isinstance(n, dict) and n.get("local_key"):
+                by_key[str(n["local_key"])] = n
+        root_key = str(
+            record.get("root_local_key")
+            or (flat_nodes[0].get("local_key") if isinstance(flat_nodes[0], dict) else "root")
+        )
+
+        def _node_item(key: str, index: int) -> PublicationItem | None:
+            n = by_key.get(key)
+            if not n:
+                return None
+            child_keys = [str(c) for c in (n.get("children") or []) if c]
+            nested = [
+                child
+                for i, ck in enumerate(child_keys)
+                if (child := _node_item(ck, i)) is not None
+            ]
+            item = dict_to_item(n, key_column="local_key", index=index)
+            if nested:
+                item = item.model_copy(update={"children": nested})
+            return item
+
+        root_item = _node_item(root_key, 0)
+        if root_item is not None:
+            # Prefer root's children as structure children (skip bare root wrapper)
+            if root_item.children:
+                children = children + list(root_item.children)
+            else:
+                children = children + [root_item]
     return PublicationItem(
         id=item_id,
         title=str(title) if title is not None else None,

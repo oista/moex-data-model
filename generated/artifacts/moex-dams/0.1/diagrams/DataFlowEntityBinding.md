@@ -95,16 +95,7 @@
         
       DataFlowEntityBinding : name
         
-      DataFlowEntityBinding : physical_field_refs
-        
-          
-    
-        
-        
-        DataFlowEntityBinding --> "*" PhysicalField : physical_field_refs
-        click PhysicalField href "../PhysicalField"
-    
-
+      DataFlowEntityBinding : schema_node_refs
         
       DataFlowEntityBinding : source_model_ref
         

@@ -15,12 +15,21 @@ data_carriers:
     name: client_changed_topic
     title: Client topic
     asset_kind: stream_topic
-    physical_fields:
-      - element_id: dams:physical/mdm/client-topic/client_id
-        name: client_id
+    structure_ref: dams:structure/mdm/client_changed_topic
+data_structures:
+  - element_id: dams:structure/mdm/client_changed_topic
+    name: client_changed_topic
+    schema_format: relational
+    root_local_key: root
+    nodes:
+      - local_key: root
+        node_kind: object
+        children: [client_id]
+      - local_key: client_id
+        node_kind: scalar
+        native_name: client_id
         native_type: string
         required: true
-        carrier_ref: dams:physical/mdm/client-topic
 `;
 
 describe("PhysicalForms", () => {

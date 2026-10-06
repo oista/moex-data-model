@@ -81,7 +81,7 @@ def _solution(**entity_overrides) -> dict:
                 "description": "Идентификационный номер налогоплательщика.",
                 "lifecycle_status": "draft",
                 "owner_entity_ref": "dams:logical/sol/LegalEntity",
-                "logical_type": "string",
+                "data_type_ref": "dams:datatype/string",
                 "required": True,
                 "multivalued": False,
             }

@@ -65,7 +65,7 @@ Artifacts in `--out`:
 | **Attributes** | yes | nested `LogicalAttribute` on entity |
 | **Relationships** | no | logical `Relationship` |
 | **DataCarriers** | no | TechnicalAsset rows (`DataCarrier` / routed by `asset_kind`) |
-| **PhysicalFields** | no | fields; `object` = DataCarriers.name; stored as `carrier_ref` |
+| **StructureFields** | no | structure nodes; `object` = DataCarriers.name → `DataStructure` / scalar `SchemaNode` |
 | **Mappings** | no | `source` / `target` as `Entity.attr` or `Object.field` (or bare entity/object name); `\|` for several |
 
 Example fixture: [`tests/fixtures/er-dictionary/`](tests/fixtures/er-dictionary/).
@@ -78,8 +78,8 @@ Example fixture: [`tests/fixtures/er-dictionary/`](tests/fixtures/er-dictionary/
 ### Technical assets ↔ mapping
 
 - `DataCarriers` (ingest sheet): `name`, `description`, `asset_kind`, `qualified_name`, `system_ref`, `technology`, `direction`, `structure_ref` (legacy column `native_schema_ref` accepted). Rows are routed into `data_carriers` / `access_points` / `data_containers` / `execution_assets` by `asset_kind`.
-- `PhysicalFields`: `object`, `name`, `native_type`; optional `native_name`, `required`, `schema_path`; mapped to `carrier_ref`.
-- `Mappings`: dotted refs resolve to logical attributes / physical fields first; bare names to entities / carriers. Defaults: `mapping_type=field_mapping`, `mapping_cardinality=one_to_one`.
+- `StructureFields`: `object`, `name`, `native_type`; optional `native_name`, `required`, `schema_path`; builds relational `DataStructure` nodes and sets `structure_ref`.
+- `Mappings`: dotted refs resolve to logical attributes / schema node refs (`structure_id#local_key`) first; bare names to entities / carriers. Defaults: `mapping_type=field_mapping`, `mapping_cardinality=one_to_one`.
 
 ## Mapping semantics
 
@@ -87,7 +87,7 @@ Example fixture: [`tests/fixtures/er-dictionary/`](tests/fixtures/er-dictionary/
 - Attributes → nested `LogicalAttribute` (`pk` → `key_attribute_refs`, types via `type_map`)
 - Relationships → `Relationship` with CURIE refs
 - One `DomainContext` from profile defaults
-- DataCarriers / PhysicalFields / Mappings when sheets are present
+- DataCarriers / StructureFields / Mappings when sheets are present
 
 ## Tests
 

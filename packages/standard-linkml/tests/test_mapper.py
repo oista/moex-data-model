@@ -36,14 +36,14 @@ def test_map_fixture_er_dictionary(
         "dams:logical/pilot/TradingClient/clientId"
     ]
     client_id = next(a for a in client["attributes"] if a["name"] == "clientId")
-    assert client_id["logical_type"] == "identifier"
+    assert client_id["data_type_ref"] == "dams:datatype/identifier"
     assert client_id["required"] is True
 
     trade = next(e for e in pkg["logical_entities"] if e["name"] == "Trade")
     qty = next(a for a in trade["attributes"] if a["name"] == "quantity")
-    assert qty["logical_type"] == "decimal"
+    assert qty["data_type_ref"] == "dams:datatype/decimal"
     trade_date = next(a for a in trade["attributes"] if a["name"] == "tradeDate")
-    assert trade_date["logical_type"] == "date"
+    assert trade_date["data_type_ref"] == "dams:datatype/date"
     assert trade_date["required"] is False
 
     rel = pkg["relationships"][0]
@@ -60,9 +60,22 @@ def test_map_fixture_er_dictionary(
     assert phys["name"] == "client_changed_topic"
     assert phys["asset_kind"] == "stream_topic"
     assert phys["element_id"] == "dams:physical/pilot/client_changed_topic"
-    assert len(phys["physical_fields"]) == 1
-    assert phys["physical_fields"][0]["native_name"] == "client_id"
-    assert phys["physical_fields"][0]["carrier_ref"] == phys["element_id"]
+    assert phys["structure_ref"] == "dams:structure/pilot/client_changed_topic"
+    assert "physical" + "_fields" not in phys
+    structures = pkg["data_structures"]
+    assert len(structures) == 1
+    st = structures[0]
+    assert st["element_id"] == "dams:structure/pilot/client_changed_topic"
+    assert st["schema_format"] == "relational"
+    assert st["root_local_key"] == "root"
+    assert st["source_artifact_ref"] == (
+        "https://schemas.moex.com/trading/client-changed/1.0.0"
+    )
+    scalars = [
+        n for n in st["nodes"] if n.get("node_kind") == "scalar"
+    ]
+    assert len(scalars) == 1
+    assert scalars[0]["native_name"] == "client_id"
     assert not pkg.get("access_points")  # topic → data_carriers only
 
     assert len(pkg["mappings"]) == 1
@@ -71,7 +84,7 @@ def test_map_fixture_er_dictionary(
         "dams:logical/pilot/TradingClient/clientId"
     ]
     assert mapping["target_refs"] == [
-        "dams:physical/pilot/client_changed_topic/client_id"
+        f"{st['element_id']}#{scalars[0]['local_key']}"
     ]
     assert mapping["mapping_type"] == "field_mapping"
 

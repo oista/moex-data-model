@@ -121,7 +121,7 @@ profiles:
         semantic_capability: physical-fields
         obligation: recommended
         min_occurs: 0
-        expected_semantic_types: [PhysicalField]
+        expected_semantic_types: [SchemaNode]
         accepted_section_kinds: [slots, classes, bindings]
         accepted_renderers: [properties-table, entity-table]
         inherited_from: dams-logical-and-physical

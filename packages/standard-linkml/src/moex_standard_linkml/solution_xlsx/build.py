@@ -44,7 +44,7 @@ def ir_to_workbook_tables(
     attributes: list[dict[str, Any]] = []
     relationships: list[dict[str, Any]] = []
     data_carriers: list[dict[str, Any]] = []
-    physical_fields: list[dict[str, Any]] = []
+    structure_fields: list[dict[str, Any]] = []
     mappings: list[dict[str, Any]] = []
 
     phys_names: set[str] = set()
@@ -142,7 +142,7 @@ def ir_to_workbook_tables(
             fkey = (phys_name, field_name)
             if fkey not in field_keys:
                 field_keys.add(fkey)
-                physical_fields.append(
+                structure_fields.append(
                     {
                         "object": phys_name,
                         "name": field_name,
@@ -232,8 +232,8 @@ def ir_to_workbook_tables(
         data_carriers=SheetTable(
             "data_carriers", "DataCarriers", data_carriers
         ),
-        physical_fields=SheetTable(
-            "physical_fields", "PhysicalFields", physical_fields
+        structure_fields=SheetTable(
+            "structure_fields", "StructureFields", structure_fields
         ),
         mappings=SheetTable("mappings", "Mappings", mappings),
         warnings=[],

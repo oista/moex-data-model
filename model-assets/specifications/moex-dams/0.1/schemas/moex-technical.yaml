@@ -11,6 +11,7 @@ imports:
   - moex-registries
   - moex-governance
   - moex-core
+  - moex-structure
 default_prefix: dams
 default_range: string
 
@@ -18,11 +19,10 @@ classes:
   HasStructure:
     mixin: true
     description: >
-      Mixin структуры данных носителя. structure_ref — временная ссылка
-      (uriorcurie); в будущем заменяется классом DataStructure (ADR-C).
+      Mixin структуры данных носителя. structure_ref — ссылка на DataStructure
+      (range=DataStructure, ADR-038). Диалект схемы живёт на DataStructure.schema_dialect.
     slots:
       - structure_ref
-      - schema_dialect
       - data_format
 
   HasProtocolBinding:
@@ -104,7 +104,6 @@ classes:
       Носитель данных: хранит или передаёт данные (таблица, файл, топик,
       сообщение и т.п.).
     slots:
-      - physical_fields
       - mapping_coverage_status
       - mapping_rationale
     slot_usage:
@@ -138,6 +137,7 @@ classes:
       - operation_name
       - http_method
       - path_template
+      - message_refs
     slot_usage:
       asset_kind:
         range: AccessPointKindEnum
@@ -166,6 +166,8 @@ classes:
             http_method:
               value_presence: ABSENT
             path_template:
+              value_presence: ABSENT
+            message_refs:
               value_presence: ABSENT
 
   DataContainer:
@@ -220,15 +222,13 @@ slots:
     range: LineageRoleEnum
     description: Роль актива в lineage (source, sink, intermediate, none).
   structure_ref:
-    range: uriorcurie
+    range: DataStructure
+    inlined: false
     description: >
-      Ссылка на структуру данных (пока uriorcurie; в будущем DataStructure).
-  schema_dialect:
-    range: string
-    description: Диалект схемы (например avro, json-schema, sql-ddl).
+      Ссылка на структуру данных (DataStructure, ADR-038).
   data_format:
     range: string
-    description: Формат данных (например parquet, csv, json).
+    description: Wire-формат носителя (parquet, csv, json); не путать с schema_format.
   protocol:
     range: string
     description: Протокол доступа (например https, jdbc, kafka).
@@ -276,8 +276,6 @@ enums:
       dataset:
       stream_topic:
       stream_queue:
-      message_type:
-        description: Transitional; будет заменён Message/DataStructure (ADR-C).
       in_memory:
       api_resource:
       other:

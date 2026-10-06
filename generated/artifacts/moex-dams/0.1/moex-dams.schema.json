@@ -39,11 +39,16 @@
                             "required": [
                                 "operation_name",
                                 "http_method",
-                                "path_template"
+                                "path_template",
+                                "message_refs"
                             ]
                         },
                         "properties": {
                             "http_method": {},
+                            "message_refs": {
+                                "items": {},
+                                "type": "array"
+                            },
                             "operation_name": {},
                             "path_template": {}
                         }
@@ -152,6 +157,16 @@
                     "format": "uri",
                     "type": [
                         "string",
+                        "null"
+                    ]
+                },
+                "message_refs": {
+                    "description": "\u0421\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f \u0442\u043e\u0447\u043a\u0438 \u0434\u043e\u0441\u0442\u0443\u043f\u0430. \u0414\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u043e \u0434\u043b\u044f AccessPoint kind=operation|channel; \u0437\u0430\u043f\u0440\u0435\u0449\u0435\u043d\u043e \u0434\u043b\u044f interface (LinkML rule + DAMS).\n",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
                         "null"
                     ]
                 },
@@ -524,6 +539,204 @@
             "title": "ConceptualAlignmentStatusEnum",
             "type": "string"
         },
+        "ConceptualDomain": {
+            "additionalProperties": false,
+            "description": "\u041a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u044b\u0439 \u0434\u043e\u043c\u0435\u043d \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0439: \u043d\u0430\u0431\u043e\u0440 \u0441\u043c\u044b\u0441\u043b\u043e\u0432 (ValueMeaning) \u0438\u043b\u0438 \u0441\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u0432\u043d\u0435\u0448\u043d\u044e\u044e \u0441\u0445\u0435\u043c\u0443 \u043f\u043e\u043d\u044f\u0442\u0438\u0439. \u0414\u043e\u043f\u0443\u0441\u0442\u0438\u043c \u0442\u043e\u043b\u044c\u043a\u043e \u0432 \u043f\u0430\u043a\u0435\u0442\u0430\u0445 implementation_scope=enterprise.",
+            "if": {
+                "properties": {
+                    "conceptual_domain_kind": {
+                        "const": "described"
+                    }
+                },
+                "required": [
+                    "conceptual_domain_kind"
+                ]
+            },
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "approval_status": {
+                    "$ref": "#/$defs/ApprovalStatusEnum"
+                },
+                "approved_at": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "approved_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "broader_domain_ref": {
+                    "description": "\u0411\u043e\u043b\u0435\u0435 \u0448\u0438\u0440\u043e\u043a\u0438\u0439 \u043a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u044b\u0439 \u0434\u043e\u043c\u0435\u043d.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "concept_scheme_uri": {
+                    "description": "\u0412\u043d\u0435\u0448\u043d\u044f\u044f \u0441\u0445\u0435\u043c\u0430 \u043f\u043e\u043d\u044f\u0442\u0438\u0439 (SKOS ConceptScheme / \u043e\u043d\u0442\u043e\u043b\u043e\u0433\u0438\u044f).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "conceptual_domain_kind": {
+                    "$ref": "#/$defs/ConceptualDomainKindEnum",
+                    "description": "\u0412\u0438\u0434 \u043a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u0434\u043e\u043c\u0435\u043d\u0430 (enumerated | described)."
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "evidence_refs": {
+                    "items": {
+                        "format": "uri",
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ownership_inheritance_rule": {
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "source_artifact_ref": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "value_meanings": {
+                    "description": "\u0412\u0441\u0442\u0440\u043e\u0435\u043d\u043d\u044b\u0439 \u0441\u043f\u0438\u0441\u043e\u043a \u0441\u043c\u044b\u0441\u043b\u043e\u0432 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0439.",
+                    "items": {
+                        "$ref": "#/$defs/ValueMeaning"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "conceptual_domain_kind",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "then": {
+                "not": {
+                    "required": [
+                        "value_meanings"
+                    ]
+                },
+                "properties": {
+                    "value_meanings": {
+                        "items": {},
+                        "type": "array"
+                    }
+                }
+            },
+            "title": "ConceptualDomain",
+            "type": "object"
+        },
+        "ConceptualDomainKindEnum": {
+            "description": "\u0412\u0438\u0434 \u043a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u0434\u043e\u043c\u0435\u043d\u0430 (ISO 11179 Conceptual Domain).",
+            "enum": [
+                "enumerated",
+                "described"
+            ],
+            "title": "ConceptualDomainKindEnum",
+            "type": "string"
+        },
         "ConceptualEntity": {
             "additionalProperties": false,
             "description": "\u041a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u0435 \u0431\u0438\u0437\u043d\u0435\u0441-\u043f\u043e\u043d\u044f\u0442\u0438\u0435 \u0432\u0435\u0440\u0445\u043d\u0435\u0433\u043e \u0443\u0440\u043e\u0432\u043d\u044f, \u043d\u0435\u0437\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0435 \u043e\u0442 \u043a\u043e\u043d\u043a\u0440\u0435\u0442\u043d\u043e\u0439 \u0440\u0435\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u0438.",
@@ -711,6 +924,243 @@
             "title": "ConceptualEntity",
             "type": "object"
         },
+        "ConceptualProperty": {
+            "additionalProperties": false,
+            "description": "\u0417\u043d\u0430\u0447\u0438\u043c\u043e\u0435 \u043a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u043e\u0435 \u0441\u0432\u043e\u0439\u0441\u0442\u0432\u043e \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0438 \u041a\u041c\u0414. \u0421\u043e\u0437\u0434\u0430\u0451\u0442\u0441\u044f \u0442\u043e\u043b\u044c\u043a\u043e \u043f\u0440\u0438 \u043d\u0430\u043b\u0438\u0447\u0438\u0438 significance_basis; \u043d\u0435 \u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e \u0434\u043b\u044f \u043a\u0430\u0436\u0434\u043e\u0433\u043e LogicalAttribute.",
+            "if": {
+                "properties": {
+                    "property_kind": {
+                        "const": "identifying"
+                    }
+                },
+                "required": [
+                    "property_kind"
+                ]
+            },
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "approval_status": {
+                    "$ref": "#/$defs/ApprovalStatusEnum"
+                },
+                "approved_at": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "approved_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "conceptual_domain_ref": {
+                    "description": "\u041e\u043f\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u0430\u044f \u0441\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u043a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u044b\u0439 \u0434\u043e\u043c\u0435\u043d \u0441\u043c\u044b\u0441\u043b\u043e\u0432.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "definition_rationale": {
+                    "description": "Human rationale for declaring an own definition when a source is also cited, or for overriding an inherited definition.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "definition_source_ref": {
+                    "description": "Reference to the element or external term whose definition is inherited or adapted (ADR-025). Orthogonal to glossary_term_refs (term assignment).\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "description": "Reference definition (skos:definition). Absent means inherit via definition_source_ref per ADR-025.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "evidence_refs": {
+                    "items": {
+                        "format": "uri",
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "genesis_kind": {
+                    "$ref": "#/$defs/GenesisKindEnum",
+                    "description": "external = aligns to ontology/external class(es); native = modelled without external parents (ADR-026).\n"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "is_identifying": {
+                    "description": "\u042f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043b\u0438 \u0441\u0432\u043e\u0439\u0441\u0442\u0432\u043e \u0438\u0434\u0435\u043d\u0442\u0438\u0444\u0438\u0446\u0438\u0440\u0443\u044e\u0449\u0438\u043c (\u0431\u0438\u0437\u043d\u0435\u0441-\u043a\u043b\u044e\u0447).",
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ownership_inheritance_rule": {
+                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "policy_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "property_kind": {
+                    "$ref": "#/$defs/PropertyKindEnum",
+                    "description": "\u0412\u0438\u0434 \u043a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u0441\u0432\u043e\u0439\u0441\u0442\u0432\u0430."
+                },
+                "property_owner_entity_ref": {
+                    "description": "ConceptualEntity-\u0432\u043b\u0430\u0434\u0435\u043b\u0435\u0446 ConceptualProperty (\u043a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u044b\u0439 containment).\n",
+                    "type": "string"
+                },
+                "scoped_definitions": {
+                    "description": "Context-scoped definitions (ADR-025); v1 scope_kind = system.",
+                    "items": {
+                        "$ref": "#/$defs/ScopedDefinition"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "significance_basis": {
+                    "description": "\u041e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u044f \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u043e\u0432\u0430\u043d\u0438\u044f ConceptualProperty (\u043c\u0438\u043d\u0438\u043c\u0443\u043c \u043e\u0434\u043d\u043e).",
+                    "items": {
+                        "$ref": "#/$defs/SignificanceBasisEnum"
+                    },
+                    "type": "array"
+                },
+                "significance_rationale": {
+                    "description": "\u041e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e\u0435 \u043e\u0431\u043e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u0435, \u0435\u0441\u043b\u0438 significance_basis \u0441\u043e\u0434\u0435\u0440\u0436\u0438\u0442 explicit_decision.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "source_artifact_ref": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "property_owner_entity_ref",
+                "significance_basis",
+                "property_kind",
+                "genesis_kind",
+                "element_id",
+                "name",
+                "lifecycle_status"
+            ],
+            "then": {
+                "properties": {
+                    "is_identifying": {
+                        "const": "true"
+                    }
+                },
+                "required": [
+                    "is_identifying"
+                ]
+            },
+            "title": "ConceptualProperty",
+            "type": "object"
+        },
         "ContainmentKindEnum": {
             "description": "",
             "enum": [
@@ -788,7 +1238,7 @@
                     "$ref": "#/$defs/ContainmentKindEnum"
                 },
                 "data_format": {
-                    "description": "\u0424\u043e\u0440\u043c\u0430\u0442 \u0434\u0430\u043d\u043d\u044b\u0445 (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 parquet, csv, json).",
+                    "description": "Wire-\u0444\u043e\u0440\u043c\u0430\u0442 \u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044f (parquet, csv, json); \u043d\u0435 \u043f\u0443\u0442\u0430\u0442\u044c \u0441 schema_format.",
                     "type": [
                         "string",
                         "null"
@@ -888,15 +1338,6 @@
                         "null"
                     ]
                 },
-                "physical_fields": {
-                    "items": {
-                        "$ref": "#/$defs/PhysicalField"
-                    },
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
                 "policy_refs": {
                     "items": {
                         "type": "string"
@@ -910,13 +1351,6 @@
                     "type": "string"
                 },
                 "region": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "schema_dialect": {
-                    "description": "\u0414\u0438\u0430\u043b\u0435\u043a\u0442 \u0441\u0445\u0435\u043c\u044b (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 avro, json-schema, sql-ddl).",
                     "type": [
                         "string",
                         "null"
@@ -942,7 +1376,7 @@
                     ]
                 },
                 "structure_ref": {
-                    "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0443 \u0434\u0430\u043d\u043d\u044b\u0445 (\u043f\u043e\u043a\u0430 uriorcurie; \u0432 \u0431\u0443\u0434\u0443\u0449\u0435\u043c DataStructure).\n",
+                    "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0443 \u0434\u0430\u043d\u043d\u044b\u0445 (DataStructure, ADR-038).\n",
                     "type": [
                         "string",
                         "null"
@@ -1021,7 +1455,6 @@
                 "dataset",
                 "stream_topic",
                 "stream_queue",
-                "message_type",
                 "in_memory",
                 "api_resource",
                 "other"
@@ -1562,7 +1995,8 @@
                 "name": {
                     "type": "string"
                 },
-                "physical_field_refs": {
+                "schema_node_refs": {
+                    "description": "\u0421\u0441\u044b\u043b\u043a\u0438 \u043d\u0430 \u0443\u0437\u043b\u044b \u0441\u0445\u0435\u043c\u044b (SchemaNode) \u0432 DataStructure.",
                     "items": {
                         "type": "string"
                     },
@@ -1793,6 +2227,443 @@
                 "description"
             ],
             "title": "DataModelBinding",
+            "type": "object"
+        },
+        "DataStructure": {
+            "additionalProperties": false,
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "source_pointer": {}
+                        },
+                        "required": [
+                            "source_pointer"
+                        ]
+                    },
+                    "then": {
+                        "properties": {
+                            "source_artifact_ref": {}
+                        },
+                        "required": [
+                            "source_artifact_ref"
+                        ]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "schema_dialect": {}
+                        },
+                        "required": [
+                            "schema_dialect"
+                        ]
+                    },
+                    "then": {
+                        "properties": {
+                            "schema_format": {
+                                "anyOf": [
+                                    {
+                                        "const": "json_schema"
+                                    },
+                                    {
+                                        "const": "openapi_schema"
+                                    }
+                                ]
+                            }
+                        },
+                        "required": [
+                            "schema_format"
+                        ]
+                    }
+                }
+            ],
+            "description": "\u0418\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u043d\u0430\u044f \u0432\u0435\u0440\u0441\u0438\u044f \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u044b \u0434\u0430\u043d\u043d\u044b\u0445: \u043a\u043e\u0440\u0435\u043d\u044c \u0434\u0435\u0440\u0435\u0432\u0430 SchemaNode \u0441 \u0444\u043e\u0440\u043c\u0430\u0442\u043e\u043c \u0438 \u043e\u043f\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u044b\u043c \u0434\u0438\u0430\u043b\u0435\u043a\u0442\u043e\u043c (ADR-038). \u0425\u0440\u0430\u043d\u0438\u0442 \u043f\u043b\u043e\u0441\u043a\u0438\u0439 \u0441\u043f\u0438\u0441\u043e\u043a \u0443\u0437\u043b\u043e\u0432 (nodes + root_local_key).",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "content_digest": {
+                    "description": "\u0414\u0430\u0439\u0434\u0436\u0435\u0441\u0442 \u0441\u043e\u0434\u0435\u0440\u0436\u0438\u043c\u043e\u0433\u043e \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u044b (\u043e\u043f\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u043e).",
+                    "pattern": "^sha256:[a-fA-F0-9]{64}$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nodes": {
+                    "description": "\u041f\u043b\u043e\u0441\u043a\u0438\u0439 \u0441\u043f\u0438\u0441\u043e\u043a \u0443\u0437\u043b\u043e\u0432 \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u044b.",
+                    "items": {
+                        "$ref": "#/$defs/SchemaNode"
+                    },
+                    "type": "array"
+                },
+                "previous_version_ref": {
+                    "description": "\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0430\u044f \u0432\u0435\u0440\u0441\u0438\u044f \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u044b.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "root_local_key": {
+                    "description": "local_key \u043a\u043e\u0440\u043d\u0435\u0432\u043e\u0433\u043e \u0443\u0437\u043b\u0430 \u0432 nodes.",
+                    "pattern": "^[a-z0-9_.-]+$",
+                    "type": "string"
+                },
+                "schema_dialect": {
+                    "description": "\u0414\u0438\u0430\u043b\u0435\u043a\u0442 / \u0432\u0435\u0440\u0441\u0438\u044f \u044f\u0437\u044b\u043a\u0430 \u0441\u0445\u0435\u043c\u044b (JSON Schema dialect IRI, AsyncAPI format id). \u041a\u0430\u043d\u043e\u043d \u2014 \u043d\u0430 DataStructure; \u043d\u0430 HasStructure deprecated (ADR-038).\n",
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "schema_format": {
+                    "$ref": "#/$defs/SchemaFormatEnum",
+                    "description": "\u0424\u043e\u0440\u043c\u0430\u0442 \u0441\u0445\u0435\u043c\u044b (\u0441\u0442\u0430\u0440\u0442\u043e\u0432\u044b\u0439 enum; \u0440\u0435\u0435\u0441\u0442\u0440 \u0444\u043e\u0440\u043c\u0430\u0442\u043e\u0432 \u2014 \u043e\u0442\u0434\u0435\u043b\u044c\u043d\u0430\u044f \u0437\u0430\u0434\u0430\u0447\u0430)."
+                },
+                "source_artifact_ref": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "source_pointer": {
+                    "description": "JSON Pointer \u0438\u043b\u0438 \u0430\u043d\u0430\u043b\u043e\u0433 \u0432\u043d\u0443\u0442\u0440\u0438 source_artifact_ref.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "structure_version": {
+                    "description": "\u0412\u0435\u0440\u0441\u0438\u044f \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u044b (SemVer).",
+                    "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$",
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "schema_format",
+                "structure_version",
+                "root_local_key",
+                "nodes",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "DataStructure",
+            "type": "object"
+        },
+        "DataType": {
+            "additionalProperties": false,
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "precision": {}
+                        },
+                        "required": [
+                            "precision"
+                        ]
+                    },
+                    "then": {
+                        "properties": {
+                            "type_family": {
+                                "const": "decimal"
+                            }
+                        },
+                        "required": [
+                            "type_family"
+                        ]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "scale": {}
+                        },
+                        "required": [
+                            "scale"
+                        ]
+                    },
+                    "then": {
+                        "properties": {
+                            "type_family": {
+                                "const": "decimal"
+                            }
+                        },
+                        "required": [
+                            "type_family"
+                        ]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "max_length": {}
+                        },
+                        "required": [
+                            "max_length"
+                        ]
+                    },
+                    "then": {
+                        "properties": {
+                            "type_family": {
+                                "anyOf": [
+                                    {
+                                        "const": "string"
+                                    },
+                                    {
+                                        "const": "binary"
+                                    }
+                                ]
+                            }
+                        },
+                        "required": [
+                            "type_family"
+                        ]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "min_length": {}
+                        },
+                        "required": [
+                            "min_length"
+                        ]
+                    },
+                    "then": {
+                        "properties": {
+                            "type_family": {
+                                "anyOf": [
+                                    {
+                                        "const": "string"
+                                    },
+                                    {
+                                        "const": "binary"
+                                    }
+                                ]
+                            }
+                        },
+                        "required": [
+                            "type_family"
+                        ]
+                    }
+                }
+            ],
+            "description": "\u041a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u044b\u0439 \u0442\u0438\u043f \u0434\u0430\u043d\u043d\u044b\u0445: \u0441\u0435\u043c\u0435\u0439\u0441\u0442\u0432\u043e, \u043f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u043f\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u0438\u044f \u0438 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 XSD/LinkML. \u0414\u043e\u043f\u0443\u0441\u0442\u0438\u043c \u0442\u043e\u043b\u044c\u043a\u043e \u0432 \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u043c \u0440\u0435\u0435\u0441\u0442\u0440\u0435 \u0442\u0438\u043f\u043e\u0432.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "base_type_ref": {
+                    "description": "\u0411\u0430\u0437\u043e\u0432\u044b\u0439 \u0442\u0438\u043f, \u043e\u0442 \u043a\u043e\u0442\u043e\u0440\u043e\u0433\u043e \u043d\u0430\u0441\u043b\u0435\u0434\u0443\u044e\u0442\u0441\u044f \u043f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "charset": {
+                    "description": "\u041a\u043e\u0434\u0438\u0440\u043e\u0432\u043a\u0430 \u0434\u043b\u044f string/binary.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "datatype_timezone_policy": {
+                    "$ref": "#/$defs/TimezonePolicyEnum",
+                    "description": "\u041f\u043e\u043b\u0438\u0442\u0438\u043a\u0430 \u0447\u0430\u0441\u043e\u0432\u043e\u0433\u043e \u043f\u043e\u044f\u0441\u0430 \u0434\u043b\u044f date/time/datetime \u0442\u0438\u043f\u043e\u0432."
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "linkml_type": {
+                    "description": "\u0418\u043c\u044f \u0442\u0438\u043f\u0430 LinkML (string, integer, \u2026).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "max_length": {
+                    "description": "\u041c\u0430\u043a\u0441\u0438\u043c\u0430\u043b\u044c\u043d\u0430\u044f \u0434\u043b\u0438\u043d\u0430 \u0434\u043b\u044f string/binary.",
+                    "minimum": 0,
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "min_length": {
+                    "description": "\u041c\u0438\u043d\u0438\u043c\u0430\u043b\u044c\u043d\u0430\u044f \u0434\u043b\u0438\u043d\u0430 \u0434\u043b\u044f string/binary.",
+                    "minimum": 0,
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "name": {
+                    "type": "string"
+                },
+                "precision": {
+                    "description": "\u0422\u043e\u0447\u043d\u043e\u0441\u0442\u044c \u0434\u043b\u044f decimal (\u043e\u0431\u0449\u0435\u0435 \u0447\u0438\u0441\u043b\u043e \u0446\u0438\u0444\u0440).",
+                    "minimum": 1,
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "scale": {
+                    "description": "\u041c\u0430\u0441\u0448\u0442\u0430\u0431 \u0434\u043b\u044f decimal (\u0447\u0438\u0441\u043b\u043e \u0446\u0438\u0444\u0440 \u043f\u043e\u0441\u043b\u0435 \u0437\u0430\u043f\u044f\u0442\u043e\u0439); scale \u2264 precision.",
+                    "minimum": 0,
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "type_family": {
+                    "$ref": "#/$defs/TypeFamilyEnum",
+                    "description": "\u0421\u0435\u043c\u0435\u0439\u0441\u0442\u0432\u043e \u0442\u0438\u043f\u0430 (boolean, integer, decimal, \u2026)."
+                },
+                "type_name": {
+                    "description": "\u041a\u0430\u043d\u043e\u043d\u0438\u0447\u0435\u0441\u043a\u043e\u0435 \u0438\u043c\u044f \u0442\u0438\u043f\u0430 \u0432 \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u043c \u0440\u0435\u0435\u0441\u0442\u0440\u0435.",
+                    "type": "string"
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "xsd_datatype": {
+                    "description": "\u0421\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0439 XSD datatype (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 xsd:string).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "type_name",
+                "type_family",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "DataType",
             "type": "object"
         },
         "DefinitionScopeKindEnum": {
@@ -2038,6 +2909,27 @@
             "title": "DomainContext",
             "type": "object"
         },
+        "EmbeddedElement": {
+            "additionalProperties": false,
+            "description": "\u0412\u0441\u0442\u0440\u0430\u0438\u0432\u0430\u0435\u043c\u044b\u0439 \u0432\u0441\u043f\u043e\u043c\u043e\u0433\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0439 \u043e\u0431\u044a\u0435\u043a\u0442 \u0431\u0435\u0437 \u0441\u043e\u0431\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0433\u043e \u0436\u0438\u0437\u043d\u0435\u043d\u043d\u043e\u0433\u043e \u0446\u0438\u043a\u043b\u0430 \u0438 \u0433\u043b\u043e\u0431\u0430\u043b\u044c\u043d\u043e\u0433\u043e element_id. \u0418\u0434\u0435\u043d\u0442\u0438\u0447\u043d\u043e\u0441\u0442\u044c \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u0430 \u043e\u0442\u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u0440\u043e\u0434\u0438\u0442\u0435\u043b\u044f (local_key). \u041d\u0435 \u043f\u0443\u0442\u0430\u0442\u044c \u0441 \u0431\u0443\u0434\u0443\u0449\u0438\u043c IdentifiedElement (ADR-038).",
+            "properties": {
+                "description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "local_key": {
+                    "description": "\u041b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u0439 \u043a\u043b\u044e\u0447 \u0443\u0437\u043b\u0430 \u0432\u043d\u0443\u0442\u0440\u0438 DataStructure. \u0410\u043b\u0444\u0430\u0432\u0438\u0442 ^[a-z0-9_.-]+$ (ADR-039). \u0421\u0442\u0430\u0431\u0438\u043b\u0435\u043d \u043f\u043e\u0441\u043b\u0435 \u0437\u0430\u043f\u0438\u0441\u0438; \u043d\u0435 \u043f\u0435\u0440\u0435\u0441\u0447\u0438\u0442\u044b\u0432\u0430\u0435\u0442\u0441\u044f \u043f\u0440\u0438 \u0441\u043c\u0435\u043d\u0435 native_name.\n",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "local_key"
+            ],
+            "title": "EmbeddedElement",
+            "type": "object"
+        },
         "EnforcementResultEnum": {
             "description": "",
             "enum": [
@@ -2068,6 +2960,16 @@
                 "technical"
             ],
             "title": "EntityTypeEnum",
+            "type": "string"
+        },
+        "EnvelopeKindEnum": {
+            "description": "\u0412\u0438\u0434 \u043a\u043e\u043d\u0432\u0435\u0440\u0442\u0430 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f (Message.envelope_kind).",
+            "enum": [
+                "none",
+                "cloudevents",
+                "custom"
+            ],
+            "title": "EnvelopeKindEnum",
             "type": "string"
         },
         "ExecutionAsset": {
@@ -2808,24 +3710,17 @@
         },
         "HasStructure": {
             "additionalProperties": false,
-            "description": "Mixin \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u044b \u0434\u0430\u043d\u043d\u044b\u0445 \u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044f. structure_ref \u2014 \u0432\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u0441\u0441\u044b\u043b\u043a\u0430 (uriorcurie); \u0432 \u0431\u0443\u0434\u0443\u0449\u0435\u043c \u0437\u0430\u043c\u0435\u043d\u044f\u0435\u0442\u0441\u044f \u043a\u043b\u0430\u0441\u0441\u043e\u043c DataStructure (ADR-C).",
+            "description": "Mixin \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u044b \u0434\u0430\u043d\u043d\u044b\u0445 \u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044f. structure_ref \u2014 \u0441\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 DataStructure (range=DataStructure, ADR-038). \u0414\u0438\u0430\u043b\u0435\u043a\u0442 \u0441\u0445\u0435\u043c\u044b \u0436\u0438\u0432\u0451\u0442 \u043d\u0430 DataStructure.schema_dialect.",
             "properties": {
                 "data_format": {
-                    "description": "\u0424\u043e\u0440\u043c\u0430\u0442 \u0434\u0430\u043d\u043d\u044b\u0445 (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 parquet, csv, json).",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "schema_dialect": {
-                    "description": "\u0414\u0438\u0430\u043b\u0435\u043a\u0442 \u0441\u0445\u0435\u043c\u044b (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 avro, json-schema, sql-ddl).",
+                    "description": "Wire-\u0444\u043e\u0440\u043c\u0430\u0442 \u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044f (parquet, csv, json); \u043d\u0435 \u043f\u0443\u0442\u0430\u0442\u044c \u0441 schema_format.",
                     "type": [
                         "string",
                         "null"
                     ]
                 },
                 "structure_ref": {
-                    "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0443 \u0434\u0430\u043d\u043d\u044b\u0445 (\u043f\u043e\u043a\u0430 uriorcurie; \u0432 \u0431\u0443\u0434\u0443\u0449\u0435\u043c DataStructure).\n",
+                    "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0443 \u0434\u0430\u043d\u043d\u044b\u0445 (DataStructure, ADR-038).\n",
                     "type": [
                         "string",
                         "null"
@@ -3081,7 +3976,7 @@
         },
         "LogicalAttribute": {
             "additionalProperties": false,
-            "description": "\u041b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u0430\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0438 \u0441 \u0431\u0438\u0437\u043d\u0435\u0441-\u0441\u043c\u044b\u0441\u043b\u043e\u043c, \u0442\u0438\u043f\u043e\u043c, \u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c\u044e \u0438 \u043a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u0435\u0439.",
+            "description": "\u041b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u0430\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0438: \u0438\u0434\u0435\u043d\u0442\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u044f, \u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c, \u043a\u0430\u0440\u0434\u0438\u043d\u0430\u043b\u044c\u043d\u043e\u0441\u0442\u044c \u0438 \u0441\u0441\u044b\u043b\u043a\u0438 \u043d\u0430 \u043f\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u0438\u0435 (DataType/ValueDomain) \u0438 \u043e\u043f\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u043e \u043d\u0430 ConceptualProperty (\u0432\u0430\u0440\u0438\u0430\u043d\u0442 B, ADR-034).",
             "properties": {
                 "aliases": {
                     "items": {
@@ -3104,6 +3999,20 @@
                         "null"
                     ]
                 },
+                "concept_ref": {
+                    "description": "\u041e\u043f\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u0430\u044f \u0441\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 ConceptualProperty. \u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0438\u0435 \u043d\u0435 \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043e\u0448\u0438\u0431\u043a\u043e\u0439 \u0438 \u043d\u0435 \u043f\u043e\u0440\u043e\u0436\u0434\u0430\u0435\u0442 \u043f\u0440\u0435\u0434\u0443\u043f\u0440\u0435\u0436\u0434\u0435\u043d\u0438\u0435 (\u0432\u0430\u0440\u0438\u0430\u043d\u0442 B).\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "critical_data_element": {
+                    "description": "\u041f\u0440\u0438\u0437\u043d\u0430\u043a \u043a\u0440\u0438\u0442\u0438\u0447\u043d\u043e\u0433\u043e \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430 \u0434\u0430\u043d\u043d\u044b\u0445 (CDE). \u0415\u0434\u0438\u043d\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439 \u0438\u0441\u0442\u043e\u0447\u043d\u0438\u043a \u043f\u0440\u0430\u0432\u0434\u044b \u0434\u043b\u044f critical_data; \u0442\u0435\u0440\u043c\u0438\u043d CDE \u0432 ClassificationAssignment \u043d\u0435 \u0432\u0432\u043e\u0434\u0438\u0442\u0441\u044f (ADR-034).\n",
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
                 "currency_attribute_ref": {
                     "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u0430\u0442\u0440\u0438\u0431\u0443\u0442 \u0432\u0430\u043b\u044e\u0442\u044b \u0434\u043b\u044f \u0434\u0435\u043d\u0435\u0436\u043d\u043e\u0439 \u0432\u0435\u043b\u0438\u0447\u0438\u043d\u044b (Wave 2 soft).",
                     "type": [
@@ -3118,6 +4027,13 @@
                     ]
                 },
                 "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_type_ref": {
+                    "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u044b\u0439 DataType. \u041e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u0435\u043d data_type_ref \u0438/\u0438\u043b\u0438 value_domain_ref (ADR-034 \u0448\u0430\u0433 2 / PR-5).\n",
                     "type": [
                         "string",
                         "null"
@@ -3156,7 +4072,7 @@
                     ]
                 },
                 "description": {
-                    "description": "Reference definition (skos:definition). v1 attributes are own-only; inheritance from conceptual attributes is out of scope (ADR-025).\n",
+                    "description": "Reference definition (skos:definition). Prefer ADR-025 (definition_source_ref / scoped_definitions); do not copy from ConceptualProperty.\n",
                     "type": [
                         "string",
                         "null"
@@ -3164,12 +4080,6 @@
                 },
                 "element_id": {
                     "type": "string"
-                },
-                "format_pattern": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
                 },
                 "glossary_term_refs": {
                     "items": {
@@ -3185,9 +4095,6 @@
                 },
                 "lifecycle_status": {
                     "$ref": "#/$defs/LifecycleStatusEnum"
-                },
-                "logical_type": {
-                    "$ref": "#/$defs/LogicalDataTypeEnum"
                 },
                 "mapping_coverage_status": {
                     "$ref": "#/$defs/MappingCoverageStatusEnum",
@@ -3301,13 +4208,6 @@
                         "null"
                     ]
                 },
-                "unit_code": {
-                    "description": "\u041a\u043e\u0434 \u0435\u0434\u0438\u043d\u0438\u0446\u044b \u0438\u0437\u043c\u0435\u0440\u0435\u043d\u0438\u044f (Wave 2 soft).",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
                 "valid_from": {
                     "format": "date-time",
                     "type": [
@@ -3322,8 +4222,8 @@
                         "null"
                     ]
                 },
-                "value_set_ref": {
-                    "format": "uri",
+                "value_domain_ref": {
+                    "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u0434\u043e\u043c\u0435\u043d \u043f\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u0438\u044f \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0439.",
                     "type": [
                         "string",
                         "null"
@@ -3332,7 +4232,6 @@
             },
             "required": [
                 "owner_entity_ref",
-                "logical_type",
                 "required",
                 "multivalued",
                 "element_id",
@@ -3614,6 +4513,16 @@
             "title": "LogicalEntity",
             "type": "object"
         },
+        "LossinessEnum": {
+            "description": "\u041e\u0446\u0435\u043d\u043a\u0430 \u043f\u043e\u0442\u0435\u0440\u0438 \u0442\u043e\u0447\u043d\u043e\u0441\u0442\u0438 NativeTypeBinding.",
+            "enum": [
+                "lossless",
+                "lossy",
+                "unknown"
+            ],
+            "title": "LossinessEnum",
+            "type": "string"
+        },
         "MOEXModelRepository": {
             "additionalProperties": false,
             "description": "\u041a\u043e\u0440\u043d\u0435\u0432\u043e\u0439 \u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440 \u0434\u043b\u044f \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0438 \u043d\u0430\u0431\u043e\u0440\u0430 \u043c\u043e\u0434\u0435\u043b\u0435\u0439, \u0441\u0441\u044b\u043b\u043e\u0447\u043d\u044b\u0445 \u043f\u0440\u043e\u0435\u043a\u0446\u0438\u0439 \u0441\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a\u043e\u0432, \u043f\u043e\u0442\u043e\u043a\u043e\u0432 \u0438 \u043a\u043e\u043d\u0442\u0440\u0430\u043a\u0442\u043d\u044b\u0445 bindings.",
@@ -3702,7 +4611,7 @@
         },
         "Mapping": {
             "additionalProperties": false,
-            "description": "\u042f\u0432\u043d\u043e\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430\u043c\u0438. Discriminate via mapping_type: realizes (solution\u2192enterprise conceptual), entity_physical (DataCarrier\u2194LogicalEntity), field_mapping/mapsTo (PhysicalField\u2194LogicalAttribute), aligns_with (enterprise\u2194external term). Not used for SpecImpl implements/conforms_to.",
+            "description": "\u042f\u0432\u043d\u043e\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430\u043c\u0438. Discriminate via mapping_type: realizes (solution\u2192enterprise conceptual), entity_physical (DataCarrier\u2194LogicalEntity), field_mapping/mapsTo (SchemaNode\u2194LogicalAttribute), aligns_with (enterprise\u2194external term). Not used for SpecImpl implements/conforms_to.",
             "properties": {
                 "aliases": {
                     "items": {
@@ -3886,7 +4795,7 @@
             "type": "string"
         },
         "MappingTypeEnum": {
-            "description": "Kind of Mapping assertion. realizes = solution element \u2192 enterprise conceptual; entity_physical = DataCarrier \u2194 LogicalEntity; field_mapping = mapsTo (PhysicalField \u2194 LogicalAttribute); aligns_with = enterprise conceptual \u2194 external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).",
+            "description": "Kind of Mapping assertion. realizes = solution element \u2192 enterprise conceptual; entity_physical = DataCarrier \u2194 LogicalEntity; field_mapping = mapsTo (SchemaNode \u2194 LogicalAttribute); aligns_with = enterprise conceptual \u2194 external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).",
             "enum": [
                 "semantic_equivalence",
                 "specialization",
@@ -3901,6 +4810,124 @@
             ],
             "title": "MappingTypeEnum",
             "type": "string"
+        },
+        "Message": {
+            "additionalProperties": false,
+            "description": "\u042d\u043b\u0435\u043c\u0435\u043d\u0442 \u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u043e\u043d\u043d\u043e\u0439 \u043c\u043e\u0434\u0435\u043b\u0438: \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 \u0441 payload/headers \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0430\u043c\u0438. \u041d\u0435 TechnicalAsset (\u043d\u0435\u0442 asset_namespace / qualified_name; \u043d\u0435 carrier_refs). AccessPoint (operation|channel) \u0441\u0441\u044b\u043b\u0430\u0435\u0442\u0441\u044f \u0447\u0435\u0440\u0435\u0437 message_refs (ADR-040). \u041a\u043b\u0430\u0441\u0441 \u0432 moex-structure, \u0447\u0442\u043e\u0431\u044b ModelPackage \u0438 AccessPoint \u0441\u0441\u044b\u043b\u0430\u043b\u0438\u0441\u044c \u0431\u0435\u0437 \u0446\u0438\u043a\u043b\u0430 core\u2194integration (ADR-040).",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "content_type": {
+                    "description": "MIME / content-type \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "correlation_hint": {
+                    "description": "\u041f\u043e\u0434\u0441\u043a\u0430\u0437\u043a\u0430 \u043a\u043e\u0440\u0440\u0435\u043b\u044f\u0446\u0438\u0438 (\u0438\u043c\u044f \u043f\u043e\u043b\u044f / \u043f\u0443\u0442\u044c).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "envelope_kind": {
+                    "$ref": "#/$defs/EnvelopeKindEnum",
+                    "description": "\u0412\u0438\u0434 \u043a\u043e\u043d\u0432\u0435\u0440\u0442\u0430 (none, cloudevents, custom)."
+                },
+                "envelope_ref": {
+                    "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u043e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043a\u043e\u043d\u0432\u0435\u0440\u0442\u0430 (\u0434\u043b\u044f custom / \u043f\u0440\u043e\u0444\u0438\u043b\u044f).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "headers_structure_ref": {
+                    "description": "\u0421\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0430 \u0437\u0430\u0433\u043e\u043b\u043e\u0432\u043a\u043e\u0432 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "payload_structure_ref": {
+                    "description": "\u0421\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0430 \u0442\u0435\u043b\u0430 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f.",
+                    "type": "string"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "payload_structure_ref",
+                "element_id",
+                "name",
+                "lifecycle_status"
+            ],
+            "title": "Message",
+            "type": "object"
         },
         "Metric": {
             "additionalProperties": false,
@@ -4191,6 +5218,16 @@
                         "null"
                     ]
                 },
+                "conceptual_domains": {
+                    "description": "\u041a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u044b\u0435 \u0434\u043e\u043c\u0435\u043d\u044b \u0441\u043c\u044b\u0441\u043b\u043e\u0432 (\u0442\u043e\u043b\u044c\u043a\u043e enterprise-\u043f\u0430\u043a\u0435\u0442\u044b).",
+                    "items": {
+                        "$ref": "#/$defs/ConceptualDomain"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
                 "conceptual_entities": {
                     "items": {
                         "$ref": "#/$defs/ConceptualEntity"
@@ -4204,6 +5241,16 @@
                     "description": "Required for solution packages: reference to the enterprise-conceptual SpecImpl / ModelPackage id (e.g. moex-enterprise-conceptual-model).\n",
                     "type": [
                         "string",
+                        "null"
+                    ]
+                },
+                "conceptual_properties": {
+                    "description": "\u0417\u043d\u0430\u0447\u0438\u043c\u044b\u0435 \u043a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u044b\u0435 \u0441\u0432\u043e\u0439\u0441\u0442\u0432\u0430 (\u0442\u043e\u043b\u044c\u043a\u043e enterprise-\u043f\u0430\u043a\u0435\u0442\u044b).",
+                    "items": {
+                        "$ref": "#/$defs/ConceptualProperty"
+                    },
+                    "type": [
+                        "array",
                         "null"
                     ]
                 },
@@ -4236,6 +5283,26 @@
                 "data_steward_ref": {
                     "type": [
                         "string",
+                        "null"
+                    ]
+                },
+                "data_structures": {
+                    "description": "\u041a\u043e\u043b\u043b\u0435\u043a\u0446\u0438\u044f \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440 \u0434\u0430\u043d\u043d\u044b\u0445 \u043f\u0430\u043a\u0435\u0442\u0430.",
+                    "items": {
+                        "$ref": "#/$defs/DataStructure"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "data_types": {
+                    "description": "\u041a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u044b\u0439 \u0440\u0435\u0435\u0441\u0442\u0440 \u0442\u0438\u043f\u043e\u0432 \u0434\u0430\u043d\u043d\u044b\u0445.",
+                    "items": {
+                        "$ref": "#/$defs/DataType"
+                    },
+                    "type": [
+                        "array",
                         "null"
                     ]
                 },
@@ -4326,12 +5393,32 @@
                         "null"
                     ]
                 },
+                "messages": {
+                    "description": "\u041a\u043e\u043b\u043b\u0435\u043a\u0446\u0438\u044f \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0439 \u043f\u0430\u043a\u0435\u0442\u0430 (\u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u043e\u043d\u043d\u0430\u044f \u043c\u043e\u0434\u0435\u043b\u044c).",
+                    "items": {
+                        "$ref": "#/$defs/Message"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
                 "model_version": {
                     "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$",
                     "type": "string"
                 },
                 "name": {
                     "type": "string"
+                },
+                "native_type_bindings": {
+                    "description": "\u041f\u0440\u0438\u0432\u044f\u0437\u043a\u0438 \u043d\u0430\u0442\u0438\u0432\u043d\u044b\u0445 \u0442\u0438\u043f\u043e\u0432 \u0434\u0438\u0430\u043b\u0435\u043a\u0442\u043e\u0432 \u043a DataType.",
+                    "items": {
+                        "$ref": "#/$defs/NativeTypeBinding"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
                 },
                 "ownership_inheritance_rule": {
                     "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
@@ -4419,6 +5506,16 @@
                     "format": "date-time",
                     "type": [
                         "string",
+                        "null"
+                    ]
+                },
+                "value_domains": {
+                    "description": "\u0414\u043e\u043c\u0435\u043d\u044b \u043f\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u0438\u044f \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0439 (enterprise \u0438\u043b\u0438 solution).",
+                    "items": {
+                        "$ref": "#/$defs/ValueDomain"
+                    },
+                    "type": [
+                        "array",
                         "null"
                     ]
                 }
@@ -4523,6 +5620,47 @@
             "title": "ModelSelection",
             "type": "object"
         },
+        "NativeTypeBinding": {
+            "additionalProperties": false,
+            "description": "\u041f\u0440\u0438\u0432\u044f\u0437\u043a\u0430 \u043d\u0430\u0442\u0438\u0432\u043d\u043e\u0433\u043e \u0442\u0438\u043f\u0430 \u0434\u0438\u0430\u043b\u0435\u043a\u0442\u0430 (SQL, JSON Schema \u0438 \u0442.\u043f.) \u043a \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u043c\u0443 DataType \u0441 \u043e\u0446\u0435\u043d\u043a\u043e\u0439 \u043f\u043e\u0442\u0435\u0440\u0438 \u0442\u043e\u0447\u043d\u043e\u0441\u0442\u0438.",
+            "properties": {
+                "binding_id": {
+                    "type": "string"
+                },
+                "data_type_ref": {
+                    "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u044b\u0439 DataType.",
+                    "type": "string"
+                },
+                "dialect": {
+                    "description": "\u0414\u0438\u0430\u043b\u0435\u043a\u0442/\u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u0430 \u043d\u0430\u0442\u0438\u0432\u043d\u043e\u0433\u043e \u0442\u0438\u043f\u0430 (postgresql, oracle, json, \u2026).",
+                    "type": "string"
+                },
+                "dialect_native_type": {
+                    "description": "\u0418\u043c\u044f \u043d\u0430\u0442\u0438\u0432\u043d\u043e\u0433\u043e \u0442\u0438\u043f\u0430 \u0432 \u0434\u0438\u0430\u043b\u0435\u043a\u0442\u0435. \u041e\u0442\u0434\u0435\u043b\u044c\u043d\u044b\u0439 \u0441\u043b\u043e\u0442 \u043e\u0442 SchemaNode.native_type (\u0434\u0440\u0443\u0433\u043e\u0439 \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442; \u043e\u0431\u0449\u0438\u0439 URI \u043b\u043e\u043c\u0430\u0435\u0442 SchemaLoader merge \u2014 ADR-036).\n",
+                    "type": "string"
+                },
+                "lossiness": {
+                    "$ref": "#/$defs/LossinessEnum",
+                    "description": "\u041e\u0446\u0435\u043d\u043a\u0430 \u043f\u043e\u0442\u0435\u0440\u0438 \u0442\u043e\u0447\u043d\u043e\u0441\u0442\u0438 \u043f\u0440\u0438 \u043e\u0442\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u0438."
+                },
+                "parameter_mapping": {
+                    "description": "\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043e\u0442\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u044f \u043f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u043e\u0432 (precision/scale/length).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "binding_id",
+                "dialect",
+                "dialect_native_type",
+                "data_type_ref",
+                "lossiness"
+            ],
+            "title": "NativeTypeBinding",
+            "type": "object"
+        },
         "OrganizationUnit": {
             "additionalProperties": false,
             "description": "\u041e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u043e\u043d\u043d\u043e\u0435 \u043f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435.",
@@ -4562,186 +5700,58 @@
             "title": "OrganizationUnit",
             "type": "object"
         },
-        "PhysicalField": {
+        "PermissibleValue": {
             "additionalProperties": false,
-            "description": "\u041f\u043e\u043b\u0435 \u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044f \u0434\u0430\u043d\u043d\u044b\u0445 (DataCarrier); \u0441\u0435\u043c\u0430\u043d\u0442\u0438\u043a\u0430 \u0437\u0430\u0434\u0430\u0451\u0442\u0441\u044f Mapping \u043a LogicalAttribute.",
+            "description": "\u0414\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u0432\u043d\u0443\u0442\u0440\u0438 ValueDomain (\u0432\u0441\u0442\u0440\u0430\u0438\u0432\u0430\u0435\u043c\u044b\u0439).",
             "properties": {
-                "aliases": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
-                "carrier_ref": {
-                    "description": "\u041d\u043e\u0441\u0438\u0442\u0435\u043b\u044c \u0434\u0430\u043d\u043d\u044b\u0445, \u043a\u043e\u0442\u043e\u0440\u043e\u043c\u0443 \u043f\u0440\u0438\u043d\u0430\u0434\u043b\u0435\u0436\u0438\u0442 \u043f\u043e\u043b\u0435.",
-                    "type": "string"
-                },
-                "classification_rationale": {
+                "meaning_term_ref": {
+                    "description": "CURIE \u0432\u043d\u0435\u0448\u043d\u0435\u0433\u043e \u0442\u0435\u0440\u043c\u0438\u043d\u0430, \u0443\u0442\u043e\u0447\u043d\u044f\u044e\u0449\u0435\u0433\u043e \u0441\u043c\u044b\u0441\u043b.",
                     "type": [
                         "string",
                         "null"
                     ]
                 },
-                "classification_source": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "data_owner_ref": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "data_steward_ref": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "deprecated_by_ref": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "description": {
-                    "type": "string"
-                },
-                "element_id": {
-                    "type": "string"
-                },
-                "glossary_term_refs": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
-                "governance_classification": {
-                    "$ref": "#/$defs/GovernanceClassificationEnum"
-                },
-                "lifecycle_status": {
-                    "$ref": "#/$defs/LifecycleStatusEnum"
-                },
-                "mapping_coverage_status": {
-                    "$ref": "#/$defs/MappingCoverageStatusEnum",
-                    "description": "\u0421\u0442\u0430\u0442\u0443\u0441 \u043f\u043e\u043a\u0440\u044b\u0442\u0438\u044f \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430 mapping\u2019\u043e\u043c \u043d\u0430 \u0441\u043e\u0441\u0435\u0434\u043d\u0435\u043c \u0443\u0440\u043e\u0432\u043d\u0435 \u043c\u043e\u0434\u0435\u043b\u0438 (logical \u2194 physical).\n"
-                },
-                "mapping_rationale": {
-                    "description": "\u041e\u0431\u043e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0434\u043b\u044f planned / technical-only / not-applicable / inherited.",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "name": {
-                    "type": "string"
-                },
-                "native_name": {
-                    "type": "string"
-                },
-                "native_type": {
-                    "type": "string"
-                },
-                "ordinal_position": {
-                    "minimum": 1,
+                "ordinal": {
+                    "description": "\u041f\u043e\u0440\u044f\u0434\u043e\u043a \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u0432 \u043f\u0435\u0440\u0435\u0447\u0438\u0441\u043b\u0435\u043d\u0438\u0438.",
                     "type": [
                         "integer",
                         "null"
                     ]
                 },
-                "ownership_inheritance_rule": {
-                    "description": "Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.\n",
+                "value_code": {
+                    "description": "\u041a\u043e\u0434 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f, \u0443\u043d\u0438\u043a\u0430\u043b\u044c\u043d\u044b\u0439 \u0432\u043d\u0443\u0442\u0440\u0438 ValueDomain.",
+                    "type": "string"
+                },
+                "value_definition": {
+                    "description": "\u041e\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u0438\u0435 \u0434\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u043e\u0433\u043e \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f.",
                     "type": [
                         "string",
                         "null"
                     ]
                 },
-                "owning_unit_ref": {
+                "value_label": {
+                    "description": "\u041c\u0435\u0442\u043a\u0430 \u0434\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u043e\u0433\u043e \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f.",
                     "type": [
                         "string",
                         "null"
                     ]
                 },
-                "policy_refs": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
-                "required": {
-                    "type": "boolean"
-                },
-                "schema_path": {
+                "value_meaning_key": {
+                    "description": "\u041a\u043b\u044e\u0447 ValueMeaning \u0432 \u0441\u0432\u044f\u0437\u0430\u043d\u043d\u043e\u043c ConceptualDomain.",
                     "type": [
                         "string",
                         "null"
                     ]
                 },
-                "security_classification": {
-                    "$ref": "#/$defs/SecurityClassificationEnum",
-                    "description": "\u0420\u0435\u0436\u0438\u043c \u0437\u0430\u0449\u0438\u0442\u044b (Wave 2); \u043e\u0440\u0442\u043e\u0433\u043e\u043d\u0430\u043b\u0435\u043d governance_classification."
-                },
-                "sensitivity_term_refs": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
-                "tags": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
-                "title": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "valid_from": {
-                    "format": "date-time",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "valid_to": {
-                    "format": "date-time",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                "value_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum",
+                    "description": "\u0421\u0442\u0430\u0442\u0443\u0441 \u0434\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u043e\u0433\u043e \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f."
                 }
             },
             "required": [
-                "carrier_ref",
-                "native_name",
-                "native_type",
-                "required",
-                "element_id",
-                "name",
-                "description",
-                "lifecycle_status"
+                "value_code"
             ],
-            "title": "PhysicalField",
+            "title": "PermissibleValue",
             "type": "object"
         },
         "Policy": {
@@ -4821,6 +5831,19 @@
             ],
             "title": "PolicyBinding",
             "type": "object"
+        },
+        "PropertyKindEnum": {
+            "description": "\u0412\u0438\u0434 \u043a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u0441\u0432\u043e\u0439\u0441\u0442\u0432\u0430.",
+            "enum": [
+                "descriptive",
+                "identifying",
+                "relational",
+                "measure",
+                "temporal",
+                "status"
+            ],
+            "title": "PropertyKindEnum",
+            "type": "string"
         },
         "RegistryEntry": {
             "additionalProperties": false,
@@ -5343,6 +6366,295 @@
             "title": "Role",
             "type": "object"
         },
+        "SchemaFormatEnum": {
+            "description": "\u0424\u043e\u0440\u043c\u0430\u0442 \u0441\u0445\u0435\u043c\u044b DataStructure (\u0441\u0442\u0430\u0440\u0442\u043e\u0432\u044b\u0439 \u043d\u0430\u0431\u043e\u0440; \u043f\u0435\u0440\u0435\u043d\u043e\u0441 \u0432 \u0440\u0435\u0435\u0441\u0442\u0440 \u2014 \u043e\u0442\u0434\u0435\u043b\u044c\u043d\u043e).",
+            "enum": [
+                "json_schema",
+                "avro",
+                "protobuf",
+                "xml_schema",
+                "relational",
+                "openapi_schema",
+                "other"
+            ],
+            "title": "SchemaFormatEnum",
+            "type": "string"
+        },
+        "SchemaNode": {
+            "additionalProperties": false,
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "node_kind": {
+                                "anyOf": [
+                                    {
+                                        "const": "array"
+                                    },
+                                    {
+                                        "const": "map"
+                                    }
+                                ]
+                            }
+                        },
+                        "required": [
+                            "node_kind"
+                        ]
+                    },
+                    "then": {
+                        "not": {
+                            "required": [
+                                "children"
+                            ]
+                        },
+                        "properties": {
+                            "children": {
+                                "items": {},
+                                "type": "array"
+                            },
+                            "item_node": {}
+                        },
+                        "required": [
+                            "item_node"
+                        ]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "node_kind": {
+                                "anyOf": [
+                                    {
+                                        "const": "scalar"
+                                    },
+                                    {
+                                        "const": "enum"
+                                    }
+                                ]
+                            }
+                        },
+                        "required": [
+                            "node_kind"
+                        ]
+                    },
+                    "then": {
+                        "not": {
+                            "required": [
+                                "children",
+                                "item_node"
+                            ]
+                        },
+                        "properties": {
+                            "children": {
+                                "items": {},
+                                "type": "array"
+                            },
+                            "item_node": {}
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "node_kind": {
+                                "const": "reference"
+                            }
+                        },
+                        "required": [
+                            "node_kind"
+                        ]
+                    },
+                    "then": {
+                        "properties": {
+                            "reference_target": {}
+                        },
+                        "required": [
+                            "reference_target"
+                        ]
+                    }
+                }
+            ],
+            "description": "\u0423\u0437\u0435\u043b \u0434\u0435\u0440\u0435\u0432\u0430 \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u044b. \u0418\u0434\u0435\u043d\u0442\u0438\u0447\u043d\u043e\u0441\u0442\u044c (DataStructure.element_id, local_key). \u0420\u0451\u0431\u0440\u0430 children/item_node \u2014 \u0441\u0442\u0440\u043e\u043a\u0438 local_key (\u043f\u043b\u043e\u0441\u043a\u0430\u044f \u0444\u043e\u0440\u043c\u0430, ADR-038). \u0424\u043e\u0440\u043c\u0430 \u0438 \u0444\u0438\u0437\u0438\u043a\u0430 \u0432 \u043e\u0434\u043d\u043e\u043c \u0443\u0437\u043b\u0435 (\u043a\u0430\u043a ODCS).",
+            "properties": {
+                "children": {
+                    "description": "local_key \u0434\u043e\u0447\u0435\u0440\u043d\u0438\u0445 \u0443\u0437\u043b\u043e\u0432 (object / union).",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "column_position": {
+                    "description": "\u041f\u043e\u0437\u0438\u0446\u0438\u044f \u043a\u043e\u043b\u043e\u043d\u043a\u0438 (\u0442\u043e\u043b\u044c\u043a\u043e schema_format=relational; DAMS-\u0432\u0430\u043b\u0438\u0434\u0430\u0442\u043e\u0440).",
+                    "minimum": 1,
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "constraint_expressions": {
+                    "description": "\u0412\u0440\u0435\u043c\u0435\u043d\u043d\u044b\u0435 \u0432\u044b\u0440\u0430\u0436\u0435\u043d\u0438\u044f \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u0438\u0439 \u0434\u043e \u0432\u0432\u0435\u0434\u0435\u043d\u0438\u044f Expression.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "data_type_ref": {
+                    "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u044b\u0439 DataType.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "default_value": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "foreign_key_target": {
+                    "description": "\u0426\u0435\u043b\u044c \u0432\u043d\u0435\u0448\u043d\u0435\u0433\u043e \u043a\u043b\u044e\u0447\u0430 \u043a\u0430\u043a structure_id#local_key (\u0442\u043e\u043b\u044c\u043a\u043e relational).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "is_primary_key": {
+                    "description": "\u041f\u0440\u0438\u0437\u043d\u0430\u043a \u043f\u0435\u0440\u0432\u0438\u0447\u043d\u043e\u0433\u043e \u043a\u043b\u044e\u0447\u0430 (\u0442\u043e\u043b\u044c\u043a\u043e relational; DAMS-\u0432\u0430\u043b\u0438\u0434\u0430\u0442\u043e\u0440).",
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "is_unique": {
+                    "description": "\u041f\u0440\u0438\u0437\u043d\u0430\u043a \u0443\u043d\u0438\u043a\u0430\u043b\u044c\u043d\u043e\u0441\u0442\u0438 \u043a\u043e\u043b\u043e\u043d\u043a\u0438 (\u0442\u043e\u043b\u044c\u043a\u043e relational; DAMS-\u0432\u0430\u043b\u0438\u0434\u0430\u0442\u043e\u0440).",
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "item_node": {
+                    "description": "local_key \u0443\u0437\u043b\u0430 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430 \u043c\u0430\u0441\u0441\u0438\u0432\u0430 \u0438\u043b\u0438 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f map.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "local_key": {
+                    "description": "\u041b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u0439 \u043a\u043b\u044e\u0447 \u0443\u0437\u043b\u0430 \u0432\u043d\u0443\u0442\u0440\u0438 DataStructure. \u0410\u043b\u0444\u0430\u0432\u0438\u0442 ^[a-z0-9_.-]+$ (ADR-039). \u0421\u0442\u0430\u0431\u0438\u043b\u0435\u043d \u043f\u043e\u0441\u043b\u0435 \u0437\u0430\u043f\u0438\u0441\u0438; \u043d\u0435 \u043f\u0435\u0440\u0435\u0441\u0447\u0438\u0442\u044b\u0432\u0430\u0435\u0442\u0441\u044f \u043f\u0440\u0438 \u0441\u043c\u0435\u043d\u0435 native_name.\n",
+                    "pattern": "^[a-z0-9_.-]+$",
+                    "type": "string"
+                },
+                "mapping_coverage_status": {
+                    "$ref": "#/$defs/MappingCoverageStatusEnum",
+                    "description": "\u0421\u0442\u0430\u0442\u0443\u0441 \u043f\u043e\u043a\u0440\u044b\u0442\u0438\u044f \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430 mapping\u2019\u043e\u043c \u043d\u0430 \u0441\u043e\u0441\u0435\u0434\u043d\u0435\u043c \u0443\u0440\u043e\u0432\u043d\u0435 \u043c\u043e\u0434\u0435\u043b\u0438 (logical \u2194 physical).\n"
+                },
+                "mapping_rationale": {
+                    "description": "\u041e\u0431\u043e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0434\u043b\u044f planned / technical-only / not-applicable / inherited.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "max_occurs": {
+                    "description": "\u041c\u0430\u043a\u0441\u0438\u043c\u0430\u043b\u044c\u043d\u0430\u044f \u043a\u0440\u0430\u0442\u043d\u043e\u0441\u0442\u044c; \u0431\u0435\u0437 \u0432\u0435\u0440\u0445\u043d\u0435\u0439 \u0433\u0440\u0430\u043d\u0438\u0446\u044b \u0441\u043b\u043e\u0442 \u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442.",
+                    "minimum": 0,
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "min_occurs": {
+                    "description": "\u041c\u0438\u043d\u0438\u043c\u0430\u043b\u044c\u043d\u0430\u044f \u043a\u0440\u0430\u0442\u043d\u043e\u0441\u0442\u044c.",
+                    "minimum": 0,
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "native_name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "native_type": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "node_kind": {
+                    "$ref": "#/$defs/SchemaNodeKindEnum",
+                    "description": "\u0412\u0438\u0434 \u0443\u0437\u043b\u0430 (scalar, object, array, map, union, enum, reference)."
+                },
+                "nullable": {
+                    "description": "\u0414\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u043e\u0441\u0442\u044c null (\u043e\u0442\u0434\u0435\u043b\u044c\u043d\u043e \u043e\u0442 required).",
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "ordinal_position": {
+                    "minimum": 1,
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "realizes_attribute_ref": {
+                    "description": "\u041e\u043f\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u0430\u044f \u0441\u0432\u044f\u0437\u044c \u0441 \u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0438\u043c \u0430\u0442\u0440\u0438\u0431\u0443\u0442\u043e\u043c (\u043a\u0430\u043a concept_ref).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "reference_target": {
+                    "description": "\u0426\u0435\u043b\u044c \u0434\u043b\u044f node_kind=reference (\u0434\u0440\u0443\u0433\u0430\u044f DataStructure \u0438\u043b\u0438 \u0443\u0437\u0435\u043b).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "required": {
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "node_kind",
+                "local_key"
+            ],
+            "title": "SchemaNode",
+            "type": "object"
+        },
+        "SchemaNodeKindEnum": {
+            "description": "\u0412\u0438\u0434 \u0443\u0437\u043b\u0430 SchemaNode.",
+            "enum": [
+                "scalar",
+                "object",
+                "array",
+                "map",
+                "union",
+                "enum",
+                "reference"
+            ],
+            "title": "SchemaNodeKindEnum",
+            "type": "string"
+        },
         "ScopedDefinition": {
             "additionalProperties": false,
             "description": "\u041a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u043d\u043e\u0435 \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u0438\u0435 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430 \u043c\u043e\u0434\u0435\u043b\u0438 (ADR-025 / ISO 11179 Context). \u041d\u0435 \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043e\u0442\u0434\u0435\u043b\u044c\u043d\u044b\u043c \u0442\u0435\u0440\u043c\u0438\u043d\u043e\u043c \u0433\u043b\u043e\u0441\u0441\u0430\u0440\u0438\u044f \u0438 \u043d\u0435 \u0437\u0430\u043c\u0435\u043d\u044f\u0435\u0442 \u044d\u0442\u0430\u043b\u043e\u043d\u043d\u043e\u0435 \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u0438\u0435 \u0432\u043d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d\u043d\u043e\u0433\u043e scope.",
@@ -5479,7 +6791,8 @@
                 "name": {
                     "type": "string"
                 },
-                "physical_field_refs": {
+                "schema_node_refs": {
+                    "description": "\u0421\u0441\u044b\u043b\u043a\u0438 \u043d\u0430 \u0443\u0437\u043b\u044b \u0441\u0445\u0435\u043c\u044b (SchemaNode) \u0432 DataStructure.",
                     "items": {
                         "type": "string"
                     },
@@ -5637,6 +6950,20 @@
             ],
             "title": "SelectedEntity",
             "type": "object"
+        },
+        "SignificanceBasisEnum": {
+            "description": "\u041e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u043e\u0432\u0430\u043d\u0438\u044f ConceptualProperty \u0432 \u041a\u041c\u0414 (\u0432\u0430\u0440\u0438\u0430\u043d\u0442 B).",
+            "enum": [
+                "identifying",
+                "externally_aligned",
+                "cross_solution",
+                "regulatory",
+                "critical_data",
+                "governance_anchor",
+                "explicit_decision"
+            ],
+            "title": "SignificanceBasisEnum",
+            "type": "string"
         },
         "SolutionDataRoleEnum": {
             "description": "",
@@ -5987,6 +7314,379 @@
             ],
             "title": "TermDirectionEnum",
             "type": "string"
+        },
+        "TimezonePolicyEnum": {
+            "description": "\u041f\u043e\u043b\u0438\u0442\u0438\u043a\u0430 \u0447\u0430\u0441\u043e\u0432\u043e\u0433\u043e \u043f\u043e\u044f\u0441\u0430 \u0434\u043b\u044f \u0432\u0440\u0435\u043c\u0435\u043d\u043d\u044b\u0445 DataType.",
+            "enum": [
+                "none",
+                "utc",
+                "with_offset",
+                "local"
+            ],
+            "title": "TimezonePolicyEnum",
+            "type": "string"
+        },
+        "TypeFamilyEnum": {
+            "description": "\u0421\u0435\u043c\u0435\u0439\u0441\u0442\u0432\u043e \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u0433\u043e DataType.",
+            "enum": [
+                "boolean",
+                "integer",
+                "decimal",
+                "float",
+                "string",
+                "binary",
+                "date",
+                "time",
+                "datetime",
+                "duration",
+                "identifier",
+                "uri",
+                "object",
+                "array",
+                "other"
+            ],
+            "title": "TypeFamilyEnum",
+            "type": "string"
+        },
+        "ValueDomain": {
+            "additionalProperties": false,
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "value_domain_kind": {
+                                "const": "enumerated"
+                            }
+                        },
+                        "required": [
+                            "value_domain_kind"
+                        ]
+                    },
+                    "then": {
+                        "properties": {
+                            "permissible_values": {
+                                "items": {},
+                                "type": "array"
+                            }
+                        },
+                        "required": [
+                            "permissible_values"
+                        ]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "value_domain_kind": {
+                                "const": "described"
+                            }
+                        },
+                        "required": [
+                            "value_domain_kind"
+                        ]
+                    },
+                    "then": {
+                        "not": {
+                            "required": [
+                                "permissible_values"
+                            ]
+                        },
+                        "properties": {
+                            "permissible_values": {
+                                "items": {},
+                                "type": "array"
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "value_domain_kind": {
+                                "const": "reference_set"
+                            }
+                        },
+                        "required": [
+                            "value_domain_kind"
+                        ]
+                    },
+                    "then": {
+                        "not": {
+                            "required": [
+                                "permissible_values"
+                            ]
+                        },
+                        "properties": {
+                            "permissible_values": {
+                                "items": {},
+                                "type": "array"
+                            }
+                        }
+                    }
+                }
+            ],
+            "description": "\u041f\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0439: \u0442\u0438\u043f, \u0444\u043e\u0440\u043c\u0430\u0442, \u0435\u0434\u0438\u043d\u0438\u0446\u0430, \u0434\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u044b\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u0438\u043b\u0438 \u0441\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u0432\u043d\u0435\u0448\u043d\u0438\u0439 \u043d\u0430\u0431\u043e\u0440. \u0414\u043e\u043f\u0443\u0441\u0442\u0438\u043c \u0432 \u043f\u0430\u043a\u0435\u0442\u0430\u0445 enterprise \u0438 solution.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "conceptual_domain_ref": {
+                    "description": "\u041e\u043f\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u0430\u044f \u0441\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u043a\u043e\u043d\u0446\u0435\u043f\u0442\u0443\u0430\u043b\u044c\u043d\u044b\u0439 \u0434\u043e\u043c\u0435\u043d \u0441\u043c\u044b\u0441\u043b\u043e\u0432.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_type_ref": {
+                    "description": "\u0421\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u044b\u0439 DataType.",
+                    "type": "string"
+                },
+                "deprecated_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "dynamic_query": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/ValueSetQuery"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "\u0414\u0438\u043d\u0430\u043c\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u0437\u0430\u043f\u0440\u043e\u0441 \u043d\u0430\u0431\u043e\u0440\u0430 (reachable_from)."
+                },
+                "element_id": {
+                    "type": "string"
+                },
+                "format_pattern": {
+                    "description": "\u0428\u0430\u0431\u043b\u043e\u043d/\u0444\u043e\u0440\u043c\u0430\u0442 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u0434\u043b\u044f ValueDomain (regex \u0438\u043b\u0438 \u043c\u0430\u0441\u043a\u0430).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "lifecycle_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum"
+                },
+                "max_value": {
+                    "description": "\u041c\u0430\u043a\u0441\u0438\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u0434\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 (described).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "min_value": {
+                    "description": "\u041c\u0438\u043d\u0438\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u0434\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 (described).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "name": {
+                    "type": "string"
+                },
+                "permissible_values": {
+                    "description": "\u0412\u0441\u0442\u0440\u043e\u0435\u043d\u043d\u044b\u0439 \u0441\u043f\u0438\u0441\u043e\u043a \u0434\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u044b\u0445 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0439.",
+                    "items": {
+                        "$ref": "#/$defs/PermissibleValue"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "unit_code": {
+                    "description": "\u041a\u043e\u0434 \u0435\u0434\u0438\u043d\u0438\u0446\u044b \u0438\u0437\u043c\u0435\u0440\u0435\u043d\u0438\u044f (UCUM / \u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u044b\u0439 \u043a\u043e\u0434) \u0434\u043b\u044f ValueDomain.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "value_domain_kind": {
+                    "$ref": "#/$defs/ValueDomainKindEnum",
+                    "description": "\u0412\u0438\u0434 \u0434\u043e\u043c\u0435\u043d\u0430 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0439 (enumerated | described | reference_set)."
+                },
+                "value_set_source": {
+                    "description": "\u0412\u043d\u0435\u0448\u043d\u0438\u0439 \u0438\u0441\u0442\u043e\u0447\u043d\u0438\u043a \u043d\u0430\u0431\u043e\u0440\u0430 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0439 (reference_set).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "value_domain_kind",
+                "data_type_ref",
+                "element_id",
+                "name",
+                "description",
+                "lifecycle_status"
+            ],
+            "title": "ValueDomain",
+            "type": "object"
+        },
+        "ValueDomainKindEnum": {
+            "description": "\u0412\u0438\u0434 \u0434\u043e\u043c\u0435\u043d\u0430 \u043f\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u0438\u044f \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0439 (ISO 11179 Value Domain).",
+            "enum": [
+                "enumerated",
+                "described",
+                "reference_set"
+            ],
+            "title": "ValueDomainKindEnum",
+            "type": "string"
+        },
+        "ValueMeaning": {
+            "additionalProperties": false,
+            "description": "\u0421\u043c\u044b\u0441\u043b \u0434\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u043e\u0433\u043e \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u0432\u043d\u0443\u0442\u0440\u0438 ConceptualDomain (\u0432\u0441\u0442\u0440\u0430\u0438\u0432\u0430\u0435\u043c\u044b\u0439, \u0431\u0435\u0437 lifecycle).",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "broader_meaning_key": {
+                    "description": "\u041a\u043b\u044e\u0447 \u0431\u043e\u043b\u0435\u0435 \u0448\u0438\u0440\u043e\u043a\u043e\u0433\u043e ValueMeaning \u0432 \u0442\u043e\u043c \u0436\u0435 \u0434\u043e\u043c\u0435\u043d\u0435.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "meaning_definition": {
+                    "description": "\u041e\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u0438\u0435 \u0441\u043c\u044b\u0441\u043b\u0430 (skos:definition).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "meaning_key": {
+                    "description": "\u041a\u043b\u044e\u0447 \u0441\u043c\u044b\u0441\u043b\u0430, \u0443\u043d\u0438\u043a\u0430\u043b\u044c\u043d\u044b\u0439 \u0432\u043d\u0443\u0442\u0440\u0438 ConceptualDomain.",
+                    "type": "string"
+                },
+                "meaning_label": {
+                    "description": "\u041f\u0440\u0435\u0434\u043f\u043e\u0447\u0442\u0438\u0442\u0435\u043b\u044c\u043d\u0430\u044f \u043c\u0435\u0442\u043a\u0430 \u0441\u043c\u044b\u0441\u043b\u0430 (skos:prefLabel \u0432 OWL-\u043f\u0440\u043e\u0435\u043a\u0446\u0438\u0438).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "meaning_status": {
+                    "$ref": "#/$defs/LifecycleStatusEnum",
+                    "description": "\u0421\u0442\u0430\u0442\u0443\u0441 \u0441\u043c\u044b\u0441\u043b\u0430 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f."
+                },
+                "meaning_term_ref": {
+                    "description": "CURIE \u0432\u043d\u0435\u0448\u043d\u0435\u0433\u043e \u0442\u0435\u0440\u043c\u0438\u043d\u0430, \u0443\u0442\u043e\u0447\u043d\u044f\u044e\u0449\u0435\u0433\u043e \u0441\u043c\u044b\u0441\u043b.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "meaning_key"
+            ],
+            "title": "ValueMeaning",
+            "type": "object"
+        },
+        "ValueSetQuery": {
+            "additionalProperties": false,
+            "description": "\u0414\u0438\u043d\u0430\u043c\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u0437\u0430\u043f\u0440\u043e\u0441 \u043d\u0430\u0431\u043e\u0440\u0430 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0439 \u043f\u043e \u043e\u0431\u0440\u0430\u0437\u0446\u0443 LinkML reachable_from (source ontology, \u0443\u0437\u043b\u044b, \u0442\u0438\u043f\u044b \u0441\u0432\u044f\u0437\u0435\u0439).",
+            "properties": {
+                "include_self": {
+                    "description": "\u0412\u043a\u043b\u044e\u0447\u0430\u0442\u044c \u0441\u0442\u0430\u0440\u0442\u043e\u0432\u044b\u0435 \u0443\u0437\u043b\u044b \u0432 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442.",
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "relationship_types": {
+                    "description": "\u0422\u0438\u043f\u044b \u0441\u0432\u044f\u0437\u0435\u0439 \u0434\u043b\u044f \u043e\u0431\u0445\u043e\u0434\u0430.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "source_nodes": {
+                    "description": "\u0421\u0442\u0430\u0440\u0442\u043e\u0432\u044b\u0435 \u0443\u0437\u043b\u044b reachable_from.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "source_ontology": {
+                    "description": "IRI/CURIE \u0438\u0441\u0445\u043e\u0434\u043d\u043e\u0439 \u043e\u043d\u0442\u043e\u043b\u043e\u0433\u0438\u0438 \u0434\u043b\u044f \u0434\u0438\u043d\u0430\u043c\u0438\u0447\u0435\u0441\u043a\u043e\u0433\u043e \u043d\u0430\u0431\u043e\u0440\u0430.",
+                    "type": "string"
+                },
+                "value_set_query_id": {
+                    "description": "\u041b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u0439 \u0438\u0434\u0435\u043d\u0442\u0438\u0444\u0438\u043a\u0430\u0442\u043e\u0440 \u0434\u0438\u043d\u0430\u043c\u0438\u0447\u0435\u0441\u043a\u043e\u0433\u043e \u0437\u0430\u043f\u0440\u043e\u0441\u0430 \u0432\u043d\u0443\u0442\u0440\u0438 ValueDomain.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "value_set_query_id",
+                "source_ontology"
+            ],
+            "title": "ValueSetQuery",
+            "type": "object"
         }
     },
     "$id": "https://data.moex.com/dams/v0.1",
@@ -6076,5 +7776,5 @@
     ],
     "title": "moex_dams",
     "type": "object",
-    "version": "0.1.0"
+    "version": "2.0.0"
 }

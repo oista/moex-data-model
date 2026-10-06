@@ -2,13 +2,13 @@
   "summary": {
     "overall_result": "conformant_with_warnings",
     "implementation_id": "moex:implementation:mdm:0.1.0",
-    "revision": "98c818f20e38",
-    "content_digest": "sha256:98c818f20e38187a5023654222289d53ccdfdd0c01b54bb87e04c4753a62f9ef",
+    "revision": "c0402adba083",
+    "content_digest": "sha256:c0402adba08359ab76c509769eb3484f196a5c2dbffff694d10bb562a1624ae4",
     "package_id": "dams:model/mdm/0.1.0",
-    "node_count": 146,
-    "edge_count": 339,
+    "node_count": 150,
+    "edge_count": 305,
     "is_conformant": true,
-    "bundle_digest": "sha256:0eb202b71e09e86ddddd309b6c4bba6667a254b9bae994b3b0f94e74122b5799"
+    "bundle_digest": "sha256:17f9b039abd233317a68e4034e9405d5ff6270fd0dc2fcff38a7ed5036599cbf"
   },
   "nodes": [
     {
@@ -355,277 +355,11 @@
       "kind": "technical_asset"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/GOLD_ID",
-      "name": "GOLD_ID",
-      "title": null,
-      "description": "Уникальный GUID золотой записи (MDMID) ЮЛ",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME",
-      "name": "SHORT_NAME",
-      "title": null,
-      "description": "Краткое наименование ЮЛ",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME_ENG",
-      "name": "SHORT_NAME_ENG",
-      "title": null,
-      "description": "Краткое наименование ЮЛ (на английском языке)",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME",
-      "name": "FULL_NAME",
-      "title": null,
-      "description": "Полное наименование ЮЛ",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME_ENG",
-      "name": "FULL_NAME_ENG",
-      "title": null,
-      "description": "Полное наименование ЮЛ (на английском языке)",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/COUNTRY_CODE",
-      "name": "COUNTRY_CODE",
-      "title": null,
-      "description": "Код страны",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN",
-      "name": "INN",
-      "title": null,
-      "description": "ИНН",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KPP",
-      "name": "KPP",
-      "title": null,
-      "description": "КПП",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/OGRN",
-      "name": "OGRN",
-      "title": null,
-      "description": "ОГРН",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ADDR_EGRUL_REGION",
-      "name": "ADDR_EGRUL_REGION",
-      "title": null,
-      "description": "Адрес ЮЛ: Субъект",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TERMINATION_DATE",
-      "name": "TERMINATION_DATE",
-      "title": null,
-      "description": "Дата прекращения юридического лица",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN_NONRESIDENT",
-      "name": "INN_NONRESIDENT",
-      "title": null,
-      "description": "ИНН организации-нерезидента (ИНН в стране нерезидента)",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/LEI",
-      "name": "LEI",
-      "title": null,
-      "description": "Международный код идентификации юридического лица LEI",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KIO",
-      "name": "KIO",
-      "title": null,
-      "description": "КИО",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/REG_NUM_NONRESIDENT",
-      "name": "REG_NUM_NONRESIDENT",
-      "title": null,
-      "description": "Регистрационный номер организации-нерезидента",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_FIRSTNAME",
-      "name": "CEO_FIRSTNAME",
-      "title": null,
-      "description": "Имя руководителя",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_INN",
-      "name": "CEO_INN",
-      "title": null,
-      "description": "Сведения о лице, имеющем право без доверенности действовать от имени ЮЛ: ИНН",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_PATRONYMIC",
-      "name": "CEO_PATRONYMIC",
-      "title": null,
-      "description": "Отчество руководителя",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_POSITION",
-      "name": "CEO_POSITION",
-      "title": null,
-      "description": "Должность руководителя",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_SURNAME",
-      "name": "CEO_SURNAME",
-      "title": null,
-      "description": "Фамилия руководителя",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TRUST_RULE_NUMBER",
-      "name": "TRUST_RULE_NUMBER",
-      "title": null,
-      "description": "Номер правил доверительного управления",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ECBD_ID",
-      "name": "ECBD_ID",
-      "title": null,
-      "description": "ID в ЕКБД",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/UNICODE",
-      "name": "UNICODE",
-      "title": null,
-      "description": "Унифицированный код участника в ЕКБД",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CODE_NSD",
-      "name": "CODE_NSD",
-      "title": null,
-      "description": "Код НРД",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KBD_FIRMID",
-      "name": "KBD_FIRMID",
-      "title": null,
-      "description": "ID в КБД",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ACTIVE_FLAG",
-      "name": "ACTIVE_FLAG",
-      "title": null,
-      "description": "Является ли запись удаленной (0) или активной (1) хотя бы на одном из источников в последней загрузке",
-      "kind": "field"
-    },
-    {
       "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
       "name": "INTERNALDM_MDM_V_PERSON",
       "title": "Физические лица (ФЛ)",
       "description": "Физические лица (ФЛ)",
       "kind": "technical_asset"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/GOLD_ID",
-      "name": "GOLD_ID",
-      "title": null,
-      "description": "Уникальный GUID золотой записи (MDMID) ФЛ",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIO",
-      "name": "FIO",
-      "title": null,
-      "description": "ФИО",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/LAST_NAME",
-      "name": "LAST_NAME",
-      "title": null,
-      "description": "Фамилия",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIRST_NAME",
-      "name": "FIRST_NAME",
-      "title": null,
-      "description": "Имя",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/PATRONYMIC",
-      "name": "PATRONYMIC",
-      "title": null,
-      "description": "Отчество",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/DATEBIRTH",
-      "name": "DATEBIRTH",
-      "title": null,
-      "description": "Дата рождения",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/ADDRESS_F",
-      "name": "ADDRESS_F",
-      "title": null,
-      "description": "Адрес физический",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/INN",
-      "name": "INN",
-      "title": null,
-      "description": "ИНН",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/SNILS",
-      "name": "SNILS",
-      "title": null,
-      "description": "СНИЛС",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE",
-      "name": "IDENTITY_DOCUMENT_CODE",
-      "title": null,
-      "description": "Код документа, удостоверяющего личность",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE_OMEGA",
-      "name": "IDENTITY_DOCUMENT_CODE_OMEGA",
-      "title": null,
-      "description": "Код документа, удостоверяющего личность (по классификации ОМЕГА)",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_TYPE",
-      "name": "IDENTITY_DOCUMENT_TYPE",
-      "title": null,
-      "description": "Тип документа, удостоверяющего личность",
-      "kind": "field"
     },
     {
       "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
@@ -635,20 +369,6 @@
       "kind": "technical_asset"
     },
     {
-      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY2",
-      "name": "REFERENCE_KEY2",
-      "title": null,
-      "description": "Идентификатор записи в справочнике ЮЛ",
-      "kind": "field"
-    },
-    {
-      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY1",
-      "name": "REFERENCE_KEY1",
-      "title": null,
-      "description": "Идентификатор записи в справочнике ФЛ",
-      "kind": "field"
-    },
-    {
       "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
       "name": "MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
       "title": "Представители:Отношение ЮЛ - ФЛ",
@@ -656,14 +376,322 @@
       "kind": "technical_asset"
     },
     {
-      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY2",
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "name": "INTERNALDM_MDM_V_ENTERPRISE",
+      "title": null,
+      "description": "Relational structure for INTERNALDM_MDM_V_ENTERPRISE",
+      "kind": "technical_asset"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#gold_id",
+      "name": "GOLD_ID",
+      "title": null,
+      "description": "Уникальный GUID золотой записи (MDMID) ЮЛ",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#short_name",
+      "name": "SHORT_NAME",
+      "title": null,
+      "description": "Краткое наименование ЮЛ",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#short_name_eng",
+      "name": "SHORT_NAME_ENG",
+      "title": null,
+      "description": "Краткое наименование ЮЛ (на английском языке)",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#full_name",
+      "name": "FULL_NAME",
+      "title": null,
+      "description": "Полное наименование ЮЛ",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#full_name_eng",
+      "name": "FULL_NAME_ENG",
+      "title": null,
+      "description": "Полное наименование ЮЛ (на английском языке)",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#country_code",
+      "name": "COUNTRY_CODE",
+      "title": null,
+      "description": "Код страны",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#inn",
+      "name": "INN",
+      "title": null,
+      "description": "ИНН",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kpp",
+      "name": "KPP",
+      "title": null,
+      "description": "КПП",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ogrn",
+      "name": "OGRN",
+      "title": null,
+      "description": "ОГРН",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#addr_egrul_region",
+      "name": "ADDR_EGRUL_REGION",
+      "title": null,
+      "description": "Адрес ЮЛ: Субъект",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#termination_date",
+      "name": "TERMINATION_DATE",
+      "title": null,
+      "description": "Дата прекращения юридического лица",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#inn_nonresident",
+      "name": "INN_NONRESIDENT",
+      "title": null,
+      "description": "ИНН организации-нерезидента (ИНН в стране нерезидента)",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#lei",
+      "name": "LEI",
+      "title": null,
+      "description": "Международный код идентификации юридического лица LEI",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kio",
+      "name": "KIO",
+      "title": null,
+      "description": "КИО",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#reg_num_nonresident",
+      "name": "REG_NUM_NONRESIDENT",
+      "title": null,
+      "description": "Регистрационный номер организации-нерезидента",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_firstname",
+      "name": "CEO_FIRSTNAME",
+      "title": null,
+      "description": "Имя руководителя",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_inn",
+      "name": "CEO_INN",
+      "title": null,
+      "description": "Сведения о лице, имеющем право без доверенности действовать от имени ЮЛ: ИНН",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_patronymic",
+      "name": "CEO_PATRONYMIC",
+      "title": null,
+      "description": "Отчество руководителя",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_position",
+      "name": "CEO_POSITION",
+      "title": null,
+      "description": "Должность руководителя",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_surname",
+      "name": "CEO_SURNAME",
+      "title": null,
+      "description": "Фамилия руководителя",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#trust_rule_number",
+      "name": "TRUST_RULE_NUMBER",
+      "title": null,
+      "description": "Номер правил доверительного управления",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ecbd_id",
+      "name": "ECBD_ID",
+      "title": null,
+      "description": "ID в ЕКБД",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#unicode",
+      "name": "UNICODE",
+      "title": null,
+      "description": "Унифицированный код участника в ЕКБД",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#code_nsd",
+      "name": "CODE_NSD",
+      "title": null,
+      "description": "Код НРД",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kbd_firmid",
+      "name": "KBD_FIRMID",
+      "title": null,
+      "description": "ID в КБД",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#active_flag",
+      "name": "ACTIVE_FLAG",
+      "title": null,
+      "description": "Является ли запись удаленной (0) или активной (1) хотя бы на одном из источников в последней загрузке",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON",
+      "name": "INTERNALDM_MDM_V_PERSON",
+      "title": null,
+      "description": "Relational structure for INTERNALDM_MDM_V_PERSON",
+      "kind": "technical_asset"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#gold_id",
+      "name": "GOLD_ID",
+      "title": null,
+      "description": "Уникальный GUID золотой записи (MDMID) ФЛ",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#fio",
+      "name": "FIO",
+      "title": null,
+      "description": "ФИО",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#last_name",
+      "name": "LAST_NAME",
+      "title": null,
+      "description": "Фамилия",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#first_name",
+      "name": "FIRST_NAME",
+      "title": null,
+      "description": "Имя",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#patronymic",
+      "name": "PATRONYMIC",
+      "title": null,
+      "description": "Отчество",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#datebirth",
+      "name": "DATEBIRTH",
+      "title": null,
+      "description": "Дата рождения",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#address_f",
+      "name": "ADDRESS_F",
+      "title": null,
+      "description": "Адрес физический",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#inn",
+      "name": "INN",
+      "title": null,
+      "description": "ИНН",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#snils",
+      "name": "SNILS",
+      "title": null,
+      "description": "СНИЛС",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_code",
+      "name": "IDENTITY_DOCUMENT_CODE",
+      "title": null,
+      "description": "Код документа, удостоверяющего личность",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_code_omega",
+      "name": "IDENTITY_DOCUMENT_CODE_OMEGA",
+      "title": null,
+      "description": "Код документа, удостоверяющего личность (по классификации ОМЕГА)",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_type",
+      "name": "IDENTITY_DOCUMENT_TYPE",
+      "title": null,
+      "description": "Тип документа, удостоверяющего личность",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
+      "name": "MOSCOW_EXCHANGE_T_REF_CEO",
+      "title": null,
+      "description": "Relational structure for MOSCOW_EXCHANGE_T_REF_CEO",
+      "kind": "technical_asset"
+    },
+    {
+      "id": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO#reference_key2",
+      "name": "REFERENCE_KEY2",
+      "title": null,
+      "description": "Идентификатор записи в справочнике ЮЛ",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO#reference_key1",
+      "name": "REFERENCE_KEY1",
+      "title": null,
+      "description": "Идентификатор записи в справочнике ФЛ",
+      "kind": "field"
+    },
+    {
+      "id": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
+      "name": "MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
+      "title": null,
+      "description": "Relational structure for MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
+      "kind": "technical_asset"
+    },
+    {
+      "id": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key2",
       "name": "REFERENCE_KEY2",
       "title": null,
       "description": "ID записи в справочнике ЮЛ",
       "kind": "field"
     },
     {
-      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY3",
+      "id": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key3",
       "name": "REFERENCE_KEY3",
       "title": null,
       "description": "ID записи в справочнике ФЛ",
@@ -1612,466 +1640,10 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/GOLD_ID:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/GOLD_ID",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/GOLD_ID->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/GOLD_ID",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME_ENG:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME_ENG",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME_ENG->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME_ENG",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME_ENG:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME_ENG",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME_ENG->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME_ENG",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/COUNTRY_CODE:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/COUNTRY_CODE",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/COUNTRY_CODE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/COUNTRY_CODE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KPP:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KPP",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KPP->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KPP",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/OGRN:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/OGRN",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/OGRN->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/OGRN",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ADDR_EGRUL_REGION:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ADDR_EGRUL_REGION",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ADDR_EGRUL_REGION->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ADDR_EGRUL_REGION",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TERMINATION_DATE:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TERMINATION_DATE",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TERMINATION_DATE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TERMINATION_DATE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN_NONRESIDENT:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN_NONRESIDENT",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN_NONRESIDENT->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN_NONRESIDENT",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/LEI:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/LEI",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/LEI->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/LEI",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KIO:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KIO",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KIO->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KIO",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/REG_NUM_NONRESIDENT:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/REG_NUM_NONRESIDENT",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/REG_NUM_NONRESIDENT->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/REG_NUM_NONRESIDENT",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_FIRSTNAME:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_FIRSTNAME",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_FIRSTNAME->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_FIRSTNAME",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_INN:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_INN",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_INN->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_INN",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_PATRONYMIC:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_PATRONYMIC",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_PATRONYMIC->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_PATRONYMIC",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_POSITION:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_POSITION",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_POSITION->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_POSITION",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_SURNAME:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_SURNAME",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_SURNAME->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_SURNAME",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TRUST_RULE_NUMBER:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TRUST_RULE_NUMBER",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TRUST_RULE_NUMBER->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TRUST_RULE_NUMBER",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ECBD_ID:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ECBD_ID",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ECBD_ID->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ECBD_ID",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/UNICODE:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/UNICODE",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/UNICODE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/UNICODE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CODE_NSD:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CODE_NSD",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CODE_NSD->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CODE_NSD",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KBD_FIRMID:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KBD_FIRMID",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KBD_FIRMID->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KBD_FIRMID",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ACTIVE_FLAG:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ACTIVE_FLAG",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ACTIVE_FLAG->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ACTIVE_FLAG",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "carrier_ref"
-    },
-    {
       "id": "dams:model/mdm/0.1.0->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:contains",
       "source": "dams:model/mdm/0.1.0",
       "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
       "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/GOLD_ID:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/GOLD_ID",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/GOLD_ID->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/GOLD_ID",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIO:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIO",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIO->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIO",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/LAST_NAME:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/LAST_NAME",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/LAST_NAME->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/LAST_NAME",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIRST_NAME:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIRST_NAME",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIRST_NAME->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIRST_NAME",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/PATRONYMIC:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/PATRONYMIC",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/PATRONYMIC->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/PATRONYMIC",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/DATEBIRTH:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/DATEBIRTH",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/DATEBIRTH->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/DATEBIRTH",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/ADDRESS_F:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/ADDRESS_F",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/ADDRESS_F->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/ADDRESS_F",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/INN:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/INN",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/INN->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/INN",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/SNILS:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/SNILS",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/SNILS->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/SNILS",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE_OMEGA:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE_OMEGA",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE_OMEGA->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE_OMEGA",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_TYPE:contains",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_TYPE",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_TYPE->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
-      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_TYPE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "carrier_ref"
     },
     {
       "id": "dams:model/mdm/0.1.0->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO:contains",
@@ -2080,57 +1652,309 @@
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY2:contains",
-      "source": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
-      "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY2",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY2->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO:carrier_ref",
-      "source": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY2",
-      "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
-      "kind": "carrier_ref"
-    },
-    {
-      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY1:contains",
-      "source": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
-      "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY1",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY1->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO:carrier_ref",
-      "source": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY1",
-      "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
-      "kind": "carrier_ref"
-    },
-    {
       "id": "dams:model/mdm/0.1.0->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE:contains",
       "source": "dams:model/mdm/0.1.0",
       "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY2:contains",
-      "source": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
-      "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY2",
+      "id": "dams:model/mdm/0.1.0->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE:contains",
+      "source": "dams:model/mdm/0.1.0",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
       "kind": "contains"
     },
     {
-      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY2->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE:carrier_ref",
-      "source": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY2",
-      "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#gold_id:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#gold_id",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#short_name:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#short_name",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#short_name_eng:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#short_name_eng",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#full_name:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#full_name",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#full_name_eng:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#full_name_eng",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#country_code:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#country_code",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#inn:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#inn",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kpp:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kpp",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ogrn:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ogrn",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#addr_egrul_region:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#addr_egrul_region",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#termination_date:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#termination_date",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#inn_nonresident:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#inn_nonresident",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#lei:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#lei",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kio:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kio",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#reg_num_nonresident:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#reg_num_nonresident",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_firstname:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_firstname",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_inn:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_inn",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_patronymic:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_patronymic",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_position:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_position",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_surname:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_surname",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#trust_rule_number:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#trust_rule_number",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ecbd_id:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ecbd_id",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#unicode:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#unicode",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#code_nsd:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#code_nsd",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kbd_firmid:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kbd_firmid",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#active_flag:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#active_flag",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:model/mdm/0.1.0->dams:structure/mdm/INTERNALDM_MDM_V_PERSON:contains",
+      "source": "dams:model/mdm/0.1.0",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#gold_id:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#gold_id",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#fio:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#fio",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#last_name:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#last_name",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#first_name:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#first_name",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#patronymic:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#patronymic",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#datebirth:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#datebirth",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#address_f:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#address_f",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#inn:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#inn",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#snils:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#snils",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_code:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_code",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_code_omega:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_code_omega",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_type:contains",
+      "source": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_type",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:model/mdm/0.1.0->dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO:contains",
+      "source": "dams:model/mdm/0.1.0",
+      "target": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO->dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO#reference_key2:contains",
+      "source": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
+      "target": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO#reference_key2",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO->dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO#reference_key1:contains",
+      "source": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
+      "target": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO#reference_key1",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:model/mdm/0.1.0->dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE:contains",
+      "source": "dams:model/mdm/0.1.0",
+      "target": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE->dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key2:contains",
+      "source": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
+      "target": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key2",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE->dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key3:contains",
+      "source": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
+      "target": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key3",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE:carrier_ref",
+      "source": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
       "kind": "carrier_ref"
     },
     {
-      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY3:contains",
-      "source": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
-      "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY3",
-      "kind": "contains"
+      "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON->dams:structure/mdm/INTERNALDM_MDM_V_PERSON:carrier_ref",
+      "source": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON",
+      "kind": "carrier_ref"
     },
     {
-      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY3->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE:carrier_ref",
-      "source": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY3",
-      "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
+      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO->dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO:carrier_ref",
+      "source": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
+      "target": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
+      "kind": "carrier_ref"
+    },
+    {
+      "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE->dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE:carrier_ref",
+      "source": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
+      "target": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
       "kind": "carrier_ref"
     },
     {
@@ -2218,9 +2042,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/GOLD_ID:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#gold_id:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/GOLD_ID",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#gold_id",
       "kind": "maps_to"
     },
     {
@@ -2236,9 +2060,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_SHORT_NAME->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_SHORT_NAME->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#short_name:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_SHORT_NAME",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#short_name",
       "kind": "maps_to"
     },
     {
@@ -2254,9 +2078,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_SHORT_NAME_ENG->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME_ENG:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_SHORT_NAME_ENG->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#short_name_eng:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_SHORT_NAME_ENG",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME_ENG",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#short_name_eng",
       "kind": "maps_to"
     },
     {
@@ -2272,9 +2096,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_FULL_NAME->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_FULL_NAME->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#full_name:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_FULL_NAME",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#full_name",
       "kind": "maps_to"
     },
     {
@@ -2290,9 +2114,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_FULL_NAME_ENG->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME_ENG:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_FULL_NAME_ENG->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#full_name_eng:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_FULL_NAME_ENG",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME_ENG",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#full_name_eng",
       "kind": "maps_to"
     },
     {
@@ -2308,9 +2132,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_COUNTRY_CODE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/COUNTRY_CODE:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_COUNTRY_CODE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#country_code:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_COUNTRY_CODE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/COUNTRY_CODE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#country_code",
       "kind": "maps_to"
     },
     {
@@ -2326,9 +2150,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_INN->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_INN->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#inn:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_INN",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#inn",
       "kind": "maps_to"
     },
     {
@@ -2344,9 +2168,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_KPP->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KPP:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_KPP->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kpp:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_KPP",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KPP",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kpp",
       "kind": "maps_to"
     },
     {
@@ -2362,9 +2186,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_OGRN->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/OGRN:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_OGRN->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ogrn:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_OGRN",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/OGRN",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ogrn",
       "kind": "maps_to"
     },
     {
@@ -2380,9 +2204,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_ADDR_EGRUL_REGION->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ADDR_EGRUL_REGION:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_ADDR_EGRUL_REGION->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#addr_egrul_region:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_ADDR_EGRUL_REGION",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ADDR_EGRUL_REGION",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#addr_egrul_region",
       "kind": "maps_to"
     },
     {
@@ -2398,9 +2222,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_TERMINATION_DATE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TERMINATION_DATE:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_TERMINATION_DATE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#termination_date:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_TERMINATION_DATE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TERMINATION_DATE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#termination_date",
       "kind": "maps_to"
     },
     {
@@ -2416,9 +2240,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_INN_NONRESIDENT->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN_NONRESIDENT:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_INN_NONRESIDENT->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#inn_nonresident:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_INN_NONRESIDENT",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN_NONRESIDENT",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#inn_nonresident",
       "kind": "maps_to"
     },
     {
@@ -2434,9 +2258,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_LEI->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/LEI:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_LEI->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#lei:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_LEI",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/LEI",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#lei",
       "kind": "maps_to"
     },
     {
@@ -2452,9 +2276,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_KIO->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KIO:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_KIO->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kio:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_KIO",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KIO",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kio",
       "kind": "maps_to"
     },
     {
@@ -2470,9 +2294,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_REG_NUM_NONRESIDENT->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/REG_NUM_NONRESIDENT:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_REG_NUM_NONRESIDENT->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#reg_num_nonresident:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_REG_NUM_NONRESIDENT",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/REG_NUM_NONRESIDENT",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#reg_num_nonresident",
       "kind": "maps_to"
     },
     {
@@ -2488,9 +2312,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_CEO_FIRSTNAME->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_FIRSTNAME:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_CEO_FIRSTNAME->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_firstname:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_CEO_FIRSTNAME",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_FIRSTNAME",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_firstname",
       "kind": "maps_to"
     },
     {
@@ -2506,9 +2330,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_CEO_INN->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_INN:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_CEO_INN->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_inn:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_CEO_INN",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_INN",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_inn",
       "kind": "maps_to"
     },
     {
@@ -2524,9 +2348,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_CEO_PATRONYMIC->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_PATRONYMIC:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_CEO_PATRONYMIC->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_patronymic:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_CEO_PATRONYMIC",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_PATRONYMIC",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_patronymic",
       "kind": "maps_to"
     },
     {
@@ -2542,9 +2366,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_CEO_POSITION->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_POSITION:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_CEO_POSITION->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_position:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_CEO_POSITION",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_POSITION",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_position",
       "kind": "maps_to"
     },
     {
@@ -2560,9 +2384,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_CEO_SURNAME->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_SURNAME:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_CEO_SURNAME->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_surname:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_CEO_SURNAME",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_SURNAME",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_surname",
       "kind": "maps_to"
     },
     {
@@ -2578,9 +2402,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_TRUST_RULE_NUMBER->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TRUST_RULE_NUMBER:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_TRUST_RULE_NUMBER->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#trust_rule_number:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_TRUST_RULE_NUMBER",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TRUST_RULE_NUMBER",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#trust_rule_number",
       "kind": "maps_to"
     },
     {
@@ -2596,9 +2420,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_ECBD_ID->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ECBD_ID:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_ECBD_ID->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ecbd_id:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_ECBD_ID",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ECBD_ID",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ecbd_id",
       "kind": "maps_to"
     },
     {
@@ -2614,9 +2438,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_UNICODE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/UNICODE:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_UNICODE->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#unicode:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_UNICODE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/UNICODE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#unicode",
       "kind": "maps_to"
     },
     {
@@ -2632,9 +2456,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_CODE_NSD->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CODE_NSD:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_CODE_NSD->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#code_nsd:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_CODE_NSD",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CODE_NSD",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#code_nsd",
       "kind": "maps_to"
     },
     {
@@ -2650,9 +2474,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_KBD_FIRMID->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KBD_FIRMID:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_KBD_FIRMID->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kbd_firmid:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_KBD_FIRMID",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KBD_FIRMID",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kbd_firmid",
       "kind": "maps_to"
     },
     {
@@ -2668,9 +2492,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_ENTERPRISE_ACTIVE_FLAG->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ACTIVE_FLAG:maps_to",
+      "id": "dams:mapping/mdm/map_ENTERPRISE_ACTIVE_FLAG->dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#active_flag:maps_to",
       "source": "dams:mapping/mdm/map_ENTERPRISE_ACTIVE_FLAG",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ACTIVE_FLAG",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#active_flag",
       "kind": "maps_to"
     },
     {
@@ -2686,9 +2510,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_PERSON_PERSON_ID->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/GOLD_ID:maps_to",
+      "id": "dams:mapping/mdm/map_PERSON_PERSON_ID->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#gold_id:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_PERSON_ID",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/GOLD_ID",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#gold_id",
       "kind": "maps_to"
     },
     {
@@ -2704,9 +2528,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_PERSON_FIO->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIO:maps_to",
+      "id": "dams:mapping/mdm/map_PERSON_FIO->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#fio:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_FIO",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIO",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#fio",
       "kind": "maps_to"
     },
     {
@@ -2722,9 +2546,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_PERSON_LAST_NAME->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/LAST_NAME:maps_to",
+      "id": "dams:mapping/mdm/map_PERSON_LAST_NAME->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#last_name:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_LAST_NAME",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/LAST_NAME",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#last_name",
       "kind": "maps_to"
     },
     {
@@ -2740,9 +2564,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_PERSON_FIRST_NAME->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIRST_NAME:maps_to",
+      "id": "dams:mapping/mdm/map_PERSON_FIRST_NAME->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#first_name:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_FIRST_NAME",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIRST_NAME",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#first_name",
       "kind": "maps_to"
     },
     {
@@ -2758,9 +2582,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_PERSON_PATRONYMIC->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/PATRONYMIC:maps_to",
+      "id": "dams:mapping/mdm/map_PERSON_PATRONYMIC->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#patronymic:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_PATRONYMIC",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/PATRONYMIC",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#patronymic",
       "kind": "maps_to"
     },
     {
@@ -2776,9 +2600,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_PERSON_DATEBIRTH->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/DATEBIRTH:maps_to",
+      "id": "dams:mapping/mdm/map_PERSON_DATEBIRTH->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#datebirth:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_DATEBIRTH",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/DATEBIRTH",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#datebirth",
       "kind": "maps_to"
     },
     {
@@ -2794,9 +2618,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_PERSON_ADDRESS_F->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/ADDRESS_F:maps_to",
+      "id": "dams:mapping/mdm/map_PERSON_ADDRESS_F->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#address_f:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_ADDRESS_F",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/ADDRESS_F",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#address_f",
       "kind": "maps_to"
     },
     {
@@ -2812,9 +2636,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_PERSON_INN->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/INN:maps_to",
+      "id": "dams:mapping/mdm/map_PERSON_INN->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#inn:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_INN",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/INN",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#inn",
       "kind": "maps_to"
     },
     {
@@ -2830,9 +2654,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_PERSON_SNILS->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/SNILS:maps_to",
+      "id": "dams:mapping/mdm/map_PERSON_SNILS->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#snils:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_SNILS",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/SNILS",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#snils",
       "kind": "maps_to"
     },
     {
@@ -2848,9 +2672,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_CODE->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE:maps_to",
+      "id": "dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_CODE->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_code:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_CODE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_code",
       "kind": "maps_to"
     },
     {
@@ -2866,9 +2690,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_CODE_OMEGA->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE_OMEGA:maps_to",
+      "id": "dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_CODE_OMEGA->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_code_omega:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_CODE_OMEGA",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE_OMEGA",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_code_omega",
       "kind": "maps_to"
     },
     {
@@ -2884,9 +2708,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_TYPE->dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_TYPE:maps_to",
+      "id": "dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_TYPE->dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_type:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_TYPE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_TYPE",
+      "target": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_type",
       "kind": "maps_to"
     },
     {
@@ -2902,9 +2726,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_PERSON_CEO_ENTERPRISE_ID->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY2:maps_to",
+      "id": "dams:mapping/mdm/map_PERSON_CEO_ENTERPRISE_ID->dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO#reference_key2:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_CEO_ENTERPRISE_ID",
-      "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY2",
+      "target": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO#reference_key2",
       "kind": "maps_to"
     },
     {
@@ -2920,9 +2744,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_PERSON_CEO_PERSON_ID->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY1:maps_to",
+      "id": "dams:mapping/mdm/map_PERSON_CEO_PERSON_ID->dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO#reference_key1:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_CEO_PERSON_ID",
-      "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY1",
+      "target": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO#reference_key1",
       "kind": "maps_to"
     },
     {
@@ -2938,9 +2762,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_PERSON_REPRESENTATIVE_ENTERPRISE_ID->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY2:maps_to",
+      "id": "dams:mapping/mdm/map_PERSON_REPRESENTATIVE_ENTERPRISE_ID->dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key2:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_REPRESENTATIVE_ENTERPRISE_ID",
-      "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY2",
+      "target": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key2",
       "kind": "maps_to"
     },
     {
@@ -2956,9 +2780,9 @@
       "kind": "maps_to"
     },
     {
-      "id": "dams:mapping/mdm/map_PERSON_REPRESENTATIVE_PERSON_ID->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY3:maps_to",
+      "id": "dams:mapping/mdm/map_PERSON_REPRESENTATIVE_PERSON_ID->dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key3:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_REPRESENTATIVE_PERSON_ID",
-      "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY3",
+      "target": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key3",
       "kind": "maps_to"
     },
     {
@@ -5880,7 +5704,7 @@
             "title": "revision",
             "description": null,
             "attributes": {
-              "value": "98c818f20e38"
+              "value": "c0402adba083"
             },
             "children": [],
             "tags": [],
@@ -5891,7 +5715,7 @@
             "title": "content_digest",
             "description": null,
             "attributes": {
-              "value": "sha256:98c818f20e38187a5023654222289d53ccdfdd0c01b54bb87e04c4753a62f9ef"
+              "value": "sha256:c0402adba08359ab76c509769eb3484f196a5c2dbffff694d10bb562a1624ae4"
             },
             "children": [],
             "tags": [],
@@ -5902,7 +5726,7 @@
             "title": "nodes",
             "description": null,
             "attributes": {
-              "value": 146
+              "value": 150
             },
             "children": [],
             "tags": [],
@@ -5913,7 +5737,7 @@
             "title": "edges",
             "description": null,
             "attributes": {
-              "value": 339
+              "value": 305
             },
             "children": [],
             "tags": [],
@@ -6528,468 +6352,12 @@
             "source_ref": null
           },
           {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/GOLD_ID",
-            "title": "GOLD_ID",
-            "description": "Уникальный GUID золотой записи (MDMID) ЮЛ",
-            "attributes": {
-              "kind": "field",
-              "name": "GOLD_ID"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME",
-            "title": "SHORT_NAME",
-            "description": "Краткое наименование ЮЛ",
-            "attributes": {
-              "kind": "field",
-              "name": "SHORT_NAME"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/SHORT_NAME_ENG",
-            "title": "SHORT_NAME_ENG",
-            "description": "Краткое наименование ЮЛ (на английском языке)",
-            "attributes": {
-              "kind": "field",
-              "name": "SHORT_NAME_ENG"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME",
-            "title": "FULL_NAME",
-            "description": "Полное наименование ЮЛ",
-            "attributes": {
-              "kind": "field",
-              "name": "FULL_NAME"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/FULL_NAME_ENG",
-            "title": "FULL_NAME_ENG",
-            "description": "Полное наименование ЮЛ (на английском языке)",
-            "attributes": {
-              "kind": "field",
-              "name": "FULL_NAME_ENG"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/COUNTRY_CODE",
-            "title": "COUNTRY_CODE",
-            "description": "Код страны",
-            "attributes": {
-              "kind": "field",
-              "name": "COUNTRY_CODE"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN",
-            "title": "INN",
-            "description": "ИНН",
-            "attributes": {
-              "kind": "field",
-              "name": "INN"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KPP",
-            "title": "KPP",
-            "description": "КПП",
-            "attributes": {
-              "kind": "field",
-              "name": "KPP"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/OGRN",
-            "title": "OGRN",
-            "description": "ОГРН",
-            "attributes": {
-              "kind": "field",
-              "name": "OGRN"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ADDR_EGRUL_REGION",
-            "title": "ADDR_EGRUL_REGION",
-            "description": "Адрес ЮЛ: Субъект",
-            "attributes": {
-              "kind": "field",
-              "name": "ADDR_EGRUL_REGION"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TERMINATION_DATE",
-            "title": "TERMINATION_DATE",
-            "description": "Дата прекращения юридического лица",
-            "attributes": {
-              "kind": "field",
-              "name": "TERMINATION_DATE"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/INN_NONRESIDENT",
-            "title": "INN_NONRESIDENT",
-            "description": "ИНН организации-нерезидента (ИНН в стране нерезидента)",
-            "attributes": {
-              "kind": "field",
-              "name": "INN_NONRESIDENT"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/LEI",
-            "title": "LEI",
-            "description": "Международный код идентификации юридического лица LEI",
-            "attributes": {
-              "kind": "field",
-              "name": "LEI"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KIO",
-            "title": "KIO",
-            "description": "КИО",
-            "attributes": {
-              "kind": "field",
-              "name": "KIO"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/REG_NUM_NONRESIDENT",
-            "title": "REG_NUM_NONRESIDENT",
-            "description": "Регистрационный номер организации-нерезидента",
-            "attributes": {
-              "kind": "field",
-              "name": "REG_NUM_NONRESIDENT"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_FIRSTNAME",
-            "title": "CEO_FIRSTNAME",
-            "description": "Имя руководителя",
-            "attributes": {
-              "kind": "field",
-              "name": "CEO_FIRSTNAME"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_INN",
-            "title": "CEO_INN",
-            "description": "Сведения о лице, имеющем право без доверенности действовать от имени ЮЛ: ИНН",
-            "attributes": {
-              "kind": "field",
-              "name": "CEO_INN"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_PATRONYMIC",
-            "title": "CEO_PATRONYMIC",
-            "description": "Отчество руководителя",
-            "attributes": {
-              "kind": "field",
-              "name": "CEO_PATRONYMIC"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_POSITION",
-            "title": "CEO_POSITION",
-            "description": "Должность руководителя",
-            "attributes": {
-              "kind": "field",
-              "name": "CEO_POSITION"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CEO_SURNAME",
-            "title": "CEO_SURNAME",
-            "description": "Фамилия руководителя",
-            "attributes": {
-              "kind": "field",
-              "name": "CEO_SURNAME"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/TRUST_RULE_NUMBER",
-            "title": "TRUST_RULE_NUMBER",
-            "description": "Номер правил доверительного управления",
-            "attributes": {
-              "kind": "field",
-              "name": "TRUST_RULE_NUMBER"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ECBD_ID",
-            "title": "ECBD_ID",
-            "description": "ID в ЕКБД",
-            "attributes": {
-              "kind": "field",
-              "name": "ECBD_ID"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/UNICODE",
-            "title": "UNICODE",
-            "description": "Унифицированный код участника в ЕКБД",
-            "attributes": {
-              "kind": "field",
-              "name": "UNICODE"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/CODE_NSD",
-            "title": "CODE_NSD",
-            "description": "Код НРД",
-            "attributes": {
-              "kind": "field",
-              "name": "CODE_NSD"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/KBD_FIRMID",
-            "title": "KBD_FIRMID",
-            "description": "ID в КБД",
-            "attributes": {
-              "kind": "field",
-              "name": "KBD_FIRMID"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/ACTIVE_FLAG",
-            "title": "ACTIVE_FLAG",
-            "description": "Является ли запись удаленной (0) или активной (1) хотя бы на одном из источников в последней загрузке",
-            "attributes": {
-              "kind": "field",
-              "name": "ACTIVE_FLAG"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
             "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
             "title": "Физические лица (ФЛ)",
             "description": "Физические лица (ФЛ)",
             "attributes": {
               "kind": "technical_asset",
               "name": "INTERNALDM_MDM_V_PERSON"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/GOLD_ID",
-            "title": "GOLD_ID",
-            "description": "Уникальный GUID золотой записи (MDMID) ФЛ",
-            "attributes": {
-              "kind": "field",
-              "name": "GOLD_ID"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIO",
-            "title": "FIO",
-            "description": "ФИО",
-            "attributes": {
-              "kind": "field",
-              "name": "FIO"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/LAST_NAME",
-            "title": "LAST_NAME",
-            "description": "Фамилия",
-            "attributes": {
-              "kind": "field",
-              "name": "LAST_NAME"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/FIRST_NAME",
-            "title": "FIRST_NAME",
-            "description": "Имя",
-            "attributes": {
-              "kind": "field",
-              "name": "FIRST_NAME"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/PATRONYMIC",
-            "title": "PATRONYMIC",
-            "description": "Отчество",
-            "attributes": {
-              "kind": "field",
-              "name": "PATRONYMIC"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/DATEBIRTH",
-            "title": "DATEBIRTH",
-            "description": "Дата рождения",
-            "attributes": {
-              "kind": "field",
-              "name": "DATEBIRTH"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/ADDRESS_F",
-            "title": "ADDRESS_F",
-            "description": "Адрес физический",
-            "attributes": {
-              "kind": "field",
-              "name": "ADDRESS_F"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/INN",
-            "title": "INN",
-            "description": "ИНН",
-            "attributes": {
-              "kind": "field",
-              "name": "INN"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/SNILS",
-            "title": "SNILS",
-            "description": "СНИЛС",
-            "attributes": {
-              "kind": "field",
-              "name": "SNILS"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE",
-            "title": "IDENTITY_DOCUMENT_CODE",
-            "description": "Код документа, удостоверяющего личность",
-            "attributes": {
-              "kind": "field",
-              "name": "IDENTITY_DOCUMENT_CODE"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_CODE_OMEGA",
-            "title": "IDENTITY_DOCUMENT_CODE_OMEGA",
-            "description": "Код документа, удостоверяющего личность (по классификации ОМЕГА)",
-            "attributes": {
-              "kind": "field",
-              "name": "IDENTITY_DOCUMENT_CODE_OMEGA"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON/IDENTITY_DOCUMENT_TYPE",
-            "title": "IDENTITY_DOCUMENT_TYPE",
-            "description": "Тип документа, удостоверяющего личность",
-            "attributes": {
-              "kind": "field",
-              "name": "IDENTITY_DOCUMENT_TYPE"
             },
             "children": [],
             "tags": [],
@@ -7008,30 +6376,6 @@
             "source_ref": null
           },
           {
-            "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY2",
-            "title": "REFERENCE_KEY2",
-            "description": "Идентификатор записи в справочнике ЮЛ",
-            "attributes": {
-              "kind": "field",
-              "name": "REFERENCE_KEY2"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO/REFERENCE_KEY1",
-            "title": "REFERENCE_KEY1",
-            "description": "Идентификатор записи в справочнике ФЛ",
-            "attributes": {
-              "kind": "field",
-              "name": "REFERENCE_KEY1"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
             "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
             "title": "Представители:Отношение ЮЛ - ФЛ",
             "description": "MOSCOW_EXCHANGE.T_REPRESENTATIVE",
@@ -7044,7 +6388,535 @@
             "source_ref": null
           },
           {
-            "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY2",
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+            "title": "INTERNALDM_MDM_V_ENTERPRISE",
+            "description": "Relational structure for INTERNALDM_MDM_V_ENTERPRISE",
+            "attributes": {
+              "kind": "technical_asset",
+              "name": "INTERNALDM_MDM_V_ENTERPRISE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#gold_id",
+            "title": "GOLD_ID",
+            "description": "Уникальный GUID золотой записи (MDMID) ЮЛ",
+            "attributes": {
+              "kind": "field",
+              "name": "GOLD_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#short_name",
+            "title": "SHORT_NAME",
+            "description": "Краткое наименование ЮЛ",
+            "attributes": {
+              "kind": "field",
+              "name": "SHORT_NAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#short_name_eng",
+            "title": "SHORT_NAME_ENG",
+            "description": "Краткое наименование ЮЛ (на английском языке)",
+            "attributes": {
+              "kind": "field",
+              "name": "SHORT_NAME_ENG"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#full_name",
+            "title": "FULL_NAME",
+            "description": "Полное наименование ЮЛ",
+            "attributes": {
+              "kind": "field",
+              "name": "FULL_NAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#full_name_eng",
+            "title": "FULL_NAME_ENG",
+            "description": "Полное наименование ЮЛ (на английском языке)",
+            "attributes": {
+              "kind": "field",
+              "name": "FULL_NAME_ENG"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#country_code",
+            "title": "COUNTRY_CODE",
+            "description": "Код страны",
+            "attributes": {
+              "kind": "field",
+              "name": "COUNTRY_CODE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#inn",
+            "title": "INN",
+            "description": "ИНН",
+            "attributes": {
+              "kind": "field",
+              "name": "INN"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kpp",
+            "title": "KPP",
+            "description": "КПП",
+            "attributes": {
+              "kind": "field",
+              "name": "KPP"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ogrn",
+            "title": "OGRN",
+            "description": "ОГРН",
+            "attributes": {
+              "kind": "field",
+              "name": "OGRN"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#addr_egrul_region",
+            "title": "ADDR_EGRUL_REGION",
+            "description": "Адрес ЮЛ: Субъект",
+            "attributes": {
+              "kind": "field",
+              "name": "ADDR_EGRUL_REGION"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#termination_date",
+            "title": "TERMINATION_DATE",
+            "description": "Дата прекращения юридического лица",
+            "attributes": {
+              "kind": "field",
+              "name": "TERMINATION_DATE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#inn_nonresident",
+            "title": "INN_NONRESIDENT",
+            "description": "ИНН организации-нерезидента (ИНН в стране нерезидента)",
+            "attributes": {
+              "kind": "field",
+              "name": "INN_NONRESIDENT"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#lei",
+            "title": "LEI",
+            "description": "Международный код идентификации юридического лица LEI",
+            "attributes": {
+              "kind": "field",
+              "name": "LEI"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kio",
+            "title": "KIO",
+            "description": "КИО",
+            "attributes": {
+              "kind": "field",
+              "name": "KIO"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#reg_num_nonresident",
+            "title": "REG_NUM_NONRESIDENT",
+            "description": "Регистрационный номер организации-нерезидента",
+            "attributes": {
+              "kind": "field",
+              "name": "REG_NUM_NONRESIDENT"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_firstname",
+            "title": "CEO_FIRSTNAME",
+            "description": "Имя руководителя",
+            "attributes": {
+              "kind": "field",
+              "name": "CEO_FIRSTNAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_inn",
+            "title": "CEO_INN",
+            "description": "Сведения о лице, имеющем право без доверенности действовать от имени ЮЛ: ИНН",
+            "attributes": {
+              "kind": "field",
+              "name": "CEO_INN"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_patronymic",
+            "title": "CEO_PATRONYMIC",
+            "description": "Отчество руководителя",
+            "attributes": {
+              "kind": "field",
+              "name": "CEO_PATRONYMIC"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_position",
+            "title": "CEO_POSITION",
+            "description": "Должность руководителя",
+            "attributes": {
+              "kind": "field",
+              "name": "CEO_POSITION"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_surname",
+            "title": "CEO_SURNAME",
+            "description": "Фамилия руководителя",
+            "attributes": {
+              "kind": "field",
+              "name": "CEO_SURNAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#trust_rule_number",
+            "title": "TRUST_RULE_NUMBER",
+            "description": "Номер правил доверительного управления",
+            "attributes": {
+              "kind": "field",
+              "name": "TRUST_RULE_NUMBER"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ecbd_id",
+            "title": "ECBD_ID",
+            "description": "ID в ЕКБД",
+            "attributes": {
+              "kind": "field",
+              "name": "ECBD_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#unicode",
+            "title": "UNICODE",
+            "description": "Унифицированный код участника в ЕКБД",
+            "attributes": {
+              "kind": "field",
+              "name": "UNICODE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#code_nsd",
+            "title": "CODE_NSD",
+            "description": "Код НРД",
+            "attributes": {
+              "kind": "field",
+              "name": "CODE_NSD"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kbd_firmid",
+            "title": "KBD_FIRMID",
+            "description": "ID в КБД",
+            "attributes": {
+              "kind": "field",
+              "name": "KBD_FIRMID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#active_flag",
+            "title": "ACTIVE_FLAG",
+            "description": "Является ли запись удаленной (0) или активной (1) хотя бы на одном из источников в последней загрузке",
+            "attributes": {
+              "kind": "field",
+              "name": "ACTIVE_FLAG"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON",
+            "title": "INTERNALDM_MDM_V_PERSON",
+            "description": "Relational structure for INTERNALDM_MDM_V_PERSON",
+            "attributes": {
+              "kind": "technical_asset",
+              "name": "INTERNALDM_MDM_V_PERSON"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#gold_id",
+            "title": "GOLD_ID",
+            "description": "Уникальный GUID золотой записи (MDMID) ФЛ",
+            "attributes": {
+              "kind": "field",
+              "name": "GOLD_ID"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#fio",
+            "title": "FIO",
+            "description": "ФИО",
+            "attributes": {
+              "kind": "field",
+              "name": "FIO"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#last_name",
+            "title": "LAST_NAME",
+            "description": "Фамилия",
+            "attributes": {
+              "kind": "field",
+              "name": "LAST_NAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#first_name",
+            "title": "FIRST_NAME",
+            "description": "Имя",
+            "attributes": {
+              "kind": "field",
+              "name": "FIRST_NAME"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#patronymic",
+            "title": "PATRONYMIC",
+            "description": "Отчество",
+            "attributes": {
+              "kind": "field",
+              "name": "PATRONYMIC"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#datebirth",
+            "title": "DATEBIRTH",
+            "description": "Дата рождения",
+            "attributes": {
+              "kind": "field",
+              "name": "DATEBIRTH"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#address_f",
+            "title": "ADDRESS_F",
+            "description": "Адрес физический",
+            "attributes": {
+              "kind": "field",
+              "name": "ADDRESS_F"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#inn",
+            "title": "INN",
+            "description": "ИНН",
+            "attributes": {
+              "kind": "field",
+              "name": "INN"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#snils",
+            "title": "SNILS",
+            "description": "СНИЛС",
+            "attributes": {
+              "kind": "field",
+              "name": "SNILS"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_code",
+            "title": "IDENTITY_DOCUMENT_CODE",
+            "description": "Код документа, удостоверяющего личность",
+            "attributes": {
+              "kind": "field",
+              "name": "IDENTITY_DOCUMENT_CODE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_code_omega",
+            "title": "IDENTITY_DOCUMENT_CODE_OMEGA",
+            "description": "Код документа, удостоверяющего личность (по классификации ОМЕГА)",
+            "attributes": {
+              "kind": "field",
+              "name": "IDENTITY_DOCUMENT_CODE_OMEGA"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_type",
+            "title": "IDENTITY_DOCUMENT_TYPE",
+            "description": "Тип документа, удостоверяющего личность",
+            "attributes": {
+              "kind": "field",
+              "name": "IDENTITY_DOCUMENT_TYPE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
+            "title": "MOSCOW_EXCHANGE_T_REF_CEO",
+            "description": "Relational structure for MOSCOW_EXCHANGE_T_REF_CEO",
+            "attributes": {
+              "kind": "technical_asset",
+              "name": "MOSCOW_EXCHANGE_T_REF_CEO"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO#reference_key2",
+            "title": "REFERENCE_KEY2",
+            "description": "Идентификатор записи в справочнике ЮЛ",
+            "attributes": {
+              "kind": "field",
+              "name": "REFERENCE_KEY2"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO#reference_key1",
+            "title": "REFERENCE_KEY1",
+            "description": "Идентификатор записи в справочнике ФЛ",
+            "attributes": {
+              "kind": "field",
+              "name": "REFERENCE_KEY1"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
+            "title": "MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
+            "description": "Relational structure for MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
+            "attributes": {
+              "kind": "technical_asset",
+              "name": "MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE"
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key2",
             "title": "REFERENCE_KEY2",
             "description": "ID записи в справочнике ЮЛ",
             "attributes": {
@@ -7056,7 +6928,7 @@
             "source_ref": null
           },
           {
-            "id": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE/REFERENCE_KEY3",
+            "id": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key3",
             "title": "REFERENCE_KEY3",
             "description": "ID записи в справочнике ФЛ",
             "attributes": {

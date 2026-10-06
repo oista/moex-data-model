@@ -1,0 +1,328 @@
+id: https://data.moex.com/dams/datatypes/v0.1
+name: moex_datatypes
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  dams: https://data.moex.com/dams/
+imports:
+  - linkml:types
+  - moex-types
+  - moex-registries
+  - moex-governance
+  - moex-core
+  - moex-semantic
+default_prefix: dams
+default_range: string
+
+classes:
+  DataType:
+    is_a: ModelElement
+    class_uri: dams:DataType
+    close_mappings:
+      - rdfs:Datatype
+    comments:
+      - ISO/IEC 11179 Datatype; корпоративный реестр логических типов (ADR-036).
+    description: >
+      Корпоративный тип данных: семейство, параметры представления и соответствие
+      XSD/LinkML. Допустим только в корпоративном реестре типов.
+    slots:
+      - type_name
+      - type_family
+      - precision
+      - scale
+      - max_length
+      - min_length
+      - datatype_timezone_policy
+      - charset
+      - xsd_datatype
+      - linkml_type
+      - base_type_ref
+    unique_keys:
+      data_type_name_key:
+        unique_key_slots:
+          - type_name
+    rules:
+      - description: precision только для decimal
+        preconditions:
+          slot_conditions:
+            precision:
+              value_presence: PRESENT
+        postconditions:
+          slot_conditions:
+            type_family:
+              equals_string: decimal
+      - description: scale только для decimal
+        preconditions:
+          slot_conditions:
+            scale:
+              value_presence: PRESENT
+        postconditions:
+          slot_conditions:
+            type_family:
+              equals_string: decimal
+      - description: max_length только для string или binary
+        preconditions:
+          slot_conditions:
+            max_length:
+              value_presence: PRESENT
+        postconditions:
+          slot_conditions:
+            type_family:
+              any_of:
+                - equals_string: string
+                - equals_string: binary
+      - description: min_length только для string или binary
+        preconditions:
+          slot_conditions:
+            min_length:
+              value_presence: PRESENT
+        postconditions:
+          slot_conditions:
+            type_family:
+              any_of:
+                - equals_string: string
+                - equals_string: binary
+
+  NativeTypeBinding:
+    class_uri: dams:NativeTypeBinding
+    description: >
+      Привязка нативного типа диалекта (SQL, JSON Schema и т.п.) к корпоративному
+      DataType с оценкой потери точности.
+    slots:
+      - binding_id
+      - dialect
+      - dialect_native_type
+      - data_type_ref
+      - lossiness
+      - parameter_mapping
+    slot_usage:
+      data_type_ref:
+        required: true
+    unique_keys:
+      native_type_binding_key:
+        unique_key_slots:
+          - dialect
+          - dialect_native_type
+          - data_type_ref
+
+  ValueDomain:
+    is_a: ModelElement
+    class_uri: dams:ValueDomain
+    close_mappings: []
+    comments:
+      - ISO/IEC 11179 Value Domain — представление допустимых значений (ADR-035).
+    description: >
+      Представление значений: тип, формат, единица, допустимые значения или
+      ссылка на внешний набор. Допустим в пакетах enterprise и solution.
+    slots:
+      - value_domain_kind
+      - data_type_ref
+      - conceptual_domain_ref
+      - unit_code
+      - format_pattern
+      - min_value
+      - max_value
+      - permissible_values
+      - value_set_source
+      - dynamic_query
+    slot_usage:
+      data_type_ref:
+        required: true
+    rules:
+      - description: enumerated-домен требует permissible_values
+        preconditions:
+          slot_conditions:
+            value_domain_kind:
+              equals_string: enumerated
+        postconditions:
+          slot_conditions:
+            permissible_values:
+              value_presence: PRESENT
+      - description: described-домен не содержит permissible_values
+        preconditions:
+          slot_conditions:
+            value_domain_kind:
+              equals_string: described
+        postconditions:
+          slot_conditions:
+            permissible_values:
+              value_presence: ABSENT
+      - description: reference_set не содержит permissible_values
+        preconditions:
+          slot_conditions:
+            value_domain_kind:
+              equals_string: reference_set
+        postconditions:
+          slot_conditions:
+            permissible_values:
+              value_presence: ABSENT
+
+  PermissibleValue:
+    class_uri: dams:PermissibleValue
+    comments:
+      - ISO/IEC 11179 Permissible Value; LinkML enum permissible value (ADR-035).
+    description: Допустимое значение внутри ValueDomain (встраиваемый).
+    slots:
+      - value_code
+      - value_label
+      - value_definition
+      - value_meaning_key
+      - meaning_term_ref
+      - ordinal
+      - value_status
+
+  ValueSetQuery:
+    class_uri: dams:ValueSetQuery
+    description: >
+      Динамический запрос набора значений по образцу LinkML reachable_from
+      (source ontology, узлы, типы связей).
+    slots:
+      - value_set_query_id
+      - source_ontology
+      - source_nodes
+      - relationship_types
+      - include_self
+
+slots:
+  type_name:
+    range: string
+    required: true
+    description: Каноническое имя типа в корпоративном реестре.
+  type_family:
+    range: TypeFamilyEnum
+    required: true
+    description: Семейство типа (boolean, integer, decimal, …).
+  precision:
+    range: integer
+    minimum_value: 1
+    description: Точность для decimal (общее число цифр).
+  scale:
+    range: integer
+    minimum_value: 0
+    description: Масштаб для decimal (число цифр после запятой); scale ≤ precision.
+  max_length:
+    range: integer
+    minimum_value: 0
+    description: Максимальная длина для string/binary.
+  min_length:
+    range: integer
+    minimum_value: 0
+    description: Минимальная длина для string/binary.
+  datatype_timezone_policy:
+    range: TimezonePolicyEnum
+    description: Политика часового пояса для date/time/datetime типов.
+  charset:
+    range: string
+    description: Кодировка для string/binary.
+  xsd_datatype:
+    range: uriorcurie
+    description: Соответствующий XSD datatype (например xsd:string).
+  linkml_type:
+    range: string
+    description: Имя типа LinkML (string, integer, …).
+  base_type_ref:
+    range: DataType
+    inlined: false
+    description: Базовый тип, от которого наследуются параметры.
+  binding_id:
+    identifier: true
+    range: uriorcurie
+    required: true
+  dialect:
+    range: string
+    required: true
+    description: Диалект/платформа нативного типа (postgresql, oracle, json, …).
+  dialect_native_type:
+    range: string
+    required: true
+    description: >
+      Имя нативного типа в диалекте. Отдельный слот от SchemaNode.native_type
+      (другой контекст; общий URI ломает SchemaLoader merge — ADR-036).
+  data_type_ref:
+    range: DataType
+    inlined: false
+    required: false
+    description: Ссылка на корпоративный DataType.
+  unit_code:
+    range: string
+    description: Код единицы измерения (UCUM / корпоративный код) для ValueDomain.
+  format_pattern:
+    range: string
+    description: Шаблон/формат значения для ValueDomain (regex или маска).
+  lossiness:
+    range: LossinessEnum
+    required: true
+    description: Оценка потери точности при отображении.
+  parameter_mapping:
+    range: string
+    description: Описание отображения параметров (precision/scale/length).
+  value_domain_kind:
+    range: ValueDomainKindEnum
+    required: true
+    description: Вид домена значений (enumerated | described | reference_set).
+  conceptual_domain_ref:
+    range: ConceptualDomain
+    inlined: false
+    description: Опциональная ссылка на концептуальный домен смыслов.
+  min_value:
+    range: string
+    description: Минимальное допустимое значение (described).
+  max_value:
+    range: string
+    description: Максимальное допустимое значение (described).
+  permissible_values:
+    range: PermissibleValue
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Встроенный список допустимых значений.
+  value_set_source:
+    range: uriorcurie
+    description: Внешний источник набора значений (reference_set).
+  dynamic_query:
+    range: ValueSetQuery
+    inlined: true
+    description: Динамический запрос набора (reachable_from).
+  value_code:
+    identifier: true
+    range: string
+    required: true
+    description: Код значения, уникальный внутри ValueDomain.
+  value_label:
+    range: string
+    description: Метка допустимого значения.
+  value_definition:
+    range: string
+    description: Определение допустимого значения.
+  value_meaning_key:
+    range: string
+    description: Ключ ValueMeaning в связанном ConceptualDomain.
+  ordinal:
+    range: integer
+    description: Порядок значения в перечислении.
+  value_status:
+    range: LifecycleStatusEnum
+    description: Статус допустимого значения.
+  value_set_query_id:
+    identifier: true
+    range: string
+    required: true
+    description: Локальный идентификатор динамического запроса внутри ValueDomain.
+  source_ontology:
+    range: uriorcurie
+    required: true
+    description: IRI/CURIE исходной онтологии для динамического набора.
+  source_nodes:
+    range: uriorcurie
+    multivalued: true
+    description: Стартовые узлы reachable_from.
+  relationship_types:
+    range: uriorcurie
+    multivalued: true
+    description: Типы связей для обхода.
+  include_self:
+    range: boolean
+    description: Включать стартовые узлы в результат.

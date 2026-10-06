@@ -7,6 +7,8 @@
     click HasDefinition href "../HasDefinition"
       HasDefinition <|-- ConceptualEntity
         click ConceptualEntity href "../ConceptualEntity"
+      HasDefinition <|-- ConceptualProperty
+        click ConceptualProperty href "../ConceptualProperty"
       HasDefinition <|-- LogicalEntity
         click LogicalEntity href "../LogicalEntity"
       HasDefinition <|-- LogicalAttribute

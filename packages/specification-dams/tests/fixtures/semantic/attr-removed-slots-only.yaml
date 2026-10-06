@@ -1,0 +1,34 @@
+# Negative fixture: LogicalAttribute with only removed representation slots (PR-5).
+# Expected: DAMS-SEM-ATTR-TYPE error — value_domain_ref OR data_type_ref required.
+element_id: dams:model/neg/attr-removed-slots-only
+name: neg_attr_removed_slots_only
+title: Negative — only deleted slots
+description: Fixture for PR-5 strict typing.
+lifecycle_status: active
+implementation_scope: solution
+solution_ref: eam:solution/NEG
+domain_contexts:
+  - element_id: dams:ctx/neg
+    name: neg_ctx
+    description: Neg context
+    lifecycle_status: active
+logical_entities:
+  - element_id: dams:logical/neg/E
+    name: E
+    description: Entity
+    lifecycle_status: active
+    context_ref: dams:ctx/neg
+    solution_data_role: producer
+    attributes:
+      - element_id: dams:logical/neg/E/a
+        name: a
+        description: Attribute typed only via removed slots
+        lifecycle_status: active
+        owner_entity_ref: dams:logical/neg/E
+        # Removed in PR-5 — must not satisfy typing:
+        logical_type: string
+        format_pattern: "\\d+"
+        value_set_ref: urn:example:vs
+        unit_code: 1
+        required: true
+        multivalued: false

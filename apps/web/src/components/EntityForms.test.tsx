@@ -19,7 +19,7 @@ logical_entities:
     attributes:
       - element_id: dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID
         name: enterpriseId
-        logical_type: identifier
+        data_type_ref: dams:datatype/identifier
         required: true
 `;
 

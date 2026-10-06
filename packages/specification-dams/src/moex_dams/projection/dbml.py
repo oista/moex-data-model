@@ -11,6 +11,11 @@ from typing import Any, Literal
 
 import yaml
 
+from moex_dams.rules.data_structure import (
+    scalar_nodes_for_carrier,
+    structures_by_id,
+)
+
 Profile = Literal["logical", "physical", "conceptual"]
 
 GENERATOR = "moex-dams-dbml/0.1"
@@ -45,6 +50,16 @@ def _ident(raw: str | None, *, fallback: str) -> str:
     if cleaned and cleaned[0].isdigit():
         cleaned = f"t_{cleaned}"
     return cleaned or fallback
+
+
+def effective_attr_type(attr: dict[str, Any]) -> str:
+    """Leaf type name from data_type_ref (required representation after PR-5)."""
+    dtr = str(attr.get("data_type_ref") or "").strip()
+    if dtr:
+        leaf = dtr.rsplit("/", 1)[-1]
+        if leaf:
+            return leaf
+    return "string"
 
 
 def _escape_note(text: str) -> str:
@@ -162,7 +177,7 @@ def project_model_package_to_dbml(
                 if not isinstance(attr, dict):
                     continue
                 cname = _ident(attr.get("name"), fallback="attr")
-                ctype = _ident(attr.get("logical_type"), fallback="string")
+                ctype = _ident(effective_attr_type(attr), fallback="string")
                 required = bool(attr.get("required"))
                 aid = attr.get("element_id")
                 note = str(aid) if aid else None
@@ -178,13 +193,14 @@ def project_model_package_to_dbml(
                     col_index[str(aid)] = (tname, cname)
                 if default_col is None:
                     default_col = cname
-                elif attr.get("logical_type") == "identifier":
+                elif effective_attr_type(attr) == "identifier":
                     default_col = cname
             if eid and default_col:
                 entity_default_col[str(eid)] = default_col
             lines.append("}")
             lines.append("")
     else:
+        by_structure = structures_by_id(data)
         for obj in data.get("data_carriers") or []:
             if not isinstance(obj, dict):
                 continue
@@ -203,27 +219,22 @@ def project_model_package_to_dbml(
             lines.append(f"Table {tname} [headercolor: {color}] {{")
             lines.append(f"  Note: '{_escape_note('; '.join(note_bits))}'")
             default_col = None
-            for field in obj.get("physical_fields") or []:
-                if not isinstance(field, dict):
-                    continue
+            for node_ref, field in scalar_nodes_for_carrier(obj, by_structure):
                 cname = _ident(
-                    field.get("native_name") or field.get("name"),
+                    field.get("native_name") or field.get("local_key"),
                     fallback="field",
                 )
                 ctype = _ident(field.get("native_type"), fallback="string")
                 required = bool(field.get("required"))
-                fid = field.get("element_id")
-                note = str(fid) if fid else None
                 lines.append(
                     _column_line(
                         name=cname,
                         type_name=ctype,
                         required=required,
-                        note=note,
+                        note=node_ref,
                     )
                 )
-                if fid:
-                    col_index[str(fid)] = (tname, cname)
+                col_index[node_ref] = (tname, cname)
                 if default_col is None:
                     default_col = cname
             if oid and default_col:

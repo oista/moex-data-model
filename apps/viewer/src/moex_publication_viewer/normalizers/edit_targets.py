@@ -91,7 +91,7 @@ def attach_yaml_list_edit_targets(
         nested_list_key = None
         nested_records: list[dict[str, Any]] = []
         if rec is not None:
-            for nk in ("attributes", "physical_fields"):
+            for nk in ("attributes", "nodes"):
                 raw = rec.get(nk)
                 if isinstance(raw, list) and raw and isinstance(raw[0], dict):
                     nested_list_key = nk
@@ -99,18 +99,31 @@ def attach_yaml_list_edit_targets(
                     break
 
         nested_by_id = {
-            str(r.get("element_id") or r.get("id") or r.get("name")): r
+            str(
+                r.get("element_id")
+                or r.get("local_key")
+                or r.get("id")
+                or r.get("name")
+            ): r
             for r in nested_records
-            if r.get("element_id") or r.get("id") or r.get("name")
+            if r.get("element_id")
+            or r.get("local_key")
+            or r.get("id")
+            or r.get("name")
         }
 
         for child in item.children or []:
             if nested_list_key and child.id in nested_by_id and prefix:
-                child_prefix = (
-                    f"{prefix}.{nested_list_key}"
-                    f"[element_id={nested_by_id[child.id].get('element_id', child.id)}]"
-                )
                 child_rec = nested_by_id[child.id]
+                key_attr = (
+                    "local_key"
+                    if nested_list_key == "nodes" and child_rec.get("local_key")
+                    else "element_id"
+                )
+                key_val = child_rec.get(key_attr, child.id)
+                child_prefix = (
+                    f"{prefix}.{nested_list_key}[{key_attr}={key_val}]"
+                )
                 child_targets = _targets_for_record(
                     file=file, yaml_path_prefix=child_prefix, record=child_rec
                 )

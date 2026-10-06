@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-05T21:35:07
+# Generation date: 2026-10-06T09:36:48
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -29,7 +29,7 @@ from jsonasobj2 import (
 )
 from linkml_runtime.linkml_model.meta import (
     EnumDefinition,
-    PermissibleValue,
+    PermissibleValue as LinkMLPermissibleValue,
     PvFormulaOptions
 )
 from linkml_runtime.utils.curienamespace import CurieNamespace
@@ -60,12 +60,15 @@ from linkml_runtime.linkml_model.types import Boolean, Datetime, Decimal, Intege
 from linkml_runtime.utils.metamodelcore import Bool, Decimal, URI, URIorCURIE, XSDDateTime
 
 metamodel_version = "1.11.0"
-version = "0.1.0"
+version = "2.0.0"
 
 # Namespaces
 DAMS = CurieNamespace('dams', 'https://data.moex.com/dams/')
 LINKML = CurieNamespace('linkml', 'https://w3id.org/linkml/')
 MOEX = CurieNamespace('moex', 'https://data.moex.com/')
+RDF = CurieNamespace('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+RDFS = CurieNamespace('rdfs', 'http://www.w3.org/2000/01/rdf-schema#')
+SKOS = CurieNamespace('skos', 'http://www.w3.org/2004/02/skos/core#')
 XSD = CurieNamespace('xsd', 'http://www.w3.org/2001/XMLSchema#')
 DEFAULT_ = DAMS
 
@@ -170,6 +173,10 @@ class ConceptualEntityElementId(ModelElementElementId):
     pass
 
 
+class ConceptualPropertyElementId(ModelElementElementId):
+    pass
+
+
 class LogicalEntityElementId(ModelElementElementId):
     pass
 
@@ -187,10 +194,6 @@ class RelationTermElementId(ModelElementElementId):
 
 
 class ExternalClassRefExternalClassRefId(URIorCURIE):
-    pass
-
-
-class PhysicalFieldElementId(ModelElementElementId):
     pass
 
 
@@ -215,6 +218,50 @@ class DataContainerElementId(TechnicalAssetElementId):
 
 
 class ExecutionAssetElementId(TechnicalAssetElementId):
+    pass
+
+
+class ConceptualDomainElementId(ModelElementElementId):
+    pass
+
+
+class ValueMeaningMeaningKey(extended_str):
+    pass
+
+
+class DataTypeElementId(ModelElementElementId):
+    pass
+
+
+class NativeTypeBindingBindingId(URIorCURIE):
+    pass
+
+
+class ValueDomainElementId(ModelElementElementId):
+    pass
+
+
+class PermissibleValueValueCode(extended_str):
+    pass
+
+
+class ValueSetQueryValueSetQueryId(extended_str):
+    pass
+
+
+class EmbeddedElementLocalKey(extended_str):
+    pass
+
+
+class DataStructureElementId(ModelElementElementId):
+    pass
+
+
+class SchemaNodeLocalKey(EmbeddedElementLocalKey):
+    pass
+
+
+class MessageElementId(ModelElementElementId):
     pass
 
 
@@ -1200,6 +1247,13 @@ class ModelPackage(ModelElement):
     data_containers: Optional[Union[dict[Union[str, DataContainerElementId], Union[dict, "DataContainer"]], list[Union[dict, "DataContainer"]]]] = empty_dict()
     execution_assets: Optional[Union[dict[Union[str, ExecutionAssetElementId], Union[dict, "ExecutionAsset"]], list[Union[dict, "ExecutionAsset"]]]] = empty_dict()
     mappings: Optional[Union[dict[Union[str, MappingElementId], Union[dict, "Mapping"]], list[Union[dict, "Mapping"]]]] = empty_dict()
+    conceptual_properties: Optional[Union[dict[Union[str, ConceptualPropertyElementId], Union[dict, "ConceptualProperty"]], list[Union[dict, "ConceptualProperty"]]]] = empty_dict()
+    conceptual_domains: Optional[Union[dict[Union[str, ConceptualDomainElementId], Union[dict, "ConceptualDomain"]], list[Union[dict, "ConceptualDomain"]]]] = empty_dict()
+    value_domains: Optional[Union[dict[Union[str, ValueDomainElementId], Union[dict, "ValueDomain"]], list[Union[dict, "ValueDomain"]]]] = empty_dict()
+    data_types: Optional[Union[dict[Union[str, DataTypeElementId], Union[dict, "DataType"]], list[Union[dict, "DataType"]]]] = empty_dict()
+    native_type_bindings: Optional[Union[dict[Union[str, NativeTypeBindingBindingId], Union[dict, "NativeTypeBinding"]], list[Union[dict, "NativeTypeBinding"]]]] = empty_dict()
+    data_structures: Optional[Union[dict[Union[str, DataStructureElementId], Union[dict, "DataStructure"]], list[Union[dict, "DataStructure"]]]] = empty_dict()
+    messages: Optional[Union[dict[Union[str, MessageElementId], Union[dict, "Message"]], list[Union[dict, "Message"]]]] = empty_dict()
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
     data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
     owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
@@ -1263,6 +1317,20 @@ class ModelPackage(ModelElement):
         self._normalize_inlined_as_list(slot_name="execution_assets", slot_type=ExecutionAsset, key_name="element_id", keyed=True)
 
         self._normalize_inlined_as_list(slot_name="mappings", slot_type=Mapping, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="conceptual_properties", slot_type=ConceptualProperty, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="conceptual_domains", slot_type=ConceptualDomain, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="value_domains", slot_type=ValueDomain, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="data_types", slot_type=DataType, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="native_type_bindings", slot_type=NativeTypeBinding, key_name="binding_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="data_structures", slot_type=DataStructure, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="messages", slot_type=Message, key_name="element_id", keyed=True)
 
         if self.data_owner_ref is not None and not isinstance(self.data_owner_ref, RoleRegistryId):
             self.data_owner_ref = RoleRegistryId(self.data_owner_ref)
@@ -1462,6 +1530,128 @@ class ConceptualEntity(ModelElement):
 
 
 @dataclass(repr=False)
+class ConceptualProperty(ModelElement):
+    """
+    Значимое концептуальное свойство сущности КМД. Создаётся только при наличии significance_basis; не обязательно для
+    каждого LogicalAttribute.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["ConceptualProperty"]
+    class_class_curie: ClassVar[str] = "dams:ConceptualProperty"
+    class_name: ClassVar[str] = "ConceptualProperty"
+    class_model_uri: ClassVar[URIRef] = DAMS.ConceptualProperty
+
+    element_id: Union[str, ConceptualPropertyElementId] = None
+    name: str = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    property_owner_entity_ref: Union[str, ConceptualEntityElementId] = None
+    significance_basis: Union[Union[str, "SignificanceBasisEnum"], list[Union[str, "SignificanceBasisEnum"]]] = None
+    property_kind: Union[str, "PropertyKindEnum"] = None
+    genesis_kind: Union[str, "GenesisKindEnum"] = None
+    description: str = None
+    significance_rationale: Optional[str] = None
+    conceptual_domain_ref: Optional[Union[str, ConceptualDomainElementId]] = None
+    is_identifying: Optional[Union[bool, Bool]] = None
+    data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
+    data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
+    owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+    ownership_inheritance_rule: Optional[str] = None
+    definition_source_ref: Optional[Union[str, URIorCURIE]] = None
+    definition_rationale: Optional[str] = None
+    scoped_definitions: Optional[Union[dict[Union[str, ScopedDefinitionScopedDefinitionId], Union[dict, ScopedDefinition]], list[Union[dict, ScopedDefinition]]]] = empty_dict()
+    source_artifact_ref: Optional[Union[str, URI]] = None
+    evidence_refs: Optional[Union[Union[str, URI], list[Union[str, URI]]]] = empty_list()
+    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
+    approved_by_ref: Optional[Union[str, RoleRegistryId]] = None
+    approved_at: Optional[Union[str, XSDDateTime]] = None
+    policy_refs: Optional[Union[Union[str, PolicyRegistryId], list[Union[str, PolicyRegistryId]]]] = empty_list()
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, ConceptualPropertyElementId):
+            self.element_id = ConceptualPropertyElementId(self.element_id)
+
+        if self._is_empty(self.property_owner_entity_ref):
+            self.MissingRequiredField("property_owner_entity_ref")
+        if not isinstance(self.property_owner_entity_ref, ConceptualEntityElementId):
+            self.property_owner_entity_ref = ConceptualEntityElementId(self.property_owner_entity_ref)
+
+        if self._is_empty(self.significance_basis):
+            self.MissingRequiredField("significance_basis")
+        if not isinstance(self.significance_basis, list):
+            self.significance_basis = [self.significance_basis] if self.significance_basis is not None else []
+        self.significance_basis = [v if isinstance(v, SignificanceBasisEnum) else SignificanceBasisEnum(v) for v in self.significance_basis]
+
+        if self._is_empty(self.property_kind):
+            self.MissingRequiredField("property_kind")
+        if not isinstance(self.property_kind, PropertyKindEnum):
+            self.property_kind = PropertyKindEnum(self.property_kind)
+
+        if self._is_empty(self.genesis_kind):
+            self.MissingRequiredField("genesis_kind")
+        if not isinstance(self.genesis_kind, GenesisKindEnum):
+            self.genesis_kind = GenesisKindEnum(self.genesis_kind)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
+
+        if self.significance_rationale is not None and not isinstance(self.significance_rationale, str):
+            self.significance_rationale = str(self.significance_rationale)
+
+        if self.conceptual_domain_ref is not None and not isinstance(self.conceptual_domain_ref, ConceptualDomainElementId):
+            self.conceptual_domain_ref = ConceptualDomainElementId(self.conceptual_domain_ref)
+
+        if self.is_identifying is not None and not isinstance(self.is_identifying, Bool):
+            self.is_identifying = Bool(self.is_identifying)
+
+        if self.data_owner_ref is not None and not isinstance(self.data_owner_ref, RoleRegistryId):
+            self.data_owner_ref = RoleRegistryId(self.data_owner_ref)
+
+        if self.data_steward_ref is not None and not isinstance(self.data_steward_ref, RoleRegistryId):
+            self.data_steward_ref = RoleRegistryId(self.data_steward_ref)
+
+        if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
+            self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
+
+        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
+            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
+
+        if self.definition_source_ref is not None and not isinstance(self.definition_source_ref, URIorCURIE):
+            self.definition_source_ref = URIorCURIE(self.definition_source_ref)
+
+        if self.definition_rationale is not None and not isinstance(self.definition_rationale, str):
+            self.definition_rationale = str(self.definition_rationale)
+
+        self._normalize_inlined_as_list(slot_name="scoped_definitions", slot_type=ScopedDefinition, key_name="scoped_definition_id", keyed=True)
+
+        if self.source_artifact_ref is not None and not isinstance(self.source_artifact_ref, URI):
+            self.source_artifact_ref = URI(self.source_artifact_ref)
+
+        if not isinstance(self.evidence_refs, list):
+            self.evidence_refs = [self.evidence_refs] if self.evidence_refs is not None else []
+        self.evidence_refs = [v if isinstance(v, URI) else URI(v) for v in self.evidence_refs]
+
+        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
+            self.approval_status = ApprovalStatusEnum(self.approval_status)
+
+        if self.approved_by_ref is not None and not isinstance(self.approved_by_ref, RoleRegistryId):
+            self.approved_by_ref = RoleRegistryId(self.approved_by_ref)
+
+        if self.approved_at is not None and not isinstance(self.approved_at, XSDDateTime):
+            self.approved_at = XSDDateTime(self.approved_at)
+
+        if not isinstance(self.policy_refs, list):
+            self.policy_refs = [self.policy_refs] if self.policy_refs is not None else []
+        self.policy_refs = [v if isinstance(v, PolicyRegistryId) else PolicyRegistryId(v) for v in self.policy_refs]
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
 class LogicalEntity(ModelElement):
     """
     Представление бизнес-сущности в доменном контексте и модели конкретного решения.
@@ -1614,7 +1804,8 @@ class LogicalEntity(ModelElement):
 @dataclass(repr=False)
 class LogicalAttribute(ModelElement):
     """
-    Логический атрибут сущности с бизнес-смыслом, типом, обязательностью и классификацией.
+    Логический атрибут сущности: идентификация, обязательность, кардинальность и ссылки на представление
+    (DataType/ValueDomain) и опционально на ConceptualProperty (вариант B, ADR-034).
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -1627,19 +1818,19 @@ class LogicalAttribute(ModelElement):
     name: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     owner_entity_ref: Union[str, LogicalEntityElementId] = None
-    logical_type: Union[str, "LogicalDataTypeEnum"] = None
     required: Union[bool, Bool] = None
     multivalued: Union[bool, Bool] = None
     description: str = None
+    concept_ref: Optional[Union[str, ConceptualPropertyElementId]] = None
+    value_domain_ref: Optional[Union[str, ValueDomainElementId]] = None
+    data_type_ref: Optional[Union[str, DataTypeElementId]] = None
+    critical_data_element: Optional[Union[bool, Bool]] = None
     minimum_cardinality: Optional[int] = None
     maximum_cardinality: Optional[int] = None
-    value_set_ref: Optional[Union[str, URI]] = None
-    format_pattern: Optional[str] = None
     default_value: Optional[str] = None
     derived_expression: Optional[str] = None
     mapping_coverage_status: Optional[Union[str, "MappingCoverageStatusEnum"]] = None
     mapping_rationale: Optional[str] = None
-    unit_code: Optional[str] = None
     currency_attribute_ref: Optional[Union[str, URIorCURIE]] = None
     timezone_policy: Optional[str] = None
     temporal_semantics: Optional[str] = None
@@ -1668,11 +1859,6 @@ class LogicalAttribute(ModelElement):
         if not isinstance(self.owner_entity_ref, LogicalEntityElementId):
             self.owner_entity_ref = LogicalEntityElementId(self.owner_entity_ref)
 
-        if self._is_empty(self.logical_type):
-            self.MissingRequiredField("logical_type")
-        if not isinstance(self.logical_type, LogicalDataTypeEnum):
-            self.logical_type = LogicalDataTypeEnum(self.logical_type)
-
         if self._is_empty(self.required):
             self.MissingRequiredField("required")
         if not isinstance(self.required, Bool):
@@ -1688,17 +1874,23 @@ class LogicalAttribute(ModelElement):
         if not isinstance(self.description, str):
             self.description = str(self.description)
 
+        if self.concept_ref is not None and not isinstance(self.concept_ref, ConceptualPropertyElementId):
+            self.concept_ref = ConceptualPropertyElementId(self.concept_ref)
+
+        if self.value_domain_ref is not None and not isinstance(self.value_domain_ref, ValueDomainElementId):
+            self.value_domain_ref = ValueDomainElementId(self.value_domain_ref)
+
+        if self.data_type_ref is not None and not isinstance(self.data_type_ref, DataTypeElementId):
+            self.data_type_ref = DataTypeElementId(self.data_type_ref)
+
+        if self.critical_data_element is not None and not isinstance(self.critical_data_element, Bool):
+            self.critical_data_element = Bool(self.critical_data_element)
+
         if self.minimum_cardinality is not None and not isinstance(self.minimum_cardinality, int):
             self.minimum_cardinality = int(self.minimum_cardinality)
 
         if self.maximum_cardinality is not None and not isinstance(self.maximum_cardinality, int):
             self.maximum_cardinality = int(self.maximum_cardinality)
-
-        if self.value_set_ref is not None and not isinstance(self.value_set_ref, URI):
-            self.value_set_ref = URI(self.value_set_ref)
-
-        if self.format_pattern is not None and not isinstance(self.format_pattern, str):
-            self.format_pattern = str(self.format_pattern)
 
         if self.default_value is not None and not isinstance(self.default_value, str):
             self.default_value = str(self.default_value)
@@ -1711,9 +1903,6 @@ class LogicalAttribute(ModelElement):
 
         if self.mapping_rationale is not None and not isinstance(self.mapping_rationale, str):
             self.mapping_rationale = str(self.mapping_rationale)
-
-        if self.unit_code is not None and not isinstance(self.unit_code, str):
-            self.unit_code = str(self.unit_code)
 
         if self.currency_attribute_ref is not None and not isinstance(self.currency_attribute_ref, URIorCURIE):
             self.currency_attribute_ref = URIorCURIE(self.currency_attribute_ref)
@@ -1998,118 +2187,10 @@ class ExternalClassRef(YAMLRoot):
 
 
 @dataclass(repr=False)
-class PhysicalField(ModelElement):
-    """
-    Поле носителя данных (DataCarrier); семантика задаётся Mapping к LogicalAttribute.
-    """
-    _inherited_slots: ClassVar[list[str]] = []
-
-    class_class_uri: ClassVar[URIRef] = DAMS["PhysicalField"]
-    class_class_curie: ClassVar[str] = "dams:PhysicalField"
-    class_name: ClassVar[str] = "PhysicalField"
-    class_model_uri: ClassVar[URIRef] = DAMS.PhysicalField
-
-    element_id: Union[str, PhysicalFieldElementId] = None
-    name: str = None
-    description: str = None
-    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
-    carrier_ref: Union[str, DataCarrierElementId] = None
-    native_name: str = None
-    native_type: str = None
-    required: Union[bool, Bool] = None
-    ordinal_position: Optional[int] = None
-    schema_path: Optional[str] = None
-    mapping_coverage_status: Optional[Union[str, "MappingCoverageStatusEnum"]] = None
-    mapping_rationale: Optional[str] = None
-    data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
-    data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
-    owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
-    ownership_inheritance_rule: Optional[str] = None
-    governance_classification: Optional[Union[str, "GovernanceClassificationEnum"]] = None
-    security_classification: Optional[Union[str, "SecurityClassificationEnum"]] = None
-    sensitivity_term_refs: Optional[Union[Union[str, DataClassificationTermRegistryId], list[Union[str, DataClassificationTermRegistryId]]]] = empty_list()
-    classification_source: Optional[str] = None
-    classification_rationale: Optional[str] = None
-    policy_refs: Optional[Union[Union[str, PolicyRegistryId], list[Union[str, PolicyRegistryId]]]] = empty_list()
-
-    def __post_init__(self, *_: str, **kwargs: Any):
-        if self._is_empty(self.element_id):
-            self.MissingRequiredField("element_id")
-        if not isinstance(self.element_id, PhysicalFieldElementId):
-            self.element_id = PhysicalFieldElementId(self.element_id)
-
-        if self._is_empty(self.carrier_ref):
-            self.MissingRequiredField("carrier_ref")
-        if not isinstance(self.carrier_ref, DataCarrierElementId):
-            self.carrier_ref = DataCarrierElementId(self.carrier_ref)
-
-        if self._is_empty(self.native_name):
-            self.MissingRequiredField("native_name")
-        if not isinstance(self.native_name, str):
-            self.native_name = str(self.native_name)
-
-        if self._is_empty(self.native_type):
-            self.MissingRequiredField("native_type")
-        if not isinstance(self.native_type, str):
-            self.native_type = str(self.native_type)
-
-        if self._is_empty(self.required):
-            self.MissingRequiredField("required")
-        if not isinstance(self.required, Bool):
-            self.required = Bool(self.required)
-
-        if self.ordinal_position is not None and not isinstance(self.ordinal_position, int):
-            self.ordinal_position = int(self.ordinal_position)
-
-        if self.schema_path is not None and not isinstance(self.schema_path, str):
-            self.schema_path = str(self.schema_path)
-
-        if self.mapping_coverage_status is not None and not isinstance(self.mapping_coverage_status, MappingCoverageStatusEnum):
-            self.mapping_coverage_status = MappingCoverageStatusEnum(self.mapping_coverage_status)
-
-        if self.mapping_rationale is not None and not isinstance(self.mapping_rationale, str):
-            self.mapping_rationale = str(self.mapping_rationale)
-
-        if self.data_owner_ref is not None and not isinstance(self.data_owner_ref, RoleRegistryId):
-            self.data_owner_ref = RoleRegistryId(self.data_owner_ref)
-
-        if self.data_steward_ref is not None and not isinstance(self.data_steward_ref, RoleRegistryId):
-            self.data_steward_ref = RoleRegistryId(self.data_steward_ref)
-
-        if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
-            self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
-
-        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
-            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
-
-        if self.governance_classification is not None and not isinstance(self.governance_classification, GovernanceClassificationEnum):
-            self.governance_classification = GovernanceClassificationEnum(self.governance_classification)
-
-        if self.security_classification is not None and not isinstance(self.security_classification, SecurityClassificationEnum):
-            self.security_classification = SecurityClassificationEnum(self.security_classification)
-
-        if not isinstance(self.sensitivity_term_refs, list):
-            self.sensitivity_term_refs = [self.sensitivity_term_refs] if self.sensitivity_term_refs is not None else []
-        self.sensitivity_term_refs = [v if isinstance(v, DataClassificationTermRegistryId) else DataClassificationTermRegistryId(v) for v in self.sensitivity_term_refs]
-
-        if self.classification_source is not None and not isinstance(self.classification_source, str):
-            self.classification_source = str(self.classification_source)
-
-        if self.classification_rationale is not None and not isinstance(self.classification_rationale, str):
-            self.classification_rationale = str(self.classification_rationale)
-
-        if not isinstance(self.policy_refs, list):
-            self.policy_refs = [self.policy_refs] if self.policy_refs is not None else []
-        self.policy_refs = [v if isinstance(v, PolicyRegistryId) else PolicyRegistryId(v) for v in self.policy_refs]
-
-        super().__post_init__(**kwargs)
-
-
-@dataclass(repr=False)
 class Mapping(ModelElement):
     """
     Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual),
-    entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (PhysicalField↔LogicalAttribute), aligns_with
+    entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with
     (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
     """
     _inherited_slots: ClassVar[list[str]] = []
@@ -2199,8 +2280,8 @@ class Mapping(ModelElement):
 @dataclass(repr=False)
 class HasStructure(YAMLRoot):
     """
-    Mixin структуры данных носителя. structure_ref — временная ссылка (uriorcurie); в будущем заменяется классом
-    DataStructure (ADR-C).
+    Mixin структуры данных носителя. structure_ref — ссылка на DataStructure (range=DataStructure, ADR-038). Диалект
+    схемы живёт на DataStructure.schema_dialect.
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -2209,16 +2290,12 @@ class HasStructure(YAMLRoot):
     class_name: ClassVar[str] = "HasStructure"
     class_model_uri: ClassVar[URIRef] = DAMS.HasStructure
 
-    structure_ref: Optional[Union[str, URIorCURIE]] = None
-    schema_dialect: Optional[str] = None
+    structure_ref: Optional[Union[str, DataStructureElementId]] = None
     data_format: Optional[str] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
-        if self.structure_ref is not None and not isinstance(self.structure_ref, URIorCURIE):
-            self.structure_ref = URIorCURIE(self.structure_ref)
-
-        if self.schema_dialect is not None and not isinstance(self.schema_dialect, str):
-            self.schema_dialect = str(self.schema_dialect)
+        if self.structure_ref is not None and not isinstance(self.structure_ref, DataStructureElementId):
+            self.structure_ref = DataStructureElementId(self.structure_ref)
 
         if self.data_format is not None and not isinstance(self.data_format, str):
             self.data_format = str(self.data_format)
@@ -2442,11 +2519,9 @@ class DataCarrier(TechnicalAsset):
     system_ref: Union[str, ITSystemRegistryId] = None
     description: str = None
     asset_kind: Union[str, "DataCarrierKindEnum"] = None
-    physical_fields: Optional[Union[dict[Union[str, PhysicalFieldElementId], Union[dict, PhysicalField]], list[Union[dict, PhysicalField]]]] = empty_dict()
     mapping_coverage_status: Optional[Union[str, "MappingCoverageStatusEnum"]] = None
     mapping_rationale: Optional[str] = None
-    structure_ref: Optional[Union[str, URIorCURIE]] = None
-    schema_dialect: Optional[str] = None
+    structure_ref: Optional[Union[str, DataStructureElementId]] = None
     data_format: Optional[str] = None
     location_uri: Optional[Union[str, URI]] = None
     region: Optional[str] = None
@@ -2463,19 +2538,14 @@ class DataCarrier(TechnicalAsset):
         if not isinstance(self.asset_kind, DataCarrierKindEnum):
             self.asset_kind = DataCarrierKindEnum(self.asset_kind)
 
-        self._normalize_inlined_as_list(slot_name="physical_fields", slot_type=PhysicalField, key_name="element_id", keyed=True)
-
         if self.mapping_coverage_status is not None and not isinstance(self.mapping_coverage_status, MappingCoverageStatusEnum):
             self.mapping_coverage_status = MappingCoverageStatusEnum(self.mapping_coverage_status)
 
         if self.mapping_rationale is not None and not isinstance(self.mapping_rationale, str):
             self.mapping_rationale = str(self.mapping_rationale)
 
-        if self.structure_ref is not None and not isinstance(self.structure_ref, URIorCURIE):
-            self.structure_ref = URIorCURIE(self.structure_ref)
-
-        if self.schema_dialect is not None and not isinstance(self.schema_dialect, str):
-            self.schema_dialect = str(self.schema_dialect)
+        if self.structure_ref is not None and not isinstance(self.structure_ref, DataStructureElementId):
+            self.structure_ref = DataStructureElementId(self.structure_ref)
 
         if self.data_format is not None and not isinstance(self.data_format, str):
             self.data_format = str(self.data_format)
@@ -2519,6 +2589,7 @@ class AccessPoint(TechnicalAsset):
     operation_name: Optional[str] = None
     http_method: Optional[str] = None
     path_template: Optional[str] = None
+    message_refs: Optional[Union[Union[str, MessageElementId], list[Union[str, MessageElementId]]]] = empty_list()
     direction: Optional[Union[str, "FlowDirectionEnum"]] = None
     protocol: Optional[str] = None
     protocol_version: Optional[str] = None
@@ -2552,6 +2623,10 @@ class AccessPoint(TechnicalAsset):
 
         if self.path_template is not None and not isinstance(self.path_template, str):
             self.path_template = str(self.path_template)
+
+        if not isinstance(self.message_refs, list):
+            self.message_refs = [self.message_refs] if self.message_refs is not None else []
+        self.message_refs = [v if isinstance(v, MessageElementId) else MessageElementId(v) for v in self.message_refs]
 
         if self.direction is not None and not isinstance(self.direction, FlowDirectionEnum):
             self.direction = FlowDirectionEnum(self.direction)
@@ -2665,6 +2740,704 @@ class ExecutionAsset(TechnicalAsset):
 
         if self.direction is not None and not isinstance(self.direction, FlowDirectionEnum):
             self.direction = FlowDirectionEnum(self.direction)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class ConceptualDomain(ModelElement):
+    """
+    Концептуальный домен значений: набор смыслов (ValueMeaning) или ссылка на внешнюю схему понятий. Допустим только в
+    пакетах implementation_scope=enterprise.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["ConceptualDomain"]
+    class_class_curie: ClassVar[str] = "dams:ConceptualDomain"
+    class_name: ClassVar[str] = "ConceptualDomain"
+    class_model_uri: ClassVar[URIRef] = DAMS.ConceptualDomain
+
+    element_id: Union[str, ConceptualDomainElementId] = None
+    name: str = None
+    description: str = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    conceptual_domain_kind: Union[str, "ConceptualDomainKindEnum"] = None
+    value_meanings: Optional[Union[dict[Union[str, ValueMeaningMeaningKey], Union[dict, "ValueMeaning"]], list[Union[dict, "ValueMeaning"]]]] = empty_dict()
+    concept_scheme_uri: Optional[Union[str, URIorCURIE]] = None
+    broader_domain_ref: Optional[Union[str, ConceptualDomainElementId]] = None
+    data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
+    data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
+    owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+    ownership_inheritance_rule: Optional[str] = None
+    source_artifact_ref: Optional[Union[str, URI]] = None
+    evidence_refs: Optional[Union[Union[str, URI], list[Union[str, URI]]]] = empty_list()
+    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
+    approved_by_ref: Optional[Union[str, RoleRegistryId]] = None
+    approved_at: Optional[Union[str, XSDDateTime]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, ConceptualDomainElementId):
+            self.element_id = ConceptualDomainElementId(self.element_id)
+
+        if self._is_empty(self.conceptual_domain_kind):
+            self.MissingRequiredField("conceptual_domain_kind")
+        if not isinstance(self.conceptual_domain_kind, ConceptualDomainKindEnum):
+            self.conceptual_domain_kind = ConceptualDomainKindEnum(self.conceptual_domain_kind)
+
+        self._normalize_inlined_as_list(slot_name="value_meanings", slot_type=ValueMeaning, key_name="meaning_key", keyed=True)
+
+        if self.concept_scheme_uri is not None and not isinstance(self.concept_scheme_uri, URIorCURIE):
+            self.concept_scheme_uri = URIorCURIE(self.concept_scheme_uri)
+
+        if self.broader_domain_ref is not None and not isinstance(self.broader_domain_ref, ConceptualDomainElementId):
+            self.broader_domain_ref = ConceptualDomainElementId(self.broader_domain_ref)
+
+        if self.data_owner_ref is not None and not isinstance(self.data_owner_ref, RoleRegistryId):
+            self.data_owner_ref = RoleRegistryId(self.data_owner_ref)
+
+        if self.data_steward_ref is not None and not isinstance(self.data_steward_ref, RoleRegistryId):
+            self.data_steward_ref = RoleRegistryId(self.data_steward_ref)
+
+        if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
+            self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
+
+        if self.ownership_inheritance_rule is not None and not isinstance(self.ownership_inheritance_rule, str):
+            self.ownership_inheritance_rule = str(self.ownership_inheritance_rule)
+
+        if self.source_artifact_ref is not None and not isinstance(self.source_artifact_ref, URI):
+            self.source_artifact_ref = URI(self.source_artifact_ref)
+
+        if not isinstance(self.evidence_refs, list):
+            self.evidence_refs = [self.evidence_refs] if self.evidence_refs is not None else []
+        self.evidence_refs = [v if isinstance(v, URI) else URI(v) for v in self.evidence_refs]
+
+        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
+            self.approval_status = ApprovalStatusEnum(self.approval_status)
+
+        if self.approved_by_ref is not None and not isinstance(self.approved_by_ref, RoleRegistryId):
+            self.approved_by_ref = RoleRegistryId(self.approved_by_ref)
+
+        if self.approved_at is not None and not isinstance(self.approved_at, XSDDateTime):
+            self.approved_at = XSDDateTime(self.approved_at)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class ValueMeaning(YAMLRoot):
+    """
+    Смысл допустимого значения внутри ConceptualDomain (встраиваемый, без lifecycle).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["ValueMeaning"]
+    class_class_curie: ClassVar[str] = "dams:ValueMeaning"
+    class_name: ClassVar[str] = "ValueMeaning"
+    class_model_uri: ClassVar[URIRef] = DAMS.ValueMeaning
+
+    meaning_key: Union[str, ValueMeaningMeaningKey] = None
+    meaning_label: Optional[str] = None
+    meaning_definition: Optional[str] = None
+    aliases: Optional[Union[str, list[str]]] = empty_list()
+    meaning_term_ref: Optional[Union[str, URIorCURIE]] = None
+    broader_meaning_key: Optional[str] = None
+    meaning_status: Optional[Union[str, "LifecycleStatusEnum"]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.meaning_key):
+            self.MissingRequiredField("meaning_key")
+        if not isinstance(self.meaning_key, ValueMeaningMeaningKey):
+            self.meaning_key = ValueMeaningMeaningKey(self.meaning_key)
+
+        if self.meaning_label is not None and not isinstance(self.meaning_label, str):
+            self.meaning_label = str(self.meaning_label)
+
+        if self.meaning_definition is not None and not isinstance(self.meaning_definition, str):
+            self.meaning_definition = str(self.meaning_definition)
+
+        if not isinstance(self.aliases, list):
+            self.aliases = [self.aliases] if self.aliases is not None else []
+        self.aliases = [v if isinstance(v, str) else str(v) for v in self.aliases]
+
+        if self.meaning_term_ref is not None and not isinstance(self.meaning_term_ref, URIorCURIE):
+            self.meaning_term_ref = URIorCURIE(self.meaning_term_ref)
+
+        if self.broader_meaning_key is not None and not isinstance(self.broader_meaning_key, str):
+            self.broader_meaning_key = str(self.broader_meaning_key)
+
+        if self.meaning_status is not None and not isinstance(self.meaning_status, LifecycleStatusEnum):
+            self.meaning_status = LifecycleStatusEnum(self.meaning_status)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class DataType(ModelElement):
+    """
+    Корпоративный тип данных: семейство, параметры представления и соответствие XSD/LinkML. Допустим только в
+    корпоративном реестре типов.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["DataType"]
+    class_class_curie: ClassVar[str] = "dams:DataType"
+    class_name: ClassVar[str] = "DataType"
+    class_model_uri: ClassVar[URIRef] = DAMS.DataType
+
+    element_id: Union[str, DataTypeElementId] = None
+    name: str = None
+    description: str = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    type_name: str = None
+    type_family: Union[str, "TypeFamilyEnum"] = None
+    precision: Optional[int] = None
+    scale: Optional[int] = None
+    max_length: Optional[int] = None
+    min_length: Optional[int] = None
+    datatype_timezone_policy: Optional[Union[str, "TimezonePolicyEnum"]] = None
+    charset: Optional[str] = None
+    xsd_datatype: Optional[Union[str, URIorCURIE]] = None
+    linkml_type: Optional[str] = None
+    base_type_ref: Optional[Union[str, DataTypeElementId]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, DataTypeElementId):
+            self.element_id = DataTypeElementId(self.element_id)
+
+        if self._is_empty(self.type_name):
+            self.MissingRequiredField("type_name")
+        if not isinstance(self.type_name, str):
+            self.type_name = str(self.type_name)
+
+        if self._is_empty(self.type_family):
+            self.MissingRequiredField("type_family")
+        if not isinstance(self.type_family, TypeFamilyEnum):
+            self.type_family = TypeFamilyEnum(self.type_family)
+
+        if self.precision is not None and not isinstance(self.precision, int):
+            self.precision = int(self.precision)
+
+        if self.scale is not None and not isinstance(self.scale, int):
+            self.scale = int(self.scale)
+
+        if self.max_length is not None and not isinstance(self.max_length, int):
+            self.max_length = int(self.max_length)
+
+        if self.min_length is not None and not isinstance(self.min_length, int):
+            self.min_length = int(self.min_length)
+
+        if self.datatype_timezone_policy is not None and not isinstance(self.datatype_timezone_policy, TimezonePolicyEnum):
+            self.datatype_timezone_policy = TimezonePolicyEnum(self.datatype_timezone_policy)
+
+        if self.charset is not None and not isinstance(self.charset, str):
+            self.charset = str(self.charset)
+
+        if self.xsd_datatype is not None and not isinstance(self.xsd_datatype, URIorCURIE):
+            self.xsd_datatype = URIorCURIE(self.xsd_datatype)
+
+        if self.linkml_type is not None and not isinstance(self.linkml_type, str):
+            self.linkml_type = str(self.linkml_type)
+
+        if self.base_type_ref is not None and not isinstance(self.base_type_ref, DataTypeElementId):
+            self.base_type_ref = DataTypeElementId(self.base_type_ref)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class NativeTypeBinding(YAMLRoot):
+    """
+    Привязка нативного типа диалекта (SQL, JSON Schema и т.п.) к корпоративному DataType с оценкой потери точности.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["NativeTypeBinding"]
+    class_class_curie: ClassVar[str] = "dams:NativeTypeBinding"
+    class_name: ClassVar[str] = "NativeTypeBinding"
+    class_model_uri: ClassVar[URIRef] = DAMS.NativeTypeBinding
+
+    binding_id: Union[str, NativeTypeBindingBindingId] = None
+    dialect: str = None
+    dialect_native_type: str = None
+    data_type_ref: Union[str, DataTypeElementId] = None
+    lossiness: Union[str, "LossinessEnum"] = None
+    parameter_mapping: Optional[str] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.binding_id):
+            self.MissingRequiredField("binding_id")
+        if not isinstance(self.binding_id, NativeTypeBindingBindingId):
+            self.binding_id = NativeTypeBindingBindingId(self.binding_id)
+
+        if self._is_empty(self.dialect):
+            self.MissingRequiredField("dialect")
+        if not isinstance(self.dialect, str):
+            self.dialect = str(self.dialect)
+
+        if self._is_empty(self.dialect_native_type):
+            self.MissingRequiredField("dialect_native_type")
+        if not isinstance(self.dialect_native_type, str):
+            self.dialect_native_type = str(self.dialect_native_type)
+
+        if self._is_empty(self.data_type_ref):
+            self.MissingRequiredField("data_type_ref")
+        if not isinstance(self.data_type_ref, DataTypeElementId):
+            self.data_type_ref = DataTypeElementId(self.data_type_ref)
+
+        if self._is_empty(self.lossiness):
+            self.MissingRequiredField("lossiness")
+        if not isinstance(self.lossiness, LossinessEnum):
+            self.lossiness = LossinessEnum(self.lossiness)
+
+        if self.parameter_mapping is not None and not isinstance(self.parameter_mapping, str):
+            self.parameter_mapping = str(self.parameter_mapping)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class ValueDomain(ModelElement):
+    """
+    Представление значений: тип, формат, единица, допустимые значения или ссылка на внешний набор. Допустим в пакетах
+    enterprise и solution.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["ValueDomain"]
+    class_class_curie: ClassVar[str] = "dams:ValueDomain"
+    class_name: ClassVar[str] = "ValueDomain"
+    class_model_uri: ClassVar[URIRef] = DAMS.ValueDomain
+
+    element_id: Union[str, ValueDomainElementId] = None
+    name: str = None
+    description: str = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    value_domain_kind: Union[str, "ValueDomainKindEnum"] = None
+    data_type_ref: Union[str, DataTypeElementId] = None
+    conceptual_domain_ref: Optional[Union[str, ConceptualDomainElementId]] = None
+    unit_code: Optional[str] = None
+    format_pattern: Optional[str] = None
+    min_value: Optional[str] = None
+    max_value: Optional[str] = None
+    permissible_values: Optional[Union[dict[Union[str, PermissibleValueValueCode], Union[dict, "PermissibleValue"]], list[Union[dict, "PermissibleValue"]]]] = empty_dict()
+    value_set_source: Optional[Union[str, URIorCURIE]] = None
+    dynamic_query: Optional[Union[dict, "ValueSetQuery"]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, ValueDomainElementId):
+            self.element_id = ValueDomainElementId(self.element_id)
+
+        if self._is_empty(self.value_domain_kind):
+            self.MissingRequiredField("value_domain_kind")
+        if not isinstance(self.value_domain_kind, ValueDomainKindEnum):
+            self.value_domain_kind = ValueDomainKindEnum(self.value_domain_kind)
+
+        if self._is_empty(self.data_type_ref):
+            self.MissingRequiredField("data_type_ref")
+        if not isinstance(self.data_type_ref, DataTypeElementId):
+            self.data_type_ref = DataTypeElementId(self.data_type_ref)
+
+        if self.conceptual_domain_ref is not None and not isinstance(self.conceptual_domain_ref, ConceptualDomainElementId):
+            self.conceptual_domain_ref = ConceptualDomainElementId(self.conceptual_domain_ref)
+
+        if self.unit_code is not None and not isinstance(self.unit_code, str):
+            self.unit_code = str(self.unit_code)
+
+        if self.format_pattern is not None and not isinstance(self.format_pattern, str):
+            self.format_pattern = str(self.format_pattern)
+
+        if self.min_value is not None and not isinstance(self.min_value, str):
+            self.min_value = str(self.min_value)
+
+        if self.max_value is not None and not isinstance(self.max_value, str):
+            self.max_value = str(self.max_value)
+
+        self._normalize_inlined_as_list(slot_name="permissible_values", slot_type=PermissibleValue, key_name="value_code", keyed=True)
+
+        if self.value_set_source is not None and not isinstance(self.value_set_source, URIorCURIE):
+            self.value_set_source = URIorCURIE(self.value_set_source)
+
+        if self.dynamic_query is not None and not isinstance(self.dynamic_query, ValueSetQuery):
+            self.dynamic_query = ValueSetQuery(**as_dict(self.dynamic_query))
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class PermissibleValue(YAMLRoot):
+    """
+    Допустимое значение внутри ValueDomain (встраиваемый).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["PermissibleValue"]
+    class_class_curie: ClassVar[str] = "dams:PermissibleValue"
+    class_name: ClassVar[str] = "PermissibleValue"
+    class_model_uri: ClassVar[URIRef] = DAMS.PermissibleValue
+
+    value_code: Union[str, PermissibleValueValueCode] = None
+    value_label: Optional[str] = None
+    value_definition: Optional[str] = None
+    value_meaning_key: Optional[str] = None
+    meaning_term_ref: Optional[Union[str, URIorCURIE]] = None
+    ordinal: Optional[int] = None
+    value_status: Optional[Union[str, "LifecycleStatusEnum"]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.value_code):
+            self.MissingRequiredField("value_code")
+        if not isinstance(self.value_code, PermissibleValueValueCode):
+            self.value_code = PermissibleValueValueCode(self.value_code)
+
+        if self.value_label is not None and not isinstance(self.value_label, str):
+            self.value_label = str(self.value_label)
+
+        if self.value_definition is not None and not isinstance(self.value_definition, str):
+            self.value_definition = str(self.value_definition)
+
+        if self.value_meaning_key is not None and not isinstance(self.value_meaning_key, str):
+            self.value_meaning_key = str(self.value_meaning_key)
+
+        if self.meaning_term_ref is not None and not isinstance(self.meaning_term_ref, URIorCURIE):
+            self.meaning_term_ref = URIorCURIE(self.meaning_term_ref)
+
+        if self.ordinal is not None and not isinstance(self.ordinal, int):
+            self.ordinal = int(self.ordinal)
+
+        if self.value_status is not None and not isinstance(self.value_status, LifecycleStatusEnum):
+            self.value_status = LifecycleStatusEnum(self.value_status)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class ValueSetQuery(YAMLRoot):
+    """
+    Динамический запрос набора значений по образцу LinkML reachable_from (source ontology, узлы, типы связей).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["ValueSetQuery"]
+    class_class_curie: ClassVar[str] = "dams:ValueSetQuery"
+    class_name: ClassVar[str] = "ValueSetQuery"
+    class_model_uri: ClassVar[URIRef] = DAMS.ValueSetQuery
+
+    value_set_query_id: Union[str, ValueSetQueryValueSetQueryId] = None
+    source_ontology: Union[str, URIorCURIE] = None
+    source_nodes: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
+    relationship_types: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
+    include_self: Optional[Union[bool, Bool]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.value_set_query_id):
+            self.MissingRequiredField("value_set_query_id")
+        if not isinstance(self.value_set_query_id, ValueSetQueryValueSetQueryId):
+            self.value_set_query_id = ValueSetQueryValueSetQueryId(self.value_set_query_id)
+
+        if self._is_empty(self.source_ontology):
+            self.MissingRequiredField("source_ontology")
+        if not isinstance(self.source_ontology, URIorCURIE):
+            self.source_ontology = URIorCURIE(self.source_ontology)
+
+        if not isinstance(self.source_nodes, list):
+            self.source_nodes = [self.source_nodes] if self.source_nodes is not None else []
+        self.source_nodes = [v if isinstance(v, URIorCURIE) else URIorCURIE(v) for v in self.source_nodes]
+
+        if not isinstance(self.relationship_types, list):
+            self.relationship_types = [self.relationship_types] if self.relationship_types is not None else []
+        self.relationship_types = [v if isinstance(v, URIorCURIE) else URIorCURIE(v) for v in self.relationship_types]
+
+        if self.include_self is not None and not isinstance(self.include_self, Bool):
+            self.include_self = Bool(self.include_self)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class EmbeddedElement(YAMLRoot):
+    """
+    Встраиваемый вспомогательный объект без собственного жизненного цикла и глобального element_id. Идентичность
+    локальна относительно родителя (local_key). Не путать с будущим IdentifiedElement (ADR-038).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["EmbeddedElement"]
+    class_class_curie: ClassVar[str] = "dams:EmbeddedElement"
+    class_name: ClassVar[str] = "EmbeddedElement"
+    class_model_uri: ClassVar[URIRef] = DAMS.EmbeddedElement
+
+    local_key: Union[str, EmbeddedElementLocalKey] = None
+    description: str = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.local_key):
+            self.MissingRequiredField("local_key")
+        if not isinstance(self.local_key, EmbeddedElementLocalKey):
+            self.local_key = EmbeddedElementLocalKey(self.local_key)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class DataStructure(ModelElement):
+    """
+    Именованная версия структуры данных: корень дерева SchemaNode с форматом и опциональным диалектом (ADR-038).
+    Хранит плоский список узлов (nodes + root_local_key).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["DataStructure"]
+    class_class_curie: ClassVar[str] = "dams:DataStructure"
+    class_name: ClassVar[str] = "DataStructure"
+    class_model_uri: ClassVar[URIRef] = DAMS.DataStructure
+
+    element_id: Union[str, DataStructureElementId] = None
+    name: str = None
+    description: str = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    schema_format: Union[str, "SchemaFormatEnum"] = None
+    structure_version: Union[str, SemVer] = None
+    root_local_key: str = None
+    nodes: Union[dict[Union[str, SchemaNodeLocalKey], Union[dict, "SchemaNode"]], list[Union[dict, "SchemaNode"]]] = empty_dict()
+    schema_dialect: Optional[Union[str, URI]] = None
+    source_artifact_ref: Optional[Union[str, URI]] = None
+    source_pointer: Optional[str] = None
+    content_digest: Optional[Union[str, Sha256Digest]] = None
+    previous_version_ref: Optional[Union[str, DataStructureElementId]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, DataStructureElementId):
+            self.element_id = DataStructureElementId(self.element_id)
+
+        if self._is_empty(self.schema_format):
+            self.MissingRequiredField("schema_format")
+        if not isinstance(self.schema_format, SchemaFormatEnum):
+            self.schema_format = SchemaFormatEnum(self.schema_format)
+
+        if self._is_empty(self.structure_version):
+            self.MissingRequiredField("structure_version")
+        if not isinstance(self.structure_version, SemVer):
+            self.structure_version = SemVer(self.structure_version)
+
+        if self._is_empty(self.root_local_key):
+            self.MissingRequiredField("root_local_key")
+        if not isinstance(self.root_local_key, str):
+            self.root_local_key = str(self.root_local_key)
+
+        if self._is_empty(self.nodes):
+            self.MissingRequiredField("nodes")
+        self._normalize_inlined_as_list(slot_name="nodes", slot_type=SchemaNode, key_name="local_key", keyed=True)
+
+        if self.schema_dialect is not None and not isinstance(self.schema_dialect, URI):
+            self.schema_dialect = URI(self.schema_dialect)
+
+        if self.source_artifact_ref is not None and not isinstance(self.source_artifact_ref, URI):
+            self.source_artifact_ref = URI(self.source_artifact_ref)
+
+        if self.source_pointer is not None and not isinstance(self.source_pointer, str):
+            self.source_pointer = str(self.source_pointer)
+
+        if self.content_digest is not None and not isinstance(self.content_digest, Sha256Digest):
+            self.content_digest = Sha256Digest(self.content_digest)
+
+        if self.previous_version_ref is not None and not isinstance(self.previous_version_ref, DataStructureElementId):
+            self.previous_version_ref = DataStructureElementId(self.previous_version_ref)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class SchemaNode(EmbeddedElement):
+    """
+    Узел дерева структуры. Идентичность (DataStructure.element_id, local_key). Рёбра children/item_node — строки
+    local_key (плоская форма, ADR-038). Форма и физика в одном узле (как ODCS).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["SchemaNode"]
+    class_class_curie: ClassVar[str] = "dams:SchemaNode"
+    class_name: ClassVar[str] = "SchemaNode"
+    class_model_uri: ClassVar[URIRef] = DAMS.SchemaNode
+
+    local_key: Union[str, SchemaNodeLocalKey] = None
+    native_name: str = None
+    node_kind: Union[str, "SchemaNodeKindEnum"] = None
+    native_type: str = None
+    required: Union[bool, Bool] = None
+    description: str = None
+    children: Optional[Union[str, list[str]]] = empty_list()
+    item_node: Optional[str] = None
+    data_type_ref: Optional[Union[str, DataTypeElementId]] = None
+    nullable: Optional[Union[bool, Bool]] = None
+    min_occurs: Optional[int] = None
+    max_occurs: Optional[int] = None
+    ordinal_position: Optional[int] = None
+    reference_target: Optional[Union[str, URIorCURIE]] = None
+    realizes_attribute_ref: Optional[Union[str, LogicalAttributeElementId]] = None
+    constraint_expressions: Optional[Union[str, list[str]]] = empty_list()
+    default_value: Optional[str] = None
+    mapping_coverage_status: Optional[Union[str, "MappingCoverageStatusEnum"]] = None
+    mapping_rationale: Optional[str] = None
+    column_position: Optional[int] = None
+    is_primary_key: Optional[Union[bool, Bool]] = None
+    is_unique: Optional[Union[bool, Bool]] = None
+    foreign_key_target: Optional[Union[str, URIorCURIE]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.local_key):
+            self.MissingRequiredField("local_key")
+        if not isinstance(self.local_key, SchemaNodeLocalKey):
+            self.local_key = SchemaNodeLocalKey(self.local_key)
+
+        if self._is_empty(self.native_name):
+            self.MissingRequiredField("native_name")
+        if not isinstance(self.native_name, str):
+            self.native_name = str(self.native_name)
+
+        if self._is_empty(self.node_kind):
+            self.MissingRequiredField("node_kind")
+        if not isinstance(self.node_kind, SchemaNodeKindEnum):
+            self.node_kind = SchemaNodeKindEnum(self.node_kind)
+
+        if self._is_empty(self.native_type):
+            self.MissingRequiredField("native_type")
+        if not isinstance(self.native_type, str):
+            self.native_type = str(self.native_type)
+
+        if self._is_empty(self.required):
+            self.MissingRequiredField("required")
+        if not isinstance(self.required, Bool):
+            self.required = Bool(self.required)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
+
+        if not isinstance(self.children, list):
+            self.children = [self.children] if self.children is not None else []
+        self.children = [v if isinstance(v, str) else str(v) for v in self.children]
+
+        if self.item_node is not None and not isinstance(self.item_node, str):
+            self.item_node = str(self.item_node)
+
+        if self.data_type_ref is not None and not isinstance(self.data_type_ref, DataTypeElementId):
+            self.data_type_ref = DataTypeElementId(self.data_type_ref)
+
+        if self.nullable is not None and not isinstance(self.nullable, Bool):
+            self.nullable = Bool(self.nullable)
+
+        if self.min_occurs is not None and not isinstance(self.min_occurs, int):
+            self.min_occurs = int(self.min_occurs)
+
+        if self.max_occurs is not None and not isinstance(self.max_occurs, int):
+            self.max_occurs = int(self.max_occurs)
+
+        if self.ordinal_position is not None and not isinstance(self.ordinal_position, int):
+            self.ordinal_position = int(self.ordinal_position)
+
+        if self.reference_target is not None and not isinstance(self.reference_target, URIorCURIE):
+            self.reference_target = URIorCURIE(self.reference_target)
+
+        if self.realizes_attribute_ref is not None and not isinstance(self.realizes_attribute_ref, LogicalAttributeElementId):
+            self.realizes_attribute_ref = LogicalAttributeElementId(self.realizes_attribute_ref)
+
+        if not isinstance(self.constraint_expressions, list):
+            self.constraint_expressions = [self.constraint_expressions] if self.constraint_expressions is not None else []
+        self.constraint_expressions = [v if isinstance(v, str) else str(v) for v in self.constraint_expressions]
+
+        if self.default_value is not None and not isinstance(self.default_value, str):
+            self.default_value = str(self.default_value)
+
+        if self.mapping_coverage_status is not None and not isinstance(self.mapping_coverage_status, MappingCoverageStatusEnum):
+            self.mapping_coverage_status = MappingCoverageStatusEnum(self.mapping_coverage_status)
+
+        if self.mapping_rationale is not None and not isinstance(self.mapping_rationale, str):
+            self.mapping_rationale = str(self.mapping_rationale)
+
+        if self.column_position is not None and not isinstance(self.column_position, int):
+            self.column_position = int(self.column_position)
+
+        if self.is_primary_key is not None and not isinstance(self.is_primary_key, Bool):
+            self.is_primary_key = Bool(self.is_primary_key)
+
+        if self.is_unique is not None and not isinstance(self.is_unique, Bool):
+            self.is_unique = Bool(self.is_unique)
+
+        if self.foreign_key_target is not None and not isinstance(self.foreign_key_target, URIorCURIE):
+            self.foreign_key_target = URIorCURIE(self.foreign_key_target)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class Message(ModelElement):
+    """
+    Элемент интеграционной модели: сообщение с payload/headers структурами. Не TechnicalAsset (нет asset_namespace /
+    qualified_name; не carrier_refs). AccessPoint (operation|channel) ссылается через message_refs (ADR-040). Класс в
+    moex-structure, чтобы ModelPackage и AccessPoint ссылались без цикла core↔integration (ADR-040).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["Message"]
+    class_class_curie: ClassVar[str] = "dams:Message"
+    class_name: ClassVar[str] = "Message"
+    class_model_uri: ClassVar[URIRef] = DAMS.Message
+
+    element_id: Union[str, MessageElementId] = None
+    name: str = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    payload_structure_ref: Union[str, DataStructureElementId] = None
+    description: str = None
+    headers_structure_ref: Optional[Union[str, DataStructureElementId]] = None
+    content_type: Optional[str] = None
+    envelope_kind: Optional[Union[str, "EnvelopeKindEnum"]] = None
+    envelope_ref: Optional[Union[str, URIorCURIE]] = None
+    correlation_hint: Optional[str] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, MessageElementId):
+            self.element_id = MessageElementId(self.element_id)
+
+        if self._is_empty(self.payload_structure_ref):
+            self.MissingRequiredField("payload_structure_ref")
+        if not isinstance(self.payload_structure_ref, DataStructureElementId):
+            self.payload_structure_ref = DataStructureElementId(self.payload_structure_ref)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
+
+        if self.headers_structure_ref is not None and not isinstance(self.headers_structure_ref, DataStructureElementId):
+            self.headers_structure_ref = DataStructureElementId(self.headers_structure_ref)
+
+        if self.content_type is not None and not isinstance(self.content_type, str):
+            self.content_type = str(self.content_type)
+
+        if self.envelope_kind is not None and not isinstance(self.envelope_kind, EnvelopeKindEnum):
+            self.envelope_kind = EnvelopeKindEnum(self.envelope_kind)
+
+        if self.envelope_ref is not None and not isinstance(self.envelope_ref, URIorCURIE):
+            self.envelope_ref = URIorCURIE(self.envelope_ref)
+
+        if self.correlation_hint is not None and not isinstance(self.correlation_hint, str):
+            self.correlation_hint = str(self.correlation_hint)
 
         super().__post_init__(**kwargs)
 
@@ -2823,7 +3596,7 @@ class DataFlowEntityBinding(ModelElement):
     logical_entity_ref: Union[str, LogicalEntityElementId] = None
     logical_attribute_refs: Optional[Union[Union[str, LogicalAttributeElementId], list[Union[str, LogicalAttributeElementId]]]] = empty_list()
     carrier_refs: Optional[Union[Union[str, DataCarrierElementId], list[Union[str, DataCarrierElementId]]]] = empty_list()
-    physical_field_refs: Optional[Union[Union[str, PhysicalFieldElementId], list[Union[str, PhysicalFieldElementId]]]] = empty_list()
+    schema_node_refs: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
     transformation_mapping_refs: Optional[Union[Union[str, MappingElementId], list[Union[str, MappingElementId]]]] = empty_list()
     direction: Optional[Union[str, "FlowDirectionEnum"]] = None
 
@@ -2856,9 +3629,9 @@ class DataFlowEntityBinding(ModelElement):
             self.carrier_refs = [self.carrier_refs] if self.carrier_refs is not None else []
         self.carrier_refs = [v if isinstance(v, DataCarrierElementId) else DataCarrierElementId(v) for v in self.carrier_refs]
 
-        if not isinstance(self.physical_field_refs, list):
-            self.physical_field_refs = [self.physical_field_refs] if self.physical_field_refs is not None else []
-        self.physical_field_refs = [v if isinstance(v, PhysicalFieldElementId) else PhysicalFieldElementId(v) for v in self.physical_field_refs]
+        if not isinstance(self.schema_node_refs, list):
+            self.schema_node_refs = [self.schema_node_refs] if self.schema_node_refs is not None else []
+        self.schema_node_refs = [v if isinstance(v, URIorCURIE) else URIorCURIE(v) for v in self.schema_node_refs]
 
         if not isinstance(self.transformation_mapping_refs, list):
             self.transformation_mapping_refs = [self.transformation_mapping_refs] if self.transformation_mapping_refs is not None else []
@@ -3080,7 +3853,7 @@ class SelectedAttribute(ModelElement):
     description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     logical_attribute_ref: Union[str, LogicalAttributeElementId] = None
-    physical_field_refs: Optional[Union[Union[str, PhysicalFieldElementId], list[Union[str, PhysicalFieldElementId]]]] = empty_list()
+    schema_node_refs: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
     transformation_mapping_ref: Optional[Union[str, MappingElementId]] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
@@ -3094,9 +3867,9 @@ class SelectedAttribute(ModelElement):
         if not isinstance(self.logical_attribute_ref, LogicalAttributeElementId):
             self.logical_attribute_ref = LogicalAttributeElementId(self.logical_attribute_ref)
 
-        if not isinstance(self.physical_field_refs, list):
-            self.physical_field_refs = [self.physical_field_refs] if self.physical_field_refs is not None else []
-        self.physical_field_refs = [v if isinstance(v, PhysicalFieldElementId) else PhysicalFieldElementId(v) for v in self.physical_field_refs]
+        if not isinstance(self.schema_node_refs, list):
+            self.schema_node_refs = [self.schema_node_refs] if self.schema_node_refs is not None else []
+        self.schema_node_refs = [v if isinstance(v, URIorCURIE) else URIorCURIE(v) for v in self.schema_node_refs]
 
         if self.transformation_mapping_ref is not None and not isinstance(self.transformation_mapping_ref, MappingElementId):
             self.transformation_mapping_ref = MappingElementId(self.transformation_mapping_ref)
@@ -3436,10 +4209,10 @@ class RequirementCatalog(YAMLRoot):
 # Enumerations
 class LifecycleStatusEnum(EnumDefinitionImpl):
 
-    draft = PermissibleValue(text="draft")
-    active = PermissibleValue(text="active")
-    deprecated = PermissibleValue(text="deprecated")
-    retired = PermissibleValue(text="retired")
+    draft = LinkMLPermissibleValue(text="draft")
+    active = LinkMLPermissibleValue(text="active")
+    deprecated = LinkMLPermissibleValue(text="deprecated")
+    retired = LinkMLPermissibleValue(text="retired")
 
     _defn = EnumDefinition(
         name="LifecycleStatusEnum",
@@ -3447,10 +4220,10 @@ class LifecycleStatusEnum(EnumDefinitionImpl):
 
 class ApprovalStatusEnum(EnumDefinitionImpl):
 
-    proposed = PermissibleValue(text="proposed")
-    approved = PermissibleValue(text="approved")
-    rejected = PermissibleValue(text="rejected")
-    superseded = PermissibleValue(text="superseded")
+    proposed = LinkMLPermissibleValue(text="proposed")
+    approved = LinkMLPermissibleValue(text="approved")
+    rejected = LinkMLPermissibleValue(text="rejected")
+    superseded = LinkMLPermissibleValue(text="superseded")
 
     _defn = EnumDefinition(
         name="ApprovalStatusEnum",
@@ -3458,9 +4231,9 @@ class ApprovalStatusEnum(EnumDefinitionImpl):
 
 class ModelLevelEnum(EnumDefinitionImpl):
 
-    conceptual = PermissibleValue(text="conceptual")
-    logical = PermissibleValue(text="logical")
-    physical = PermissibleValue(text="physical")
+    conceptual = LinkMLPermissibleValue(text="conceptual")
+    logical = LinkMLPermissibleValue(text="logical")
+    physical = LinkMLPermissibleValue(text="physical")
 
     _defn = EnumDefinition(
         name="ModelLevelEnum",
@@ -3470,19 +4243,19 @@ class EntityTypeEnum(EnumDefinitionImpl):
     """
     Роль логической сущности в модели решения.
     """
-    core = PermissibleValue(
+    core = LinkMLPermissibleValue(
         text="core",
         description="Базовая сущность, создаваемая и управляемая решением.")
-    derived = PermissibleValue(
+    derived = LinkMLPermissibleValue(
         text="derived",
         description="""Результат вычисления, агрегации, трансформации или правила; обязательны derivation rule и sources (Wave 2).""")
-    reference = PermissibleValue(
+    reference = LinkMLPermissibleValue(
         text="reference",
         description="Справочная сущность или представление управляемого справочника.")
-    projection = PermissibleValue(
+    projection = LinkMLPermissibleValue(
         text="projection",
         description="""Представление существующей сущности или набора сущностей для конкретного use case (API DTO, read model, витрина).""")
-    technical = PermissibleValue(
+    technical = LinkMLPermissibleValue(
         text="technical",
         description="Не имеет самостоятельного бизнес-смысла вне технической реализации.")
 
@@ -3495,22 +4268,22 @@ class DataClassEnum(EnumDefinitionImpl):
     """
     Класс данных для наследования модельной спецификацией дата-контракта; не совпадает с entity_type.
     """
-    reference_data = PermissibleValue(
+    reference_data = LinkMLPermissibleValue(
         text="reference_data",
         description="Нормативно-справочная информация (НСИ).")
-    master_data = PermissibleValue(
+    master_data = LinkMLPermissibleValue(
         text="master_data",
         description="Мастер-данные.")
-    transactional_data = PermissibleValue(
+    transactional_data = LinkMLPermissibleValue(
         text="transactional_data",
         description="Транзакционные данные.")
-    analytical_data = PermissibleValue(
+    analytical_data = LinkMLPermissibleValue(
         text="analytical_data",
         description="Аналитические или производные наборы данных.")
-    metadata = PermissibleValue(
+    metadata = LinkMLPermissibleValue(
         text="metadata",
         description="Метаданные.")
-    operational_data = PermissibleValue(
+    operational_data = LinkMLPermissibleValue(
         text="operational_data",
         description="""Операционные данные — данные для непосредственного выполнения операций решения, не являющиеся master/reference, transactional событием, analytical результатом или metadata.""")
 
@@ -3523,10 +4296,10 @@ class BusinessImportanceEnum(EnumDefinitionImpl):
     """
     Важность сущности в модели решения (не criticality бизнес-процесса).
     """
-    critical = PermissibleValue(text="critical")
-    high = PermissibleValue(text="high")
-    medium = PermissibleValue(text="medium")
-    low = PermissibleValue(text="low")
+    critical = LinkMLPermissibleValue(text="critical")
+    high = LinkMLPermissibleValue(text="high")
+    medium = LinkMLPermissibleValue(text="medium")
+    low = LinkMLPermissibleValue(text="low")
 
     _defn = EnumDefinition(
         name="BusinessImportanceEnum",
@@ -3537,22 +4310,22 @@ class BusinessKeyKindEnum(EnumDefinitionImpl):
     """
     Характер бизнес-ключа логической сущности.
     """
-    natural = PermissibleValue(
+    natural = LinkMLPermissibleValue(
         text="natural",
         description="Устойчивый бизнес-идентификатор, независимый от технической реализации.")
-    composite = PermissibleValue(
+    composite = LinkMLPermissibleValue(
         text="composite",
         description="Комбинация нескольких бизнес-атрибутов, уникальная в контексте.")
-    external = PermissibleValue(
+    external = LinkMLPermissibleValue(
         text="external",
         description="Идентификатор внешней системы, реестра или контрагента.")
-    local = PermissibleValue(
+    local = LinkMLPermissibleValue(
         text="local",
         description="Идентификатор, уникальный только в границе ИТ-решения или контекста.")
-    surrogate = PermissibleValue(
+    surrogate = LinkMLPermissibleValue(
         text="surrogate",
         description="Технический ключ реализации; не заменяет identity_rule.")
-    derived = PermissibleValue(
+    derived = LinkMLPermissibleValue(
         text="derived",
         description="Идентификатор, вычисляемый из других атрибутов по документированному правилу.")
 
@@ -3565,10 +4338,10 @@ class ConceptualAlignmentStatusEnum(EnumDefinitionImpl):
     """
     Статус выравнивания логической сущности с корпоративным концептуальным уровнем.
     """
-    aligned = PermissibleValue(
+    aligned = LinkMLPermissibleValue(
         text="aligned",
         description="Есть ссылка на одну или несколько концептуальных сущностей.")
-    pending = PermissibleValue(
+    pending = LinkMLPermissibleValue(
         text="pending",
         description="Связь должна быть установлена, но пока не утверждена; rationale обязателен.")
 
@@ -3580,11 +4353,11 @@ class ConceptualAlignmentStatusEnum(EnumDefinitionImpl):
     @classmethod
     def _addvals(cls):
         setattr(cls, "local-only",
-            PermissibleValue(
+            LinkMLPermissibleValue(
                 text="local-only",
                 description="""Бизнес-смысл только в контексте данного решения; корпоративный аналог сейчас не требуется; rationale обязателен."""))
         setattr(cls, "not-applicable",
-            PermissibleValue(
+            LinkMLPermissibleValue(
                 text="not-applicable",
                 description="""Сущность техническая/служебная и не относится к conceptual layer; допустимо только при entity_type technical."""))
 
@@ -3592,7 +4365,7 @@ class DefinitionScopeKindEnum(EnumDefinitionImpl):
     """
     Kind of scope for a ScopedDefinition (ADR-025). v1 supports system only; enum is intentionally extensible.
     """
-    system = PermissibleValue(
+    system = LinkMLPermissibleValue(
         text="system",
         description="Definition applies within one ITSystem of the solution.")
 
@@ -3605,16 +4378,16 @@ class ScopedDefinitionRelationEnum(EnumDefinitionImpl):
     """
     How a scoped definition relates to the element's reference definition (ADR-025).
     """
-    refines = PermissibleValue(
+    refines = LinkMLPermissibleValue(
         text="refines",
         description="Clarifies the reference definition without changing extension.")
-    narrows = PermissibleValue(
+    narrows = LinkMLPermissibleValue(
         text="narrows",
         description="Restricts the meaning to a subset in this scope.")
-    alternative = PermissibleValue(
+    alternative = LinkMLPermissibleValue(
         text="alternative",
         description="Parallel wording for the same concept in this scope.")
-    replaces = PermissibleValue(
+    replaces = LinkMLPermissibleValue(
         text="replaces",
         description="Scope-local replacement; does not change the reference outside scope.")
 
@@ -3628,10 +4401,10 @@ class EntityTierEnum(EnumDefinitionImpl):
     Structural independence of a ConceptualEntity (ADR-026). Orthogonal to entity_type, data_class, and
     business_importance.
     """
-    primary = PermissibleValue(
+    primary = LinkMLPermissibleValue(
         text="primary",
         description="""Existence does not depend on other conceptual entities (FK presence alone does not make an entity dependent).""")
-    dependent = PermissibleValue(
+    dependent = LinkMLPermissibleValue(
         text="dependent",
         description="""Cannot exist without owner entity/entities listed in depends_on_refs.""")
 
@@ -3644,10 +4417,10 @@ class DependencyKindEnum(EnumDefinitionImpl):
     """
     Kind of structural dependency for a dependent ConceptualEntity (ADR-026).
     """
-    characteristic = PermissibleValue(
+    characteristic = LinkMLPermissibleValue(
         text="characteristic",
         description="Part or detail of an owning entity (owner key in identity).")
-    associative = PermissibleValue(
+    associative = LinkMLPermissibleValue(
         text="associative",
         description="Resolves an M:N association between owner entities.")
 
@@ -3660,10 +4433,10 @@ class GenesisKindEnum(EnumDefinitionImpl):
     """
     Whether a ConceptualEntity is aligned to an external class/term or is native to MOEX (ADR-026).
     """
-    external = PermissibleValue(
+    external = LinkMLPermissibleValue(
         text="external",
         description="""Aligns to one or more ontology classes or external-specification terms (corporate architecture, business models, API/data standards).""")
-    native = PermissibleValue(
+    native = LinkMLPermissibleValue(
         text="native",
         description="Modelled in MOEX without external parent classes.")
 
@@ -3677,19 +4450,19 @@ class ExternalMatchKindEnum(EnumDefinitionImpl):
     Strength of ConceptualEntity ↔ external class alignment (ADR-026). Mirrors SKOS mapping relations plus
     owl:equivalentClass; used for definition inheritance (exact/equivalent only).
     """
-    exact = PermissibleValue(
+    exact = LinkMLPermissibleValue(
         text="exact",
         description="skos:exactMatch — substitutable; definition may inherit.")
-    equivalent = PermissibleValue(
+    equivalent = LinkMLPermissibleValue(
         text="equivalent",
         description="owl:equivalentClass — substitutable; definition may inherit.")
-    close = PermissibleValue(
+    close = LinkMLPermissibleValue(
         text="close",
         description="skos:closeMatch — not substitutable; own description required.")
-    broad = PermissibleValue(
+    broad = LinkMLPermissibleValue(
         text="broad",
         description="skos:broadMatch — external is broader; own description required.")
-    narrow = PermissibleValue(
+    narrow = LinkMLPermissibleValue(
         text="narrow",
         description="skos:narrowMatch — external is narrower; own description required.")
 
@@ -3703,8 +4476,8 @@ class ExternalSourceKindEnum(EnumDefinitionImpl):
     Kind of external source for a ConceptualEntity alignment (ADR-026). Aligned with ExternalSpecificationKind where
     values overlap.
     """
-    ontology = PermissibleValue(text="ontology")
-    other = PermissibleValue(text="other")
+    ontology = LinkMLPermissibleValue(text="ontology")
+    other = LinkMLPermissibleValue(text="other")
 
     _defn = EnumDefinition(
         name="ExternalSourceKindEnum",
@@ -3714,20 +4487,20 @@ class ExternalSourceKindEnum(EnumDefinitionImpl):
     @classmethod
     def _addvals(cls):
         setattr(cls, "corporate-architecture",
-            PermissibleValue(text="corporate-architecture"))
+            LinkMLPermissibleValue(text="corporate-architecture"))
         setattr(cls, "business-model",
-            PermissibleValue(text="business-model"))
+            LinkMLPermissibleValue(text="business-model"))
         setattr(cls, "api-spec",
-            PermissibleValue(text="api-spec"))
+            LinkMLPermissibleValue(text="api-spec"))
 
 class TermDirectionEnum(EnumDefinitionImpl):
     """
     Which side of a RelationTerm a Relationship assertion uses (ADR-026).
     """
-    forward = PermissibleValue(
+    forward = LinkMLPermissibleValue(
         text="forward",
         description="Assertion reads with forward_label (source → target).")
-    inverse = PermissibleValue(
+    inverse = LinkMLPermissibleValue(
         text="inverse",
         description="Assertion reads with inverse_label (source → target uses inverse wording).")
 
@@ -3741,16 +4514,16 @@ class MappingCoverageStatusEnum(EnumDefinitionImpl):
     Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical). Не статус самой логической
     модели.
     """
-    mapped = PermissibleValue(
+    mapped = LinkMLPermissibleValue(
         text="mapped",
         description="Есть формальное mapping.")
-    derived = PermissibleValue(
+    derived = LinkMLPermissibleValue(
         text="derived",
         description="Значение выводится из источников по documented expression.")
-    planned = PermissibleValue(
+    planned = LinkMLPermissibleValue(
         text="planned",
         description="""Физическая реализация или mapping ещё не введены. Требует mapping_rationale; не постоянный обход для active артефактов.""")
-    inherited = PermissibleValue(
+    inherited = LinkMLPermissibleValue(
         text="inherited",
         description="Mapping наследуется/делегируется из родительского элемента.")
 
@@ -3762,11 +4535,11 @@ class MappingCoverageStatusEnum(EnumDefinitionImpl):
     @classmethod
     def _addvals(cls):
         setattr(cls, "technical-only",
-            PermissibleValue(
+            LinkMLPermissibleValue(
                 text="technical-only",
                 description="Поле/объект имеет только техническое назначение."))
         setattr(cls, "not-applicable",
-            PermissibleValue(
+            LinkMLPermissibleValue(
                 text="not-applicable",
                 description="Mapping неприменим по характеру элемента."))
 
@@ -3774,15 +4547,15 @@ class RelationshipKindEnum(EnumDefinitionImpl):
     """
     Тип логической связи (Wave 2).
     """
-    association = PermissibleValue(text="association")
-    composition = PermissibleValue(text="composition")
-    aggregation = PermissibleValue(text="aggregation")
-    specialization = PermissibleValue(text="specialization")
-    reference = PermissibleValue(text="reference")
-    derivation = PermissibleValue(text="derivation")
-    realization = PermissibleValue(text="realization")
-    lineage = PermissibleValue(text="lineage")
-    event_participation = PermissibleValue(text="event_participation")
+    association = LinkMLPermissibleValue(text="association")
+    composition = LinkMLPermissibleValue(text="composition")
+    aggregation = LinkMLPermissibleValue(text="aggregation")
+    specialization = LinkMLPermissibleValue(text="specialization")
+    reference = LinkMLPermissibleValue(text="reference")
+    derivation = LinkMLPermissibleValue(text="derivation")
+    realization = LinkMLPermissibleValue(text="realization")
+    lineage = LinkMLPermissibleValue(text="lineage")
+    event_participation = LinkMLPermissibleValue(text="event_participation")
 
     _defn = EnumDefinition(
         name="RelationshipKindEnum",
@@ -3793,9 +4566,9 @@ class SecurityClassificationEnum(EnumDefinitionImpl):
     """
     Режим защиты данных (Wave 2); ортогонален governance_classification.
     """
-    internal = PermissibleValue(text="internal")
-    confidential = PermissibleValue(text="confidential")
-    restricted = PermissibleValue(text="restricted")
+    internal = LinkMLPermissibleValue(text="internal")
+    confidential = LinkMLPermissibleValue(text="confidential")
+    restricted = LinkMLPermissibleValue(text="restricted")
 
     _defn = EnumDefinition(
         name="SecurityClassificationEnum",
@@ -3806,10 +4579,10 @@ class GovernanceClassificationEnum(EnumDefinitionImpl):
     """
     Базовая шкала ограничения доступа; специальные виды тайны задаются отдельными терминами классификации.
     """
-    public = PermissibleValue(text="public")
-    internal = PermissibleValue(text="internal")
-    confidential = PermissibleValue(text="confidential")
-    restricted = PermissibleValue(text="restricted")
+    public = LinkMLPermissibleValue(text="public")
+    internal = LinkMLPermissibleValue(text="internal")
+    confidential = LinkMLPermissibleValue(text="confidential")
+    restricted = LinkMLPermissibleValue(text="restricted")
 
     _defn = EnumDefinition(
         name="GovernanceClassificationEnum",
@@ -3818,17 +4591,17 @@ class GovernanceClassificationEnum(EnumDefinitionImpl):
 
 class LogicalDataTypeEnum(EnumDefinitionImpl):
 
-    string = PermissibleValue(text="string")
-    integer = PermissibleValue(text="integer")
-    decimal = PermissibleValue(text="decimal")
-    boolean = PermissibleValue(text="boolean")
-    date = PermissibleValue(text="date")
-    datetime = PermissibleValue(text="datetime")
-    time = PermissibleValue(text="time")
-    binary = PermissibleValue(text="binary")
-    identifier = PermissibleValue(text="identifier")
-    uri = PermissibleValue(text="uri")
-    object = PermissibleValue(text="object")
+    string = LinkMLPermissibleValue(text="string")
+    integer = LinkMLPermissibleValue(text="integer")
+    decimal = LinkMLPermissibleValue(text="decimal")
+    boolean = LinkMLPermissibleValue(text="boolean")
+    date = LinkMLPermissibleValue(text="date")
+    datetime = LinkMLPermissibleValue(text="datetime")
+    time = LinkMLPermissibleValue(text="time")
+    binary = LinkMLPermissibleValue(text="binary")
+    identifier = LinkMLPermissibleValue(text="identifier")
+    uri = LinkMLPermissibleValue(text="uri")
+    object = LinkMLPermissibleValue(text="object")
 
     _defn = EnumDefinition(
         name="LogicalDataTypeEnum",
@@ -3836,10 +4609,10 @@ class LogicalDataTypeEnum(EnumDefinitionImpl):
 
 class FlowDirectionEnum(EnumDefinitionImpl):
 
-    inbound = PermissibleValue(text="inbound")
-    outbound = PermissibleValue(text="outbound")
-    internal = PermissibleValue(text="internal")
-    bidirectional = PermissibleValue(text="bidirectional")
+    inbound = LinkMLPermissibleValue(text="inbound")
+    outbound = LinkMLPermissibleValue(text="outbound")
+    internal = LinkMLPermissibleValue(text="internal")
+    bidirectional = LinkMLPermissibleValue(text="bidirectional")
 
     _defn = EnumDefinition(
         name="FlowDirectionEnum",
@@ -3847,9 +4620,9 @@ class FlowDirectionEnum(EnumDefinitionImpl):
 
 class SolutionDataRoleEnum(EnumDefinitionImpl):
 
-    producer = PermissibleValue(text="producer")
-    consumer = PermissibleValue(text="consumer")
-    intermediary = PermissibleValue(text="intermediary")
+    producer = LinkMLPermissibleValue(text="producer")
+    consumer = LinkMLPermissibleValue(text="consumer")
+    intermediary = LinkMLPermissibleValue(text="intermediary")
 
     _defn = EnumDefinition(
         name="SolutionDataRoleEnum",
@@ -3857,11 +4630,11 @@ class SolutionDataRoleEnum(EnumDefinitionImpl):
 
 class IntegrationChannelEnum(EnumDefinitionImpl):
 
-    api = PermissibleValue(text="api")
-    queue = PermissibleValue(text="queue")
-    database = PermissibleValue(text="database")
-    file = PermissibleValue(text="file")
-    other = PermissibleValue(text="other")
+    api = LinkMLPermissibleValue(text="api")
+    queue = LinkMLPermissibleValue(text="queue")
+    database = LinkMLPermissibleValue(text="database")
+    file = LinkMLPermissibleValue(text="file")
+    other = LinkMLPermissibleValue(text="other")
 
     _defn = EnumDefinition(
         name="IntegrationChannelEnum",
@@ -3869,8 +4642,8 @@ class IntegrationChannelEnum(EnumDefinitionImpl):
 
 class IntegrationClassEnum(EnumDefinitionImpl):
 
-    EAP = PermissibleValue(text="EAP")
-    EDA = PermissibleValue(text="EDA")
+    EAP = LinkMLPermissibleValue(text="EAP")
+    EDA = LinkMLPermissibleValue(text="EDA")
 
     _defn = EnumDefinition(
         name="IntegrationClassEnum",
@@ -3878,8 +4651,8 @@ class IntegrationClassEnum(EnumDefinitionImpl):
 
 class IntegrationLevelEnum(EnumDefinitionImpl):
 
-    intraplatform = PermissibleValue(text="intraplatform")
-    interplatform = PermissibleValue(text="interplatform")
+    intraplatform = LinkMLPermissibleValue(text="intraplatform")
+    interplatform = LinkMLPermissibleValue(text="interplatform")
 
     _defn = EnumDefinition(
         name="IntegrationLevelEnum",
@@ -3888,31 +4661,31 @@ class IntegrationLevelEnum(EnumDefinitionImpl):
 class MappingTypeEnum(EnumDefinitionImpl):
     """
     Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = DataCarrier ↔
-    LogicalEntity; field_mapping = mapsTo (PhysicalField ↔ LogicalAttribute); aligns_with = enterprise conceptual ↔
+    LogicalEntity; field_mapping = mapsTo (SchemaNode ↔ LogicalAttribute); aligns_with = enterprise conceptual ↔
     external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).
     """
-    semantic_equivalence = PermissibleValue(text="semantic_equivalence")
-    specialization = PermissibleValue(text="specialization")
-    implementation = PermissibleValue(text="implementation")
-    entity_physical = PermissibleValue(
+    semantic_equivalence = LinkMLPermissibleValue(text="semantic_equivalence")
+    specialization = LinkMLPermissibleValue(text="specialization")
+    implementation = LinkMLPermissibleValue(text="implementation")
+    entity_physical = LinkMLPermissibleValue(
         text="entity_physical",
         description="""Explicit entity-level link between DataCarrier and LogicalEntity (PDM-003). Do not infer from field_mapping alone.""")
-    field_mapping = PermissibleValue(
+    field_mapping = LinkMLPermissibleValue(
         text="field_mapping",
-        description="Technical/structural mapsTo between physical and logical.")
-    transformation = PermissibleValue(text="transformation")
-    aggregation = PermissibleValue(text="aggregation")
-    derivation = PermissibleValue(text="derivation")
-    realizes = PermissibleValue(
+        description="""mapsTo between SchemaNode (structure_id#local_key) and LogicalAttribute (ADR-038).""")
+    transformation = LinkMLPermissibleValue(text="transformation")
+    aggregation = LinkMLPermissibleValue(text="aggregation")
+    derivation = LinkMLPermissibleValue(text="derivation")
+    realizes = LinkMLPermissibleValue(
         text="realizes",
         description="Solution logical/concept realizes an enterprise conceptual entity.")
-    aligns_with = PermissibleValue(
+    aligns_with = LinkMLPermissibleValue(
         text="aligns_with",
         description="Enterprise conceptual aligns with an external reference term.")
 
     _defn = EnumDefinition(
         name="MappingTypeEnum",
-        description="""Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = DataCarrier ↔ LogicalEntity; field_mapping = mapsTo (PhysicalField ↔ LogicalAttribute); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).""",
+        description="""Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = DataCarrier ↔ LogicalEntity; field_mapping = mapsTo (SchemaNode ↔ LogicalAttribute); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).""",
     )
 
 class ImplementationProfileEnum(EnumDefinitionImpl):
@@ -3920,7 +4693,7 @@ class ImplementationProfileEnum(EnumDefinitionImpl):
     DAMS-side mirror of kernel ImplementationProfile for ModelPackage metadata. Package-level dams_model_level applies
     only to dams-data-model.
     """
-    other = PermissibleValue(text="other")
+    other = LinkMLPermissibleValue(text="other")
 
     _defn = EnumDefinition(
         name="ImplementationProfileEnum",
@@ -3930,24 +4703,24 @@ class ImplementationProfileEnum(EnumDefinitionImpl):
     @classmethod
     def _addvals(cls):
         setattr(cls, "dams-data-model",
-            PermissibleValue(
+            LinkMLPermissibleValue(
                 text="dams-data-model",
                 description="MOEX DAMS corporate data-model implementation."))
         setattr(cls, "ontology-application",
-            PermissibleValue(
+            LinkMLPermissibleValue(
                 text="ontology-application",
                 description="Not a DAMS model Impl — ontology application profile."))
         setattr(cls, "api-specification",
-            PermissibleValue(text="api-specification"))
+            LinkMLPermissibleValue(text="api-specification"))
         setattr(cls, "data-contract",
-            PermissibleValue(text="data-contract"))
+            LinkMLPermissibleValue(text="data-contract"))
 
 class DAMSModelLevelEnum(EnumDefinitionImpl):
     """
     Package-level DAMS model layer (ADR-021). Distinct from ModelLevelEnum (element conceptual/logical/physical). No
     domain-logical value.
     """
-    solution = PermissibleValue(
+    solution = LinkMLPermissibleValue(
         text="solution",
         description="IT-solution model with local logical/physical facets.")
 
@@ -3959,16 +4732,16 @@ class DAMSModelLevelEnum(EnumDefinitionImpl):
     @classmethod
     def _addvals(cls):
         setattr(cls, "enterprise-conceptual",
-            PermissibleValue(
+            LinkMLPermissibleValue(
                 text="enterprise-conceptual",
                 description="Enterprise corporate conceptual model (solution-independent)."))
 
 class ImplementationScopeEnum(EnumDefinitionImpl):
 
-    enterprise = PermissibleValue(
+    enterprise = LinkMLPermissibleValue(
         text="enterprise",
         description="Enterprise-wide scope (no solution_ref).")
-    solution = PermissibleValue(
+    solution = LinkMLPermissibleValue(
         text="solution",
         description="Scoped to a specific IT solution.")
 
@@ -3978,10 +4751,10 @@ class ImplementationScopeEnum(EnumDefinitionImpl):
 
 class MappingCardinalityEnum(EnumDefinitionImpl):
 
-    one_to_one = PermissibleValue(text="one_to_one")
-    one_to_many = PermissibleValue(text="one_to_many")
-    many_to_one = PermissibleValue(text="many_to_one")
-    many_to_many = PermissibleValue(text="many_to_many")
+    one_to_one = LinkMLPermissibleValue(text="one_to_one")
+    one_to_many = LinkMLPermissibleValue(text="one_to_many")
+    many_to_one = LinkMLPermissibleValue(text="many_to_one")
+    many_to_many = LinkMLPermissibleValue(text="many_to_many")
 
     _defn = EnumDefinition(
         name="MappingCardinalityEnum",
@@ -3989,10 +4762,10 @@ class MappingCardinalityEnum(EnumDefinitionImpl):
 
 class CompatibilityModeEnum(EnumDefinitionImpl):
 
-    backward = PermissibleValue(text="backward")
-    forward = PermissibleValue(text="forward")
-    full = PermissibleValue(text="full")
-    none = PermissibleValue(text="none")
+    backward = LinkMLPermissibleValue(text="backward")
+    forward = LinkMLPermissibleValue(text="forward")
+    full = LinkMLPermissibleValue(text="full")
+    none = LinkMLPermissibleValue(text="none")
 
     _defn = EnumDefinition(
         name="CompatibilityModeEnum",
@@ -4000,9 +4773,9 @@ class CompatibilityModeEnum(EnumDefinitionImpl):
 
 class SpecificationKindEnum(EnumDefinitionImpl):
 
-    integration = PermissibleValue(text="integration")
-    data_model = PermissibleValue(text="data_model")
-    data_quality = PermissibleValue(text="data_quality")
+    integration = LinkMLPermissibleValue(text="integration")
+    data_model = LinkMLPermissibleValue(text="data_model")
+    data_quality = LinkMLPermissibleValue(text="data_quality")
 
     _defn = EnumDefinition(
         name="SpecificationKindEnum",
@@ -4010,9 +4783,9 @@ class SpecificationKindEnum(EnumDefinitionImpl):
 
 class EnforcementResultEnum(EnumDefinitionImpl):
 
-    warn = PermissibleValue(text="warn")
-    fail = PermissibleValue(text="fail")
-    not_applicable = PermissibleValue(text="not_applicable")
+    warn = LinkMLPermissibleValue(text="warn")
+    fail = LinkMLPermissibleValue(text="fail")
+    not_applicable = LinkMLPermissibleValue(text="not_applicable")
 
     _defn = EnumDefinition(
         name="EnforcementResultEnum",
@@ -4021,19 +4794,19 @@ class EnforcementResultEnum(EnumDefinitionImpl):
     @classmethod
     def _addvals(cls):
         setattr(cls, "pass",
-            PermissibleValue(text="pass"))
+            LinkMLPermissibleValue(text="pass"))
 
 class RequirementLevelEnum(EnumDefinitionImpl):
     """
     Уровень применения требования к спецификации.
     """
-    conceptual_model = PermissibleValue(
+    conceptual_model = LinkMLPermissibleValue(
         text="conceptual_model",
         description="Концептуальная модель")
-    it_solution = PermissibleValue(
+    it_solution = LinkMLPermissibleValue(
         text="it_solution",
         description="ИТ-решение")
-    it_system = PermissibleValue(
+    it_system = LinkMLPermissibleValue(
         text="it_system",
         description="ИТ-система")
 
@@ -4047,22 +4820,22 @@ class RequirementLifecycleStatus(EnumDefinitionImpl):
     Статус жизненного цикла нормативного требования (SpecificationRequirement). Не заменяет ApprovalStatusEnum
     (согласование provenance у других элементов).
     """
-    draft = PermissibleValue(
+    draft = LinkMLPermissibleValue(
         text="draft",
         description="Черновик, формулируется")
-    proposed = PermissibleValue(
+    proposed = LinkMLPermissibleValue(
         text="proposed",
         description="Вынесено на согласование")
-    approved = PermissibleValue(
+    approved = LinkMLPermissibleValue(
         text="approved",
         description="Принято как норма")
-    rejected = PermissibleValue(
+    rejected = LinkMLPermissibleValue(
         text="rejected",
         description="Отклонено")
-    deprecated = PermissibleValue(
+    deprecated = LinkMLPermissibleValue(
         text="deprecated",
         description="Больше не актуально, замены нет")
-    superseded = PermissibleValue(
+    superseded = LinkMLPermissibleValue(
         text="superseded",
         description="Заменено другим требованием")
 
@@ -4076,16 +4849,16 @@ class RequirementImplementationStatus(EnumDefinitionImpl):
     Статус реализации утверждённого требования. Осмысленно при lifecycle_status=approved; не заменяет
     ApprovalStatusEnum.
     """
-    not_started = PermissibleValue(
+    not_started = LinkMLPermissibleValue(
         text="not_started",
         description="Не начато")
-    in_progress = PermissibleValue(
+    in_progress = LinkMLPermissibleValue(
         text="in_progress",
         description="Реализуется")
-    implemented = PermissibleValue(
+    implemented = LinkMLPermissibleValue(
         text="implemented",
         description="Реализовано")
-    verified = PermissibleValue(
+    verified = LinkMLPermissibleValue(
         text="verified",
         description="Проверено")
 
@@ -4098,25 +4871,25 @@ class RequirementSectionEnum(EnumDefinitionImpl):
     """
     Раздел каталога требований (трёхбуквенный код в code).
     """
-    LDM = PermissibleValue(
+    LDM = LinkMLPermissibleValue(
         text="LDM",
         description="Логическая модель")
-    PDM = PermissibleValue(
+    PDM = LinkMLPermissibleValue(
         text="PDM",
         description="Физическая модель")
-    REF = PermissibleValue(
+    REF = LinkMLPermissibleValue(
         text="REF",
         description="Связи сущностей")
-    ATR = PermissibleValue(
+    ATR = LinkMLPermissibleValue(
         text="ATR",
         description="Атрибуты")
-    FLW = PermissibleValue(
+    FLW = LinkMLPermissibleValue(
         text="FLW",
         description="Потоки данных")
-    CLS = PermissibleValue(
+    CLS = LinkMLPermissibleValue(
         text="CLS",
         description="Классификация данных")
-    GEN = PermissibleValue(
+    GEN = LinkMLPermissibleValue(
         text="GEN",
         description="Общие требования")
 
@@ -4129,20 +4902,20 @@ class FormalCheckKindEnum(EnumDefinitionImpl):
     """
     Вид формальной проверки в нотации, близкой к LinkML constraints.
     """
-    slot_required = PermissibleValue(text="slot_required")
-    slot_min_cardinality = PermissibleValue(text="slot_min_cardinality")
-    ref_resolves = PermissibleValue(text="ref_resolves")
-    key_subset = PermissibleValue(text="key_subset")
-    at_least_one_slots = PermissibleValue(
+    slot_required = LinkMLPermissibleValue(text="slot_required")
+    slot_min_cardinality = LinkMLPermissibleValue(text="slot_min_cardinality")
+    ref_resolves = LinkMLPermissibleValue(text="ref_resolves")
+    key_subset = LinkMLPermissibleValue(text="key_subset")
+    at_least_one_slots = LinkMLPermissibleValue(
         text="at_least_one_slots",
         description="Хотя бы один из target_slots заполнен (override обоих допустим).")
-    definition_resolvable = PermissibleValue(
+    definition_resolvable = LinkMLPermissibleValue(
         text="definition_resolvable",
         description="""Effective definition must resolve (ADR-025): own description, definition_source_ref, or single conceptual_entity_refs inheritance.""")
-    conditional_branch = PermissibleValue(
+    conditional_branch = LinkMLPermissibleValue(
         text="conditional_branch",
         description="""Фиксированный шаблон (имя в expression): status→slots, allowlist kinds, planned guard, semantic inclusion и т.п. Без произвольного mini-language.""")
-    custom = PermissibleValue(text="custom")
+    custom = LinkMLPermissibleValue(text="custom")
 
     _defn = EnumDefinition(
         name="FormalCheckKindEnum",
@@ -4151,27 +4924,205 @@ class FormalCheckKindEnum(EnumDefinitionImpl):
 
 class CheckSeverityEnum(EnumDefinitionImpl):
 
-    error = PermissibleValue(text="error")
-    warning = PermissibleValue(text="warning")
+    error = LinkMLPermissibleValue(text="error")
+    warning = LinkMLPermissibleValue(text="warning")
 
     _defn = EnumDefinition(
         name="CheckSeverityEnum",
     )
 
+class ConceptualDomainKindEnum(EnumDefinitionImpl):
+    """
+    Вид концептуального домена (ISO 11179 Conceptual Domain).
+    """
+    enumerated = LinkMLPermissibleValue(
+        text="enumerated",
+        description="Домен с явным набором ValueMeaning или внешней concept scheme.")
+    described = LinkMLPermissibleValue(
+        text="described",
+        description="Домен, заданный описанием без перечисления смыслов.")
+
+    _defn = EnumDefinition(
+        name="ConceptualDomainKindEnum",
+        description="Вид концептуального домена (ISO 11179 Conceptual Domain).",
+    )
+
+class ValueDomainKindEnum(EnumDefinitionImpl):
+    """
+    Вид домена представления значений (ISO 11179 Value Domain).
+    """
+    enumerated = LinkMLPermissibleValue(
+        text="enumerated",
+        description="Явный список PermissibleValue.")
+    described = LinkMLPermissibleValue(
+        text="described",
+        description="Описание через формат, min/max, единицу.")
+    reference_set = LinkMLPermissibleValue(
+        text="reference_set",
+        description="Внешний или динамический набор значений.")
+
+    _defn = EnumDefinition(
+        name="ValueDomainKindEnum",
+        description="Вид домена представления значений (ISO 11179 Value Domain).",
+    )
+
+class TypeFamilyEnum(EnumDefinitionImpl):
+    """
+    Семейство корпоративного DataType.
+    """
+    boolean = LinkMLPermissibleValue(text="boolean")
+    integer = LinkMLPermissibleValue(text="integer")
+    decimal = LinkMLPermissibleValue(text="decimal")
+    float = LinkMLPermissibleValue(text="float")
+    string = LinkMLPermissibleValue(text="string")
+    binary = LinkMLPermissibleValue(text="binary")
+    date = LinkMLPermissibleValue(text="date")
+    time = LinkMLPermissibleValue(text="time")
+    datetime = LinkMLPermissibleValue(text="datetime")
+    duration = LinkMLPermissibleValue(text="duration")
+    identifier = LinkMLPermissibleValue(text="identifier")
+    uri = LinkMLPermissibleValue(text="uri")
+    object = LinkMLPermissibleValue(text="object")
+    array = LinkMLPermissibleValue(text="array")
+    other = LinkMLPermissibleValue(text="other")
+
+    _defn = EnumDefinition(
+        name="TypeFamilyEnum",
+        description="Семейство корпоративного DataType.",
+    )
+
+class TimezonePolicyEnum(EnumDefinitionImpl):
+    """
+    Политика часового пояса для временных DataType.
+    """
+    none = LinkMLPermissibleValue(text="none")
+    utc = LinkMLPermissibleValue(text="utc")
+    with_offset = LinkMLPermissibleValue(text="with_offset")
+    local = LinkMLPermissibleValue(text="local")
+
+    _defn = EnumDefinition(
+        name="TimezonePolicyEnum",
+        description="Политика часового пояса для временных DataType.",
+    )
+
+class LossinessEnum(EnumDefinitionImpl):
+    """
+    Оценка потери точности NativeTypeBinding.
+    """
+    lossless = LinkMLPermissibleValue(text="lossless")
+    lossy = LinkMLPermissibleValue(text="lossy")
+    unknown = LinkMLPermissibleValue(text="unknown")
+
+    _defn = EnumDefinition(
+        name="LossinessEnum",
+        description="Оценка потери точности NativeTypeBinding.",
+    )
+
+class SignificanceBasisEnum(EnumDefinitionImpl):
+    """
+    Основание существования ConceptualProperty в КМД (вариант B).
+    """
+    identifying = LinkMLPermissibleValue(
+        text="identifying",
+        description="Входит в бизнес-ключ сущности.")
+    externally_aligned = LinkMLPermissibleValue(
+        text="externally_aligned",
+        description="Выравнивается с внешним термином (FIBO, ISO, API).")
+    cross_solution = LinkMLPermissibleValue(
+        text="cross_solution",
+        description="Используется в двух и более решениях.")
+    regulatory = LinkMLPermissibleValue(
+        text="regulatory",
+        description="Упомянуто в нормативном требовании или отчётности.")
+    critical_data = LinkMLPermissibleValue(
+        text="critical_data",
+        description="Критичный элемент данных (CDE), поднятый с логического уровня.")
+    governance_anchor = LinkMLPermissibleValue(
+        text="governance_anchor",
+        description="Привязаны политика или классификация предприятия.")
+    explicit_decision = LinkMLPermissibleValue(
+        text="explicit_decision",
+        description="Решение архитектурного комитета (нужен significance_rationale).")
+
+    _defn = EnumDefinition(
+        name="SignificanceBasisEnum",
+        description="Основание существования ConceptualProperty в КМД (вариант B).",
+    )
+
+class PropertyKindEnum(EnumDefinitionImpl):
+    """
+    Вид концептуального свойства.
+    """
+    descriptive = LinkMLPermissibleValue(text="descriptive")
+    identifying = LinkMLPermissibleValue(text="identifying")
+    relational = LinkMLPermissibleValue(text="relational")
+    measure = LinkMLPermissibleValue(text="measure")
+    temporal = LinkMLPermissibleValue(text="temporal")
+    status = LinkMLPermissibleValue(text="status")
+
+    _defn = EnumDefinition(
+        name="PropertyKindEnum",
+        description="Вид концептуального свойства.",
+    )
+
+class SchemaFormatEnum(EnumDefinitionImpl):
+    """
+    Формат схемы DataStructure (стартовый набор; перенос в реестр — отдельно).
+    """
+    json_schema = LinkMLPermissibleValue(text="json_schema")
+    avro = LinkMLPermissibleValue(text="avro")
+    protobuf = LinkMLPermissibleValue(text="protobuf")
+    xml_schema = LinkMLPermissibleValue(text="xml_schema")
+    relational = LinkMLPermissibleValue(text="relational")
+    openapi_schema = LinkMLPermissibleValue(text="openapi_schema")
+    other = LinkMLPermissibleValue(text="other")
+
+    _defn = EnumDefinition(
+        name="SchemaFormatEnum",
+        description="""Формат схемы DataStructure (стартовый набор; перенос в реестр — отдельно).""",
+    )
+
+class SchemaNodeKindEnum(EnumDefinitionImpl):
+    """
+    Вид узла SchemaNode.
+    """
+    scalar = LinkMLPermissibleValue(text="scalar")
+    object = LinkMLPermissibleValue(text="object")
+    array = LinkMLPermissibleValue(text="array")
+    map = LinkMLPermissibleValue(text="map")
+    union = LinkMLPermissibleValue(text="union")
+    enum = LinkMLPermissibleValue(text="enum")
+    reference = LinkMLPermissibleValue(text="reference")
+
+    _defn = EnumDefinition(
+        name="SchemaNodeKindEnum",
+        description="Вид узла SchemaNode.",
+    )
+
+class EnvelopeKindEnum(EnumDefinitionImpl):
+    """
+    Вид конверта сообщения (Message.envelope_kind).
+    """
+    none = LinkMLPermissibleValue(text="none")
+    cloudevents = LinkMLPermissibleValue(text="cloudevents")
+    custom = LinkMLPermissibleValue(text="custom")
+
+    _defn = EnumDefinition(
+        name="EnvelopeKindEnum",
+        description="Вид конверта сообщения (Message.envelope_kind).",
+    )
+
 class DataCarrierKindEnum(EnumDefinitionImpl):
 
-    relational_table = PermissibleValue(text="relational_table")
-    relational_view = PermissibleValue(text="relational_view")
-    file = PermissibleValue(text="file")
-    dataset = PermissibleValue(text="dataset")
-    stream_topic = PermissibleValue(text="stream_topic")
-    stream_queue = PermissibleValue(text="stream_queue")
-    message_type = PermissibleValue(
-        text="message_type",
-        description="Transitional; будет заменён Message/DataStructure (ADR-C).")
-    in_memory = PermissibleValue(text="in_memory")
-    api_resource = PermissibleValue(text="api_resource")
-    other = PermissibleValue(text="other")
+    relational_table = LinkMLPermissibleValue(text="relational_table")
+    relational_view = LinkMLPermissibleValue(text="relational_view")
+    file = LinkMLPermissibleValue(text="file")
+    dataset = LinkMLPermissibleValue(text="dataset")
+    stream_topic = LinkMLPermissibleValue(text="stream_topic")
+    stream_queue = LinkMLPermissibleValue(text="stream_queue")
+    in_memory = LinkMLPermissibleValue(text="in_memory")
+    api_resource = LinkMLPermissibleValue(text="api_resource")
+    other = LinkMLPermissibleValue(text="other")
 
     _defn = EnumDefinition(
         name="DataCarrierKindEnum",
@@ -4179,9 +5130,9 @@ class DataCarrierKindEnum(EnumDefinitionImpl):
 
 class AccessPointKindEnum(EnumDefinitionImpl):
 
-    interface = PermissibleValue(text="interface")
-    operation = PermissibleValue(text="operation")
-    channel = PermissibleValue(text="channel")
+    interface = LinkMLPermissibleValue(text="interface")
+    operation = LinkMLPermissibleValue(text="operation")
+    channel = LinkMLPermissibleValue(text="channel")
 
     _defn = EnumDefinition(
         name="AccessPointKindEnum",
@@ -4189,12 +5140,12 @@ class AccessPointKindEnum(EnumDefinitionImpl):
 
 class DataContainerKindEnum(EnumDefinitionImpl):
 
-    database = PermissibleValue(text="database")
-    schema = PermissibleValue(text="schema")
-    bucket = PermissibleValue(text="bucket")
-    broker = PermissibleValue(text="broker")
-    directory = PermissibleValue(text="directory")
-    cluster = PermissibleValue(text="cluster")
+    database = LinkMLPermissibleValue(text="database")
+    schema = LinkMLPermissibleValue(text="schema")
+    bucket = LinkMLPermissibleValue(text="bucket")
+    broker = LinkMLPermissibleValue(text="broker")
+    directory = LinkMLPermissibleValue(text="directory")
+    cluster = LinkMLPermissibleValue(text="cluster")
 
     _defn = EnumDefinition(
         name="DataContainerKindEnum",
@@ -4202,8 +5153,8 @@ class DataContainerKindEnum(EnumDefinitionImpl):
 
 class ExecutionAssetKindEnum(EnumDefinitionImpl):
 
-    pipeline = PermissibleValue(text="pipeline")
-    job = PermissibleValue(text="job")
+    pipeline = LinkMLPermissibleValue(text="pipeline")
+    job = LinkMLPermissibleValue(text="job")
 
     _defn = EnumDefinition(
         name="ExecutionAssetKindEnum",
@@ -4211,10 +5162,10 @@ class ExecutionAssetKindEnum(EnumDefinitionImpl):
 
 class LineageRoleEnum(EnumDefinitionImpl):
 
-    source = PermissibleValue(text="source")
-    sink = PermissibleValue(text="sink")
-    intermediate = PermissibleValue(text="intermediate")
-    none = PermissibleValue(text="none")
+    source = LinkMLPermissibleValue(text="source")
+    sink = LinkMLPermissibleValue(text="sink")
+    intermediate = LinkMLPermissibleValue(text="intermediate")
+    none = LinkMLPermissibleValue(text="none")
 
     _defn = EnumDefinition(
         name="LineageRoleEnum",
@@ -4222,9 +5173,9 @@ class LineageRoleEnum(EnumDefinitionImpl):
 
 class ContainmentKindEnum(EnumDefinitionImpl):
 
-    composite = PermissibleValue(text="composite")
-    partitioned = PermissibleValue(text="partitioned")
-    hierarchical = PermissibleValue(text="hierarchical")
+    composite = LinkMLPermissibleValue(text="composite")
+    partitioned = LinkMLPermissibleValue(text="partitioned")
+    hierarchical = LinkMLPermissibleValue(text="hierarchical")
 
     _defn = EnumDefinition(
         name="ContainmentKindEnum",
@@ -4468,8 +5419,20 @@ slots.data_containers = Slot(uri=DAMS.data_containers, name="data_containers", c
 slots.execution_assets = Slot(uri=DAMS.execution_assets, name="execution_assets", curie=DAMS.curie('execution_assets'),
                    model_uri=DAMS.execution_assets, domain=None, range=Optional[Union[dict[Union[str, ExecutionAssetElementId], Union[dict, ExecutionAsset]], list[Union[dict, ExecutionAsset]]]])
 
-slots.carrier_ref = Slot(uri=DAMS.carrier_ref, name="carrier_ref", curie=DAMS.curie('carrier_ref'),
-                   model_uri=DAMS.carrier_ref, domain=None, range=Union[str, DataCarrierElementId])
+slots.conceptual_properties = Slot(uri=DAMS.conceptual_properties, name="conceptual_properties", curie=DAMS.curie('conceptual_properties'),
+                   model_uri=DAMS.conceptual_properties, domain=None, range=Optional[Union[dict[Union[str, ConceptualPropertyElementId], Union[dict, ConceptualProperty]], list[Union[dict, ConceptualProperty]]]])
+
+slots.conceptual_domains = Slot(uri=DAMS.conceptual_domains, name="conceptual_domains", curie=DAMS.curie('conceptual_domains'),
+                   model_uri=DAMS.conceptual_domains, domain=None, range=Optional[Union[dict[Union[str, ConceptualDomainElementId], Union[dict, ConceptualDomain]], list[Union[dict, ConceptualDomain]]]])
+
+slots.value_domains = Slot(uri=DAMS.value_domains, name="value_domains", curie=DAMS.curie('value_domains'),
+                   model_uri=DAMS.value_domains, domain=None, range=Optional[Union[dict[Union[str, ValueDomainElementId], Union[dict, ValueDomain]], list[Union[dict, ValueDomain]]]])
+
+slots.data_types = Slot(uri=DAMS.data_types, name="data_types", curie=DAMS.curie('data_types'),
+                   model_uri=DAMS.data_types, domain=None, range=Optional[Union[dict[Union[str, DataTypeElementId], Union[dict, DataType]], list[Union[dict, DataType]]]])
+
+slots.native_type_bindings = Slot(uri=DAMS.native_type_bindings, name="native_type_bindings", curie=DAMS.curie('native_type_bindings'),
+                   model_uri=DAMS.native_type_bindings, domain=None, range=Optional[Union[dict[Union[str, NativeTypeBindingBindingId], Union[dict, NativeTypeBinding]], list[Union[dict, NativeTypeBinding]]]])
 
 slots.domain_ref = Slot(uri=DAMS.domain_ref, name="domain_ref", curie=DAMS.curie('domain_ref'),
                    model_uri=DAMS.domain_ref, domain=None, range=Union[str, BusinessDomainRegistryId])
@@ -4522,8 +5485,29 @@ slots.invariant_refs = Slot(uri=DAMS.invariant_refs, name="invariant_refs", curi
 slots.owner_entity_ref = Slot(uri=DAMS.owner_entity_ref, name="owner_entity_ref", curie=DAMS.curie('owner_entity_ref'),
                    model_uri=DAMS.owner_entity_ref, domain=None, range=Union[str, LogicalEntityElementId])
 
-slots.logical_type = Slot(uri=DAMS.logical_type, name="logical_type", curie=DAMS.curie('logical_type'),
-                   model_uri=DAMS.logical_type, domain=None, range=Union[str, "LogicalDataTypeEnum"])
+slots.property_owner_entity_ref = Slot(uri=DAMS.property_owner_entity_ref, name="property_owner_entity_ref", curie=DAMS.curie('property_owner_entity_ref'),
+                   model_uri=DAMS.property_owner_entity_ref, domain=None, range=Union[str, ConceptualEntityElementId])
+
+slots.concept_ref = Slot(uri=DAMS.concept_ref, name="concept_ref", curie=DAMS.curie('concept_ref'),
+                   model_uri=DAMS.concept_ref, domain=None, range=Optional[Union[str, ConceptualPropertyElementId]])
+
+slots.value_domain_ref = Slot(uri=DAMS.value_domain_ref, name="value_domain_ref", curie=DAMS.curie('value_domain_ref'),
+                   model_uri=DAMS.value_domain_ref, domain=None, range=Optional[Union[str, ValueDomainElementId]])
+
+slots.critical_data_element = Slot(uri=DAMS.critical_data_element, name="critical_data_element", curie=DAMS.curie('critical_data_element'),
+                   model_uri=DAMS.critical_data_element, domain=None, range=Optional[Union[bool, Bool]])
+
+slots.significance_basis = Slot(uri=DAMS.significance_basis, name="significance_basis", curie=DAMS.curie('significance_basis'),
+                   model_uri=DAMS.significance_basis, domain=None, range=Union[Union[str, "SignificanceBasisEnum"], list[Union[str, "SignificanceBasisEnum"]]])
+
+slots.significance_rationale = Slot(uri=DAMS.significance_rationale, name="significance_rationale", curie=DAMS.curie('significance_rationale'),
+                   model_uri=DAMS.significance_rationale, domain=None, range=Optional[str])
+
+slots.property_kind = Slot(uri=DAMS.property_kind, name="property_kind", curie=DAMS.curie('property_kind'),
+                   model_uri=DAMS.property_kind, domain=None, range=Union[str, "PropertyKindEnum"])
+
+slots.is_identifying = Slot(uri=DAMS.is_identifying, name="is_identifying", curie=DAMS.curie('is_identifying'),
+                   model_uri=DAMS.is_identifying, domain=None, range=Optional[Union[bool, Bool]])
 
 slots.required = Slot(uri=DAMS.required, name="required", curie=DAMS.curie('required'),
                    model_uri=DAMS.required, domain=None, range=Union[bool, Bool])
@@ -4536,12 +5520,6 @@ slots.minimum_cardinality = Slot(uri=DAMS.minimum_cardinality, name="minimum_car
 
 slots.maximum_cardinality = Slot(uri=DAMS.maximum_cardinality, name="maximum_cardinality", curie=DAMS.curie('maximum_cardinality'),
                    model_uri=DAMS.maximum_cardinality, domain=None, range=Optional[int])
-
-slots.value_set_ref = Slot(uri=DAMS.value_set_ref, name="value_set_ref", curie=DAMS.curie('value_set_ref'),
-                   model_uri=DAMS.value_set_ref, domain=None, range=Optional[Union[str, URI]])
-
-slots.format_pattern = Slot(uri=DAMS.format_pattern, name="format_pattern", curie=DAMS.curie('format_pattern'),
-                   model_uri=DAMS.format_pattern, domain=None, range=Optional[str])
 
 slots.default_value = Slot(uri=DAMS.default_value, name="default_value", curie=DAMS.curie('default_value'),
                    model_uri=DAMS.default_value, domain=None, range=Optional[str])
@@ -4569,9 +5547,6 @@ slots.mapping_coverage_status = Slot(uri=DAMS.mapping_coverage_status, name="map
 
 slots.mapping_rationale = Slot(uri=DAMS.mapping_rationale, name="mapping_rationale", curie=DAMS.curie('mapping_rationale'),
                    model_uri=DAMS.mapping_rationale, domain=None, range=Optional[str])
-
-slots.unit_code = Slot(uri=DAMS.unit_code, name="unit_code", curie=DAMS.curie('unit_code'),
-                   model_uri=DAMS.unit_code, domain=None, range=Optional[str])
 
 slots.currency_attribute_ref = Slot(uri=DAMS.currency_attribute_ref, name="currency_attribute_ref", curie=DAMS.curie('currency_attribute_ref'),
                    model_uri=DAMS.currency_attribute_ref, domain=None, range=Optional[Union[str, URIorCURIE]])
@@ -4675,9 +5650,6 @@ slots.technology = Slot(uri=DAMS.technology, name="technology", curie=DAMS.curie
 slots.direction = Slot(uri=DAMS.direction, name="direction", curie=DAMS.curie('direction'),
                    model_uri=DAMS.direction, domain=None, range=Optional[Union[str, "FlowDirectionEnum"]])
 
-slots.physical_fields = Slot(uri=DAMS.physical_fields, name="physical_fields", curie=DAMS.curie('physical_fields'),
-                   model_uri=DAMS.physical_fields, domain=None, range=Optional[Union[dict[Union[str, PhysicalFieldElementId], Union[dict, PhysicalField]], list[Union[dict, PhysicalField]]]])
-
 slots.native_name = Slot(uri=DAMS.native_name, name="native_name", curie=DAMS.curie('native_name'),
                    model_uri=DAMS.native_name, domain=None, range=str)
 
@@ -4686,9 +5658,6 @@ slots.native_type = Slot(uri=DAMS.native_type, name="native_type", curie=DAMS.cu
 
 slots.ordinal_position = Slot(uri=DAMS.ordinal_position, name="ordinal_position", curie=DAMS.curie('ordinal_position'),
                    model_uri=DAMS.ordinal_position, domain=None, range=Optional[int])
-
-slots.schema_path = Slot(uri=DAMS.schema_path, name="schema_path", curie=DAMS.curie('schema_path'),
-                   model_uri=DAMS.schema_path, domain=None, range=Optional[str])
 
 slots.source_refs = Slot(uri=DAMS.source_refs, name="source_refs", curie=DAMS.curie('source_refs'),
                    model_uri=DAMS.source_refs, domain=None, range=Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]])
@@ -4724,10 +5693,7 @@ slots.lineage_role = Slot(uri=DAMS.lineage_role, name="lineage_role", curie=DAMS
                    model_uri=DAMS.lineage_role, domain=None, range=Optional[Union[str, "LineageRoleEnum"]])
 
 slots.structure_ref = Slot(uri=DAMS.structure_ref, name="structure_ref", curie=DAMS.curie('structure_ref'),
-                   model_uri=DAMS.structure_ref, domain=None, range=Optional[Union[str, URIorCURIE]])
-
-slots.schema_dialect = Slot(uri=DAMS.schema_dialect, name="schema_dialect", curie=DAMS.curie('schema_dialect'),
-                   model_uri=DAMS.schema_dialect, domain=None, range=Optional[str])
+                   model_uri=DAMS.structure_ref, domain=None, range=Optional[Union[str, DataStructureElementId]])
 
 slots.data_format = Slot(uri=DAMS.data_format, name="data_format", curie=DAMS.curie('data_format'),
                    model_uri=DAMS.data_format, domain=None, range=Optional[str])
@@ -4770,6 +5736,241 @@ slots.produces_refs = Slot(uri=DAMS.produces_refs, name="produces_refs", curie=D
 
 slots.consumes_refs = Slot(uri=DAMS.consumes_refs, name="consumes_refs", curie=DAMS.curie('consumes_refs'),
                    model_uri=DAMS.consumes_refs, domain=None, range=Optional[Union[Union[str, TechnicalAssetElementId], list[Union[str, TechnicalAssetElementId]]]])
+
+slots.conceptual_domain_kind = Slot(uri=DAMS.conceptual_domain_kind, name="conceptual_domain_kind", curie=DAMS.curie('conceptual_domain_kind'),
+                   model_uri=DAMS.conceptual_domain_kind, domain=None, range=Union[str, "ConceptualDomainKindEnum"])
+
+slots.value_meanings = Slot(uri=DAMS.value_meanings, name="value_meanings", curie=DAMS.curie('value_meanings'),
+                   model_uri=DAMS.value_meanings, domain=None, range=Optional[Union[dict[Union[str, ValueMeaningMeaningKey], Union[dict, ValueMeaning]], list[Union[dict, ValueMeaning]]]])
+
+slots.concept_scheme_uri = Slot(uri=DAMS.concept_scheme_uri, name="concept_scheme_uri", curie=DAMS.curie('concept_scheme_uri'),
+                   model_uri=DAMS.concept_scheme_uri, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.broader_domain_ref = Slot(uri=DAMS.broader_domain_ref, name="broader_domain_ref", curie=DAMS.curie('broader_domain_ref'),
+                   model_uri=DAMS.broader_domain_ref, domain=None, range=Optional[Union[str, ConceptualDomainElementId]])
+
+slots.meaning_key = Slot(uri=DAMS.meaning_key, name="meaning_key", curie=DAMS.curie('meaning_key'),
+                   model_uri=DAMS.meaning_key, domain=None, range=URIRef)
+
+slots.meaning_label = Slot(uri=DAMS.meaning_label, name="meaning_label", curie=DAMS.curie('meaning_label'),
+                   model_uri=DAMS.meaning_label, domain=None, range=Optional[str])
+
+slots.meaning_definition = Slot(uri=DAMS.meaning_definition, name="meaning_definition", curie=DAMS.curie('meaning_definition'),
+                   model_uri=DAMS.meaning_definition, domain=None, range=Optional[str])
+
+slots.meaning_term_ref = Slot(uri=DAMS.meaning_term_ref, name="meaning_term_ref", curie=DAMS.curie('meaning_term_ref'),
+                   model_uri=DAMS.meaning_term_ref, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.broader_meaning_key = Slot(uri=DAMS.broader_meaning_key, name="broader_meaning_key", curie=DAMS.curie('broader_meaning_key'),
+                   model_uri=DAMS.broader_meaning_key, domain=None, range=Optional[str])
+
+slots.meaning_status = Slot(uri=DAMS.meaning_status, name="meaning_status", curie=DAMS.curie('meaning_status'),
+                   model_uri=DAMS.meaning_status, domain=None, range=Optional[Union[str, "LifecycleStatusEnum"]])
+
+slots.type_name = Slot(uri=DAMS.type_name, name="type_name", curie=DAMS.curie('type_name'),
+                   model_uri=DAMS.type_name, domain=None, range=str)
+
+slots.type_family = Slot(uri=DAMS.type_family, name="type_family", curie=DAMS.curie('type_family'),
+                   model_uri=DAMS.type_family, domain=None, range=Union[str, "TypeFamilyEnum"])
+
+slots.precision = Slot(uri=DAMS.precision, name="precision", curie=DAMS.curie('precision'),
+                   model_uri=DAMS.precision, domain=None, range=Optional[int])
+
+slots.scale = Slot(uri=DAMS.scale, name="scale", curie=DAMS.curie('scale'),
+                   model_uri=DAMS.scale, domain=None, range=Optional[int])
+
+slots.max_length = Slot(uri=DAMS.max_length, name="max_length", curie=DAMS.curie('max_length'),
+                   model_uri=DAMS.max_length, domain=None, range=Optional[int])
+
+slots.min_length = Slot(uri=DAMS.min_length, name="min_length", curie=DAMS.curie('min_length'),
+                   model_uri=DAMS.min_length, domain=None, range=Optional[int])
+
+slots.datatype_timezone_policy = Slot(uri=DAMS.datatype_timezone_policy, name="datatype_timezone_policy", curie=DAMS.curie('datatype_timezone_policy'),
+                   model_uri=DAMS.datatype_timezone_policy, domain=None, range=Optional[Union[str, "TimezonePolicyEnum"]])
+
+slots.charset = Slot(uri=DAMS.charset, name="charset", curie=DAMS.curie('charset'),
+                   model_uri=DAMS.charset, domain=None, range=Optional[str])
+
+slots.xsd_datatype = Slot(uri=DAMS.xsd_datatype, name="xsd_datatype", curie=DAMS.curie('xsd_datatype'),
+                   model_uri=DAMS.xsd_datatype, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.linkml_type = Slot(uri=DAMS.linkml_type, name="linkml_type", curie=DAMS.curie('linkml_type'),
+                   model_uri=DAMS.linkml_type, domain=None, range=Optional[str])
+
+slots.base_type_ref = Slot(uri=DAMS.base_type_ref, name="base_type_ref", curie=DAMS.curie('base_type_ref'),
+                   model_uri=DAMS.base_type_ref, domain=None, range=Optional[Union[str, DataTypeElementId]])
+
+slots.binding_id = Slot(uri=DAMS.binding_id, name="binding_id", curie=DAMS.curie('binding_id'),
+                   model_uri=DAMS.binding_id, domain=None, range=URIRef)
+
+slots.dialect = Slot(uri=DAMS.dialect, name="dialect", curie=DAMS.curie('dialect'),
+                   model_uri=DAMS.dialect, domain=None, range=str)
+
+slots.dialect_native_type = Slot(uri=DAMS.dialect_native_type, name="dialect_native_type", curie=DAMS.curie('dialect_native_type'),
+                   model_uri=DAMS.dialect_native_type, domain=None, range=str)
+
+slots.data_type_ref = Slot(uri=DAMS.data_type_ref, name="data_type_ref", curie=DAMS.curie('data_type_ref'),
+                   model_uri=DAMS.data_type_ref, domain=None, range=Optional[Union[str, DataTypeElementId]])
+
+slots.unit_code = Slot(uri=DAMS.unit_code, name="unit_code", curie=DAMS.curie('unit_code'),
+                   model_uri=DAMS.unit_code, domain=None, range=Optional[str])
+
+slots.format_pattern = Slot(uri=DAMS.format_pattern, name="format_pattern", curie=DAMS.curie('format_pattern'),
+                   model_uri=DAMS.format_pattern, domain=None, range=Optional[str])
+
+slots.lossiness = Slot(uri=DAMS.lossiness, name="lossiness", curie=DAMS.curie('lossiness'),
+                   model_uri=DAMS.lossiness, domain=None, range=Union[str, "LossinessEnum"])
+
+slots.parameter_mapping = Slot(uri=DAMS.parameter_mapping, name="parameter_mapping", curie=DAMS.curie('parameter_mapping'),
+                   model_uri=DAMS.parameter_mapping, domain=None, range=Optional[str])
+
+slots.value_domain_kind = Slot(uri=DAMS.value_domain_kind, name="value_domain_kind", curie=DAMS.curie('value_domain_kind'),
+                   model_uri=DAMS.value_domain_kind, domain=None, range=Union[str, "ValueDomainKindEnum"])
+
+slots.conceptual_domain_ref = Slot(uri=DAMS.conceptual_domain_ref, name="conceptual_domain_ref", curie=DAMS.curie('conceptual_domain_ref'),
+                   model_uri=DAMS.conceptual_domain_ref, domain=None, range=Optional[Union[str, ConceptualDomainElementId]])
+
+slots.min_value = Slot(uri=DAMS.min_value, name="min_value", curie=DAMS.curie('min_value'),
+                   model_uri=DAMS.min_value, domain=None, range=Optional[str])
+
+slots.max_value = Slot(uri=DAMS.max_value, name="max_value", curie=DAMS.curie('max_value'),
+                   model_uri=DAMS.max_value, domain=None, range=Optional[str])
+
+slots.permissible_values = Slot(uri=DAMS.permissible_values, name="permissible_values", curie=DAMS.curie('permissible_values'),
+                   model_uri=DAMS.permissible_values, domain=None, range=Optional[Union[dict[Union[str, PermissibleValueValueCode], Union[dict, PermissibleValue]], list[Union[dict, PermissibleValue]]]])
+
+slots.value_set_source = Slot(uri=DAMS.value_set_source, name="value_set_source", curie=DAMS.curie('value_set_source'),
+                   model_uri=DAMS.value_set_source, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.dynamic_query = Slot(uri=DAMS.dynamic_query, name="dynamic_query", curie=DAMS.curie('dynamic_query'),
+                   model_uri=DAMS.dynamic_query, domain=None, range=Optional[Union[dict, ValueSetQuery]])
+
+slots.value_code = Slot(uri=DAMS.value_code, name="value_code", curie=DAMS.curie('value_code'),
+                   model_uri=DAMS.value_code, domain=None, range=URIRef)
+
+slots.value_label = Slot(uri=DAMS.value_label, name="value_label", curie=DAMS.curie('value_label'),
+                   model_uri=DAMS.value_label, domain=None, range=Optional[str])
+
+slots.value_definition = Slot(uri=DAMS.value_definition, name="value_definition", curie=DAMS.curie('value_definition'),
+                   model_uri=DAMS.value_definition, domain=None, range=Optional[str])
+
+slots.value_meaning_key = Slot(uri=DAMS.value_meaning_key, name="value_meaning_key", curie=DAMS.curie('value_meaning_key'),
+                   model_uri=DAMS.value_meaning_key, domain=None, range=Optional[str])
+
+slots.ordinal = Slot(uri=DAMS.ordinal, name="ordinal", curie=DAMS.curie('ordinal'),
+                   model_uri=DAMS.ordinal, domain=None, range=Optional[int])
+
+slots.value_status = Slot(uri=DAMS.value_status, name="value_status", curie=DAMS.curie('value_status'),
+                   model_uri=DAMS.value_status, domain=None, range=Optional[Union[str, "LifecycleStatusEnum"]])
+
+slots.value_set_query_id = Slot(uri=DAMS.value_set_query_id, name="value_set_query_id", curie=DAMS.curie('value_set_query_id'),
+                   model_uri=DAMS.value_set_query_id, domain=None, range=URIRef)
+
+slots.source_ontology = Slot(uri=DAMS.source_ontology, name="source_ontology", curie=DAMS.curie('source_ontology'),
+                   model_uri=DAMS.source_ontology, domain=None, range=Union[str, URIorCURIE])
+
+slots.source_nodes = Slot(uri=DAMS.source_nodes, name="source_nodes", curie=DAMS.curie('source_nodes'),
+                   model_uri=DAMS.source_nodes, domain=None, range=Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]])
+
+slots.relationship_types = Slot(uri=DAMS.relationship_types, name="relationship_types", curie=DAMS.curie('relationship_types'),
+                   model_uri=DAMS.relationship_types, domain=None, range=Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]])
+
+slots.include_self = Slot(uri=DAMS.include_self, name="include_self", curie=DAMS.curie('include_self'),
+                   model_uri=DAMS.include_self, domain=None, range=Optional[Union[bool, Bool]])
+
+slots.local_key = Slot(uri=DAMS.local_key, name="local_key", curie=DAMS.curie('local_key'),
+                   model_uri=DAMS.local_key, domain=None, range=URIRef)
+
+slots.schema_format = Slot(uri=DAMS.schema_format, name="schema_format", curie=DAMS.curie('schema_format'),
+                   model_uri=DAMS.schema_format, domain=None, range=Union[str, "SchemaFormatEnum"])
+
+slots.schema_dialect = Slot(uri=DAMS.schema_dialect, name="schema_dialect", curie=DAMS.curie('schema_dialect'),
+                   model_uri=DAMS.schema_dialect, domain=None, range=Optional[Union[str, URI]])
+
+slots.structure_version = Slot(uri=DAMS.structure_version, name="structure_version", curie=DAMS.curie('structure_version'),
+                   model_uri=DAMS.structure_version, domain=None, range=Union[str, SemVer])
+
+slots.root_local_key = Slot(uri=DAMS.root_local_key, name="root_local_key", curie=DAMS.curie('root_local_key'),
+                   model_uri=DAMS.root_local_key, domain=None, range=str,
+                   pattern=re.compile(r'^[a-z0-9_.-]+$'))
+
+slots.nodes = Slot(uri=DAMS.nodes, name="nodes", curie=DAMS.curie('nodes'),
+                   model_uri=DAMS.nodes, domain=None, range=Union[dict[Union[str, SchemaNodeLocalKey], Union[dict, SchemaNode]], list[Union[dict, SchemaNode]]])
+
+slots.source_pointer = Slot(uri=DAMS.source_pointer, name="source_pointer", curie=DAMS.curie('source_pointer'),
+                   model_uri=DAMS.source_pointer, domain=None, range=Optional[str])
+
+slots.content_digest = Slot(uri=DAMS.content_digest, name="content_digest", curie=DAMS.curie('content_digest'),
+                   model_uri=DAMS.content_digest, domain=None, range=Optional[Union[str, Sha256Digest]])
+
+slots.previous_version_ref = Slot(uri=DAMS.previous_version_ref, name="previous_version_ref", curie=DAMS.curie('previous_version_ref'),
+                   model_uri=DAMS.previous_version_ref, domain=None, range=Optional[Union[str, DataStructureElementId]])
+
+slots.node_kind = Slot(uri=DAMS.node_kind, name="node_kind", curie=DAMS.curie('node_kind'),
+                   model_uri=DAMS.node_kind, domain=None, range=Union[str, "SchemaNodeKindEnum"])
+
+slots.children = Slot(uri=DAMS.children, name="children", curie=DAMS.curie('children'),
+                   model_uri=DAMS.children, domain=None, range=Optional[Union[str, list[str]]])
+
+slots.item_node = Slot(uri=DAMS.item_node, name="item_node", curie=DAMS.curie('item_node'),
+                   model_uri=DAMS.item_node, domain=None, range=Optional[str])
+
+slots.nullable = Slot(uri=DAMS.nullable, name="nullable", curie=DAMS.curie('nullable'),
+                   model_uri=DAMS.nullable, domain=None, range=Optional[Union[bool, Bool]])
+
+slots.min_occurs = Slot(uri=DAMS.min_occurs, name="min_occurs", curie=DAMS.curie('min_occurs'),
+                   model_uri=DAMS.min_occurs, domain=None, range=Optional[int])
+
+slots.max_occurs = Slot(uri=DAMS.max_occurs, name="max_occurs", curie=DAMS.curie('max_occurs'),
+                   model_uri=DAMS.max_occurs, domain=None, range=Optional[int])
+
+slots.reference_target = Slot(uri=DAMS.reference_target, name="reference_target", curie=DAMS.curie('reference_target'),
+                   model_uri=DAMS.reference_target, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.realizes_attribute_ref = Slot(uri=DAMS.realizes_attribute_ref, name="realizes_attribute_ref", curie=DAMS.curie('realizes_attribute_ref'),
+                   model_uri=DAMS.realizes_attribute_ref, domain=None, range=Optional[Union[str, LogicalAttributeElementId]])
+
+slots.constraint_expressions = Slot(uri=DAMS.constraint_expressions, name="constraint_expressions", curie=DAMS.curie('constraint_expressions'),
+                   model_uri=DAMS.constraint_expressions, domain=None, range=Optional[Union[str, list[str]]])
+
+slots.column_position = Slot(uri=DAMS.column_position, name="column_position", curie=DAMS.curie('column_position'),
+                   model_uri=DAMS.column_position, domain=None, range=Optional[int])
+
+slots.is_primary_key = Slot(uri=DAMS.is_primary_key, name="is_primary_key", curie=DAMS.curie('is_primary_key'),
+                   model_uri=DAMS.is_primary_key, domain=None, range=Optional[Union[bool, Bool]])
+
+slots.is_unique = Slot(uri=DAMS.is_unique, name="is_unique", curie=DAMS.curie('is_unique'),
+                   model_uri=DAMS.is_unique, domain=None, range=Optional[Union[bool, Bool]])
+
+slots.foreign_key_target = Slot(uri=DAMS.foreign_key_target, name="foreign_key_target", curie=DAMS.curie('foreign_key_target'),
+                   model_uri=DAMS.foreign_key_target, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.payload_structure_ref = Slot(uri=DAMS.payload_structure_ref, name="payload_structure_ref", curie=DAMS.curie('payload_structure_ref'),
+                   model_uri=DAMS.payload_structure_ref, domain=None, range=Union[str, DataStructureElementId])
+
+slots.headers_structure_ref = Slot(uri=DAMS.headers_structure_ref, name="headers_structure_ref", curie=DAMS.curie('headers_structure_ref'),
+                   model_uri=DAMS.headers_structure_ref, domain=None, range=Optional[Union[str, DataStructureElementId]])
+
+slots.content_type = Slot(uri=DAMS.content_type, name="content_type", curie=DAMS.curie('content_type'),
+                   model_uri=DAMS.content_type, domain=None, range=Optional[str])
+
+slots.envelope_kind = Slot(uri=DAMS.envelope_kind, name="envelope_kind", curie=DAMS.curie('envelope_kind'),
+                   model_uri=DAMS.envelope_kind, domain=None, range=Optional[Union[str, "EnvelopeKindEnum"]])
+
+slots.envelope_ref = Slot(uri=DAMS.envelope_ref, name="envelope_ref", curie=DAMS.curie('envelope_ref'),
+                   model_uri=DAMS.envelope_ref, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.correlation_hint = Slot(uri=DAMS.correlation_hint, name="correlation_hint", curie=DAMS.curie('correlation_hint'),
+                   model_uri=DAMS.correlation_hint, domain=None, range=Optional[str])
+
+slots.data_structures = Slot(uri=DAMS.data_structures, name="data_structures", curie=DAMS.curie('data_structures'),
+                   model_uri=DAMS.data_structures, domain=None, range=Optional[Union[dict[Union[str, DataStructureElementId], Union[dict, DataStructure]], list[Union[dict, DataStructure]]]])
+
+slots.messages = Slot(uri=DAMS.messages, name="messages", curie=DAMS.curie('messages'),
+                   model_uri=DAMS.messages, domain=None, range=Optional[Union[dict[Union[str, MessageElementId], Union[dict, Message]], list[Union[dict, Message]]]])
+
+slots.message_refs = Slot(uri=DAMS.message_refs, name="message_refs", curie=DAMS.curie('message_refs'),
+                   model_uri=DAMS.message_refs, domain=None, range=Optional[Union[Union[str, MessageElementId], list[Union[str, MessageElementId]]]])
 
 slots.integration_ref = Slot(uri=DAMS.integration_ref, name="integration_ref", curie=DAMS.curie('integration_ref'),
                    model_uri=DAMS.integration_ref, domain=None, range=Union[str, IntegrationReferenceRegistryId])
@@ -4825,8 +6026,8 @@ slots.logical_attribute_refs = Slot(uri=DAMS.logical_attribute_refs, name="logic
 slots.carrier_refs = Slot(uri=DAMS.carrier_refs, name="carrier_refs", curie=DAMS.curie('carrier_refs'),
                    model_uri=DAMS.carrier_refs, domain=None, range=Optional[Union[Union[str, DataCarrierElementId], list[Union[str, DataCarrierElementId]]]])
 
-slots.physical_field_refs = Slot(uri=DAMS.physical_field_refs, name="physical_field_refs", curie=DAMS.curie('physical_field_refs'),
-                   model_uri=DAMS.physical_field_refs, domain=None, range=Optional[Union[Union[str, PhysicalFieldElementId], list[Union[str, PhysicalFieldElementId]]]])
+slots.schema_node_refs = Slot(uri=DAMS.schema_node_refs, name="schema_node_refs", curie=DAMS.curie('schema_node_refs'),
+                   model_uri=DAMS.schema_node_refs, domain=None, range=Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]])
 
 slots.transformation_mapping_refs = Slot(uri=DAMS.transformation_mapping_refs, name="transformation_mapping_refs", curie=DAMS.curie('transformation_mapping_refs'),
                    model_uri=DAMS.transformation_mapping_refs, domain=None, range=Optional[Union[Union[str, MappingElementId], list[Union[str, MappingElementId]]]])
@@ -4973,11 +6174,23 @@ slots.requirements = Slot(uri=DAMS.requirements, name="requirements", curie=DAMS
 slots.ConceptualEntity_description = Slot(uri=DAMS.description, name="ConceptualEntity_description", curie=DAMS.curie('description'),
                    model_uri=DAMS.ConceptualEntity_description, domain=ConceptualEntity, range=str)
 
+slots.ConceptualProperty_description = Slot(uri=DAMS.description, name="ConceptualProperty_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.ConceptualProperty_description, domain=ConceptualProperty, range=str)
+
+slots.ConceptualProperty_genesis_kind = Slot(uri=DAMS.genesis_kind, name="ConceptualProperty_genesis_kind", curie=DAMS.curie('genesis_kind'),
+                   model_uri=DAMS.ConceptualProperty_genesis_kind, domain=ConceptualProperty, range=Union[str, "GenesisKindEnum"])
+
 slots.LogicalEntity_description = Slot(uri=DAMS.description, name="LogicalEntity_description", curie=DAMS.curie('description'),
                    model_uri=DAMS.LogicalEntity_description, domain=LogicalEntity, range=str)
 
 slots.LogicalAttribute_description = Slot(uri=DAMS.description, name="LogicalAttribute_description", curie=DAMS.curie('description'),
                    model_uri=DAMS.LogicalAttribute_description, domain=LogicalAttribute, range=str)
+
+slots.LogicalAttribute_data_type_ref = Slot(uri=DAMS.data_type_ref, name="LogicalAttribute_data_type_ref", curie=DAMS.curie('data_type_ref'),
+                   model_uri=DAMS.LogicalAttribute_data_type_ref, domain=LogicalAttribute, range=Optional[Union[str, DataTypeElementId]])
+
+slots.LogicalAttribute_concept_ref = Slot(uri=DAMS.concept_ref, name="LogicalAttribute_concept_ref", curie=DAMS.curie('concept_ref'),
+                   model_uri=DAMS.LogicalAttribute_concept_ref, domain=LogicalAttribute, range=Optional[Union[str, ConceptualPropertyElementId]])
 
 slots.RelationTerm_description = Slot(uri=DAMS.description, name="RelationTerm_description", curie=DAMS.curie('description'),
                    model_uri=DAMS.RelationTerm_description, domain=RelationTerm, range=str)
@@ -5020,6 +6233,34 @@ slots.ExecutionAsset_asset_kind = Slot(uri=DAMS.asset_kind, name="ExecutionAsset
 
 slots.ExecutionAsset_direction = Slot(uri=DAMS.direction, name="ExecutionAsset_direction", curie=DAMS.curie('direction'),
                    model_uri=DAMS.ExecutionAsset_direction, domain=ExecutionAsset, range=Optional[Union[str, "FlowDirectionEnum"]])
+
+slots.NativeTypeBinding_data_type_ref = Slot(uri=DAMS.data_type_ref, name="NativeTypeBinding_data_type_ref", curie=DAMS.curie('data_type_ref'),
+                   model_uri=DAMS.NativeTypeBinding_data_type_ref, domain=NativeTypeBinding, range=Union[str, DataTypeElementId])
+
+slots.ValueDomain_data_type_ref = Slot(uri=DAMS.data_type_ref, name="ValueDomain_data_type_ref", curie=DAMS.curie('data_type_ref'),
+                   model_uri=DAMS.ValueDomain_data_type_ref, domain=ValueDomain, range=Union[str, DataTypeElementId])
+
+slots.EmbeddedElement_description = Slot(uri=DAMS.description, name="EmbeddedElement_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.EmbeddedElement_description, domain=EmbeddedElement, range=str)
+
+slots.SchemaNode_description = Slot(uri=DAMS.description, name="SchemaNode_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.SchemaNode_description, domain=SchemaNode, range=str)
+
+slots.SchemaNode_native_name = Slot(uri=DAMS.native_name, name="SchemaNode_native_name", curie=DAMS.curie('native_name'),
+                   model_uri=DAMS.SchemaNode_native_name, domain=SchemaNode, range=str)
+
+slots.SchemaNode_native_type = Slot(uri=DAMS.native_type, name="SchemaNode_native_type", curie=DAMS.curie('native_type'),
+                   model_uri=DAMS.SchemaNode_native_type, domain=SchemaNode, range=str)
+
+slots.SchemaNode_required = Slot(uri=DAMS.required, name="SchemaNode_required", curie=DAMS.curie('required'),
+                   model_uri=DAMS.SchemaNode_required, domain=SchemaNode, range=Union[bool, Bool])
+
+slots.SchemaNode_local_key = Slot(uri=DAMS.local_key, name="SchemaNode_local_key", curie=DAMS.curie('local_key'),
+                   model_uri=DAMS.SchemaNode_local_key, domain=SchemaNode, range=Union[str, SchemaNodeLocalKey],
+                   pattern=re.compile(r'^[a-z0-9_.-]+$'))
+
+slots.Message_description = Slot(uri=DAMS.description, name="Message_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.Message_description, domain=Message, range=str)
 
 slots.SpecificationRequirement_lifecycle_status = Slot(uri=DAMS.lifecycle_status, name="SpecificationRequirement_lifecycle_status", curie=DAMS.curie('lifecycle_status'),
                    model_uri=DAMS.SpecificationRequirement_lifecycle_status, domain=SpecificationRequirement, range=Union[str, "RequirementLifecycleStatus"])

@@ -12,27 +12,27 @@ superseded_by: MODELING_ARCHITECTURE.md
 **Date:** 2026-09-28  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md) (Proposed 0.2)
 
-Список решений из [linkml_architecture.md](../architecture/linkml_architecture.md) § «Ключевые решения». Это **проекты ADR**, не Accepted: при расхождении побеждает нормативный документ ядра.
+Спиѝок решений из [linkml_architecture.md](../architecture/linkml_architecture.md) § «Ключевые решениѝ». Это **проекты ADR**, не Accepted: при раѝхождении побеждает нормативный документ ѝдра.
 
-Viewer-решения живут отдельно: [viewer-decisions.md](../architecture/viewer-decisions.md). UI presentation — [ADR-015](ADR-015-viewer-ui-atlas.md) / [viewer-atlas](../design/viewer-atlas/README.md).
+Viewer-решениѝ живут отдельно: [viewer-decisions.md](../architecture/viewer-decisions.md). UI presentation — [ADR-015](ADR-015-viewer-ui-atlas.md) / [viewer-atlas](../design/viewer-atlas/README.md).
 
 | ADR | Title | Scope today |
 |---|---|---|
-| [ADR-001](ADR-001-linkml-yaml-canonical.md) | LinkML YAML — канон для DAMS / LinkML toolchain | действует на текущем срезе |
-| [ADR-002](ADR-002-git-published-source.md) | Git — источник опубликованных версий | действует |
-| [ADR-003](ADR-003-postgres-operational.md) | PostgreSQL — операционное хранилище и поисковая проекция | Workbench, ещё нет кода |
-| [ADR-004](ADR-004-modular-monolith.md) | Модульный монолит | действует (packages + apps/cli) |
+| [ADR-001](ADR-001-linkml-yaml-canonical.md) | LinkML YAML — канон длѝ DAMS / LinkML toolchain | дейѝтвует на текущем ѝрезе |
+| [ADR-002](ADR-002-git-published-source.md) | Git — иѝточник опубликованных верѝий | дейѝтвует |
+| [ADR-003](ADR-003-postgres-operational.md) | PostgreSQL — операционное хранилище и поиѝковаѝ проекциѝ | Workbench, ещё нет кода |
+| [ADR-004](ADR-004-modular-monolith.md) | Модульный монолит | дейѝтвует (packages + apps/cli) |
 | [ADR-005](ADR-005-drawdb-isolated.md) | drawDB — изолированное self-hosted приложение | MVP: `apps/drawdb` + adapter + API/UI |
-| [ADR-006](ADR-006-dbml-projection.md) | DBML — проекция, не source of truth | действует; Stage 5 round-trip MVP |
-| [ADR-007](ADR-007-pydantic-dto-not-validator.md) | Pydantic — API DTO, не единственный validator | действует |
+| [ADR-006](ADR-006-dbml-projection.md) | DBML — проекциѝ, не source of truth | дейѝтвует; Stage 5 round-trip MVP |
+| [ADR-007](ADR-007-pydantic-dto-not-validator.md) | Pydantic — API DTO, не единѝтвенный validator | дейѝтвует |
 | [ADR-008](ADR-008-linkml-map-provider.md) | LinkML Map за provider interface | Workbench / mappings, ещё нет кода |
-| [ADR-009](ADR-009-schema-automator-draft-only.md) | schema-automator только draft import | действует (ingest не использует) |
-| [ADR-010](ADR-010-owl-not-primary-validation.md) | OWL не основной validation | действует (каталог read-only) |
-| [ADR-011](ADR-011-reproducible-artifacts.md) | Generated artifacts воспроизводимы | Stage 0: `requirements-linkml.txt` + `compare-golden` (contracts/JSON Schema); полный matrix — этап 6 |
-| [ADR-012](ADR-012-semantic-diff-review.md) | Публикация через semantic diff и review | Workbench; CLI + API preview + Web Review changes; PR attach — нет |
-| [ADR-013](ADR-013-specification-requirements-catalog.md) | Каталог требований к спецификации в DAMS LinkML | DAMS explorer «Требования» |
+| [ADR-009](ADR-009-schema-automator-draft-only.md) | schema-automator только draft import | дейѝтвует (ingest не иѝпользует) |
+| [ADR-010](ADR-010-owl-not-primary-validation.md) | OWL не оѝновной validation | дейѝтвует (каталог read-only) |
+| [ADR-011](ADR-011-reproducible-artifacts.md) | Generated artifacts воѝпроизводимы | Stage 0: `requirements-linkml.txt` + `compare-golden` (contracts/JSON Schema); полный matrix — ѝтап 6 |
+| [ADR-012](ADR-012-semantic-diff-review.md) | Публикациѝ через semantic diff и review | Workbench; CLI + API preview + Web Review changes; PR attach — нет |
+| [ADR-013](ADR-013-specification-requirements-catalog.md) | Каталог требований к ѝпецификации в DAMS LinkML | DAMS explorer «Требованиѝ» |
 | [ADR-014](ADR-014-fibo-profile-metamodel.md) | FIBO profile = Spec; content ≠ profile metamodel | metamodel YAML + Pydantic; refined by ADR-018 / ADR-024 |
-| [ADR-015](ADR-015-viewer-ui-atlas.md) | MOEX Atlas — UI/UX стандарт Publication Viewer | Proposed; visual redesign apps/viewer |
+| [ADR-015](ADR-015-viewer-ui-atlas.md) | MOEX Atlas — UI/UX ѝтандарт Publication Viewer | Proposed; visual redesign apps/viewer |
 | [ADR-016](ADR-016-publication-section-kinds-and-profiles.md) | Publication section kinds and profiles | Proposed; DSP ProfileSpec; ontology row amended by ADR-024 |
 | [ADR-017](ADR-017-external-specification-source-sync.md) | External specification source sync | Proposed; SpecificationSource + ROBOT/git adapters |
 | [ADR-018](ADR-018-ontology-application-implementation.md) | OWL SpecImpl = application / extension ontology | Proposed; moex-fibo-application three-artifact body |
@@ -51,6 +51,15 @@ Viewer-решения живут отдельно: [viewer-decisions.md](../arch
 
 ## Как принимать
 
-1. Ревью по [CHECKLIST.md](../architecture/CHECKLIST.md), если правка затрагивает ядро.
-2. Сменить `status: Proposed` → `Accepted` только после явного решения.
-3. Не дублировать инварианты §14 MODELING_ARCHITECTURE — ADR ссылается на них.
+1. Ревью по [CHECKLIST.md](../architecture/CHECKLIST.md), еѝли правка затрагивает ѝдро.
+2. Сменить `status: Proposed` → `Accepted` только поѝле ѝвного решениѝ.
+3. Не дублировать инварианты §14 MODELING_ARCHITECTURE — ADR ѝѝылаетѝѝ на них.
+
+| [ADR-034](ADR-034-lightweight-conceptual-property.md) | ����������� ConceptualProperty (������� B) | Accepted; critical_data_element; deprecated slots |
+| [ADR-035](ADR-035-value-domains.md) | ConceptualDomain / ValueDomain / SKOS | Accepted |
+| [ADR-036](ADR-036-datatype-system.md) | DataType / NativeTypeBinding | Accepted |
+| [ADR-037](ADR-037-attribute-semantics-migration.md) | �������� ��������� LogicalAttribute | Accepted |
+| [ADR-038](ADR-038-datastructure-and-schemanode.md) | DataStructure / SchemaNode (flat nodes) | Accepted; PhysicalField removed in 2.0.0 |
+| [ADR-039](ADR-039-structure-node-addressing.md) | SchemaNode addressing (structure_id#local_key) | Accepted; amends ADR-030 |
+| [ADR-040](ADR-040-message-integration-model.md) | Message integration model | Accepted; class in moex-structure |
+| [ADR-041](ADR-041-schemanode-datatype-binding.md) | SchemaNode ? DataType / native_type | Accepted; does not duplicate ADR-036 |

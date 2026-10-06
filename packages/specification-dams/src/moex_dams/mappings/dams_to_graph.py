@@ -95,42 +95,6 @@ def build_dams_graph(body: LinkMLImplementationBody) -> DamsModelGraphView:
                         )
                     )
 
-            for field in item.get("physical_fields") or []:
-                if not isinstance(field, dict):
-                    continue
-                fid = field.get("element_id")
-                if not fid:
-                    continue
-                fid = str(fid)
-                nodes.append(
-                    GraphNode(
-                        id=fid,
-                        kind=NodeKind.FIELD,
-                        name=field.get("name"),
-                        title=field.get("title"),
-                        description=field.get("description"),
-                    )
-                )
-                edges.append(
-                    GraphEdge(source=eid, target=fid, kind=EdgeKind.CONTAINS)
-                )
-                if field.get("carrier_ref"):
-                    edges.append(
-                        GraphEdge(
-                            source=fid,
-                            target=str(field["carrier_ref"]),
-                            kind=EdgeKind.CARRIER_REF,
-                        )
-                    )
-                elif field.get("physical_object_ref"):
-                    edges.append(
-                        GraphEdge(
-                            source=fid,
-                            target=str(field["physical_object_ref"]),
-                            kind=EdgeKind.CARRIER_REF,
-                        )
-                    )
-
     add_entity("conceptual_entities", NodeKind.CONCEPTUAL_ENTITY)
     add_entity("domain_contexts", NodeKind.DOMAIN_CONTEXT)
     add_entity("logical_entities", NodeKind.LOGICAL_ENTITY)
@@ -138,6 +102,81 @@ def build_dams_graph(body: LinkMLImplementationBody) -> DamsModelGraphView:
     add_entity("access_points", NodeKind.TECHNICAL_ASSET)
     add_entity("data_containers", NodeKind.TECHNICAL_ASSET)
     add_entity("execution_assets", NodeKind.TECHNICAL_ASSET)
+
+    for item in data.get("data_structures") or []:
+        if not isinstance(item, dict):
+            continue
+        sid = item.get("element_id")
+        if not sid:
+            continue
+        sid = str(sid)
+        nodes.append(
+            GraphNode(
+                id=sid,
+                kind=NodeKind.TECHNICAL_ASSET,
+                name=item.get("name"),
+                title=item.get("title"),
+                description=item.get("description"),
+            )
+        )
+        edges.append(GraphEdge(source=package_id, target=sid, kind=EdgeKind.CONTAINS))
+        for node in item.get("nodes") or []:
+            if not isinstance(node, dict):
+                continue
+            if str(node.get("node_kind") or "") != "scalar":
+                continue
+            lk = node.get("local_key")
+            if not lk:
+                continue
+            nid = f"{sid}#{lk}"
+            nodes.append(
+                GraphNode(
+                    id=nid,
+                    kind=NodeKind.FIELD,
+                    name=node.get("native_name") or lk,
+                    title=node.get("title"),
+                    description=node.get("description"),
+                )
+            )
+            edges.append(GraphEdge(source=sid, target=nid, kind=EdgeKind.CONTAINS))
+
+    for carrier in data.get("data_carriers") or []:
+        if not isinstance(carrier, dict):
+            continue
+        cid = carrier.get("element_id")
+        sref = carrier.get("structure_ref")
+        if cid and sref:
+            edges.append(
+                GraphEdge(
+                    source=str(cid),
+                    target=str(sref),
+                    kind=EdgeKind.CARRIER_REF,
+                )
+            )
+
+    for item in data.get("messages") or []:
+        if not isinstance(item, dict):
+            continue
+        mid = item.get("element_id")
+        if not mid:
+            continue
+        mid = str(mid)
+        nodes.append(
+            GraphNode(
+                id=mid,
+                kind=NodeKind.TECHNICAL_ASSET,
+                name=item.get("name"),
+                title=item.get("title"),
+                description=item.get("description"),
+            )
+        )
+        edges.append(GraphEdge(source=package_id, target=mid, kind=EdgeKind.CONTAINS))
+        for slot in ("payload_structure_ref", "headers_structure_ref"):
+            ref = item.get(slot)
+            if ref:
+                edges.append(
+                    GraphEdge(source=mid, target=str(ref), kind=EdgeKind.CARRIER_REF)
+                )
 
     for item in data.get("relationships") or []:
         if not isinstance(item, dict):
@@ -220,6 +259,8 @@ def package_index(data: dict[str, Any]) -> dict[str, dict[str, Any]]:
         "access_points",
         "data_containers",
         "execution_assets",
+        "data_structures",
+        "messages",
         "domain_contexts",
         "mappings",
         "relationships",
@@ -229,8 +270,13 @@ def package_index(data: dict[str, Any]) -> dict[str, dict[str, Any]]:
                 index[str(item["element_id"])] = item
             if not isinstance(item, dict):
                 continue
-            for nested_key in ("attributes", "physical_fields"):
-                for nested in item.get(nested_key) or []:
+            if collection == "logical_entities":
+                for nested in item.get("attributes") or []:
                     if isinstance(nested, dict) and nested.get("element_id"):
                         index[str(nested["element_id"])] = nested
+            if collection == "data_structures":
+                sid = str(item.get("element_id") or "")
+                for nested in item.get("nodes") or []:
+                    if isinstance(nested, dict) and nested.get("local_key") and sid:
+                        index[f"{sid}#{nested['local_key']}"] = nested
     return index

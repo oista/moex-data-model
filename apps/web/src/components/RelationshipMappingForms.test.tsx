@@ -20,9 +20,20 @@ logical_entities:
 data_carriers:
   - element_id: dams:physical/mdm/topic
     asset_kind: stream_topic
-    physical_fields:
-      - element_id: dams:physical/mdm/topic/id
-        carrier_ref: dams:physical/mdm/topic
+    structure_ref: dams:structure/mdm/topic
+data_structures:
+  - element_id: dams:structure/mdm/topic
+    name: topic
+    schema_format: relational
+    root_local_key: root
+    nodes:
+      - local_key: root
+        node_kind: object
+        children: [id]
+      - local_key: id
+        node_kind: scalar
+        native_name: id
+        native_type: string
 mappings:
   - element_id: dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID
     name: map_client_id
@@ -30,7 +41,7 @@ mappings:
     source_refs:
       - dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID
     target_refs:
-      - dams:physical/mdm/topic/id
+      - dams:structure/mdm/topic#id
     mapping_type: field_mapping
     mapping_cardinality: one_to_one
 `;

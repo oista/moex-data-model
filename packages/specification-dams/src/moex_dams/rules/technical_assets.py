@@ -11,6 +11,8 @@ from moex_modeling import (
     DiagnosticSeverity,
 )
 
+from moex_dams.rules.data_structure import check_data_structures
+
 TECHNICAL_COLLECTIONS: tuple[tuple[str, str], ...] = (
     ("data_carriers", "DataCarrier"),
     ("access_points", "AccessPoint"),
@@ -26,7 +28,6 @@ DATA_CARRIER_KINDS = frozenset(
         "dataset",
         "stream_topic",
         "stream_queue",
-        "message_type",
         "in_memory",
         "api_resource",
         "other",
@@ -258,13 +259,14 @@ def check_mapping_endpoint_types(data: dict[str, Any]) -> list[Diagnostic]:
                 attr_ids.add(str(a["element_id"]))
     by_class = technical_asset_ids_by_class(data)
     carrier_ids = by_class["DataCarrier"]
-    field_ids: set[str] = set()
-    for c in data.get("data_carriers") or []:
-        if not isinstance(c, dict):
+    node_ids: set[str] = set()
+    for s in data.get("data_structures") or []:
+        if not isinstance(s, dict):
             continue
-        for f in c.get("physical_fields") or []:
-            if isinstance(f, dict) and f.get("element_id"):
-                field_ids.add(str(f["element_id"]))
+        sid = str(s.get("element_id") or "")
+        for n in s.get("nodes") or []:
+            if isinstance(n, dict) and n.get("local_key"):
+                node_ids.add(f"{sid}#{n['local_key']}")
 
     out: list[Diagnostic] = []
     for m in data.get("mappings") or []:
@@ -276,7 +278,6 @@ def check_mapping_endpoint_types(data: dict[str, Any]) -> list[Diagnostic]:
         if mtype == "entity_physical":
             has_logical = any(r in logical_ids for r in refs)
             has_carrier = any(r in carrier_ids for r in refs)
-            # Wrong if any end is a non-carrier technical asset or no LogicalEntity/DataCarrier pair
             wrong_tech = [
                 r
                 for r in refs
@@ -302,18 +303,19 @@ def check_mapping_endpoint_types(data: dict[str, Any]) -> list[Diagnostic]:
                 )
         elif mtype == "field_mapping":
             has_attr = any(r in attr_ids for r in refs)
-            has_field = any(r in field_ids for r in refs)
-            if not (has_attr and has_field):
+            has_node = any(r in node_ids for r in refs)
+            if not (has_attr and has_node):
                 out.append(
                     _diag(
                         code="DAMS-REQ-PDM-009.c2",
                         message=(
                             f'Mapping "{mid}" field_mapping must link LogicalAttribute '
-                            "and PhysicalField."
+                            "and SchemaNode (structure_id#local_key)."
                         ),
                         subject=mid or None,
                         remediation=(
-                            "Use source_refs/target_refs with LogicalAttribute and PhysicalField ids."
+                            "Use source_refs/target_refs with LogicalAttribute and "
+                            "structure_id#local_key."
                         ),
                         requirement_code="PDM-009",
                     )
@@ -460,4 +462,5 @@ def check_technical_assets(data: dict[str, Any]) -> tuple[Diagnostic, ...]:
     diags.extend(check_carrier_refs_are_data_carriers(data))
     diags.extend(check_operation_interface_ref(data))
     diags.extend(check_in_memory_location(data))
+    diags.extend(check_data_structures(data))
     return tuple(diags)

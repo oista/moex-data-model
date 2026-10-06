@@ -10,7 +10,7 @@ contract_ref: catalog:contract/DC-01425
 integration_ref: clinkr:integration/INT-00421
 model_package_ref: https://modelhub.moex.com/models/mdm/0.1.0
 model_version: 0.1.0
-model_revision: 9f2c8ab
+model_revision: a55bcd48f4d2
 selections:
 - element_id: dams:selection/DC-01425/Client
   name: client_selection
@@ -28,10 +28,11 @@ selections:
       description: Выбранный идентификатор золотой записи ЮЛ.
       lifecycle_status: active
       logical_attribute_ref: dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID
-      physical_field_refs:
-      - dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE/GOLD_ID
+      schema_node_refs:
+      - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#gold_id
     carrier_refs:
     - dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE
 compatibility_mode: backward
-integrity_digest: sha256:6589a675809d1597a6afa5bce63b4986a0352c59937fe48c7f3c300f41632378
+integrity_digest: sha256:2a8e172f2892f6b2f31295c0c408fad48a2b2e29dc4622d2868eaf9af5bfd1e4
 generated_at: '2026-09-16T20:30:00+03:00'
+compatibility_baseline_ref: dams:binding/DC-01425/1.0.0/rev/9f2c8ab

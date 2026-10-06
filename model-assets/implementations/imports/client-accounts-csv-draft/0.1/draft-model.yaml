@@ -18,13 +18,13 @@ logical_entities:
   - element_id: dams:logical/csv-draft/ClientAccount/accountId
     name: accountId
     title: Идентификатор счёта
-    logical_type: identifier
     required: true
+    data_type_ref: dams:datatype/identifier
   - element_id: dams:logical/csv-draft/ClientAccount/clientName
     name: clientName
     title: Имя клиента
-    logical_type: string
     required: true
+    data_type_ref: dams:datatype/string
 mappings:
 - element_id: dams:mapping/csv-draft/account-id
   name: map_account_id
@@ -33,7 +33,7 @@ mappings:
   source_refs:
   - dams:logical/csv-draft/ClientAccount/accountId
   target_refs:
-  - dams:physical/csv-draft/client_accounts_csv/account_id
+  - dams:structure/csv-draft/client_accounts_csv#account_id
   approval_status: pending-review
 data_carriers:
 - element_id: dams:physical/csv-draft/client_accounts_csv
@@ -41,19 +41,41 @@ data_carriers:
   title: client_accounts.csv
   description: Исходный CSV-файл импорта.
   technology: CSV
-  physical_fields:
-  - element_id: dams:physical/csv-draft/client_accounts_csv/account_id
-    name: account_id
-    native_name: account_id
-    native_type: string
-    required: true
-  - element_id: dams:physical/csv-draft/client_accounts_csv/client_name
-    name: client_name
-    native_name: client_name
-    native_type: string
-    required: true
   asset_namespace: csv://unknown
   asset_kind: file
   tags:
   - transitional
-  - namespace_heuristic
+  structure_ref: dams:structure/csv-draft/client_accounts_csv
+value_domains: []
+data_structures:
+- element_id: dams:structure/csv-draft/client_accounts_csv
+  name: client_accounts_csv
+  description: Relational structure for client_accounts_csv
+  lifecycle_status: active
+  schema_format: relational
+  structure_version: 1.0.0
+  root_local_key: root
+  nodes:
+  - local_key: root
+    native_name: client_accounts_csv
+    node_kind: object
+    description: root of client_accounts_csv
+    children:
+    - account_id
+    - client_name
+  - local_key: account_id
+    native_name: account_id
+    node_kind: scalar
+    description: account_id
+    native_type: string
+    required: true
+    ordinal_position: 1
+    column_position: 1
+  - local_key: client_name
+    native_name: client_name
+    node_kind: scalar
+    description: client_name
+    native_type: string
+    required: true
+    ordinal_position: 2
+    column_position: 2

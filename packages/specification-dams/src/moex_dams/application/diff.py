@@ -28,13 +28,20 @@ _SKIP_KEYS = frozenset(
     {
         "element_id",
         "attributes",
-        "physical_fields",
+        "nodes",
         "conceptual_entities",
         "logical_entities",
         "data_carriers",
         "access_points",
         "data_containers",
         "execution_assets",
+        "data_structures",
+        "messages",
+        "conceptual_properties",
+        "conceptual_domains",
+        "value_domains",
+        "data_types",
+        "native_type_bindings",
         "domain_contexts",
         "mappings",
         "relationships",
@@ -46,6 +53,15 @@ _SKIP_KEYS = frozenset(
         "target_entity_ref",
         "sensitivity_term_refs",
     }
+)
+
+# Slot removals that are staged deprecations (LinkML deprecated metadata).
+_DEPRECATED_ATTR_SLOTS = frozenset(
+    {"logical_type", "format_pattern", "value_set_ref", "unit_code"}
+)
+# Additive representation slots replacing deprecated ones.
+_REPLACEMENT_ATTR_SLOTS = frozenset(
+    {"data_type_ref", "value_domain_ref", "concept_ref", "critical_data_element"}
 )
 
 _REF_EDGE_KINDS = frozenset(
@@ -264,18 +280,51 @@ def _classify_item_delta(
         )
         return out
 
-    # Remaining non-doc, non-gov property deltas — conservative breaking.
+    # Remaining non-doc, non-gov property deltas — classify deprecation vs breaking.
     remaining = changed - _DOC_KEYS
     if remaining:
-        out.append(
-            SemanticChange(
-                change_code="DAMS-DIFF-PROP",
-                category=ChangeCategory.BREAKING,
-                subject_ref=eid,
-                message=f"Properties changed on {eid}: {sorted(remaining)}",
-                path=",".join(sorted(remaining)),
-            )
+        only_deprecation = remaining <= _DEPRECATED_ATTR_SLOTS and all(
+            left.get(k) is not None and right.get(k) is None for k in remaining
         )
+        only_replacement_add = remaining <= _REPLACEMENT_ATTR_SLOTS and all(
+            left.get(k) is None and right.get(k) is not None for k in remaining
+        )
+        if only_deprecation:
+            out.append(
+                SemanticChange(
+                    change_code="DAMS-DIFF-DEPRECATE-REMOVE",
+                    category=ChangeCategory.BREAKING,
+                    subject_ref=eid,
+                    message=(
+                        f"Removed slots (was deprecated) on {eid}: "
+                        f"{sorted(remaining)}"
+                    ),
+                    path=",".join(sorted(remaining)),
+                )
+            )
+        elif only_replacement_add:
+            out.append(
+                SemanticChange(
+                    change_code="DAMS-DIFF-REPLACEMENT",
+                    category=ChangeCategory.BACKWARD_COMPATIBLE,
+                    subject_ref=eid,
+                    message=(
+                        f"Replacement semantics slots added on {eid}: "
+                        f"{sorted(remaining)}"
+                    ),
+                    path=",".join(sorted(remaining)),
+                )
+            )
+        else:
+            out.append(
+                SemanticChange(
+                    change_code="DAMS-DIFF-PROP",
+                    category=ChangeCategory.BREAKING,
+                    subject_ref=eid,
+                    message=f"Properties changed on {eid}: {sorted(remaining)}",
+                    path=",".join(sorted(remaining)),
+                )
+            )
     elif changed & _DOC_KEYS:
         out.append(
             SemanticChange(

@@ -172,17 +172,6 @@
     
 
         
-      DataCarrier : physical_fields
-        
-          
-    
-        
-        
-        DataCarrier --> "*" PhysicalField : physical_fields
-        click PhysicalField href "../PhysicalField"
-    
-
-        
       DataCarrier : policy_refs
         
           
@@ -197,8 +186,6 @@
       DataCarrier : qualified_name
         
       DataCarrier : region
-        
-      DataCarrier : schema_dialect
         
       DataCarrier : security_classification
         
@@ -234,6 +221,15 @@
 
         
       DataCarrier : structure_ref
+        
+          
+    
+        
+        
+        DataCarrier --> "0..1" DataStructure : structure_ref
+        click DataStructure href "../DataStructure"
+    
+
         
       DataCarrier : system_ref
         

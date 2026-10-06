@@ -34,7 +34,7 @@ from pydantic import (
 
 
 metamodel_version = "1.11.0"
-version = "0.1.0"
+version = "2.0.0"
 
 
 class ConfiguredBaseModel(BaseModel):
@@ -464,7 +464,7 @@ class IntegrationLevelEnum(str, Enum):
 
 class MappingTypeEnum(str, Enum):
     """
-    Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = DataCarrier ↔ LogicalEntity; field_mapping = mapsTo (PhysicalField ↔ LogicalAttribute); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).
+    Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = DataCarrier ↔ LogicalEntity; field_mapping = mapsTo (SchemaNode ↔ LogicalAttribute); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).
 
     """
     semantic_equivalence = "semantic_equivalence"
@@ -477,7 +477,8 @@ class MappingTypeEnum(str, Enum):
     """
     field_mapping = "field_mapping"
     """
-    Technical/structural mapsTo between physical and logical.
+    mapsTo between SchemaNode (structure_id#local_key) and LogicalAttribute (ADR-038).
+
     """
     transformation = "transformation"
     aggregation = "aggregation"
@@ -699,6 +700,160 @@ class CheckSeverityEnum(str, Enum):
     warning = "warning"
 
 
+class ConceptualDomainKindEnum(str, Enum):
+    """
+    Вид концептуального домена (ISO 11179 Conceptual Domain).
+    """
+    enumerated = "enumerated"
+    """
+    Домен с явным набором ValueMeaning или внешней concept scheme.
+    """
+    described = "described"
+    """
+    Домен, заданный описанием без перечисления смыслов.
+    """
+
+
+class ValueDomainKindEnum(str, Enum):
+    """
+    Вид домена представления значений (ISO 11179 Value Domain).
+    """
+    enumerated = "enumerated"
+    """
+    Явный список PermissibleValue.
+    """
+    described = "described"
+    """
+    Описание через формат, min/max, единицу.
+    """
+    reference_set = "reference_set"
+    """
+    Внешний или динамический набор значений.
+    """
+
+
+class TypeFamilyEnum(str, Enum):
+    """
+    Семейство корпоративного DataType.
+    """
+    boolean = "boolean"
+    integer = "integer"
+    decimal = "decimal"
+    float = "float"
+    string = "string"
+    binary = "binary"
+    date = "date"
+    time = "time"
+    datetime = "datetime"
+    duration = "duration"
+    identifier = "identifier"
+    uri = "uri"
+    object = "object"
+    array = "array"
+    other = "other"
+
+
+class TimezonePolicyEnum(str, Enum):
+    """
+    Политика часового пояса для временных DataType.
+    """
+    none = "none"
+    utc = "utc"
+    with_offset = "with_offset"
+    local = "local"
+
+
+class LossinessEnum(str, Enum):
+    """
+    Оценка потери точности NativeTypeBinding.
+    """
+    lossless = "lossless"
+    lossy = "lossy"
+    unknown = "unknown"
+
+
+class SignificanceBasisEnum(str, Enum):
+    """
+    Основание существования ConceptualProperty в КМД (вариант B).
+    """
+    identifying = "identifying"
+    """
+    Входит в бизнес-ключ сущности.
+    """
+    externally_aligned = "externally_aligned"
+    """
+    Выравнивается с внешним термином (FIBO, ISO, API).
+    """
+    cross_solution = "cross_solution"
+    """
+    Используется в двух и более решениях.
+    """
+    regulatory = "regulatory"
+    """
+    Упомянуто в нормативном требовании или отчётности.
+    """
+    critical_data = "critical_data"
+    """
+    Критичный элемент данных (CDE), поднятый с логического уровня.
+    """
+    governance_anchor = "governance_anchor"
+    """
+    Привязаны политика или классификация предприятия.
+    """
+    explicit_decision = "explicit_decision"
+    """
+    Решение архитектурного комитета (нужен significance_rationale).
+    """
+
+
+class PropertyKindEnum(str, Enum):
+    """
+    Вид концептуального свойства.
+    """
+    descriptive = "descriptive"
+    identifying = "identifying"
+    relational = "relational"
+    measure = "measure"
+    temporal = "temporal"
+    status = "status"
+
+
+class SchemaFormatEnum(str, Enum):
+    """
+    Формат схемы DataStructure (стартовый набор; перенос в реестр — отдельно).
+
+    """
+    json_schema = "json_schema"
+    avro = "avro"
+    protobuf = "protobuf"
+    xml_schema = "xml_schema"
+    relational = "relational"
+    openapi_schema = "openapi_schema"
+    other = "other"
+
+
+class SchemaNodeKindEnum(str, Enum):
+    """
+    Вид узла SchemaNode.
+    """
+    scalar = "scalar"
+    object = "object"
+    array = "array"
+    map = "map"
+    union = "union"
+    enum = "enum"
+    reference = "reference"
+
+
+class EnvelopeKindEnum(str, Enum):
+    """
+    Вид конверта сообщения (Message.envelope_kind).
+    """
+    none = "none"
+    cloudevents = "cloudevents"
+    custom = "custom"
+
+
 class DataCarrierKindEnum(str, Enum):
     relational_table = "relational_table"
     relational_view = "relational_view"
@@ -706,10 +861,6 @@ class DataCarrierKindEnum(str, Enum):
     dataset = "dataset"
     stream_topic = "stream_topic"
     stream_queue = "stream_queue"
-    message_type = "message_type"
-    """
-    Transitional; будет заменён Message/DataStructure (ADR-C).
-    """
     in_memory = "in_memory"
     api_resource = "api_resource"
     other = "other"
@@ -1069,6 +1220,13 @@ class ModelPackage(ModelElement, HasPolicyBindings, HasGovernanceClassification,
     data_containers: Optional[list[DataContainer]] = Field(default=None, description="""Коллекция контейнеров пакета (Variant B, ADR-031).""")
     execution_assets: Optional[list[ExecutionAsset]] = Field(default=None, description="""Коллекция исполняемых активов пакета (Variant B, ADR-031).""")
     mappings: Optional[list[Mapping]] = Field(default=None)
+    conceptual_properties: Optional[list[ConceptualProperty]] = Field(default=None, description="""Значимые концептуальные свойства (только enterprise-пакеты).""")
+    conceptual_domains: Optional[list[ConceptualDomain]] = Field(default=None, description="""Концептуальные домены смыслов (только enterprise-пакеты).""")
+    value_domains: Optional[list[ValueDomain]] = Field(default=None, description="""Домены представления значений (enterprise или solution).""")
+    data_types: Optional[list[DataType]] = Field(default=None, description="""Корпоративный реестр типов данных.""")
+    native_type_bindings: Optional[list[NativeTypeBinding]] = Field(default=None, description="""Привязки нативных типов диалектов к DataType.""")
+    data_structures: Optional[list[DataStructure]] = Field(default=None, description="""Коллекция структур данных пакета.""")
+    messages: Optional[list[Message]] = Field(default=None, description="""Коллекция сообщений пакета (интеграционная модель).""")
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
@@ -1162,6 +1320,51 @@ class ConceptualEntity(ModelElement, HasDefinition, HasBusinessClassification, H
     deprecated_by_ref: Optional[str] = Field(default=None)
 
 
+class ConceptualProperty(ModelElement, HasDefinition, HasProvenance, HasPolicyBindings, HasOwnership):
+    """
+    Значимое концептуальное свойство сущности КМД. Создаётся только при наличии significance_basis; не обязательно для каждого LogicalAttribute.
+
+    """
+    property_owner_entity_ref: str = Field(default=..., description="""ConceptualEntity-владелец ConceptualProperty (концептуальный containment).
+""")
+    significance_basis: list[SignificanceBasisEnum] = Field(default=..., description="""Основания существования ConceptualProperty (минимум одно).""")
+    significance_rationale: Optional[str] = Field(default=None, description="""Обязательное обоснование, если significance_basis содержит explicit_decision.
+""")
+    property_kind: PropertyKindEnum = Field(default=..., description="""Вид концептуального свойства.""")
+    conceptual_domain_ref: Optional[str] = Field(default=None, description="""Опциональная ссылка на концептуальный домен смыслов.""")
+    is_identifying: Optional[bool] = Field(default=None, description="""Является ли свойство идентифицирующим (бизнес-ключ).""")
+    genesis_kind: GenesisKindEnum = Field(default=..., description="""external = aligns to ontology/external class(es); native = modelled without external parents (ADR-026).
+""")
+    data_owner_ref: Optional[str] = Field(default=None)
+    data_steward_ref: Optional[str] = Field(default=None)
+    owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
+""")
+    definition_source_ref: Optional[str] = Field(default=None, description="""Reference to the element or external term whose definition is inherited or adapted (ADR-025). Orthogonal to glossary_term_refs (term assignment).
+""")
+    definition_rationale: Optional[str] = Field(default=None, description="""Human rationale for declaring an own definition when a source is also cited, or for overriding an inherited definition.
+""")
+    scoped_definitions: Optional[list[ScopedDefinition]] = Field(default=None, description="""Context-scoped definitions (ADR-025); v1 scope_kind = system.""")
+    source_artifact_ref: Optional[str] = Field(default=None)
+    evidence_refs: Optional[list[str]] = Field(default=None)
+    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
+    approved_by_ref: Optional[str] = Field(default=None)
+    approved_at: Optional[datetime ] = Field(default=None)
+    policy_refs: Optional[list[str]] = Field(default=None)
+    element_id: str = Field(default=...)
+    name: str = Field(default=...)
+    title: Optional[str] = Field(default=None)
+    description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition). Absent means inherit via definition_source_ref per ADR-025.
+""")
+    aliases: Optional[list[str]] = Field(default=None)
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+
+
 class LogicalEntity(ModelElement, HasDefinition, HasPolicyBindings, HasGovernanceClassification, HasBusinessClassification, HasOwnership):
     """
     Представление бизнес-сущности в доменном контексте и модели конкретного решения.
@@ -1214,23 +1417,27 @@ class LogicalEntity(ModelElement, HasDefinition, HasPolicyBindings, HasGovernanc
 
 class LogicalAttribute(ModelElement, HasDefinition, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
     """
-    Логический атрибут сущности с бизнес-смыслом, типом, обязательностью и классификацией.
+    Логический атрибут сущности: идентификация, обязательность, кардинальность и ссылки на представление (DataType/ValueDomain) и опционально на ConceptualProperty (вариант B, ADR-034).
+
     """
     owner_entity_ref: str = Field(default=..., description="""Structural parent LogicalEntity of this attribute (containment), not the data owner role. Data ownership uses data_owner_ref via HasOwnership / ADR-023 cascade.
 """)
-    logical_type: LogicalDataTypeEnum = Field(default=...)
+    concept_ref: Optional[str] = Field(default=None, description="""Опциональная ссылка на ConceptualProperty. Отсутствие не является ошибкой и не порождает предупреждение (вариант B).
+""")
+    value_domain_ref: Optional[str] = Field(default=None, description="""Ссылка на домен представления значений.""")
+    data_type_ref: Optional[str] = Field(default=None, description="""Ссылка на корпоративный DataType. Обязателен data_type_ref и/или value_domain_ref (ADR-034 шаг 2 / PR-5).
+""")
+    critical_data_element: Optional[bool] = Field(default=None, description="""Признак критичного элемента данных (CDE). Единственный источник правды для critical_data; термин CDE в ClassificationAssignment не вводится (ADR-034).
+""")
     required: bool = Field(default=...)
     multivalued: bool = Field(default=...)
     minimum_cardinality: Optional[int] = Field(default=None, ge=0)
     maximum_cardinality: Optional[int] = Field(default=None, ge=1)
-    value_set_ref: Optional[str] = Field(default=None)
-    format_pattern: Optional[str] = Field(default=None)
     default_value: Optional[str] = Field(default=None)
     derived_expression: Optional[str] = Field(default=None)
     mapping_coverage_status: Optional[MappingCoverageStatusEnum] = Field(default=None, description="""Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
 """)
     mapping_rationale: Optional[str] = Field(default=None, description="""Обоснование для planned / technical-only / not-applicable / inherited.""")
-    unit_code: Optional[str] = Field(default=None, description="""Код единицы измерения (Wave 2 soft).""")
     currency_attribute_ref: Optional[str] = Field(default=None, description="""Ссылка на атрибут валюты для денежной величины (Wave 2 soft).""")
     timezone_policy: Optional[str] = Field(default=None, description="""Политика часового пояса для timestamp (Wave 2 soft).""")
     temporal_semantics: Optional[str] = Field(default=None, description="""Семантика даты/времени (Wave 2 soft).""")
@@ -1253,7 +1460,7 @@ class LogicalAttribute(ModelElement, HasDefinition, HasPolicyBindings, HasGovern
     element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition). v1 attributes are own-only; inheritance from conceptual attributes is out of scope (ADR-025).
+    description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition). Prefer ADR-025 (definition_source_ref / scoped_definitions); do not copy from ConceptualProperty.
 """)
     aliases: Optional[list[str]] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
@@ -1350,47 +1557,9 @@ class ExternalClassRef(HasProvenance):
     approved_at: Optional[datetime ] = Field(default=None)
 
 
-class PhysicalField(ModelElement, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
-    """
-    Поле носителя данных (DataCarrier); семантика задаётся Mapping к LogicalAttribute.
-
-    """
-    carrier_ref: str = Field(default=..., description="""Носитель данных, которому принадлежит поле.""")
-    native_name: str = Field(default=...)
-    native_type: str = Field(default=...)
-    required: bool = Field(default=...)
-    ordinal_position: Optional[int] = Field(default=None, ge=1)
-    schema_path: Optional[str] = Field(default=None)
-    mapping_coverage_status: Optional[MappingCoverageStatusEnum] = Field(default=None, description="""Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
-""")
-    mapping_rationale: Optional[str] = Field(default=None, description="""Обоснование для planned / technical-only / not-applicable / inherited.""")
-    data_owner_ref: Optional[str] = Field(default=None)
-    data_steward_ref: Optional[str] = Field(default=None)
-    owning_unit_ref: Optional[str] = Field(default=None)
-    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
-""")
-    governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
-    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
-    sensitivity_term_refs: Optional[list[str]] = Field(default=None)
-    classification_source: Optional[str] = Field(default=None)
-    classification_rationale: Optional[str] = Field(default=None)
-    policy_refs: Optional[list[str]] = Field(default=None)
-    element_id: str = Field(default=...)
-    name: str = Field(default=...)
-    title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
-    aliases: Optional[list[str]] = Field(default=None)
-    glossary_term_refs: Optional[list[str]] = Field(default=None)
-    tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
-    valid_from: Optional[datetime ] = Field(default=None)
-    valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
-
-
 class Mapping(ModelElement, HasProvenance):
     """
-    Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (PhysicalField↔LogicalAttribute), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
+    Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
 
     """
     source_refs: Optional[list[str]] = Field(default=None, min_length=1)
@@ -1420,13 +1589,12 @@ class Mapping(ModelElement, HasProvenance):
 
 class HasStructure(ConfiguredBaseModel):
     """
-    Mixin структуры данных носителя. structure_ref — временная ссылка (uriorcurie); в будущем заменяется классом DataStructure (ADR-C).
+    Mixin структуры данных носителя. structure_ref — ссылка на DataStructure (range=DataStructure, ADR-038). Диалект схемы живёт на DataStructure.schema_dialect.
 
     """
-    structure_ref: Optional[str] = Field(default=None, description="""Ссылка на структуру данных (пока uriorcurie; в будущем DataStructure).
+    structure_ref: Optional[str] = Field(default=None, description="""Ссылка на структуру данных (DataStructure, ADR-038).
 """)
-    schema_dialect: Optional[str] = Field(default=None, description="""Диалект схемы (например avro, json-schema, sql-ddl).""")
-    data_format: Optional[str] = Field(default=None, description="""Формат данных (например parquet, csv, json).""")
+    data_format: Optional[str] = Field(default=None, description="""Wire-формат носителя (parquet, csv, json); не путать с schema_format.""")
 
 
 class HasProtocolBinding(ConfiguredBaseModel):
@@ -1501,14 +1669,12 @@ class DataCarrier(TechnicalAsset, HasLocation, Contains, HasStructure):
     Носитель данных: хранит или передаёт данные (таблица, файл, топик, сообщение и т.п.).
 
     """
-    physical_fields: Optional[list[PhysicalField]] = Field(default=None)
     mapping_coverage_status: Optional[MappingCoverageStatusEnum] = Field(default=None, description="""Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
 """)
     mapping_rationale: Optional[str] = Field(default=None, description="""Обоснование для planned / technical-only / not-applicable / inherited.""")
-    structure_ref: Optional[str] = Field(default=None, description="""Ссылка на структуру данных (пока uriorcurie; в будущем DataStructure).
+    structure_ref: Optional[str] = Field(default=None, description="""Ссылка на структуру данных (DataStructure, ADR-038).
 """)
-    schema_dialect: Optional[str] = Field(default=None, description="""Диалект схемы (например avro, json-schema, sql-ddl).""")
-    data_format: Optional[str] = Field(default=None, description="""Формат данных (например parquet, csv, json).""")
+    data_format: Optional[str] = Field(default=None, description="""Wire-формат носителя (parquet, csv, json); не путать с schema_format.""")
     location_uri: Optional[str] = Field(default=None)
     region: Optional[str] = Field(default=None)
     containment_kind: Optional[ContainmentKindEnum] = Field(default=None)
@@ -1559,6 +1725,8 @@ class AccessPoint(TechnicalAsset, HasLocation, HasProtocolBinding):
     operation_name: Optional[str] = Field(default=None)
     http_method: Optional[str] = Field(default=None)
     path_template: Optional[str] = Field(default=None)
+    message_refs: Optional[list[str]] = Field(default=None, description="""Сообщения точки доступа. Допустимо для AccessPoint kind=operation|channel; запрещено для interface (LinkML rule + DAMS).
+""")
     protocol: Optional[str] = Field(default=None, description="""Протокол доступа (например https, jdbc, kafka).""")
     protocol_version: Optional[str] = Field(default=None)
     binding_ref: Optional[str] = Field(default=None, description="""Ссылка на внешнее описание binding.""")
@@ -1685,6 +1853,268 @@ class ExecutionAsset(TechnicalAsset):
     deprecated_by_ref: Optional[str] = Field(default=None)
 
 
+class ConceptualDomain(ModelElement, HasProvenance, HasOwnership):
+    """
+    Концептуальный домен значений: набор смыслов (ValueMeaning) или ссылка на внешнюю схему понятий. Допустим только в пакетах implementation_scope=enterprise.
+
+    """
+    conceptual_domain_kind: ConceptualDomainKindEnum = Field(default=..., description="""Вид концептуального домена (enumerated | described).""")
+    value_meanings: Optional[list[ValueMeaning]] = Field(default=None, description="""Встроенный список смыслов значений.""")
+    concept_scheme_uri: Optional[str] = Field(default=None, description="""Внешняя схема понятий (SKOS ConceptScheme / онтология).""")
+    broader_domain_ref: Optional[str] = Field(default=None, description="""Более широкий концептуальный домен.""")
+    data_owner_ref: Optional[str] = Field(default=None)
+    data_steward_ref: Optional[str] = Field(default=None)
+    owning_unit_ref: Optional[str] = Field(default=None)
+    ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
+""")
+    source_artifact_ref: Optional[str] = Field(default=None)
+    evidence_refs: Optional[list[str]] = Field(default=None)
+    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
+    approved_by_ref: Optional[str] = Field(default=None)
+    approved_at: Optional[datetime ] = Field(default=None)
+    element_id: str = Field(default=...)
+    name: str = Field(default=...)
+    title: Optional[str] = Field(default=None)
+    description: str = Field(default=...)
+    aliases: Optional[list[str]] = Field(default=None)
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+
+
+class ValueMeaning(ConfiguredBaseModel):
+    """
+    Смысл допустимого значения внутри ConceptualDomain (встраиваемый, без lifecycle).
+
+    """
+    meaning_key: str = Field(default=..., description="""Ключ смысла, уникальный внутри ConceptualDomain.""")
+    meaning_label: Optional[str] = Field(default=None, description="""Предпочтительная метка смысла (skos:prefLabel в OWL-проекции).""")
+    meaning_definition: Optional[str] = Field(default=None, description="""Определение смысла (skos:definition).""")
+    aliases: Optional[list[str]] = Field(default=None)
+    meaning_term_ref: Optional[str] = Field(default=None, description="""CURIE внешнего термина, уточняющего смысл.""")
+    broader_meaning_key: Optional[str] = Field(default=None, description="""Ключ более широкого ValueMeaning в том же домене.""")
+    meaning_status: Optional[LifecycleStatusEnum] = Field(default=None, description="""Статус смысла значения.""")
+
+
+class DataType(ModelElement):
+    """
+    Корпоративный тип данных: семейство, параметры представления и соответствие XSD/LinkML. Допустим только в корпоративном реестре типов.
+
+    """
+    type_name: str = Field(default=..., description="""Каноническое имя типа в корпоративном реестре.""")
+    type_family: TypeFamilyEnum = Field(default=..., description="""Семейство типа (boolean, integer, decimal, …).""")
+    precision: Optional[int] = Field(default=None, description="""Точность для decimal (общее число цифр).""", ge=1)
+    scale: Optional[int] = Field(default=None, description="""Масштаб для decimal (число цифр после запятой); scale ≤ precision.""", ge=0)
+    max_length: Optional[int] = Field(default=None, description="""Максимальная длина для string/binary.""", ge=0)
+    min_length: Optional[int] = Field(default=None, description="""Минимальная длина для string/binary.""", ge=0)
+    datatype_timezone_policy: Optional[TimezonePolicyEnum] = Field(default=None, description="""Политика часового пояса для date/time/datetime типов.""")
+    charset: Optional[str] = Field(default=None, description="""Кодировка для string/binary.""")
+    xsd_datatype: Optional[str] = Field(default=None, description="""Соответствующий XSD datatype (например xsd:string).""")
+    linkml_type: Optional[str] = Field(default=None, description="""Имя типа LinkML (string, integer, …).""")
+    base_type_ref: Optional[str] = Field(default=None, description="""Базовый тип, от которого наследуются параметры.""")
+    element_id: str = Field(default=...)
+    name: str = Field(default=...)
+    title: Optional[str] = Field(default=None)
+    description: str = Field(default=...)
+    aliases: Optional[list[str]] = Field(default=None)
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+
+
+class NativeTypeBinding(ConfiguredBaseModel):
+    """
+    Привязка нативного типа диалекта (SQL, JSON Schema и т.п.) к корпоративному DataType с оценкой потери точности.
+
+    """
+    binding_id: str = Field(default=...)
+    dialect: str = Field(default=..., description="""Диалект/платформа нативного типа (postgresql, oracle, json, …).""")
+    dialect_native_type: str = Field(default=..., description="""Имя нативного типа в диалекте. Отдельный слот от SchemaNode.native_type (другой контекст; общий URI ломает SchemaLoader merge — ADR-036).
+""")
+    data_type_ref: str = Field(default=..., description="""Ссылка на корпоративный DataType.""")
+    lossiness: LossinessEnum = Field(default=..., description="""Оценка потери точности при отображении.""")
+    parameter_mapping: Optional[str] = Field(default=None, description="""Описание отображения параметров (precision/scale/length).""")
+
+
+class ValueDomain(ModelElement):
+    """
+    Представление значений: тип, формат, единица, допустимые значения или ссылка на внешний набор. Допустим в пакетах enterprise и solution.
+
+    """
+    value_domain_kind: ValueDomainKindEnum = Field(default=..., description="""Вид домена значений (enumerated | described | reference_set).""")
+    data_type_ref: str = Field(default=..., description="""Ссылка на корпоративный DataType.""")
+    conceptual_domain_ref: Optional[str] = Field(default=None, description="""Опциональная ссылка на концептуальный домен смыслов.""")
+    unit_code: Optional[str] = Field(default=None, description="""Код единицы измерения (UCUM / корпоративный код) для ValueDomain.""")
+    format_pattern: Optional[str] = Field(default=None, description="""Шаблон/формат значения для ValueDomain (regex или маска).""")
+    min_value: Optional[str] = Field(default=None, description="""Минимальное допустимое значение (described).""")
+    max_value: Optional[str] = Field(default=None, description="""Максимальное допустимое значение (described).""")
+    permissible_values: Optional[list[PermissibleValue]] = Field(default=None, description="""Встроенный список допустимых значений.""")
+    value_set_source: Optional[str] = Field(default=None, description="""Внешний источник набора значений (reference_set).""")
+    dynamic_query: Optional[ValueSetQuery] = Field(default=None, description="""Динамический запрос набора (reachable_from).""")
+    element_id: str = Field(default=...)
+    name: str = Field(default=...)
+    title: Optional[str] = Field(default=None)
+    description: str = Field(default=...)
+    aliases: Optional[list[str]] = Field(default=None)
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+
+
+class PermissibleValue(ConfiguredBaseModel):
+    """
+    Допустимое значение внутри ValueDomain (встраиваемый).
+    """
+    value_code: str = Field(default=..., description="""Код значения, уникальный внутри ValueDomain.""")
+    value_label: Optional[str] = Field(default=None, description="""Метка допустимого значения.""")
+    value_definition: Optional[str] = Field(default=None, description="""Определение допустимого значения.""")
+    value_meaning_key: Optional[str] = Field(default=None, description="""Ключ ValueMeaning в связанном ConceptualDomain.""")
+    meaning_term_ref: Optional[str] = Field(default=None, description="""CURIE внешнего термина, уточняющего смысл.""")
+    ordinal: Optional[int] = Field(default=None, description="""Порядок значения в перечислении.""")
+    value_status: Optional[LifecycleStatusEnum] = Field(default=None, description="""Статус допустимого значения.""")
+
+
+class ValueSetQuery(ConfiguredBaseModel):
+    """
+    Динамический запрос набора значений по образцу LinkML reachable_from (source ontology, узлы, типы связей).
+
+    """
+    value_set_query_id: str = Field(default=..., description="""Локальный идентификатор динамического запроса внутри ValueDomain.""")
+    source_ontology: str = Field(default=..., description="""IRI/CURIE исходной онтологии для динамического набора.""")
+    source_nodes: Optional[list[str]] = Field(default=None, description="""Стартовые узлы reachable_from.""")
+    relationship_types: Optional[list[str]] = Field(default=None, description="""Типы связей для обхода.""")
+    include_self: Optional[bool] = Field(default=None, description="""Включать стартовые узлы в результат.""")
+
+
+class EmbeddedElement(ConfiguredBaseModel):
+    """
+    Встраиваемый вспомогательный объект без собственного жизненного цикла и глобального element_id. Идентичность локальна относительно родителя (local_key). Не путать с будущим IdentifiedElement (ADR-038).
+
+    """
+    local_key: str = Field(default=..., description="""Локальный ключ узла внутри DataStructure. Алфавит ^[a-z0-9_.-]+$ (ADR-039). Стабилен после записи; не пересчитывается при смене native_name.
+""")
+    description: Optional[str] = Field(default=None)
+
+
+class DataStructure(ModelElement):
+    """
+    Именованная версия структуры данных: корень дерева SchemaNode с форматом и опциональным диалектом (ADR-038). Хранит плоский список узлов (nodes + root_local_key).
+
+    """
+    schema_format: SchemaFormatEnum = Field(default=..., description="""Формат схемы (стартовый enum; реестр форматов — отдельная задача).""")
+    schema_dialect: Optional[str] = Field(default=None, description="""Диалект / версия языка схемы (JSON Schema dialect IRI, AsyncAPI format id). Канон — на DataStructure; на HasStructure deprecated (ADR-038).
+""")
+    structure_version: str = Field(default=..., description="""Версия структуры (SemVer).""")
+    root_local_key: str = Field(default=..., description="""local_key корневого узла в nodes.""")
+    nodes: list[SchemaNode] = Field(default=..., description="""Плоский список узлов структуры.""")
+    source_artifact_ref: Optional[str] = Field(default=None)
+    source_pointer: Optional[str] = Field(default=None, description="""JSON Pointer или аналог внутри source_artifact_ref.""")
+    content_digest: Optional[str] = Field(default=None, description="""Дайджест содержимого структуры (опционально).""")
+    previous_version_ref: Optional[str] = Field(default=None, description="""Предыдущая версия этой структуры.""")
+    element_id: str = Field(default=...)
+    name: str = Field(default=...)
+    title: Optional[str] = Field(default=None)
+    description: str = Field(default=...)
+    aliases: Optional[list[str]] = Field(default=None)
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+
+    @field_validator('root_local_key')
+    def pattern_root_local_key(cls, v):
+        pattern=re.compile(r"^[a-z0-9_.-]+$")
+        if isinstance(v, list):
+            for element in v:
+                if isinstance(element, str) and not pattern.match(element):
+                    err_msg = f"Invalid root_local_key format: {element}"
+                    raise ValueError(err_msg)
+        elif isinstance(v, str) and not pattern.match(v):
+            err_msg = f"Invalid root_local_key format: {v}"
+            raise ValueError(err_msg)
+        return v
+
+
+class SchemaNode(EmbeddedElement):
+    """
+    Узел дерева структуры. Идентичность (DataStructure.element_id, local_key). Рёбра children/item_node — строки local_key (плоская форма, ADR-038). Форма и физика в одном узле (как ODCS).
+
+    """
+    native_name: Optional[str] = Field(default=None)
+    node_kind: SchemaNodeKindEnum = Field(default=..., description="""Вид узла (scalar, object, array, map, union, enum, reference).""")
+    children: Optional[list[str]] = Field(default=None, description="""local_key дочерних узлов (object / union).""")
+    item_node: Optional[str] = Field(default=None, description="""local_key узла элемента массива или значения map.""")
+    data_type_ref: Optional[str] = Field(default=None, description="""Ссылка на корпоративный DataType.""")
+    native_type: Optional[str] = Field(default=None)
+    nullable: Optional[bool] = Field(default=None, description="""Допустимость null (отдельно от required).""")
+    required: Optional[bool] = Field(default=None)
+    min_occurs: Optional[int] = Field(default=None, description="""Минимальная кратность.""", ge=0)
+    max_occurs: Optional[int] = Field(default=None, description="""Максимальная кратность; без верхней границы слот отсутствует.""", ge=0)
+    ordinal_position: Optional[int] = Field(default=None, ge=1)
+    reference_target: Optional[str] = Field(default=None, description="""Цель для node_kind=reference (другая DataStructure или узел).""")
+    realizes_attribute_ref: Optional[str] = Field(default=None, description="""Опциональная связь с логическим атрибутом (как concept_ref).""")
+    constraint_expressions: Optional[list[str]] = Field(default=None, description="""Временные выражения ограничений до введения Expression.""")
+    default_value: Optional[str] = Field(default=None)
+    mapping_coverage_status: Optional[MappingCoverageStatusEnum] = Field(default=None, description="""Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical).
+""")
+    mapping_rationale: Optional[str] = Field(default=None, description="""Обоснование для planned / technical-only / not-applicable / inherited.""")
+    column_position: Optional[int] = Field(default=None, description="""Позиция колонки (только schema_format=relational; DAMS-валидатор).""", ge=1)
+    is_primary_key: Optional[bool] = Field(default=None, description="""Признак первичного ключа (только relational; DAMS-валидатор).""")
+    is_unique: Optional[bool] = Field(default=None, description="""Признак уникальности колонки (только relational; DAMS-валидатор).""")
+    foreign_key_target: Optional[str] = Field(default=None, description="""Цель внешнего ключа как structure_id#local_key (только relational).""")
+    local_key: str = Field(default=..., description="""Локальный ключ узла внутри DataStructure. Алфавит ^[a-z0-9_.-]+$ (ADR-039). Стабилен после записи; не пересчитывается при смене native_name.
+""")
+    description: Optional[str] = Field(default=None)
+
+    @field_validator('local_key')
+    def pattern_local_key(cls, v):
+        pattern=re.compile(r"^[a-z0-9_.-]+$")
+        if isinstance(v, list):
+            for element in v:
+                if isinstance(element, str) and not pattern.match(element):
+                    err_msg = f"Invalid local_key format: {element}"
+                    raise ValueError(err_msg)
+        elif isinstance(v, str) and not pattern.match(v):
+            err_msg = f"Invalid local_key format: {v}"
+            raise ValueError(err_msg)
+        return v
+
+
+class Message(ModelElement):
+    """
+    Элемент интеграционной модели: сообщение с payload/headers структурами. Не TechnicalAsset (нет asset_namespace / qualified_name; не carrier_refs). AccessPoint (operation|channel) ссылается через message_refs (ADR-040). Класс в moex-structure, чтобы ModelPackage и AccessPoint ссылались без цикла core↔integration (ADR-040).
+
+    """
+    payload_structure_ref: str = Field(default=..., description="""Структура тела сообщения.""")
+    headers_structure_ref: Optional[str] = Field(default=None, description="""Структура заголовков сообщения.""")
+    content_type: Optional[str] = Field(default=None, description="""MIME / content-type сообщения.""")
+    envelope_kind: Optional[EnvelopeKindEnum] = Field(default=None, description="""Вид конверта (none, cloudevents, custom).""")
+    envelope_ref: Optional[str] = Field(default=None, description="""Ссылка на описание конверта (для custom / профиля).""")
+    correlation_hint: Optional[str] = Field(default=None, description="""Подсказка корреляции (имя поля / путь).""")
+    element_id: str = Field(default=...)
+    name: str = Field(default=...)
+    title: Optional[str] = Field(default=None)
+    description: Optional[str] = Field(default=None)
+    aliases: Optional[list[str]] = Field(default=None)
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+
+
 class DataFlow(ModelElement, HasOwnership, HasLifecycle):
     """
     Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr, а семантика — модели данных.
@@ -1729,7 +2159,7 @@ class DataFlowEntityBinding(ModelElement):
     logical_entity_ref: str = Field(default=...)
     logical_attribute_refs: Optional[list[str]] = Field(default=None, min_length=1)
     carrier_refs: Optional[list[str]] = Field(default=None, description="""Носители данных, участвующие в binding (не контейнеры).""", min_length=1)
-    physical_field_refs: Optional[list[str]] = Field(default=None)
+    schema_node_refs: Optional[list[str]] = Field(default=None, description="""Ссылки на узлы схемы (SchemaNode) в DataStructure.""")
     transformation_mapping_refs: Optional[list[str]] = Field(default=None)
     direction: Optional[FlowDirectionEnum] = Field(default=None)
     element_id: str = Field(default=...)
@@ -1822,7 +2252,7 @@ class SelectedAttribute(ModelElement):
     Выбранный атрибут и соответствующее физическое поле payload, таблицы или сообщения.
     """
     logical_attribute_ref: str = Field(default=...)
-    physical_field_refs: Optional[list[str]] = Field(default=None)
+    schema_node_refs: Optional[list[str]] = Field(default=None, description="""Ссылки на узлы схемы (SchemaNode) в DataStructure.""")
     transformation_mapping_ref: Optional[str] = Field(default=None)
     element_id: str = Field(default=...)
     name: str = Field(default=...)
@@ -2010,12 +2440,12 @@ ModelElement.model_rebuild()
 ModelPackage.model_rebuild()
 DomainContext.model_rebuild()
 ConceptualEntity.model_rebuild()
+ConceptualProperty.model_rebuild()
 LogicalEntity.model_rebuild()
 LogicalAttribute.model_rebuild()
 Relationship.model_rebuild()
 RelationTerm.model_rebuild()
 ExternalClassRef.model_rebuild()
-PhysicalField.model_rebuild()
 Mapping.model_rebuild()
 HasStructure.model_rebuild()
 HasProtocolBinding.model_rebuild()
@@ -2026,6 +2456,17 @@ DataCarrier.model_rebuild()
 AccessPoint.model_rebuild()
 DataContainer.model_rebuild()
 ExecutionAsset.model_rebuild()
+ConceptualDomain.model_rebuild()
+ValueMeaning.model_rebuild()
+DataType.model_rebuild()
+NativeTypeBinding.model_rebuild()
+ValueDomain.model_rebuild()
+PermissibleValue.model_rebuild()
+ValueSetQuery.model_rebuild()
+EmbeddedElement.model_rebuild()
+DataStructure.model_rebuild()
+SchemaNode.model_rebuild()
+Message.model_rebuild()
 DataFlow.model_rebuild()
 DataFlowEntityBinding.model_rebuild()
 DataModelBinding.model_rebuild()

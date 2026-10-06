@@ -45,7 +45,7 @@ function collectIds(data: Record<string, unknown>): Set<string> {
       const row = asRecord(item);
       if (!row) continue;
       if (row.element_id) ids.add(String(row.element_id));
-      for (const nestedKey of ["attributes", "physical_fields", "fields"]) {
+      for (const nestedKey of ["attributes"]) {
         const nested = row[nestedKey];
         if (!Array.isArray(nested)) continue;
         for (const n of nested) {
@@ -53,6 +53,13 @@ function collectIds(data: Record<string, unknown>): Set<string> {
           if (nr?.element_id) ids.add(String(nr.element_id));
         }
       }
+    }
+  }
+  const structures = data.data_structures;
+  if (Array.isArray(structures)) {
+    for (const item of structures) {
+      const row = asRecord(item);
+      if (row?.element_id) ids.add(String(row.element_id));
     }
   }
   return ids;
@@ -133,8 +140,6 @@ const LEGACY_KIND: Record<string, string> = {
   view: "relational_view",
   topic: "stream_topic",
   queue: "stream_queue",
-  message: "message_type",
-  payload: "message_type",
   api: "interface",
   endpoint: "operation",
 };
@@ -146,7 +151,6 @@ const KIND_COLLECTION: Record<string, string> = {
   dataset: "data_carriers",
   stream_topic: "data_carriers",
   stream_queue: "data_carriers",
-  message_type: "data_carriers",
   in_memory: "data_carriers",
   api_resource: "data_carriers",
   other: "data_carriers",
@@ -193,31 +197,87 @@ function findDataCarrier(
   return { idx: found.idx, row: found.row };
 }
 
-function findPhysicalField(
+function findSchemaNode(
   data: Record<string, unknown>,
-  elementId: string,
+  nodeRef: string,
 ): {
-  owner: Record<string, unknown>;
+  structure: Record<string, unknown>;
   idx: number;
   row: Record<string, unknown>;
 } {
-  for (const key of TECH_COLLECTIONS) {
-    const objects = data[key];
-    if (!Array.isArray(objects)) continue;
-    for (const obj of objects) {
-      const owner = asRecord(obj);
-      if (!owner) continue;
-      const fields = owner.physical_fields;
-      if (!Array.isArray(fields)) continue;
-      for (let i = 0; i < fields.length; i++) {
-        const row = asRecord(fields[i]);
-        if (row && String(row.element_id) === elementId) {
-          return { owner, idx: i, row };
-        }
+  const hash = nodeRef.indexOf("#");
+  if (hash < 0) {
+    throw new YamlMutateError(
+      `schema node ref must be structure_id#local_key, got: ${nodeRef}`,
+    );
+  }
+  const sid = nodeRef.slice(0, hash);
+  const localKey = nodeRef.slice(hash + 1);
+  const structures = data.data_structures;
+  if (!Array.isArray(structures)) {
+    throw new YamlMutateError("data_structures missing");
+  }
+  for (const st of structures) {
+    const structure = asRecord(st);
+    if (!structure || String(structure.element_id) !== sid) continue;
+    const nodes = structure.nodes;
+    if (!Array.isArray(nodes)) continue;
+    for (let i = 0; i < nodes.length; i++) {
+      const row = asRecord(nodes[i]);
+      if (row && String(row.local_key) === localKey) {
+        return { structure, idx: i, row };
       }
     }
   }
-  throw new YamlMutateError(`physical field not found: ${elementId}`);
+  throw new YamlMutateError(`schema node not found: ${nodeRef}`);
+}
+
+function slugLocalKey(text: string): string {
+  const s = text.trim().toLowerCase();
+  let out = "";
+  for (const ch of s) {
+    if (/[a-z0-9_.-]/.test(ch)) out += ch;
+    else out += "_";
+  }
+  return out.replace(/^[_.-]+|[_.-]+$/g, "") || "_";
+}
+
+function ensureStructureForCarrier(
+  data: Record<string, unknown>,
+  carrier: Record<string, unknown>,
+): Record<string, unknown> {
+  const sid = String(carrier.structure_ref || "").trim();
+  const structures = ensureSeq(data, "data_structures");
+  if (sid) {
+    for (const st of structures) {
+      const row = asRecord(st);
+      if (row && String(row.element_id) === sid) {
+        if (!Array.isArray(row.nodes)) row.nodes = [];
+        return row;
+      }
+    }
+  }
+  const name = String(carrier.name || "structure");
+  const eid = String(carrier.element_id || "");
+  const parts = eid.split("/");
+  const slug = parts.length >= 3 ? parts[1] : "unknown";
+  const structureId = `dams:structure/${slug}/${name}`;
+  const row: Record<string, unknown> = {
+    element_id: structureId,
+    name,
+    title: carrier.title || name,
+    description: `Structure for ${name}`,
+    lifecycle_status: carrier.lifecycle_status || "draft",
+    schema_format: "relational",
+    structure_version: "1.0.0",
+    root_local_key: "root",
+    nodes: [
+      { local_key: "root", node_kind: "object", children: [] as string[] },
+    ],
+  };
+  structures.push(row);
+  carrier.structure_ref = structureId;
+  return row;
 }
 
 function applyPatch(
@@ -261,16 +321,17 @@ function mutateData(
       const ownerId = String(payload.owner_element_id || "").trim();
       const eid = String(attr.element_id || "").trim();
       const name = String(attr.name || "").trim();
-      const logicalType = String(attr.logical_type || "").trim();
-      if (!ownerId || !eid || !name || !logicalType) {
+      const dataTypeRef = String(attr.data_type_ref || "").trim();
+      const valueDomainRef = String(attr.value_domain_ref || "").trim();
+      if (!ownerId || !eid || !name || !(dataTypeRef || valueDomainRef)) {
         throw new YamlMutateError(
-          "owner_element_id, element_id, name, and logical_type are required",
+          "owner_element_id, element_id, name, and data_type_ref or value_domain_ref are required",
         );
       }
       if (ids().has(eid)) throw new YamlMutateError(`duplicate element_id: ${eid}`);
       const { row: owner } = findLogicalEntity(data, ownerId);
       if (!Array.isArray(owner.attributes)) owner.attributes = [];
-      (owner.attributes as Record<string, unknown>[]).push({
+      const row: Record<string, unknown> = {
         element_id: eid,
         name,
         title: attr.title || name,
@@ -278,10 +339,12 @@ function mutateData(
           attr.description || `Logical attribute ${name} (workbench draft).`,
         lifecycle_status: "draft",
         owner_entity_ref: ownerId,
-        logical_type: logicalType,
         required: Boolean(attr.required),
         multivalued: false,
-      });
+      };
+      if (dataTypeRef) row.data_type_ref = dataTypeRef;
+      if (valueDomainRef) row.value_domain_ref = valueDomainRef;
+      (owner.attributes as Record<string, unknown>[]).push(row);
       break;
     }
     case "update_logical_entity": {
@@ -314,7 +377,8 @@ function mutateData(
           "name",
           "title",
           "description",
-          "logical_type",
+          "data_type_ref",
+          "value_domain_ref",
           "required",
           "multivalued",
           "lifecycle_status",
@@ -455,9 +519,6 @@ function mutateData(
         ...(obj.structure_ref ? { structure_ref: obj.structure_ref } : {}),
         ...(obj.parent_ref ? { parent_ref: obj.parent_ref } : {}),
       };
-      if (collection === "data_carriers") {
-        row.physical_fields = [];
-      }
       ensureSeq(data, collection).push(row);
       break;
     }
@@ -497,60 +558,68 @@ function mutateData(
       (data[found.collection] as unknown[]).splice(found.idx, 1);
       break;
     }
-    case "add_physical_field": {
-      const field = payload.physical_field;
+    case "add_schema_node": {
+      const node = payload.schema_node;
       const ownerId = String(payload.owner_element_id || "").trim();
-      const eid = String(field.element_id || "").trim();
-      const name = String(field.name || "").trim();
-      const nativeType = String(field.native_type || "").trim();
-      if (!ownerId || !eid || !name || !nativeType) {
+      const name = String(node.name || node.native_name || "").trim();
+      const nativeType = String(node.native_type || "").trim();
+      if (!ownerId || !name || !nativeType) {
         throw new YamlMutateError(
-          "owner_element_id, element_id, name, and native_type are required",
+          "owner_element_id, name, and native_type are required",
         );
       }
-      if (ids().has(eid)) throw new YamlMutateError(`duplicate element_id: ${eid}`);
-      const { row: owner } = findDataCarrier(data, ownerId);
-      if (!Array.isArray(owner.physical_fields)) owner.physical_fields = [];
-      (owner.physical_fields as Record<string, unknown>[]).push({
-        element_id: eid,
-        name,
-        description:
-          field.description || `Physical field ${name} (workbench draft).`,
-        lifecycle_status: field.lifecycle_status || "draft",
-        carrier_ref: ownerId,
-        native_name: field.native_name || name,
+      const { row: carrier } = findDataCarrier(data, ownerId);
+      const structure = ensureStructureForCarrier(data, carrier);
+      const nodes = structure.nodes as Record<string, unknown>[];
+      let localKey = String(node.local_key || slugLocalKey(name)).trim();
+      const used = new Set(
+        nodes.map((n) => String(n.local_key || "")).filter(Boolean),
+      );
+      if (used.has(localKey)) {
+        let n = 2;
+        while (used.has(`${localKey}-${n}`)) n += 1;
+        localKey = `${localKey}-${n}`;
+      }
+      nodes.push({
+        local_key: localKey,
+        node_kind: "scalar",
+        native_name: node.native_name || name,
         native_type: nativeType,
-        required: Boolean(field.required),
-        ...(field.nullable !== undefined ? { nullable: field.nullable } : {}),
-        ...(field.logical_attribute_ref
-          ? { logical_attribute_ref: field.logical_attribute_ref }
-          : {}),
+        required: Boolean(node.required),
+        ...(node.description ? { description: node.description } : {}),
       });
+      const root = nodes.find((n) => String(n.local_key) === "root");
+      if (root) {
+        if (!Array.isArray(root.children)) root.children = [];
+        (root.children as string[]).push(localKey);
+      }
       break;
     }
-    case "update_physical_field": {
-      const { row } = findPhysicalField(data, payload.element_id);
+    case "update_schema_node": {
+      const { row } = findSchemaNode(data, payload.element_id);
       applyPatch(
         row,
         payload.patch as Record<string, unknown>,
         new Set([
-          "name",
-          "title",
-          "description",
-          "lifecycle_status",
           "native_name",
           "native_type",
           "required",
+          "description",
           "nullable",
-          "logical_attribute_ref",
-          "schema_path",
         ]),
       );
       break;
     }
-    case "delete_physical_field": {
-      const { owner, idx } = findPhysicalField(data, payload.element_id);
-      (owner.physical_fields as unknown[]).splice(idx, 1);
+    case "delete_schema_node": {
+      const { structure, idx, row } = findSchemaNode(data, payload.element_id);
+      const localKey = String(row.local_key);
+      (structure.nodes as unknown[]).splice(idx, 1);
+      for (const n of structure.nodes as Record<string, unknown>[]) {
+        const children = n.children;
+        if (Array.isArray(children)) {
+          n.children = children.filter((c) => c !== localKey);
+        }
+      }
       break;
     }
     default: {

@@ -69,8 +69,22 @@ def enrich_package(
 
     for carrier in package.get("data_carriers") or []:
         carrier["mapping_coverage_status"] = defaults.mapping_coverage_status_mapped
-        for pf in carrier.get("physical_fields") or []:
-            pf["mapping_coverage_status"] = defaults.mapping_coverage_status_mapped
+
+    structures_by_id = {
+        str(s.get("element_id")): s
+        for s in (package.get("data_structures") or [])
+        if isinstance(s, dict) and s.get("element_id")
+    }
+    for carrier in package.get("data_carriers") or []:
+        if not isinstance(carrier, dict):
+            continue
+        sid = str(carrier.get("structure_ref") or "")
+        st = structures_by_id.get(sid)
+        if not st:
+            continue
+        for node in st.get("nodes") or []:
+            if isinstance(node, dict) and str(node.get("node_kind") or "") == "scalar":
+                node["mapping_coverage_status"] = defaults.mapping_coverage_status_mapped
 
     for mapping in package.get("mappings") or []:
         mname = str(mapping.get("name") or "")

@@ -38,7 +38,7 @@ def _pkg(**overrides):
                         "description": "attr a1",
                         "lifecycle_status": "draft",
                         "owner_entity_ref": "dams:logical/cascade/X",
-                        "logical_type": "string",
+                        "data_type_ref": "dams:datatype/string",
                         "required": False,
                         "multivalued": False,
                     },
@@ -48,7 +48,7 @@ def _pkg(**overrides):
                         "description": "attr a2",
                         "lifecycle_status": "draft",
                         "owner_entity_ref": "dams:logical/cascade/X",
-                        "logical_type": "string",
+                        "data_type_ref": "dams:datatype/string",
                         "required": False,
                         "multivalued": False,
                         "data_steward_ref": "org:role/STEWARD_T",
@@ -72,7 +72,7 @@ def _pkg(**overrides):
                         "description": "attr y1",
                         "lifecycle_status": "draft",
                         "owner_entity_ref": "dams:logical/cascade/Y",
-                        "logical_type": "string",
+                        "data_type_ref": "dams:datatype/string",
                         "required": False,
                         "multivalued": False,
                     }
@@ -137,7 +137,7 @@ def test_absent_policy_inherits() -> None:
     assert "policy_refs" not in data["logical_entities"][0]
 
 
-def test_physical_field_inherits_from_object_and_package() -> None:
+def test_schema_node_inherits_from_structure_and_package() -> None:
     data = _pkg(
         data_carriers=[
             {
@@ -150,27 +150,44 @@ def test_physical_field_inherits_from_object_and_package() -> None:
                 "asset_namespace": "postgres://S",
                 "qualified_name": "public.t",
                 "technology": "postgres",
-                "structure_ref": "urn:schema:t",
+                "structure_ref": "dams:structure/cascade/T",
                 "direction": "internal",
                 "data_owner_ref": "org:role/PHYS_OWNER",
-                "physical_fields": [
+            }
+        ],
+        data_structures=[
+            {
+                "element_id": "dams:structure/cascade/T",
+                "name": "T",
+                "description": "structure",
+                "lifecycle_status": "draft",
+                "schema_format": "relational",
+                "structure_version": "1.0.0",
+                "root_local_key": "root",
+                "data_owner_ref": "org:role/STRUCT_OWNER",
+                "nodes": [
                     {
-                        "element_id": "dams:physical/cascade/T/c1",
-                        "name": "c1",
-                        "description": "col",
-                        "lifecycle_status": "draft",
-                        "carrier_ref": "dams:physical/cascade/T",
+                        "local_key": "root",
+                        "node_kind": "object",
+                        "children": ["c1"],
+                    },
+                    {
+                        "local_key": "c1",
+                        "node_kind": "scalar",
                         "native_name": "c1",
                         "native_type": "text",
                         "required": True,
-                    }
+                    },
                 ],
             }
-        ]
+        ],
     )
     resolved = resolve_governed(data)
-    c1 = resolved["dams:physical/cascade/T/c1"]
-    assert c1["data_owner_ref"].value == "org:role/PHYS_OWNER"
+    structure = resolved["dams:structure/cascade/T"]
+    assert structure["data_owner_ref"].value == "org:role/STRUCT_OWNER"
+    assert structure["governance_classification"].value == "internal"
+    c1 = resolved["dams:structure/cascade/T#c1"]
+    assert c1["data_owner_ref"].value == "org:role/STRUCT_OWNER"
     assert c1["governance_classification"].value == "internal"
     assert c1["policy_refs"].value == ["pol:P1"]
 

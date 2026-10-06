@@ -307,7 +307,7 @@ def test_yaml_nested_attributes_become_children(tmp_path: Path):
                                 "element_id": "dams:logical/demo/doc/id",
                                 "name": "id",
                                 "title": "Id",
-                                "logical_type": "identifier",
+                                "data_type_ref": "dams:datatype/identifier",
                                 "required": True,
                             }
                         ],
@@ -328,7 +328,7 @@ def test_yaml_nested_attributes_become_children(tmp_path: Path):
     assert out.items[0].id == "dams:logical/demo/doc"
     assert len(out.items[0].children) == 1
     assert out.items[0].children[0].id == "dams:logical/demo/doc/id"
-    assert out.items[0].children[0].attributes.get("logical_type") == "identifier"
+    assert out.items[0].children[0].attributes.get("data_type_ref") == "dams:datatype/identifier"
     assert "attributes" not in out.items[0].attributes or not isinstance(
         out.items[0].attributes.get("attributes"), list
     )

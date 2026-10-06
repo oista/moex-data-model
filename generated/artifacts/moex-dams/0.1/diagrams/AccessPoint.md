@@ -131,6 +131,17 @@
         
       AccessPoint : location_uri
         
+      AccessPoint : message_refs
+        
+          
+    
+        
+        
+        AccessPoint --> "*" Message : message_refs
+        click Message href "../Message"
+    
+
+        
       AccessPoint : name
         
       AccessPoint : native_name
