@@ -82,7 +82,11 @@ def generate(*, out_root: Path, manifest_path: Path) -> tuple[Path, str]:
     pyproject.write_text(PYPROJECT_TOML, encoding="utf-8", newline="\n")
 
     digest = "sha256:" + hashlib.sha256(init_py.read_bytes()).hexdigest()
-    schema_digest = "sha256:" + hashlib.sha256(SCHEMA.read_bytes()).hexdigest()
+    # Hash LF bytes so Windows working-tree CRLF does not churn schema_digest.
+    schema_digest = (
+        "sha256:"
+        + hashlib.sha256(SCHEMA.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+    )
     try:
         output_rel = init_py.relative_to(REPO).as_posix()
     except ValueError:
