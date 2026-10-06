@@ -1,0 +1,248 @@
+id: https://data.moex.com/dams/constraint-matrix/v0.1
+name: moex_constraint_matrix
+title: DAMS executable constraint matrix schema
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  dams: https://data.moex.com/dams/
+imports:
+  - linkml:types
+default_prefix: dams
+default_range: string
+
+classes:
+  ConstraintMatrix:
+    tree_root: true
+    description: >-
+      Реестр исполняемых инвариантов модели (ADR-045). Текст инварианта
+      хранится здесь; схемы и документы ссылаются на INV-NNN.
+    slots:
+      - matrix_id
+      - title
+      - description
+      - baseline
+      - invariants
+
+  ConstraintBaseline:
+    description: >-
+      Точный перечень LinkML rules на момент инвентаризации (файл, класс,
+      индекс), привязанный к SHA коммита и sha256 канонического списка.
+    slots:
+      - baseline_commit
+      - rules_sha256
+      - rules
+
+  BaselineRuleRef:
+    description: Одна запись baseline — позиция rules[] в схеме.
+    slots:
+      - schema_file
+      - class_name
+      - rule_index
+      - inv_id
+
+  Invariant:
+    description: Одна запись матрицы инвариантов.
+    slots:
+      - id
+      - title
+      - statement
+      - source
+      - source_status
+      - scope
+      - levels
+      - severity
+      - status
+      - waiver_reason
+      - requirement_refs
+      - notes
+      - implementation
+      - tests
+
+  InvariantImplementation:
+    description: Указатели на реализацию по уровням (пути/коды; без дублирования текста).
+    slots:
+      - linkml_rule
+      - dams_validator
+      - shacl
+
+  LinkmlRuleRef:
+    description: Ссылка на существующий блок rules в схеме DAMS.
+    slots:
+      - schema_file
+      - class_name
+      - rule_index
+
+  InvariantTests:
+    description: Пути к valid/invalid примерам по уровням (заполняются с PR-C2).
+    slots:
+      - l1_valid
+      - l1_invalid
+      - l2_valid
+      - l2_invalid
+      - l3_valid
+      - l3_invalid
+
+enums:
+  InvariantStatusEnum:
+    permissible_values:
+      planned:
+        description: Ещё не написано в схеме/коде.
+      implemented-untested:
+        description: Реализация есть, негативного теста нет.
+      implemented:
+        description: Реализация и негативный тест на каждом заявленном уровне.
+      waived:
+        description: Сознательно не проверяется; обязателен waiver_reason.
+
+  InvariantLevelEnum:
+    permissible_values:
+      L1:
+        description: LinkML rules
+      L2:
+        description: DAMS Python validators
+      L3:
+        description: SHACL
+
+  InvariantSeverityEnum:
+    permissible_values:
+      error:
+      warning:
+
+  SourceStatusEnum:
+    permissible_values:
+      aligned:
+        description: Правило совпадает с цитируемым источником.
+      partial:
+        description: Источник тоньше правила или только description слота.
+      divergent:
+        description: Источник и правило расходятся.
+
+  InvariantScopeEnum:
+    permissible_values:
+      moex-dams:
+        description: Схемы DAMS (основной охват матрицы).
+      moex-dsp:
+        description: DSP (вне текущего охвата реализации).
+      moex-external-alignment:
+        description: External alignment (вне текущего охвата реализации).
+
+slots:
+  matrix_id:
+    identifier: true
+    range: uriorcurie
+    required: true
+  title:
+    range: string
+    required: true
+  description:
+    range: string
+  baseline:
+    range: ConstraintBaseline
+    required: true
+    inlined: true
+  invariants:
+    range: Invariant
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    required: true
+  baseline_commit:
+    range: string
+    required: true
+    description: Полный SHA коммита, на котором зафиксирован перечень rules.
+  rules_sha256:
+    range: string
+    required: true
+    pattern: '^[0-9a-f]{64}$'
+    description: sha256 канонического списка schema_file|class_name|rule_index (LF).
+  rules:
+    range: BaselineRuleRef
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    required: true
+  schema_file:
+    range: string
+    required: true
+  class_name:
+    range: string
+    required: true
+  rule_index:
+    range: integer
+    required: true
+    minimum_value: 0
+  inv_id:
+    range: string
+    required: true
+    pattern: '^INV-[0-9]{3}$'
+  id:
+    identifier: true
+    range: string
+    required: true
+    pattern: '^INV-[0-9]{3}$'
+  statement:
+    range: string
+    required: true
+  source:
+    range: string
+    required: true
+    description: Ссылка на ADR, раздел или description (не полный текст инварианта).
+  source_status:
+    range: SourceStatusEnum
+    required: true
+  scope:
+    range: InvariantScopeEnum
+    required: true
+  levels:
+    range: InvariantLevelEnum
+    multivalued: true
+    required: true
+  severity:
+    range: InvariantSeverityEnum
+    required: true
+    ifabsent: string(error)
+  status:
+    range: InvariantStatusEnum
+    required: true
+  waiver_reason:
+    range: string
+  requirement_refs:
+    range: string
+    multivalued: true
+    description: Коды DAMS-REQ-* / PDM-* из каталога ADR-013, если есть.
+  notes:
+    range: string
+  implementation:
+    range: InvariantImplementation
+    inlined: true
+  linkml_rule:
+    range: LinkmlRuleRef
+    inlined: true
+  dams_validator:
+    range: string
+    description: Модуль:символ или путь к L2-проверке.
+  shacl:
+    range: string
+    description: Путь к ручной SHACL-форме (PR-C4).
+  tests:
+    range: InvariantTests
+    inlined: true
+  l1_valid:
+    range: string
+    multivalued: true
+  l1_invalid:
+    range: string
+    multivalued: true
+  l2_valid:
+    range: string
+    multivalued: true
+  l2_invalid:
+    range: string
+    multivalued: true
+  l3_valid:
+    range: string
+    multivalued: true
+  l3_invalid:
+    range: string
+    multivalued: true

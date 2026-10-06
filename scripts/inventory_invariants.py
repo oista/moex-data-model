@@ -49,6 +49,7 @@ SELF_EXCLUDE = {
     "constraint-matrix.md",
     "linkml-rules-support.md",
     "ADR-045-executable-constraint-matrix.md",
+    "validation-helper-c1a-report.md",
 }
 
 MARKERS = (
