@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-06T20:29:22
+# Generation date: 2026-10-06T20:35:23
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -2304,17 +2304,20 @@ class Mapping(ModelElement):
     class_model_uri: ClassVar[URIRef] = DAMS.Mapping
 
     element_id: Union[str, MappingElementId] = None
-    name: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     mapping_type: Union[str, "MappingTypeEnum"] = None
     mapping_cardinality: Union[str, "MappingCardinalityEnum"] = None
+    name: str = None
     source_refs: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
     target_refs: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
     transformation_ref: Optional[Union[str, URI]] = None
     transformation_expression: Optional[str] = None
     confidence: Optional[Decimal] = None
-    valid_from: Optional[Union[str, XSDDateTime]] = None
-    valid_to: Optional[Union[str, XSDDateTime]] = None
+    title: Optional[str] = None
+    aliases: Optional[Union[str, list[str]]] = empty_list()
+    glossary_term_refs: Optional[Union[Union[str, GlossaryTermRegistryId], list[Union[str, GlossaryTermRegistryId]]]] = empty_list()
+    tags: Optional[Union[str, list[str]]] = empty_list()
+    description: Optional[str] = None
     source_artifact_ref: Optional[Union[str, URI]] = None
     evidence_refs: Optional[Union[Union[str, URI], list[Union[str, URI]]]] = empty_list()
     approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
@@ -2337,6 +2340,11 @@ class Mapping(ModelElement):
         if not isinstance(self.mapping_cardinality, MappingCardinalityEnum):
             self.mapping_cardinality = MappingCardinalityEnum(self.mapping_cardinality)
 
+        if self._is_empty(self.name):
+            self.MissingRequiredField("name")
+        if not isinstance(self.name, str):
+            self.name = str(self.name)
+
         if not isinstance(self.source_refs, list):
             self.source_refs = [self.source_refs] if self.source_refs is not None else []
         self.source_refs = [v if isinstance(v, URIorCURIE) else URIorCURIE(v) for v in self.source_refs]
@@ -2354,11 +2362,23 @@ class Mapping(ModelElement):
         if self.confidence is not None and not isinstance(self.confidence, Decimal):
             self.confidence = Decimal(self.confidence)
 
-        if self.valid_from is not None and not isinstance(self.valid_from, XSDDateTime):
-            self.valid_from = XSDDateTime(self.valid_from)
+        if self.title is not None and not isinstance(self.title, str):
+            self.title = str(self.title)
 
-        if self.valid_to is not None and not isinstance(self.valid_to, XSDDateTime):
-            self.valid_to = XSDDateTime(self.valid_to)
+        if not isinstance(self.aliases, list):
+            self.aliases = [self.aliases] if self.aliases is not None else []
+        self.aliases = [v if isinstance(v, str) else str(v) for v in self.aliases]
+
+        if not isinstance(self.glossary_term_refs, list):
+            self.glossary_term_refs = [self.glossary_term_refs] if self.glossary_term_refs is not None else []
+        self.glossary_term_refs = [v if isinstance(v, GlossaryTermRegistryId) else GlossaryTermRegistryId(v) for v in self.glossary_term_refs]
+
+        if not isinstance(self.tags, list):
+            self.tags = [self.tags] if self.tags is not None else []
+        self.tags = [v if isinstance(v, str) else str(v) for v in self.tags]
+
+        if self.description is not None and not isinstance(self.description, str):
+            self.description = str(self.description)
 
         if self.source_artifact_ref is not None and not isinstance(self.source_artifact_ref, URI):
             self.source_artifact_ref = URI(self.source_artifact_ref)
@@ -6323,6 +6343,24 @@ slots.LogicalAttribute_data_type_ref = Slot(uri=DAMS.data_type_ref, name="Logica
 
 slots.LogicalAttribute_concept_ref = Slot(uri=DAMS.concept_ref, name="LogicalAttribute_concept_ref", curie=DAMS.curie('concept_ref'),
                    model_uri=DAMS.LogicalAttribute_concept_ref, domain=LogicalAttribute, range=Optional[Union[str, ConceptualPropertyElementId]])
+
+slots.Mapping_name = Slot(uri=DAMS.name, name="Mapping_name", curie=DAMS.curie('name'),
+                   model_uri=DAMS.Mapping_name, domain=Mapping, range=str)
+
+slots.Mapping_title = Slot(uri=DAMS.title, name="Mapping_title", curie=DAMS.curie('title'),
+                   model_uri=DAMS.Mapping_title, domain=Mapping, range=Optional[str])
+
+slots.Mapping_aliases = Slot(uri=DAMS.aliases, name="Mapping_aliases", curie=DAMS.curie('aliases'),
+                   model_uri=DAMS.Mapping_aliases, domain=Mapping, range=Optional[Union[str, list[str]]])
+
+slots.Mapping_glossary_term_refs = Slot(uri=DAMS.glossary_term_refs, name="Mapping_glossary_term_refs", curie=DAMS.curie('glossary_term_refs'),
+                   model_uri=DAMS.Mapping_glossary_term_refs, domain=Mapping, range=Optional[Union[Union[str, GlossaryTermRegistryId], list[Union[str, GlossaryTermRegistryId]]]])
+
+slots.Mapping_tags = Slot(uri=DAMS.tags, name="Mapping_tags", curie=DAMS.curie('tags'),
+                   model_uri=DAMS.Mapping_tags, domain=Mapping, range=Optional[Union[str, list[str]]])
+
+slots.Mapping_description = Slot(uri=DAMS.description, name="Mapping_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.Mapping_description, domain=Mapping, range=Optional[str])
 
 slots.TechnicalAsset_description = Slot(uri=DAMS.description, name="TechnicalAsset_description", curie=DAMS.curie('description'),
                    model_uri=DAMS.TechnicalAsset_description, domain=TechnicalAsset, range=str)

@@ -4775,7 +4775,10 @@
                     "$ref": "#/$defs/MappingTypeEnum"
                 },
                 "name": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "source_artifact_ref": {
                     "format": "uri",
@@ -4850,7 +4853,6 @@
             "required": [
                 "mapping_type",
                 "mapping_cardinality",
-                "name",
                 "lifecycle_status",
                 "element_id"
             ],

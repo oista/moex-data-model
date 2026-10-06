@@ -25,6 +25,7 @@ DESCRIPTION_SLOT_USAGE_ALLOWLIST: dict[str, str] = {
     "Dimension": "preserve pre-ADR-044 required",
     "SpecificationRequirement": "preserve pre-ADR-044 required",
     "DataStructure": "D1 recommended description",
+    "Mapping": "D3 optional description + deprecated identity slots (2.1.0)",
 }
 
 

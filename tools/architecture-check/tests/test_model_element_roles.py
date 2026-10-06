@@ -19,7 +19,7 @@ def test_identified_vs_embedded_passes_on_repo():
     assert check_identified_vs_embedded(REPO_ROOT) == []
 
 
-def test_allowlist_contains_has_definition_not_relationship():
+def test_allowlist_contains_has_definition_and_mapping():
     assert "HasDefinition" in DESCRIPTION_SLOT_USAGE_ALLOWLIST
     assert "Relationship" not in DESCRIPTION_SLOT_USAGE_ALLOWLIST
-    assert "Mapping" not in DESCRIPTION_SLOT_USAGE_ALLOWLIST
+    assert "Mapping" in DESCRIPTION_SLOT_USAGE_ALLOWLIST

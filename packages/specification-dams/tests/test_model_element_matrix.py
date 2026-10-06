@@ -37,6 +37,7 @@ ALLOWED_DELTAS: dict[tuple[str, str], str] = {
     ("Relationship", "description"): OPT,
     ("DataStructure", "description"): REC,
     ("Mapping", "description"): OPT,
+    ("Mapping", "name"): OPT,  # PR-3: required false + deprecated
 }
 
 MIXIN_SKIP = frozenset(
@@ -98,10 +99,13 @@ def test_has_definition_induces_optional_description_with_skos_mapping():
     assert "skos:definition" in (induced.exact_mappings or [])
 
 
-def test_mapping_still_has_name_required_until_pr3():
+def test_mapping_name_optional_deprecated_until_pr6():
     sv = SchemaView(str(SCHEMA))
-    assert sv.induced_slot("name", "Mapping").required is True
+    name = sv.induced_slot("name", "Mapping")
+    assert name.required is not True
+    assert name.deprecated
     assert sv.get_class("Mapping").is_a == "ModelElement"
+    assert "valid_from" in {s.name for s in sv.class_induced_slots("Mapping")}
 
 
 def test_schema_version_is_2_1_0():

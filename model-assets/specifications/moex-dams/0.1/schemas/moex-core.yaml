@@ -279,8 +279,27 @@ classes:
       - transformation_ref
       - transformation_expression
       - confidence
-      - valid_from
-      - valid_to
+    slot_usage:
+      name:
+        required: false
+        deprecated: >
+          Deprecated in DAMS 2.1.0. Prefer viewer/migration label from
+          source_refs -> target_refs + mapping_type. Removed in 3.0.0.
+        deprecated_element_has_possible_replacement: dams:mapping_type
+      title:
+        deprecated: >
+          Deprecated in DAMS 2.1.0. Removed in 3.0.0.
+      aliases:
+        deprecated: >
+          Deprecated in DAMS 2.1.0. Removed in 3.0.0.
+      glossary_term_refs:
+        deprecated: >
+          Deprecated in DAMS 2.1.0. Removed in 3.0.0.
+      tags:
+        deprecated: >
+          Deprecated in DAMS 2.1.0. Removed in 3.0.0.
+      description:
+        required: false
 
 slots:
   api_version:

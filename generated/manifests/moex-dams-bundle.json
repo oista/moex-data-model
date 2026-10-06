@@ -8,13 +8,13 @@
     {
       "path": "generated/contracts/moex-dams/0.1",
       "role": "contracts",
-      "content_digest": "sha256:e50669dc2118198ca6808b5d1d36cf7c8fb7523fb8dffe77c05036a3e2e6fa54",
+      "content_digest": "sha256:f4542ce84b092ead641e00fa2f5496d670b78a013faea3c69a09c5a97bb524df",
       "manifest_path": "generated/manifests/moex-dams-contracts.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/moex-dams.schema.json",
       "role": "json-schema",
-      "content_digest": "sha256:620ee1c207bde9f4bddd690b8d3cb007e2765274c32c5ccda758183b2f3e1fb8",
+      "content_digest": "sha256:dfee7826168ae8848b8a08959c04726f6737a8bb7088d80f9c98db8ef543d049",
       "manifest_path": "generated/manifests/moex-dams-json-schema.json"
     },
     {
@@ -32,7 +32,7 @@
     {
       "path": "generated/artifacts/moex-dams/0.1/moex-dams.dbml",
       "role": "dbml",
-      "content_digest": "sha256:d63e6fa69ee16f4c3b287cbe38745b54a38ac6e8dc302c0b1be900234e7c1b74",
+      "content_digest": "sha256:9cdfcbb0fea40a6ce1fe233c708bff1673908ab4977b57151c1c0391be20231c",
       "manifest_path": "generated/manifests/moex-dams-dbml.json"
     },
     {
@@ -44,13 +44,13 @@
     {
       "path": "generated/artifacts/moex-dams/0.1/python/moex_dams.py",
       "role": "python",
-      "content_digest": "sha256:1ff9e85b77bc9595b6c62fa01821ddf9590f06aad2f71b7cca40e7432d461921",
+      "content_digest": "sha256:d1a815fbc9a92fbe29d0e4c34040d12230a1bdb2b8574943510e0564329c9280",
       "manifest_path": "generated/manifests/moex-dams-python.json"
     },
     {
       "path": "generated/artifacts/moex-dams/0.1/docs",
       "role": "doc",
-      "content_digest": "sha256:56287ae52b067d03d98974ea5c2fae3249ff53466213656b4192bee70572d98a",
+      "content_digest": "sha256:5c5bebe919bc6ad02f760fcfc681fb174960cbab033828c8c120552f5b5e1896",
       "manifest_path": "generated/manifests/moex-dams-doc.json"
     },
     {
@@ -62,7 +62,7 @@
     {
       "path": "generated/artifacts/moex-dams/0.1/ontology-profile.json",
       "role": "ontology-profile",
-      "content_digest": "sha256:2de27b87736a164ddc7cb18dfcffa69cfc5439c55175cf68399ac7058e84e0e4",
+      "content_digest": "sha256:1a2490cec2290bc910e9a343b42f732cd33d119751d49d9a1f03e5c2f311853b",
       "manifest_path": "generated/manifests/moex-dams-ontology-profile.json"
     },
     {
@@ -71,6 +71,6 @@
       "content_digest": "sha256:142f4b53cd297311e8e33fd64e46ddaa1688289122e08441e5c9a5ac028efaf9"
     }
   ],
-  "content_digest": "sha256:4c052613ffcb9b8c7403bdffb15704adb12817847350ccf04eff38fc8ca72546",
-  "generated_at": "2026-10-06T17:29:44.266000+00:00"
+  "content_digest": "sha256:8477f04135b62213f87498d5f9ef5eb7b02da098a01cb9902226ba8d2905d515",
+  "generated_at": "2026-10-06T17:35:43.819551+00:00"
 }

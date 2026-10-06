@@ -1613,14 +1613,12 @@ class Mapping(ModelElement, HasProvenance):
     transformation_ref: Optional[str] = Field(default=None)
     transformation_expression: Optional[str] = Field(default=None)
     confidence: Optional[Decimal] = Field(default=None, ge=0, le=1)
-    valid_from: Optional[datetime ] = Field(default=None)
-    valid_to: Optional[datetime ] = Field(default=None)
     source_artifact_ref: Optional[str] = Field(default=None)
     evidence_refs: Optional[list[str]] = Field(default=None)
     approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
     approved_by_ref: Optional[str] = Field(default=None)
     approved_at: Optional[datetime ] = Field(default=None)
-    name: str = Field(default=...)
+    name: Optional[str] = Field(default=None)
     title: Optional[str] = Field(default=None)
     aliases: Optional[list[str]] = Field(default=None)
     description: Optional[str] = Field(default=None)
@@ -1629,6 +1627,8 @@ class Mapping(ModelElement, HasProvenance):
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
     element_id: str = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
 
 
 class HasStructure(ConfiguredBaseModel):

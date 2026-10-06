@@ -3748,8 +3748,38 @@ classes:
     - transformation_ref
     - transformation_expression
     - confidence
-    - valid_from
-    - valid_to
+    slot_usage:
+      name:
+        name: name
+        deprecated: 'Deprecated in DAMS 2.1.0. Prefer viewer/migration label from
+          source_refs -> target_refs + mapping_type. Removed in 3.0.0.
+
+          '
+        deprecated_element_has_possible_replacement: dams:mapping_type
+        required: false
+      title:
+        name: title
+        deprecated: 'Deprecated in DAMS 2.1.0. Removed in 3.0.0.
+
+          '
+      aliases:
+        name: aliases
+        deprecated: 'Deprecated in DAMS 2.1.0. Removed in 3.0.0.
+
+          '
+      glossary_term_refs:
+        name: glossary_term_refs
+        deprecated: 'Deprecated in DAMS 2.1.0. Removed in 3.0.0.
+
+          '
+      tags:
+        name: tags
+        deprecated: 'Deprecated in DAMS 2.1.0. Removed in 3.0.0.
+
+          '
+      description:
+        name: description
+        required: false
   HasStructure:
     name: HasStructure
     description: 'Mixin структуры данных носителя. structure_ref — ссылка на DataStructure
