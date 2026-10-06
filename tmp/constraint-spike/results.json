@@ -1,0 +1,870 @@
+{
+  "meta": {
+    "python": "3.10.6",
+    "linkml": "1.11.1",
+    "linkml_runtime": "1.11.1",
+    "pyshacl": "0.40.1"
+  },
+  "cases": [
+    {
+      "id": "c01-required-post",
+      "title": "pre kind=X => post a required:true",
+      "channels": {
+        "linkml-validate": "APPLIES",
+        "gen-json-schema": "APPLIES",
+        "gen-pydantic": "IGNORES",
+        "gen-shacl+pyshacl": "IGNORES"
+      },
+      "detail": {
+        "linkml-validate": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation"
+          ]
+        },
+        "gen-json-schema": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation"
+          ]
+        },
+        "gen-pydantic": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        },
+        "gen-shacl+pyshacl": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        }
+      },
+      "artifact_effect": {
+        "gen-json-schema": "differs",
+        "gen-pydantic": "differs (linkml_meta only)",
+        "gen-shacl": "identical",
+        "gen-owl": "differs"
+      }
+    },
+    {
+      "id": "c02-presence-post",
+      "title": "pre kind=X => post a value_presence PRESENT",
+      "channels": {
+        "linkml-validate": "APPLIES",
+        "gen-json-schema": "APPLIES",
+        "gen-pydantic": "IGNORES",
+        "gen-shacl+pyshacl": "IGNORES"
+      },
+      "detail": {
+        "linkml-validate": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation"
+          ]
+        },
+        "gen-json-schema": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation"
+          ]
+        },
+        "gen-pydantic": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        },
+        "gen-shacl+pyshacl": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        }
+      },
+      "artifact_effect": {
+        "gen-json-schema": "differs",
+        "gen-pydantic": "differs (linkml_meta only)",
+        "gen-shacl": "identical",
+        "gen-owl": "differs"
+      }
+    },
+    {
+      "id": "c03-absent-post",
+      "title": "pre kind=X => post a value_presence ABSENT",
+      "channels": {
+        "linkml-validate": "APPLIES",
+        "gen-json-schema": "APPLIES",
+        "gen-pydantic": "IGNORES",
+        "gen-shacl+pyshacl": "IGNORES"
+      },
+      "detail": {
+        "linkml-validate": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation"
+          ]
+        },
+        "gen-json-schema": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation"
+          ]
+        },
+        "gen-pydantic": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        },
+        "gen-shacl+pyshacl": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        }
+      },
+      "artifact_effect": {
+        "gen-json-schema": "differs",
+        "gen-pydantic": "differs (linkml_meta only)",
+        "gen-shacl": "identical",
+        "gen-owl": "differs"
+      }
+    },
+    {
+      "id": "c04-pre-presence",
+      "title": "pre a PRESENT => post kind=X (DataType pattern)",
+      "channels": {
+        "linkml-validate": "APPLIES",
+        "gen-json-schema": "APPLIES",
+        "gen-pydantic": "IGNORES",
+        "gen-shacl+pyshacl": "IGNORES"
+      },
+      "detail": {
+        "linkml-validate": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation"
+          ]
+        },
+        "gen-json-schema": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation"
+          ]
+        },
+        "gen-pydantic": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        },
+        "gen-shacl+pyshacl": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        }
+      },
+      "artifact_effect": {
+        "gen-json-schema": "differs",
+        "gen-pydantic": "differs (linkml_meta only)",
+        "gen-shacl": "identical",
+        "gen-owl": "differs"
+      }
+    },
+    {
+      "id": "c05-anyof-pre",
+      "title": "pre kind any_of(X,Y) => a PRESENT and b ABSENT (SchemaNode pattern)",
+      "channels": {
+        "linkml-validate": "APPLIES",
+        "gen-json-schema": "APPLIES",
+        "gen-pydantic": "IGNORES",
+        "gen-shacl+pyshacl": "IGNORES"
+      },
+      "detail": {
+        "linkml-validate": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation",
+            "violation"
+          ]
+        },
+        "gen-json-schema": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation",
+            "violation"
+          ]
+        },
+        "gen-pydantic": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok",
+            "ok"
+          ]
+        },
+        "gen-shacl+pyshacl": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok",
+            "ok"
+          ]
+        }
+      },
+      "artifact_effect": {
+        "gen-json-schema": "differs",
+        "gen-pydantic": "differs (linkml_meta only)",
+        "gen-shacl": "identical",
+        "gen-owl": "differs"
+      }
+    },
+    {
+      "id": "c06-anyof-post",
+      "title": "pre a PRESENT => post kind any_of(X,Y)",
+      "channels": {
+        "linkml-validate": "APPLIES",
+        "gen-json-schema": "APPLIES",
+        "gen-pydantic": "IGNORES",
+        "gen-shacl+pyshacl": "IGNORES"
+      },
+      "detail": {
+        "linkml-validate": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation"
+          ]
+        },
+        "gen-json-schema": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation"
+          ]
+        },
+        "gen-pydantic": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        },
+        "gen-shacl+pyshacl": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        }
+      },
+      "artifact_effect": {
+        "gen-json-schema": "differs",
+        "gen-pydantic": "differs (linkml_meta only)",
+        "gen-shacl": "identical",
+        "gen-owl": "differs"
+      }
+    },
+    {
+      "id": "c07-boolean-equals-string",
+      "title": "pre kind=X => post flag equals_string 'true' on boolean slot (ConceptualProperty pattern)",
+      "channels": {
+        "linkml-validate": "WRONG (valid rejected)",
+        "gen-json-schema": "WRONG (valid rejected)",
+        "gen-pydantic": "IGNORES",
+        "gen-shacl+pyshacl": "IGNORES"
+      },
+      "detail": {
+        "linkml-validate": {
+          "valid": [
+            "violation",
+            "ok"
+          ],
+          "invalid": [
+            "violation",
+            "violation"
+          ]
+        },
+        "gen-json-schema": {
+          "valid": [
+            "violation",
+            "ok"
+          ],
+          "invalid": [
+            "violation",
+            "violation"
+          ]
+        },
+        "gen-pydantic": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok",
+            "ok"
+          ]
+        },
+        "gen-shacl+pyshacl": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok",
+            "ok"
+          ]
+        }
+      },
+      "artifact_effect": {
+        "gen-json-schema": "differs",
+        "gen-pydantic": "differs (linkml_meta only)",
+        "gen-shacl": "identical",
+        "gen-owl": "differs"
+      }
+    },
+    {
+      "id": "c08-pattern-post",
+      "title": "pre kind=X => post a pattern ^A",
+      "channels": {
+        "linkml-validate": "APPLIES",
+        "gen-json-schema": "APPLIES",
+        "gen-pydantic": "IGNORES",
+        "gen-shacl+pyshacl": "IGNORES"
+      },
+      "detail": {
+        "linkml-validate": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation"
+          ]
+        },
+        "gen-json-schema": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation"
+          ]
+        },
+        "gen-pydantic": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        },
+        "gen-shacl+pyshacl": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        }
+      },
+      "artifact_effect": {
+        "gen-json-schema": "differs",
+        "gen-pydantic": "differs (linkml_meta only)",
+        "gen-shacl": "identical",
+        "gen-owl": "differs"
+      }
+    },
+    {
+      "id": "c09-elseconditions",
+      "title": "pre kind=X => a PRESENT else b PRESENT",
+      "channels": {
+        "linkml-validate": "APPLIES",
+        "gen-json-schema": "APPLIES",
+        "gen-pydantic": "IGNORES",
+        "gen-shacl+pyshacl": "IGNORES"
+      },
+      "detail": {
+        "linkml-validate": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation",
+            "violation"
+          ]
+        },
+        "gen-json-schema": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation",
+            "violation"
+          ]
+        },
+        "gen-pydantic": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok",
+            "ok"
+          ]
+        },
+        "gen-shacl+pyshacl": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok",
+            "ok"
+          ]
+        }
+      },
+      "artifact_effect": {
+        "gen-json-schema": "differs",
+        "gen-pydantic": "differs (linkml_meta only)",
+        "gen-shacl": "identical",
+        "gen-owl": "differs"
+      }
+    },
+    {
+      "id": "c10-bidirectional",
+      "title": "kind=X <=> a PRESENT (bidirectional)",
+      "channels": {
+        "linkml-validate": "APPLIES",
+        "gen-json-schema": "APPLIES",
+        "gen-pydantic": "IGNORES",
+        "gen-shacl+pyshacl": "IGNORES"
+      },
+      "detail": {
+        "linkml-validate": {
+          "valid": [
+            "ok",
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation",
+            "violation"
+          ]
+        },
+        "gen-json-schema": {
+          "valid": [
+            "ok",
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation",
+            "violation"
+          ]
+        },
+        "gen-pydantic": {
+          "valid": [
+            "ok",
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok",
+            "ok"
+          ]
+        },
+        "gen-shacl+pyshacl": {
+          "valid": [
+            "ok",
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok",
+            "ok"
+          ]
+        }
+      },
+      "artifact_effect": {
+        "gen-json-schema": "differs",
+        "gen-pydantic": "differs (linkml_meta only)",
+        "gen-shacl": "identical",
+        "gen-owl": "differs"
+      }
+    },
+    {
+      "id": "c11a-inapplicable-rule-field",
+      "title": "rule-level `inapplicable: true` (does the field exist?)",
+      "channels": {
+        "linkml-validate": "CRASH",
+        "gen-json-schema": "CRASH",
+        "gen-pydantic": "CRASH",
+        "gen-shacl+pyshacl": "CRASH"
+      },
+      "detail": {
+        "linkml-validate": {
+          "valid": [
+            "CRASH TypeError: ClassRule.__init__() got an unexpected keyword argument 'inapplicable'"
+          ],
+          "invalid": [
+            "CRASH TypeError: ClassRule.__init__() got an unexpected keyword argument 'inapplicable'"
+          ]
+        },
+        "gen-json-schema": {
+          "valid": [
+            "CRASH TypeError: ClassRule.__init__() got an unexpected keyword argument 'inapplicable'"
+          ],
+          "invalid": [
+            "CRASH TypeError: ClassRule.__init__() got an unexpected keyword argument 'inapplicable'"
+          ]
+        },
+        "gen-pydantic": {
+          "valid": [
+            "CRASH TypeError: ClassRule.__init__() got an unexpected keyword argument 'inapplicable'"
+          ],
+          "invalid": [
+            "CRASH TypeError: ClassRule.__init__() got an unexpected keyword argument 'inapplicable'"
+          ]
+        },
+        "gen-shacl+pyshacl": {
+          "valid": [
+            "CRASH TypeError: ClassRule.__init__() got an unexpected keyword argument 'inapplicable'"
+          ],
+          "invalid": [
+            "CRASH TypeError: ClassRule.__init__() got an unexpected keyword argument 'inapplicable'"
+          ]
+        }
+      },
+      "artifact_effect": {
+        "gen-json-schema": "CRASH TypeError: ClassRule.__init__() got an unexpected keyword argument 'inapplicable'",
+        "gen-pydantic": "CRASH TypeError: ClassRule.__init__() got an unexpected keyword argument 'inapplicable'",
+        "gen-shacl": "CRASH TypeError: ClassRule.__init__() got an unexpected keyword argument 'inapplicable'",
+        "gen-owl": "CRASH TypeError: ClassRule.__init__() got an unexpected keyword argument 'inapplicable'"
+      }
+    },
+    {
+      "id": "c11b-inapplicable-slot-cond",
+      "title": "slot_conditions a: inapplicable: true",
+      "channels": {
+        "linkml-validate": "CRASH",
+        "gen-json-schema": "CRASH",
+        "gen-pydantic": "CRASH",
+        "gen-shacl+pyshacl": "CRASH"
+      },
+      "detail": {
+        "linkml-validate": {
+          "valid": [
+            "CRASH TypeError: SlotDefinition.__init__() got an unexpected keyword argument 'inapplicable'"
+          ],
+          "invalid": [
+            "CRASH TypeError: SlotDefinition.__init__() got an unexpected keyword argument 'inapplicable'"
+          ]
+        },
+        "gen-json-schema": {
+          "valid": [
+            "CRASH TypeError: SlotDefinition.__init__() got an unexpected keyword argument 'inapplicable'"
+          ],
+          "invalid": [
+            "CRASH TypeError: SlotDefinition.__init__() got an unexpected keyword argument 'inapplicable'"
+          ]
+        },
+        "gen-pydantic": {
+          "valid": [
+            "CRASH TypeError: SlotDefinition.__init__() got an unexpected keyword argument 'inapplicable'"
+          ],
+          "invalid": [
+            "CRASH TypeError: SlotDefinition.__init__() got an unexpected keyword argument 'inapplicable'"
+          ]
+        },
+        "gen-shacl+pyshacl": {
+          "valid": [
+            "CRASH TypeError: SlotDefinition.__init__() got an unexpected keyword argument 'inapplicable'"
+          ],
+          "invalid": [
+            "CRASH TypeError: SlotDefinition.__init__() got an unexpected keyword argument 'inapplicable'"
+          ]
+        }
+      },
+      "artifact_effect": {
+        "gen-json-schema": "CRASH TypeError: SlotDefinition.__init__() got an unexpected keyword argument 'inapplicable'",
+        "gen-pydantic": "CRASH TypeError: SlotDefinition.__init__() got an unexpected keyword argument 'inapplicable'",
+        "gen-shacl": "CRASH TypeError: SlotDefinition.__init__() got an unexpected keyword argument 'inapplicable'",
+        "gen-owl": "CRASH TypeError: SlotDefinition.__init__() got an unexpected keyword argument 'inapplicable'"
+      }
+    },
+    {
+      "id": "c11c-deactivated",
+      "title": "rule with deactivated: true (control: must be ignored by every generator)",
+      "channels": {
+        "linkml-validate": "WRONG (valid rejected)",
+        "gen-json-schema": "WRONG (valid rejected)",
+        "gen-pydantic": "n/a (no invalid)",
+        "gen-shacl+pyshacl": "n/a (no invalid)"
+      },
+      "detail": {
+        "linkml-validate": {
+          "valid": [
+            "violation"
+          ],
+          "invalid": []
+        },
+        "gen-json-schema": {
+          "valid": [
+            "violation"
+          ],
+          "invalid": []
+        },
+        "gen-pydantic": {
+          "valid": [
+            "ok"
+          ],
+          "invalid": []
+        },
+        "gen-shacl+pyshacl": {
+          "valid": [
+            "ok"
+          ],
+          "invalid": []
+        }
+      },
+      "artifact_effect": {
+        "gen-json-schema": "differs",
+        "gen-pydantic": "differs (linkml_meta only)",
+        "gen-shacl": "identical",
+        "gen-owl": "differs"
+      }
+    },
+    {
+      "id": "c12-compare-slots",
+      "title": "compare two slots: post n2 equals_expression '{n1}'",
+      "channels": {
+        "linkml-validate": "IGNORES",
+        "gen-json-schema": "IGNORES",
+        "gen-pydantic": "IGNORES",
+        "gen-shacl+pyshacl": "IGNORES"
+      },
+      "detail": {
+        "linkml-validate": {
+          "valid": [
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        },
+        "gen-json-schema": {
+          "valid": [
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        },
+        "gen-pydantic": {
+          "valid": [
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        },
+        "gen-shacl+pyshacl": {
+          "valid": [
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        }
+      },
+      "artifact_effect": {
+        "gen-json-schema": "differs",
+        "gen-pydantic": "differs (linkml_meta only)",
+        "gen-shacl": "identical",
+        "gen-owl": "differs"
+      }
+    },
+    {
+      "id": "c13-const-compare",
+      "title": "control: constant comparison post n2 minimum_value 5",
+      "channels": {
+        "linkml-validate": "APPLIES",
+        "gen-json-schema": "APPLIES",
+        "gen-pydantic": "IGNORES",
+        "gen-shacl+pyshacl": "IGNORES"
+      },
+      "detail": {
+        "linkml-validate": {
+          "valid": [
+            "ok"
+          ],
+          "invalid": [
+            "violation"
+          ]
+        },
+        "gen-json-schema": {
+          "valid": [
+            "ok"
+          ],
+          "invalid": [
+            "violation"
+          ]
+        },
+        "gen-pydantic": {
+          "valid": [
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        },
+        "gen-shacl+pyshacl": {
+          "valid": [
+            "ok"
+          ],
+          "invalid": [
+            "ok"
+          ]
+        }
+      },
+      "artifact_effect": {
+        "gen-json-schema": "differs",
+        "gen-pydantic": "differs (linkml_meta only)",
+        "gen-shacl": "identical",
+        "gen-owl": "differs"
+      }
+    },
+    {
+      "id": "c14-exactly-one-of",
+      "title": "class-level exactly_one_of(a required | b required) (not a rule)",
+      "channels": {
+        "linkml-validate": "APPLIES",
+        "gen-json-schema": "APPLIES",
+        "gen-pydantic": "IGNORES",
+        "gen-shacl+pyshacl": "IGNORES"
+      },
+      "detail": {
+        "linkml-validate": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation",
+            "violation"
+          ]
+        },
+        "gen-json-schema": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "violation",
+            "violation"
+          ]
+        },
+        "gen-pydantic": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok",
+            "ok"
+          ]
+        },
+        "gen-shacl+pyshacl": {
+          "valid": [
+            "ok",
+            "ok"
+          ],
+          "invalid": [
+            "ok",
+            "ok"
+          ]
+        }
+      },
+      "artifact_effect": {
+        "gen-json-schema": "differs",
+        "gen-pydantic": "differs",
+        "gen-shacl": "identical",
+        "gen-owl": "differs"
+      }
+    }
+  ]
+}

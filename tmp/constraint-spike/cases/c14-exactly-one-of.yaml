@@ -1,0 +1,31 @@
+id: https://spike.example/schema
+name: spike
+prefixes:
+  ex: https://spike.example/
+  linkml: https://w3id.org/linkml/
+default_prefix: ex
+default_range: string
+imports:
+- linkml:types
+classes:
+  T:
+    attributes:
+      kind:
+        range: string
+      a:
+        range: string
+      b:
+        range: string
+      n1:
+        range: integer
+      n2:
+        range: integer
+      flag:
+        range: boolean
+    exactly_one_of:
+    - slot_conditions:
+        a:
+          required: true
+    - slot_conditions:
+        b:
+          required: true
