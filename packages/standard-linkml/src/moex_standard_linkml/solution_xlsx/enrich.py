@@ -87,7 +87,10 @@ def enrich_package(
                 node["mapping_coverage_status"] = defaults.mapping_coverage_status_mapped
 
     for mapping in package.get("mappings") or []:
-        mname = str(mapping.get("name") or "")
+        # Mapping lost identity slot name in DAMS 3.0.0 (ADR-044); key lineage
+        # by the local id segment (same token as the former workbook name).
+        eid = str(mapping.get("element_id") or "")
+        mname = eid.rsplit("/", 1)[-1] if eid else ""
         lineage = lineage_by_name.get(mname) or ""
         if lineage:
             base = mapping.get("description") or f"Mapping {mname}"
@@ -120,7 +123,6 @@ def enrich_package(
         mappings.append(
             {
                 "element_id": f"dams:mapping/{system.slug}/realizes_{name}",
-                "name": f"realizes_{name}",
                 "description": (
                     f"Локальный stub: {name} realizes conceptual {name} "
                     f"(импорт xlsx; выверка с enterprise — follow-up)."

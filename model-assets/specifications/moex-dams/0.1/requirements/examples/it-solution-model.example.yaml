@@ -96,7 +96,6 @@ relationships:
   relationship_kind: association
 mappings:
 - element_id: dams:mapping/example-min/party-entity
-  name: map_party_entity
   description: Отображение логической стороны на топик событий.
   lifecycle_status: active
   source_refs:
@@ -106,7 +105,6 @@ mappings:
   mapping_type: entity_physical
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/example-min/party-id
-  name: map_party_id
   description: Соответствие логического идентификатора физическому полю.
   lifecycle_status: active
   source_refs:
