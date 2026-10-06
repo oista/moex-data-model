@@ -100,14 +100,14 @@ _SPEC_FILE_META: dict[str, tuple[str, str]] = {
     "moex-structure.yaml": (
         "Структура данных",
         "DataStructure и SchemaNode: плоское дерево узлов носителя или сообщения. "
-        "Заменяет PhysicalField; Message вынесен из TechnicalAsset. Адресация "
-        "узлов — structure_id#local_key (ADR-038…041).",
+        "Класс Message — отдельный ModelElement со ссылками на структуры. "
+        "Адресация узлов — structure_id#local_key (ADR-038…041).",
     ),
     "moex-technical.yaml": (
         "Технические активы",
         "TechnicalAsset, DataCarrier и точки доступа без встроенных полей. "
         "Носитель ссылается на DataStructure; каналы и сообщения связываются "
-        "через AccessPoint.message_refs, а не kind message_type.",
+        "через AccessPoint.message_refs на класс Message.",
     ),
 }
 
