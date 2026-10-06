@@ -2127,7 +2127,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/esed/CardDocument_ExternalPoaInfo
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/esed/RefStates_States
   name: RefStates_States
   title: common_state
@@ -2143,7 +2143,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/esed/RefStates_States
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/esed/RefKinds_CardKinds
   name: RefKinds_CardKinds
   title: common_type
@@ -2159,7 +2159,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/esed/RefKinds_CardKinds
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/esed/RefStaff_Units
   name: RefStaff_Units
   title: division
@@ -2175,7 +2175,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/esed/RefStaff_Units
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/esed/dvsys_instances_date
   name: dvsys_instances_date
   title: document
@@ -2191,7 +2191,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/esed/dvsys_instances_date
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/esed/RefStaff_Employees
   name: RefStaff_Employees
   title: employee
@@ -2207,7 +2207,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/esed/RefStaff_Employees
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/esed/dvsys_files
   name: dvsys_files
   title: file
@@ -2223,7 +2223,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/esed/dvsys_files
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/esed/dvsys_binaries
   name: dvsys_binaries
   title: file_binary
@@ -2239,7 +2239,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/esed/dvsys_binaries
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/esed/dvsys_instances
   name: dvsys_instances
   title: instance
@@ -2255,7 +2255,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/esed/dvsys_instances
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/esed/RefPartners_Companies
   name: RefPartners_Companies
   title: organization
@@ -2271,7 +2271,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/esed/RefPartners_Companies
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/esed/RefPartners_Employees
   name: RefPartners_Employees
   title: organization_employee
@@ -2287,7 +2287,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/esed/RefPartners_Employees
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/esed/RefBaseUniversal_Items
   name: RefBaseUniversal_Items
   title: universal_item
@@ -2303,7 +2303,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/esed/RefBaseUniversal_Items
   tags:
-  - namespace_heuristic
+  - transitional
 value_domains: []
 data_structures:
 - element_id: dams:structure/esed/CardDocument_ExternalPoaInfo

@@ -1236,7 +1236,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/ucd/phys_AGREEMENT
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/ucd/phys_AUTHORIZATION
   name: phys_AUTHORIZATION
   title: Полномочия
@@ -1252,7 +1252,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/ucd/phys_AUTHORIZATION
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/ucd/phys_EMPOYEE
   name: phys_EMPOYEE
   title: Сотрудник
@@ -1268,7 +1268,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/ucd/phys_EMPOYEE
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/ucd/phys_ORGANIZATION
   name: phys_ORGANIZATION
   title: Организация
@@ -1284,7 +1284,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/ucd/phys_ORGANIZATION
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/ucd/phys_ORGANIZATION_TYPE
   name: phys_ORGANIZATION_TYPE
   title: Тип организации
@@ -1300,7 +1300,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/ucd/phys_ORGANIZATION_TYPE
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/ucd/phys_PERSON
   name: phys_PERSON
   title: Персона
@@ -1316,7 +1316,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/ucd/phys_PERSON
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/ucd/phys_POSITION
   name: phys_POSITION
   title: Должность
@@ -1332,7 +1332,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/ucd/phys_POSITION
   tags:
-  - namespace_heuristic
+  - transitional
 value_domains: []
 data_structures:
 - element_id: dams:structure/ucd/phys_AGREEMENT

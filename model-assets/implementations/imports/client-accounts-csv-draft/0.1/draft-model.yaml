@@ -44,7 +44,7 @@ data_carriers:
   asset_namespace: csv://unknown
   asset_kind: file
   tags:
-  - namespace_heuristic
+  - transitional
   structure_ref: dams:structure/csv-draft/client_accounts_csv
 value_domains: []
 data_structures:

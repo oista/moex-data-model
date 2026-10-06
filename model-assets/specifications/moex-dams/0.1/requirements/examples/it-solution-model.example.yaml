@@ -131,7 +131,7 @@ data_carriers:
   asset_kind: stream_topic
   structure_ref: dams:structure/example-min/party-topic
   tags:
-  - namespace_heuristic
+  - transitional
 value_domains: []
 data_structures:
 - element_id: dams:structure/example-min/party-topic

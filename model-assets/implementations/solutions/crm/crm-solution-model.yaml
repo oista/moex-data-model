@@ -1442,7 +1442,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/crm/phys_CONTACT
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/crm/ACCOUNT
   name: ACCOUNT
   title: Клиент
@@ -1458,7 +1458,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/crm/ACCOUNT
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/crm/phys_LEAD
   name: phys_LEAD
   title: Привлечение
@@ -1474,7 +1474,7 @@ data_carriers:
   asset_kind: relational_table
   structure_ref: dams:structure/crm/phys_LEAD
   tags:
-  - namespace_heuristic
+  - transitional
 value_domains: []
 data_structures:
 - element_id: dams:structure/crm/phys_CONTACT

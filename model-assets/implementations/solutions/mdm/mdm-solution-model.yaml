@@ -1122,7 +1122,7 @@ data_carriers:
   asset_kind: relational_view
   structure_ref: dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/mdm/INTERNALDM_MDM_V_PERSON
   name: INTERNALDM_MDM_V_PERSON
   title: Физические лица (ФЛ)
@@ -1138,7 +1138,7 @@ data_carriers:
   asset_kind: relational_view
   structure_ref: dams:structure/mdm/INTERNALDM_MDM_V_PERSON
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO
   name: MOSCOW_EXCHANGE_T_REF_CEO
   title: 'ЕИО (СЕО): Отношение ЮЛ к ФЛ'
@@ -1154,7 +1154,7 @@ data_carriers:
   asset_kind: relational_view
   structure_ref: dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO
   tags:
-  - namespace_heuristic
+  - transitional
 - element_id: dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE
   name: MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE
   title: Представители:Отношение ЮЛ - ФЛ
@@ -1170,7 +1170,7 @@ data_carriers:
   asset_kind: relational_view
   structure_ref: dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE
   tags:
-  - namespace_heuristic
+  - transitional
 value_domains: []
 data_structures:
 - element_id: dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE
