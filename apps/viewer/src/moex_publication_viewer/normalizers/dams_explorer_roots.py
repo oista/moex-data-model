@@ -85,6 +85,30 @@ _SPEC_FILE_META: dict[str, tuple[str, str]] = {
         "модели, SemVer и дайджесты. Базовый слой импортов, чтобы модули не "
         "размножали локальные enum.",
     ),
+    "moex-datatypes.yaml": (
+        "Реестр типов данных",
+        "Корпоративные DataType и привязки native-типов (ADR-036/037). Логические "
+        "атрибуты и узлы схемы ссылаются на реестр, не дублируя семейства типов "
+        "в каждой модели решения.",
+    ),
+    "moex-semantic.yaml": (
+        "Семантический слой",
+        "ConceptualProperty, ConceptualDomain и связи атрибутной семантики. "
+        "Отделяет смысл свойства от логического атрибута и обеспечивает "
+        "каскад определений без смешения с физической структурой.",
+    ),
+    "moex-structure.yaml": (
+        "Структура данных",
+        "DataStructure и SchemaNode: плоское дерево узлов носителя или сообщения. "
+        "Заменяет PhysicalField; Message вынесен из TechnicalAsset. Адресация "
+        "узлов — structure_id#local_key (ADR-038…041).",
+    ),
+    "moex-technical.yaml": (
+        "Технические активы",
+        "TechnicalAsset, DataCarrier и точки доступа без встроенных полей. "
+        "Носитель ссылается на DataStructure; каналы и сообщения связываются "
+        "через AccessPoint.message_refs, а не kind message_type.",
+    ),
 }
 
 
