@@ -15,6 +15,12 @@ from moex_dams.application.ontology_report import (
     write_ontology_profile,
 )
 from moex_dams.application.repository import DamsAssetRepository
+from moex_dams.application.schema_diff import (
+    SchemaDiffResult,
+    diff_schemas,
+    recommend_version,
+    write_schema_diff_report,
+)
 from moex_dams.application.rules_runner import (
     RuleSet,
     default_dams_rule_sets,
@@ -97,6 +103,7 @@ __all__ = [
     "ModelPackage",
     "NodeKind",
     "RuleSet",
+    "SchemaDiffResult",
     "SliceResult",
     "SlotProvenance",
     "assess_implementation",
@@ -122,10 +129,12 @@ __all__ = [
     "diff_graphs",
     "diff_implementations",
     "diff_schema_element_uris",
+    "diff_schemas",
     "find_redundant_definition_overrides",
     "find_redundant_overrides",
     "project_model_package_to_dbml",
     "project_model_package_to_er_diagram",
+    "recommend_version",
     "relation_label",
     "resolve_definition",
     "resolve_governed",
@@ -135,4 +144,5 @@ __all__ = [
     "write_er_diagram_artifact",
     "write_ontology_profile",
     "write_requirements_xlsx",
+    "write_schema_diff_report",
 ]

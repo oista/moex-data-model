@@ -1,0 +1,72 @@
+schema-diff base=d0b05d4 target=9f0ab18
+version_recommendation=major
+counts breaking=11 backward_compatible=50 non_breaking=5 deprecation=0
+changelog=C:\Users\bons1\IdeaProjects\moex-data-model\docs\migration\CHANGELOG-technical-asset.md
+compatibility_baseline_ref=False
+note: breaking changes covered by changelog and/or baseline ref
+BACKWARD_COMPATIBLE DAMS-SCHEMA-CLASS-ADD class:AccessPoint: Added class AccessPoint
+BACKWARD_COMPATIBLE DAMS-SCHEMA-CLASS-ADD class:Contains: Added class Contains
+BACKWARD_COMPATIBLE DAMS-SCHEMA-CLASS-ADD class:DataCarrier: Added class DataCarrier
+BACKWARD_COMPATIBLE DAMS-SCHEMA-CLASS-ADD class:DataContainer: Added class DataContainer
+BACKWARD_COMPATIBLE DAMS-SCHEMA-CLASS-ADD class:ExecutionAsset: Added class ExecutionAsset
+BACKWARD_COMPATIBLE DAMS-SCHEMA-CLASS-ADD class:HasLocation: Added class HasLocation
+BACKWARD_COMPATIBLE DAMS-SCHEMA-CLASS-ADD class:HasProtocolBinding: Added class HasProtocolBinding
+BACKWARD_COMPATIBLE DAMS-SCHEMA-CLASS-ADD class:HasStructure: Added class HasStructure
+BACKWARD_COMPATIBLE DAMS-SCHEMA-CLASS-ADD class:TechnicalAsset: Added class TechnicalAsset
+BREAKING DAMS-SCHEMA-CLASS-REMOVE class:PhysicalObject: Removed class PhysicalObject
+NON_BREAKING DAMS-SCHEMA-CLASS-DOC class:DataFlowEntityBinding: Class DataFlowEntityBinding description changed
+BACKWARD_COMPATIBLE DAMS-SCHEMA-CLASS-SLOT-ADD class:DataFlowEntityBinding.carrier_refs: Added slot carrier_refs on class DataFlowEntityBinding
+BREAKING DAMS-SCHEMA-CLASS-SLOT-REMOVE class:DataFlowEntityBinding.physical_object_refs: Removed slot physical_object_refs from class DataFlowEntityBinding
+NON_BREAKING DAMS-SCHEMA-CLASS-DOC class:Mapping: Class Mapping description changed
+BACKWARD_COMPATIBLE DAMS-SCHEMA-CLASS-SLOT-ADD class:ModelPackage.access_points: Added slot access_points on class ModelPackage
+BACKWARD_COMPATIBLE DAMS-SCHEMA-CLASS-SLOT-ADD class:ModelPackage.data_carriers: Added slot data_carriers on class ModelPackage
+BACKWARD_COMPATIBLE DAMS-SCHEMA-CLASS-SLOT-ADD class:ModelPackage.data_containers: Added slot data_containers on class ModelPackage
+BACKWARD_COMPATIBLE DAMS-SCHEMA-CLASS-SLOT-ADD class:ModelPackage.execution_assets: Added slot execution_assets on class ModelPackage
+BREAKING DAMS-SCHEMA-CLASS-SLOT-REMOVE class:ModelPackage.physical_objects: Removed slot physical_objects from class ModelPackage
+NON_BREAKING DAMS-SCHEMA-CLASS-DOC class:PhysicalField: Class PhysicalField description changed
+BACKWARD_COMPATIBLE DAMS-SCHEMA-CLASS-SLOT-ADD class:PhysicalField.carrier_ref: Added slot carrier_ref on class PhysicalField
+BREAKING DAMS-SCHEMA-CLASS-SLOT-REMOVE class:PhysicalField.physical_object_ref: Removed slot physical_object_ref from class PhysicalField
+BACKWARD_COMPATIBLE DAMS-SCHEMA-CLASS-SLOT-ADD class:SelectedEntity.carrier_refs: Added slot carrier_refs on class SelectedEntity
+BREAKING DAMS-SCHEMA-CLASS-SLOT-REMOVE class:SelectedEntity.physical_object_refs: Removed slot physical_object_refs from class SelectedEntity
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:access_points: Added slot access_points
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:asset_kind: Added slot asset_kind
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:asset_namespace: Added slot asset_namespace
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:binding_ref: Added slot binding_ref
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:carrier_ref: Added slot carrier_ref
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:carrier_refs: Added slot carrier_refs
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:consumes_refs: Added slot consumes_refs
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:containment_kind: Added slot containment_kind
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:data_carriers: Added slot data_carriers
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:data_containers: Added slot data_containers
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:data_format: Added slot data_format
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:execution_assets: Added slot execution_assets
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:http_method: Added slot http_method
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:interface_ref: Added slot interface_ref
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:lineage_role: Added slot lineage_role
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:location_uri: Added slot location_uri
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:operation_name: Added slot operation_name
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:parent_ref: Added slot parent_ref
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:path_template: Added slot path_template
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:produces_refs: Added slot produces_refs
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:protocol: Added slot protocol
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:protocol_version: Added slot protocol_version
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:region: Added slot region
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:schema_dialect: Added slot schema_dialect
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:serves_refs: Added slot serves_refs
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-ADD slot:structure_ref: Added slot structure_ref
+BREAKING DAMS-SCHEMA-SLOT-REMOVE slot:native_schema_ref: Removed slot native_schema_ref
+BREAKING DAMS-SCHEMA-SLOT-REMOVE slot:object_kind: Removed slot object_kind
+BREAKING DAMS-SCHEMA-SLOT-REMOVE slot:physical_object_ref: Removed slot physical_object_ref
+BREAKING DAMS-SCHEMA-SLOT-REMOVE slot:physical_object_refs: Removed slot physical_object_refs
+BREAKING DAMS-SCHEMA-SLOT-REMOVE slot:physical_objects: Removed slot physical_objects
+NON_BREAKING DAMS-SCHEMA-SLOT-DOC slot:applies_target_kinds: Slot applies_target_kinds description/comments changed
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-OPTIONAL slot:direction: Slot direction cardinality relaxed required->optional
+BACKWARD_COMPATIBLE DAMS-SCHEMA-SLOT-OPTIONAL slot:technology: Slot technology cardinality relaxed required->optional
+BACKWARD_COMPATIBLE DAMS-SCHEMA-ENUM-ADD enum:AccessPointKindEnum: Added enum AccessPointKindEnum
+BACKWARD_COMPATIBLE DAMS-SCHEMA-ENUM-ADD enum:ContainmentKindEnum: Added enum ContainmentKindEnum
+BACKWARD_COMPATIBLE DAMS-SCHEMA-ENUM-ADD enum:DataCarrierKindEnum: Added enum DataCarrierKindEnum
+BACKWARD_COMPATIBLE DAMS-SCHEMA-ENUM-ADD enum:DataContainerKindEnum: Added enum DataContainerKindEnum
+BACKWARD_COMPATIBLE DAMS-SCHEMA-ENUM-ADD enum:ExecutionAssetKindEnum: Added enum ExecutionAssetKindEnum
+BACKWARD_COMPATIBLE DAMS-SCHEMA-ENUM-ADD enum:LineageRoleEnum: Added enum LineageRoleEnum
+BREAKING DAMS-SCHEMA-ENUM-REMOVE enum:PhysicalObjectKindEnum: Removed enum PhysicalObjectKindEnum
+NON_BREAKING DAMS-SCHEMA-ENUM-DOC enum:MappingTypeEnum: Enum MappingTypeEnum description changed
