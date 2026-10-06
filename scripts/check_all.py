@@ -90,6 +90,18 @@ def _try_executable(cmd: list[str]) -> str | None:
     return exe if exe and Path(exe).exists() else None
 
 
+def _cli_venv_python() -> str | None:
+    for rel in (
+        Path("apps/cli/.venv/Scripts/python.exe"),
+        Path("apps/cli/.venv/bin/python"),
+        Path("apps/cli/.venv/bin/python3"),
+    ):
+        candidate = REPO_ROOT / rel
+        if candidate.is_file():
+            return str(candidate)
+    return None
+
+
 def resolve_python() -> str:
     """Pick a usable interpreter; prefer pin / PYTHON / existing CLI venv."""
     env = os.environ.get("PYTHON", "").strip()
@@ -111,14 +123,9 @@ def resolve_python() -> str:
         if probed:
             return probed
 
-    for rel in (
-        Path("apps/cli/.venv/Scripts/python.exe"),
-        Path("apps/cli/.venv/bin/python"),
-        Path("apps/cli/.venv/bin/python3"),
-    ):
-        candidate = REPO_ROOT / rel
-        if candidate.is_file():
-            return str(candidate)
+    venv_py = _cli_venv_python()
+    if venv_py:
+        return venv_py
 
     for ver in ("3.14", "3.13", "3.12", "3.11"):
         probed = _try_executable(
@@ -294,6 +301,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"=== {step_id} ===")
         result = run_step(step_id, python)
         results.append(result)
+        if result.ok and step_id == "slice-cli":
+            venv_py = _cli_venv_python()
+            if venv_py and venv_py != python:
+                python = venv_py
+                print(f"check_all: python={python} (cli venv after slice-cli)")
         if not result.ok:
             exit_code = 1
             print(f"FAIL {step_id}: {result.detail}", file=sys.stderr)
