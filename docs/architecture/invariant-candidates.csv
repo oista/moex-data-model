@@ -1,0 +1,151 @@
+file,line,quote,nearest
+docs/adr/ADR-001-linkml-yaml-canonical.md,19,MODELING_ARCHITECTURE запрещает считать один формализм каноном **всей** мультиформальной платформы: OpenAPI и OWL — отдельные `ModelingStandard`.,Context
+docs/adr/ADR-003-postgres-operational.md,22,**Работа над моделью** — это другое. Workbench должен помнить:,Context
+docs/adr/ADR-005-drawdb-isolated.md,34,- Замена editor не должна трогать kernel.,Consequences
+docs/adr/ADR-007-pydantic-dto-not-validator.md,39,| `type + dict` bodies | запрещено MODELING_ARCHITECTURE §4 |,Alternatives
+docs/adr/ADR-008-linkml-map-provider.md,20,"На срезе Stage 7 / 7b: порт `MappingProvider` в modeling-kernel; адаптер `LinkmlMapProvider` в `packages/linkml-tooling` — default **ObjectTransformer**, opt-in **SQL** via `SQLCompiler` + SQLite (`backend=sql` / CLI `--backend sql`). SQL path rejects `expr:` (`MAP-SQL-001`). Conformance: [`packages/linkml-tooling/tests/test_sql_backend_conformance.py`](../../packages/linkml-tooling/tests/test_sql_backend_conformance.py) (identity + rename fixtures must match ObjectTransformer). Workbench: `GET/POST /workspaces/{id}/transforms` + `/workspaces/:id/transform` UI (sync preview|sample). SSSOM / LinkML extract остаются в `semantic-mappings` (другой контур).",mappings
+docs/adr/ADR-008-linkml-map-provider.md,28,- Unrestricted evaluation выражений **запрещён** по умолчанию (allowlist + isolation); SQL backend не поддерживает `expr:`.,Decision
+docs/adr/ADR-008-linkml-map-provider.md,29,"- Mapping обязан фиксировать preserved/lost semantics, round-trip, authoritative source, provenance.",Mapping
+docs/adr/ADR-009-schema-automator-draft-only.md,9,# ADR-009: schema-automator используется только для draft import,superseded_by
+docs/adr/ADR-009-schema-automator-draft-only.md,28,Исходный файл и параметры import job сохраняются (audit). Повторный импорт должен быть воспроизводим.,Decision
+docs/adr/ADR-011-reproducible-artifacts.md,9,# ADR-011: Generated artifacts должны быть воспроизводимыми,superseded_by
+docs/adr/ADR-012-semantic-diff-review.md,31,Прямая запись в published branch без diff/review не допускается. Breaking changes требуют migration note / approval (IMPLEMENTATION_PLAN этап 10).,Decision
+docs/adr/ADR-013-specification-requirements-catalog.md,18,"Нормативные MUST к модели ИТ-решения (`DAMS-F-*`) живут в markdown, а машинные",requirements
+docs/adr/ADR-015-viewer-ui-atlas.md,48,"- UI без логики, специфичной только для DAMS или FIBO.",2. Неизменяемые ограничения
+docs/adr/ADR-015-viewer-ui-atlas.md,144,"**UI display preferences** (theme, density, palette, section visibility, glossary chrome) live in `apps/viewer/config/display.yaml` (product defaults) and reader overlay in `localStorage` (`moex-viewer-prefs`), with graceful fallback when storage is unavailable (`file://`). They must not be authored in `publish.yaml`.",12. Запреты
+docs/adr/ADR-015-viewer-ui-atlas.md,158,"- Build must inline CSS/JS/fonts (сегодня копируются sibling files — это drift, закрывается реализацией Atlas).",Consequences
+docs/adr/ADR-016-publication-section-kinds-and-profiles.md,31,`PublicationModule` must stay an open class of instances (new packages appear). What must be closed is the **semantic vocabulary of section kinds** and the **profile** that says which kinds a publication of a given shape must / should / must not carry.,text
+docs/adr/ADR-016-publication-section-kinds-and-profiles.md,36,2. **`taxonomy` is a separate kind** (legacy). **ADR-024:** for new ontology modules hierarchy lives under `classes`; `taxonomy` stays in the enum for compatibility but is **deprecated** and must not be required. It remains forbidden on LinkML specification profiles.,kind
+docs/adr/ADR-016-publication-section-kinds-and-profiles.md,40,4. **`ProfileSpec`** on each `PublicationProfileId` (`linkml-specification` | `ontology` | `implementation`) declares `required` / `recommended` / `forbidden` kinds (ontology row per ADR-024):,required
+docs/adr/ADR-016-publication-section-kinds-and-profiles.md,42,| Profile | Required | Recommended | Forbidden |,required
+docs/adr/ADR-016-publication-section-kinds-and-profiles.md,50,"7. Soft validation in this iteration: with `profile` set, missing required / present forbidden / missing recommended → **warnings**, not build failure. Strict CI may follow later.",required
+docs/adr/ADR-016-publication-section-kinds-and-profiles.md,55,- New publication modules must pick a `profile` and section `kind`s from `PublicationSectionKind` (see Cursor rule / DSP README).,kind
+docs/adr/ADR-016-publication-section-kinds-and-profiles.md,57,- DAMS must not introduce a taxonomy root; «Спецификация» maps to `schema-files`.,kind
+docs/adr/ADR-017-external-specification-source-sync.md,20,ADR-014 already separates the FIBO **profile** (`moex-fibo-profile`) from release **content**. ADR-010 keeps OWL out of primary YAML validation. Sync must not conflate with schema-automator draft import (ADR-009) or auto-publish into the catalog/viewer (ADR-012).,Context
+docs/adr/ADR-018-ontology-application-implementation.md,49,| `conformance_level` / `seed_ref` on kernel envelope | Kernel must stay standard-agnostic (MODELING_ARCHITECTURE §4) |,namespace
+docs/adr/ADR-019-publication-contract-inheritance.md,19,"`SpecificationImplementation` may declare `conforms_to` a `ReferenceSpecification` (catalog nesting, kernel envelope). That does **not** mean the implementation must copy the reference’s `PublicationModule` ids, file names, or renderers.",requirements
+docs/adr/ADR-019-publication-contract-inheritance.md,23,This is **not** OWL / LinkML class inheritance (`is_a` / `subClassOf`). It is inheritance of a **publication contract**: mandatory semantic publication capabilities that must be satisfied by local sections.,mappings
+docs/adr/ADR-019-publication-contract-inheritance.md,25,"ADR-016 already closed `PublicationSectionKind` and base `ProfileSpec` (required / recommended / forbidden kinds per artifact type). That covers “what shape of publication this is,” not “which capabilities of *this* reference specification must be covered.”",required
+docs/adr/ADR-019-publication-contract-inheritance.md,33,| Base artifact profile | ADR-016 `PublicationProfileId` / `ProfileSpec` | required / recommended / forbidden **kinds** for `linkml-specification` \| `ontology` \| `implementation` |,required
+docs/adr/ADR-019-publication-contract-inheritance.md,49,"> A specification implementation inherits publication-profile **obligations**, not publication-module **identity**. Every mandatory `PublicationRequirement` of the inherited reference profile must be covered by at least one `PublicationSection` with an explicit `satisfies` link, an accepted renderer, and a semantically valid source. Local module names, count, grouping, and order may differ and extend without breaking conformance.","2. Conformance is on sections, not module identity"
+docs/adr/ADR-019-publication-contract-inheritance.md,67,Obligation: `required` \| `recommended` \| `forbidden`.,required
+docs/adr/ADR-019-publication-contract-inheritance.md,73,"- **Semantic substitution forbidden:** declaring `satisfies: dams:logical-entities` for a CSV column list without `LogicalEntity` / mapping is invalid. Check `satisfies`, source semantic type, minimum content, and bindings — not title alone.",LogicalEntity
+docs/adr/ADR-020-external-specification-scope-and-term-selection.md,61,- `owl:equivalentClass` / `owl:equivalentProperty` forbidden unless `review_status: approved`.,Mapping
+docs/adr/ADR-020-external-specification-scope-and-term-selection.md,64,- Non-accepted / non-approved terms must not be treated as confirmed semantic mappings in the viewer.,mappings
+docs/adr/ADR-021-dams-implementation-profile-and-levels.md,32,- any other profile ⇒ `dams_model_level` forbidden,required
+docs/adr/ADR-022-solution-xlsx-import.md,30,2. **Package boundary.** `solution_xlsx` must not import `moex_dams`.,technology
+docs/adr/ADR-023-governed-property-cascade.md,73,"| ownership | `data_owner_ref`, `data_steward_ref`, `owning_unit_ref` | scalar | package must declare `data_owner_ref` |",data_owner_ref
+docs/adr/ADR-023-governed-property-cascade.md,74,| classification | `governance_classification` | scalar | logical entity must have effective classification |,governance_classification
+docs/adr/ADR-023-governed-property-cascade.md,110,- Xlsx enrich must not stamp ownership/classification onto descendants.,ModelPackage
+docs/adr/ADR-024-unified-class-entity.md,34,"- forbidden: `enumerations`, `slots`",required
+docs/adr/ADR-024-unified-class-entity.md,37,8. Soft validation (missing required → warning) from ADR-016 §7 stays; empty explorer stubs must not satisfy `classes`.,required
+docs/adr/ADR-025-definition-cascade-and-glossary.md,85,**not** inherit; the element must declare its own `description` (may still,description
+docs/adr/ADR-025-definition-cascade-and-glossary.md,112,- `scope_ref` for `system` must be a member of the solution’s,scope_ref
+docs/adr/ADR-026-cmd-entity-metamodel.md,36,must appear in that view alongside entities.,Mapping
+docs/adr/ADR-027-glossary-term-relations.md,52,1. **Related is symmetric and non-transitive.** It must not appear as a tree,symmetric
+docs/adr/ADR-027-glossary-term-relations.md,96,must not be written into the hierarchy.,text
+docs/adr/ADR-027-glossary-term-relations.md,114,| Authored `related` on glossary CSV/JSON | Second graph; glossary must stay a view |,Alternatives
+docs/adr/ADR-028-package-documentation-section.md,37,- other pages are free but must be listed in the TOC;,ModelPackage
+docs/adr/ADR-029-cdm-from-er-sketch-and-realization.md,77,Severity: **warning** (transitional; existing solutions must not fail hard).,identifying
+docs/adr/ADR-030-dams-uri-and-prefix-policy.md,40,- Prefix URI values must end with `/` or `#`.,Prefix registry
+docs/adr/ADR-035-value-domains.md,25,`skos:Collection` только если нет иерархии `broader_meaning_key` — по умолчанию,broader_meaning_key
+docs/adr/ADR-035-value-domains.md,31,"- Общие справочники (валюты, страны) заводить как ConceptualDomain только при",ConceptualDomain
+docs/adr/ADR-038-datastructure-and-schemanode.md,32,- Циклы в рёбрах запрещены DAMS-валидатором; рекурсия схемы — через `node_kind=reference`.,node_kind
+docs/adr/ADR-039-structure-node-addressing.md,39,2. Запрещённые символы исходного имени → `_`.,local_key
+docs/adr/ADR-040-message-integration-model.md,18,"В quantum boundary (ADR-033) transitional `payload` / `message` моделировались как `DataCarrier` с `asset_kind: message_type`. Это смешивает **квант носителя** (топик, файл, таблица) с **описанием сообщения** интеграционного контракта. Сообщение не имеет `asset_namespace` / `qualified_name` в смысле TechnicalAsset и не должно попадать в `carrier_refs`.",DataCarrier
+docs/adr/ADR-040-message-integration-model.md,40,- Допустимо только для `AccessPoint` kind **`operation` | `channel`**.,AccessPoint
+docs/adr/ADR-042-integrity-digest-revisions.md,68,| Придумать revision ids для MDM в фазе 1 | нет исходных bindings; inventing запрещён ТЗ |,ModelPackage
+docs/adr/ADR-043-transitional-tags-registry.md,28,Иных переходных значений в `tags` **нет**. Свободные строки в `tags` для переходности запрещены: только значения из этого реестра.,tags
+docs/adr/ADR-043-transitional-tags-registry.md,35,"2. Residue-тест проверяет, что во `model-assets/**/*.yaml` значения `tags`, равные известным переходным маркерам, ⊆ реестра; неизвестные маркеры вида `transitional-*` / `legacy-*` / `tmp-*` запрещены.",tags
+docs/adr/ADR-044-model-element-decomposition.md,40,- `HasDefinition` must actually induce `description`: `mixins: [DescribedElement]` (or list `description` in slots).,HasDefinition
+docs/adr/ADR-044-model-element-decomposition.md,115,- Architecture-check gains an allowlist for `slot_usage.description` (PR-2); list must not grow without an ADR note.,description
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,80,- должен быть непустым;,1.2. Граница пакета
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,223,"Для логической сущности должно быть описано, по каким деловым",statement
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,268,«Нетехническая логическая сущность не должна быть изолированной:,text
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,269,"должна быть связь с другой логической сущностью, выравнивание",text
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,273,"«LogicalEntity должен иметь Relationship или conceptual_entity_refs,",LogicalEntity
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,317,"Не каждая норма стандарта обязана иметь автоматическую проверку. Если у требования нет formal check, это означает:",formal_checks
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,349,Каждая исполнимая проверка должна формировать стабильный diagnostic:,formal_checks
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,355,Diagnostic должен содержать:,text
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,374,"Для логической сущности должно быть описано, по каким деловым",LogicalEntity
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,383,Requirements catalog является критичным governance-артефактом и должен сам проходить validation.,4.3. Проверка самого каталога
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,400,"Каталог с неизвестным check kind, несуществующим target class или duplicate requirement ID не должен silently pass.",kind
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,447,Пакет модели данных ИТ-решения должен иметь:,GEN-001. Идентичность и ответственность пакета
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,464,Пакет DAMS solution model должен:,ownership_inheritance_rule
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,472,Пакет должен содержать хотя бы одно из:,GEN-003. Непустой состав модели
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,483,"Если в пакете есть physical object, который несёт данные, предоставляет payload или содержит schema/fields, он должен:",GEN-004. Физические объекты связаны со смыслом
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,488,"Проверка не должна автоматически применяться к чисто инфраструктурным контейнерам, например:",mapping_rationale
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,501,Такие объекты должны быть исключены по существующему object kind/role либо явно классифицированы как технические.,kind
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,509,Логическая сущность должна иметь:,6.1. Базовые сведения
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,580,Нетехническая логическая сущность должна иметь `identity_rule`.,identity_rule
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,608,Каждая логическая сущность должна иметь минимум один логический атрибут.,business_key_kind
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,610,Исключение допускается только для:,6.5. Наличие атрибутов
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,622,Логическая сущность должна быть связана с корпоративной концептуальной моделью либо иметь обоснованный статус alignment.,6.6. Conceptual alignment
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,640,| `not-applicable` | Должны отсутствовать | Обязательно; допустимо только для `technical` |,conceptual_entity_refs
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,659,Нетехническая logical entity не должна быть изолированной.,6.7. Семантическая включённость
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,661,Для неё должно быть хотя бы одно:,6.7. Семантическая включённость
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,692,Каждый logical attribute должен иметь:,7.1. Базовые свойства logical attribute
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,725,| `technical-only` | Элемент нужен только для технической реализации |,Mapping
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,732,"Для logical attribute, который подлежит физической реализации в данном package, должно существовать:",mapping_rationale
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,755,Он не должен использоваться как постоянный обход обязательных mappings.,mappings
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,763,- должен давать warning или error для active/approved/released artifacts,mapping_rationale
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,775,Logical relationship должна иметь:,8.1. Концы связи
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,784,Для active relationships должны быть определены:,relationships
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,802,Не допускается silently заполнять `0..*` для всех связей только ради прохождения gate.,8.1. Концы связи
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,806,Для draft или imported relationship допускается временная неполнота cardinality только при:,8.2. Draft/imported исключения
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,846,Каждый business-significant physical object должен иметь:,Message
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,858,Каждый PhysicalField должен иметь:,9.2. Physical field
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,880,Attribute-level mappings не должны автоматически считаться заменой entity-level mapping.,mappings
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,926,"Он не должен применяться к business-significant data только потому, что mapping ещё не подготовлен.",9.5. Technical-only objects и fields
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,1020,"Автоматическая проверка атомарности может быть только эвристической. Она должна формировать warning и требовать review, а не автоматически перепроектировать модель.",Atomicity
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,1070,Перед hardening должны быть:,12.2. Принцип hardening
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,1083,### 13.1. Exception должен быть явным,13.1. Exception должен быть явным
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,1107,"XOR допустим, только когда два значения не могут иметь смысл одновременно.",13.2. Не использовать XOR по привычке
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,1202,"DSP может сформировать candidate mappings, но не должен silently объявлять semantic alignment или production completeness.",mappings
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,1208,Логическая сущность решения по умолчанию должна стремиться к связи с enterprise conceptual model.,15. Relation с enterprise conceptual model и внешними стандартами
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,1231,"Для solution model допустимы local external mappings, но они должны быть явно отмечены как локальные или исключительные. Основной semantic target для ExternalTermSelection — enterprise conceptual layer.",mappings
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,1315,6. Technical-only не должен использоваться для бизнес-данных.,rationale
+docs/architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md,1317,7. Planned не должен быть постоянной заменой mapping.,rationale
+docs/architecture/MODELING_ARCHITECTURE.md,86,Версия implementation не равна версии specification. Изменение нормативной DAMS-схемы не должно задним числом менять смысл опубликованной модели решения.,SpecificationImplementation
+docs/architecture/MODELING_ARCHITECTURE.md,111,"Поэтому `LinkML`, `OpenAPI` и `OWL` нельзя моделировать только как enum вида спецификации, как тип файла или как subclass kernel-сущностей (`LinkMLStandard is_a ModelingStandard` запрещён).",3. Роли не равны технологиям
+docs/architecture/MODELING_ARCHITECTURE.md,134,"Запрещена универсальная модель `type + dict[str, Any]`. Она стирает семантику и позволяет применять операции одного стандарта к объектам другого.",4. Standard-specific object model
+docs/architecture/MODELING_ARCHITECTURE.md,163,Для LinkML/DAMS: `TSpecBody` — schema view / schema elements; `TImplBody` — instance (`ModelPackage` / repository wrapper). Один `TypeVar` на оба метода запрещён.,ModelPackage
+docs/architecture/MODELING_ARCHITECTURE.md,179,"Provider выбирается registry по standard identity/family. В application-коде не должно быть распределённых `if standard == ""linkml""`.",5. Объекты и поведение
+docs/architecture/MODELING_ARCHITECTURE.md,264,"| `specifications` | specifications, profiles, imports, conformance policy | Какой норме это должно соответствовать? |",7. Domain-модули
+docs/architecture/MODELING_ARCHITECTURE.md,354,Mapping обязан указывать:,Mapping
+docs/architecture/MODELING_ARCHITECTURE.md,488,1. **Базовый профиль артефакта** (`publication_profile: implementation` \| `ontology` \| `linkml-specification`) — ADR-016 ProfileSpec: required / recommended / forbidden **kinds** для любого артефакта данного типа.,required
+docs/architecture/MODELING_ARCHITECTURE.md,491,Локальные `PublicationSection` связываются с требованиями через `satisfies`. Допустимы агрегация (один section → много requirements) и декомпозиция (много sections → один requirement при `1..*`). Запрещена семантическая подмена (title/`satisfies` без валидного semantic source).,requirements
+docs/architecture/app_model.md,57,Запрещено моделировать роли наследованием в kernel:,mappings
+docs/architecture/linkml_architecture.md,17,MOEX Data Model Workbench должен предоставлять единую среду для:,Цели системы
+docs/architecture/linkml_architecture.md,32,Первая версия приложения не должна пытаться заменить:,Не входит в систему
+docs/architecture/linkml_architecture.md,51,"Редактирование производного формата не должно напрямую изменять опубликованную LinkML-схему. Изменение сначала преобразуется в контролируемый patch, после чего повторно проверяется и применяется к канонической модели.",LinkML как источник истины
+docs/architecture/linkml_architecture.md,235,- Классификация атрибута не может быть слабее запрещённого политикой уровня.,DataModelBinding
+docs/architecture/linkml_architecture.md,236,- Ссылки на registry objects должны быть разрешены или явно помечены как external/unresolved.,DataModelBinding
+docs/architecture/linkml_architecture.md,269,"LinkML generators преобразуют одну модель в JSON Schema, программные классы, RDF/OWL/SHACL, документацию и другие представления. Генерация JSON Schema должна выполняться без timestamps либо с иным контролем недетерминированных полей, чтобы одинаковый commit давал одинаковый результат.",Generator Service
+docs/architecture/linkml_architecture.md,281,"Transformation Specification хранится в Git рядом с моделями. Для production используется Python `ObjectTransformer`; SQL backend не должен применяться без отдельного conformance-теста, поскольку его поддерживаемое подмножество ограничено, а часть конструкций может быть пропущена при компиляции.",Mapping Engine
+docs/architecture/linkml_architecture.md,287,`schema-automator` применяется только для bootstrapping:,Import Engine
+docs/architecture/linkml_architecture.md,328,Git provider должен быть скрыт за интерфейсом:,Git Publishing Service
+docs/architecture/linkml_architecture.md,338,"Первая реализация может использовать GitHub, но прикладные модули не должны зависеть от GitHub-specific DTO.",title
+docs/architecture/linkml_architecture.md,431,DBML не может без потерь представить все возможности LinkML:,Ограничения round-trip
+docs/architecture/linkml_architecture.md,460,MOEX DBML profile должен поддерживать:,relationships
+docs/architecture/linkml_architecture.md,484,Координаты и настройки canvas не должны попадать в семантическую LinkML-модель.,MOEX DBML profile
+docs/architecture/linkml_architecture.md,561,Ключ артефакта должен включать:,Artifact storage
+docs/architecture/linkml_architecture.md,652,Каждая операция должна иметь:,Наблюдаемость
+docs/architecture/linkml_architecture.md,703,| [ADR-009](../adr/ADR-009-schema-automator-draft-only.md) | schema-automator используется только для draft import |,Ключевые решения
+docs/architecture/linkml_architecture.md,705,| [ADR-011](../adr/ADR-011-reproducible-artifacts.md) | Generated artifacts должны быть воспроизводимыми |,Ключевые решения
+docs/architecture/model-element-inventory-report.md,103,Classes that currently have explicit `slot_usage.description` or that must retain `required: true` after global `description` becomes optional:,description
+docs/architecture/model-element-inventory-report.md,129,List must not grow without an ADR-044 amendment. Architecture-check (PR-2) enforces this allowlist.,SchemaNode
+docs/architecture/model-element-inventory-report.md,143,- `generated/contracts/moex-dams/0.1/**` (Pydantic MRO / bases will change; field sets+required must match — PR-1 acceptance),required
+docs/architecture/model-element-inventory-report.md,147,- `model-assets/implementations/enterprise/moex-hierarchy/moex-dams-full.yaml` (must include `moex-base` after PR-1),required
+docs/architecture/ontology-catalog.md,109,| Эталонное определение ConceptualEntity / LogicalEntity | `description` (`skos:definition`) + ADR-025 cascade; наследование из онтологии только при exactMatch / equivalentClass |,ConceptualEntity
+docs/architecture/provider-protocol-test-spec.md,25,`TSpecBody` and `TImplBody` must be distinct type parameters (not aliases of the same TypeVar).,aliases
+docs/architecture/provider-protocol-test-spec.md,33,"""""""StandardProvider must not collapse specification body and",Test to land with the package
+docs/architecture/provider-protocol-test-spec.md,41,"""spec and implementation body types must differ per standard""",Test to land with the package
+model-assets/specifications/moex-dams/0.1/schemas/moex-core.yaml,116,"ISO/IEC 11179 Property (close). Облегчённый концептуальный слой — только для значимых атрибутов (вариант B, ADR-034). IRI ISO 11179 не используются.",ConceptualProperty
+model-assets/specifications/moex-dams/0.1/schemas/moex-core.yaml,120,Значимое концептуальное свойство сущности КМД. Создаётся только при наличии significance_basis; не обязательно для каждого LogicalAttribute.,ConceptualProperty
+model-assets/specifications/moex-dams/0.1/schemas/moex-core.yaml,300,Body-level scope: enterprise (no solution_ref) or solution. Must align with envelope dams_model_level when profile is dams-data-model.,implementation_scope
+model-assets/specifications/moex-dams/0.1/schemas/moex-governance.yaml,248,Target of the scope (e.g. ITSystem registry id). For scope_kind=system must be a member of the solution's ITSolution.member_system_refs.,scope_ref
+model-assets/specifications/moex-dams/0.1/schemas/moex-structure.yaml,303,Сообщения точки доступа. Допустимо для AccessPoint kind=operation|channel; запрещено для interface (LinkML rule + DAMS).,message_refs
+model-assets/specifications/moex-dams/0.1/schemas/moex-technical.yaml,93,Направление относительно решения. Запрещён для DataContainer и ExecutionAsset правилом DAMS-валидатора и LinkML rules.,TechnicalAsset.direction
+model-assets/specifications/moex-dams/0.1/schemas/moex-technical.yaml,186,Запрещён для DataContainer (правило валидатора).,DataContainer.direction
+model-assets/specifications/moex-dams/0.1/schemas/moex-technical.yaml,201,Запрещён для ExecutionAsset (правило валидатора).,ExecutionAsset.direction
