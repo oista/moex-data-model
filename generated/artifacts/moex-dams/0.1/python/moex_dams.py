@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-06T20:23:03
+# Generation date: 2026-10-06T20:29:22
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -3280,7 +3280,7 @@ class ValueSetQuery(YAMLRoot):
 class EmbeddedElement(YAMLRoot):
     """
     Встраиваемый вспомогательный объект без собственного жизненного цикла и глобального element_id. Идентичность
-    локальна относительно родителя (local_key). Не путать с будущим IdentifiedElement (ADR-038).
+    локальна относительно родителя (local_key). Не путать с IdentifiedElement (ADR-038 / ADR-044).
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -3412,7 +3412,6 @@ class SchemaNode(EmbeddedElement):
     is_primary_key: Optional[Union[bool, Bool]] = None
     is_unique: Optional[Union[bool, Bool]] = None
     foreign_key_target: Optional[Union[str, URIorCURIE]] = None
-    description: Optional[str] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.local_key):
@@ -3492,9 +3491,6 @@ class SchemaNode(EmbeddedElement):
 
         if self.foreign_key_target is not None and not isinstance(self.foreign_key_target, URIorCURIE):
             self.foreign_key_target = URIorCURIE(self.foreign_key_target)
-
-        if self.description is not None and not isinstance(self.description, str):
-            self.description = str(self.description)
 
         super().__post_init__(**kwargs)
 
@@ -6382,14 +6378,8 @@ slots.ValueDomain_description = Slot(uri=DAMS.description, name="ValueDomain_des
 slots.ValueDomain_data_type_ref = Slot(uri=DAMS.data_type_ref, name="ValueDomain_data_type_ref", curie=DAMS.curie('data_type_ref'),
                    model_uri=DAMS.ValueDomain_data_type_ref, domain=ValueDomain, range=Union[str, DataTypeElementId])
 
-slots.EmbeddedElement_description = Slot(uri=DAMS.description, name="EmbeddedElement_description", curie=DAMS.curie('description'),
-                   model_uri=DAMS.EmbeddedElement_description, domain=EmbeddedElement, range=Optional[str])
-
 slots.DataStructure_description = Slot(uri=DAMS.description, name="DataStructure_description", curie=DAMS.curie('description'),
                    model_uri=DAMS.DataStructure_description, domain=DataStructure, range=Optional[str])
-
-slots.SchemaNode_description = Slot(uri=DAMS.description, name="SchemaNode_description", curie=DAMS.curie('description'),
-                   model_uri=DAMS.SchemaNode_description, domain=SchemaNode, range=Optional[str])
 
 slots.SchemaNode_native_name = Slot(uri=DAMS.native_name, name="SchemaNode_native_name", curie=DAMS.curie('native_name'),
                    model_uri=DAMS.SchemaNode_native_name, domain=SchemaNode, range=str)

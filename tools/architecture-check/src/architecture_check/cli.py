@@ -9,6 +9,10 @@ from pathlib import Path
 from architecture_check.doc_consistency import check_docs
 from architecture_check.kernel_policy import check_extension_policy
 from architecture_check.layer_boundaries import check_layer_boundaries
+from architecture_check.model_element_roles import (
+    check_description_declarations,
+    check_identified_vs_embedded,
+)
 
 
 def _repo_root_from_here() -> Path:
@@ -55,6 +59,10 @@ def main(argv: list[str] | None = None) -> int:
             errors.append(f"doc_consistency: {msg}")
         for msg in check_layer_boundaries(dams):
             errors.append(f"layer_boundaries: {msg}")
+        for msg in check_description_declarations(root):
+            errors.append(f"model_element_roles: {msg}")
+        for msg in check_identified_vs_embedded(root):
+            errors.append(f"model_element_roles: {msg}")
 
     if errors:
         print("architecture-check FAILED:", file=sys.stderr)

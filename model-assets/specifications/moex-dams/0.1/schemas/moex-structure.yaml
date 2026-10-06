@@ -9,6 +9,7 @@ imports:
   - linkml:types
   - moex-types
   - moex-registries
+  - moex-base
   - moex-governance
   - moex-core
   - moex-datatypes
@@ -21,13 +22,11 @@ classes:
     description: >
       Встраиваемый вспомогательный объект без собственного жизненного цикла и
       глобального element_id. Идентичность локальна относительно родителя
-      (local_key). Не путать с будущим IdentifiedElement (ADR-038).
+      (local_key). Не путать с IdentifiedElement (ADR-038 / ADR-044).
+    mixins:
+      - DescribedElement
     slots:
       - local_key
-      - description
-    slot_usage:
-      description:
-        required: false
 
   DataStructure:
     is_a: ModelElement
@@ -107,8 +106,6 @@ classes:
       - is_unique
       - foreign_key_target
     slot_usage:
-      description:
-        required: false
       native_name:
         required: false
       native_type:

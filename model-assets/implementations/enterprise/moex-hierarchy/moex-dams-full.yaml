@@ -4242,18 +4242,15 @@ classes:
     name: EmbeddedElement
     description: 'Встраиваемый вспомогательный объект без собственного жизненного
       цикла и глобального element_id. Идентичность локальна относительно родителя
-      (local_key). Не путать с будущим IdentifiedElement (ADR-038).
+      (local_key). Не путать с IdentifiedElement (ADR-038 / ADR-044).
 
       '
     from_schema: https://data.moex.com/dams/structure/v0.1
     abstract: true
+    mixins:
+    - DescribedElement
     slots:
     - local_key
-    - description
-    slot_usage:
-      description:
-        name: description
-        required: false
   DataStructure:
     name: DataStructure
     id_prefixes:
@@ -4343,9 +4340,6 @@ classes:
     - is_unique
     - foreign_key_target
     slot_usage:
-      description:
-        name: description
-        required: false
       native_name:
         name: native_name
         required: false

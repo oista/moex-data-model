@@ -2039,9 +2039,9 @@ class ValueSetQuery(ConfiguredBaseModel):
     include_self: Optional[bool] = Field(default=None, description="""Включать стартовые узлы в результат.""")
 
 
-class EmbeddedElement(ConfiguredBaseModel):
+class EmbeddedElement(DescribedElement):
     """
-    Встраиваемый вспомогательный объект без собственного жизненного цикла и глобального element_id. Идентичность локальна относительно родителя (local_key). Не путать с будущим IdentifiedElement (ADR-038).
+    Встраиваемый вспомогательный объект без собственного жизненного цикла и глобального element_id. Идентичность локальна относительно родителя (local_key). Не путать с IdentifiedElement (ADR-038 / ADR-044).
 
     """
     local_key: str = Field(default=..., description="""Локальный ключ узла внутри DataStructure. Алфавит ^[a-z0-9_.-]+$ (ADR-039). Стабилен после записи; не пересчитывается при смене native_name.

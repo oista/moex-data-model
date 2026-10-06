@@ -8,7 +8,7 @@
     "node_count": 150,
     "edge_count": 305,
     "is_conformant": true,
-    "bundle_digest": "sha256:c8822a307c4743b3a4c9847ffa21f818bd0f1930b63d67a30965e1187fd2566e"
+    "bundle_digest": "sha256:4c052613ffcb9b8c7403bdffb15704adb12817847350ccf04eff38fc8ca72546"
   },
   "nodes": [
     {

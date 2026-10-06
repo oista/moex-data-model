@@ -122,7 +122,7 @@ Classes that currently have explicit `slot_usage.description` or that must retai
 | SpecificationRequirement | **add** `required: true` | preserve |
 | DataStructure | **add** `recommended: true` (not required) | D1 |
 | Relationship | **none** — global optional only (no class slot_usage) | D4; confirmed |
-| Mapping | **add** optional (+ later deprecate siblings) | D3 |
+| Mapping | **none** in PR-1/PR-2 (global optional); PR-3 adds deprecated slot_usage | D3 |
 | ConceptualEntity, ConceptualProperty, LogicalEntity, LogicalAttribute, RelationTerm, Message | **remove** local copy | moved to HasDefinition |
 | SchemaNode / EmbeddedElement | **remove** in PR-2 | DescribedElement |
 

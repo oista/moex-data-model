@@ -905,7 +905,7 @@ include_self boolean
 
 Table EmbeddedElement {
 local_key varchar [not null, primary key]
-EmbeddedElement_description varchar
+description varchar
 }
 
 Table DataStructure {
@@ -933,6 +933,7 @@ description varchar
 }
 
 Table SchemaNode {
+description varchar
 SchemaNode_native_name varchar [not null]
 node_kind varchar [not null]
 children varchar
@@ -954,10 +955,8 @@ column_position int
 is_primary_key boolean
 is_unique boolean
 foreign_key_target varchar
-SchemaNode_description varchar
 SchemaNode_local_key varchar [not null, primary key]
 local_key varchar [not null, primary key]
-EmbeddedElement_description varchar
 }
 
 Table Message {
