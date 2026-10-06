@@ -22,7 +22,7 @@ def validate_instance(
     """Validate implementation instance against a LinkML schema path."""
     schema_path = Path(schema_path)
     try:
-        from linkml.validator import Validator
+        from moex_standard_linkml.validation import make_linkml_validator
     except ImportError as exc:
         return (
             Diagnostic(
@@ -37,7 +37,7 @@ def validate_instance(
         instance = body.data
         if not instance:
             instance = yaml.safe_load(body.path.read_text(encoding="utf-8"))
-        validator = Validator(schema_path)
+        validator = make_linkml_validator(schema_path)
         report = validator.validate(instance, body.target_class)
     except Exception as exc:  # noqa: BLE001
         return (

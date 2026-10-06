@@ -71,7 +71,10 @@ def _validate_inprocess(
         str(package_path),
     ]
     try:
-        from linkml.validator import Validator
+        from moex_standard_linkml.validation import (
+            error_results,
+            make_linkml_validator,
+        )
     except ImportError as exc:
         return ValidationResult(
             ok=False,
@@ -83,7 +86,7 @@ def _validate_inprocess(
 
     try:
         instance = yaml.safe_load(package_path.read_text(encoding="utf-8"))
-        validator = Validator(schema_path)
+        validator = make_linkml_validator(schema_path)
         report = validator.validate(instance, target_class)
     except Exception as exc:  # noqa: BLE001 — surface as validation failure
         return ValidationResult(
@@ -94,7 +97,7 @@ def _validate_inprocess(
             command=command,
         )
 
-    results = list(getattr(report, "results", []) or [])
+    results = error_results(report)
     if not results:
         return ValidationResult(
             ok=True,

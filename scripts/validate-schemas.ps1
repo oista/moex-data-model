@@ -85,17 +85,14 @@ print('ontology URI lint OK')
 from pathlib import Path
 import sys
 import yaml
-from linkml.validator import Validator
+from moex_standard_linkml.validation import error_results, make_linkml_validator
 
 schema = Path(r'$Schema')
 inst = Path(r'$Impl')
 data = yaml.safe_load(inst.read_text(encoding='utf-8'))
-report = Validator(schema).validate(data, target_class='ModelPackage')
-bad = []
-for r in report.results:
-    sev = str(getattr(r, 'severity', r))
-    if 'ERROR' in sev.upper():
-        bad.append(r)
+bad = error_results(
+    make_linkml_validator(schema).validate(data, target_class='ModelPackage')
+)
 if bad:
     for e in bad[:30]:
         print(e, file=sys.stderr)
