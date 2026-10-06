@@ -618,7 +618,6 @@ def map_er_dictionary(
             mappings.append(
                 {
                     "element_id": ids.mapping_id(prefix, slug, map_name),
-                    "name": map_name,
                     "description": f"Mapping {map_name}",
                     "lifecycle_status": defaults.lifecycle_status,
                     "source_refs": source_refs,
