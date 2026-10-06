@@ -65,3 +65,4 @@ Viewer-решениѝ живут отдельно: [viewer-decisions.md](../arch
 | [ADR-041](ADR-041-schemanode-datatype-binding.md) | SchemaNode ? DataType / native_type | Accepted; does not duplicate ADR-036 |
 | [ADR-042](ADR-042-integrity-digest-revisions.md) | integrity_digest and model revisions | Accepted; editorial renumber from colliding ADR-034 |
 | [ADR-043](ADR-043-transitional-tags-registry.md) | Transitional element tags registry | Accepted; editorial renumber from colliding ADR-035 |
+| [ADR-044](ADR-044-model-element-decomposition.md) | ModelElement decomposition (mixins, HasValidity, Mapping) | Proposed; inventory matrix; schema changes from 2.1.0 |
