@@ -5,6 +5,10 @@
  classDiagram
     class HasDefinition
     click HasDefinition href "../HasDefinition"
+      DescribedElement <|-- HasDefinition
+        click DescribedElement href "../DescribedElement"
+      
+
       HasDefinition <|-- ConceptualEntity
         click ConceptualEntity href "../ConceptualEntity"
       HasDefinition <|-- ConceptualProperty
@@ -16,9 +20,12 @@
       HasDefinition <|-- RelationTerm
         click RelationTerm href "../RelationTerm"
       
+
       HasDefinition : definition_rationale
         
       HasDefinition : definition_source_ref
+        
+      HasDefinition : description
         
       HasDefinition : scoped_definitions
         

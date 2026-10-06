@@ -1,6 +1,6 @@
 id: https://data.moex.com/dams/v0.1
 name: moex_dams
-version: 2.0.0
+version: 2.1.0
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml: https://w3id.org/linkml/
@@ -10,6 +10,7 @@ imports:
   - linkml:types
   - moex-types
   - moex-registries
+  - moex-base
   - moex-governance
   - moex-core
   - moex-technical

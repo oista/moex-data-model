@@ -315,10 +315,10 @@
                 "qualified_name",
                 "system_ref",
                 "asset_kind",
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "AccessPoint",
             "type": "object"
@@ -707,10 +707,10 @@
             },
             "required": [
                 "conceptual_domain_kind",
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "then": {
                 "not": {
@@ -803,7 +803,7 @@
                     ]
                 },
                 "description": {
-                    "description": "Reference definition (skos:definition). Absent means inherit via definition_source_ref (ontology class or GlossaryTerm) per ADR-025.\n",
+                    "description": "Reference definition (skos:definition via exact_mappings; RDF predicate remains dams:description per ADR-044). Absent means inherit via definition_source_ref (ontology class or GlossaryTerm) per ADR-025. Prefer definition cascade over copying text from related ConceptualProperty / LogicalAttribute.\n",
                     "type": [
                         "string",
                         "null"
@@ -917,9 +917,9 @@
                 }
             },
             "required": [
-                "element_id",
                 "name",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "ConceptualEntity",
             "type": "object"
@@ -1003,7 +1003,7 @@
                     ]
                 },
                 "description": {
-                    "description": "Reference definition (skos:definition). Absent means inherit via definition_source_ref per ADR-025.\n",
+                    "description": "Reference definition (skos:definition via exact_mappings; RDF predicate remains dams:description per ADR-044). Absent means inherit via definition_source_ref (ontology class or GlossaryTerm) per ADR-025. Prefer definition cascade over copying text from related ConceptualProperty / LogicalAttribute.\n",
                     "type": [
                         "string",
                         "null"
@@ -1144,9 +1144,9 @@
                 "significance_basis",
                 "property_kind",
                 "genesis_kind",
-                "element_id",
                 "name",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "then": {
                 "properties": {
@@ -1426,10 +1426,10 @@
                 "qualified_name",
                 "system_ref",
                 "asset_kind",
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "then": {
                 "not": {
@@ -1701,10 +1701,10 @@
                 "qualified_name",
                 "system_ref",
                 "asset_kind",
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "DataContainer",
             "type": "object"
@@ -1918,9 +1918,9 @@
                 "integration_channel",
                 "integration_spec_ref",
                 "lifecycle_status",
-                "element_id",
                 "name",
-                "description"
+                "description",
+                "element_id"
             ],
             "title": "DataFlow",
             "type": "object"
@@ -2052,10 +2052,10 @@
                 "flow_ref",
                 "source_model_ref",
                 "logical_entity_ref",
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "DataFlowEntityBinding",
             "type": "object"
@@ -2222,9 +2222,9 @@
                 "integrity_digest",
                 "generated_at",
                 "lifecycle_status",
-                "element_id",
                 "name",
-                "description"
+                "description",
+                "element_id"
             ],
             "title": "DataModelBinding",
             "type": "object"
@@ -2304,7 +2304,10 @@
                     ]
                 },
                 "description": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "element_id": {
                     "type": "string"
@@ -2409,10 +2412,9 @@
                 "structure_version",
                 "root_local_key",
                 "nodes",
-                "element_id",
                 "name",
-                "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "DataStructure",
             "type": "object"
@@ -2658,10 +2660,10 @@
             "required": [
                 "type_name",
                 "type_family",
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "DataType",
             "type": "object"
@@ -2682,6 +2684,20 @@
             ],
             "title": "DependencyKindEnum",
             "type": "string"
+        },
+        "DescribedElement": {
+            "additionalProperties": false,
+            "description": "\u0422\u0435\u043a\u0441\u0442\u043e\u0432\u043e\u0435 \u043e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430. \u0413\u043b\u043e\u0431\u0430\u043b\u044c\u043d\u043e \u043d\u0435 \u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e; \u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c \u0437\u0430\u0434\u0430\u0451\u0442\u0441\u044f slot_usage \u043d\u0430 \u043a\u043e\u043d\u043a\u0440\u0435\u0442\u043d\u044b\u0445 \u043a\u043b\u0430\u0441\u0441\u0430\u0445 (ADR-044 / ADR-025).",
+            "properties": {
+                "description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "DescribedElement",
+            "type": "object"
         },
         "Dimension": {
             "additionalProperties": false,
@@ -2773,10 +2789,10 @@
                 }
             },
             "required": [
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "Dimension",
             "type": "object"
@@ -2901,10 +2917,10 @@
             "required": [
                 "domain_ref",
                 "namespace",
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "DomainContext",
             "type": "object"
@@ -3174,10 +3190,10 @@
                 "qualified_name",
                 "system_ref",
                 "asset_kind",
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "ExecutionAsset",
             "type": "object"
@@ -3468,7 +3484,7 @@
         },
         "HasDefinition": {
             "additionalProperties": false,
-            "description": "Mixin \u044d\u0442\u0430\u043b\u043e\u043d\u043d\u043e\u0433\u043e \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u0438\u044f (ADR-025). \u0421\u043b\u043e\u0442 description \u043e\u0441\u0442\u0430\u0451\u0442\u0441\u044f skos:definition (own text). \u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0438\u0435 description \u043f\u0440\u0438 \u043d\u0430\u043b\u0438\u0447\u0438\u0438 definition_source_ref \u043e\u0437\u043d\u0430\u0447\u0430\u0435\u0442 \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0435; \u0437\u0430\u0434\u0430\u043d\u043d\u044b\u0439 description \u2014 own (\u043e\u043f\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u043e adapted from source). scoped_definitions \u2014 \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u043d\u044b\u0435 \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u0438\u044f (v1: \u0443\u0440\u043e\u0432\u0435\u043d\u044c ITSystem), \u043d\u0435 \u0437\u0430\u043c\u0435\u043d\u044f\u044e\u0449\u0438\u0435 \u044d\u0442\u0430\u043b\u043e\u043d \u0432\u043d\u0435 scope.",
+            "description": "Mixin \u044d\u0442\u0430\u043b\u043e\u043d\u043d\u043e\u0433\u043e \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u0438\u044f (ADR-025 / ADR-044). \u0421\u043b\u043e\u0442 description \u0438\u043d\u0434\u0443\u0446\u0438\u0440\u0443\u0435\u0442\u0441\u044f \u0447\u0435\u0440\u0435\u0437 DescribedElement; exact_mappings \u0443\u043a\u0430\u0437\u044b\u0432\u0430\u0435\u0442 skos:definition (slot_uri \u043d\u0435 \u043c\u0435\u043d\u044f\u0435\u0442\u0441\u044f \u2014 \u043f\u0440\u0435\u0434\u0438\u043a\u0430\u0442 dams:description). \u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0438\u0435 description \u043f\u0440\u0438 \u043d\u0430\u043b\u0438\u0447\u0438\u0438 definition_source_ref \u043e\u0437\u043d\u0430\u0447\u0430\u0435\u0442 \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0435; \u0437\u0430\u0434\u0430\u043d\u043d\u044b\u0439 description \u2014 own (\u043e\u043f\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u043e adapted from source). scoped_definitions \u2014 \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u043d\u044b\u0435 \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u0438\u044f (v1: \u0443\u0440\u043e\u0432\u0435\u043d\u044c ITSystem), \u043d\u0435 \u0437\u0430\u043c\u0435\u043d\u044f\u044e\u0449\u0438\u0435 \u044d\u0442\u0430\u043b\u043e\u043d \u0432\u043d\u0435 scope.",
             "properties": {
                 "definition_rationale": {
                     "description": "Human rationale for declaring an own definition when a source is also cited, or for overriding an inherited definition.\n",
@@ -3479,6 +3495,13 @@
                 },
                 "definition_source_ref": {
                     "description": "Reference to the element or external term whose definition is inherited or adapted (ADR-025). Orthogonal to glossary_term_refs (term assignment).\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "description": "Reference definition (skos:definition via exact_mappings; RDF predicate remains dams:description per ADR-044). Absent means inherit via definition_source_ref (ontology class or GlossaryTerm) per ADR-025. Prefer definition cascade over copying text from related ConceptualProperty / LogicalAttribute.\n",
                     "type": [
                         "string",
                         "null"
@@ -3708,6 +3731,32 @@
             "title": "HasProvenance",
             "type": "object"
         },
+        "HasSemanticAnnotations": {
+            "additionalProperties": false,
+            "description": "\u0421\u0435\u043c\u0430\u043d\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0435 \u0430\u043d\u043d\u043e\u0442\u0430\u0446\u0438\u0438 (glossary_term_refs, tags). ADR-044.",
+            "properties": {
+                "glossary_term_refs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                }
+            },
+            "title": "HasSemanticAnnotations",
+            "type": "object"
+        },
         "HasStructure": {
             "additionalProperties": false,
             "description": "Mixin \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u044b \u0434\u0430\u043d\u043d\u044b\u0445 \u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044f. structure_ref \u2014 \u0441\u0441\u044b\u043b\u043a\u0430 \u043d\u0430 DataStructure (range=DataStructure, ADR-038). \u0414\u0438\u0430\u043b\u0435\u043a\u0442 \u0441\u0445\u0435\u043c\u044b \u0436\u0438\u0432\u0451\u0442 \u043d\u0430 DataStructure.schema_dialect.",
@@ -3728,6 +3777,28 @@
                 }
             },
             "title": "HasStructure",
+            "type": "object"
+        },
+        "HasValidity": {
+            "additionalProperties": false,
+            "description": "\u041f\u0435\u0440\u0438\u043e\u0434 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044f \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430 (valid_from, valid_to). ADR-044.",
+            "properties": {
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "HasValidity",
             "type": "object"
         },
         "ITPlatform": {
@@ -3860,6 +3931,20 @@
                 "registry_status"
             ],
             "title": "ITSystem",
+            "type": "object"
+        },
+        "IdentifiedElement": {
+            "additionalProperties": false,
+            "description": "\u042d\u043b\u0435\u043c\u0435\u043d\u0442 \u0441 \u0433\u043b\u043e\u0431\u0430\u043b\u044c\u043d\u044b\u043c \u0438\u0434\u0435\u043d\u0442\u0438\u0444\u0438\u043a\u0430\u0442\u043e\u0440\u043e\u043c element_id. \u041d\u0435 \u0441\u043c\u0435\u0448\u0438\u0432\u0430\u0442\u044c \u0441 EmbeddedElement (local_key). ADR-044.",
+            "properties": {
+                "element_id": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "element_id"
+            ],
+            "title": "IdentifiedElement",
             "type": "object"
         },
         "ImplementationProfileEnum": {
@@ -4072,7 +4157,7 @@
                     ]
                 },
                 "description": {
-                    "description": "Reference definition (skos:definition). Prefer ADR-025 (definition_source_ref / scoped_definitions); do not copy from ConceptualProperty.\n",
+                    "description": "Reference definition (skos:definition via exact_mappings; RDF predicate remains dams:description per ADR-044). Absent means inherit via definition_source_ref (ontology class or GlossaryTerm) per ADR-025. Prefer definition cascade over copying text from related ConceptualProperty / LogicalAttribute.\n",
                     "type": [
                         "string",
                         "null"
@@ -4234,9 +4319,9 @@
                 "owner_entity_ref",
                 "required",
                 "multivalued",
-                "element_id",
                 "name",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "LogicalAttribute",
             "type": "object"
@@ -4357,7 +4442,7 @@
                     ]
                 },
                 "description": {
-                    "description": "Reference definition (skos:definition). Absent means inherit from conceptual_entity_refs or definition_source_ref per ADR-025.\n",
+                    "description": "Reference definition (skos:definition via exact_mappings; RDF predicate remains dams:description per ADR-044). Absent means inherit via definition_source_ref (ontology class or GlossaryTerm) per ADR-025. Prefer definition cascade over copying text from related ConceptualProperty / LogicalAttribute.\n",
                     "type": [
                         "string",
                         "null"
@@ -4506,9 +4591,9 @@
             "required": [
                 "context_ref",
                 "solution_data_role",
-                "element_id",
                 "name",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "LogicalEntity",
             "type": "object"
@@ -4653,7 +4738,10 @@
                     ]
                 },
                 "description": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "element_id": {
                     "type": "string"
@@ -4762,10 +4850,9 @@
             "required": [
                 "mapping_type",
                 "mapping_cardinality",
-                "element_id",
                 "name",
-                "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "Mapping",
             "type": "object"
@@ -4922,9 +5009,9 @@
             },
             "required": [
                 "payload_structure_ref",
-                "element_id",
                 "name",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "Message",
             "type": "object"
@@ -5083,17 +5170,17 @@
             "required": [
                 "metric_expression",
                 "aggregation_function",
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "Metric",
             "type": "object"
         },
         "ModelElement": {
             "additionalProperties": false,
-            "description": "\u0410\u0431\u0441\u0442\u0440\u0430\u043a\u0442\u043d\u044b\u0439 \u043a\u043e\u0440\u0435\u043d\u044c \u0438\u0435\u0440\u0430\u0440\u0445\u0438\u0438 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u043e\u0432 \u043c\u043e\u0434\u0435\u043b\u0438: \u043e\u0431\u0449\u0430\u044f \u0438\u0434\u0435\u043d\u0442\u0438\u0447\u043d\u043e\u0441\u0442\u044c (element_id), \u0438\u043c\u044f, \u043e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u0438 \u0436\u0438\u0437\u043d\u0435\u043d\u043d\u044b\u0439 \u0446\u0438\u043a\u043b.",
+            "description": "\u0410\u0431\u0441\u0442\u0440\u0430\u043a\u0442\u043d\u044b\u0439 \u043a\u043e\u0440\u0435\u043d\u044c \u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u043d\u044b\u0445 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u043e\u0432 \u043c\u043e\u0434\u0435\u043b\u0438: IdentifiedElement + NamedElement + DescribedElement + HasLifecycle + HasSemanticAnnotations (ADR-044).",
             "properties": {
                 "aliases": {
                     "items": {
@@ -5111,7 +5198,10 @@
                     ]
                 },
                 "description": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "element_id": {
                     "type": "string"
@@ -5162,10 +5252,9 @@
                 }
             },
             "required": [
-                "element_id",
                 "name",
-                "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "ModelElement",
             "type": "object"
@@ -5523,10 +5612,10 @@
             "required": [
                 "api_version",
                 "model_version",
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "ModelPackage",
             "type": "object"
@@ -5612,12 +5701,41 @@
                 }
             },
             "required": [
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "ModelSelection",
+            "type": "object"
+        },
+        "NamedElement": {
+            "additionalProperties": false,
+            "description": "\u0418\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430 \u043c\u043e\u0434\u0435\u043b\u0438 (name, title, aliases). ADR-044.",
+            "properties": {
+                "aliases": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "name": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "title": "NamedElement",
             "type": "object"
         },
         "NativeTypeBinding": {
@@ -5922,7 +6040,7 @@
                     ]
                 },
                 "description": {
-                    "description": "Reference definition of the relation term (skos:definition). Absent means inherit via definition_source_ref per ADR-025.\n",
+                    "description": "Reference definition (skos:definition via exact_mappings; RDF predicate remains dams:description per ADR-044). Absent means inherit via definition_source_ref (ontology class or GlossaryTerm) per ADR-025. Prefer definition cascade over copying text from related ConceptualProperty / LogicalAttribute.\n",
                     "type": [
                         "string",
                         "null"
@@ -6027,9 +6145,9 @@
             },
             "required": [
                 "forward_label",
-                "element_id",
                 "name",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "RelationTerm",
             "type": "object"
@@ -6067,7 +6185,10 @@
                     ]
                 },
                 "description": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "element_id": {
                     "type": "string"
@@ -6187,10 +6308,9 @@
             "required": [
                 "source_entity_ref",
                 "target_entity_ref",
-                "element_id",
                 "name",
-                "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "Relationship",
             "type": "object"
@@ -6839,10 +6959,10 @@
             },
             "required": [
                 "logical_attribute_ref",
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "SelectedAttribute",
             "type": "object"
@@ -6943,10 +7063,10 @@
             },
             "required": [
                 "logical_entity_ref",
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "SelectedEntity",
             "type": "object"
@@ -7106,10 +7226,10 @@
                 "requirement_level",
                 "requirement_section",
                 "statement",
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "SpecificationRequirement",
             "type": "object"
@@ -7298,10 +7418,10 @@
                 "qualified_name",
                 "system_ref",
                 "asset_kind",
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "TechnicalAsset",
             "type": "object"
@@ -7567,10 +7687,10 @@
             "required": [
                 "value_domain_kind",
                 "data_type_ref",
-                "element_id",
                 "name",
                 "description",
-                "lifecycle_status"
+                "lifecycle_status",
+                "element_id"
             ],
             "title": "ValueDomain",
             "type": "object"
@@ -7776,5 +7896,5 @@
     ],
     "title": "moex_dams",
     "type": "object",
-    "version": "2.0.0"
+    "version": "2.1.0"
 }

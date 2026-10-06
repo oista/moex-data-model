@@ -10,6 +10,7 @@ imports:
   - linkml:types
   - moex-types
   - moex-registries
+  - moex-base
   - moex-governance
   - moex-technical
   - moex-semantic
@@ -21,17 +22,16 @@ default_range: string
 classes:
   ModelElement:
     abstract: true
-    description: "Абстрактный корень иерархии элементов модели: общая идентичность (element_id), имя, описание и жизненный цикл."
+    description: >
+      Абстрактный корень именованных элементов модели: IdentifiedElement +
+      NamedElement + DescribedElement + HasLifecycle + HasSemanticAnnotations
+      (ADR-044).
+    is_a: IdentifiedElement
     mixins:
+      - NamedElement
+      - DescribedElement
       - HasLifecycle
-    slots:
-      - element_id
-      - name
-      - title
-      - description
-      - aliases
-      - glossary_term_refs
-      - tags
+      - HasSemanticAnnotations
 
   ModelPackage:
     is_a: ModelElement
@@ -69,6 +69,9 @@ classes:
       - native_type_bindings
       - data_structures
       - messages
+    slot_usage:
+      description:
+        required: true
 
   DomainContext:
     is_a: ModelElement
@@ -80,6 +83,9 @@ classes:
       - solution_ref
       - namespace
       - business_process_refs
+    slot_usage:
+      description:
+        required: true
 
   ConceptualEntity:
     is_a: ModelElement
@@ -96,12 +102,6 @@ classes:
       - depends_on_refs
       - genesis_kind
       - external_class_refs
-    slot_usage:
-      description:
-        required: false
-        description: >
-          Reference definition (skos:definition). Absent means inherit via
-          definition_source_ref (ontology class or GlossaryTerm) per ADR-025.
 
   ConceptualProperty:
     is_a: ModelElement
@@ -134,11 +134,6 @@ classes:
           - property_owner_entity_ref
           - name
     slot_usage:
-      description:
-        required: false
-        description: >
-          Reference definition (skos:definition). Absent means inherit via
-          definition_source_ref per ADR-025.
       genesis_kind:
         required: true
     rules:
@@ -174,12 +169,6 @@ classes:
       - conceptual_alignment_status
       - alignment_rationale
       - isolation_rationale
-    slot_usage:
-      description:
-        required: false
-        description: >
-          Reference definition (skos:definition). Absent means inherit from
-          conceptual_entity_refs or definition_source_ref per ADR-025.
 
   LogicalAttribute:
     is_a: ModelElement
@@ -210,12 +199,6 @@ classes:
       - timezone_policy
       - temporal_semantics
     slot_usage:
-      description:
-        required: false
-        description: >
-          Reference definition (skos:definition). Prefer ADR-025
-          (definition_source_ref / scoped_definitions); do not copy from
-          ConceptualProperty.
       data_type_ref:
         required: false
         description: >
@@ -262,12 +245,6 @@ classes:
       - symmetric
       - default_relationship_kind
       - ontology_property_ref
-    slot_usage:
-      description:
-        required: false
-        description: >
-          Reference definition of the relation term (skos:definition). Absent
-          means inherit via definition_source_ref per ADR-025.
 
   ExternalClassRef:
     mixins:
@@ -306,28 +283,6 @@ classes:
       - valid_to
 
 slots:
-  element_id:
-    identifier: true
-    range: uriorcurie
-    required: true
-  name:
-    range: string
-    required: true
-  title:
-    range: string
-  description:
-    range: string
-    required: true
-  aliases:
-    range: string
-    multivalued: true
-  glossary_term_refs:
-    range: GlossaryTerm
-    multivalued: true
-    inlined: false
-  tags:
-    range: string
-    multivalued: true
   api_version:
     range: string
     required: true

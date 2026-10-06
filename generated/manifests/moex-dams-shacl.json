@@ -4,10 +4,10 @@
   "generator_module": "linkml.generators.shaclgen",
   "generator_version": "1.11.1",
   "schema_path": "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml",
-  "schema_digest": "sha256:23d23cdb25bde907c6eb70f5083194d9459c78b35862c24dd9104290cbcfcc93",
+  "schema_digest": "sha256:6c8a1366e25298e6e51f9773639a3229f324728f3202ad3581e8dd93d5162803",
   "output_path": "generated/artifacts/moex-dams/0.1/moex-dams.shacl.ttl",
-  "content_digest": "sha256:8bbd338dadde71c28adfd4c386fa5500000b8a649f69b0564d3eb20d024a65da",
-  "generated_at": "2026-10-05T21:42:44.935752+00:00",
+  "content_digest": "sha256:39b604acb2d869ba304e71ae65dd0ab32d611fe3e6d81181f12ea3928e4eb441",
+  "generated_at": "2026-10-06T17:22:59.588989+00:00",
   "generator_options": {
     "digest_mode": "rdf_ground_triples"
   }

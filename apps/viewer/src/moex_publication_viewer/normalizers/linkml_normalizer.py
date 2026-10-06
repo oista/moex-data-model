@@ -41,6 +41,15 @@ _SCHEMA_GROUP_META_BASE: dict[str, tuple[int, str, str, str, str]] = {
         "интеграционных тестов/репозитория; imports связывают модули без дублирования классов.",
         "moex-dams.yaml",
     ),
+    "moex_base": (
+        7,
+        "Base",
+        "Базовые строительные блоки ModelElement: IdentifiedElement, NamedElement, "
+        "DescribedElement, HasSemanticAnnotations, HasValidity (ADR-044).",
+        "Вынесен из core/governance, чтобы HasDefinition мог объявить slot_usage на "
+        "description без цикла импортов и без добавления классов в moex-structure.",
+        "moex-base.yaml",
+    ),
     "moex_core": (
         10,
         "Core",

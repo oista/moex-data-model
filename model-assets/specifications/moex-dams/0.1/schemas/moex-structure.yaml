@@ -52,6 +52,10 @@ classes:
         unique_key_slots:
           - name
           - structure_version
+    slot_usage:
+      description:
+        required: false
+        recommended: true
     rules:
       - description: source_pointer требует source_artifact_ref
         preconditions:
@@ -168,9 +172,6 @@ classes:
       - correlation_hint
     id_prefixes:
       - dams
-    slot_usage:
-      description:
-        required: false
 
 slots:
   local_key:

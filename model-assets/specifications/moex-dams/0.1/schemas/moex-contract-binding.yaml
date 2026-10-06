@@ -36,12 +36,18 @@ classes:
       - compatibility_baseline_ref
       - integrity_digest
       - generated_at
+    slot_usage:
+      description:
+        required: true
 
   ModelSelection:
     is_a: ModelElement
     description: Переиспользуемый набор выбранных сущностей, атрибутов и физических представлений.
     slots:
       - selected_entities
+    slot_usage:
+      description:
+        required: true
 
   SelectedEntity:
     is_a: ModelElement
@@ -50,6 +56,9 @@ classes:
       - logical_entity_ref
       - selected_attributes
       - carrier_refs
+    slot_usage:
+      description:
+        required: true
 
   SelectedAttribute:
     is_a: ModelElement
@@ -58,6 +67,9 @@ classes:
       - logical_attribute_ref
       - schema_node_refs
       - transformation_mapping_ref
+    slot_usage:
+      description:
+        required: true
 
 slots:
   specification_version:

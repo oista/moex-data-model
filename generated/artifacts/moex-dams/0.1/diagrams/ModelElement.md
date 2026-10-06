@@ -5,8 +5,16 @@
  classDiagram
     class ModelElement
     click ModelElement href "../ModelElement"
+      NamedElement <|-- ModelElement
+        click NamedElement href "../NamedElement"
+      DescribedElement <|-- ModelElement
+        click DescribedElement href "../DescribedElement"
       HasLifecycle <|-- ModelElement
         click HasLifecycle href "../HasLifecycle"
+      HasSemanticAnnotations <|-- ModelElement
+        click HasSemanticAnnotations href "../HasSemanticAnnotations"
+      IdentifiedElement <|-- ModelElement
+        click IdentifiedElement href "../IdentifiedElement"
       
 
       ModelElement <|-- ModelPackage

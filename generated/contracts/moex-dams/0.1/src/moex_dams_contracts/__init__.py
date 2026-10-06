@@ -34,7 +34,7 @@ from pydantic import (
 
 
 metamodel_version = "1.11.0"
-version = "2.0.0"
+version = "2.1.0"
 
 
 class ConfiguredBaseModel(BaseModel):
@@ -1059,6 +1059,47 @@ class IntegrationReference(RegistryEntry):
     registry_status: LifecycleStatusEnum = Field(default=...)
 
 
+class IdentifiedElement(ConfiguredBaseModel):
+    """
+    Элемент с глобальным идентификатором element_id. Не смешивать с EmbeddedElement (local_key). ADR-044.
+
+    """
+    element_id: str = Field(default=...)
+
+
+class NamedElement(ConfiguredBaseModel):
+    """
+    Именование элемента модели (name, title, aliases). ADR-044.
+    """
+    name: str = Field(default=...)
+    title: Optional[str] = Field(default=None)
+    aliases: Optional[list[str]] = Field(default=None)
+
+
+class DescribedElement(ConfiguredBaseModel):
+    """
+    Текстовое описание элемента. Глобально не обязательно; обязательность задаётся slot_usage на конкретных классах (ADR-044 / ADR-025).
+
+    """
+    description: Optional[str] = Field(default=None)
+
+
+class HasSemanticAnnotations(ConfiguredBaseModel):
+    """
+    Семантические аннотации (glossary_term_refs, tags). ADR-044.
+    """
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+
+
+class HasValidity(ConfiguredBaseModel):
+    """
+    Период действия элемента (valid_from, valid_to). ADR-044.
+    """
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+
+
 class ClassificationAssignment(ConfiguredBaseModel):
     """
     Версионируемое назначение категории классификации элементу модели с основанием и периодом действия.
@@ -1086,14 +1127,14 @@ class PolicyBinding(ConfiguredBaseModel):
     approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
 
 
-class HasLifecycle(ConfiguredBaseModel):
+class HasLifecycle(HasValidity):
     """
     Mixin жизненного цикла: статус, период действия и ссылка на заменяющий элемент.
     """
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class HasOwnership(ConfiguredBaseModel):
@@ -1148,9 +1189,9 @@ class HasProvenance(ConfiguredBaseModel):
     approved_at: Optional[datetime ] = Field(default=None)
 
 
-class HasDefinition(ConfiguredBaseModel):
+class HasDefinition(DescribedElement):
     """
-    Mixin эталонного определения (ADR-025). Слот description остаётся skos:definition (own text). Отсутствие description при наличии definition_source_ref означает наследование; заданный description — own (опционально adapted from source). scoped_definitions — контекстные определения (v1: уровень ITSystem), не заменяющие эталон вне scope.
+    Mixin эталонного определения (ADR-025 / ADR-044). Слот description индуцируется через DescribedElement; exact_mappings указывает skos:definition (slot_uri не меняется — предикат dams:description). Отсутствие description при наличии definition_source_ref означает наследование; заданный description — own (опционально adapted from source). scoped_definitions — контекстные определения (v1: уровень ITSystem), не заменяющие эталон вне scope.
 
     """
     definition_source_ref: Optional[str] = Field(default=None, description="""Reference to the element or external term whose definition is inherited or adapted (ADR-025). Orthogonal to glossary_term_refs (term assignment).
@@ -1158,6 +1199,8 @@ class HasDefinition(ConfiguredBaseModel):
     definition_rationale: Optional[str] = Field(default=None, description="""Human rationale for declaring an own definition when a source is also cited, or for overriding an inherited definition.
 """)
     scoped_definitions: Optional[list[ScopedDefinition]] = Field(default=None, description="""Context-scoped definitions (ADR-025); v1 scope_kind = system.""")
+    description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition via exact_mappings; RDF predicate remains dams:description per ADR-044). Absent means inherit via definition_source_ref (ontology class or GlossaryTerm) per ADR-025. Prefer definition cascade over copying text from related ConceptualProperty / LogicalAttribute.
+""")
 
 
 class ScopedDefinition(HasProvenance):
@@ -1179,21 +1222,22 @@ class ScopedDefinition(HasProvenance):
     approved_at: Optional[datetime ] = Field(default=None)
 
 
-class ModelElement(HasLifecycle):
+class ModelElement(HasLifecycle, HasSemanticAnnotations, DescribedElement, NamedElement, IdentifiedElement):
     """
-    Абстрактный корень иерархии элементов модели: общая идентичность (element_id), имя, описание и жизненный цикл.
+    Абстрактный корень именованных элементов модели: IdentifiedElement + NamedElement + DescribedElement + HasLifecycle + HasSemanticAnnotations (ADR-044).
+
     """
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: Optional[str] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class ModelPackage(ModelElement, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
@@ -1238,17 +1282,17 @@ class ModelPackage(ModelElement, HasPolicyBindings, HasGovernanceClassification,
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
     policy_refs: Optional[list[str]] = Field(default=None)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class DomainContext(ModelElement, HasOwnership):
@@ -1264,17 +1308,17 @@ class DomainContext(ModelElement, HasOwnership):
     owning_unit_ref: Optional[str] = Field(default=None)
     ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class ConceptualEntity(ModelElement, HasDefinition, HasBusinessClassification, HasOwnership):
@@ -1306,18 +1350,18 @@ class ConceptualEntity(ModelElement, HasDefinition, HasBusinessClassification, H
     definition_rationale: Optional[str] = Field(default=None, description="""Human rationale for declaring an own definition when a source is also cited, or for overriding an inherited definition.
 """)
     scoped_definitions: Optional[list[ScopedDefinition]] = Field(default=None, description="""Context-scoped definitions (ADR-025); v1 scope_kind = system.""")
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition). Absent means inherit via definition_source_ref (ontology class or GlossaryTerm) per ADR-025.
-""")
     aliases: Optional[list[str]] = Field(default=None)
+    description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition via exact_mappings; RDF predicate remains dams:description per ADR-044). Absent means inherit via definition_source_ref (ontology class or GlossaryTerm) per ADR-025. Prefer definition cascade over copying text from related ConceptualProperty / LogicalAttribute.
+""")
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class ConceptualProperty(ModelElement, HasDefinition, HasProvenance, HasPolicyBindings, HasOwnership):
@@ -1351,18 +1395,18 @@ class ConceptualProperty(ModelElement, HasDefinition, HasProvenance, HasPolicyBi
     approved_by_ref: Optional[str] = Field(default=None)
     approved_at: Optional[datetime ] = Field(default=None)
     policy_refs: Optional[list[str]] = Field(default=None)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition). Absent means inherit via definition_source_ref per ADR-025.
-""")
     aliases: Optional[list[str]] = Field(default=None)
+    description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition via exact_mappings; RDF predicate remains dams:description per ADR-044). Absent means inherit via definition_source_ref (ontology class or GlossaryTerm) per ADR-025. Prefer definition cascade over copying text from related ConceptualProperty / LogicalAttribute.
+""")
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class LogicalEntity(ModelElement, HasDefinition, HasPolicyBindings, HasGovernanceClassification, HasBusinessClassification, HasOwnership):
@@ -1401,18 +1445,18 @@ class LogicalEntity(ModelElement, HasDefinition, HasPolicyBindings, HasGovernanc
     definition_rationale: Optional[str] = Field(default=None, description="""Human rationale for declaring an own definition when a source is also cited, or for overriding an inherited definition.
 """)
     scoped_definitions: Optional[list[ScopedDefinition]] = Field(default=None, description="""Context-scoped definitions (ADR-025); v1 scope_kind = system.""")
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition). Absent means inherit from conceptual_entity_refs or definition_source_ref per ADR-025.
-""")
     aliases: Optional[list[str]] = Field(default=None)
+    description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition via exact_mappings; RDF predicate remains dams:description per ADR-044). Absent means inherit via definition_source_ref (ontology class or GlossaryTerm) per ADR-025. Prefer definition cascade over copying text from related ConceptualProperty / LogicalAttribute.
+""")
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class LogicalAttribute(ModelElement, HasDefinition, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
@@ -1457,18 +1501,18 @@ class LogicalAttribute(ModelElement, HasDefinition, HasPolicyBindings, HasGovern
     definition_rationale: Optional[str] = Field(default=None, description="""Human rationale for declaring an own definition when a source is also cited, or for overriding an inherited definition.
 """)
     scoped_definitions: Optional[list[ScopedDefinition]] = Field(default=None, description="""Context-scoped definitions (ADR-025); v1 scope_kind = system.""")
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition). Prefer ADR-025 (definition_source_ref / scoped_definitions); do not copy from ConceptualProperty.
-""")
     aliases: Optional[list[str]] = Field(default=None)
+    description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition via exact_mappings; RDF predicate remains dams:description per ADR-044). Absent means inherit via definition_source_ref (ontology class or GlossaryTerm) per ADR-025. Prefer definition cascade over copying text from related ConceptualProperty / LogicalAttribute.
+""")
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class Relationship(ModelElement):
@@ -1491,17 +1535,17 @@ class Relationship(ModelElement):
 """)
     term_direction: Optional[TermDirectionEnum] = Field(default=None, description="""Whether this Relationship assertion uses the forward or inverse wording of relation_term_ref (ADR-026). Default forward when omitted.
 """)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: Optional[str] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class RelationTerm(ModelElement, HasDefinition):
@@ -1524,18 +1568,18 @@ class RelationTerm(ModelElement, HasDefinition):
     definition_rationale: Optional[str] = Field(default=None, description="""Human rationale for declaring an own definition when a source is also cited, or for overriding an inherited definition.
 """)
     scoped_definitions: Optional[list[ScopedDefinition]] = Field(default=None, description="""Context-scoped definitions (ADR-025); v1 scope_kind = system.""")
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: Optional[str] = Field(default=None, description="""Reference definition of the relation term (skos:definition). Absent means inherit via definition_source_ref per ADR-025.
-""")
     aliases: Optional[list[str]] = Field(default=None)
+    description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition via exact_mappings; RDF predicate remains dams:description per ADR-044). Absent means inherit via definition_source_ref (ontology class or GlossaryTerm) per ADR-025. Prefer definition cascade over copying text from related ConceptualProperty / LogicalAttribute.
+""")
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class ExternalClassRef(HasProvenance):
@@ -1576,15 +1620,15 @@ class Mapping(ModelElement, HasProvenance):
     approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
     approved_by_ref: Optional[str] = Field(default=None)
     approved_at: Optional[datetime ] = Field(default=None)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
-    glossary_term_refs: Optional[list[str]] = Field(default=None)
-    tags: Optional[list[str]] = Field(default=None)
+    description: Optional[str] = Field(default=None)
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
     deprecated_by_ref: Optional[str] = Field(default=None)
+    glossary_term_refs: Optional[list[str]] = Field(default=None)
+    tags: Optional[list[str]] = Field(default=None)
+    element_id: str = Field(default=...)
 
 
 class HasStructure(ConfiguredBaseModel):
@@ -1651,17 +1695,17 @@ class TechnicalAsset(ModelElement, HasPolicyBindings, HasGovernanceClassificatio
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
     policy_refs: Optional[list[str]] = Field(default=None)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class DataCarrier(TechnicalAsset, HasLocation, Contains, HasStructure):
@@ -1702,17 +1746,17 @@ class DataCarrier(TechnicalAsset, HasLocation, Contains, HasStructure):
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
     policy_refs: Optional[list[str]] = Field(default=None)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class AccessPoint(TechnicalAsset, HasLocation, HasProtocolBinding):
@@ -1755,17 +1799,17 @@ class AccessPoint(TechnicalAsset, HasLocation, HasProtocolBinding):
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
     policy_refs: Optional[list[str]] = Field(default=None)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class DataContainer(TechnicalAsset, Contains):
@@ -1797,17 +1841,17 @@ class DataContainer(TechnicalAsset, Contains):
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
     policy_refs: Optional[list[str]] = Field(default=None)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class ExecutionAsset(TechnicalAsset):
@@ -1840,17 +1884,17 @@ class ExecutionAsset(TechnicalAsset):
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
     policy_refs: Optional[list[str]] = Field(default=None)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class ConceptualDomain(ModelElement, HasProvenance, HasOwnership):
@@ -1872,17 +1916,17 @@ class ConceptualDomain(ModelElement, HasProvenance, HasOwnership):
     approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
     approved_by_ref: Optional[str] = Field(default=None)
     approved_at: Optional[datetime ] = Field(default=None)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class ValueMeaning(ConfiguredBaseModel):
@@ -1915,17 +1959,17 @@ class DataType(ModelElement):
     xsd_datatype: Optional[str] = Field(default=None, description="""Соответствующий XSD datatype (например xsd:string).""")
     linkml_type: Optional[str] = Field(default=None, description="""Имя типа LinkML (string, integer, …).""")
     base_type_ref: Optional[str] = Field(default=None, description="""Базовый тип, от которого наследуются параметры.""")
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class NativeTypeBinding(ConfiguredBaseModel):
@@ -1957,17 +2001,17 @@ class ValueDomain(ModelElement):
     permissible_values: Optional[list[PermissibleValue]] = Field(default=None, description="""Встроенный список допустимых значений.""")
     value_set_source: Optional[str] = Field(default=None, description="""Внешний источник набора значений (reference_set).""")
     dynamic_query: Optional[ValueSetQuery] = Field(default=None, description="""Динамический запрос набора (reachable_from).""")
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class PermissibleValue(ConfiguredBaseModel):
@@ -2020,17 +2064,17 @@ class DataStructure(ModelElement):
     source_pointer: Optional[str] = Field(default=None, description="""JSON Pointer или аналог внутри source_artifact_ref.""")
     content_digest: Optional[str] = Field(default=None, description="""Дайджест содержимого структуры (опционально).""")
     previous_version_ref: Optional[str] = Field(default=None, description="""Предыдущая версия этой структуры.""")
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: Optional[str] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
     @field_validator('root_local_key')
     def pattern_root_local_key(cls, v):
@@ -2102,17 +2146,17 @@ class Message(ModelElement):
     envelope_kind: Optional[EnvelopeKindEnum] = Field(default=None, description="""Вид конверта (none, cloudevents, custom).""")
     envelope_ref: Optional[str] = Field(default=None, description="""Ссылка на описание конверта (для custom / профиля).""")
     correlation_hint: Optional[str] = Field(default=None, description="""Подсказка корреляции (имя поля / путь).""")
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: Optional[str] = Field(default=None)
     aliases: Optional[list[str]] = Field(default=None)
+    description: Optional[str] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class DataFlow(ModelElement, HasOwnership, HasLifecycle):
@@ -2138,16 +2182,16 @@ class DataFlow(ModelElement, HasOwnership, HasLifecycle):
     ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
-    valid_from: Optional[datetime ] = Field(default=None)
-    valid_to: Optional[datetime ] = Field(default=None)
     deprecated_by_ref: Optional[str] = Field(default=None)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
+    element_id: str = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
 
 
 class DataFlowEntityBinding(ModelElement):
@@ -2162,17 +2206,17 @@ class DataFlowEntityBinding(ModelElement):
     schema_node_refs: Optional[list[str]] = Field(default=None, description="""Ссылки на узлы схемы (SchemaNode) в DataStructure.""")
     transformation_mapping_refs: Optional[list[str]] = Field(default=None)
     direction: Optional[FlowDirectionEnum] = Field(default=None)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class DataModelBinding(ModelElement, HasOwnership, HasLifecycle):
@@ -2192,21 +2236,21 @@ class DataModelBinding(ModelElement, HasOwnership, HasLifecycle):
     integrity_digest: str = Field(default=...)
     generated_at: datetime  = Field(default=...)
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
-    valid_from: Optional[datetime ] = Field(default=None)
-    valid_to: Optional[datetime ] = Field(default=None)
     deprecated_by_ref: Optional[str] = Field(default=None)
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
     ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
+    element_id: str = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
 
 
 class ModelSelection(ModelElement):
@@ -2214,17 +2258,17 @@ class ModelSelection(ModelElement):
     Переиспользуемый набор выбранных сущностей, атрибутов и физических представлений.
     """
     selected_entities: Optional[list[SelectedEntity]] = Field(default=None, min_length=1)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class SelectedEntity(ModelElement):
@@ -2234,17 +2278,17 @@ class SelectedEntity(ModelElement):
     logical_entity_ref: str = Field(default=...)
     selected_attributes: Optional[list[SelectedAttribute]] = Field(default=None, min_length=1)
     carrier_refs: Optional[list[str]] = Field(default=None, description="""Носители данных, участвующие в binding (не контейнеры).""", min_length=1)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class SelectedAttribute(ModelElement):
@@ -2254,17 +2298,17 @@ class SelectedAttribute(ModelElement):
     logical_attribute_ref: str = Field(default=...)
     schema_node_refs: Optional[list[str]] = Field(default=None, description="""Ссылки на узлы схемы (SchemaNode) в DataStructure.""")
     transformation_mapping_ref: Optional[str] = Field(default=None)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class Metric(ModelElement, HasPolicyBindings, HasOwnership):
@@ -2284,17 +2328,17 @@ class Metric(ModelElement, HasPolicyBindings, HasOwnership):
     ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     policy_refs: Optional[list[str]] = Field(default=None)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class Dimension(ModelElement):
@@ -2303,17 +2347,17 @@ class Dimension(ModelElement):
     """
     dimension_attribute_refs: Optional[list[str]] = Field(default=None)
     grain_entity_refs: Optional[list[str]] = Field(default=None, min_length=1)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
 
 class RequirementApplicability(ConfiguredBaseModel):
@@ -2361,17 +2405,17 @@ class SpecificationRequirement(ModelElement):
 """)
     superseded_by: Optional[str] = Field(default=None, description="""Ссылка на требование, которым данное заменено (при lifecycle_status=superseded). Отличается от deprecated_by_ref (HasLifecycle): deprecated_by_ref означает «устарело из-за …» без обязательной замены нормой; superseded_by — «заменено указанным требованием». Обязательность при superseded не проверяется здесь.
 """)
-    element_id: str = Field(default=...)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
-    description: str = Field(default=...)
     aliases: Optional[list[str]] = Field(default=None)
+    description: str = Field(default=...)
+    lifecycle_status: RequirementLifecycleStatus = Field(default=RequirementLifecycleStatus.draft)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
-    lifecycle_status: RequirementLifecycleStatus = Field(default=RequirementLifecycleStatus.draft)
+    element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    deprecated_by_ref: Optional[str] = Field(default=None)
 
     @field_validator('code')
     def pattern_code(cls, v):
@@ -2426,6 +2470,11 @@ Policy.model_rebuild()
 BusinessProcess.model_rebuild()
 DataContractReference.model_rebuild()
 IntegrationReference.model_rebuild()
+IdentifiedElement.model_rebuild()
+NamedElement.model_rebuild()
+DescribedElement.model_rebuild()
+HasSemanticAnnotations.model_rebuild()
+HasValidity.model_rebuild()
 ClassificationAssignment.model_rebuild()
 PolicyBinding.model_rebuild()
 HasLifecycle.model_rebuild()

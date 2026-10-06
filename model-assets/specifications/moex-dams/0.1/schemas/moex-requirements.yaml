@@ -57,6 +57,8 @@ classes:
       - implementation_status
       - superseded_by
     slot_usage:
+      description:
+        required: true
       lifecycle_status:
         range: RequirementLifecycleStatus
         required: true
