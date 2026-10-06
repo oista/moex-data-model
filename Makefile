@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check viewer-serve packages-check architecture-check linkml-ingest-check vertical-slice-check check validate-schemas lint-schemas validate-examples validate-requirements generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate ontology-check
+.PHONY: viewer viewer-check viewer-serve packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate ontology-check
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -111,10 +111,7 @@ web-e2e:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File apps/web/scripts/e2e.ps1
 
 # Stage 0 gate: contracts → slice tests → schemas → examples → golden
-check:
-	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/generate-contracts.ps1
-	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File apps/cli/scripts/check.ps1
-	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/validate-schemas.ps1
-	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/validate-examples.ps1
-	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/validate-requirements.ps1
-	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/compare-golden.ps1
+# (+ architecture-check + publish-gate). Cross-platform entry: scripts/check_all.py
+# Individual targets above remain for Linux/macOS/Make and for --only steps.
+check check-all:
+	$(PYTHON) scripts/check_all.py

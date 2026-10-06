@@ -82,13 +82,17 @@ def generate(*, out_root: Path, manifest_path: Path) -> tuple[Path, str]:
     pyproject.write_text(PYPROJECT_TOML, encoding="utf-8", newline="\n")
 
     digest = "sha256:" + hashlib.sha256(init_py.read_bytes()).hexdigest()
-    schema_digest = "sha256:" + hashlib.sha256(SCHEMA.read_bytes()).hexdigest()
+    # Hash LF bytes so Windows working-tree CRLF does not churn schema_digest.
+    schema_digest = (
+        "sha256:"
+        + hashlib.sha256(SCHEMA.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+    )
     try:
         output_rel = init_py.relative_to(REPO).as_posix()
     except ValueError:
         output_rel = init_py.as_posix()
 
-    manifest = {
+    stable = {
         "artifact_id": "moex:artifact:dams-contracts:0.1",
         "generator": "gen-pydantic",
         "generator_module": "linkml.generators.pydanticgen",
@@ -98,8 +102,20 @@ def generate(*, out_root: Path, manifest_path: Path) -> tuple[Path, str]:
         "output_path": output_rel,
         "content_digest": digest,
         "package": "moex-dams-contracts",
-        "generated_at": datetime.now(timezone.utc).isoformat(),
     }
+    # Keep generated_at stable when content is unchanged so check_all leaves a clean tree.
+    prev: dict = {}
+    if manifest_path.is_file():
+        try:
+            prev = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            prev = {}
+    prev_stable = {k: prev.get(k) for k in stable}
+    if prev_stable == stable and prev.get("generated_at"):
+        generated_at = str(prev["generated_at"])
+    else:
+        generated_at = datetime.now(timezone.utc).isoformat()
+    manifest = {**stable, "generated_at": generated_at}
     manifest_path.write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",

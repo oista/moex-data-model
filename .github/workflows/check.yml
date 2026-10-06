@@ -15,12 +15,13 @@ jobs:
         with:
           python-version-file: .python-version
 
-      - name: Install make
+      - name: Install make / pwsh deps
         run: sudo apt-get update && sudo apt-get install -y make
 
-      # pwsh is preinstalled on ubuntu-latest; Makefile selects it via OS!=Windows_NT
-      - name: Stage 0 make check
-        run: make check
+      # Primary entry: scripts/check_all.py (Makefile ``check`` delegates here).
+      # pwsh is preinstalled on ubuntu-latest for the underlying .ps1 steps.
+      - name: Stage 0 check_all
+        run: python scripts/check_all.py
 
   # Viewer + ontology packages stay outside Stage 0 gate (heavier / separate deps)
   viewer-and-packages:

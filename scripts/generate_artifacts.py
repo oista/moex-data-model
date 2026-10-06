@@ -105,7 +105,7 @@ def _sha256_text(text: str) -> str:
 
 
 def schema_digest() -> str:
-    return _sha256_bytes(SCHEMA.read_bytes())
+    return _sha256_bytes(SCHEMA.read_bytes().replace(b"\r\n", b"\n"))
 
 
 def schema_rel() -> str:
