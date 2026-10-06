@@ -1,4 +1,4 @@
-"""digest — verify / rewrite DataModelBinding.integrity_digest (ADR-034)."""
+"""digest — verify / rewrite DataModelBinding.integrity_digest (ADR-042)."""
 
 from __future__ import annotations
 
@@ -45,7 +45,7 @@ def run_digest(
         if not matches and not mismatches:
             lines.append(
                 "digest: no DataModelBinding instances with integrity_digest "
-                "(see ADR-034 open question for solution models)\n"
+                "(see ADR-042 open question for solution models)\n"
             )
             return 0, "".join(lines)
         if mismatches:

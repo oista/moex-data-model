@@ -1,4 +1,4 @@
-"""Ensure transitional model tags stay within the ADR-035 registry."""
+"""Ensure transitional model tags stay within the ADR-043 registry."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ import yaml
 REPO = Path(__file__).resolve().parents[2]
 MODEL_ASSETS = REPO / "model-assets"
 
-# Registry from docs/adr/ADR-035-transitional-tags-registry.md
+# Registry from docs/adr/ADR-043-transitional-tags-registry.md
 ALLOWED_TRANSITIONAL_TAGS = frozenset({"transitional"})
 
 # Heuristic: values that look like unnamed transitional markers.

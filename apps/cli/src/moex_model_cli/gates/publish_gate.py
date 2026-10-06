@@ -210,7 +210,7 @@ def verify_publish_gate(
 
 
 def _binding_integrity_digests(repo: Path) -> list[str]:
-    """ADR-034: DataModelBinding.integrity_digest must match content."""
+    """ADR-042: DataModelBinding.integrity_digest must match content."""
     try:
         from moex_dams.application.digest import verify_digests
     except ImportError:

@@ -6,7 +6,7 @@ supersedes: []
 superseded_by: MODELING_ARCHITECTURE.md
 ---
 
-# ADR-034: integrity_digest and model revisions for non-demo models
+# ADR-042: integrity_digest and model revisions for non-demo models
 
 **Date:** 2026-10-05  
 **Status:** Accepted  

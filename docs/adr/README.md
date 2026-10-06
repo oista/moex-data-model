@@ -63,3 +63,5 @@ Viewer-решениѝ живут отдельно: [viewer-decisions.md](../arch
 | [ADR-039](ADR-039-structure-node-addressing.md) | SchemaNode addressing (structure_id#local_key) | Accepted; amends ADR-030 |
 | [ADR-040](ADR-040-message-integration-model.md) | Message integration model | Accepted; class in moex-structure |
 | [ADR-041](ADR-041-schemanode-datatype-binding.md) | SchemaNode ? DataType / native_type | Accepted; does not duplicate ADR-036 |
+| [ADR-042](ADR-042-integrity-digest-revisions.md) | integrity_digest and model revisions | Accepted; editorial renumber from colliding ADR-034 |
+| [ADR-043](ADR-043-transitional-tags-registry.md) | Transitional element tags registry | Accepted; editorial renumber from colliding ADR-035 |

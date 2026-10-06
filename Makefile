@@ -89,7 +89,7 @@ generate-bundle:
 publish-gate:
 	$(PYTHON) -m moex_model_cli.gates.publish_gate
 
-# ADR-034: DataModelBinding.integrity_digest vs content
+# ADR-042: DataModelBinding.integrity_digest vs content
 digest-check:
 	$(PYTHON) -m moex_model_cli digest --root .
 
