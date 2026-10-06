@@ -44,7 +44,7 @@
     {
       "path": "generated/artifacts/moex-dams/0.1/python/moex_dams.py",
       "role": "python",
-      "content_digest": "sha256:de355941ba78a90b9eb366ca903842fc9f80d07b8e23ff5abdea154848e88f1f",
+      "content_digest": "sha256:b9b0fecffdbff11dd59c5649dcfe667e6d2d486c357bacfdd4cf98ea4e70ca5b",
       "manifest_path": "generated/manifests/moex-dams-python.json"
     },
     {
@@ -71,6 +71,6 @@
       "content_digest": "sha256:142f4b53cd297311e8e33fd64e46ddaa1688289122e08441e5c9a5ac028efaf9"
     }
   ],
-  "content_digest": "sha256:601156ebb48f8e23270dbbf9486bc9b76b9c66da447026d29db79ff7038caccd",
-  "generated_at": "2026-10-05T21:44:15.595229+00:00"
+  "content_digest": "sha256:17f9b039abd233317a68e4034e9405d5ff6270fd0dc2fcff38a7ed5036599cbf",
+  "generated_at": "2026-10-06T06:36:54.987901+00:00"
 }

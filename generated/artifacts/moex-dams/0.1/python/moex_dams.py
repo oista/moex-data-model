@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-06T00:43:03
+# Generation date: 2026-10-06T09:36:48
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -29,7 +29,7 @@ from jsonasobj2 import (
 )
 from linkml_runtime.linkml_model.meta import (
     EnumDefinition,
-    PermissibleValue,
+    PermissibleValue as LinkMLPermissibleValue,
     PvFormulaOptions
 )
 from linkml_runtime.utils.curienamespace import CurieNamespace
@@ -4209,10 +4209,10 @@ class RequirementCatalog(YAMLRoot):
 # Enumerations
 class LifecycleStatusEnum(EnumDefinitionImpl):
 
-    draft = PermissibleValue(text="draft")
-    active = PermissibleValue(text="active")
-    deprecated = PermissibleValue(text="deprecated")
-    retired = PermissibleValue(text="retired")
+    draft = LinkMLPermissibleValue(text="draft")
+    active = LinkMLPermissibleValue(text="active")
+    deprecated = LinkMLPermissibleValue(text="deprecated")
+    retired = LinkMLPermissibleValue(text="retired")
 
     _defn = EnumDefinition(
         name="LifecycleStatusEnum",
@@ -4220,10 +4220,10 @@ class LifecycleStatusEnum(EnumDefinitionImpl):
 
 class ApprovalStatusEnum(EnumDefinitionImpl):
 
-    proposed = PermissibleValue(text="proposed")
-    approved = PermissibleValue(text="approved")
-    rejected = PermissibleValue(text="rejected")
-    superseded = PermissibleValue(text="superseded")
+    proposed = LinkMLPermissibleValue(text="proposed")
+    approved = LinkMLPermissibleValue(text="approved")
+    rejected = LinkMLPermissibleValue(text="rejected")
+    superseded = LinkMLPermissibleValue(text="superseded")
 
     _defn = EnumDefinition(
         name="ApprovalStatusEnum",
@@ -4231,9 +4231,9 @@ class ApprovalStatusEnum(EnumDefinitionImpl):
 
 class ModelLevelEnum(EnumDefinitionImpl):
 
-    conceptual = PermissibleValue(text="conceptual")
-    logical = PermissibleValue(text="logical")
-    physical = PermissibleValue(text="physical")
+    conceptual = LinkMLPermissibleValue(text="conceptual")
+    logical = LinkMLPermissibleValue(text="logical")
+    physical = LinkMLPermissibleValue(text="physical")
 
     _defn = EnumDefinition(
         name="ModelLevelEnum",
@@ -4243,19 +4243,19 @@ class EntityTypeEnum(EnumDefinitionImpl):
     """
     Роль логической сущности в модели решения.
     """
-    core = PermissibleValue(
+    core = LinkMLPermissibleValue(
         text="core",
         description="Базовая сущность, создаваемая и управляемая решением.")
-    derived = PermissibleValue(
+    derived = LinkMLPermissibleValue(
         text="derived",
         description="""Результат вычисления, агрегации, трансформации или правила; обязательны derivation rule и sources (Wave 2).""")
-    reference = PermissibleValue(
+    reference = LinkMLPermissibleValue(
         text="reference",
         description="Справочная сущность или представление управляемого справочника.")
-    projection = PermissibleValue(
+    projection = LinkMLPermissibleValue(
         text="projection",
         description="""Представление существующей сущности или набора сущностей для конкретного use case (API DTO, read model, витрина).""")
-    technical = PermissibleValue(
+    technical = LinkMLPermissibleValue(
         text="technical",
         description="Не имеет самостоятельного бизнес-смысла вне технической реализации.")
 
@@ -4268,22 +4268,22 @@ class DataClassEnum(EnumDefinitionImpl):
     """
     Класс данных для наследования модельной спецификацией дата-контракта; не совпадает с entity_type.
     """
-    reference_data = PermissibleValue(
+    reference_data = LinkMLPermissibleValue(
         text="reference_data",
         description="Нормативно-справочная информация (НСИ).")
-    master_data = PermissibleValue(
+    master_data = LinkMLPermissibleValue(
         text="master_data",
         description="Мастер-данные.")
-    transactional_data = PermissibleValue(
+    transactional_data = LinkMLPermissibleValue(
         text="transactional_data",
         description="Транзакционные данные.")
-    analytical_data = PermissibleValue(
+    analytical_data = LinkMLPermissibleValue(
         text="analytical_data",
         description="Аналитические или производные наборы данных.")
-    metadata = PermissibleValue(
+    metadata = LinkMLPermissibleValue(
         text="metadata",
         description="Метаданные.")
-    operational_data = PermissibleValue(
+    operational_data = LinkMLPermissibleValue(
         text="operational_data",
         description="""Операционные данные — данные для непосредственного выполнения операций решения, не являющиеся master/reference, transactional событием, analytical результатом или metadata.""")
 
@@ -4296,10 +4296,10 @@ class BusinessImportanceEnum(EnumDefinitionImpl):
     """
     Важность сущности в модели решения (не criticality бизнес-процесса).
     """
-    critical = PermissibleValue(text="critical")
-    high = PermissibleValue(text="high")
-    medium = PermissibleValue(text="medium")
-    low = PermissibleValue(text="low")
+    critical = LinkMLPermissibleValue(text="critical")
+    high = LinkMLPermissibleValue(text="high")
+    medium = LinkMLPermissibleValue(text="medium")
+    low = LinkMLPermissibleValue(text="low")
 
     _defn = EnumDefinition(
         name="BusinessImportanceEnum",
@@ -4310,22 +4310,22 @@ class BusinessKeyKindEnum(EnumDefinitionImpl):
     """
     Характер бизнес-ключа логической сущности.
     """
-    natural = PermissibleValue(
+    natural = LinkMLPermissibleValue(
         text="natural",
         description="Устойчивый бизнес-идентификатор, независимый от технической реализации.")
-    composite = PermissibleValue(
+    composite = LinkMLPermissibleValue(
         text="composite",
         description="Комбинация нескольких бизнес-атрибутов, уникальная в контексте.")
-    external = PermissibleValue(
+    external = LinkMLPermissibleValue(
         text="external",
         description="Идентификатор внешней системы, реестра или контрагента.")
-    local = PermissibleValue(
+    local = LinkMLPermissibleValue(
         text="local",
         description="Идентификатор, уникальный только в границе ИТ-решения или контекста.")
-    surrogate = PermissibleValue(
+    surrogate = LinkMLPermissibleValue(
         text="surrogate",
         description="Технический ключ реализации; не заменяет identity_rule.")
-    derived = PermissibleValue(
+    derived = LinkMLPermissibleValue(
         text="derived",
         description="Идентификатор, вычисляемый из других атрибутов по документированному правилу.")
 
@@ -4338,10 +4338,10 @@ class ConceptualAlignmentStatusEnum(EnumDefinitionImpl):
     """
     Статус выравнивания логической сущности с корпоративным концептуальным уровнем.
     """
-    aligned = PermissibleValue(
+    aligned = LinkMLPermissibleValue(
         text="aligned",
         description="Есть ссылка на одну или несколько концептуальных сущностей.")
-    pending = PermissibleValue(
+    pending = LinkMLPermissibleValue(
         text="pending",
         description="Связь должна быть установлена, но пока не утверждена; rationale обязателен.")
 
@@ -4353,11 +4353,11 @@ class ConceptualAlignmentStatusEnum(EnumDefinitionImpl):
     @classmethod
     def _addvals(cls):
         setattr(cls, "local-only",
-            PermissibleValue(
+            LinkMLPermissibleValue(
                 text="local-only",
                 description="""Бизнес-смысл только в контексте данного решения; корпоративный аналог сейчас не требуется; rationale обязателен."""))
         setattr(cls, "not-applicable",
-            PermissibleValue(
+            LinkMLPermissibleValue(
                 text="not-applicable",
                 description="""Сущность техническая/служебная и не относится к conceptual layer; допустимо только при entity_type technical."""))
 
@@ -4365,7 +4365,7 @@ class DefinitionScopeKindEnum(EnumDefinitionImpl):
     """
     Kind of scope for a ScopedDefinition (ADR-025). v1 supports system only; enum is intentionally extensible.
     """
-    system = PermissibleValue(
+    system = LinkMLPermissibleValue(
         text="system",
         description="Definition applies within one ITSystem of the solution.")
 
@@ -4378,16 +4378,16 @@ class ScopedDefinitionRelationEnum(EnumDefinitionImpl):
     """
     How a scoped definition relates to the element's reference definition (ADR-025).
     """
-    refines = PermissibleValue(
+    refines = LinkMLPermissibleValue(
         text="refines",
         description="Clarifies the reference definition without changing extension.")
-    narrows = PermissibleValue(
+    narrows = LinkMLPermissibleValue(
         text="narrows",
         description="Restricts the meaning to a subset in this scope.")
-    alternative = PermissibleValue(
+    alternative = LinkMLPermissibleValue(
         text="alternative",
         description="Parallel wording for the same concept in this scope.")
-    replaces = PermissibleValue(
+    replaces = LinkMLPermissibleValue(
         text="replaces",
         description="Scope-local replacement; does not change the reference outside scope.")
 
@@ -4401,10 +4401,10 @@ class EntityTierEnum(EnumDefinitionImpl):
     Structural independence of a ConceptualEntity (ADR-026). Orthogonal to entity_type, data_class, and
     business_importance.
     """
-    primary = PermissibleValue(
+    primary = LinkMLPermissibleValue(
         text="primary",
         description="""Existence does not depend on other conceptual entities (FK presence alone does not make an entity dependent).""")
-    dependent = PermissibleValue(
+    dependent = LinkMLPermissibleValue(
         text="dependent",
         description="""Cannot exist without owner entity/entities listed in depends_on_refs.""")
 
@@ -4417,10 +4417,10 @@ class DependencyKindEnum(EnumDefinitionImpl):
     """
     Kind of structural dependency for a dependent ConceptualEntity (ADR-026).
     """
-    characteristic = PermissibleValue(
+    characteristic = LinkMLPermissibleValue(
         text="characteristic",
         description="Part or detail of an owning entity (owner key in identity).")
-    associative = PermissibleValue(
+    associative = LinkMLPermissibleValue(
         text="associative",
         description="Resolves an M:N association between owner entities.")
 
@@ -4433,10 +4433,10 @@ class GenesisKindEnum(EnumDefinitionImpl):
     """
     Whether a ConceptualEntity is aligned to an external class/term or is native to MOEX (ADR-026).
     """
-    external = PermissibleValue(
+    external = LinkMLPermissibleValue(
         text="external",
         description="""Aligns to one or more ontology classes or external-specification terms (corporate architecture, business models, API/data standards).""")
-    native = PermissibleValue(
+    native = LinkMLPermissibleValue(
         text="native",
         description="Modelled in MOEX without external parent classes.")
 
@@ -4450,19 +4450,19 @@ class ExternalMatchKindEnum(EnumDefinitionImpl):
     Strength of ConceptualEntity ↔ external class alignment (ADR-026). Mirrors SKOS mapping relations plus
     owl:equivalentClass; used for definition inheritance (exact/equivalent only).
     """
-    exact = PermissibleValue(
+    exact = LinkMLPermissibleValue(
         text="exact",
         description="skos:exactMatch — substitutable; definition may inherit.")
-    equivalent = PermissibleValue(
+    equivalent = LinkMLPermissibleValue(
         text="equivalent",
         description="owl:equivalentClass — substitutable; definition may inherit.")
-    close = PermissibleValue(
+    close = LinkMLPermissibleValue(
         text="close",
         description="skos:closeMatch — not substitutable; own description required.")
-    broad = PermissibleValue(
+    broad = LinkMLPermissibleValue(
         text="broad",
         description="skos:broadMatch — external is broader; own description required.")
-    narrow = PermissibleValue(
+    narrow = LinkMLPermissibleValue(
         text="narrow",
         description="skos:narrowMatch — external is narrower; own description required.")
 
@@ -4476,8 +4476,8 @@ class ExternalSourceKindEnum(EnumDefinitionImpl):
     Kind of external source for a ConceptualEntity alignment (ADR-026). Aligned with ExternalSpecificationKind where
     values overlap.
     """
-    ontology = PermissibleValue(text="ontology")
-    other = PermissibleValue(text="other")
+    ontology = LinkMLPermissibleValue(text="ontology")
+    other = LinkMLPermissibleValue(text="other")
 
     _defn = EnumDefinition(
         name="ExternalSourceKindEnum",
@@ -4487,20 +4487,20 @@ class ExternalSourceKindEnum(EnumDefinitionImpl):
     @classmethod
     def _addvals(cls):
         setattr(cls, "corporate-architecture",
-            PermissibleValue(text="corporate-architecture"))
+            LinkMLPermissibleValue(text="corporate-architecture"))
         setattr(cls, "business-model",
-            PermissibleValue(text="business-model"))
+            LinkMLPermissibleValue(text="business-model"))
         setattr(cls, "api-spec",
-            PermissibleValue(text="api-spec"))
+            LinkMLPermissibleValue(text="api-spec"))
 
 class TermDirectionEnum(EnumDefinitionImpl):
     """
     Which side of a RelationTerm a Relationship assertion uses (ADR-026).
     """
-    forward = PermissibleValue(
+    forward = LinkMLPermissibleValue(
         text="forward",
         description="Assertion reads with forward_label (source → target).")
-    inverse = PermissibleValue(
+    inverse = LinkMLPermissibleValue(
         text="inverse",
         description="Assertion reads with inverse_label (source → target uses inverse wording).")
 
@@ -4514,16 +4514,16 @@ class MappingCoverageStatusEnum(EnumDefinitionImpl):
     Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ physical). Не статус самой логической
     модели.
     """
-    mapped = PermissibleValue(
+    mapped = LinkMLPermissibleValue(
         text="mapped",
         description="Есть формальное mapping.")
-    derived = PermissibleValue(
+    derived = LinkMLPermissibleValue(
         text="derived",
         description="Значение выводится из источников по documented expression.")
-    planned = PermissibleValue(
+    planned = LinkMLPermissibleValue(
         text="planned",
         description="""Физическая реализация или mapping ещё не введены. Требует mapping_rationale; не постоянный обход для active артефактов.""")
-    inherited = PermissibleValue(
+    inherited = LinkMLPermissibleValue(
         text="inherited",
         description="Mapping наследуется/делегируется из родительского элемента.")
 
@@ -4535,11 +4535,11 @@ class MappingCoverageStatusEnum(EnumDefinitionImpl):
     @classmethod
     def _addvals(cls):
         setattr(cls, "technical-only",
-            PermissibleValue(
+            LinkMLPermissibleValue(
                 text="technical-only",
                 description="Поле/объект имеет только техническое назначение."))
         setattr(cls, "not-applicable",
-            PermissibleValue(
+            LinkMLPermissibleValue(
                 text="not-applicable",
                 description="Mapping неприменим по характеру элемента."))
 
@@ -4547,15 +4547,15 @@ class RelationshipKindEnum(EnumDefinitionImpl):
     """
     Тип логической связи (Wave 2).
     """
-    association = PermissibleValue(text="association")
-    composition = PermissibleValue(text="composition")
-    aggregation = PermissibleValue(text="aggregation")
-    specialization = PermissibleValue(text="specialization")
-    reference = PermissibleValue(text="reference")
-    derivation = PermissibleValue(text="derivation")
-    realization = PermissibleValue(text="realization")
-    lineage = PermissibleValue(text="lineage")
-    event_participation = PermissibleValue(text="event_participation")
+    association = LinkMLPermissibleValue(text="association")
+    composition = LinkMLPermissibleValue(text="composition")
+    aggregation = LinkMLPermissibleValue(text="aggregation")
+    specialization = LinkMLPermissibleValue(text="specialization")
+    reference = LinkMLPermissibleValue(text="reference")
+    derivation = LinkMLPermissibleValue(text="derivation")
+    realization = LinkMLPermissibleValue(text="realization")
+    lineage = LinkMLPermissibleValue(text="lineage")
+    event_participation = LinkMLPermissibleValue(text="event_participation")
 
     _defn = EnumDefinition(
         name="RelationshipKindEnum",
@@ -4566,9 +4566,9 @@ class SecurityClassificationEnum(EnumDefinitionImpl):
     """
     Режим защиты данных (Wave 2); ортогонален governance_classification.
     """
-    internal = PermissibleValue(text="internal")
-    confidential = PermissibleValue(text="confidential")
-    restricted = PermissibleValue(text="restricted")
+    internal = LinkMLPermissibleValue(text="internal")
+    confidential = LinkMLPermissibleValue(text="confidential")
+    restricted = LinkMLPermissibleValue(text="restricted")
 
     _defn = EnumDefinition(
         name="SecurityClassificationEnum",
@@ -4579,10 +4579,10 @@ class GovernanceClassificationEnum(EnumDefinitionImpl):
     """
     Базовая шкала ограничения доступа; специальные виды тайны задаются отдельными терминами классификации.
     """
-    public = PermissibleValue(text="public")
-    internal = PermissibleValue(text="internal")
-    confidential = PermissibleValue(text="confidential")
-    restricted = PermissibleValue(text="restricted")
+    public = LinkMLPermissibleValue(text="public")
+    internal = LinkMLPermissibleValue(text="internal")
+    confidential = LinkMLPermissibleValue(text="confidential")
+    restricted = LinkMLPermissibleValue(text="restricted")
 
     _defn = EnumDefinition(
         name="GovernanceClassificationEnum",
@@ -4591,17 +4591,17 @@ class GovernanceClassificationEnum(EnumDefinitionImpl):
 
 class LogicalDataTypeEnum(EnumDefinitionImpl):
 
-    string = PermissibleValue(text="string")
-    integer = PermissibleValue(text="integer")
-    decimal = PermissibleValue(text="decimal")
-    boolean = PermissibleValue(text="boolean")
-    date = PermissibleValue(text="date")
-    datetime = PermissibleValue(text="datetime")
-    time = PermissibleValue(text="time")
-    binary = PermissibleValue(text="binary")
-    identifier = PermissibleValue(text="identifier")
-    uri = PermissibleValue(text="uri")
-    object = PermissibleValue(text="object")
+    string = LinkMLPermissibleValue(text="string")
+    integer = LinkMLPermissibleValue(text="integer")
+    decimal = LinkMLPermissibleValue(text="decimal")
+    boolean = LinkMLPermissibleValue(text="boolean")
+    date = LinkMLPermissibleValue(text="date")
+    datetime = LinkMLPermissibleValue(text="datetime")
+    time = LinkMLPermissibleValue(text="time")
+    binary = LinkMLPermissibleValue(text="binary")
+    identifier = LinkMLPermissibleValue(text="identifier")
+    uri = LinkMLPermissibleValue(text="uri")
+    object = LinkMLPermissibleValue(text="object")
 
     _defn = EnumDefinition(
         name="LogicalDataTypeEnum",
@@ -4609,10 +4609,10 @@ class LogicalDataTypeEnum(EnumDefinitionImpl):
 
 class FlowDirectionEnum(EnumDefinitionImpl):
 
-    inbound = PermissibleValue(text="inbound")
-    outbound = PermissibleValue(text="outbound")
-    internal = PermissibleValue(text="internal")
-    bidirectional = PermissibleValue(text="bidirectional")
+    inbound = LinkMLPermissibleValue(text="inbound")
+    outbound = LinkMLPermissibleValue(text="outbound")
+    internal = LinkMLPermissibleValue(text="internal")
+    bidirectional = LinkMLPermissibleValue(text="bidirectional")
 
     _defn = EnumDefinition(
         name="FlowDirectionEnum",
@@ -4620,9 +4620,9 @@ class FlowDirectionEnum(EnumDefinitionImpl):
 
 class SolutionDataRoleEnum(EnumDefinitionImpl):
 
-    producer = PermissibleValue(text="producer")
-    consumer = PermissibleValue(text="consumer")
-    intermediary = PermissibleValue(text="intermediary")
+    producer = LinkMLPermissibleValue(text="producer")
+    consumer = LinkMLPermissibleValue(text="consumer")
+    intermediary = LinkMLPermissibleValue(text="intermediary")
 
     _defn = EnumDefinition(
         name="SolutionDataRoleEnum",
@@ -4630,11 +4630,11 @@ class SolutionDataRoleEnum(EnumDefinitionImpl):
 
 class IntegrationChannelEnum(EnumDefinitionImpl):
 
-    api = PermissibleValue(text="api")
-    queue = PermissibleValue(text="queue")
-    database = PermissibleValue(text="database")
-    file = PermissibleValue(text="file")
-    other = PermissibleValue(text="other")
+    api = LinkMLPermissibleValue(text="api")
+    queue = LinkMLPermissibleValue(text="queue")
+    database = LinkMLPermissibleValue(text="database")
+    file = LinkMLPermissibleValue(text="file")
+    other = LinkMLPermissibleValue(text="other")
 
     _defn = EnumDefinition(
         name="IntegrationChannelEnum",
@@ -4642,8 +4642,8 @@ class IntegrationChannelEnum(EnumDefinitionImpl):
 
 class IntegrationClassEnum(EnumDefinitionImpl):
 
-    EAP = PermissibleValue(text="EAP")
-    EDA = PermissibleValue(text="EDA")
+    EAP = LinkMLPermissibleValue(text="EAP")
+    EDA = LinkMLPermissibleValue(text="EDA")
 
     _defn = EnumDefinition(
         name="IntegrationClassEnum",
@@ -4651,8 +4651,8 @@ class IntegrationClassEnum(EnumDefinitionImpl):
 
 class IntegrationLevelEnum(EnumDefinitionImpl):
 
-    intraplatform = PermissibleValue(text="intraplatform")
-    interplatform = PermissibleValue(text="interplatform")
+    intraplatform = LinkMLPermissibleValue(text="intraplatform")
+    interplatform = LinkMLPermissibleValue(text="interplatform")
 
     _defn = EnumDefinition(
         name="IntegrationLevelEnum",
@@ -4664,22 +4664,22 @@ class MappingTypeEnum(EnumDefinitionImpl):
     LogicalEntity; field_mapping = mapsTo (SchemaNode ↔ LogicalAttribute); aligns_with = enterprise conceptual ↔
     external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).
     """
-    semantic_equivalence = PermissibleValue(text="semantic_equivalence")
-    specialization = PermissibleValue(text="specialization")
-    implementation = PermissibleValue(text="implementation")
-    entity_physical = PermissibleValue(
+    semantic_equivalence = LinkMLPermissibleValue(text="semantic_equivalence")
+    specialization = LinkMLPermissibleValue(text="specialization")
+    implementation = LinkMLPermissibleValue(text="implementation")
+    entity_physical = LinkMLPermissibleValue(
         text="entity_physical",
         description="""Explicit entity-level link between DataCarrier and LogicalEntity (PDM-003). Do not infer from field_mapping alone.""")
-    field_mapping = PermissibleValue(
+    field_mapping = LinkMLPermissibleValue(
         text="field_mapping",
         description="""mapsTo between SchemaNode (structure_id#local_key) and LogicalAttribute (ADR-038).""")
-    transformation = PermissibleValue(text="transformation")
-    aggregation = PermissibleValue(text="aggregation")
-    derivation = PermissibleValue(text="derivation")
-    realizes = PermissibleValue(
+    transformation = LinkMLPermissibleValue(text="transformation")
+    aggregation = LinkMLPermissibleValue(text="aggregation")
+    derivation = LinkMLPermissibleValue(text="derivation")
+    realizes = LinkMLPermissibleValue(
         text="realizes",
         description="Solution logical/concept realizes an enterprise conceptual entity.")
-    aligns_with = PermissibleValue(
+    aligns_with = LinkMLPermissibleValue(
         text="aligns_with",
         description="Enterprise conceptual aligns with an external reference term.")
 
@@ -4693,7 +4693,7 @@ class ImplementationProfileEnum(EnumDefinitionImpl):
     DAMS-side mirror of kernel ImplementationProfile for ModelPackage metadata. Package-level dams_model_level applies
     only to dams-data-model.
     """
-    other = PermissibleValue(text="other")
+    other = LinkMLPermissibleValue(text="other")
 
     _defn = EnumDefinition(
         name="ImplementationProfileEnum",
@@ -4703,24 +4703,24 @@ class ImplementationProfileEnum(EnumDefinitionImpl):
     @classmethod
     def _addvals(cls):
         setattr(cls, "dams-data-model",
-            PermissibleValue(
+            LinkMLPermissibleValue(
                 text="dams-data-model",
                 description="MOEX DAMS corporate data-model implementation."))
         setattr(cls, "ontology-application",
-            PermissibleValue(
+            LinkMLPermissibleValue(
                 text="ontology-application",
                 description="Not a DAMS model Impl — ontology application profile."))
         setattr(cls, "api-specification",
-            PermissibleValue(text="api-specification"))
+            LinkMLPermissibleValue(text="api-specification"))
         setattr(cls, "data-contract",
-            PermissibleValue(text="data-contract"))
+            LinkMLPermissibleValue(text="data-contract"))
 
 class DAMSModelLevelEnum(EnumDefinitionImpl):
     """
     Package-level DAMS model layer (ADR-021). Distinct from ModelLevelEnum (element conceptual/logical/physical). No
     domain-logical value.
     """
-    solution = PermissibleValue(
+    solution = LinkMLPermissibleValue(
         text="solution",
         description="IT-solution model with local logical/physical facets.")
 
@@ -4732,16 +4732,16 @@ class DAMSModelLevelEnum(EnumDefinitionImpl):
     @classmethod
     def _addvals(cls):
         setattr(cls, "enterprise-conceptual",
-            PermissibleValue(
+            LinkMLPermissibleValue(
                 text="enterprise-conceptual",
                 description="Enterprise corporate conceptual model (solution-independent)."))
 
 class ImplementationScopeEnum(EnumDefinitionImpl):
 
-    enterprise = PermissibleValue(
+    enterprise = LinkMLPermissibleValue(
         text="enterprise",
         description="Enterprise-wide scope (no solution_ref).")
-    solution = PermissibleValue(
+    solution = LinkMLPermissibleValue(
         text="solution",
         description="Scoped to a specific IT solution.")
 
@@ -4751,10 +4751,10 @@ class ImplementationScopeEnum(EnumDefinitionImpl):
 
 class MappingCardinalityEnum(EnumDefinitionImpl):
 
-    one_to_one = PermissibleValue(text="one_to_one")
-    one_to_many = PermissibleValue(text="one_to_many")
-    many_to_one = PermissibleValue(text="many_to_one")
-    many_to_many = PermissibleValue(text="many_to_many")
+    one_to_one = LinkMLPermissibleValue(text="one_to_one")
+    one_to_many = LinkMLPermissibleValue(text="one_to_many")
+    many_to_one = LinkMLPermissibleValue(text="many_to_one")
+    many_to_many = LinkMLPermissibleValue(text="many_to_many")
 
     _defn = EnumDefinition(
         name="MappingCardinalityEnum",
@@ -4762,10 +4762,10 @@ class MappingCardinalityEnum(EnumDefinitionImpl):
 
 class CompatibilityModeEnum(EnumDefinitionImpl):
 
-    backward = PermissibleValue(text="backward")
-    forward = PermissibleValue(text="forward")
-    full = PermissibleValue(text="full")
-    none = PermissibleValue(text="none")
+    backward = LinkMLPermissibleValue(text="backward")
+    forward = LinkMLPermissibleValue(text="forward")
+    full = LinkMLPermissibleValue(text="full")
+    none = LinkMLPermissibleValue(text="none")
 
     _defn = EnumDefinition(
         name="CompatibilityModeEnum",
@@ -4773,9 +4773,9 @@ class CompatibilityModeEnum(EnumDefinitionImpl):
 
 class SpecificationKindEnum(EnumDefinitionImpl):
 
-    integration = PermissibleValue(text="integration")
-    data_model = PermissibleValue(text="data_model")
-    data_quality = PermissibleValue(text="data_quality")
+    integration = LinkMLPermissibleValue(text="integration")
+    data_model = LinkMLPermissibleValue(text="data_model")
+    data_quality = LinkMLPermissibleValue(text="data_quality")
 
     _defn = EnumDefinition(
         name="SpecificationKindEnum",
@@ -4783,9 +4783,9 @@ class SpecificationKindEnum(EnumDefinitionImpl):
 
 class EnforcementResultEnum(EnumDefinitionImpl):
 
-    warn = PermissibleValue(text="warn")
-    fail = PermissibleValue(text="fail")
-    not_applicable = PermissibleValue(text="not_applicable")
+    warn = LinkMLPermissibleValue(text="warn")
+    fail = LinkMLPermissibleValue(text="fail")
+    not_applicable = LinkMLPermissibleValue(text="not_applicable")
 
     _defn = EnumDefinition(
         name="EnforcementResultEnum",
@@ -4794,19 +4794,19 @@ class EnforcementResultEnum(EnumDefinitionImpl):
     @classmethod
     def _addvals(cls):
         setattr(cls, "pass",
-            PermissibleValue(text="pass"))
+            LinkMLPermissibleValue(text="pass"))
 
 class RequirementLevelEnum(EnumDefinitionImpl):
     """
     Уровень применения требования к спецификации.
     """
-    conceptual_model = PermissibleValue(
+    conceptual_model = LinkMLPermissibleValue(
         text="conceptual_model",
         description="Концептуальная модель")
-    it_solution = PermissibleValue(
+    it_solution = LinkMLPermissibleValue(
         text="it_solution",
         description="ИТ-решение")
-    it_system = PermissibleValue(
+    it_system = LinkMLPermissibleValue(
         text="it_system",
         description="ИТ-система")
 
@@ -4820,22 +4820,22 @@ class RequirementLifecycleStatus(EnumDefinitionImpl):
     Статус жизненного цикла нормативного требования (SpecificationRequirement). Не заменяет ApprovalStatusEnum
     (согласование provenance у других элементов).
     """
-    draft = PermissibleValue(
+    draft = LinkMLPermissibleValue(
         text="draft",
         description="Черновик, формулируется")
-    proposed = PermissibleValue(
+    proposed = LinkMLPermissibleValue(
         text="proposed",
         description="Вынесено на согласование")
-    approved = PermissibleValue(
+    approved = LinkMLPermissibleValue(
         text="approved",
         description="Принято как норма")
-    rejected = PermissibleValue(
+    rejected = LinkMLPermissibleValue(
         text="rejected",
         description="Отклонено")
-    deprecated = PermissibleValue(
+    deprecated = LinkMLPermissibleValue(
         text="deprecated",
         description="Больше не актуально, замены нет")
-    superseded = PermissibleValue(
+    superseded = LinkMLPermissibleValue(
         text="superseded",
         description="Заменено другим требованием")
 
@@ -4849,16 +4849,16 @@ class RequirementImplementationStatus(EnumDefinitionImpl):
     Статус реализации утверждённого требования. Осмысленно при lifecycle_status=approved; не заменяет
     ApprovalStatusEnum.
     """
-    not_started = PermissibleValue(
+    not_started = LinkMLPermissibleValue(
         text="not_started",
         description="Не начато")
-    in_progress = PermissibleValue(
+    in_progress = LinkMLPermissibleValue(
         text="in_progress",
         description="Реализуется")
-    implemented = PermissibleValue(
+    implemented = LinkMLPermissibleValue(
         text="implemented",
         description="Реализовано")
-    verified = PermissibleValue(
+    verified = LinkMLPermissibleValue(
         text="verified",
         description="Проверено")
 
@@ -4871,25 +4871,25 @@ class RequirementSectionEnum(EnumDefinitionImpl):
     """
     Раздел каталога требований (трёхбуквенный код в code).
     """
-    LDM = PermissibleValue(
+    LDM = LinkMLPermissibleValue(
         text="LDM",
         description="Логическая модель")
-    PDM = PermissibleValue(
+    PDM = LinkMLPermissibleValue(
         text="PDM",
         description="Физическая модель")
-    REF = PermissibleValue(
+    REF = LinkMLPermissibleValue(
         text="REF",
         description="Связи сущностей")
-    ATR = PermissibleValue(
+    ATR = LinkMLPermissibleValue(
         text="ATR",
         description="Атрибуты")
-    FLW = PermissibleValue(
+    FLW = LinkMLPermissibleValue(
         text="FLW",
         description="Потоки данных")
-    CLS = PermissibleValue(
+    CLS = LinkMLPermissibleValue(
         text="CLS",
         description="Классификация данных")
-    GEN = PermissibleValue(
+    GEN = LinkMLPermissibleValue(
         text="GEN",
         description="Общие требования")
 
@@ -4902,20 +4902,20 @@ class FormalCheckKindEnum(EnumDefinitionImpl):
     """
     Вид формальной проверки в нотации, близкой к LinkML constraints.
     """
-    slot_required = PermissibleValue(text="slot_required")
-    slot_min_cardinality = PermissibleValue(text="slot_min_cardinality")
-    ref_resolves = PermissibleValue(text="ref_resolves")
-    key_subset = PermissibleValue(text="key_subset")
-    at_least_one_slots = PermissibleValue(
+    slot_required = LinkMLPermissibleValue(text="slot_required")
+    slot_min_cardinality = LinkMLPermissibleValue(text="slot_min_cardinality")
+    ref_resolves = LinkMLPermissibleValue(text="ref_resolves")
+    key_subset = LinkMLPermissibleValue(text="key_subset")
+    at_least_one_slots = LinkMLPermissibleValue(
         text="at_least_one_slots",
         description="Хотя бы один из target_slots заполнен (override обоих допустим).")
-    definition_resolvable = PermissibleValue(
+    definition_resolvable = LinkMLPermissibleValue(
         text="definition_resolvable",
         description="""Effective definition must resolve (ADR-025): own description, definition_source_ref, or single conceptual_entity_refs inheritance.""")
-    conditional_branch = PermissibleValue(
+    conditional_branch = LinkMLPermissibleValue(
         text="conditional_branch",
         description="""Фиксированный шаблон (имя в expression): status→slots, allowlist kinds, planned guard, semantic inclusion и т.п. Без произвольного mini-language.""")
-    custom = PermissibleValue(text="custom")
+    custom = LinkMLPermissibleValue(text="custom")
 
     _defn = EnumDefinition(
         name="FormalCheckKindEnum",
@@ -4924,8 +4924,8 @@ class FormalCheckKindEnum(EnumDefinitionImpl):
 
 class CheckSeverityEnum(EnumDefinitionImpl):
 
-    error = PermissibleValue(text="error")
-    warning = PermissibleValue(text="warning")
+    error = LinkMLPermissibleValue(text="error")
+    warning = LinkMLPermissibleValue(text="warning")
 
     _defn = EnumDefinition(
         name="CheckSeverityEnum",
@@ -4935,10 +4935,10 @@ class ConceptualDomainKindEnum(EnumDefinitionImpl):
     """
     Вид концептуального домена (ISO 11179 Conceptual Domain).
     """
-    enumerated = PermissibleValue(
+    enumerated = LinkMLPermissibleValue(
         text="enumerated",
         description="Домен с явным набором ValueMeaning или внешней concept scheme.")
-    described = PermissibleValue(
+    described = LinkMLPermissibleValue(
         text="described",
         description="Домен, заданный описанием без перечисления смыслов.")
 
@@ -4951,13 +4951,13 @@ class ValueDomainKindEnum(EnumDefinitionImpl):
     """
     Вид домена представления значений (ISO 11179 Value Domain).
     """
-    enumerated = PermissibleValue(
+    enumerated = LinkMLPermissibleValue(
         text="enumerated",
         description="Явный список PermissibleValue.")
-    described = PermissibleValue(
+    described = LinkMLPermissibleValue(
         text="described",
         description="Описание через формат, min/max, единицу.")
-    reference_set = PermissibleValue(
+    reference_set = LinkMLPermissibleValue(
         text="reference_set",
         description="Внешний или динамический набор значений.")
 
@@ -4970,21 +4970,21 @@ class TypeFamilyEnum(EnumDefinitionImpl):
     """
     Семейство корпоративного DataType.
     """
-    boolean = PermissibleValue(text="boolean")
-    integer = PermissibleValue(text="integer")
-    decimal = PermissibleValue(text="decimal")
-    float = PermissibleValue(text="float")
-    string = PermissibleValue(text="string")
-    binary = PermissibleValue(text="binary")
-    date = PermissibleValue(text="date")
-    time = PermissibleValue(text="time")
-    datetime = PermissibleValue(text="datetime")
-    duration = PermissibleValue(text="duration")
-    identifier = PermissibleValue(text="identifier")
-    uri = PermissibleValue(text="uri")
-    object = PermissibleValue(text="object")
-    array = PermissibleValue(text="array")
-    other = PermissibleValue(text="other")
+    boolean = LinkMLPermissibleValue(text="boolean")
+    integer = LinkMLPermissibleValue(text="integer")
+    decimal = LinkMLPermissibleValue(text="decimal")
+    float = LinkMLPermissibleValue(text="float")
+    string = LinkMLPermissibleValue(text="string")
+    binary = LinkMLPermissibleValue(text="binary")
+    date = LinkMLPermissibleValue(text="date")
+    time = LinkMLPermissibleValue(text="time")
+    datetime = LinkMLPermissibleValue(text="datetime")
+    duration = LinkMLPermissibleValue(text="duration")
+    identifier = LinkMLPermissibleValue(text="identifier")
+    uri = LinkMLPermissibleValue(text="uri")
+    object = LinkMLPermissibleValue(text="object")
+    array = LinkMLPermissibleValue(text="array")
+    other = LinkMLPermissibleValue(text="other")
 
     _defn = EnumDefinition(
         name="TypeFamilyEnum",
@@ -4995,10 +4995,10 @@ class TimezonePolicyEnum(EnumDefinitionImpl):
     """
     Политика часового пояса для временных DataType.
     """
-    none = PermissibleValue(text="none")
-    utc = PermissibleValue(text="utc")
-    with_offset = PermissibleValue(text="with_offset")
-    local = PermissibleValue(text="local")
+    none = LinkMLPermissibleValue(text="none")
+    utc = LinkMLPermissibleValue(text="utc")
+    with_offset = LinkMLPermissibleValue(text="with_offset")
+    local = LinkMLPermissibleValue(text="local")
 
     _defn = EnumDefinition(
         name="TimezonePolicyEnum",
@@ -5009,9 +5009,9 @@ class LossinessEnum(EnumDefinitionImpl):
     """
     Оценка потери точности NativeTypeBinding.
     """
-    lossless = PermissibleValue(text="lossless")
-    lossy = PermissibleValue(text="lossy")
-    unknown = PermissibleValue(text="unknown")
+    lossless = LinkMLPermissibleValue(text="lossless")
+    lossy = LinkMLPermissibleValue(text="lossy")
+    unknown = LinkMLPermissibleValue(text="unknown")
 
     _defn = EnumDefinition(
         name="LossinessEnum",
@@ -5022,25 +5022,25 @@ class SignificanceBasisEnum(EnumDefinitionImpl):
     """
     Основание существования ConceptualProperty в КМД (вариант B).
     """
-    identifying = PermissibleValue(
+    identifying = LinkMLPermissibleValue(
         text="identifying",
         description="Входит в бизнес-ключ сущности.")
-    externally_aligned = PermissibleValue(
+    externally_aligned = LinkMLPermissibleValue(
         text="externally_aligned",
         description="Выравнивается с внешним термином (FIBO, ISO, API).")
-    cross_solution = PermissibleValue(
+    cross_solution = LinkMLPermissibleValue(
         text="cross_solution",
         description="Используется в двух и более решениях.")
-    regulatory = PermissibleValue(
+    regulatory = LinkMLPermissibleValue(
         text="regulatory",
         description="Упомянуто в нормативном требовании или отчётности.")
-    critical_data = PermissibleValue(
+    critical_data = LinkMLPermissibleValue(
         text="critical_data",
         description="Критичный элемент данных (CDE), поднятый с логического уровня.")
-    governance_anchor = PermissibleValue(
+    governance_anchor = LinkMLPermissibleValue(
         text="governance_anchor",
         description="Привязаны политика или классификация предприятия.")
-    explicit_decision = PermissibleValue(
+    explicit_decision = LinkMLPermissibleValue(
         text="explicit_decision",
         description="Решение архитектурного комитета (нужен significance_rationale).")
 
@@ -5053,12 +5053,12 @@ class PropertyKindEnum(EnumDefinitionImpl):
     """
     Вид концептуального свойства.
     """
-    descriptive = PermissibleValue(text="descriptive")
-    identifying = PermissibleValue(text="identifying")
-    relational = PermissibleValue(text="relational")
-    measure = PermissibleValue(text="measure")
-    temporal = PermissibleValue(text="temporal")
-    status = PermissibleValue(text="status")
+    descriptive = LinkMLPermissibleValue(text="descriptive")
+    identifying = LinkMLPermissibleValue(text="identifying")
+    relational = LinkMLPermissibleValue(text="relational")
+    measure = LinkMLPermissibleValue(text="measure")
+    temporal = LinkMLPermissibleValue(text="temporal")
+    status = LinkMLPermissibleValue(text="status")
 
     _defn = EnumDefinition(
         name="PropertyKindEnum",
@@ -5069,13 +5069,13 @@ class SchemaFormatEnum(EnumDefinitionImpl):
     """
     Формат схемы DataStructure (стартовый набор; перенос в реестр — отдельно).
     """
-    json_schema = PermissibleValue(text="json_schema")
-    avro = PermissibleValue(text="avro")
-    protobuf = PermissibleValue(text="protobuf")
-    xml_schema = PermissibleValue(text="xml_schema")
-    relational = PermissibleValue(text="relational")
-    openapi_schema = PermissibleValue(text="openapi_schema")
-    other = PermissibleValue(text="other")
+    json_schema = LinkMLPermissibleValue(text="json_schema")
+    avro = LinkMLPermissibleValue(text="avro")
+    protobuf = LinkMLPermissibleValue(text="protobuf")
+    xml_schema = LinkMLPermissibleValue(text="xml_schema")
+    relational = LinkMLPermissibleValue(text="relational")
+    openapi_schema = LinkMLPermissibleValue(text="openapi_schema")
+    other = LinkMLPermissibleValue(text="other")
 
     _defn = EnumDefinition(
         name="SchemaFormatEnum",
@@ -5086,13 +5086,13 @@ class SchemaNodeKindEnum(EnumDefinitionImpl):
     """
     Вид узла SchemaNode.
     """
-    scalar = PermissibleValue(text="scalar")
-    object = PermissibleValue(text="object")
-    array = PermissibleValue(text="array")
-    map = PermissibleValue(text="map")
-    union = PermissibleValue(text="union")
-    enum = PermissibleValue(text="enum")
-    reference = PermissibleValue(text="reference")
+    scalar = LinkMLPermissibleValue(text="scalar")
+    object = LinkMLPermissibleValue(text="object")
+    array = LinkMLPermissibleValue(text="array")
+    map = LinkMLPermissibleValue(text="map")
+    union = LinkMLPermissibleValue(text="union")
+    enum = LinkMLPermissibleValue(text="enum")
+    reference = LinkMLPermissibleValue(text="reference")
 
     _defn = EnumDefinition(
         name="SchemaNodeKindEnum",
@@ -5103,9 +5103,9 @@ class EnvelopeKindEnum(EnumDefinitionImpl):
     """
     Вид конверта сообщения (Message.envelope_kind).
     """
-    none = PermissibleValue(text="none")
-    cloudevents = PermissibleValue(text="cloudevents")
-    custom = PermissibleValue(text="custom")
+    none = LinkMLPermissibleValue(text="none")
+    cloudevents = LinkMLPermissibleValue(text="cloudevents")
+    custom = LinkMLPermissibleValue(text="custom")
 
     _defn = EnumDefinition(
         name="EnvelopeKindEnum",
@@ -5114,15 +5114,15 @@ class EnvelopeKindEnum(EnumDefinitionImpl):
 
 class DataCarrierKindEnum(EnumDefinitionImpl):
 
-    relational_table = PermissibleValue(text="relational_table")
-    relational_view = PermissibleValue(text="relational_view")
-    file = PermissibleValue(text="file")
-    dataset = PermissibleValue(text="dataset")
-    stream_topic = PermissibleValue(text="stream_topic")
-    stream_queue = PermissibleValue(text="stream_queue")
-    in_memory = PermissibleValue(text="in_memory")
-    api_resource = PermissibleValue(text="api_resource")
-    other = PermissibleValue(text="other")
+    relational_table = LinkMLPermissibleValue(text="relational_table")
+    relational_view = LinkMLPermissibleValue(text="relational_view")
+    file = LinkMLPermissibleValue(text="file")
+    dataset = LinkMLPermissibleValue(text="dataset")
+    stream_topic = LinkMLPermissibleValue(text="stream_topic")
+    stream_queue = LinkMLPermissibleValue(text="stream_queue")
+    in_memory = LinkMLPermissibleValue(text="in_memory")
+    api_resource = LinkMLPermissibleValue(text="api_resource")
+    other = LinkMLPermissibleValue(text="other")
 
     _defn = EnumDefinition(
         name="DataCarrierKindEnum",
@@ -5130,9 +5130,9 @@ class DataCarrierKindEnum(EnumDefinitionImpl):
 
 class AccessPointKindEnum(EnumDefinitionImpl):
 
-    interface = PermissibleValue(text="interface")
-    operation = PermissibleValue(text="operation")
-    channel = PermissibleValue(text="channel")
+    interface = LinkMLPermissibleValue(text="interface")
+    operation = LinkMLPermissibleValue(text="operation")
+    channel = LinkMLPermissibleValue(text="channel")
 
     _defn = EnumDefinition(
         name="AccessPointKindEnum",
@@ -5140,12 +5140,12 @@ class AccessPointKindEnum(EnumDefinitionImpl):
 
 class DataContainerKindEnum(EnumDefinitionImpl):
 
-    database = PermissibleValue(text="database")
-    schema = PermissibleValue(text="schema")
-    bucket = PermissibleValue(text="bucket")
-    broker = PermissibleValue(text="broker")
-    directory = PermissibleValue(text="directory")
-    cluster = PermissibleValue(text="cluster")
+    database = LinkMLPermissibleValue(text="database")
+    schema = LinkMLPermissibleValue(text="schema")
+    bucket = LinkMLPermissibleValue(text="bucket")
+    broker = LinkMLPermissibleValue(text="broker")
+    directory = LinkMLPermissibleValue(text="directory")
+    cluster = LinkMLPermissibleValue(text="cluster")
 
     _defn = EnumDefinition(
         name="DataContainerKindEnum",
@@ -5153,8 +5153,8 @@ class DataContainerKindEnum(EnumDefinitionImpl):
 
 class ExecutionAssetKindEnum(EnumDefinitionImpl):
 
-    pipeline = PermissibleValue(text="pipeline")
-    job = PermissibleValue(text="job")
+    pipeline = LinkMLPermissibleValue(text="pipeline")
+    job = LinkMLPermissibleValue(text="job")
 
     _defn = EnumDefinition(
         name="ExecutionAssetKindEnum",
@@ -5162,10 +5162,10 @@ class ExecutionAssetKindEnum(EnumDefinitionImpl):
 
 class LineageRoleEnum(EnumDefinitionImpl):
 
-    source = PermissibleValue(text="source")
-    sink = PermissibleValue(text="sink")
-    intermediate = PermissibleValue(text="intermediate")
-    none = PermissibleValue(text="none")
+    source = LinkMLPermissibleValue(text="source")
+    sink = LinkMLPermissibleValue(text="sink")
+    intermediate = LinkMLPermissibleValue(text="intermediate")
+    none = LinkMLPermissibleValue(text="none")
 
     _defn = EnumDefinition(
         name="LineageRoleEnum",
@@ -5173,9 +5173,9 @@ class LineageRoleEnum(EnumDefinitionImpl):
 
 class ContainmentKindEnum(EnumDefinitionImpl):
 
-    composite = PermissibleValue(text="composite")
-    partitioned = PermissibleValue(text="partitioned")
-    hierarchical = PermissibleValue(text="hierarchical")
+    composite = LinkMLPermissibleValue(text="composite")
+    partitioned = LinkMLPermissibleValue(text="partitioned")
+    hierarchical = LinkMLPermissibleValue(text="hierarchical")
 
     _defn = EnumDefinition(
         name="ContainmentKindEnum",

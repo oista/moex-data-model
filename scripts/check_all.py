@@ -91,7 +91,14 @@ def _try_executable(cmd: list[str]) -> str | None:
 
 
 def resolve_python() -> str:
-    """Pick a usable interpreter; prefer pin / PYTHON / existing CLI venv."""
+    """Pick a usable interpreter.
+
+    Order matches ``scripts/lib.ps1`` Resolve-RepoPython: explicit ``PYTHON``,
+    then ``apps/cli/.venv`` (created by slice-cli / generate-contracts on CI),
+    then ``.python-version`` pin / py launcher / python3.
+    Preferring the CLI venv avoids publish-gate running on a bare system
+    interpreter that does not have ``moex_model_cli`` installed.
+    """
     env = os.environ.get("PYTHON", "").strip()
     if env:
         # Allow ``PYTHON="py -3.14"`` (Makefile style) or a bare executable path.
@@ -103,14 +110,6 @@ def resolve_python() -> str:
             return probed
         raise SystemExit(f"PYTHON={env!r} did not resolve to a usable interpreter")
 
-    pin = _read_python_version_pin()
-    if pin:
-        probed = _try_executable(
-            ["py", f"-{pin}", "-c", "import sys; print(sys.executable)"]
-        )
-        if probed:
-            return probed
-
     for rel in (
         Path("apps/cli/.venv/Scripts/python.exe"),
         Path("apps/cli/.venv/bin/python"),
@@ -119,6 +118,14 @@ def resolve_python() -> str:
         candidate = REPO_ROOT / rel
         if candidate.is_file():
             return str(candidate)
+
+    pin = _read_python_version_pin()
+    if pin:
+        probed = _try_executable(
+            ["py", f"-{pin}", "-c", "import sys; print(sys.executable)"]
+        )
+        if probed:
+            return probed
 
     for ver in ("3.14", "3.13", "3.12", "3.11"):
         probed = _try_executable(
@@ -281,8 +288,6 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    python = resolve_python()
-    print(f"check_all: python={python}")
     print(f"check_all: root={REPO_ROOT}")
 
     selected = [args.only] if args.only else list(STEP_IDS)
@@ -290,8 +295,12 @@ def main(argv: list[str] | None = None) -> int:
     exit_code = 0
 
     for step_id in selected:
+        # Re-resolve each step: slice-cli / generate-contracts may create
+        # apps/cli/.venv after the process started without one (GitHub Actions).
+        python = resolve_python()
         print()
         print(f"=== {step_id} ===")
+        print(f"check_all: python={python}")
         result = run_step(step_id, python)
         results.append(result)
         if not result.ok:
