@@ -29,7 +29,7 @@ try {
 from pathlib import Path
 import sys
 import yaml
-from linkml.validator import Validator
+from moex_standard_linkml.validation import error_results, make_linkml_validator
 
 repo = Path(r'$RepoRoot')
 schema = Path(r'$Schema')
@@ -45,7 +45,7 @@ TARGETS = {
     'client-data-flow.yaml': 'DataFlow',
 }
 
-validator = Validator(schema)
+validator = make_linkml_validator(schema)
 failed = 0
 for path in sorted(examples.glob('*.yaml')):
     name = path.name
@@ -58,12 +58,7 @@ for path in sorted(examples.glob('*.yaml')):
         failed += 1
         continue
     data = yaml.safe_load(path.read_text(encoding='utf-8'))
-    report = validator.validate(data, target_class=target)
-    bad = []
-    for r in report.results:
-        sev = str(getattr(r, 'severity', r))
-        if 'ERROR' in sev.upper():
-            bad.append(r)
+    bad = error_results(validator.validate(data, target_class=target))
     if bad:
         failed += 1
         print(f'FAIL {name} target={target}', file=sys.stderr)
