@@ -33,8 +33,6 @@
         click Relationship href "../Relationship"
       ModelElement <|-- RelationTerm
         click RelationTerm href "../RelationTerm"
-      ModelElement <|-- Mapping
-        click Mapping href "../Mapping"
       ModelElement <|-- TechnicalAsset
         click TechnicalAsset href "../TechnicalAsset"
       ModelElement <|-- ConceptualDomain

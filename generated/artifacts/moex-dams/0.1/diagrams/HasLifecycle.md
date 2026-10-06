@@ -11,6 +11,8 @@
 
       HasLifecycle <|-- ModelElement
         click ModelElement href "../ModelElement"
+      HasLifecycle <|-- Mapping
+        click Mapping href "../Mapping"
       
 
       HasLifecycle : deprecated_by_ref

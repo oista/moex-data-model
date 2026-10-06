@@ -1,10 +1,11 @@
-"""ADR-044 PR-1: induced-slot matrix after ModelElement decomposition.
+"""ADR-044: induced-slot matrix after ModelElement decomposition.
 
 Allowed deltas vs docs/architecture/model-element-matrix-before.csv:
 - ModelElement.description → opt (abstract DescribedElement default)
 - Relationship.description → opt (global optional; no class slot_usage)
 - DataStructure.description → rec
-- Mapping.description → opt (global; identity slots unchanged until PR-3)
+- Mapping.description → opt
+- Mapping name/title/glossary_term_refs/tags → absent (3.0.0 IdentifiedElement)
 """
 
 from __future__ import annotations
@@ -37,7 +38,10 @@ ALLOWED_DELTAS: dict[tuple[str, str], str] = {
     ("Relationship", "description"): OPT,
     ("DataStructure", "description"): REC,
     ("Mapping", "description"): OPT,
-    ("Mapping", "name"): OPT,  # PR-3: required false + deprecated
+    ("Mapping", "name"): ABSENT,
+    ("Mapping", "title"): ABSENT,
+    ("Mapping", "glossary_term_refs"): ABSENT,
+    ("Mapping", "tags"): ABSENT,
 }
 
 MIXIN_SKIP = frozenset(
@@ -99,18 +103,21 @@ def test_has_definition_induces_optional_description_with_skos_mapping():
     assert "skos:definition" in (induced.exact_mappings or [])
 
 
-def test_mapping_name_optional_deprecated_until_pr6():
+def test_mapping_is_identified_element_without_name():
     sv = SchemaView(str(SCHEMA))
-    name = sv.induced_slot("name", "Mapping")
-    assert name.required is not True
-    assert name.deprecated
-    assert sv.get_class("Mapping").is_a == "ModelElement"
-    assert "valid_from" in {s.name for s in sv.class_induced_slots("Mapping")}
+    induced = {s.name for s in sv.class_induced_slots("Mapping")}
+    assert "name" not in induced
+    assert "title" not in induced
+    assert "glossary_term_refs" not in induced
+    assert "tags" not in induced
+    assert "description" in induced
+    assert "valid_from" in induced
+    assert sv.get_class("Mapping").is_a == "IdentifiedElement"
 
 
-def test_schema_version_is_2_1_0():
+def test_schema_version_is_3_0_0():
     sv = SchemaView(str(SCHEMA))
-    assert sv.schema.version == "2.1.0"
+    assert sv.schema.version == "3.0.0"
 
 
 def test_pydantic_field_required_sets_match_for_key_classes():

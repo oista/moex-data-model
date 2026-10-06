@@ -4696,17 +4696,8 @@
         },
         "Mapping": {
             "additionalProperties": false,
-            "description": "\u042f\u0432\u043d\u043e\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430\u043c\u0438. Discriminate via mapping_type: realizes (solution\u2192enterprise conceptual), entity_physical (DataCarrier\u2194LogicalEntity), field_mapping/mapsTo (SchemaNode\u2194LogicalAttribute), aligns_with (enterprise\u2194external term). Not used for SpecImpl implements/conforms_to.",
+            "description": "\u042f\u0432\u043d\u043e\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430\u043c\u0438. Discriminate via mapping_type: realizes (solution\u2192enterprise conceptual), entity_physical (DataCarrier\u2194LogicalEntity), field_mapping/mapsTo (SchemaNode\u2194LogicalAttribute), aligns_with (enterprise\u2194external term). Not used for SpecImpl implements/conforms_to. Identity slots name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044); display label = source_refs -> target_refs [mapping_type].",
             "properties": {
-                "aliases": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
                 "approval_status": {
                     "$ref": "#/$defs/ApprovalStatusEnum"
                 },
@@ -4756,15 +4747,6 @@
                         "null"
                     ]
                 },
-                "glossary_term_refs": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
                 "lifecycle_status": {
                     "$ref": "#/$defs/LifecycleStatusEnum"
                 },
@@ -4773,12 +4755,6 @@
                 },
                 "mapping_type": {
                     "$ref": "#/$defs/MappingTypeEnum"
-                },
-                "name": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
                 },
                 "source_artifact_ref": {
                     "format": "uri",
@@ -4797,15 +4773,6 @@
                         "null"
                     ]
                 },
-                "tags": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
                 "target_refs": {
                     "items": {
                         "type": "string"
@@ -4813,12 +4780,6 @@
                     "minItems": 1,
                     "type": [
                         "array",
-                        "null"
-                    ]
-                },
-                "title": {
-                    "type": [
-                        "string",
                         "null"
                     ]
                 },
@@ -7898,5 +7859,5 @@
     ],
     "title": "moex_dams",
     "type": "object",
-    "version": "2.1.0"
+    "version": "3.0.0"
 }

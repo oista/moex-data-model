@@ -262,8 +262,10 @@ classes:
       - selection_ref
 
   Mapping:
-    is_a: ModelElement
+    is_a: IdentifiedElement
     mixins:
+      - DescribedElement
+      - HasLifecycle
       - HasProvenance
     description: >
       Явное соответствие между элементами. Discriminate via mapping_type:
@@ -271,6 +273,9 @@ classes:
       (DataCarrier↔LogicalEntity), field_mapping/mapsTo
       (SchemaNode↔LogicalAttribute), aligns_with (enterprise↔external term).
       Not used for SpecImpl implements/conforms_to.
+      Identity slots name/title/aliases/glossary_term_refs/tags removed in
+      DAMS 3.0.0 (ADR-044); display label = source_refs -> target_refs
+      [mapping_type].
     slots:
       - source_refs
       - target_refs
@@ -280,24 +285,6 @@ classes:
       - transformation_expression
       - confidence
     slot_usage:
-      name:
-        required: false
-        deprecated: >
-          Deprecated in DAMS 2.1.0. Prefer viewer/migration label from
-          source_refs -> target_refs + mapping_type. Removed in 3.0.0.
-        deprecated_element_has_possible_replacement: dams:mapping_type
-      title:
-        deprecated: >
-          Deprecated in DAMS 2.1.0. Removed in 3.0.0.
-      aliases:
-        deprecated: >
-          Deprecated in DAMS 2.1.0. Removed in 3.0.0.
-      glossary_term_refs:
-        deprecated: >
-          Deprecated in DAMS 2.1.0. Removed in 3.0.0.
-      tags:
-        deprecated: >
-          Deprecated in DAMS 2.1.0. Removed in 3.0.0.
       description:
         required: false
 

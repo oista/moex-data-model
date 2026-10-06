@@ -540,10 +540,6 @@ approved_at datetime
 
 Table Mapping {
 element_id varchar [not null, primary key]
-lifecycle_status varchar [not null]
-deprecated_by_ref varchar
-valid_from datetime
-valid_to datetime
 source_refs varchar
 target_refs varchar
 mapping_type varchar [not null]
@@ -551,23 +547,17 @@ mapping_cardinality varchar [not null]
 transformation_ref varchar
 transformation_expression varchar
 confidence varchar
-Mapping_name varchar [not null]
-Mapping_title varchar
-Mapping_aliases varchar
-Mapping_glossary_term_refs varchar
-Mapping_tags varchar
 Mapping_description varchar
+lifecycle_status varchar [not null]
+deprecated_by_ref varchar
+valid_from datetime
+valid_to datetime
 source_artifact_ref varchar
 evidence_refs varchar
 approval_status varchar
 approved_by_ref varchar
 approved_at datetime
-name varchar [not null]
-title varchar
-aliases varchar
 description varchar
-glossary_term_refs varchar
-tags varchar
 }
 
 Table HasStructure {
@@ -1323,9 +1313,7 @@ Ref: Relationship.relation_term_ref > RelationTerm.element_id
 Ref: RelationTerm.glossary_term_refs > GlossaryTerm.registry_id
 Ref: RelationTerm.scoped_definitions > ScopedDefinition.scoped_definition_id
 Ref: ExternalClassRef.approved_by_ref > Role.registry_id
-Ref: Mapping.Mapping_glossary_term_refs > GlossaryTerm.registry_id
 Ref: Mapping.approved_by_ref > Role.registry_id
-Ref: Mapping.glossary_term_refs > GlossaryTerm.registry_id
 Ref: HasStructure.structure_ref > DataStructure.element_id
 Ref: TechnicalAsset.glossary_term_refs > GlossaryTerm.registry_id
 Ref: TechnicalAsset.TechnicalAsset_system_ref > ITSystem.registry_id

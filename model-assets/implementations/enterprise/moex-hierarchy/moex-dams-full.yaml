@@ -3,7 +3,7 @@
 # Do not edit by hand — regenerated at viewer publication build.
 name: moex_dams
 id: https://data.moex.com/dams/v0.1
-version: 2.1.0
+version: 3.0.0
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml:
@@ -3742,12 +3742,16 @@ classes:
     description: 'Явное соответствие между элементами. Discriminate via mapping_type:
       realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity),
       field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with (enterprise↔external
-      term). Not used for SpecImpl implements/conforms_to.
+      term). Not used for SpecImpl implements/conforms_to. Identity slots name/title/aliases/glossary_term_refs/tags
+      removed in DAMS 3.0.0 (ADR-044); display label = source_refs -> target_refs
+      [mapping_type].
 
       '
     from_schema: https://data.moex.com/dams/core/v0.1
-    is_a: ModelElement
+    is_a: IdentifiedElement
     mixins:
+    - DescribedElement
+    - HasLifecycle
     - HasProvenance
     slots:
     - source_refs
@@ -3758,34 +3762,6 @@ classes:
     - transformation_expression
     - confidence
     slot_usage:
-      name:
-        name: name
-        deprecated: 'Deprecated in DAMS 2.1.0. Prefer viewer/migration label from
-          source_refs -> target_refs + mapping_type. Removed in 3.0.0.
-
-          '
-        deprecated_element_has_possible_replacement: dams:mapping_type
-        required: false
-      title:
-        name: title
-        deprecated: 'Deprecated in DAMS 2.1.0. Removed in 3.0.0.
-
-          '
-      aliases:
-        name: aliases
-        deprecated: 'Deprecated in DAMS 2.1.0. Removed in 3.0.0.
-
-          '
-      glossary_term_refs:
-        name: glossary_term_refs
-        deprecated: 'Deprecated in DAMS 2.1.0. Removed in 3.0.0.
-
-          '
-      tags:
-        name: tags
-        deprecated: 'Deprecated in DAMS 2.1.0. Removed in 3.0.0.
-
-          '
       description:
         name: description
         required: false

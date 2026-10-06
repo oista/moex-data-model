@@ -1,11 +1,14 @@
-"""Report Mapping labels (ADR-044 / D3). Uses ruamel.yaml to preserve order/comments.
+"""Report / strip Mapping labels (ADR-044 / D3 / D8).
 
-In DAMS 2.1.0 Mapping.name is optional+deprecated; label =
-source_refs -> target_refs [mapping_type]; name remains fallback.
-Does not strip name (that is PR-6 / --strip-deprecated).
+Uses ruamel.yaml to preserve order/comments. Label =
+source_refs -> target_refs [mapping_type].
+
+In DAMS 3.0.0 Mapping identity slots are removed; use --strip-deprecated
+to delete name/title/aliases/tags/glossary_term_refs from instance YAML.
 
 Usage:
   python scripts/migrate_mapping_labels.py --report docs/migration/mapping-name-report.md
+  python scripts/migrate_mapping_labels.py --strip-deprecated
 """
 
 from __future__ import annotations

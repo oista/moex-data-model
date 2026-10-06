@@ -34,7 +34,7 @@ from pydantic import (
 
 
 metamodel_version = "1.11.0"
-version = "2.1.0"
+version = "3.0.0"
 
 
 class ConfiguredBaseModel(BaseModel):
@@ -1601,9 +1601,9 @@ class ExternalClassRef(HasProvenance):
     approved_at: Optional[datetime ] = Field(default=None)
 
 
-class Mapping(ModelElement, HasProvenance):
+class Mapping(HasProvenance, HasLifecycle, DescribedElement, IdentifiedElement):
     """
-    Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
+    Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to. Identity slots name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044); display label = source_refs -> target_refs [mapping_type].
 
     """
     source_refs: Optional[list[str]] = Field(default=None, min_length=1)
@@ -1613,19 +1613,14 @@ class Mapping(ModelElement, HasProvenance):
     transformation_ref: Optional[str] = Field(default=None)
     transformation_expression: Optional[str] = Field(default=None)
     confidence: Optional[Decimal] = Field(default=None, ge=0, le=1)
+    description: Optional[str] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     source_artifact_ref: Optional[str] = Field(default=None)
     evidence_refs: Optional[list[str]] = Field(default=None)
     approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
     approved_by_ref: Optional[str] = Field(default=None)
     approved_at: Optional[datetime ] = Field(default=None)
-    name: Optional[str] = Field(default=None)
-    title: Optional[str] = Field(default=None)
-    aliases: Optional[list[str]] = Field(default=None)
-    description: Optional[str] = Field(default=None)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
-    deprecated_by_ref: Optional[str] = Field(default=None)
-    glossary_term_refs: Optional[list[str]] = Field(default=None)
-    tags: Optional[list[str]] = Field(default=None)
     element_id: str = Field(default=...)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
