@@ -78,3 +78,9 @@ slots:
     range: datetime
   valid_to:
     range: datetime
+  artifact_version:
+    abstract: true
+    range: SemVer
+    description: >
+      Абстрактный слот версии артефакта (SemVer). Специализации —
+      model_version и structure_version (ADR-044 / D6).

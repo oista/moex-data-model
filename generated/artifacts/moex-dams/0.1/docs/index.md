@@ -106,6 +106,7 @@ Name: moex_dams
 | [approval_status](approval_status.md) |  |
 | [approved_at](approved_at.md) |  |
 | [approved_by_ref](approved_by_ref.md) |  |
+| [artifact_version](artifact_version.md) | Абстрактный слот версии артефакта (SemVer) |
 | [asset_kind](asset_kind.md) | Разновидность актива |
 | [asset_namespace](asset_namespace.md) | Пространство имён источника по аналогии с OpenLineage namespace (например pos... |
 | [assignment_id](assignment_id.md) |  |

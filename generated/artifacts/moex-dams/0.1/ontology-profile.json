@@ -1947,7 +1947,7 @@
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "xsd": "http://www.w3.org/2001/XMLSchema#"
   },
-  "schema_digest": "sha256:624c40f61a99d1d60a2103ec2b5d85f6881119d0864d7fc37fed34cfe47615b5",
+  "schema_digest": "sha256:dbf9000e025ed9d7944a89969473429d1d5fd01db769213c81e6fdab7052bfe3",
   "schema_id": "https://data.moex.com/dams/v0.1",
   "schema_name": "moex_dams",
   "schema_version": "2.1.0",
@@ -2011,6 +2011,10 @@
     {
       "iri": "https://data.moex.com/dams/approved_by_ref",
       "name": "approved_by_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/artifact_version",
+      "name": "artifact_version"
     },
     {
       "iri": "https://data.moex.com/dams/asset_kind",

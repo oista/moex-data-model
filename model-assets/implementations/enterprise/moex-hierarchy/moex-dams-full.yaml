@@ -1385,6 +1385,15 @@ slots:
     name: valid_to
     from_schema: https://data.moex.com/dams/base/v0.1
     range: datetime
+  artifact_version:
+    name: artifact_version
+    description: 'Абстрактный слот версии артефакта (SemVer). Специализации — model_version
+      и structure_version (ADR-044 / D6).
+
+      '
+    from_schema: https://data.moex.com/dams/base/v0.1
+    abstract: true
+    range: SemVer
   assignment_id:
     name: assignment_id
     from_schema: https://data.moex.com/dams/governance/v0.1
@@ -1582,7 +1591,7 @@ slots:
   model_version:
     name: model_version
     from_schema: https://data.moex.com/dams/core/v0.1
-    range: SemVer
+    is_a: artifact_version
     required: true
   implementation_scope:
     name: implementation_scope
@@ -2618,7 +2627,7 @@ slots:
     name: structure_version
     description: Версия структуры (SemVer).
     from_schema: https://data.moex.com/dams/structure/v0.1
-    range: SemVer
+    is_a: artifact_version
     required: true
   root_local_key:
     name: root_local_key

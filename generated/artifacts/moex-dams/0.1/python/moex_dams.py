@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-06T20:41:22
+# Generation date: 2026-10-06T20:47:18
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -5402,6 +5402,9 @@ slots.valid_from = Slot(uri=DAMS.valid_from, name="valid_from", curie=DAMS.curie
 
 slots.valid_to = Slot(uri=DAMS.valid_to, name="valid_to", curie=DAMS.curie('valid_to'),
                    model_uri=DAMS.valid_to, domain=None, range=Optional[Union[str, XSDDateTime]])
+
+slots.artifact_version = Slot(uri=DAMS.artifact_version, name="artifact_version", curie=DAMS.curie('artifact_version'),
+                   model_uri=DAMS.artifact_version, domain=None, range=Optional[Union[str, SemVer]])
 
 slots.assignment_id = Slot(uri=DAMS.assignment_id, name="assignment_id", curie=DAMS.curie('assignment_id'),
                    model_uri=DAMS.assignment_id, domain=None, range=URIRef)

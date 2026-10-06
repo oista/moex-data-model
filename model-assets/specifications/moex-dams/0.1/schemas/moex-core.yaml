@@ -306,7 +306,7 @@ slots:
     range: string
     required: true
   model_version:
-    range: SemVer
+    is_a: artifact_version
     required: true
   implementation_scope:
     range: ImplementationScopeEnum

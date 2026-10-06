@@ -192,7 +192,7 @@ slots:
       Removed from mixin in 2.0.0.
     deprecated_element_has_possible_replacement: dams:schema_dialect
   structure_version:
-    range: SemVer
+    is_a: artifact_version
     required: true
     description: Версия структуры (SemVer).
   root_local_key:
