@@ -1,0 +1,374 @@
+[
+  {
+    "file": "moex-core.yaml",
+    "class": "ConceptualProperty",
+    "index": 0,
+    "description": "identifying property_kind требует is_identifying",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": false,
+    "satisfy_errors": [
+      "'true' is not of type 'boolean', 'null'"
+    ],
+    "violations": [
+      {
+        "slot": "is_identifying",
+        "rejected": true,
+        "errors": [
+          "'true' was expected"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "moex-datatypes.yaml",
+    "class": "DataType",
+    "index": 0,
+    "description": "precision только для decimal",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": true,
+    "satisfy_errors": [],
+    "violations": [
+      {
+        "slot": "type_family",
+        "rejected": true,
+        "errors": [
+          "'decimal' was expected"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "moex-datatypes.yaml",
+    "class": "DataType",
+    "index": 1,
+    "description": "scale только для decimal",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": true,
+    "satisfy_errors": [],
+    "violations": [
+      {
+        "slot": "type_family",
+        "rejected": true,
+        "errors": [
+          "'decimal' was expected"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "moex-datatypes.yaml",
+    "class": "DataType",
+    "index": 2,
+    "description": "max_length только для string или binary",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": true,
+    "satisfy_errors": [],
+    "violations": [
+      {
+        "slot": "type_family",
+        "rejected": true,
+        "errors": [
+          "'boolean' is not valid under any of the given schemas"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "moex-datatypes.yaml",
+    "class": "DataType",
+    "index": 3,
+    "description": "min_length только для string или binary",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": true,
+    "satisfy_errors": [],
+    "violations": [
+      {
+        "slot": "type_family",
+        "rejected": true,
+        "errors": [
+          "'boolean' is not valid under any of the given schemas"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "moex-datatypes.yaml",
+    "class": "ValueDomain",
+    "index": 0,
+    "description": "enumerated-домен требует permissible_values",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": true,
+    "satisfy_errors": [],
+    "violations": [
+      {
+        "slot": "permissible_values",
+        "rejected": true,
+        "errors": [
+          "'permissible_values' is a required property"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "moex-datatypes.yaml",
+    "class": "ValueDomain",
+    "index": 1,
+    "description": "described-домен не содержит permissible_values",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": true,
+    "satisfy_errors": [],
+    "violations": [
+      {
+        "slot": "permissible_values",
+        "rejected": true,
+        "errors": [
+          "{'value_domain_kind': 'described', 'data_type_ref': 'x', 'name': 'x', 'description': 'x', 'lifecycle_status': "
+        ]
+      }
+    ]
+  },
+  {
+    "file": "moex-datatypes.yaml",
+    "class": "ValueDomain",
+    "index": 2,
+    "description": "reference_set не содержит permissible_values",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": true,
+    "satisfy_errors": [],
+    "violations": [
+      {
+        "slot": "permissible_values",
+        "rejected": true,
+        "errors": [
+          "{'value_domain_kind': 'reference_set', 'data_type_ref': 'x', 'name': 'x', 'description': 'x', 'lifecycle_statu"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "moex-semantic.yaml",
+    "class": "ConceptualDomain",
+    "index": 0,
+    "description": "described-домен не содержит value_meanings",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": true,
+    "satisfy_errors": [],
+    "violations": [
+      {
+        "slot": "value_meanings",
+        "rejected": true,
+        "errors": [
+          "{'conceptual_domain_kind': 'described', 'name': 'x', 'description': 'x', 'lifecycle_status': 'draft', 'element"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "moex-structure.yaml",
+    "class": "DataStructure",
+    "index": 0,
+    "description": "source_pointer требует source_artifact_ref",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": true,
+    "satisfy_errors": [],
+    "violations": [
+      {
+        "slot": "source_artifact_ref",
+        "rejected": true,
+        "errors": [
+          "'source_artifact_ref' is a required property"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "moex-structure.yaml",
+    "class": "DataStructure",
+    "index": 1,
+    "description": "schema_dialect только для семейства JSON Schema",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": true,
+    "satisfy_errors": [],
+    "violations": [
+      {
+        "slot": "schema_format",
+        "rejected": true,
+        "errors": [
+          "'avro' is not valid under any of the given schemas"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "moex-structure.yaml",
+    "class": "SchemaNode",
+    "index": 0,
+    "description": "array|map требуют item_node и запрещают children",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": true,
+    "satisfy_errors": [],
+    "violations": [
+      {
+        "slot": "item_node",
+        "rejected": true,
+        "errors": [
+          "'item_node' is a required property"
+        ]
+      },
+      {
+        "slot": "children",
+        "rejected": true,
+        "errors": [
+          "{'node_kind': 'array', 'local_key': 'x', 'item_node': 'x', 'children': ['x']} should not be valid under {'requ"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "moex-structure.yaml",
+    "class": "SchemaNode",
+    "index": 1,
+    "description": "scalar|enum запрещают children и item_node",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": true,
+    "satisfy_errors": [],
+    "violations": [
+      {
+        "slot": "children",
+        "rejected": false,
+        "errors": []
+      },
+      {
+        "slot": "item_node",
+        "rejected": false,
+        "errors": []
+      },
+      {
+        "slot": "ALL:children+item_node",
+        "rejected": true,
+        "errors": [
+          "{'node_kind': 'scalar', 'local_key': 'x', 'children': ['x'], 'item_node': 'x'} should not be valid under {'req"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "moex-structure.yaml",
+    "class": "SchemaNode",
+    "index": 2,
+    "description": "reference требует reference_target",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": true,
+    "satisfy_errors": [],
+    "violations": [
+      {
+        "slot": "reference_target",
+        "rejected": true,
+        "errors": [
+          "'reference_target' is a required property"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "moex-technical.yaml",
+    "class": "DataCarrier",
+    "index": 0,
+    "description": "in_memory носитель не имеет location_uri и region",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": true,
+    "satisfy_errors": [],
+    "violations": [
+      {
+        "slot": "location_uri",
+        "rejected": false,
+        "errors": []
+      },
+      {
+        "slot": "region",
+        "rejected": false,
+        "errors": []
+      },
+      {
+        "slot": "ALL:location_uri+region",
+        "rejected": true,
+        "errors": [
+          "{'asset_namespace': 'x', 'qualified_name': 'x', 'system_ref': 'x', 'asset_kind': 'in_memory', 'name': 'x', 'de"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "moex-technical.yaml",
+    "class": "AccessPoint",
+    "index": 0,
+    "description": "operation требует interface_ref",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": true,
+    "satisfy_errors": [],
+    "violations": [
+      {
+        "slot": "interface_ref",
+        "rejected": true,
+        "errors": [
+          "'interface_ref' is a required property"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "moex-technical.yaml",
+    "class": "AccessPoint",
+    "index": 1,
+    "description": "interface не имеет operation-полей",
+    "base_ok": true,
+    "base_errors": [],
+    "satisfy_ok": true,
+    "satisfy_errors": [],
+    "violations": [
+      {
+        "slot": "operation_name",
+        "rejected": false,
+        "errors": []
+      },
+      {
+        "slot": "http_method",
+        "rejected": false,
+        "errors": []
+      },
+      {
+        "slot": "path_template",
+        "rejected": false,
+        "errors": []
+      },
+      {
+        "slot": "message_refs",
+        "rejected": false,
+        "errors": []
+      },
+      {
+        "slot": "ALL:operation_name+http_method+path_template+message_refs",
+        "rejected": true,
+        "errors": [
+          "{'asset_namespace': 'x', 'qualified_name': 'x', 'system_ref': 'x', 'asset_kind': 'interface', 'name': 'x', 'de"
+        ]
+      }
+    ]
+  }
+]
