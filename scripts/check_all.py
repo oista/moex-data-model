@@ -13,9 +13,10 @@ Mirrors Makefile ``check`` plus ``architecture-check`` and ``publish-gate``
 3. validate-schemas            → scripts/validate-schemas.ps1
 4. validate-examples           → scripts/validate-examples.ps1
 5. validate-requirements       → scripts/validate-requirements.ps1
-6. compare-golden              → scripts/compare-golden.ps1
-7. architecture-check          → pytest + architecture_check.cli (Makefile)
-8. publish-gate                → python -m moex_model_cli.gates.publish_gate
+6. check-constraints           → scripts/check_constraint_matrix.py (ADR-045)
+7. compare-golden              → scripts/compare-golden.ps1
+8. architecture-check          → pytest + architecture_check.cli (Makefile)
+9. publish-gate                → python -m moex_model_cli.gates.publish_gate
 
 Usage (from repo root)::
 
@@ -47,6 +48,7 @@ STEP_IDS = (
     "validate-schemas",
     "validate-examples",
     "validate-requirements",
+    "check-constraints",
     "compare-golden",
     "architecture-check",
     "publish-gate",
@@ -181,6 +183,17 @@ def _run_python_module(python: str, module: str, *args: str) -> int:
     return int(proc.returncode)
 
 
+def _run_python_script(python: str, script_rel: str, *args: str) -> int:
+    script = REPO_ROOT / script_rel
+    if not script.is_file():
+        print(f"MISSING script: {script}", file=sys.stderr)
+        return 2
+    cmd = [python, str(script), *args]
+    print(f"+ {' '.join(cmd)}")
+    proc = subprocess.run(cmd, cwd=str(REPO_ROOT), check=False)
+    return int(proc.returncode)
+
+
 def _run_pytest(python: str, *paths: str) -> int:
     cmd = [python, "-m", "pytest", *paths, "-q"]
     print(f"+ {' '.join(cmd)}")
@@ -209,6 +222,9 @@ def run_step(step_id: str, python: str) -> StepResult:
         elif step_id == "validate-requirements":
             # Makefile: validate-requirements
             code = _run_ps1("scripts/validate-requirements.ps1")
+        elif step_id == "check-constraints":
+            # Makefile: check-constraints (ADR-045)
+            code = _run_python_script(python, "scripts/check_constraint_matrix.py")
         elif step_id == "compare-golden":
             # Makefile: compare-golden
             code = _run_ps1("scripts/compare-golden.ps1")
