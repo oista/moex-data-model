@@ -236,12 +236,12 @@ def test_remove_previously_deprecated_marked(tmp_path: Path) -> None:
 def test_changelog_covers_breaking(tmp_path: Path) -> None:
     left = _write_schema(
         tmp_path / "left.yaml",
-        {"classes": {"PhysicalObject": {}}},
+        {"classes": {"LegacyWidget": {}}},
     )
     right = _write_schema(tmp_path / "right.yaml", {"classes": {}})
     changelog = tmp_path / "CHANGELOG.md"
     changelog.write_text(
-        "Breaking: removed PhysicalObject class.\n",
+        "Breaking: removed LegacyWidget class.\n",
         encoding="utf-8",
     )
     result = diff_schemas(

@@ -172,7 +172,7 @@ def _changelog_covers_schema_break(text: str) -> bool:
 
 def _change_covered_by_changelog(change: SemanticChange, text: str) -> bool:
     subject = change.subject_ref or ""
-    # subject like "class:PhysicalObject" / "enum:PhysicalObjectKindEnum#column"
+    # subject like "class:LegacyWidget" / "enum:StatusEnum#column"
     name = subject.split(":", 1)[-1].split("#", 1)[0]
     if name and name in text:
         return True
