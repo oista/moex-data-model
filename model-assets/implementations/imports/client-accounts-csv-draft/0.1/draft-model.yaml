@@ -27,7 +27,6 @@ logical_entities:
     data_type_ref: dams:datatype/string
 mappings:
 - element_id: dams:mapping/csv-draft/account-id
-  name: map_account_id
   description: CSV account_id → logical accountId
   mapping_type: field_mapping
   source_refs:

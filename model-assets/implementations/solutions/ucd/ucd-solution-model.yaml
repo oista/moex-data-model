@@ -312,8 +312,7 @@ logical_entities:
   business_key_kind: surrogate
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
-  alignment_rationale: UCD EMPOYEE реализует Employee (reified роль Person); Person уже на UCD PERSON. Связь EMPOYEE→PERSON
-    закрывает LDM-008.
+  alignment_rationale: UCD EMPOYEE реализует Employee (reified роль Person); Person уже на UCD PERSON. Связь EMPOYEE→PERSON закрывает LDM-008.
 - element_id: dams:logical/ucd/ORGANIZATION
   name: ORGANIZATION
   title: Организация
@@ -608,8 +607,7 @@ logical_entities:
   business_key_kind: surrogate
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
-  alignment_rationale: UCD POSITION — каталог должностей; ближайший корпоративный концепт StaffPosition (штатная единица).
-    Зерно без Department — осознанно.
+  alignment_rationale: UCD POSITION — каталог должностей; ближайший корпоративный концепт StaffPosition (штатная единица). Зерно без Department — осознанно.
 relationships:
 - element_id: dams:rel/ucd/AGREEMENT_to_ORGANIZATION_via_organizationId
   name: AGREEMENT_to_ORGANIZATION_via_organizationId
@@ -685,7 +683,6 @@ relationships:
   target_max_cardinality: 1
 mappings:
 - element_id: dams:mapping/ucd/map_AGREEMENT_id
-  name: map_AGREEMENT_id
   description: Mapping map_AGREEMENT_id
   lifecycle_status: draft
   source_refs:
@@ -695,7 +692,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_AGREEMENT_organizationId
-  name: map_AGREEMENT_organizationId
   description: Mapping map_AGREEMENT_organizationId
   lifecycle_status: draft
   source_refs:
@@ -705,7 +701,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_AGREEMENT_type
-  name: map_AGREEMENT_type
   description: Mapping map_AGREEMENT_type
   lifecycle_status: draft
   source_refs:
@@ -715,7 +710,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_AGREEMENT_status
-  name: map_AGREEMENT_status
   description: Mapping map_AGREEMENT_status
   lifecycle_status: draft
   source_refs:
@@ -725,7 +719,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_AGREEMENT_conclusionDate
-  name: map_AGREEMENT_conclusionDate
   description: Mapping map_AGREEMENT_conclusionDate
   lifecycle_status: draft
   source_refs:
@@ -735,7 +728,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_AUTHORIZATION_id
-  name: map_AUTHORIZATION_id
   description: Mapping map_AUTHORIZATION_id
   lifecycle_status: draft
   source_refs:
@@ -745,7 +737,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_AUTHORIZATION_employeeId
-  name: map_AUTHORIZATION_employeeId
   description: Mapping map_AUTHORIZATION_employeeId
   lifecycle_status: draft
   source_refs:
@@ -755,7 +746,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_AUTHORIZATION_type
-  name: map_AUTHORIZATION_type
   description: Mapping map_AUTHORIZATION_type
   lifecycle_status: draft
   source_refs:
@@ -765,7 +755,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_AUTHORIZATION_valid_from
-  name: map_AUTHORIZATION_valid_from
   description: Mapping map_AUTHORIZATION_valid_from
   lifecycle_status: draft
   source_refs:
@@ -775,7 +764,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_AUTHORIZATION_valid_to
-  name: map_AUTHORIZATION_valid_to
   description: Mapping map_AUTHORIZATION_valid_to
   lifecycle_status: draft
   source_refs:
@@ -785,7 +773,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_AUTHORIZATION_status
-  name: map_AUTHORIZATION_status
   description: Mapping map_AUTHORIZATION_status
   lifecycle_status: draft
   source_refs:
@@ -795,7 +782,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_EMPOYEE_id
-  name: map_EMPOYEE_id
   description: Mapping map_EMPOYEE_id
   lifecycle_status: draft
   source_refs:
@@ -805,7 +791,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_EMPOYEE_organizationId
-  name: map_EMPOYEE_organizationId
   description: Mapping map_EMPOYEE_organizationId
   lifecycle_status: draft
   source_refs:
@@ -815,7 +800,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_EMPOYEE_personId
-  name: map_EMPOYEE_personId
   description: Mapping map_EMPOYEE_personId
   lifecycle_status: draft
   source_refs:
@@ -825,7 +809,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_EMPOYEE_positionId
-  name: map_EMPOYEE_positionId
   description: Mapping map_EMPOYEE_positionId
   lifecycle_status: draft
   source_refs:
@@ -835,7 +818,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_EMPOYEE_full_name
-  name: map_EMPOYEE_full_name
   description: Mapping map_EMPOYEE_full_name
   lifecycle_status: draft
   source_refs:
@@ -845,7 +827,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_EMPOYEE_inn
-  name: map_EMPOYEE_inn
   description: Mapping map_EMPOYEE_inn
   lifecycle_status: draft
   source_refs:
@@ -855,7 +836,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_EMPOYEE_snils
-  name: map_EMPOYEE_snils
   description: Mapping map_EMPOYEE_snils
   lifecycle_status: draft
   source_refs:
@@ -865,7 +845,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_EMPOYEE_status
-  name: map_EMPOYEE_status
   description: Mapping map_EMPOYEE_status
   lifecycle_status: draft
   source_refs:
@@ -875,7 +854,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_EMPOYEE_hire_date
-  name: map_EMPOYEE_hire_date
   description: Mapping map_EMPOYEE_hire_date
   lifecycle_status: draft
   source_refs:
@@ -885,7 +863,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_EMPOYEE_termination_date
-  name: map_EMPOYEE_termination_date
   description: Mapping map_EMPOYEE_termination_date
   lifecycle_status: draft
   source_refs:
@@ -895,7 +872,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_ORGANIZATION_id
-  name: map_ORGANIZATION_id
   description: Mapping map_ORGANIZATION_id
   lifecycle_status: draft
   source_refs:
@@ -905,7 +881,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_ORGANIZATION_typeId
-  name: map_ORGANIZATION_typeId
   description: Mapping map_ORGANIZATION_typeId
   lifecycle_status: draft
   source_refs:
@@ -915,7 +890,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_ORGANIZATION_inn
-  name: map_ORGANIZATION_inn
   description: Mapping map_ORGANIZATION_inn
   lifecycle_status: draft
   source_refs:
@@ -925,7 +899,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_ORGANIZATION_shortName
-  name: map_ORGANIZATION_shortName
   description: Mapping map_ORGANIZATION_shortName
   lifecycle_status: draft
   source_refs:
@@ -935,7 +908,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_ORGANIZATION_kpp
-  name: map_ORGANIZATION_kpp
   description: Mapping map_ORGANIZATION_kpp
   lifecycle_status: draft
   source_refs:
@@ -945,7 +917,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_ORGANIZATION_ogrn
-  name: map_ORGANIZATION_ogrn
   description: Mapping map_ORGANIZATION_ogrn
   lifecycle_status: draft
   source_refs:
@@ -955,7 +926,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_ORGANIZATION_fullName
-  name: map_ORGANIZATION_fullName
   description: Mapping map_ORGANIZATION_fullName
   lifecycle_status: draft
   source_refs:
@@ -965,7 +935,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_ORGANIZATION_mcdbId
-  name: map_ORGANIZATION_mcdbId
   description: Mapping map_ORGANIZATION_mcdbId
   lifecycle_status: draft
   source_refs:
@@ -975,7 +944,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_ORGANIZATION_TYPE_Id
-  name: map_ORGANIZATION_TYPE_Id
   description: Mapping map_ORGANIZATION_TYPE_Id
   lifecycle_status: draft
   source_refs:
@@ -985,7 +953,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_ORGANIZATION_TYPE_typeName
-  name: map_ORGANIZATION_TYPE_typeName
   description: Mapping map_ORGANIZATION_TYPE_typeName
   lifecycle_status: draft
   source_refs:
@@ -995,7 +962,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_ORGANIZATION_TYPE_code
-  name: map_ORGANIZATION_TYPE_code
   description: Mapping map_ORGANIZATION_TYPE_code
   lifecycle_status: draft
   source_refs:
@@ -1005,7 +971,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_PERSON_id
-  name: map_PERSON_id
   description: Mapping map_PERSON_id
   lifecycle_status: draft
   source_refs:
@@ -1015,7 +980,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_PERSON_fullName
-  name: map_PERSON_fullName
   description: Mapping map_PERSON_fullName
   lifecycle_status: draft
   source_refs:
@@ -1025,7 +989,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_PERSON_birthDate
-  name: map_PERSON_birthDate
   description: Mapping map_PERSON_birthDate
   lifecycle_status: draft
   source_refs:
@@ -1035,7 +998,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_PERSON_inn
-  name: map_PERSON_inn
   description: Mapping map_PERSON_inn
   lifecycle_status: draft
   source_refs:
@@ -1045,7 +1007,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_PERSON_snils
-  name: map_PERSON_snils
   description: Mapping map_PERSON_snils
   lifecycle_status: draft
   source_refs:
@@ -1055,7 +1016,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_POSITION_id
-  name: map_POSITION_id
   description: Mapping map_POSITION_id
   lifecycle_status: draft
   source_refs:
@@ -1065,7 +1025,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_POSITION_name
-  name: map_POSITION_name
   description: Mapping map_POSITION_name
   lifecycle_status: draft
   source_refs:
@@ -1075,7 +1034,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/map_POSITION_code
-  name: map_POSITION_code
   description: Mapping map_POSITION_code
   lifecycle_status: draft
   source_refs:
@@ -1085,7 +1043,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/ucd/entity_phys_AGREEMENT
-  name: entity_phys_AGREEMENT
   description: Mapping entity_phys_AGREEMENT
   lifecycle_status: draft
   source_refs:
@@ -1096,7 +1053,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/ucd/entity_phys_AUTHORIZATION
-  name: entity_phys_AUTHORIZATION
   description: Mapping entity_phys_AUTHORIZATION
   lifecycle_status: draft
   source_refs:
@@ -1107,7 +1063,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/ucd/entity_phys_EMPOYEE
-  name: entity_phys_EMPOYEE
   description: Mapping entity_phys_EMPOYEE
   lifecycle_status: draft
   source_refs:
@@ -1118,7 +1073,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/ucd/entity_phys_ORGANIZATION
-  name: entity_phys_ORGANIZATION
   description: Mapping entity_phys_ORGANIZATION
   lifecycle_status: draft
   source_refs:
@@ -1129,7 +1083,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/ucd/entity_phys_ORGANIZATION_TYPE
-  name: entity_phys_ORGANIZATION_TYPE
   description: Mapping entity_phys_ORGANIZATION_TYPE
   lifecycle_status: draft
   source_refs:
@@ -1140,7 +1093,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/ucd/entity_phys_PERSON
-  name: entity_phys_PERSON
   description: Mapping entity_phys_PERSON
   lifecycle_status: draft
   source_refs:
@@ -1151,7 +1103,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/ucd/entity_phys_POSITION
-  name: entity_phys_POSITION
   description: Mapping entity_phys_POSITION
   lifecycle_status: draft
   source_refs:
@@ -1162,7 +1113,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/ucd/realizes_AGREEMENT
-  name: realizes_AGREEMENT
   description: UCD AGREEMENT realizes enterprise dams:concept/Agreement (ADR-021/029).
   lifecycle_status: draft
   source_refs:
@@ -1173,7 +1123,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/ucd/realizes_EMPOYEE
-  name: realizes_EMPOYEE
   description: UCD EMPOYEE realizes enterprise dams:concept/Employee (ADR-021/029).
   lifecycle_status: draft
   source_refs:
@@ -1184,7 +1133,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/ucd/realizes_ORGANIZATION
-  name: realizes_ORGANIZATION
   description: UCD ORGANIZATION realizes enterprise dams:concept/LegalEntity (ADR-021/029).
   lifecycle_status: draft
   source_refs:
@@ -1195,7 +1143,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/ucd/realizes_PERSON
-  name: realizes_PERSON
   description: UCD PERSON realizes enterprise dams:concept/Person (ADR-021/029).
   lifecycle_status: draft
   source_refs:
@@ -1206,7 +1153,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/ucd/realizes_POSITION
-  name: realizes_POSITION
   description: UCD POSITION realizes enterprise dams:concept/StaffPosition (ADR-021/029).
   lifecycle_status: draft
   source_refs:
