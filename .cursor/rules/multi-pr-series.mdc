@@ -1,0 +1,19 @@
+---
+description: Multi-PR series — one PR theme per branch/commit; do not mix PR-N with PR-M
+alwaysApply: true
+---
+
+# Multi-PR series discipline
+
+When a plan defines a sequence **PR-0 … PR-N** (or equivalent numbered steps):
+
+1. **One theme per PR.** While implementing `PR-K`, change only files that belong to that PR’s acceptance criteria. Do not edit paths reserved for `PR-M` (M ≠ K), even if the end state of the whole series is already known.
+2. **Deliver as separate commits or branches**, not one combined “all PRs green” tree. Preferred shapes:
+   - branch per PR (`docs/…-pr0-…`, `feat/…-pr1-…`, …), or
+   - stacked commits on one branch where each commit is reviewable as one PR topic.
+3. **PR-0 / inventory / ADR-only steps must not touch schemas or `generated/`** when the plan says so. A green `make check` / `check_all` on the final combined tree does **not** prove intermediate states are valid — verify each PR branch/commit separately.
+4. **Do not skip deprecation windows.** If the plan requires version A (deprecated) then version B (removal), leave A as a mergeable state with valid old data; do not jump straight to B and “fix” with strip scripts unless that is explicitly PR-B.
+5. **Schema diff and data migration diff must not mix** in the same commit when the plan separates them (prefer `ruamel.yaml` for data rewrites to preserve comments/key order).
+6. If a spike or prototype already produced the full end state, **archive it** (`wip/…`) and **re-cut** PR-0…PR-N from a clean base; do not open the monolith as PR-0.
+
+User / plan instructions always override this rule when they explicitly ask for a single combined change.
