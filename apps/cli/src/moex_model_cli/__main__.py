@@ -424,6 +424,27 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ontology.add_argument("--json", action="store_true", help="Print JSON")
 
+    digest = sub.add_parser(
+        "digest",
+        help="Verify or rewrite DataModelBinding.integrity_digest (ADR-034)",
+    )
+    _add_slice_args(digest)
+    digest.add_argument(
+        "--model",
+        default=None,
+        help="Filter by element_id substring or path substring",
+    )
+    digest.add_argument(
+        "--write",
+        action="store_true",
+        help="Write recomputed digests (examples/demo by default)",
+    )
+    digest.add_argument(
+        "--allow-non-demo-write",
+        action="store_true",
+        help="Allow --write for non-example bindings (requires process from ADR-034)",
+    )
+
     return parser
 
 
@@ -608,6 +629,15 @@ def main(argv: list[str] | None = None) -> int:
             to_schema=getattr(args, "to_schema", None),
             as_json=getattr(args, "json", False),
             out=getattr(args, "out", None),
+        )
+    elif args.command == "digest":
+        from moex_model_cli.commands.digest import run_digest
+
+        code, text = run_digest(
+            paths,
+            model=args.model,
+            write=args.write,
+            allow_non_demo_write=args.allow_non_demo_write,
         )
     else:
         return 2

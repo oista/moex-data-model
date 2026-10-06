@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check viewer-serve packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate ontology-check
+.PHONY: viewer viewer-check viewer-serve packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate digest-check ontology-check
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -88,6 +88,10 @@ generate-bundle:
 
 publish-gate:
 	$(PYTHON) -m moex_model_cli.gates.publish_gate
+
+# ADR-034: DataModelBinding.integrity_digest vs content
+digest-check:
+	$(PYTHON) -m moex_model_cli digest --root .
 
 # Digest check: contracts + json-schema + Stage 6/7 artifact matrix + bundle vs regenerate
 compare-golden:

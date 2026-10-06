@@ -33,5 +33,5 @@ selections:
     carrier_refs:
     - dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE
 compatibility_mode: backward
-integrity_digest: sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+integrity_digest: sha256:6589a675809d1597a6afa5bce63b4986a0352c59937fe48c7f3c300f41632378
 generated_at: '2026-09-16T20:30:00+03:00'
