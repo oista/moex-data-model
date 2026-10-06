@@ -9,6 +9,7 @@ imports:
   - linkml:types
   - moex-types
   - moex-registries
+  - moex-base
   - moex-governance
   - moex-core
   - moex-datatypes
@@ -21,13 +22,11 @@ classes:
     description: >
       Встраиваемый вспомогательный объект без собственного жизненного цикла и
       глобального element_id. Идентичность локальна относительно родителя
-      (local_key). Не путать с будущим IdentifiedElement (ADR-038).
+      (local_key). Не путать с IdentifiedElement (ADR-038 / ADR-044).
+    mixins:
+      - DescribedElement
     slots:
       - local_key
-      - description
-    slot_usage:
-      description:
-        required: false
 
   DataStructure:
     is_a: ModelElement
@@ -52,6 +51,10 @@ classes:
         unique_key_slots:
           - name
           - structure_version
+    slot_usage:
+      description:
+        required: false
+        recommended: true
     rules:
       - description: source_pointer требует source_artifact_ref
         preconditions:
@@ -103,8 +106,6 @@ classes:
       - is_unique
       - foreign_key_target
     slot_usage:
-      description:
-        required: false
       native_name:
         required: false
       native_type:
@@ -168,9 +169,6 @@ classes:
       - correlation_hint
     id_prefixes:
       - dams
-    slot_usage:
-      description:
-        required: false
 
 slots:
   local_key:
@@ -194,7 +192,7 @@ slots:
       Removed from mixin in 2.0.0.
     deprecated_element_has_possible_replacement: dams:schema_dialect
   structure_version:
-    range: SemVer
+    is_a: artifact_version
     required: true
     description: Версия структуры (SemVer).
   root_local_key:

@@ -29,6 +29,7 @@ Name: moex_dams
 | [DataModelBinding](DataModelBinding.md) | Дочерняя модельная спецификация дата-контракта, фиксирующая неизменяемую реви... |
 | [DataStructure](DataStructure.md) | Именованная версия структуры данных: корень дерева SchemaNode с форматом и оп... |
 | [DataType](DataType.md) | Корпоративный тип данных: семейство, параметры представления и соответствие X... |
+| [DescribedElement](DescribedElement.md) | Текстовое описание элемента |
 | [Dimension](Dimension.md) | Переиспользуемое аналитическое измерение, связанное с логическими атрибутами |
 | [DomainContext](DomainContext.md) | Ограниченный логический контекст с собственной терминологией и областью ответ... |
 | [EmbeddedElement](EmbeddedElement.md) | Встраиваемый вспомогательный объект без собственного жизненного цикла и глоба... |
@@ -37,7 +38,7 @@ Name: moex_dams
 | [FormalCheck](FormalCheck.md) | Одна машиночитаемая проверка требования |
 | [GlossaryTerm](GlossaryTerm.md) | Термин корпоративного бизнес-глоссария |
 | [HasBusinessClassification](HasBusinessClassification.md) | Классификация роли и бизнес-значимости логической сущности |
-| [HasDefinition](HasDefinition.md) | Mixin эталонного определения (ADR-025) |
+| [HasDefinition](HasDefinition.md) | Mixin эталонного определения (ADR-025 / ADR-044) |
 | [HasGovernanceClassification](HasGovernanceClassification.md) | Базовая и специальная классификация чувствительности данных |
 | [HasLifecycle](HasLifecycle.md) | Mixin жизненного цикла: статус, период действия и ссылка на заменяющий элемен... |
 | [HasLocation](HasLocation.md) | Mixin расположения носителя или точки доступа |
@@ -45,7 +46,10 @@ Name: moex_dams
 | [HasPolicyBindings](HasPolicyBindings.md) | Mixin привязки управляемых политик к элементу модели |
 | [HasProtocolBinding](HasProtocolBinding.md) | Mixin протокола доступа для точки доступа (AccessPoint) |
 | [HasProvenance](HasProvenance.md) | Mixin происхождения и согласования: исходный артефакт, evidence, статус и сог... |
+| [HasSemanticAnnotations](HasSemanticAnnotations.md) | Семантические аннотации (glossary_term_refs, tags) |
 | [HasStructure](HasStructure.md) | Mixin структуры данных носителя |
+| [HasValidity](HasValidity.md) | Период действия элемента (valid_from, valid_to) |
+| [IdentifiedElement](IdentifiedElement.md) | Элемент с глобальным идентификатором element_id |
 | [IntegrationReference](IntegrationReference.md) | Ссылка на интеграцию в Clinkr |
 | [ITPlatform](ITPlatform.md) | ИТ-платформа; мастер данных — EAM |
 | [ITSolution](ITSolution.md) | ИТ-решение, объединяющее одну или несколько ИТ-систем; мастер данных — EAM |
@@ -55,10 +59,11 @@ Name: moex_dams
 | [Mapping](Mapping.md) | Явное соответствие между элементами |
 | [Message](Message.md) | Элемент интеграционной модели: сообщение с payload/headers структурами |
 | [Metric](Metric.md) | Управляемое определение бизнес- или технической метрики; является опциональны... |
-| [ModelElement](ModelElement.md) | Абстрактный корень иерархии элементов модели: общая идентичность (element_id)... |
+| [ModelElement](ModelElement.md) | Абстрактный корень именованных элементов модели: IdentifiedElement + NamedEle... |
 | [ModelPackage](ModelPackage.md) | Версионируемый артефакт модели данных: либо корпоративная conceptual модель (... |
 | [ModelSelection](ModelSelection.md) | Переиспользуемый набор выбранных сущностей, атрибутов и физических представле... |
 | [MOEXModelRepository](MOEXModelRepository.md) | Корневой контейнер для проверки набора моделей, ссылочных проекций справочник... |
+| [NamedElement](NamedElement.md) | Именование элемента модели (name, title, aliases) |
 | [NativeTypeBinding](NativeTypeBinding.md) | Привязка нативного типа диалекта (SQL, JSON Schema и т |
 | [OrganizationUnit](OrganizationUnit.md) | Организационное подразделение |
 | [PermissibleValue](PermissibleValue.md) | Допустимое значение внутри ValueDomain (встраиваемый) |
@@ -101,6 +106,7 @@ Name: moex_dams
 | [approval_status](approval_status.md) |  |
 | [approved_at](approved_at.md) |  |
 | [approved_by_ref](approved_by_ref.md) |  |
+| [artifact_version](artifact_version.md) | Абстрактный слот версии артефакта (SemVer) |
 | [asset_kind](asset_kind.md) | Разновидность актива |
 | [asset_namespace](asset_namespace.md) | Пространство имён источника по аналогии с OpenLineage namespace (например pos... |
 | [assignment_id](assignment_id.md) |  |

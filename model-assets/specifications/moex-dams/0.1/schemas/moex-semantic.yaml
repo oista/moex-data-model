@@ -38,6 +38,9 @@ classes:
       - value_meanings
       - concept_scheme_uri
       - broader_domain_ref
+    slot_usage:
+      description:
+        required: true
     rules:
       - description: described-домен не содержит value_meanings
         preconditions:

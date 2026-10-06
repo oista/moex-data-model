@@ -1,4 +1,4 @@
-"""Compute / verify DataModelBinding.integrity_digest (ADR-034)."""
+"""Compute / verify DataModelBinding.integrity_digest (ADR-042)."""
 
 from __future__ import annotations
 
@@ -130,7 +130,7 @@ def write_digests(
         if not is_example and not allow_non_demo:
             raise ValueError(
                 f"refusing to write digest for non-demo binding {eid or path} "
-                f"(pass --allow-non-demo-write; see ADR-034)"
+                f"(pass --allow-non-demo-write; see ADR-042)"
             )
         digest = compute_binding_digest(binding)
         text = path.read_text(encoding="utf-8")

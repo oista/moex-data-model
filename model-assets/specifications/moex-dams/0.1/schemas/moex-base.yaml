@@ -1,0 +1,86 @@
+id: https://data.moex.com/dams/base/v0.1
+name: moex_base
+version: 0.1.0
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  dams: https://data.moex.com/dams/
+imports:
+  - linkml:types
+  - moex-types
+  - moex-registries
+default_prefix: dams
+default_range: string
+
+classes:
+  IdentifiedElement:
+    abstract: true
+    description: >
+      Элемент с глобальным идентификатором element_id. Не смешивать с
+      EmbeddedElement (local_key). ADR-044.
+    slots:
+      - element_id
+
+  NamedElement:
+    mixin: true
+    description: Именование элемента модели (name, title, aliases). ADR-044.
+    slots:
+      - name
+      - title
+      - aliases
+
+  DescribedElement:
+    mixin: true
+    description: >
+      Текстовое описание элемента. Глобально не обязательно; обязательность
+      задаётся slot_usage на конкретных классах (ADR-044 / ADR-025).
+    slots:
+      - description
+
+  HasSemanticAnnotations:
+    mixin: true
+    description: Семантические аннотации (glossary_term_refs, tags). ADR-044.
+    slots:
+      - glossary_term_refs
+      - tags
+
+  HasValidity:
+    mixin: true
+    description: Период действия элемента (valid_from, valid_to). ADR-044.
+    slots:
+      - valid_from
+      - valid_to
+
+slots:
+  element_id:
+    identifier: true
+    range: uriorcurie
+    required: true
+  name:
+    range: string
+    required: true
+  title:
+    range: string
+  description:
+    range: string
+    required: false
+  aliases:
+    range: string
+    multivalued: true
+  glossary_term_refs:
+    range: GlossaryTerm
+    multivalued: true
+    inlined: false
+  tags:
+    range: string
+    multivalued: true
+  valid_from:
+    range: datetime
+  valid_to:
+    range: datetime
+  artifact_version:
+    abstract: true
+    range: SemVer
+    description: >
+      Абстрактный слот версии артефакта (SemVer). Специализации —
+      model_version и structure_version (ADR-044 / D6).

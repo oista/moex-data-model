@@ -44,6 +44,9 @@ classes:
       data_type_name_key:
         unique_key_slots:
           - type_name
+    slot_usage:
+      description:
+        required: true
     rules:
       - description: precision только для decimal
         preconditions:
@@ -129,6 +132,8 @@ classes:
       - value_set_source
       - dynamic_query
     slot_usage:
+      description:
+        required: true
       data_type_ref:
         required: true
     rules:

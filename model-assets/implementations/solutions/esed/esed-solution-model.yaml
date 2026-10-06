@@ -618,8 +618,7 @@ logical_entities:
   business_key_kind: surrogate
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
-  alignment_rationale: ЕСЭД employee реализует Employee. Отдельного Person в пакете нет; Person живёт в MDM/UCD (LDM-008 warning
-    допустим).
+  alignment_rationale: ЕСЭД employee реализует Employee. Отдельного Person в пакете нет; Person живёт в MDM/UCD (LDM-008 warning допустим).
 - element_id: dams:logical/esed/file
   name: file
   title: file
@@ -901,8 +900,7 @@ logical_entities:
   business_key_kind: surrogate
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
-  alignment_rationale: ЕСЭД organization (партнёр ЭДО, ИНН/КПП/ОГРН) реализует LegalEntity; не Counterparty (коммерческая
-    роль).
+  alignment_rationale: ЕСЭД organization (партнёр ЭДО, ИНН/КПП/ОГРН) реализует LegalEntity; не Counterparty (коммерческая роль).
 - element_id: dams:logical/esed/organization_employee
   name: organization_employee
   title: organization_employee
@@ -1219,7 +1217,6 @@ relationships:
   target_max_cardinality: 1
 mappings:
 - element_id: dams:mapping/esed/map_attorney_check_info_instance_id
-  name: map_attorney_check_info_instance_id
   description: Mapping map_attorney_check_info_instance_id
   lifecycle_status: draft
   source_refs:
@@ -1229,7 +1226,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_attorney_check_info_validation_status
-  name: map_attorney_check_info_validation_status
   description: Mapping map_attorney_check_info_validation_status
   lifecycle_status: draft
   source_refs:
@@ -1239,7 +1235,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_attorney_check_info_signature_status
-  name: map_attorney_check_info_signature_status
   description: Mapping map_attorney_check_info_signature_status
   lifecycle_status: draft
   source_refs:
@@ -1249,7 +1244,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_attorney_check_info_representative_signature_status
-  name: map_attorney_check_info_representative_signature_status
   description: Mapping map_attorney_check_info_representative_signature_status
   lifecycle_status: draft
   source_refs:
@@ -1259,7 +1253,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_attorney_check_info_validation_json_data
-  name: map_attorney_check_info_validation_json_data
   description: Mapping map_attorney_check_info_validation_json_data
   lifecycle_status: draft
   source_refs:
@@ -1269,7 +1262,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_common_state_state_id
-  name: map_common_state_state_id
   description: Mapping map_common_state_state_id
   lifecycle_status: draft
   source_refs:
@@ -1279,7 +1271,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_common_state_state_name
-  name: map_common_state_state_name
   description: Mapping map_common_state_state_name
   lifecycle_status: draft
   source_refs:
@@ -1289,7 +1280,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_common_type_type_id
-  name: map_common_type_type_id
   description: Mapping map_common_type_type_id
   lifecycle_status: draft
   source_refs:
@@ -1299,7 +1289,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_common_type_type_name
-  name: map_common_type_type_name
   description: Mapping map_common_type_type_name
   lifecycle_status: draft
   source_refs:
@@ -1309,7 +1298,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_division_division_id
-  name: map_division_division_id
   description: Mapping map_division_division_id
   lifecycle_status: draft
   source_refs:
@@ -1319,7 +1307,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_division_division_name
-  name: map_division_division_name
   description: Mapping map_division_division_name
   lifecycle_status: draft
   source_refs:
@@ -1329,7 +1316,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_division_parent_id
-  name: map_division_parent_id
   description: Mapping map_division_parent_id
   lifecycle_status: draft
   source_refs:
@@ -1339,7 +1325,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_document_id
-  name: map_document_document_id
   description: Mapping map_document_document_id
   lifecycle_status: draft
   source_refs:
@@ -1349,7 +1334,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_register_date
-  name: map_document_register_date
   description: Mapping map_document_register_date
   lifecycle_status: draft
   source_refs:
@@ -1359,7 +1343,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_register_number
-  name: map_document_register_number
   description: Mapping map_document_register_number
   lifecycle_status: draft
   source_refs:
@@ -1369,7 +1352,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_register_external_number
-  name: map_document_register_external_number
   description: Mapping map_document_register_external_number
   lifecycle_status: draft
   source_refs:
@@ -1379,7 +1361,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_register_employee_id
-  name: map_document_register_employee_id
   description: Mapping map_document_register_employee_id
   lifecycle_status: draft
   source_refs:
@@ -1389,7 +1370,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_author_employee_id
-  name: map_document_author_employee_id
   description: Mapping map_document_author_employee_id
   lifecycle_status: draft
   source_refs:
@@ -1399,7 +1379,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_document_name
-  name: map_document_document_name
   description: Mapping map_document_document_name
   lifecycle_status: draft
   source_refs:
@@ -1409,7 +1388,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_content
-  name: map_document_content
   description: Mapping map_document_content
   lifecycle_status: draft
   source_refs:
@@ -1419,7 +1397,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_division_id
-  name: map_document_division_id
   description: Mapping map_document_division_id
   lifecycle_status: draft
   source_refs:
@@ -1429,7 +1406,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_type_id
-  name: map_document_type_id
   description: Mapping map_document_type_id
   lifecycle_status: draft
   source_refs:
@@ -1439,7 +1415,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_state_id
-  name: map_document_state_id
   description: Mapping map_document_state_id
   lifecycle_status: draft
   source_refs:
@@ -1449,7 +1424,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_status_id
-  name: map_document_status_id
   description: Mapping map_document_status_id
   lifecycle_status: draft
   source_refs:
@@ -1459,7 +1433,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_delivery_type_id
-  name: map_document_delivery_type_id
   description: Mapping map_document_delivery_type_id
   lifecycle_status: draft
   source_refs:
@@ -1469,7 +1442,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_delivery_date
-  name: map_document_delivery_date
   description: Mapping map_document_delivery_date
   lifecycle_status: draft
   source_refs:
@@ -1479,7 +1451,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_sender_organization_id
-  name: map_document_sender_organization_id
   description: Mapping map_document_sender_organization_id
   lifecycle_status: draft
   source_refs:
@@ -1489,7 +1460,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_sender_employee_id
-  name: map_document_sender_employee_id
   description: Mapping map_document_sender_employee_id
   lifecycle_status: draft
   source_refs:
@@ -1499,7 +1469,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_answer_not_need
-  name: map_document_answer_not_need
   description: Mapping map_document_answer_not_need
   lifecycle_status: draft
   source_refs:
@@ -1509,7 +1478,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_item_id
-  name: map_document_item_id
   description: Mapping map_document_item_id
   lifecycle_status: draft
   source_refs:
@@ -1519,7 +1487,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_indoc_processing_status
-  name: map_document_indoc_processing_status
   description: Mapping map_document_indoc_processing_status
   lifecycle_status: draft
   source_refs:
@@ -1529,7 +1496,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_document_type_indoc
-  name: map_document_document_type_indoc
   description: Mapping map_document_document_type_indoc
   lifecycle_status: draft
   source_refs:
@@ -1539,7 +1505,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_document_type_kbd
-  name: map_document_document_type_kbd
   description: Mapping map_document_document_type_kbd
   lifecycle_status: draft
   source_refs:
@@ -1549,7 +1514,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_kbd_sync_status
-  name: map_document_kbd_sync_status
   description: Mapping map_document_kbd_sync_status
   lifecycle_status: draft
   source_refs:
@@ -1559,7 +1523,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_kbd_lku_document_id
-  name: map_document_kbd_lku_document_id
   description: Mapping map_document_kbd_lku_document_id
   lifecycle_status: draft
   source_refs:
@@ -1569,7 +1532,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_creation_date_time
-  name: map_document_creation_date_time
   description: Mapping map_document_creation_date_time
   lifecycle_status: draft
   source_refs:
@@ -1579,7 +1541,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_document_change_date_time
-  name: map_document_change_date_time
   description: Mapping map_document_change_date_time
   lifecycle_status: draft
   source_refs:
@@ -1589,7 +1550,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_employee_employee_id
-  name: map_employee_employee_id
   description: Mapping map_employee_employee_id
   lifecycle_status: draft
   source_refs:
@@ -1599,7 +1559,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_employee_last_name
-  name: map_employee_last_name
   description: Mapping map_employee_last_name
   lifecycle_status: draft
   source_refs:
@@ -1609,7 +1568,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_employee_first_name
-  name: map_employee_first_name
   description: Mapping map_employee_first_name
   lifecycle_status: draft
   source_refs:
@@ -1619,7 +1577,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_employee_middle_name
-  name: map_employee_middle_name
   description: Mapping map_employee_middle_name
   lifecycle_status: draft
   source_refs:
@@ -1629,7 +1586,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_employee_ad_login
-  name: map_employee_ad_login
   description: Mapping map_employee_ad_login
   lifecycle_status: draft
   source_refs:
@@ -1639,7 +1595,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_employee_division_id
-  name: map_employee_division_id
   description: Mapping map_employee_division_id
   lifecycle_status: draft
   source_refs:
@@ -1649,7 +1604,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_file_id
-  name: map_file_id
   description: Mapping map_file_id
   lifecycle_status: draft
   source_refs:
@@ -1659,7 +1613,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_file_owner_card_id
-  name: map_file_owner_card_id
   description: Mapping map_file_owner_card_id
   lifecycle_status: draft
   source_refs:
@@ -1669,7 +1622,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_file_file_name
-  name: map_file_file_name
   description: Mapping map_file_file_name
   lifecycle_status: draft
   source_refs:
@@ -1679,7 +1631,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_file_binary_id
-  name: map_file_binary_id
   description: Mapping map_file_binary_id
   lifecycle_status: draft
   source_refs:
@@ -1689,7 +1640,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_file_file_type
-  name: map_file_file_type
   description: Mapping map_file_file_type
   lifecycle_status: draft
   source_refs:
@@ -1699,7 +1649,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_file_binary_id
-  name: map_file_binary_id
   description: Mapping map_file_binary_id
   lifecycle_status: draft
   source_refs:
@@ -1709,7 +1658,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_file_binary_path
-  name: map_file_binary_path
   description: Mapping map_file_binary_path
   lifecycle_status: draft
   source_refs:
@@ -1719,7 +1667,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_file_binary_storage_id
-  name: map_file_binary_storage_id
   description: Mapping map_file_binary_storage_id
   lifecycle_status: draft
   source_refs:
@@ -1729,7 +1676,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_instance_instance_id
-  name: map_instance_instance_id
   description: Mapping map_instance_instance_id
   lifecycle_status: draft
   source_refs:
@@ -1739,7 +1685,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_instance_deleted
-  name: map_instance_deleted
   description: Mapping map_instance_deleted
   lifecycle_status: draft
   source_refs:
@@ -1749,7 +1694,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_organization_organization_id
-  name: map_organization_organization_id
   description: Mapping map_organization_organization_id
   lifecycle_status: draft
   source_refs:
@@ -1759,7 +1703,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_organization_organization_name
-  name: map_organization_organization_name
   description: Mapping map_organization_organization_name
   lifecycle_status: draft
   source_refs:
@@ -1769,7 +1712,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_organization_organization_full_name
-  name: map_organization_organization_full_name
   description: Mapping map_organization_organization_full_name
   lifecycle_status: draft
   source_refs:
@@ -1779,7 +1721,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_organization_inn
-  name: map_organization_inn
   description: Mapping map_organization_inn
   lifecycle_status: draft
   source_refs:
@@ -1789,7 +1730,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_organization_kpp
-  name: map_organization_kpp
   description: Mapping map_organization_kpp
   lifecycle_status: draft
   source_refs:
@@ -1799,7 +1739,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_organization_ogrn
-  name: map_organization_ogrn
   description: Mapping map_organization_ogrn
   lifecycle_status: draft
   source_refs:
@@ -1809,7 +1748,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_organization_comments
-  name: map_organization_comments
   description: Mapping map_organization_comments
   lifecycle_status: draft
   source_refs:
@@ -1819,7 +1757,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_organization_fax
-  name: map_organization_fax
   description: Mapping map_organization_fax
   lifecycle_status: draft
   source_refs:
@@ -1829,7 +1766,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_organization_employee_employee_id
-  name: map_organization_employee_employee_id
   description: Mapping map_organization_employee_employee_id
   lifecycle_status: draft
   source_refs:
@@ -1839,7 +1775,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_organization_employee_last_name
-  name: map_organization_employee_last_name
   description: Mapping map_organization_employee_last_name
   lifecycle_status: draft
   source_refs:
@@ -1849,7 +1784,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_organization_employee_first_name
-  name: map_organization_employee_first_name
   description: Mapping map_organization_employee_first_name
   lifecycle_status: draft
   source_refs:
@@ -1859,7 +1793,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_organization_employee_middle_name
-  name: map_organization_employee_middle_name
   description: Mapping map_organization_employee_middle_name
   lifecycle_status: draft
   source_refs:
@@ -1869,7 +1802,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_universal_item_item_id
-  name: map_universal_item_item_id
   description: Mapping map_universal_item_item_id
   lifecycle_status: draft
   source_refs:
@@ -1879,7 +1811,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_universal_item_item_name
-  name: map_universal_item_item_name
   description: Mapping map_universal_item_item_name
   lifecycle_status: draft
   source_refs:
@@ -1889,7 +1820,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_universal_item_item_card
-  name: map_universal_item_item_card
   description: Mapping map_universal_item_item_card
   lifecycle_status: draft
   source_refs:
@@ -1899,7 +1829,6 @@ mappings:
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/entity_phys_attorney_check_info
-  name: entity_phys_attorney_check_info
   description: Mapping entity_phys_attorney_check_info
   lifecycle_status: draft
   source_refs:
@@ -1910,7 +1839,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/entity_phys_common_state
-  name: entity_phys_common_state
   description: Mapping entity_phys_common_state
   lifecycle_status: draft
   source_refs:
@@ -1921,7 +1849,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/entity_phys_common_type
-  name: entity_phys_common_type
   description: Mapping entity_phys_common_type
   lifecycle_status: draft
   source_refs:
@@ -1932,7 +1859,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/entity_phys_division
-  name: entity_phys_division
   description: Mapping entity_phys_division
   lifecycle_status: draft
   source_refs:
@@ -1943,7 +1869,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/entity_phys_document
-  name: entity_phys_document
   description: Mapping entity_phys_document
   lifecycle_status: draft
   source_refs:
@@ -1954,7 +1879,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/entity_phys_employee
-  name: entity_phys_employee
   description: Mapping entity_phys_employee
   lifecycle_status: draft
   source_refs:
@@ -1965,7 +1889,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/entity_phys_file
-  name: entity_phys_file
   description: Mapping entity_phys_file
   lifecycle_status: draft
   source_refs:
@@ -1976,7 +1899,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/entity_phys_file_binary
-  name: entity_phys_file_binary
   description: Mapping entity_phys_file_binary
   lifecycle_status: draft
   source_refs:
@@ -1987,7 +1909,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/entity_phys_instance
-  name: entity_phys_instance
   description: Mapping entity_phys_instance
   lifecycle_status: draft
   source_refs:
@@ -1998,7 +1919,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/entity_phys_organization
-  name: entity_phys_organization
   description: Mapping entity_phys_organization
   lifecycle_status: draft
   source_refs:
@@ -2009,7 +1929,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/entity_phys_organization_employee
-  name: entity_phys_organization_employee
   description: Mapping entity_phys_organization_employee
   lifecycle_status: draft
   source_refs:
@@ -2020,7 +1939,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/entity_phys_universal_item
-  name: entity_phys_universal_item
   description: Mapping entity_phys_universal_item
   lifecycle_status: draft
   source_refs:
@@ -2031,7 +1949,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/realizes_organization
-  name: realizes_organization
   description: ESED organization realizes enterprise dams:concept/LegalEntity (ADR-021/029).
   lifecycle_status: draft
   source_refs:
@@ -2042,7 +1959,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/realizes_employee
-  name: realizes_employee
   description: ESED employee realizes enterprise dams:concept/Employee (ADR-021/029).
   lifecycle_status: draft
   source_refs:
@@ -2053,7 +1969,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/realizes_organization_employee
-  name: realizes_organization_employee
   description: ESED organization_employee realizes enterprise dams:concept/Person (ADR-021/029).
   lifecycle_status: draft
   source_refs:
@@ -2064,7 +1979,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/realizes_division
-  name: realizes_division
   description: ESED division realizes enterprise dams:concept/Department (ADR-021/029).
   lifecycle_status: draft
   source_refs:
@@ -2075,7 +1989,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/realizes_document
-  name: realizes_document
   description: ESED document realizes enterprise dams:concept/SupportingDocument (ADR-021/029).
   lifecycle_status: draft
   source_refs:
@@ -2086,7 +1999,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/realizes_instance
-  name: realizes_instance
   description: ESED instance realizes enterprise dams:concept/SupportingDocument (ADR-021/029).
   lifecycle_status: draft
   source_refs:
@@ -2097,7 +2009,6 @@ mappings:
   mapping_cardinality: one_to_one
   approval_status: proposed
 - element_id: dams:mapping/esed/realizes_attorney_check_info
-  name: realizes_attorney_check_info
   description: ESED attorney_check_info realizes enterprise dams:concept/SupportingDocument (ADR-021/029).
   lifecycle_status: draft
   source_refs:

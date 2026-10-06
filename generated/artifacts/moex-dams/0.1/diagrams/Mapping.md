@@ -5,13 +5,15 @@
  classDiagram
     class Mapping
     click Mapping href "../Mapping"
+      DescribedElement <|-- Mapping
+        click DescribedElement href "../DescribedElement"
+      HasLifecycle <|-- Mapping
+        click HasLifecycle href "../HasLifecycle"
       HasProvenance <|-- Mapping
         click HasProvenance href "../HasProvenance"
-      ModelElement <|-- Mapping
-        click ModelElement href "../ModelElement"
+      IdentifiedElement <|-- Mapping
+        click IdentifiedElement href "../IdentifiedElement"
       
-      Mapping : aliases
-        
       Mapping : approval_status
         
           
@@ -46,17 +48,6 @@
         
       Mapping : evidence_refs
         
-      Mapping : glossary_term_refs
-        
-          
-    
-        
-        
-        Mapping --> "*" GlossaryTerm : glossary_term_refs
-        click GlossaryTerm href "../GlossaryTerm"
-    
-
-        
       Mapping : lifecycle_status
         
           
@@ -90,17 +81,11 @@
     
 
         
-      Mapping : name
-        
       Mapping : source_artifact_ref
         
       Mapping : source_refs
         
-      Mapping : tags
-        
       Mapping : target_refs
-        
-      Mapping : title
         
       Mapping : transformation_expression
         

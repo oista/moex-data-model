@@ -5,8 +5,6 @@
  classDiagram
     class DataModelBinding
     click DataModelBinding href "../DataModelBinding"
-      HasLifecycle <|-- DataModelBinding
-        click HasLifecycle href "../HasLifecycle"
       HasOwnership <|-- DataModelBinding
         click HasOwnership href "../HasOwnership"
       ModelElement <|-- DataModelBinding

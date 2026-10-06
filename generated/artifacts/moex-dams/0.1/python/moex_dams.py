@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-06T09:36:48
+# Generation date: 2026-10-06T20:54:08
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -60,7 +60,7 @@ from linkml_runtime.linkml_model.types import Boolean, Datetime, Decimal, Intege
 from linkml_runtime.utils.metamodelcore import Bool, Decimal, URI, URIorCURIE, XSDDateTime
 
 metamodel_version = "1.11.0"
-version = "2.0.0"
+version = "3.0.0"
 
 # Namespaces
 DAMS = CurieNamespace('dams', 'https://data.moex.com/dams/')
@@ -145,6 +145,10 @@ class IntegrationReferenceRegistryId(RegistryEntryRegistryId):
     pass
 
 
+class IdentifiedElementElementId(URIorCURIE):
+    pass
+
+
 class ClassificationAssignmentAssignmentId(URIorCURIE):
     pass
 
@@ -157,7 +161,7 @@ class ScopedDefinitionScopedDefinitionId(URIorCURIE):
     pass
 
 
-class ModelElementElementId(URIorCURIE):
+class ModelElementElementId(IdentifiedElementElementId):
     pass
 
 
@@ -197,7 +201,7 @@ class ExternalClassRefExternalClassRefId(URIorCURIE):
     pass
 
 
-class MappingElementId(ModelElementElementId):
+class MappingElementId(IdentifiedElementElementId):
     pass
 
 
@@ -735,6 +739,135 @@ class IntegrationReference(RegistryEntry):
 
 
 @dataclass(repr=False)
+class IdentifiedElement(YAMLRoot):
+    """
+    Элемент с глобальным идентификатором element_id. Не смешивать с EmbeddedElement (local_key). ADR-044.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["IdentifiedElement"]
+    class_class_curie: ClassVar[str] = "dams:IdentifiedElement"
+    class_name: ClassVar[str] = "IdentifiedElement"
+    class_model_uri: ClassVar[URIRef] = DAMS.IdentifiedElement
+
+    element_id: Union[str, IdentifiedElementElementId] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, IdentifiedElementElementId):
+            self.element_id = IdentifiedElementElementId(self.element_id)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class NamedElement(YAMLRoot):
+    """
+    Именование элемента модели (name, title, aliases). ADR-044.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["NamedElement"]
+    class_class_curie: ClassVar[str] = "dams:NamedElement"
+    class_name: ClassVar[str] = "NamedElement"
+    class_model_uri: ClassVar[URIRef] = DAMS.NamedElement
+
+    name: str = None
+    title: Optional[str] = None
+    aliases: Optional[Union[str, list[str]]] = empty_list()
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.name):
+            self.MissingRequiredField("name")
+        if not isinstance(self.name, str):
+            self.name = str(self.name)
+
+        if self.title is not None and not isinstance(self.title, str):
+            self.title = str(self.title)
+
+        if not isinstance(self.aliases, list):
+            self.aliases = [self.aliases] if self.aliases is not None else []
+        self.aliases = [v if isinstance(v, str) else str(v) for v in self.aliases]
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class DescribedElement(YAMLRoot):
+    """
+    Текстовое описание элемента. Глобально не обязательно; обязательность задаётся slot_usage на конкретных классах
+    (ADR-044 / ADR-025).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["DescribedElement"]
+    class_class_curie: ClassVar[str] = "dams:DescribedElement"
+    class_name: ClassVar[str] = "DescribedElement"
+    class_model_uri: ClassVar[URIRef] = DAMS.DescribedElement
+
+    description: Optional[str] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self.description is not None and not isinstance(self.description, str):
+            self.description = str(self.description)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class HasSemanticAnnotations(YAMLRoot):
+    """
+    Семантические аннотации (glossary_term_refs, tags). ADR-044.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["HasSemanticAnnotations"]
+    class_class_curie: ClassVar[str] = "dams:HasSemanticAnnotations"
+    class_name: ClassVar[str] = "HasSemanticAnnotations"
+    class_model_uri: ClassVar[URIRef] = DAMS.HasSemanticAnnotations
+
+    glossary_term_refs: Optional[Union[Union[str, GlossaryTermRegistryId], list[Union[str, GlossaryTermRegistryId]]]] = empty_list()
+    tags: Optional[Union[str, list[str]]] = empty_list()
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if not isinstance(self.glossary_term_refs, list):
+            self.glossary_term_refs = [self.glossary_term_refs] if self.glossary_term_refs is not None else []
+        self.glossary_term_refs = [v if isinstance(v, GlossaryTermRegistryId) else GlossaryTermRegistryId(v) for v in self.glossary_term_refs]
+
+        if not isinstance(self.tags, list):
+            self.tags = [self.tags] if self.tags is not None else []
+        self.tags = [v if isinstance(v, str) else str(v) for v in self.tags]
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class HasValidity(YAMLRoot):
+    """
+    Период действия элемента (valid_from, valid_to). ADR-044.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["HasValidity"]
+    class_class_curie: ClassVar[str] = "dams:HasValidity"
+    class_name: ClassVar[str] = "HasValidity"
+    class_model_uri: ClassVar[URIRef] = DAMS.HasValidity
+
+    valid_from: Optional[Union[str, XSDDateTime]] = None
+    valid_to: Optional[Union[str, XSDDateTime]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self.valid_from is not None and not isinstance(self.valid_from, XSDDateTime):
+            self.valid_from = XSDDateTime(self.valid_from)
+
+        if self.valid_to is not None and not isinstance(self.valid_to, XSDDateTime):
+            self.valid_to = XSDDateTime(self.valid_to)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
 class ClassificationAssignment(YAMLRoot):
     """
     Версионируемое назначение категории классификации элементу модели с основанием и периодом действия.
@@ -752,9 +885,9 @@ class ClassificationAssignment(YAMLRoot):
     governance_classification: Optional[Union[str, "GovernanceClassificationEnum"]] = None
     classification_source: Optional[str] = None
     classification_rationale: Optional[str] = None
+    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
     valid_from: Optional[Union[str, XSDDateTime]] = None
     valid_to: Optional[Union[str, XSDDateTime]] = None
-    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.assignment_id):
@@ -779,14 +912,14 @@ class ClassificationAssignment(YAMLRoot):
         if self.classification_rationale is not None and not isinstance(self.classification_rationale, str):
             self.classification_rationale = str(self.classification_rationale)
 
+        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
+            self.approval_status = ApprovalStatusEnum(self.approval_status)
+
         if self.valid_from is not None and not isinstance(self.valid_from, XSDDateTime):
             self.valid_from = XSDDateTime(self.valid_from)
 
         if self.valid_to is not None and not isinstance(self.valid_to, XSDDateTime):
             self.valid_to = XSDDateTime(self.valid_to)
-
-        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
-            self.approval_status = ApprovalStatusEnum(self.approval_status)
 
         super().__post_init__(**kwargs)
 
@@ -806,9 +939,9 @@ class PolicyBinding(YAMLRoot):
     policy_binding_id: Union[str, PolicyBindingPolicyBindingId] = None
     policy_target_ref: Union[str, URIorCURIE] = None
     policy_ref: Union[str, PolicyRegistryId] = None
+    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
     valid_from: Optional[Union[str, XSDDateTime]] = None
     valid_to: Optional[Union[str, XSDDateTime]] = None
-    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.policy_binding_id):
@@ -826,14 +959,14 @@ class PolicyBinding(YAMLRoot):
         if not isinstance(self.policy_ref, PolicyRegistryId):
             self.policy_ref = PolicyRegistryId(self.policy_ref)
 
+        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
+            self.approval_status = ApprovalStatusEnum(self.approval_status)
+
         if self.valid_from is not None and not isinstance(self.valid_from, XSDDateTime):
             self.valid_from = XSDDateTime(self.valid_from)
 
         if self.valid_to is not None and not isinstance(self.valid_to, XSDDateTime):
             self.valid_to = XSDDateTime(self.valid_to)
-
-        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
-            self.approval_status = ApprovalStatusEnum(self.approval_status)
 
         super().__post_init__(**kwargs)
 
@@ -851,9 +984,9 @@ class HasLifecycle(YAMLRoot):
     class_model_uri: ClassVar[URIRef] = DAMS.HasLifecycle
 
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    deprecated_by_ref: Optional[Union[str, URIorCURIE]] = None
     valid_from: Optional[Union[str, XSDDateTime]] = None
     valid_to: Optional[Union[str, XSDDateTime]] = None
-    deprecated_by_ref: Optional[Union[str, URIorCURIE]] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.lifecycle_status):
@@ -861,14 +994,14 @@ class HasLifecycle(YAMLRoot):
         if not isinstance(self.lifecycle_status, LifecycleStatusEnum):
             self.lifecycle_status = LifecycleStatusEnum(self.lifecycle_status)
 
+        if self.deprecated_by_ref is not None and not isinstance(self.deprecated_by_ref, URIorCURIE):
+            self.deprecated_by_ref = URIorCURIE(self.deprecated_by_ref)
+
         if self.valid_from is not None and not isinstance(self.valid_from, XSDDateTime):
             self.valid_from = XSDDateTime(self.valid_from)
 
         if self.valid_to is not None and not isinstance(self.valid_to, XSDDateTime):
             self.valid_to = XSDDateTime(self.valid_to)
-
-        if self.deprecated_by_ref is not None and not isinstance(self.deprecated_by_ref, URIorCURIE):
-            self.deprecated_by_ref = URIorCURIE(self.deprecated_by_ref)
 
         super().__post_init__(**kwargs)
 
@@ -1039,7 +1172,8 @@ class HasProvenance(YAMLRoot):
 @dataclass(repr=False)
 class HasDefinition(YAMLRoot):
     """
-    Mixin эталонного определения (ADR-025). Слот description остаётся skos:definition (own text). Отсутствие
+    Mixin эталонного определения (ADR-025 / ADR-044). Слот description индуцируется через DescribedElement;
+    exact_mappings указывает skos:definition (slot_uri не меняется — предикат dams:description). Отсутствие
     description при наличии definition_source_ref означает наследование; заданный description — own (опционально
     adapted from source). scoped_definitions — контекстные определения (v1: уровень ITSystem), не заменяющие эталон
     вне scope.
@@ -1054,6 +1188,7 @@ class HasDefinition(YAMLRoot):
     definition_source_ref: Optional[Union[str, URIorCURIE]] = None
     definition_rationale: Optional[str] = None
     scoped_definitions: Optional[Union[dict[Union[str, ScopedDefinitionScopedDefinitionId], Union[dict, "ScopedDefinition"]], list[Union[dict, "ScopedDefinition"]]]] = empty_dict()
+    description: Optional[str] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self.definition_source_ref is not None and not isinstance(self.definition_source_ref, URIorCURIE):
@@ -1063,6 +1198,9 @@ class HasDefinition(YAMLRoot):
             self.definition_rationale = str(self.definition_rationale)
 
         self._normalize_inlined_as_list(slot_name="scoped_definitions", slot_type=ScopedDefinition, key_name="scoped_definition_id", keyed=True)
+
+        if self.description is not None and not isinstance(self.description, str):
+            self.description = str(self.description)
 
         super().__post_init__(**kwargs)
 
@@ -1141,9 +1279,10 @@ class ScopedDefinition(YAMLRoot):
 
 
 @dataclass(repr=False)
-class ModelElement(YAMLRoot):
+class ModelElement(IdentifiedElement):
     """
-    Абстрактный корень иерархии элементов модели: общая идентичность (element_id), имя, описание и жизненный цикл.
+    Абстрактный корень именованных элементов модели: IdentifiedElement + NamedElement + DescribedElement +
+    HasLifecycle + HasSemanticAnnotations (ADR-044).
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -1154,31 +1293,19 @@ class ModelElement(YAMLRoot):
 
     element_id: Union[str, ModelElementElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     title: Optional[str] = None
     aliases: Optional[Union[str, list[str]]] = empty_list()
+    description: Optional[str] = None
+    deprecated_by_ref: Optional[Union[str, URIorCURIE]] = None
     glossary_term_refs: Optional[Union[Union[str, GlossaryTermRegistryId], list[Union[str, GlossaryTermRegistryId]]]] = empty_list()
     tags: Optional[Union[str, list[str]]] = empty_list()
-    valid_from: Optional[Union[str, XSDDateTime]] = None
-    valid_to: Optional[Union[str, XSDDateTime]] = None
-    deprecated_by_ref: Optional[Union[str, URIorCURIE]] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
-        if self._is_empty(self.element_id):
-            self.MissingRequiredField("element_id")
-        if not isinstance(self.element_id, ModelElementElementId):
-            self.element_id = ModelElementElementId(self.element_id)
-
         if self._is_empty(self.name):
             self.MissingRequiredField("name")
         if not isinstance(self.name, str):
             self.name = str(self.name)
-
-        if self._is_empty(self.description):
-            self.MissingRequiredField("description")
-        if not isinstance(self.description, str):
-            self.description = str(self.description)
 
         if self._is_empty(self.lifecycle_status):
             self.MissingRequiredField("lifecycle_status")
@@ -1192,6 +1319,12 @@ class ModelElement(YAMLRoot):
             self.aliases = [self.aliases] if self.aliases is not None else []
         self.aliases = [v if isinstance(v, str) else str(v) for v in self.aliases]
 
+        if self.description is not None and not isinstance(self.description, str):
+            self.description = str(self.description)
+
+        if self.deprecated_by_ref is not None and not isinstance(self.deprecated_by_ref, URIorCURIE):
+            self.deprecated_by_ref = URIorCURIE(self.deprecated_by_ref)
+
         if not isinstance(self.glossary_term_refs, list):
             self.glossary_term_refs = [self.glossary_term_refs] if self.glossary_term_refs is not None else []
         self.glossary_term_refs = [v if isinstance(v, GlossaryTermRegistryId) else GlossaryTermRegistryId(v) for v in self.glossary_term_refs]
@@ -1199,15 +1332,6 @@ class ModelElement(YAMLRoot):
         if not isinstance(self.tags, list):
             self.tags = [self.tags] if self.tags is not None else []
         self.tags = [v if isinstance(v, str) else str(v) for v in self.tags]
-
-        if self.valid_from is not None and not isinstance(self.valid_from, XSDDateTime):
-            self.valid_from = XSDDateTime(self.valid_from)
-
-        if self.valid_to is not None and not isinstance(self.valid_to, XSDDateTime):
-            self.valid_to = XSDDateTime(self.valid_to)
-
-        if self.deprecated_by_ref is not None and not isinstance(self.deprecated_by_ref, URIorCURIE):
-            self.deprecated_by_ref = URIorCURIE(self.deprecated_by_ref)
 
         super().__post_init__(**kwargs)
 
@@ -1228,10 +1352,10 @@ class ModelPackage(ModelElement):
 
     element_id: Union[str, ModelPackageElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     api_version: str = None
     model_version: Union[str, SemVer] = None
+    description: str = None
     implementation_scope: Optional[Union[str, "ImplementationScopeEnum"]] = None
     conceptual_implementation_ref: Optional[Union[str, URIorCURIE]] = None
     solution_ref: Optional[Union[str, ITSolutionRegistryId]] = None
@@ -1280,6 +1404,11 @@ class ModelPackage(ModelElement):
             self.MissingRequiredField("model_version")
         if not isinstance(self.model_version, SemVer):
             self.model_version = SemVer(self.model_version)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         if self.implementation_scope is not None and not isinstance(self.implementation_scope, ImplementationScopeEnum):
             self.implementation_scope = ImplementationScopeEnum(self.implementation_scope)
@@ -1381,10 +1510,10 @@ class DomainContext(ModelElement):
 
     element_id: Union[str, DomainContextElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     domain_ref: Union[str, BusinessDomainRegistryId] = None
     namespace: Union[str, URI] = None
+    description: str = None
     solution_ref: Optional[Union[str, ITSolutionRegistryId]] = None
     business_process_refs: Optional[Union[Union[str, BusinessProcessRegistryId], list[Union[str, BusinessProcessRegistryId]]]] = empty_list()
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
@@ -1407,6 +1536,11 @@ class DomainContext(ModelElement):
             self.MissingRequiredField("namespace")
         if not isinstance(self.namespace, URI):
             self.namespace = URI(self.namespace)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         if self.solution_ref is not None and not isinstance(self.solution_ref, ITSolutionRegistryId):
             self.solution_ref = ITSolutionRegistryId(self.solution_ref)
@@ -1445,7 +1579,6 @@ class ConceptualEntity(ModelElement):
     element_id: Union[str, ConceptualEntityElementId] = None
     name: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
-    description: str = None
     parent_concept_ref: Optional[Union[str, ConceptualEntityElementId]] = None
     key_attribute_refs: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
     entity_tier: Optional[Union[str, "EntityTierEnum"]] = None
@@ -1469,11 +1602,6 @@ class ConceptualEntity(ModelElement):
             self.MissingRequiredField("element_id")
         if not isinstance(self.element_id, ConceptualEntityElementId):
             self.element_id = ConceptualEntityElementId(self.element_id)
-
-        if self._is_empty(self.description):
-            self.MissingRequiredField("description")
-        if not isinstance(self.description, str):
-            self.description = str(self.description)
 
         if self.parent_concept_ref is not None and not isinstance(self.parent_concept_ref, ConceptualEntityElementId):
             self.parent_concept_ref = ConceptualEntityElementId(self.parent_concept_ref)
@@ -1549,7 +1677,6 @@ class ConceptualProperty(ModelElement):
     significance_basis: Union[Union[str, "SignificanceBasisEnum"], list[Union[str, "SignificanceBasisEnum"]]] = None
     property_kind: Union[str, "PropertyKindEnum"] = None
     genesis_kind: Union[str, "GenesisKindEnum"] = None
-    description: str = None
     significance_rationale: Optional[str] = None
     conceptual_domain_ref: Optional[Union[str, ConceptualDomainElementId]] = None
     is_identifying: Optional[Union[bool, Bool]] = None
@@ -1593,11 +1720,6 @@ class ConceptualProperty(ModelElement):
             self.MissingRequiredField("genesis_kind")
         if not isinstance(self.genesis_kind, GenesisKindEnum):
             self.genesis_kind = GenesisKindEnum(self.genesis_kind)
-
-        if self._is_empty(self.description):
-            self.MissingRequiredField("description")
-        if not isinstance(self.description, str):
-            self.description = str(self.description)
 
         if self.significance_rationale is not None and not isinstance(self.significance_rationale, str):
             self.significance_rationale = str(self.significance_rationale)
@@ -1668,7 +1790,6 @@ class LogicalEntity(ModelElement):
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     context_ref: Union[str, DomainContextElementId] = None
     solution_data_role: Union[str, "SolutionDataRoleEnum"] = None
-    description: str = None
     conceptual_entity_refs: Optional[Union[Union[str, ConceptualEntityElementId], list[Union[str, ConceptualEntityElementId]]]] = empty_list()
     solution_ref: Optional[Union[str, ITSolutionRegistryId]] = None
     attributes: Optional[Union[dict[Union[str, LogicalAttributeElementId], Union[dict, "LogicalAttribute"]], list[Union[dict, "LogicalAttribute"]]]] = empty_dict()
@@ -1711,11 +1832,6 @@ class LogicalEntity(ModelElement):
             self.MissingRequiredField("solution_data_role")
         if not isinstance(self.solution_data_role, SolutionDataRoleEnum):
             self.solution_data_role = SolutionDataRoleEnum(self.solution_data_role)
-
-        if self._is_empty(self.description):
-            self.MissingRequiredField("description")
-        if not isinstance(self.description, str):
-            self.description = str(self.description)
 
         if not isinstance(self.conceptual_entity_refs, list):
             self.conceptual_entity_refs = [self.conceptual_entity_refs] if self.conceptual_entity_refs is not None else []
@@ -1820,7 +1936,6 @@ class LogicalAttribute(ModelElement):
     owner_entity_ref: Union[str, LogicalEntityElementId] = None
     required: Union[bool, Bool] = None
     multivalued: Union[bool, Bool] = None
-    description: str = None
     concept_ref: Optional[Union[str, ConceptualPropertyElementId]] = None
     value_domain_ref: Optional[Union[str, ValueDomainElementId]] = None
     data_type_ref: Optional[Union[str, DataTypeElementId]] = None
@@ -1868,11 +1983,6 @@ class LogicalAttribute(ModelElement):
             self.MissingRequiredField("multivalued")
         if not isinstance(self.multivalued, Bool):
             self.multivalued = Bool(self.multivalued)
-
-        if self._is_empty(self.description):
-            self.MissingRequiredField("description")
-        if not isinstance(self.description, str):
-            self.description = str(self.description)
 
         if self.concept_ref is not None and not isinstance(self.concept_ref, ConceptualPropertyElementId):
             self.concept_ref = ConceptualPropertyElementId(self.concept_ref)
@@ -1970,7 +2080,6 @@ class Relationship(ModelElement):
 
     element_id: Union[str, RelationshipElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     source_entity_ref: Union[str, URIorCURIE] = None
     target_entity_ref: Union[str, URIorCURIE] = None
@@ -2059,7 +2168,6 @@ class RelationTerm(ModelElement):
     name: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     forward_label: str = None
-    description: str = None
     forward_label_en: Optional[str] = None
     inverse_label: Optional[str] = None
     inverse_label_en: Optional[str] = None
@@ -2080,11 +2188,6 @@ class RelationTerm(ModelElement):
             self.MissingRequiredField("forward_label")
         if not isinstance(self.forward_label, str):
             self.forward_label = str(self.forward_label)
-
-        if self._is_empty(self.description):
-            self.MissingRequiredField("description")
-        if not isinstance(self.description, str):
-            self.description = str(self.description)
 
         if self.forward_label_en is not None and not isinstance(self.forward_label_en, str):
             self.forward_label_en = str(self.forward_label_en)
@@ -2187,11 +2290,13 @@ class ExternalClassRef(YAMLRoot):
 
 
 @dataclass(repr=False)
-class Mapping(ModelElement):
+class Mapping(IdentifiedElement):
     """
     Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual),
     entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with
-    (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
+    (enterprise↔external term). Not used for SpecImpl implements/conforms_to. Identity slots
+    name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044); display label = source_refs ->
+    target_refs [mapping_type].
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -2201,18 +2306,16 @@ class Mapping(ModelElement):
     class_model_uri: ClassVar[URIRef] = DAMS.Mapping
 
     element_id: Union[str, MappingElementId] = None
-    name: str = None
-    description: str = None
-    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     mapping_type: Union[str, "MappingTypeEnum"] = None
     mapping_cardinality: Union[str, "MappingCardinalityEnum"] = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     source_refs: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
     target_refs: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
     transformation_ref: Optional[Union[str, URI]] = None
     transformation_expression: Optional[str] = None
     confidence: Optional[Decimal] = None
-    valid_from: Optional[Union[str, XSDDateTime]] = None
-    valid_to: Optional[Union[str, XSDDateTime]] = None
+    description: Optional[str] = None
+    deprecated_by_ref: Optional[Union[str, URIorCURIE]] = None
     source_artifact_ref: Optional[Union[str, URI]] = None
     evidence_refs: Optional[Union[Union[str, URI], list[Union[str, URI]]]] = empty_list()
     approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
@@ -2235,6 +2338,11 @@ class Mapping(ModelElement):
         if not isinstance(self.mapping_cardinality, MappingCardinalityEnum):
             self.mapping_cardinality = MappingCardinalityEnum(self.mapping_cardinality)
 
+        if self._is_empty(self.lifecycle_status):
+            self.MissingRequiredField("lifecycle_status")
+        if not isinstance(self.lifecycle_status, LifecycleStatusEnum):
+            self.lifecycle_status = LifecycleStatusEnum(self.lifecycle_status)
+
         if not isinstance(self.source_refs, list):
             self.source_refs = [self.source_refs] if self.source_refs is not None else []
         self.source_refs = [v if isinstance(v, URIorCURIE) else URIorCURIE(v) for v in self.source_refs]
@@ -2252,11 +2360,11 @@ class Mapping(ModelElement):
         if self.confidence is not None and not isinstance(self.confidence, Decimal):
             self.confidence = Decimal(self.confidence)
 
-        if self.valid_from is not None and not isinstance(self.valid_from, XSDDateTime):
-            self.valid_from = XSDDateTime(self.valid_from)
+        if self.description is not None and not isinstance(self.description, str):
+            self.description = str(self.description)
 
-        if self.valid_to is not None and not isinstance(self.valid_to, XSDDateTime):
-            self.valid_to = XSDDateTime(self.valid_to)
+        if self.deprecated_by_ref is not None and not isinstance(self.deprecated_by_ref, URIorCURIE):
+            self.deprecated_by_ref = URIorCURIE(self.deprecated_by_ref)
 
         if self.source_artifact_ref is not None and not isinstance(self.source_artifact_ref, URI):
             self.source_artifact_ref = URI(self.source_artifact_ref)
@@ -2759,9 +2867,9 @@ class ConceptualDomain(ModelElement):
 
     element_id: Union[str, ConceptualDomainElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     conceptual_domain_kind: Union[str, "ConceptualDomainKindEnum"] = None
+    description: str = None
     value_meanings: Optional[Union[dict[Union[str, ValueMeaningMeaningKey], Union[dict, "ValueMeaning"]], list[Union[dict, "ValueMeaning"]]]] = empty_dict()
     concept_scheme_uri: Optional[Union[str, URIorCURIE]] = None
     broader_domain_ref: Optional[Union[str, ConceptualDomainElementId]] = None
@@ -2785,6 +2893,11 @@ class ConceptualDomain(ModelElement):
             self.MissingRequiredField("conceptual_domain_kind")
         if not isinstance(self.conceptual_domain_kind, ConceptualDomainKindEnum):
             self.conceptual_domain_kind = ConceptualDomainKindEnum(self.conceptual_domain_kind)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         self._normalize_inlined_as_list(slot_name="value_meanings", slot_type=ValueMeaning, key_name="meaning_key", keyed=True)
 
@@ -2888,10 +3001,10 @@ class DataType(ModelElement):
 
     element_id: Union[str, DataTypeElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     type_name: str = None
     type_family: Union[str, "TypeFamilyEnum"] = None
+    description: str = None
     precision: Optional[int] = None
     scale: Optional[int] = None
     max_length: Optional[int] = None
@@ -2917,6 +3030,11 @@ class DataType(ModelElement):
             self.MissingRequiredField("type_family")
         if not isinstance(self.type_family, TypeFamilyEnum):
             self.type_family = TypeFamilyEnum(self.type_family)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         if self.precision is not None and not isinstance(self.precision, int):
             self.precision = int(self.precision)
@@ -3014,10 +3132,10 @@ class ValueDomain(ModelElement):
 
     element_id: Union[str, ValueDomainElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     value_domain_kind: Union[str, "ValueDomainKindEnum"] = None
     data_type_ref: Union[str, DataTypeElementId] = None
+    description: str = None
     conceptual_domain_ref: Optional[Union[str, ConceptualDomainElementId]] = None
     unit_code: Optional[str] = None
     format_pattern: Optional[str] = None
@@ -3042,6 +3160,11 @@ class ValueDomain(ModelElement):
             self.MissingRequiredField("data_type_ref")
         if not isinstance(self.data_type_ref, DataTypeElementId):
             self.data_type_ref = DataTypeElementId(self.data_type_ref)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         if self.conceptual_domain_ref is not None and not isinstance(self.conceptual_domain_ref, ConceptualDomainElementId):
             self.conceptual_domain_ref = ConceptualDomainElementId(self.conceptual_domain_ref)
@@ -3163,7 +3286,7 @@ class ValueSetQuery(YAMLRoot):
 class EmbeddedElement(YAMLRoot):
     """
     Встраиваемый вспомогательный объект без собственного жизненного цикла и глобального element_id. Идентичность
-    локальна относительно родителя (local_key). Не путать с будущим IdentifiedElement (ADR-038).
+    локальна относительно родителя (local_key). Не путать с IdentifiedElement (ADR-038 / ADR-044).
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -3173,7 +3296,7 @@ class EmbeddedElement(YAMLRoot):
     class_model_uri: ClassVar[URIRef] = DAMS.EmbeddedElement
 
     local_key: Union[str, EmbeddedElementLocalKey] = None
-    description: str = None
+    description: Optional[str] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.local_key):
@@ -3181,9 +3304,7 @@ class EmbeddedElement(YAMLRoot):
         if not isinstance(self.local_key, EmbeddedElementLocalKey):
             self.local_key = EmbeddedElementLocalKey(self.local_key)
 
-        if self._is_empty(self.description):
-            self.MissingRequiredField("description")
-        if not isinstance(self.description, str):
+        if self.description is not None and not isinstance(self.description, str):
             self.description = str(self.description)
 
         super().__post_init__(**kwargs)
@@ -3204,7 +3325,6 @@ class DataStructure(ModelElement):
 
     element_id: Union[str, DataStructureElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     schema_format: Union[str, "SchemaFormatEnum"] = None
     structure_version: Union[str, SemVer] = None
@@ -3215,6 +3335,7 @@ class DataStructure(ModelElement):
     source_pointer: Optional[str] = None
     content_digest: Optional[Union[str, Sha256Digest]] = None
     previous_version_ref: Optional[Union[str, DataStructureElementId]] = None
+    description: Optional[str] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
@@ -3256,6 +3377,9 @@ class DataStructure(ModelElement):
         if self.previous_version_ref is not None and not isinstance(self.previous_version_ref, DataStructureElementId):
             self.previous_version_ref = DataStructureElementId(self.previous_version_ref)
 
+        if self.description is not None and not isinstance(self.description, str):
+            self.description = str(self.description)
+
         super().__post_init__(**kwargs)
 
 
@@ -3277,7 +3401,6 @@ class SchemaNode(EmbeddedElement):
     node_kind: Union[str, "SchemaNodeKindEnum"] = None
     native_type: str = None
     required: Union[bool, Bool] = None
-    description: str = None
     children: Optional[Union[str, list[str]]] = empty_list()
     item_node: Optional[str] = None
     data_type_ref: Optional[Union[str, DataTypeElementId]] = None
@@ -3321,11 +3444,6 @@ class SchemaNode(EmbeddedElement):
             self.MissingRequiredField("required")
         if not isinstance(self.required, Bool):
             self.required = Bool(self.required)
-
-        if self._is_empty(self.description):
-            self.MissingRequiredField("description")
-        if not isinstance(self.description, str):
-            self.description = str(self.description)
 
         if not isinstance(self.children, list):
             self.children = [self.children] if self.children is not None else []
@@ -3401,7 +3519,6 @@ class Message(ModelElement):
     name: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     payload_structure_ref: Union[str, DataStructureElementId] = None
-    description: str = None
     headers_structure_ref: Optional[Union[str, DataStructureElementId]] = None
     content_type: Optional[str] = None
     envelope_kind: Optional[Union[str, "EnvelopeKindEnum"]] = None
@@ -3418,11 +3535,6 @@ class Message(ModelElement):
             self.MissingRequiredField("payload_structure_ref")
         if not isinstance(self.payload_structure_ref, DataStructureElementId):
             self.payload_structure_ref = DataStructureElementId(self.payload_structure_ref)
-
-        if self._is_empty(self.description):
-            self.MissingRequiredField("description")
-        if not isinstance(self.description, str):
-            self.description = str(self.description)
 
         if self.headers_structure_ref is not None and not isinstance(self.headers_structure_ref, DataStructureElementId):
             self.headers_structure_ref = DataStructureElementId(self.headers_structure_ref)
@@ -3457,7 +3569,6 @@ class DataFlow(ModelElement):
 
     element_id: Union[str, DataFlowElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     integration_ref: Union[str, IntegrationReferenceRegistryId] = None
     source_solution_ref: Union[str, ITSolutionRegistryId] = None
@@ -3470,9 +3581,7 @@ class DataFlow(ModelElement):
     integration_class: Union[str, "IntegrationClassEnum"] = None
     integration_channel: Union[str, "IntegrationChannelEnum"] = None
     integration_spec_ref: Union[str, URI] = None
-    valid_from: Optional[Union[str, XSDDateTime]] = None
-    valid_to: Optional[Union[str, XSDDateTime]] = None
-    deprecated_by_ref: Optional[Union[str, URIorCURIE]] = None
+    description: str = None
     contract_ref: Optional[Union[str, DataContractReferenceRegistryId]] = None
     entity_bindings: Optional[Union[dict[Union[str, DataFlowEntityBindingElementId], Union[dict, "DataFlowEntityBinding"]], list[Union[dict, "DataFlowEntityBinding"]]]] = empty_dict()
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
@@ -3485,11 +3594,6 @@ class DataFlow(ModelElement):
             self.MissingRequiredField("element_id")
         if not isinstance(self.element_id, DataFlowElementId):
             self.element_id = DataFlowElementId(self.element_id)
-
-        if self._is_empty(self.lifecycle_status):
-            self.MissingRequiredField("lifecycle_status")
-        if not isinstance(self.lifecycle_status, LifecycleStatusEnum):
-            self.lifecycle_status = LifecycleStatusEnum(self.lifecycle_status)
 
         if self._is_empty(self.integration_ref):
             self.MissingRequiredField("integration_ref")
@@ -3546,14 +3650,10 @@ class DataFlow(ModelElement):
         if not isinstance(self.integration_spec_ref, URI):
             self.integration_spec_ref = URI(self.integration_spec_ref)
 
-        if self.valid_from is not None and not isinstance(self.valid_from, XSDDateTime):
-            self.valid_from = XSDDateTime(self.valid_from)
-
-        if self.valid_to is not None and not isinstance(self.valid_to, XSDDateTime):
-            self.valid_to = XSDDateTime(self.valid_to)
-
-        if self.deprecated_by_ref is not None and not isinstance(self.deprecated_by_ref, URIorCURIE):
-            self.deprecated_by_ref = URIorCURIE(self.deprecated_by_ref)
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         if self.contract_ref is not None and not isinstance(self.contract_ref, DataContractReferenceRegistryId):
             self.contract_ref = DataContractReferenceRegistryId(self.contract_ref)
@@ -3589,11 +3689,11 @@ class DataFlowEntityBinding(ModelElement):
 
     element_id: Union[str, DataFlowEntityBindingElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     flow_ref: Union[str, DataFlowElementId] = None
     source_model_ref: Union[str, URI] = None
     logical_entity_ref: Union[str, LogicalEntityElementId] = None
+    description: str = None
     logical_attribute_refs: Optional[Union[Union[str, LogicalAttributeElementId], list[Union[str, LogicalAttributeElementId]]]] = empty_list()
     carrier_refs: Optional[Union[Union[str, DataCarrierElementId], list[Union[str, DataCarrierElementId]]]] = empty_list()
     schema_node_refs: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
@@ -3620,6 +3720,11 @@ class DataFlowEntityBinding(ModelElement):
             self.MissingRequiredField("logical_entity_ref")
         if not isinstance(self.logical_entity_ref, LogicalEntityElementId):
             self.logical_entity_ref = LogicalEntityElementId(self.logical_entity_ref)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         if not isinstance(self.logical_attribute_refs, list):
             self.logical_attribute_refs = [self.logical_attribute_refs] if self.logical_attribute_refs is not None else []
@@ -3657,7 +3762,6 @@ class DataModelBinding(ModelElement):
 
     element_id: Union[str, DataModelBindingElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     specification_version: Union[str, SemVer] = None
     implementation_version: Union[str, SemVer] = None
@@ -3668,9 +3772,7 @@ class DataModelBinding(ModelElement):
     compatibility_mode: Union[str, "CompatibilityModeEnum"] = None
     integrity_digest: Union[str, Sha256Digest] = None
     generated_at: Union[str, XSDDateTime] = None
-    valid_from: Optional[Union[str, XSDDateTime]] = None
-    valid_to: Optional[Union[str, XSDDateTime]] = None
-    deprecated_by_ref: Optional[Union[str, URIorCURIE]] = None
+    description: str = None
     contract_ref: Optional[Union[str, DataContractReferenceRegistryId]] = None
     selections: Optional[Union[dict[Union[str, ModelSelectionElementId], Union[dict, "ModelSelection"]], list[Union[dict, "ModelSelection"]]]] = empty_dict()
     compatibility_baseline_ref: Optional[Union[str, URI]] = None
@@ -3684,11 +3786,6 @@ class DataModelBinding(ModelElement):
             self.MissingRequiredField("element_id")
         if not isinstance(self.element_id, DataModelBindingElementId):
             self.element_id = DataModelBindingElementId(self.element_id)
-
-        if self._is_empty(self.lifecycle_status):
-            self.MissingRequiredField("lifecycle_status")
-        if not isinstance(self.lifecycle_status, LifecycleStatusEnum):
-            self.lifecycle_status = LifecycleStatusEnum(self.lifecycle_status)
 
         if self._is_empty(self.specification_version):
             self.MissingRequiredField("specification_version")
@@ -3735,14 +3832,10 @@ class DataModelBinding(ModelElement):
         if not isinstance(self.generated_at, XSDDateTime):
             self.generated_at = XSDDateTime(self.generated_at)
 
-        if self.valid_from is not None and not isinstance(self.valid_from, XSDDateTime):
-            self.valid_from = XSDDateTime(self.valid_from)
-
-        if self.valid_to is not None and not isinstance(self.valid_to, XSDDateTime):
-            self.valid_to = XSDDateTime(self.valid_to)
-
-        if self.deprecated_by_ref is not None and not isinstance(self.deprecated_by_ref, URIorCURIE):
-            self.deprecated_by_ref = URIorCURIE(self.deprecated_by_ref)
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         if self.contract_ref is not None and not isinstance(self.contract_ref, DataContractReferenceRegistryId):
             self.contract_ref = DataContractReferenceRegistryId(self.contract_ref)
@@ -3781,8 +3874,8 @@ class ModelSelection(ModelElement):
 
     element_id: Union[str, ModelSelectionElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    description: str = None
     selected_entities: Optional[Union[dict[Union[str, SelectedEntityElementId], Union[dict, "SelectedEntity"]], list[Union[dict, "SelectedEntity"]]]] = empty_dict()
 
     def __post_init__(self, *_: str, **kwargs: Any):
@@ -3790,6 +3883,11 @@ class ModelSelection(ModelElement):
             self.MissingRequiredField("element_id")
         if not isinstance(self.element_id, ModelSelectionElementId):
             self.element_id = ModelSelectionElementId(self.element_id)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         self._normalize_inlined_as_list(slot_name="selected_entities", slot_type=SelectedEntity, key_name="element_id", keyed=True)
 
@@ -3810,9 +3908,9 @@ class SelectedEntity(ModelElement):
 
     element_id: Union[str, SelectedEntityElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     logical_entity_ref: Union[str, LogicalEntityElementId] = None
+    description: str = None
     selected_attributes: Optional[Union[dict[Union[str, SelectedAttributeElementId], Union[dict, "SelectedAttribute"]], list[Union[dict, "SelectedAttribute"]]]] = empty_dict()
     carrier_refs: Optional[Union[Union[str, DataCarrierElementId], list[Union[str, DataCarrierElementId]]]] = empty_list()
 
@@ -3826,6 +3924,11 @@ class SelectedEntity(ModelElement):
             self.MissingRequiredField("logical_entity_ref")
         if not isinstance(self.logical_entity_ref, LogicalEntityElementId):
             self.logical_entity_ref = LogicalEntityElementId(self.logical_entity_ref)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         self._normalize_inlined_as_list(slot_name="selected_attributes", slot_type=SelectedAttribute, key_name="element_id", keyed=True)
 
@@ -3850,9 +3953,9 @@ class SelectedAttribute(ModelElement):
 
     element_id: Union[str, SelectedAttributeElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     logical_attribute_ref: Union[str, LogicalAttributeElementId] = None
+    description: str = None
     schema_node_refs: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
     transformation_mapping_ref: Optional[Union[str, MappingElementId]] = None
 
@@ -3866,6 +3969,11 @@ class SelectedAttribute(ModelElement):
             self.MissingRequiredField("logical_attribute_ref")
         if not isinstance(self.logical_attribute_ref, LogicalAttributeElementId):
             self.logical_attribute_ref = LogicalAttributeElementId(self.logical_attribute_ref)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         if not isinstance(self.schema_node_refs, list):
             self.schema_node_refs = [self.schema_node_refs] if self.schema_node_refs is not None else []
@@ -3891,10 +3999,10 @@ class Metric(ModelElement):
 
     element_id: Union[str, MetricElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     metric_expression: str = None
     aggregation_function: str = None
+    description: str = None
     grain_entity_refs: Optional[Union[Union[str, LogicalEntityElementId], list[Union[str, LogicalEntityElementId]]]] = empty_list()
     dimension_attribute_refs: Optional[Union[Union[str, LogicalAttributeElementId], list[Union[str, LogicalAttributeElementId]]]] = empty_list()
     measure_attribute_refs: Optional[Union[Union[str, LogicalAttributeElementId], list[Union[str, LogicalAttributeElementId]]]] = empty_list()
@@ -3921,6 +4029,11 @@ class Metric(ModelElement):
             self.MissingRequiredField("aggregation_function")
         if not isinstance(self.aggregation_function, str):
             self.aggregation_function = str(self.aggregation_function)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         if not isinstance(self.grain_entity_refs, list):
             self.grain_entity_refs = [self.grain_entity_refs] if self.grain_entity_refs is not None else []
@@ -3973,8 +4086,8 @@ class Dimension(ModelElement):
 
     element_id: Union[str, DimensionElementId] = None
     name: str = None
-    description: str = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    description: str = None
     dimension_attribute_refs: Optional[Union[Union[str, LogicalAttributeElementId], list[Union[str, LogicalAttributeElementId]]]] = empty_list()
     grain_entity_refs: Optional[Union[Union[str, LogicalEntityElementId], list[Union[str, LogicalEntityElementId]]]] = empty_list()
 
@@ -3983,6 +4096,11 @@ class Dimension(ModelElement):
             self.MissingRequiredField("element_id")
         if not isinstance(self.element_id, DimensionElementId):
             self.element_id = DimensionElementId(self.element_id)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         if not isinstance(self.dimension_attribute_refs, list):
             self.dimension_attribute_refs = [self.dimension_attribute_refs] if self.dimension_attribute_refs is not None else []
@@ -4118,11 +4236,11 @@ class SpecificationRequirement(ModelElement):
 
     element_id: Union[str, SpecificationRequirementElementId] = None
     name: str = None
-    description: str = None
     code: str = None
     requirement_level: Union[str, "RequirementLevelEnum"] = None
     requirement_section: Union[str, "RequirementSectionEnum"] = None
     statement: str = None
+    description: str = None
     lifecycle_status: Union[str, "RequirementLifecycleStatus"] = 'draft'
     applies_to: Optional[Union[dict, RequirementApplicability]] = None
     formal_checks: Optional[Union[dict[Union[str, FormalCheckCheckId], Union[dict, FormalCheck]], list[Union[dict, FormalCheck]]]] = empty_dict()
@@ -4154,6 +4272,11 @@ class SpecificationRequirement(ModelElement):
             self.MissingRequiredField("statement")
         if not isinstance(self.statement, str):
             self.statement = str(self.statement)
+
+        if self._is_empty(self.description):
+            self.MissingRequiredField("description")
+        if not isinstance(self.description, str):
+            self.description = str(self.description)
 
         if self._is_empty(self.lifecycle_status):
             self.MissingRequiredField("lifecycle_status")
@@ -5239,6 +5362,36 @@ slots.platform_ref = Slot(uri=DAMS.platform_ref, name="platform_ref", curie=DAMS
 slots.parent_domain_ref = Slot(uri=DAMS.parent_domain_ref, name="parent_domain_ref", curie=DAMS.curie('parent_domain_ref'),
                    model_uri=DAMS.parent_domain_ref, domain=None, range=Optional[Union[str, BusinessDomainRegistryId]])
 
+slots.element_id = Slot(uri=DAMS.element_id, name="element_id", curie=DAMS.curie('element_id'),
+                   model_uri=DAMS.element_id, domain=None, range=URIRef)
+
+slots.name = Slot(uri=DAMS.name, name="name", curie=DAMS.curie('name'),
+                   model_uri=DAMS.name, domain=None, range=str)
+
+slots.title = Slot(uri=DAMS.title, name="title", curie=DAMS.curie('title'),
+                   model_uri=DAMS.title, domain=None, range=Optional[str])
+
+slots.description = Slot(uri=DAMS.description, name="description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.description, domain=None, range=Optional[str])
+
+slots.aliases = Slot(uri=DAMS.aliases, name="aliases", curie=DAMS.curie('aliases'),
+                   model_uri=DAMS.aliases, domain=None, range=Optional[Union[str, list[str]]])
+
+slots.glossary_term_refs = Slot(uri=DAMS.glossary_term_refs, name="glossary_term_refs", curie=DAMS.curie('glossary_term_refs'),
+                   model_uri=DAMS.glossary_term_refs, domain=None, range=Optional[Union[Union[str, GlossaryTermRegistryId], list[Union[str, GlossaryTermRegistryId]]]])
+
+slots.tags = Slot(uri=DAMS.tags, name="tags", curie=DAMS.curie('tags'),
+                   model_uri=DAMS.tags, domain=None, range=Optional[Union[str, list[str]]])
+
+slots.valid_from = Slot(uri=DAMS.valid_from, name="valid_from", curie=DAMS.curie('valid_from'),
+                   model_uri=DAMS.valid_from, domain=None, range=Optional[Union[str, XSDDateTime]])
+
+slots.valid_to = Slot(uri=DAMS.valid_to, name="valid_to", curie=DAMS.curie('valid_to'),
+                   model_uri=DAMS.valid_to, domain=None, range=Optional[Union[str, XSDDateTime]])
+
+slots.artifact_version = Slot(uri=DAMS.artifact_version, name="artifact_version", curie=DAMS.curie('artifact_version'),
+                   model_uri=DAMS.artifact_version, domain=None, range=Optional[Union[str, SemVer]])
+
 slots.assignment_id = Slot(uri=DAMS.assignment_id, name="assignment_id", curie=DAMS.curie('assignment_id'),
                    model_uri=DAMS.assignment_id, domain=None, range=URIRef)
 
@@ -5259,12 +5412,6 @@ slots.policy_ref = Slot(uri=DAMS.policy_ref, name="policy_ref", curie=DAMS.curie
 
 slots.lifecycle_status = Slot(uri=DAMS.lifecycle_status, name="lifecycle_status", curie=DAMS.curie('lifecycle_status'),
                    model_uri=DAMS.lifecycle_status, domain=None, range=Union[str, "LifecycleStatusEnum"])
-
-slots.valid_from = Slot(uri=DAMS.valid_from, name="valid_from", curie=DAMS.curie('valid_from'),
-                   model_uri=DAMS.valid_from, domain=None, range=Optional[Union[str, XSDDateTime]])
-
-slots.valid_to = Slot(uri=DAMS.valid_to, name="valid_to", curie=DAMS.curie('valid_to'),
-                   model_uri=DAMS.valid_to, domain=None, range=Optional[Union[str, XSDDateTime]])
 
 slots.deprecated_by_ref = Slot(uri=DAMS.deprecated_by_ref, name="deprecated_by_ref", curie=DAMS.curie('deprecated_by_ref'),
                    model_uri=DAMS.deprecated_by_ref, domain=None, range=Optional[Union[str, URIorCURIE]])
@@ -5349,27 +5496,6 @@ slots.relation_to_reference = Slot(uri=DAMS.relation_to_reference, name="relatio
 
 slots.rationale = Slot(uri=DAMS.rationale, name="rationale", curie=DAMS.curie('rationale'),
                    model_uri=DAMS.rationale, domain=None, range=Optional[str])
-
-slots.element_id = Slot(uri=DAMS.element_id, name="element_id", curie=DAMS.curie('element_id'),
-                   model_uri=DAMS.element_id, domain=None, range=URIRef)
-
-slots.name = Slot(uri=DAMS.name, name="name", curie=DAMS.curie('name'),
-                   model_uri=DAMS.name, domain=None, range=str)
-
-slots.title = Slot(uri=DAMS.title, name="title", curie=DAMS.curie('title'),
-                   model_uri=DAMS.title, domain=None, range=Optional[str])
-
-slots.description = Slot(uri=DAMS.description, name="description", curie=DAMS.curie('description'),
-                   model_uri=DAMS.description, domain=None, range=str)
-
-slots.aliases = Slot(uri=DAMS.aliases, name="aliases", curie=DAMS.curie('aliases'),
-                   model_uri=DAMS.aliases, domain=None, range=Optional[Union[str, list[str]]])
-
-slots.glossary_term_refs = Slot(uri=DAMS.glossary_term_refs, name="glossary_term_refs", curie=DAMS.curie('glossary_term_refs'),
-                   model_uri=DAMS.glossary_term_refs, domain=None, range=Optional[Union[Union[str, GlossaryTermRegistryId], list[Union[str, GlossaryTermRegistryId]]]])
-
-slots.tags = Slot(uri=DAMS.tags, name="tags", curie=DAMS.curie('tags'),
-                   model_uri=DAMS.tags, domain=None, range=Optional[Union[str, list[str]]])
 
 slots.api_version = Slot(uri=DAMS.api_version, name="api_version", curie=DAMS.curie('api_version'),
                    model_uri=DAMS.api_version, domain=None, range=str)
@@ -6171,20 +6297,17 @@ slots.catalog_id = Slot(uri=DAMS.catalog_id, name="catalog_id", curie=DAMS.curie
 slots.requirements = Slot(uri=DAMS.requirements, name="requirements", curie=DAMS.curie('requirements'),
                    model_uri=DAMS.requirements, domain=None, range=Optional[Union[dict[Union[str, SpecificationRequirementElementId], Union[dict, SpecificationRequirement]], list[Union[dict, SpecificationRequirement]]]])
 
-slots.ConceptualEntity_description = Slot(uri=DAMS.description, name="ConceptualEntity_description", curie=DAMS.curie('description'),
-                   model_uri=DAMS.ConceptualEntity_description, domain=ConceptualEntity, range=str)
+slots.HasDefinition_description = Slot(uri=DAMS.description, name="HasDefinition_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.HasDefinition_description, domain=None, range=Optional[str])
 
-slots.ConceptualProperty_description = Slot(uri=DAMS.description, name="ConceptualProperty_description", curie=DAMS.curie('description'),
-                   model_uri=DAMS.ConceptualProperty_description, domain=ConceptualProperty, range=str)
+slots.ModelPackage_description = Slot(uri=DAMS.description, name="ModelPackage_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.ModelPackage_description, domain=ModelPackage, range=str)
+
+slots.DomainContext_description = Slot(uri=DAMS.description, name="DomainContext_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.DomainContext_description, domain=DomainContext, range=str)
 
 slots.ConceptualProperty_genesis_kind = Slot(uri=DAMS.genesis_kind, name="ConceptualProperty_genesis_kind", curie=DAMS.curie('genesis_kind'),
                    model_uri=DAMS.ConceptualProperty_genesis_kind, domain=ConceptualProperty, range=Union[str, "GenesisKindEnum"])
-
-slots.LogicalEntity_description = Slot(uri=DAMS.description, name="LogicalEntity_description", curie=DAMS.curie('description'),
-                   model_uri=DAMS.LogicalEntity_description, domain=LogicalEntity, range=str)
-
-slots.LogicalAttribute_description = Slot(uri=DAMS.description, name="LogicalAttribute_description", curie=DAMS.curie('description'),
-                   model_uri=DAMS.LogicalAttribute_description, domain=LogicalAttribute, range=str)
 
 slots.LogicalAttribute_data_type_ref = Slot(uri=DAMS.data_type_ref, name="LogicalAttribute_data_type_ref", curie=DAMS.curie('data_type_ref'),
                    model_uri=DAMS.LogicalAttribute_data_type_ref, domain=LogicalAttribute, range=Optional[Union[str, DataTypeElementId]])
@@ -6192,8 +6315,8 @@ slots.LogicalAttribute_data_type_ref = Slot(uri=DAMS.data_type_ref, name="Logica
 slots.LogicalAttribute_concept_ref = Slot(uri=DAMS.concept_ref, name="LogicalAttribute_concept_ref", curie=DAMS.curie('concept_ref'),
                    model_uri=DAMS.LogicalAttribute_concept_ref, domain=LogicalAttribute, range=Optional[Union[str, ConceptualPropertyElementId]])
 
-slots.RelationTerm_description = Slot(uri=DAMS.description, name="RelationTerm_description", curie=DAMS.curie('description'),
-                   model_uri=DAMS.RelationTerm_description, domain=RelationTerm, range=str)
+slots.Mapping_description = Slot(uri=DAMS.description, name="Mapping_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.Mapping_description, domain=Mapping, range=Optional[str])
 
 slots.TechnicalAsset_description = Slot(uri=DAMS.description, name="TechnicalAsset_description", curie=DAMS.curie('description'),
                    model_uri=DAMS.TechnicalAsset_description, domain=TechnicalAsset, range=str)
@@ -6234,17 +6357,23 @@ slots.ExecutionAsset_asset_kind = Slot(uri=DAMS.asset_kind, name="ExecutionAsset
 slots.ExecutionAsset_direction = Slot(uri=DAMS.direction, name="ExecutionAsset_direction", curie=DAMS.curie('direction'),
                    model_uri=DAMS.ExecutionAsset_direction, domain=ExecutionAsset, range=Optional[Union[str, "FlowDirectionEnum"]])
 
+slots.ConceptualDomain_description = Slot(uri=DAMS.description, name="ConceptualDomain_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.ConceptualDomain_description, domain=ConceptualDomain, range=str)
+
+slots.DataType_description = Slot(uri=DAMS.description, name="DataType_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.DataType_description, domain=DataType, range=str)
+
 slots.NativeTypeBinding_data_type_ref = Slot(uri=DAMS.data_type_ref, name="NativeTypeBinding_data_type_ref", curie=DAMS.curie('data_type_ref'),
                    model_uri=DAMS.NativeTypeBinding_data_type_ref, domain=NativeTypeBinding, range=Union[str, DataTypeElementId])
+
+slots.ValueDomain_description = Slot(uri=DAMS.description, name="ValueDomain_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.ValueDomain_description, domain=ValueDomain, range=str)
 
 slots.ValueDomain_data_type_ref = Slot(uri=DAMS.data_type_ref, name="ValueDomain_data_type_ref", curie=DAMS.curie('data_type_ref'),
                    model_uri=DAMS.ValueDomain_data_type_ref, domain=ValueDomain, range=Union[str, DataTypeElementId])
 
-slots.EmbeddedElement_description = Slot(uri=DAMS.description, name="EmbeddedElement_description", curie=DAMS.curie('description'),
-                   model_uri=DAMS.EmbeddedElement_description, domain=EmbeddedElement, range=str)
-
-slots.SchemaNode_description = Slot(uri=DAMS.description, name="SchemaNode_description", curie=DAMS.curie('description'),
-                   model_uri=DAMS.SchemaNode_description, domain=SchemaNode, range=str)
+slots.DataStructure_description = Slot(uri=DAMS.description, name="DataStructure_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.DataStructure_description, domain=DataStructure, range=Optional[str])
 
 slots.SchemaNode_native_name = Slot(uri=DAMS.native_name, name="SchemaNode_native_name", curie=DAMS.curie('native_name'),
                    model_uri=DAMS.SchemaNode_native_name, domain=SchemaNode, range=str)
@@ -6259,8 +6388,32 @@ slots.SchemaNode_local_key = Slot(uri=DAMS.local_key, name="SchemaNode_local_key
                    model_uri=DAMS.SchemaNode_local_key, domain=SchemaNode, range=Union[str, SchemaNodeLocalKey],
                    pattern=re.compile(r'^[a-z0-9_.-]+$'))
 
-slots.Message_description = Slot(uri=DAMS.description, name="Message_description", curie=DAMS.curie('description'),
-                   model_uri=DAMS.Message_description, domain=Message, range=str)
+slots.DataFlow_description = Slot(uri=DAMS.description, name="DataFlow_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.DataFlow_description, domain=DataFlow, range=str)
+
+slots.DataFlowEntityBinding_description = Slot(uri=DAMS.description, name="DataFlowEntityBinding_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.DataFlowEntityBinding_description, domain=DataFlowEntityBinding, range=str)
+
+slots.DataModelBinding_description = Slot(uri=DAMS.description, name="DataModelBinding_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.DataModelBinding_description, domain=DataModelBinding, range=str)
+
+slots.ModelSelection_description = Slot(uri=DAMS.description, name="ModelSelection_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.ModelSelection_description, domain=ModelSelection, range=str)
+
+slots.SelectedEntity_description = Slot(uri=DAMS.description, name="SelectedEntity_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.SelectedEntity_description, domain=SelectedEntity, range=str)
+
+slots.SelectedAttribute_description = Slot(uri=DAMS.description, name="SelectedAttribute_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.SelectedAttribute_description, domain=SelectedAttribute, range=str)
+
+slots.Metric_description = Slot(uri=DAMS.description, name="Metric_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.Metric_description, domain=Metric, range=str)
+
+slots.Dimension_description = Slot(uri=DAMS.description, name="Dimension_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.Dimension_description, domain=Dimension, range=str)
+
+slots.SpecificationRequirement_description = Slot(uri=DAMS.description, name="SpecificationRequirement_description", curie=DAMS.curie('description'),
+                   model_uri=DAMS.SpecificationRequirement_description, domain=SpecificationRequirement, range=str)
 
 slots.SpecificationRequirement_lifecycle_status = Slot(uri=DAMS.lifecycle_status, name="SpecificationRequirement_lifecycle_status", curie=DAMS.curie('lifecycle_status'),
                    model_uri=DAMS.SpecificationRequirement_lifecycle_status, domain=SpecificationRequirement, range=Union[str, "RequirementLifecycleStatus"])

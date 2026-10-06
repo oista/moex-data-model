@@ -433,7 +433,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     digest = sub.add_parser(
         "digest",
-        help="Verify or rewrite DataModelBinding.integrity_digest (ADR-034)",
+        help="Verify or rewrite DataModelBinding.integrity_digest (ADR-042)",
     )
     _add_slice_args(digest)
     digest.add_argument(
@@ -449,7 +449,7 @@ def build_parser() -> argparse.ArgumentParser:
     digest.add_argument(
         "--allow-non-demo-write",
         action="store_true",
-        help="Allow --write for non-example bindings (requires process from ADR-034)",
+        help="Allow --write for non-example bindings (requires process from ADR-042)",
     )
 
     return parser

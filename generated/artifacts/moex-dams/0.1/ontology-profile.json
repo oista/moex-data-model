@@ -30,7 +30,9 @@
       "iri": "https://data.moex.com/dams/ClassificationAssignment",
       "is_mixin": false,
       "name": "ClassificationAssignment",
-      "parents": []
+      "parents": [
+        "HasValidity"
+      ]
     },
     {
       "iri": "https://data.moex.com/dams/ConceptualDomain",
@@ -112,7 +114,6 @@
       "is_mixin": false,
       "name": "DataFlow",
       "parents": [
-        "HasLifecycle",
         "HasOwnership",
         "ModelElement"
       ]
@@ -130,7 +131,6 @@
       "is_mixin": false,
       "name": "DataModelBinding",
       "parents": [
-        "HasLifecycle",
         "HasOwnership",
         "ModelElement"
       ]
@@ -150,6 +150,12 @@
       "parents": [
         "ModelElement"
       ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/DescribedElement",
+      "is_mixin": true,
+      "name": "DescribedElement",
+      "parents": []
     },
     {
       "iri": "https://data.moex.com/dams/Dimension",
@@ -172,7 +178,9 @@
       "iri": "https://data.moex.com/dams/EmbeddedElement",
       "is_mixin": false,
       "name": "EmbeddedElement",
-      "parents": []
+      "parents": [
+        "DescribedElement"
+      ]
     },
     {
       "iri": "https://data.moex.com/dams/ExecutionAsset",
@@ -214,7 +222,9 @@
       "iri": "https://data.moex.com/dams/HasDefinition",
       "is_mixin": true,
       "name": "HasDefinition",
-      "parents": []
+      "parents": [
+        "DescribedElement"
+      ]
     },
     {
       "iri": "https://data.moex.com/dams/HasGovernanceClassification",
@@ -226,7 +236,9 @@
       "iri": "https://data.moex.com/dams/HasLifecycle",
       "is_mixin": true,
       "name": "HasLifecycle",
-      "parents": []
+      "parents": [
+        "HasValidity"
+      ]
     },
     {
       "iri": "https://data.moex.com/dams/HasLocation",
@@ -259,9 +271,21 @@
       "parents": []
     },
     {
+      "iri": "https://data.moex.com/dams/HasSemanticAnnotations",
+      "is_mixin": true,
+      "name": "HasSemanticAnnotations",
+      "parents": []
+    },
+    {
       "iri": "https://data.moex.com/dams/HasStructure",
       "is_mixin": true,
       "name": "HasStructure",
+      "parents": []
+    },
+    {
+      "iri": "https://data.moex.com/dams/HasValidity",
+      "is_mixin": true,
+      "name": "HasValidity",
       "parents": []
     },
     {
@@ -287,6 +311,12 @@
       "parents": [
         "RegistryEntry"
       ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/IdentifiedElement",
+      "is_mixin": false,
+      "name": "IdentifiedElement",
+      "parents": []
     },
     {
       "iri": "https://data.moex.com/dams/IntegrationReference",
@@ -332,8 +362,10 @@
       "is_mixin": false,
       "name": "Mapping",
       "parents": [
+        "DescribedElement",
+        "HasLifecycle",
         "HasProvenance",
-        "ModelElement"
+        "IdentifiedElement"
       ]
     },
     {
@@ -359,7 +391,11 @@
       "is_mixin": false,
       "name": "ModelElement",
       "parents": [
-        "HasLifecycle"
+        "DescribedElement",
+        "HasLifecycle",
+        "HasSemanticAnnotations",
+        "IdentifiedElement",
+        "NamedElement"
       ]
     },
     {
@@ -380,6 +416,12 @@
       "parents": [
         "ModelElement"
       ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/NamedElement",
+      "is_mixin": true,
+      "name": "NamedElement",
+      "parents": []
     },
     {
       "iri": "https://data.moex.com/dams/NativeTypeBinding",
@@ -413,7 +455,9 @@
       "iri": "https://data.moex.com/dams/PolicyBinding",
       "is_mixin": false,
       "name": "PolicyBinding",
-      "parents": []
+      "parents": [
+        "HasValidity"
+      ]
     },
     {
       "iri": "https://data.moex.com/dams/RegistryEntry",
@@ -1905,10 +1949,10 @@
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "xsd": "http://www.w3.org/2001/XMLSchema#"
   },
-  "schema_digest": "sha256:a3fae0bc0a6eb8f784085aed6352ef62ad8f90ca74e1675f2e8022004da7a6e5",
+  "schema_digest": "sha256:6d63ce4b50f210327785664c28d1ef764cb70ab5d408e03ec913463ebd5c9544",
   "schema_id": "https://data.moex.com/dams/v0.1",
   "schema_name": "moex_dams",
-  "schema_version": "2.0.0",
+  "schema_version": "3.0.0",
   "slots": [
     {
       "iri": "https://data.moex.com/dams/access_points",
@@ -1969,6 +2013,10 @@
     {
       "iri": "https://data.moex.com/dams/approved_by_ref",
       "name": "approved_by_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/artifact_version",
+      "name": "artifact_version"
     },
     {
       "iri": "https://data.moex.com/dams/asset_kind",

@@ -11,7 +11,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 **Date:** 2026-10-06  
 **Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [ADR-033](ADR-033-technical-asset-quantum-boundary.md), [ADR-036](ADR-036-datatype-system.md), [ADR-039](ADR-039-structure-node-addressing.md), [ADR-040](ADR-040-message-integration-model.md), [ADR-041](ADR-041-schemanode-datatype-binding.md)  
+**Related:** [ADR-033](ADR-033-technical-asset-quantum-boundary.md), [ADR-036](ADR-036-datatype-system.md), [ADR-039](ADR-039-structure-node-addressing.md), [ADR-040](ADR-040-message-integration-model.md), [ADR-041](ADR-041-schemanode-datatype-binding.md), [ADR-044](ADR-044-model-element-decomposition.md)  
 **Spike:** [data-structure-spike-report.md](../migration/data-structure-spike-report.md)
 
 ## Context
@@ -52,7 +52,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 
 ### EmbeddedElement vs IdentifiedElement
 
-`SchemaNode` `is_a: EmbeddedElement`. `local_key` — слот **только** встраиваемых объектов: уникальность внутри родителя (`DataStructure`), не глобальный идентификатор. Не конфликтовать с будущим `IdentifiedElement`: не вводить второй `description` / не делать `local_key` глобальным key. Идентичность узла: `(DataStructure.element_id, local_key)`.
+`SchemaNode` `is_a: EmbeddedElement`. `local_key` — слот **только** встраиваемых объектов: уникальность внутри родителя (`DataStructure`), не глобальный идентификатор. Не конфликтовать с `IdentifiedElement` (ADR-044): не вводить второй `description` / не делать `local_key` глобальным key. `EmbeddedElement` использует mixin `DescribedElement`; собственный слот `description` снят. Идентичность узла: `(DataStructure.element_id, local_key)`.
 
 ### Деприкация PhysicalField
 

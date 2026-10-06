@@ -6,7 +6,7 @@ supersedes: []
 superseded_by: MODELING_ARCHITECTURE.md
 ---
 
-# ADR-035: Transitional element tags registry
+# ADR-043: Transitional element tags registry
 
 **Date:** 2026-10-05  
 **Status:** Accepted  
@@ -46,7 +46,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 ## Consequences
 
 - Нет «безымянных» переходных меток.
-- Расширение реестра — правка ADR-035 + тест allowlist.
+- Расширение реестра — правка ADR-043 + тест allowlist.
 
 ## Alternatives
 

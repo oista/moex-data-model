@@ -20,7 +20,6 @@ classes:
     is_a: ModelElement
     mixins:
       - HasOwnership
-      - HasLifecycle
     description: Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr, а семантика — модели данных.
     slots:
       - integration_ref
@@ -36,6 +35,9 @@ classes:
       - integration_channel
       - integration_spec_ref
       - entity_bindings
+    slot_usage:
+      description:
+        required: true
 
   DataFlowEntityBinding:
     is_a: ModelElement
@@ -49,6 +51,9 @@ classes:
       - schema_node_refs
       - transformation_mapping_refs
       - direction
+    slot_usage:
+      description:
+        required: true
 
 slots:
   integration_ref:

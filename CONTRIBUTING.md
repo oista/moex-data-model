@@ -21,4 +21,4 @@ On Linux/macOS, `make check` delegates to the same script when available; indivi
 
 ## ADRs
 
-Accepted ADRs are not rewritten for additive registries — add a new ADR (e.g. tags registry ADR-035 after Accepted ADR-031).
+Accepted ADRs are not rewritten for additive registries — add a new ADR (e.g. tags registry ADR-043 after Accepted ADR-031).

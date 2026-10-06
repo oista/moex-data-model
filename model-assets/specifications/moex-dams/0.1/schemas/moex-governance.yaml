@@ -4,17 +4,21 @@ version: 0.1.0
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml: https://w3id.org/linkml/
+  skos: http://www.w3.org/2004/02/skos/core#
   dams: https://data.moex.com/dams/
 imports:
   - linkml:types
   - moex-types
   - moex-registries
+  - moex-base
 default_prefix: dams
 default_range: string
 
 classes:
   ClassificationAssignment:
     description: Версионируемое назначение категории классификации элементу модели с основанием и периодом действия.
+    mixins:
+      - HasValidity
     slots:
       - assignment_id
       - classified_element_ref
@@ -22,27 +26,25 @@ classes:
       - governance_classification
       - classification_source
       - classification_rationale
-      - valid_from
-      - valid_to
       - approval_status
 
   PolicyBinding:
     description: Применение управляемой политики к элементу модели.
+    mixins:
+      - HasValidity
     slots:
       - policy_binding_id
       - policy_target_ref
       - policy_ref
-      - valid_from
-      - valid_to
       - approval_status
 
   HasLifecycle:
     mixin: true
     description: "Mixin жизненного цикла: статус, период действия и ссылка на заменяющий элемент."
+    mixins:
+      - HasValidity
     slots:
       - lifecycle_status
-      - valid_from
-      - valid_to
       - deprecated_by_ref
 
   HasOwnership:
@@ -99,16 +101,31 @@ classes:
 
   HasDefinition:
     mixin: true
+    mixins:
+      - DescribedElement
     description: >
-      Mixin эталонного определения (ADR-025). Слот description остаётся
-      skos:definition (own text). Отсутствие description при наличии
-      definition_source_ref означает наследование; заданный description —
-      own (опционально adapted from source). scoped_definitions — контекстные
-      определения (v1: уровень ITSystem), не заменяющие эталон вне scope.
+      Mixin эталонного определения (ADR-025 / ADR-044). Слот description
+      индуцируется через DescribedElement; exact_mappings указывает
+      skos:definition (slot_uri не меняется — предикат dams:description).
+      Отсутствие description при наличии definition_source_ref означает
+      наследование; заданный description — own (опционально adapted from
+      source). scoped_definitions — контекстные определения (v1: уровень
+      ITSystem), не заменяющие эталон вне scope.
     slots:
       - definition_source_ref
       - definition_rationale
       - scoped_definitions
+    slot_usage:
+      description:
+        required: false
+        exact_mappings:
+          - skos:definition
+        description: >
+          Reference definition (skos:definition via exact_mappings; RDF
+          predicate remains dams:description per ADR-044). Absent means
+          inherit via definition_source_ref (ontology class or GlossaryTerm)
+          per ADR-025. Prefer definition cascade over copying text from
+          related ConceptualProperty / LogicalAttribute.
 
   ScopedDefinition:
     mixins:
@@ -150,10 +167,6 @@ slots:
   lifecycle_status:
     range: LifecycleStatusEnum
     required: true
-  valid_from:
-    range: datetime
-  valid_to:
-    range: datetime
   deprecated_by_ref:
     range: uriorcurie
   data_owner_ref:

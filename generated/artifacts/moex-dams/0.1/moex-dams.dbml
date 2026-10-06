@@ -124,6 +124,30 @@ source_uri varchar
 registry_status varchar [not null]
 }
 
+Table IdentifiedElement {
+element_id varchar [not null, primary key]
+}
+
+Table NamedElement {
+name varchar [not null]
+title varchar
+aliases varchar
+}
+
+Table DescribedElement {
+description varchar
+}
+
+Table HasSemanticAnnotations {
+glossary_term_refs varchar
+tags varchar
+}
+
+Table HasValidity {
+valid_from datetime
+valid_to datetime
+}
+
 Table ClassificationAssignment {
 assignment_id varchar [not null, primary key]
 classified_element_ref varchar [not null]
@@ -131,25 +155,25 @@ classification_term_ref varchar
 governance_classification varchar
 classification_source varchar
 classification_rationale varchar
+approval_status varchar
 valid_from datetime
 valid_to datetime
-approval_status varchar
 }
 
 Table PolicyBinding {
 policy_binding_id varchar [not null, primary key]
 policy_target_ref varchar [not null]
 policy_ref varchar [not null]
+approval_status varchar
 valid_from datetime
 valid_to datetime
-approval_status varchar
 }
 
 Table HasLifecycle {
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
 }
 
 Table HasOwnership {
@@ -189,6 +213,8 @@ Table HasDefinition {
 definition_source_ref varchar
 definition_rationale varchar
 scoped_definitions varchar
+HasDefinition_description varchar
+description varchar
 }
 
 Table ScopedDefinition {
@@ -209,28 +235,27 @@ Table ModelElement {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
+description varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 }
 
 Table ModelPackage {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 api_version varchar [not null]
 model_version varchar [not null]
 implementation_scope varchar
@@ -255,6 +280,7 @@ data_types varchar
 native_type_bindings varchar
 data_structures varchar
 messages varchar
+ModelPackage_description varchar [not null]
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
@@ -265,28 +291,30 @@ sensitivity_term_refs varchar
 classification_source varchar
 classification_rationale varchar
 policy_refs varchar
+description varchar
 }
 
 Table DomainContext {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 domain_ref varchar [not null]
 solution_ref varchar
 namespace varchar [not null]
 business_process_refs varchar
+DomainContext_description varchar [not null]
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
 ownership_inheritance_rule varchar
+description varchar
 }
 
 Table ConceptualEntity {
@@ -294,12 +322,13 @@ element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
 aliases varchar
-glossary_term_refs varchar
-tags varchar
+description varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 parent_concept_ref varchar
 key_attribute_refs varchar
 entity_tier varchar
@@ -307,7 +336,6 @@ dependency_kind varchar
 depends_on_refs varchar
 genesis_kind varchar
 external_class_refs varchar
-ConceptualEntity_description varchar [not null]
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
@@ -318,7 +346,7 @@ business_importance varchar
 definition_source_ref varchar
 definition_rationale varchar
 scoped_definitions varchar
-description varchar [not null]
+HasDefinition_description varchar
 }
 
 Table ConceptualProperty {
@@ -326,12 +354,13 @@ element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
 aliases varchar
-glossary_term_refs varchar
-tags varchar
+description varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 property_owner_entity_ref varchar [not null]
 significance_basis varchar [not null]
 significance_rationale varchar
@@ -339,7 +368,6 @@ property_kind varchar [not null]
 conceptual_domain_ref varchar
 is_identifying boolean
 ConceptualProperty_genesis_kind varchar [not null]
-ConceptualProperty_description varchar [not null]
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
@@ -353,7 +381,7 @@ approval_status varchar
 approved_by_ref varchar
 approved_at datetime
 policy_refs varchar
-description varchar [not null]
+HasDefinition_description varchar
 }
 
 Table LogicalEntity {
@@ -361,12 +389,13 @@ element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
 aliases varchar
-glossary_term_refs varchar
-tags varchar
+description varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 context_ref varchar [not null]
 conceptual_entity_refs varchar
 solution_ref varchar
@@ -379,7 +408,6 @@ business_key_kind varchar
 conceptual_alignment_status varchar
 alignment_rationale varchar
 isolation_rationale varchar
-LogicalEntity_description varchar [not null]
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
@@ -396,7 +424,7 @@ policy_refs varchar
 definition_source_ref varchar
 definition_rationale varchar
 scoped_definitions varchar
-description varchar [not null]
+HasDefinition_description varchar
 }
 
 Table LogicalAttribute {
@@ -404,12 +432,13 @@ element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
 aliases varchar
-glossary_term_refs varchar
-tags varchar
+description varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 owner_entity_ref varchar [not null]
 LogicalAttribute_concept_ref varchar
 value_domain_ref varchar
@@ -426,7 +455,6 @@ mapping_rationale varchar
 currency_attribute_ref varchar
 timezone_policy varchar
 temporal_semantics varchar
-LogicalAttribute_description varchar [not null]
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
@@ -440,21 +468,21 @@ policy_refs varchar
 definition_source_ref varchar
 definition_rationale varchar
 scoped_definitions varchar
-description varchar [not null]
+HasDefinition_description varchar
 }
 
 Table Relationship {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
+description varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 source_entity_ref varchar [not null]
 target_entity_ref varchar [not null]
 source_role varchar
@@ -476,12 +504,13 @@ element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
 aliases varchar
-glossary_term_refs varchar
-tags varchar
+description varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 forward_label varchar [not null]
 forward_label_en varchar
 inverse_label varchar
@@ -489,11 +518,10 @@ inverse_label_en varchar
 symmetric boolean
 default_relationship_kind varchar
 ontology_property_ref varchar
-RelationTerm_description varchar [not null]
 definition_source_ref varchar
 definition_rationale varchar
 scoped_definitions varchar
-description varchar [not null]
+HasDefinition_description varchar
 }
 
 Table ExternalClassRef {
@@ -512,14 +540,6 @@ approved_at datetime
 
 Table Mapping {
 element_id varchar [not null, primary key]
-name varchar [not null]
-title varchar
-description varchar [not null]
-aliases varchar
-glossary_term_refs varchar
-tags varchar
-lifecycle_status varchar [not null]
-deprecated_by_ref varchar
 source_refs varchar
 target_refs varchar
 mapping_type varchar [not null]
@@ -527,6 +547,9 @@ mapping_cardinality varchar [not null]
 transformation_ref varchar
 transformation_expression varchar
 confidence varchar
+Mapping_description varchar
+lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
 source_artifact_ref varchar
@@ -534,6 +557,7 @@ evidence_refs varchar
 approval_status varchar
 approved_by_ref varchar
 approved_at datetime
+description varchar
 }
 
 Table HasStructure {
@@ -561,12 +585,12 @@ element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 asset_namespace varchar [not null]
 TechnicalAsset_qualified_name varchar [not null]
 TechnicalAsset_native_name varchar [not null]
@@ -588,7 +612,7 @@ sensitivity_term_refs varchar
 classification_source varchar
 classification_rationale varchar
 policy_refs varchar
-description varchar [not null]
+description varchar
 }
 
 Table DataCarrier {
@@ -596,12 +620,12 @@ element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 asset_namespace varchar [not null]
 TechnicalAsset_qualified_name varchar [not null]
 TechnicalAsset_native_name varchar [not null]
@@ -631,7 +655,7 @@ location_uri varchar
 region varchar
 containment_kind varchar
 asset_kind varchar [not null]
-description varchar [not null]
+description varchar
 }
 
 Table AccessPoint {
@@ -639,12 +663,12 @@ element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 asset_namespace varchar [not null]
 TechnicalAsset_qualified_name varchar [not null]
 TechnicalAsset_native_name varchar [not null]
@@ -679,7 +703,7 @@ location_uri varchar
 region varchar
 asset_kind varchar [not null]
 TechnicalAsset_direction varchar
-description varchar [not null]
+description varchar
 }
 
 Table DataContainer {
@@ -687,12 +711,12 @@ element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 asset_namespace varchar [not null]
 TechnicalAsset_qualified_name varchar [not null]
 TechnicalAsset_native_name varchar [not null]
@@ -717,7 +741,7 @@ DataContainer_direction varchar
 containment_kind varchar
 asset_kind varchar [not null]
 TechnicalAsset_direction varchar
-description varchar [not null]
+description varchar
 }
 
 Table ExecutionAsset {
@@ -725,12 +749,12 @@ element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 asset_namespace varchar [not null]
 TechnicalAsset_qualified_name varchar [not null]
 TechnicalAsset_native_name varchar [not null]
@@ -756,25 +780,25 @@ ExecutionAsset_asset_kind varchar [not null]
 ExecutionAsset_direction varchar
 asset_kind varchar [not null]
 TechnicalAsset_direction varchar
-description varchar [not null]
+description varchar
 }
 
 Table ConceptualDomain {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 conceptual_domain_kind varchar [not null]
 value_meanings varchar
 concept_scheme_uri varchar
 broader_domain_ref varchar
+ConceptualDomain_description varchar [not null]
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
@@ -784,6 +808,7 @@ evidence_refs varchar
 approval_status varchar
 approved_by_ref varchar
 approved_at datetime
+description varchar
 }
 
 Table ValueMeaning {
@@ -800,14 +825,13 @@ Table DataType {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 type_name varchar [not null]
 type_family varchar [not null]
 precision int
@@ -819,6 +843,8 @@ charset varchar
 xsd_datatype varchar
 linkml_type varchar
 base_type_ref varchar
+DataType_description varchar [not null]
+description varchar
 }
 
 Table NativeTypeBinding {
@@ -834,14 +860,13 @@ Table ValueDomain {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 value_domain_kind varchar [not null]
 ValueDomain_data_type_ref varchar [not null]
 conceptual_domain_ref varchar
@@ -852,6 +877,8 @@ max_value varchar
 permissible_values varchar
 value_set_source varchar
 dynamic_query varchar
+ValueDomain_description varchar [not null]
+description varchar
 }
 
 Table PermissibleValue {
@@ -874,21 +901,20 @@ include_self boolean
 
 Table EmbeddedElement {
 local_key varchar [not null, primary key]
-EmbeddedElement_description varchar [not null]
+description varchar
 }
 
 Table DataStructure {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 schema_format varchar [not null]
 schema_dialect varchar
 structure_version varchar [not null]
@@ -898,9 +924,12 @@ source_artifact_ref varchar
 source_pointer varchar
 content_digest varchar
 previous_version_ref varchar
+DataStructure_description varchar
+description varchar
 }
 
 Table SchemaNode {
+description varchar
 SchemaNode_native_name varchar [not null]
 node_kind varchar [not null]
 children varchar
@@ -922,10 +951,8 @@ column_position int
 is_primary_key boolean
 is_unique boolean
 foreign_key_target varchar
-SchemaNode_description varchar [not null]
 SchemaNode_local_key varchar [not null, primary key]
 local_key varchar [not null, primary key]
-EmbeddedElement_description varchar [not null]
 }
 
 Table Message {
@@ -933,34 +960,32 @@ element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
 aliases varchar
-glossary_term_refs varchar
-tags varchar
+description varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 payload_structure_ref varchar [not null]
 headers_structure_ref varchar
 content_type varchar
 envelope_kind varchar
 envelope_ref varchar
 correlation_hint varchar
-Message_description varchar [not null]
-description varchar [not null]
 }
 
 Table DataFlow {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 integration_ref varchar [not null]
 contract_ref varchar
 source_solution_ref varchar [not null]
@@ -974,24 +999,25 @@ integration_class varchar [not null]
 integration_channel varchar [not null]
 integration_spec_ref varchar [not null]
 entity_bindings varchar
+DataFlow_description varchar [not null]
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
 ownership_inheritance_rule varchar
+description varchar
 }
 
 Table DataFlowEntityBinding {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 flow_ref varchar [not null]
 source_model_ref varchar [not null]
 logical_entity_ref varchar [not null]
@@ -1000,20 +1026,21 @@ carrier_refs varchar
 schema_node_refs varchar
 transformation_mapping_refs varchar
 direction varchar
+DataFlowEntityBinding_description varchar [not null]
+description varchar
 }
 
 Table DataModelBinding {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 specification_version varchar [not null]
 implementation_version varchar [not null]
 contract_ref varchar
@@ -1026,73 +1053,77 @@ compatibility_mode varchar [not null]
 compatibility_baseline_ref varchar
 integrity_digest varchar [not null]
 generated_at datetime [not null]
+DataModelBinding_description varchar [not null]
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
 ownership_inheritance_rule varchar
+description varchar
 }
 
 Table ModelSelection {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 selected_entities varchar
+ModelSelection_description varchar [not null]
+description varchar
 }
 
 Table SelectedEntity {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 logical_entity_ref varchar [not null]
 selected_attributes varchar
 carrier_refs varchar
+SelectedEntity_description varchar [not null]
+description varchar
 }
 
 Table SelectedAttribute {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 logical_attribute_ref varchar [not null]
 schema_node_refs varchar
 transformation_mapping_ref varchar
+SelectedAttribute_description varchar [not null]
+description varchar
 }
 
 Table Metric {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 metric_expression varchar [not null]
 aggregation_function varchar [not null]
 grain_entity_refs varchar
@@ -1100,27 +1131,30 @@ dimension_attribute_refs varchar
 measure_attribute_refs varchar
 unit varchar
 filter_expression varchar
+Metric_description varchar [not null]
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
 ownership_inheritance_rule varchar
 policy_refs varchar
+description varchar
 }
 
 Table Dimension {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
 lifecycle_status varchar [not null]
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 dimension_attribute_refs varchar
 grain_entity_refs varchar
+Dimension_description varchar [not null]
+description varchar
 }
 
 Table RequirementApplicability {
@@ -1149,13 +1183,12 @@ Table SpecificationRequirement {
 element_id varchar [not null, primary key]
 name varchar [not null]
 title varchar
-description varchar [not null]
 aliases varchar
-glossary_term_refs varchar
-tags varchar
+deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
-deprecated_by_ref varchar
+glossary_term_refs varchar
+tags varchar
 code varchar [not null]
 requirement_level varchar [not null]
 requirement_section varchar [not null]
@@ -1164,7 +1197,9 @@ applies_to varchar
 formal_checks varchar
 implementation_status varchar
 superseded_by varchar
+SpecificationRequirement_description varchar [not null]
 SpecificationRequirement_lifecycle_status varchar [not null]
+description varchar
 lifecycle_status varchar [not null]
 }
 
@@ -1189,6 +1224,7 @@ policy_bindings varchar
 Ref: ITSolution.member_system_refs > ITSystem.registry_id
 Ref: ITSolution.platform_ref > ITPlatform.registry_id
 Ref: BusinessDomain.parent_domain_ref > BusinessDomain.registry_id
+Ref: HasSemanticAnnotations.glossary_term_refs > GlossaryTerm.registry_id
 Ref: ClassificationAssignment.classification_term_ref > DataClassificationTerm.registry_id
 Ref: PolicyBinding.policy_ref > Policy.registry_id
 Ref: HasOwnership.data_owner_ref > Role.registry_id
@@ -1277,7 +1313,6 @@ Ref: Relationship.relation_term_ref > RelationTerm.element_id
 Ref: RelationTerm.glossary_term_refs > GlossaryTerm.registry_id
 Ref: RelationTerm.scoped_definitions > ScopedDefinition.scoped_definition_id
 Ref: ExternalClassRef.approved_by_ref > Role.registry_id
-Ref: Mapping.glossary_term_refs > GlossaryTerm.registry_id
 Ref: Mapping.approved_by_ref > Role.registry_id
 Ref: HasStructure.structure_ref > DataStructure.element_id
 Ref: TechnicalAsset.glossary_term_refs > GlossaryTerm.registry_id

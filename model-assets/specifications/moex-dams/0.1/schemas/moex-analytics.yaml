@@ -29,6 +29,9 @@ classes:
       - measure_attribute_refs
       - unit
       - filter_expression
+    slot_usage:
+      description:
+        required: true
 
   Dimension:
     is_a: ModelElement
@@ -36,6 +39,9 @@ classes:
     slots:
       - dimension_attribute_refs
       - grain_entity_refs
+    slot_usage:
+      description:
+        required: true
 
 slots:
   metric_expression:

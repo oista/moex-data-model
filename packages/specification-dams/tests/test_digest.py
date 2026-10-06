@@ -1,4 +1,4 @@
-"""Tests for DataModelBinding integrity_digest (ADR-034)."""
+"""Tests for DataModelBinding integrity_digest (ADR-042)."""
 
 from __future__ import annotations
 

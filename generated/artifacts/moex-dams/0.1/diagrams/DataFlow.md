@@ -7,8 +7,6 @@
     click DataFlow href "../DataFlow"
       HasOwnership <|-- DataFlow
         click HasOwnership href "../HasOwnership"
-      HasLifecycle <|-- DataFlow
-        click HasLifecycle href "../HasLifecycle"
       ModelElement <|-- DataFlow
         click ModelElement href "../ModelElement"
       

@@ -37,6 +37,12 @@ _SPEC_FILE_META: dict[str, tuple[str, str]] = {
         "импорты в одну схему для совместной проверки моделей, справочников, "
         "потоков и контрактов.",
     ),
+    "moex-base.yaml": (
+        "Базовые элементы",
+        "IdentifiedElement, NamedElement, DescribedElement, HasSemanticAnnotations "
+        "и HasValidity — строительные блоки ModelElement без governance-долга "
+        "цикла core↔structure (ADR-044).",
+    ),
     "moex-core.yaml": (
         "Ядро модели данных",
         "Описывает уровни conceptual, logical и physical и явный Mapping между "
