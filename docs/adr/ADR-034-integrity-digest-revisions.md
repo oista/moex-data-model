@@ -15,7 +15,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 
 ## Context
 
-`DataModelBinding.integrity_digest` фиксирует неизменяемый срез контрактной ревизии. При миграции PhysicalObject → TechnicalAsset (фаза 1) digest пересчитывался только в `--demo`. Для не-demo моделей неизменяемость ревизии требует **новой** ревизии с baseline, а не in-place пересчёта.
+`DataModelBinding.integrity_digest` фиксирует неизменяемый срез контрактной ревизии. При миграции физического объекта к TechnicalAsset (фаза 1) digest пересчитывался только в `--demo`. Для не-demo моделей неизменяемость ревизии требует **новой** ревизии с baseline, а не in-place пересчёта.
 
 ## Decision
 
