@@ -1,0 +1,266 @@
+{
+  "schema": "model-assets\\specifications\\moex-dams\\0.1\\schemas\\moex-dams.yaml",
+  "plugin": "JsonschemaValidationPlugin(closed=True)",
+  "rows": [
+    {
+      "group": "validate-examples",
+      "path": "model-assets/specifications/moex-dams/0.1/examples/client-contract-binding.yaml",
+      "target": "DataModelBinding",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 0,
+      "newly_invalid": false,
+      "still_ok": true,
+      "errors_sample": []
+    },
+    {
+      "group": "validate-examples",
+      "path": "model-assets/specifications/moex-dams/0.1/examples/client-data-flow.yaml",
+      "target": "DataFlow",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 0,
+      "newly_invalid": false,
+      "still_ok": true,
+      "errors_sample": []
+    },
+    {
+      "group": "validate-schemas",
+      "path": "model-assets/implementations/solutions/mdm/mdm-solution-model.yaml",
+      "target": "ModelPackage",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 0,
+      "newly_invalid": false,
+      "still_ok": true,
+      "errors_sample": []
+    },
+    {
+      "group": "validate-requirements",
+      "path": "model-assets/specifications/moex-dams/0.1/requirements/it-solution-requirements.yaml",
+      "target": "RequirementCatalog",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 18,
+      "newly_invalid": true,
+      "still_ok": false,
+      "errors_sample": [
+        "Additional properties are not allowed ('effective' was unexpected) in /requirements/5/formal_checks/4",
+        "Additional properties are not allowed ('effective' was unexpected) in /requirements/6/formal_checks/3",
+        "Additional properties are not allowed ('description' was unexpected) in /requirements/21/formal_checks/0",
+        "Additional properties are not allowed ('description' was unexpected) in /requirements/22/formal_checks/0",
+        "Additional properties are not allowed ('description' was unexpected) in /requirements/23/formal_checks/0",
+        "Additional properties are not allowed ('description' was unexpected) in /requirements/24/formal_checks/0",
+        "Additional properties are not allowed ('description' was unexpected) in /requirements/25/formal_checks/0",
+        "Additional properties are not allowed ('description' was unexpected) in /requirements/26/formal_checks/0"
+      ]
+    },
+    {
+      "group": "related-example",
+      "path": "model-assets/specifications/moex-dams/0.1/examples/ontology/valid-model-package.yaml",
+      "target": "ModelPackage",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 0,
+      "newly_invalid": false,
+      "still_ok": true,
+      "errors_sample": []
+    },
+    {
+      "group": "related-example",
+      "path": "model-assets/specifications/moex-dams/0.1/requirements/examples/it-solution-model.example.yaml",
+      "target": "ModelPackage",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 0,
+      "newly_invalid": false,
+      "still_ok": true,
+      "errors_sample": []
+    },
+    {
+      "group": "related-solution",
+      "path": "model-assets/implementations/solutions/crm/crm-solution-model.yaml",
+      "target": "ModelPackage",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 0,
+      "newly_invalid": false,
+      "still_ok": true,
+      "errors_sample": []
+    },
+    {
+      "group": "related-solution",
+      "path": "model-assets/implementations/solutions/esed/esed-solution-model.yaml",
+      "target": "ModelPackage",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 0,
+      "newly_invalid": false,
+      "still_ok": true,
+      "errors_sample": []
+    },
+    {
+      "group": "related-solution",
+      "path": "model-assets/implementations/solutions/ucd/ucd-solution-model.yaml",
+      "target": "ModelPackage",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 0,
+      "newly_invalid": false,
+      "still_ok": true,
+      "errors_sample": []
+    },
+    {
+      "group": "related-catalog",
+      "path": "model-assets/specifications/moex-dams/0.1/requirements/conceptual-model-requirements.yaml",
+      "target": "RequirementCatalog",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 14,
+      "newly_invalid": true,
+      "still_ok": false,
+      "errors_sample": [
+        "'CM-GEN-001' does not match '^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$' in /requirements/0/code",
+        "'CM-GEN-002' does not match '^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$' in /requirements/1/code",
+        "'CM-CON-001' does not match '^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$' in /requirements/2/code",
+        "'CM-REF-001' does not match '^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$' in /requirements/3/code",
+        "'CM-CON-002' does not match '^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$' in /requirements/4/code",
+        "Additional properties are not allowed ('description' was unexpected) in /requirements/4/formal_checks/0",
+        "'CM-CON-003' does not match '^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$' in /requirements/5/code",
+        "Additional properties are not allowed ('description' was unexpected) in /requirements/5/formal_checks/0"
+      ]
+    }
+  ],
+  "newly_invalid": [
+    {
+      "group": "validate-requirements",
+      "path": "model-assets/specifications/moex-dams/0.1/requirements/it-solution-requirements.yaml",
+      "target": "RequirementCatalog",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 18,
+      "newly_invalid": true,
+      "still_ok": false,
+      "errors_sample": [
+        "Additional properties are not allowed ('effective' was unexpected) in /requirements/5/formal_checks/4",
+        "Additional properties are not allowed ('effective' was unexpected) in /requirements/6/formal_checks/3",
+        "Additional properties are not allowed ('description' was unexpected) in /requirements/21/formal_checks/0",
+        "Additional properties are not allowed ('description' was unexpected) in /requirements/22/formal_checks/0",
+        "Additional properties are not allowed ('description' was unexpected) in /requirements/23/formal_checks/0",
+        "Additional properties are not allowed ('description' was unexpected) in /requirements/24/formal_checks/0",
+        "Additional properties are not allowed ('description' was unexpected) in /requirements/25/formal_checks/0",
+        "Additional properties are not allowed ('description' was unexpected) in /requirements/26/formal_checks/0"
+      ]
+    },
+    {
+      "group": "related-catalog",
+      "path": "model-assets/specifications/moex-dams/0.1/requirements/conceptual-model-requirements.yaml",
+      "target": "RequirementCatalog",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 14,
+      "newly_invalid": true,
+      "still_ok": false,
+      "errors_sample": [
+        "'CM-GEN-001' does not match '^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$' in /requirements/0/code",
+        "'CM-GEN-002' does not match '^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$' in /requirements/1/code",
+        "'CM-CON-001' does not match '^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$' in /requirements/2/code",
+        "'CM-REF-001' does not match '^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$' in /requirements/3/code",
+        "'CM-CON-002' does not match '^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$' in /requirements/4/code",
+        "Additional properties are not allowed ('description' was unexpected) in /requirements/4/formal_checks/0",
+        "'CM-CON-003' does not match '^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$' in /requirements/5/code",
+        "Additional properties are not allowed ('description' was unexpected) in /requirements/5/formal_checks/0"
+      ]
+    }
+  ],
+  "ok": [
+    {
+      "group": "validate-examples",
+      "path": "model-assets/specifications/moex-dams/0.1/examples/client-contract-binding.yaml",
+      "target": "DataModelBinding",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 0,
+      "newly_invalid": false,
+      "still_ok": true,
+      "errors_sample": []
+    },
+    {
+      "group": "validate-examples",
+      "path": "model-assets/specifications/moex-dams/0.1/examples/client-data-flow.yaml",
+      "target": "DataFlow",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 0,
+      "newly_invalid": false,
+      "still_ok": true,
+      "errors_sample": []
+    },
+    {
+      "group": "validate-schemas",
+      "path": "model-assets/implementations/solutions/mdm/mdm-solution-model.yaml",
+      "target": "ModelPackage",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 0,
+      "newly_invalid": false,
+      "still_ok": true,
+      "errors_sample": []
+    },
+    {
+      "group": "related-example",
+      "path": "model-assets/specifications/moex-dams/0.1/examples/ontology/valid-model-package.yaml",
+      "target": "ModelPackage",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 0,
+      "newly_invalid": false,
+      "still_ok": true,
+      "errors_sample": []
+    },
+    {
+      "group": "related-example",
+      "path": "model-assets/specifications/moex-dams/0.1/requirements/examples/it-solution-model.example.yaml",
+      "target": "ModelPackage",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 0,
+      "newly_invalid": false,
+      "still_ok": true,
+      "errors_sample": []
+    },
+    {
+      "group": "related-solution",
+      "path": "model-assets/implementations/solutions/crm/crm-solution-model.yaml",
+      "target": "ModelPackage",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 0,
+      "newly_invalid": false,
+      "still_ok": true,
+      "errors_sample": []
+    },
+    {
+      "group": "related-solution",
+      "path": "model-assets/implementations/solutions/esed/esed-solution-model.yaml",
+      "target": "ModelPackage",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 0,
+      "newly_invalid": false,
+      "still_ok": true,
+      "errors_sample": []
+    },
+    {
+      "group": "related-solution",
+      "path": "model-assets/implementations/solutions/ucd/ucd-solution-model.yaml",
+      "target": "ModelPackage",
+      "exists": true,
+      "vacuous_error_count": 0,
+      "plugin_error_count": 0,
+      "newly_invalid": false,
+      "still_ok": true,
+      "errors_sample": []
+    }
+  ]
+}
