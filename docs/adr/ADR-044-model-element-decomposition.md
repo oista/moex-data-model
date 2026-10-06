@@ -63,7 +63,7 @@ New mixin `HasValidity` (`valid_from`, `valid_to`); `HasLifecycle` includes it a
 
 **IdentifiedElement is not for every service class.** LinkML allows one identifier per class. Classes with a proprietary id stay on their own id and may only gain `HasValidity` / `HasProvenance`. D8 (base-class change) applies only where `element_id` already exists or is required. Exact class lists live in the inventory report.
 
-**ValueMeaning** stays an exception: renaming `meaning_key` → `local_key` would break data; do not force `EmbeddedElement` without a data migration ADR.
+**ValueMeaning** stays an exception: renaming `meaning_key` → `local_key` would break data; do not force `EmbeddedElement` without a data migration ADR. Recorded in the inventory report §3.
 
 ### D6. No `VersionedArtifact` mixin yet
 

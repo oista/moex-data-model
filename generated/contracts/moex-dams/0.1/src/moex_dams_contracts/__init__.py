@@ -1100,7 +1100,7 @@ class HasValidity(ConfiguredBaseModel):
     valid_to: Optional[datetime ] = Field(default=None)
 
 
-class ClassificationAssignment(ConfiguredBaseModel):
+class ClassificationAssignment(HasValidity):
     """
     Версионируемое назначение категории классификации элементу модели с основанием и периодом действия.
     """
@@ -1110,21 +1110,21 @@ class ClassificationAssignment(ConfiguredBaseModel):
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
+    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
 
 
-class PolicyBinding(ConfiguredBaseModel):
+class PolicyBinding(HasValidity):
     """
     Применение управляемой политики к элементу модели.
     """
     policy_binding_id: str = Field(default=...)
     policy_target_ref: str = Field(default=...)
     policy_ref: str = Field(default=...)
+    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
-    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
 
 
 class HasLifecycle(HasValidity):
@@ -2159,7 +2159,7 @@ class Message(ModelElement):
     valid_to: Optional[datetime ] = Field(default=None)
 
 
-class DataFlow(ModelElement, HasOwnership, HasLifecycle):
+class DataFlow(ModelElement, HasOwnership):
     """
     Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr, а семантика — модели данных.
     """
@@ -2181,12 +2181,12 @@ class DataFlow(ModelElement, HasOwnership, HasLifecycle):
     owning_unit_ref: Optional[str] = Field(default=None)
     ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
-    deprecated_by_ref: Optional[str] = Field(default=None)
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
     aliases: Optional[list[str]] = Field(default=None)
     description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
     element_id: str = Field(default=...)
@@ -2219,7 +2219,7 @@ class DataFlowEntityBinding(ModelElement):
     valid_to: Optional[datetime ] = Field(default=None)
 
 
-class DataModelBinding(ModelElement, HasOwnership, HasLifecycle):
+class DataModelBinding(ModelElement, HasOwnership):
     """
     Дочерняя модельная спецификация дата-контракта, фиксирующая неизменяемую ревизию модели и передаваемый срез.
     """
@@ -2235,8 +2235,6 @@ class DataModelBinding(ModelElement, HasOwnership, HasLifecycle):
     compatibility_baseline_ref: Optional[str] = Field(default=None)
     integrity_digest: str = Field(default=...)
     generated_at: datetime  = Field(default=...)
-    lifecycle_status: LifecycleStatusEnum = Field(default=...)
-    deprecated_by_ref: Optional[str] = Field(default=None)
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
@@ -2246,6 +2244,8 @@ class DataModelBinding(ModelElement, HasOwnership, HasLifecycle):
     title: Optional[str] = Field(default=None)
     aliases: Optional[list[str]] = Field(default=None)
     description: str = Field(default=...)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
     glossary_term_refs: Optional[list[str]] = Field(default=None)
     tags: Optional[list[str]] = Field(default=None)
     element_id: str = Field(default=...)

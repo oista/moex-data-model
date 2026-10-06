@@ -5,6 +5,9 @@
  classDiagram
     class PolicyBinding
     click PolicyBinding href "../PolicyBinding"
+      HasValidity <|-- PolicyBinding
+        click HasValidity href "../HasValidity"
+      
       PolicyBinding : approval_status
         
           

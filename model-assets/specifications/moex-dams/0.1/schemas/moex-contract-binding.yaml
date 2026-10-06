@@ -20,7 +20,6 @@ classes:
   DataModelBinding:
     is_a: ModelElement
     mixins:
-      - HasLifecycle
       - HasOwnership
     description: Дочерняя модельная спецификация дата-контракта, фиксирующая неизменяемую ревизию модели и передаваемый срез.
     slots:

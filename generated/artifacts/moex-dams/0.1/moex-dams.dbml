@@ -155,18 +155,18 @@ classification_term_ref varchar
 governance_classification varchar
 classification_source varchar
 classification_rationale varchar
+approval_status varchar
 valid_from datetime
 valid_to datetime
-approval_status varchar
 }
 
 Table PolicyBinding {
 policy_binding_id varchar [not null, primary key]
 policy_target_ref varchar [not null]
 policy_ref varchar [not null]
+approval_status varchar
 valid_from datetime
 valid_to datetime
-approval_status varchar
 }
 
 Table HasLifecycle {

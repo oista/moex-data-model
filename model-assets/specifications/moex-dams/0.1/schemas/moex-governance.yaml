@@ -17,6 +17,8 @@ default_range: string
 classes:
   ClassificationAssignment:
     description: Версионируемое назначение категории классификации элементу модели с основанием и периодом действия.
+    mixins:
+      - HasValidity
     slots:
       - assignment_id
       - classified_element_ref
@@ -24,18 +26,16 @@ classes:
       - governance_classification
       - classification_source
       - classification_rationale
-      - valid_from
-      - valid_to
       - approval_status
 
   PolicyBinding:
     description: Применение управляемой политики к элементу модели.
+    mixins:
+      - HasValidity
     slots:
       - policy_binding_id
       - policy_target_ref
       - policy_ref
-      - valid_from
-      - valid_to
       - approval_status
 
   HasLifecycle:

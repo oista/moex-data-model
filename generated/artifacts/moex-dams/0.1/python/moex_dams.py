@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-06T20:35:23
+# Generation date: 2026-10-06T20:41:22
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -885,9 +885,9 @@ class ClassificationAssignment(YAMLRoot):
     governance_classification: Optional[Union[str, "GovernanceClassificationEnum"]] = None
     classification_source: Optional[str] = None
     classification_rationale: Optional[str] = None
+    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
     valid_from: Optional[Union[str, XSDDateTime]] = None
     valid_to: Optional[Union[str, XSDDateTime]] = None
-    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.assignment_id):
@@ -912,14 +912,14 @@ class ClassificationAssignment(YAMLRoot):
         if self.classification_rationale is not None and not isinstance(self.classification_rationale, str):
             self.classification_rationale = str(self.classification_rationale)
 
+        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
+            self.approval_status = ApprovalStatusEnum(self.approval_status)
+
         if self.valid_from is not None and not isinstance(self.valid_from, XSDDateTime):
             self.valid_from = XSDDateTime(self.valid_from)
 
         if self.valid_to is not None and not isinstance(self.valid_to, XSDDateTime):
             self.valid_to = XSDDateTime(self.valid_to)
-
-        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
-            self.approval_status = ApprovalStatusEnum(self.approval_status)
 
         super().__post_init__(**kwargs)
 
@@ -939,9 +939,9 @@ class PolicyBinding(YAMLRoot):
     policy_binding_id: Union[str, PolicyBindingPolicyBindingId] = None
     policy_target_ref: Union[str, URIorCURIE] = None
     policy_ref: Union[str, PolicyRegistryId] = None
+    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
     valid_from: Optional[Union[str, XSDDateTime]] = None
     valid_to: Optional[Union[str, XSDDateTime]] = None
-    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.policy_binding_id):
@@ -959,14 +959,14 @@ class PolicyBinding(YAMLRoot):
         if not isinstance(self.policy_ref, PolicyRegistryId):
             self.policy_ref = PolicyRegistryId(self.policy_ref)
 
+        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
+            self.approval_status = ApprovalStatusEnum(self.approval_status)
+
         if self.valid_from is not None and not isinstance(self.valid_from, XSDDateTime):
             self.valid_from = XSDDateTime(self.valid_from)
 
         if self.valid_to is not None and not isinstance(self.valid_to, XSDDateTime):
             self.valid_to = XSDDateTime(self.valid_to)
-
-        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
-            self.approval_status = ApprovalStatusEnum(self.approval_status)
 
         super().__post_init__(**kwargs)
 
@@ -3596,7 +3596,6 @@ class DataFlow(ModelElement):
     integration_channel: Union[str, "IntegrationChannelEnum"] = None
     integration_spec_ref: Union[str, URI] = None
     description: str = None
-    deprecated_by_ref: Optional[Union[str, URIorCURIE]] = None
     contract_ref: Optional[Union[str, DataContractReferenceRegistryId]] = None
     entity_bindings: Optional[Union[dict[Union[str, DataFlowEntityBindingElementId], Union[dict, "DataFlowEntityBinding"]], list[Union[dict, "DataFlowEntityBinding"]]]] = empty_dict()
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
@@ -3609,11 +3608,6 @@ class DataFlow(ModelElement):
             self.MissingRequiredField("element_id")
         if not isinstance(self.element_id, DataFlowElementId):
             self.element_id = DataFlowElementId(self.element_id)
-
-        if self._is_empty(self.lifecycle_status):
-            self.MissingRequiredField("lifecycle_status")
-        if not isinstance(self.lifecycle_status, LifecycleStatusEnum):
-            self.lifecycle_status = LifecycleStatusEnum(self.lifecycle_status)
 
         if self._is_empty(self.integration_ref):
             self.MissingRequiredField("integration_ref")
@@ -3674,9 +3668,6 @@ class DataFlow(ModelElement):
             self.MissingRequiredField("description")
         if not isinstance(self.description, str):
             self.description = str(self.description)
-
-        if self.deprecated_by_ref is not None and not isinstance(self.deprecated_by_ref, URIorCURIE):
-            self.deprecated_by_ref = URIorCURIE(self.deprecated_by_ref)
 
         if self.contract_ref is not None and not isinstance(self.contract_ref, DataContractReferenceRegistryId):
             self.contract_ref = DataContractReferenceRegistryId(self.contract_ref)
@@ -3796,7 +3787,6 @@ class DataModelBinding(ModelElement):
     integrity_digest: Union[str, Sha256Digest] = None
     generated_at: Union[str, XSDDateTime] = None
     description: str = None
-    deprecated_by_ref: Optional[Union[str, URIorCURIE]] = None
     contract_ref: Optional[Union[str, DataContractReferenceRegistryId]] = None
     selections: Optional[Union[dict[Union[str, ModelSelectionElementId], Union[dict, "ModelSelection"]], list[Union[dict, "ModelSelection"]]]] = empty_dict()
     compatibility_baseline_ref: Optional[Union[str, URI]] = None
@@ -3810,11 +3800,6 @@ class DataModelBinding(ModelElement):
             self.MissingRequiredField("element_id")
         if not isinstance(self.element_id, DataModelBindingElementId):
             self.element_id = DataModelBindingElementId(self.element_id)
-
-        if self._is_empty(self.lifecycle_status):
-            self.MissingRequiredField("lifecycle_status")
-        if not isinstance(self.lifecycle_status, LifecycleStatusEnum):
-            self.lifecycle_status = LifecycleStatusEnum(self.lifecycle_status)
 
         if self._is_empty(self.specification_version):
             self.MissingRequiredField("specification_version")
@@ -3865,9 +3850,6 @@ class DataModelBinding(ModelElement):
             self.MissingRequiredField("description")
         if not isinstance(self.description, str):
             self.description = str(self.description)
-
-        if self.deprecated_by_ref is not None and not isinstance(self.deprecated_by_ref, URIorCURIE):
-            self.deprecated_by_ref = URIorCURIE(self.deprecated_by_ref)
 
         if self.contract_ref is not None and not isinstance(self.contract_ref, DataContractReferenceRegistryId):
             self.contract_ref = DataContractReferenceRegistryId(self.contract_ref)

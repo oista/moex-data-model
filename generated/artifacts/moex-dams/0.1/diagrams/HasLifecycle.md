@@ -11,10 +11,6 @@
 
       HasLifecycle <|-- ModelElement
         click ModelElement href "../ModelElement"
-      HasLifecycle <|-- DataFlow
-        click DataFlow href "../DataFlow"
-      HasLifecycle <|-- DataModelBinding
-        click DataModelBinding href "../DataModelBinding"
       
 
       HasLifecycle : deprecated_by_ref

@@ -1917,9 +1917,9 @@
                 "integration_class",
                 "integration_channel",
                 "integration_spec_ref",
-                "lifecycle_status",
                 "name",
                 "description",
+                "lifecycle_status",
                 "element_id"
             ],
             "title": "DataFlow",
@@ -2221,9 +2221,9 @@
                 "compatibility_mode",
                 "integrity_digest",
                 "generated_at",
-                "lifecycle_status",
                 "name",
                 "description",
+                "lifecycle_status",
                 "element_id"
             ],
             "title": "DataModelBinding",

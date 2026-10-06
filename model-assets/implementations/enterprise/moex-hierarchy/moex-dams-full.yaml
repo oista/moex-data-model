@@ -3318,6 +3318,8 @@ classes:
     description: Версионируемое назначение категории классификации элементу модели
       с основанием и периодом действия.
     from_schema: https://data.moex.com/dams/governance/v0.1
+    mixins:
+    - HasValidity
     slots:
     - assignment_id
     - classified_element_ref
@@ -3325,19 +3327,17 @@ classes:
     - governance_classification
     - classification_source
     - classification_rationale
-    - valid_from
-    - valid_to
     - approval_status
   PolicyBinding:
     name: PolicyBinding
     description: Применение управляемой политики к элементу модели.
     from_schema: https://data.moex.com/dams/governance/v0.1
+    mixins:
+    - HasValidity
     slots:
     - policy_binding_id
     - policy_target_ref
     - policy_ref
-    - valid_from
-    - valid_to
     - approval_status
   HasLifecycle:
     name: HasLifecycle
@@ -4454,7 +4454,6 @@ classes:
     is_a: ModelElement
     mixins:
     - HasOwnership
-    - HasLifecycle
     slots:
     - integration_ref
     - contract_ref
@@ -4499,7 +4498,6 @@ classes:
     from_schema: https://data.moex.com/dams/contract-binding/v0.1
     is_a: ModelElement
     mixins:
-    - HasLifecycle
     - HasOwnership
     slots:
     - specification_version

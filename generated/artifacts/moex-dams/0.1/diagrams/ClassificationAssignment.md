@@ -5,6 +5,9 @@
  classDiagram
     class ClassificationAssignment
     click ClassificationAssignment href "../ClassificationAssignment"
+      HasValidity <|-- ClassificationAssignment
+        click HasValidity href "../HasValidity"
+      
       ClassificationAssignment : approval_status
         
           
