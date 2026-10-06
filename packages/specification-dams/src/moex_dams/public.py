@@ -2,6 +2,13 @@
 
 from moex_dams.application.assess import SliceResult, assess_implementation
 from moex_dams.application.diff import diff_graphs, diff_implementations
+from moex_dams.application.digest import (
+    DigestMatch,
+    DigestMismatch,
+    compute_binding_digest,
+    verify_digests,
+    write_digests,
+)
 from moex_dams.application.element_index import ElementIndexEntry, build_element_index
 from moex_dams.application.export_requirements import (
     EXPORT_COLUMNS,
@@ -15,6 +22,12 @@ from moex_dams.application.ontology_report import (
     write_ontology_profile,
 )
 from moex_dams.application.repository import DamsAssetRepository
+from moex_dams.application.schema_diff import (
+    SchemaDiffResult,
+    diff_schemas,
+    recommend_version,
+    write_schema_diff_report,
+)
 from moex_dams.application.rules_runner import (
     RuleSet,
     default_dams_rule_sets,
@@ -87,6 +100,8 @@ __all__ = [
     "DefinitionIndex",
     "DefinitionMode",
     "DefinitionProvenance",
+    "DigestMatch",
+    "DigestMismatch",
     "EdgeKind",
     "ElementIndexEntry",
     "ErDiagramManifest",
@@ -97,6 +112,7 @@ __all__ = [
     "ModelPackage",
     "NodeKind",
     "RuleSet",
+    "SchemaDiffResult",
     "SliceResult",
     "SlotProvenance",
     "assess_implementation",
@@ -112,6 +128,7 @@ __all__ = [
     "check_formal_requirements",
     "check_ontology_uris",
     "check_references",
+    "compute_binding_digest",
     "load_merged_schema_prefix_map",
     "check_relation_terms",
     "check_relation_terms_body",
@@ -122,17 +139,22 @@ __all__ = [
     "diff_graphs",
     "diff_implementations",
     "diff_schema_element_uris",
+    "diff_schemas",
     "find_redundant_definition_overrides",
     "find_redundant_overrides",
     "project_model_package_to_dbml",
     "project_model_package_to_er_diagram",
+    "recommend_version",
     "relation_label",
     "resolve_definition",
     "resolve_governed",
     "resolve_package_definitions",
     "run_rule_sets",
+    "verify_digests",
     "write_dbml_artifact",
+    "write_digests",
     "write_er_diagram_artifact",
     "write_ontology_profile",
     "write_requirements_xlsx",
+    "write_schema_diff_report",
 ]

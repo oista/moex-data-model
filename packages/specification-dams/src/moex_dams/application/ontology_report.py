@@ -40,7 +40,7 @@ def schema_files_digest(schema_path: Path | str) -> str:
         rel = file_path.name
         h.update(rel.encode("utf-8"))
         h.update(b"\0")
-        h.update(file_path.read_bytes())
+        h.update(file_path.read_bytes().replace(b"\r\n", b"\n"))
         h.update(b"\0")
     return "sha256:" + h.hexdigest()
 

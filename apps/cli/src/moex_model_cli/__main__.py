@@ -108,6 +108,45 @@ def build_parser() -> argparse.ArgumentParser:
     _add_slice_args(coverage)
     coverage.add_argument("--json", action="store_true", help="Print JSON report")
 
+    schema_diff = sub.add_parser(
+        "schema-diff",
+        help="Classify DAMS LinkML schema changes (breaking / additive / …)",
+    )
+    _add_slice_args(schema_diff)
+    schema_diff.add_argument("--from", dest="from_ref", default=None)
+    schema_diff.add_argument("--to", dest="to_ref", default=None)
+    schema_diff.add_argument("--left", type=Path, default=None, help="Base schema YAML")
+    schema_diff.add_argument("--right", type=Path, default=None, help="Target schema YAML")
+    schema_diff.add_argument(
+        "--changelog",
+        type=Path,
+        default=None,
+        help="Changelog path covering breaking changes (default: docs/migration/CHANGELOG-technical-asset.md)",
+    )
+    schema_diff.add_argument(
+        "--compatibility-baseline-ref",
+        action="store_true",
+        help="Mark that the target revision declares compatibility_baseline_ref",
+    )
+    schema_diff.add_argument(
+        "--fail-on-breaking",
+        action="store_true",
+        help="Exit 1 when breaking changes are not covered by changelog/baseline",
+    )
+    schema_diff.add_argument("--json", action="store_true", help="Print JSON report")
+    schema_diff.add_argument(
+        "--out-json",
+        type=Path,
+        default=None,
+        help="Write JSON report to path",
+    )
+    schema_diff.add_argument(
+        "--out-text",
+        type=Path,
+        default=None,
+        help="Write text summary to path",
+    )
+
     publish = sub.add_parser(
         "publish",
         help="Assess implementation and write viewer JSON projection",
@@ -392,6 +431,27 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ontology.add_argument("--json", action="store_true", help="Print JSON")
 
+    digest = sub.add_parser(
+        "digest",
+        help="Verify or rewrite DataModelBinding.integrity_digest (ADR-034)",
+    )
+    _add_slice_args(digest)
+    digest.add_argument(
+        "--model",
+        default=None,
+        help="Filter by element_id substring or path substring",
+    )
+    digest.add_argument(
+        "--write",
+        action="store_true",
+        help="Write recomputed digests (examples/demo by default)",
+    )
+    digest.add_argument(
+        "--allow-non-demo-write",
+        action="store_true",
+        help="Allow --write for non-example bindings (requires process from ADR-034)",
+    )
+
     return parser
 
 
@@ -473,6 +533,22 @@ def main(argv: list[str] | None = None) -> int:
         from moex_model_cli.commands.concept_coverage import run_concept_coverage
 
         code, text = run_concept_coverage(paths, as_json=args.json)
+    elif args.command == "schema-diff":
+        from moex_model_cli.commands.schema_diff import run_schema_diff
+
+        code, text = run_schema_diff(
+            paths,
+            from_ref=args.from_ref,
+            to_ref=args.to_ref,
+            left=args.left,
+            right=args.right,
+            changelog=args.changelog,
+            has_compatibility_baseline_ref=args.compatibility_baseline_ref,
+            fail_on_breaking=args.fail_on_breaking,
+            as_json=args.json,
+            out_json=args.out_json,
+            out_text=args.out_text,
+        )
     elif args.command == "publish":
         from moex_model_cli.commands.publish import run_publish
 
@@ -564,6 +640,15 @@ def main(argv: list[str] | None = None) -> int:
             to_schema=getattr(args, "to_schema", None),
             as_json=getattr(args, "json", False),
             out=getattr(args, "out", None),
+        )
+    elif args.command == "digest":
+        from moex_model_cli.commands.digest import run_digest
+
+        code, text = run_digest(
+            paths,
+            model=args.model,
+            write=args.write,
+            allow_non_demo_write=args.allow_non_demo_write,
         )
     else:
         return 2

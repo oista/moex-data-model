@@ -1,0 +1,616 @@
+{
+  "base_label": "d0b05d4",
+  "target_label": "9f0ab18",
+  "version_recommendation": "major",
+  "counts": {
+    "backward_compatible": 50,
+    "breaking": 11,
+    "governance": 0,
+    "operational": 0,
+    "non_breaking": 5,
+    "deprecation": 0
+  },
+  "has_breaking": true,
+  "has_compatibility_baseline_ref": false,
+  "changelog_path": "C:\\Users\\bons1\\IdeaProjects\\moex-data-model\\docs\\migration\\CHANGELOG-technical-asset.md",
+  "uncovered_breaking": [],
+  "notes": [
+    "breaking changes covered by changelog and/or baseline ref"
+  ],
+  "changes": [
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "class:AccessPoint",
+      "message": "Added class AccessPoint",
+      "path": "classes.AccessPoint",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "class:Contains",
+      "message": "Added class Contains",
+      "path": "classes.Contains",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "class:DataCarrier",
+      "message": "Added class DataCarrier",
+      "path": "classes.DataCarrier",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "class:DataContainer",
+      "message": "Added class DataContainer",
+      "path": "classes.DataContainer",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "class:ExecutionAsset",
+      "message": "Added class ExecutionAsset",
+      "path": "classes.ExecutionAsset",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "class:HasLocation",
+      "message": "Added class HasLocation",
+      "path": "classes.HasLocation",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "class:HasProtocolBinding",
+      "message": "Added class HasProtocolBinding",
+      "path": "classes.HasProtocolBinding",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "class:HasStructure",
+      "message": "Added class HasStructure",
+      "path": "classes.HasStructure",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "class:TechnicalAsset",
+      "message": "Added class TechnicalAsset",
+      "path": "classes.TechnicalAsset",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-REMOVE",
+      "category": "breaking",
+      "subject_ref": "class:PhysicalObject",
+      "message": "Removed class PhysicalObject",
+      "path": "classes.PhysicalObject",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-DOC",
+      "category": "non_breaking",
+      "subject_ref": "class:DataFlowEntityBinding",
+      "message": "Class DataFlowEntityBinding description changed",
+      "path": "classes.DataFlowEntityBinding.description",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "class:DataFlowEntityBinding.carrier_refs",
+      "message": "Added slot carrier_refs on class DataFlowEntityBinding",
+      "path": "classes.DataFlowEntityBinding.slots.carrier_refs",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-SLOT-REMOVE",
+      "category": "breaking",
+      "subject_ref": "class:DataFlowEntityBinding.physical_object_refs",
+      "message": "Removed slot physical_object_refs from class DataFlowEntityBinding",
+      "path": "classes.DataFlowEntityBinding.slots.physical_object_refs",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-DOC",
+      "category": "non_breaking",
+      "subject_ref": "class:Mapping",
+      "message": "Class Mapping description changed",
+      "path": "classes.Mapping.description",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "class:ModelPackage.access_points",
+      "message": "Added slot access_points on class ModelPackage",
+      "path": "classes.ModelPackage.slots.access_points",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "class:ModelPackage.data_carriers",
+      "message": "Added slot data_carriers on class ModelPackage",
+      "path": "classes.ModelPackage.slots.data_carriers",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "class:ModelPackage.data_containers",
+      "message": "Added slot data_containers on class ModelPackage",
+      "path": "classes.ModelPackage.slots.data_containers",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "class:ModelPackage.execution_assets",
+      "message": "Added slot execution_assets on class ModelPackage",
+      "path": "classes.ModelPackage.slots.execution_assets",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-SLOT-REMOVE",
+      "category": "breaking",
+      "subject_ref": "class:ModelPackage.physical_objects",
+      "message": "Removed slot physical_objects from class ModelPackage",
+      "path": "classes.ModelPackage.slots.physical_objects",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-DOC",
+      "category": "non_breaking",
+      "subject_ref": "class:PhysicalField",
+      "message": "Class PhysicalField description changed",
+      "path": "classes.PhysicalField.description",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "class:PhysicalField.carrier_ref",
+      "message": "Added slot carrier_ref on class PhysicalField",
+      "path": "classes.PhysicalField.slots.carrier_ref",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-SLOT-REMOVE",
+      "category": "breaking",
+      "subject_ref": "class:PhysicalField.physical_object_ref",
+      "message": "Removed slot physical_object_ref from class PhysicalField",
+      "path": "classes.PhysicalField.slots.physical_object_ref",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "class:SelectedEntity.carrier_refs",
+      "message": "Added slot carrier_refs on class SelectedEntity",
+      "path": "classes.SelectedEntity.slots.carrier_refs",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-CLASS-SLOT-REMOVE",
+      "category": "breaking",
+      "subject_ref": "class:SelectedEntity.physical_object_refs",
+      "message": "Removed slot physical_object_refs from class SelectedEntity",
+      "path": "classes.SelectedEntity.slots.physical_object_refs",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:access_points",
+      "message": "Added slot access_points",
+      "path": "slots.access_points",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:asset_kind",
+      "message": "Added slot asset_kind",
+      "path": "slots.asset_kind",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:asset_namespace",
+      "message": "Added slot asset_namespace",
+      "path": "slots.asset_namespace",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:binding_ref",
+      "message": "Added slot binding_ref",
+      "path": "slots.binding_ref",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:carrier_ref",
+      "message": "Added slot carrier_ref",
+      "path": "slots.carrier_ref",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:carrier_refs",
+      "message": "Added slot carrier_refs",
+      "path": "slots.carrier_refs",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:consumes_refs",
+      "message": "Added slot consumes_refs",
+      "path": "slots.consumes_refs",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:containment_kind",
+      "message": "Added slot containment_kind",
+      "path": "slots.containment_kind",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:data_carriers",
+      "message": "Added slot data_carriers",
+      "path": "slots.data_carriers",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:data_containers",
+      "message": "Added slot data_containers",
+      "path": "slots.data_containers",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:data_format",
+      "message": "Added slot data_format",
+      "path": "slots.data_format",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:execution_assets",
+      "message": "Added slot execution_assets",
+      "path": "slots.execution_assets",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:http_method",
+      "message": "Added slot http_method",
+      "path": "slots.http_method",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:interface_ref",
+      "message": "Added slot interface_ref",
+      "path": "slots.interface_ref",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:lineage_role",
+      "message": "Added slot lineage_role",
+      "path": "slots.lineage_role",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:location_uri",
+      "message": "Added slot location_uri",
+      "path": "slots.location_uri",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:operation_name",
+      "message": "Added slot operation_name",
+      "path": "slots.operation_name",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:parent_ref",
+      "message": "Added slot parent_ref",
+      "path": "slots.parent_ref",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:path_template",
+      "message": "Added slot path_template",
+      "path": "slots.path_template",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:produces_refs",
+      "message": "Added slot produces_refs",
+      "path": "slots.produces_refs",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:protocol",
+      "message": "Added slot protocol",
+      "path": "slots.protocol",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:protocol_version",
+      "message": "Added slot protocol_version",
+      "path": "slots.protocol_version",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:region",
+      "message": "Added slot region",
+      "path": "slots.region",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:schema_dialect",
+      "message": "Added slot schema_dialect",
+      "path": "slots.schema_dialect",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:serves_refs",
+      "message": "Added slot serves_refs",
+      "path": "slots.serves_refs",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "slot:structure_ref",
+      "message": "Added slot structure_ref",
+      "path": "slots.structure_ref",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-REMOVE",
+      "category": "breaking",
+      "subject_ref": "slot:native_schema_ref",
+      "message": "Removed slot native_schema_ref",
+      "path": "slots.native_schema_ref",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-REMOVE",
+      "category": "breaking",
+      "subject_ref": "slot:object_kind",
+      "message": "Removed slot object_kind",
+      "path": "slots.object_kind",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-REMOVE",
+      "category": "breaking",
+      "subject_ref": "slot:physical_object_ref",
+      "message": "Removed slot physical_object_ref",
+      "path": "slots.physical_object_ref",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-REMOVE",
+      "category": "breaking",
+      "subject_ref": "slot:physical_object_refs",
+      "message": "Removed slot physical_object_refs",
+      "path": "slots.physical_object_refs",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-REMOVE",
+      "category": "breaking",
+      "subject_ref": "slot:physical_objects",
+      "message": "Removed slot physical_objects",
+      "path": "slots.physical_objects",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-DOC",
+      "category": "non_breaking",
+      "subject_ref": "slot:applies_target_kinds",
+      "message": "Slot applies_target_kinds description/comments changed",
+      "path": "slots.applies_target_kinds.description",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-OPTIONAL",
+      "category": "backward_compatible",
+      "subject_ref": "slot:direction",
+      "message": "Slot direction cardinality relaxed required->optional",
+      "path": "slots.direction.required",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-SLOT-OPTIONAL",
+      "category": "backward_compatible",
+      "subject_ref": "slot:technology",
+      "message": "Slot technology cardinality relaxed required->optional",
+      "path": "slots.technology.required",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-ENUM-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "enum:AccessPointKindEnum",
+      "message": "Added enum AccessPointKindEnum",
+      "path": "enums.AccessPointKindEnum",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-ENUM-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "enum:ContainmentKindEnum",
+      "message": "Added enum ContainmentKindEnum",
+      "path": "enums.ContainmentKindEnum",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-ENUM-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "enum:DataCarrierKindEnum",
+      "message": "Added enum DataCarrierKindEnum",
+      "path": "enums.DataCarrierKindEnum",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-ENUM-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "enum:DataContainerKindEnum",
+      "message": "Added enum DataContainerKindEnum",
+      "path": "enums.DataContainerKindEnum",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-ENUM-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "enum:ExecutionAssetKindEnum",
+      "message": "Added enum ExecutionAssetKindEnum",
+      "path": "enums.ExecutionAssetKindEnum",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-ENUM-ADD",
+      "category": "backward_compatible",
+      "subject_ref": "enum:LineageRoleEnum",
+      "message": "Added enum LineageRoleEnum",
+      "path": "enums.LineageRoleEnum",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-ENUM-REMOVE",
+      "category": "breaking",
+      "subject_ref": "enum:PhysicalObjectKindEnum",
+      "message": "Removed enum PhysicalObjectKindEnum",
+      "path": "enums.PhysicalObjectKindEnum",
+      "before": [],
+      "after": []
+    },
+    {
+      "change_code": "DAMS-SCHEMA-ENUM-DOC",
+      "category": "non_breaking",
+      "subject_ref": "enum:MappingTypeEnum",
+      "message": "Enum MappingTypeEnum description changed",
+      "path": "enums.MappingTypeEnum.description",
+      "before": [],
+      "after": []
+    }
+  ]
+}

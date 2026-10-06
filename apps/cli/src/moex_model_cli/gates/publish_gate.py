@@ -205,7 +205,18 @@ def verify_publish_gate(
         return errors
 
     errors.extend(_bundle_ok(repo, refresh_bundle=refresh_bundle))
+    errors.extend(_binding_integrity_digests(repo))
     return errors
+
+
+def _binding_integrity_digests(repo: Path) -> list[str]:
+    """ADR-034: DataModelBinding.integrity_digest must match content."""
+    try:
+        from moex_dams.application.digest import verify_digests
+    except ImportError:
+        return ["publish-gate: moex_dams.application.digest unavailable"]
+    _matches, mismatches = verify_digests(repo)
+    return [f"publish-gate: {m.message}" for m in mismatches]
 
 
 def main(argv: list[str] | None = None) -> int:

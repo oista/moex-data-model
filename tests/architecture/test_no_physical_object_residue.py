@@ -19,6 +19,7 @@ ALLOW_PREFIXES = (
     "scripts/spike_technical_asset_generators.py",
     "tests/migration/",
     "docs/migration/",
+    "docs/changelog/",
     "docs/adr/ADR-031",
     "docs/adr/ADR-032",
     "docs/adr/ADR-033",
