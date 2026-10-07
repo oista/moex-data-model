@@ -1,6 +1,7 @@
 matrix_id: dams:constraint-matrix/0.1
 title: MOEX DAMS executable constraint matrix
-description: Реестр инвариантов ADR-045. Тексты только здесь; схемы и документы ссылаются на INV-NNN.
+description: Реестр инвариантов ADR-045. Тексты только здесь; схемы и документы ссылаются
+  на INV-NNN.
 baseline:
   baseline_commit: 5b57c326432745fc61a7d2bd7de5c1721912f3ea
   rules_sha256: 7c530bf111f5febf858f3f8e7d8a087d8cd20be7ebed1bdf4058f89ee915aa93
@@ -76,21 +77,27 @@ baseline:
 invariants:
   - id: INV-001
     title: ConceptualProperty identifying → is_identifying
-    statement: Если property_kind = identifying, то is_identifying должен быть задан как true.
+    statement: Если property_kind = identifying, то is_identifying должен быть задан
+      как true.
     source: ADR-034:58; slot is_identifying
     source_status: aligned
     scope: moex-dams
     levels: [L2, L3]
     severity: error
     status: implemented-untested
-    notes: В схеме есть L1 rule, но equals_string на boolean дефектен в JSON Schema (см. linkml-rules-support
-      §3.1); целевые уровни L2+L3.
+    notes: 'В схеме есть L1 rule, но equals_string на boolean дефектен в JSON Schema
+      (см. linkml-rules-support §3.1); целевые уровни L2+L3. PR-C2: valid fixture
+      uses base instance (satisfy unsatisfiable due to boolean equals_string).'
     implementation:
       linkml_rule:
         schema_file: moex-core.yaml
         class_name: ConceptualProperty
         rule_index: 0
       dams_validator: moex_dams.rules.semantic_layer
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-001.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-001.invalid.yaml]
   - id: INV-002
     title: DataType.precision только для decimal
     statement: Слот precision допустим только при type_family = decimal.
@@ -106,6 +113,10 @@ invariants:
         class_name: DataType
         rule_index: 0
       dams_validator: moex_dams.rules.semantic_layer
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-002.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-002.invalid.yaml]
   - id: INV-003
     title: DataType.scale только для decimal
     statement: Слот scale допустим только при type_family = decimal.
@@ -121,6 +132,10 @@ invariants:
         class_name: DataType
         rule_index: 1
       dams_validator: moex_dams.rules.semantic_layer
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-003.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-003.invalid.yaml]
   - id: INV-004
     title: DataType.max_length только для string/binary
     statement: Слот max_length допустим только при type_family string или binary.
@@ -136,6 +151,10 @@ invariants:
         class_name: DataType
         rule_index: 2
       dams_validator: moex_dams.rules.semantic_layer
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-004.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-004.invalid.yaml]
   - id: INV-005
     title: DataType.min_length только для string/binary
     statement: Слот min_length допустим только при type_family string или binary.
@@ -151,6 +170,10 @@ invariants:
         class_name: DataType
         rule_index: 3
       dams_validator: moex_dams.rules.semantic_layer
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-005.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-005.invalid.yaml]
   - id: INV-006
     title: ValueDomain enumerated → permissible_values
     statement: Для value_domain_kind = enumerated обязательны permissible_values.
@@ -166,6 +189,10 @@ invariants:
         class_name: ValueDomain
         rule_index: 0
       dams_validator: moex_dams.rules.semantic_layer
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-006.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-006.invalid.yaml]
   - id: INV-007
     title: ValueDomain described без permissible_values
     statement: Для value_domain_kind = described слот permissible_values отсутствует.
@@ -181,6 +208,10 @@ invariants:
         class_name: ValueDomain
         rule_index: 1
       dams_validator: moex_dams.rules.semantic_layer
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-007.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-007.invalid.yaml]
   - id: INV-008
     title: ValueDomain reference_set без permissible_values
     statement: Для value_domain_kind = reference_set слот permissible_values отсутствует.
@@ -196,6 +227,10 @@ invariants:
         class_name: ValueDomain
         rule_index: 2
       dams_validator: moex_dams.rules.semantic_layer
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-008.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-008.invalid.yaml]
   - id: INV-009
     title: ConceptualDomain described без value_meanings
     statement: Для conceptual_domain_kind = described слот value_meanings отсутствует.
@@ -211,6 +246,10 @@ invariants:
         class_name: ConceptualDomain
         rule_index: 0
       dams_validator: moex_dams.rules.semantic_layer
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-009.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-009.invalid.yaml]
   - id: INV-010
     title: DataStructure source_pointer → source_artifact_ref
     statement: Наличие source_pointer требует source_artifact_ref.
@@ -225,6 +264,10 @@ invariants:
         schema_file: moex-structure.yaml
         class_name: DataStructure
         rule_index: 0
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-010.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-010.invalid.yaml]
   - id: INV-011
     title: DataStructure schema_dialect только JSON Schema family
     statement: schema_dialect допустим только для schema_format json_schema или openapi_schema.
@@ -240,6 +283,10 @@ invariants:
         schema_file: moex-structure.yaml
         class_name: DataStructure
         rule_index: 1
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-011.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-011.invalid.yaml]
   - id: INV-012
     title: SchemaNode array|map → item_node, без children
     statement: Для node_kind array или map обязателен item_node и запрещены children.
@@ -256,6 +303,10 @@ invariants:
         class_name: SchemaNode
         rule_index: 0
       dams_validator: moex_dams.rules.data_structure
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-012.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-012.invalid.yaml]
   - id: INV-013
     title: SchemaNode scalar|enum без children и item_node
     statement: Для node_kind scalar или enum запрещены children и item_node.
@@ -273,6 +324,10 @@ invariants:
         class_name: SchemaNode
         rule_index: 1
       dams_validator: moex_dams.rules.data_structure
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-013.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-013.invalid.yaml]
   - id: INV-014
     title: SchemaNode reference → reference_target
     statement: Для node_kind = reference обязателен reference_target.
@@ -287,6 +342,10 @@ invariants:
         schema_file: moex-structure.yaml
         class_name: SchemaNode
         rule_index: 2
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-014.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-014.invalid.yaml]
   - id: INV-015
     title: DataCarrier in_memory без location_uri и region
     statement: Для asset_kind = in_memory запрещены location_uri и region.
@@ -304,6 +363,10 @@ invariants:
         class_name: DataCarrier
         rule_index: 0
       dams_validator: moex_dams.rules.technical_assets
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-015.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-015.invalid.yaml]
   - id: INV-016
     title: AccessPoint operation → interface_ref
     statement: Для access_point_kind = operation обязателен interface_ref.
@@ -320,10 +383,14 @@ invariants:
         class_name: AccessPoint
         rule_index: 0
       dams_validator: moex_dams.rules.technical_assets
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-016.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-016.invalid.yaml]
   - id: INV-017
     title: AccessPoint interface без operation-полей
-    statement: Для access_point_kind = interface запрещены operation_name, http_method, path_template,
-      message_refs.
+    statement: Для access_point_kind = interface запрещены operation_name, http_method,
+      path_template, message_refs.
     source: ADR-040:40-41; PDM-018
     source_status: partial
     scope: moex-dams
@@ -338,6 +405,10 @@ invariants:
         class_name: AccessPoint
         rule_index: 1
       dams_validator: moex_dams.rules.data_structure
+    tests:
+      l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-017.valid.yaml]
+      l1_invalid: [
+            model-assets/specifications/moex-dams/0.1/examples/invariants/INV-017.invalid.yaml]
   - id: INV-018
     title: direction запрещён для DataContainer и ExecutionAsset
     statement: Слот direction не задаётся у DataContainer и ExecutionAsset.
@@ -402,7 +473,8 @@ invariants:
       dams_validator: moex_dams.rules.data_structure
   - id: INV-023
     title: dams_model_level согласован с профилем
-    statement: dams_model_level допустим только для профиля dams-data-model; согласован с implementation_scope.
+    statement: dams_model_level допустим только для профиля dams-data-model; согласован
+      с implementation_scope.
     source: ADR-021:32; moex-core.yaml
     source_status: partial
     scope: moex-dams
@@ -445,7 +517,8 @@ invariants:
       dams_validator: moex_dams.rules.ontology_uris
   - id: INV-027
     title: Владелец пакета и классификация сущности
-    statement: У пакета задан data_owner_ref; у логической сущности есть эффективная классификация.
+    statement: У пакета задан data_owner_ref; у логической сущности есть эффективная
+      классификация.
     source: ADR-023:73-74
     source_status: partial
     scope: moex-dams

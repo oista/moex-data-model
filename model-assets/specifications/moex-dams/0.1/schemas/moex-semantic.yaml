@@ -42,7 +42,7 @@ classes:
       description:
         required: true
     rules:
-      - description: described-домен не содержит value_meanings
+      - description: 'INV-009: described-домен не содержит value_meanings'
         preconditions:
           slot_conditions:
             conceptual_domain_kind:

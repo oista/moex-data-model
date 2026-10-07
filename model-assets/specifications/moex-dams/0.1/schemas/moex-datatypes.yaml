@@ -48,7 +48,7 @@ classes:
       description:
         required: true
     rules:
-      - description: precision только для decimal
+      - description: 'INV-002: precision только для decimal'
         preconditions:
           slot_conditions:
             precision:
@@ -57,7 +57,7 @@ classes:
           slot_conditions:
             type_family:
               equals_string: decimal
-      - description: scale только для decimal
+      - description: 'INV-003: scale только для decimal'
         preconditions:
           slot_conditions:
             scale:
@@ -66,7 +66,7 @@ classes:
           slot_conditions:
             type_family:
               equals_string: decimal
-      - description: max_length только для string или binary
+      - description: 'INV-004: max_length только для string или binary'
         preconditions:
           slot_conditions:
             max_length:
@@ -77,7 +77,7 @@ classes:
               any_of:
                 - equals_string: string
                 - equals_string: binary
-      - description: min_length только для string или binary
+      - description: 'INV-005: min_length только для string или binary'
         preconditions:
           slot_conditions:
             min_length:
@@ -137,7 +137,7 @@ classes:
       data_type_ref:
         required: true
     rules:
-      - description: enumerated-домен требует permissible_values
+      - description: 'INV-006: enumerated-домен требует permissible_values'
         preconditions:
           slot_conditions:
             value_domain_kind:
@@ -146,7 +146,7 @@ classes:
           slot_conditions:
             permissible_values:
               value_presence: PRESENT
-      - description: described-домен не содержит permissible_values
+      - description: 'INV-007: described-домен не содержит permissible_values'
         preconditions:
           slot_conditions:
             value_domain_kind:
@@ -155,7 +155,7 @@ classes:
           slot_conditions:
             permissible_values:
               value_presence: ABSENT
-      - description: reference_set не содержит permissible_values
+      - description: 'INV-008: reference_set не содержит permissible_values'
         preconditions:
           slot_conditions:
             value_domain_kind:
