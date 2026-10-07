@@ -1,0 +1,8 @@
+# INV-009 invalid fixture for LinkML class ConceptualDomain (ADR-045 / PR-C2). Do not use as production data.
+conceptual_domain_kind: described
+name: x
+description: x
+lifecycle_status: draft
+element_id: x
+value_meanings:
+  - meaning_key: x

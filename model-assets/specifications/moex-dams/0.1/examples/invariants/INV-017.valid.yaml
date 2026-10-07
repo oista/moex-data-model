@@ -1,0 +1,9 @@
+# INV-017 valid fixture for LinkML class AccessPoint (ADR-045 / PR-C2). Do not use as production data.
+asset_namespace: x
+qualified_name: x
+system_ref: x
+asset_kind: interface
+name: x
+description: x
+lifecycle_status: draft
+element_id: x

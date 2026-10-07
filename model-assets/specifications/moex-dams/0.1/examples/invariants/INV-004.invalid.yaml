@@ -1,0 +1,8 @@
+# INV-004 invalid fixture for LinkML class DataType (ADR-045 / PR-C2). Do not use as production data.
+type_name: x
+type_family: boolean
+name: x
+description: x
+lifecycle_status: draft
+element_id: x
+max_length: 1

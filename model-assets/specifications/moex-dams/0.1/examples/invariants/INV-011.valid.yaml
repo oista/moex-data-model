@@ -1,0 +1,11 @@
+# INV-011 valid fixture for LinkML class DataStructure (ADR-045 / PR-C2). Do not use as production data.
+schema_format: json_schema
+structure_version: 1.0.0
+root_local_key: x
+nodes:
+  - node_kind: scalar
+    local_key: x
+name: x
+lifecycle_status: draft
+element_id: x
+schema_dialect: https://example.org/x
