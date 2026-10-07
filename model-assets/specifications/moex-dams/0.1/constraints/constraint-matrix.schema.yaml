@@ -76,6 +76,7 @@ classes:
   InvariantTests:
     description: Пути к valid/invalid примерам по уровням (заполняются с PR-C2).
     slots:
+      - l1_positive
       - l1_valid
       - l1_invalid
       - l2_valid
@@ -117,6 +118,13 @@ enums:
         description: Источник тоньше правила или только description слота.
       divergent:
         description: Источник и правило расходятся.
+
+  L1PositiveStatusEnum:
+    permissible_values:
+      ok:
+        description: Положительный L1-пример удовлетворим и принимается.
+      not_satisfiable:
+        description: Положительный L1-пример невозможен из-за дефекта генератора/правила.
 
   InvariantScopeEnum:
     permissible_values:
@@ -228,6 +236,12 @@ slots:
   tests:
     range: InvariantTests
     inlined: true
+  l1_positive:
+    range: L1PositiveStatusEnum
+    description: >-
+      Статус положительного L1-примера. not_satisfiable — правило в схеме есть,
+      но валидный экземпляр, удовлетворяющий postcondition, JSON Schema отклоняет
+      (дефект генератора; см. INV-001).
   l1_valid:
     range: string
     multivalued: true
