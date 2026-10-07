@@ -87,7 +87,8 @@ invariants:
     status: implemented-untested
     notes: 'В схеме есть L1 rule, но equals_string на boolean дефектен в JSON Schema
       (см. linkml-rules-support §3.1); целевые уровни L2+L3. PR-C2: valid fixture
-      uses base instance (satisfy unsatisfiable due to boolean equals_string).'
+      uses base instance (satisfy unsatisfiable due to boolean equals_string). l1_positive=not_satisfiable;
+      не чинить L1 (остаётся L2+L3); дефект генератора — отдельный issue.'
     implementation:
       linkml_rule:
         schema_file: moex-core.yaml
@@ -98,6 +99,7 @@ invariants:
       l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-001.valid.yaml]
       l1_invalid: [
             model-assets/specifications/moex-dams/0.1/examples/invariants/INV-001.invalid.yaml]
+      l1_positive: not_satisfiable
   - id: INV-002
     title: DataType.precision только для decimal
     statement: Слот precision допустим только при type_family = decimal.
