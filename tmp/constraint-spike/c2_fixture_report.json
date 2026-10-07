@@ -1,0 +1,208 @@
+[
+  {
+    "id": "INV-001",
+    "class": "ConceptualProperty",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "is_identifying",
+    "satisfy_errors": [
+      "'true' was expected"
+    ],
+    "violate_errors": [
+      "'true' was expected"
+    ],
+    "valid_note": "used base (satisfy unsatisfiable)"
+  },
+  {
+    "id": "INV-002",
+    "class": "DataType",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "type_family",
+    "satisfy_errors": [],
+    "violate_errors": [
+      "'decimal' was expected"
+    ],
+    "valid_note": "satisfy"
+  },
+  {
+    "id": "INV-003",
+    "class": "DataType",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "type_family",
+    "satisfy_errors": [],
+    "violate_errors": [
+      "'decimal' was expected"
+    ],
+    "valid_note": "satisfy"
+  },
+  {
+    "id": "INV-004",
+    "class": "DataType",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "type_family",
+    "satisfy_errors": [],
+    "violate_errors": [
+      "'boolean' is not valid under any of the given schemas"
+    ],
+    "valid_note": "satisfy"
+  },
+  {
+    "id": "INV-005",
+    "class": "DataType",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "type_family",
+    "satisfy_errors": [],
+    "violate_errors": [
+      "'boolean' is not valid under any of the given schemas"
+    ],
+    "valid_note": "satisfy"
+  },
+  {
+    "id": "INV-006",
+    "class": "ValueDomain",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "permissible_values",
+    "satisfy_errors": [],
+    "violate_errors": [
+      "'permissible_values' is a required property"
+    ],
+    "valid_note": "satisfy"
+  },
+  {
+    "id": "INV-007",
+    "class": "ValueDomain",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "permissible_values",
+    "satisfy_errors": [],
+    "violate_errors": [
+      "{'value_domain_kind': 'described', 'data_type_ref': 'x', 'name': 'x', 'description': 'x', 'lifecycle_status': 'active', 'element_id': 'x', 'permissible_values':"
+    ],
+    "valid_note": "satisfy"
+  },
+  {
+    "id": "INV-008",
+    "class": "ValueDomain",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "permissible_values",
+    "satisfy_errors": [],
+    "violate_errors": [
+      "{'value_domain_kind': 'reference_set', 'data_type_ref': 'x', 'name': 'x', 'description': 'x', 'lifecycle_status': 'active', 'element_id': 'x', 'permissible_valu"
+    ],
+    "valid_note": "satisfy"
+  },
+  {
+    "id": "INV-009",
+    "class": "ConceptualDomain",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "value_meanings",
+    "satisfy_errors": [],
+    "violate_errors": [
+      "{'conceptual_domain_kind': 'described', 'name': 'x', 'description': 'x', 'lifecycle_status': 'draft', 'element_id': 'x', 'value_meanings': [{'meaning_key': 'x'}"
+    ],
+    "valid_note": "satisfy"
+  },
+  {
+    "id": "INV-010",
+    "class": "DataStructure",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "source_artifact_ref",
+    "satisfy_errors": [],
+    "violate_errors": [
+      "'source_artifact_ref' is a required property"
+    ],
+    "valid_note": "satisfy"
+  },
+  {
+    "id": "INV-011",
+    "class": "DataStructure",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "schema_format",
+    "satisfy_errors": [],
+    "violate_errors": [
+      "'avro' is not valid under any of the given schemas"
+    ],
+    "valid_note": "satisfy"
+  },
+  {
+    "id": "INV-012",
+    "class": "SchemaNode",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "item_node",
+    "satisfy_errors": [],
+    "violate_errors": [
+      "'item_node' is a required property"
+    ],
+    "valid_note": "satisfy"
+  },
+  {
+    "id": "INV-013",
+    "class": "SchemaNode",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "all-absent-present",
+    "satisfy_errors": [],
+    "violate_errors": [
+      "{'node_kind': 'scalar', 'local_key': 'x', 'children': ['x'], 'item_node': 'x'} should not be valid under {'required': ['children', 'item_node']}"
+    ],
+    "valid_note": "satisfy"
+  },
+  {
+    "id": "INV-014",
+    "class": "SchemaNode",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "reference_target",
+    "satisfy_errors": [],
+    "violate_errors": [
+      "'reference_target' is a required property"
+    ],
+    "valid_note": "satisfy"
+  },
+  {
+    "id": "INV-015",
+    "class": "DataCarrier",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "all-absent-present",
+    "satisfy_errors": [],
+    "violate_errors": [
+      "{'asset_namespace': 'x', 'qualified_name': 'x', 'system_ref': 'x', 'asset_kind': 'in_memory', 'name': 'x', 'description': 'x', 'lifecycle_status': 'draft', 'ele"
+    ],
+    "valid_note": "satisfy"
+  },
+  {
+    "id": "INV-016",
+    "class": "AccessPoint",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "interface_ref",
+    "satisfy_errors": [],
+    "violate_errors": [
+      "'interface_ref' is a required property"
+    ],
+    "valid_note": "satisfy"
+  },
+  {
+    "id": "INV-017",
+    "class": "AccessPoint",
+    "valid_ok": true,
+    "invalid_rejected": true,
+    "invalid_how": "all-absent-present",
+    "satisfy_errors": [],
+    "violate_errors": [
+      "{'asset_namespace': 'x', 'qualified_name': 'x', 'system_ref': 'x', 'asset_kind': 'interface', 'name': 'x', 'description': 'x', 'lifecycle_status': 'draft', 'ele"
+    ],
+    "valid_note": "satisfy"
+  }
+]

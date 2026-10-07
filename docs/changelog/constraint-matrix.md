@@ -57,3 +57,19 @@ superseded_by: []
 **Статусы:** INV-001..017 = `implemented-untested`; INV-018..027 = `planned` (нумерация закреплена).
 
 **Затронутые данные:** нет правок условий LinkML `rules`.
+
+## PR-C2: L1 INV-prefix + negative fixtures
+
+**Добавлено**
+
+- Префикс `INV-NNN:` в `description` 17 существующих `rules` (условия не менялись).
+- `examples/invariants/` — 17× valid/invalid + `manifest.yaml`; negative-режим в `validate-examples.ps1`.
+- Пути `tests.l1_*` в матрице; тест `test_invariant_l1_fixtures.py`.
+
+**Стало строже:** `validate-examples` требует, чтобы invalid-фикстуры отвергались JSON Schema.
+
+**Версия схемы:** предложен **PATCH** (только описания rules; ограничений не добавлено). Версию `3.0.0` не бампим без подтверждения.
+
+**Golden:** префикс меняет артефакт `doc` (`content_digest`) — отдельный коммит после подтверждения (Q6).
+
+**Не сделано в C2 (ждут решения):** правка INV-001 (boolean `equals_string`); разбиение multi-ABSENT (INV-013/015/017); новые L1 для INV-018+.

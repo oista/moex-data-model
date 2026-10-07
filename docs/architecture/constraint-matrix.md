@@ -51,7 +51,7 @@ superseded_by: []
 
 Если property_kind = identifying, то is_identifying должен быть задан как true.
 
-*Notes:* В схеме есть L1 rule, но equals_string на boolean дефектен в JSON Schema (см. linkml-rules-support §3.1); целевые уровни L2+L3.
+*Notes:* В схеме есть L1 rule, но equals_string на boolean дефектен в JSON Schema (см. linkml-rules-support §3.1); целевые уровни L2+L3. PR-C2: valid fixture uses base instance (satisfy unsatisfiable due to boolean equals_string).
 
 ### INV-002: DataType.precision только для decimal
 

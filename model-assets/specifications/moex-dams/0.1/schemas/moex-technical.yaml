@@ -111,7 +111,7 @@ classes:
         range: DataCarrierKindEnum
         required: true
     rules:
-      - description: in_memory носитель не имеет location_uri и region
+      - description: 'INV-015: in_memory носитель не имеет location_uri и region'
         preconditions:
           slot_conditions:
             asset_kind:
@@ -145,7 +145,7 @@ classes:
       direction:
         description: Направление протокола AccessPoint (через FlowDirectionEnum).
     rules:
-      - description: operation требует interface_ref
+      - description: 'INV-016: operation требует interface_ref'
         preconditions:
           slot_conditions:
             asset_kind:
@@ -154,7 +154,7 @@ classes:
           slot_conditions:
             interface_ref:
               required: true
-      - description: interface не имеет operation-полей
+      - description: 'INV-017: interface не имеет operation-полей'
         preconditions:
           slot_conditions:
             asset_kind:

@@ -1,0 +1,7 @@
+# INV-006 invalid fixture for LinkML class ValueDomain (ADR-045 / PR-C2). Do not use as production data.
+value_domain_kind: enumerated
+data_type_ref: x
+name: x
+description: x
+lifecycle_status: active
+element_id: x

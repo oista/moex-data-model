@@ -56,7 +56,7 @@ classes:
         required: false
         recommended: true
     rules:
-      - description: source_pointer требует source_artifact_ref
+      - description: 'INV-010: source_pointer требует source_artifact_ref'
         preconditions:
           slot_conditions:
             source_pointer:
@@ -65,7 +65,7 @@ classes:
           slot_conditions:
             source_artifact_ref:
               value_presence: PRESENT
-      - description: schema_dialect только для семейства JSON Schema
+      - description: 'INV-011: schema_dialect только для семейства JSON Schema'
         preconditions:
           slot_conditions:
             schema_dialect:
@@ -116,7 +116,7 @@ classes:
         required: true
         pattern: '^[a-z0-9_.-]+$'
     rules:
-      - description: array|map требуют item_node и запрещают children
+      - description: 'INV-012: array|map требуют item_node и запрещают children'
         preconditions:
           slot_conditions:
             node_kind:
@@ -129,7 +129,7 @@ classes:
               value_presence: PRESENT
             children:
               value_presence: ABSENT
-      - description: scalar|enum запрещают children и item_node
+      - description: 'INV-013: scalar|enum запрещают children и item_node'
         preconditions:
           slot_conditions:
             node_kind:
@@ -142,7 +142,7 @@ classes:
               value_presence: ABSENT
             item_node:
               value_presence: ABSENT
-      - description: reference требует reference_target
+      - description: 'INV-014: reference требует reference_target'
         preconditions:
           slot_conditions:
             node_kind:

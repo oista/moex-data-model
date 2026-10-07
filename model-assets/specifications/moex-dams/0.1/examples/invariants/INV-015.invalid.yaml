@@ -1,0 +1,11 @@
+# INV-015 invalid fixture for LinkML class DataCarrier (ADR-045 / PR-C2). Do not use as production data.
+asset_namespace: x
+qualified_name: x
+system_ref: x
+asset_kind: in_memory
+name: x
+description: x
+lifecycle_status: draft
+element_id: x
+location_uri: https://example.org/x
+region: x

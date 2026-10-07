@@ -1,0 +1,10 @@
+# INV-001 invalid fixture for LinkML class ConceptualProperty (ADR-045 / PR-C2). Do not use as production data.
+property_owner_entity_ref: x
+significance_basis:
+  - identifying
+property_kind: identifying
+genesis_kind: external
+name: x
+lifecycle_status: draft
+element_id: x
+is_identifying: true

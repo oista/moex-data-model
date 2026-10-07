@@ -1,0 +1,6 @@
+# INV-013 invalid fixture for LinkML class SchemaNode (ADR-045 / PR-C2). Do not use as production data.
+node_kind: scalar
+local_key: x
+children:
+  - x
+item_node: x

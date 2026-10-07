@@ -1,0 +1,7 @@
+# INV-008 valid fixture for LinkML class ValueDomain (ADR-045 / PR-C2). Do not use as production data.
+value_domain_kind: reference_set
+data_type_ref: x
+name: x
+description: x
+lifecycle_status: active
+element_id: x

@@ -1,0 +1,4 @@
+# INV-012 valid fixture for LinkML class SchemaNode (ADR-045 / PR-C2). Do not use as production data.
+node_kind: array
+local_key: x
+item_node: x

@@ -137,7 +137,7 @@ classes:
       genesis_kind:
         required: true
     rules:
-      - description: identifying property_kind требует is_identifying
+      - description: 'INV-001: identifying property_kind требует is_identifying'
         preconditions:
           slot_conditions:
             property_kind:
