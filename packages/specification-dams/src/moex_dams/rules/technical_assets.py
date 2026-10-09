@@ -84,11 +84,16 @@ def _diag(
     subject: str | None,
     remediation: str | None = None,
     requirement_code: str | None = None,
+    invariant_id: str | None = None,
     severity: DiagnosticSeverity = DiagnosticSeverity.ERROR,
 ) -> Diagnostic:
     details: list[DiagnosticDetail] = [
         DiagnosticDetail(detail_key="finding", detail_value=message)
     ]
+    if invariant_id:
+        details.append(
+            DiagnosticDetail(detail_key="invariant_id", detail_value=str(invariant_id))
+        )
     if requirement_code:
         details.append(
             DiagnosticDetail(
@@ -222,7 +227,13 @@ def check_asset_kind_allowlists(data: dict[str, Any]) -> list[Diagnostic]:
 
 
 def check_direction_forbidden(data: dict[str, Any]) -> list[Diagnostic]:
-    """direction is forbidden on DataContainer and ExecutionAsset."""
+    """INV-018: direction is forbidden on DataContainer and ExecutionAsset (PDM-008).
+
+    Example error::
+
+        DataContainer \"dams:container/x/db\" must not declare direction (got 'inbound').
+        Remediation: Remove direction; it is only for DataCarrier/AccessPoint. INV-018.
+    """
     out: list[Diagnostic] = []
     for el, sid, class_name in iter_technical_assets(data):
         if class_name not in DIRECTION_FORBIDDEN_CLASSES:
@@ -231,12 +242,15 @@ def check_direction_forbidden(data: dict[str, Any]) -> list[Diagnostic]:
             out.append(
                 _diag(
                     code="DAMS-REQ-PDM-008.c1",
+                    invariant_id="INV-018",
                     message=(
                         f'{class_name} "{sid}" must not declare direction '
                         f"(got {el.get('direction')!r})."
                     ),
                     subject=sid,
-                    remediation="Remove direction; it is only for DataCarrier/AccessPoint.",
+                    remediation=(
+                        "Remove direction; it is only for DataCarrier/AccessPoint. INV-018."
+                    ),
                     requirement_code="PDM-008",
                 )
             )
@@ -398,7 +412,13 @@ def check_carrier_refs_are_data_carriers(data: dict[str, Any]) -> list[Diagnosti
 
 
 def check_operation_interface_ref(data: dict[str, Any]) -> list[Diagnostic]:
-    """AccessPoint with asset_kind=operation requires interface_ref."""
+    """INV-016: AccessPoint with asset_kind=operation requires interface_ref (PDM-011).
+
+    Example error::
+
+        AccessPoint \"dams:ap/x/op\" with asset_kind=operation requires interface_ref.
+        Remediation: Set interface_ref to the parent AccessPoint (interface). INV-016.
+    """
     out: list[Diagnostic] = []
     for el in data.get("access_points") or []:
         if not isinstance(el, dict):
@@ -410,11 +430,14 @@ def check_operation_interface_ref(data: dict[str, Any]) -> list[Diagnostic]:
             out.append(
                 _diag(
                     code="DAMS-REQ-PDM-011.c1",
+                    invariant_id="INV-016",
                     message=(
                         f'AccessPoint "{sid}" with asset_kind=operation requires interface_ref.'
                     ),
                     subject=sid or None,
-                    remediation="Set interface_ref to the parent AccessPoint (interface).",
+                    remediation=(
+                        "Set interface_ref to the parent AccessPoint (interface). INV-016."
+                    ),
                     requirement_code="PDM-011",
                 )
             )
@@ -422,7 +445,13 @@ def check_operation_interface_ref(data: dict[str, Any]) -> list[Diagnostic]:
 
 
 def check_in_memory_location(data: dict[str, Any]) -> list[Diagnostic]:
-    """in_memory DataCarrier must not have location_uri or region."""
+    """INV-015: in_memory DataCarrier must not have location_uri or region (PDM-012).
+
+    Example error::
+
+        DataCarrier \"dams:carrier/x\" with asset_kind=in_memory must not set location_uri.
+        Remediation: Remove location_uri and region for in_memory carriers. INV-015.
+    """
     out: list[Diagnostic] = []
     for el in data.get("data_carriers") or []:
         if not isinstance(el, dict):
@@ -439,12 +468,15 @@ def check_in_memory_location(data: dict[str, Any]) -> list[Diagnostic]:
             out.append(
                 _diag(
                     code="DAMS-REQ-PDM-012.c1",
+                    invariant_id="INV-015",
                     message=(
                         f'DataCarrier "{sid}" with asset_kind=in_memory must not set '
                         f"{', '.join(bad)}."
                     ),
                     subject=sid or None,
-                    remediation="Remove location_uri and region for in_memory carriers.",
+                    remediation=(
+                        "Remove location_uri and region for in_memory carriers. INV-015."
+                    ),
                     requirement_code="PDM-012",
                 )
             )

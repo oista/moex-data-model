@@ -19,10 +19,15 @@ def _diag(
     subject: str | None,
     *,
     remediation: str | None = None,
+    invariant_id: str | None = None,
 ) -> Diagnostic:
     details: list[DiagnosticDetail] = [
         DiagnosticDetail(detail_key="finding", detail_value=message)
     ]
+    if invariant_id:
+        details.append(
+            DiagnosticDetail(detail_key="invariant_id", detail_value=str(invariant_id))
+        )
     parts = [message]
     if remediation and str(remediation).strip():
         parts.append(f"Remediation: {remediation}")
@@ -66,6 +71,41 @@ def _iter_attributes(data: dict[str, Any]) -> list[dict[str, Any]]:
             if isinstance(attr, dict):
                 attrs.append(attr)
     return attrs
+
+
+def check_identifying_requires_is_identifying(
+    prop: dict[str, Any],
+) -> Diagnostic | None:
+    """INV-001: property_kind=identifying требует is_identifying=true.
+
+    L1 rule exists but JSON Schema ``equals_string`` on boolean is defective
+    (``l1_positive=not_satisfiable``); L2 enforces the same statement.
+
+    Example error::
+
+        ConceptualProperty \"dams:concept/C/p\": property_kind=identifying,
+        но is_identifying не true.
+        Remediation: Установите is_identifying: true … См. INV-001 / ADR-034.
+    """
+    eid = str(prop.get("element_id") or "")
+    if str(prop.get("property_kind") or "") != "identifying":
+        return None
+    if prop.get("is_identifying") is True:
+        return None
+    return _diag(
+        "DAMS-INV-001",
+        DiagnosticSeverity.ERROR,
+        (
+            f'ConceptualProperty "{eid}": property_kind=identifying, '
+            "но is_identifying не true."
+        ),
+        eid or None,
+        invariant_id="INV-001",
+        remediation=(
+            "Установите is_identifying: true для identifying-свойства "
+            "или смените property_kind. См. INV-001 / ADR-034."
+        ),
+    )
 
 
 def check_semantic_layer(data: dict[str, Any]) -> list[Diagnostic]:
@@ -161,17 +201,9 @@ def check_semantic_layer(data: dict[str, Any]) -> list[Diagnostic]:
                     eid,
                 )
             )
-        if str(prop.get("property_kind") or "") == "identifying" and prop.get(
-            "is_identifying"
-        ) is not True:
-            out.append(
-                _diag(
-                    "DAMS-SEM-PROP-KIND",
-                    DiagnosticSeverity.ERROR,
-                    "property_kind=identifying требует is_identifying=true.",
-                    eid,
-                )
-            )
+        inv001 = check_identifying_requires_is_identifying(prop)
+        if inv001 is not None:
+            out.append(inv001)
         if "explicit_decision" in basis_set and not str(
             prop.get("significance_rationale") or ""
         ).strip():
