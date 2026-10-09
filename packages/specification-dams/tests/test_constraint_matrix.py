@@ -33,8 +33,11 @@ def test_baseline_has_seventeen_rules() -> None:
     statuses = {inv["id"]: inv["status"] for inv in data["invariants"]}
     for i in range(1, 18):
         assert statuses[f"INV-{i:03d}"] == "implemented-untested"
-    for i in range(18, 28):
-        assert statuses[f"INV-{i:03d}"] == "planned"
+    # PR-C3: confirmed L2 candidates tagged → implemented-untested; partial/unconfirmed stay planned
+    for inv_id in ("INV-018", "INV-019", "INV-020", "INV-021", "INV-022", "INV-026"):
+        assert statuses[inv_id] == "implemented-untested"
+    for inv_id in ("INV-023", "INV-024", "INV-025", "INV-027"):
+        assert statuses[inv_id] == "planned"
 
 
 def test_check_constraint_matrix_script_ok() -> None:

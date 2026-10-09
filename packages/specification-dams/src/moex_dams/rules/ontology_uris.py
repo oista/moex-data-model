@@ -91,12 +91,13 @@ def check_ontology_uris(schema_path: Path | str) -> tuple[Diagnostic, ...]:
             if not text:
                 continue
             if not (text.endswith("/") or text.endswith("#")):
+                # INV-026 (ADR-030): prefix URI must end with '/' or '#'
                 diagnostics.append(
                     _diag(
                         "MOEX-ONT-004",
                         (
                             f"Prefix {key!r} in schema {schema_name!r} has URI "
-                            f"{text!r} without trailing '/' or '#'"
+                            f"{text!r} without trailing '/' or '#' (INV-026)."
                         ),
                         subject=str(key),
                         pointer=f"/prefixes/{key}",
@@ -106,6 +107,15 @@ def check_ontology_uris(schema_path: Path | str) -> tuple[Diagnostic, ...]:
                                 detail_key="schema", detail_value=str(schema_name)
                             ),
                             DiagnosticDetail(detail_key="uri", detail_value=text),
+                            DiagnosticDetail(
+                                detail_key="invariant_id", detail_value="INV-026"
+                            ),
+                            DiagnosticDetail(
+                                detail_key="remediation",
+                                detail_value=(
+                                    "Append '/' or '#' to the prefix URI. INV-026."
+                                ),
+                            ),
                         ),
                     )
                 )

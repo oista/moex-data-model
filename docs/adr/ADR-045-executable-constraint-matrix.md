@@ -83,6 +83,12 @@ superseded_by: []
 - Обновление golden после `INV-xxx` в `description` в PR-C2 отдельным коммитом; при изменении `content_digest` (а не только `schema_digest`) остановка и подтверждение.
 - ADR получает статус Accepted только после слияния всех PR серии и подтверждения пользователя.
 
+## Open questions (C3)
+
+### Q-INV-011 / AsyncAPI
+
+Источник ADR-038 допускает `schema_dialect` для AsyncAPI Multi Format Schema; существующее LinkML-правило и L2-валидатор `check_schema_dialect_format_family` ограничивают семейство `json_schema` / `openapi_schema` (`source_status: divergent`). В PR-C3 правило **не** расширялось и **не** сужалось: L2 зеркалит L1. Решение (расширить правило, ослабить ADR или waiver) — за владельцем модели; до решения расхождение остаётся зафиксированным в матрице и в отчёте C3.
+
 ## Alternatives rejected
 
 | Альтернатива | Причина |

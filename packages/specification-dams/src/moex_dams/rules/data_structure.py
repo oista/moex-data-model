@@ -30,11 +30,16 @@ def _diag(
     subject: str | None,
     remediation: str | None = None,
     requirement_code: str | None = None,
+    invariant_id: str | None = None,
     severity: DiagnosticSeverity = DiagnosticSeverity.ERROR,
 ) -> Diagnostic:
     details: list[DiagnosticDetail] = [
         DiagnosticDetail(detail_key="finding", detail_value=message)
     ]
+    if invariant_id:
+        details.append(
+            DiagnosticDetail(detail_key="invariant_id", detail_value=str(invariant_id))
+        )
     if requirement_code:
         details.append(
             DiagnosticDetail(
@@ -141,7 +146,7 @@ def _nodes_by_local_key(ds: dict[str, Any]) -> dict[str, dict[str, Any]]:
 
 
 def check_local_key_unique(data: dict[str, Any]) -> list[Diagnostic]:
-    """local_key must be unique within each DataStructure.nodes."""
+    """INV-022: local_key must be unique within each DataStructure.nodes (PDM-013)."""
     out: list[Diagnostic] = []
     for ds in data.get("data_structures") or []:
         if not isinstance(ds, dict):
@@ -160,12 +165,15 @@ def check_local_key_unique(data: dict[str, Any]) -> list[Diagnostic]:
                 out.append(
                     _diag(
                         code="DAMS-REQ-PDM-013.c1",
+                        invariant_id="INV-022",
                         message=(
                             f'DataStructure "{sid}" has duplicate local_key {lk!r} '
                             f"({count} nodes)."
                         ),
                         subject=f"{sid}#{lk}" if sid else lk,
-                        remediation="Ensure local_key is unique within DataStructure.nodes.",
+                        remediation=(
+                            "Ensure local_key is unique within DataStructure.nodes. INV-022."
+                        ),
                         requirement_code="PDM-013",
                     )
                 )
@@ -173,7 +181,7 @@ def check_local_key_unique(data: dict[str, Any]) -> list[Diagnostic]:
 
 
 def check_node_edge_cycles(data: dict[str, Any]) -> list[Diagnostic]:
-    """Detect cycles via children / item_node edges (DFS)."""
+    """INV-020: detect cycles via children / item_node edges (PDM-014)."""
     out: list[Diagnostic] = []
     for ds in data.get("data_structures") or []:
         if not isinstance(ds, dict):
@@ -220,11 +228,15 @@ def check_node_edge_cycles(data: dict[str, Any]) -> list[Diagnostic]:
                 out.append(
                     _diag(
                         code="DAMS-REQ-PDM-014.c1",
+                        invariant_id="INV-020",
                         message=(
                             f'DataStructure "{sid}" has a cycle in children/item_node edges.'
                         ),
                         subject=sid or None,
-                        remediation="Remove cycles; use node_kind=reference for recursive schemas.",
+                        remediation=(
+                            "Remove cycles; use node_kind=reference for recursive schemas. "
+                            "INV-020."
+                        ),
                         requirement_code="PDM-014",
                     )
                 )
@@ -290,7 +302,7 @@ def check_root_local_key(data: dict[str, Any]) -> list[Diagnostic]:
 
 
 def check_relational_slots(data: dict[str, Any]) -> list[Diagnostic]:
-    """Relational slots forbidden unless schema_format=relational."""
+    """INV-021: relational node facets only when schema_format=relational (PDM-016)."""
     out: list[Diagnostic] = []
     for ds in data.get("data_structures") or []:
         if not isinstance(ds, dict):
@@ -308,13 +320,15 @@ def check_relational_slots(data: dict[str, Any]) -> list[Diagnostic]:
                 out.append(
                     _diag(
                         code="DAMS-REQ-PDM-016.c1",
+                        invariant_id="INV-021",
                         message=(
                             f'SchemaNode "{sid}#{lk}" declares relational slots '
                             f"{', '.join(bad)} but DataStructure schema_format is {fmt!r}."
                         ),
                         subject=f"{sid}#{lk}" if sid and lk else (sid or lk or None),
                         remediation=(
-                            "Remove relational slots or set schema_format=relational."
+                            "Remove relational slots or set schema_format=relational. "
+                            "INV-021."
                         ),
                         requirement_code="PDM-016",
                     )
@@ -378,12 +392,15 @@ def check_node_kind_shape(data: dict[str, Any]) -> list[Diagnostic]:
                     out.append(
                         _diag(
                             code="DAMS-REQ-PDM-020.c1",
+                            invariant_id="INV-012",
                             message=(
                                 f'SchemaNode "{subject}" with node_kind={kind} '
                                 "requires item_node."
                             ),
                             subject=subject,
-                            remediation="Set item_node to the element/value node local_key.",
+                            remediation=(
+                                "Set item_node to the element/value node local_key. INV-012."
+                            ),
                             requirement_code="PDM-020",
                         )
                     )
@@ -391,12 +408,15 @@ def check_node_kind_shape(data: dict[str, Any]) -> list[Diagnostic]:
                     out.append(
                         _diag(
                             code="DAMS-REQ-PDM-020.c2",
+                            invariant_id="INV-012",
                             message=(
                                 f'SchemaNode "{subject}" with node_kind={kind} '
                                 "must not declare children."
                             ),
                             subject=subject,
-                            remediation="Remove children; use item_node for array/map.",
+                            remediation=(
+                                "Remove children; use item_node for array/map. INV-012."
+                            ),
                             requirement_code="PDM-020",
                         )
                     )
@@ -405,12 +425,13 @@ def check_node_kind_shape(data: dict[str, Any]) -> list[Diagnostic]:
                     out.append(
                         _diag(
                             code="DAMS-REQ-PDM-020.c3",
+                            invariant_id="INV-013",
                             message=(
                                 f'SchemaNode "{subject}" with node_kind={kind} '
                                 "must not declare children."
                             ),
                             subject=subject,
-                            remediation="Remove children from scalar/enum nodes.",
+                            remediation="Remove children from scalar/enum nodes. INV-013.",
                             requirement_code="PDM-020",
                         )
                     )
@@ -418,12 +439,13 @@ def check_node_kind_shape(data: dict[str, Any]) -> list[Diagnostic]:
                     out.append(
                         _diag(
                             code="DAMS-REQ-PDM-020.c4",
+                            invariant_id="INV-013",
                             message=(
                                 f'SchemaNode "{subject}" with node_kind={kind} '
                                 "must not declare item_node."
                             ),
                             subject=subject,
-                            remediation="Remove item_node from scalar/enum nodes.",
+                            remediation="Remove item_node from scalar/enum nodes. INV-013.",
                             requirement_code="PDM-020",
                         )
                     )
@@ -475,8 +497,132 @@ def check_field_mapping_structure_ends(data: dict[str, Any]) -> list[Diagnostic]
     return out
 
 
+def check_source_pointer_requires_artifact(data: dict[str, Any]) -> list[Diagnostic]:
+    """INV-010: source_pointer only meaningful inside source_artifact_ref (slot text).
+
+    Example error::
+
+        DataStructure \"dams:structure/x\": source_pointer задан без source_artifact_ref.
+        Remediation: Задайте source_artifact_ref или удалите source_pointer. INV-010.
+    """
+    out: list[Diagnostic] = []
+    for ds in data.get("data_structures") or []:
+        if not isinstance(ds, dict):
+            continue
+        sid = str(ds.get("element_id") or ds.get("name") or "")
+        pointer = ds.get("source_pointer")
+        if pointer is None or not str(pointer).strip():
+            continue
+        artifact = ds.get("source_artifact_ref")
+        if artifact is None or not str(artifact).strip():
+            out.append(
+                _diag(
+                    code="DAMS-INV-010",
+                    invariant_id="INV-010",
+                    message=(
+                        f'DataStructure "{sid}": source_pointer задан без '
+                        "source_artifact_ref (слот: указатель внутри артефакта)."
+                    ),
+                    subject=sid or None,
+                    remediation=(
+                        "Задайте source_artifact_ref на документ-источник или удалите "
+                        "source_pointer. INV-010."
+                    ),
+                )
+            )
+    return out
+
+
+def check_schema_dialect_format_family(data: dict[str, Any]) -> list[Diagnostic]:
+    """INV-011: schema_dialect only when schema_format is json_schema|openapi_schema.
+
+    Does **not** extend the rule to AsyncAPI Multi Format Schema — divergence from
+    ADR-038 remains an open question (ADR-045 / C3 report). L2 mirrors the existing
+    LinkML rule.
+
+    Example error::
+
+        DataStructure \"dams:structure/x\": schema_dialect задан при schema_format=avro.
+        Remediation: Удалите schema_dialect или смените schema_format на json_schema /
+        openapi_schema. INV-011.
+    """
+    allowed = frozenset({"json_schema", "openapi_schema"})
+    out: list[Diagnostic] = []
+    for ds in data.get("data_structures") or []:
+        if not isinstance(ds, dict):
+            continue
+        dialect = ds.get("schema_dialect")
+        if dialect is None or not str(dialect).strip():
+            continue
+        sid = str(ds.get("element_id") or ds.get("name") or "")
+        fmt = str(ds.get("schema_format") or "")
+        if fmt not in allowed:
+            out.append(
+                _diag(
+                    code="DAMS-INV-011",
+                    invariant_id="INV-011",
+                    message=(
+                        f'DataStructure "{sid}": schema_dialect задан при '
+                        f"schema_format={fmt!r} (допустимо только json_schema|"
+                        "openapi_schema по правилу схемы)."
+                    ),
+                    subject=sid or None,
+                    remediation=(
+                        "Удалите schema_dialect или смените schema_format на "
+                        "json_schema / openapi_schema. INV-011 "
+                        "(расхождение с AsyncAPI в ADR-038 — см. ADR-045)."
+                    ),
+                )
+            )
+    return out
+
+
+def check_reference_node_target(data: dict[str, Any]) -> list[Diagnostic]:
+    """INV-014: node_kind=reference requires reference_target (slot text).
+
+    Example error::
+
+        SchemaNode \"dams:structure/x#ref\": node_kind=reference без reference_target.
+        Remediation: Задайте reference_target (CURIE/URI цели). INV-014.
+    """
+    out: list[Diagnostic] = []
+    for ds in data.get("data_structures") or []:
+        if not isinstance(ds, dict):
+            continue
+        sid = str(ds.get("element_id") or ds.get("name") or "")
+        for node in ds.get("nodes") or []:
+            if not isinstance(node, dict):
+                continue
+            if str(node.get("node_kind") or "") != "reference":
+                continue
+            lk = str(node.get("local_key") or "")
+            subject = f"{sid}#{lk}" if sid and lk else (sid or lk or None)
+            target = node.get("reference_target")
+            if target is None or not str(target).strip():
+                out.append(
+                    _diag(
+                        code="DAMS-INV-014",
+                        invariant_id="INV-014",
+                        message=(
+                            f'SchemaNode "{subject}": node_kind=reference без '
+                            "reference_target (слот: цель ссылки)."
+                        ),
+                        subject=subject,
+                        remediation=(
+                            "Задайте reference_target на DataStructure или узел "
+                            "(uriorcurie). INV-014."
+                        ),
+                    )
+                )
+    return out
+
+
 def check_message_refs_kinds(data: dict[str, Any]) -> list[Diagnostic]:
-    """message_refs forbidden on AccessPoint asset_kind=interface; allowed for operation|channel."""
+    """INV-019 / INV-017 (message_refs): only operation|channel; forbidden on interface.
+
+    Source for interface ban of message_refs: ADR-040 / PDM-018. Other operation
+    fields on interface remain L1-only (source partial beyond message_refs).
+    """
     out: list[Diagnostic] = []
     for el in data.get("access_points") or []:
         if not isinstance(el, dict):
@@ -490,12 +636,13 @@ def check_message_refs_kinds(data: dict[str, Any]) -> list[Diagnostic]:
             out.append(
                 _diag(
                     code="DAMS-REQ-PDM-018.c1",
+                    invariant_id="INV-017",
                     message=(
                         f'AccessPoint "{sid}" with asset_kind=interface must not declare '
                         "message_refs."
                     ),
                     subject=sid or None,
-                    remediation="Put message_refs on operation or channel AccessPoints.",
+                    remediation="Put message_refs on operation or channel AccessPoints. INV-017.",
                     requirement_code="PDM-018",
                 )
             )
@@ -503,12 +650,15 @@ def check_message_refs_kinds(data: dict[str, Any]) -> list[Diagnostic]:
             out.append(
                 _diag(
                     code="DAMS-REQ-PDM-018.c2",
+                    invariant_id="INV-019",
                     message=(
                         f'AccessPoint "{sid}" with asset_kind={kind!r} must not declare '
                         "message_refs."
                     ),
                     subject=sid or None,
-                    remediation="message_refs is only for asset_kind operation or channel.",
+                    remediation=(
+                        "message_refs is only for asset_kind operation or channel. INV-019."
+                    ),
                     requirement_code="PDM-018",
                 )
             )
@@ -575,6 +725,9 @@ def check_data_structures(data: dict[str, Any]) -> tuple[Diagnostic, ...]:
     diags.extend(check_relational_slots(data))
     diags.extend(check_occurs_bounds(data))
     diags.extend(check_node_kind_shape(data))
+    diags.extend(check_source_pointer_requires_artifact(data))
+    diags.extend(check_schema_dialect_format_family(data))
+    diags.extend(check_reference_node_target(data))
     diags.extend(check_field_mapping_structure_ends(data))
     diags.extend(check_message_refs_kinds(data))
     diags.extend(check_message_payload(data))

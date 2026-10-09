@@ -88,18 +88,22 @@ invariants:
     notes: 'В схеме есть L1 rule, но equals_string на boolean дефектен в JSON Schema
       (см. linkml-rules-support §3.1); целевые уровни L2+L3. PR-C2: valid fixture
       uses base instance (satisfy unsatisfiable due to boolean equals_string). l1_positive=not_satisfiable;
-      не чинить L1 (остаётся L2+L3); дефект генератора — отдельный issue.'
+      не чинить L1 (остаётся L2+L3); дефект генератора — отдельный issue. PR-C3: L2
+      DAMS-INV-001 в check_identifying_requires_is_identifying; unit-тесты в
+      test_invariant_l2.py. L3 — PR-C4.'
     implementation:
       linkml_rule:
         schema_file: moex-core.yaml
         class_name: ConceptualProperty
         rule_index: 0
-      dams_validator: moex_dams.rules.semantic_layer
+      dams_validator: moex_dams.rules.semantic_layer.check_identifying_requires_is_identifying
     tests:
       l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-001.valid.yaml]
       l1_invalid: [
             model-assets/specifications/moex-dams/0.1/examples/invariants/INV-001.invalid.yaml]
       l1_positive: not_satisfiable
+      l2_valid: [packages/specification-dams/tests/test_invariant_l2.py]
+      l2_invalid: [packages/specification-dams/tests/test_invariant_l2.py]
   - id: INV-002
     title: DataType.precision только для decimal
     statement: Слот precision допустим только при type_family = decimal.
@@ -258,37 +262,46 @@ invariants:
     source: slot source_pointer; ADR-038
     source_status: partial
     scope: moex-dams
-    levels: [L1, L3]
+    levels: [L1, L2, L3]
     severity: error
     status: implemented-untested
+    notes: 'PR-C3: L2 привязан к тексту слота (указатель внутри source_artifact_ref),
+      без расширения нормы. Unit-тесты test_invariant_l2.py.'
     implementation:
       linkml_rule:
         schema_file: moex-structure.yaml
         class_name: DataStructure
         rule_index: 0
+      dams_validator: moex_dams.rules.data_structure.check_source_pointer_requires_artifact
     tests:
       l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-010.valid.yaml]
       l1_invalid: [
             model-assets/specifications/moex-dams/0.1/examples/invariants/INV-010.invalid.yaml]
+      l2_valid: [packages/specification-dams/tests/test_invariant_l2.py]
+      l2_invalid: [packages/specification-dams/tests/test_invariant_l2.py]
   - id: INV-011
     title: DataStructure schema_dialect только JSON Schema family
     statement: schema_dialect допустим только для schema_format json_schema или openapi_schema.
     source: ADR-038:44-51
     source_status: divergent
     scope: moex-dams
-    levels: [L1, L3]
+    levels: [L1, L2, L3]
     severity: error
     status: implemented-untested
-    notes: ADR допускает AsyncAPI Multi Format Schema; правило уже уже.
+    notes: 'ADR допускает AsyncAPI Multi Format Schema; правило уже уже. PR-C3: L2
+      зеркалит LinkML без расширения; вопрос AsyncAPI остаётся в ADR-045 / отчёте C3.'
     implementation:
       linkml_rule:
         schema_file: moex-structure.yaml
         class_name: DataStructure
         rule_index: 1
+      dams_validator: moex_dams.rules.data_structure.check_schema_dialect_format_family
     tests:
       l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-011.valid.yaml]
       l1_invalid: [
             model-assets/specifications/moex-dams/0.1/examples/invariants/INV-011.invalid.yaml]
+      l2_valid: [packages/specification-dams/tests/test_invariant_l2.py]
+      l2_invalid: [packages/specification-dams/tests/test_invariant_l2.py]
   - id: INV-012
     title: SchemaNode array|map → item_node, без children
     statement: Для node_kind array или map обязателен item_node и запрещены children.
@@ -336,18 +349,23 @@ invariants:
     source: ADR-038:32; slot reference_target
     source_status: partial
     scope: moex-dams
-    levels: [L1, L3]
+    levels: [L1, L2, L3]
     severity: error
     status: implemented-untested
+    notes: 'PR-C3: L2 привязан к тексту слота reference_target; unit-тесты
+      test_invariant_l2.py.'
     implementation:
       linkml_rule:
         schema_file: moex-structure.yaml
         class_name: SchemaNode
         rule_index: 2
+      dams_validator: moex_dams.rules.data_structure.check_reference_node_target
     tests:
       l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-014.valid.yaml]
       l1_invalid: [
             model-assets/specifications/moex-dams/0.1/examples/invariants/INV-014.invalid.yaml]
+      l2_valid: [packages/specification-dams/tests/test_invariant_l2.py]
+      l2_invalid: [packages/specification-dams/tests/test_invariant_l2.py]
   - id: INV-015
     title: DataCarrier in_memory без location_uri и region
     statement: Для asset_kind = in_memory запрещены location_uri и region.
@@ -417,13 +435,17 @@ invariants:
     source: moex-technical.yaml; PDM-008
     source_status: aligned
     scope: moex-dams
-    levels: [L1, L2]
+    levels: [L2]
     severity: error
-    status: planned
+    status: implemented-untested
     requirement_refs: [DAMS-REQ-PDM-008.c1]
-    notes: В description заявлено LinkML rules, в схеме правила нет.
+    notes: 'L1 rules в схеме нет (описание устарело). PR-C3: L2 check_direction_forbidden
+      с invariant_id=INV-018; unit-тест test_inv_018_direction_forbidden_tagged.'
     implementation:
-      dams_validator: moex_dams.rules.technical_assets
+      dams_validator: moex_dams.rules.technical_assets.check_direction_forbidden
+    tests:
+      l2_valid: [packages/specification-dams/tests/test_invariant_l2.py]
+      l2_invalid: [packages/specification-dams/tests/test_invariant_l2.py]
   - id: INV-019
     title: message_refs только у operation/channel
     statement: message_refs допустимы только у AccessPoint kind operation или channel.
@@ -432,11 +454,11 @@ invariants:
     scope: moex-dams
     levels: [L2]
     severity: error
-    status: planned
-    requirement_refs: [DAMS-REQ-PDM-018.c1]
-    notes: L1 частично покрыт INV-017 (только interface).
+    status: implemented-untested
+    requirement_refs: [DAMS-REQ-PDM-018.c2]
+    notes: 'L1 частично покрыт INV-017 (только interface). PR-C3: tagged INV-019.'
     implementation:
-      dams_validator: moex_dams.rules.data_structure
+      dams_validator: moex_dams.rules.data_structure.check_message_refs_kinds
   - id: INV-020
     title: SchemaNode без циклов children/item_node
     statement: Рёбра children и item_node не образуют циклов.
@@ -445,8 +467,9 @@ invariants:
     scope: moex-dams
     levels: [L2, L3]
     severity: error
-    status: planned
+    status: implemented-untested
     requirement_refs: [DAMS-REQ-PDM-014.c1]
+    notes: 'PR-C3 tagged INV-020 on existing cycle checker; L3 — PR-C4.'
     implementation:
       dams_validator: moex_dams.rules.data_structure
   - id: INV-021
@@ -457,8 +480,9 @@ invariants:
     scope: moex-dams
     levels: [L2]
     severity: error
-    status: planned
+    status: implemented-untested
     requirement_refs: [DAMS-REQ-PDM-016.c1]
+    notes: 'PR-C3 tagged INV-021 on existing relational-slot checker.'
     implementation:
       dams_validator: moex_dams.rules.data_structure
   - id: INV-022
@@ -469,8 +493,9 @@ invariants:
     scope: moex-dams
     levels: [L2]
     severity: error
-    status: planned
+    status: implemented-untested
     requirement_refs: [DAMS-REQ-PDM-013.c1]
+    notes: 'PR-C3 tagged INV-022 on existing uniqueness checker.'
     implementation:
       dams_validator: moex_dams.rules.data_structure
   - id: INV-023
@@ -483,7 +508,8 @@ invariants:
     levels: [L2]
     severity: error
     status: planned
-    notes: Проверить покрытие в PR-C3.
+    notes: 'PR-C3: source_status=partial — валидатор не добавлялся без подтверждённой
+      нормы; dams_levels уже есть, привязка INV отложена.'
     implementation:
       dams_validator: moex_dams.rules.dams_levels
   - id: INV-024
@@ -495,7 +521,7 @@ invariants:
     levels: [L2]
     severity: error
     status: planned
-    notes: Реализация не подтверждена чтением кода (PR-C3).
+    notes: 'PR-C3: источник partial — валидатор не изобретался.'
   - id: INV-025
     title: tags только из реестра переходных тегов
     statement: Значения tags принадлежат реестру переходных тегов (ADR-043).
@@ -505,7 +531,8 @@ invariants:
     levels: [L2]
     severity: error
     status: planned
-    notes: Residue-тест по ADR-043; подтвердить в PR-C3.
+    notes: 'PR-C3: instance-валидатор tags в moex_dams/rules не найден (residue
+      architecture-check); остаётся planned.'
   - id: INV-026
     title: 'URI префикса оканчивается на / или #'
     statement: URI префикса онтологии оканчивается на '/' или '#'.
@@ -514,9 +541,10 @@ invariants:
     scope: moex-dams
     levels: [L2]
     severity: error
-    status: planned
+    status: implemented-untested
+    notes: 'PR-C3: tagged MOEX-ONT-004 с invariant_id=INV-026 (schema lint, не package).'
     implementation:
-      dams_validator: moex_dams.rules.ontology_uris
+      dams_validator: moex_dams.rules.ontology_uris.check_ontology_uris
   - id: INV-027
     title: Владелец пакета и классификация сущности
     statement: У пакета задан data_owner_ref; у логической сущности есть эффективная
@@ -527,4 +555,4 @@ invariants:
     levels: [L2]
     severity: error
     status: planned
-    notes: Каскад; проверить в PR-C3.
+    notes: 'PR-C3: source_status=partial — каскад не оформлялся как новый INV-валидатор.'

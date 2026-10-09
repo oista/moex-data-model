@@ -75,3 +75,20 @@ superseded_by: []
 **Golden:** обновляется отдельным коммитом после проверки diff (Q6).
 
 **Не чинить в C2/C3 (семантика → отдельная серия / MAJOR 4.0.0):** INV-001 L1 boolean defect (`l1_positive: not_satisfiable`, уровни L2+L3); multi-ABSENT INV-013/015/017 оставляем ослабленными на L1, закрываем L2/L3.
+
+## PR-C3: L2 validators
+
+**Добавлено**
+
+- L2 `DAMS-INV-001` (`check_identifying_requires_is_identifying`), `DAMS-INV-010/011/014` в `data_structure.py`.
+- `invariant_id` на существующих PDM-проверках: INV-012…022, INV-015/016/017 (message_refs), INV-018; INV-026 на `MOEX-ONT-004`.
+- Unit-тесты `packages/specification-dams/tests/test_invariant_l2.py` (valid/invalid).
+- Заметка Q-INV-011 / AsyncAPI в [ADR-045](../adr/ADR-045-executable-constraint-matrix.md); отчёт [constraint-matrix-c3-report.md](../architecture/constraint-matrix-c3-report.md).
+
+**Не изобреталось:** INV-023/024/027 (`source_status: partial`); INV-025 (нет instance-валидатора tags в `moex_dams/rules`).
+
+**INV-011:** правило не менялось; расхождение с AsyncAPI остаётся вопросом в ADR-045.
+
+**Стало строже:** L2 теперь ловит INV-001/010/011/014 на пакетах (ранее только L1 JSON Schema / без L2). Данные автоматически не чинились.
+
+**Статусы:** INV-018…022, INV-026 → `implemented-untested`; INV-010/011/014 получили уровень L2 в матрице; INV-023…025, 027 остаются `planned`.
