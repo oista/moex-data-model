@@ -330,7 +330,7 @@ dams/
 
 ### `DataFlow`
 
-`DataFlow` не является второй карточкой интеграции. Это ссылочная проекция Clinkr, необходимая для соединения топологии интеграции с семантикой модели. Источником участников, систем, платформ, уровня, класса, канала и integration specification является Clinkr; DAMS добавляет ссылки на модели, логические сущности, атрибуты и физические объекты.
+`DataFlow` не является второй карточкой интеграции. Это ссылочная проекция Clinkr, необходимая для соединения топологии интеграции с семантикой модели. Источником участников, систем, платформ, уровня, класса, канала и integration specification является Clinkr (файл-снимок → материализованный `TopologyView`, ADR-048); DAMS authored хранит `integration_ref`, `entity_bindings` и опционально `bound_catalog_revision`.
 
 Стандарт MOEX устанавливает, что новая кросс-системная интеграция сначала регистрируется в Clinkr, затем её справочник загружается в каталог и для неё создаётся дата-контракт. Clinkr остаётся master технического описания интеграций.[^2]
 
@@ -562,17 +562,10 @@ classes:
     slots:
       - integration_ref
       - contract_ref
-      - source_solution_ref
-      - target_solution_ref
-      - source_system_ref
-      - target_system_ref
-      - source_platform_ref
-      - target_platform_ref
-      - integration_level
-      - integration_class
-      - integration_channel
-      - integration_spec_ref
+      - bound_catalog_revision
       - entity_bindings
+    # Topology (systems/platforms/channel/spec) is owned by Clinkr/EAM
+    # and materialized as TopologyView (ADR-048), not authored on DataFlow.
 
   DataFlowEntityBinding:
     is_a: ModelElement
@@ -581,10 +574,13 @@ classes:
       - source_model_ref
       - logical_entity_ref
       - logical_attribute_refs
-      - physical_object_refs
-      - physical_field_refs
+      - carrier_refs
+      - schema_node_refs
       - transformation_mapping_refs
+      - catalog_operation_ref
+      - catalog_participant_ref
 ```
+
 
 ## Контрактный selection
 

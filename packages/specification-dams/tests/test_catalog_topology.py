@@ -100,6 +100,9 @@ def test_topology_changed_warning() -> None:
 def test_unmapped_exchange_warning() -> None:
     snap = load_snapshot(SNAPSHOT)
     flow = yaml.safe_load(FLOW.read_text(encoding="utf-8"))
+    for b in flow.get("entity_bindings") or []:
+        if isinstance(b, dict):
+            b.pop("catalog_operation_ref", None)
     findings, _ = collect_drift(flow, snap)
     assert any(f.code == "unmapped_exchange" for f in findings)
 

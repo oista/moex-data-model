@@ -232,11 +232,7 @@ Name: moex_dams
 | [implementation_version](implementation_version.md) |  |
 | [imports_refs](imports_refs.md) |  |
 | [include_self](include_self.md) | Включать стартовые узлы в результат |
-| [integration_channel](integration_channel.md) |  |
-| [integration_class](integration_class.md) |  |
-| [integration_level](integration_level.md) |  |
 | [integration_ref](integration_ref.md) |  |
-| [integration_spec_ref](integration_spec_ref.md) |  |
 | [integrity_digest](integrity_digest.md) |  |
 | [interface_ref](interface_ref.md) | Родительский интерфейс для операции (asset_kind=operation) |
 | [invariant_refs](invariant_refs.md) |  |
@@ -376,12 +372,9 @@ Name: moex_dams
 | [source_model_ref](source_model_ref.md) |  |
 | [source_nodes](source_nodes.md) | Стартовые узлы reachable_from |
 | [source_ontology](source_ontology.md) | IRI/CURIE исходной онтологии для динамического набора |
-| [source_platform_ref](source_platform_ref.md) |  |
 | [source_pointer](source_pointer.md) | JSON Pointer или аналог внутри source_artifact_ref |
 | [source_refs](source_refs.md) |  |
 | [source_role](source_role.md) |  |
-| [source_solution_ref](source_solution_ref.md) |  |
-| [source_system_ref](source_system_ref.md) |  |
 | [source_uri](source_uri.md) |  |
 | [specification_version](specification_version.md) |  |
 | [statement](statement.md) | Полная нормативная формулировка на русском для человека: без имён LinkML-клас... |
@@ -396,14 +389,11 @@ Name: moex_dams
 | [target_max_cardinality](target_max_cardinality.md) |  |
 | [target_min_cardinality](target_min_cardinality.md) |  |
 | [target_path](target_path.md) | JSON Pointer или path hint в теле ModelPackage |
-| [target_platform_ref](target_platform_ref.md) |  |
 | [target_ref](target_ref.md) | IRI/CURIE of the external class or term (ADR-026) |
 | [target_refs](target_refs.md) |  |
 | [target_role](target_role.md) |  |
 | [target_slot](target_slot.md) |  |
 | [target_slots](target_slots.md) | Список слотов для kind=at_least_one_slots |
-| [target_solution_ref](target_solution_ref.md) |  |
-| [target_system_ref](target_system_ref.md) |  |
 | [technology](technology.md) |  |
 | [temporal_semantics](temporal_semantics.md) | Семантика даты/времени (Wave 2 soft) |
 | [term_direction](term_direction.md) | Whether this Relationship assertion uses the forward or inverse wording of re... |

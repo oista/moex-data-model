@@ -75,39 +75,6 @@
     
 
         
-      DataFlow : integration_channel
-        
-          
-    
-        
-        
-        DataFlow --> "0..1" IntegrationChannelEnum : integration_channel
-        click IntegrationChannelEnum href "../IntegrationChannelEnum"
-    
-
-        
-      DataFlow : integration_class
-        
-          
-    
-        
-        
-        DataFlow --> "0..1" IntegrationClassEnum : integration_class
-        click IntegrationClassEnum href "../IntegrationClassEnum"
-    
-
-        
-      DataFlow : integration_level
-        
-          
-    
-        
-        
-        DataFlow --> "0..1" IntegrationLevelEnum : integration_level
-        click IntegrationLevelEnum href "../IntegrationLevelEnum"
-    
-
-        
       DataFlow : integration_ref
         
           
@@ -118,8 +85,6 @@
         click IntegrationReference href "../IntegrationReference"
     
 
-        
-      DataFlow : integration_spec_ref
         
       DataFlow : lifecycle_status
         
@@ -147,73 +112,7 @@
     
 
         
-      DataFlow : source_platform_ref
-        
-          
-    
-        
-        
-        DataFlow --> "0..1" ITPlatform : source_platform_ref
-        click ITPlatform href "../ITPlatform"
-    
-
-        
-      DataFlow : source_solution_ref
-        
-          
-    
-        
-        
-        DataFlow --> "0..1" ITSolution : source_solution_ref
-        click ITSolution href "../ITSolution"
-    
-
-        
-      DataFlow : source_system_ref
-        
-          
-    
-        
-        
-        DataFlow --> "0..1" ITSystem : source_system_ref
-        click ITSystem href "../ITSystem"
-    
-
-        
       DataFlow : tags
-        
-      DataFlow : target_platform_ref
-        
-          
-    
-        
-        
-        DataFlow --> "0..1" ITPlatform : target_platform_ref
-        click ITPlatform href "../ITPlatform"
-    
-
-        
-      DataFlow : target_solution_ref
-        
-          
-    
-        
-        
-        DataFlow --> "0..1" ITSolution : target_solution_ref
-        click ITSolution href "../ITSolution"
-    
-
-        
-      DataFlow : target_system_ref
-        
-          
-    
-        
-        
-        DataFlow --> "0..1" ITSystem : target_system_ref
-        click ITSystem href "../ITSystem"
-    
-
         
       DataFlow : title
         

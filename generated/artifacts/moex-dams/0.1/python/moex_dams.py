@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-12T21:46:29
+# Generation date: 2026-10-12T21:55:24
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -60,7 +60,7 @@ from linkml_runtime.linkml_model.types import Boolean, Datetime, Decimal, Intege
 from linkml_runtime.utils.metamodelcore import Bool, Decimal, URI, URIorCURIE, XSDDateTime
 
 metamodel_version = "1.11.0"
-version = "3.2.0"
+version = "4.0.0"
 
 # Namespaces
 DAMS = CurieNamespace('dams', 'https://data.moex.com/dams/')
@@ -3741,8 +3741,8 @@ class Message(ModelElement):
 @dataclass(repr=False)
 class DataFlow(ModelElement):
     """
-    Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr, а семантика — модели
-    данных (ADR-048).
+    Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr и читаются из
+    TopologyView, а семантика — модели данных (ADR-048).
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -3758,16 +3758,6 @@ class DataFlow(ModelElement):
     description: str = None
     contract_ref: Optional[Union[str, DataContractReferenceRegistryId]] = None
     bound_catalog_revision: Optional[str] = None
-    source_solution_ref: Optional[Union[str, ITSolutionRegistryId]] = None
-    target_solution_ref: Optional[Union[str, ITSolutionRegistryId]] = None
-    source_system_ref: Optional[Union[str, ITSystemRegistryId]] = None
-    target_system_ref: Optional[Union[str, ITSystemRegistryId]] = None
-    source_platform_ref: Optional[Union[str, ITPlatformRegistryId]] = None
-    target_platform_ref: Optional[Union[str, ITPlatformRegistryId]] = None
-    integration_level: Optional[Union[str, "IntegrationLevelEnum"]] = None
-    integration_class: Optional[Union[str, "IntegrationClassEnum"]] = None
-    integration_channel: Optional[Union[str, "IntegrationChannelEnum"]] = None
-    integration_spec_ref: Optional[Union[str, URI]] = None
     entity_bindings: Optional[Union[dict[Union[str, DataFlowEntityBindingElementId], Union[dict, "DataFlowEntityBinding"]], list[Union[dict, "DataFlowEntityBinding"]]]] = empty_dict()
     data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
     data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
@@ -3795,36 +3785,6 @@ class DataFlow(ModelElement):
 
         if self.bound_catalog_revision is not None and not isinstance(self.bound_catalog_revision, str):
             self.bound_catalog_revision = str(self.bound_catalog_revision)
-
-        if self.source_solution_ref is not None and not isinstance(self.source_solution_ref, ITSolutionRegistryId):
-            self.source_solution_ref = ITSolutionRegistryId(self.source_solution_ref)
-
-        if self.target_solution_ref is not None and not isinstance(self.target_solution_ref, ITSolutionRegistryId):
-            self.target_solution_ref = ITSolutionRegistryId(self.target_solution_ref)
-
-        if self.source_system_ref is not None and not isinstance(self.source_system_ref, ITSystemRegistryId):
-            self.source_system_ref = ITSystemRegistryId(self.source_system_ref)
-
-        if self.target_system_ref is not None and not isinstance(self.target_system_ref, ITSystemRegistryId):
-            self.target_system_ref = ITSystemRegistryId(self.target_system_ref)
-
-        if self.source_platform_ref is not None and not isinstance(self.source_platform_ref, ITPlatformRegistryId):
-            self.source_platform_ref = ITPlatformRegistryId(self.source_platform_ref)
-
-        if self.target_platform_ref is not None and not isinstance(self.target_platform_ref, ITPlatformRegistryId):
-            self.target_platform_ref = ITPlatformRegistryId(self.target_platform_ref)
-
-        if self.integration_level is not None and not isinstance(self.integration_level, IntegrationLevelEnum):
-            self.integration_level = IntegrationLevelEnum(self.integration_level)
-
-        if self.integration_class is not None and not isinstance(self.integration_class, IntegrationClassEnum):
-            self.integration_class = IntegrationClassEnum(self.integration_class)
-
-        if self.integration_channel is not None and not isinstance(self.integration_channel, IntegrationChannelEnum):
-            self.integration_channel = IntegrationChannelEnum(self.integration_channel)
-
-        if self.integration_spec_ref is not None and not isinstance(self.integration_spec_ref, URI):
-            self.integration_spec_ref = URI(self.integration_spec_ref)
 
         self._normalize_inlined_as_list(slot_name="entity_bindings", slot_type=DataFlowEntityBinding, key_name="element_id", keyed=True)
 
@@ -6297,36 +6257,6 @@ slots.contract_ref = Slot(uri=DAMS.contract_ref, name="contract_ref", curie=DAMS
 
 slots.bound_catalog_revision = Slot(uri=DAMS.bound_catalog_revision, name="bound_catalog_revision", curie=DAMS.curie('bound_catalog_revision'),
                    model_uri=DAMS.bound_catalog_revision, domain=None, range=Optional[str])
-
-slots.source_solution_ref = Slot(uri=DAMS.source_solution_ref, name="source_solution_ref", curie=DAMS.curie('source_solution_ref'),
-                   model_uri=DAMS.source_solution_ref, domain=None, range=Optional[Union[str, ITSolutionRegistryId]])
-
-slots.target_solution_ref = Slot(uri=DAMS.target_solution_ref, name="target_solution_ref", curie=DAMS.curie('target_solution_ref'),
-                   model_uri=DAMS.target_solution_ref, domain=None, range=Optional[Union[str, ITSolutionRegistryId]])
-
-slots.source_system_ref = Slot(uri=DAMS.source_system_ref, name="source_system_ref", curie=DAMS.curie('source_system_ref'),
-                   model_uri=DAMS.source_system_ref, domain=None, range=Optional[Union[str, ITSystemRegistryId]])
-
-slots.target_system_ref = Slot(uri=DAMS.target_system_ref, name="target_system_ref", curie=DAMS.curie('target_system_ref'),
-                   model_uri=DAMS.target_system_ref, domain=None, range=Optional[Union[str, ITSystemRegistryId]])
-
-slots.source_platform_ref = Slot(uri=DAMS.source_platform_ref, name="source_platform_ref", curie=DAMS.curie('source_platform_ref'),
-                   model_uri=DAMS.source_platform_ref, domain=None, range=Optional[Union[str, ITPlatformRegistryId]])
-
-slots.target_platform_ref = Slot(uri=DAMS.target_platform_ref, name="target_platform_ref", curie=DAMS.curie('target_platform_ref'),
-                   model_uri=DAMS.target_platform_ref, domain=None, range=Optional[Union[str, ITPlatformRegistryId]])
-
-slots.integration_level = Slot(uri=DAMS.integration_level, name="integration_level", curie=DAMS.curie('integration_level'),
-                   model_uri=DAMS.integration_level, domain=None, range=Optional[Union[str, "IntegrationLevelEnum"]])
-
-slots.integration_class = Slot(uri=DAMS.integration_class, name="integration_class", curie=DAMS.curie('integration_class'),
-                   model_uri=DAMS.integration_class, domain=None, range=Optional[Union[str, "IntegrationClassEnum"]])
-
-slots.integration_channel = Slot(uri=DAMS.integration_channel, name="integration_channel", curie=DAMS.curie('integration_channel'),
-                   model_uri=DAMS.integration_channel, domain=None, range=Optional[Union[str, "IntegrationChannelEnum"]])
-
-slots.integration_spec_ref = Slot(uri=DAMS.integration_spec_ref, name="integration_spec_ref", curie=DAMS.curie('integration_spec_ref'),
-                   model_uri=DAMS.integration_spec_ref, domain=None, range=Optional[Union[str, URI]])
 
 slots.entity_bindings = Slot(uri=DAMS.entity_bindings, name="entity_bindings", curie=DAMS.curie('entity_bindings'),
                    model_uri=DAMS.entity_bindings, domain=None, range=Optional[Union[dict[Union[str, DataFlowEntityBindingElementId], Union[dict, DataFlowEntityBinding]], list[Union[dict, DataFlowEntityBinding]]]])

@@ -22,21 +22,11 @@ classes:
       - HasOwnership
     description: >
       Ссылочная проекция зарегистрированной интеграции; топология и канал являются
-      данными Clinkr, а семантика — модели данных (ADR-048).
+      данными Clinkr и читаются из TopologyView, а семантика — модели данных (ADR-048).
     slots:
       - integration_ref
       - contract_ref
       - bound_catalog_revision
-      - source_solution_ref
-      - target_solution_ref
-      - source_system_ref
-      - target_system_ref
-      - source_platform_ref
-      - target_platform_ref
-      - integration_level
-      - integration_class
-      - integration_channel
-      - integration_spec_ref
       - entity_bindings
     slot_usage:
       description:
@@ -73,63 +63,6 @@ slots:
     description: >
       Ревизия файл-снимка каталога, на которой подтверждена привязка flow (ADR-048).
       Источник stale_revision в drift-отчёте.
-  source_solution_ref:
-    range: ITSolution
-    inlined: false
-    deprecated: >
-      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
-      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
-  target_solution_ref:
-    range: ITSolution
-    inlined: false
-    deprecated: >
-      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
-      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
-  source_system_ref:
-    range: ITSystem
-    inlined: false
-    deprecated: >
-      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
-      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
-  target_system_ref:
-    range: ITSystem
-    inlined: false
-    deprecated: >
-      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
-      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
-  source_platform_ref:
-    range: ITPlatform
-    inlined: false
-    deprecated: >
-      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
-      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
-  target_platform_ref:
-    range: ITPlatform
-    inlined: false
-    deprecated: >
-      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
-      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
-  integration_level:
-    range: IntegrationLevelEnum
-    deprecated: >
-      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
-      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
-  integration_class:
-    range: IntegrationClassEnum
-    deprecated: >
-      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
-      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
-  integration_channel:
-    range: IntegrationChannelEnum
-    deprecated: >
-      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
-      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
-  integration_spec_ref:
-    range: uri
-    deprecated: >
-      Deprecated in DAMS 3.2.0 (ADR-048). Spec URI is a catalog fact;
-      read from TopologyView / CatalogSnapshot. Removed from authored DataFlow
-      in the cleanup PR.
   entity_bindings:
     range: DataFlowEntityBinding
     multivalued: true

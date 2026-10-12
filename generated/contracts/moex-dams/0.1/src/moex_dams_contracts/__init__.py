@@ -34,7 +34,7 @@ from pydantic import (
 
 
 metamodel_version = "1.11.0"
-version = "3.2.0"
+version = "4.0.0"
 
 
 class ConfiguredBaseModel(BaseModel):
@@ -2253,23 +2253,13 @@ class Message(ModelElement):
 
 class DataFlow(ModelElement, HasOwnership):
     """
-    Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr, а семантика — модели данных (ADR-048).
+    Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr и читаются из TopologyView, а семантика — модели данных (ADR-048).
 
     """
     integration_ref: str = Field(default=...)
     contract_ref: Optional[str] = Field(default=None)
     bound_catalog_revision: Optional[str] = Field(default=None, description="""Ревизия файл-снимка каталога, на которой подтверждена привязка flow (ADR-048). Источник stale_revision в drift-отчёте.
 """)
-    source_solution_ref: Optional[str] = Field(default=None)
-    target_solution_ref: Optional[str] = Field(default=None)
-    source_system_ref: Optional[str] = Field(default=None)
-    target_system_ref: Optional[str] = Field(default=None)
-    source_platform_ref: Optional[str] = Field(default=None)
-    target_platform_ref: Optional[str] = Field(default=None)
-    integration_level: Optional[IntegrationLevelEnum] = Field(default=None)
-    integration_class: Optional[IntegrationClassEnum] = Field(default=None)
-    integration_channel: Optional[IntegrationChannelEnum] = Field(default=None)
-    integration_spec_ref: Optional[str] = Field(default=None)
     entity_bindings: Optional[list[DataFlowEntityBinding]] = Field(default=None)
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)

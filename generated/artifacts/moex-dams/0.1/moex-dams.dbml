@@ -1088,16 +1088,6 @@ tags varchar
 integration_ref varchar [not null]
 contract_ref varchar
 bound_catalog_revision varchar
-source_solution_ref varchar
-target_solution_ref varchar
-source_system_ref varchar
-target_system_ref varchar
-source_platform_ref varchar
-target_platform_ref varchar
-integration_level varchar
-integration_class varchar
-integration_channel varchar
-integration_spec_ref varchar
 entity_bindings varchar
 DataFlow_description varchar [not null]
 data_owner_ref varchar
@@ -1510,12 +1500,6 @@ Ref: Message.headers_structure_ref > DataStructure.element_id
 Ref: DataFlow.glossary_term_refs > GlossaryTerm.registry_id
 Ref: DataFlow.integration_ref > IntegrationReference.registry_id
 Ref: DataFlow.contract_ref > DataContractReference.registry_id
-Ref: DataFlow.source_solution_ref > ITSolution.registry_id
-Ref: DataFlow.target_solution_ref > ITSolution.registry_id
-Ref: DataFlow.source_system_ref > ITSystem.registry_id
-Ref: DataFlow.target_system_ref > ITSystem.registry_id
-Ref: DataFlow.source_platform_ref > ITPlatform.registry_id
-Ref: DataFlow.target_platform_ref > ITPlatform.registry_id
 Ref: DataFlow.entity_bindings > DataFlowEntityBinding.element_id
 Ref: DataFlow.data_owner_ref > Role.registry_id
 Ref: DataFlow.data_steward_ref > Role.registry_id

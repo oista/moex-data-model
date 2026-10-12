@@ -35,10 +35,14 @@ def test_effective_prefers_topology_view() -> None:
 
 
 def test_fallback_to_authored_when_no_view() -> None:
-    flow = yaml.safe_load(FLOW.read_text(encoding="utf-8"))
+    flow = {
+        "element_id": "dams:flow/x",
+        "integration_ref": "clinkr:integration/INT-00421",
+        "source_system_ref": "eam:system/TRADING_CORE",
+    }
     eff = effective_topology(flow, None)
     assert eff["source"] == "authored_deprecated"
-    assert eff["source_system_ref"] == flow["source_system_ref"]
+    assert eff["source_system_ref"] == "eam:system/TRADING_CORE"
 
 
 def test_no_mismatches_when_aligned() -> None:

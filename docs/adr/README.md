@@ -69,4 +69,4 @@ Viewer-ÃÂÃÂµÃÂÃÂµÃÂ½ÃÂ¸ÃÂ ÃÂ¶ÃÂ¸
 | [ADR-045](ADR-045-executable-constraint-matrix.md) | Executable constraint matrix (L1 rules / L2 validators / L3 SHACL) | Accepted; P0 invariants; INV-xxx; check-constraints in publish-gate |
 | [ADR-046](ADR-046-typed-mapping-endpoints.md) | Typed Mapping endpoints (subclasses + separate collections) | Accepted; PR-5 landed; schema 3.1.0 |
 | [ADR-047](ADR-047-repository-manifest-and-lock.md) | Repository manifest and lock (index + content_hash) | Proposed; P1 series; see p1-inventory.md |
-| [ADR-048](ADR-048-topology-ownership.md) | Topology ownership (Clinkr/EAM SoT, TopologyView read model) | Proposed; Topology ownership series; see topology-inventory.md |
+| [ADR-048](ADR-048-topology-ownership.md) | Topology ownership (Clinkr/EAM SoT, TopologyView read model) | Accepted; PR-5 landed; schema 4.0.0; see topology-inventory.md |
