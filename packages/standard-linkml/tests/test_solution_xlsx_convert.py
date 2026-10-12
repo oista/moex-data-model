@@ -39,13 +39,18 @@ def test_convert_crm_builds_package(tmp_path):
     assert result.package_path.is_file()
     assert (tmp_path / "crm" / "publish.yaml").is_file()
     # field mappings present
+    assert "mappings" not in result.package  # typed collections only (ADR-046)
     assert any(
         m.get("mapping_type") == "field_mapping"
-        for m in result.package.get("mappings") or []
+        for m in result.package.get("field_mappings") or []
     )
     assert any(
         m.get("mapping_type") == "entity_physical"
-        for m in result.package.get("mappings") or []
+        for m in result.package.get("entity_physical_mappings") or []
+    )
+    assert any(
+        m.get("mapping_type") == "realizes"
+        for m in result.package.get("realizes_mappings") or []
     )
 
 

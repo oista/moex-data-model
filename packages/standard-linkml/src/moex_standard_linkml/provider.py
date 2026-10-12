@@ -22,6 +22,7 @@ from moex_standard_linkml.domain.body import (
     LinkMLSpecificationBody,
 )
 from moex_standard_linkml.domain.elements import LinkMLElement, LinkMLElementKind
+from moex_standard_linkml.mapping_collections import TYPED_MAPPING_KEYS
 
 
 class LinkMLStandardProvider:
@@ -110,7 +111,7 @@ class LinkMLStandardProvider:
             "data_containers",
             "execution_assets",
             "domain_contexts",
-            "mappings",
+            *TYPED_MAPPING_KEYS,
         ):
             items = body.data.get(collection) or []
             if not isinstance(items, list):

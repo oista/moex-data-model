@@ -13,8 +13,10 @@ TYPED_MAPPING_KEYS = (
 )
 
 
-def iter_mappings(data: dict[str, Any]) -> Iterator[dict[str, Any]]:
-    """Yield mapping objects from typed ModelPackage collections.
+def iter_mappings_with_collection(
+    data: dict[str, Any],
+) -> Iterator[tuple[str, dict[str, Any]]]:
+    """Yield ``(collection_key, mapping)`` from typed ModelPackage collections.
 
     Stable order: typed keys in ``TYPED_MAPPING_KEYS`` order. Deduplicate by
     ``element_id`` when the same id appears in more than one collection
@@ -34,4 +36,13 @@ def iter_mappings(data: dict[str, Any]) -> Iterator[dict[str, Any]]:
                 if sid in seen:
                     continue
                 seen.add(sid)
-            yield item
+            yield key, item
+
+
+def iter_mappings(data: dict[str, Any]) -> Iterator[dict[str, Any]]:
+    """Yield mapping objects from typed ModelPackage collections.
+
+    Same order and deduplication as :func:`iter_mappings_with_collection`.
+    """
+    for _key, item in iter_mappings_with_collection(data):
+        yield item

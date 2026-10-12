@@ -1,5 +1,9 @@
 """Report / strip Mapping labels (ADR-044 / D3 / D8).
 
+LEGACY (one-shot): reads only the polymorphic ``mappings`` key that was removed
+in DAMS 3.1.0 (ADR-046 PR-5); it is a no-op on current typed-collection data.
+Kept for pre-3.1.0 packages from external consumers.
+
 Uses ruamel.yaml to preserve order/comments. Label =
 source_refs -> target_refs [mapping_type].
 

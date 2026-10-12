@@ -59,10 +59,10 @@ MINI = {
             "target_entity_ref": "dams:logical/mini/Client",
         }
     ],
-    "mappings": [
+    "field_mappings": [
         {
             "element_id": "dams:map/mini/keep-me",
-            "name": "cross_layer",
+            "description": "cross_layer",
             "mapping_type": "field_mapping",
             "source_refs": ["dams:logical/mini/Client/clientId"],
             "target_refs": ["dams:physical/other"],
@@ -135,7 +135,9 @@ def test_identity_round_trip_no_semantic_loss() -> None:
     # non-projected metadata retained
     assert merged["governance_classification"] == "internal"
     assert merged["conceptual_entities"][0]["element_id"] == "dams:concept/mini/Client"
-    assert any(m["element_id"] == "dams:map/mini/keep-me" for m in merged["mappings"])
+    assert any(
+        m["element_id"] == "dams:map/mini/keep-me" for m in merged["field_mappings"]
+    )
     # relationship retained
     assert any(
         r["element_id"] == "dams:rel/mini/Account-Client"

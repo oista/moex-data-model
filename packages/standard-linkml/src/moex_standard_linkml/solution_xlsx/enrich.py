@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from moex_standard_linkml.ingest.workbook import WorkbookTables
+from moex_standard_linkml.mapping_collections import iter_package_mappings
 from moex_standard_linkml.solution_xlsx.ir import SolutionIR
 from moex_standard_linkml.solution_xlsx.normalize import match_key
 from moex_standard_linkml.solution_xlsx.profile import SolutionXlsxProfile, SystemDefaults
@@ -86,7 +87,7 @@ def enrich_package(
             if isinstance(node, dict) and str(node.get("node_kind") or "") == "scalar":
                 node["mapping_coverage_status"] = defaults.mapping_coverage_status_mapped
 
-    for mapping in package.get("mappings") or []:
+    for mapping in iter_package_mappings(package):
         # Mapping lost identity slot name in DAMS 3.0.0 (ADR-044); key lineage
         # by the local id segment (same token as the former workbook name).
         eid = str(mapping.get("element_id") or "")
@@ -100,11 +101,11 @@ def enrich_package(
 
     # Package-level realizes stubs: logical entity → local conceptual stub (ADR-021).
     # Full enterprise alignment is a follow-up edit.
-    mappings = list(package.get("mappings") or [])
+    realizes_mappings = list(package.get("realizes_mappings") or [])
     existing_realizes = {
         tuple(m.get("source_refs") or [])
-        for m in mappings
-        if m.get("mapping_type") == "realizes"
+        for m in realizes_mappings
+        if isinstance(m, dict)
     }
     concept_by_name = {
         str(c.get("name")): str(c.get("element_id"))
@@ -120,7 +121,7 @@ def enrich_package(
         key = (eid,)
         if key in existing_realizes:
             continue
-        mappings.append(
+        realizes_mappings.append(
             {
                 "element_id": f"dams:mapping/{system.slug}/realizes_{name}",
                 "description": (
@@ -135,7 +136,8 @@ def enrich_package(
                 "approval_status": "proposed",
             }
         )
-    package["mappings"] = mappings
+    if realizes_mappings:
+        package["realizes_mappings"] = realizes_mappings
 
     for rel in package.get("relationships") or []:
         # Draft packages may omit unbounded max; keep finite cards from builder.

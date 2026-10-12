@@ -78,8 +78,9 @@ def test_map_fixture_er_dictionary(
     assert scalars[0]["native_name"] == "client_id"
     assert not pkg.get("access_points")  # topic → data_carriers only
 
-    assert len(pkg["mappings"]) == 1
-    mapping = pkg["mappings"][0]
+    assert "mappings" not in pkg  # typed collections only (ADR-046)
+    assert len(pkg["field_mappings"]) == 1
+    mapping = pkg["field_mappings"][0]
     assert mapping["source_refs"] == [
         "dams:logical/pilot/TradingClient/clientId"
     ]
