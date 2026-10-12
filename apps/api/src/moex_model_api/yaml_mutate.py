@@ -62,6 +62,10 @@ def _collect_ids(data: CommentedMap) -> set[str]:
         "data_containers",
         "execution_assets",
         "mappings",
+        "realizes_mappings",
+        "entity_physical_mappings",
+        "field_mappings",
+        "aligns_with_mappings",
         "relationships",
         "conceptual_entities",
     ):
@@ -286,6 +290,45 @@ _MAPPING_PATCH_KEYS = frozenset(
         "transformation_expression",
     }
 )
+_MAPPING_TYPE_TO_COLLECTION: dict[str, str] = {
+    "realizes": "realizes_mappings",
+    "entity_physical": "entity_physical_mappings",
+    "field_mapping": "field_mappings",
+    "aligns_with": "aligns_with_mappings",
+}
+_MAPPING_COLLECTION_KEYS: tuple[str, ...] = (
+    "realizes_mappings",
+    "entity_physical_mappings",
+    "field_mappings",
+    "aligns_with_mappings",
+    "mappings",
+)
+
+
+def _collection_for_mapping_type(mapping_type: str) -> str:
+    key = _MAPPING_TYPE_TO_COLLECTION.get(str(mapping_type or "").strip())
+    if key is None:
+        raise MutationError(
+            f"unsupported mapping_type: {mapping_type!r} "
+            f"(expected one of {sorted(_MAPPING_TYPE_TO_COLLECTION)})"
+        )
+    return key
+
+
+def _find_mapping(
+    data: CommentedMap, element_id: str
+) -> tuple[str, int, CommentedMap | dict[str, Any]]:
+    eid = str(element_id or "").strip()
+    if not eid:
+        raise MutationError("element_id is required")
+    for key in _MAPPING_COLLECTION_KEYS:
+        items = data.get(key) or []
+        if not isinstance(items, list):
+            continue
+        for idx, item in enumerate(items):
+            if isinstance(item, dict) and str(item.get("element_id")) == eid:
+                return key, idx, item
+    raise MutationError(f"mapping not found: {eid}")
 _CARDINALITY_KEYS = frozenset(
     {
         "source_min_cardinality",
@@ -468,21 +511,38 @@ def add_mapping(data: CommentedMap, mapping: dict[str, Any]) -> None:
     if mapping.get("transformation_expression") is not None:
         row["transformation_expression"] = str(mapping["transformation_expression"])
 
-    seq = _ensure_seq(data, "mappings")
+    collection = _collection_for_mapping_type(mapping_type)
+    seq = _ensure_seq(data, collection)
     seq.append(row)
 
 
 def update_mapping(
     data: CommentedMap, element_id: str, patch: dict[str, Any]
 ) -> None:
-    _, item = _find_top_level_item(data, "mappings", element_id, "mapping")
+    collection, idx, item = _find_mapping(data, element_id)
     _apply_patch(item, patch or {}, _MAPPING_PATCH_KEYS)
+    new_type = str(item.get("mapping_type") or "").strip()
+    if new_type:
+        target = _collection_for_mapping_type(new_type)
+        if target != collection:
+            seq = data[collection]
+            del seq[idx]
+            if isinstance(seq, list) and len(seq) == 0 and collection == "mappings":
+                del data[collection]
+            _ensure_seq(data, target).append(item)
 
 
 def delete_mapping(data: CommentedMap, element_id: str) -> None:
-    idx, _ = _find_top_level_item(data, "mappings", element_id, "mapping")
-    seq = data["mappings"]
+    collection, idx, _ = _find_mapping(data, element_id)
+    seq = data[collection]
     del seq[idx]
+    if (
+        collection == "mappings"
+        and isinstance(seq, list)
+        and len(seq) == 0
+        and collection in data
+    ):
+        del data[collection]
 
 
 _TECHNICAL_COLLECTIONS = (

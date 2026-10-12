@@ -25,15 +25,6 @@ logical_entities:
     title: Имя клиента
     required: true
     data_type_ref: dams:datatype/string
-mappings:
-- element_id: dams:mapping/csv-draft/account-id
-  description: CSV account_id → logical accountId
-  mapping_type: field_mapping
-  source_refs:
-  - dams:logical/csv-draft/ClientAccount/accountId
-  target_refs:
-  - dams:structure/csv-draft/client_accounts_csv#account_id
-  approval_status: pending-review
 data_carriers:
 - element_id: dams:physical/csv-draft/client_accounts_csv
   name: client_accounts_csv
@@ -78,3 +69,12 @@ data_structures:
     required: true
     ordinal_position: 2
     column_position: 2
+field_mappings:
+- element_id: dams:mapping/csv-draft/account-id
+  description: CSV account_id → logical accountId
+  mapping_type: field_mapping
+  source_refs:
+  - dams:logical/csv-draft/ClientAccount/accountId
+  target_refs:
+  - dams:structure/csv-draft/client_accounts_csv#account_id
+  approval_status: pending-review

@@ -36,6 +36,10 @@ function collectIds(data: Record<string, unknown>): Set<string> {
     "data_containers",
     "execution_assets",
     "mappings",
+    "realizes_mappings",
+    "entity_physical_mappings",
+    "field_mappings",
+    "aligns_with_mappings",
     "relationships",
     "conceptual_entities",
   ]) {
@@ -126,6 +130,50 @@ function findTopLevel(
     }
   }
   throw new YamlMutateError(`${label} not found: ${elementId}`);
+}
+
+const MAPPING_TYPE_TO_COLLECTION: Record<string, string> = {
+  realizes: "realizes_mappings",
+  entity_physical: "entity_physical_mappings",
+  field_mapping: "field_mappings",
+  aligns_with: "aligns_with_mappings",
+};
+
+const MAPPING_COLLECTION_KEYS = [
+  "realizes_mappings",
+  "entity_physical_mappings",
+  "field_mappings",
+  "aligns_with_mappings",
+  "mappings",
+] as const;
+
+function collectionForMappingType(mappingType: string): string {
+  const key = MAPPING_TYPE_TO_COLLECTION[String(mappingType || "").trim()];
+  if (!key) {
+    throw new YamlMutateError(
+      `unsupported mapping_type: ${mappingType} (expected one of ${Object.keys(MAPPING_TYPE_TO_COLLECTION).join(", ")})`,
+    );
+  }
+  return key;
+}
+
+function findMapping(
+  data: Record<string, unknown>,
+  elementId: string,
+): { collection: string; idx: number; row: Record<string, unknown> } {
+  const eid = String(elementId || "").trim();
+  if (!eid) throw new YamlMutateError("element_id is required");
+  for (const key of MAPPING_COLLECTION_KEYS) {
+    const items = data[key];
+    if (!Array.isArray(items)) continue;
+    for (let i = 0; i < items.length; i++) {
+      const row = asRecord(items[i]);
+      if (row && String(row.element_id) === eid) {
+        return { collection: key, idx: i, row };
+      }
+    }
+  }
+  throw new YamlMutateError(`mapping not found: ${eid}`);
 }
 
 const TECH_COLLECTIONS = [
@@ -453,7 +501,9 @@ function mutateData(
       const name = String(mapping.name || "").trim();
       if (!eid || !name) throw new YamlMutateError("element_id and name are required");
       if (ids().has(eid)) throw new YamlMutateError(`duplicate element_id: ${eid}`);
-      ensureSeq(data, "mappings").push({
+      const mappingType = String(mapping.mapping_type || "field_mapping");
+      const collection = collectionForMappingType(mappingType);
+      ensureSeq(data, collection).push({
         element_id: eid,
         name,
         title: mapping.title || name,
@@ -461,7 +511,7 @@ function mutateData(
         lifecycle_status: mapping.lifecycle_status || "draft",
         source_refs: mapping.source_refs,
         target_refs: mapping.target_refs,
-        mapping_type: mapping.mapping_type,
+        mapping_type: mappingType,
         mapping_cardinality: mapping.mapping_cardinality,
         ...(mapping.transformation_expression
           ? { transformation_expression: mapping.transformation_expression }
@@ -470,7 +520,7 @@ function mutateData(
       break;
     }
     case "update_mapping": {
-      const { row } = findTopLevel(data, "mappings", payload.element_id, "mapping");
+      const { collection, idx, row } = findMapping(data, payload.element_id);
       applyPatch(
         row,
         payload.patch as Record<string, unknown>,
@@ -486,11 +536,33 @@ function mutateData(
           "transformation_expression",
         ]),
       );
+      const newType = String(row.mapping_type || "").trim();
+      if (newType) {
+        const target = collectionForMappingType(newType);
+        if (target !== collection) {
+          (data[collection] as unknown[]).splice(idx, 1);
+          if (
+            collection === "mappings" &&
+            Array.isArray(data.mappings) &&
+            data.mappings.length === 0
+          ) {
+            delete data.mappings;
+          }
+          ensureSeq(data, target).push(row);
+        }
+      }
       break;
     }
     case "delete_mapping": {
-      const { idx } = findTopLevel(data, "mappings", payload.element_id, "mapping");
-      (data.mappings as unknown[]).splice(idx, 1);
+      const { collection, idx } = findMapping(data, payload.element_id);
+      (data[collection] as unknown[]).splice(idx, 1);
+      if (
+        collection === "mappings" &&
+        Array.isArray(data.mappings) &&
+        data.mappings.length === 0
+      ) {
+        delete data.mappings;
+      }
       break;
     }
     case "add_physical_object": {

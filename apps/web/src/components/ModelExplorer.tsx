@@ -221,20 +221,42 @@ function parseTree(content: string): { groups: Group[]; error: string | null } {
       });
     }
 
-    const mappings = Array.isArray(data.mappings) ? data.mappings : [];
-    if (mappings.length) {
+    const mappingKeys = [
+      "realizes_mappings",
+      "entity_physical_mappings",
+      "field_mappings",
+      "aligns_with_mappings",
+      "mappings",
+    ] as const;
+    const mappingSeen = new Set<string>();
+    const mappingNodes: Array<{
+      id: string;
+      label: string;
+      kind: "mapping";
+      tab: FormsTab;
+    }> = [];
+    for (const key of mappingKeys) {
+      const items = Array.isArray(data[key]) ? data[key] : [];
+      for (const e of items) {
+        if (!e || typeof e !== "object") continue;
+        const row = e as Record<string, unknown>;
+        if (!row.element_id) continue;
+        const eid = String(row.element_id);
+        if (mappingSeen.has(eid)) continue;
+        mappingSeen.add(eid);
+        mappingNodes.push({
+          id: eid,
+          label: String(row.name || row.element_id),
+          kind: "mapping" as const,
+          tab: "mappings" as FormsTab,
+        });
+      }
+    }
+    if (mappingNodes.length) {
       groups.push({
         id: "mappings",
         title: "Mappings",
-        nodes: mappings
-          .filter((e): e is Record<string, unknown> => !!e && typeof e === "object")
-          .filter((e) => e.element_id)
-          .map((e) => ({
-            id: String(e.element_id),
-            label: String(e.name || e.element_id),
-            kind: "mapping" as const,
-            tab: "mappings" as FormsTab,
-          })),
+        nodes: mappingNodes,
       });
     }
 

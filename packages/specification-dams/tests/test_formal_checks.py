@@ -11,7 +11,42 @@ from moex_modeling import DiagnosticSeverity
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
 from moex_dams import assess_implementation
+from moex_dams.mappings.iter_mappings import (
+    LEGACY_MAPPING_KEY,
+    TYPED_MAPPING_KEYS,
+)
 from moex_dams.rules.formal_checks import check_formal_requirements
+
+_MAPPING_TYPE_TO_COLLECTION = {
+    "realizes": "realizes_mappings",
+    "entity_physical": "entity_physical_mappings",
+    "field_mapping": "field_mappings",
+    "aligns_with": "aligns_with_mappings",
+}
+
+
+def _drop_mapping_types(data: dict, *mapping_types: str) -> None:
+    """Remove Mapping instances of given types from typed + legacy collections."""
+    drop = set(mapping_types)
+    for key in (*TYPED_MAPPING_KEYS, LEGACY_MAPPING_KEY):
+        items = data.get(key)
+        if not isinstance(items, list):
+            continue
+        kept = [
+            m
+            for m in items
+            if not (isinstance(m, dict) and m.get("mapping_type") in drop)
+        ]
+        if kept:
+            data[key] = kept
+        elif key in data:
+            del data[key]
+
+
+def _append_mapping(data: dict, mapping: dict) -> None:
+    mtype = str(mapping.get("mapping_type") or "")
+    key = _MAPPING_TYPE_TO_COLLECTION.get(mtype, LEGACY_MAPPING_KEY)
+    data.setdefault(key, []).append(mapping)
 
 REPO = Path(__file__).resolve().parents[3]
 CATALOG = (
@@ -268,9 +303,7 @@ def test_gen003_empty_package() -> None:
 
 def test_gen004_data_carrying_needs_entity_mapping() -> None:
     data = _example()
-    data["mappings"] = [
-        m for m in data["mappings"] if m.get("mapping_type") != "entity_physical"
-    ]
+    _drop_mapping_types(data, "entity_physical")
     assert "DAMS-REQ-GEN-004.c1" in _codes(_errors(data))
 
 
@@ -291,9 +324,7 @@ def test_gen004_infra_database_skipped() -> None:
         }
     ]
     data["data_carriers"] = []
-    data["mappings"] = [
-        m for m in data["mappings"] if m.get("mapping_type") != "entity_physical"
-    ]
+    _drop_mapping_types(data, "entity_physical")
     # Only infra container — GEN-004 must not fire; GEN-003 still ok via logical entities
     assert "DAMS-REQ-GEN-004.c1" not in _codes(_errors(data))
 
@@ -366,9 +397,7 @@ def test_ldm007_isolated_entity() -> None:
     e.pop("alignment_rationale", None)
     e.pop("isolation_rationale", None)
     data["relationships"] = []
-    data["mappings"] = [
-        m for m in data["mappings"] if m.get("mapping_type") != "realizes"
-    ]
+    _drop_mapping_types(data, "realizes")
     assert "DAMS-REQ-LDM-007.c1" in _codes(_errors(data))
 
 
@@ -414,9 +443,7 @@ def test_atr005_missing_mapping() -> None:
     data = _example()
     attr = data["logical_entities"][0]["attributes"][0]
     attr.pop("mapping_coverage_status", None)
-    data["mappings"] = [
-        m for m in data["mappings"] if m.get("mapping_type") != "field_mapping"
-    ]
+    _drop_mapping_types(data, "field_mapping")
     assert "DAMS-REQ-ATR-005.c1" in _codes(_errors(data))
 
 
@@ -427,9 +454,7 @@ def test_atr005_planned_on_active_warning() -> None:
     attr["mapping_coverage_status"] = "planned"
     attr["mapping_rationale"] = "later"
     # Drop field mapping so coverage is exception-based
-    data["mappings"] = [
-        m for m in data["mappings"] if m.get("mapping_type") != "field_mapping"
-    ]
+    _drop_mapping_types(data, "field_mapping")
     assert any("ATR-005.c2" in d.diagnostic_code for d in _warns(data))
 
 
@@ -508,9 +533,7 @@ def test_pdm002_scalar_type_required() -> None:
 
 def test_pdm003_not_inferred_from_field_mapping() -> None:
     data = _example()
-    data["mappings"] = [
-        m for m in data["mappings"] if m.get("mapping_type") != "entity_physical"
-    ]
+    _drop_mapping_types(data, "entity_physical")
     # field_mapping remains — must still fail PDM-003 / GEN-004
     assert "DAMS-REQ-PDM-003.c1" in _codes(_errors(data))
 
@@ -520,9 +543,7 @@ def test_pdm003_technical_only_with_rationale_ok() -> None:
     obj = data["data_carriers"][0]
     obj["mapping_coverage_status"] = "technical-only"
     obj["mapping_rationale"] = "Internal staging topic."
-    data["mappings"] = [
-        m for m in data["mappings"] if m.get("mapping_type") != "entity_physical"
-    ]
+    _drop_mapping_types(data, "entity_physical")
     assert "DAMS-REQ-PDM-003.c1" not in _codes(_errors(data))
 
 
@@ -534,9 +555,7 @@ def test_pdm004_field_needs_mapping() -> None:
         if n.get("node_kind") == "scalar"
     )
     node.pop("mapping_coverage_status", None)
-    data["mappings"] = [
-        m for m in data["mappings"] if m.get("mapping_type") != "field_mapping"
-    ]
+    _drop_mapping_types(data, "field_mapping")
     assert "DAMS-REQ-PDM-004.c1" in _codes(_errors(data))
 
 
@@ -649,7 +668,7 @@ def _ldm008_base() -> dict:
                 ],
             }
         ],
-        "mappings": [
+        "realizes_mappings": [
             {
                 "element_id": "dams:mapping/ldm008/issuer-realizes",
                 "name": "realizes_IssuerView",
@@ -729,7 +748,8 @@ def test_ldm008_passes_when_owner_realizer_linked() -> None:
             "relationship_kind": "association",
         }
     ]
-    data["mappings"].append(
+    _append_mapping(
+        data,
         {
             "element_id": "dams:mapping/ldm008/le-realizes",
             "name": "realizes_LegalEntityView",
@@ -739,7 +759,7 @@ def test_ldm008_passes_when_owner_realizer_linked() -> None:
             "target_refs": ["dams:concept/LegalEntity"],
             "mapping_type": "realizes",
             "mapping_cardinality": "one_to_one",
-        }
+        },
     )
     data["logical_entities"][0].pop("isolation_rationale", None)
     warns = [

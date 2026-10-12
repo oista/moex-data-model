@@ -615,445 +615,6 @@ relationships:
   source_max_cardinality: 999999
   target_min_cardinality: 0
   target_max_cardinality: 1
-mappings:
-- element_id: dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID
-  description: Mapping map_ENTERPRISE_ENTERPRISE_ID. BaseSrc=MDM/MDM/V_ENTERPRISE
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#gold_id
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_SHORT_NAME
-  description: Mapping map_ENTERPRISE_SHORT_NAME. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/SHORT_NAME
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#short_name
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_SHORT_NAME_ENG
-  description: Mapping map_ENTERPRISE_SHORT_NAME_ENG. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#short_name_eng
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_FULL_NAME
-  description: Mapping map_ENTERPRISE_FULL_NAME. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/FULL_NAME
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#full_name
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_FULL_NAME_ENG
-  description: Mapping map_ENTERPRISE_FULL_NAME_ENG. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#full_name_eng
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_COUNTRY_CODE
-  description: Mapping map_ENTERPRISE_COUNTRY_CODE. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/COUNTRY_CODE
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#country_code
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_INN
-  description: Mapping map_ENTERPRISE_INN. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/INN
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#inn
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_KPP
-  description: Mapping map_ENTERPRISE_KPP. BaseSrc=FTS/ФНС-ЕГРЮЛ/V_FTS_EGRUL
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/KPP
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kpp
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_OGRN
-  description: Mapping map_ENTERPRISE_OGRN. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/OGRN
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ogrn
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_ADDR_EGRUL_REGION
-  description: Mapping map_ENTERPRISE_ADDR_EGRUL_REGION. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#addr_egrul_region
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_TERMINATION_DATE
-  description: Mapping map_ENTERPRISE_TERMINATION_DATE. BaseSrc=FTS/ФНС-ЕГРЮЛ/V_FTS_EGRUL
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/TERMINATION_DATE
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#termination_date
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_INN_NONRESIDENT
-  description: Mapping map_ENTERPRISE_INN_NONRESIDENT. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#inn_nonresident
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_LEI
-  description: Mapping map_ENTERPRISE_LEI. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/LEI
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#lei
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_KIO
-  description: Mapping map_ENTERPRISE_KIO. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/KIO
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kio
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_REG_NUM_NONRESIDENT
-  description: Mapping map_ENTERPRISE_REG_NUM_NONRESIDENT. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#reg_num_nonresident
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_CEO_FIRSTNAME
-  description: Mapping map_ENTERPRISE_CEO_FIRSTNAME. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_firstname
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_CEO_INN
-  description: Mapping map_ENTERPRISE_CEO_INN. BaseSrc=FTS/ФНС-ЕГРЮЛ/V_FTS_EGRUL
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/CEO_INN
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_inn
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_CEO_PATRONYMIC
-  description: Mapping map_ENTERPRISE_CEO_PATRONYMIC. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_patronymic
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_CEO_POSITION
-  description: Mapping map_ENTERPRISE_CEO_POSITION. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/CEO_POSITION
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_position
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_CEO_SURNAME
-  description: Mapping map_ENTERPRISE_CEO_SURNAME. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/CEO_SURNAME
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_surname
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_TRUST_RULE_NUMBER
-  description: Mapping map_ENTERPRISE_TRUST_RULE_NUMBER. BaseSrc=CBR/ЦБ РФ/V_CBR_PIF
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#trust_rule_number
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_ECBD_ID
-  description: Mapping map_ENTERPRISE_ECBD_ID. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/ECBD_ID
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ecbd_id
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_UNICODE
-  description: Mapping map_ENTERPRISE_UNICODE. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/UNICODE
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#unicode
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_CODE_NSD
-  description: Mapping map_ENTERPRISE_CODE_NSD. BaseSrc=NSD/API NSD/V_APINSD_PIF
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/CODE_NSD
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#code_nsd
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_KBD_FIRMID
-  description: Mapping map_ENTERPRISE_KBD_FIRMID. BaseSrc=KBD/Клиентская база данных/V_KBD_UR
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/KBD_FIRMID
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kbd_firmid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_ENTERPRISE_ACTIVE_FLAG
-  description: Mapping map_ENTERPRISE_ACTIVE_FLAG. BaseSrc=MDM/MDM/V_ENTERPRISE
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#active_flag
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_PERSON_PERSON_ID
-  description: Mapping map_PERSON_PERSON_ID. BaseSrc=MDM/MDM/V_PERSON
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON/PERSON_ID
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#gold_id
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_PERSON_FIO
-  description: Mapping map_PERSON_FIO. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON/FIO
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#fio
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_PERSON_LAST_NAME
-  description: Mapping map_PERSON_LAST_NAME. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON/LAST_NAME
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#last_name
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_PERSON_FIRST_NAME
-  description: Mapping map_PERSON_FIRST_NAME. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON/FIRST_NAME
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#first_name
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_PERSON_PATRONYMIC
-  description: Mapping map_PERSON_PATRONYMIC. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON/PATRONYMIC
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#patronymic
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_PERSON_DATEBIRTH
-  description: Mapping map_PERSON_DATEBIRTH. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON/DATEBIRTH
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#datebirth
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_PERSON_ADDRESS_F
-  description: Mapping map_PERSON_ADDRESS_F. BaseSrc=1C/1С/V_1C_KONTR_FIZ
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON/ADDRESS_F
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#address_f
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_PERSON_INN
-  description: Mapping map_PERSON_INN. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON/INN
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#inn
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_PERSON_SNILS
-  description: Mapping map_PERSON_SNILS. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON/SNILS
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#snils
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_CODE
-  description: Mapping map_PERSON_IDENTITY_DOCUMENT_CODE. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_code
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_CODE_OMEGA
-  description: Mapping map_PERSON_IDENTITY_DOCUMENT_CODE_OMEGA. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_code_omega
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_TYPE
-  description: Mapping map_PERSON_IDENTITY_DOCUMENT_TYPE. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE
-  target_refs:
-  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_type
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_PERSON_CEO_ENTERPRISE_ID
-  description: Mapping map_PERSON_CEO_ENTERPRISE_ID. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_REF_CEO
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID
-  target_refs:
-  - dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO#reference_key2
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_PERSON_CEO_PERSON_ID
-  description: Mapping map_PERSON_CEO_PERSON_ID. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_REF_CEO
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON_CEO/PERSON_ID
-  target_refs:
-  - dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO#reference_key1
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_PERSON_REPRESENTATIVE_ENTERPRISE_ID
-  description: Mapping map_PERSON_REPRESENTATIVE_ENTERPRISE_ID. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_REF_REPRESENTATIVE
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID
-  target_refs:
-  - dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key2
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/map_PERSON_REPRESENTATIVE_PERSON_ID
-  description: Mapping map_PERSON_REPRESENTATIVE_PERSON_ID. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_REF_REPRESENTATIVE
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID
-  target_refs:
-  - dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key3
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/mdm/entity_phys_ENTERPRISE
-  description: Mapping entity_phys_ENTERPRISE
-  lifecycle_status: draft
-  source_refs:
-  - dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE
-  target_refs:
-  - dams:logical/mdm/ENTERPRISE
-  mapping_type: entity_physical
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/mdm/entity_phys_PERSON
-  description: Mapping entity_phys_PERSON
-  lifecycle_status: draft
-  source_refs:
-  - dams:physical/mdm/INTERNALDM_MDM_V_PERSON
-  target_refs:
-  - dams:logical/mdm/PERSON
-  mapping_type: entity_physical
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/mdm/entity_phys_PERSON_CEO
-  description: Mapping entity_phys_PERSON_CEO
-  lifecycle_status: draft
-  source_refs:
-  - dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO
-  target_refs:
-  - dams:logical/mdm/PERSON_CEO
-  mapping_type: entity_physical
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE
-  description: Mapping entity_phys_PERSON_REPRESENTATIVE
-  lifecycle_status: draft
-  source_refs:
-  - dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE
-  target_refs:
-  - dams:logical/mdm/PERSON_REPRESENTATIVE
-  mapping_type: entity_physical
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/mdm/realizes_ENTERPRISE
-  description: MDM ENTERPRISE realizes enterprise dams:concept/LegalEntity (ADR-021/029).
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/ENTERPRISE
-  target_refs:
-  - dams:concept/LegalEntity
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/mdm/realizes_PERSON
-  description: MDM PERSON realizes enterprise dams:concept/Person (ADR-021/029).
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/mdm/PERSON
-  target_refs:
-  - dams:concept/Person
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
 implementation_scope: solution
 conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
 data_owner_ref: org:role/DATA_OWNER_PENDING
@@ -1597,3 +1158,444 @@ data_structures:
     ordinal_position: 2
     column_position: 2
     mapping_coverage_status: mapped
+field_mappings:
+- element_id: dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID
+  description: Mapping map_ENTERPRISE_ENTERPRISE_ID. BaseSrc=MDM/MDM/V_ENTERPRISE
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#gold_id
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_SHORT_NAME
+  description: Mapping map_ENTERPRISE_SHORT_NAME. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/SHORT_NAME
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#short_name
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_SHORT_NAME_ENG
+  description: Mapping map_ENTERPRISE_SHORT_NAME_ENG. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#short_name_eng
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_FULL_NAME
+  description: Mapping map_ENTERPRISE_FULL_NAME. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/FULL_NAME
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#full_name
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_FULL_NAME_ENG
+  description: Mapping map_ENTERPRISE_FULL_NAME_ENG. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#full_name_eng
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_COUNTRY_CODE
+  description: Mapping map_ENTERPRISE_COUNTRY_CODE. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/COUNTRY_CODE
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#country_code
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_INN
+  description: Mapping map_ENTERPRISE_INN. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/INN
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#inn
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_KPP
+  description: Mapping map_ENTERPRISE_KPP. BaseSrc=FTS/ФНС-ЕГРЮЛ/V_FTS_EGRUL
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/KPP
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kpp
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_OGRN
+  description: Mapping map_ENTERPRISE_OGRN. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/OGRN
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ogrn
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_ADDR_EGRUL_REGION
+  description: Mapping map_ENTERPRISE_ADDR_EGRUL_REGION. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#addr_egrul_region
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_TERMINATION_DATE
+  description: Mapping map_ENTERPRISE_TERMINATION_DATE. BaseSrc=FTS/ФНС-ЕГРЮЛ/V_FTS_EGRUL
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/TERMINATION_DATE
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#termination_date
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_INN_NONRESIDENT
+  description: Mapping map_ENTERPRISE_INN_NONRESIDENT. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#inn_nonresident
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_LEI
+  description: Mapping map_ENTERPRISE_LEI. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/LEI
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#lei
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_KIO
+  description: Mapping map_ENTERPRISE_KIO. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/KIO
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kio
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_REG_NUM_NONRESIDENT
+  description: Mapping map_ENTERPRISE_REG_NUM_NONRESIDENT. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#reg_num_nonresident
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_CEO_FIRSTNAME
+  description: Mapping map_ENTERPRISE_CEO_FIRSTNAME. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_firstname
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_CEO_INN
+  description: Mapping map_ENTERPRISE_CEO_INN. BaseSrc=FTS/ФНС-ЕГРЮЛ/V_FTS_EGRUL
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/CEO_INN
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_inn
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_CEO_PATRONYMIC
+  description: Mapping map_ENTERPRISE_CEO_PATRONYMIC. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_patronymic
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_CEO_POSITION
+  description: Mapping map_ENTERPRISE_CEO_POSITION. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/CEO_POSITION
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_position
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_CEO_SURNAME
+  description: Mapping map_ENTERPRISE_CEO_SURNAME. BaseSrc=ECBD/ФНС-ЕГРЮЛ/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/CEO_SURNAME
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ceo_surname
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_TRUST_RULE_NUMBER
+  description: Mapping map_ENTERPRISE_TRUST_RULE_NUMBER. BaseSrc=CBR/ЦБ РФ/V_CBR_PIF
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#trust_rule_number
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_ECBD_ID
+  description: Mapping map_ENTERPRISE_ECBD_ID. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/ECBD_ID
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#ecbd_id
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_UNICODE
+  description: Mapping map_ENTERPRISE_UNICODE. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/UNICODE
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#unicode
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_CODE_NSD
+  description: Mapping map_ENTERPRISE_CODE_NSD. BaseSrc=NSD/API NSD/V_APINSD_PIF
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/CODE_NSD
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#code_nsd
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_KBD_FIRMID
+  description: Mapping map_ENTERPRISE_KBD_FIRMID. BaseSrc=KBD/Клиентская база данных/V_KBD_UR
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/KBD_FIRMID
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#kbd_firmid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_ENTERPRISE_ACTIVE_FLAG
+  description: Mapping map_ENTERPRISE_ACTIVE_FLAG. BaseSrc=MDM/MDM/V_ENTERPRISE
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_ENTERPRISE#active_flag
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_PERSON_PERSON_ID
+  description: Mapping map_PERSON_PERSON_ID. BaseSrc=MDM/MDM/V_PERSON
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON/PERSON_ID
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#gold_id
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_PERSON_FIO
+  description: Mapping map_PERSON_FIO. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON/FIO
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#fio
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_PERSON_LAST_NAME
+  description: Mapping map_PERSON_LAST_NAME. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON/LAST_NAME
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#last_name
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_PERSON_FIRST_NAME
+  description: Mapping map_PERSON_FIRST_NAME. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON/FIRST_NAME
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#first_name
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_PERSON_PATRONYMIC
+  description: Mapping map_PERSON_PATRONYMIC. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON/PATRONYMIC
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#patronymic
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_PERSON_DATEBIRTH
+  description: Mapping map_PERSON_DATEBIRTH. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON/DATEBIRTH
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#datebirth
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_PERSON_ADDRESS_F
+  description: Mapping map_PERSON_ADDRESS_F. BaseSrc=1C/1С/V_1C_KONTR_FIZ
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON/ADDRESS_F
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#address_f
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_PERSON_INN
+  description: Mapping map_PERSON_INN. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON/INN
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#inn
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_PERSON_SNILS
+  description: Mapping map_PERSON_SNILS. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON/SNILS
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#snils
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_CODE
+  description: Mapping map_PERSON_IDENTITY_DOCUMENT_CODE. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_code
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_CODE_OMEGA
+  description: Mapping map_PERSON_IDENTITY_DOCUMENT_CODE_OMEGA. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_code_omega
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_PERSON_IDENTITY_DOCUMENT_TYPE
+  description: Mapping map_PERSON_IDENTITY_DOCUMENT_TYPE. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_PERSON
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE
+  target_refs:
+  - dams:structure/mdm/INTERNALDM_MDM_V_PERSON#identity_document_type
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_PERSON_CEO_ENTERPRISE_ID
+  description: Mapping map_PERSON_CEO_ENTERPRISE_ID. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_REF_CEO
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID
+  target_refs:
+  - dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO#reference_key2
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_PERSON_CEO_PERSON_ID
+  description: Mapping map_PERSON_CEO_PERSON_ID. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_REF_CEO
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON_CEO/PERSON_ID
+  target_refs:
+  - dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_CEO#reference_key1
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_PERSON_REPRESENTATIVE_ENTERPRISE_ID
+  description: Mapping map_PERSON_REPRESENTATIVE_ENTERPRISE_ID. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_REF_REPRESENTATIVE
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID
+  target_refs:
+  - dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key2
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/mdm/map_PERSON_REPRESENTATIVE_PERSON_ID
+  description: Mapping map_PERSON_REPRESENTATIVE_PERSON_ID. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_REF_REPRESENTATIVE
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID
+  target_refs:
+  - dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key3
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+entity_physical_mappings:
+- element_id: dams:mapping/mdm/entity_phys_ENTERPRISE
+  description: Mapping entity_phys_ENTERPRISE
+  lifecycle_status: draft
+  source_refs:
+  - dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE
+  target_refs:
+  - dams:logical/mdm/ENTERPRISE
+  mapping_type: entity_physical
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/mdm/entity_phys_PERSON
+  description: Mapping entity_phys_PERSON
+  lifecycle_status: draft
+  source_refs:
+  - dams:physical/mdm/INTERNALDM_MDM_V_PERSON
+  target_refs:
+  - dams:logical/mdm/PERSON
+  mapping_type: entity_physical
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/mdm/entity_phys_PERSON_CEO
+  description: Mapping entity_phys_PERSON_CEO
+  lifecycle_status: draft
+  source_refs:
+  - dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO
+  target_refs:
+  - dams:logical/mdm/PERSON_CEO
+  mapping_type: entity_physical
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE
+  description: Mapping entity_phys_PERSON_REPRESENTATIVE
+  lifecycle_status: draft
+  source_refs:
+  - dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE
+  target_refs:
+  - dams:logical/mdm/PERSON_REPRESENTATIVE
+  mapping_type: entity_physical
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+realizes_mappings:
+- element_id: dams:mapping/mdm/realizes_ENTERPRISE
+  description: MDM ENTERPRISE realizes enterprise dams:concept/LegalEntity (ADR-021/029).
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/ENTERPRISE
+  target_refs:
+  - dams:concept/LegalEntity
+  mapping_type: realizes
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/mdm/realizes_PERSON
+  description: MDM PERSON realizes enterprise dams:concept/Person (ADR-021/029).
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/mdm/PERSON
+  target_refs:
+  - dams:concept/Person
+  mapping_type: realizes
+  mapping_cardinality: one_to_one
+  approval_status: proposed

@@ -9,6 +9,7 @@ import yaml
 from moex_modeling import DiagnosticSeverity
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
+from moex_dams.mappings.iter_mappings import LEGACY_MAPPING_KEY, TYPED_MAPPING_KEYS
 from moex_dams.rules.formal_checks import check_formal_requirements
 from moex_dams.rules.technical_assets import check_technical_assets
 
@@ -165,7 +166,9 @@ def test_entity_physical_wrong_endpoint_types() -> None:
     ]
     # Point entity_physical at DataContainer instead of DataCarrier
     logical_id = data["logical_entities"][0]["element_id"]
-    data["mappings"] = [
+    for key in (*TYPED_MAPPING_KEYS, LEGACY_MAPPING_KEY):
+        data.pop(key, None)
+    data["entity_physical_mappings"] = [
         {
             "element_id": "dams:mapping/neg/bad-ep",
             "name": "bad_entity_physical",

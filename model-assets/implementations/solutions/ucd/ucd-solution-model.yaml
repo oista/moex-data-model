@@ -681,487 +681,6 @@ relationships:
   source_max_cardinality: 999999
   target_min_cardinality: 0
   target_max_cardinality: 1
-mappings:
-- element_id: dams:mapping/ucd/map_AGREEMENT_id
-  description: Mapping map_AGREEMENT_id
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/AGREEMENT/id
-  target_refs:
-  - dams:structure/ucd/phys_AGREEMENT#id
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_AGREEMENT_organizationId
-  description: Mapping map_AGREEMENT_organizationId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/AGREEMENT/organizationId
-  target_refs:
-  - dams:structure/ucd/phys_AGREEMENT#organizationid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_AGREEMENT_type
-  description: Mapping map_AGREEMENT_type
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/AGREEMENT/type
-  target_refs:
-  - dams:structure/ucd/phys_AGREEMENT#type
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_AGREEMENT_status
-  description: Mapping map_AGREEMENT_status
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/AGREEMENT/status
-  target_refs:
-  - dams:structure/ucd/phys_AGREEMENT#status
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_AGREEMENT_conclusionDate
-  description: Mapping map_AGREEMENT_conclusionDate
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/AGREEMENT/conclusionDate
-  target_refs:
-  - dams:structure/ucd/phys_AGREEMENT#conclusiondate
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_AUTHORIZATION_id
-  description: Mapping map_AUTHORIZATION_id
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/AUTHORIZATION/id
-  target_refs:
-  - dams:structure/ucd/phys_AUTHORIZATION#id
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_AUTHORIZATION_employeeId
-  description: Mapping map_AUTHORIZATION_employeeId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/AUTHORIZATION/employeeId
-  target_refs:
-  - dams:structure/ucd/phys_AUTHORIZATION#employeeid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_AUTHORIZATION_type
-  description: Mapping map_AUTHORIZATION_type
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/AUTHORIZATION/type
-  target_refs:
-  - dams:structure/ucd/phys_AUTHORIZATION#type
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_AUTHORIZATION_valid_from
-  description: Mapping map_AUTHORIZATION_valid_from
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/AUTHORIZATION/valid_from
-  target_refs:
-  - dams:structure/ucd/phys_AUTHORIZATION#valid_from
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_AUTHORIZATION_valid_to
-  description: Mapping map_AUTHORIZATION_valid_to
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/AUTHORIZATION/valid_to
-  target_refs:
-  - dams:structure/ucd/phys_AUTHORIZATION#valid_to
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_AUTHORIZATION_status
-  description: Mapping map_AUTHORIZATION_status
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/AUTHORIZATION/status
-  target_refs:
-  - dams:structure/ucd/phys_AUTHORIZATION#status
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_EMPOYEE_id
-  description: Mapping map_EMPOYEE_id
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/EMPOYEE/id
-  target_refs:
-  - dams:structure/ucd/phys_EMPOYEE#id
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_EMPOYEE_organizationId
-  description: Mapping map_EMPOYEE_organizationId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/EMPOYEE/organizationId
-  target_refs:
-  - dams:structure/ucd/phys_EMPOYEE#organizationid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_EMPOYEE_personId
-  description: Mapping map_EMPOYEE_personId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/EMPOYEE/personId
-  target_refs:
-  - dams:structure/ucd/phys_EMPOYEE#personid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_EMPOYEE_positionId
-  description: Mapping map_EMPOYEE_positionId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/EMPOYEE/positionId
-  target_refs:
-  - dams:structure/ucd/phys_EMPOYEE#id
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_EMPOYEE_full_name
-  description: Mapping map_EMPOYEE_full_name
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/EMPOYEE/full_name
-  target_refs:
-  - dams:structure/ucd/phys_EMPOYEE#full_name
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_EMPOYEE_inn
-  description: Mapping map_EMPOYEE_inn
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/EMPOYEE/inn
-  target_refs:
-  - dams:structure/ucd/phys_EMPOYEE#inn
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_EMPOYEE_snils
-  description: Mapping map_EMPOYEE_snils
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/EMPOYEE/snils
-  target_refs:
-  - dams:structure/ucd/phys_EMPOYEE#snils
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_EMPOYEE_status
-  description: Mapping map_EMPOYEE_status
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/EMPOYEE/status
-  target_refs:
-  - dams:structure/ucd/phys_EMPOYEE#status
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_EMPOYEE_hire_date
-  description: Mapping map_EMPOYEE_hire_date
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/EMPOYEE/hire_date
-  target_refs:
-  - dams:structure/ucd/phys_EMPOYEE#hire_date
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_EMPOYEE_termination_date
-  description: Mapping map_EMPOYEE_termination_date
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/EMPOYEE/termination_date
-  target_refs:
-  - dams:structure/ucd/phys_EMPOYEE#termination_date
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_ORGANIZATION_id
-  description: Mapping map_ORGANIZATION_id
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/ORGANIZATION/id
-  target_refs:
-  - dams:structure/ucd/phys_ORGANIZATION#id
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_ORGANIZATION_typeId
-  description: Mapping map_ORGANIZATION_typeId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/ORGANIZATION/typeId
-  target_refs:
-  - dams:structure/ucd/phys_ORGANIZATION#typeid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_ORGANIZATION_inn
-  description: Mapping map_ORGANIZATION_inn
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/ORGANIZATION/inn
-  target_refs:
-  - dams:structure/ucd/phys_ORGANIZATION#inn
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_ORGANIZATION_shortName
-  description: Mapping map_ORGANIZATION_shortName
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/ORGANIZATION/shortName
-  target_refs:
-  - dams:structure/ucd/phys_ORGANIZATION#shortname
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_ORGANIZATION_kpp
-  description: Mapping map_ORGANIZATION_kpp
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/ORGANIZATION/kpp
-  target_refs:
-  - dams:structure/ucd/phys_ORGANIZATION#kpp
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_ORGANIZATION_ogrn
-  description: Mapping map_ORGANIZATION_ogrn
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/ORGANIZATION/ogrn
-  target_refs:
-  - dams:structure/ucd/phys_ORGANIZATION#ogrn
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_ORGANIZATION_fullName
-  description: Mapping map_ORGANIZATION_fullName
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/ORGANIZATION/fullName
-  target_refs:
-  - dams:structure/ucd/phys_ORGANIZATION#fullname
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_ORGANIZATION_mcdbId
-  description: Mapping map_ORGANIZATION_mcdbId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/ORGANIZATION/mcdbId
-  target_refs:
-  - dams:structure/ucd/phys_ORGANIZATION#mcdbid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_ORGANIZATION_TYPE_Id
-  description: Mapping map_ORGANIZATION_TYPE_Id
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/ORGANIZATION_TYPE/Id
-  target_refs:
-  - dams:structure/ucd/phys_ORGANIZATION_TYPE#id
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_ORGANIZATION_TYPE_typeName
-  description: Mapping map_ORGANIZATION_TYPE_typeName
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/ORGANIZATION_TYPE/typeName
-  target_refs:
-  - dams:structure/ucd/phys_ORGANIZATION_TYPE#typename
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_ORGANIZATION_TYPE_code
-  description: Mapping map_ORGANIZATION_TYPE_code
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/ORGANIZATION_TYPE/code
-  target_refs:
-  - dams:structure/ucd/phys_ORGANIZATION_TYPE#code
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_PERSON_id
-  description: Mapping map_PERSON_id
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/PERSON/id
-  target_refs:
-  - dams:structure/ucd/phys_PERSON#id
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_PERSON_fullName
-  description: Mapping map_PERSON_fullName
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/PERSON/fullName
-  target_refs:
-  - dams:structure/ucd/phys_PERSON#fullname
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_PERSON_birthDate
-  description: Mapping map_PERSON_birthDate
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/PERSON/birthDate
-  target_refs:
-  - dams:structure/ucd/phys_PERSON#birthdate
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_PERSON_inn
-  description: Mapping map_PERSON_inn
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/PERSON/inn
-  target_refs:
-  - dams:structure/ucd/phys_PERSON#inn
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_PERSON_snils
-  description: Mapping map_PERSON_snils
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/PERSON/snils
-  target_refs:
-  - dams:structure/ucd/phys_PERSON#snils
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_POSITION_id
-  description: Mapping map_POSITION_id
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/POSITION/id
-  target_refs:
-  - dams:structure/ucd/phys_POSITION#id
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_POSITION_name
-  description: Mapping map_POSITION_name
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/POSITION/name
-  target_refs:
-  - dams:structure/ucd/phys_POSITION#name
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/map_POSITION_code
-  description: Mapping map_POSITION_code
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/POSITION/code
-  target_refs:
-  - dams:structure/ucd/phys_POSITION#code
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/ucd/entity_phys_AGREEMENT
-  description: Mapping entity_phys_AGREEMENT
-  lifecycle_status: draft
-  source_refs:
-  - dams:physical/ucd/phys_AGREEMENT
-  target_refs:
-  - dams:logical/ucd/AGREEMENT
-  mapping_type: entity_physical
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/ucd/entity_phys_AUTHORIZATION
-  description: Mapping entity_phys_AUTHORIZATION
-  lifecycle_status: draft
-  source_refs:
-  - dams:physical/ucd/phys_AUTHORIZATION
-  target_refs:
-  - dams:logical/ucd/AUTHORIZATION
-  mapping_type: entity_physical
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/ucd/entity_phys_EMPOYEE
-  description: Mapping entity_phys_EMPOYEE
-  lifecycle_status: draft
-  source_refs:
-  - dams:physical/ucd/phys_EMPOYEE
-  target_refs:
-  - dams:logical/ucd/EMPOYEE
-  mapping_type: entity_physical
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/ucd/entity_phys_ORGANIZATION
-  description: Mapping entity_phys_ORGANIZATION
-  lifecycle_status: draft
-  source_refs:
-  - dams:physical/ucd/phys_ORGANIZATION
-  target_refs:
-  - dams:logical/ucd/ORGANIZATION
-  mapping_type: entity_physical
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/ucd/entity_phys_ORGANIZATION_TYPE
-  description: Mapping entity_phys_ORGANIZATION_TYPE
-  lifecycle_status: draft
-  source_refs:
-  - dams:physical/ucd/phys_ORGANIZATION_TYPE
-  target_refs:
-  - dams:logical/ucd/ORGANIZATION_TYPE
-  mapping_type: entity_physical
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/ucd/entity_phys_PERSON
-  description: Mapping entity_phys_PERSON
-  lifecycle_status: draft
-  source_refs:
-  - dams:physical/ucd/phys_PERSON
-  target_refs:
-  - dams:logical/ucd/PERSON
-  mapping_type: entity_physical
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/ucd/entity_phys_POSITION
-  description: Mapping entity_phys_POSITION
-  lifecycle_status: draft
-  source_refs:
-  - dams:physical/ucd/phys_POSITION
-  target_refs:
-  - dams:logical/ucd/POSITION
-  mapping_type: entity_physical
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/ucd/realizes_AGREEMENT
-  description: UCD AGREEMENT realizes enterprise dams:concept/Agreement (ADR-021/029).
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/AGREEMENT
-  target_refs:
-  - dams:concept/Agreement
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/ucd/realizes_EMPOYEE
-  description: UCD EMPOYEE realizes enterprise dams:concept/Employee (ADR-021/029).
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/EMPOYEE
-  target_refs:
-  - dams:concept/Employee
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/ucd/realizes_ORGANIZATION
-  description: UCD ORGANIZATION realizes enterprise dams:concept/LegalEntity (ADR-021/029).
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/ORGANIZATION
-  target_refs:
-  - dams:concept/LegalEntity
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/ucd/realizes_PERSON
-  description: UCD PERSON realizes enterprise dams:concept/Person (ADR-021/029).
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/PERSON
-  target_refs:
-  - dams:concept/Person
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/ucd/realizes_POSITION
-  description: UCD POSITION realizes enterprise dams:concept/StaffPosition (ADR-021/029).
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/ucd/POSITION
-  target_refs:
-  - dams:concept/StaffPosition
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
 implementation_scope: solution
 conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
 data_owner_ref: org:role/DATA_OWNER_PENDING
@@ -1762,3 +1281,486 @@ data_structures:
     ordinal_position: 3
     column_position: 3
     mapping_coverage_status: mapped
+field_mappings:
+- element_id: dams:mapping/ucd/map_AGREEMENT_id
+  description: Mapping map_AGREEMENT_id
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/AGREEMENT/id
+  target_refs:
+  - dams:structure/ucd/phys_AGREEMENT#id
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_AGREEMENT_organizationId
+  description: Mapping map_AGREEMENT_organizationId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/AGREEMENT/organizationId
+  target_refs:
+  - dams:structure/ucd/phys_AGREEMENT#organizationid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_AGREEMENT_type
+  description: Mapping map_AGREEMENT_type
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/AGREEMENT/type
+  target_refs:
+  - dams:structure/ucd/phys_AGREEMENT#type
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_AGREEMENT_status
+  description: Mapping map_AGREEMENT_status
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/AGREEMENT/status
+  target_refs:
+  - dams:structure/ucd/phys_AGREEMENT#status
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_AGREEMENT_conclusionDate
+  description: Mapping map_AGREEMENT_conclusionDate
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/AGREEMENT/conclusionDate
+  target_refs:
+  - dams:structure/ucd/phys_AGREEMENT#conclusiondate
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_AUTHORIZATION_id
+  description: Mapping map_AUTHORIZATION_id
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/AUTHORIZATION/id
+  target_refs:
+  - dams:structure/ucd/phys_AUTHORIZATION#id
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_AUTHORIZATION_employeeId
+  description: Mapping map_AUTHORIZATION_employeeId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/AUTHORIZATION/employeeId
+  target_refs:
+  - dams:structure/ucd/phys_AUTHORIZATION#employeeid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_AUTHORIZATION_type
+  description: Mapping map_AUTHORIZATION_type
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/AUTHORIZATION/type
+  target_refs:
+  - dams:structure/ucd/phys_AUTHORIZATION#type
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_AUTHORIZATION_valid_from
+  description: Mapping map_AUTHORIZATION_valid_from
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/AUTHORIZATION/valid_from
+  target_refs:
+  - dams:structure/ucd/phys_AUTHORIZATION#valid_from
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_AUTHORIZATION_valid_to
+  description: Mapping map_AUTHORIZATION_valid_to
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/AUTHORIZATION/valid_to
+  target_refs:
+  - dams:structure/ucd/phys_AUTHORIZATION#valid_to
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_AUTHORIZATION_status
+  description: Mapping map_AUTHORIZATION_status
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/AUTHORIZATION/status
+  target_refs:
+  - dams:structure/ucd/phys_AUTHORIZATION#status
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_EMPOYEE_id
+  description: Mapping map_EMPOYEE_id
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/EMPOYEE/id
+  target_refs:
+  - dams:structure/ucd/phys_EMPOYEE#id
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_EMPOYEE_organizationId
+  description: Mapping map_EMPOYEE_organizationId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/EMPOYEE/organizationId
+  target_refs:
+  - dams:structure/ucd/phys_EMPOYEE#organizationid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_EMPOYEE_personId
+  description: Mapping map_EMPOYEE_personId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/EMPOYEE/personId
+  target_refs:
+  - dams:structure/ucd/phys_EMPOYEE#personid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_EMPOYEE_positionId
+  description: Mapping map_EMPOYEE_positionId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/EMPOYEE/positionId
+  target_refs:
+  - dams:structure/ucd/phys_EMPOYEE#id
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_EMPOYEE_full_name
+  description: Mapping map_EMPOYEE_full_name
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/EMPOYEE/full_name
+  target_refs:
+  - dams:structure/ucd/phys_EMPOYEE#full_name
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_EMPOYEE_inn
+  description: Mapping map_EMPOYEE_inn
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/EMPOYEE/inn
+  target_refs:
+  - dams:structure/ucd/phys_EMPOYEE#inn
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_EMPOYEE_snils
+  description: Mapping map_EMPOYEE_snils
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/EMPOYEE/snils
+  target_refs:
+  - dams:structure/ucd/phys_EMPOYEE#snils
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_EMPOYEE_status
+  description: Mapping map_EMPOYEE_status
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/EMPOYEE/status
+  target_refs:
+  - dams:structure/ucd/phys_EMPOYEE#status
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_EMPOYEE_hire_date
+  description: Mapping map_EMPOYEE_hire_date
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/EMPOYEE/hire_date
+  target_refs:
+  - dams:structure/ucd/phys_EMPOYEE#hire_date
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_EMPOYEE_termination_date
+  description: Mapping map_EMPOYEE_termination_date
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/EMPOYEE/termination_date
+  target_refs:
+  - dams:structure/ucd/phys_EMPOYEE#termination_date
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_ORGANIZATION_id
+  description: Mapping map_ORGANIZATION_id
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/ORGANIZATION/id
+  target_refs:
+  - dams:structure/ucd/phys_ORGANIZATION#id
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_ORGANIZATION_typeId
+  description: Mapping map_ORGANIZATION_typeId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/ORGANIZATION/typeId
+  target_refs:
+  - dams:structure/ucd/phys_ORGANIZATION#typeid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_ORGANIZATION_inn
+  description: Mapping map_ORGANIZATION_inn
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/ORGANIZATION/inn
+  target_refs:
+  - dams:structure/ucd/phys_ORGANIZATION#inn
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_ORGANIZATION_shortName
+  description: Mapping map_ORGANIZATION_shortName
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/ORGANIZATION/shortName
+  target_refs:
+  - dams:structure/ucd/phys_ORGANIZATION#shortname
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_ORGANIZATION_kpp
+  description: Mapping map_ORGANIZATION_kpp
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/ORGANIZATION/kpp
+  target_refs:
+  - dams:structure/ucd/phys_ORGANIZATION#kpp
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_ORGANIZATION_ogrn
+  description: Mapping map_ORGANIZATION_ogrn
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/ORGANIZATION/ogrn
+  target_refs:
+  - dams:structure/ucd/phys_ORGANIZATION#ogrn
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_ORGANIZATION_fullName
+  description: Mapping map_ORGANIZATION_fullName
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/ORGANIZATION/fullName
+  target_refs:
+  - dams:structure/ucd/phys_ORGANIZATION#fullname
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_ORGANIZATION_mcdbId
+  description: Mapping map_ORGANIZATION_mcdbId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/ORGANIZATION/mcdbId
+  target_refs:
+  - dams:structure/ucd/phys_ORGANIZATION#mcdbid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_ORGANIZATION_TYPE_Id
+  description: Mapping map_ORGANIZATION_TYPE_Id
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/ORGANIZATION_TYPE/Id
+  target_refs:
+  - dams:structure/ucd/phys_ORGANIZATION_TYPE#id
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_ORGANIZATION_TYPE_typeName
+  description: Mapping map_ORGANIZATION_TYPE_typeName
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/ORGANIZATION_TYPE/typeName
+  target_refs:
+  - dams:structure/ucd/phys_ORGANIZATION_TYPE#typename
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_ORGANIZATION_TYPE_code
+  description: Mapping map_ORGANIZATION_TYPE_code
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/ORGANIZATION_TYPE/code
+  target_refs:
+  - dams:structure/ucd/phys_ORGANIZATION_TYPE#code
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_PERSON_id
+  description: Mapping map_PERSON_id
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/PERSON/id
+  target_refs:
+  - dams:structure/ucd/phys_PERSON#id
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_PERSON_fullName
+  description: Mapping map_PERSON_fullName
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/PERSON/fullName
+  target_refs:
+  - dams:structure/ucd/phys_PERSON#fullname
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_PERSON_birthDate
+  description: Mapping map_PERSON_birthDate
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/PERSON/birthDate
+  target_refs:
+  - dams:structure/ucd/phys_PERSON#birthdate
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_PERSON_inn
+  description: Mapping map_PERSON_inn
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/PERSON/inn
+  target_refs:
+  - dams:structure/ucd/phys_PERSON#inn
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_PERSON_snils
+  description: Mapping map_PERSON_snils
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/PERSON/snils
+  target_refs:
+  - dams:structure/ucd/phys_PERSON#snils
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_POSITION_id
+  description: Mapping map_POSITION_id
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/POSITION/id
+  target_refs:
+  - dams:structure/ucd/phys_POSITION#id
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_POSITION_name
+  description: Mapping map_POSITION_name
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/POSITION/name
+  target_refs:
+  - dams:structure/ucd/phys_POSITION#name
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/ucd/map_POSITION_code
+  description: Mapping map_POSITION_code
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/POSITION/code
+  target_refs:
+  - dams:structure/ucd/phys_POSITION#code
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+entity_physical_mappings:
+- element_id: dams:mapping/ucd/entity_phys_AGREEMENT
+  description: Mapping entity_phys_AGREEMENT
+  lifecycle_status: draft
+  source_refs:
+  - dams:physical/ucd/phys_AGREEMENT
+  target_refs:
+  - dams:logical/ucd/AGREEMENT
+  mapping_type: entity_physical
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/ucd/entity_phys_AUTHORIZATION
+  description: Mapping entity_phys_AUTHORIZATION
+  lifecycle_status: draft
+  source_refs:
+  - dams:physical/ucd/phys_AUTHORIZATION
+  target_refs:
+  - dams:logical/ucd/AUTHORIZATION
+  mapping_type: entity_physical
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/ucd/entity_phys_EMPOYEE
+  description: Mapping entity_phys_EMPOYEE
+  lifecycle_status: draft
+  source_refs:
+  - dams:physical/ucd/phys_EMPOYEE
+  target_refs:
+  - dams:logical/ucd/EMPOYEE
+  mapping_type: entity_physical
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/ucd/entity_phys_ORGANIZATION
+  description: Mapping entity_phys_ORGANIZATION
+  lifecycle_status: draft
+  source_refs:
+  - dams:physical/ucd/phys_ORGANIZATION
+  target_refs:
+  - dams:logical/ucd/ORGANIZATION
+  mapping_type: entity_physical
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/ucd/entity_phys_ORGANIZATION_TYPE
+  description: Mapping entity_phys_ORGANIZATION_TYPE
+  lifecycle_status: draft
+  source_refs:
+  - dams:physical/ucd/phys_ORGANIZATION_TYPE
+  target_refs:
+  - dams:logical/ucd/ORGANIZATION_TYPE
+  mapping_type: entity_physical
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/ucd/entity_phys_PERSON
+  description: Mapping entity_phys_PERSON
+  lifecycle_status: draft
+  source_refs:
+  - dams:physical/ucd/phys_PERSON
+  target_refs:
+  - dams:logical/ucd/PERSON
+  mapping_type: entity_physical
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/ucd/entity_phys_POSITION
+  description: Mapping entity_phys_POSITION
+  lifecycle_status: draft
+  source_refs:
+  - dams:physical/ucd/phys_POSITION
+  target_refs:
+  - dams:logical/ucd/POSITION
+  mapping_type: entity_physical
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+realizes_mappings:
+- element_id: dams:mapping/ucd/realizes_AGREEMENT
+  description: UCD AGREEMENT realizes enterprise dams:concept/Agreement (ADR-021/029).
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/AGREEMENT
+  target_refs:
+  - dams:concept/Agreement
+  mapping_type: realizes
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/ucd/realizes_EMPOYEE
+  description: UCD EMPOYEE realizes enterprise dams:concept/Employee (ADR-021/029).
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/EMPOYEE
+  target_refs:
+  - dams:concept/Employee
+  mapping_type: realizes
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/ucd/realizes_ORGANIZATION
+  description: UCD ORGANIZATION realizes enterprise dams:concept/LegalEntity (ADR-021/029).
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/ORGANIZATION
+  target_refs:
+  - dams:concept/LegalEntity
+  mapping_type: realizes
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/ucd/realizes_PERSON
+  description: UCD PERSON realizes enterprise dams:concept/Person (ADR-021/029).
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/PERSON
+  target_refs:
+  - dams:concept/Person
+  mapping_type: realizes
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/ucd/realizes_POSITION
+  description: UCD POSITION realizes enterprise dams:concept/StaffPosition (ADR-021/029).
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/ucd/POSITION
+  target_refs:
+  - dams:concept/StaffPosition
+  mapping_type: realizes
+  mapping_cardinality: one_to_one
+  approval_status: proposed
