@@ -115,10 +115,10 @@ describe("EditorPage", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("monaco")).toBeTruthy();
+      expect(screen.getByTestId("draft-source").textContent).toMatch(
+        /loaded:\s*published/i,
+      );
     });
-    expect(screen.getByTestId("draft-source").textContent).toMatch(
-      /loaded:\s*published/i,
-    );
   });
 
   it("PUTs dirty Monaco content before mutation", async () => {
