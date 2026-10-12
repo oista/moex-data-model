@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
-from moex_dams.mappings import TYPED_MAPPING_KEYS, iter_mappings
+from moex_dams.mappings import (
+    TYPED_MAPPING_KEYS,
+    iter_mappings,
+    iter_mappings_with_collection,
+)
 
 
 def test_empty() -> None:
@@ -74,3 +78,12 @@ def test_missing_element_id_always_yielded() -> None:
     }
     got = list(iter_mappings(data))
     assert len(got) == 2
+
+
+def test_with_collection_reports_source_key() -> None:
+    data = {
+        "realizes_mappings": [{"element_id": "r1"}],
+        "field_mappings": [{"element_id": "f1"}, {"element_id": "r1"}],
+    }
+    got = [(k, m["element_id"]) for k, m in iter_mappings_with_collection(data)]
+    assert got == [("realizes_mappings", "r1"), ("field_mappings", "f1")]

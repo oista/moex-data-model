@@ -70,7 +70,7 @@ def test_entity_physical_direction_aware() -> None:
         ],
     }
     codes = {d.diagnostic_code for d in check_mapping_endpoint_types(good)}
-    assert "DAMS-REQ-PDM-009.c1" not in codes
+    assert "DAMS-INV-033" not in codes
 
     bad = {
         **data,
@@ -87,7 +87,7 @@ def test_entity_physical_direction_aware() -> None:
         ],
     }
     diags = check_mapping_endpoint_types(bad)
-    assert any(d.diagnostic_code == "DAMS-REQ-PDM-009.c1" for d in diags)
+    assert any(d.diagnostic_code == "DAMS-INV-033" for d in diags)
     assert "INV-033" in _collect_invariant_ids(diags)
 
 

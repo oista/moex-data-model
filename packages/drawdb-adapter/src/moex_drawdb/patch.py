@@ -645,11 +645,8 @@ def _patch_physical_refs(
     ops: list[PatchOp],
     rejected: list[RejectedOp],
 ) -> None:
-    mappings = [
-        m
-        for m in (base.get("mappings") or [])
-        if isinstance(m, dict) and m.get("mapping_type") == "field_mapping"
-    ]
+    # ADR-046: field mappings live in the typed ``field_mappings`` collection.
+    mappings = [m for m in (base.get("field_mappings") or []) if isinstance(m, dict)]
     # Index fields by table.column via objects
     objects = list(base.get("data_carriers") or [])
     # After adds we don't have new fields in base; resolve columns from diagram
@@ -700,10 +697,13 @@ def _patch_physical_refs(
         ops.append(
             PatchOp(
                 kind=PatchOpKind.ADD_MAPPING_REF,
-                path=f"mappings[{mid}]",
+                path=f"field_mappings[{mid}]",
                 payload={
                     "element_id": mid,
-                    "name": ref.name or f"{ref.source_table}_{ref.target_table}",
+                    # Mapping has no ``name`` slot since DAMS 3.0.0 (ADR-044).
+                    "description": (
+                        ref.name or f"{ref.source_table}_{ref.target_table}"
+                    ),
                     "mapping_type": "field_mapping",
                     "source_refs": [src_col],
                     "target_refs": [tgt_col],
@@ -729,7 +729,7 @@ def _patch_physical_refs(
                 ops.append(
                     PatchOp(
                         kind=PatchOpKind.DELETE_MAPPING_REF,
-                        path=f"mappings[{mid}]",
+                        path=f"field_mappings[{mid}]",
                         payload={"element_id": mid},
                     )
                 )
@@ -932,11 +932,11 @@ def apply_model_patch(
                     if isinstance(children, list) and lk in children:
                         n["children"] = [c for c in children if c != lk]
         elif kind is PatchOpKind.ADD_MAPPING_REF:
-            out.setdefault("mappings", []).append(p)
+            out.setdefault("field_mappings", []).append(p)
         elif kind is PatchOpKind.DELETE_MAPPING_REF:
-            out["mappings"] = [
+            out["field_mappings"] = [
                 m
-                for m in (out.get("mappings") or [])
+                for m in (out.get("field_mappings") or [])
                 if m.get("element_id") != p["element_id"]
             ]
 

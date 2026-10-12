@@ -13,7 +13,7 @@ Mirrors Makefile ``check`` plus ``architecture-check`` and ``publish-gate``
 3. validate-schemas            → scripts/validate-schemas.ps1
 4. validate-examples           → scripts/validate-examples.ps1
 5. validate-requirements       → scripts/validate-requirements.ps1
-6. check-constraints           → scripts/check_constraint_matrix.py (ADR-045)
+6. check-constraints           → scripts/check_constraint_matrix.py --gate-strict (ADR-045)
 7. compare-golden              → scripts/compare-golden.ps1
 8. architecture-check          → pytest + architecture_check.cli (Makefile)
 9. check-manifest              → moex-model check-manifest (ADR-047)
@@ -229,8 +229,12 @@ def run_step(step_id: str, python: str) -> StepResult:
             # Makefile: validate-requirements
             code = _run_ps1("scripts/validate-requirements.ps1")
         elif step_id == "check-constraints":
-            # Makefile: check-constraints (ADR-045)
-            code = _run_python_script(python, "scripts/check_constraint_matrix.py")
+            # Makefile: check-constraints (ADR-045); gate_strict = audit A3
+            code = _run_python_script(
+                python,
+                "scripts/check_constraint_matrix.py",
+                "--gate-strict",
+            )
         elif step_id == "compare-golden":
             # Makefile: compare-golden
             code = _run_ps1("scripts/compare-golden.ps1")

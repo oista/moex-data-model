@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Migrate DataCarrier.physical_fields to DataStructure / SchemaNode (ADR-038/039).
 
+LEGACY (one-shot): remaps field mappings from the polymorphic ``mappings`` key
+removed in DAMS 3.1.0 (ADR-046 PR-5); on pre-3.1.0 packages run it before
+``migrate_mappings_to_typed_collections``. Kept for external consumers only.
+
 Idempotent: re-running on already-migrated YAML is a no-op (empty local_key set
 change). Preserves order/comments via ruamel.yaml when available; falls back to
 PyYAML.

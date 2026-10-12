@@ -16,6 +16,10 @@ from moex_standard_linkml.ingest.technical_asset import (
     resolve_kind,
 )
 from moex_standard_linkml.ingest.workbook import WorkbookTables
+from moex_standard_linkml.mapping_collections import (
+    MAPPING_TYPE_TO_COLLECTION,
+    TYPED_MAPPING_KEYS,
+)
 
 _CARD_RE = re.compile(
     r"^\s*(\d+)\s*(?:\.\.\s*(\d+|\*|n|N))?\s*$"
@@ -579,14 +583,8 @@ def map_er_dictionary(
     for obj in phys_obj_by_name.values():
         obj.pop("_source_artifact_ref", None)
 
-    _MAPPING_TYPE_TO_COLLECTION = {
-        "realizes": "realizes_mappings",
-        "entity_physical": "entity_physical_mappings",
-        "field_mapping": "field_mappings",
-        "aligns_with": "aligns_with_mappings",
-    }
     typed_mappings: dict[str, list[dict[str, Any]]] = {
-        key: [] for key in _MAPPING_TYPE_TO_COLLECTION.values()
+        key: [] for key in TYPED_MAPPING_KEYS
     }
     if tables.mappings is not None:
         for i, row in enumerate(tables.mappings.rows, start=2):
@@ -623,7 +621,7 @@ def map_er_dictionary(
             mapping_cardinality = (
                 _opt_str(row.get("mapping_cardinality")) or "one_to_one"
             )
-            collection = _MAPPING_TYPE_TO_COLLECTION.get(mapping_type)
+            collection = MAPPING_TYPE_TO_COLLECTION.get(mapping_type)
             if collection is None:
                 errors.append(
                     MapperError(

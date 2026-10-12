@@ -243,7 +243,7 @@ def check_direction_forbidden(data: dict[str, Any]) -> list[Diagnostic]:
         if el.get("direction") is not None and str(el.get("direction") or "").strip():
             out.append(
                 _diag(
-                    code="DAMS-REQ-PDM-008.c1",
+                    code="DAMS-INV-018",
                     invariant_id="INV-018",
                     message=(
                         f'{class_name} "{sid}" must not declare direction '
@@ -317,7 +317,7 @@ def check_mapping_endpoint_types(data: dict[str, Any]) -> list[Diagnostic]:
             if not (src_ok and tgt_ok):
                 out.append(
                     _diag(
-                        code="DAMS-REQ-PDM-009.c1",
+                        code="DAMS-INV-033",
                         invariant_id="INV-033",
                         message=(
                             f'Mapping "{mid}" entity_physical requires source_refs ⊆ '
@@ -341,7 +341,7 @@ def check_mapping_endpoint_types(data: dict[str, Any]) -> list[Diagnostic]:
             if not (src_ok and tgt_pattern_ok and tgt_resolved):
                 out.append(
                     _diag(
-                        code="DAMS-REQ-PDM-009.c2",
+                        code="DAMS-INV-034",
                         invariant_id="INV-034",
                         message=(
                             f'Mapping "{mid}" field_mapping requires source_refs ⊆ '
@@ -500,7 +500,7 @@ def check_operation_interface_ref(data: dict[str, Any]) -> list[Diagnostic]:
         if not (el.get("interface_ref") and str(el.get("interface_ref")).strip()):
             out.append(
                 _diag(
-                    code="DAMS-REQ-PDM-011.c1",
+                    code="DAMS-INV-016",
                     invariant_id="INV-016",
                     message=(
                         f'AccessPoint "{sid}" with asset_kind=operation requires interface_ref.'
@@ -538,7 +538,7 @@ def check_in_memory_location(data: dict[str, Any]) -> list[Diagnostic]:
         if bad:
             out.append(
                 _diag(
-                    code="DAMS-REQ-PDM-012.c1",
+                    code="DAMS-INV-015",
                     invariant_id="INV-015",
                     message=(
                         f'DataCarrier "{sid}" with asset_kind=in_memory must not set '

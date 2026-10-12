@@ -22,6 +22,8 @@ dev = [
     "pytest>=8.0,<9.0",
     "moex-modeling-kernel[dev]",
     "moex-standard-linkml[dev]",
+    "pyshacl==0.40.1",
+    "rdflib>=7.0,<8.0",
 ]
 
 [project.scripts]

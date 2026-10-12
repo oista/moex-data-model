@@ -226,7 +226,6 @@ function parseTree(content: string): { groups: Group[]; error: string | null } {
       "entity_physical_mappings",
       "field_mappings",
       "aligns_with_mappings",
-      "mappings",
     ] as const;
     const mappingSeen = new Set<string>();
     const mappingNodes: Array<{

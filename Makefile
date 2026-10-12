@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check viewer-serve packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements check-constraints generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate digest-check ontology-check check-manifest lock-verify check-topology
+.PHONY: viewer viewer-check viewer-serve packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements check-constraints dams-packages-check generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate digest-check ontology-check check-manifest lock-verify check-topology
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -86,9 +86,15 @@ validate-examples:
 validate-requirements:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/validate-requirements.ps1
 
-# ADR-045: constraint-matrix.yaml vs schema + baseline rules list
+# ADR-045: constraint-matrix.yaml vs schema + fixtures (gate_strict, audit A3)
 check-constraints:
-	$(PYTHON) scripts/check_constraint_matrix.py
+	$(PYTHON) scripts/check_constraint_matrix.py --gate-strict
+
+# Package pytest for DAMS / LinkML / repository-loader / architecture (CI job dams-packages)
+dams-packages-check:
+	$(PYTHON) -m pip install -q -r requirements-linkml.txt pyshacl==0.40.1
+	$(PYTHON) -m pip install -q -e "./generated/contracts/moex-dams/0.1" -e "./$(KERNEL)" -e "./packages/standard-linkml" -e "./$(DAMS)[dev]" -e "./packages/repository-loader[dev]" pytest
+	$(PYTHON) -m pytest packages/specification-dams/tests packages/standard-linkml/tests packages/repository-loader/tests tests/architecture -q
 
 # gen-pydantic → generated/contracts/moex-dams/0.1 (moex_dams_contracts)
 generate-contracts:

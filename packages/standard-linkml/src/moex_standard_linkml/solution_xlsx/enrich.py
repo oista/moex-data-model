@@ -5,24 +5,11 @@ from __future__ import annotations
 from typing import Any
 
 from moex_standard_linkml.ingest.workbook import WorkbookTables
+from moex_standard_linkml.mapping_collections import iter_package_mappings
 from moex_standard_linkml.solution_xlsx.ir import SolutionIR
 from moex_standard_linkml.solution_xlsx.normalize import match_key
 from moex_standard_linkml.solution_xlsx.profile import SolutionXlsxProfile, SystemDefaults
 from moex_standard_linkml.solution_xlsx.trace import TraceMap
-
-_TYPED_MAPPING_KEYS = (
-    "realizes_mappings",
-    "entity_physical_mappings",
-    "field_mappings",
-    "aligns_with_mappings",
-)
-
-
-def _iter_typed_mappings(package: dict[str, Any]):
-    for key in _TYPED_MAPPING_KEYS:
-        for mapping in package.get(key) or []:
-            if isinstance(mapping, dict):
-                yield mapping
 
 
 def enrich_package(
@@ -100,7 +87,7 @@ def enrich_package(
             if isinstance(node, dict) and str(node.get("node_kind") or "") == "scalar":
                 node["mapping_coverage_status"] = defaults.mapping_coverage_status_mapped
 
-    for mapping in _iter_typed_mappings(package):
+    for mapping in iter_package_mappings(package):
         # Mapping lost identity slot name in DAMS 3.0.0 (ADR-044); key lineage
         # by the local id segment (same token as the former workbook name).
         eid = str(mapping.get("element_id") or "")
@@ -114,11 +101,11 @@ def enrich_package(
 
     # Package-level realizes stubs: logical entity → local conceptual stub (ADR-021).
     # Full enterprise alignment is a follow-up edit.
-    realizes = list(package.get("realizes_mappings") or [])
+    realizes_mappings = list(package.get("realizes_mappings") or [])
     existing_realizes = {
         tuple(m.get("source_refs") or [])
-        for m in realizes
-        if m.get("mapping_type") == "realizes"
+        for m in realizes_mappings
+        if isinstance(m, dict)
     }
     concept_by_name = {
         str(c.get("name")): str(c.get("element_id"))
@@ -134,7 +121,7 @@ def enrich_package(
         key = (eid,)
         if key in existing_realizes:
             continue
-        realizes.append(
+        realizes_mappings.append(
             {
                 "element_id": f"dams:mapping/{system.slug}/realizes_{name}",
                 "description": (
@@ -149,8 +136,8 @@ def enrich_package(
                 "approval_status": "proposed",
             }
         )
-    if realizes:
-        package["realizes_mappings"] = realizes
+    if realizes_mappings:
+        package["realizes_mappings"] = realizes_mappings
     package.pop("mappings", None)
 
     for rel in package.get("relationships") or []:

@@ -47,6 +47,10 @@ def test_convert_crm_builds_package(tmp_path):
         m.get("mapping_type") == "entity_physical"
         for m in result.package.get("entity_physical_mappings") or []
     )
+    assert any(
+        m.get("mapping_type") == "realizes"
+        for m in result.package.get("realizes_mappings") or []
+    )
     assert "mappings" not in result.package
 
 

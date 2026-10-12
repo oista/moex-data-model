@@ -12,7 +12,10 @@ from moex_modeling import (
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
 from moex_dams.mappings.dams_to_graph import package_index
-from moex_dams.mappings.iter_mappings import iter_mappings
+from moex_dams.mappings.iter_mappings import (
+    iter_mappings,
+    iter_mappings_with_collection,
+)
 
 
 def _pointer(collection: str, element_id: str) -> str:
@@ -114,7 +117,7 @@ def check_references(body: LinkMLImplementationBody) -> tuple[Diagnostic, ...]:
             label="target_entity_ref",
         )
 
-    for mapping in iter_mappings(data):
+    for collection, mapping in iter_mappings_with_collection(data):
         mid = str(mapping.get("element_id") or "")
         sources = mapping.get("source_refs") or []
         targets = mapping.get("target_refs") or []
@@ -130,7 +133,7 @@ def check_references(body: LinkMLImplementationBody) -> tuple[Diagnostic, ...]:
                     subject_ref=mid or None,
                     source_location=SourceLocation(
                         source_uri=source_uri,
-                        json_pointer=_pointer("mappings", mid),
+                        json_pointer=_pointer(collection, mid),
                     )
                     if mid
                     else (SourceLocation(source_uri=source_uri) if source_uri else None),
@@ -156,7 +159,7 @@ def check_references(body: LinkMLImplementationBody) -> tuple[Diagnostic, ...]:
             require(
                 sref,
                 subject=mid,
-                collection="mappings",
+                collection=collection,
                 code="DAMS-REF-004",
                 label="mapping endpoint",
             )

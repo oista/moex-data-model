@@ -16,6 +16,45 @@ import yaml
 
 INV_PREFIX_RE = re.compile(r"^(INV-\d{3}):")
 
+# Former diagnostic_code values kept as aliases (requirement_code / docs).
+DIAGNOSTIC_CODE_ALIASES: dict[str, frozenset[str]] = {
+    "INV-012": frozenset({"DAMS-REQ-PDM-020.c1", "DAMS-REQ-PDM-020.c2"}),
+    "INV-013": frozenset({"DAMS-REQ-PDM-020.c3", "DAMS-REQ-PDM-020.c4"}),
+    "INV-015": frozenset({"DAMS-REQ-PDM-012.c1"}),
+    "INV-016": frozenset({"DAMS-REQ-PDM-011.c1"}),
+    "INV-017": frozenset({"DAMS-REQ-PDM-018.c1"}),
+    "INV-018": frozenset({"DAMS-REQ-PDM-008.c1"}),
+    "INV-019": frozenset({"DAMS-REQ-PDM-018.c2"}),
+    "INV-020": frozenset({"DAMS-REQ-PDM-014.c1"}),
+    "INV-021": frozenset({"DAMS-REQ-PDM-016.c1"}),
+    "INV-022": frozenset({"DAMS-REQ-PDM-013.c1"}),
+    "INV-026": frozenset({"MOEX-ONT-004"}),
+    "INV-033": frozenset({"DAMS-REQ-PDM-009.c1"}),
+    "INV-034": frozenset({"DAMS-REQ-PDM-009.c2"}),
+}
+
+
+def canonical_diagnostic_code(inv_id: str) -> str:
+    """Canonical L2/L3 tagged code: DAMS-INV-NNN."""
+    return f"DAMS-{inv_id}"
+
+
+def resolve_dams_validator(dotted: str) -> Any:
+    """Import ``package.module.callable`` and return the attribute."""
+    import importlib
+
+    dotted = str(dotted).strip()
+    if not dotted or "." not in dotted:
+        raise ValueError(f"dams_validator must be a dotted callable path, got {dotted!r}")
+    module_name, _, attr = dotted.rpartition(".")
+    module = importlib.import_module(module_name)
+    obj = getattr(module, attr, None)
+    if obj is None:
+        raise ValueError(f"dams_validator {dotted!r}: attribute missing")
+    if not callable(obj):
+        raise ValueError(f"dams_validator {dotted!r}: not callable")
+    return obj
+
 
 def repo_root() -> Path:
     """Return repository root (…/moex-data-model)."""
@@ -195,9 +234,6 @@ def _run_l1_fixtures(
         if not msgs:
             errors.append(f"{iid}: L1 invalid fixture must fail: {ip}")
             continue
-        # Prefer INV id in message; otherwise class-scoped failure is enough
-        # (JSON Schema rarely echoes rule description). Fallback: expected_error
-        # in sibling manifest, or accept any rejection on the owning class.
         joined = " ".join(msgs)
         expected = None
         man_path = invariants_dir(root) / "manifest.yaml"
@@ -207,13 +243,16 @@ def _run_l1_fixtures(
                 if case.get("id") == iid:
                     expected = case.get("expected_error")
                     break
-        if expected and str(expected) not in joined:
+        if not expected:
             errors.append(
-                f"{iid}: L1 invalid error must contain expected_error={expected!r}; got {msgs[0]!r}"
+                f"{iid}: L1 invalid requires expected_error in "
+                f"examples/invariants/manifest.yaml (got rejection: {msgs[0]!r})"
             )
-        elif iid in joined:
-            pass  # strong attribution
-        # else: class-scoped rejection accepted (INV tied via linkml_rule)
+        elif str(expected) not in joined and iid not in joined:
+            errors.append(
+                f"{iid}: L1 invalid error must contain expected_error={expected!r} "
+                f"or {iid}; got {msgs[0]!r}"
+            )
 
 
 def _collect_invariant_ids(diags: list[Any]) -> set[str]:
@@ -229,23 +268,44 @@ def _collect_invariant_ids(diags: list[Any]) -> set[str]:
 
 
 def _run_l2_package_checks(data: dict[str, Any]) -> list[Any]:
+    """Run L2 package checks once (technical_assets already includes data_structures)."""
     from moex_dams.rules.catalog_topology import check_catalog_topology
-    from moex_dams.rules.data_structure import check_data_structures
     from moex_dams.rules.semantic_layer import check_semantic_layer
     from moex_dams.rules.technical_assets import check_technical_assets
 
     diags: list[Any] = []
     diags.extend(check_semantic_layer(data))
-    diags.extend(check_data_structures(data))
     diags.extend(check_technical_assets(data))
     diags.extend(check_catalog_topology(data, repo_root=repo_root()))
     return diags
+
+
+def _diag_matches_inv(diag: Any, iid: str) -> bool:
+    for det in getattr(diag, "diagnostic_details", None) or ():
+        if getattr(det, "detail_key", None) == "invariant_id":
+            if str(det.detail_value) == iid:
+                return True
+    code = str(getattr(diag, "diagnostic_code", "") or "")
+    if code == canonical_diagnostic_code(iid):
+        return True
+    if code.startswith("DAMS-INV-") and code.replace("DAMS-", "") == iid:
+        return True
+    return False
+
+
+def _severity_value(diag: Any) -> str:
+    sev = getattr(diag, "severity", None)
+    if sev is None:
+        return ""
+    return str(getattr(sev, "value", sev)).lower()
 
 
 def _run_l2_fixtures(
     inv: dict[str, Any], *, root: Path, errors: list[str]
 ) -> None:
     iid = str(inv.get("id"))
+    expected_code = canonical_diagnostic_code(iid)
+    expected_sev = str(inv.get("severity") or "error").lower()
     tests = inv.get("tests") or {}
     valid_paths = [p for p in (tests.get("l2_valid") or []) if _is_data_fixture(str(p))]
     invalid_paths = [
@@ -276,20 +336,33 @@ def _run_l2_fixtures(
         if not path.is_file():
             errors.append(f"{iid}: missing L2 invalid fixture {ip}")
             continue
-        data = load_yaml(path)
-        if not isinstance(data, dict):
-            errors.append(f"{iid}: L2 invalid fixture must be a mapping: {ip}")
-            continue
-        # Ontology URI checks take a schema path — skip here; package body only.
         if iid == "INV-026":
             from moex_dams.rules.ontology_uris import check_ontology_uris
 
-            ids = _collect_invariant_ids(list(check_ontology_uris(path)))
+            diags = list(check_ontology_uris(path))
         else:
-            ids = _collect_invariant_ids(_run_l2_package_checks(data))
-        if iid not in ids:
+            data = load_yaml(path)
+            if not isinstance(data, dict):
+                errors.append(f"{iid}: L2 invalid fixture must be a mapping: {ip}")
+                continue
+            diags = _run_l2_package_checks(data)
+        matched = [d for d in diags if _diag_matches_inv(d, iid)]
+        if not matched:
             errors.append(
                 f"{iid}: L2 invalid fixture must emit invariant_id={iid}: {ip}"
+            )
+            continue
+        codes = {str(getattr(d, "diagnostic_code", "") or "") for d in matched}
+        if expected_code not in codes and not (codes & DIAGNOSTIC_CODE_ALIASES.get(iid, frozenset())):
+            errors.append(
+                f"{iid}: L2 invalid must emit diagnostic_code={expected_code} "
+                f"(or documented alias); got {sorted(codes)}: {ip}"
+            )
+        severities = {_severity_value(d) for d in matched}
+        if expected_sev not in severities:
+            errors.append(
+                f"{iid}: L2 invalid severity must include {expected_sev!r}; "
+                f"got {sorted(severities)}: {ip}"
             )
 
 
@@ -470,6 +543,23 @@ def validate_matrix(
                 if not p.is_file():
                     errors.append(f"{iid}: missing test file {path}")
 
+        # dams_validator: required callable when L2 implemented; forbidden otherwise
+        impl = inv.get("implementation") or {}
+        dv = impl.get("dams_validator")
+        if str(ls.get("L2")) == "implemented":
+            if not dv:
+                errors.append(f"{iid}: L2 implemented requires implementation.dams_validator")
+            else:
+                try:
+                    resolve_dams_validator(str(dv))
+                except Exception as exc:  # noqa: BLE001 — surface path errors as matrix errors
+                    errors.append(f"{iid}: dams_validator {dv!r}: {exc}")
+        elif dv:
+            errors.append(
+                f"{iid}: dams_validator set but level_status.L2="
+                f"{ls.get('L2')!r} (use not-applicable / waived without stub)"
+            )
+
         if run_fixtures:
             if str(ls.get("L1")) == "implemented":
                 _run_l1_fixtures(inv, root=root, errors=errors)
@@ -543,8 +633,9 @@ def _run_l3_fixtures(
         if conforms:
             errors.append(f"{iid}: L3 invalid must fail: {ip}")
         elif iid not in text and f"Shape-{iid}" not in text:
-            # Accept failure even without INV string if shape targeted correctly
-            pass
+            errors.append(
+                f"{iid}: L3 invalid report must mention {iid} or Shape-{iid}: {ip}"
+            )
 
 
 def render_markdown(data: dict[str, Any]) -> str:

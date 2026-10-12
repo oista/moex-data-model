@@ -122,4 +122,4 @@ classes:
         encoding="utf-8",
     )
     diags = check_ontology_uris(schema)
-    assert any(d.diagnostic_code == "MOEX-ONT-004" for d in diags)
+    assert any(d.diagnostic_code == "DAMS-INV-026" for d in diags)
