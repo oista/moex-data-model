@@ -34,6 +34,7 @@ dams:INV-033 a rdfs:Resource .
 dams:INV-034 a rdfs:Resource .
 dams:INV-035 a rdfs:Resource .
 dams:INV-036 a rdfs:Resource .
+dams:INV-037 a rdfs:Resource .
 
 # --- INV-001: identifying → is_identifying true ---
 dams:Shape-INV-001 a sh:NodeShape ;
@@ -313,8 +314,85 @@ dams:Shape-INV-017 a sh:NodeShape ;
     """
   ] .
 
-# --- ADR-046 PR-4: Mapping endpoint shapes (INV-033..036) ---
-# Designators INV-028..032 are L1-only (LinkML rules); declared above for registry.
+# --- ADR-046 PR-4: Mapping designators (INV-028..032) ---
+# Match LinkML PRESENT precondition: only fail when the slot is present and wrong.
+
+dams:Shape-INV-028 a sh:NodeShape ;
+  sh:sourceShape dams:INV-028 ;
+  sh:targetClass dams:RealizesMapping ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-028: RealizesMapping.mapping_type must be realizes" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:mapping_type ?t .
+        FILTER(?t != "realizes")
+      }
+    """
+  ] .
+
+dams:Shape-INV-029 a sh:NodeShape ;
+  sh:sourceShape dams:INV-029 ;
+  sh:targetClass dams:EntityPhysicalMapping ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-029: EntityPhysicalMapping.mapping_type must be entity_physical" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:mapping_type ?t .
+        FILTER(?t != "entity_physical")
+      }
+    """
+  ] .
+
+dams:Shape-INV-030 a sh:NodeShape ;
+  sh:sourceShape dams:INV-030 ;
+  sh:targetClass dams:EntityPhysicalMapping ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-030: EntityPhysicalMapping.mapping_cardinality must be one_to_one" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:mapping_cardinality ?c .
+        FILTER(?c != "one_to_one")
+      }
+    """
+  ] .
+
+dams:Shape-INV-031 a sh:NodeShape ;
+  sh:sourceShape dams:INV-031 ;
+  sh:targetClass dams:FieldMapping ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-031: FieldMapping.mapping_type must be field_mapping" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:mapping_type ?t .
+        FILTER(?t != "field_mapping")
+      }
+    """
+  ] .
+
+dams:Shape-INV-032 a sh:NodeShape ;
+  sh:sourceShape dams:INV-032 ;
+  sh:targetClass dams:AlignsWithMapping ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-032: AlignsWithMapping.mapping_type must be aligns_with" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:mapping_type ?t .
+        FILTER(?t != "aligns_with")
+      }
+    """
+  ] .
+
+# --- ADR-046 PR-4: Mapping endpoint shapes (INV-033..037) ---
 
 dams:Shape-INV-033 a sh:NodeShape ;
   sh:sourceShape dams:INV-033 ;
@@ -336,10 +414,14 @@ dams:Shape-INV-034 a sh:NodeShape ;
   sh:sourceShape dams:INV-034 ;
   sh:targetClass dams:FieldMapping ;
   sh:property [
+    sh:path dams:source_refs ;
+    sh:minCount 1 ;
+    sh:message "INV-034: FieldMapping.source_refs minCount 1" ;
+  ] ;
+  sh:property [
     sh:path dams:target_refs ;
     sh:minCount 1 ;
-    sh:pattern "^dams:structure/.+#.+$" ;
-    sh:message "INV-034: FieldMapping.target_refs must match SchemaNodeRef pattern" ;
+    sh:message "INV-034: FieldMapping.target_refs minCount 1" ;
   ] .
 
 dams:Shape-INV-035 a sh:NodeShape ;
@@ -370,4 +452,15 @@ dams:Shape-INV-036 a sh:NodeShape ;
     sh:minCount 1 ;
     sh:pattern "^https?://.*" ;
     sh:message "INV-036: AlignsWithMapping.target_refs must be http(s) IRI" ;
+  ] .
+
+# INV-037: SchemaNodeRef pattern (gen-shacl misses typeof pattern on FieldMapping.target_refs)
+dams:Shape-INV-037 a sh:NodeShape ;
+  sh:sourceShape dams:INV-037 ;
+  sh:targetClass dams:FieldMapping ;
+  sh:property [
+    sh:path dams:target_refs ;
+    sh:minCount 1 ;
+    sh:pattern "^dams:structure/.+#.+$" ;
+    sh:message "INV-037: FieldMapping.target_refs must match SchemaNodeRef pattern" ;
   ] .

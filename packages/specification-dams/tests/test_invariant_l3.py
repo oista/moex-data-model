@@ -55,7 +55,14 @@ SCHEMA = (
 )
 MANIFEST = L1_DIR / "manifest.yaml"
 
-L3_IDS = [f"INV-{i:03d}" for i in range(1, 18)]
+L3_IDS = [f"INV-{i:03d}" for i in range(1, 18)] + [
+    "INV-028",
+    "INV-033",
+    "INV-034",
+    "INV-035",
+    "INV-036",
+    "INV-037",
+]
 
 
 def _violating_source_shapes(report_graph: Graph) -> set[str]:

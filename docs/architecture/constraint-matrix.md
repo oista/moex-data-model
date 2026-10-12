@@ -11,8 +11,8 @@ superseded_by: []
 Автогенерируется `scripts/check_constraint_matrix.py`. Источник: `model-assets/specifications/moex-dams/0.1/constraints/constraint-matrix.yaml`. Не редактировать вручную.
 
 **matrix_id:** `dams:constraint-matrix/0.1`  
-**registry size:** 36  
-**invariants:** 36
+**registry size:** 37  
+**invariants:** 37
 
 | ID | Title | Levels | Status | L1 | L2 | L3 | Source status | Scope | Source |
 |---|---|---|---|---|---|---|---|---|---|
@@ -43,7 +43,7 @@ superseded_by: []
 | INV-025 | tags только из реестра переходных тегов | L2 | waived | not-applicable | waived | not-applicable | aligned | moex-dams | ADR-043:28,35 |
 | INV-026 | URI префикса оканчивается на / или # | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-030:40 |
 | INV-027 | Владелец пакета и классификация сущности | L2 | waived | not-applicable | waived | not-applicable | partial | moex-dams | ADR-023:73-74 |
-| INV-028 | RealizesMapping.mapping_type = realizes | L1 | implemented | implemented | not-applicable | not-applicable | aligned | moex-dams | moex-core.yaml RealizesMapping rule 0; ADR-046 |
+| INV-028 | RealizesMapping.mapping_type = realizes | L1, L3 | implemented | implemented | not-applicable | implemented | aligned | moex-dams | moex-core.yaml RealizesMapping rule 0; ADR-046 |
 | INV-029 | EntityPhysicalMapping.mapping_type = entity_physical | L1 | implemented | implemented | not-applicable | not-applicable | aligned | moex-dams | moex-core.yaml EntityPhysicalMapping rule 0; ADR-046 |
 | INV-030 | EntityPhysicalMapping.mapping_cardinality = one_to_one | L1 | implemented | implemented | not-applicable | not-applicable | aligned | moex-dams | moex-core.yaml EntityPhysicalMapping rule 1; ADR-046 |
 | INV-031 | FieldMapping.mapping_type = field_mapping | L1 | implemented | implemented | not-applicable | not-applicable | aligned | moex-dams | moex-core.yaml FieldMapping rule 0; ADR-046 |
@@ -52,6 +52,7 @@ superseded_by: []
 | INV-034 | FieldMapping endpoints LogicalAttribute→SchemaNodeRef | L2, L3 | implemented | not-applicable | implemented | implemented | aligned | moex-dams | PDM-009.c2/c3; ADR-046; ADR-039 |
 | INV-035 | RealizesMapping endpoints Logical→Conceptual | L2, L3 | implemented | not-applicable | implemented | implemented | aligned | moex-dams | PDM-009; ADR-046; ADR-029 |
 | INV-036 | AlignsWithMapping ConceptualEntity→http(s) IRI | L2, L3 | implemented | not-applicable | implemented | implemented | aligned | moex-dams | PDM-009; ADR-046 |
+| INV-037 | FieldMapping.target_refs SchemaNodeRef pattern | L3 | implemented | not-applicable | not-applicable | implemented | aligned | moex-dams | moex-types.yaml SchemaNodeRef; ADR-046; ADR-039 |
 
 ## Statements
 
@@ -239,6 +240,8 @@ URI префикса онтологии оканчивается на '/' или
 
 У RealizesMapping слот mapping_type равен realizes.
 
+*Notes:* L3 SPARQL mirrors LinkML PRESENT precondition (fail only when present and wrong).
+
 *requirement_refs:* `DAMS-REQ-PDM-009.c1`
 
 *adr_ref:* `ADR-046`
@@ -289,7 +292,8 @@ EntityPhysicalMapping.source_refs ⊆ DataCarrier (ровно 1) и target_refs 
 FieldMapping.source_refs ⊆ LogicalAttribute; target_refs соответствуют pattern dams:structure/…#… и резолвятся в data_structures.nodes.
 
 
-*Notes:* L3 covers SchemaNodeRef pattern (gen-shacl missed type pattern).
+*Notes:* L2 checks kinds+pattern+resolve; L3 here is endpoint minCount. SchemaNodeRef pattern alone is INV-037 (gen-shacl missed typeof pattern).
+
 
 *requirement_refs:* `DAMS-REQ-PDM-009.c2`
 
@@ -310,6 +314,18 @@ AlignsWithMapping.source_refs — ровно один ConceptualEntity; target_r
 
 
 *requirement_refs:* `DAMS-REQ-PDM-009.c1`
+
+*adr_ref:* `ADR-046`
+
+### INV-037: FieldMapping.target_refs SchemaNodeRef pattern
+
+У FieldMapping каждый target_refs соответствует pattern SchemaNodeRef (^dams:structure/.+#.+$). L1 — typeof SchemaNodeRef; L3 — manual SHACL (gen-shacl не эмитит pattern на слот).
+
+
+*Notes:* L1 covered by SchemaNodeRef typeof pattern in JSON Schema; L2 pattern check is part of INV-034 / check_mapping_endpoint_types.
+
+
+*requirement_refs:* `DAMS-REQ-PDM-009.c2`
 
 *adr_ref:* `ADR-046`
 
