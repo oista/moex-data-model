@@ -53,7 +53,7 @@ def test_real_catalog_passes_linkml_requirement_catalog_vacuous() -> None:
 
 
 def test_real_catalog_passes_under_jsonschema_plugin() -> None:
-    """Catalog validates once FormalCheck description/effective are in schema."""
+    """PR-C3d: FormalCheck.description / effective are declared; catalog validates."""
     from moex_standard_linkml.validation import error_results, make_linkml_validator
 
     data = yaml.safe_load(CATALOG.read_text(encoding="utf-8"))

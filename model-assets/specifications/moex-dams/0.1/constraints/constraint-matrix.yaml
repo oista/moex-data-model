@@ -1001,6 +1001,103 @@ invariants:
     L1: not-applicable
     L2: not-applicable
     L3: implemented
+- id: INV-038
+  title: DataFlow.integration_ref resolvable in catalog snapshot
+  statement: >
+    DataFlow.integration_ref must parse as {catalog}:{kind}/{external_id} and
+    resolve to an object in the file catalog snapshot. Unknown catalog prefix
+    or missing object is an error (orphan_ref / unknown_catalog).
+  source: ADR-048; DAMS-F-007; FLW-002
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-048
+  requirement_refs: [DAMS-REQ-FLW-002.c1]
+  implementation:
+    dams_validator: moex_dams.rules.catalog_topology.check_catalog_topology
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-038.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-038.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-039
+  title: DataFlowEntityBinding.catalog_operation_ref in snapshot
+  statement: >
+    If DataFlowEntityBinding.catalog_operation_ref is set, it must identify an
+    operation on the resolved integration object in the catalog snapshot.
+  source: ADR-048; FLW-003
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: warning
+  status: implemented
+  adr_ref: ADR-048
+  requirement_refs: [DAMS-REQ-FLW-003.c1]
+  implementation:
+    dams_validator: moex_dams.rules.catalog_topology.check_catalog_topology
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-039.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-039.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-040
+  title: DataFlow.bound_catalog_revision matches snapshot
+  statement: >
+    When DataFlow.bound_catalog_revision is set, it must equal the catalog_revision
+    of the file catalog snapshot (else stale_revision warning).
+  source: ADR-048; FLW-004
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: warning
+  status: implemented
+  adr_ref: ADR-048
+  requirement_refs: [DAMS-REQ-FLW-004.c1]
+  implementation:
+    dams_validator: moex_dams.rules.catalog_topology.check_catalog_topology
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-040.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-040.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-041
+  title: DataModelBinding.catalog_revision matches snapshot
+  statement: >
+    When DataModelBinding.catalog_revision is set, it must equal the catalog_revision
+    of the file catalog snapshot (topology change without contract rebuild).
+  source: ADR-048; FLW-005
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: warning
+  status: implemented
+  adr_ref: ADR-048
+  requirement_refs: [DAMS-REQ-FLW-005.c1]
+  implementation:
+    dams_validator: moex_dams.rules.catalog_topology.check_catalog_topology
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-041.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-041.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
 invariant_id_registry:
 - INV-001
 - INV-002
@@ -1039,3 +1136,7 @@ invariant_id_registry:
 - INV-035
 - INV-036
 - INV-037
+- INV-038
+- INV-039
+- INV-040
+- INV-041

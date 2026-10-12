@@ -3,7 +3,7 @@
 # Do not edit by hand — regenerated at viewer publication build.
 name: moex_dams
 id: https://data.moex.com/dams/v0.1
-version: 3.1.0
+version: 4.0.0
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml:
@@ -2823,62 +2823,14 @@ slots:
     from_schema: https://data.moex.com/dams/integration/v0.1
     range: DataContractReference
     inlined: false
-  source_solution_ref:
-    name: source_solution_ref
+  bound_catalog_revision:
+    name: bound_catalog_revision
+    description: 'Ревизия файл-снимка каталога, на которой подтверждена привязка flow
+      (ADR-048). Источник stale_revision в drift-отчёте.
+
+      '
     from_schema: https://data.moex.com/dams/integration/v0.1
-    range: ITSolution
-    required: true
-    inlined: false
-  target_solution_ref:
-    name: target_solution_ref
-    from_schema: https://data.moex.com/dams/integration/v0.1
-    range: ITSolution
-    required: true
-    inlined: false
-  source_system_ref:
-    name: source_system_ref
-    from_schema: https://data.moex.com/dams/integration/v0.1
-    range: ITSystem
-    required: true
-    inlined: false
-  target_system_ref:
-    name: target_system_ref
-    from_schema: https://data.moex.com/dams/integration/v0.1
-    range: ITSystem
-    required: true
-    inlined: false
-  source_platform_ref:
-    name: source_platform_ref
-    from_schema: https://data.moex.com/dams/integration/v0.1
-    range: ITPlatform
-    required: true
-    inlined: false
-  target_platform_ref:
-    name: target_platform_ref
-    from_schema: https://data.moex.com/dams/integration/v0.1
-    range: ITPlatform
-    required: true
-    inlined: false
-  integration_level:
-    name: integration_level
-    from_schema: https://data.moex.com/dams/integration/v0.1
-    range: IntegrationLevelEnum
-    required: true
-  integration_class:
-    name: integration_class
-    from_schema: https://data.moex.com/dams/integration/v0.1
-    range: IntegrationClassEnum
-    required: true
-  integration_channel:
-    name: integration_channel
-    from_schema: https://data.moex.com/dams/integration/v0.1
-    range: IntegrationChannelEnum
-    required: true
-  integration_spec_ref:
-    name: integration_spec_ref
-    from_schema: https://data.moex.com/dams/integration/v0.1
-    range: uri
-    required: true
+    range: string
   entity_bindings:
     name: entity_bindings
     from_schema: https://data.moex.com/dams/integration/v0.1
@@ -2931,6 +2883,22 @@ slots:
     range: Mapping
     multivalued: true
     inlined: false
+  catalog_operation_ref:
+    name: catalog_operation_ref
+    description: 'Идентификатор операции или канала в каталоге интеграций (ADR-048),
+      к которому привязан этот entity binding.
+
+      '
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: string
+  catalog_participant_ref:
+    name: catalog_participant_ref
+    description: 'Внешний участник каталога (система/решение), чью роль в обмене занимает
+      source_model_ref; роль producer/consumer выражена слотом direction (ADR-048).
+
+      '
+    from_schema: https://data.moex.com/dams/integration/v0.1
+    range: uriorcurie
   specification_version:
     name: specification_version
     from_schema: https://data.moex.com/dams/contract-binding/v0.1
@@ -2941,6 +2909,14 @@ slots:
     from_schema: https://data.moex.com/dams/contract-binding/v0.1
     range: SemVer
     required: true
+  catalog_revision:
+    name: catalog_revision
+    description: 'Ревизия файл-снимка каталога, зафиксированная в контрактном binding
+      (ADR-048). Смена топологии без пересборки контракта даёт drift warning.
+
+      '
+    from_schema: https://data.moex.com/dams/contract-binding/v0.1
+    range: string
   model_package_ref:
     name: model_package_ref
     from_schema: https://data.moex.com/dams/contract-binding/v0.1
@@ -4613,8 +4589,11 @@ classes:
     - correlation_hint
   DataFlow:
     name: DataFlow
-    description: Ссылочная проекция зарегистрированной интеграции; топология и канал
-      являются данными Clinkr, а семантика — модели данных.
+    description: 'Ссылочная проекция зарегистрированной интеграции; топология и канал
+      являются данными Clinkr и читаются из TopologyView, а семантика — модели данных
+      (ADR-048).
+
+      '
     from_schema: https://data.moex.com/dams/integration/v0.1
     is_a: ModelElement
     mixins:
@@ -4622,16 +4601,7 @@ classes:
     slots:
     - integration_ref
     - contract_ref
-    - source_solution_ref
-    - target_solution_ref
-    - source_system_ref
-    - target_system_ref
-    - source_platform_ref
-    - target_platform_ref
-    - integration_level
-    - integration_class
-    - integration_channel
-    - integration_spec_ref
+    - bound_catalog_revision
     - entity_bindings
     slot_usage:
       description:
@@ -4652,6 +4622,8 @@ classes:
     - schema_node_refs
     - transformation_mapping_refs
     - direction
+    - catalog_operation_ref
+    - catalog_participant_ref
     slot_usage:
       description:
         name: description
@@ -4669,6 +4641,7 @@ classes:
     - implementation_version
     - contract_ref
     - integration_ref
+    - catalog_revision
     - model_package_ref
     - model_version
     - model_revision

@@ -238,8 +238,9 @@ note bottom of ModelPackage
   live in one ModelPackage (0..* compositions).
 end note
 note bottom of DataFlow
-  Topology (source/target solution, system,
-  platform) is required on DataFlow itself.
-  Bindings link flow to logical/physical slice.
+  Authored: integration_ref + entity_bindings
+  (+ bound_catalog_revision). Topology is
+  materialized TopologyView from catalog snapshot
+  (ADR-048); bindings carry semantics.
 end note
 @enduml

@@ -138,6 +138,7 @@ def enrich_package(
         )
     if realizes_mappings:
         package["realizes_mappings"] = realizes_mappings
+    package.pop("mappings", None)
 
     for rel in package.get("relationships") or []:
         # Draft packages may omit unbounded max; keep finite cards from builder.

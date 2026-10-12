@@ -38,8 +38,7 @@ def test_convert_crm_builds_package(tmp_path):
     assert result.package_path is not None
     assert result.package_path.is_file()
     assert (tmp_path / "crm" / "publish.yaml").is_file()
-    # field mappings present
-    assert "mappings" not in result.package  # typed collections only (ADR-046)
+    # typed mapping collections present (ADR-046)
     assert any(
         m.get("mapping_type") == "field_mapping"
         for m in result.package.get("field_mappings") or []
@@ -52,6 +51,7 @@ def test_convert_crm_builds_package(tmp_path):
         m.get("mapping_type") == "realizes"
         for m in result.package.get("realizes_mappings") or []
     )
+    assert "mappings" not in result.package
 
 
 def test_writer_no_overwrite(tmp_path):

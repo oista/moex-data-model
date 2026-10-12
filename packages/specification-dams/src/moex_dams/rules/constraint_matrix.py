@@ -269,12 +269,14 @@ def _collect_invariant_ids(diags: list[Any]) -> set[str]:
 
 def _run_l2_package_checks(data: dict[str, Any]) -> list[Any]:
     """Run L2 package checks once (technical_assets already includes data_structures)."""
+    from moex_dams.rules.catalog_topology import check_catalog_topology
     from moex_dams.rules.semantic_layer import check_semantic_layer
     from moex_dams.rules.technical_assets import check_technical_assets
 
     diags: list[Any] = []
     diags.extend(check_semantic_layer(data))
     diags.extend(check_technical_assets(data))
+    diags.extend(check_catalog_topology(data, repo_root=repo_root()))
     return diags
 
 
@@ -583,7 +585,8 @@ def _run_l3_fixtures(
         from pyshacl import validate
         from rdflib import Graph
     except ImportError:
-        errors.append(f"{inv.get('id')}: pyshacl/rdflib required for L3 runner")
+        # ADR-030: Stage 0 / publish-gate stay free of pyshacl; L3 fixtures run
+        # under Stage 8 ontology-check (requirements-ontology.txt).
         return
 
     iid = str(inv.get("id"))

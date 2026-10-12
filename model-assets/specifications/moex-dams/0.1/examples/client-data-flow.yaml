@@ -5,16 +5,7 @@ description: Проекция интеграции из Clinkr с привязк
 lifecycle_status: active
 integration_ref: clinkr:integration/INT-00421
 contract_ref: catalog:contract/DC-01425
-source_solution_ref: eam:solution/MDM
-target_solution_ref: eam:solution/CRM
-source_system_ref: eam:system/TRADING_CORE
-target_system_ref: eam:system/CRM_CORE
-source_platform_ref: eam:platform/TRADING_PLATFORM
-target_platform_ref: eam:platform/CLIENT_PLATFORM
-integration_level: interplatform
-integration_class: EDA
-integration_channel: queue
-integration_spec_ref: https://clinkr.moex.com/specifications/INT-00421/asyncapi/2.3.0
+bound_catalog_revision: "2026-10-12.fixture.1"
 entity_bindings:
 - element_id: dams:flow-binding/INT-00421/Client
   name: client_binding
@@ -29,3 +20,4 @@ entity_bindings:
   direction: outbound
   carrier_refs:
   - dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE
+  catalog_operation_ref: client.changed

@@ -10,7 +10,6 @@ logical_entities:
     name: a
     description: a
     lifecycle_status: active
-    owner_entity_ref: dams:logical/inv034/E
     data_type_ref: dams:datatype/string
 data_structures:
 - element_id: dams:structure/inv034/S

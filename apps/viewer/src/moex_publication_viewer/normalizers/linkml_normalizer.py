@@ -85,9 +85,9 @@ _SCHEMA_GROUP_META_BASE: dict[str, tuple[int, str, str, str, str]] = {
         "Integration",
         "Связать топологию интеграции (master в Clinkr) с семантикой модели: кто/что передаётся "
         "на уровне logical/physical, без второй карточки интеграции.",
-        "DataFlow — проекция Clinkr; DataFlowEntityBinding — семантика передачи. Разделение "
-        "нужно, чтобы канал и системы оставались в Clinkr, а DAMS не дублировал интеграционный "
-        "source of truth.",
+        "DataFlow — проекция Clinkr (integration_ref + семантика); топология читается из "
+        "материализованного TopologyView (ADR-048), а не копируется как master. "
+        "DataFlowEntityBinding — семантика передачи.",
         "moex-integration.yaml",
     ),
     "moex_contract_binding": (

@@ -38,7 +38,6 @@ data_structures:
         native_type: string
 field_mappings:
   - element_id: dams:mapping/mdm/m
-    description: m
 `;
 
 describe("ModelExplorer", () => {

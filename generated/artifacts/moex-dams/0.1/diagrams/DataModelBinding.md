@@ -12,6 +12,8 @@
       
       DataModelBinding : aliases
         
+      DataModelBinding : catalog_revision
+        
       DataModelBinding : compatibility_baseline_ref
         
       DataModelBinding : compatibility_mode

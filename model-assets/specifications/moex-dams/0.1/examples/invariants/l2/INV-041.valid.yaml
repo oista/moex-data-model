@@ -1,0 +1,35 @@
+data_model_bindings:
+- element_id: dams:binding/inv041
+  name: inv041_ok
+  description: catalog_revision matches snapshot
+  lifecycle_status: active
+  specification_version: 0.1.0
+  implementation_version: 0.1.0
+  contract_ref: catalog:contract/INV-041
+  integration_ref: clinkr:integration/INT-00421
+  catalog_revision: "2026-10-12.fixture.1"
+  model_package_ref: https://example.moex.com/models/inv041
+  model_version: 0.1.0
+  model_revision: rev-1
+  compatibility_mode: backward
+  integrity_digest: sha256:e5b140349e9adcf0fd9f061a89be667758533acb70fa360403897b20f8141c63
+  generated_at: "2026-10-12T00:00:00Z"
+  selections:
+  - element_id: dams:selection/inv041
+    name: sel
+    description: sel
+    lifecycle_status: active
+    selected_entities:
+    - element_id: dams:selected/inv041/E
+      name: E
+      description: e
+      lifecycle_status: active
+      logical_entity_ref: dams:logical/inv041/E
+      selected_attributes:
+      - element_id: dams:selected-attr/inv041/A
+        name: A
+        description: a
+        lifecycle_status: active
+        logical_attribute_ref: dams:logical/inv041/E/A
+      carrier_refs:
+      - dams:physical/inv041/C

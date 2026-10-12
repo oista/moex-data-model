@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check viewer-serve packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements check-constraints dams-packages-check generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate digest-check ontology-check check-manifest lock-verify
+.PHONY: viewer viewer-check viewer-serve packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements check-constraints dams-packages-check generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate digest-check ontology-check check-manifest lock-verify check-topology
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -57,6 +57,11 @@ check-manifest:
 
 lock-verify:
 	$(PYTHON) -m moex_model_cli lock verify --root .
+
+# ADR-048: catalog snapshot TopologyView + blocking drift (also Stage 0 via check_all)
+check-topology:
+	$(PYTHON) -m pip install -q -e "./$(DAMS)"
+	$(PYTHON) -m moex_dams.catalog.cli check --root .
 
 # Uses package .venv (Python 3.11+). Without make:
 #   powershell -NoProfile -File packages/standard-linkml/scripts/check.ps1
