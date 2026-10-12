@@ -14,7 +14,8 @@
 7b. AccessPoint — точка доступа (interface / operation / channel)
 7c. DataContainer — контейнер (database, schema, broker, …)
 7d. ExecutionAsset — исполняемый актив (pipeline, job)
-8. Mapping — маппинг между уровнями (лог <-> физ, домен <-> домен)
+7e. DataStructure / SchemaNode — структура и узлы схемы (вместо PhysicalField; ADR-038)
+8. Mapping (+ RealizesMapping, EntityPhysicalMapping, FieldMapping, AlignsWithMapping) — типизированные коллекции (ADR-046)
 9. ClassificationAssignment — присвоение классификации/чувствительности элементу
 10. ModelSelection / DataModelBinding — выбранная проекция модели для контракта
 
@@ -25,8 +26,8 @@
 
 ## Группа 3. Интеграционный слой (новое из обсуждения потоков данных)
 
-13. DataFlow — проекция интеграции Clinkr (integration_ref + семантика; топология в TopologyView, ADR-048)
-14. DataFlowEntityBinding — привязка семантики обмена к потоку (+ catalog_operation_ref)
+13. DataFlow — поток данных между решениями/системами (топология)
+14. DataFlowEntityBinding — привязка кросс-системной сущности к конкретному потоку
 
 ## Группа 4. Справочники (Registries) — внешние ключи
 

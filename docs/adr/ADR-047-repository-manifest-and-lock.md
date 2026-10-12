@@ -1,7 +1,7 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
-normative: false
+normative: true
 supersedes: []
 superseded_by: []
 ---
@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-047: Repository manifest and lock
 
 **Date:** 2026-10-12  
-**Status:** Proposed  
+**Status:** Accepted — manifest + lock + loader + `check-manifest` / `lock-verify` in Stage 0 (PRs #25–#29). Deferred: extra DocumentKind aggregates (P1b).
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Related:** [ADR-002](ADR-002-git-published-source.md), [ADR-031](ADR-031-technical-asset-registry.md), [ADR-042](ADR-042-integrity-digest-revisions.md) (canonical digest algorithm reused for lock `content_hash`), [ADR-044](ADR-044-model-element-decomposition.md)  
 **Inventory:** [p1-inventory.md](../migration/p1-inventory.md)

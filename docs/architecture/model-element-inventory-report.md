@@ -8,13 +8,13 @@ superseded_by: []
 
 # ModelElement inventory report (ADR-044, PR-0)
 
-**Date:** 2026-10-06  
-**Schema:** `model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml` (`version: 2.0.0`)  
+**Date:** 2026-10-06 (inventory snapshot)  
+**Schema at inventory:** `version: 2.0.0`  
+**Schema on `main` now:** see `moex-dams.yaml` (3.1.0+; ADR-044 Accepted — Wave B1)  
 **Matrix:** [model-element-matrix-before.csv](model-element-matrix-before.csv) / [model-element-matrix-before.md](model-element-matrix-before.md)  
 **ADR:** [ADR-044](../adr/ADR-044-model-element-decomposition.md)  
-**Spike script:** `tmp/spike_model_element_mixins.py` (not committed as production code)
 
-Schema **not** changed in this PR. Branch stacked on `chore/adr-renumber-phase1-tail` (ADR-042 / ADR-043).
+This report is the **before**-matrix for ADR-044. It is historical for class roles at 2.0.0; do not treat §4 proposals as unfinished work if ADR-044 / schema already landed them. Still deferred after acceptance: selection/binding helpers as EmbeddedElement, VersionedArtifact (D6), redundant-mixin lint.
 
 ## 1. Schemas inventoried (13 modules under `0.1/schemas/`)
 

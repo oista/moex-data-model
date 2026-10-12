@@ -1,4 +1,7 @@
-# Topology ownership inventory
+# Topology ownership inventory (historical)
+
+> **Historical.** Captures pre–PR-5 authored topology slots. After ADR-048 PR-5 those slots are removed from the schema; see [CHANGELOG-topology.md](CHANGELOG-topology.md).
+
 
 **Date:** 2026-10-12  
 **ADR:** [ADR-048](../adr/ADR-048-topology-ownership.md)  
@@ -9,7 +12,7 @@
 Primary: [`moex-integration.yaml`](../../model-assets/specifications/moex-dams/0.1/schemas/moex-integration.yaml)  
 Merged copy (schema only, not instances): [`moex-dams-full.yaml`](../../model-assets/implementations/enterprise/moex-hierarchy/moex-dams-full.yaml)
 
-## Topology / catalog slots on DataFlow (today)
+## Topology / catalog slots on DataFlow (before PR-5)
 
 | Slot | Range | Required today | Target after series |
 |---|---|---|---|
@@ -29,7 +32,7 @@ Merged copy (schema only, not instances): [`moex-dams-full.yaml`](../../model-as
 
 New authored slot (PR-1): `bound_catalog_revision`.
 
-## Semantic slots on DataFlowEntityBinding (today)
+## Semantic slots on DataFlowEntityBinding (before / during series)
 
 | Slot | Notes |
 |---|---|

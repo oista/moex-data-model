@@ -144,8 +144,8 @@ LinkML в этом смысле **монотонен**: `slot_usage` может 
 ### Type (TypeDefinition)
 Скалярный тип данных — аналог примитивного типа в языке программирования: `string`, `integer`, `float`, `boolean`, `date`, `datetime`, `time`, `uri`, `uriorcurie` и другие встроенные типы LinkML. Определять собственные типы не обязательно — можно использовать встроенные, но DAMS явно фиксирует свой набор логических типов через enum, а не через кастомные LinkML `types`.
 
-### logical_data_type_enum (пример типового enum DAMS)
-В DAMS вместо создания россыпи кастомных LinkML `TypeDefinition` для каждого логического типа данных выбран другой путь: единый enum `logical_data_type_enum` со значениями `string`, `integer`, `decimal`, `boolean`, `date`, `datetime`, `time`, `binary`, `identifier`, `uri`, `object`. Это осознанное архитектурное решение — типизация атрибута описывается как классифицирующее значение (enum), а не как отдельный LinkML `range`-тип, потому что реальный физический тип определяется на уровне `PhysicalField`, а не `LogicalAttribute`.
+### logical_data_type_enum (исторический seed) и DataType (ADR-036)
+Раньше логическая типизация атрибута шла через закрытый enum `LogicalDataTypeEnum`. После ADR-036 канон — реестровый объект `DataType` плюс `NativeTypeBinding` (диалект / native type / lossiness). Слот `LogicalAttribute.data_type_ref` указывает на `DataType`; `logical_type` (enum) помечен deprecated. Физический native type живёт на `SchemaNode` (и опционально в binding), а не на удалённом `PhysicalField` (ADR-038).
 
 ---
 

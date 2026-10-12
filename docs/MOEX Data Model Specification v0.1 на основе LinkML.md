@@ -248,17 +248,15 @@ dams/
 
 Стандарт дата-контрактов требует на физическом уровне описывать базы, таблицы, API, очереди, сообщения, файлы, ETL/ELT и технические идентификаторы, а выбранный в контракте физический объект должен быть связан с соответствующей OpenAPI/AsyncAPI или иной нативной схемой.[^2]
 
-### `PhysicalField`
+### `DataStructure` / `SchemaNode`
 
-Поле физического объекта: column, JSON property, message field, параметр API и т. п. Хранит native name/type и schema path. Бизнес-семантика не дублируется в поле, а задаётся Mapping к `LogicalAttribute`.
+Структура данных и узел схемы (ADR-038 / ADR-039) заменяют прежний `PhysicalField`. `DataStructure` владеет плоским списком `SchemaNode` (`node_kind`: scalar, object, array, …); адрес узла — `structure_id#local_key`. Бизнес-семантика поля задаётся `FieldMapping` к `LogicalAttribute`, а не дублируется в узле.
 
 ## Mapping-блок
 
-### `Mapping`
+### `Mapping` (typed subclasses)
 
-Универсальное соответствие одного или нескольких source-elements одному или нескольким target-elements. Основные типы: semantic equivalence, specialization, implementation, field mapping, transformation, aggregation и derivation.
-
-Минимальные обязательные данные: `source_refs`, `target_refs`, `mapping_type`, `mapping_cardinality`, stable ID и lifecycle. Для утверждённых mappings должны поддерживаться evidence, approval, confidence, transformation и temporal validity.
+Базовый `Mapping` — `IdentifiedElement` с `source_refs` / `target_refs`, `mapping_type`, `mapping_cardinality`, provenance и confidence. Живые подклассы и коллекции `ModelPackage` (ADR-046): `RealizesMapping` / `realizes_mappings`, `EntityPhysicalMapping` / `entity_physical_mappings`, `FieldMapping` / `field_mappings`, `AlignsWithMapping` / `aligns_with_mappings`. Полиморфный массив `mappings[]` удалён. Endpoint kinds проверяются L2-инвариантами (INV-033…036).
 
 ## Справочники
 
@@ -330,7 +328,7 @@ dams/
 
 ### `DataFlow`
 
-`DataFlow` не является второй карточкой интеграции. Это ссылочная проекция Clinkr, необходимая для соединения топологии интеграции с семантикой модели. Источником участников, систем, платформ, уровня, класса, канала и integration specification является Clinkr (файл-снимок → материализованный `TopologyView`, ADR-048); DAMS authored хранит `integration_ref`, `entity_bindings` и опционально `bound_catalog_revision`.
+`DataFlow` не является второй карточкой интеграции. Это ссылочная проекция Clinkr, необходимая для соединения топологии интеграции с семантикой модели. Источником участников, систем, платформ, уровня, класса, канала и integration specification является Clinkr; DAMS добавляет ссылки на модели, логические сущности, атрибуты и физические объекты.
 
 Стандарт MOEX устанавливает, что новая кросс-системная интеграция сначала регистрируется в Clinkr, затем её справочник загружается в каталог и для неё создаётся дата-контракт. Clinkr остаётся master технического описания интеграций.[^2]
 
@@ -562,10 +560,17 @@ classes:
     slots:
       - integration_ref
       - contract_ref
-      - bound_catalog_revision
+      - source_solution_ref
+      - target_solution_ref
+      - source_system_ref
+      - target_system_ref
+      - source_platform_ref
+      - target_platform_ref
+      - integration_level
+      - integration_class
+      - integration_channel
+      - integration_spec_ref
       - entity_bindings
-    # Topology (systems/platforms/channel/spec) is owned by Clinkr/EAM
-    # and materialized as TopologyView (ADR-048), not authored on DataFlow.
 
   DataFlowEntityBinding:
     is_a: ModelElement
@@ -574,13 +579,10 @@ classes:
       - source_model_ref
       - logical_entity_ref
       - logical_attribute_refs
-      - carrier_refs
-      - schema_node_refs
+      - physical_object_refs
+      - physical_field_refs
       - transformation_mapping_refs
-      - catalog_operation_ref
-      - catalog_participant_ref
 ```
-
 
 ## Контрактный selection
 

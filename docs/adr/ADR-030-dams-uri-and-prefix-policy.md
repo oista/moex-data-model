@@ -1,15 +1,15 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
-normative: false
+normative: true
 supersedes: []
-superseded_by: MODELING_ARCHITECTURE.md
+superseded_by: []
 ---
 
 # ADR-030: DAMS URI and prefix policy
 
 **Date:** 2026-10-05  
-**Status:** Proposed  
+**Status:** Accepted — URI/prefix policy enforced via MOEX-ONT-* lint, ontology-profile, `make ontology-check` (ADR-039 amends SchemaNode addressing).
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Workbench detail:** [linkml_architecture.md](../architecture/linkml_architecture.md) «Ontology Engine»  
 **Related:** [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-011](ADR-011-reproducible-artifacts.md), [ontology-catalog.md](../architecture/ontology-catalog.md)

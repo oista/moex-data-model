@@ -46,12 +46,16 @@ end note
 ' ===============================================================
 
 package "DAMS ModelElement" #D9EAD3 {
+  abstract class IdentifiedElement {
+    +element_id [1]
+  }
   abstract class ModelElement {
     +element_id [1]
     +name [1]
     +description [1]
     +lifecycle_status [1]
   }
+  IdentifiedElement <|-- ModelElement
 
   class ModelPackage {
     +api_version [1]
@@ -65,13 +69,18 @@ package "DAMS ModelElement" #D9EAD3 {
   class Relationship
   class TechnicalAsset
   class DataCarrier
-  class PhysicalField
+  class DataStructure
+  class SchemaNode
   class Mapping {
     +source_refs [1..*]
     +target_refs [1..*]
     +mapping_type [1]
     +mapping_cardinality [1]
   }
+  class RealizesMapping
+  class EntityPhysicalMapping
+  class FieldMapping
+  class AlignsWithMapping
   class DataFlow
   class DataFlowEntityBinding
   class DataModelBinding
@@ -89,8 +98,12 @@ ModelElement <|-- LogicalAttribute
 ModelElement <|-- Relationship
 ModelElement <|-- TechnicalAsset
 TechnicalAsset <|-- DataCarrier
-ModelElement <|-- PhysicalField
-ModelElement <|-- Mapping
+ModelElement <|-- DataStructure
+IdentifiedElement <|-- Mapping
+Mapping <|-- RealizesMapping
+Mapping <|-- EntityPhysicalMapping
+Mapping <|-- FieldMapping
+Mapping <|-- AlignsWithMapping
 ModelElement <|-- DataFlow
 ModelElement <|-- DataFlowEntityBinding
 ModelElement <|-- DataModelBinding
@@ -106,14 +119,18 @@ ModelPackage "1" *-- "0..*" DomainContext : domain_contexts
 ModelPackage "1" *-- "0..*" LogicalEntity : logical_entities
 ModelPackage "1" *-- "0..*" Relationship : relationships
 ModelPackage "1" *-- "0..*" DataCarrier : data_carriers
-ModelPackage "1" *-- "0..*" Mapping : mappings
+ModelPackage "1" *-- "0..*" DataStructure : data_structures
+ModelPackage "1" *-- "0..*" RealizesMapping : realizes_mappings
+ModelPackage "1" *-- "0..*" EntityPhysicalMapping : entity_physical_mappings
+ModelPackage "1" *-- "0..*" FieldMapping : field_mappings
+ModelPackage "1" *-- "0..*" AlignsWithMapping : aligns_with_mappings
 
 DomainContext "1" <-- "0..*" LogicalEntity : context_ref
 LogicalEntity "1" *-- "0..*" LogicalAttribute : attributes
 LogicalEntity "0..*" --> "0..*" ConceptualEntity : conceptual_entity_refs
 Relationship "0..*" --> "1" LogicalEntity : source/target
-DataCarrier "1" *-- "0..*" PhysicalField : physical_fields
-Mapping "0..*" ..> ModelElement : source_refs / target_refs
+DataCarrier "0..*" --> "0..1" DataStructure : structure_ref
+DataStructure "1" *-- "0..*" SchemaNode : nodes
 
 DataFlow "1" *-- "0..*" DataFlowEntityBinding : entity_bindings
 DataModelBinding "1" *-- "1..*" ModelSelection : selections
@@ -121,11 +138,10 @@ ModelSelection "1" *-- "1..*" SelectedEntity : selected_entities
 Metric "0..*" --> "1..*" LogicalEntity : grain_entity_refs
 
 note right of ModelElement
-  Mixins (not superclasses):
-  HasLifecycle, HasOwnership,
-  HasBusinessClassification,
-  HasGovernanceClassification,
-  HasPolicyBindings, HasProvenance
+  Backbone IdentifiedElement + mixins
+  (ADR-044). Mapping is IdentifiedElement.
+  Typed mapping collections (ADR-046).
+  SchemaNode replaces PhysicalField (ADR-038).
 end note
 
 ' ===============================================================
