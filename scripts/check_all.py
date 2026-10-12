@@ -16,7 +16,9 @@ Mirrors Makefile ``check`` plus ``architecture-check`` and ``publish-gate``
 6. check-constraints           → scripts/check_constraint_matrix.py (ADR-045)
 7. compare-golden              → scripts/compare-golden.ps1
 8. architecture-check          → pytest + architecture_check.cli (Makefile)
-9. publish-gate                → python -m moex_model_cli.gates.publish_gate
+9. check-manifest              → moex-model check-manifest (ADR-047)
+10. lock-verify                → moex-model lock verify (ADR-047)
+11. publish-gate               → python -m moex_model_cli.gates.publish_gate
 
 Usage (from repo root)::
 
@@ -51,6 +53,8 @@ STEP_IDS = (
     "check-constraints",
     "compare-golden",
     "architecture-check",
+    "check-manifest",
+    "lock-verify",
     "publish-gate",
 )
 
@@ -253,6 +257,16 @@ def run_step(step_id: str, python: str) -> StepResult:
                     code = _run_python_module(
                         python, "architecture_check.cli", "--root", str(REPO_ROOT)
                     )
+        elif step_id == "check-manifest":
+            # ADR-047: repository manifest integrity
+            code = _run_python_module(
+                python, "moex_model_cli", "check-manifest", "--root", str(REPO_ROOT)
+            )
+        elif step_id == "lock-verify":
+            # ADR-047: manifest.lock hashes
+            code = _run_python_module(
+                python, "moex_model_cli", "lock", "verify", "--root", str(REPO_ROOT)
+            )
         elif step_id == "publish-gate":
             # Makefile: publish-gate
             code = _run_python_module(python, "moex_model_cli.gates.publish_gate")

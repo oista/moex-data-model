@@ -19,6 +19,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y make
 
       # Primary entry: scripts/check_all.py (Makefile ``check`` delegates here).
+      # Includes ADR-047 check-manifest + lock verify after architecture-check.
       # pwsh is preinstalled on ubuntu-latest for the underlying .ps1 steps.
       - name: Stage 0 check_all
         run: python scripts/check_all.py
