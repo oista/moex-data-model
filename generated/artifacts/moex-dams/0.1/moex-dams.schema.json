@@ -336,6 +336,14 @@
         "AlignsWithMapping": {
             "additionalProperties": false,
             "description": "Enterprise conceptual entity aligns with an external reference IRI (ADR-046). Exactly one source; one or more target URIs.",
+            "if": {
+                "properties": {
+                    "mapping_type": {}
+                },
+                "required": [
+                    "mapping_type"
+                ]
+            },
             "properties": {
                 "approval_status": {
                     "$ref": "#/$defs/ApprovalStatusEnum"
@@ -3102,6 +3110,14 @@
             "additionalProperties": false,
             "allOf": [
                 {
+                    "if": {
+                        "properties": {
+                            "mapping_type": {}
+                        },
+                        "required": [
+                            "mapping_type"
+                        ]
+                    },
                     "then": {
                         "properties": {
                             "mapping_type": {
@@ -3114,6 +3130,14 @@
                     }
                 },
                 {
+                    "if": {
+                        "properties": {
+                            "mapping_cardinality": {}
+                        },
+                        "required": [
+                            "mapping_cardinality"
+                        ]
+                    },
                     "then": {
                         "properties": {
                             "mapping_cardinality": {
@@ -3605,6 +3629,14 @@
         "FieldMapping": {
             "additionalProperties": false,
             "description": "mapsTo between LogicalAttribute and SchemaNode address (structure_id#local_key) via SchemaNodeRef (ADR-039 / ADR-046).",
+            "if": {
+                "properties": {
+                    "mapping_type": {}
+                },
+                "required": [
+                    "mapping_type"
+                ]
+            },
             "properties": {
                 "approval_status": {
                     "$ref": "#/$defs/ApprovalStatusEnum"
@@ -6415,6 +6447,14 @@
         "RealizesMapping": {
             "additionalProperties": false,
             "description": "Solution logical entity realizes an enterprise conceptual entity (ADR-046). Designator via L1 rule (not equals_string on enum slot). source_refs narrowed to LogicalEntity in PR-1; ConceptualEntity via any_of deferred if needed.",
+            "if": {
+                "properties": {
+                    "mapping_type": {}
+                },
+                "required": [
+                    "mapping_type"
+                ]
+            },
             "properties": {
                 "approval_status": {
                     "$ref": "#/$defs/ApprovalStatusEnum"

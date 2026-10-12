@@ -1,0 +1,6 @@
+@prefix dams: <https://data.moex.com/dams/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<https://data.moex.com/dams/mapping/inv034/fm-bad> a dams:FieldMapping ;
+  dams:source_refs "dams:logical/inv034/E/a" ;
+  dams:target_refs "dams:logical/inv034/E/a" .

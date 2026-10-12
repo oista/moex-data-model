@@ -747,6 +747,238 @@ invariants:
   tests: {}
   waiver_reason: source_status=partial; ownership/classification cascade not packaged as INV (PR-C5).
   adr_ref: ADR-045
+- id: INV-028
+  title: RealizesMapping.mapping_type = realizes
+  statement: У RealizesMapping слот mapping_type равен realizes.
+  source: moex-core.yaml RealizesMapping rule 0; ADR-046
+  source_status: aligned
+  scope: moex-dams
+  levels: [L1]
+  severity: error
+  status: implemented
+  adr_ref: ADR-046
+  requirement_refs: [DAMS-REQ-PDM-009.c1]
+  implementation:
+    linkml_rule:
+      schema_file: moex-core.yaml
+      class_name: RealizesMapping
+      rule_index: 0
+  tests:
+    l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-028.valid.yaml]
+    l1_invalid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-028.invalid.yaml]
+  level_status:
+    L1: implemented
+    L2: not-applicable
+    L3: not-applicable
+- id: INV-029
+  title: EntityPhysicalMapping.mapping_type = entity_physical
+  statement: У EntityPhysicalMapping слот mapping_type равен entity_physical.
+  source: moex-core.yaml EntityPhysicalMapping rule 0; ADR-046
+  source_status: aligned
+  scope: moex-dams
+  levels: [L1]
+  severity: error
+  status: implemented
+  adr_ref: ADR-046
+  requirement_refs: [DAMS-REQ-PDM-009.c1]
+  implementation:
+    linkml_rule:
+      schema_file: moex-core.yaml
+      class_name: EntityPhysicalMapping
+      rule_index: 0
+  tests:
+    l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-029.valid.yaml]
+    l1_invalid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-029.invalid.yaml]
+  level_status:
+    L1: implemented
+    L2: not-applicable
+    L3: not-applicable
+- id: INV-030
+  title: EntityPhysicalMapping.mapping_cardinality = one_to_one
+  statement: У EntityPhysicalMapping слот mapping_cardinality равен one_to_one.
+  source: moex-core.yaml EntityPhysicalMapping rule 1; ADR-046
+  source_status: aligned
+  scope: moex-dams
+  levels: [L1]
+  severity: error
+  status: implemented
+  adr_ref: ADR-046
+  requirement_refs: [DAMS-REQ-PDM-009.c1]
+  implementation:
+    linkml_rule:
+      schema_file: moex-core.yaml
+      class_name: EntityPhysicalMapping
+      rule_index: 1
+  tests:
+    l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-030.valid.yaml]
+    l1_invalid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-030.invalid.yaml]
+  level_status:
+    L1: implemented
+    L2: not-applicable
+    L3: not-applicable
+- id: INV-031
+  title: FieldMapping.mapping_type = field_mapping
+  statement: У FieldMapping слот mapping_type равен field_mapping.
+  source: moex-core.yaml FieldMapping rule 0; ADR-046
+  source_status: aligned
+  scope: moex-dams
+  levels: [L1]
+  severity: error
+  status: implemented
+  adr_ref: ADR-046
+  requirement_refs: [DAMS-REQ-PDM-009.c1]
+  implementation:
+    linkml_rule:
+      schema_file: moex-core.yaml
+      class_name: FieldMapping
+      rule_index: 0
+  tests:
+    l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-031.valid.yaml]
+    l1_invalid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-031.invalid.yaml]
+  level_status:
+    L1: implemented
+    L2: not-applicable
+    L3: not-applicable
+- id: INV-032
+  title: AlignsWithMapping.mapping_type = aligns_with
+  statement: У AlignsWithMapping слот mapping_type равен aligns_with.
+  source: moex-core.yaml AlignsWithMapping rule 0; ADR-046
+  source_status: aligned
+  scope: moex-dams
+  levels: [L1]
+  severity: error
+  status: implemented
+  adr_ref: ADR-046
+  requirement_refs: [DAMS-REQ-PDM-009.c1]
+  implementation:
+    linkml_rule:
+      schema_file: moex-core.yaml
+      class_name: AlignsWithMapping
+      rule_index: 0
+  tests:
+    l1_valid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-032.valid.yaml]
+    l1_invalid: [model-assets/specifications/moex-dams/0.1/examples/invariants/INV-032.invalid.yaml]
+  level_status:
+    L1: implemented
+    L2: not-applicable
+    L3: not-applicable
+- id: INV-033
+  title: EntityPhysicalMapping endpoints DataCarrier→LogicalEntity
+  statement: >
+    EntityPhysicalMapping.source_refs ⊆ DataCarrier (ровно 1) и target_refs ⊆ LogicalEntity
+    (ровно 1); направление carrier→logical.
+  source: PDM-009.c1; ADR-046
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2, L3]
+  severity: error
+  status: implemented
+  adr_ref: ADR-046
+  requirement_refs: [DAMS-REQ-PDM-009.c1]
+  implementation:
+    dams_validator: moex_dams.rules.technical_assets.check_mapping_endpoint_types
+    shacl: model-assets/specifications/moex-dams/0.1/constraints/shacl/manual/invariants.ttl
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-033.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-033.invalid.yaml
+    l3_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l3/INV-033.valid.ttl
+    l3_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l3/INV-033.invalid.ttl
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: implemented
+- id: INV-034
+  title: FieldMapping endpoints LogicalAttribute→SchemaNodeRef
+  statement: >
+    FieldMapping.source_refs ⊆ LogicalAttribute; target_refs соответствуют pattern
+    dams:structure/…#… и резолвятся в data_structures.nodes.
+  source: PDM-009.c2/c3; ADR-046; ADR-039
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2, L3]
+  severity: error
+  status: implemented
+  adr_ref: ADR-046
+  requirement_refs: [DAMS-REQ-PDM-009.c2]
+  notes: L3 covers SchemaNodeRef pattern (gen-shacl missed type pattern).
+  implementation:
+    dams_validator: moex_dams.rules.technical_assets.check_mapping_endpoint_types
+    shacl: model-assets/specifications/moex-dams/0.1/constraints/shacl/manual/invariants.ttl
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-034.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-034.invalid.yaml
+    l3_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l3/INV-034.valid.ttl
+    l3_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l3/INV-034.invalid.ttl
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: implemented
+- id: INV-035
+  title: RealizesMapping endpoints Logical→Conceptual
+  statement: >
+    RealizesMapping.source_refs ⊆ LogicalEntity|ConceptualEntity (min 1);
+    target_refs ⊆ ConceptualEntity (min 1; внешние conceptual id допустимы).
+  source: PDM-009; ADR-046; ADR-029
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2, L3]
+  severity: error
+  status: implemented
+  adr_ref: ADR-046
+  requirement_refs: [DAMS-REQ-PDM-009.c1]
+  implementation:
+    dams_validator: moex_dams.rules.technical_assets.check_mapping_endpoint_types
+    shacl: model-assets/specifications/moex-dams/0.1/constraints/shacl/manual/invariants.ttl
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-035.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-035.invalid.yaml
+    l3_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l3/INV-035.valid.ttl
+    l3_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l3/INV-035.invalid.ttl
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: implemented
+- id: INV-036
+  title: AlignsWithMapping ConceptualEntity→http(s) IRI
+  statement: >
+    AlignsWithMapping.source_refs — ровно один ConceptualEntity; target_refs —
+    абсолютные http(s) IRI.
+  source: PDM-009; ADR-046
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2, L3]
+  severity: error
+  status: implemented
+  adr_ref: ADR-046
+  requirement_refs: [DAMS-REQ-PDM-009.c1]
+  implementation:
+    dams_validator: moex_dams.rules.technical_assets.check_mapping_endpoint_types
+    shacl: model-assets/specifications/moex-dams/0.1/constraints/shacl/manual/invariants.ttl
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-036.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-036.invalid.yaml
+    l3_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l3/INV-036.valid.ttl
+    l3_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l3/INV-036.invalid.ttl
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: implemented
 invariant_id_registry:
 - INV-001
 - INV-002
@@ -775,3 +1007,12 @@ invariant_id_registry:
 - INV-025
 - INV-026
 - INV-027
+- INV-028
+- INV-029
+- INV-030
+- INV-031
+- INV-032
+- INV-033
+- INV-034
+- INV-035
+- INV-036

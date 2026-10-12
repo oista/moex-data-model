@@ -25,6 +25,15 @@ dams:INV-014 a rdfs:Resource .
 dams:INV-015 a rdfs:Resource .
 dams:INV-016 a rdfs:Resource .
 dams:INV-017 a rdfs:Resource .
+dams:INV-028 a rdfs:Resource .
+dams:INV-029 a rdfs:Resource .
+dams:INV-030 a rdfs:Resource .
+dams:INV-031 a rdfs:Resource .
+dams:INV-032 a rdfs:Resource .
+dams:INV-033 a rdfs:Resource .
+dams:INV-034 a rdfs:Resource .
+dams:INV-035 a rdfs:Resource .
+dams:INV-036 a rdfs:Resource .
 
 # --- INV-001: identifying → is_identifying true ---
 dams:Shape-INV-001 a sh:NodeShape ;
@@ -302,4 +311,63 @@ dams:Shape-INV-017 a sh:NodeShape ;
         )
       }
     """
+  ] .
+
+# --- ADR-046 PR-4: Mapping endpoint shapes (INV-033..036) ---
+# Designators INV-028..032 are L1-only (LinkML rules); declared above for registry.
+
+dams:Shape-INV-033 a sh:NodeShape ;
+  sh:sourceShape dams:INV-033 ;
+  sh:targetClass dams:EntityPhysicalMapping ;
+  sh:property [
+    sh:path dams:source_refs ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "INV-033: EntityPhysicalMapping.source_refs maxCount 1" ;
+  ] ;
+  sh:property [
+    sh:path dams:target_refs ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "INV-033: EntityPhysicalMapping.target_refs maxCount 1" ;
+  ] .
+
+dams:Shape-INV-034 a sh:NodeShape ;
+  sh:sourceShape dams:INV-034 ;
+  sh:targetClass dams:FieldMapping ;
+  sh:property [
+    sh:path dams:target_refs ;
+    sh:minCount 1 ;
+    sh:pattern "^dams:structure/.+#.+$" ;
+    sh:message "INV-034: FieldMapping.target_refs must match SchemaNodeRef pattern" ;
+  ] .
+
+dams:Shape-INV-035 a sh:NodeShape ;
+  sh:sourceShape dams:INV-035 ;
+  sh:targetClass dams:RealizesMapping ;
+  sh:property [
+    sh:path dams:source_refs ;
+    sh:minCount 1 ;
+    sh:message "INV-035: RealizesMapping.source_refs minCount 1" ;
+  ] ;
+  sh:property [
+    sh:path dams:target_refs ;
+    sh:minCount 1 ;
+    sh:message "INV-035: RealizesMapping.target_refs minCount 1" ;
+  ] .
+
+dams:Shape-INV-036 a sh:NodeShape ;
+  sh:sourceShape dams:INV-036 ;
+  sh:targetClass dams:AlignsWithMapping ;
+  sh:property [
+    sh:path dams:source_refs ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "INV-036: AlignsWithMapping.source_refs exactly one" ;
+  ] ;
+  sh:property [
+    sh:path dams:target_refs ;
+    sh:minCount 1 ;
+    sh:pattern "^https?://.*" ;
+    sh:message "INV-036: AlignsWithMapping.target_refs must be http(s) IRI" ;
   ] .

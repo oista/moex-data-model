@@ -455,14 +455,7 @@ def check_node_kind_shape(data: dict[str, Any]) -> list[Diagnostic]:
 
 
 def check_field_mapping_structure_ends(data: dict[str, Any]) -> list[Diagnostic]:
-    """field_mapping ends: LogicalAttribute + structure_id#local_key that resolves."""
-    attr_ids: set[str] = set()
-    for e in data.get("logical_entities") or []:
-        if not isinstance(e, dict):
-            continue
-        for a in e.get("attributes") or []:
-            if isinstance(a, dict) and a.get("element_id"):
-                attr_ids.add(str(a["element_id"]))
+    """INV-034 / PDM-009.c3: field_mapping target_refs must resolve in nodes."""
     node_index = structure_node_index(data)
 
     out: list[Diagnostic] = []
@@ -470,30 +463,28 @@ def check_field_mapping_structure_ends(data: dict[str, Any]) -> list[Diagnostic]
         if str(m.get("mapping_type") or "") != "field_mapping":
             continue
         mid = str(m.get("element_id") or m.get("name") or "")
-        refs = [str(x) for x in (m.get("source_refs") or []) + (m.get("target_refs") or [])]
-        has_attr = any(r in attr_ids for r in refs)
-        structure_refs = [r for r in refs if parse_structure_node_ref(r) is not None]
+        targets = [str(x) for x in (m.get("target_refs") or [])]
+        structure_refs = [r for r in targets if parse_structure_node_ref(r) is not None]
         unresolved = [r for r in structure_refs if r not in node_index]
-        has_resolved_node = any(r in node_index for r in structure_refs)
-
+        # Also flag targets that look like structure refs but fail SchemaNodeRef pattern
+        # only when they contain '#' (parseable) — pairing elsewhere is INV-034.c2.
         if unresolved:
             out.append(
                 _diag(
                     code="DAMS-REQ-PDM-009.c3",
+                    invariant_id="INV-034",
                     message=(
-                        f'Mapping "{mid}" field_mapping references missing SchemaNode '
+                        f'Mapping "{mid}" field_mapping target_refs missing SchemaNode '
                         f"end(s): {', '.join(unresolved)}."
                     ),
                     subject=mid or None,
                     remediation=(
-                        "Use structure_id#local_key that exists in data_structures.nodes."
+                        "Use dams:structure/…#local_key that exists in "
+                        "data_structures.nodes. INV-034."
                     ),
                     requirement_code="PDM-009",
                 )
             )
-        elif not (has_attr and has_resolved_node):
-            # Pairing failure without unresolved refs is handled by technical_assets PDM-009.c2
-            pass
     return out
 
 

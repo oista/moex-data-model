@@ -171,15 +171,24 @@ def test_entity_physical_wrong_endpoint_types() -> None:
     data["entity_physical_mappings"] = [
         {
             "element_id": "dams:mapping/neg/bad-ep",
-            "name": "bad_entity_physical",
-            "description": "Wrong ends",
+            "description": "Wrong ends (container + reversed direction)",
             "lifecycle_status": "active",
             "mapping_type": "entity_physical",
+            "mapping_cardinality": "one_to_one",
             "source_refs": [logical_id],
             "target_refs": ["dams:physical/neg/db"],
         }
     ]
-    assert "DAMS-REQ-PDM-009.c1" in _codes(_errors_from_technical(data))
+    errs = _errors_from_technical(data)
+    assert "DAMS-REQ-PDM-009.c1" in _codes(errs)
+    # Direction-aware rewrite tags INV-033
+    inv = {
+        det.detail_value
+        for d in errs
+        for det in (d.diagnostic_details or ())
+        if det.detail_key == "invariant_id"
+    }
+    assert "INV-033" in inv
 
 
 def test_carrier_refs_pointing_at_data_container() -> None:

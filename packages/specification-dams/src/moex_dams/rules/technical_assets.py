@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from moex_modeling import (
@@ -258,11 +259,27 @@ def check_direction_forbidden(data: dict[str, Any]) -> list[Diagnostic]:
     return out
 
 
+_SCHEMA_NODE_REF_RE = re.compile(r"^dams:structure/.+#.+$")
+_HTTP_IRI_RE = re.compile(r"^https?://", re.IGNORECASE)
+
+
 def check_mapping_endpoint_types(data: dict[str, Any]) -> list[Diagnostic]:
-    """entity_physical / field_mapping ends must use the correct class pairings."""
+    """Direction-aware Mapping endpoint kinds (INV-033..036 / PDM-009).
+
+    - entity_physical: source ⊆ DataCarrier (exactly 1), target ⊆ LogicalEntity (exactly 1)
+    - field_mapping: source ⊆ LogicalAttribute, target SchemaNodeRef pattern + resolve
+    - realizes: source ⊆ LogicalEntity|ConceptualEntity, target ⊆ ConceptualEntity (local)
+      or not a known non-concept local id (external conceptual ok)
+    - aligns_with: exactly one ConceptualEntity source; target http(s) IRIs
+    """
     logical_ids = {
         str(e.get("element_id"))
         for e in (data.get("logical_entities") or [])
+        if isinstance(e, dict) and e.get("element_id")
+    }
+    conceptual_ids = {
+        str(e.get("element_id"))
+        for e in (data.get("conceptual_entities") or [])
         if isinstance(e, dict) and e.get("element_id")
     }
     attr_ids: set[str] = set()
@@ -274,6 +291,7 @@ def check_mapping_endpoint_types(data: dict[str, Any]) -> list[Diagnostic]:
                 attr_ids.add(str(a["element_id"]))
     by_class = technical_asset_ids_by_class(data)
     carrier_ids = by_class["DataCarrier"]
+    all_tech_ids = set().union(*by_class.values()) if by_class else set()
     node_ids: set[str] = set()
     for s in data.get("data_structures") or []:
         if not isinstance(s, dict):
@@ -283,52 +301,106 @@ def check_mapping_endpoint_types(data: dict[str, Any]) -> list[Diagnostic]:
             if isinstance(n, dict) and n.get("local_key"):
                 node_ids.add(f"{sid}#{n['local_key']}")
 
+    known_non_concept = logical_ids | attr_ids | all_tech_ids | node_ids
+    known_non_logical_source = attr_ids | all_tech_ids | node_ids
+
     out: list[Diagnostic] = []
     for m in iter_mappings(data):
         mtype = str(m.get("mapping_type") or "")
         mid = str(m.get("element_id") or m.get("name") or "")
-        refs = [str(x) for x in (m.get("source_refs") or []) + (m.get("target_refs") or [])]
+        sources = [str(x) for x in (m.get("source_refs") or [])]
+        targets = [str(x) for x in (m.get("target_refs") or [])]
+
         if mtype == "entity_physical":
-            has_logical = any(r in logical_ids for r in refs)
-            has_carrier = any(r in carrier_ids for r in refs)
-            wrong_tech = [
-                r
-                for r in refs
-                if r not in logical_ids
-                and r not in carrier_ids
-                and any(r in ids for ids in by_class.values())
-            ]
-            if wrong_tech or not (has_logical and has_carrier):
+            src_ok = len(sources) == 1 and sources[0] in carrier_ids
+            tgt_ok = len(targets) == 1 and targets[0] in logical_ids
+            if not (src_ok and tgt_ok):
                 out.append(
                     _diag(
                         code="DAMS-REQ-PDM-009.c1",
+                        invariant_id="INV-033",
                         message=(
-                            f'Mapping "{mid}" entity_physical must link one LogicalEntity '
-                            f"and one DataCarrier"
-                            + (f" (invalid ends: {', '.join(wrong_tech)})" if wrong_tech else ".")
+                            f'Mapping "{mid}" entity_physical requires source_refs ⊆ '
+                            "DataCarrier (exactly 1) and target_refs ⊆ LogicalEntity "
+                            "(exactly 1)."
                         ),
                         subject=mid or None,
                         remediation=(
-                            "Use source_refs/target_refs with LogicalEntity and DataCarrier ids only."
+                            "Set source_refs to one DataCarrier id and target_refs to "
+                            "one LogicalEntity id. INV-033."
                         ),
                         requirement_code="PDM-009",
                     )
                 )
         elif mtype == "field_mapping":
-            has_attr = any(r in attr_ids for r in refs)
-            has_node = any(r in node_ids for r in refs)
-            if not (has_attr and has_node):
+            src_ok = bool(sources) and all(r in attr_ids for r in sources)
+            tgt_pattern_ok = bool(targets) and all(
+                _SCHEMA_NODE_REF_RE.match(r) for r in targets
+            )
+            tgt_resolved = bool(targets) and all(r in node_ids for r in targets)
+            if not (src_ok and tgt_pattern_ok and tgt_resolved):
                 out.append(
                     _diag(
                         code="DAMS-REQ-PDM-009.c2",
+                        invariant_id="INV-034",
                         message=(
-                            f'Mapping "{mid}" field_mapping must link LogicalAttribute '
-                            "and SchemaNode (structure_id#local_key)."
+                            f'Mapping "{mid}" field_mapping requires source_refs ⊆ '
+                            "LogicalAttribute and target_refs matching "
+                            "dams:structure/…#… that resolve in data_structures.nodes."
                         ),
                         subject=mid or None,
                         remediation=(
-                            "Use source_refs/target_refs with LogicalAttribute and "
-                            "structure_id#local_key."
+                            "Use LogicalAttribute ids in source_refs and resolvable "
+                            "SchemaNodeRef targets. INV-034."
+                        ),
+                        requirement_code="PDM-009",
+                    )
+                )
+        elif mtype == "realizes":
+            src_ok = bool(sources) and all(
+                r in logical_ids or r in conceptual_ids for r in sources
+            )
+            # External conceptual targets allowed when not a known local non-concept.
+            tgt_ok = bool(targets) and all(
+                r in conceptual_ids or r not in known_non_concept for r in targets
+            )
+            if sources and any(r in known_non_logical_source for r in sources):
+                src_ok = False
+            if not (src_ok and tgt_ok):
+                out.append(
+                    _diag(
+                        code="DAMS-INV-035",
+                        invariant_id="INV-035",
+                        message=(
+                            f'Mapping "{mid}" realizes requires source_refs ⊆ '
+                            "LogicalEntity|ConceptualEntity (min 1) and target_refs ⊆ "
+                            "ConceptualEntity (min 1; external conceptual ids allowed)."
+                        ),
+                        subject=mid or None,
+                        remediation=(
+                            "Point source_refs at logical/conceptual entities and "
+                            "target_refs at conceptual entities. INV-035."
+                        ),
+                        requirement_code="PDM-009",
+                    )
+                )
+        elif mtype == "aligns_with":
+            src_ok = len(sources) == 1 and sources[0] in conceptual_ids
+            tgt_ok = bool(targets) and all(_HTTP_IRI_RE.match(r) for r in targets)
+            if not (src_ok and tgt_ok):
+                out.append(
+                    _diag(
+                        code="DAMS-INV-036",
+                        invariant_id="INV-036",
+                        message=(
+                            f'Mapping "{mid}" aligns_with requires exactly one '
+                            "ConceptualEntity in source_refs and http(s) IRI "
+                            "target_refs."
+                        ),
+                        subject=mid or None,
+                        remediation=(
+                            "Use one ConceptualEntity source and absolute http(s) "
+                            "IRI targets. INV-036."
                         ),
                         requirement_code="PDM-009",
                     )

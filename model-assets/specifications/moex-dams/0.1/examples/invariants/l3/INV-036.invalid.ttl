@@ -1,0 +1,6 @@
+@prefix dams: <https://data.moex.com/dams/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<https://data.moex.com/dams/mapping/inv036/a-bad> a dams:AlignsWithMapping ;
+  dams:source_refs "dams:concept/inv036/C" ;
+  dams:target_refs "dams:concept/Other" .

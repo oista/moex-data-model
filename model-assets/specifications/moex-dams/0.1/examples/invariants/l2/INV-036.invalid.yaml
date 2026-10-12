@@ -1,0 +1,17 @@
+element_id: dams:model/inv036
+implementation_scope: enterprise
+conceptual_entities:
+- element_id: dams:concept/inv036/C
+  name: C
+  description: c
+  lifecycle_status: active
+aligns_with_mappings:
+- element_id: dams:mapping/inv036/a-bad
+  description: non-http target
+  lifecycle_status: active
+  mapping_type: aligns_with
+  mapping_cardinality: one_to_one
+  source_refs:
+  - dams:concept/inv036/C
+  target_refs:
+  - dams:concept/Other

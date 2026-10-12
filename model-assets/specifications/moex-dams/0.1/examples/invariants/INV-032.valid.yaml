@@ -1,0 +1,10 @@
+﻿# INV-032 valid AlignsWithMapping designator.
+element_id: dams:mapping/inv032
+description: x
+lifecycle_status: draft
+mapping_type: aligns_with
+mapping_cardinality: one_to_one
+source_refs:
+- dams:concept/a
+target_refs:
+- https://example.org/term

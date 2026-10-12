@@ -11,8 +11,8 @@ superseded_by: []
 Автогенерируется `scripts/check_constraint_matrix.py`. Источник: `model-assets/specifications/moex-dams/0.1/constraints/constraint-matrix.yaml`. Не редактировать вручную.
 
 **matrix_id:** `dams:constraint-matrix/0.1`  
-**registry size:** 27  
-**invariants:** 27
+**registry size:** 36  
+**invariants:** 36
 
 | ID | Title | Levels | Status | L1 | L2 | L3 | Source status | Scope | Source |
 |---|---|---|---|---|---|---|---|---|---|
@@ -43,6 +43,15 @@ superseded_by: []
 | INV-025 | tags только из реестра переходных тегов | L2 | waived | not-applicable | waived | not-applicable | aligned | moex-dams | ADR-043:28,35 |
 | INV-026 | URI префикса оканчивается на / или # | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-030:40 |
 | INV-027 | Владелец пакета и классификация сущности | L2 | waived | not-applicable | waived | not-applicable | partial | moex-dams | ADR-023:73-74 |
+| INV-028 | RealizesMapping.mapping_type = realizes | L1 | implemented | implemented | not-applicable | not-applicable | aligned | moex-dams | moex-core.yaml RealizesMapping rule 0; ADR-046 |
+| INV-029 | EntityPhysicalMapping.mapping_type = entity_physical | L1 | implemented | implemented | not-applicable | not-applicable | aligned | moex-dams | moex-core.yaml EntityPhysicalMapping rule 0; ADR-046 |
+| INV-030 | EntityPhysicalMapping.mapping_cardinality = one_to_one | L1 | implemented | implemented | not-applicable | not-applicable | aligned | moex-dams | moex-core.yaml EntityPhysicalMapping rule 1; ADR-046 |
+| INV-031 | FieldMapping.mapping_type = field_mapping | L1 | implemented | implemented | not-applicable | not-applicable | aligned | moex-dams | moex-core.yaml FieldMapping rule 0; ADR-046 |
+| INV-032 | AlignsWithMapping.mapping_type = aligns_with | L1 | implemented | implemented | not-applicable | not-applicable | aligned | moex-dams | moex-core.yaml AlignsWithMapping rule 0; ADR-046 |
+| INV-033 | EntityPhysicalMapping endpoints DataCarrier→LogicalEntity | L2, L3 | implemented | not-applicable | implemented | implemented | aligned | moex-dams | PDM-009.c1; ADR-046 |
+| INV-034 | FieldMapping endpoints LogicalAttribute→SchemaNodeRef | L2, L3 | implemented | not-applicable | implemented | implemented | aligned | moex-dams | PDM-009.c2/c3; ADR-046; ADR-039 |
+| INV-035 | RealizesMapping endpoints Logical→Conceptual | L2, L3 | implemented | not-applicable | implemented | implemented | aligned | moex-dams | PDM-009; ADR-046; ADR-029 |
+| INV-036 | AlignsWithMapping ConceptualEntity→http(s) IRI | L2, L3 | implemented | not-applicable | implemented | implemented | aligned | moex-dams | PDM-009; ADR-046 |
 
 ## Statements
 
@@ -225,5 +234,83 @@ URI префикса онтологии оканчивается на '/' или
 *Notes:* PR-C3: source_status=partial — каскад не оформлялся как новый INV-валидатор.
 
 *adr_ref:* `ADR-045`
+
+### INV-028: RealizesMapping.mapping_type = realizes
+
+У RealizesMapping слот mapping_type равен realizes.
+
+*requirement_refs:* `DAMS-REQ-PDM-009.c1`
+
+*adr_ref:* `ADR-046`
+
+### INV-029: EntityPhysicalMapping.mapping_type = entity_physical
+
+У EntityPhysicalMapping слот mapping_type равен entity_physical.
+
+*requirement_refs:* `DAMS-REQ-PDM-009.c1`
+
+*adr_ref:* `ADR-046`
+
+### INV-030: EntityPhysicalMapping.mapping_cardinality = one_to_one
+
+У EntityPhysicalMapping слот mapping_cardinality равен one_to_one.
+
+*requirement_refs:* `DAMS-REQ-PDM-009.c1`
+
+*adr_ref:* `ADR-046`
+
+### INV-031: FieldMapping.mapping_type = field_mapping
+
+У FieldMapping слот mapping_type равен field_mapping.
+
+*requirement_refs:* `DAMS-REQ-PDM-009.c1`
+
+*adr_ref:* `ADR-046`
+
+### INV-032: AlignsWithMapping.mapping_type = aligns_with
+
+У AlignsWithMapping слот mapping_type равен aligns_with.
+
+*requirement_refs:* `DAMS-REQ-PDM-009.c1`
+
+*adr_ref:* `ADR-046`
+
+### INV-033: EntityPhysicalMapping endpoints DataCarrier→LogicalEntity
+
+EntityPhysicalMapping.source_refs ⊆ DataCarrier (ровно 1) и target_refs ⊆ LogicalEntity (ровно 1); направление carrier→logical.
+
+
+*requirement_refs:* `DAMS-REQ-PDM-009.c1`
+
+*adr_ref:* `ADR-046`
+
+### INV-034: FieldMapping endpoints LogicalAttribute→SchemaNodeRef
+
+FieldMapping.source_refs ⊆ LogicalAttribute; target_refs соответствуют pattern dams:structure/…#… и резолвятся в data_structures.nodes.
+
+
+*Notes:* L3 covers SchemaNodeRef pattern (gen-shacl missed type pattern).
+
+*requirement_refs:* `DAMS-REQ-PDM-009.c2`
+
+*adr_ref:* `ADR-046`
+
+### INV-035: RealizesMapping endpoints Logical→Conceptual
+
+RealizesMapping.source_refs ⊆ LogicalEntity|ConceptualEntity (min 1); target_refs ⊆ ConceptualEntity (min 1; внешние conceptual id допустимы).
+
+
+*requirement_refs:* `DAMS-REQ-PDM-009.c1`
+
+*adr_ref:* `ADR-046`
+
+### INV-036: AlignsWithMapping ConceptualEntity→http(s) IRI
+
+AlignsWithMapping.source_refs — ровно один ConceptualEntity; target_refs — абсолютные http(s) IRI.
+
+
+*requirement_refs:* `DAMS-REQ-PDM-009.c1`
+
+*adr_ref:* `ADR-046`
 
 См. также: [ADR-045](../adr/ADR-045-executable-constraint-matrix.md), [inventory report](constraint-matrix-inventory-report.md), [adding-an-invariant](../guides/adding-an-invariant.md).

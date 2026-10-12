@@ -1,0 +1,17 @@
+element_id: dams:model/inv035
+implementation_scope: solution
+logical_entities:
+- element_id: dams:logical/inv035/E
+  name: E
+  description: e
+  lifecycle_status: active
+realizes_mappings:
+- element_id: dams:mapping/inv035/r
+  description: ok
+  lifecycle_status: active
+  mapping_type: realizes
+  mapping_cardinality: one_to_one
+  source_refs:
+  - dams:logical/inv035/E
+  target_refs:
+  - dams:concept/Person
