@@ -12,6 +12,7 @@ from typing import Any, Literal
 
 import yaml
 
+from moex_dams.mappings.iter_mappings import iter_mappings
 from moex_dams.projection.dbml import _ident, effective_attr_type
 from moex_dams.projection.er_common import (
     MANY as _MANY,
@@ -194,7 +195,7 @@ def project_model_package_to_er_diagram(
     relationships = [
         r for r in (data.get("relationships") or []) if isinstance(r, dict)
     ]
-    mappings = [m for m in (data.get("mappings") or []) if isinstance(m, dict)]
+    mappings = list(iter_mappings(data))
 
     if profile == "physical":
         for mapping in mappings:

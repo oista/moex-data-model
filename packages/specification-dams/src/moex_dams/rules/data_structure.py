@@ -11,6 +11,8 @@ from moex_modeling import (
     DiagnosticSeverity,
 )
 
+from moex_dams.mappings.iter_mappings import iter_mappings
+
 RELATIONAL_SLOTS: frozenset[str] = frozenset(
     {
         "column_position",
@@ -464,9 +466,7 @@ def check_field_mapping_structure_ends(data: dict[str, Any]) -> list[Diagnostic]
     node_index = structure_node_index(data)
 
     out: list[Diagnostic] = []
-    for m in data.get("mappings") or []:
-        if not isinstance(m, dict):
-            continue
+    for m in iter_mappings(data):
         if str(m.get("mapping_type") or "") != "field_mapping":
             continue
         mid = str(m.get("element_id") or m.get("name") or "")

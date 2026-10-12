@@ -18,6 +18,7 @@ from moex_modeling import (
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
 from moex_dams.mappings.dams_to_graph import package_index
+from moex_dams.mappings.iter_mappings import iter_mappings
 
 
 def _prefix_reference(value: Any) -> str:
@@ -119,9 +120,7 @@ def _walk_ids(data: dict[str, Any]) -> list[tuple[str, str, str]]:
             if ref:
                 found.append((str(ref), rid, "relationships"))
 
-    for mapping in data.get("mappings") or []:
-        if not isinstance(mapping, dict):
-            continue
+    for mapping in iter_mappings(data):
         mid = str(mapping.get("element_id") or "")
         for ref in list(mapping.get("source_refs") or []) + list(
             mapping.get("target_refs") or []

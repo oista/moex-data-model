@@ -11,6 +11,7 @@ from typing import Any, Literal
 
 import yaml
 
+from moex_dams.mappings.iter_mappings import iter_mappings
 from moex_dams.rules.data_structure import (
     scalar_nodes_for_carrier,
     structures_by_id,
@@ -268,9 +269,7 @@ def project_model_package_to_dbml(
 
     # Physical FKs: field_mapping when both ends are physical fields in index;
     # also object-level mappings with both physical object ends (default cols).
-    for mapping in data.get("mappings") or []:
-        if not isinstance(mapping, dict):
-            continue
+    for mapping in iter_mappings(data):
         mtype = mapping.get("mapping_type")
         sources = [str(x) for x in (mapping.get("source_refs") or [])]
         targets = [str(x) for x in (mapping.get("target_refs") or [])]

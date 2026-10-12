@@ -16,6 +16,7 @@ from moex_modeling import (
 )
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
+from moex_dams.mappings.iter_mappings import iter_mappings
 from moex_dams.rules.cascade import (
     DATA_OWNER_PLACEHOLDER,
     find_redundant_overrides,
@@ -158,7 +159,6 @@ def _collect_ids(data: dict[str, Any]) -> set[str]:
         "access_points",
         "data_containers",
         "execution_assets",
-        "mappings",
         "conceptual_entities",
         "data_structures",
         "messages",
@@ -175,6 +175,9 @@ def _collect_ids(data: dict[str, Any]) -> set[str]:
                 for node in item.get("nodes") or []:
                     if isinstance(node, dict) and node.get("local_key") and sid:
                         ids.add(f"{sid}#{node['local_key']}")
+    for m in iter_mappings(data):
+        if m.get("element_id"):
+            ids.add(str(m["element_id"]))
     return ids
 
 
@@ -262,9 +265,8 @@ def _iter_targets(
         return out
     if target_class == "Mapping":
         out = []
-        for m in data.get("mappings") or []:
-            if isinstance(m, dict):
-                out.append((m, str(m.get("element_id") or m.get("name"))))
+        for m in iter_mappings(data):
+            out.append((m, str(m.get("element_id") or m.get("name"))))
         return out
     return []
 
@@ -282,9 +284,7 @@ def _has_entity_physical_mapping(data: dict[str, Any], physical_id: str) -> bool
         for e in (data.get("logical_entities") or [])
         if isinstance(e, dict) and e.get("element_id")
     }
-    for m in data.get("mappings") or []:
-        if not isinstance(m, dict):
-            continue
+    for m in iter_mappings(data):
         if str(m.get("mapping_type") or "") != "entity_physical":
             continue
         refs = {str(x) for x in (m.get("source_refs") or []) + (m.get("target_refs") or [])}
@@ -301,9 +301,7 @@ def _has_field_mapping(
     logical_attr_id: str | None = None,
     schema_node_ref: str | None = None,
 ) -> bool:
-    for m in data.get("mappings") or []:
-        if not isinstance(m, dict):
-            continue
+    for m in iter_mappings(data):
         if str(m.get("mapping_type") or "") != "field_mapping":
             continue
         refs = {str(x) for x in (m.get("source_refs") or []) + (m.get("target_refs") or [])}
@@ -326,9 +324,7 @@ def _entity_in_relationship(data: dict[str, Any], entity_id: str) -> bool:
 
 
 def _has_realizes(data: dict[str, Any], entity_id: str) -> bool:
-    for m in data.get("mappings") or []:
-        if not isinstance(m, dict):
-            continue
+    for m in iter_mappings(data):
         if str(m.get("mapping_type") or "") != "realizes":
             continue
         refs = {str(x) for x in (m.get("source_refs") or []) + (m.get("target_refs") or [])}
@@ -395,9 +391,7 @@ def _concepts_realized_by_logical(
         for r in el.get("conceptual_entity_refs") or []:
             if r:
                 refs.add(str(r))
-    for m in data.get("mappings") or []:
-        if not isinstance(m, dict):
-            continue
+    for m in iter_mappings(data):
         if str(m.get("mapping_type") or "") != "realizes":
             continue
         sources = {str(x) for x in (m.get("source_refs") or [])}

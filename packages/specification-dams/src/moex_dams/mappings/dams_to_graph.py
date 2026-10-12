@@ -13,6 +13,7 @@ from moex_dams.domain.graph import (
     GraphNode,
     NodeKind,
 )
+from moex_dams.mappings.iter_mappings import iter_mappings
 
 
 def build_dams_graph(body: LinkMLImplementationBody) -> DamsModelGraphView:
@@ -212,9 +213,7 @@ def build_dams_graph(body: LinkMLImplementationBody) -> DamsModelGraphView:
                 )
             )
 
-    for item in data.get("mappings") or []:
-        if not isinstance(item, dict):
-            continue
+    for item in iter_mappings(data):
         mid = item.get("element_id")
         if not mid:
             continue
@@ -262,7 +261,6 @@ def package_index(data: dict[str, Any]) -> dict[str, dict[str, Any]]:
         "data_structures",
         "messages",
         "domain_contexts",
-        "mappings",
         "relationships",
     ):
         for item in data.get(collection) or []:
@@ -279,4 +277,7 @@ def package_index(data: dict[str, Any]) -> dict[str, dict[str, Any]]:
                 for nested in item.get("nodes") or []:
                     if isinstance(nested, dict) and nested.get("local_key") and sid:
                         index[f"{sid}#{nested['local_key']}"] = nested
+    for item in iter_mappings(data):
+        if item.get("element_id"):
+            index[str(item["element_id"])] = item
     return index

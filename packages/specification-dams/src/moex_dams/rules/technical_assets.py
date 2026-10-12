@@ -11,6 +11,7 @@ from moex_modeling import (
     DiagnosticSeverity,
 )
 
+from moex_dams.mappings.iter_mappings import iter_mappings
 from moex_dams.rules.data_structure import check_data_structures
 
 TECHNICAL_COLLECTIONS: tuple[tuple[str, str], ...] = (
@@ -283,9 +284,7 @@ def check_mapping_endpoint_types(data: dict[str, Any]) -> list[Diagnostic]:
                 node_ids.add(f"{sid}#{n['local_key']}")
 
     out: list[Diagnostic] = []
-    for m in data.get("mappings") or []:
-        if not isinstance(m, dict):
-            continue
+    for m in iter_mappings(data):
         mtype = str(m.get("mapping_type") or "")
         mid = str(m.get("element_id") or m.get("name") or "")
         refs = [str(x) for x in (m.get("source_refs") or []) + (m.get("target_refs") or [])]
