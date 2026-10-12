@@ -31,6 +31,7 @@ try {
     $Sem = Join-Path $RepoRoot "packages/semantic-mappings"
     $Tooling = Join-Path $RepoRoot "packages/linkml-tooling"
     $ExtSrc = Join-Path $RepoRoot "packages/external-sources"
+    $RepoLoader = Join-Path $RepoRoot "packages/repository-loader"
 
     $Contracts = Join-Path $RepoRoot "generated/contracts/moex-dams/0.1"
     Write-Host "Ensuring DAMS contracts package (Python: $VenvPython)"
@@ -50,9 +51,10 @@ try {
         -e "$Sem" `
         -e "$Tooling" `
         -e "$ExtSrc" `
+        -e "$RepoLoader" `
         -e "$CliRoot[dev]" -q
 
-    Write-Host "Running pytest (kernel, provider, dams, publication, git, external-sources, cli, architecture)"
+    Write-Host "Running pytest (kernel, provider, dams, publication, git, external-sources, repository-loader, cli, architecture)"
     & $VenvPython -m pytest `
         (Join-Path $Kernel "tests") `
         (Join-Path $Linkml "tests/test_provider.py") `
@@ -60,6 +62,7 @@ try {
         (Join-Path $Pub "tests") `
         (Join-Path $Git "tests") `
         (Join-Path $ExtSrc "tests") `
+        (Join-Path $RepoLoader "tests") `
         (Join-Path $CliRoot "tests") `
         (Join-Path $RepoRoot "tests/architecture") `
         -q
