@@ -27,6 +27,17 @@
         
       ModelPackage : aliases
         
+      ModelPackage : aligns_with_mappings
+        
+          
+    
+        
+        
+        ModelPackage --> "*" AlignsWithMapping : aligns_with_mappings
+        click AlignsWithMapping href "../AlignsWithMapping"
+    
+
+        
       ModelPackage : api_version
         
       ModelPackage : classification_rationale
@@ -162,6 +173,17 @@
         
       ModelPackage : element_id
         
+      ModelPackage : entity_physical_mappings
+        
+          
+    
+        
+        
+        ModelPackage --> "*" EntityPhysicalMapping : entity_physical_mappings
+        click EntityPhysicalMapping href "../EntityPhysicalMapping"
+    
+
+        
       ModelPackage : execution_assets
         
           
@@ -170,6 +192,17 @@
         
         ModelPackage --> "*" ExecutionAsset : execution_assets
         click ExecutionAsset href "../ExecutionAsset"
+    
+
+        
+      ModelPackage : field_mappings
+        
+          
+    
+        
+        
+        ModelPackage --> "*" FieldMapping : field_mappings
+        click FieldMapping href "../FieldMapping"
     
 
         
@@ -288,6 +321,17 @@
         
         ModelPackage --> "*" Policy : policy_refs
         click Policy href "../Policy"
+    
+
+        
+      ModelPackage : realizes_mappings
+        
+          
+    
+        
+        
+        ModelPackage --> "*" RealizesMapping : realizes_mappings
+        click RealizesMapping href "../RealizesMapping"
     
 
         

@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-12T19:07:54
+# Generation date: 2026-10-12T19:34:23
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -86,6 +86,14 @@ class Sha256Digest(String):
     type_class_curie = "xsd:string"
     type_name = "Sha256Digest"
     type_model_uri = DAMS.Sha256Digest
+
+
+class SchemaNodeRef(Uriorcurie):
+    """ SchemaNode address structure_id#local_key (ADR-039 / ADR-046). """
+    type_class_uri = XSD["anyURI"]
+    type_class_curie = "xsd:anyURI"
+    type_name = "SchemaNodeRef"
+    type_model_uri = DAMS.SchemaNodeRef
 
 
 # Class references
@@ -202,6 +210,22 @@ class ExternalClassRefExternalClassRefId(URIorCURIE):
 
 
 class MappingElementId(IdentifiedElementElementId):
+    pass
+
+
+class RealizesMappingElementId(MappingElementId):
+    pass
+
+
+class EntityPhysicalMappingElementId(MappingElementId):
+    pass
+
+
+class FieldMappingElementId(MappingElementId):
+    pass
+
+
+class AlignsWithMappingElementId(MappingElementId):
     pass
 
 
@@ -1371,6 +1395,10 @@ class ModelPackage(ModelElement):
     data_containers: Optional[Union[dict[Union[str, DataContainerElementId], Union[dict, "DataContainer"]], list[Union[dict, "DataContainer"]]]] = empty_dict()
     execution_assets: Optional[Union[dict[Union[str, ExecutionAssetElementId], Union[dict, "ExecutionAsset"]], list[Union[dict, "ExecutionAsset"]]]] = empty_dict()
     mappings: Optional[Union[dict[Union[str, MappingElementId], Union[dict, "Mapping"]], list[Union[dict, "Mapping"]]]] = empty_dict()
+    realizes_mappings: Optional[Union[dict[Union[str, RealizesMappingElementId], Union[dict, "RealizesMapping"]], list[Union[dict, "RealizesMapping"]]]] = empty_dict()
+    entity_physical_mappings: Optional[Union[dict[Union[str, EntityPhysicalMappingElementId], Union[dict, "EntityPhysicalMapping"]], list[Union[dict, "EntityPhysicalMapping"]]]] = empty_dict()
+    field_mappings: Optional[Union[dict[Union[str, FieldMappingElementId], Union[dict, "FieldMapping"]], list[Union[dict, "FieldMapping"]]]] = empty_dict()
+    aligns_with_mappings: Optional[Union[dict[Union[str, AlignsWithMappingElementId], Union[dict, "AlignsWithMapping"]], list[Union[dict, "AlignsWithMapping"]]]] = empty_dict()
     conceptual_properties: Optional[Union[dict[Union[str, ConceptualPropertyElementId], Union[dict, "ConceptualProperty"]], list[Union[dict, "ConceptualProperty"]]]] = empty_dict()
     conceptual_domains: Optional[Union[dict[Union[str, ConceptualDomainElementId], Union[dict, "ConceptualDomain"]], list[Union[dict, "ConceptualDomain"]]]] = empty_dict()
     value_domains: Optional[Union[dict[Union[str, ValueDomainElementId], Union[dict, "ValueDomain"]], list[Union[dict, "ValueDomain"]]]] = empty_dict()
@@ -1446,6 +1474,14 @@ class ModelPackage(ModelElement):
         self._normalize_inlined_as_list(slot_name="execution_assets", slot_type=ExecutionAsset, key_name="element_id", keyed=True)
 
         self._normalize_inlined_as_list(slot_name="mappings", slot_type=Mapping, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="realizes_mappings", slot_type=RealizesMapping, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="entity_physical_mappings", slot_type=EntityPhysicalMapping, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="field_mappings", slot_type=FieldMapping, key_name="element_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="aligns_with_mappings", slot_type=AlignsWithMapping, key_name="element_id", keyed=True)
 
         self._normalize_inlined_as_list(slot_name="conceptual_properties", slot_type=ConceptualProperty, key_name="element_id", keyed=True)
 
@@ -2292,11 +2328,13 @@ class ExternalClassRef(YAMLRoot):
 @dataclass(repr=False)
 class Mapping(IdentifiedElement):
     """
-    Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual),
-    entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with
-    (enterprise↔external term). Not used for SpecImpl implements/conforms_to. Identity slots
-    name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044); display label = source_refs ->
-    target_refs [mapping_type].
+    Явное соответствие между элементами. Prefer typed subclasses (RealizesMapping, EntityPhysicalMapping,
+    FieldMapping, AlignsWithMapping) and separate ModelPackage collections (ADR-046). Base Mapping remains for the
+    deprecated polymorphic mappings collection during the compatibility window. Discriminate via mapping_type:
+    realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo
+    (SchemaNode↔LogicalAttribute), aligns_with (enterprise↔external term). Not used for SpecImpl
+    implements/conforms_to. Identity slots name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044);
+    display label = source_refs -> target_refs [mapping_type].
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -2381,6 +2419,155 @@ class Mapping(IdentifiedElement):
 
         if self.approved_at is not None and not isinstance(self.approved_at, XSDDateTime):
             self.approved_at = XSDDateTime(self.approved_at)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class RealizesMapping(Mapping):
+    """
+    Solution logical entity realizes an enterprise conceptual entity (ADR-046). Designator via L1 rule (not
+    equals_string on enum slot). source_refs narrowed to LogicalEntity in PR-1; ConceptualEntity via any_of deferred
+    if needed.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["RealizesMapping"]
+    class_class_curie: ClassVar[str] = "dams:RealizesMapping"
+    class_name: ClassVar[str] = "RealizesMapping"
+    class_model_uri: ClassVar[URIRef] = DAMS.RealizesMapping
+
+    element_id: Union[str, RealizesMappingElementId] = None
+    mapping_type: Union[str, "MappingTypeEnum"] = None
+    mapping_cardinality: Union[str, "MappingCardinalityEnum"] = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    source_refs: Optional[Union[Union[str, LogicalEntityElementId], list[Union[str, LogicalEntityElementId]]]] = empty_list()
+    target_refs: Optional[Union[Union[str, ConceptualEntityElementId], list[Union[str, ConceptualEntityElementId]]]] = empty_list()
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, RealizesMappingElementId):
+            self.element_id = RealizesMappingElementId(self.element_id)
+
+        if not isinstance(self.source_refs, list):
+            self.source_refs = [self.source_refs] if self.source_refs is not None else []
+        self.source_refs = [v if isinstance(v, LogicalEntityElementId) else LogicalEntityElementId(v) for v in self.source_refs]
+
+        if not isinstance(self.target_refs, list):
+            self.target_refs = [self.target_refs] if self.target_refs is not None else []
+        self.target_refs = [v if isinstance(v, ConceptualEntityElementId) else ConceptualEntityElementId(v) for v in self.target_refs]
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class EntityPhysicalMapping(Mapping):
+    """
+    Explicit entity-level link between DataCarrier and LogicalEntity (ADR-046 / PDM-003). Exactly one source and one
+    target; cardinality one_to_one.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["EntityPhysicalMapping"]
+    class_class_curie: ClassVar[str] = "dams:EntityPhysicalMapping"
+    class_name: ClassVar[str] = "EntityPhysicalMapping"
+    class_model_uri: ClassVar[URIRef] = DAMS.EntityPhysicalMapping
+
+    element_id: Union[str, EntityPhysicalMappingElementId] = None
+    mapping_type: Union[str, "MappingTypeEnum"] = None
+    mapping_cardinality: Union[str, "MappingCardinalityEnum"] = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    source_refs: Optional[Union[Union[str, DataCarrierElementId], list[Union[str, DataCarrierElementId]]]] = empty_list()
+    target_refs: Optional[Union[Union[str, LogicalEntityElementId], list[Union[str, LogicalEntityElementId]]]] = empty_list()
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, EntityPhysicalMappingElementId):
+            self.element_id = EntityPhysicalMappingElementId(self.element_id)
+
+        if not isinstance(self.source_refs, list):
+            self.source_refs = [self.source_refs] if self.source_refs is not None else []
+        self.source_refs = [v if isinstance(v, DataCarrierElementId) else DataCarrierElementId(v) for v in self.source_refs]
+
+        if not isinstance(self.target_refs, list):
+            self.target_refs = [self.target_refs] if self.target_refs is not None else []
+        self.target_refs = [v if isinstance(v, LogicalEntityElementId) else LogicalEntityElementId(v) for v in self.target_refs]
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class FieldMapping(Mapping):
+    """
+    mapsTo between LogicalAttribute and SchemaNode address (structure_id#local_key) via SchemaNodeRef (ADR-039 /
+    ADR-046).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["FieldMapping"]
+    class_class_curie: ClassVar[str] = "dams:FieldMapping"
+    class_name: ClassVar[str] = "FieldMapping"
+    class_model_uri: ClassVar[URIRef] = DAMS.FieldMapping
+
+    element_id: Union[str, FieldMappingElementId] = None
+    mapping_type: Union[str, "MappingTypeEnum"] = None
+    mapping_cardinality: Union[str, "MappingCardinalityEnum"] = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    source_refs: Optional[Union[Union[str, LogicalAttributeElementId], list[Union[str, LogicalAttributeElementId]]]] = empty_list()
+    target_refs: Optional[Union[Union[str, SchemaNodeRef], list[Union[str, SchemaNodeRef]]]] = empty_list()
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, FieldMappingElementId):
+            self.element_id = FieldMappingElementId(self.element_id)
+
+        if not isinstance(self.source_refs, list):
+            self.source_refs = [self.source_refs] if self.source_refs is not None else []
+        self.source_refs = [v if isinstance(v, LogicalAttributeElementId) else LogicalAttributeElementId(v) for v in self.source_refs]
+
+        if not isinstance(self.target_refs, list):
+            self.target_refs = [self.target_refs] if self.target_refs is not None else []
+        self.target_refs = [v if isinstance(v, SchemaNodeRef) else SchemaNodeRef(v) for v in self.target_refs]
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class AlignsWithMapping(Mapping):
+    """
+    Enterprise conceptual entity aligns with an external reference IRI (ADR-046). Exactly one source; one or more
+    target URIs.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["AlignsWithMapping"]
+    class_class_curie: ClassVar[str] = "dams:AlignsWithMapping"
+    class_name: ClassVar[str] = "AlignsWithMapping"
+    class_model_uri: ClassVar[URIRef] = DAMS.AlignsWithMapping
+
+    element_id: Union[str, AlignsWithMappingElementId] = None
+    mapping_type: Union[str, "MappingTypeEnum"] = None
+    mapping_cardinality: Union[str, "MappingCardinalityEnum"] = None
+    lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
+    source_refs: Optional[Union[Union[str, ConceptualEntityElementId], list[Union[str, ConceptualEntityElementId]]]] = empty_list()
+    target_refs: Optional[Union[Union[str, URI], list[Union[str, URI]]]] = empty_list()
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.element_id):
+            self.MissingRequiredField("element_id")
+        if not isinstance(self.element_id, AlignsWithMappingElementId):
+            self.element_id = AlignsWithMappingElementId(self.element_id)
+
+        if not isinstance(self.source_refs, list):
+            self.source_refs = [self.source_refs] if self.source_refs is not None else []
+        self.source_refs = [v if isinstance(v, ConceptualEntityElementId) else ConceptualEntityElementId(v) for v in self.source_refs]
+
+        if not isinstance(self.target_refs, list):
+            self.target_refs = [self.target_refs] if self.target_refs is not None else []
+        self.target_refs = [v if isinstance(v, URI) else URI(v) for v in self.target_refs]
 
         super().__post_init__(**kwargs)
 
@@ -4795,18 +4982,30 @@ class MappingTypeEnum(EnumDefinitionImpl):
     LogicalEntity; field_mapping = mapsTo (SchemaNode ↔ LogicalAttribute); aligns_with = enterprise conceptual ↔
     external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).
     """
-    semantic_equivalence = LinkMLPermissibleValue(text="semantic_equivalence")
-    specialization = LinkMLPermissibleValue(text="specialization")
-    implementation = LinkMLPermissibleValue(text="implementation")
+    semantic_equivalence = LinkMLPermissibleValue(
+        text="semantic_equivalence",
+        description="Deprecated (ADR-046). Unused; removed in a later PR of the series.")
+    specialization = LinkMLPermissibleValue(
+        text="specialization",
+        description="Deprecated (ADR-046). Unused; removed in a later PR of the series.")
+    implementation = LinkMLPermissibleValue(
+        text="implementation",
+        description="Deprecated (ADR-046). Unused; removed in a later PR of the series.")
     entity_physical = LinkMLPermissibleValue(
         text="entity_physical",
         description="""Explicit entity-level link between DataCarrier and LogicalEntity (PDM-003). Do not infer from field_mapping alone.""")
     field_mapping = LinkMLPermissibleValue(
         text="field_mapping",
         description="""mapsTo between SchemaNode (structure_id#local_key) and LogicalAttribute (ADR-038).""")
-    transformation = LinkMLPermissibleValue(text="transformation")
-    aggregation = LinkMLPermissibleValue(text="aggregation")
-    derivation = LinkMLPermissibleValue(text="derivation")
+    transformation = LinkMLPermissibleValue(
+        text="transformation",
+        description="Deprecated (ADR-046). Unused; removed in a later PR of the series.")
+    aggregation = LinkMLPermissibleValue(
+        text="aggregation",
+        description="Deprecated (ADR-046). Unused; removed in a later PR of the series.")
+    derivation = LinkMLPermissibleValue(
+        text="derivation",
+        description="Deprecated (ADR-046). Unused; removed in a later PR of the series.")
     realizes = LinkMLPermissibleValue(
         text="realizes",
         description="Solution logical/concept realizes an enterprise conceptual entity.")
@@ -5540,6 +5739,18 @@ slots.relationships = Slot(uri=DAMS.relationships, name="relationships", curie=D
 
 slots.mappings = Slot(uri=DAMS.mappings, name="mappings", curie=DAMS.curie('mappings'),
                    model_uri=DAMS.mappings, domain=None, range=Optional[Union[dict[Union[str, MappingElementId], Union[dict, Mapping]], list[Union[dict, Mapping]]]])
+
+slots.realizes_mappings = Slot(uri=DAMS.realizes_mappings, name="realizes_mappings", curie=DAMS.curie('realizes_mappings'),
+                   model_uri=DAMS.realizes_mappings, domain=None, range=Optional[Union[dict[Union[str, RealizesMappingElementId], Union[dict, RealizesMapping]], list[Union[dict, RealizesMapping]]]])
+
+slots.entity_physical_mappings = Slot(uri=DAMS.entity_physical_mappings, name="entity_physical_mappings", curie=DAMS.curie('entity_physical_mappings'),
+                   model_uri=DAMS.entity_physical_mappings, domain=None, range=Optional[Union[dict[Union[str, EntityPhysicalMappingElementId], Union[dict, EntityPhysicalMapping]], list[Union[dict, EntityPhysicalMapping]]]])
+
+slots.field_mappings = Slot(uri=DAMS.field_mappings, name="field_mappings", curie=DAMS.curie('field_mappings'),
+                   model_uri=DAMS.field_mappings, domain=None, range=Optional[Union[dict[Union[str, FieldMappingElementId], Union[dict, FieldMapping]], list[Union[dict, FieldMapping]]]])
+
+slots.aligns_with_mappings = Slot(uri=DAMS.aligns_with_mappings, name="aligns_with_mappings", curie=DAMS.curie('aligns_with_mappings'),
+                   model_uri=DAMS.aligns_with_mappings, domain=None, range=Optional[Union[dict[Union[str, AlignsWithMappingElementId], Union[dict, AlignsWithMapping]], list[Union[dict, AlignsWithMapping]]]])
 
 slots.data_carriers = Slot(uri=DAMS.data_carriers, name="data_carriers", curie=DAMS.curie('data_carriers'),
                    model_uri=DAMS.data_carriers, domain=None, range=Optional[Union[dict[Union[str, DataCarrierElementId], Union[dict, DataCarrier]], list[Union[dict, DataCarrier]]]])
@@ -6328,6 +6539,30 @@ slots.LogicalAttribute_concept_ref = Slot(uri=DAMS.concept_ref, name="LogicalAtt
 
 slots.Mapping_description = Slot(uri=DAMS.description, name="Mapping_description", curie=DAMS.curie('description'),
                    model_uri=DAMS.Mapping_description, domain=Mapping, range=Optional[str])
+
+slots.RealizesMapping_source_refs = Slot(uri=DAMS.source_refs, name="RealizesMapping_source_refs", curie=DAMS.curie('source_refs'),
+                   model_uri=DAMS.RealizesMapping_source_refs, domain=RealizesMapping, range=Optional[Union[Union[str, LogicalEntityElementId], list[Union[str, LogicalEntityElementId]]]])
+
+slots.RealizesMapping_target_refs = Slot(uri=DAMS.target_refs, name="RealizesMapping_target_refs", curie=DAMS.curie('target_refs'),
+                   model_uri=DAMS.RealizesMapping_target_refs, domain=RealizesMapping, range=Optional[Union[Union[str, ConceptualEntityElementId], list[Union[str, ConceptualEntityElementId]]]])
+
+slots.EntityPhysicalMapping_source_refs = Slot(uri=DAMS.source_refs, name="EntityPhysicalMapping_source_refs", curie=DAMS.curie('source_refs'),
+                   model_uri=DAMS.EntityPhysicalMapping_source_refs, domain=EntityPhysicalMapping, range=Optional[Union[Union[str, DataCarrierElementId], list[Union[str, DataCarrierElementId]]]])
+
+slots.EntityPhysicalMapping_target_refs = Slot(uri=DAMS.target_refs, name="EntityPhysicalMapping_target_refs", curie=DAMS.curie('target_refs'),
+                   model_uri=DAMS.EntityPhysicalMapping_target_refs, domain=EntityPhysicalMapping, range=Optional[Union[Union[str, LogicalEntityElementId], list[Union[str, LogicalEntityElementId]]]])
+
+slots.FieldMapping_source_refs = Slot(uri=DAMS.source_refs, name="FieldMapping_source_refs", curie=DAMS.curie('source_refs'),
+                   model_uri=DAMS.FieldMapping_source_refs, domain=FieldMapping, range=Optional[Union[Union[str, LogicalAttributeElementId], list[Union[str, LogicalAttributeElementId]]]])
+
+slots.FieldMapping_target_refs = Slot(uri=DAMS.target_refs, name="FieldMapping_target_refs", curie=DAMS.curie('target_refs'),
+                   model_uri=DAMS.FieldMapping_target_refs, domain=FieldMapping, range=Optional[Union[Union[str, SchemaNodeRef], list[Union[str, SchemaNodeRef]]]])
+
+slots.AlignsWithMapping_source_refs = Slot(uri=DAMS.source_refs, name="AlignsWithMapping_source_refs", curie=DAMS.curie('source_refs'),
+                   model_uri=DAMS.AlignsWithMapping_source_refs, domain=AlignsWithMapping, range=Optional[Union[Union[str, ConceptualEntityElementId], list[Union[str, ConceptualEntityElementId]]]])
+
+slots.AlignsWithMapping_target_refs = Slot(uri=DAMS.target_refs, name="AlignsWithMapping_target_refs", curie=DAMS.curie('target_refs'),
+                   model_uri=DAMS.AlignsWithMapping_target_refs, domain=AlignsWithMapping, range=Optional[Union[Union[str, URI], list[Union[str, URI]]]])
 
 slots.TechnicalAsset_description = Slot(uri=DAMS.description, name="TechnicalAsset_description", curie=DAMS.curie('description'),
                    model_uri=DAMS.TechnicalAsset_description, domain=TechnicalAsset, range=str)

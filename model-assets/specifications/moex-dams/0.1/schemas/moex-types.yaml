@@ -20,6 +20,11 @@ types:
     typeof: string
     uri: xsd:string
     pattern: '^sha256:[a-fA-F0-9]{64}$'
+  SchemaNodeRef:
+    typeof: uriorcurie
+    uri: xsd:anyURI
+    pattern: '^dams:structure/.+#.+$'
+    description: SchemaNode address structure_id#local_key (ADR-039 / ADR-046).
 
 enums:
   LifecycleStatusEnum:
@@ -288,8 +293,11 @@ enums:
       implements (that is conforms_to / publication implements).
     permissible_values:
       semantic_equivalence:
+        description: Deprecated (ADR-046). Unused; removed in a later PR of the series.
       specialization:
+        description: Deprecated (ADR-046). Unused; removed in a later PR of the series.
       implementation:
+        description: Deprecated (ADR-046). Unused; removed in a later PR of the series.
       entity_physical:
         description: >
           Explicit entity-level link between DataCarrier and LogicalEntity
@@ -299,8 +307,11 @@ enums:
           mapsTo between SchemaNode (structure_id#local_key) and LogicalAttribute
           (ADR-038).
       transformation:
+        description: Deprecated (ADR-046). Unused; removed in a later PR of the series.
       aggregation:
+        description: Deprecated (ADR-046). Unused; removed in a later PR of the series.
       derivation:
+        description: Deprecated (ADR-046). Unused; removed in a later PR of the series.
       realizes:
         description: Solution logical/concept realizes an enterprise conceptual entity.
       aligns_with:

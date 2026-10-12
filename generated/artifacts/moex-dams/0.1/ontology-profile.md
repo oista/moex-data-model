@@ -2,10 +2,10 @@
 
 - schema_id: `https://data.moex.com/dams/v0.1`
 - schema_version: `3.0.0`
-- schema_digest: `sha256:f9c39e8d22948313d93585e02dadc3b3613093dc924beb79fe31e26e819b2422`
+- schema_digest: `sha256:a8446f786716c1cdb7dee975893d86b6d3befa1823cd044381f4d29ced793996`
 - default_prefix: `dams`
-- classes: 72
-- slots: 330
+- classes: 76
+- slots: 334
 - enums: 56
 - issues: 0
 

@@ -13,6 +13,7 @@ Name: moex_dams
 | Class | Description |
 | --- | --- |
 | [AccessPoint](AccessPoint.md) | Точка доступа к данным: интерфейс, операция или канал |
+| [AlignsWithMapping](AlignsWithMapping.md) | Enterprise conceptual entity aligns with an external reference IRI (ADR-046) |
 | [BusinessDomain](BusinessDomain.md) | Бизнес-домен или предметная область; мастер определяется архитектурным govern... |
 | [BusinessProcess](BusinessProcess.md) | Ссылка на бизнес-процесс или его шаг в BPMN-репозитории |
 | [ClassificationAssignment](ClassificationAssignment.md) | Версионируемое назначение категории классификации элементу модели с основание... |
@@ -33,8 +34,10 @@ Name: moex_dams
 | [Dimension](Dimension.md) | Переиспользуемое аналитическое измерение, связанное с логическими атрибутами |
 | [DomainContext](DomainContext.md) | Ограниченный логический контекст с собственной терминологией и областью ответ... |
 | [EmbeddedElement](EmbeddedElement.md) | Встраиваемый вспомогательный объект без собственного жизненного цикла и глоба... |
+| [EntityPhysicalMapping](EntityPhysicalMapping.md) | Explicit entity-level link between DataCarrier and LogicalEntity (ADR-046 / P... |
 | [ExecutionAsset](ExecutionAsset.md) | Исполняемый актив (pipeline / job) с минимальной lineage-ролью |
 | [ExternalClassRef](ExternalClassRef.md) | Alignment of a ConceptualEntity to an external class or term (ADR-026) |
+| [FieldMapping](FieldMapping.md) | mapsTo between LogicalAttribute and SchemaNode address (structure_id#local_ke... |
 | [FormalCheck](FormalCheck.md) | Одна машиночитаемая проверка требования |
 | [GlossaryTerm](GlossaryTerm.md) | Термин корпоративного бизнес-глоссария |
 | [HasBusinessClassification](HasBusinessClassification.md) | Классификация роли и бизнес-значимости логической сущности |
@@ -69,6 +72,7 @@ Name: moex_dams
 | [PermissibleValue](PermissibleValue.md) | Допустимое значение внутри ValueDomain (встраиваемый) |
 | [Policy](Policy.md) | Политика доступа, хранения, качества или архитектурный инвариант |
 | [PolicyBinding](PolicyBinding.md) | Применение управляемой политики к элементу модели |
+| [RealizesMapping](RealizesMapping.md) | Solution logical entity realizes an enterprise conceptual entity (ADR-046) |
 | [RegistryEntry](RegistryEntry.md) | Локальная ссылочная проекция записи внешней мастер-системы; не является масте... |
 | [Relationship](Relationship.md) | Именованная связь между логическими или концептуальными сущностями |
 | [RelationTerm](RelationTerm.md) | Governed dictionary term for a conceptual/logical relationship (ADR-026) |
@@ -95,6 +99,7 @@ Name: moex_dams
 | [aggregation_function](aggregation_function.md) |  |
 | [aliases](aliases.md) |  |
 | [alignment_rationale](alignment_rationale.md) | Обоснование статуса выравнивания с концептуальным уровнем |
+| [aligns_with_mappings](aligns_with_mappings.md) | Typed aligns_with mappings (ADR-046 Variant B) |
 | [api_version](api_version.md) |  |
 | [applicability_id](applicability_id.md) | Stable id for applies_to blocks (e |
 | [applies_dams_model_level](applies_dams_model_level.md) |  |
@@ -190,6 +195,7 @@ Name: moex_dams
 | [effective](effective.md) | Optional flag: whether this FormalCheck is currently enforced by assess (docu... |
 | [element_id](element_id.md) |  |
 | [entity_bindings](entity_bindings.md) |  |
+| [entity_physical_mappings](entity_physical_mappings.md) | Typed entity_physical mappings (ADR-046 Variant B) |
 | [entity_tier](entity_tier.md) | Structural independence of the conceptual entity (ADR-026) |
 | [entity_type](entity_type.md) |  |
 | [envelope_kind](envelope_kind.md) | Вид конверта (none, cloudevents, custom) |
@@ -200,6 +206,7 @@ Name: moex_dams
 | [external_class_ref_id](external_class_ref_id.md) |  |
 | [external_class_refs](external_class_refs.md) | Canonical ConceptualEntity → external class/term alignments with match_kind (... |
 | [external_specification_ref](external_specification_ref.md) | Optional ExternalSpecification / version pin (ADR-020) |
+| [field_mappings](field_mappings.md) | Typed field_mapping mappings (ADR-046 Variant B) |
 | [filter_expression](filter_expression.md) |  |
 | [flow_ref](flow_ref.md) |  |
 | [foreign_key_target](foreign_key_target.md) | Цель внешнего ключа как structure_id#local_key (только relational) |
@@ -252,7 +259,7 @@ Name: moex_dams
 | [mapping_coverage_status](mapping_coverage_status.md) | Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ phys... |
 | [mapping_rationale](mapping_rationale.md) | Обоснование для planned / technical-only / not-applicable / inherited |
 | [mapping_type](mapping_type.md) |  |
-| [mappings](mappings.md) |  |
+| [mappings](mappings.md) | Deprecated (ADR-046) |
 | [master_system](master_system.md) |  |
 | [match_kind](match_kind.md) | Alignment strength |
 | [max_length](max_length.md) | Максимальная длина для string/binary |
@@ -317,6 +324,7 @@ Name: moex_dams
 | [qualified_name](qualified_name.md) |  |
 | [rationale](rationale.md) | Why this scoped wording differs from the reference definition |
 | [realizes_attribute_ref](realizes_attribute_ref.md) | Опциональная связь с логическим атрибутом (как concept_ref) |
+| [realizes_mappings](realizes_mappings.md) | Typed realizes mappings (ADR-046 Variant B) |
 | [reference_target](reference_target.md) | Цель для node_kind=reference (другая DataStructure или узел) |
 | [region](region.md) |  |
 | [registry_description](registry_description.md) |  |
@@ -503,6 +511,7 @@ Name: moex_dams
 | [Ncname](Ncname.md) | Prefix part of CURIE |
 | [Nodeidentifier](Nodeidentifier.md) | A URI, CURIE or BNODE that represents a node in a model |
 | [Objectidentifier](Objectidentifier.md) | A URI or CURIE that represents an object in the model |
+| [SchemaNodeRef](SchemaNodeRef.md) | SchemaNode address structure_id#local_key (ADR-039 / ADR-046) |
 | [SemVer](SemVer.md) |  |
 | [Sha256Digest](Sha256Digest.md) |  |
 | [Sparqlpath](Sparqlpath.md) | A string encoding a SPARQL Property Path |

@@ -273,6 +273,10 @@ access_points varchar
 data_containers varchar
 execution_assets varchar
 mappings varchar
+realizes_mappings varchar
+entity_physical_mappings varchar
+field_mappings varchar
+aligns_with_mappings varchar
 conceptual_properties varchar
 conceptual_domains varchar
 value_domains varchar
@@ -557,6 +561,102 @@ evidence_refs varchar
 approval_status varchar
 approved_by_ref varchar
 approved_at datetime
+description varchar
+}
+
+Table RealizesMapping {
+element_id varchar [not null, primary key]
+mapping_type varchar [not null]
+mapping_cardinality varchar [not null]
+transformation_ref varchar
+transformation_expression varchar
+confidence varchar
+Mapping_description varchar
+lifecycle_status varchar [not null]
+deprecated_by_ref varchar
+valid_from datetime
+valid_to datetime
+source_artifact_ref varchar
+evidence_refs varchar
+approval_status varchar
+approved_by_ref varchar
+approved_at datetime
+RealizesMapping_source_refs varchar
+RealizesMapping_target_refs varchar
+source_refs varchar
+target_refs varchar
+description varchar
+}
+
+Table EntityPhysicalMapping {
+element_id varchar [not null, primary key]
+mapping_type varchar [not null]
+mapping_cardinality varchar [not null]
+transformation_ref varchar
+transformation_expression varchar
+confidence varchar
+Mapping_description varchar
+lifecycle_status varchar [not null]
+deprecated_by_ref varchar
+valid_from datetime
+valid_to datetime
+source_artifact_ref varchar
+evidence_refs varchar
+approval_status varchar
+approved_by_ref varchar
+approved_at datetime
+EntityPhysicalMapping_source_refs varchar
+EntityPhysicalMapping_target_refs varchar
+source_refs varchar
+target_refs varchar
+description varchar
+}
+
+Table FieldMapping {
+element_id varchar [not null, primary key]
+mapping_type varchar [not null]
+mapping_cardinality varchar [not null]
+transformation_ref varchar
+transformation_expression varchar
+confidence varchar
+Mapping_description varchar
+lifecycle_status varchar [not null]
+deprecated_by_ref varchar
+valid_from datetime
+valid_to datetime
+source_artifact_ref varchar
+evidence_refs varchar
+approval_status varchar
+approved_by_ref varchar
+approved_at datetime
+FieldMapping_source_refs varchar
+FieldMapping_target_refs varchar
+source_refs varchar
+target_refs varchar
+description varchar
+}
+
+Table AlignsWithMapping {
+element_id varchar [not null, primary key]
+mapping_type varchar [not null]
+mapping_cardinality varchar [not null]
+transformation_ref varchar
+transformation_expression varchar
+confidence varchar
+Mapping_description varchar
+lifecycle_status varchar [not null]
+deprecated_by_ref varchar
+valid_from datetime
+valid_to datetime
+source_artifact_ref varchar
+evidence_refs varchar
+approval_status varchar
+approved_by_ref varchar
+approved_at datetime
+AlignsWithMapping_source_refs varchar
+AlignsWithMapping_target_refs varchar
+source_refs varchar
+target_refs varchar
 description varchar
 }
 
@@ -1251,6 +1351,10 @@ Ref: ModelPackage.access_points > AccessPoint.element_id
 Ref: ModelPackage.data_containers > DataContainer.element_id
 Ref: ModelPackage.execution_assets > ExecutionAsset.element_id
 Ref: ModelPackage.mappings > Mapping.element_id
+Ref: ModelPackage.realizes_mappings > RealizesMapping.element_id
+Ref: ModelPackage.entity_physical_mappings > EntityPhysicalMapping.element_id
+Ref: ModelPackage.field_mappings > FieldMapping.element_id
+Ref: ModelPackage.aligns_with_mappings > AlignsWithMapping.element_id
 Ref: ModelPackage.conceptual_properties > ConceptualProperty.element_id
 Ref: ModelPackage.conceptual_domains > ConceptualDomain.element_id
 Ref: ModelPackage.value_domains > ValueDomain.element_id
@@ -1316,6 +1420,16 @@ Ref: RelationTerm.glossary_term_refs > GlossaryTerm.registry_id
 Ref: RelationTerm.scoped_definitions > ScopedDefinition.scoped_definition_id
 Ref: ExternalClassRef.approved_by_ref > Role.registry_id
 Ref: Mapping.approved_by_ref > Role.registry_id
+Ref: RealizesMapping.approved_by_ref > Role.registry_id
+Ref: RealizesMapping.RealizesMapping_source_refs > LogicalEntity.element_id
+Ref: RealizesMapping.RealizesMapping_target_refs > ConceptualEntity.element_id
+Ref: EntityPhysicalMapping.approved_by_ref > Role.registry_id
+Ref: EntityPhysicalMapping.EntityPhysicalMapping_source_refs > DataCarrier.element_id
+Ref: EntityPhysicalMapping.EntityPhysicalMapping_target_refs > LogicalEntity.element_id
+Ref: FieldMapping.approved_by_ref > Role.registry_id
+Ref: FieldMapping.FieldMapping_source_refs > LogicalAttribute.element_id
+Ref: AlignsWithMapping.approved_by_ref > Role.registry_id
+Ref: AlignsWithMapping.AlignsWithMapping_source_refs > ConceptualEntity.element_id
 Ref: HasStructure.structure_ref > DataStructure.element_id
 Ref: TechnicalAsset.glossary_term_refs > GlossaryTerm.registry_id
 Ref: TechnicalAsset.TechnicalAsset_system_ref > ITSystem.registry_id
