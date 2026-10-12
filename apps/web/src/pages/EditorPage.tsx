@@ -222,7 +222,9 @@ export function EditorPage() {
           Open diagram
         </Link>
         {draft.sourceLabel && (
-          <span className="badge neutral">loaded: {draft.sourceLabel}</span>
+          <span className="badge neutral" data-testid="draft-source">
+            loaded: {draft.sourceLabel}
+          </span>
         )}
         {draft.dirty && <span className="badge neutral">unsaved</span>}
       </div>
