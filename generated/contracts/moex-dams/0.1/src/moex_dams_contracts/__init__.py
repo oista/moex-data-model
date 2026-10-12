@@ -468,8 +468,17 @@ class MappingTypeEnum(str, Enum):
 
     """
     semantic_equivalence = "semantic_equivalence"
+    """
+    Deprecated (ADR-046). Unused; removed in a later PR of the series.
+    """
     specialization = "specialization"
+    """
+    Deprecated (ADR-046). Unused; removed in a later PR of the series.
+    """
     implementation = "implementation"
+    """
+    Deprecated (ADR-046). Unused; removed in a later PR of the series.
+    """
     entity_physical = "entity_physical"
     """
     Explicit entity-level link between DataCarrier and LogicalEntity (PDM-003). Do not infer from field_mapping alone.
@@ -481,8 +490,17 @@ class MappingTypeEnum(str, Enum):
 
     """
     transformation = "transformation"
+    """
+    Deprecated (ADR-046). Unused; removed in a later PR of the series.
+    """
     aggregation = "aggregation"
+    """
+    Deprecated (ADR-046). Unused; removed in a later PR of the series.
+    """
     derivation = "derivation"
+    """
+    Deprecated (ADR-046). Unused; removed in a later PR of the series.
+    """
     realizes = "realizes"
     """
     Solution logical/concept realizes an enterprise conceptual entity.
@@ -1263,7 +1281,12 @@ class ModelPackage(ModelElement, HasPolicyBindings, HasGovernanceClassification,
     access_points: Optional[list[AccessPoint]] = Field(default=None, description="""Коллекция точек доступа пакета (Variant B, ADR-031).""")
     data_containers: Optional[list[DataContainer]] = Field(default=None, description="""Коллекция контейнеров пакета (Variant B, ADR-031).""")
     execution_assets: Optional[list[ExecutionAsset]] = Field(default=None, description="""Коллекция исполняемых активов пакета (Variant B, ADR-031).""")
-    mappings: Optional[list[Mapping]] = Field(default=None)
+    mappings: Optional[list[Mapping]] = Field(default=None, description="""Deprecated (ADR-046). Use realizes_mappings / entity_physical_mappings / field_mappings / aligns_with_mappings. Removed in a later PR of the series.
+""")
+    realizes_mappings: Optional[list[RealizesMapping]] = Field(default=None, description="""Typed realizes mappings (ADR-046 Variant B).""")
+    entity_physical_mappings: Optional[list[EntityPhysicalMapping]] = Field(default=None, description="""Typed entity_physical mappings (ADR-046 Variant B).""")
+    field_mappings: Optional[list[FieldMapping]] = Field(default=None, description="""Typed field_mapping mappings (ADR-046 Variant B).""")
+    aligns_with_mappings: Optional[list[AlignsWithMapping]] = Field(default=None, description="""Typed aligns_with mappings (ADR-046 Variant B).""")
     conceptual_properties: Optional[list[ConceptualProperty]] = Field(default=None, description="""Значимые концептуальные свойства (только enterprise-пакеты).""")
     conceptual_domains: Optional[list[ConceptualDomain]] = Field(default=None, description="""Концептуальные домены смыслов (только enterprise-пакеты).""")
     value_domains: Optional[list[ValueDomain]] = Field(default=None, description="""Домены представления значений (enterprise или solution).""")
@@ -1603,10 +1626,110 @@ class ExternalClassRef(HasProvenance):
 
 class Mapping(HasProvenance, HasLifecycle, DescribedElement, IdentifiedElement):
     """
-    Явное соответствие между элементами. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to. Identity slots name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044); display label = source_refs -> target_refs [mapping_type].
+    Явное соответствие между элементами. Prefer typed subclasses (RealizesMapping, EntityPhysicalMapping, FieldMapping, AlignsWithMapping) and separate ModelPackage collections (ADR-046). Base Mapping remains for the deprecated polymorphic mappings collection during the compatibility window. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to. Identity slots name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044); display label = source_refs -> target_refs [mapping_type].
 
     """
     source_refs: Optional[list[str]] = Field(default=None, min_length=1)
+    target_refs: Optional[list[str]] = Field(default=None, min_length=1)
+    mapping_type: MappingTypeEnum = Field(default=...)
+    mapping_cardinality: MappingCardinalityEnum = Field(default=...)
+    transformation_ref: Optional[str] = Field(default=None)
+    transformation_expression: Optional[str] = Field(default=None)
+    confidence: Optional[Decimal] = Field(default=None, ge=0, le=1)
+    description: Optional[str] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+    source_artifact_ref: Optional[str] = Field(default=None)
+    evidence_refs: Optional[list[str]] = Field(default=None)
+    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
+    approved_by_ref: Optional[str] = Field(default=None)
+    approved_at: Optional[datetime ] = Field(default=None)
+    element_id: str = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+
+
+class RealizesMapping(Mapping):
+    """
+    Solution logical entity realizes an enterprise conceptual entity (ADR-046). Designator via L1 rule (not equals_string on enum slot). source_refs narrowed to LogicalEntity in PR-1; ConceptualEntity via any_of deferred if needed.
+
+    """
+    source_refs: Optional[list[str]] = Field(default=None, min_length=1)
+    target_refs: Optional[list[str]] = Field(default=None, min_length=1)
+    mapping_type: MappingTypeEnum = Field(default=...)
+    mapping_cardinality: MappingCardinalityEnum = Field(default=...)
+    transformation_ref: Optional[str] = Field(default=None)
+    transformation_expression: Optional[str] = Field(default=None)
+    confidence: Optional[Decimal] = Field(default=None, ge=0, le=1)
+    description: Optional[str] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+    source_artifact_ref: Optional[str] = Field(default=None)
+    evidence_refs: Optional[list[str]] = Field(default=None)
+    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
+    approved_by_ref: Optional[str] = Field(default=None)
+    approved_at: Optional[datetime ] = Field(default=None)
+    element_id: str = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+
+
+class EntityPhysicalMapping(Mapping):
+    """
+    Explicit entity-level link between DataCarrier and LogicalEntity (ADR-046 / PDM-003). Exactly one source and one target; cardinality one_to_one.
+
+    """
+    source_refs: Optional[list[str]] = Field(default=None, min_length=1, max_length=1)
+    target_refs: Optional[list[str]] = Field(default=None, min_length=1, max_length=1)
+    mapping_type: MappingTypeEnum = Field(default=...)
+    mapping_cardinality: MappingCardinalityEnum = Field(default=...)
+    transformation_ref: Optional[str] = Field(default=None)
+    transformation_expression: Optional[str] = Field(default=None)
+    confidence: Optional[Decimal] = Field(default=None, ge=0, le=1)
+    description: Optional[str] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+    source_artifact_ref: Optional[str] = Field(default=None)
+    evidence_refs: Optional[list[str]] = Field(default=None)
+    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
+    approved_by_ref: Optional[str] = Field(default=None)
+    approved_at: Optional[datetime ] = Field(default=None)
+    element_id: str = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+
+
+class FieldMapping(Mapping):
+    """
+    mapsTo between LogicalAttribute and SchemaNode address (structure_id#local_key) via SchemaNodeRef (ADR-039 / ADR-046).
+
+    """
+    source_refs: Optional[list[str]] = Field(default=None, min_length=1)
+    target_refs: Optional[list[str]] = Field(default=None, min_length=1)
+    mapping_type: MappingTypeEnum = Field(default=...)
+    mapping_cardinality: MappingCardinalityEnum = Field(default=...)
+    transformation_ref: Optional[str] = Field(default=None)
+    transformation_expression: Optional[str] = Field(default=None)
+    confidence: Optional[Decimal] = Field(default=None, ge=0, le=1)
+    description: Optional[str] = Field(default=None)
+    lifecycle_status: LifecycleStatusEnum = Field(default=...)
+    deprecated_by_ref: Optional[str] = Field(default=None)
+    source_artifact_ref: Optional[str] = Field(default=None)
+    evidence_refs: Optional[list[str]] = Field(default=None)
+    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
+    approved_by_ref: Optional[str] = Field(default=None)
+    approved_at: Optional[datetime ] = Field(default=None)
+    element_id: str = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+
+
+class AlignsWithMapping(Mapping):
+    """
+    Enterprise conceptual entity aligns with an external reference IRI (ADR-046). Exactly one source; one or more target URIs.
+
+    """
+    source_refs: Optional[list[str]] = Field(default=None, min_length=1, max_length=1)
     target_refs: Optional[list[str]] = Field(default=None, min_length=1)
     mapping_type: MappingTypeEnum = Field(default=...)
     mapping_cardinality: MappingCardinalityEnum = Field(default=...)
@@ -2493,6 +2616,10 @@ Relationship.model_rebuild()
 RelationTerm.model_rebuild()
 ExternalClassRef.model_rebuild()
 Mapping.model_rebuild()
+RealizesMapping.model_rebuild()
+EntityPhysicalMapping.model_rebuild()
+FieldMapping.model_rebuild()
+AlignsWithMapping.model_rebuild()
 HasStructure.model_rebuild()
 HasProtocolBinding.model_rebuild()
 Contains.model_rebuild()

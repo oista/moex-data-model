@@ -14,6 +14,17 @@
       IdentifiedElement <|-- Mapping
         click IdentifiedElement href "../IdentifiedElement"
       
+
+      Mapping <|-- RealizesMapping
+        click RealizesMapping href "../RealizesMapping"
+      Mapping <|-- EntityPhysicalMapping
+        click EntityPhysicalMapping href "../EntityPhysicalMapping"
+      Mapping <|-- FieldMapping
+        click FieldMapping href "../FieldMapping"
+      Mapping <|-- AlignsWithMapping
+        click AlignsWithMapping href "../AlignsWithMapping"
+      
+
       Mapping : approval_status
         
           

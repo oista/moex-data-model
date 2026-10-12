@@ -62,6 +62,10 @@ classes:
       - data_containers
       - execution_assets
       - mappings
+      - realizes_mappings
+      - entity_physical_mappings
+      - field_mappings
+      - aligns_with_mappings
       - conceptual_properties
       - conceptual_domains
       - value_domains
@@ -268,9 +272,13 @@ classes:
       - HasLifecycle
       - HasProvenance
     description: >
-      Явное соответствие между элементами. Discriminate via mapping_type:
-      realizes (solution→enterprise conceptual), entity_physical
-      (DataCarrier↔LogicalEntity), field_mapping/mapsTo
+      Явное соответствие между элементами. Prefer typed subclasses
+      (RealizesMapping, EntityPhysicalMapping, FieldMapping,
+      AlignsWithMapping) and separate ModelPackage collections (ADR-046).
+      Base Mapping remains for the deprecated polymorphic mappings
+      collection during the compatibility window. Discriminate via
+      mapping_type: realizes (solution→enterprise conceptual),
+      entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo
       (SchemaNode↔LogicalAttribute), aligns_with (enterprise↔external term).
       Not used for SpecImpl implements/conforms_to.
       Identity slots name/title/aliases/glossary_term_refs/tags removed in
@@ -287,6 +295,112 @@ classes:
     slot_usage:
       description:
         required: false
+
+  RealizesMapping:
+    is_a: Mapping
+    description: >
+      Solution logical entity realizes an enterprise conceptual entity
+      (ADR-046). Designator via L1 rule (not equals_string on enum slot).
+      source_refs narrowed to LogicalEntity in PR-1; ConceptualEntity via
+      any_of deferred if needed.
+    slot_usage:
+      source_refs:
+        range: LogicalEntity
+        inlined: false
+        multivalued: true
+        minimum_cardinality: 1
+      target_refs:
+        range: ConceptualEntity
+        inlined: false
+        multivalued: true
+        minimum_cardinality: 1
+    rules:
+      - description: 'INV-MAP: RealizesMapping.mapping_type must be realizes'
+        preconditions: {}
+        postconditions:
+          slot_conditions:
+            mapping_type:
+              equals_string: realizes
+
+  EntityPhysicalMapping:
+    is_a: Mapping
+    description: >
+      Explicit entity-level link between DataCarrier and LogicalEntity
+      (ADR-046 / PDM-003). Exactly one source and one target; cardinality
+      one_to_one.
+    slot_usage:
+      source_refs:
+        range: DataCarrier
+        inlined: false
+        multivalued: true
+        minimum_cardinality: 1
+        maximum_cardinality: 1
+      target_refs:
+        range: LogicalEntity
+        inlined: false
+        multivalued: true
+        minimum_cardinality: 1
+        maximum_cardinality: 1
+    rules:
+      - description: 'INV-MAP: EntityPhysicalMapping.mapping_type must be entity_physical'
+        preconditions: {}
+        postconditions:
+          slot_conditions:
+            mapping_type:
+              equals_string: entity_physical
+      - description: 'INV-MAP: EntityPhysicalMapping.mapping_cardinality must be one_to_one'
+        preconditions: {}
+        postconditions:
+          slot_conditions:
+            mapping_cardinality:
+              equals_string: one_to_one
+
+  FieldMapping:
+    is_a: Mapping
+    description: >
+      mapsTo between LogicalAttribute and SchemaNode address
+      (structure_id#local_key) via SchemaNodeRef (ADR-039 / ADR-046).
+    slot_usage:
+      source_refs:
+        range: LogicalAttribute
+        inlined: false
+        multivalued: true
+        minimum_cardinality: 1
+      target_refs:
+        range: SchemaNodeRef
+        multivalued: true
+        minimum_cardinality: 1
+    rules:
+      - description: 'INV-MAP: FieldMapping.mapping_type must be field_mapping'
+        preconditions: {}
+        postconditions:
+          slot_conditions:
+            mapping_type:
+              equals_string: field_mapping
+
+  AlignsWithMapping:
+    is_a: Mapping
+    description: >
+      Enterprise conceptual entity aligns with an external reference IRI
+      (ADR-046). Exactly one source; one or more target URIs.
+    slot_usage:
+      source_refs:
+        range: ConceptualEntity
+        inlined: false
+        multivalued: true
+        minimum_cardinality: 1
+        maximum_cardinality: 1
+      target_refs:
+        range: uri
+        multivalued: true
+        minimum_cardinality: 1
+    rules:
+      - description: 'INV-MAP: AlignsWithMapping.mapping_type must be aligns_with'
+        preconditions: {}
+        postconditions:
+          slot_conditions:
+            mapping_type:
+              equals_string: aligns_with
 
 slots:
   api_version:
@@ -340,6 +454,36 @@ slots:
     multivalued: true
     inlined: true
     inlined_as_list: true
+    deprecated: >
+      Deprecated (ADR-046). Use realizes_mappings / entity_physical_mappings /
+      field_mappings / aligns_with_mappings. Removed in a later PR of the series.
+    description: >
+      Deprecated (ADR-046). Use realizes_mappings / entity_physical_mappings /
+      field_mappings / aligns_with_mappings. Removed in a later PR of the series.
+  realizes_mappings:
+    range: RealizesMapping
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Typed realizes mappings (ADR-046 Variant B).
+  entity_physical_mappings:
+    range: EntityPhysicalMapping
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Typed entity_physical mappings (ADR-046 Variant B).
+  field_mappings:
+    range: FieldMapping
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Typed field_mapping mappings (ADR-046 Variant B).
+  aligns_with_mappings:
+    range: AlignsWithMapping
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    description: Typed aligns_with mappings (ADR-046 Variant B).
   data_carriers:
     range: DataCarrier
     multivalued: true

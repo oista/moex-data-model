@@ -11,6 +11,14 @@
       ]
     },
     {
+      "iri": "https://data.moex.com/dams/AlignsWithMapping",
+      "is_mixin": false,
+      "name": "AlignsWithMapping",
+      "parents": [
+        "Mapping"
+      ]
+    },
+    {
       "iri": "https://data.moex.com/dams/BusinessDomain",
       "is_mixin": false,
       "name": "BusinessDomain",
@@ -183,6 +191,14 @@
       ]
     },
     {
+      "iri": "https://data.moex.com/dams/EntityPhysicalMapping",
+      "is_mixin": false,
+      "name": "EntityPhysicalMapping",
+      "parents": [
+        "Mapping"
+      ]
+    },
+    {
       "iri": "https://data.moex.com/dams/ExecutionAsset",
       "is_mixin": false,
       "name": "ExecutionAsset",
@@ -196,6 +212,14 @@
       "name": "ExternalClassRef",
       "parents": [
         "HasProvenance"
+      ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/FieldMapping",
+      "is_mixin": false,
+      "name": "FieldMapping",
+      "parents": [
+        "Mapping"
       ]
     },
     {
@@ -457,6 +481,14 @@
       "name": "PolicyBinding",
       "parents": [
         "HasValidity"
+      ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/RealizesMapping",
+      "is_mixin": false,
+      "name": "RealizesMapping",
+      "parents": [
+        "Mapping"
       ]
     },
     {
@@ -1949,7 +1981,7 @@
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "xsd": "http://www.w3.org/2001/XMLSchema#"
   },
-  "schema_digest": "sha256:f9c39e8d22948313d93585e02dadc3b3613093dc924beb79fe31e26e819b2422",
+  "schema_digest": "sha256:a8446f786716c1cdb7dee975893d86b6d3befa1823cd044381f4d29ced793996",
   "schema_id": "https://data.moex.com/dams/v0.1",
   "schema_name": "moex_dams",
   "schema_version": "3.0.0",
@@ -1969,6 +2001,10 @@
     {
       "iri": "https://data.moex.com/dams/alignment_rationale",
       "name": "alignment_rationale"
+    },
+    {
+      "iri": "https://data.moex.com/dams/aligns_with_mappings",
+      "name": "aligns_with_mappings"
     },
     {
       "iri": "https://data.moex.com/dams/api_version",
@@ -2351,6 +2387,10 @@
       "name": "entity_bindings"
     },
     {
+      "iri": "https://data.moex.com/dams/entity_physical_mappings",
+      "name": "entity_physical_mappings"
+    },
+    {
       "iri": "https://data.moex.com/dams/entity_tier",
       "name": "entity_tier"
     },
@@ -2389,6 +2429,10 @@
     {
       "iri": "https://data.moex.com/dams/external_specification_ref",
       "name": "external_specification_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/field_mappings",
+      "name": "field_mappings"
     },
     {
       "iri": "https://data.moex.com/dams/filter_expression",
@@ -2857,6 +2901,10 @@
     {
       "iri": "https://data.moex.com/dams/realizes_attribute_ref",
       "name": "realizes_attribute_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/realizes_mappings",
+      "name": "realizes_mappings"
     },
     {
       "iri": "https://data.moex.com/dams/reference_target",
