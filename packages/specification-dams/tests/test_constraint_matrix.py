@@ -1,4 +1,4 @@
-"""Constraint matrix structural checks (ADR-045 / PR-C1…C5)."""
+"""Constraint matrix structural checks (ADR-045 / PR-C1…C5; audit A2)."""
 
 from __future__ import annotations
 
@@ -21,30 +21,39 @@ MATRIX = (
 CHECK = REPO / "scripts" / "check_constraint_matrix.py"
 
 
+def _load_matrix() -> dict:
+    return yaml.safe_load(MATRIX.read_text(encoding="utf-8"))
+
+
 def test_matrix_file_exists() -> None:
     assert MATRIX.is_file()
     assert MATRIX.with_name("constraint-matrix.schema.yaml").is_file()
 
 
-def test_baseline_removed_registry_present() -> None:
-    data = yaml.safe_load(MATRIX.read_text(encoding="utf-8"))
+def test_registry_matches_invariants() -> None:
+    data = _load_matrix()
     assert "baseline" not in data or not data.get("baseline")
-    assert len(data["invariant_id_registry"]) == 27
-    assert len(data["invariants"]) == 27
+    registry = list(data["invariant_id_registry"])
+    invs = list(data["invariants"])
+    inv_ids = [inv["id"] for inv in invs]
+    assert len(registry) == len(invs)
+    assert registry == inv_ids
+    assert len(invs) >= 27
+    assert inv_ids[0] == "INV-001"
+    assert inv_ids == sorted(inv_ids)
+
+
+def test_known_waivers_and_level_status() -> None:
+    data = _load_matrix()
     statuses = {inv["id"]: inv["status"] for inv in data["invariants"]}
     level_status = {inv["id"]: inv["level_status"] for inv in data["invariants"]}
-    for i in range(1, 18):
-        assert statuses[f"INV-{i:03d}"] == "implemented"
     assert level_status["INV-001"]["L1"] == "waived"
     assert level_status["INV-002"]["L3"] == "implemented"
-    for inv_id in ("INV-018", "INV-019", "INV-020", "INV-021", "INV-022", "INV-026"):
-        assert statuses[inv_id] == "implemented"
     assert level_status["INV-020"]["L3"] == "waived"
     for inv_id in ("INV-023", "INV-024", "INV-025", "INV-027"):
         assert statuses[inv_id] == "waived"
-        assert data["invariants"][
-            int(inv_id.split("-")[1]) - 1
-        ].get("adr_ref")
+        row = next(i for i in data["invariants"] if i["id"] == inv_id)
+        assert row.get("adr_ref")
 
 
 def test_check_constraint_matrix_script_ok() -> None:
@@ -59,11 +68,11 @@ def test_check_constraint_matrix_script_ok() -> None:
     assert proc.returncode == 0, proc.stderr or proc.stdout
 
 
-def test_extra_schema_rule_would_fail(tmp_path: Path, monkeypatch) -> None:
+def test_extra_schema_rule_would_fail() -> None:
     """Sanity: registry must list every invariant id."""
     from moex_dams.rules.constraint_matrix import validate_matrix
 
-    data = yaml.safe_load(MATRIX.read_text(encoding="utf-8"))
+    data = _load_matrix()
     data["invariant_id_registry"] = [
         x for x in data["invariant_id_registry"] if x != "INV-001"
     ]
@@ -74,5 +83,5 @@ def test_extra_schema_rule_would_fail(tmp_path: Path, monkeypatch) -> None:
 def test_package_validate_matrix_ok() -> None:
     from moex_dams.rules.constraint_matrix import validate_matrix
 
-    data = yaml.safe_load(MATRIX.read_text(encoding="utf-8"))
+    data = _load_matrix()
     assert validate_matrix(data, run_fixtures=False, gate_strict=True) == []

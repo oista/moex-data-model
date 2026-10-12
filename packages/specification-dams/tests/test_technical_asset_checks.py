@@ -122,7 +122,7 @@ def test_operation_without_interface_ref() -> None:
             "asset_kind": "operation",
         }
     ]
-    assert "DAMS-REQ-PDM-011.c1" in _codes(_errors_from_technical(data))
+    assert "DAMS-INV-016" in _codes(_errors_from_technical(data))
 
 
 def test_in_memory_with_location_uri() -> None:
@@ -138,7 +138,7 @@ def test_in_memory_with_location_uri() -> None:
     ]
     # Remove None keys that would confuse presence checks
     data["data_carriers"][0].pop("structure_ref", None)
-    assert "DAMS-REQ-PDM-012.c1" in _codes(_errors_from_technical(data))
+    assert "DAMS-INV-015" in _codes(_errors_from_technical(data))
 
 
 def test_wrong_asset_kind() -> None:
@@ -180,7 +180,7 @@ def test_entity_physical_wrong_endpoint_types() -> None:
         }
     ]
     errs = _errors_from_technical(data)
-    assert "DAMS-REQ-PDM-009.c1" in _codes(errs)
+    assert "DAMS-INV-033" in _codes(errs)
     # Direction-aware rewrite tags INV-033
     inv = {
         det.detail_value
@@ -242,7 +242,7 @@ def test_direction_on_data_container() -> None:
             "direction": "internal",
         }
     ]
-    assert "DAMS-REQ-PDM-008.c1" in _codes(_errors_from_technical(data))
+    assert "DAMS-INV-018" in _codes(_errors_from_technical(data))
 
 
 def test_technical_checks_wired_into_formal_requirements() -> None:

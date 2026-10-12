@@ -42,6 +42,7 @@ ALLOWED_DELTAS: dict[tuple[str, str], str] = {
     ("Mapping", "title"): ABSENT,
     ("Mapping", "glossary_term_refs"): ABSENT,
     ("Mapping", "tags"): ABSENT,
+    ("FormalCheck", "description"): OPT,
 }
 
 MIXIN_SKIP = frozenset(
@@ -117,7 +118,7 @@ def test_mapping_is_identified_element_without_name():
 
 def test_schema_version_is_3_0_0():
     sv = SchemaView(str(SCHEMA))
-    assert sv.schema.version == "3.0.0"
+    assert sv.schema.version == "3.1.0"
 
 
 def test_pydantic_field_required_sets_match_for_key_classes():

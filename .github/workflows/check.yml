@@ -24,6 +24,22 @@ jobs:
       - name: Stage 0 check_all
         run: python scripts/check_all.py
 
+  # DAMS / LinkML / repository-loader / architecture tests (audit A3)
+  dams-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - name: Install make
+        run: sudo apt-get update && sudo apt-get install -y make
+
+      - name: dams-packages-check
+        run: make dams-packages-check
+
   # Viewer + ontology packages stay outside Stage 0 gate (heavier / separate deps)
   viewer-and-packages:
     runs-on: ubuntu-latest

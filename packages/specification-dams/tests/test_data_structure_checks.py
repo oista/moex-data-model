@@ -53,7 +53,7 @@ def test_duplicate_local_key() -> None:
         }
     )
     codes = {d.diagnostic_code for d in check_data_structures(data)}
-    assert "DAMS-REQ-PDM-013.c1" in codes
+    assert "DAMS-INV-022" in codes
 
 
 def test_missing_root_local_key() -> None:

@@ -166,7 +166,7 @@ def check_local_key_unique(data: dict[str, Any]) -> list[Diagnostic]:
             if count > 1:
                 out.append(
                     _diag(
-                        code="DAMS-REQ-PDM-013.c1",
+                        code="DAMS-INV-022",
                         invariant_id="INV-022",
                         message=(
                             f'DataStructure "{sid}" has duplicate local_key {lk!r} '
@@ -229,7 +229,7 @@ def check_node_edge_cycles(data: dict[str, Any]) -> list[Diagnostic]:
                 cycle_reported = True
                 out.append(
                     _diag(
-                        code="DAMS-REQ-PDM-014.c1",
+                        code="DAMS-INV-020",
                         invariant_id="INV-020",
                         message=(
                             f'DataStructure "{sid}" has a cycle in children/item_node edges.'
@@ -321,7 +321,7 @@ def check_relational_slots(data: dict[str, Any]) -> list[Diagnostic]:
             if bad:
                 out.append(
                     _diag(
-                        code="DAMS-REQ-PDM-016.c1",
+                        code="DAMS-INV-021",
                         invariant_id="INV-021",
                         message=(
                             f'SchemaNode "{sid}#{lk}" declares relational slots '
@@ -393,7 +393,7 @@ def check_node_kind_shape(data: dict[str, Any]) -> list[Diagnostic]:
                 if not has_item:
                     out.append(
                         _diag(
-                            code="DAMS-REQ-PDM-020.c1",
+                            code="DAMS-INV-012",
                             invariant_id="INV-012",
                             message=(
                                 f'SchemaNode "{subject}" with node_kind={kind} '
@@ -409,7 +409,7 @@ def check_node_kind_shape(data: dict[str, Any]) -> list[Diagnostic]:
                 if has_children:
                     out.append(
                         _diag(
-                            code="DAMS-REQ-PDM-020.c2",
+                            code="DAMS-INV-012",
                             invariant_id="INV-012",
                             message=(
                                 f'SchemaNode "{subject}" with node_kind={kind} '
@@ -426,7 +426,7 @@ def check_node_kind_shape(data: dict[str, Any]) -> list[Diagnostic]:
                 if has_children:
                     out.append(
                         _diag(
-                            code="DAMS-REQ-PDM-020.c3",
+                            code="DAMS-INV-013",
                             invariant_id="INV-013",
                             message=(
                                 f'SchemaNode "{subject}" with node_kind={kind} '
@@ -440,7 +440,7 @@ def check_node_kind_shape(data: dict[str, Any]) -> list[Diagnostic]:
                 if has_item:
                     out.append(
                         _diag(
-                            code="DAMS-REQ-PDM-020.c4",
+                            code="DAMS-INV-013",
                             invariant_id="INV-013",
                             message=(
                                 f'SchemaNode "{subject}" with node_kind={kind} '
@@ -624,7 +624,7 @@ def check_message_refs_kinds(data: dict[str, Any]) -> list[Diagnostic]:
         if kind == "interface":
             out.append(
                 _diag(
-                    code="DAMS-REQ-PDM-018.c1",
+                    code="DAMS-INV-017",
                     invariant_id="INV-017",
                     message=(
                         f'AccessPoint "{sid}" with asset_kind=interface must not declare '
@@ -638,7 +638,7 @@ def check_message_refs_kinds(data: dict[str, Any]) -> list[Diagnostic]:
         elif kind and kind not in MESSAGE_REFS_ALLOWED_KINDS:
             out.append(
                 _diag(
-                    code="DAMS-REQ-PDM-018.c2",
+                    code="DAMS-INV-019",
                     invariant_id="INV-019",
                     message=(
                         f'AccessPoint "{sid}" with asset_kind={kind!r} must not declare '

@@ -94,7 +94,7 @@ def check_ontology_uris(schema_path: Path | str) -> tuple[Diagnostic, ...]:
                 # INV-026 (ADR-030): prefix URI must end with '/' or '#'
                 diagnostics.append(
                     _diag(
-                        "MOEX-ONT-004",
+                        "DAMS-INV-026",
                         (
                             f"Prefix {key!r} in schema {schema_name!r} has URI "
                             f"{text!r} without trailing '/' or '#' (INV-026)."

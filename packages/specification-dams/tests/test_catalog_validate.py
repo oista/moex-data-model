@@ -52,15 +52,15 @@ def test_real_catalog_passes_linkml_requirement_catalog_vacuous() -> None:
     assert errors == [], errors[:10]
 
 
-def test_real_catalog_fails_under_jsonschema_plugin() -> None:
-    """Documents C1a impact: plugin rejects undeclared FormalCheck fields."""
+def test_real_catalog_passes_under_jsonschema_plugin() -> None:
+    """Catalog validates once FormalCheck description/effective are in schema."""
     from moex_standard_linkml.validation import error_results, make_linkml_validator
 
     data = yaml.safe_load(CATALOG.read_text(encoding="utf-8"))
     errors = error_results(
         make_linkml_validator(SCHEMA).validate(data, target_class="RequirementCatalog")
     )
-    assert errors, "expected catalog to fail until description/effective are in schema"
+    assert errors == [], errors[:10]
 
 
 def test_unknown_check_kind() -> None:

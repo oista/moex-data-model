@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import pytest
 from moex_modeling import DiagnosticSeverity
 
 from moex_dams.rules.data_structure import check_data_structures
@@ -165,10 +166,22 @@ def test_inv_018_direction_forbidden_tagged() -> None:
     assert "INV-018" in _inv_ids(diags)
 
 
-def test_l2_yaml_fixtures_cover_tagged_invariants() -> None:
-    """PR-C3c: each tagged L2 INV has valid/invalid YAML under examples/invariants/l2/."""
-    from pathlib import Path
+def _l2_implemented_ids() -> list[str]:
+    import yaml
 
+    from moex_dams.rules.constraint_matrix import matrix_path
+
+    data = yaml.safe_load(matrix_path().read_text(encoding="utf-8"))
+    return [
+        str(inv["id"])
+        for inv in data["invariants"]
+        if (inv.get("level_status") or {}).get("L2") == "implemented"
+    ]
+
+
+@pytest.mark.parametrize("iid", _l2_implemented_ids())
+def test_l2_yaml_fixtures_cover_tagged_invariants(iid: str) -> None:
+    """A2: every L2-implemented INV has valid/invalid YAML exercised by package checks."""
     import yaml
 
     from moex_dams.rules.constraint_matrix import (
@@ -189,26 +202,15 @@ def test_l2_yaml_fixtures_cover_tagged_invariants() -> None:
         / "invariants"
         / "l2"
     )
-    for iid in (
-        "INV-012",
-        "INV-013",
-        "INV-015",
-        "INV-016",
-        "INV-017",
-        "INV-019",
-        "INV-020",
-        "INV-021",
-        "INV-022",
-        "INV-026",
-    ):
-        valid = yaml.safe_load((l2 / f"{iid}.valid.yaml").read_text(encoding="utf-8"))
-        invalid_path = l2 / f"{iid}.invalid.yaml"
-        invalid = yaml.safe_load(invalid_path.read_text(encoding="utf-8"))
-        if iid == "INV-026":
-            assert iid not in _collect_invariant_ids(
-                list(check_ontology_uris(l2 / f"{iid}.valid.yaml"))
-            )
-            assert iid in _collect_invariant_ids(list(check_ontology_uris(invalid_path)))
-        else:
-            assert iid not in _collect_invariant_ids(_run_l2_package_checks(valid))
-            assert iid in _collect_invariant_ids(_run_l2_package_checks(invalid))
+    valid_path = l2 / f"{iid}.valid.yaml"
+    invalid_path = l2 / f"{iid}.invalid.yaml"
+    assert valid_path.is_file(), f"missing {valid_path}"
+    assert invalid_path.is_file(), f"missing {invalid_path}"
+    if iid == "INV-026":
+        assert iid not in _collect_invariant_ids(list(check_ontology_uris(valid_path)))
+        assert iid in _collect_invariant_ids(list(check_ontology_uris(invalid_path)))
+        return
+    valid = yaml.safe_load(valid_path.read_text(encoding="utf-8"))
+    assert iid not in _collect_invariant_ids(_run_l2_package_checks(valid))
+    invalid = yaml.safe_load(invalid_path.read_text(encoding="utf-8"))
+    assert iid in _collect_invariant_ids(_run_l2_package_checks(invalid))

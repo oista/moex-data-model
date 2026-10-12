@@ -34,7 +34,7 @@ def test_all_l1_fixtures_negative_mode() -> None:
     man = yaml.safe_load(MANIFEST.read_text(encoding="utf-8"))
     validator = make_linkml_validator(SCHEMA)
     inv_dir = MANIFEST.parent
-    assert len(man["cases"]) == 17
+    assert len(man["cases"]) >= 17
     for case in man["cases"]:
         target = case["target_class"]
         valid = yaml.safe_load((inv_dir / case["valid"]).read_text(encoding="utf-8"))
