@@ -12,7 +12,7 @@ data_model_bindings:
   model_version: 0.1.0
   model_revision: rev-1
   compatibility_mode: backward
-  integrity_digest: sha256:0000000000000000000000000000000000000000000000000000000000000002
+  integrity_digest: sha256:fe2dea9ecc415820566b521f7c922610b1438a29b820d4555d4d66d4ac97252f
   generated_at: "2026-10-12T00:00:00Z"
   selections:
   - element_id: dams:selection/inv041-bad
