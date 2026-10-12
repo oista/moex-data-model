@@ -1,0 +1,10 @@
+﻿# INV-030 valid EntityPhysicalMapping cardinality designator.
+element_id: dams:mapping/inv030
+description: x
+lifecycle_status: draft
+mapping_type: entity_physical
+mapping_cardinality: one_to_one
+source_refs:
+- dams:physical/a
+target_refs:
+- dams:logical/b

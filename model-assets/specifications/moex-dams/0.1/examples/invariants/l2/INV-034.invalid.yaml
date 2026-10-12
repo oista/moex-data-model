@@ -1,0 +1,34 @@
+element_id: dams:model/inv034
+implementation_scope: enterprise
+logical_entities:
+- element_id: dams:logical/inv034/E
+  name: E
+  description: e
+  lifecycle_status: active
+  attributes:
+  - element_id: dams:logical/inv034/E/a
+    name: a
+    description: a
+    lifecycle_status: active
+data_structures:
+- element_id: dams:structure/inv034/S
+  schema_format: json_schema
+  structure_version: 1.0.0
+  root_local_key: root
+  nodes:
+  - local_key: root
+    node_kind: object
+    children:
+    - a
+  - local_key: a
+    node_kind: scalar
+field_mappings:
+- element_id: dams:mapping/inv034/fm-bad
+  description: wrong ends
+  lifecycle_status: active
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+  source_refs:
+  - dams:logical/inv034/E
+  target_refs:
+  - dams:logical/inv034/E/a

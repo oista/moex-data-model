@@ -170,3 +170,18 @@ superseded_by: []
 - `.tmp-pdf-extract/` (5 txt); запись в `.gitignore`.
 
 **Документы:** ссылки на spike заменены на тег.
+
+## ADR-046 PR-4: typed Mapping endpoint invariants
+
+**Добавлено**
+
+- INV-028..032 (L1; INV-028 also L3): designator rules на `RealizesMapping` /
+  `EntityPhysicalMapping` / `FieldMapping` / `AlignsWithMapping` (`INV-NNN:` в
+  `moex-core.yaml`, fixtures; manual SHACL SPARQL for designators).
+- INV-033..036 (L2+L3): direction-aware endpoint kinds; `check_mapping_endpoint_types`
+  + manual SHACL (EntityPhysical maxCount 1, AlignsWith http(s)).
+- INV-037 (L3): FieldMapping `SchemaNodeRef` pattern (gen-shacl miss).
+- PDM-009 statement обновлён на направление source→target (ADR-046).
+
+**Стало строже:** entity_physical / field_mapping проверяют направление концов, не только
+наличие пары классов; realizes / aligns_with покрыты явными INV.

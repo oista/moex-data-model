@@ -315,8 +315,11 @@ classes:
         multivalued: true
         minimum_cardinality: 1
     rules:
-      - description: 'INV-MAP: RealizesMapping.mapping_type must be realizes'
-        preconditions: {}
+      - description: 'INV-028: RealizesMapping.mapping_type must be realizes'
+        preconditions:
+          slot_conditions:
+            mapping_type:
+              value_presence: PRESENT
         postconditions:
           slot_conditions:
             mapping_type:
@@ -342,14 +345,20 @@ classes:
         minimum_cardinality: 1
         maximum_cardinality: 1
     rules:
-      - description: 'INV-MAP: EntityPhysicalMapping.mapping_type must be entity_physical'
-        preconditions: {}
+      - description: 'INV-029: EntityPhysicalMapping.mapping_type must be entity_physical'
+        preconditions:
+          slot_conditions:
+            mapping_type:
+              value_presence: PRESENT
         postconditions:
           slot_conditions:
             mapping_type:
               equals_string: entity_physical
-      - description: 'INV-MAP: EntityPhysicalMapping.mapping_cardinality must be one_to_one'
-        preconditions: {}
+      - description: 'INV-030: EntityPhysicalMapping.mapping_cardinality must be one_to_one'
+        preconditions:
+          slot_conditions:
+            mapping_cardinality:
+              value_presence: PRESENT
         postconditions:
           slot_conditions:
             mapping_cardinality:
@@ -371,8 +380,11 @@ classes:
         multivalued: true
         minimum_cardinality: 1
     rules:
-      - description: 'INV-MAP: FieldMapping.mapping_type must be field_mapping'
-        preconditions: {}
+      - description: 'INV-031: FieldMapping.mapping_type must be field_mapping'
+        preconditions:
+          slot_conditions:
+            mapping_type:
+              value_presence: PRESENT
         postconditions:
           slot_conditions:
             mapping_type:
@@ -395,8 +407,11 @@ classes:
         multivalued: true
         minimum_cardinality: 1
     rules:
-      - description: 'INV-MAP: AlignsWithMapping.mapping_type must be aligns_with'
-        preconditions: {}
+      - description: 'INV-032: AlignsWithMapping.mapping_type must be aligns_with'
+        preconditions:
+          slot_conditions:
+            mapping_type:
+              value_presence: PRESENT
         postconditions:
           slot_conditions:
             mapping_type:

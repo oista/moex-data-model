@@ -1,0 +1,26 @@
+element_id: dams:model/inv033
+implementation_scope: enterprise
+logical_entities:
+- element_id: dams:logical/inv033/E
+  name: E
+  description: e
+  lifecycle_status: active
+data_carriers:
+- element_id: dams:physical/inv033/T
+  name: T
+  description: t
+  lifecycle_status: active
+  system_ref: eam:system/X
+  asset_namespace: ns
+  qualified_name: T
+  asset_kind: relational_table
+entity_physical_mappings:
+- element_id: dams:mapping/inv033/ep-bad
+  description: reversed ends
+  lifecycle_status: active
+  mapping_type: entity_physical
+  mapping_cardinality: one_to_one
+  source_refs:
+  - dams:logical/inv033/E
+  target_refs:
+  - dams:physical/inv033/T

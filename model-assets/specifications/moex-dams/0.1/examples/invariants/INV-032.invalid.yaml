@@ -1,0 +1,10 @@
+﻿# INV-032 invalid: wrong mapping_type.
+element_id: dams:mapping/inv032
+description: x
+lifecycle_status: draft
+mapping_type: realizes
+mapping_cardinality: one_to_one
+source_refs:
+- dams:concept/a
+target_refs:
+- https://example.org/term

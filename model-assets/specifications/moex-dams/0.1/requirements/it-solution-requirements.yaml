@@ -820,13 +820,18 @@ requirements:
 - element_id: dams:req/PDM-009
   name: mapping_endpoint_types
   title: Типы концов Mapping
-  description: entity_physical and field_mapping endpoint class checks.
+  description: Direction-aware Mapping endpoint class checks (ADR-046).
   lifecycle_status: approved
   code: PDM-009
   requirement_level: it_solution
   requirement_section: PDM
-  statement: Mapping типа entity_physical связывает LogicalEntity и DataCarrier; Mapping типа field_mapping
-    связывает LogicalAttribute и SchemaNode (структура#local_key).
+  statement: >
+    Direction-aware endpoint kinds (ADR-046): EntityPhysicalMapping source_refs ⊆
+    DataCarrier (1) and target_refs ⊆ LogicalEntity (1); FieldMapping source_refs ⊆
+    LogicalAttribute and target_refs are SchemaNodeRef (dams:structure/…#…) resolving
+    in data_structures.nodes; RealizesMapping source_refs ⊆ LogicalEntity|ConceptualEntity
+    and target_refs ⊆ ConceptualEntity (min 1 each); AlignsWithMapping source_refs exactly
+    one ConceptualEntity and target_refs are absolute http(s) IRIs.
   applies_to:
     applicability_id: appl:PDM-009
     applies_target_class: Mapping
@@ -836,8 +841,8 @@ requirements:
     target_class: Mapping
     severity: error
     diagnostic_code: DAMS-REQ-PDM-009.c1
-    remediation: Исправьте типы концов Mapping.
-    description: Enforced by check_mapping_endpoint_types.
+    remediation: Исправьте типы и направление концов Mapping.
+    description: Enforced by check_mapping_endpoint_types (INV-033..036).
 - element_id: dams:req/PDM-010
   name: carrier_refs_data_carrier_only
   title: carrier_refs только на DataCarrier

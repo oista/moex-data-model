@@ -1,0 +1,26 @@
+element_id: dams:model/inv035
+implementation_scope: solution
+logical_entities:
+- element_id: dams:logical/inv035/E
+  name: E
+  description: e
+  lifecycle_status: active
+data_carriers:
+- element_id: dams:physical/inv035/T
+  name: T
+  description: t
+  lifecycle_status: active
+  system_ref: eam:system/X
+  asset_namespace: ns
+  qualified_name: T
+  asset_kind: relational_table
+realizes_mappings:
+- element_id: dams:mapping/inv035/r-bad
+  description: carrier as source
+  lifecycle_status: active
+  mapping_type: realizes
+  mapping_cardinality: one_to_one
+  source_refs:
+  - dams:physical/inv035/T
+  target_refs:
+  - dams:concept/Person

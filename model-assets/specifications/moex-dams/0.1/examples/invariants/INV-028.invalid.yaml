@@ -1,0 +1,10 @@
+﻿# INV-028 invalid: wrong mapping_type designator.
+element_id: dams:mapping/inv028
+description: x
+lifecycle_status: draft
+mapping_type: field_mapping
+mapping_cardinality: one_to_one
+source_refs:
+- dams:logical/a
+target_refs:
+- dams:concept/b
