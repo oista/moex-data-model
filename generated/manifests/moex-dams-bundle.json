@@ -2,7 +2,7 @@
   "artifact_id": "moex:artifact:dams-bundle:0.1",
   "schema_path": "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml",
   "toolchain_pin": "requirements-linkml.txt",
-  "toolchain_digest": "sha256:8390719059f8b1a9f2685192ec21c03c6cfdda24c092a335df187eab0bf701b4",
+  "toolchain_digest": "sha256:954db25284391e9ee45b1d0befc2ce9aeb4d29efaecbb952be4693d625a13f93",
   "bundle_dir": "generated/bundles/moex-dams/0.1",
   "parts": [
     {
@@ -68,9 +68,9 @@
     {
       "path": "requirements-linkml.txt",
       "role": "toolchain",
-      "content_digest": "sha256:8390719059f8b1a9f2685192ec21c03c6cfdda24c092a335df187eab0bf701b4"
+      "content_digest": "sha256:954db25284391e9ee45b1d0befc2ce9aeb4d29efaecbb952be4693d625a13f93"
     }
   ],
-  "content_digest": "sha256:d2abae728a7e9ddf57a055ea6abfeabd103dce7f7b630bc8032162a13541d1ba",
-  "generated_at": "2026-10-12T19:47:24.678526+00:00"
+  "content_digest": "sha256:3f8cf0794c9b6b68d68bc1d6fdc176ef56fa73bc59537b333b3d5ca9c216a1c9",
+  "generated_at": "2026-10-12T21:19:58.529263+00:00"
 }
