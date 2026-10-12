@@ -206,7 +206,22 @@ def verify_publish_gate(
 
     errors.extend(_bundle_ok(repo, refresh_bundle=refresh_bundle))
     errors.extend(_binding_integrity_digests(repo))
+    errors.extend(_constraint_matrix_ok(repo))
     return errors
+
+
+def _constraint_matrix_ok(repo: Path) -> list[str]:
+    """ADR-045 / PR-C5: constraint matrix must be gate-strict clean."""
+    try:
+        from moex_dams.rules.constraint_matrix import run_check
+    except ImportError:
+        return ["publish-gate: moex_dams.rules.constraint_matrix unavailable"]
+    code, errs = run_check(
+        write_doc=False, root=repo, run_fixtures=True, gate_strict=True
+    )
+    if code == 0:
+        return []
+    return [f"publish-gate: check-constraints: {e}" for e in errs]
 
 
 def _binding_integrity_digests(repo: Path) -> list[str]:

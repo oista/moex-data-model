@@ -22,6 +22,7 @@ classes:
       - title
       - description
       - baseline
+      - invariant_id_registry
       - invariants
 
   ConstraintBaseline:
@@ -53,11 +54,22 @@ classes:
       - levels
       - severity
       - status
+      - level_status
       - waiver_reason
+      - adr_ref
       - requirement_refs
       - notes
       - implementation
       - tests
+
+  LevelStatusMap:
+    description: >-
+      Статус по каждому уровню. Общий status вычисляется из level_status
+      (PR-C3b); ручное расхождение — ошибка checker.
+    slots:
+      - L1
+      - L2
+      - L3
 
   InvariantImplementation:
     description: Указатели на реализацию по уровням (пути/коды; без дублирования текста).
@@ -94,7 +106,9 @@ enums:
       implemented:
         description: Реализация и негативный тест на каждом заявленном уровне.
       waived:
-        description: Сознательно не проверяется; обязателен waiver_reason.
+        description: Сознательно не проверяется; обязателен waiver_reason и adr_ref.
+      not-applicable:
+        description: Уровень не заявлен в levels (только в level_status).
 
   InvariantLevelEnum:
     permissible_values:
@@ -147,8 +161,18 @@ slots:
     range: string
   baseline:
     range: ConstraintBaseline
-    required: true
+    required: false
     inlined: true
+    description: >-
+      Deprecated after PR-C5; INV-prefix check replaces baseline pin.
+      Kept optional for historical matrices.
+  invariant_id_registry:
+    range: string
+    multivalued: true
+    required: true
+    description: >-
+      Append-only list of INV-NNN ever published. Removal requires moving the
+      id to a waived/retired note with adr_ref (checker enforces subset).
   invariants:
     range: Invariant
     multivalued: true
@@ -213,8 +237,26 @@ slots:
   status:
     range: InvariantStatusEnum
     required: true
+    description: >-
+      Агрегат по level_status. Должен совпадать с compute_overall_status().
+  level_status:
+    range: LevelStatusMap
+    inlined: true
+    required: true
+  L1:
+    range: InvariantStatusEnum
+    required: true
+  L2:
+    range: InvariantStatusEnum
+    required: true
+  L3:
+    range: InvariantStatusEnum
+    required: true
   waiver_reason:
     range: string
+  adr_ref:
+    range: string
+    description: Ссылка на ADR при status/level_status waived (обязательна для waived).
   requirement_refs:
     range: string
     multivalued: true

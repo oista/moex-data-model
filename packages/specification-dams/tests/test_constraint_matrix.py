@@ -1,4 +1,4 @@
-"""Constraint matrix structural checks (ADR-045 / PR-C1)."""
+"""Constraint matrix structural checks (ADR-045 / PR-C1…C5)."""
 
 from __future__ import annotations
 
@@ -26,23 +26,30 @@ def test_matrix_file_exists() -> None:
     assert MATRIX.with_name("constraint-matrix.schema.yaml").is_file()
 
 
-def test_baseline_has_seventeen_rules() -> None:
+def test_baseline_removed_registry_present() -> None:
     data = yaml.safe_load(MATRIX.read_text(encoding="utf-8"))
-    assert len(data["baseline"]["rules"]) == 17
+    assert "baseline" not in data or not data.get("baseline")
+    assert len(data["invariant_id_registry"]) == 27
     assert len(data["invariants"]) == 27
     statuses = {inv["id"]: inv["status"] for inv in data["invariants"]}
+    level_status = {inv["id"]: inv["level_status"] for inv in data["invariants"]}
     for i in range(1, 18):
-        assert statuses[f"INV-{i:03d}"] == "implemented-untested"
-    # PR-C3: confirmed L2 candidates tagged → implemented-untested; partial/unconfirmed stay planned
+        assert statuses[f"INV-{i:03d}"] == "implemented"
+    assert level_status["INV-001"]["L1"] == "waived"
+    assert level_status["INV-002"]["L3"] == "implemented"
     for inv_id in ("INV-018", "INV-019", "INV-020", "INV-021", "INV-022", "INV-026"):
-        assert statuses[inv_id] == "implemented-untested"
+        assert statuses[inv_id] == "implemented"
+    assert level_status["INV-020"]["L3"] == "waived"
     for inv_id in ("INV-023", "INV-024", "INV-025", "INV-027"):
-        assert statuses[inv_id] == "planned"
+        assert statuses[inv_id] == "waived"
+        assert data["invariants"][
+            int(inv_id.split("-")[1]) - 1
+        ].get("adr_ref")
 
 
 def test_check_constraint_matrix_script_ok() -> None:
     proc = subprocess.run(
-        [sys.executable, str(CHECK), "--no-write-doc"],
+        [sys.executable, str(CHECK), "--no-write-doc", "--gate-strict"],
         cwd=str(REPO),
         capture_output=True,
         text=True,
@@ -53,14 +60,19 @@ def test_check_constraint_matrix_script_ok() -> None:
 
 
 def test_extra_schema_rule_would_fail(tmp_path: Path, monkeypatch) -> None:
-    """Sanity: baseline digest is pinned; mutating matrix digest fails the check."""
-    import importlib.util
+    """Sanity: registry must list every invariant id."""
+    from moex_dams.rules.constraint_matrix import validate_matrix
 
-    spec = importlib.util.spec_from_file_location("check_constraint_matrix", CHECK)
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
     data = yaml.safe_load(MATRIX.read_text(encoding="utf-8"))
-    data["baseline"]["rules_sha256"] = "0" * 64
-    errors = mod.validate_matrix(data)
-    assert any("rules_sha256 mismatch" in e for e in errors)
+    data["invariant_id_registry"] = [
+        x for x in data["invariant_id_registry"] if x != "INV-001"
+    ]
+    errors = validate_matrix(data, run_fixtures=False)
+    assert any("INV-001" in e and "registry" in e for e in errors)
+
+
+def test_package_validate_matrix_ok() -> None:
+    from moex_dams.rules.constraint_matrix import validate_matrix
+
+    data = yaml.safe_load(MATRIX.read_text(encoding="utf-8"))
+    assert validate_matrix(data, run_fixtures=False, gate_strict=True) == []

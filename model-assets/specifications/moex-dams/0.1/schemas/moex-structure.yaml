@@ -65,7 +65,9 @@ classes:
           slot_conditions:
             source_artifact_ref:
               value_presence: PRESENT
-      - description: 'INV-011: schema_dialect только для семейства JSON Schema'
+      - description: >-
+          INV-011: schema_dialect только для json_schema, openapi_schema или other
+          (other — AsyncAPI Multi Format Schema / прочие диалекты, ADR-038)
         preconditions:
           slot_conditions:
             schema_dialect:
@@ -76,6 +78,7 @@ classes:
               any_of:
                 - equals_string: json_schema
                 - equals_string: openapi_schema
+                - equals_string: other
 
   SchemaNode:
     is_a: EmbeddedElement

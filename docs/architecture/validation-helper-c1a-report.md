@@ -11,7 +11,7 @@ superseded_by: []
 **Date:** 2026-10-06  
 **Branch:** `feat/constraints-c1a-validation-helper` (base: `feat/constraints-c0-inventory`)  
 **ADR:** [ADR-045](../adr/ADR-045-executable-constraint-matrix.md)  
-**Spike inventory:** `tmp/constraint-spike/inventory_validation_impact.py`, `validation_impact.json`
+**Spike inventory:** git tag `archive/constraint-spike` (`inventory_validation_impact.py`, `validation_impact.json`)
 
 ## 1. What landed in C1a
 
@@ -20,7 +20,7 @@ superseded_by: []
 | `moex_standard_linkml.validation.make_linkml_validator` (`JsonschemaValidationPlugin(closed=True)`) | done |
 | `error_results` helper | done |
 | Wired: `adapters/validator.py`, `ingest/validate.py`, `validate-examples.ps1`, `validate-schemas.ps1` | done |
-| Wired: `validate-requirements.ps1` | **deferred** (would turn `check_all` red; see §2) |
+| Wired: `validate-requirements.ps1` | **done in PR-C3d** (`FormalCheck.description` / `effective` added; plugin on) |
 | Side fix: stop emitting Mapping.`name` in xlsx ingest (`mapper.py`, `enrich.py`) + example YAML | done (ADR-044 / DAMS 3.0.0) |
 | Unit tests `packages/standard-linkml/tests/test_validation_helper.py` | done |
 | Catalog test documents plugin failure | done |
@@ -33,7 +33,7 @@ superseded_by: []
 
 | Path | Target | In `check_all` today? | Errors | Root cause | C1a action |
 |---|---|---|---|---|---|
-| `.../requirements/it-solution-requirements.yaml` | `RequirementCatalog` | **yes** (`validate-requirements`) | 18 | undeclared FormalCheck fields: `effective` (2), `description` (16) | plugin **not wired** here |
+| `.../requirements/it-solution-requirements.yaml` | `RequirementCatalog` | **yes** (`validate-requirements`) | was 18 | undeclared FormalCheck fields: `effective` (2), `description` (16) | **PR-C3d:** slots added to FormalCheck; plugin wired |
 | `.../requirements/conceptual-model-requirements.yaml` | `RequirementCatalog` | no | 14 | `code` pattern rejects `CM-*`; plus FormalCheck.`description` | left as inventory |
 | `.../requirements/examples/it-solution-model.example.yaml` | `ModelPackage` | no | was 2 | `mappings[*].name` after ADR-044 | **fixed** (removed `name`) |
 | XLSX import → ModelPackage (CRM fixture) | `ModelPackage` | yes (`slice-cli`) | was many | mapper emitted Mapping.`name` | **fixed** in ingest |

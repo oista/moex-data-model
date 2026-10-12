@@ -14,7 +14,8 @@
 
 Нормативный документ: [`docs/architecture/MODELING_ARCHITECTURE.md`](docs/architecture/MODELING_ARCHITECTURE.md) (Proposed 0.2).  
 Схема ядра: [`docs/architecture/modeling-kernel.yaml`](docs/architecture/modeling-kernel.yaml).  
-Чеклист ревью docs/architecture: [`docs/architecture/CHECKLIST.md`](docs/architecture/CHECKLIST.md).
+Чеклист ревью docs/architecture: [`docs/architecture/CHECKLIST.md`](docs/architecture/CHECKLIST.md).  
+Исполняемые инварианты (ADR-045): [`docs/architecture/constraint-matrix.md`](docs/architecture/constraint-matrix.md), руководство [`docs/guides/adding-an-invariant.md`](docs/guides/adding-an-invariant.md).
 
 Workbench / LinkML toolchain описаны отдельно в [`docs/architecture/linkml_architecture.md`](docs/architecture/linkml_architecture.md) — это **не** верхний уровень архитектуры. Целевая раскладка пакетов — [`docs/architecture/app_model.md`](docs/architecture/app_model.md) (`target-after-slice`).
 

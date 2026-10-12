@@ -18,7 +18,7 @@ superseded_by: []
 - [ADR-045](../adr/ADR-045-executable-constraint-matrix.md) (Proposed) и строка в индексе ADR.
 - [linkml-rules-support.md](../architecture/linkml-rules-support.md): таблица «правило x генератор», версия LinkML 1.11.1.
 - [constraint-matrix-inventory-report.md](../architecture/constraint-matrix-inventory-report.md): 17 существующих правил, прочие кандидаты, расхождения, вопросы.
-- Spike: `tmp/constraint-spike/`.
+- Spike: `tmp/constraint-spike/` (позднее архив — тег `archive/constraint-spike`, PR-C6).
 
 **Стало строже:** ничего.
 
@@ -92,3 +92,81 @@ superseded_by: []
 **Стало строже:** L2 теперь ловит INV-001/010/011/014 на пакетах (ранее только L1 JSON Schema / без L2). Данные автоматически не чинились.
 
 **Статусы:** INV-018…022, INV-026 → `implemented-untested`; INV-010/011/014 получили уровень L2 в матрице; INV-023…025, 027 остаются `planned`.
+
+## PR-C3a: checker logic in package
+
+**Добавлено**
+
+- Логика проверки матрицы перенесена в `moex_dams.rules.constraint_matrix`.
+- `scripts/check_constraint_matrix.py` — тонкая CLI-обёртка (поведение без изменений).
+
+**Стало строже:** ничего (рефакторинг).
+
+## PR-C3b: checker v2 (level_status + runners)
+
+**Добавлено**
+
+- `level_status` (L1/L2/L3) в схеме и матрице; общий `status` должен совпадать с вычислением.
+- `adr_ref` обязателен при `waived`.
+- Проверка префикса `INV-NNN:` в `description` каждого `rules`.
+- L1/L2 runners: при `level_status.*.implemented` valid проходит, invalid падает (L2 — только YAML-фикстуры).
+
+**Статусы:** L1 у INV-002…017 → `implemented`; L2 у tagged кандидатов → `implemented-untested` до C3c; L3 → `planned`.
+
+## PR-C3c: L2 YAML fixtures
+
+**Добавлено**
+
+- `examples/invariants/l2/INV-*.{valid,invalid}.yaml` для INV-001/010–022/026.
+- Матрица: `l2_valid`/`l2_invalid` → YAML; `level_status.L2=implemented` где L2 заявлен.
+- Тест `test_l2_yaml_fixtures_cover_tagged_invariants`.
+
+**Статусы:** INV-018/019/021/022/026 → `implemented`; INV с L3 остаются `implemented-untested`.
+
+## PR-C3d: validate-requirements plugin
+
+**Добавлено**
+
+- Слоты `FormalCheck.description` и `FormalCheck.effective` в `moex-requirements.yaml`.
+- `validate-requirements.ps1` → `make_linkml_validator` (closed JSON Schema).
+- Обновлён отчёт C1a (deferred → done).
+
+**Затронутые данные:** каталог не менялся; схема расширена (additive). Golden — отдельный коммит при смене digest.
+
+## PR-C4a: L1 waivers + INV-011 AsyncAPI
+
+**Добавлено**
+
+- L1 `waived` (+ `adr_ref: ADR-045`) для INV-001, INV-013, INV-015, INV-017.
+- INV-011: L1+L2 допускают `schema_format=other` для AsyncAPI dialect; `source_status=aligned`.
+- Amendment в ADR-045.
+
+**Стало строже / слабее:** INV-011 послабление (additive any_of).
+
+## PR-C4b: L3 SHACL
+
+**Добавлено**
+
+- Ручные формы `constraints/shacl/manual/invariants.ttl` (`sh:sourceShape` → INV-001…017).
+- RDF fixtures `examples/invariants/l3/*.ttl`; тесты `test_invariant_l3.py`.
+- Явные `SHACL_OPTIONS` в `generate_artifacts.py`; тест что gen-shacl не эмитит INV.
+- Дифференциальные spot-check L1↔L3 (INV-002) и L2↔L3 (INV-010).
+- INV-020 L3 → `waived` (циклы остаются на L2).
+
+## PR-C5: gate and Accepted
+
+**Добавлено**
+
+- `invariant_id_registry` (append-only); baseline снят.
+- INV-023/024/025/027 → `waived` + `adr_ref: ADR-045`.
+- `--gate-strict` / publish-gate вызывает `run_check(..., gate_strict=True)`.
+- ADR-045 → Accepted; ссылки в README, MODELING_ARCHITECTURE §14, `constraint-matrix-p0-audit.md`.
+
+## PR-C6: cleanup
+
+**Удалено**
+
+- `tmp/constraint-spike/` (архив: тег `archive/constraint-spike`).
+- `.tmp-pdf-extract/` (5 txt); запись в `.gitignore`.
+
+**Документы:** ссылки на spike заменены на тег.

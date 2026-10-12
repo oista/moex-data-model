@@ -1,0 +1,10 @@
+id: https://example.org/inv026-bad
+name: inv026_bad
+prefixes:
+  bad: https://example.org/bad
+default_prefix: bad
+classes:
+  X:
+    attributes:
+      a:
+        range: string

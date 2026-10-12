@@ -42,9 +42,10 @@ model-assets/external-sources/**/.cache/
 tmp/solution-import/
 
 # Local check_all / spike logs (do not publish red/green run artifacts)
-tmp/constraint-spike/*.log
+tmp/constraint-spike/
 tmp/**/*check_all*.log
 tmp/baseline_check_all*.log
+.tmp-pdf-extract/
 
 # Office lock files (Excel holds ~$*.xlsx open → git add Permission denied)
 **/~$*

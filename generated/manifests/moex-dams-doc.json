@@ -6,8 +6,8 @@
   "schema_path": "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml",
   "schema_digest": "sha256:10548b67a4d7cb7313e114b0631373b21c430d566fba02f14cc9eb4376925fb6",
   "output_path": "generated/artifacts/moex-dams/0.1/docs",
-  "content_digest": "sha256:f7d7a45384c5f5e3d79bf80312cbc7397e282020c590dc9dabc176164c64a94f",
-  "generated_at": "2026-10-07T12:35:15.816553+00:00",
+  "content_digest": "sha256:0c834e739cbde6d8a621e8a10fa878a5f4952ba7fc6d5e03a2e9cf0b9c0b1f86",
+  "generated_at": "2026-10-12T16:11:29.884251+00:00",
   "generator_options": {
     "git_policy": "index_subset"
   }

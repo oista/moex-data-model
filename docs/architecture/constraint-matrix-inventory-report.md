@@ -13,7 +13,7 @@ superseded_by: []
 **ADR:** [ADR-045](../adr/ADR-045-executable-constraint-matrix.md)  
 **Таблица «правило × генератор»:** [linkml-rules-support.md](linkml-rules-support.md)  
 **Кандидаты (автоматически):** [invariant-candidates.csv](invariant-candidates.csv) (150 строк)  
-**Скрипт:** `scripts/inventory_invariants.py` (`--csv`, `--list-rules`); spike: `tmp/constraint-spike/`
+**Скрипт:** `scripts/inventory_invariants.py` (`--csv`, `--list-rules`); spike: git tag `archive/constraint-spike`
 
 Тексты инвариантов хранятся в матрице (PR-C1). Этот отчёт ссылается на источники и фиксирует предложение по уровням; предложенные уровни подлежат проверке пользователем до PR-C1.
 

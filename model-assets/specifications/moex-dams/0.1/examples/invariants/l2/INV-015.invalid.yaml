@@ -1,0 +1,9 @@
+element_id: dams:model/inv/1
+implementation_scope: enterprise
+data_carriers:
+- element_id: dams:carrier/inv/mem
+  name: mem
+  asset_kind: in_memory
+  asset_namespace: ns
+  qualified_name: mem
+  location_uri: mem://x

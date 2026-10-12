@@ -187,6 +187,7 @@ Name: moex_dams
 | [domain_ref](domain_ref.md) |  |
 | [domain_refs](domain_refs.md) |  |
 | [dynamic_query](dynamic_query.md) | Динамический запрос набора (reachable_from) |
+| [effective](effective.md) | Optional flag: whether this FormalCheck is currently enforced by assess (docu... |
 | [element_id](element_id.md) |  |
 | [entity_bindings](entity_bindings.md) |  |
 | [entity_tier](entity_tier.md) | Structural independence of the conceptual entity (ADR-026) |

@@ -1,7 +1,7 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
-normative: false
+normative: true
 supersedes: []
 superseded_by: []
 ---
@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-045: Executable constraint matrix
 
 **Date:** 2026-10-06  
-**Status:** Proposed  
+**Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Related:** [ADR-007](ADR-007-pydantic-dto-not-validator.md), [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-013](ADR-013-specification-requirements-catalog.md), [ADR-038](ADR-038-datastructure-and-schemanode.md), [ADR-044](ADR-044-model-element-decomposition.md)  
 **Inventory:** [constraint-matrix-inventory-report.md](../architecture/constraint-matrix-inventory-report.md), [invariant-candidates.csv](../architecture/invariant-candidates.csv)  
@@ -83,11 +83,18 @@ superseded_by: []
 - Обновление golden после `INV-xxx` в `description` в PR-C2 отдельным коммитом; при изменении `content_digest` (а не только `schema_digest`) остановка и подтверждение.
 - ADR получает статус Accepted только после слияния всех PR серии и подтверждения пользователя.
 
-## Open questions (C3)
+## Amendments (PR-C4a)
 
-### Q-INV-011 / AsyncAPI
+### Q-INV-011 / AsyncAPI — resolved
 
-Источник ADR-038 допускает `schema_dialect` для AsyncAPI Multi Format Schema; существующее LinkML-правило и L2-валидатор `check_schema_dialect_format_family` ограничивают семейство `json_schema` / `openapi_schema` (`source_status: divergent`). В PR-C3 правило **не** расширялось и **не** сужалось: L2 зеркалит L1. Решение (расширить правило, ослабить ADR или waiver) — за владельцем модели; до решения расхождение остаётся зафиксированным в матрице и в отчёте C3.
+`schema_dialect` разрешён при `schema_format` ∈ {`json_schema`, `openapi_schema`, `other`}. Значение `other` покрывает AsyncAPI Multi Format Schema dialect id (ADR-038). L1-правило и L2 `check_schema_dialect_format_family` расширены согласованно; `source_status` INV-011 → `aligned`.
+
+### L1 waivers (generator defects)
+
+На уровне L1 со статусом `waived` и `adr_ref: ADR-045` (покрытие L2/L3):
+
+- **INV-001** — `equals_string` на boolean → `const: "true"` в JSON Schema.
+- **INV-013, INV-015, INV-017** — multi-slot `value_presence: ABSENT` ослаблен до «не все присутствуют» (linkml-rules-support §3.2).
 
 ## Alternatives rejected
 

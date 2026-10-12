@@ -7,7 +7,11 @@
     click FormalCheck href "../FormalCheck"
       FormalCheck : check_id
         
+      FormalCheck : description
+        
       FormalCheck : diagnostic_code
+        
+      FormalCheck : effective
         
       FormalCheck : expression
         

@@ -11,7 +11,7 @@ superseded_by: []
 **Дата:** 2026-10-06  
 **ADR:** [ADR-045](../adr/ADR-045-executable-constraint-matrix.md)  
 **Отчёт:** [constraint-matrix-inventory-report.md](constraint-matrix-inventory-report.md)  
-**Spike:** `tmp/constraint-spike/spike_rules.py`, `spike_real_rules.py`, `validator_default_check.py`, `spike_inv_prefix.py` (результаты: `tmp/constraint-spike/results.json`, `real-rules.json`)
+**Spike:** archived at git tag `archive/constraint-spike` (was `tmp/constraint-spike/`: `spike_rules.py`, `spike_real_rules.py`, `validator_default_check.py`, `spike_inv_prefix.py`, `results.json`, `real-rules.json`)
 
 Документ обновляется при каждой смене версии LinkML (пин: `requirements-linkml.txt`).
 

@@ -1,0 +1,9 @@
+element_id: dams:model/inv/1
+implementation_scope: enterprise
+data_containers:
+- element_id: dams:container/inv/db
+  name: db
+  asset_kind: database
+  asset_namespace: ns
+  qualified_name: db
+  direction: inbound

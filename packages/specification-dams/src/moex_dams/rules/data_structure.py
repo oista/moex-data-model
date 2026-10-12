@@ -534,19 +534,17 @@ def check_source_pointer_requires_artifact(data: dict[str, Any]) -> list[Diagnos
 
 
 def check_schema_dialect_format_family(data: dict[str, Any]) -> list[Diagnostic]:
-    """INV-011: schema_dialect only when schema_format is json_schema|openapi_schema.
+    """INV-011: schema_dialect only for json_schema|openapi_schema|other.
 
-    Does **not** extend the rule to AsyncAPI Multi Format Schema — divergence from
-    ADR-038 remains an open question (ADR-045 / C3 report). L2 mirrors the existing
-    LinkML rule.
+    ``other`` covers AsyncAPI Multi Format Schema dialect ids (ADR-038 / PR-C4a).
 
     Example error::
 
         DataStructure \"dams:structure/x\": schema_dialect задан при schema_format=avro.
         Remediation: Удалите schema_dialect или смените schema_format на json_schema /
-        openapi_schema. INV-011.
+        openapi_schema / other. INV-011.
     """
-    allowed = frozenset({"json_schema", "openapi_schema"})
+    allowed = frozenset({"json_schema", "openapi_schema", "other"})
     out: list[Diagnostic] = []
     for ds in data.get("data_structures") or []:
         if not isinstance(ds, dict):
@@ -563,14 +561,14 @@ def check_schema_dialect_format_family(data: dict[str, Any]) -> list[Diagnostic]
                     invariant_id="INV-011",
                     message=(
                         f'DataStructure "{sid}": schema_dialect задан при '
-                        f"schema_format={fmt!r} (допустимо только json_schema|"
-                        "openapi_schema по правилу схемы)."
+                        f"schema_format={fmt!r} (допустимо json_schema|"
+                        "openapi_schema|other)."
                     ),
                     subject=sid or None,
                     remediation=(
                         "Удалите schema_dialect или смените schema_format на "
-                        "json_schema / openapi_schema. INV-011 "
-                        "(расхождение с AsyncAPI в ADR-038 — см. ADR-045)."
+                        "json_schema / openapi_schema / other (AsyncAPI Multi "
+                        "Format Schema). INV-011."
                     ),
                 )
             )

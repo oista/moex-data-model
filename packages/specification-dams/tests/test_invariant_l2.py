@@ -92,7 +92,7 @@ def test_inv_010_source_pointer_requires_artifact() -> None:
 
 
 def test_inv_011_schema_dialect_format_family() -> None:
-    """INV-011 mirrors LinkML rule; AsyncAPI divergence not widened here."""
+    """INV-011: dialect allowed for json_schema|openapi_schema|other (PR-C4a)."""
     base = {
         "element_id": "dams:model/x/1",
         "data_structures": [
@@ -110,10 +110,11 @@ def test_inv_011_schema_dialect_format_family() -> None:
     }
     diags = check_data_structures(base)
     assert "DAMS-INV-011" in {d.diagnostic_code for d in diags}
-    assert "AsyncAPI" in diags[0].diagnostic_message or any(
-        "AsyncAPI" in (d.diagnostic_message or "") for d in diags
-    )
 
+    base["data_structures"][0]["schema_format"] = "other"
+    assert "DAMS-INV-011" not in {
+        d.diagnostic_code for d in check_data_structures(base)
+    }
     base["data_structures"][0]["schema_format"] = "json_schema"
     assert "DAMS-INV-011" not in {
         d.diagnostic_code for d in check_data_structures(base)
@@ -162,3 +163,52 @@ def test_inv_018_direction_forbidden_tagged() -> None:
     }
     diags = check_technical_assets(data)
     assert "INV-018" in _inv_ids(diags)
+
+
+def test_l2_yaml_fixtures_cover_tagged_invariants() -> None:
+    """PR-C3c: each tagged L2 INV has valid/invalid YAML under examples/invariants/l2/."""
+    from pathlib import Path
+
+    import yaml
+
+    from moex_dams.rules.constraint_matrix import (
+        _collect_invariant_ids,
+        _run_l2_package_checks,
+        repo_root,
+    )
+    from moex_dams.rules.ontology_uris import check_ontology_uris
+
+    root = repo_root()
+    l2 = (
+        root
+        / "model-assets"
+        / "specifications"
+        / "moex-dams"
+        / "0.1"
+        / "examples"
+        / "invariants"
+        / "l2"
+    )
+    for iid in (
+        "INV-012",
+        "INV-013",
+        "INV-015",
+        "INV-016",
+        "INV-017",
+        "INV-019",
+        "INV-020",
+        "INV-021",
+        "INV-022",
+        "INV-026",
+    ):
+        valid = yaml.safe_load((l2 / f"{iid}.valid.yaml").read_text(encoding="utf-8"))
+        invalid_path = l2 / f"{iid}.invalid.yaml"
+        invalid = yaml.safe_load(invalid_path.read_text(encoding="utf-8"))
+        if iid == "INV-026":
+            assert iid not in _collect_invariant_ids(
+                list(check_ontology_uris(l2 / f"{iid}.valid.yaml"))
+            )
+            assert iid in _collect_invariant_ids(list(check_ontology_uris(invalid_path)))
+        else:
+            assert iid not in _collect_invariant_ids(_run_l2_package_checks(valid))
+            assert iid in _collect_invariant_ids(_run_l2_package_checks(invalid))

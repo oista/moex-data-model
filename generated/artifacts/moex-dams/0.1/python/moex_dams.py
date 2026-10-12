@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-06T20:54:08
+# Generation date: 2026-10-12T19:07:54
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -4180,6 +4180,8 @@ class FormalCheck(YAMLRoot):
     diagnostic_code: Optional[str] = None
     expression: Optional[str] = None
     remediation: Optional[str] = None
+    description: Optional[str] = None
+    effective: Optional[Union[bool, Bool]] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.check_id):
@@ -4218,6 +4220,12 @@ class FormalCheck(YAMLRoot):
 
         if self.remediation is not None and not isinstance(self.remediation, str):
             self.remediation = str(self.remediation)
+
+        if self.description is not None and not isinstance(self.description, str):
+            self.description = str(self.description)
+
+        if self.effective is not None and not isinstance(self.effective, Bool):
+            self.effective = Bool(self.effective)
 
         super().__post_init__(**kwargs)
 
@@ -6250,6 +6258,9 @@ slots.expression = Slot(uri=DAMS.expression, name="expression", curie=DAMS.curie
 
 slots.remediation = Slot(uri=DAMS.remediation, name="remediation", curie=DAMS.curie('remediation'),
                    model_uri=DAMS.remediation, domain=None, range=Optional[str])
+
+slots.effective = Slot(uri=DAMS.effective, name="effective", curie=DAMS.curie('effective'),
+                   model_uri=DAMS.effective, domain=None, range=Optional[Union[bool, Bool]])
 
 slots.code = Slot(uri=DAMS.code, name="code", curie=DAMS.curie('code'),
                    model_uri=DAMS.code, domain=None, range=str,

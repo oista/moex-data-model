@@ -2383,6 +2383,8 @@ class FormalCheck(ConfiguredBaseModel):
     expression: Optional[str] = Field(default=None, description="""Имя фиксированного шаблона для conditional_branch / custom (например ldm006_alignment, planned_on_active_warning).
 """)
     remediation: Optional[str] = Field(default=None, description="""Actionable remediation text for CI / Cursor / authors.""")
+    description: Optional[str] = Field(default=None)
+    effective: Optional[bool] = Field(default=None, description="""Optional flag: whether this FormalCheck is currently enforced by assess (documentation / progressive rollout). Absent means enforced when kind is runnable.""")
 
 
 class SpecificationRequirement(ModelElement):

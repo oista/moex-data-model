@@ -439,6 +439,8 @@ linkml@1.x
 12. Добавление нового стандарта не меняет существующие providers, handlers и classes `modeling-kernel.yaml`.
 13. Реализация reference specification наследует обязательства publication profile (через `satisfies` → `PublicationRequirement`), а не идентичность `PublicationModule` (см. §17, ADR-019).
 
+Исполняемые инварианты модели (INV-NNN) — в [constraint-matrix.md](constraint-matrix.md) / ADR-045; как добавить: [adding-an-invariant.md](../guides/adding-an-invariant.md).
+
 ## 15. Правило расширения
 
 Новый standard требует:

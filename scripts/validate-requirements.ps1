@@ -24,31 +24,24 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 Push-Location $RepoRoot
 try {
     Write-Host "validate-requirements LinkML RequirementCatalog"
-    # PR-C1a: JsonschemaValidationPlugin is ready via make_linkml_validator, but the
-    # live catalog still has undeclared FormalCheck fields (description, effective).
-    # Wiring the plugin here turns validate-requirements red (18 errors). Deferred
-    # until schema/data fix; see docs/architecture/validation-helper-c1a-report.md.
+    # PR-C3d: FormalCheck.description / effective declared in moex-requirements.yaml;
+    # closed JSON Schema via make_linkml_validator.
     & $Python -c @"
 from pathlib import Path
 import sys
 import yaml
-from linkml.validator import Validator
+from moex_standard_linkml.validation import error_results, make_linkml_validator
 
 schema = Path(r'$Schema')
 catalog = Path(r'$Catalog')
 data = yaml.safe_load(catalog.read_text(encoding='utf-8'))
-# VACUOUS on purpose until catalog/schema fix (PR-C1a report).
-report = Validator(schema).validate(data, target_class='RequirementCatalog')
-bad = []
-for r in report.results:
-    sev = str(getattr(r, 'severity', r))
-    if 'ERROR' in sev.upper():
-        bad.append(r)
+report = make_linkml_validator(schema).validate(data, target_class='RequirementCatalog')
+bad = error_results(report)
 if bad:
     for e in bad[:40]:
-        print(e, file=sys.stderr)
+        print(getattr(e, 'message', e), file=sys.stderr)
     raise SystemExit(1)
-print('LinkML RequirementCatalog OK (vacuous Validator; plugin deferred — see C1a report)')
+print('LinkML RequirementCatalog OK (JsonschemaValidationPlugin closed=True)')
 "@
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

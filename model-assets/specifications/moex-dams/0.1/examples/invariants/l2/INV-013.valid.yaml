@@ -1,0 +1,14 @@
+element_id: dams:model/inv/1
+implementation_scope: enterprise
+data_structures:
+- element_id: dams:structure/inv/T
+  schema_format: json_schema
+  structure_version: 1.0.0
+  root_local_key: root
+  nodes:
+  - local_key: root
+    node_kind: object
+    children:
+    - s
+  - local_key: s
+    node_kind: scalar

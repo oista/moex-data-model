@@ -1,0 +1,8 @@
+element_id: dams:model/inv/1
+implementation_scope: enterprise
+access_points:
+- element_id: dams:ap/inv/iface
+  name: iface
+  asset_kind: interface
+  asset_namespace: ns
+  qualified_name: iface

@@ -290,13 +290,22 @@ def generate_owl(*, out_path: Path = OWL_PATH, manifest_path: Path = OWL_MANIFES
     return digest
 
 
+# Explicit ShaclGenerator options (ADR-045 / PR-C4b). gen-shacl 1.11.1 ignores
+# LinkML ``rules``; manual forms live under constraints/shacl/manual/.
+SHACL_OPTIONS: dict[str, object] = {
+    "closed": False,
+    "metadata": False,
+    "mergeimports": True,
+}
+
+
 def generate_shacl(
     *, out_path: Path = SHACL_PATH, manifest_path: Path = SHACL_MANIFEST
 ) -> str:
     from linkml.generators.shaclgen import ShaclGenerator
 
     with schema_cwd() as schema_name:
-        gen = ShaclGenerator(schema_name)
+        gen = ShaclGenerator(schema_name, **SHACL_OPTIONS)
         text = gen.serialize()
     digest = write_rdf_artifact(out_path, text)
     try:
@@ -310,7 +319,14 @@ def generate_shacl(
         generator_module="linkml.generators.shaclgen",
         output_path=out_rel,
         content_digest=digest,
-        generator_options={"digest_mode": "rdf_ground_triples"},
+        generator_options={
+            **{k: v for k, v in SHACL_OPTIONS.items()},
+            "digest_mode": "rdf_ground_triples",
+            "rules_emitted": False,
+            "manual_shapes": (
+                "model-assets/specifications/moex-dams/0.1/constraints/shacl/manual/"
+            ),
+        },
     )
     return digest
 

@@ -1,0 +1,305 @@
+# Manual SHACL shapes for ADR-045 L3 (PR-C4b).
+# Generated SHACL (gen-shacl) does not carry LinkML rules; these forms are authoritative for L3.
+# Each shape carries sh:sourceShape → dams:INV-NNN.
+
+@prefix dams: <https://data.moex.com/dams/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+dams:INV-001 a rdfs:Resource .
+dams:INV-002 a rdfs:Resource .
+dams:INV-003 a rdfs:Resource .
+dams:INV-004 a rdfs:Resource .
+dams:INV-005 a rdfs:Resource .
+dams:INV-006 a rdfs:Resource .
+dams:INV-007 a rdfs:Resource .
+dams:INV-008 a rdfs:Resource .
+dams:INV-009 a rdfs:Resource .
+dams:INV-010 a rdfs:Resource .
+dams:INV-011 a rdfs:Resource .
+dams:INV-012 a rdfs:Resource .
+dams:INV-013 a rdfs:Resource .
+dams:INV-014 a rdfs:Resource .
+dams:INV-015 a rdfs:Resource .
+dams:INV-016 a rdfs:Resource .
+dams:INV-017 a rdfs:Resource .
+
+# --- INV-001: identifying → is_identifying true ---
+dams:Shape-INV-001 a sh:NodeShape ;
+  sh:sourceShape dams:INV-001 ;
+  sh:targetClass dams:ConceptualProperty ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-001: property_kind=identifying requires is_identifying=true" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:property_kind "identifying" .
+        FILTER NOT EXISTS { $this dams:is_identifying true }
+      }
+    """
+  ] .
+
+# --- INV-002: precision only for decimal ---
+dams:Shape-INV-002 a sh:NodeShape ;
+  sh:sourceShape dams:INV-002 ;
+  sh:targetClass dams:DataType ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-002: precision only when type_family=decimal" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:precision ?p .
+        OPTIONAL { $this dams:type_family ?f }
+        FILTER(!BOUND(?f) || ?f != "decimal")
+      }
+    """
+  ] .
+
+dams:Shape-INV-003 a sh:NodeShape ;
+  sh:sourceShape dams:INV-003 ;
+  sh:targetClass dams:DataType ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-003: scale only when type_family=decimal" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:scale ?s .
+        OPTIONAL { $this dams:type_family ?f }
+        FILTER(!BOUND(?f) || ?f != "decimal")
+      }
+    """
+  ] .
+
+dams:Shape-INV-004 a sh:NodeShape ;
+  sh:sourceShape dams:INV-004 ;
+  sh:targetClass dams:DataType ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-004: max_length only for string|binary" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:max_length ?m .
+        OPTIONAL { $this dams:type_family ?f }
+        FILTER(!BOUND(?f) || (?f != "string" && ?f != "binary"))
+      }
+    """
+  ] .
+
+dams:Shape-INV-005 a sh:NodeShape ;
+  sh:sourceShape dams:INV-005 ;
+  sh:targetClass dams:DataType ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-005: min_length only for string|binary" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:min_length ?m .
+        OPTIONAL { $this dams:type_family ?f }
+        FILTER(!BOUND(?f) || (?f != "string" && ?f != "binary"))
+      }
+    """
+  ] .
+
+dams:Shape-INV-006 a sh:NodeShape ;
+  sh:sourceShape dams:INV-006 ;
+  sh:targetClass dams:ValueDomain ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-006: enumerated requires permissible_values" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:value_domain_kind "enumerated" .
+        FILTER NOT EXISTS { $this dams:permissible_values ?v }
+      }
+    """
+  ] .
+
+dams:Shape-INV-007 a sh:NodeShape ;
+  sh:sourceShape dams:INV-007 ;
+  sh:targetClass dams:ValueDomain ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-007: described forbids permissible_values" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:value_domain_kind "described" .
+        $this dams:permissible_values ?v .
+      }
+    """
+  ] .
+
+dams:Shape-INV-008 a sh:NodeShape ;
+  sh:sourceShape dams:INV-008 ;
+  sh:targetClass dams:ValueDomain ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-008: reference_set forbids permissible_values" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:value_domain_kind "reference_set" .
+        $this dams:permissible_values ?v .
+      }
+    """
+  ] .
+
+dams:Shape-INV-009 a sh:NodeShape ;
+  sh:sourceShape dams:INV-009 ;
+  sh:targetClass dams:ConceptualDomain ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-009: described forbids value_meanings" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:conceptual_domain_kind "described" .
+        $this dams:value_meanings ?v .
+      }
+    """
+  ] .
+
+dams:Shape-INV-010 a sh:NodeShape ;
+  sh:sourceShape dams:INV-010 ;
+  sh:targetClass dams:DataStructure ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-010: source_pointer requires source_artifact_ref" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:source_pointer ?p .
+        FILTER NOT EXISTS { $this dams:source_artifact_ref ?a }
+      }
+    """
+  ] .
+
+dams:Shape-INV-011 a sh:NodeShape ;
+  sh:sourceShape dams:INV-011 ;
+  sh:targetClass dams:DataStructure ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-011: schema_dialect only for json_schema|openapi_schema|other" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:schema_dialect ?d .
+        OPTIONAL { $this dams:schema_format ?f }
+        FILTER(!BOUND(?f) || (?f != "json_schema" && ?f != "openapi_schema" && ?f != "other"))
+      }
+    """
+  ] .
+
+dams:Shape-INV-012 a sh:NodeShape ;
+  sh:sourceShape dams:INV-012 ;
+  sh:targetClass dams:SchemaNode ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-012: array|map requires item_node and forbids children" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:node_kind ?k .
+        FILTER(?k = "array" || ?k = "map")
+        FILTER(
+          NOT EXISTS { $this dams:item_node ?i }
+          || EXISTS { $this dams:children ?c }
+        )
+      }
+    """
+  ] .
+
+dams:Shape-INV-013 a sh:NodeShape ;
+  sh:sourceShape dams:INV-013 ;
+  sh:targetClass dams:SchemaNode ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-013: scalar|enum forbids children and item_node" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:node_kind ?k .
+        FILTER(?k = "scalar" || ?k = "enum")
+        FILTER(
+          EXISTS { $this dams:children ?c }
+          || EXISTS { $this dams:item_node ?i }
+        )
+      }
+    """
+  ] .
+
+dams:Shape-INV-014 a sh:NodeShape ;
+  sh:sourceShape dams:INV-014 ;
+  sh:targetClass dams:SchemaNode ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-014: reference requires reference_target" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:node_kind "reference" .
+        FILTER NOT EXISTS { $this dams:reference_target ?t }
+      }
+    """
+  ] .
+
+dams:Shape-INV-015 a sh:NodeShape ;
+  sh:sourceShape dams:INV-015 ;
+  sh:targetClass dams:DataCarrier ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-015: in_memory forbids location_uri and region" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:asset_kind "in_memory" .
+        FILTER(
+          EXISTS { $this dams:location_uri ?u }
+          || EXISTS { $this dams:region ?r }
+        )
+      }
+    """
+  ] .
+
+dams:Shape-INV-016 a sh:NodeShape ;
+  sh:sourceShape dams:INV-016 ;
+  sh:targetClass dams:AccessPoint ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-016: operation requires interface_ref" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:asset_kind "operation" .
+        FILTER NOT EXISTS { $this dams:interface_ref ?i }
+      }
+    """
+  ] .
+
+dams:Shape-INV-017 a sh:NodeShape ;
+  sh:sourceShape dams:INV-017 ;
+  sh:targetClass dams:AccessPoint ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "INV-017: interface forbids operation fields / message_refs" ;
+    sh:select """
+      PREFIX dams: <https://data.moex.com/dams/>
+      SELECT $this WHERE {
+        $this dams:asset_kind "interface" .
+        FILTER(
+          EXISTS { $this dams:operation_name ?o }
+          || EXISTS { $this dams:http_method ?h }
+          || EXISTS { $this dams:path_template ?p }
+          || EXISTS { $this dams:message_refs ?m }
+        )
+      }
+    """
+  ] .

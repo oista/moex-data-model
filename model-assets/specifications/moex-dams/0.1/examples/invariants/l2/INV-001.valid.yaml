@@ -1,0 +1,18 @@
+element_id: dams:model/inv/1
+implementation_scope: enterprise
+conceptual_entities:
+- element_id: dams:concept/C
+  name: C
+  description: c
+  lifecycle_status: active
+conceptual_properties:
+- element_id: dams:concept/C/p
+  name: p
+  description: p
+  lifecycle_status: active
+  property_owner_entity_ref: dams:concept/C
+  significance_basis:
+  - identifying
+  property_kind: identifying
+  genesis_kind: native
+  is_identifying: true

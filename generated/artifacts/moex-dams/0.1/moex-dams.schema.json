@@ -2268,6 +2268,9 @@
                                     },
                                     {
                                         "const": "openapi_schema"
+                                    },
+                                    {
+                                        "const": "other"
                                     }
                                 ]
                             }
@@ -3325,10 +3328,23 @@
                 "check_id": {
                     "type": "string"
                 },
+                "description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "diagnostic_code": {
                     "description": "\u041c\u043e\u0441\u0442 \u043a DAMS-STRUCT-* / DAMS-REF-* / DAMS-REQ-*.",
                     "type": [
                         "string",
+                        "null"
+                    ]
+                },
+                "effective": {
+                    "description": "Optional flag: whether this FormalCheck is currently enforced by assess (documentation / progressive rollout). Absent means enforced when kind is runnable.",
+                    "type": [
+                        "boolean",
                         "null"
                     ]
                 },

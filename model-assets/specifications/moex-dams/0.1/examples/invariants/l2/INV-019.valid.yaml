@@ -1,0 +1,11 @@
+element_id: dams:model/inv/1
+implementation_scope: enterprise
+access_points:
+- element_id: dams:ap/inv/op
+  name: op
+  asset_kind: operation
+  asset_namespace: ns
+  qualified_name: op
+  interface_ref: dams:ap/inv/iface
+  message_refs:
+  - dams:msg/x

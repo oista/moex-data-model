@@ -1,0 +1,10 @@
+id: https://example.org/inv026-good/
+name: inv026_good
+prefixes:
+  good: https://example.org/good/
+default_prefix: good
+classes:
+  X:
+    attributes:
+      a:
+        range: string
