@@ -110,7 +110,10 @@ class LinkMLStandardProvider:
             "data_containers",
             "execution_assets",
             "domain_contexts",
-            "mappings",
+            "realizes_mappings",
+            "entity_physical_mappings",
+            "field_mappings",
+            "aligns_with_mappings",
         ):
             items = body.data.get(collection) or []
             if not isinstance(items, list):

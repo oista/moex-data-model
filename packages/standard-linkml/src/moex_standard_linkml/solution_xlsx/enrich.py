@@ -10,6 +10,20 @@ from moex_standard_linkml.solution_xlsx.normalize import match_key
 from moex_standard_linkml.solution_xlsx.profile import SolutionXlsxProfile, SystemDefaults
 from moex_standard_linkml.solution_xlsx.trace import TraceMap
 
+_TYPED_MAPPING_KEYS = (
+    "realizes_mappings",
+    "entity_physical_mappings",
+    "field_mappings",
+    "aligns_with_mappings",
+)
+
+
+def _iter_typed_mappings(package: dict[str, Any]):
+    for key in _TYPED_MAPPING_KEYS:
+        for mapping in package.get(key) or []:
+            if isinstance(mapping, dict):
+                yield mapping
+
 
 def enrich_package(
     package: dict[str, Any],
@@ -86,7 +100,7 @@ def enrich_package(
             if isinstance(node, dict) and str(node.get("node_kind") or "") == "scalar":
                 node["mapping_coverage_status"] = defaults.mapping_coverage_status_mapped
 
-    for mapping in package.get("mappings") or []:
+    for mapping in _iter_typed_mappings(package):
         # Mapping lost identity slot name in DAMS 3.0.0 (ADR-044); key lineage
         # by the local id segment (same token as the former workbook name).
         eid = str(mapping.get("element_id") or "")
@@ -100,10 +114,10 @@ def enrich_package(
 
     # Package-level realizes stubs: logical entity → local conceptual stub (ADR-021).
     # Full enterprise alignment is a follow-up edit.
-    mappings = list(package.get("mappings") or [])
+    realizes = list(package.get("realizes_mappings") or [])
     existing_realizes = {
         tuple(m.get("source_refs") or [])
-        for m in mappings
+        for m in realizes
         if m.get("mapping_type") == "realizes"
     }
     concept_by_name = {
@@ -120,7 +134,7 @@ def enrich_package(
         key = (eid,)
         if key in existing_realizes:
             continue
-        mappings.append(
+        realizes.append(
             {
                 "element_id": f"dams:mapping/{system.slug}/realizes_{name}",
                 "description": (
@@ -135,7 +149,9 @@ def enrich_package(
                 "approval_status": "proposed",
             }
         )
-    package["mappings"] = mappings
+    if realizes:
+        package["realizes_mappings"] = realizes
+    package.pop("mappings", None)
 
     for rel in package.get("relationships") or []:
         # Draft packages may omit unbounded max; keep finite cards from builder.

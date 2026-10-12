@@ -34,9 +34,8 @@ data_structures:
         node_kind: scalar
         native_name: id
         native_type: string
-mappings:
+field_mappings:
   - element_id: dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID
-    name: map_client_id
     description: existing
     source_refs:
       - dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID
