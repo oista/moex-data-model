@@ -3,7 +3,7 @@
 # Do not edit by hand — regenerated at viewer publication build.
 name: moex_dams
 id: https://data.moex.com/dams/v0.1
-version: 3.0.0
+version: 3.1.0
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml:
@@ -278,6 +278,13 @@ types:
     typeof: string
     uri: xsd:string
     pattern: ^sha256:[a-fA-F0-9]{64}$
+  SchemaNodeRef:
+    name: SchemaNodeRef
+    description: SchemaNode address structure_id#local_key (ADR-039 / ADR-046).
+    from_schema: https://data.moex.com/dams/types/v0.1
+    typeof: uriorcurie
+    uri: xsd:anyURI
+    pattern: ^dams:structure/.+#.+$
 enums:
   LifecycleStatusEnum:
     name: LifecycleStatusEnum
@@ -732,12 +739,6 @@ enums:
       '
     from_schema: https://data.moex.com/dams/types/v0.1
     permissible_values:
-      semantic_equivalence:
-        text: semantic_equivalence
-      specialization:
-        text: specialization
-      implementation:
-        text: implementation
       entity_physical:
         text: entity_physical
         description: 'Explicit entity-level link between DataCarrier and LogicalEntity
@@ -750,12 +751,6 @@ enums:
           (ADR-038).
 
           '
-      transformation:
-        text: transformation
-      aggregation:
-        text: aggregation
-      derivation:
-        text: derivation
       realizes:
         text: realizes
         description: Solution logical/concept realizes an enterprise conceptual entity.
@@ -1653,10 +1648,35 @@ slots:
     multivalued: true
     inlined: true
     inlined_as_list: true
-  mappings:
-    name: mappings
+  realizes_mappings:
+    name: realizes_mappings
+    description: Typed realizes mappings (ADR-046 Variant B).
     from_schema: https://data.moex.com/dams/core/v0.1
-    range: Mapping
+    range: RealizesMapping
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  entity_physical_mappings:
+    name: entity_physical_mappings
+    description: Typed entity_physical mappings (ADR-046 Variant B).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: EntityPhysicalMapping
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  field_mappings:
+    name: field_mappings
+    description: Typed field_mapping mappings (ADR-046 Variant B).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: FieldMapping
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  aligns_with_mappings:
+    name: aligns_with_mappings
+    description: Typed aligns_with mappings (ADR-046 Variant B).
+    from_schema: https://data.moex.com/dams/core/v0.1
+    range: AlignsWithMapping
     multivalued: true
     inlined: true
     inlined_as_list: true
@@ -3084,6 +3104,13 @@ slots:
     description: Actionable remediation text for CI / Cursor / authors.
     from_schema: https://data.moex.com/dams/requirements/v0.1
     range: string
+  effective:
+    name: effective
+    description: 'Optional flag: whether this FormalCheck is currently enforced by
+      assess (documentation / progressive rollout). Absent means enforced when kind
+      is runnable.'
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: boolean
   code:
     name: code
     from_schema: https://data.moex.com/dams/requirements/v0.1
@@ -3512,7 +3539,10 @@ classes:
     - access_points
     - data_containers
     - execution_assets
-    - mappings
+    - realizes_mappings
+    - entity_physical_mappings
+    - field_mappings
+    - aligns_with_mappings
     - conceptual_properties
     - conceptual_domains
     - value_domains
@@ -3609,7 +3639,7 @@ classes:
           is_identifying:
             name: is_identifying
             equals_string: 'true'
-      description: identifying property_kind требует is_identifying
+      description: 'INV-001: identifying property_kind требует is_identifying'
   LogicalEntity:
     name: LogicalEntity
     description: Представление бизнес-сущности в доменном контексте и модели конкретного
@@ -3739,12 +3769,15 @@ classes:
     - selection_ref
   Mapping:
     name: Mapping
-    description: 'Явное соответствие между элементами. Discriminate via mapping_type:
-      realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity),
-      field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with (enterprise↔external
-      term). Not used for SpecImpl implements/conforms_to. Identity slots name/title/aliases/glossary_term_refs/tags
-      removed in DAMS 3.0.0 (ADR-044); display label = source_refs -> target_refs
-      [mapping_type].
+    description: 'Явное соответствие между элементами. Prefer typed subclasses (RealizesMapping,
+      EntityPhysicalMapping, FieldMapping, AlignsWithMapping) and separate ModelPackage
+      collections (ADR-046). Base Mapping remains as the inheritance root for those
+      subclasses. Discriminate via mapping_type: realizes (solution→enterprise conceptual),
+      entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (SchemaNode↔LogicalAttribute),
+      aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
+      Identity slots name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0
+      (ADR-044); polymorphic ModelPackage.mappings removed in 3.1.0 (ADR-046 PR-5);
+      display label = source_refs -> target_refs [mapping_type].
 
       '
     from_schema: https://data.moex.com/dams/core/v0.1
@@ -3765,6 +3798,151 @@ classes:
       description:
         name: description
         required: false
+  RealizesMapping:
+    name: RealizesMapping
+    description: 'Solution logical entity realizes an enterprise conceptual entity
+      (ADR-046). Designator via L1 rule (not equals_string on enum slot). source_refs
+      narrowed to LogicalEntity in PR-1; ConceptualEntity via any_of deferred if needed.
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    is_a: Mapping
+    slot_usage:
+      source_refs:
+        name: source_refs
+        range: LogicalEntity
+        multivalued: true
+        inlined: false
+        minimum_cardinality: 1
+      target_refs:
+        name: target_refs
+        range: ConceptualEntity
+        multivalued: true
+        inlined: false
+        minimum_cardinality: 1
+    rules:
+    - preconditions:
+        slot_conditions:
+          mapping_type:
+            name: mapping_type
+            value_presence: PRESENT
+      postconditions:
+        slot_conditions:
+          mapping_type:
+            name: mapping_type
+            equals_string: realizes
+      description: 'INV-028: RealizesMapping.mapping_type must be realizes'
+  EntityPhysicalMapping:
+    name: EntityPhysicalMapping
+    description: 'Explicit entity-level link between DataCarrier and LogicalEntity
+      (ADR-046 / PDM-003). Exactly one source and one target; cardinality one_to_one.
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    is_a: Mapping
+    slot_usage:
+      source_refs:
+        name: source_refs
+        range: DataCarrier
+        multivalued: true
+        inlined: false
+        minimum_cardinality: 1
+        maximum_cardinality: 1
+      target_refs:
+        name: target_refs
+        range: LogicalEntity
+        multivalued: true
+        inlined: false
+        minimum_cardinality: 1
+        maximum_cardinality: 1
+    rules:
+    - preconditions:
+        slot_conditions:
+          mapping_type:
+            name: mapping_type
+            value_presence: PRESENT
+      postconditions:
+        slot_conditions:
+          mapping_type:
+            name: mapping_type
+            equals_string: entity_physical
+      description: 'INV-029: EntityPhysicalMapping.mapping_type must be entity_physical'
+    - preconditions:
+        slot_conditions:
+          mapping_cardinality:
+            name: mapping_cardinality
+            value_presence: PRESENT
+      postconditions:
+        slot_conditions:
+          mapping_cardinality:
+            name: mapping_cardinality
+            equals_string: one_to_one
+      description: 'INV-030: EntityPhysicalMapping.mapping_cardinality must be one_to_one'
+  FieldMapping:
+    name: FieldMapping
+    description: 'mapsTo between LogicalAttribute and SchemaNode address (structure_id#local_key)
+      via SchemaNodeRef (ADR-039 / ADR-046).
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    is_a: Mapping
+    slot_usage:
+      source_refs:
+        name: source_refs
+        range: LogicalAttribute
+        multivalued: true
+        inlined: false
+        minimum_cardinality: 1
+      target_refs:
+        name: target_refs
+        range: SchemaNodeRef
+        multivalued: true
+        minimum_cardinality: 1
+    rules:
+    - preconditions:
+        slot_conditions:
+          mapping_type:
+            name: mapping_type
+            value_presence: PRESENT
+      postconditions:
+        slot_conditions:
+          mapping_type:
+            name: mapping_type
+            equals_string: field_mapping
+      description: 'INV-031: FieldMapping.mapping_type must be field_mapping'
+  AlignsWithMapping:
+    name: AlignsWithMapping
+    description: 'Enterprise conceptual entity aligns with an external reference IRI
+      (ADR-046). Exactly one source; one or more target URIs.
+
+      '
+    from_schema: https://data.moex.com/dams/core/v0.1
+    is_a: Mapping
+    slot_usage:
+      source_refs:
+        name: source_refs
+        range: ConceptualEntity
+        multivalued: true
+        inlined: false
+        minimum_cardinality: 1
+        maximum_cardinality: 1
+      target_refs:
+        name: target_refs
+        range: uri
+        multivalued: true
+        minimum_cardinality: 1
+    rules:
+    - preconditions:
+        slot_conditions:
+          mapping_type:
+            name: mapping_type
+            value_presence: PRESENT
+      postconditions:
+        slot_conditions:
+          mapping_type:
+            name: mapping_type
+            equals_string: aligns_with
+      description: 'INV-032: AlignsWithMapping.mapping_type must be aligns_with'
   HasStructure:
     name: HasStructure
     description: 'Mixin структуры данных носителя. structure_ref — ссылка на DataStructure
@@ -3893,7 +4071,7 @@ classes:
           region:
             name: region
             value_presence: ABSENT
-      description: in_memory носитель не имеет location_uri и region
+      description: 'INV-015: in_memory носитель не имеет location_uri и region'
   AccessPoint:
     name: AccessPoint
     description: 'Точка доступа к данным: интерфейс, операция или канал. Сама данные
@@ -3931,7 +4109,7 @@ classes:
           interface_ref:
             name: interface_ref
             required: true
-      description: operation требует interface_ref
+      description: 'INV-016: operation требует interface_ref'
     - preconditions:
         slot_conditions:
           asset_kind:
@@ -3951,7 +4129,7 @@ classes:
           message_refs:
             name: message_refs
             value_presence: ABSENT
-      description: interface не имеет operation-полей
+      description: 'INV-017: interface не имеет operation-полей'
   DataContainer:
     name: DataContainer
     description: 'Контейнер других активов (database, schema, bucket, broker, directory,
@@ -4031,7 +4209,7 @@ classes:
           value_meanings:
             name: value_meanings
             value_presence: ABSENT
-      description: described-домен не содержит value_meanings
+      description: 'INV-009: described-домен не содержит value_meanings'
   ValueMeaning:
     name: ValueMeaning
     description: 'Смысл допустимого значения внутри ConceptualDomain (встраиваемый,
@@ -4097,7 +4275,7 @@ classes:
           type_family:
             name: type_family
             equals_string: decimal
-      description: precision только для decimal
+      description: 'INV-002: precision только для decimal'
     - preconditions:
         slot_conditions:
           scale:
@@ -4108,7 +4286,7 @@ classes:
           type_family:
             name: type_family
             equals_string: decimal
-      description: scale только для decimal
+      description: 'INV-003: scale только для decimal'
     - preconditions:
         slot_conditions:
           max_length:
@@ -4121,7 +4299,7 @@ classes:
             any_of:
             - equals_string: string
             - equals_string: binary
-      description: max_length только для string или binary
+      description: 'INV-004: max_length только для string или binary'
     - preconditions:
         slot_conditions:
           min_length:
@@ -4134,7 +4312,7 @@ classes:
             any_of:
             - equals_string: string
             - equals_string: binary
-      description: min_length только для string или binary
+      description: 'INV-005: min_length только для string или binary'
   NativeTypeBinding:
     name: NativeTypeBinding
     description: 'Привязка нативного типа диалекта (SQL, JSON Schema и т.п.) к корпоративному
@@ -4201,7 +4379,7 @@ classes:
           permissible_values:
             name: permissible_values
             value_presence: PRESENT
-      description: enumerated-домен требует permissible_values
+      description: 'INV-006: enumerated-домен требует permissible_values'
     - preconditions:
         slot_conditions:
           value_domain_kind:
@@ -4212,7 +4390,7 @@ classes:
           permissible_values:
             name: permissible_values
             value_presence: ABSENT
-      description: described-домен не содержит permissible_values
+      description: 'INV-007: described-домен не содержит permissible_values'
     - preconditions:
         slot_conditions:
           value_domain_kind:
@@ -4223,7 +4401,7 @@ classes:
           permissible_values:
             name: permissible_values
             value_presence: ABSENT
-      description: reference_set не содержит permissible_values
+      description: 'INV-008: reference_set не содержит permissible_values'
   PermissibleValue:
     name: PermissibleValue
     description: Допустимое значение внутри ValueDomain (встраиваемый).
@@ -4309,7 +4487,7 @@ classes:
           source_artifact_ref:
             name: source_artifact_ref
             value_presence: PRESENT
-      description: source_pointer требует source_artifact_ref
+      description: 'INV-010: source_pointer требует source_artifact_ref'
     - preconditions:
         slot_conditions:
           schema_dialect:
@@ -4322,7 +4500,9 @@ classes:
             any_of:
             - equals_string: json_schema
             - equals_string: openapi_schema
-      description: schema_dialect только для семейства JSON Schema
+            - equals_string: other
+      description: 'INV-011: schema_dialect только для json_schema, openapi_schema
+        или other (other — AsyncAPI Multi Format Schema / прочие диалекты, ADR-038)'
   SchemaNode:
     name: SchemaNode
     description: 'Узел дерева структуры. Идентичность (DataStructure.element_id, local_key).
@@ -4384,7 +4564,7 @@ classes:
           children:
             name: children
             value_presence: ABSENT
-      description: array|map требуют item_node и запрещают children
+      description: 'INV-012: array|map требуют item_node и запрещают children'
     - preconditions:
         slot_conditions:
           node_kind:
@@ -4400,7 +4580,7 @@ classes:
           item_node:
             name: item_node
             value_presence: ABSENT
-      description: scalar|enum запрещают children и item_node
+      description: 'INV-013: scalar|enum запрещают children и item_node'
     - preconditions:
         slot_conditions:
           node_kind:
@@ -4411,7 +4591,7 @@ classes:
           reference_target:
             name: reference_target
             value_presence: PRESENT
-      description: reference требует reference_target
+      description: 'INV-014: reference требует reference_target'
   Message:
     name: Message
     id_prefixes:
@@ -4605,6 +4785,8 @@ classes:
     - diagnostic_code
     - expression
     - remediation
+    - description
+    - effective
   SpecificationRequirement:
     name: SpecificationRequirement
     description: Нормативное требование к модели, соответствующей reference specification

@@ -12,6 +12,9 @@ note as N_SRC
   UML shows key slots only.
 end note
 
+abstract class IdentifiedElement {
+  +element_id : uriorcurie [1]
+}
 abstract class ModelElement {
   +element_id : uriorcurie [1]
   +name : string [1]
@@ -126,6 +129,10 @@ package "Трассируемость" #EADCF8 {
     +transformation_expression : string [0..1]
     +confidence : decimal [0..1]
   }
+  class RealizesMapping
+  class EntityPhysicalMapping
+  class FieldMapping
+  class AlignsWithMapping
 }
 
 package "Реестры (RegistryEntry)" #F5F5F5 {
@@ -156,7 +163,11 @@ TechnicalAsset <|-- AccessPoint
 TechnicalAsset <|-- DataContainer
 TechnicalAsset <|-- ExecutionAsset
 ModelElement <|-- PhysicalField
-ModelElement <|-- Mapping
+IdentifiedElement <|-- Mapping
+Mapping <|-- RealizesMapping
+Mapping <|-- EntityPhysicalMapping
+Mapping <|-- FieldMapping
+Mapping <|-- AlignsWithMapping
 
 RegistryEntry <|-- ITSystem
 RegistryEntry <|-- ITSolution
@@ -182,10 +193,12 @@ ITSolution "1" o-- "0..*" ITSystem : member_system_refs
 Mapping "0..*" ..> ModelElement : source_refs / target_refs\n(uriorcurie 1..*)
 
 note bottom of Mapping
-  One canonical Mapping class.
+  Base Mapping + typed subclasses (ADR-046).
+  ModelPackage collections: realizes_mappings,
+  entity_physical_mappings, field_mappings,
+  aligns_with_mappings (polymorphic mappings removed).
   mapping_type: realizes, entity_physical,
-  field_mapping, aligns_with, derivation, …
-  No ModelElementRealization / Transformation classes.
+  field_mapping, aligns_with.
 end note
 note bottom of ConceptualEntity
   No ConceptualAttribute class.

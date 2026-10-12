@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-12T19:34:23
+# Generation date: 2026-10-12T20:25:38
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -60,7 +60,7 @@ from linkml_runtime.linkml_model.types import Boolean, Datetime, Decimal, Intege
 from linkml_runtime.utils.metamodelcore import Bool, Decimal, URI, URIorCURIE, XSDDateTime
 
 metamodel_version = "1.11.0"
-version = "3.0.0"
+version = "3.1.0"
 
 # Namespaces
 DAMS = CurieNamespace('dams', 'https://data.moex.com/dams/')
@@ -1394,7 +1394,6 @@ class ModelPackage(ModelElement):
     access_points: Optional[Union[dict[Union[str, AccessPointElementId], Union[dict, "AccessPoint"]], list[Union[dict, "AccessPoint"]]]] = empty_dict()
     data_containers: Optional[Union[dict[Union[str, DataContainerElementId], Union[dict, "DataContainer"]], list[Union[dict, "DataContainer"]]]] = empty_dict()
     execution_assets: Optional[Union[dict[Union[str, ExecutionAssetElementId], Union[dict, "ExecutionAsset"]], list[Union[dict, "ExecutionAsset"]]]] = empty_dict()
-    mappings: Optional[Union[dict[Union[str, MappingElementId], Union[dict, "Mapping"]], list[Union[dict, "Mapping"]]]] = empty_dict()
     realizes_mappings: Optional[Union[dict[Union[str, RealizesMappingElementId], Union[dict, "RealizesMapping"]], list[Union[dict, "RealizesMapping"]]]] = empty_dict()
     entity_physical_mappings: Optional[Union[dict[Union[str, EntityPhysicalMappingElementId], Union[dict, "EntityPhysicalMapping"]], list[Union[dict, "EntityPhysicalMapping"]]]] = empty_dict()
     field_mappings: Optional[Union[dict[Union[str, FieldMappingElementId], Union[dict, "FieldMapping"]], list[Union[dict, "FieldMapping"]]]] = empty_dict()
@@ -1472,8 +1471,6 @@ class ModelPackage(ModelElement):
         self._normalize_inlined_as_list(slot_name="data_containers", slot_type=DataContainer, key_name="element_id", keyed=True)
 
         self._normalize_inlined_as_list(slot_name="execution_assets", slot_type=ExecutionAsset, key_name="element_id", keyed=True)
-
-        self._normalize_inlined_as_list(slot_name="mappings", slot_type=Mapping, key_name="element_id", keyed=True)
 
         self._normalize_inlined_as_list(slot_name="realizes_mappings", slot_type=RealizesMapping, key_name="element_id", keyed=True)
 
@@ -2329,12 +2326,12 @@ class ExternalClassRef(YAMLRoot):
 class Mapping(IdentifiedElement):
     """
     Явное соответствие между элементами. Prefer typed subclasses (RealizesMapping, EntityPhysicalMapping,
-    FieldMapping, AlignsWithMapping) and separate ModelPackage collections (ADR-046). Base Mapping remains for the
-    deprecated polymorphic mappings collection during the compatibility window. Discriminate via mapping_type:
-    realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo
-    (SchemaNode↔LogicalAttribute), aligns_with (enterprise↔external term). Not used for SpecImpl
-    implements/conforms_to. Identity slots name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044);
-    display label = source_refs -> target_refs [mapping_type].
+    FieldMapping, AlignsWithMapping) and separate ModelPackage collections (ADR-046). Base Mapping remains as the
+    inheritance root for those subclasses. Discriminate via mapping_type: realizes (solution→enterprise conceptual),
+    entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with
+    (enterprise↔external term). Not used for SpecImpl implements/conforms_to. Identity slots
+    name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044); polymorphic ModelPackage.mappings
+    removed in 3.1.0 (ADR-046 PR-5); display label = source_refs -> target_refs [mapping_type].
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -4982,30 +4979,12 @@ class MappingTypeEnum(EnumDefinitionImpl):
     LogicalEntity; field_mapping = mapsTo (SchemaNode ↔ LogicalAttribute); aligns_with = enterprise conceptual ↔
     external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).
     """
-    semantic_equivalence = LinkMLPermissibleValue(
-        text="semantic_equivalence",
-        description="Deprecated (ADR-046). Unused; removed in a later PR of the series.")
-    specialization = LinkMLPermissibleValue(
-        text="specialization",
-        description="Deprecated (ADR-046). Unused; removed in a later PR of the series.")
-    implementation = LinkMLPermissibleValue(
-        text="implementation",
-        description="Deprecated (ADR-046). Unused; removed in a later PR of the series.")
     entity_physical = LinkMLPermissibleValue(
         text="entity_physical",
         description="""Explicit entity-level link between DataCarrier and LogicalEntity (PDM-003). Do not infer from field_mapping alone.""")
     field_mapping = LinkMLPermissibleValue(
         text="field_mapping",
         description="""mapsTo between SchemaNode (structure_id#local_key) and LogicalAttribute (ADR-038).""")
-    transformation = LinkMLPermissibleValue(
-        text="transformation",
-        description="Deprecated (ADR-046). Unused; removed in a later PR of the series.")
-    aggregation = LinkMLPermissibleValue(
-        text="aggregation",
-        description="Deprecated (ADR-046). Unused; removed in a later PR of the series.")
-    derivation = LinkMLPermissibleValue(
-        text="derivation",
-        description="Deprecated (ADR-046). Unused; removed in a later PR of the series.")
     realizes = LinkMLPermissibleValue(
         text="realizes",
         description="Solution logical/concept realizes an enterprise conceptual entity.")
@@ -5736,9 +5715,6 @@ slots.logical_entities = Slot(uri=DAMS.logical_entities, name="logical_entities"
 
 slots.relationships = Slot(uri=DAMS.relationships, name="relationships", curie=DAMS.curie('relationships'),
                    model_uri=DAMS.relationships, domain=None, range=Optional[Union[dict[Union[str, RelationshipElementId], Union[dict, Relationship]], list[Union[dict, Relationship]]]])
-
-slots.mappings = Slot(uri=DAMS.mappings, name="mappings", curie=DAMS.curie('mappings'),
-                   model_uri=DAMS.mappings, domain=None, range=Optional[Union[dict[Union[str, MappingElementId], Union[dict, Mapping]], list[Union[dict, Mapping]]]])
 
 slots.realizes_mappings = Slot(uri=DAMS.realizes_mappings, name="realizes_mappings", curie=DAMS.curie('realizes_mappings'),
                    model_uri=DAMS.realizes_mappings, domain=None, range=Optional[Union[dict[Union[str, RealizesMappingElementId], Union[dict, RealizesMapping]], list[Union[dict, RealizesMapping]]]])

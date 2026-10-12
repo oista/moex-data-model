@@ -6,7 +6,7 @@ from pathlib import Path
 
 import yaml
 
-from moex_dams.mappings.iter_mappings import LEGACY_MAPPING_KEY, TYPED_MAPPING_KEYS
+from moex_dams.mappings.iter_mappings import TYPED_MAPPING_KEYS
 from moex_dams.rules.constraint_matrix import (
     _collect_invariant_ids,
     _run_l2_package_checks,
@@ -52,7 +52,7 @@ def test_entity_physical_direction_aware() -> None:
     data = yaml.safe_load(EXAMPLE.read_text(encoding="utf-8"))
     logical_id = data["logical_entities"][0]["element_id"]
     carrier_id = data["data_carriers"][0]["element_id"]
-    for key in (*TYPED_MAPPING_KEYS, LEGACY_MAPPING_KEY):
+    for key in TYPED_MAPPING_KEYS:
         data.pop(key, None)
 
     good = {

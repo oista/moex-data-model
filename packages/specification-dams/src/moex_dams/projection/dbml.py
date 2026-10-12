@@ -267,8 +267,7 @@ def project_model_package_to_dbml(
                 f"> {entity_table[tgt_id]}.{entity_default_col[tgt_id]}{note}"
             )
 
-    # Physical FKs: field_mapping when both ends are physical fields in index;
-    # also object-level mappings with both physical object ends (default cols).
+    # Physical FKs: field_mapping when both ends are SchemaNode keys in index.
     for mapping in iter_mappings(data):
         mtype = mapping.get("mapping_type")
         sources = [str(x) for x in (mapping.get("source_refs") or [])]
@@ -285,23 +284,6 @@ def project_model_package_to_dbml(
                     st, sc = col_index[src]
                     tt, tc = col_index[tgt]
                     refs.append(f"Ref {mname}: {st}.{sc} > {tt}.{tc}{note}")
-        elif profile == "physical" and mtype in {
-            "object_mapping",
-            "entity_mapping",
-        }:
-            for src in sources:
-                for tgt in targets:
-                    if (
-                        src not in entity_table
-                        or tgt not in entity_table
-                        or src not in entity_default_col
-                        or tgt not in entity_default_col
-                    ):
-                        continue
-                    refs.append(
-                        f"Ref {mname}: {entity_table[src]}.{entity_default_col[src]} "
-                        f"> {entity_table[tgt]}.{entity_default_col[tgt]}{note}"
-                    )
 
     if refs:
         lines.append("// relationships / mappings as Refs")

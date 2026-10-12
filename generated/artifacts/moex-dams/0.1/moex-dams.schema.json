@@ -5173,7 +5173,7 @@
         },
         "Mapping": {
             "additionalProperties": false,
-            "description": "\u042f\u0432\u043d\u043e\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430\u043c\u0438. Prefer typed subclasses (RealizesMapping, EntityPhysicalMapping, FieldMapping, AlignsWithMapping) and separate ModelPackage collections (ADR-046). Base Mapping remains for the deprecated polymorphic mappings collection during the compatibility window. Discriminate via mapping_type: realizes (solution\u2192enterprise conceptual), entity_physical (DataCarrier\u2194LogicalEntity), field_mapping/mapsTo (SchemaNode\u2194LogicalAttribute), aligns_with (enterprise\u2194external term). Not used for SpecImpl implements/conforms_to. Identity slots name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044); display label = source_refs -> target_refs [mapping_type].",
+            "description": "\u042f\u0432\u043d\u043e\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430\u043c\u0438. Prefer typed subclasses (RealizesMapping, EntityPhysicalMapping, FieldMapping, AlignsWithMapping) and separate ModelPackage collections (ADR-046). Base Mapping remains as the inheritance root for those subclasses. Discriminate via mapping_type: realizes (solution\u2192enterprise conceptual), entity_physical (DataCarrier\u2194LogicalEntity), field_mapping/mapsTo (SchemaNode\u2194LogicalAttribute), aligns_with (enterprise\u2194external term). Not used for SpecImpl implements/conforms_to. Identity slots name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044); polymorphic ModelPackage.mappings removed in 3.1.0 (ADR-046 PR-5); display label = source_refs -> target_refs [mapping_type].",
             "properties": {
                 "approval_status": {
                     "$ref": "#/$defs/ApprovalStatusEnum"
@@ -5324,14 +5324,8 @@
         "MappingTypeEnum": {
             "description": "Kind of Mapping assertion. realizes = solution element \u2192 enterprise conceptual; entity_physical = DataCarrier \u2194 LogicalEntity; field_mapping = mapsTo (SchemaNode \u2194 LogicalAttribute); aligns_with = enterprise conceptual \u2194 external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).",
             "enum": [
-                "semantic_equivalence",
-                "specialization",
-                "implementation",
                 "entity_physical",
                 "field_mapping",
-                "transformation",
-                "aggregation",
-                "derivation",
                 "realizes",
                 "aligns_with"
             ],
@@ -5937,16 +5931,6 @@
                 "logical_entities": {
                     "items": {
                         "$ref": "#/$defs/LogicalEntity"
-                    },
-                    "type": [
-                        "array",
-                        "null"
-                    ]
-                },
-                "mappings": {
-                    "description": "Deprecated (ADR-046). Use realizes_mappings / entity_physical_mappings / field_mappings / aligns_with_mappings. Removed in a later PR of the series.\n",
-                    "items": {
-                        "$ref": "#/$defs/Mapping"
                     },
                     "type": [
                         "array",
@@ -8521,5 +8505,5 @@
     ],
     "title": "moex_dams",
     "type": "object",
-    "version": "3.0.0"
+    "version": "3.1.0"
 }

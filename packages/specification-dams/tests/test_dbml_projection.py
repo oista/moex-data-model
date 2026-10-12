@@ -150,7 +150,7 @@ MINI = {
             ],
         },
     ],
-    "mappings": [
+    "field_mappings": [
         {
             "mapping_type": "field_mapping",
             "source_refs": ["dams:logical/mini/Client/clientId"],

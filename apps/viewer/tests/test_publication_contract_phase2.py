@@ -61,7 +61,9 @@ FIXTURE_MODEL = {
             ],
         }
     ],
-    "mappings": [{"element_id": "m1", "name": "M1", "mapping_type": "field_mapping"}],
+    "field_mappings": [
+        {"element_id": "m1", "name": "M1", "mapping_type": "field_mapping"}
+    ],
 }
 
 
@@ -80,7 +82,7 @@ def test_count_logical_entities_and_nested_attributes():
         count_semantic_entities(
             FIXTURE_MODEL,
             ["EntityPhysicalMapping", "AttributePhysicalMapping"],
-            select="mappings",
+            select="field_mappings",
         )
         == 1
     )

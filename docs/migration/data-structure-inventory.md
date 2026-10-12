@@ -2,9 +2,14 @@
 
 Инвентаризация вхождений `PhysicalField` / связанных слотов для миграции на `DataStructure` / `SchemaNode` (плоский список узлов).
 
-**Target classes (planned):** `DataStructure`, `SchemaNode` — в схемах и данных **отсутствуют** (grep `SchemaNode` ≈ 0 вне планов; `DataStructure` — только упоминания в описаниях/`HasStructure`).
+> **Status (2026-10):** Migration landed. Prefer `DataStructure` / `SchemaNode`
+> (`structure_id#local_key`) over `PhysicalField`. `MappingTypeEnum.field_mapping`
+> endpoints are LogicalAttribute ↔ SchemaNodeRef (ADR-038/039/046). Counts and
+> file paths below are a historical scan snapshot and may be stale.
 
-**Patterns:** `PhysicalField`, `physical_fields`, `physical_field_refs`, `schema_path`, `native_type` (в контексте PhysicalField), `structure_ref`, `message_type` / `asset_kind: message_type`, `transitional`, `LogicalDataTypeEnum`, `field_mapping`, `SelectedAttribute` / `DataFlowEntityBinding` / `DataModelBinding` (field refs), `schema_dialect`, `data_format` / `HasStructure`, `PDM-002`, `PDM-004`, `PDM-009`.
+**Target classes:** `DataStructure`, `SchemaNode` (in schema + solution YAML).
+
+**Patterns:** `PhysicalField` (legacy), `physical_fields`, `physical_field_refs`, `schema_path`, `native_type` (в контексте PhysicalField), `structure_ref`, `message_type` / `asset_kind: message_type`, `transitional`, `LogicalDataTypeEnum`, `field_mapping`, `SelectedAttribute` / `DataFlowEntityBinding` / `DataModelBinding` (field refs), `schema_dialect`, `data_format` / `HasStructure`, `PDM-002`, `PDM-004`, `PDM-009`.
 
 **Excluded:** `tmp/**`, `.git/**`, `**/__pycache__/**`, `**/.venv/**`, `node_modules/**`, `.cursor/plans/**`.
 
@@ -26,7 +31,7 @@
 | `schema_dialect` | `moex-technical.yaml:226-228` | **No instance values** in model-assets (schema def + hierarchy mirror only) |
 | `data_format` | `moex-technical.yaml:229-231` | No values in solution YAML |
 | `DataCarrierKindEnum.message_type` | `moex-technical.yaml:279-280` | Transitional; enum exists, **no solution carriers use it** |
-| `MappingTypeEnum.field_mapping` | `moex-types.yaml:286-297` | PhysicalField ↔ LogicalAttribute |
+| `MappingTypeEnum.field_mapping` | `moex-types.yaml` | SchemaNode ↔ LogicalAttribute (was PhysicalField) |
 | `SelectedAttribute.physical_field_refs` | `moex-contract-binding.yaml:54-59` | Fields only |
 | `DataFlowEntityBinding.physical_field_refs` | `moex-integration.yaml:49`, slot `:124-125` | `range: PhysicalField` |
 | `DataModelBinding` | `moex-contract-binding.yaml:20+` | Package binding; field refs via nested `SelectedAttribute` |
@@ -102,7 +107,7 @@
 | `SelectedAttribute` | `physical_field_refs` | Contract selection → PhysicalField |
 | `DataFlowEntityBinding` | `physical_field_refs` | Flow binding → PhysicalField |
 | `DataModelBinding` | via `SelectedAttribute` | No direct field slot on binding root |
-| `Mapping` (`field_mapping`) | `source_refs` / `target_refs` | Endpoints LogicalAttribute ↔ PhysicalField (PDM-009) |
+| `FieldMapping` (`field_mapping`) | `source_refs` / `target_refs` | Endpoints LogicalAttribute ↔ SchemaNodeRef (PDM-009 / ADR-046) |
 
 ---
 
@@ -135,7 +140,7 @@
 |---|---|---|---|
 | PDM-002 | physical_field_core | `PhysicalField` | slot_required: `carrier_ref`, `native_name`, `native_type`, `required` |
 | PDM-004 | field_attribute_mapping | `PhysicalField` | `pdm004_field_mapping` / `field_mapping` or exception |
-| PDM-009 | mapping_endpoint_types | `Mapping` | `check_mapping_endpoint_types` (`technical_assets.py`) — `field_mapping` ends = LogicalAttribute ↔ PhysicalField |
+| PDM-009 | mapping_endpoint_types | typed Mapping subclasses | `check_mapping_endpoint_types` — `field_mapping` ends = LogicalAttribute ↔ SchemaNodeRef |
 
 *Entries in section: 3 files, 41 line hits.*
 

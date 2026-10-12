@@ -272,7 +272,6 @@ data_carriers varchar
 access_points varchar
 data_containers varchar
 execution_assets varchar
-mappings varchar
 realizes_mappings varchar
 entity_physical_mappings varchar
 field_mappings varchar
@@ -1350,7 +1349,6 @@ Ref: ModelPackage.data_carriers > DataCarrier.element_id
 Ref: ModelPackage.access_points > AccessPoint.element_id
 Ref: ModelPackage.data_containers > DataContainer.element_id
 Ref: ModelPackage.execution_assets > ExecutionAsset.element_id
-Ref: ModelPackage.mappings > Mapping.element_id
 Ref: ModelPackage.realizes_mappings > RealizesMapping.element_id
 Ref: ModelPackage.entity_physical_mappings > EntityPhysicalMapping.element_id
 Ref: ModelPackage.field_mappings > FieldMapping.element_id

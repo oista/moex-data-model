@@ -263,17 +263,6 @@
     
 
         
-      ModelPackage : mappings
-        
-          
-    
-        
-        
-        ModelPackage --> "*" Mapping : mappings
-        click Mapping href "../Mapping"
-    
-
-        
       ModelPackage : messages
         
           

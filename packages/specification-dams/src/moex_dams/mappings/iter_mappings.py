@@ -1,4 +1,4 @@
-"""Unified iteration over legacy and typed Mapping collections (ADR-046)."""
+"""Unified iteration over typed Mapping collections (ADR-046)."""
 
 from __future__ import annotations
 
@@ -11,20 +11,20 @@ TYPED_MAPPING_KEYS = (
     "field_mappings",
     "aligns_with_mappings",
 )
-LEGACY_MAPPING_KEY = "mappings"
 
 
 def iter_mappings(data: dict[str, Any]) -> Iterator[dict[str, Any]]:
-    """Yield mapping objects from legacy + typed ModelPackage collections.
+    """Yield mapping objects from typed ModelPackage collections.
 
-    Stable order: typed keys in ``TYPED_MAPPING_KEYS`` order, then legacy
-    ``mappings``. Deduplicate by ``element_id`` when the same id appears in
-    both typed and legacy (prefer first occurrence: typed collections first
-    so migrated data wins, then legacy). Skip non-dicts. Entries without
-    ``element_id`` are always yielded (no dedupe key).
+    Stable order: typed keys in ``TYPED_MAPPING_KEYS`` order. Deduplicate by
+    ``element_id`` when the same id appears in more than one collection
+    (prefer first occurrence). Skip non-dicts. Entries without ``element_id``
+    are always yielded (no dedupe key).
+
+    Legacy polymorphic ``mappings`` is no longer read (removed in ADR-046 PR-5).
     """
     seen: set[str] = set()
-    for key in (*TYPED_MAPPING_KEYS, LEGACY_MAPPING_KEY):
+    for key in TYPED_MAPPING_KEYS:
         for item in data.get(key) or []:
             if not isinstance(item, dict):
                 continue

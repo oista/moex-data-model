@@ -61,7 +61,6 @@ def _collect_ids(data: CommentedMap) -> set[str]:
         "access_points",
         "data_containers",
         "execution_assets",
-        "mappings",
         "realizes_mappings",
         "entity_physical_mappings",
         "field_mappings",
@@ -301,7 +300,6 @@ _MAPPING_COLLECTION_KEYS: tuple[str, ...] = (
     "entity_physical_mappings",
     "field_mappings",
     "aligns_with_mappings",
-    "mappings",
 )
 
 
@@ -527,7 +525,7 @@ def update_mapping(
         if target != collection:
             seq = data[collection]
             del seq[idx]
-            if isinstance(seq, list) and len(seq) == 0 and collection == "mappings":
+            if isinstance(seq, list) and len(seq) == 0 and collection in data:
                 del data[collection]
             _ensure_seq(data, target).append(item)
 
@@ -536,12 +534,7 @@ def delete_mapping(data: CommentedMap, element_id: str) -> None:
     collection, idx, _ = _find_mapping(data, element_id)
     seq = data[collection]
     del seq[idx]
-    if (
-        collection == "mappings"
-        and isinstance(seq, list)
-        and len(seq) == 0
-        and collection in data
-    ):
+    if isinstance(seq, list) and len(seq) == 0 and collection in data:
         del data[collection]
 
 
