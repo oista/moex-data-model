@@ -32,6 +32,23 @@ def _write_repo_marker(root: Path) -> None:
     marker.write_text("id: stub\n", encoding="utf-8")
 
 
+def _write_manifest(root: Path, documents: list[dict]) -> None:
+    impl = root / "model-assets" / "implementations"
+    impl.mkdir(parents=True, exist_ok=True)
+    (impl / "manifest.yaml").write_text(
+        yaml.dump(
+            {
+                "manifest_schema_version": "0.1.0",
+                "repository_id": "moex:repository:test",
+                "documents": documents,
+            },
+            allow_unicode=True,
+            sort_keys=False,
+        ),
+        encoding="utf-8",
+    )
+
+
 @pytest.fixture(scope="module")
 def catalog() -> FilesystemImplementationCatalog:
     return FilesystemImplementationCatalog(find_repo_root())
@@ -89,6 +106,7 @@ def test_unknown_token(catalog: FilesystemImplementationCatalog) -> None:
 def test_duplicate_slug_raises(tmp_path: Path) -> None:
     _write_repo_marker(tmp_path)
     impl_root = tmp_path / "model-assets" / "implementations" / "solutions"
+    docs = []
     for folder, body_name, ver in (("a", "a.yaml", "1.0.0"), ("b", "b.yaml", "2.0.0")):
         d = impl_root / folder
         d.mkdir(parents=True)
@@ -107,6 +125,16 @@ def test_duplicate_slug_raises(tmp_path: Path) -> None:
             ),
             encoding="utf-8",
         )
+        docs.append(
+            {
+                "id": f"moex:implementation:dup:{ver}",
+                "kind": "package",
+                "path": f"solutions/{folder}/implementation.yaml",
+                "version": ver,
+                "owner": "@moex/a",
+            }
+        )
+    _write_manifest(tmp_path, docs)
     with pytest.raises(CatalogBuildError, match="duplicate implementation slug"):
         FilesystemImplementationCatalog(tmp_path)
 
@@ -130,6 +158,25 @@ def test_broken_envelope_skipped(tmp_path: Path) -> None:
     bad = tmp_path / "model-assets" / "implementations" / "solutions" / "bad"
     bad.mkdir(parents=True)
     (bad / "implementation.yaml").write_text("not: a valid id package\n", encoding="utf-8")
+    _write_manifest(
+        tmp_path,
+        [
+            {
+                "id": "moex:implementation:ok:1.0.0",
+                "kind": "package",
+                "path": "solutions/ok/implementation.yaml",
+                "version": "1.0.0",
+                "owner": "@moex/a",
+            },
+            {
+                "id": "moex:implementation:bad:1.0.0",
+                "kind": "package",
+                "path": "solutions/bad/implementation.yaml",
+                "version": "1.0.0",
+                "owner": "@moex/a",
+            },
+        ],
+    )
     catalog = FilesystemImplementationCatalog(tmp_path)
     assert [a.slug for a in catalog.list()] == ["ok"]
 
@@ -152,8 +199,28 @@ def test_body_escape_not_registered(tmp_path: Path) -> None:
         ),
         encoding="utf-8",
     )
+    _write_manifest(
+        tmp_path,
+        [
+            {
+                "id": "moex:implementation:leak:1.0.0",
+                "kind": "package",
+                "path": "solutions/leak/implementation.yaml",
+                "version": "1.0.0",
+                "owner": "@moex/a",
+            }
+        ],
+    )
     try:
         cat = FilesystemImplementationCatalog(tmp_path)
         assert "leak" not in {a.slug for a in cat.list()}
     finally:
         outside.unlink(missing_ok=True)
+
+
+def test_catalog_ids_match_manifest(catalog: FilesystemImplementationCatalog) -> None:
+    from moex_repository_loader.loader import RepositoryLoader
+
+    loader_ids = set(RepositoryLoader(catalog.root, verify_hashes=False).document_ids())
+    catalog_ids = {a.id for a in catalog.list()}
+    assert catalog_ids == loader_ids

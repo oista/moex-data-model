@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check viewer-serve packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements check-constraints generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate digest-check ontology-check
+.PHONY: viewer viewer-check viewer-serve packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements check-constraints generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate digest-check ontology-check check-manifest lock-verify
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -50,6 +50,13 @@ architecture-check:
 	$(PYTHON) -m pip install -e "./tools/architecture-check[dev]"
 	$(PYTHON) -m pytest tools/architecture-check/tests -q
 	$(PYTHON) -m architecture_check.cli --root .
+
+# ADR-047: repository manifest + lock (also Stage 0 via scripts/check_all.py)
+check-manifest:
+	$(PYTHON) -m moex_model_cli check-manifest --root .
+
+lock-verify:
+	$(PYTHON) -m moex_model_cli lock verify --root .
 
 # Uses package .venv (Python 3.11+). Without make:
 #   powershell -NoProfile -File packages/standard-linkml/scripts/check.ps1
