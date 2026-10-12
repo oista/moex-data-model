@@ -20,20 +20,13 @@ classes:
     is_a: ModelElement
     mixins:
       - HasOwnership
-    description: Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr, а семантика — модели данных.
+    description: >
+      Ссылочная проекция зарегистрированной интеграции; топология и канал являются
+      данными Clinkr и читаются из TopologyView, а семантика — модели данных (ADR-048).
     slots:
       - integration_ref
       - contract_ref
-      - source_solution_ref
-      - target_solution_ref
-      - source_system_ref
-      - target_system_ref
-      - source_platform_ref
-      - target_platform_ref
-      - integration_level
-      - integration_class
-      - integration_channel
-      - integration_spec_ref
+      - bound_catalog_revision
       - entity_bindings
     slot_usage:
       description:
@@ -51,6 +44,8 @@ classes:
       - schema_node_refs
       - transformation_mapping_refs
       - direction
+      - catalog_operation_ref
+      - catalog_participant_ref
     slot_usage:
       description:
         required: true
@@ -63,42 +58,11 @@ slots:
   contract_ref:
     range: DataContractReference
     inlined: false
-  source_solution_ref:
-    range: ITSolution
-    inlined: false
-    required: true
-  target_solution_ref:
-    range: ITSolution
-    inlined: false
-    required: true
-  source_system_ref:
-    range: ITSystem
-    inlined: false
-    required: true
-  target_system_ref:
-    range: ITSystem
-    inlined: false
-    required: true
-  source_platform_ref:
-    range: ITPlatform
-    inlined: false
-    required: true
-  target_platform_ref:
-    range: ITPlatform
-    inlined: false
-    required: true
-  integration_level:
-    range: IntegrationLevelEnum
-    required: true
-  integration_class:
-    range: IntegrationClassEnum
-    required: true
-  integration_channel:
-    range: IntegrationChannelEnum
-    required: true
-  integration_spec_ref:
-    range: uri
-    required: true
+  bound_catalog_revision:
+    range: string
+    description: >
+      Ревизия файл-снимка каталога, на которой подтверждена привязка flow (ADR-048).
+      Источник stale_revision в drift-отчёте.
   entity_bindings:
     range: DataFlowEntityBinding
     multivalued: true
@@ -135,3 +99,13 @@ slots:
     range: Mapping
     multivalued: true
     inlined: false
+  catalog_operation_ref:
+    range: string
+    description: >
+      Идентификатор операции или канала в каталоге интеграций (ADR-048),
+      к которому привязан этот entity binding.
+  catalog_participant_ref:
+    range: uriorcurie
+    description: >
+      Внешний участник каталога (система/решение), чью роль в обмене занимает
+      source_model_ref; роль producer/consumer выражена слотом direction (ADR-048).

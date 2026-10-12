@@ -1,0 +1,19 @@
+# Generated TopologyView (ADR-048). Do not edit by hand.
+# Regenerate: python -m moex_dams.catalog.cli materialize --root .
+catalog_revision: 2026-10-12.fixture.1
+built_at: '2026-10-12T18:55:57+00:00'
+snapshot_digest: sha256:abcd23b65d049c59400005c02d516e193024dbba0310ab8cfbf39aaa6c92b747
+facts:
+- flow_ref: dams:flow/INT-00421
+  integration_ref: clinkr:integration/INT-00421
+  binding_status: resolved
+  source_solution_ref: eam:solution/MDM
+  target_solution_ref: eam:solution/CRM
+  source_system_ref: eam:system/TRADING_CORE
+  target_system_ref: eam:system/CRM_CORE
+  source_platform_ref: eam:platform/TRADING_PLATFORM
+  target_platform_ref: eam:platform/CLIENT_PLATFORM
+  integration_level: interplatform
+  integration_class: EDA
+  integration_channel: queue
+  integration_spec_ref: https://clinkr.moex.com/specifications/INT-00421/asyncapi/2.3.0

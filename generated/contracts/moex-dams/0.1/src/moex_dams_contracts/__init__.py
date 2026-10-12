@@ -34,7 +34,7 @@ from pydantic import (
 
 
 metamodel_version = "1.11.0"
-version = "3.1.0"
+version = "4.0.0"
 
 
 class ConfiguredBaseModel(BaseModel):
@@ -2253,20 +2253,13 @@ class Message(ModelElement):
 
 class DataFlow(ModelElement, HasOwnership):
     """
-    Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr, а семантика — модели данных.
+    Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr и читаются из TopologyView, а семантика — модели данных (ADR-048).
+
     """
     integration_ref: str = Field(default=...)
     contract_ref: Optional[str] = Field(default=None)
-    source_solution_ref: str = Field(default=...)
-    target_solution_ref: str = Field(default=...)
-    source_system_ref: str = Field(default=...)
-    target_system_ref: str = Field(default=...)
-    source_platform_ref: str = Field(default=...)
-    target_platform_ref: str = Field(default=...)
-    integration_level: IntegrationLevelEnum = Field(default=...)
-    integration_class: IntegrationClassEnum = Field(default=...)
-    integration_channel: IntegrationChannelEnum = Field(default=...)
-    integration_spec_ref: str = Field(default=...)
+    bound_catalog_revision: Optional[str] = Field(default=None, description="""Ревизия файл-снимка каталога, на которой подтверждена привязка flow (ADR-048). Источник stale_revision в drift-отчёте.
+""")
     entity_bindings: Optional[list[DataFlowEntityBinding]] = Field(default=None)
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
@@ -2298,6 +2291,10 @@ class DataFlowEntityBinding(ModelElement):
     schema_node_refs: Optional[list[str]] = Field(default=None, description="""Ссылки на узлы схемы (SchemaNode) в DataStructure.""")
     transformation_mapping_refs: Optional[list[str]] = Field(default=None)
     direction: Optional[FlowDirectionEnum] = Field(default=None)
+    catalog_operation_ref: Optional[str] = Field(default=None, description="""Идентификатор операции или канала в каталоге интеграций (ADR-048), к которому привязан этот entity binding.
+""")
+    catalog_participant_ref: Optional[str] = Field(default=None, description="""Внешний участник каталога (система/решение), чью роль в обмене занимает source_model_ref; роль producer/consumer выражена слотом direction (ADR-048).
+""")
     name: str = Field(default=...)
     title: Optional[str] = Field(default=None)
     aliases: Optional[list[str]] = Field(default=None)
@@ -2319,6 +2316,8 @@ class DataModelBinding(ModelElement, HasOwnership):
     implementation_version: str = Field(default=...)
     contract_ref: Optional[str] = Field(default=None)
     integration_ref: str = Field(default=...)
+    catalog_revision: Optional[str] = Field(default=None, description="""Ревизия файл-снимка каталога, зафиксированная в контрактном binding (ADR-048). Смена топологии без пересборки контракта даёт drift warning.
+""")
     model_package_ref: str = Field(default=...)
     model_version: str = Field(default=...)
     model_revision: str = Field(default=...)

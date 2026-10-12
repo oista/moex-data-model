@@ -1,0 +1,21 @@
+data_flows:
+- element_id: dams:flow/inv040
+  name: inv040_ok
+  description: bound_catalog_revision matches snapshot
+  lifecycle_status: active
+  integration_ref: clinkr:integration/INT-00421
+  bound_catalog_revision: "2026-10-12.fixture.1"
+  entity_bindings:
+  - element_id: dams:flow-binding/inv040/A
+    name: inv040_binding
+    description: mapped operation
+    lifecycle_status: active
+    flow_ref: dams:flow/inv040
+    source_model_ref: https://example.moex.com/models/inv040
+    logical_entity_ref: dams:logical/inv040/E
+    logical_attribute_refs:
+    - dams:logical/inv040/E/A
+    direction: outbound
+    carrier_refs:
+    - dams:physical/inv040/C
+    catalog_operation_ref: client.changed

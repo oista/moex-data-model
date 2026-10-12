@@ -29,15 +29,36 @@ def test_matrix_file_exists() -> None:
 def test_baseline_removed_registry_present() -> None:
     data = yaml.safe_load(MATRIX.read_text(encoding="utf-8"))
     assert "baseline" not in data or not data.get("baseline")
-    assert len(data["invariant_id_registry"]) == 27
-    assert len(data["invariants"]) == 27
+    assert len(data["invariant_id_registry"]) == 41
+    assert len(data["invariants"]) == 41
     statuses = {inv["id"]: inv["status"] for inv in data["invariants"]}
     level_status = {inv["id"]: inv["level_status"] for inv in data["invariants"]}
     for i in range(1, 18):
         assert statuses[f"INV-{i:03d}"] == "implemented"
     assert level_status["INV-001"]["L1"] == "waived"
     assert level_status["INV-002"]["L3"] == "implemented"
-    for inv_id in ("INV-018", "INV-019", "INV-020", "INV-021", "INV-022", "INV-026"):
+    for inv_id in (
+        "INV-018",
+        "INV-019",
+        "INV-020",
+        "INV-021",
+        "INV-022",
+        "INV-026",
+        "INV-028",
+        "INV-029",
+        "INV-030",
+        "INV-031",
+        "INV-032",
+        "INV-033",
+        "INV-034",
+        "INV-035",
+        "INV-036",
+        "INV-037",
+        "INV-038",
+        "INV-039",
+        "INV-040",
+        "INV-041",
+    ):
         assert statuses[inv_id] == "implemented"
     assert level_status["INV-020"]["L3"] == "waived"
     for inv_id in ("INV-023", "INV-024", "INV-025", "INV-027"):

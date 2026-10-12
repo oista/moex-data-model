@@ -34,6 +34,7 @@ try {
         -e (Join-Path $RepoRoot "packages/drawdb-adapter") `
         -e ("{0}[map,automator]" -f (Join-Path $RepoRoot "packages/linkml-tooling")) `
         -e (Join-Path $RepoRoot "packages/external-sources") `
+        -e (Join-Path $RepoRoot "packages/repository-loader") `
         -e (Join-Path $RepoRoot "apps/cli") `
         -e "$ApiRoot[dev,stage7]" -q
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

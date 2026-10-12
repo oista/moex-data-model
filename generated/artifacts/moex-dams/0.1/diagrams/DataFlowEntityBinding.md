@@ -21,6 +21,10 @@
     
 
         
+      DataFlowEntityBinding : catalog_operation_ref
+        
+      DataFlowEntityBinding : catalog_participant_ref
+        
       DataFlowEntityBinding : deprecated_by_ref
         
       DataFlowEntityBinding : description

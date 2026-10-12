@@ -27,6 +27,7 @@ classes:
       - implementation_version
       - contract_ref
       - integration_ref
+      - catalog_revision
       - model_package_ref
       - model_version
       - model_revision
@@ -77,6 +78,11 @@ slots:
   implementation_version:
     range: SemVer
     required: true
+  catalog_revision:
+    range: string
+    description: >
+      Ревизия файл-снимка каталога, зафиксированная в контрактном binding (ADR-048).
+      Смена топологии без пересборки контракта даёт drift warning.
   model_package_ref:
     range: uri
     required: true

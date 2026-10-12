@@ -36,9 +36,8 @@ data_structures:
         node_kind: scalar
         native_name: id
         native_type: string
-mappings:
+field_mappings:
   - element_id: dams:mapping/mdm/m
-    name: m
 `;
 
 describe("ModelExplorer", () => {
