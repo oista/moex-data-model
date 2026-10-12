@@ -1,0 +1,15 @@
+manifest_schema_version: 0.1.0
+repository_id: moex:repository:implementations
+documents:
+  - id: moex:implementation:crm:0.1.0
+    kind: package
+    path: solutions/crm/implementation.yaml
+    version: 0.1.0
+    owner: "@moex/owner-pending"
+    depends_on:
+      - moex:implementation:moex-enterprise-conceptual-model:0.1
+  - id: moex:implementation:moex-enterprise-conceptual-model:0.1
+    kind: package
+    path: enterprise/moex-enterprise-conceptual-model/0.1/implementation.yaml
+    version: 0.1.0
+    owner: "@moex/owner-pending"

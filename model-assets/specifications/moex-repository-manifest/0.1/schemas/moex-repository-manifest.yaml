@@ -1,0 +1,130 @@
+id: https://data.moex.com/dams/repository-manifest/v0.1
+name: moex_repository_manifest
+version: 0.1.0
+title: MOEX repository manifest
+description: >
+  Index of addressable implementation documents under model-assets/implementations
+  (ADR-047). Not part of the DAMS domain model; do not import from moex-dams.yaml
+  in the P1 series (keeps generated/ and golden unchanged).
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  xsd: http://www.w3.org/2001/XMLSchema#
+  dams: https://data.moex.com/dams/
+  rm: https://data.moex.com/dams/repository-manifest/
+imports:
+  - linkml:types
+default_prefix: rm
+default_range: string
+
+types:
+  ManifestSemVer:
+    typeof: string
+    uri: xsd:string
+    description: SemVer for manifest_schema_version / lock_schema_version.
+    pattern: '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$'
+  RelativeYamlPath:
+    typeof: string
+    uri: xsd:string
+    description: >
+      Posix-relative path to a YAML document under the implementations root.
+      No absolute paths, drive letters, or '..' segments.
+    pattern: '^(?!/|[A-Za-z]:)(?!.*(?:^|/)\.\.(?:/|$))[A-Za-z0-9._/-]+\.ya?ml$'
+  CodeOwnerHandle:
+    typeof: string
+    uri: xsd:string
+    description: GitHub-style owner (@user or @org/team). Not data_owner_ref.
+    pattern: '^@[\w.-]+(/[\w.-]+)?$'
+  ContentHash:
+    typeof: string
+    uri: xsd:string
+    description: Lowercase sha256 digest with prefix (lock content_hash).
+    pattern: '^sha256:[0-9a-f]{64}$'
+
+enums:
+  DocumentKindEnum:
+    description: Addressable document kinds in the repository index (extensible additively).
+    permissible_values:
+      package:
+        description: SpecificationImplementation envelope + ModelPackage (or ontology) body.
+
+classes:
+  RepositoryManifest:
+    tree_root: true
+    description: Hand-edited index of repository documents (no model payload).
+    slots:
+      - manifest_schema_version
+      - repository_id
+      - documents
+
+  DocumentRef:
+    description: Reference to one addressable document; id is stable, path is resolved by the loader.
+    slots:
+      - id
+      - kind
+      - path
+      - version
+      - owner
+      - depends_on
+
+  RepositoryLockHeader:
+    description: First JSON Lines record of manifest.lock.
+    slots:
+      - lock_schema_version
+
+  RepositoryLockEntry:
+    description: Per-document lock line (generated; not hand-edited).
+    slots:
+      - id
+      - content_hash
+
+slots:
+  manifest_schema_version:
+    range: ManifestSemVer
+    required: true
+    description: Schema version of this RepositoryManifest instance.
+  repository_id:
+    range: uriorcurie
+    required: true
+    description: Stable id of the in-memory MOEXModelRepository assembled from this index.
+  documents:
+    range: DocumentRef
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    required: true
+    minimum_cardinality: 1
+    description: Indexed documents (packages today).
+  id:
+    identifier: true
+    range: uriorcurie
+    required: true
+    description: Stable document id (equals SpecificationImplementation.id for kind=package).
+  kind:
+    range: DocumentKindEnum
+    required: true
+  path:
+    range: RelativeYamlPath
+    required: true
+    description: Path to implementation.yaml relative to model-assets/implementations/.
+  version:
+    range: string
+    required: true
+    description: Document version string (usually matches envelope version).
+  owner:
+    range: CodeOwnerHandle
+    required: true
+    description: Code/review owner handle; distinct from data_owner_ref (ADR-023).
+  depends_on:
+    range: uriorcurie
+    multivalued: true
+    required: false
+    description: Hand-declared document ids this document depends on.
+  lock_schema_version:
+    range: ManifestSemVer
+    required: true
+    description: Schema version of the lock file format.
+  content_hash:
+    range: ContentHash
+    required: true
+    description: Canonical digest of descriptor (without stamps) + body.
