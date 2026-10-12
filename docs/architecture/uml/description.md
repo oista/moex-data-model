@@ -14,8 +14,9 @@ ModelingStandard                          (modeling-kernel.yaml)
                     │     └── ConceptualEntity / Relationship / …
                     └── implementation_scope = solution
                           ├── DomainContext / LogicalEntity / LogicalAttribute / Relationship
-                          ├── TechnicalAsset (DataCarrier / AccessPoint / DataContainer / ExecutionAsset) / PhysicalField
-                          └── Mapping (realizes, entity_physical, field_mapping, …)
+                          ├── TechnicalAsset (DataCarrier / AccessPoint / DataContainer / ExecutionAsset)
+                          ├── DataStructure / SchemaNode (ADR-038; replaces PhysicalField)
+                          └── typed Mapping collections (ADR-046): realizes / entity_physical / field_mapping / aligns_with
 ```
 
 Roles `enterprise-conceptual` and `solution` are SpecImpl / `ModelPackage` coordinates (`dams_model_level` / `implementation_scope`), not separate LinkML classes.
@@ -33,9 +34,12 @@ Roles `enterprise-conceptual` and `solution` are SpecImpl / `ModelPackage` coord
 
 Not LinkML classes (do not reintroduce in UML):
 
-- `IdentifiedElement` / `GovernedElement` — use `ModelElement` + mixins
+- `GovernedElement` / `VersionedArtifact` / `Assertion` — deferred (ADR-044 D5–D6); use mixins
+- former physical field / physical object classes — removed; use SchemaNode / TechnicalAsset
 - `ConceptualAttribute` / `ConceptualRelationship` / `BusinessTerm` / `ValueSet*`
 - `Technology` / `NativeSchema` / `ModelElementRealization` / `Transformation` as classes
 - `DataFlowEndpoint` / `DataContract` / `DataQuality*` / `DataOwner` / `DataSteward`
 - `EnterpriseConceptualModel` / `SolutionDataModel` / `ExternalSourceLock` / `ExternalSemanticAlignment`
+
+Present in schema (do show when relevant): `IdentifiedElement`, `EmbeddedElement`, `NamedElement`, `DescribedElement` (`moex-base`, ADR-044).
 - Schema/body/publication check services — pipeline process only

@@ -3,7 +3,7 @@ status: Accepted
 version: "0.1"
 normative: false
 supersedes: []
-superseded_by: MODELING_ARCHITECTURE.md
+superseded_by: []
 ---
 
 # ADR-031: TechnicalAsset as unified registry of data quanta (квант данных)

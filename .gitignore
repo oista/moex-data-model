@@ -47,6 +47,20 @@ tmp/**/*check_all*.log
 tmp/baseline_check_all*.log
 .tmp-pdf-extract/
 
+# Local scratch tree (spikes, one-off scripts, audit Wave B3)
+/tmp/
+
+# Migration scratch (logs / one-off generators — not normative)
+docs/migration/_*.log
+docs/migration/_*.py
+docs/migration/_*.json
+
+# Stray plan copies at repo root (use .cursor/plans/ or docs/plans/)
+/*.plan.md
+
+# Optional binary audits under docs/audit/ (see docs/audit/README.md)
+docs/audit/*.docx
+
 # Office lock files (Excel holds ~$*.xlsx open → git add Permission denied)
 **/~$*
 

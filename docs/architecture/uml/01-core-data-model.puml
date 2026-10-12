@@ -15,6 +15,9 @@ end note
 abstract class IdentifiedElement {
   +element_id : uriorcurie [1]
 }
+abstract class EmbeddedElement {
+  +local_key : string [1]
+}
 abstract class ModelElement {
   +element_id : uriorcurie [1]
   +name : string [1]
@@ -24,12 +27,14 @@ abstract class ModelElement {
   +tags : string [0..*]
   +lifecycle_status : LifecycleStatusEnum [1]
 }
+IdentifiedElement <|-- ModelElement
 note right of ModelElement
-  Abstract root (moex-core).
-  Mixin HasLifecycle on all ModelElement.
+  Backbone: IdentifiedElement + Named/Described/
+  HasLifecycle/HasSemanticAnnotations (ADR-044 / moex-base).
   Further mixins (HasOwnership, HasBusinessClassification,
   HasGovernanceClassification, HasPolicyBindings, HasProvenance)
-  attach per subclass — not separate Identified/Governed classes.
+  attach per subclass — no GovernedElement superclass.
+  EmbeddedElement (local_key) is for SchemaNode, not ModelElement.
 end note
 
 package "Концептуальный уровень" #FFF2CC {
@@ -109,13 +114,15 @@ package "Технический уровень (TechnicalAsset)" #FCE5CD {
   class AccessPoint
   class DataContainer
   class ExecutionAsset
-  class PhysicalField {
-    +carrier_ref : DataCarrier [1]
-    +native_name : string [1]
-    +native_type : string [1]
-    +required : boolean [1]
-    +ordinal_position : integer [0..1]
-    +schema_path : string [0..1]
+  class DataStructure {
+    +structure_id : uriorcurie [1]
+    +structure_kind : StructureKindEnum [1]
+  }
+  class SchemaNode {
+    +local_key : string [1]
+    +node_kind : SchemaNodeKindEnum [1]
+    +native_type : string [0..1]
+    +data_type_ref : DataType [0..1]
   }
 }
 
@@ -162,7 +169,8 @@ TechnicalAsset <|-- DataCarrier
 TechnicalAsset <|-- AccessPoint
 TechnicalAsset <|-- DataContainer
 TechnicalAsset <|-- ExecutionAsset
-ModelElement <|-- PhysicalField
+ModelElement <|-- DataStructure
+EmbeddedElement <|-- SchemaNode
 IdentifiedElement <|-- Mapping
 Mapping <|-- RealizesMapping
 Mapping <|-- EntityPhysicalMapping
@@ -187,16 +195,19 @@ Relationship "0..*" --> "1" LogicalEntity : source/target\n(via uriorcurie)
 
 TechnicalAsset "0..*" --> "1" ITSystem : system_ref
 TechnicalAsset "0..*" --> "0..1" ITSolution : solution_ref
-DataCarrier "1" *-- "0..*" PhysicalField : physical_fields
+DataCarrier "0..*" --> "0..1" DataStructure : structure_ref
+DataStructure "1" *-- "0..*" SchemaNode : nodes
 ITSolution "1" o-- "0..*" ITSystem : member_system_refs
 
-Mapping "0..*" ..> ModelElement : source_refs / target_refs\n(uriorcurie 1..*)
+FieldMapping "0..*" ..> SchemaNode : target_refs\n(SchemaNodeRef)
+RealizesMapping "0..*" ..> ConceptualEntity : target_refs
+EntityPhysicalMapping "0..*" ..> LogicalEntity : target_refs
 
 note bottom of Mapping
   Base Mapping + typed subclasses (ADR-046).
   ModelPackage collections: realizes_mappings,
   entity_physical_mappings, field_mappings,
-  aligns_with_mappings (polymorphic mappings removed).
+  aligns_with_mappings (legacy mappings[] removed).
   mapping_type: realizes, entity_physical,
   field_mapping, aligns_with.
 end note
@@ -209,7 +220,13 @@ note bottom of TechnicalAsset
   data_containers, execution_assets (ADR-031).
   Identity: asset_namespace + qualified_name.
 end note
+note bottom of SchemaNode
+  PhysicalField removed (ADR-038).
+  Nested schemas via node_kind + children.
+  Address: structure_id#local_key (ADR-039).
+end note
 note bottom of LogicalAttribute
   value_set_ref is uri, not a ValueSet class.
+  Prefer data_type_ref / value_domain_ref (ADR-036/037).
 end note
 @enduml

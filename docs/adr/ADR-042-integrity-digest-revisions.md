@@ -3,7 +3,7 @@ status: Accepted
 version: "0.1"
 normative: false
 supersedes: []
-superseded_by: MODELING_ARCHITECTURE.md
+superseded_by: []
 ---
 
 # ADR-042: integrity_digest and model revisions for non-demo models

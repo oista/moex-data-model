@@ -80,14 +80,16 @@ package "DAMS body" #D9EAD3 {
     +system_ref : ITSystem [1]
     +asset_kind : DataCarrierKindEnum [1]
     +qualified_name : string [1]
-    +technology : string [1]
-    +native_schema_ref : uri [1]
-    +direction : FlowDirectionEnum [1]
+    +technology : string [0..1]
+    +structure_ref : uri [0..1]
+    +direction : FlowDirectionEnum [0..1]
   }
-  class PhysicalField {
-    +native_name : string [1]
-    +native_type : string [1]
-    +required : boolean [1]
+  class DataStructure {
+    +structure_id : uriorcurie [1]
+  }
+  class SchemaNode {
+    +local_key : string [1]
+    +node_kind : SchemaNodeKindEnum [1]
   }
   class Mapping {
     +source_refs : uriorcurie [1..*]
@@ -95,6 +97,10 @@ package "DAMS body" #D9EAD3 {
     +mapping_type : MappingTypeEnum [1]
     +mapping_cardinality : MappingCardinalityEnum [1]
   }
+  class RealizesMapping
+  class EntityPhysicalMapping
+  class FieldMapping
+  class AlignsWithMapping
   class DomainContext {
     +domain_ref : BusinessDomain [1]
     +namespace : uri [1]
@@ -131,16 +137,7 @@ package "Интеграции и контрактные bindings" #D0E0E3 {
   class DataFlow {
     +integration_ref : IntegrationReference [1]
     +contract_ref : DataContractReference [0..1]
-    +source_solution_ref : ITSolution [1]
-    +target_solution_ref : ITSolution [1]
-    +source_system_ref : ITSystem [1]
-    +target_system_ref : ITSystem [1]
-    +source_platform_ref : ITPlatform [1]
-    +target_platform_ref : ITPlatform [1]
-    +integration_level : IntegrationLevelEnum [1]
-    +integration_class : IntegrationClassEnum [1]
-    +integration_channel : IntegrationChannelEnum [1]
-    +integration_spec_ref : uri [1]
+    +bound_catalog_revision : string [0..1]
   }
   class DataFlowEntityBinding {
     +flow_ref : DataFlow [1]
@@ -148,7 +145,9 @@ package "Интеграции и контрактные bindings" #D0E0E3 {
     +logical_entity_ref : LogicalEntity [1]
     +logical_attribute_refs : LogicalAttribute [1..*]
     +carrier_refs : DataCarrier [1..*]
-    +physical_field_refs : PhysicalField [0..*]
+    +schema_node_refs : SchemaNodeRef [0..*]
+    +catalog_operation_ref : string [0..1]
+    +catalog_participant_ref : string [0..1]
     +transformation_mapping_refs : Mapping [0..*]
     +direction : FlowDirectionEnum [0..1]
   }
@@ -181,14 +180,23 @@ ModelPackage "1" *-- "0..*" DomainContext : domain_contexts
 ModelPackage "1" *-- "0..*" LogicalEntity : logical_entities
 ModelPackage "1" *-- "0..*" Relationship : relationships
 ModelPackage "1" *-- "0..*" DataCarrier : data_carriers
-ModelPackage "1" *-- "0..*" Mapping : mappings
+ModelPackage "1" *-- "0..*" DataStructure : data_structures
+ModelPackage "1" *-- "0..*" RealizesMapping : realizes_mappings
+ModelPackage "1" *-- "0..*" EntityPhysicalMapping : entity_physical_mappings
+ModelPackage "1" *-- "0..*" FieldMapping : field_mappings
+ModelPackage "1" *-- "0..*" AlignsWithMapping : aligns_with_mappings
 ModelPackage "0..*" --> "0..1" ITSolution : solution_ref
 
 DomainContext "1" <-- "0..*" LogicalEntity : context_ref
 LogicalEntity "1" *-- "0..*" LogicalAttribute : attributes
 Relationship "0..*" --> "1" LogicalEntity : source/target
 DataCarrier "0..*" --> "1" ITSystem : system_ref
-DataCarrier "1" *-- "0..*" PhysicalField : physical_fields
+DataCarrier "0..*" --> "0..1" DataStructure : structure_ref
+DataStructure "1" *-- "0..*" SchemaNode : nodes
+Mapping <|-- RealizesMapping
+Mapping <|-- EntityPhysicalMapping
+Mapping <|-- FieldMapping
+Mapping <|-- AlignsWithMapping
 
 RegistryEntry <|-- ITPlatform
 RegistryEntry <|-- ITSolution
@@ -213,34 +221,41 @@ ModelSelection "1" *-- "1..*" SelectedEntity : selected_entities
 DataModelBinding "0..*" --> "0..1" DataContractReference : contract_ref
 DataModelBinding "0..*" --> "1" ModelPackage : model_package_ref
 
+abstract class IdentifiedElement {
+  +element_id : uriorcurie [1]
+}
 abstract class ModelElement {
   +element_id : uriorcurie [1]
   +name : string [1]
   +lifecycle_status : LifecycleStatusEnum [1]
 }
+IdentifiedElement <|-- ModelElement
 ModelElement <|-- ModelPackage
 ModelElement <|-- LogicalEntity
 ModelElement <|-- LogicalAttribute
 ModelElement <|-- Relationship
 ModelElement <|-- DataCarrier
-ModelElement <|-- PhysicalField
-ModelElement <|-- Mapping
+ModelElement <|-- DataStructure
 ModelElement <|-- DomainContext
 ModelElement <|-- DataFlow
 ModelElement <|-- DataFlowEntityBinding
 ModelElement <|-- DataModelBinding
 ModelElement <|-- ModelSelection
 ModelElement <|-- SelectedEntity
+IdentifiedElement <|-- Mapping
 
 note bottom of ModelPackage
   implementation_scope: enterprise | solution.
-  Logical and physical layers of one solution
-  live in one ModelPackage (0..* compositions).
+  Typed mapping collections (ADR-046); no mappings[].
 end note
 note bottom of DataFlow
-  Authored: integration_ref + entity_bindings
-  (+ bound_catalog_revision). Topology is
-  materialized TopologyView from catalog snapshot
-  (ADR-048); bindings carry semantics.
+  Authored: integration_ref, contract_ref,
+  bound_catalog_revision, entity_bindings.
+  Topology is TopologyView from catalog snapshot
+  (ADR-048); not authored on DataFlow.
+end note
+note bottom of DataStructure
+  Replaces PhysicalField trees (ADR-038).
+  FieldMapping targets SchemaNodeRef (structure#key).
 end note
 @enduml

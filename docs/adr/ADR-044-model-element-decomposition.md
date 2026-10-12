@@ -1,7 +1,7 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
-normative: false
+normative: true
 supersedes: []
 superseded_by: []
 ---
@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-044: ModelElement decomposition
 
 **Date:** 2026-10-06  
-**Status:** Proposed  
+**Status:** Accepted — `moex-base` mixins and Mapping→IdentifiedElement landed (schema through 3.0.0+). Deferred: selection/binding helpers still ModelElement; VersionedArtifact (D6); redundant-mixin lint.
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Related:** [ADR-023](ADR-023-governed-property-cascade.md), [ADR-025](ADR-025-definition-cascade-and-glossary.md), [ADR-038](ADR-038-datastructure-and-schemanode.md), [ADR-040](ADR-040-message-integration-model.md)  
 **Inventory:** [model-element-inventory-report.md](../architecture/model-element-inventory-report.md), [model-element-matrix-before.csv](../architecture/model-element-matrix-before.csv)
@@ -114,7 +114,7 @@ New classes/mixins are **not** added to `moex-structure` (ADR-040 core↔structu
 - PR-1 introduces `moex-base.yaml`, bumps schema to **2.1.0**, moves definitional `slot_usage`, keeps JSON Schema required sets (except documented Mapping.name exception in PR-3).
 - Architecture-check gains an allowlist for `slot_usage.description` (PR-2); list must not grow without an ADR note.
 - Duplicate ADR-034 / ADR-035 numbering is out of scope here (handled by `chore/adr-renumber-phase1-tail` → ADR-042 / ADR-043).
-- Frontmatter `superseded_by: MODELING_ARCHITECTURE.md` on Accepted ADR-038 / ADR-040 / ADR-041 (and the ADR index README) is incorrect for Accepted ADRs; noted, not fixed in this ADR.
+- Frontmatter `superseded_by: MODELING_ARCHITECTURE.md` on Accepted ADRs was cleared in audit Wave B1 (`superseded_by: []`).
 
 ## Spike results (PR-0, LinkML 1.11.1)
 
