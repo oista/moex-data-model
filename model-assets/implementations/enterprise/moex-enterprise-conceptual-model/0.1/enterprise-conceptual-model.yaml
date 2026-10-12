@@ -3529,20 +3529,6 @@ relationships:
   term_direction: forward
   relationship_kind: association
 
-mappings:
-- element_id: dams:mapping/align/LegalEntity-fibo
-  description: >
-    Projection of LegalEntity external_class_refs for ExternalTermSelection
-    (ADR-020/026). Canonical match_kind=close lives on the entity.
-  lifecycle_status: draft
-  source_refs:
-  - dams:concept/LegalEntity
-  target_refs:
-  - https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
-  mapping_type: aligns_with
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-
 data_types:
 - element_id: dams:datatype/string
   name: string
@@ -3684,3 +3670,17 @@ data_types:
   linkml_type: string
   tags:
   - starter
+aligns_with_mappings:
+- element_id: dams:mapping/align/LegalEntity-fibo
+  description: >
+    Projection of LegalEntity external_class_refs for ExternalTermSelection
+    (ADR-020/026). Canonical match_kind=close lives on the entity.
+  lifecycle_status: draft
+  source_refs:
+  - dams:concept/LegalEntity
+  target_refs:
+  - https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalPersons/LegalPerson
+  mapping_type: aligns_with
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+

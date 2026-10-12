@@ -579,7 +579,15 @@ def map_er_dictionary(
     for obj in phys_obj_by_name.values():
         obj.pop("_source_artifact_ref", None)
 
-    mappings: list[dict[str, Any]] = []
+    _MAPPING_TYPE_TO_COLLECTION = {
+        "realizes": "realizes_mappings",
+        "entity_physical": "entity_physical_mappings",
+        "field_mapping": "field_mappings",
+        "aligns_with": "aligns_with_mappings",
+    }
+    typed_mappings: dict[str, list[dict[str, Any]]] = {
+        key: [] for key in _MAPPING_TYPE_TO_COLLECTION.values()
+    }
     if tables.mappings is not None:
         for i, row in enumerate(tables.mappings.rows, start=2):
             map_name = _req_str(row.get("name"), "mappings", i, "name", errors)
@@ -615,7 +623,17 @@ def map_er_dictionary(
             mapping_cardinality = (
                 _opt_str(row.get("mapping_cardinality")) or "one_to_one"
             )
-            mappings.append(
+            collection = _MAPPING_TYPE_TO_COLLECTION.get(mapping_type)
+            if collection is None:
+                errors.append(
+                    MapperError(
+                        "mappings",
+                        i,
+                        f"unsupported mapping_type {mapping_type!r}",
+                    )
+                )
+                continue
+            typed_mappings[collection].append(
                 {
                     "element_id": ids.mapping_id(prefix, slug, map_name),
                     "description": f"Mapping {map_name}",
@@ -657,8 +675,9 @@ def map_er_dictionary(
             package[key] = items
     if data_structures:
         package["data_structures"] = data_structures
-    if mappings:
-        package["mappings"] = mappings
+    for key, items in typed_mappings.items():
+        if items:
+            package[key] = items
 
     result = MapResult(package=package, errors=errors, warnings=warnings)
     if raise_on_error and errors:

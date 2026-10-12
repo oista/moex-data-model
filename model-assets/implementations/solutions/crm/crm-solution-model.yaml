@@ -782,580 +782,6 @@ relationships:
   source_max_cardinality: 999999
   target_min_cardinality: 0
   target_max_cardinality: 1
-mappings:
-- element_id: dams:mapping/crm/map_CONTACT_Id
-  description: Mapping map_CONTACT_Id
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/Id
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#id
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CONTACT_Account
-  description: Mapping map_CONTACT_Account
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/Account
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#account
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CONTACT_Name
-  description: Mapping map_CONTACT_Name
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/Name
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#name
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CONTACT_MoexFullNameEn
-  description: Mapping map_CONTACT_MoexFullNameEn
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/MoexFullNameEn
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#moexfullnameen
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CONTACT_MoexEio
-  description: Mapping map_CONTACT_MoexEio
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/MoexEio
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#moexeio
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CONTACT_Surname
-  description: Mapping map_CONTACT_Surname
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/Surname
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#surname
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CONTACT_GivenName
-  description: Mapping map_CONTACT_GivenName
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/GivenName
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#givenname
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CONTACT_MiddleName
-  description: Mapping map_CONTACT_MiddleName
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/MiddleName
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#middlename
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CONTACT_Gender
-  description: Mapping map_CONTACT_Gender
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/Gender
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#gender
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CONTACT_BirthDate
-  description: Mapping map_CONTACT_BirthDate
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/BirthDate
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#birthdate
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CONTACT_Phone
-  description: Mapping map_CONTACT_Phone
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/Phone
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#phone
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CONTACT_MobilePhone
-  description: Mapping map_CONTACT_MobilePhone
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/MobilePhone
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#mobilephone
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CONTACT_Email
-  description: Mapping map_CONTACT_Email
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/Email
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#email
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CONTACT_Type
-  description: Mapping map_CONTACT_Type
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/Type
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#type
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CONTACT_MoexPassportId
-  description: Mapping map_CONTACT_MoexPassportId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/MoexPassportId
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#moexpassportid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CONTACT_MoexMdmId
-  description: Mapping map_CONTACT_MoexMdmId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/MoexMdmId
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#moexmdmid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CONTACT_MoexUCDId
-  description: Mapping map_CONTACT_MoexUCDId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT/MoexUCDId
-  target_refs:
-  - dams:structure/crm/phys_CONTACT#moexucdid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_Id
-  description: Mapping map_CUSTOMER_Id
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/Id
-  target_refs:
-  - dams:structure/crm/ACCOUNT#id
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_PrimaryContact
-  description: Mapping map_CUSTOMER_PrimaryContact
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/PrimaryContact
-  target_refs:
-  - dams:structure/crm/ACCOUNT#primarycontact
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_PrimaryAccount
-  description: Mapping map_CUSTOMER_PrimaryAccount
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/PrimaryAccount
-  target_refs:
-  - dams:structure/crm/ACCOUNT#primaryaccount
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_Parent
-  description: Mapping map_CUSTOMER_Parent
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/Parent
-  target_refs:
-  - dams:structure/crm/ACCOUNT#parent
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexPaarentCompanyHolding
-  description: Mapping map_CUSTOMER_MoexPaarentCompanyHolding
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexPaarentCompanyHolding
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexpaarentcompanyholding
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_Name
-  description: Mapping map_CUSTOMER_Name
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/Name
-  target_refs:
-  - dams:structure/crm/ACCOUNT#name
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexFullAlternativeName
-  description: Mapping map_CUSTOMER_MoexFullAlternativeName
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexFullAlternativeName
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexfullalternativename
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_AlternativeName
-  description: Mapping map_CUSTOMER_AlternativeName
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/AlternativeName
-  target_refs:
-  - dams:structure/crm/ACCOUNT#alternativename
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexEngFullAlternativeName
-  description: Mapping map_CUSTOMER_MoexEngFullAlternativeName
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexEngFullAlternativeName
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexengfullalternativename
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_Phone
-  description: Mapping map_CUSTOMER_Phone (Основной телефон)
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/Phone
-  target_refs:
-  - dams:structure/crm/ACCOUNT#phone
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexEmail
-  description: Mapping map_CUSTOMER_MoexEmail
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexEmail
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexemail
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexINN
-  description: Mapping map_CUSTOMER_MoexINN
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexINN
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexinn
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexKPP
-  description: Mapping map_CUSTOMER_MoexKPP
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexKPP
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexkpp
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexOGRN
-  description: Mapping map_CUSTOMER_MoexOGRN
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexOGRN
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexogrn
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexOKVED
-  description: Mapping map_CUSTOMER_MoexOKVED
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexOKVED
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexokved
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexCountryCode
-  description: Mapping map_CUSTOMER_MoexCountryCode
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexCountryCode
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexcountrycode
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexRegNumNonResident
-  description: Mapping map_CUSTOMER_MoexRegNumNonResident
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexRegNumNonResident
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexregnumnonresident
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexKIO
-  description: Mapping map_CUSTOMER_MoexKIO
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexKIO
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexkio
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexMDMId
-  description: Mapping map_CUSTOMER_MoexMDMId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexMDMId
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexmdmid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexCBDId
-  description: Mapping map_CUSTOMER_MoexCBDId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexCBDId
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexcbdid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexKBDId
-  description: Mapping map_CUSTOMER_MoexKBDId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexKBDId
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexkbdid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexUnicodeCBD
-  description: Mapping map_CUSTOMER_MoexUnicodeCBD
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexUnicodeCBD
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexunicodecbd
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexUCDId
-  description: Mapping map_CUSTOMER_MoexUCDId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexUCDId
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexucdid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_CUSTOMER_MoexCodeNsd
-  description: Mapping map_CUSTOMER_MoexCodeNsd
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER/MoexCodeNsd
-  target_refs:
-  - dams:structure/crm/ACCOUNT#moexcodensd
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_ApplicationId
-  description: Mapping map_LEAD_ApplicationId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/ApplicationId
-  target_refs:
-  - dams:structure/crm/phys_LEAD#applicationid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_MoexAccount
-  description: Mapping map_LEAD_MoexAccount
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/MoexAccount
-  target_refs:
-  - dams:structure/crm/phys_LEAD#moexaccount
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_MoexApplicationNumber
-  description: Mapping map_LEAD_MoexApplicationNumber
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/MoexApplicationNumber
-  target_refs:
-  - dams:structure/crm/phys_LEAD#moexapplicationnumber
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_MoexApplicationTitle
-  description: Mapping map_LEAD_MoexApplicationTitle
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/MoexApplicationTitle
-  target_refs:
-  - dams:structure/crm/phys_LEAD#moexapplicationtitle
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_MoexApplicationSource
-  description: Mapping map_LEAD_MoexApplicationSource
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/MoexApplicationSource
-  target_refs:
-  - dams:structure/crm/phys_LEAD#moexapplicationsource
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_MoexFunnelType
-  description: Mapping map_LEAD_MoexFunnelType
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/MoexFunnelType
-  target_refs:
-  - dams:structure/crm/phys_LEAD#moexfunneltype
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_MoexContact
-  description: Mapping map_LEAD_MoexContact
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/MoexContact
-  target_refs:
-  - dams:structure/crm/phys_LEAD#moexcontact
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_MobilePhone
-  description: Mapping map_LEAD_MobilePhone
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/MobilePhone
-  target_refs:
-  - dams:structure/crm/phys_LEAD#mobilephone
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_Email
-  description: Mapping map_LEAD_Email
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/Email
-  target_refs:
-  - dams:structure/crm/phys_LEAD#email
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_ModifiedOn
-  description: Mapping map_LEAD_ModifiedOn
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/ModifiedOn
-  target_refs:
-  - dams:structure/crm/phys_LEAD#modifiedon
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_CreatedOn
-  description: Mapping map_LEAD_CreatedOn
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/CreatedOn
-  target_refs:
-  - dams:structure/crm/phys_LEAD#createdon
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_MoexSiteCreatedOn
-  description: Mapping map_LEAD_MoexSiteCreatedOn
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/MoexSiteCreatedOn
-  target_refs:
-  - dams:structure/crm/phys_LEAD#moexsitecreatedon
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_MoexInn
-  description: Mapping map_LEAD_MoexInn
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/MoexInn
-  target_refs:
-  - dams:structure/crm/phys_LEAD#moexinn
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_MoexPassportId
-  description: Mapping map_LEAD_MoexPassportId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/MoexPassportId
-  target_refs:
-  - dams:structure/crm/phys_LEAD#moexpassportid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_MoexIDApplications
-  description: Mapping map_LEAD_MoexIDApplications
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/MoexIDApplications
-  target_refs:
-  - dams:structure/crm/phys_LEAD#moexidapplications
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_MoexLkkStatus
-  description: Mapping map_LEAD_MoexLkkStatus
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/MoexLkkStatus
-  target_refs:
-  - dams:structure/crm/phys_LEAD#moexlkkstatus
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/map_LEAD_MoexUcdId
-  description: Mapping map_LEAD_MoexUcdId
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/LEAD/MoexUcdId
-  target_refs:
-  - dams:structure/crm/phys_LEAD#moexucdid
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/crm/entity_phys_CONTACT
-  description: Mapping entity_phys_CONTACT
-  lifecycle_status: draft
-  source_refs:
-  - dams:physical/crm/phys_CONTACT
-  target_refs:
-  - dams:logical/crm/CONTACT
-  mapping_type: entity_physical
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/crm/entity_phys_CUSTOMER
-  description: Mapping entity_phys_CUSTOMER
-  lifecycle_status: draft
-  source_refs:
-  - dams:physical/crm/ACCOUNT
-  target_refs:
-  - dams:logical/crm/CUSTOMER
-  mapping_type: entity_physical
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/crm/entity_phys_LEAD
-  description: Mapping entity_phys_LEAD
-  lifecycle_status: draft
-  source_refs:
-  - dams:physical/crm/phys_LEAD
-  target_refs:
-  - dams:logical/crm/LEAD
-  mapping_type: entity_physical
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/crm/realizes_CONTACT
-  description: CRM CONTACT realizes enterprise dams:concept/Person (ADR-021/029).
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CONTACT
-  target_refs:
-  - dams:concept/Person
-  mapping_type: realizes
-  mapping_cardinality: one_to_one
-  approval_status: proposed
-- element_id: dams:mapping/crm/realizes_CUSTOMER
-  description: CRM CUSTOMER realizes enterprise dams:concept/Client, dams:concept/LegalEntity (ADR-021/029).
-  lifecycle_status: draft
-  source_refs:
-  - dams:logical/crm/CUSTOMER
-  target_refs:
-  - dams:concept/Client
-  - dams:concept/LegalEntity
-  mapping_type: realizes
-  mapping_cardinality: one_to_many
-  approval_status: proposed
 implementation_scope: solution
 conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
 data_owner_ref: org:role/DATA_OWNER_PENDING
@@ -2030,3 +1456,579 @@ data_structures:
     ordinal_position: 17
     column_position: 17
     mapping_coverage_status: mapped
+field_mappings:
+- element_id: dams:mapping/crm/map_CONTACT_Id
+  description: Mapping map_CONTACT_Id
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/Id
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#id
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CONTACT_Account
+  description: Mapping map_CONTACT_Account
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/Account
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#account
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CONTACT_Name
+  description: Mapping map_CONTACT_Name
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/Name
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#name
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CONTACT_MoexFullNameEn
+  description: Mapping map_CONTACT_MoexFullNameEn
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/MoexFullNameEn
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#moexfullnameen
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CONTACT_MoexEio
+  description: Mapping map_CONTACT_MoexEio
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/MoexEio
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#moexeio
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CONTACT_Surname
+  description: Mapping map_CONTACT_Surname
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/Surname
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#surname
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CONTACT_GivenName
+  description: Mapping map_CONTACT_GivenName
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/GivenName
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#givenname
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CONTACT_MiddleName
+  description: Mapping map_CONTACT_MiddleName
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/MiddleName
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#middlename
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CONTACT_Gender
+  description: Mapping map_CONTACT_Gender
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/Gender
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#gender
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CONTACT_BirthDate
+  description: Mapping map_CONTACT_BirthDate
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/BirthDate
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#birthdate
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CONTACT_Phone
+  description: Mapping map_CONTACT_Phone
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/Phone
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#phone
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CONTACT_MobilePhone
+  description: Mapping map_CONTACT_MobilePhone
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/MobilePhone
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#mobilephone
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CONTACT_Email
+  description: Mapping map_CONTACT_Email
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/Email
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#email
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CONTACT_Type
+  description: Mapping map_CONTACT_Type
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/Type
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#type
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CONTACT_MoexPassportId
+  description: Mapping map_CONTACT_MoexPassportId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/MoexPassportId
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#moexpassportid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CONTACT_MoexMdmId
+  description: Mapping map_CONTACT_MoexMdmId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/MoexMdmId
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#moexmdmid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CONTACT_MoexUCDId
+  description: Mapping map_CONTACT_MoexUCDId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT/MoexUCDId
+  target_refs:
+  - dams:structure/crm/phys_CONTACT#moexucdid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_Id
+  description: Mapping map_CUSTOMER_Id
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/Id
+  target_refs:
+  - dams:structure/crm/ACCOUNT#id
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_PrimaryContact
+  description: Mapping map_CUSTOMER_PrimaryContact
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/PrimaryContact
+  target_refs:
+  - dams:structure/crm/ACCOUNT#primarycontact
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_PrimaryAccount
+  description: Mapping map_CUSTOMER_PrimaryAccount
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/PrimaryAccount
+  target_refs:
+  - dams:structure/crm/ACCOUNT#primaryaccount
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_Parent
+  description: Mapping map_CUSTOMER_Parent
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/Parent
+  target_refs:
+  - dams:structure/crm/ACCOUNT#parent
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexPaarentCompanyHolding
+  description: Mapping map_CUSTOMER_MoexPaarentCompanyHolding
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexPaarentCompanyHolding
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexpaarentcompanyholding
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_Name
+  description: Mapping map_CUSTOMER_Name
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/Name
+  target_refs:
+  - dams:structure/crm/ACCOUNT#name
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexFullAlternativeName
+  description: Mapping map_CUSTOMER_MoexFullAlternativeName
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexFullAlternativeName
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexfullalternativename
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_AlternativeName
+  description: Mapping map_CUSTOMER_AlternativeName
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/AlternativeName
+  target_refs:
+  - dams:structure/crm/ACCOUNT#alternativename
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexEngFullAlternativeName
+  description: Mapping map_CUSTOMER_MoexEngFullAlternativeName
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexEngFullAlternativeName
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexengfullalternativename
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_Phone
+  description: Mapping map_CUSTOMER_Phone (Основной телефон)
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/Phone
+  target_refs:
+  - dams:structure/crm/ACCOUNT#phone
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexEmail
+  description: Mapping map_CUSTOMER_MoexEmail
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexEmail
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexemail
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexINN
+  description: Mapping map_CUSTOMER_MoexINN
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexINN
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexinn
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexKPP
+  description: Mapping map_CUSTOMER_MoexKPP
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexKPP
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexkpp
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexOGRN
+  description: Mapping map_CUSTOMER_MoexOGRN
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexOGRN
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexogrn
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexOKVED
+  description: Mapping map_CUSTOMER_MoexOKVED
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexOKVED
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexokved
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexCountryCode
+  description: Mapping map_CUSTOMER_MoexCountryCode
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexCountryCode
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexcountrycode
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexRegNumNonResident
+  description: Mapping map_CUSTOMER_MoexRegNumNonResident
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexRegNumNonResident
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexregnumnonresident
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexKIO
+  description: Mapping map_CUSTOMER_MoexKIO
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexKIO
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexkio
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexMDMId
+  description: Mapping map_CUSTOMER_MoexMDMId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexMDMId
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexmdmid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexCBDId
+  description: Mapping map_CUSTOMER_MoexCBDId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexCBDId
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexcbdid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexKBDId
+  description: Mapping map_CUSTOMER_MoexKBDId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexKBDId
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexkbdid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexUnicodeCBD
+  description: Mapping map_CUSTOMER_MoexUnicodeCBD
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexUnicodeCBD
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexunicodecbd
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexUCDId
+  description: Mapping map_CUSTOMER_MoexUCDId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexUCDId
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexucdid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_CUSTOMER_MoexCodeNsd
+  description: Mapping map_CUSTOMER_MoexCodeNsd
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER/MoexCodeNsd
+  target_refs:
+  - dams:structure/crm/ACCOUNT#moexcodensd
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_ApplicationId
+  description: Mapping map_LEAD_ApplicationId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/ApplicationId
+  target_refs:
+  - dams:structure/crm/phys_LEAD#applicationid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_MoexAccount
+  description: Mapping map_LEAD_MoexAccount
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/MoexAccount
+  target_refs:
+  - dams:structure/crm/phys_LEAD#moexaccount
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_MoexApplicationNumber
+  description: Mapping map_LEAD_MoexApplicationNumber
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/MoexApplicationNumber
+  target_refs:
+  - dams:structure/crm/phys_LEAD#moexapplicationnumber
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_MoexApplicationTitle
+  description: Mapping map_LEAD_MoexApplicationTitle
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/MoexApplicationTitle
+  target_refs:
+  - dams:structure/crm/phys_LEAD#moexapplicationtitle
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_MoexApplicationSource
+  description: Mapping map_LEAD_MoexApplicationSource
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/MoexApplicationSource
+  target_refs:
+  - dams:structure/crm/phys_LEAD#moexapplicationsource
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_MoexFunnelType
+  description: Mapping map_LEAD_MoexFunnelType
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/MoexFunnelType
+  target_refs:
+  - dams:structure/crm/phys_LEAD#moexfunneltype
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_MoexContact
+  description: Mapping map_LEAD_MoexContact
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/MoexContact
+  target_refs:
+  - dams:structure/crm/phys_LEAD#moexcontact
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_MobilePhone
+  description: Mapping map_LEAD_MobilePhone
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/MobilePhone
+  target_refs:
+  - dams:structure/crm/phys_LEAD#mobilephone
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_Email
+  description: Mapping map_LEAD_Email
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/Email
+  target_refs:
+  - dams:structure/crm/phys_LEAD#email
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_ModifiedOn
+  description: Mapping map_LEAD_ModifiedOn
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/ModifiedOn
+  target_refs:
+  - dams:structure/crm/phys_LEAD#modifiedon
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_CreatedOn
+  description: Mapping map_LEAD_CreatedOn
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/CreatedOn
+  target_refs:
+  - dams:structure/crm/phys_LEAD#createdon
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_MoexSiteCreatedOn
+  description: Mapping map_LEAD_MoexSiteCreatedOn
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/MoexSiteCreatedOn
+  target_refs:
+  - dams:structure/crm/phys_LEAD#moexsitecreatedon
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_MoexInn
+  description: Mapping map_LEAD_MoexInn
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/MoexInn
+  target_refs:
+  - dams:structure/crm/phys_LEAD#moexinn
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_MoexPassportId
+  description: Mapping map_LEAD_MoexPassportId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/MoexPassportId
+  target_refs:
+  - dams:structure/crm/phys_LEAD#moexpassportid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_MoexIDApplications
+  description: Mapping map_LEAD_MoexIDApplications
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/MoexIDApplications
+  target_refs:
+  - dams:structure/crm/phys_LEAD#moexidapplications
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_MoexLkkStatus
+  description: Mapping map_LEAD_MoexLkkStatus
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/MoexLkkStatus
+  target_refs:
+  - dams:structure/crm/phys_LEAD#moexlkkstatus
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+- element_id: dams:mapping/crm/map_LEAD_MoexUcdId
+  description: Mapping map_LEAD_MoexUcdId
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/LEAD/MoexUcdId
+  target_refs:
+  - dams:structure/crm/phys_LEAD#moexucdid
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
+entity_physical_mappings:
+- element_id: dams:mapping/crm/entity_phys_CONTACT
+  description: Mapping entity_phys_CONTACT
+  lifecycle_status: draft
+  source_refs:
+  - dams:physical/crm/phys_CONTACT
+  target_refs:
+  - dams:logical/crm/CONTACT
+  mapping_type: entity_physical
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/crm/entity_phys_CUSTOMER
+  description: Mapping entity_phys_CUSTOMER
+  lifecycle_status: draft
+  source_refs:
+  - dams:physical/crm/ACCOUNT
+  target_refs:
+  - dams:logical/crm/CUSTOMER
+  mapping_type: entity_physical
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/crm/entity_phys_LEAD
+  description: Mapping entity_phys_LEAD
+  lifecycle_status: draft
+  source_refs:
+  - dams:physical/crm/phys_LEAD
+  target_refs:
+  - dams:logical/crm/LEAD
+  mapping_type: entity_physical
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+realizes_mappings:
+- element_id: dams:mapping/crm/realizes_CONTACT
+  description: CRM CONTACT realizes enterprise dams:concept/Person (ADR-021/029).
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CONTACT
+  target_refs:
+  - dams:concept/Person
+  mapping_type: realizes
+  mapping_cardinality: one_to_one
+  approval_status: proposed
+- element_id: dams:mapping/crm/realizes_CUSTOMER
+  description: CRM CUSTOMER realizes enterprise dams:concept/Client, dams:concept/LegalEntity (ADR-021/029).
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/crm/CUSTOMER
+  target_refs:
+  - dams:concept/Client
+  - dams:concept/LegalEntity
+  mapping_type: realizes
+  mapping_cardinality: one_to_many
+  approval_status: proposed

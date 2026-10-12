@@ -174,7 +174,7 @@ def test_update_missing_and_empty_patch() -> None:
 SAMPLE_WITH_MAP = (
     SAMPLE
     + """\
-mappings:
+field_mappings:
   - element_id: dams:mapping/mdm/wb-map-id
     name: map_client_id
     description: existing
@@ -257,8 +257,9 @@ def test_add_update_delete_mapping() -> None:
         },
     )
     data = load_yaml(out)
-    maps = data["mappings"]
+    maps = data["field_mappings"]
     assert any(m["element_id"] == "dams:mapping/mdm/new" for m in maps)
+    assert "mappings" not in data
 
     out2 = apply_mutation(
         SAMPLE_WITH_MAP,
@@ -274,7 +275,7 @@ def test_add_update_delete_mapping() -> None:
     data2 = load_yaml(out2)
     m = next(
         x
-        for x in data2["mappings"]
+        for x in data2["field_mappings"]
         if x["element_id"] == "dams:mapping/mdm/wb-map-id"
     )
     assert m["title"] == "Client ID map"
@@ -288,7 +289,7 @@ def test_add_update_delete_mapping() -> None:
         },
     )
     data3 = load_yaml(out3)
-    ids = [x["element_id"] for x in data3.get("mappings") or []]
+    ids = [x["element_id"] for x in data3.get("field_mappings") or []]
     assert "dams:mapping/mdm/wb-map-id" not in ids
 
 

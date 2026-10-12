@@ -88,34 +88,51 @@ function parseMappings(content: string): {
     return { mappings: [], refOptions: [], error: null };
   }
   try {
-    const data = yaml.load(content) as {
-      mappings?: Array<{
-        element_id?: string;
-        name?: string;
-        title?: string;
-        description?: string;
-        source_refs?: string[];
-        target_refs?: string[];
-        mapping_type?: string;
-        mapping_cardinality?: string;
-      }>;
-    } | null;
-    const mappings = (data?.mappings ?? [])
-      .filter((m) => m?.element_id)
-      .map((m) => ({
-        element_id: String(m.element_id),
-        name: String(m.name || ""),
-        title: String(m.title || ""),
-        description: String(m.description || ""),
-        source_refs: Array.isArray(m.source_refs)
-          ? m.source_refs.map(String)
-          : [],
-        target_refs: Array.isArray(m.target_refs)
-          ? m.target_refs.map(String)
-          : [],
-        mapping_type: String(m.mapping_type || "field_mapping"),
-        mapping_cardinality: String(m.mapping_cardinality || "one_to_one"),
-      }));
+    type MappingRow = {
+      element_id?: string;
+      name?: string;
+      title?: string;
+      description?: string;
+      source_refs?: string[];
+      target_refs?: string[];
+      mapping_type?: string;
+      mapping_cardinality?: string;
+    };
+    const data = yaml.load(content) as Record<string, unknown> | null;
+    const collectionKeys = [
+      "realizes_mappings",
+      "entity_physical_mappings",
+      "field_mappings",
+      "aligns_with_mappings",
+      "mappings",
+    ] as const;
+    const seen = new Set<string>();
+    const mappings: MapSummary[] = [];
+    for (const key of collectionKeys) {
+      const items = data?.[key];
+      if (!Array.isArray(items)) continue;
+      for (const raw of items) {
+        const m = raw as MappingRow;
+        if (!m?.element_id) continue;
+        const eid = String(m.element_id);
+        if (seen.has(eid)) continue;
+        seen.add(eid);
+        mappings.push({
+          element_id: eid,
+          name: String(m.name || ""),
+          title: String(m.title || ""),
+          description: String(m.description || ""),
+          source_refs: Array.isArray(m.source_refs)
+            ? m.source_refs.map(String)
+            : [],
+          target_refs: Array.isArray(m.target_refs)
+            ? m.target_refs.map(String)
+            : [],
+          mapping_type: String(m.mapping_type || "field_mapping"),
+          mapping_cardinality: String(m.mapping_cardinality || "one_to_one"),
+        });
+      }
+    }
     return {
       mappings,
       refOptions: collectRefOptions(content),

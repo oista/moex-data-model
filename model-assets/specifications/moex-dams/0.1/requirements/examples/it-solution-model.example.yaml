@@ -8,8 +8,7 @@ model_version: 1.0.0
 implementation_scope: solution
 solution_ref: eam:solution/EXAMPLE_MIN
 data_owner_ref: org:role/EXAMPLE_DATA_OWNER
-ownership_inheritance_rule: Владелец данных наследуется от ИТ-решения eam:solution/EXAMPLE_MIN, если на сущности не задан
-  локальный override.
+ownership_inheritance_rule: Владелец данных наследуется от ИТ-решения eam:solution/EXAMPLE_MIN, если на сущности не задан локальный override.
 domain_contexts:
 - element_id: dams:context/example-min
   name: ExampleMinContext
@@ -94,25 +93,6 @@ relationships:
   target_min_cardinality: 1
   target_max_cardinality: 1
   relationship_kind: association
-mappings:
-- element_id: dams:mapping/example-min/party-entity
-  description: Отображение логической стороны на топик событий.
-  lifecycle_status: active
-  source_refs:
-  - dams:physical/example-min/party-topic
-  target_refs:
-  - dams:logical/example-min/Party
-  mapping_type: entity_physical
-  mapping_cardinality: one_to_one
-- element_id: dams:mapping/example-min/party-id
-  description: Соответствие логического идентификатора физическому полю.
-  lifecycle_status: active
-  source_refs:
-  - dams:logical/example-min/Party/party_id
-  target_refs:
-  - dams:structure/example-min/party-topic#party_id
-  mapping_type: field_mapping
-  mapping_cardinality: one_to_one
 data_carriers:
 - element_id: dams:physical/example-min/party-topic
   name: party_changed_topic
@@ -156,3 +136,23 @@ data_structures:
     column_position: 1
     mapping_coverage_status: mapped
   source_artifact_ref: https://schemas.moex.com/example-min/party-changed/1.0.0
+entity_physical_mappings:
+- element_id: dams:mapping/example-min/party-entity
+  description: Отображение логической стороны на топик событий.
+  lifecycle_status: active
+  source_refs:
+  - dams:physical/example-min/party-topic
+  target_refs:
+  - dams:logical/example-min/Party
+  mapping_type: entity_physical
+  mapping_cardinality: one_to_one
+field_mappings:
+- element_id: dams:mapping/example-min/party-id
+  description: Соответствие логического идентификатора физическому полю.
+  lifecycle_status: active
+  source_refs:
+  - dams:logical/example-min/Party/party_id
+  target_refs:
+  - dams:structure/example-min/party-topic#party_id
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
