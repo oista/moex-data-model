@@ -229,6 +229,7 @@ def _collect_invariant_ids(diags: list[Any]) -> set[str]:
 
 
 def _run_l2_package_checks(data: dict[str, Any]) -> list[Any]:
+    from moex_dams.rules.catalog_topology import check_catalog_topology
     from moex_dams.rules.data_structure import check_data_structures
     from moex_dams.rules.semantic_layer import check_semantic_layer
     from moex_dams.rules.technical_assets import check_technical_assets
@@ -237,6 +238,7 @@ def _run_l2_package_checks(data: dict[str, Any]) -> list[Any]:
     diags.extend(check_semantic_layer(data))
     diags.extend(check_data_structures(data))
     diags.extend(check_technical_assets(data))
+    diags.extend(check_catalog_topology(data, repo_root=repo_root()))
     return diags
 
 

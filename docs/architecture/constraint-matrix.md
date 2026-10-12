@@ -11,8 +11,8 @@ superseded_by: []
 Автогенерируется `scripts/check_constraint_matrix.py`. Источник: `model-assets/specifications/moex-dams/0.1/constraints/constraint-matrix.yaml`. Не редактировать вручную.
 
 **matrix_id:** `dams:constraint-matrix/0.1`  
-**registry size:** 37  
-**invariants:** 37
+**registry size:** 41  
+**invariants:** 41
 
 | ID | Title | Levels | Status | L1 | L2 | L3 | Source status | Scope | Source |
 |---|---|---|---|---|---|---|---|---|---|
@@ -53,6 +53,10 @@ superseded_by: []
 | INV-035 | RealizesMapping endpoints Logical→Conceptual | L2, L3 | implemented | not-applicable | implemented | implemented | aligned | moex-dams | PDM-009; ADR-046; ADR-029 |
 | INV-036 | AlignsWithMapping ConceptualEntity→http(s) IRI | L2, L3 | implemented | not-applicable | implemented | implemented | aligned | moex-dams | PDM-009; ADR-046 |
 | INV-037 | FieldMapping.target_refs SchemaNodeRef pattern | L3 | implemented | not-applicable | not-applicable | implemented | aligned | moex-dams | moex-types.yaml SchemaNodeRef; ADR-046; ADR-039 |
+| INV-038 | DataFlow.integration_ref resolvable in catalog snapshot | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-048; DAMS-F-007; FLW-002 |
+| INV-039 | DataFlowEntityBinding.catalog_operation_ref in snapshot | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-048; FLW-003 |
+| INV-040 | DataFlow.bound_catalog_revision matches snapshot | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-048; FLW-004 |
+| INV-041 | DataModelBinding.catalog_revision matches snapshot | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-048; FLW-005 |
 
 ## Statements
 
@@ -328,5 +332,41 @@ AlignsWithMapping.source_refs — ровно один ConceptualEntity; target_r
 *requirement_refs:* `DAMS-REQ-PDM-009.c2`
 
 *adr_ref:* `ADR-046`
+
+### INV-038: DataFlow.integration_ref resolvable in catalog snapshot
+
+DataFlow.integration_ref must parse as {catalog}:{kind}/{external_id} and resolve to an object in the file catalog snapshot. Unknown catalog prefix or missing object is an error (orphan_ref / unknown_catalog).
+
+
+*requirement_refs:* `DAMS-REQ-FLW-002.c1`
+
+*adr_ref:* `ADR-048`
+
+### INV-039: DataFlowEntityBinding.catalog_operation_ref in snapshot
+
+If DataFlowEntityBinding.catalog_operation_ref is set, it must identify an operation on the resolved integration object in the catalog snapshot.
+
+
+*requirement_refs:* `DAMS-REQ-FLW-003.c1`
+
+*adr_ref:* `ADR-048`
+
+### INV-040: DataFlow.bound_catalog_revision matches snapshot
+
+When DataFlow.bound_catalog_revision is set, it must equal the catalog_revision of the file catalog snapshot (else stale_revision warning).
+
+
+*requirement_refs:* `DAMS-REQ-FLW-004.c1`
+
+*adr_ref:* `ADR-048`
+
+### INV-041: DataModelBinding.catalog_revision matches snapshot
+
+When DataModelBinding.catalog_revision is set, it must equal the catalog_revision of the file catalog snapshot (topology change without contract rebuild).
+
+
+*requirement_refs:* `DAMS-REQ-FLW-005.c1`
+
+*adr_ref:* `ADR-048`
 
 См. также: [ADR-045](../adr/ADR-045-executable-constraint-matrix.md), [inventory report](constraint-matrix-inventory-report.md), [adding-an-invariant](../guides/adding-an-invariant.md).

@@ -1114,6 +1114,98 @@ requirements:
     diagnostic_code: DAMS-REQ-FLW-001.c1
     remediation: При межрешенческих обменах добавьте описание потоков данных; иначе предупреждение можно
       игнорировать до калибровки.
+- element_id: dams:req/FLW-002
+  name: integration_ref_resolvable
+  title: integration_ref разрешим по снимку каталога
+  description: ADR-048 — orphan_ref / unknown_catalog against file catalog snapshot.
+  lifecycle_status: approved
+  code: FLW-002
+  requirement_level: it_solution
+  requirement_section: FLW
+  statement: >
+    DataFlow.integration_ref должен ссылаться на объект, присутствующий в файл-снимке
+    каталога интеграций. Неизвестный каталог или отсутствующий объект блокируют merge.
+  applies_to:
+    applicability_id: appl:FLW-002
+    applies_target_class: ModelPackage
+    applies_implementation_scope: solution
+  formal_checks:
+  - check_id: FLW-002.c1
+    kind: custom
+    target_class: ModelPackage
+    expression: catalog_topology_integration_ref
+    severity: error
+    diagnostic_code: DAMS-REQ-FLW-002.c1
+    remediation: Обновите integration_ref или обновите catalog-snapshot.
+- element_id: dams:req/FLW-003
+  name: catalog_operation_bound
+  title: catalog_operation_ref существует в снимке
+  description: ADR-048 — entity binding operation must exist on catalog integration object.
+  lifecycle_status: approved
+  code: FLW-003
+  requirement_level: it_solution
+  requirement_section: FLW
+  statement: >
+    Если у DataFlowEntityBinding задан catalog_operation_ref, он должен соответствовать
+    операции объекта интеграции в файл-снимке каталога.
+  applies_to:
+    applicability_id: appl:FLW-003
+    applies_target_class: ModelPackage
+    applies_implementation_scope: solution
+  formal_checks:
+  - check_id: FLW-003.c1
+    kind: custom
+    target_class: ModelPackage
+    expression: catalog_topology_operation_ref
+    severity: warning
+    diagnostic_code: DAMS-REQ-FLW-003.c1
+    remediation: Исправьте catalog_operation_ref или обновите снимок.
+- element_id: dams:req/FLW-004
+  name: bound_catalog_revision_fresh
+  title: bound_catalog_revision не устарел
+  description: ADR-048 — stale_revision when bound revision lags snapshot.
+  lifecycle_status: approved
+  code: FLW-004
+  requirement_level: it_solution
+  requirement_section: FLW
+  statement: >
+    DataFlow.bound_catalog_revision при наличии должен совпадать с catalog_revision
+    текущего файл-снимка каталога.
+  applies_to:
+    applicability_id: appl:FLW-004
+    applies_target_class: ModelPackage
+    applies_implementation_scope: solution
+  formal_checks:
+  - check_id: FLW-004.c1
+    kind: custom
+    target_class: ModelPackage
+    expression: catalog_topology_bound_revision
+    severity: warning
+    diagnostic_code: DAMS-REQ-FLW-004.c1
+    remediation: Подтвердите привязку на новой ревизии снимка.
+- element_id: dams:req/FLW-005
+  name: contract_catalog_revision
+  title: DataModelBinding.catalog_revision согласован со снимком
+  description: ADR-048 — contract slice pins catalog topology revision.
+  lifecycle_status: approved
+  code: FLW-005
+  requirement_level: it_solution
+  requirement_section: FLW
+  statement: >
+    DataModelBinding.catalog_revision при наличии должен совпадать с catalog_revision
+    файл-снимка; иначе возможна несовместимость топологии и контракта.
+  applies_to:
+    applicability_id: appl:FLW-005
+    applies_target_class: ModelPackage
+    applies_implementation_scope: solution
+  formal_checks:
+  - check_id: FLW-005.c1
+    kind: custom
+    target_class: ModelPackage
+    expression: catalog_topology_binding_revision
+    severity: warning
+    diagnostic_code: DAMS-REQ-FLW-005.c1
+    remediation: Пересоберите binding на актуальной ревизии снимка.
 - element_id: dams:req/CLS-002
   name: security_classification_soft
   title: Режим защиты данных

@@ -1,0 +1,6 @@
+data_flows:
+- element_id: dams:flow/inv038
+  name: inv038_ok
+  description: integration_ref resolves in catalog snapshot
+  lifecycle_status: active
+  integration_ref: clinkr:integration/INT-00421
