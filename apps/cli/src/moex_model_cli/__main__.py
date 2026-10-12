@@ -452,6 +452,22 @@ def build_parser() -> argparse.ArgumentParser:
         help="Allow --write for non-example bindings (requires process from ADR-042)",
     )
 
+    lock = sub.add_parser(
+        "lock",
+        help="Update or verify repository manifest.lock (ADR-047)",
+    )
+    lock_sub = lock.add_subparsers(dest="lock_action", required=True)
+    lock_update = lock_sub.add_parser(
+        "update",
+        help="Regenerate manifest.lock from current documents (only writer)",
+    )
+    _add_slice_args(lock_update)
+    lock_verify = lock_sub.add_parser(
+        "verify",
+        help="Check manifest.lock hashes without rewriting",
+    )
+    _add_slice_args(lock_verify)
+
     return parser
 
 
@@ -650,6 +666,13 @@ def main(argv: list[str] | None = None) -> int:
             write=args.write,
             allow_non_demo_write=args.allow_non_demo_write,
         )
+    elif args.command == "lock":
+        from moex_model_cli.commands.lock_cmd import run_lock_update, run_lock_verify
+
+        if args.lock_action == "update":
+            code, text = run_lock_update(paths.root)
+        else:
+            code, text = run_lock_verify(paths.root)
     else:
         return 2
 

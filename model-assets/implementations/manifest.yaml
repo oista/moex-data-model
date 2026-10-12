@@ -1,0 +1,51 @@
+manifest_schema_version: 0.1.0
+repository_id: moex:repository:implementations
+documents:
+  - id: moex:implementation:client-accounts-csv-draft:0.1
+    kind: package
+    path: imports/client-accounts-csv-draft/0.1/implementation.yaml
+    version: "0.1"
+    owner: "@moex/owner-pending"
+  - id: moex:implementation:crm:0.1.0
+    kind: package
+    path: solutions/crm/implementation.yaml
+    version: 0.1.0
+    owner: "@moex/owner-pending"
+    depends_on:
+      - moex:implementation:moex-enterprise-conceptual-model:0.1
+  - id: moex:implementation:esed:0.1.0
+    kind: package
+    path: solutions/esed/implementation.yaml
+    version: 0.1.0
+    owner: "@moex/owner-pending"
+    depends_on:
+      - moex:implementation:moex-enterprise-conceptual-model:0.1
+  - id: moex:implementation:mdm:0.1.0
+    kind: package
+    path: solutions/mdm/implementation.yaml
+    version: 0.1.0
+    owner: "@moex/owner-pending"
+    depends_on:
+      - moex:implementation:moex-enterprise-conceptual-model:0.1
+  - id: moex:implementation:moex-enterprise-conceptual-model:0.1
+    kind: package
+    path: enterprise/moex-enterprise-conceptual-model/0.1/implementation.yaml
+    version: 0.1.0
+    owner: "@moex/owner-pending"
+  - id: moex:implementation:moex-fibo-application:0.1
+    kind: package
+    path: ontologies/moex-fibo-application/0.1/implementation.yaml
+    version: 0.1.0
+    owner: "@moex/owner-pending"
+  - id: moex:implementation:moex-hierarchy:0.1
+    kind: package
+    path: enterprise/moex-hierarchy/implementation.yaml
+    version: 0.1.0
+    owner: "@moex/owner-pending"
+  - id: moex:implementation:ucd:0.1.0
+    kind: package
+    path: solutions/ucd/implementation.yaml
+    version: 0.1.0
+    owner: "@moex/owner-pending"
+    depends_on:
+      - moex:implementation:moex-enterprise-conceptual-model:0.1
