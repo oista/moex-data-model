@@ -1,4 +1,4 @@
-"""Filesystem ImplementationCatalog over model-assets/implementations/**/implementation.yaml."""
+"""Filesystem ImplementationCatalog over the repository manifest (ADR-047)."""
 
 from __future__ import annotations
 
@@ -20,11 +20,11 @@ from moex_modeling.assets.domain import (
     PublicationTarget,
     slug_and_version_from_id,
 )
+from moex_repository_loader.loader import RepositoryLoader
 
 logger = logging.getLogger(__name__)
 
 IMPLEMENTATIONS_REL = Path("model-assets") / "implementations"
-ENVELOPE_NAME = "implementation.yaml"
 PUBLISH_NAME = "publish.yaml"
 
 
@@ -127,9 +127,25 @@ class FilesystemImplementationCatalog:
         base = self._root / IMPLEMENTATIONS_REL
         if not base.is_dir():
             return
-        for envelope in sorted(base.rglob(ENVELOPE_NAME)):
-            if not envelope.is_file():
+        manifest_path = base / "manifest.yaml"
+        if not manifest_path.is_file():
+            raise CatalogBuildError(
+                f"missing repository manifest: {manifest_path.as_posix()} (ADR-047)"
+            )
+        try:
+            loader = RepositoryLoader(self._root, verify_hashes=False)
+            refs = loader.load_manifest().documents
+        except Exception as exc:
+            raise CatalogBuildError(f"failed to load repository manifest: {exc}") from exc
+
+        for ref in refs:
+            if ref.kind != "package":
                 continue
+            envelope = (base / ref.path).resolve()
+            if not envelope.is_file():
+                raise CatalogBuildError(
+                    f"manifest path missing for {ref.id!r}: {ref.path}"
+                )
             try:
                 asset = self._load_asset(envelope)
             except CatalogBuildError:
@@ -137,6 +153,10 @@ class FilesystemImplementationCatalog:
             except Exception as exc:  # noqa: BLE001 — skip broken envelopes
                 logger.warning("skipping envelope %s: %s", envelope, exc)
                 continue
+            if asset.id != ref.id:
+                raise CatalogBuildError(
+                    f"manifest id {ref.id!r} != envelope id {asset.id!r} ({ref.path})"
+                )
             if asset.id in self._by_id:
                 raise CatalogBuildError(
                     f"duplicate implementation id {asset.id!r}: "
