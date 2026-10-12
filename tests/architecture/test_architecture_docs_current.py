@@ -44,7 +44,7 @@ def test_normative_architecture_docs_have_no_removed_physical_shapes() -> None:
         rel = path.relative_to(REPO).as_posix()
         text = path.read_text(encoding="utf-8")
         for i, line in enumerate(text.splitlines(), start=1):
-            # Allow explicit "removed / replaces PhysicalField" historical notes.
+            # Allow explicit historical notes (removed / replaces / вместо / …).
             lower = line.lower()
             if any(
                 marker in lower
@@ -63,7 +63,7 @@ def test_normative_architecture_docs_have_no_removed_physical_shapes() -> None:
                     offenders.append(f"{rel}:{i}: {line.strip()}")
                     break
     assert not offenders, (
-        "Removed PhysicalField/PhysicalObject residue in normative docs:\n"
+        "Removed physical-layer class residue in normative docs:\n"
         + "\n".join(offenders[:80])
     )
 

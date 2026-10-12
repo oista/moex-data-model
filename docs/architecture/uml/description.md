@@ -35,7 +35,7 @@ Roles `enterprise-conceptual` and `solution` are SpecImpl / `ModelPackage` coord
 Not LinkML classes (do not reintroduce in UML):
 
 - `GovernedElement` / `VersionedArtifact` / `Assertion` — deferred (ADR-044 D5–D6); use mixins
-- `PhysicalField` / `PhysicalObject` — removed; use SchemaNode / TechnicalAsset
+- former physical field / physical object classes — removed; use SchemaNode / TechnicalAsset
 - `ConceptualAttribute` / `ConceptualRelationship` / `BusinessTerm` / `ValueSet*`
 - `Technology` / `NativeSchema` / `ModelElementRealization` / `Transformation` as classes
 - `DataFlowEndpoint` / `DataContract` / `DataQuality*` / `DataOwner` / `DataSteward`

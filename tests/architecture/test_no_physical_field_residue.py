@@ -22,6 +22,7 @@ ALLOW_PREFIXES = (
     "scripts/migrate_physical_to_technical_asset.py",
     "tests/migration/",
     "tests/architecture/test_no_physical_field_residue.py",
+    "tests/architecture/test_architecture_docs_current.py",
     "docs/",
     "tmp/",
     ".cursor/",
