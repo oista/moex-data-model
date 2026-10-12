@@ -67,4 +67,5 @@ Viewer-ÃÂÃÂµÃÂÃÂµÃÂ½ÃÂ¸ÃÂ ÃÂ¶ÃÂ¸
 | [ADR-043](ADR-043-transitional-tags-registry.md) | Transitional element tags registry | Accepted; editorial renumber from colliding ADR-035 |
 | [ADR-044](ADR-044-model-element-decomposition.md) | ModelElement decomposition (mixins, HasValidity, Mapping) | Proposed; inventory matrix; schema changes from 2.1.0 |
 | [ADR-045](ADR-045-executable-constraint-matrix.md) | Executable constraint matrix (L1 rules / L2 validators / L3 SHACL) | Accepted; P0 invariants; INV-xxx; check-constraints in publish-gate |
-| [ADR-046](ADR-046-typed-mapping-endpoints.md) | Typed Mapping endpoints (subclasses + separate collections) | Proposed; spike report; series PR-0..PR-5 |
+| [ADR-046](ADR-046-typed-mapping-endpoints.md) | Typed Mapping endpoints (subclasses + separate collections) | Accepted; PR-5 landed; schema 3.1.0 |
+| [ADR-047](ADR-047-repository-manifest-and-lock.md) | Repository manifest and lock (index + content_hash) | Proposed; P1 series; see p1-inventory.md |

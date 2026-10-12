@@ -11,7 +11,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 **Date:** 2026-10-05  
 **Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [ADR-031](ADR-031-technical-asset-registry.md) (digest note), [ADR-012](ADR-012-semantic-diff-review.md)
+**Related:** [ADR-031](ADR-031-technical-asset-registry.md) (digest note), [ADR-012](ADR-012-semantic-diff-review.md), [ADR-047](ADR-047-repository-manifest-and-lock.md) (reuses the same canonical JSON digest idea for repository lock `content_hash`; does not supersede this ADR)
 
 ## Context
 
