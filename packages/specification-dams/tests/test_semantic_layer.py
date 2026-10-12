@@ -416,7 +416,7 @@ def test_concept_ref_foreign_entity_errors():
             {"element_id": "dams:concept/Other", "name": "Other", "description": "o", "lifecycle_status": "active"},
             {"element_id": "dams:concept/Mine", "name": "Mine", "description": "m", "lifecycle_status": "active"},
         ],
-        "mappings": [
+        "realizes_mappings": [
             {
                 "element_id": "dams:map/1",
                 "name": "r",

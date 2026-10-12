@@ -11,10 +11,7 @@ from moex_modeling import DiagnosticSeverity
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
 from moex_dams import assess_implementation
-from moex_dams.mappings.iter_mappings import (
-    LEGACY_MAPPING_KEY,
-    TYPED_MAPPING_KEYS,
-)
+from moex_dams.mappings.iter_mappings import TYPED_MAPPING_KEYS
 from moex_dams.rules.formal_checks import check_formal_requirements
 
 _MAPPING_TYPE_TO_COLLECTION = {
@@ -26,9 +23,9 @@ _MAPPING_TYPE_TO_COLLECTION = {
 
 
 def _drop_mapping_types(data: dict, *mapping_types: str) -> None:
-    """Remove Mapping instances of given types from typed + legacy collections."""
+    """Remove Mapping instances of given types from typed collections."""
     drop = set(mapping_types)
-    for key in (*TYPED_MAPPING_KEYS, LEGACY_MAPPING_KEY):
+    for key in TYPED_MAPPING_KEYS:
         items = data.get(key)
         if not isinstance(items, list):
             continue
@@ -45,7 +42,7 @@ def _drop_mapping_types(data: dict, *mapping_types: str) -> None:
 
 def _append_mapping(data: dict, mapping: dict) -> None:
     mtype = str(mapping.get("mapping_type") or "")
-    key = _MAPPING_TYPE_TO_COLLECTION.get(mtype, LEGACY_MAPPING_KEY)
+    key = _MAPPING_TYPE_TO_COLLECTION[mtype]
     data.setdefault(key, []).append(mapping)
 
 REPO = Path(__file__).resolve().parents[3]

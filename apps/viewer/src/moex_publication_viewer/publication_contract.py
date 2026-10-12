@@ -31,8 +31,20 @@ _SELECT_SUFFIXES: dict[str, tuple[str, ...]] = {
     "ExecutionAsset": ("execution_assets",),
     "SchemaNode": ("data_structures", "nodes"),
     "DataStructure": ("data_structures",),
-    "EntityPhysicalMapping": ("mappings", "physical_mappings", "nodes"),
-    "AttributePhysicalMapping": ("mappings", "physical_mappings", "nodes"),
+    # EntityPhysicalMapping is a real schema class (ADR-046).
+    "EntityPhysicalMapping": (
+        "entity_physical_mappings",
+        "physical_mappings",
+        "nodes",
+    ),
+    # AttributePhysicalMapping is a display-only alias for FieldMapping
+    # (kept so publication manifests / semantic_types lists stay valid).
+    "AttributePhysicalMapping": (
+        "field_mappings",
+        "physical_mappings",
+        "nodes",
+    ),
+    "FieldMapping": ("field_mappings",),
 }
 
 _KIND_MARKERS: dict[str, frozenset[str]] = {
@@ -50,16 +62,25 @@ _KIND_MARKERS: dict[str, frozenset[str]] = {
             "mapping",
             "EntityPhysicalMapping",
             "maps_to",
-            "entity_mapping",
             "entity_physical",
         }
     ),
+    # Display-only alias for FieldMapping (see _SELECT_SUFFIXES).
     "AttributePhysicalMapping": frozenset(
         {
             "mapping",
             "AttributePhysicalMapping",
+            "FieldMapping",
             "maps_to",
             "attribute_mapping",
+            "field_mapping",
+        }
+    ),
+    "FieldMapping": frozenset(
+        {
+            "mapping",
+            "FieldMapping",
+            "maps_to",
             "field_mapping",
         }
     ),
@@ -305,7 +326,14 @@ def _count_one_type(
                 # mappings/nodes lists often mix kinds — prefer marked when present
                 if marked:
                     return len(marked)
-                if leaf in ("mappings", "physical_mappings"):
+                if leaf in (
+                    "mappings",
+                    "physical_mappings",
+                    "entity_physical_mappings",
+                    "field_mappings",
+                    "realizes_mappings",
+                    "aligns_with_mappings",
+                ):
                     return len(items)
                 if leaf == "nodes":
                     return len(
@@ -333,7 +361,14 @@ def _count_one_type(
                             and str(x.get("kind") or "") in markers
                         ]
                     )
-                if markers and suf in ("mappings", "physical_mappings"):
+                if markers and suf in (
+                    "mappings",
+                    "physical_mappings",
+                    "entity_physical_mappings",
+                    "field_mappings",
+                    "realizes_mappings",
+                    "aligns_with_mappings",
+                ):
                     marked = [
                         x
                         for x in vals

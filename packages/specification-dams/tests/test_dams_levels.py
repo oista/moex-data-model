@@ -88,7 +88,7 @@ def test_solution_requires_realizes() -> None:
                         "lifecycle_status": "active",
                     }
                 ],
-                "mappings": [],
+                "realizes_mappings": [],
             }
         )
     )
@@ -118,7 +118,7 @@ def test_solution_with_realizes_ok() -> None:
                         "lifecycle_status": "active",
                     }
                 ],
-                "mappings": [
+                "realizes_mappings": [
                     {
                         "element_id": "dams:mapping/r1",
                         "name": "r1",

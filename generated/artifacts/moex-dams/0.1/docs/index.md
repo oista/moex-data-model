@@ -259,7 +259,6 @@ Name: moex_dams
 | [mapping_coverage_status](mapping_coverage_status.md) | Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ phys... |
 | [mapping_rationale](mapping_rationale.md) | Обоснование для planned / technical-only / not-applicable / inherited |
 | [mapping_type](mapping_type.md) |  |
-| [mappings](mappings.md) | Deprecated (ADR-046) |
 | [master_system](master_system.md) |  |
 | [match_kind](match_kind.md) | Alignment strength |
 | [max_length](max_length.md) | Максимальная длина для string/binary |

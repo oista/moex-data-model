@@ -19,7 +19,16 @@ _CLASS_PATH: dict[str, tuple[str, ...]] = {
     "ExecutionAsset": ("execution_assets",),
     "SchemaNode": ("data_structures", "nodes"),
     "DataStructure": ("data_structures",),
-    "Mapping": ("mappings",),
+    "Mapping": (
+        "realizes_mappings",
+        "entity_physical_mappings",
+        "field_mappings",
+        "aligns_with_mappings",
+    ),
+    "EntityPhysicalMapping": ("entity_physical_mappings",),
+    "FieldMapping": ("field_mappings",),
+    "RealizesMapping": ("realizes_mappings",),
+    "AlignsWithMapping": ("aligns_with_mappings",),
     "DomainContext": ("domain_contexts",),
     "ConceptualEntity": ("conceptual_entities",),
 }

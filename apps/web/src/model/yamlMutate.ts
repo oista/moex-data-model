@@ -35,7 +35,6 @@ function collectIds(data: Record<string, unknown>): Set<string> {
     "access_points",
     "data_containers",
     "execution_assets",
-    "mappings",
     "realizes_mappings",
     "entity_physical_mappings",
     "field_mappings",
@@ -144,7 +143,6 @@ const MAPPING_COLLECTION_KEYS = [
   "entity_physical_mappings",
   "field_mappings",
   "aligns_with_mappings",
-  "mappings",
 ] as const;
 
 function collectionForMappingType(mappingType: string): string {
@@ -542,11 +540,10 @@ function mutateData(
         if (target !== collection) {
           (data[collection] as unknown[]).splice(idx, 1);
           if (
-            collection === "mappings" &&
-            Array.isArray(data.mappings) &&
-            data.mappings.length === 0
+            Array.isArray(data[collection]) &&
+            (data[collection] as unknown[]).length === 0
           ) {
-            delete data.mappings;
+            delete data[collection];
           }
           ensureSeq(data, target).push(row);
         }
@@ -557,11 +554,10 @@ function mutateData(
       const { collection, idx } = findMapping(data, payload.element_id);
       (data[collection] as unknown[]).splice(idx, 1);
       if (
-        collection === "mappings" &&
-        Array.isArray(data.mappings) &&
-        data.mappings.length === 0
+        Array.isArray(data[collection]) &&
+        (data[collection] as unknown[]).length === 0
       ) {
-        delete data.mappings;
+        delete data[collection];
       }
       break;
     }

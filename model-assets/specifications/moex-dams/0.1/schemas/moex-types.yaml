@@ -292,12 +292,6 @@ enums:
       enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl
       implements (that is conforms_to / publication implements).
     permissible_values:
-      semantic_equivalence:
-        description: Deprecated (ADR-046). Unused; removed in a later PR of the series.
-      specialization:
-        description: Deprecated (ADR-046). Unused; removed in a later PR of the series.
-      implementation:
-        description: Deprecated (ADR-046). Unused; removed in a later PR of the series.
       entity_physical:
         description: >
           Explicit entity-level link between DataCarrier and LogicalEntity
@@ -306,12 +300,6 @@ enums:
         description: >
           mapsTo between SchemaNode (structure_id#local_key) and LogicalAttribute
           (ADR-038).
-      transformation:
-        description: Deprecated (ADR-046). Unused; removed in a later PR of the series.
-      aggregation:
-        description: Deprecated (ADR-046). Unused; removed in a later PR of the series.
-      derivation:
-        description: Deprecated (ADR-046). Unused; removed in a later PR of the series.
       realizes:
         description: Solution logical/concept realizes an enterprise conceptual entity.
       aligns_with:

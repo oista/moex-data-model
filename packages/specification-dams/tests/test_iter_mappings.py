@@ -1,28 +1,15 @@
-"""Unit tests for iter_mappings (ADR-046 PR-2)."""
+"""Unit tests for iter_mappings (ADR-046)."""
 
 from __future__ import annotations
 
-from moex_dams.mappings import (
-    LEGACY_MAPPING_KEY,
-    TYPED_MAPPING_KEYS,
-    iter_mappings,
-)
+from moex_dams.mappings import TYPED_MAPPING_KEYS, iter_mappings
 
 
 def test_empty() -> None:
     assert list(iter_mappings({})) == []
-    assert list(iter_mappings({"mappings": []})) == []
-
-
-def test_legacy_only() -> None:
-    data = {
-        "mappings": [
-            {"element_id": "m1", "mapping_type": "realizes"},
-            {"element_id": "m2", "mapping_type": "field_mapping"},
-        ]
-    }
-    got = list(iter_mappings(data))
-    assert [m["element_id"] for m in got] == ["m1", "m2"]
+    assert list(iter_mappings({"field_mappings": []})) == []
+    # Legacy polymorphic key is ignored after ADR-046 PR-5.
+    assert list(iter_mappings({"mappings": [{"element_id": "legacy"}]})) == []
 
 
 def test_typed_only() -> None:
@@ -44,27 +31,26 @@ def test_typed_only() -> None:
         "field_mappings",
         "aligns_with_mappings",
     )
-    assert LEGACY_MAPPING_KEY == "mappings"
 
 
-def test_both_overlap_prefers_typed() -> None:
-    typed = {
+def test_dedupe_prefers_first_typed() -> None:
+    first = {
         "element_id": "m1",
         "mapping_type": "realizes",
-        "name": "typed",
+        "name": "first",
     }
-    legacy = {
+    second = {
         "element_id": "m1",
         "mapping_type": "realizes",
-        "name": "legacy",
+        "name": "second",
     }
     data = {
-        "realizes_mappings": [typed],
-        "mappings": [legacy, {"element_id": "m2", "name": "only-legacy"}],
+        "realizes_mappings": [first],
+        "field_mappings": [second, {"element_id": "m2", "name": "other"}],
     }
     got = list(iter_mappings(data))
     assert [m["element_id"] for m in got] == ["m1", "m2"]
-    assert got[0]["name"] == "typed"
+    assert got[0]["name"] == "first"
 
 
 def test_skip_non_dict() -> None:
@@ -74,18 +60,14 @@ def test_skip_non_dict() -> None:
             None,
             {"element_id": "f1"},
         ],
-        "mappings": [
-            42,
-            {"element_id": "m1"},
-        ],
     }
     got = list(iter_mappings(data))
-    assert [m["element_id"] for m in got] == ["f1", "m1"]
+    assert [m["element_id"] for m in got] == ["f1"]
 
 
 def test_missing_element_id_always_yielded() -> None:
     data = {
-        "mappings": [
+        "field_mappings": [
             {"name": "anon-a"},
             {"name": "anon-b"},
         ]

@@ -104,7 +104,6 @@ function parseMappings(content: string): {
       "entity_physical_mappings",
       "field_mappings",
       "aligns_with_mappings",
-      "mappings",
     ] as const;
     const seen = new Set<string>();
     const mappings: MapSummary[] = [];

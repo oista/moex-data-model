@@ -169,7 +169,7 @@ sections:
     source:
       format: yaml
       path: enterprise-conceptual-model.yaml
-      select: mappings
+      select: aligns_with_mappings
     key_column: element_id
     columns:
       - name

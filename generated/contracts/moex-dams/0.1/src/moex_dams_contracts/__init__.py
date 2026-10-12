@@ -34,7 +34,7 @@ from pydantic import (
 
 
 metamodel_version = "1.11.0"
-version = "3.0.0"
+version = "3.1.0"
 
 
 class ConfiguredBaseModel(BaseModel):
@@ -467,18 +467,6 @@ class MappingTypeEnum(str, Enum):
     Kind of Mapping assertion. realizes = solution element → enterprise conceptual; entity_physical = DataCarrier ↔ LogicalEntity; field_mapping = mapsTo (SchemaNode ↔ LogicalAttribute); aligns_with = enterprise conceptual ↔ external term. Do not use Mapping for SpecImpl implements (that is conforms_to / publication implements).
 
     """
-    semantic_equivalence = "semantic_equivalence"
-    """
-    Deprecated (ADR-046). Unused; removed in a later PR of the series.
-    """
-    specialization = "specialization"
-    """
-    Deprecated (ADR-046). Unused; removed in a later PR of the series.
-    """
-    implementation = "implementation"
-    """
-    Deprecated (ADR-046). Unused; removed in a later PR of the series.
-    """
     entity_physical = "entity_physical"
     """
     Explicit entity-level link between DataCarrier and LogicalEntity (PDM-003). Do not infer from field_mapping alone.
@@ -488,18 +476,6 @@ class MappingTypeEnum(str, Enum):
     """
     mapsTo between SchemaNode (structure_id#local_key) and LogicalAttribute (ADR-038).
 
-    """
-    transformation = "transformation"
-    """
-    Deprecated (ADR-046). Unused; removed in a later PR of the series.
-    """
-    aggregation = "aggregation"
-    """
-    Deprecated (ADR-046). Unused; removed in a later PR of the series.
-    """
-    derivation = "derivation"
-    """
-    Deprecated (ADR-046). Unused; removed in a later PR of the series.
     """
     realizes = "realizes"
     """
@@ -1281,8 +1257,6 @@ class ModelPackage(ModelElement, HasPolicyBindings, HasGovernanceClassification,
     access_points: Optional[list[AccessPoint]] = Field(default=None, description="""Коллекция точек доступа пакета (Variant B, ADR-031).""")
     data_containers: Optional[list[DataContainer]] = Field(default=None, description="""Коллекция контейнеров пакета (Variant B, ADR-031).""")
     execution_assets: Optional[list[ExecutionAsset]] = Field(default=None, description="""Коллекция исполняемых активов пакета (Variant B, ADR-031).""")
-    mappings: Optional[list[Mapping]] = Field(default=None, description="""Deprecated (ADR-046). Use realizes_mappings / entity_physical_mappings / field_mappings / aligns_with_mappings. Removed in a later PR of the series.
-""")
     realizes_mappings: Optional[list[RealizesMapping]] = Field(default=None, description="""Typed realizes mappings (ADR-046 Variant B).""")
     entity_physical_mappings: Optional[list[EntityPhysicalMapping]] = Field(default=None, description="""Typed entity_physical mappings (ADR-046 Variant B).""")
     field_mappings: Optional[list[FieldMapping]] = Field(default=None, description="""Typed field_mapping mappings (ADR-046 Variant B).""")
@@ -1626,7 +1600,7 @@ class ExternalClassRef(HasProvenance):
 
 class Mapping(HasProvenance, HasLifecycle, DescribedElement, IdentifiedElement):
     """
-    Явное соответствие между элементами. Prefer typed subclasses (RealizesMapping, EntityPhysicalMapping, FieldMapping, AlignsWithMapping) and separate ModelPackage collections (ADR-046). Base Mapping remains for the deprecated polymorphic mappings collection during the compatibility window. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to. Identity slots name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044); display label = source_refs -> target_refs [mapping_type].
+    Явное соответствие между элементами. Prefer typed subclasses (RealizesMapping, EntityPhysicalMapping, FieldMapping, AlignsWithMapping) and separate ModelPackage collections (ADR-046). Base Mapping remains as the inheritance root for those subclasses. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to. Identity slots name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044); polymorphic ModelPackage.mappings removed in 3.1.0 (ADR-046 PR-5); display label = source_refs -> target_refs [mapping_type].
 
     """
     source_refs: Optional[list[str]] = Field(default=None, min_length=1)

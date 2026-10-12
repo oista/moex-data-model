@@ -1,5 +1,5 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
 normative: true
 supersedes: []
@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-046: Typed Mapping endpoints (subclasses + separate collections)
 
 **Date:** 2026-10-12  
-**Status:** Proposed  
+**Status:** Accepted (PR-5 landed: legacy `mappings` + unused enum values removed; schema **3.1.0**)  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Related:** [ADR-021](ADR-021-dams-implementation-profile-and-levels.md), [ADR-029](ADR-029-cdm-from-er-sketch-and-realization.md), [ADR-031](ADR-031-technical-asset-registry.md), [ADR-039](ADR-039-structure-node-addressing.md), [ADR-044](ADR-044-model-element-decomposition.md), [ADR-045](ADR-045-executable-constraint-matrix.md)  
 **Spike:** [typed-mapping-spike-report.md](../migration/typed-mapping-spike-report.md)
@@ -50,9 +50,9 @@ superseded_by: []
 В `ModelPackage`:
 
 - `realizes_mappings`, `entity_physical_mappings`, `field_mappings`, `aligns_with_mappings`
-- `mappings` остаётся **deprecated** на окне совместимости, затем удаляется
+- `mappings` deprecated в PR-1, **удалён в PR-5**
 
-Единый view для читателей — хелпер `iter_mappings(data)` (читает legacy + типизированные коллекции).
+Единый view для читателей — хелпер `iter_mappings(data)` (typed collections only после PR-5).
 
 ### D4. Designator и уровни проверки (результат spike)
 
@@ -67,7 +67,7 @@ superseded_by: []
 
 ### D5. Deprecation enum
 
-Значения `semantic_equivalence`, `specialization`, `implementation`, `transformation`, `aggregation`, `derivation` помечаются deprecated; удаляются в финальном PR серии после миграции данных.
+Значения `semantic_equivalence`, `specialization`, `implementation`, `transformation`, `aggregation`, `derivation` помечались deprecated в PR-1 и **удалены в PR-5**.
 
 ### D6. Серия PR
 

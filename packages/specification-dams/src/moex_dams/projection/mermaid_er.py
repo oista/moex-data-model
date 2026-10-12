@@ -381,28 +381,6 @@ def project_model_package_to_er_diagram(
                                 label=mname,
                             )
                         )
-            elif mtype in {"object_mapping", "entity_mapping"}:
-                for src in sources:
-                    for tgt in targets:
-                        if src not in entity_table or tgt not in entity_table:
-                            continue
-                        st = entity_table[src]
-                        tt = entity_table[tgt]
-                        key = (st, tt, mname)
-                        if key in seen_edges:
-                            continue
-                        seen_edges.add(key)
-                        lines.append(
-                            _cardinality_edge(
-                                source_name=st,
-                                target_name=tt,
-                                source_min=0,
-                                source_max=_MANY,
-                                target_min=0,
-                                target_max=1,
-                                label=mname,
-                            )
-                        )
 
     return "\n".join(lines).rstrip() + "\n"
 

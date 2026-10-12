@@ -74,7 +74,7 @@ sections:
     source:
       format: yaml
       path: draft-model.yaml
-      select: mappings
+      select: field_mappings
     key_column: element_id
     columns:
       - name

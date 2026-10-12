@@ -233,8 +233,9 @@ Legacy ingest aliases still accepted (mapped by ingest): `table`, `view`, `topic
 
 ### 5.3 `mapping_type` (`MappingTypeEnum`)
 
-`semantic_equivalence`, `specialization`, `implementation`, `field_mapping`,
-`transformation`, `aggregation`, `derivation`
+`entity_physical`, `field_mapping`, `realizes`, `aligns_with`
+
+(Unused enum values removed in ADR-046 PR-5 / schema 3.1.0.)
 
 ### 5.4 `mapping_cardinality` (`MappingCardinalityEnum`)
 

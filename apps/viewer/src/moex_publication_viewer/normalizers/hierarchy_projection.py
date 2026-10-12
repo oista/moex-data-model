@@ -374,7 +374,8 @@ def build_hierarchy_yaml(
     conceptual: list[dict[str, Any]] = []
     logical: list[dict[str, Any]] = []
     relationships: list[dict[str, Any]] = []
-    mappings: list[dict[str, Any]] = []
+    realizes_mappings: list[dict[str, Any]] = []
+    aligns_with_mappings: list[dict[str, Any]] = []
     seen_rel: set[str] = set()
 
     for item in items:
@@ -446,17 +447,19 @@ def build_hierarchy_yaml(
         mid = str(mapping.get("element_id") or "").strip()
         if not mid:
             continue
-        mappings.append(
-            {
-                "element_id": mid,
-                "name": mapping.get("name"),
-                "description": mapping.get("description"),
-                "mapping_type": mapping.get("mapping_type"),
-                "source_refs": mapping.get("source_refs"),
-                "target_refs": mapping.get("target_refs"),
-                "_source_implementation": impl_id,
-            }
-        )
+        row = {
+            "element_id": mid,
+            "name": mapping.get("name"),
+            "description": mapping.get("description"),
+            "mapping_type": mapping.get("mapping_type"),
+            "source_refs": mapping.get("source_refs"),
+            "target_refs": mapping.get("target_refs"),
+            "_source_implementation": impl_id,
+        }
+        if mtype == "realizes":
+            realizes_mappings.append(row)
+        else:
+            aligns_with_mappings.append(row)
 
     package = {
         "element_id": "dams:model/hierarchy/0.1.0",
@@ -472,7 +475,8 @@ def build_hierarchy_yaml(
         "conceptual_entities": conceptual,
         "logical_entities": logical,
         "relationships": relationships,
-        "mappings": mappings,
+        "realizes_mappings": realizes_mappings,
+        "aligns_with_mappings": aligns_with_mappings,
     }
     return yaml.safe_dump(
         package,

@@ -313,28 +313,6 @@ def project_model_package_to_er_scene(
                                 "target_cardinality": "zeroOrOne",
                             }
                         )
-            elif mtype in {"object_mapping", "entity_mapping"}:
-                for src in sources:
-                    for tgt in targets:
-                        if src not in entity_table or tgt not in entity_table:
-                            continue
-                        st = entity_table[src]
-                        tt = entity_table[tgt]
-                        key = (st, tt, mname)
-                        if key in seen_edges:
-                            continue
-                        seen_edges.add(key)
-                        edges.append(
-                            {
-                                "id": mid or f"{st}->{tt}:{mname}",
-                                "source": st,
-                                "target": tt,
-                                "element_id": mid,
-                                "label": mname,
-                                "source_cardinality": "zeroOrMore",
-                                "target_cardinality": "zeroOrOne",
-                            }
-                        )
 
     return {
         "version": 1,
