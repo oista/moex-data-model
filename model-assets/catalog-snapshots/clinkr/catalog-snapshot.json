@@ -1,0 +1,78 @@
+{
+  "catalog_revision": "2026-10-12.fixture.1",
+  "digest": "sha256:abcd23b65d049c59400005c02d516e193024dbba0310ab8cfbf39aaa6c92b747",
+  "captured_at": "2026-10-12T00:00:00+00:00",
+  "catalogs": [
+    "clinkr",
+    "eam"
+  ],
+  "objects": [
+    {
+      "catalog": "clinkr",
+      "kind": "integration",
+      "external_id": "INT-00421",
+      "qualified_name": "clinkr/integration/INT-00421",
+      "spec_uri": "https://clinkr.moex.com/specifications/INT-00421/asyncapi/2.3.0",
+      "channel": "queue",
+      "integration_level": "interplatform",
+      "integration_class": "EDA",
+      "participants": [
+        {
+          "role": "producer",
+          "system_ref": "eam:system/TRADING_CORE",
+          "solution_ref": "eam:solution/MDM",
+          "platform_ref": "eam:platform/TRADING_PLATFORM"
+        },
+        {
+          "role": "consumer",
+          "system_ref": "eam:system/CRM_CORE",
+          "solution_ref": "eam:solution/CRM",
+          "platform_ref": "eam:platform/CLIENT_PLATFORM"
+        }
+      ],
+      "operations": [
+        {
+          "operation_id": "client.changed",
+          "channel_name": "client.changes",
+          "direction": "outbound"
+        }
+      ]
+    },
+    {
+      "catalog": "eam",
+      "kind": "system",
+      "external_id": "TRADING_CORE",
+      "qualified_name": "eam/system/TRADING_CORE"
+    },
+    {
+      "catalog": "eam",
+      "kind": "system",
+      "external_id": "CRM_CORE",
+      "qualified_name": "eam/system/CRM_CORE"
+    },
+    {
+      "catalog": "eam",
+      "kind": "solution",
+      "external_id": "MDM",
+      "qualified_name": "eam/solution/MDM"
+    },
+    {
+      "catalog": "eam",
+      "kind": "solution",
+      "external_id": "CRM",
+      "qualified_name": "eam/solution/CRM"
+    },
+    {
+      "catalog": "eam",
+      "kind": "platform",
+      "external_id": "TRADING_PLATFORM",
+      "qualified_name": "eam/platform/TRADING_PLATFORM"
+    },
+    {
+      "catalog": "eam",
+      "kind": "platform",
+      "external_id": "CLIENT_PLATFORM",
+      "qualified_name": "eam/platform/CLIENT_PLATFORM"
+    }
+  ]
+}
