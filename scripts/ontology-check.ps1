@@ -21,6 +21,7 @@ $Git = Join-Path $RepoRoot "packages/git-adapter"
 $Sem = Join-Path $RepoRoot "packages/semantic-mappings"
 $Tooling = Join-Path $RepoRoot "packages/linkml-tooling"
 $ExtSrc = Join-Path $RepoRoot "packages/external-sources"
+$RepoLoader = Join-Path $RepoRoot "packages/repository-loader"
 $Cli = Join-Path $RepoRoot "apps/cli"
 $Req = Join-Path $RepoRoot "requirements-ontology.txt"
 
@@ -36,6 +37,7 @@ Write-Host "Installing workspace packages + moex-model-cli[ontology]"
     -e "$Sem" `
     -e "$Tooling" `
     -e "$ExtSrc" `
+    -e "$RepoLoader" `
     -e "$Cli[ontology]"
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 if (Test-Path $Req) {
@@ -45,6 +47,10 @@ if (Test-Path $Req) {
 
 Push-Location $RepoRoot
 try {
+    Write-Host "Constraint matrix L3 fixtures (pyshacl; skipped in Stage 0)"
+    & $Python (Join-Path $RepoRoot "scripts/check_constraint_matrix.py") --no-write-doc --gate-strict
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
     Write-Host "pySHACL instance fixtures"
     & $Python -m pytest packages/specification-dams/tests/test_pyshacl_instances.py -v
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

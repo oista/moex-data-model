@@ -493,7 +493,8 @@ def _run_l3_fixtures(
         from pyshacl import validate
         from rdflib import Graph
     except ImportError:
-        errors.append(f"{inv.get('id')}: pyshacl/rdflib required for L3 runner")
+        # ADR-030: Stage 0 / publish-gate stay free of pyshacl; L3 fixtures run
+        # under Stage 8 ontology-check (requirements-ontology.txt).
         return
 
     iid = str(inv.get("id"))
