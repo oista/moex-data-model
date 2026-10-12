@@ -12,6 +12,8 @@ from moex_modeling import (
 )
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
+from moex_dams.mappings.iter_mappings import iter_mappings
+
 EXACT_MATCH_KINDS = frozenset({"exact", "equivalent"})
 
 
@@ -330,9 +332,7 @@ def check_conceptual_entities(data: dict[str, Any]) -> list[Diagnostic]:
                 targets.add(str(ref["target_ref"]))
         concept_targets[eid] = targets
 
-    for mapping in data.get("mappings") or []:
-        if not isinstance(mapping, dict):
-            continue
+    for mapping in iter_mappings(data):
         if str(mapping.get("mapping_type") or "") != "aligns_with":
             continue
         sources = [str(s) for s in (mapping.get("source_refs") or []) if s]

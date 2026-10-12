@@ -11,6 +11,8 @@ from moex_modeling import (
     DiagnosticSeverity,
 )
 
+from moex_dams.mappings.iter_mappings import iter_mappings
+
 
 def _diag(
     code: str,
@@ -448,9 +450,7 @@ def check_semantic_layer(data: dict[str, Any]) -> list[Diagnostic]:
     # --- LogicalAttribute representation & concept_ref ---
     # Build realizes map: logical_entity -> set of conceptual_entity ids
     realizes: dict[str, set[str]] = {}
-    for m in data.get("mappings") or []:
-        if not isinstance(m, dict):
-            continue
+    for m in iter_mappings(data):
         if str(m.get("mapping_type") or "") != "realizes":
             continue
         sources = m.get("source_refs") or []

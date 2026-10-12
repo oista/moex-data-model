@@ -5,6 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from moex_dams.mappings.iter_mappings import iter_mappings
+
 
 @dataclass(frozen=True, slots=True)
 class ElementIndexEntry:
@@ -23,7 +25,6 @@ _LIST_KINDS: tuple[tuple[str, str, str], ...] = (
     ("execution_assets", "ExecutionAsset", "physical"),
     ("data_structures", "DataStructure", "physical"),
     ("messages", "Message", "physical"),
-    ("mappings", "Mapping", "mapping"),
     ("relationships", "Relationship", "logical"),
 )
 
@@ -90,4 +91,16 @@ def build_element_index(data: dict[str, Any]) -> list[ElementIndexEntry]:
                             layer=layer,
                         )
                     )
+    for item in iter_mappings(data):
+        eid = item.get("element_id")
+        if not eid:
+            continue
+        out.append(
+            ElementIndexEntry(
+                element_id=str(eid),
+                element_kind="Mapping",
+                name=str(item.get("name") or ""),
+                layer="mapping",
+            )
+        )
     return out

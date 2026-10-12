@@ -12,6 +12,7 @@ from moex_modeling import (
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
 from moex_dams.mappings.dams_to_graph import package_index
+from moex_dams.mappings.iter_mappings import iter_mappings
 
 
 def _pointer(collection: str, element_id: str) -> str:
@@ -27,9 +28,7 @@ def check_references(body: LinkMLImplementationBody) -> tuple[Diagnostic, ...]:
     # outside this ModelPackage (ADR-021 conceptual_implementation_ref).
     external_ok: set[str] = set()
     if data.get("conceptual_implementation_ref"):
-        for mapping in data.get("mappings") or []:
-            if not isinstance(mapping, dict):
-                continue
+        for mapping in iter_mappings(data):
             if mapping.get("mapping_type") != "realizes":
                 continue
             for ref in mapping.get("target_refs") or []:
@@ -115,9 +114,7 @@ def check_references(body: LinkMLImplementationBody) -> tuple[Diagnostic, ...]:
             label="target_entity_ref",
         )
 
-    for mapping in data.get("mappings") or []:
-        if not isinstance(mapping, dict):
-            continue
+    for mapping in iter_mappings(data):
         mid = str(mapping.get("element_id") or "")
         sources = mapping.get("source_refs") or []
         targets = mapping.get("target_refs") or []

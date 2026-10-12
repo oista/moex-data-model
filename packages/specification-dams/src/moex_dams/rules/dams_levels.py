@@ -5,6 +5,8 @@ from __future__ import annotations
 from moex_modeling import ConformancePhase, Diagnostic, DiagnosticSeverity
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
+from moex_dams.mappings.iter_mappings import iter_mappings
+
 ENTERPRISE_CONCEPTUAL_REF = "moex:implementation:moex-enterprise-conceptual-model:0.1"
 
 
@@ -41,7 +43,7 @@ def check_dams_model_level(body: LinkMLImplementationBody) -> tuple[Diagnostic, 
         or (data.get("execution_assets") or [])
     )
     logical = data.get("logical_entities") or []
-    mappings = data.get("mappings") or []
+    mappings = list(iter_mappings(data))
     solution_ref = data.get("solution_ref")
     conceptual_ref = data.get("conceptual_implementation_ref")
 
