@@ -120,6 +120,7 @@ Name: moex_dams
 | [base_type_ref](base_type_ref.md) | Базовый тип, от которого наследуются параметры |
 | [binding_id](binding_id.md) |  |
 | [binding_ref](binding_ref.md) | Ссылка на внешнее описание binding |
+| [bound_catalog_revision](bound_catalog_revision.md) | Ревизия файл-снимка каталога, на которой подтверждена привязка flow (ADR-048) |
 | [broader_domain_ref](broader_domain_ref.md) | Более широкий концептуальный домен |
 | [broader_meaning_key](broader_meaning_key.md) | Ключ более широкого ValueMeaning в том же домене |
 | [business_importance](business_importance.md) |  |
@@ -128,6 +129,9 @@ Name: moex_dams
 | [cardinality_rationale](cardinality_rationale.md) | Обоснование отсутствия кардинальности для draft/imported связей |
 | [carrier_refs](carrier_refs.md) | Носители данных, участвующие в binding (не контейнеры) |
 | [catalog_id](catalog_id.md) |  |
+| [catalog_operation_ref](catalog_operation_ref.md) | Идентификатор операции или канала в каталоге интеграций (ADR-048), к которому... |
+| [catalog_participant_ref](catalog_participant_ref.md) | Внешний участник каталога (система/решение), чью роль в обмене занимает sourc... |
+| [catalog_revision](catalog_revision.md) | Ревизия файл-снимка каталога, зафиксированная в контрактном binding (ADR-048) |
 | [charset](charset.md) | Кодировка для string/binary |
 | [check_id](check_id.md) |  |
 | [children](children.md) | local_key дочерних узлов (object / union) |

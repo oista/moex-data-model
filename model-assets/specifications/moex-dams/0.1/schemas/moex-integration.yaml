@@ -20,10 +20,13 @@ classes:
     is_a: ModelElement
     mixins:
       - HasOwnership
-    description: Ссылочная проекция зарегистрированной интеграции; топология и канал являются данными Clinkr, а семантика — модели данных.
+    description: >
+      Ссылочная проекция зарегистрированной интеграции; топология и канал являются
+      данными Clinkr, а семантика — модели данных (ADR-048).
     slots:
       - integration_ref
       - contract_ref
+      - bound_catalog_revision
       - source_solution_ref
       - target_solution_ref
       - source_system_ref
@@ -51,6 +54,8 @@ classes:
       - schema_node_refs
       - transformation_mapping_refs
       - direction
+      - catalog_operation_ref
+      - catalog_participant_ref
     slot_usage:
       description:
         required: true
@@ -63,42 +68,68 @@ slots:
   contract_ref:
     range: DataContractReference
     inlined: false
+  bound_catalog_revision:
+    range: string
+    description: >
+      Ревизия файл-снимка каталога, на которой подтверждена привязка flow (ADR-048).
+      Источник stale_revision в drift-отчёте.
   source_solution_ref:
     range: ITSolution
     inlined: false
-    required: true
+    deprecated: >
+      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
+      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
   target_solution_ref:
     range: ITSolution
     inlined: false
-    required: true
+    deprecated: >
+      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
+      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
   source_system_ref:
     range: ITSystem
     inlined: false
-    required: true
+    deprecated: >
+      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
+      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
   target_system_ref:
     range: ITSystem
     inlined: false
-    required: true
+    deprecated: >
+      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
+      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
   source_platform_ref:
     range: ITPlatform
     inlined: false
-    required: true
+    deprecated: >
+      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
+      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
   target_platform_ref:
     range: ITPlatform
     inlined: false
-    required: true
+    deprecated: >
+      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
+      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
   integration_level:
     range: IntegrationLevelEnum
-    required: true
+    deprecated: >
+      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
+      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
   integration_class:
     range: IntegrationClassEnum
-    required: true
+    deprecated: >
+      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
+      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
   integration_channel:
     range: IntegrationChannelEnum
-    required: true
+    deprecated: >
+      Deprecated in DAMS 3.2.0 (ADR-048). Topology is owned by Clinkr/EAM;
+      read from TopologyView. Removed from authored DataFlow in the cleanup PR.
   integration_spec_ref:
     range: uri
-    required: true
+    deprecated: >
+      Deprecated in DAMS 3.2.0 (ADR-048). Spec URI is a catalog fact;
+      read from TopologyView / CatalogSnapshot. Removed from authored DataFlow
+      in the cleanup PR.
   entity_bindings:
     range: DataFlowEntityBinding
     multivalued: true
@@ -135,3 +166,13 @@ slots:
     range: Mapping
     multivalued: true
     inlined: false
+  catalog_operation_ref:
+    range: string
+    description: >
+      Идентификатор операции или канала в каталоге интеграций (ADR-048),
+      к которому привязан этот entity binding.
+  catalog_participant_ref:
+    range: uriorcurie
+    description: >
+      Внешний участник каталога (система/решение), чью роль в обмене занимает
+      source_model_ref; роль producer/consumer выражена слотом direction (ADR-048).

@@ -12,6 +12,8 @@
       
       DataFlow : aliases
         
+      DataFlow : bound_catalog_revision
+        
       DataFlow : contract_ref
         
           
@@ -79,7 +81,7 @@
     
         
         
-        DataFlow --> "1" IntegrationChannelEnum : integration_channel
+        DataFlow --> "0..1" IntegrationChannelEnum : integration_channel
         click IntegrationChannelEnum href "../IntegrationChannelEnum"
     
 
@@ -90,7 +92,7 @@
     
         
         
-        DataFlow --> "1" IntegrationClassEnum : integration_class
+        DataFlow --> "0..1" IntegrationClassEnum : integration_class
         click IntegrationClassEnum href "../IntegrationClassEnum"
     
 
@@ -101,7 +103,7 @@
     
         
         
-        DataFlow --> "1" IntegrationLevelEnum : integration_level
+        DataFlow --> "0..1" IntegrationLevelEnum : integration_level
         click IntegrationLevelEnum href "../IntegrationLevelEnum"
     
 
@@ -151,7 +153,7 @@
     
         
         
-        DataFlow --> "1" ITPlatform : source_platform_ref
+        DataFlow --> "0..1" ITPlatform : source_platform_ref
         click ITPlatform href "../ITPlatform"
     
 
@@ -162,7 +164,7 @@
     
         
         
-        DataFlow --> "1" ITSolution : source_solution_ref
+        DataFlow --> "0..1" ITSolution : source_solution_ref
         click ITSolution href "../ITSolution"
     
 
@@ -173,7 +175,7 @@
     
         
         
-        DataFlow --> "1" ITSystem : source_system_ref
+        DataFlow --> "0..1" ITSystem : source_system_ref
         click ITSystem href "../ITSystem"
     
 
@@ -186,7 +188,7 @@
     
         
         
-        DataFlow --> "1" ITPlatform : target_platform_ref
+        DataFlow --> "0..1" ITPlatform : target_platform_ref
         click ITPlatform href "../ITPlatform"
     
 
@@ -197,7 +199,7 @@
     
         
         
-        DataFlow --> "1" ITSolution : target_solution_ref
+        DataFlow --> "0..1" ITSolution : target_solution_ref
         click ITSolution href "../ITSolution"
     
 
@@ -208,7 +210,7 @@
     
         
         
-        DataFlow --> "1" ITSystem : target_system_ref
+        DataFlow --> "0..1" ITSystem : target_system_ref
         click ITSystem href "../ITSystem"
     
 

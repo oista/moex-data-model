@@ -1087,16 +1087,17 @@ glossary_term_refs varchar
 tags varchar
 integration_ref varchar [not null]
 contract_ref varchar
-source_solution_ref varchar [not null]
-target_solution_ref varchar [not null]
-source_system_ref varchar [not null]
-target_system_ref varchar [not null]
-source_platform_ref varchar [not null]
-target_platform_ref varchar [not null]
-integration_level varchar [not null]
-integration_class varchar [not null]
-integration_channel varchar [not null]
-integration_spec_ref varchar [not null]
+bound_catalog_revision varchar
+source_solution_ref varchar
+target_solution_ref varchar
+source_system_ref varchar
+target_system_ref varchar
+source_platform_ref varchar
+target_platform_ref varchar
+integration_level varchar
+integration_class varchar
+integration_channel varchar
+integration_spec_ref varchar
 entity_bindings varchar
 DataFlow_description varchar [not null]
 data_owner_ref varchar
@@ -1125,6 +1126,8 @@ carrier_refs varchar
 schema_node_refs varchar
 transformation_mapping_refs varchar
 direction varchar
+catalog_operation_ref varchar
+catalog_participant_ref varchar
 DataFlowEntityBinding_description varchar [not null]
 description varchar
 }
@@ -1144,6 +1147,7 @@ specification_version varchar [not null]
 implementation_version varchar [not null]
 contract_ref varchar
 integration_ref varchar [not null]
+catalog_revision varchar
 model_package_ref varchar [not null]
 model_version varchar [not null]
 model_revision varchar [not null]

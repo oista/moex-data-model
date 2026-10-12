@@ -1,0 +1,251 @@
+id: https://data.moex.com/dams/topology/v0.1
+name: moex_topology
+version: 0.1.0
+title: MOEX topology catalog snapshot and TopologyView
+description: >
+  File-snapshot catalog contract and materialized TopologyView read model
+  (ADR-048). Not part of the DAMS domain model; do not import from moex-dams.yaml.
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  xsd: http://www.w3.org/2001/XMLSchema#
+  dams: https://data.moex.com/dams/
+  topo: https://data.moex.com/dams/topology/
+imports:
+  - linkml:types
+default_prefix: topo
+default_range: string
+annotations:
+  dams.materialized_module: "true"
+
+enums:
+  CatalogObjectKindEnum:
+    permissible_values:
+      integration:
+        description: Integration / exchange registered in Clinkr (or peer catalog).
+      interface:
+        description: Interface or API surface.
+      system:
+        description: IT system (often projected from EAM).
+      solution:
+        description: IT solution.
+      platform:
+        description: IT platform.
+      channel:
+        description: Messaging or transport channel.
+  ParticipantRoleEnum:
+    permissible_values:
+      producer:
+      consumer:
+      both:
+  DriftCodeEnum:
+    permissible_values:
+      orphan_ref:
+      unknown_catalog:
+      topology_changed:
+      unmapped_exchange:
+      stale_revision:
+  DriftSeverityEnum:
+    permissible_values:
+      error:
+      warning:
+  BindingStatusEnum:
+    description: Resolver output only; never authored on DAMS instances.
+    permissible_values:
+      resolved:
+      stale:
+      broken:
+      unmapped:
+
+classes:
+  CatalogSnapshot:
+    tree_root: true
+    description: File snapshot of an integration / EAM catalog used by CI (ADR-048).
+    slots:
+      - catalog_revision
+      - digest
+      - captured_at
+      - catalogs
+      - objects
+
+  CatalogObject:
+    description: One object in the snapshot; unique by (catalog, kind, external_id).
+    slots:
+      - catalog
+      - kind
+      - external_id
+      - qualified_name
+      - spec_uri
+      - channel
+      - integration_level
+      - integration_class
+      - participants
+      - operations
+
+  CatalogParticipant:
+    description: Participant of an integration object in the snapshot.
+    slots:
+      - role
+      - system_ref
+      - solution_ref
+      - platform_ref
+
+  CatalogOperation:
+    description: Operation or channel endpoint on an integration object.
+    slots:
+      - operation_id
+      - channel_name
+      - direction
+
+  TopologyView:
+    tree_root: true
+    description: Materialized topology read model; generated only (ADR-048).
+    annotations:
+      materialized: "true"
+    slots:
+      - catalog_revision
+      - built_at
+      - snapshot_digest
+      - facts
+
+  TopologyFact:
+    description: Effective topology for one DataFlow resolved from the snapshot.
+    slots:
+      - flow_ref
+      - integration_ref
+      - binding_status
+      - source_solution_ref
+      - target_solution_ref
+      - source_system_ref
+      - target_system_ref
+      - source_platform_ref
+      - target_platform_ref
+      - integration_level
+      - integration_class
+      - integration_channel
+      - integration_spec_ref
+
+  DriftFinding:
+    description: One drift row produced by the catalog resolver.
+    slots:
+      - code
+      - severity
+      - subject_ref
+      - message
+      - catalog_revision
+
+slots:
+  catalog_revision:
+    range: string
+    required: true
+    description: Opaque revision / etag of the catalog snapshot.
+  digest:
+    range: string
+    required: true
+    description: sha256:… digest of the snapshot payload (canonical JSON).
+  captured_at:
+    range: datetime
+    description: When the snapshot file was produced or refreshed.
+  catalogs:
+    range: string
+    multivalued: true
+    inlined: false
+    description: Catalog names present in this file (e.g. clinkr, eam).
+  objects:
+    range: CatalogObject
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    required: true
+  catalog:
+    range: string
+    required: true
+  kind:
+    range: CatalogObjectKindEnum
+    required: true
+  external_id:
+    range: string
+    required: true
+  qualified_name:
+    range: string
+    description: Surrogate key when stable external_id is unavailable.
+  spec_uri:
+    range: uri
+  channel:
+    range: string
+  integration_level:
+    range: string
+  integration_class:
+    range: string
+  participants:
+    range: CatalogParticipant
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  operations:
+    range: CatalogOperation
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  role:
+    range: ParticipantRoleEnum
+    required: true
+  system_ref:
+    range: uriorcurie
+  solution_ref:
+    range: uriorcurie
+  platform_ref:
+    range: uriorcurie
+  operation_id:
+    range: string
+  channel_name:
+    range: string
+  direction:
+    range: string
+  built_at:
+    range: datetime
+    required: true
+  snapshot_digest:
+    range: string
+    required: true
+  facts:
+    range: TopologyFact
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  flow_ref:
+    range: uriorcurie
+    required: true
+  integration_ref:
+    range: uriorcurie
+    required: true
+  binding_status:
+    range: BindingStatusEnum
+    required: true
+  source_solution_ref:
+    range: uriorcurie
+  target_solution_ref:
+    range: uriorcurie
+  source_system_ref:
+    range: uriorcurie
+  target_system_ref:
+    range: uriorcurie
+  source_platform_ref:
+    range: uriorcurie
+  target_platform_ref:
+    range: uriorcurie
+  integration_channel:
+    range: string
+  integration_spec_ref:
+    range: uri
+  code:
+    range: DriftCodeEnum
+    required: true
+  severity:
+    range: DriftSeverityEnum
+    required: true
+  subject_ref:
+    range: uriorcurie
+  message:
+    range: string
+    required: true

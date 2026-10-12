@@ -1909,7 +1909,7 @@
         },
         "DataFlow": {
             "additionalProperties": false,
-            "description": "\u0421\u0441\u044b\u043b\u043e\u0447\u043d\u0430\u044f \u043f\u0440\u043e\u0435\u043a\u0446\u0438\u044f \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u043e\u0439 \u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u0438; \u0442\u043e\u043f\u043e\u043b\u043e\u0433\u0438\u044f \u0438 \u043a\u0430\u043d\u0430\u043b \u044f\u0432\u043b\u044f\u044e\u0442\u0441\u044f \u0434\u0430\u043d\u043d\u044b\u043c\u0438 Clinkr, \u0430 \u0441\u0435\u043c\u0430\u043d\u0442\u0438\u043a\u0430 \u2014 \u043c\u043e\u0434\u0435\u043b\u0438 \u0434\u0430\u043d\u043d\u044b\u0445.",
+            "description": "\u0421\u0441\u044b\u043b\u043e\u0447\u043d\u0430\u044f \u043f\u0440\u043e\u0435\u043a\u0446\u0438\u044f \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u043e\u0439 \u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u0438; \u0442\u043e\u043f\u043e\u043b\u043e\u0433\u0438\u044f \u0438 \u043a\u0430\u043d\u0430\u043b \u044f\u0432\u043b\u044f\u044e\u0442\u0441\u044f \u0434\u0430\u043d\u043d\u044b\u043c\u0438 Clinkr, \u0430 \u0441\u0435\u043c\u0430\u043d\u0442\u0438\u043a\u0430 \u2014 \u043c\u043e\u0434\u0435\u043b\u0438 \u0434\u0430\u043d\u043d\u044b\u0445 (ADR-048).",
             "properties": {
                 "aliases": {
                     "items": {
@@ -1917,6 +1917,13 @@
                     },
                     "type": [
                         "array",
+                        "null"
+                    ]
+                },
+                "bound_catalog_revision": {
+                    "description": "\u0420\u0435\u0432\u0438\u0437\u0438\u044f \u0444\u0430\u0439\u043b-\u0441\u043d\u0438\u043c\u043a\u0430 \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430, \u043d\u0430 \u043a\u043e\u0442\u043e\u0440\u043e\u0439 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0430 \u043f\u0440\u0438\u0432\u044f\u0437\u043a\u0430 flow (ADR-048). \u0418\u0441\u0442\u043e\u0447\u043d\u0438\u043a stale_revision \u0432 drift-\u043e\u0442\u0447\u0451\u0442\u0435.\n",
+                    "type": [
+                        "string",
                         "null"
                     ]
                 },
@@ -1982,7 +1989,10 @@
                 },
                 "integration_spec_ref": {
                     "format": "uri",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "lifecycle_status": {
                     "$ref": "#/$defs/LifecycleStatusEnum"
@@ -2004,13 +2014,22 @@
                     ]
                 },
                 "source_platform_ref": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "source_solution_ref": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "source_system_ref": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "tags": {
                     "items": {
@@ -2022,13 +2041,22 @@
                     ]
                 },
                 "target_platform_ref": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "target_solution_ref": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "target_system_ref": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "title": {
                     "type": [
@@ -2053,16 +2081,6 @@
             },
             "required": [
                 "integration_ref",
-                "source_solution_ref",
-                "target_solution_ref",
-                "source_system_ref",
-                "target_system_ref",
-                "source_platform_ref",
-                "target_platform_ref",
-                "integration_level",
-                "integration_class",
-                "integration_channel",
-                "integration_spec_ref",
                 "name",
                 "description",
                 "lifecycle_status",
@@ -2092,6 +2110,20 @@
                     "minItems": 1,
                     "type": [
                         "array",
+                        "null"
+                    ]
+                },
+                "catalog_operation_ref": {
+                    "description": "\u0418\u0434\u0435\u043d\u0442\u0438\u0444\u0438\u043a\u0430\u0442\u043e\u0440 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0438 \u0438\u043b\u0438 \u043a\u0430\u043d\u0430\u043b\u0430 \u0432 \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0435 \u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u0439 (ADR-048), \u043a \u043a\u043e\u0442\u043e\u0440\u043e\u043c\u0443 \u043f\u0440\u0438\u0432\u044f\u0437\u0430\u043d \u044d\u0442\u043e\u0442 entity binding.\n",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "catalog_participant_ref": {
+                    "description": "\u0412\u043d\u0435\u0448\u043d\u0438\u0439 \u0443\u0447\u0430\u0441\u0442\u043d\u0438\u043a \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430 (\u0441\u0438\u0441\u0442\u0435\u043c\u0430/\u0440\u0435\u0448\u0435\u043d\u0438\u0435), \u0447\u044c\u044e \u0440\u043e\u043b\u044c \u0432 \u043e\u0431\u043c\u0435\u043d\u0435 \u0437\u0430\u043d\u0438\u043c\u0430\u0435\u0442 source_model_ref; \u0440\u043e\u043b\u044c producer/consumer \u0432\u044b\u0440\u0430\u0436\u0435\u043d\u0430 \u0441\u043b\u043e\u0442\u043e\u043c direction (ADR-048).\n",
+                    "type": [
+                        "string",
                         "null"
                     ]
                 },
@@ -2216,6 +2248,13 @@
                     },
                     "type": [
                         "array",
+                        "null"
+                    ]
+                },
+                "catalog_revision": {
+                    "description": "\u0420\u0435\u0432\u0438\u0437\u0438\u044f \u0444\u0430\u0439\u043b-\u0441\u043d\u0438\u043c\u043a\u0430 \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430, \u0437\u0430\u0444\u0438\u043a\u0441\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u0430\u044f \u0432 \u043a\u043e\u043d\u0442\u0440\u0430\u043a\u0442\u043d\u043e\u043c binding (ADR-048). \u0421\u043c\u0435\u043d\u0430 \u0442\u043e\u043f\u043e\u043b\u043e\u0433\u0438\u0438 \u0431\u0435\u0437 \u043f\u0435\u0440\u0435\u0441\u0431\u043e\u0440\u043a\u0438 \u043a\u043e\u043d\u0442\u0440\u0430\u043a\u0442\u0430 \u0434\u0430\u0451\u0442 drift warning.\n",
+                    "type": [
+                        "string",
                         "null"
                     ]
                 },
@@ -8505,5 +8544,5 @@
     ],
     "title": "moex_dams",
     "type": "object",
-    "version": "3.1.0"
+    "version": "3.2.0"
 }
