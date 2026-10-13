@@ -198,3 +198,37 @@ def test_alignment_dual_path_confidence_conflict() -> None:
     }
     diags = check_alignment_dual_path_consistency(data)
     assert any(d.diagnostic_code == "DAMS-INV-057" for d in diags)
+
+
+def test_alignment_dual_path_approval_status_conflict() -> None:
+    data = {
+        "conceptual_entities": [
+            {
+                "element_id": "dams:concept/C",
+                "external_class_refs": [
+                    {
+                        "target_ref": "https://example.org/T",
+                        "approval_status": "approved",
+                    }
+                ],
+            }
+        ],
+        "aligns_with_mappings": [
+            {
+                "element_id": "dams:map/a",
+                "mapping_type": "aligns_with",
+                "source_refs": ["dams:concept/C"],
+                "target_refs": ["https://example.org/T"],
+                "approval_status": "rejected",
+            }
+        ],
+    }
+    diags = check_alignment_dual_path_consistency(data)
+    assert any(d.diagnostic_code == "DAMS-INV-057" for d in diags)
+    msg = next(d.diagnostic_message for d in diags if d.diagnostic_code == "DAMS-INV-057")
+    assert "approval_status" in msg
+    assert all(
+        any(det.detail_key == "invariant_id" and det.detail_value == "INV-057" for det in d.diagnostic_details)
+        for d in diags
+        if d.diagnostic_code == "DAMS-INV-057"
+    )

@@ -87,6 +87,7 @@ def test_known_waivers_and_level_status() -> None:
         "INV-055",
         "INV-056",
         "INV-057",
+        "INV-058",
     ):
         assert statuses[inv_id] == "implemented"
     assert level_status["INV-020"]["L3"] == "waived"

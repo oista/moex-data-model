@@ -62,9 +62,9 @@ Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decision
 | [ADR-043](ADR-043-transitional-tags-registry.md) | Transitional element tags registry | Accepted | transitional tags registry |
 | [ADR-044](ADR-044-model-element-decomposition.md) | ModelElement decomposition | Accepted | ModelElement mixins (moex-base) |
 | [ADR-045](ADR-045-executable-constraint-matrix.md) | Executable constraint matrix | Accepted | constraint matrix L1/L2/L3 |
-| [ADR-046](ADR-046-typed-mapping-endpoints.md) | Typed Mapping endpoints (subclasses + separate collections) | Accepted | typed Mapping collections; schema 3.1.0 |
+| [ADR-046](ADR-046-typed-mapping-endpoints.md) | Typed Mapping endpoints (subclasses + separate collections) | Accepted | typed Mapping collections; series schema →3.1.0 (see [timeline](../migration/SCHEMA-VERSION-TIMELINE.md)) |
 | [ADR-047](ADR-047-repository-manifest-and-lock.md) | Repository manifest and lock | Accepted | repository manifest + lock |
-| [ADR-048](ADR-048-topology-ownership.md) | Topology ownership (Clinkr/EAM SoT, DAMS semantic bindings) | Accepted | topology ownership; series schema 3.2.0→4.0.0 |
+| [ADR-048](ADR-048-topology-ownership.md) | Topology ownership (Clinkr/EAM SoT, DAMS semantic bindings) | Accepted | topology ownership; series schema 3.2.0→4.0.0 (see [timeline](../migration/SCHEMA-VERSION-TIMELINE.md)) |
 | [ADR-049](ADR-049-governance-assignment-authority.md) | Governance assignment authority (assignments over cascade; EffectiveGovernanceView) | Accepted | schema 5.0.0; INV-054..056; D9 module split; see governance-inventory.md |
 | [ADR-050](ADR-050-containment-parent-refs.md) | Containment parent refs (owner equality / INV-052) | Accepted | containment equality; Wave C3 |
 | [ADR-051](ADR-051-dams-schema-compatibility.md) | DAMS schema compatibility (semver + release trains) | Accepted | aggregate semver; timeline; evidence gate |
