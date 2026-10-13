@@ -1,6 +1,6 @@
 id: https://data.moex.com/dams/v0.1
 name: moex_dams
-version: 4.1.0
+version: 4.2.0
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml: https://w3id.org/linkml/
@@ -38,6 +38,7 @@ classes:
       - dimensions
       - classification_assignments
       - policy_bindings
+      - ownership_assignments
 
 slots:
   repository_id:
@@ -81,6 +82,11 @@ slots:
     inlined_as_list: true
   policy_bindings:
     range: PolicyBinding
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  ownership_assignments:
+    range: OwnershipAssignment
     multivalued: true
     inlined: true
     inlined_as_list: true
