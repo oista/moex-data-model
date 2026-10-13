@@ -1,5 +1,5 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
 normative: false
 supersedes: []
@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-016: Publication section kinds and profiles
 
 **Date:** 2026-09-28  
-**Status:** Proposed  
+**Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Related:** [ADR-014](ADR-014-fibo-profile-metamodel.md), [ADR-010](ADR-010-owl-not-primary-validation.md), [ADR-015](ADR-015-viewer-ui-atlas.md), [ADR-019](ADR-019-publication-contract-inheritance.md), [ADR-024](ADR-024-unified-class-entity.md), [ADR-028](ADR-028-package-documentation-section.md)  
 **Schema:** [moex-dsp.yaml](../../model-assets/specifications/moex-dsp/0.1/schemas/moex-dsp.yaml)  

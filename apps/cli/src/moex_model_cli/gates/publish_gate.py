@@ -18,6 +18,11 @@ from moex_model_cli.gates.digests import (
     rdf_ground_digest,
 )
 
+_IDENTITY_FIELDS = ("schema_version", "media_type", "role")
+_SCHEMA = Path(
+    "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml"
+)
+
 
 def _check_manifest_file(
     *,
@@ -82,6 +87,48 @@ def _smoke(paths: dict[str, Path]) -> list[str]:
                 artifact_path=paths["json_schema"],
             )
         )
+    return errors
+
+
+def _aggregate_schema_version(root: Path) -> str | None:
+    schema = root / _SCHEMA
+    if not schema.is_file():
+        return None
+    for line in schema.read_text(encoding="utf-8").splitlines():
+        if line.startswith("version:"):
+            return line.split(":", 1)[1].strip().strip('"').strip("'")
+    return None
+
+
+def _manifest_identity_ok(root: Path) -> list[str]:
+    """ADR-052 D6: tracked manifests carry Distribution identity fields."""
+    expected_version = _aggregate_schema_version(root)
+    if expected_version is None:
+        return [f"publish-gate: missing or invalid {_SCHEMA.as_posix()} version"]
+    mans = root / "generated" / "manifests"
+    if not mans.is_dir():
+        return ["publish-gate: missing generated/manifests"]
+    errors: list[str] = []
+    paths = sorted(mans.glob("moex-dams-*.json"))
+    if not paths:
+        return ["publish-gate: no moex-dams-*.json manifests"]
+    for path in paths:
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            errors.append(f"publish-gate: {path.name} unreadable: {exc}")
+            continue
+        for field in _IDENTITY_FIELDS:
+            if not data.get(field):
+                errors.append(
+                    f"publish-gate: {path.name} missing identity field {field}"
+                )
+        actual = data.get("schema_version")
+        if actual and actual != expected_version:
+            errors.append(
+                f"publish-gate: {path.name} schema_version mismatch "
+                f"(manifest={actual}, schema={expected_version})"
+            )
     return errors
 
 
@@ -201,6 +248,10 @@ def verify_publish_gate(
         return errors
 
     errors.extend(_smoke(paths))
+    if errors:
+        return errors
+
+    errors.extend(_manifest_identity_ok(repo))
     if errors:
         return errors
 

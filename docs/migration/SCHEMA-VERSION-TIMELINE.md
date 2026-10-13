@@ -32,7 +32,7 @@ CI: `tests/architecture/test_schema_version_timeline.py` fails if the aggregate 
 | Per-module schema `version` | often `0.1.0` | Module-local; prefer aggregate for release notes |
 | Spec envelope `specification.yaml` | `0.1.0` | Product / catalogue label |
 | Generated artifact folder | `generated/.../moex-dams/0.1/` | Tracks catalogue path, not aggregate semver |
-| Instance `ModelPackage.api_version` | `dams.moex/v0.1` | **Misnamed** — see ADR-052 (`dams_specification_version`) |
+| Instance `ModelPackage.api_version` | `dams.moex/v0.1` | **Misnamed** — DAMS specification / product label, **not** HTTP API version; rename to `dams_specification_version` planned for **6.0.0** ([ADR-052](../adr/ADR-052-identity-and-versioning.md) D2). Lookup: [identity-map.md](../architecture/identity-map.md). |
 
 ## Related digests (not schema semver)
 

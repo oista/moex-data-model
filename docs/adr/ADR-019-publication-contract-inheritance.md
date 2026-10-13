@@ -1,5 +1,5 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
 normative: false
 supersedes: []
@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-019: Publication contract inheritance
 
 **Date:** 2026-09-28  
-**Status:** Proposed  
+**Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md) §17  
 **Related:** [ADR-016](ADR-016-publication-section-kinds-and-profiles.md), [ADR-014](ADR-014-fibo-profile-metamodel.md), [ADR-015](ADR-015-viewer-ui-atlas.md), [ADR-013](ADR-013-specification-requirements-catalog.md)  
 **Schema:** [moex-dsp.yaml](../../model-assets/specifications/moex-dsp/0.1/schemas/moex-dsp.yaml)

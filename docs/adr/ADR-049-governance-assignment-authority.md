@@ -79,7 +79,9 @@ Mirror [ADR-048](ADR-048-topology-ownership.md) / ADR-047: `EffectiveGovernanceV
 | PR-4 | INV-042+ + fixtures + formal_checks / viewer / diff consumers |
 | PR-5 | Remove deprecated slots (major), migration script, docs, regen |
 
-Schema diff and data diff must not mix. `check_all` green on each PR separately. New invariants start at **INV-042** (INV-038…041 are topology).
+`check_all` green on each PR separately. Executable invariants for this series landed as **INV-054…INV-056** (INV-038…041 are topology; Wave C took INV-042…053).
+
+**PR-5 exception (schema + data + regen):** for this series only, PR-5 may combine in one reviewable commit (or one merge PR containing that commit): (1) breaking schema removal of deprecated slots, (2) example/data migration via the series migration script, (3) regeneration of `generated/**` and related docs. PR-0…PR-4 still keep schema diffs and data migrations in separate commits. This exception amends the default “schema diff and data migration must not mix” rule (see `.cursor/rules/multi-pr-series.mdc`) so the major bump, migration, and regen stay atomic and reviewable as one topic.
 
 ### D7. Audit name map (Wave D4)
 

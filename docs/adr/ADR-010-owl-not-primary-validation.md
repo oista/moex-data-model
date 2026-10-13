@@ -1,15 +1,15 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
 normative: false
 supersedes: []
-superseded_by: MODELING_ARCHITECTURE.md
+superseded_by: []
 ---
 
 # ADR-010: OWL не применяется как основной механизм validation
 
 **Date:** 2026-09-28  
-**Status:** Proposed  
+**Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Workbench detail:** [linkml_architecture.md](../architecture/linkml_architecture.md) «Ontology Engine»  
 **Catalog:** [ontology-catalog.md](../architecture/ontology-catalog.md)

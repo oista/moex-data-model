@@ -17,32 +17,32 @@ Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decision
 
 | ADR | Title | Status | Scope / schema (on `main`) |
 |---|---|---|---|
-| [ADR-001](ADR-001-linkml-yaml-canonical.md) | LinkML YAML — канонический authoring format для DAMS | Proposed | canonical authoring |
-| [ADR-002](ADR-002-git-published-source.md) | Git — источник опубликованных версий | Proposed | published source |
-| [ADR-003](ADR-003-postgres-operational.md) | PostgreSQL — операционное хранилище и поисковая проекция | Proposed | Workbench ops store (no code yet) |
-| [ADR-004](ADR-004-modular-monolith.md) | Модульный монолит вместо микросервисов | Proposed | packages + apps |
-| [ADR-005](ADR-005-drawdb-isolated.md) | drawDB — изолированное self-hosted приложение | Proposed | apps/drawdb + adapter |
-| [ADR-006](ADR-006-dbml-projection.md) | DBML — проекция, а не источник истины | Proposed | projection; Stage 5 MVP |
-| [ADR-007](ADR-007-pydantic-dto-not-validator.md) | Pydantic — API DTO, но не единственный validator | Proposed | API DTO pattern |
+| [ADR-001](ADR-001-linkml-yaml-canonical.md) | LinkML YAML — канонический authoring format для DAMS | Accepted | canonical authoring |
+| [ADR-002](ADR-002-git-published-source.md) | Git — источник опубликованных версий | Accepted | published source |
+| [ADR-003](ADR-003-postgres-operational.md) | PostgreSQL — операционное хранилище и поисковая проекция | Proposed | Workbench ops store (SQLite default; PG compose exists) |
+| [ADR-004](ADR-004-modular-monolith.md) | Модульный монолит вместо микросервисов | Accepted | packages + apps |
+| [ADR-005](ADR-005-drawdb-isolated.md) | drawDB — изолированное self-hosted приложение | Accepted | apps/drawdb + adapter |
+| [ADR-006](ADR-006-dbml-projection.md) | DBML — проекция, а не источник истины | Accepted | projection; Stage 5 MVP |
+| [ADR-007](ADR-007-pydantic-dto-not-validator.md) | Pydantic — API DTO, но не единственный validator | Accepted | API DTO pattern |
 | [ADR-008](ADR-008-linkml-map-provider.md) | LinkML Map скрывается за provider interface | Accepted | provider interface |
 | [ADR-009](ADR-009-schema-automator-draft-only.md) | schema-automator используется только для draft import | Accepted | draft import only |
-| [ADR-010](ADR-010-owl-not-primary-validation.md) | OWL не применяется как основной механизм validation | Proposed | OWL not primary validation |
-| [ADR-011](ADR-011-reproducible-artifacts.md) | Generated artifacts должны быть воспроизводимыми | Proposed | golden / reproducible artifacts |
-| [ADR-012](ADR-012-semantic-diff-review.md) | Все изменения публикуются через semantic diff и review | Proposed | semantic diff / review |
-| [ADR-013](ADR-013-specification-requirements-catalog.md) | Каталог требований к спецификации в DAMS LinkML | Proposed | requirements catalog |
-| [ADR-014](ADR-014-fibo-profile-metamodel.md) | FIBO profile — ReferenceSpecification; domain content outside Spec explorer | Proposed | FIBO profile metamodel |
-| [ADR-015](ADR-015-viewer-ui-atlas.md) | MOEX Publication Viewer — UI/UX Design Standard (MOEX Atlas) | Proposed | viewer UI atlas |
-| [ADR-016](ADR-016-publication-section-kinds-and-profiles.md) | Publication section kinds and profiles | Proposed | publication section kinds |
-| [ADR-017](ADR-017-external-specification-source-sync.md) | External specification source sync | Proposed | external source sync |
-| [ADR-018](ADR-018-ontology-application-implementation.md) | Ontology SpecificationImplementation = application / extension ontology | Proposed | ontology SpecImpl |
-| [ADR-019](ADR-019-publication-contract-inheritance.md) | Publication contract inheritance | Proposed | publication contract inheritance |
-| [ADR-020](ADR-020-external-specification-scope-and-term-selection.md) | External Specification Scope and Term Selection | Proposed | scope vs import |
-| [ADR-021](ADR-021-dams-implementation-profile-and-levels.md) | DAMS-specific implementation profile and model levels | Proposed | dams-data-model levels |
+| [ADR-010](ADR-010-owl-not-primary-validation.md) | OWL не применяется как основной механизм validation | Accepted | OWL not primary validation |
+| [ADR-011](ADR-011-reproducible-artifacts.md) | Generated artifacts должны быть воспроизводимыми | Accepted | golden / reproducible artifacts |
+| [ADR-012](ADR-012-semantic-diff-review.md) | Все изменения публикуются через semantic diff и review | Proposed | semantic diff shipped; mandatory publish/PR gate still open |
+| [ADR-013](ADR-013-specification-requirements-catalog.md) | Каталог требований к спецификации в DAMS LinkML | Accepted | requirements catalog |
+| [ADR-014](ADR-014-fibo-profile-metamodel.md) | FIBO profile — ReferenceSpecification; domain content outside Spec explorer | Accepted | FIBO profile metamodel |
+| [ADR-015](ADR-015-viewer-ui-atlas.md) | MOEX Publication Viewer — UI/UX Design Standard (MOEX Atlas) | Accepted | viewer UI atlas |
+| [ADR-016](ADR-016-publication-section-kinds-and-profiles.md) | Publication section kinds and profiles | Accepted | publication section kinds |
+| [ADR-017](ADR-017-external-specification-source-sync.md) | External specification source sync | Proposed | external source sync (partial) |
+| [ADR-018](ADR-018-ontology-application-implementation.md) | Ontology SpecificationImplementation = application / extension ontology | Proposed | ontology SpecImpl (skeleton) |
+| [ADR-019](ADR-019-publication-contract-inheritance.md) | Publication contract inheritance | Accepted | publication contract inheritance |
+| [ADR-020](ADR-020-external-specification-scope-and-term-selection.md) | External Specification Scope and Term Selection | Proposed | scope vs import (MVP) |
+| [ADR-021](ADR-021-dams-implementation-profile-and-levels.md) | DAMS-specific implementation profile and model levels | Accepted | dams-data-model levels |
 | [ADR-022](ADR-022-solution-xlsx-import.md) | Object/ObjectAttribute xlsx → DAMS solution import | Accepted | solution_xlsx import |
-| [ADR-023](ADR-023-governed-property-cascade.md) | Containment cascade of governed properties | Proposed | governed property cascade |
-| [ADR-024](ADR-024-unified-class-entity.md) | Unified Class entity across LinkML and OWL publications | Proposed | unified Class entity |
-| [ADR-025](ADR-025-definition-cascade-and-glossary.md) | Definition cascade and glossary terminology | Proposed | definition cascade / glossary |
-| [ADR-026](ADR-026-cmd-entity-metamodel.md) | Conceptual entity metamodel (tier, genesis, relation terms) | Proposed | conceptual entity metamodel |
+| [ADR-023](ADR-023-governed-property-cascade.md) | Containment cascade of governed properties | Accepted | governed property cascade |
+| [ADR-024](ADR-024-unified-class-entity.md) | Unified Class entity across LinkML and OWL publications | Proposed | unified Class entity (partial viewer) |
+| [ADR-025](ADR-025-definition-cascade-and-glossary.md) | Definition cascade and glossary terminology | Accepted | definition cascade / glossary |
+| [ADR-026](ADR-026-cmd-entity-metamodel.md) | Conceptual entity metamodel (tier, genesis, relation terms) | Accepted | conceptual entity metamodel |
 | [ADR-027](ADR-027-glossary-term-relations.md) | Glossary term relations (hierarchy vs associative vs equivalence) | Proposed | glossary term relations |
 | [ADR-028](ADR-028-package-documentation-section.md) | Package documentation section | Proposed | package documentation section |
 | [ADR-029](ADR-029-cdm-from-er-sketch-and-realization.md) | Conceptualizing ER sketches into CDM; realization completeness (not subclass) | Proposed | ER sketch → CDM; no ConceptualAttribute |
@@ -64,11 +64,11 @@ Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decision
 | [ADR-045](ADR-045-executable-constraint-matrix.md) | Executable constraint matrix | Accepted | constraint matrix L1/L2/L3 |
 | [ADR-046](ADR-046-typed-mapping-endpoints.md) | Typed Mapping endpoints (subclasses + separate collections) | Accepted | typed Mapping collections; schema 3.1.0 |
 | [ADR-047](ADR-047-repository-manifest-and-lock.md) | Repository manifest and lock | Accepted | repository manifest + lock |
-| [ADR-048](ADR-048-topology-ownership.md) | Topology ownership (Clinkr/EAM SoT, DAMS semantic bindings) | Accepted | topology ownership; schema 4.0.0→4.1.0 |
+| [ADR-048](ADR-048-topology-ownership.md) | Topology ownership (Clinkr/EAM SoT, DAMS semantic bindings) | Accepted | topology ownership; series schema 3.2.0→4.0.0 |
 | [ADR-049](ADR-049-governance-assignment-authority.md) | Governance assignment authority (assignments over cascade; EffectiveGovernanceView) | Accepted | schema 5.0.0; INV-054..056; D9 module split; see governance-inventory.md |
 | [ADR-050](ADR-050-containment-parent-refs.md) | Containment parent refs (owner equality / INV-052) | Accepted | containment equality; Wave C3 |
 | [ADR-051](ADR-051-dams-schema-compatibility.md) | DAMS schema compatibility (semver + release trains) | Accepted | aggregate semver; timeline; evidence gate |
-| [ADR-052](ADR-052-identity-and-versioning.md) | Identity and versioning (five layers) | Accepted | identity map; api_version rename deferred; id_prefixes lint |
+| [ADR-052](ADR-052-identity-and-versioning.md) | Identity and versioning (five layers) | Accepted | identity map; operational Distribution record; api_version rename deferred; id_prefixes lint |
 | [ADR-053](ADR-053-qualified-assertion.md) | Qualified assertion pattern | Accepted | HasAssertionMetadata in schema 5.1.0; INV-057; Transformation end date |
 | [ADR-054](ADR-054-repository-aggregates-and-manifest.md) | Repository aggregates and manifest (P1b) | Accepted | validation composite; package-only DocumentKind; path-scoped orphans; INV-058 global element_id |
 | [ADR-055](ADR-055-integration-source-of-truth.md) | Integration source of truth (Clinkr/EAM topology; audit Wave F) | Accepted | Integration SoT; audit 0.2 remap; P2 backlog |
@@ -83,5 +83,7 @@ Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decision
 ## Notes
 
 - Aggregate DAMS schema version on `main`: see `model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml` (`version:` field). Catalogue path `0.1/` is the product label; it is not the LinkML semver. Living table: [SCHEMA-VERSION-TIMELINE.md](../migration/SCHEMA-VERSION-TIMELINE.md) (ADR-051).
+- “What changed?” lookup across concept / version / revision / distribution: [identity-map.md](../architecture/identity-map.md) (ADR-052).
 - `superseded_by: MODELING_ARCHITECTURE.md` is reserved for drafts that are fully absorbed; Accepted ADRs use `superseded_by: []`.
 - Post-audit P2 backlog (adapters, Distribution, vocabularies, ADR-053 follow-ups): [P2-BACKLOG.md](../migration/P2-BACKLOG.md) (ADR-055).
+- Audit R2-11 (2026-10-14): formal acceptance of clearly implemented ADRs **001, 002, 004–007, 010, 011, 013–016, 019, 021, 023, 025, 026**. Left **Proposed** where evidence is incomplete: **003** (ops store), **012** (mandatory semantic-diff gate), **017/018/020** (external/ontology wiring), **024/027/028/029** (partial or process-only).

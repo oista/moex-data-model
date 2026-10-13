@@ -92,6 +92,11 @@ def generate(*, out_root: Path, manifest_path: Path) -> tuple[Path, str]:
     except ValueError:
         output_rel = init_py.as_posix()
 
+    schema_version = "unknown"
+    for line in SCHEMA.read_text(encoding="utf-8").splitlines():
+        if line.startswith("version:"):
+            schema_version = line.split(":", 1)[1].strip().strip('"').strip("'")
+            break
     stable = {
         "artifact_id": "moex:artifact:dams-contracts:0.1",
         "generator": "gen-pydantic",
@@ -99,8 +104,11 @@ def generate(*, out_root: Path, manifest_path: Path) -> tuple[Path, str]:
         "generator_version": _linkml_version(),
         "schema_path": SCHEMA.relative_to(REPO).as_posix(),
         "schema_digest": schema_digest,
+        "schema_version": schema_version,
         "output_path": output_rel,
         "content_digest": digest,
+        "role": "contracts",
+        "media_type": "text/x-python",
         "package": "moex-dams-contracts",
     }
     # Keep generated_at stable when content is unchanged so check_all leaves a clean tree.

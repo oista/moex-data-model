@@ -112,6 +112,28 @@ def schema_rel() -> str:
     return SCHEMA.relative_to(REPO).as_posix()
 
 
+def schema_version() -> str:
+    """Aggregate DAMS LinkML semver from moex-dams.yaml (ADR-051 / ADR-052 D6)."""
+    for line in SCHEMA.read_text(encoding="utf-8").splitlines():
+        if line.startswith("version:"):
+            return line.split(":", 1)[1].strip().strip('"').strip("'")
+    raise ValueError(f"missing version: in {SCHEMA}")
+
+
+# Bundle part role → media type (ADR-052 D6 operational Distribution record).
+ARTIFACT_IDENTITY: dict[str, tuple[str, str]] = {
+    "owl": ("owl", "text/turtle"),
+    "shacl": ("shacl", "text/turtle"),
+    "dbml": ("dbml", "text/plain"),
+    "mermaid": ("mermaid", "text/markdown"),
+    "python": ("python", "text/x-python"),
+    "doc": ("doc", "text/markdown"),
+    "rdf": ("rdf", "text/turtle"),
+    "json-schema": ("json-schema", "application/schema+json"),
+    "ontology-profile": ("ontology-profile", "application/json"),
+}
+
+
 @contextmanager
 def schema_cwd() -> Iterator[str]:
     """LinkML imports resolve relative to the schema directory."""
@@ -222,10 +244,13 @@ def write_manifest(
     generator_module: str,
     output_path: str,
     content_digest: str,
+    role: str,
+    media_type: str,
     generator_options: dict | None = None,
 ) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     generator_version = _linkml_version()
+    version = schema_version()
     if path.is_file():
         try:
             existing = json.loads(path.read_text(encoding="utf-8"))
@@ -238,8 +263,11 @@ def write_manifest(
             and existing.get("generator_version") == generator_version
             and existing.get("schema_path") == schema_rel()
             and existing.get("schema_digest") == schema_digest()
+            and existing.get("schema_version") == version
             and existing.get("output_path") == output_path
             and existing.get("content_digest") == content_digest
+            and existing.get("role") == role
+            and existing.get("media_type") == media_type
             and existing.get("generator_options") == generator_options
         )
         if same:
@@ -251,8 +279,11 @@ def write_manifest(
         "generator_version": generator_version,
         "schema_path": schema_rel(),
         "schema_digest": schema_digest(),
+        "schema_version": version,
         "output_path": output_path,
         "content_digest": content_digest,
+        "role": role,
+        "media_type": media_type,
         "generated_at": datetime.now(timezone.utc).isoformat(),
     }
     if generator_options is not None:
@@ -275,6 +306,7 @@ def generate_owl(*, out_path: Path = OWL_PATH, manifest_path: Path = OWL_MANIFES
         out_rel = out_path.relative_to(REPO).as_posix()
     except ValueError:
         out_rel = out_path.as_posix()
+    role, media_type = ARTIFACT_IDENTITY["owl"]
     write_manifest(
         path=manifest_path,
         artifact_id="moex:artifact:dams-owl:0.1",
@@ -282,6 +314,8 @@ def generate_owl(*, out_path: Path = OWL_PATH, manifest_path: Path = OWL_MANIFES
         generator_module="linkml.generators.owlgen",
         output_path=out_rel,
         content_digest=digest,
+        role=role,
+        media_type=media_type,
         generator_options={
             **dict(OWL_OPTIONS),
             "digest_mode": "rdf_ground_triples",
@@ -312,6 +346,7 @@ def generate_shacl(
         out_rel = out_path.relative_to(REPO).as_posix()
     except ValueError:
         out_rel = out_path.as_posix()
+    role, media_type = ARTIFACT_IDENTITY["shacl"]
     write_manifest(
         path=manifest_path,
         artifact_id="moex:artifact:dams-shacl:0.1",
@@ -319,6 +354,8 @@ def generate_shacl(
         generator_module="linkml.generators.shaclgen",
         output_path=out_rel,
         content_digest=digest,
+        role=role,
+        media_type=media_type,
         generator_options={
             **{k: v for k, v in SHACL_OPTIONS.items()},
             "digest_mode": "rdf_ground_triples",
@@ -344,6 +381,7 @@ def generate_dbml(
         out_rel = out_path.relative_to(REPO).as_posix()
     except ValueError:
         out_rel = out_path.as_posix()
+    role, media_type = ARTIFACT_IDENTITY["dbml"]
     write_manifest(
         path=manifest_path,
         artifact_id="moex:artifact:dams-dbml:0.1",
@@ -351,6 +389,8 @@ def generate_dbml(
         generator_module="linkml.generators.dbmlgen",
         output_path=out_rel,
         content_digest=digest,
+        role=role,
+        media_type=media_type,
     )
     return digest
 
@@ -381,6 +421,7 @@ def generate_mermaid(
         out_rel = out_dir.relative_to(REPO).as_posix()
     except ValueError:
         out_rel = out_dir.as_posix()
+    role, media_type = ARTIFACT_IDENTITY["mermaid"]
     write_manifest(
         path=manifest_path,
         artifact_id="moex:artifact:dams-mermaid:0.1",
@@ -388,6 +429,8 @@ def generate_mermaid(
         generator_module="linkml.generators.mermaidclassdiagramgen",
         output_path=out_rel,
         content_digest=digest,
+        role=role,
+        media_type=media_type,
     )
     return digest
 
@@ -443,6 +486,7 @@ def generate_python(
         out_rel = out_path.relative_to(REPO).as_posix()
     except ValueError:
         out_rel = out_path.as_posix()
+    role, media_type = ARTIFACT_IDENTITY["python"]
     write_manifest(
         path=manifest_path,
         artifact_id="moex:artifact:dams-python:0.1",
@@ -450,6 +494,8 @@ def generate_python(
         generator_module="linkml.generators.pythongen",
         output_path=out_rel,
         content_digest=digest,
+        role=role,
+        media_type=media_type,
         generator_options={"digest_mode": "strip_generation_date_comment"},
     )
     return digest
@@ -499,6 +545,7 @@ def generate_doc(
         out_rel = out_dir.relative_to(REPO).as_posix()
     except ValueError:
         out_rel = out_dir.as_posix()
+    role, media_type = ARTIFACT_IDENTITY["doc"]
     write_manifest(
         path=manifest_path,
         artifact_id="moex:artifact:dams-doc:0.1",
@@ -506,6 +553,8 @@ def generate_doc(
         generator_module="linkml.generators.docgen",
         output_path=out_rel,
         content_digest=digest,
+        role=role,
+        media_type=media_type,
         generator_options={"git_policy": "index_subset"},
     )
     return digest
@@ -582,6 +631,7 @@ def generate_rdf(
         out_rel = out_path.relative_to(REPO).as_posix()
     except ValueError:
         out_rel = out_path.as_posix()
+    role, media_type = ARTIFACT_IDENTITY["rdf"]
     write_manifest(
         path=manifest_path,
         artifact_id="moex:artifact:dams-rdf:0.1",
@@ -589,6 +639,8 @@ def generate_rdf(
         generator_module="linkml.generators.rdfgen",
         output_path=out_rel,
         content_digest=digest,
+        role=role,
+        media_type=media_type,
         generator_options={
             "digest_mode": "rdf_ground_triples",
             "strip_volatile": sorted(_VOLATILE_RDF_PREDICATES),
@@ -612,6 +664,7 @@ def generate_json_schema(
         out_rel = out_path.relative_to(REPO).as_posix()
     except ValueError:
         out_rel = out_path.as_posix()
+    role, media_type = ARTIFACT_IDENTITY["json-schema"]
     write_manifest(
         path=manifest_path,
         artifact_id="moex:artifact:dams-json-schema:0.1",
@@ -619,6 +672,8 @@ def generate_json_schema(
         generator_module="linkml.generators.jsonschemagen",
         output_path=out_rel,
         content_digest=digest,
+        role=role,
+        media_type=media_type,
     )
     return digest
 
@@ -652,6 +707,7 @@ def generate_ontology_report(
         out_rel = out_path.relative_to(REPO).as_posix()
     except ValueError:
         out_rel = out_path.as_posix()
+    role, media_type = ARTIFACT_IDENTITY["ontology-profile"]
     write_manifest(
         path=manifest_path,
         artifact_id="moex:artifact:dams-ontology-profile:0.1",
@@ -659,6 +715,8 @@ def generate_ontology_report(
         generator_module="moex_dams.application.ontology_report",
         output_path=out_rel,
         content_digest=digest,
+        role=role,
+        media_type=media_type,
         generator_options={"digest_mode": "json_sorted"},
     )
     return digest

@@ -96,7 +96,9 @@ Derived (не authored после cleanup): `source_*` / `target_*` solution/sys
 | PR-4 | INV в constraint-matrix + requirement-коды + фикстуры |
 | PR-5 | Удаление topology-слотов (major), миграционный скрипт, docs, regen |
 
-Паттерн окна deprecated — как ADR-046. Схемный diff и data-diff не смешиваются. `check_all` на каждом PR отдельно.
+Паттерн окна deprecated — как ADR-046. `check_all` на каждом PR отдельно.
+
+**PR-5 exception (schema + data + regen):** for this series only, PR-5 may combine in one reviewable commit (or one merge PR containing that commit): (1) breaking schema removal of deprecated slots, (2) example/data migration via the series migration script, (3) regeneration of `generated/**` and related docs. PR-0…PR-4 still keep schema diffs and data migrations in separate commits. This exception amends the default “schema diff and data migration must not mix” rule (see `.cursor/rules/multi-pr-series.mdc`) so the major bump, migration, and regen stay atomic and reviewable as one topic.
 
 ## Consequences
 
