@@ -54,7 +54,7 @@ text-rule inheritance.
 |---|---|
 | Solution logical | `ModelPackage` → `LogicalEntity` → `LogicalAttribute` |
 | Enterprise conceptual | `ModelPackage` → `ConceptualEntity` |
-| Technical | `ModelPackage` → `TechnicalAsset` (`DataCarrier` / …) → `PhysicalField` |
+| Technical | `ModelPackage` → `TechnicalAsset` (`DataCarrier` / …) → `DataStructure` → `SchemaNode` (replaces removed `PhysicalField`) |
 
 ### Rules
 
@@ -105,9 +105,10 @@ specified in [ADR-049](ADR-049-governance-assignment-authority.md).
 
 ## Consequences
 
-- Schema: every cascade node carries the relevant mixins
-  (`LogicalAttribute` / `PhysicalField` gain ownership + classification +
-  policies; `ModelPackage` gains classification + policies).
+- Schema: every cascade node carries the relevant mixins where declared
+  (`LogicalAttribute` / `TechnicalAsset` gain ownership + classification +
+  policies; technical leaf is `DataStructure` → `SchemaNode`, replacing
+  removed `PhysicalField`; `ModelPackage` gains classification + policies).
 - Xlsx enrich must not stamp ownership/classification onto descendants.
 - GEN-001 requires package `data_owner_ref`; LDM-002 / LDM-003 may pass via
   effective inheritance.

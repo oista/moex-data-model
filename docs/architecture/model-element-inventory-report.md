@@ -1,5 +1,5 @@
 ---
-status: Proposed
+status: Historical
 version: "0.1"
 normative: false
 supersedes: []
@@ -10,7 +10,7 @@ superseded_by: []
 
 **Date:** 2026-10-06 (inventory snapshot)  
 **Schema at inventory:** `version: 2.0.0`  
-**Schema on `main` now:** see `moex-dams.yaml` (3.1.0+; ADR-044 Accepted — Wave B1)  
+**Schema on `main` now:** see `moex-dams.yaml` and [SCHEMA-VERSION-TIMELINE](../migration/SCHEMA-VERSION-TIMELINE.md) (aggregate 5.1.0+; ADR-044 Accepted)  
 **Matrix:** [model-element-matrix-before.csv](model-element-matrix-before.csv) / [model-element-matrix-before.md](model-element-matrix-before.md)  
 **ADR:** [ADR-044](../adr/ADR-044-model-element-decomposition.md)  
 
