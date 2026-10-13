@@ -14,7 +14,7 @@ Breaking for DAMS (path `0.1/` retained; schema `version` field → `2.0.0`):
   `deprecated_element_has_possible_replacement`); semantic diff expects «was deprecated».
 
 ### Migration
-- Script: `scripts/migrate_physical_field_to_schema_node.py`
+- Script: `scripts/archive/migrate_physical_field_to_schema_node.py`
 - Report: `docs/migration/physical-field-migration-report.md`
 - Spike: `docs/migration/data-structure-spike-report.md` (Decision **FLAT**)
 - Inventory: `docs/migration/data-structure-inventory.md`

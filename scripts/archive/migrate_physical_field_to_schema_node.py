@@ -10,7 +10,7 @@ change). Preserves order/comments via ruamel.yaml when available; falls back to
 PyYAML.
 
 CLI:
-  python scripts/migrate_physical_field_to_schema_node.py PATH [PATH ...]
+  python scripts/archive/migrate_physical_field_to_schema_node.py PATH [PATH ...]
       [--apply] [--report PATH] [--demo]
 """
 
@@ -23,7 +23,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-_SRC = Path(__file__).resolve().parents[1] / "packages" / "specification-dams" / "src"
+_SRC = Path(__file__).resolve().parents[2] / "packages" / "specification-dams" / "src"
 if str(_SRC) not in sys.path:
     sys.path.insert(0, str(_SRC))
 

@@ -16,7 +16,7 @@ Schema DAMS: **1.0.0 → 2.0.0** (путь `0.1/` сохранён). Окно de
 
 ## Миграция инстансов
 
-Скрипт: `scripts/migrate_physical_field_to_schema_node.py`.  
+Скрипт: `scripts/archive/migrate_physical_field_to_schema_node.py`.  
 Отчёт прогона: `docs/migration/physical-field-migration-report.md`.
 
 | Решение | fields → scalar nodes | structures | mapping rewrites |

@@ -54,17 +54,17 @@ try {
         -e "$RepoLoader" `
         -e "$CliRoot[dev]" -q
 
-    Write-Host "Running pytest (kernel, provider, dams, publication, git, external-sources, repository-loader, cli, architecture)"
+    # Full specification-dams / repository-loader / architecture / migration
+    # pytest (incl. L3 + pyshacl) lives in ``make dams-packages-check`` so Stage 0
+    # stays free of the ontology stack and does not silently skip L3 via importorskip.
+    Write-Host "Running pytest (kernel, provider smoke, publication, git, external-sources, cli)"
     & $VenvPython -m pytest `
         (Join-Path $Kernel "tests") `
         (Join-Path $Linkml "tests/test_provider.py") `
-        (Join-Path $Dams "tests") `
         (Join-Path $Pub "tests") `
         (Join-Path $Git "tests") `
         (Join-Path $ExtSrc "tests") `
-        (Join-Path $RepoLoader "tests") `
         (Join-Path $CliRoot "tests") `
-        (Join-Path $RepoRoot "tests/architecture") `
         -q
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
