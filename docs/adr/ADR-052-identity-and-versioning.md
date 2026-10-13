@@ -89,7 +89,48 @@ Binding `model_revision`, envelope `revision`, and lock `content_hash` (ADR-042 
 
 ### Allowlist (classes without `id_prefixes` as of schema 4.1.0)
 
-Maintained in `tools/architecture-check` (`ID_PREFIXES_ALLOWLIST`). Initial set = all concrete `IdentifiedElement`/`ModelElement` descendants that lack induced `id_prefixes` except `TechnicalAsset`, `DataStructure`, `Message` (already declared). Shrink the allowlist when prefixes are added; do not grow without amending this section.
+Maintained in `tools/architecture-check` (`ID_PREFIXES_ALLOWLIST` + ratchet `ID_PREFIXES_ALLOWLIST_CEILING`). Initial set = all concrete `IdentifiedElement`/`ModelElement` descendants that lack induced `id_prefixes` except `TechnicalAsset`, `DataStructure`, `Message` (already declared). Shrink the allowlist when prefixes are added; do not grow without amending this section. Architecture-check fails if the code allowlist drifts from the list below, or if size ≠ ceiling.
+
+## id_prefixes allowlist
+
+Classes permitted to lack induced `id_prefixes` (must match `ID_PREFIXES_ALLOWLIST` in `tools/architecture-check`). Ceiling at R2-10: **25**.
+
+### Ratchet schedule
+
+| Exit wave | Classes | How they leave |
+|---|---|---|
+| Aggregate **6.0.0** (ADR-052 D5) | `ModelSelection`, `SelectedEntity`, `SelectedAttribute`, `DataFlowEntityBinding` | Move off full `ModelElement` → `EmbeddedElement` / slim id (no longer in lint scope) |
+| Next **minor** after prefixes land | `ModelPackage`, `DomainContext`, `ConceptualEntity`, `ConceptualProperty`, `LogicalEntity`, `LogicalAttribute`, `Relationship`, `RelationTerm`, `ConceptualDomain`, `ValueDomain`, `DataType`, `DataFlow`, `DataModelBinding`, `Mapping`, `RealizesMapping`, `EntityPhysicalMapping`, `FieldMapping`, `AlignsWithMapping`, `Metric`, `Dimension`, `SpecificationRequirement` | Add `id_prefixes: [dams]` (or inherited) on the class / shared ancestor; remove from allowlist and **lower** `ID_PREFIXES_ALLOWLIST_CEILING` in the same PR |
+
+Default prefix for new declarations: `dams` ([ADR-030](ADR-030-dams-uri-and-prefix-policy.md)). Do not raise the ceiling without an explicit debt note in this section.
+
+### Classes (current)
+
+- `AlignsWithMapping` — mapping subclass; add dams with Mapping family (minor)
+- `ConceptualDomain` — semantic registry; add dams (minor)
+- `ConceptualEntity` — core semantic; add dams (minor)
+- `ConceptualProperty` — core semantic; add dams (minor)
+- `DataFlow` — integration root; add dams (minor)
+- `DataFlowEntityBinding` — exit on 6.0.0 (EmbeddedElement / slim id — ADR-052 D5)
+- `DataModelBinding` — contract binding; add dams (minor)
+- `DataType` — datatype registry; add dams (minor)
+- `Dimension` — analytics; add dams (minor)
+- `DomainContext` — package child; add dams (minor)
+- `EntityPhysicalMapping` — mapping subclass; add dams with Mapping family (minor)
+- `FieldMapping` — mapping subclass; add dams with Mapping family (minor)
+- `LogicalAttribute` — core logical; add dams (minor)
+- `LogicalEntity` — core logical; add dams (minor)
+- `Mapping` — abstract base still concrete for generators; add dams (minor)
+- `Metric` — analytics; add dams (minor)
+- `ModelPackage` — aggregate root; add dams (minor)
+- `ModelSelection` — exit on 6.0.0 (EmbeddedElement — ADR-052 D5)
+- `RealizesMapping` — mapping subclass; add dams with Mapping family (minor)
+- `RelationTerm` — semantic registry; add dams (minor)
+- `Relationship` — core logical; add dams (minor)
+- `SelectedAttribute` — exit on 6.0.0 (EmbeddedElement — ADR-052 D5)
+- `SelectedEntity` — exit on 6.0.0 (EmbeddedElement — ADR-052 D5)
+- `SpecificationRequirement` — requirements catalog; add dams (minor)
+- `ValueDomain` — semantic registry; add dams (minor)
 
 ## Consequences
 
@@ -111,5 +152,6 @@ Maintained in `tools/architecture-check` (`ID_PREFIXES_ALLOWLIST`). Initial set 
 - [x] Five-layer map published
 - [x] Rename decision recorded (deferred to 6.0.0 train)
 - [x] `id_prefixes` lint + allowlist
+- [x] `id_prefixes` allowlist documented in this ADR + ratchet ceiling (R2-10)
 - [x] Operational identity record (D6/D7 — manifests + publish-gate; [identity-map.md](../architecture/identity-map.md))
 - [ ] 6.0.0 train implementation (separate series)
