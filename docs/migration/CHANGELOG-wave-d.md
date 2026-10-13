@@ -22,9 +22,13 @@ Docs / architecture-check only — **no** aggregate schema bump in this wave.
 - `ExternalClassRef` canonical; `AlignsWithMapping` projection.
 - Transformation hooks removed in 6.0.0 unless a lineage ADR reclaims them.
 
-## D4 — deferred
+## D4 — governance consumer hardening (ADR-049 on main)
 
-Requires ADR-049 (governance assignment authority) on `main`. Not started in this PR.
+- Preferred import: `moex_dams.rules.assignment_resolver` (`resolve_governed` / `diagnose_governance`).
+- Conflicting `PolicyBinding` with `binding_effect=replace` → `conflicting_assignments`.
+- `formal_checks` accept `as_of` / `assignments` / `repo_root` (configured `as_of` from `moex-governance-view`).
+- `EffectiveGovernanceView` discovery includes ADR-047 manifest package bodies.
+- ADR-049 D7 audit name map + D8 consumer notes.
 
 ## D5 — deferred
 

@@ -3,9 +3,9 @@
 YAML stores declared values only (absent key = inherit). This module computes
 effective values with provenance along ModelPackage containment trees.
 
-ADR-049: approved GovernanceAssignment objects override the inline cascade for
-their validity window and assignment_scope. Effective values are never written
-back into authored YAML.
+ADR-049 assignment overrides are implemented here (shared helpers) and exposed
+via ``moex_dams.rules.assignment_resolver`` as the preferred import path
+(Wave D4). Effective values are never written back into authored YAML.
 """
 
 from __future__ import annotations
@@ -446,6 +446,31 @@ def _apply_assignments(
                 for b in nearest_bindings
                 if str(b.get("binding_effect") or "replace") == "add"
             ]
+            # ADR-049 D2 / Wave D4: multiple replace bindings at same nearest
+            # target with different policy_ref sets -> conflicting_assignments.
+            if len(replaces) > 1:
+                replace_sets = {
+                    frozenset(filter(None, [b.get("policy_ref")]))
+                    for b in replaces
+                }
+                if len(replace_sets) > 1:
+                    ids = tuple(
+                        _assignment_id(b) for b in replaces if _assignment_id(b)
+                    )
+                    findings.append(
+                        GovernanceFinding(
+                            code="conflicting_assignments",
+                            severity="error",
+                            message=(
+                                f"conflicting policy replace bindings "
+                                f"on nearest target for {eid}"
+                            ),
+                            assignment_ids=ids,
+                            element_id=eid,
+                            slot="policy_refs",
+                        )
+                    )
+                    continue
             if replaces:
                 base: list[Any] = []
                 for b in replaces:

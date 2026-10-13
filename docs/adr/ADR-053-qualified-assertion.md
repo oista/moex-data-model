@@ -11,7 +11,7 @@ superseded_by: []
 **Date:** 2026-10-13  
 **Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [ADR-023](ADR-023-governed-property-cascade.md), [ADR-025](ADR-025-definition-cascade-and-glossary.md), [ADR-026](ADR-026-cmd-entity-metamodel.md), [ADR-044](ADR-044-model-element-decomposition.md), [ADR-046](ADR-046-typed-mapping-endpoints.md), ADR-049 governance assignment authority *(number reserved; not on main yet)*  
+**Related:** [ADR-023](ADR-023-governed-property-cascade.md), [ADR-025](ADR-025-definition-cascade-and-glossary.md), [ADR-026](ADR-026-cmd-entity-metamodel.md), [ADR-044](ADR-044-model-element-decomposition.md), [ADR-046](ADR-046-typed-mapping-endpoints.md), [ADR-049](ADR-049-governance-assignment-authority.md)
 **Audit:** Wave D3 (Qualified relation / assertion decision gate)
 
 ## Context
@@ -41,7 +41,7 @@ HasAssertionMetadata:
 ```
 
 - **`confidence`**: move definition to the shared slot home (range unchanged); `Mapping` keeps the slot via the mixin instead of a local list entry where possible.
-- Apply to: `Mapping`, `ExternalClassRef`, `ScopedDefinition`, and (when ADR-049 lands) `GovernanceAssignment`.
+- Apply to: `Mapping`, `ExternalClassRef`, `ScopedDefinition`, and `GovernanceAssignment` (ADR-049).
 - Do **not** introduce an abstract class `Assertion` / `QualifiedRelation` in the `is_a` backbone (ADR-044: keep backbone shallow; aspects are mixins).
 
 Implementation: separate additive PR (minor bump), **not** this docs PR. Until then, the table in Context is the normative “as-is / to-be” contract.
@@ -68,7 +68,7 @@ Rename to `SemanticAlignment` is **deferred** (breaking + consumer churn); track
 
 ### D5. Governance name map (audit ↔ schema)
 
-When ADR-049 lands, document in that ADR (and repeat here for discoverability):
+ADR-049 is on `main`; audit name map (repeat here for discoverability; canonical in ADR-049 D7):
 
 | Audit name | DAMS class / representation |
 |---|---|

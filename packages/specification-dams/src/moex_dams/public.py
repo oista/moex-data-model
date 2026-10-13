@@ -61,14 +61,16 @@ from moex_dams.governance.materialize import (
     governance_view_path,
     materialize_governance_view,
 )
+from moex_dams.rules.assignment_resolver import (
+    GovernanceFinding,
+    diagnose_governance,
+    resolve_governed,
+)
 from moex_dams.rules.cascade import (
     CascadeCardinality,
     CascadeFamily,
-    GovernanceFinding,
     SlotProvenance,
-    diagnose_governance,
     find_redundant_overrides,
-    resolve_governed,
 )
 from moex_dams.rules.conceptual_entity import (
     check_conceptual_entities,
