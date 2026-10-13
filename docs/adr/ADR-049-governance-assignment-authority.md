@@ -1,5 +1,5 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
 normative: true
 supersedes: []
@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-049: Governance assignment authority
 
 **Date:** 2026-10-12  
-**Status:** Proposed (PR-0 of Governance assignment authority series)  
+**Status:** Accepted (PR-5 landed: legacy assignment target/id slots removed; schema **5.0.0**)  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Related:** [ADR-023](ADR-023-governed-property-cascade.md), [ADR-013](ADR-013-specification-requirements-catalog.md), [ADR-044](ADR-044-model-element-decomposition.md), [ADR-045](ADR-045-executable-constraint-matrix.md), [ADR-047](ADR-047-repository-manifest-and-lock.md), [ADR-048](ADR-048-topology-ownership.md)  
 **Inventory:** [governance-inventory.md](../migration/governance-inventory.md)

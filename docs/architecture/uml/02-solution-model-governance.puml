@@ -125,12 +125,27 @@ package "Реестры" #FFF2CC {
 }
 
 package "Governance" #D9D2E9 {
-  class PolicyBinding {
-    +policy_binding_id : string [1]
-    +policy_target_ref : uriorcurie [1]
-    +policy_ref : Policy [1]
+  abstract class GovernanceAssignment {
+    +assignment_id : uriorcurie [1]
+    +target_element_ref : uriorcurie [1]
+    +assignment_scope : AssignmentScopeEnum [1]
     +approval_status : ApprovalStatusEnum [0..1]
   }
+  class ClassificationAssignment {
+    +governance_classification : GovernanceClassificationEnum [0..1]
+  }
+  class PolicyBinding {
+    +policy_ref : Policy [1]
+    +binding_effect : BindingEffectEnum [0..1]
+  }
+  class OwnershipAssignment {
+    +data_owner_ref : Role [0..1]
+    +data_steward_ref : Role [0..1]
+    +owning_unit_ref : OrganizationUnit [0..1]
+  }
+  GovernanceAssignment <|-- ClassificationAssignment
+  GovernanceAssignment <|-- PolicyBinding
+  GovernanceAssignment <|-- OwnershipAssignment
 }
 
 package "Интеграции и контрактные bindings" #D0E0E3 {
@@ -174,7 +189,9 @@ MOEXModelRepository "1" *-- "0..*" ModelPackage : model_packages
 MOEXModelRepository "1" *-- "0..*" RegistryEntry : registry_entries
 MOEXModelRepository "1" *-- "0..*" DataFlow : data_flows
 MOEXModelRepository "1" *-- "0..*" DataModelBinding : data_model_bindings
+MOEXModelRepository "1" *-- "0..*" ClassificationAssignment : classification_assignments
 MOEXModelRepository "1" *-- "0..*" PolicyBinding : policy_bindings
+MOEXModelRepository "1" *-- "0..*" OwnershipAssignment : ownership_assignments
 
 ModelPackage "1" *-- "0..*" DomainContext : domain_contexts
 ModelPackage "1" *-- "0..*" LogicalEntity : logical_entities
@@ -209,7 +226,7 @@ ITPlatform "1" o-- "0..*" ITSolution : platform_ref
 ITSolution "1" o-- "0..*" ITSystem : member_system_refs
 
 PolicyBinding "0..*" --> "1" Policy : policy_ref
-PolicyBinding "0..*" --> "1" ModelElement : policy_target_ref
+GovernanceAssignment "0..*" --> "1" ModelElement : target_element_ref
 
 DataFlow "1" *-- "0..*" DataFlowEntityBinding : entity_bindings
 DataFlowEntityBinding "0..*" --> "1" LogicalEntity : logical_entity_ref

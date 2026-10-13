@@ -16,13 +16,15 @@
 7d. ExecutionAsset — исполняемый актив (pipeline, job)
 7e. DataStructure / SchemaNode — структура и узлы схемы (вместо PhysicalField; ADR-038)
 8. Mapping (+ RealizesMapping, EntityPhysicalMapping, FieldMapping, AlignsWithMapping) — типизированные коллекции (ADR-046)
-9. ClassificationAssignment — присвоение классификации/чувствительности элементу
-10. ModelSelection / DataModelBinding — выбранная проекция модели для контракта
+9. GovernanceAssignment (abstract) — авторитетное назначение governance (ADR-049)
+9a. ClassificationAssignment — присвоение классификации/чувствительности элементу
+9b. OwnershipAssignment — присвоение data owner / steward / owning unit
+10. ModelSelection / DataModelBinding — договорная проекция модели для контракта
 
 ## Группа 2. Аналитика и AI-слой
 
 11. Metric — метрика (expression, grain, dimensions, owner)
-12. PolicyBinding — привязка политики доступа/retention к элементу
+12. PolicyBinding — привязка политики доступа/retention к элементу (subtype GovernanceAssignment)
 
 ## Группа 3. Интеграционный слой (новое из обсуждения потоков данных)
 

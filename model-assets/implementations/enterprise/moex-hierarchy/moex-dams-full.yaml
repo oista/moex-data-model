@@ -3,7 +3,7 @@
 # Do not edit by hand — regenerated at viewer publication build.
 name: moex_dams
 id: https://data.moex.com/dams/v0.1
-version: 4.1.0
+version: 5.0.0
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml:
@@ -1435,8 +1435,7 @@ slots:
     required: true
   target_element_ref:
     name: target_element_ref
-    description: 'Element covered by this assignment (element_id). Prefer this over
-      deprecated classified_element_ref / policy_target_ref (ADR-049).
+    description: 'Element covered by this assignment (element_id) (ADR-049).
 
       '
     from_schema: https://data.moex.com/dams/governance/v0.1
@@ -1451,41 +1450,11 @@ slots:
     from_schema: https://data.moex.com/dams/governance/v0.1
     range: AssignmentScopeEnum
     required: true
-  classified_element_ref:
-    name: classified_element_ref
-    description: 'Deprecated (ADR-049). Use target_element_ref. Cleared required for
-      deprecation window PR-1…PR-4; removed in PR-5.
-
-      '
-    deprecated: 'True'
-    from_schema: https://data.moex.com/dams/governance/v0.1
-    range: uriorcurie
-    required: false
   classification_term_ref:
     name: classification_term_ref
     from_schema: https://data.moex.com/dams/governance/v0.1
     range: DataClassificationTerm
     inlined: false
-  policy_binding_id:
-    name: policy_binding_id
-    description: 'Deprecated (ADR-049). Use assignment_id. No longer an identifier;
-      removed in PR-5.
-
-      '
-    deprecated: 'True'
-    from_schema: https://data.moex.com/dams/governance/v0.1
-    range: uriorcurie
-    required: false
-  policy_target_ref:
-    name: policy_target_ref
-    description: 'Deprecated (ADR-049). Use target_element_ref. Cleared required for
-      deprecation window PR-1…PR-4; removed in PR-5.
-
-      '
-    deprecated: 'True'
-    from_schema: https://data.moex.com/dams/governance/v0.1
-    range: uriorcurie
-    required: false
   policy_ref:
     name: policy_ref
     from_schema: https://data.moex.com/dams/governance/v0.1
@@ -3450,7 +3419,6 @@ classes:
     from_schema: https://data.moex.com/dams/governance/v0.1
     is_a: GovernanceAssignment
     slots:
-    - classified_element_ref
     - classification_term_ref
     - governance_classification
     - classification_source
@@ -3464,8 +3432,6 @@ classes:
     from_schema: https://data.moex.com/dams/governance/v0.1
     is_a: GovernanceAssignment
     slots:
-    - policy_binding_id
-    - policy_target_ref
     - policy_ref
     - binding_effect
   OwnershipAssignment:

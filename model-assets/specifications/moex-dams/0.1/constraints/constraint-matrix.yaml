@@ -1400,9 +1400,8 @@ invariants:
 - id: INV-055
   title: GovernanceAssignment target_element_ref resolves in package
   statement: >
-    target_element_ref (or deprecated classified_element_ref / policy_target_ref)
-    must identify an element in the ModelPackage containment cascade
-    (dangling_target is an error).
+    target_element_ref must identify an element in the ModelPackage
+    containment cascade (dangling_target is an error).
   source: ADR-049
   source_status: aligned
   scope: moex-dams

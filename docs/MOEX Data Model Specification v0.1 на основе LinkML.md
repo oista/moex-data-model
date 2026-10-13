@@ -307,22 +307,22 @@ dams/
 
 `entity_type=reference` не эквивалентен `data_class=reference_data`: первое характеризует роль объекта в локальной модели, второе — нормативный класс данных, наследуемый дата-контрактом. Например, локальная read-only проекция мастер-данных клиента может иметь `entity_type=reference`, но `data_class=master_data`.
 
-Для аудита и временной истории предусмотрена самостоятельная `ClassificationAssignment`, которая связывает произвольный элемент с термином классификации, основанием, источником, периодом действия и статусом утверждения. Inline-поля в entity/attribute служат удобным текущим представлением; assignments — нормализованной governance-историей.
+Для аудита и временной истории предусмотрен абстрактный `GovernanceAssignment` и его подтипы (`ClassificationAssignment`, `PolicyBinding`, `OwnershipAssignment`): `target_element_ref`, `assignment_scope`, период действия и approval (ADR-049). Inline-поля mixins — authored defaults (ADR-023 cascade); assignments — авторитетный слой. Эффективные значения читаются из материализованного `EffectiveGovernanceView`, а не пишутся в элементы модели.
 
 ## Governance-блок
 
 ### Mixins
 
 - `HasLifecycle` — status, valid from/to, replacement reference;
-- `HasOwnership` — data owner, data steward, owning unit;
+- `HasOwnership` — authored default data owner / steward / owning unit (ADR-023; override via OwnershipAssignment);
 - `HasBusinessClassification` — entity type, data class, importance;
-- `HasGovernanceClassification` — access level, special classification terms, source and rationale;
-- `HasPolicyBindings` — ссылки на применимые политики;
+- `HasGovernanceClassification` — authored default access level (ADR-023; override via ClassificationAssignment);
+- `HasPolicyBindings` — authored default `policy_refs` (ADR-023; override via PolicyBinding);
 - `HasProvenance` — source artifact, evidence, approval and approver.
 
 ### Самостоятельные сущности
 
-`PolicyBinding` связывает политику с произвольным элементом модели и хранит период действия и approval. `ClassificationAssignment` обеспечивает нормализованную историю классификации и не ограничивается текущим значением в объекте.
+`GovernanceAssignment` (abstract) — авторитетное назначение с `assignment_id`, `target_element_ref`, `assignment_scope`. Подтипы: `ClassificationAssignment`, `PolicyBinding` (`binding_effect` replace/add), `OwnershipAssignment`. Effective view: `generated/governance/` (ADR-049).
 
 ## Интеграционный блок
 

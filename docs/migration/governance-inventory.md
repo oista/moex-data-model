@@ -26,9 +26,9 @@ Not in cascade (unchanged by this series): `entity_type`, `data_class`, `busines
 
 | Class | Identifier slot | Target slot | Collections on root |
 |---|---|---|---|
-| `ClassificationAssignment` | `assignment_id` | `classified_element_ref` | `classification_assignments` |
-| `PolicyBinding` | `policy_binding_id` | `policy_target_ref` | `policy_bindings` |
-| `OwnershipAssignment` | — | — | **absent** |
+| `ClassificationAssignment` | `assignment_id` (via base) | `target_element_ref` (via base; legacy `classified_element_ref` removed in 5.0.0) | `classification_assignments` |
+| `PolicyBinding` | `assignment_id` (via base; legacy `policy_binding_id` removed in 5.0.0) | `target_element_ref` (via base) | `policy_bindings` |
+| `OwnershipAssignment` | `assignment_id` | `target_element_ref` | `ownership_assignments` (added PR-1) |
 
 Shared today: `HasValidity` on both classes; `approval_status`; classification also has `governance_classification`, `classification_source`, `classification_rationale`. No shared abstract base, no `assignment_scope` (self/subtree).
 

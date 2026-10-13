@@ -36,7 +36,6 @@ classes:
       Версионируемое назначение категории классификации элементу модели
       с основанием и периодом действия (ADR-049 authoritative layer).
     slots:
-      - classified_element_ref
       - classification_term_ref
       - governance_classification
       - classification_source
@@ -48,8 +47,6 @@ classes:
       Применение управляемой политики к элементу модели
       (ADR-049 authoritative layer).
     slots:
-      - policy_binding_id
-      - policy_target_ref
       - policy_ref
       - binding_effect
 
@@ -180,38 +177,16 @@ slots:
     range: uriorcurie
     required: true
     description: >
-      Element covered by this assignment (element_id). Prefer this over
-      deprecated classified_element_ref / policy_target_ref (ADR-049).
+      Element covered by this assignment (element_id) (ADR-049).
   assignment_scope:
     range: AssignmentScopeEnum
     required: true
     description: >
       element = target only; subtree = target and descendants in the
       containment cascade (ADR-023 / ADR-049).
-  classified_element_ref:
-    range: uriorcurie
-    required: false
-    deprecated: true
-    description: >
-      Deprecated (ADR-049). Use target_element_ref. Cleared required for
-      deprecation window PR-1…PR-4; removed in PR-5.
   classification_term_ref:
     range: DataClassificationTerm
     inlined: false
-  policy_binding_id:
-    range: uriorcurie
-    required: false
-    deprecated: true
-    description: >
-      Deprecated (ADR-049). Use assignment_id. No longer an identifier;
-      removed in PR-5.
-  policy_target_ref:
-    range: uriorcurie
-    required: false
-    deprecated: true
-    description: >
-      Deprecated (ADR-049). Use target_element_ref. Cleared required for
-      deprecation window PR-1…PR-4; removed in PR-5.
   policy_ref:
     range: Policy
     inlined: false
