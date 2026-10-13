@@ -75,7 +75,7 @@ Derived (не authored после cleanup): `source_*` / `target_*` solution/sys
 |---|---|---|
 | `orphan_ref` | объект пропал / переименован в снимке | error (block merge) |
 | `unknown_catalog` | префикс `integration_ref` отсутствует в снимке | error |
-| `topology_changed` | участники / канал изменились относительно `bound_catalog_revision` | warning |
+| `topology_changed` | (reserved) сравнение предыдущего TopologyView со снимком; dual-read authored↔snapshot снят после PR-5 | warning |
 | `unmapped_exchange` | операция снимка без binding или binding без `catalog_operation_ref` | warning |
 | `stale_revision` | `bound_catalog_revision` отстаёт от снимка | warning |
 
@@ -92,7 +92,7 @@ Derived (не authored после cleanup): `source_*` / `target_*` solution/sys
 | PR-0 | Этот ADR + inventory (docs; без схем / `generated/`) |
 | PR-1 | Аддитивная схема DAMS + модуль `moex-topology`; topology-слоты deprecated + `required` снят; regen |
 | PR-2 | Файл-снимок + resolver / drift / materializer + `check-topology` |
-| PR-3 | `effective_topology` dual-read + перевод читателей |
+| PR-3 | `effective_topology` dual-read + перевод читателей (окно закрыто: view-only) |
 | PR-4 | INV в constraint-matrix + requirement-коды + фикстуры |
 | PR-5 | Удаление topology-слотов (major), миграционный скрипт, docs, regen |
 

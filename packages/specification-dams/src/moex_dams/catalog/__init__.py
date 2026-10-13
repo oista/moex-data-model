@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from moex_dams.catalog.drift import DriftFinding, collect_drift
 from moex_dams.catalog.effective_topology import (
-    authored_vs_effective_mismatches,
     effective_topology,
     load_topology_view,
 )
@@ -16,7 +15,6 @@ __all__ = [
     "CatalogRef",
     "CatalogSnapshot",
     "DriftFinding",
-    "authored_vs_effective_mismatches",
     "collect_drift",
     "effective_topology",
     "load_snapshot",
