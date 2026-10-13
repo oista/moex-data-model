@@ -33,12 +33,14 @@ viewer-serve:
 	$(PYTHON) -m pip install -e "./$(VIEWER)[dev]"
 	$(PYTHON) -m moex_publication_viewer.cli serve --root . --port 8765
 
-# Ontology stack pytest (outside Stage 0 make check; gated in GHA viewer-and-packages)
+# Ontology stack pytest (outside Stage 0 make check; gated in GHA viewer-and-packages).
+# drawDB adapter + DBML projection live only in drawdb-adapter-check (workbench-check) — no duplicate.
 ONTOLOGY := packages/ontology
 packages-check:
-	$(PYTHON) -m pip install -e "./generated/contracts/moex-dams/0.1" -e "./$(KERNEL)" -e "./packages/standard-linkml" -e "./$(DAMS)" -e "./$(DRAWDB_ADAPTER)" -e "./$(OWL)" -e "./$(ONTOLOGY)" -e "./$(MAPPINGS)" -e "./$(CATALOG)" -e "./packages/linkml-tooling[map,automator]" pytest PyYAML
-	$(PYTHON) -m pytest $(OWL)/tests $(ONTOLOGY)/tests $(MAPPINGS)/tests $(CATALOG)/tests $(DRAWDB_ADAPTER)/tests $(DAMS)/tests/test_dbml_projection.py packages/linkml-tooling/tests packages/modeling-kernel/tests/test_stage7_ports.py -q
+	$(PYTHON) -m pip install -e "./generated/contracts/moex-dams/0.1" -e "./$(KERNEL)" -e "./packages/standard-linkml" -e "./$(DAMS)" -e "./$(OWL)" -e "./$(ONTOLOGY)" -e "./$(MAPPINGS)" -e "./$(CATALOG)" -e "./packages/linkml-tooling[map,automator]" pytest PyYAML
+	$(PYTHON) -m pytest $(OWL)/tests $(ONTOLOGY)/tests $(MAPPINGS)/tests $(CATALOG)/tests packages/linkml-tooling/tests packages/modeling-kernel/tests/test_stage7_ports.py -q
 
+# drawDB adapter + DBML projection (workbench-check only; not in packages-check)
 drawdb-adapter-check:
 	$(PYTHON) -m pip install -e "./generated/contracts/moex-dams/0.1" -e "./$(KERNEL)" -e "./packages/standard-linkml" -e "./$(DAMS)" -e "./$(DRAWDB_ADAPTER)[dev]" pytest
 	$(PYTHON) -m pytest $(DRAWDB_ADAPTER)/tests $(DAMS)/tests/test_dbml_projection.py -q
@@ -96,8 +98,8 @@ validate-requirements:
 check-constraints:
 	$(PYTHON) scripts/check_constraint_matrix.py --gate-strict
 
-# Package pytest for DAMS / LinkML / repository-loader / architecture / migration (CI job dams-packages).
-# Owns full specification-dams suite (incl. L3 + pyshacl); Stage 0 slice-cli does not duplicate it.
+# Package pytest for DAMS / LinkML / repository-loader / architecture / migration.
+# Stage 0 via scripts/check_all.py (make check); slice-cli does not duplicate this suite.
 dams-packages-check:
 	$(PYTHON) -m pip install -q -r requirements-linkml.txt pyshacl==0.40.1
 	$(PYTHON) -m pip install -q -e "./generated/contracts/moex-dams/0.1" -e "./$(KERNEL)" -e "./packages/standard-linkml" -e "./$(DAMS)[dev]" -e "./packages/repository-loader[dev]" pytest ruamel.yaml
@@ -143,8 +145,9 @@ web-check:
 web-e2e:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File apps/web/scripts/e2e.ps1
 
-# Stage 0 gate: contracts → slice tests → schemas → examples → golden
-# (+ architecture-check + publish-gate). Cross-platform entry: scripts/check_all.py
+# Stage 0 gate: contracts → slice → schemas → examples → golden → architecture-check
+# → dams-packages-check → manifest/lock/topology/governance → publish-gate.
+# Cross-platform entry: scripts/check_all.py
 # Individual targets above remain for Linux/macOS/Make and for --only steps.
 check check-all:
 	$(PYTHON) scripts/check_all.py

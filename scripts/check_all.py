@@ -5,8 +5,8 @@ Source of truth for *what* each step does remains the Makefile targets and the
 PowerShell scripts they invoke. This module orchestrates the same sequence and
 does not re-implement validation logic.
 
-Mirrors Makefile ``check`` plus ``architecture-check`` and ``publish-gate``
-(see Makefile targets ``check``, ``architecture-check``, ``publish-gate``):
+Mirrors Makefile ``check`` (see Makefile targets ``check``, ``architecture-check``,
+``dams-packages-check``, ``publish-gate``):
 
 1. generate-contracts          → scripts/generate-contracts.ps1
 2. slice/CLI pytest            → apps/cli/scripts/check.ps1
@@ -16,11 +16,14 @@ Mirrors Makefile ``check`` plus ``architecture-check`` and ``publish-gate``
 6. check-constraints           → scripts/check_constraint_matrix.py --gate-strict (ADR-045)
 7. compare-golden              → scripts/compare-golden.ps1
 8. architecture-check          → pytest + architecture_check.cli (Makefile)
-9. check-manifest              → moex-model check-manifest (ADR-047)
-10. lock-verify                → moex-model lock verify (ADR-047)
-11. check-topology             → moex_dams.catalog.cli check (ADR-048)
-12. check-governance           → moex_dams.governance.cli check (ADR-049)
-13. publish-gate               → python -m moex_model_cli.gates.publish_gate
+9. dams-packages-check         → pytest specification-dams / standard-linkml /
+                                 repository-loader / tests/architecture / tests/migration
+                                 (incl. pyshacl for L3)
+10. check-manifest              → moex-model check-manifest (ADR-047)
+11. lock-verify                → moex-model lock verify (ADR-047)
+12. check-topology             → moex_dams.catalog.cli check (ADR-048)
+13. check-governance           → moex_dams.governance.cli check (ADR-049)
+14. publish-gate               → python -m moex_model_cli.gates.publish_gate
 
 Usage (from repo root)::
 
@@ -55,6 +58,7 @@ STEP_IDS = (
     "check-constraints",
     "compare-golden",
     "architecture-check",
+    "dams-packages-check",
     "check-manifest",
     "lock-verify",
     "check-topology",
@@ -265,6 +269,59 @@ def run_step(step_id: str, python: str) -> StepResult:
                     code = _run_python_module(
                         python, "architecture_check.cli", "--root", str(REPO_ROOT)
                     )
+        elif step_id == "dams-packages-check":
+            # Makefile: dams-packages-check (audit R3-3 — also Stage 0 / make check)
+            install_pins = subprocess.run(
+                [
+                    python,
+                    "-m",
+                    "pip",
+                    "install",
+                    "-q",
+                    "-r",
+                    str(REPO_ROOT / "requirements-linkml.txt"),
+                    "pyshacl==0.40.1",
+                ],
+                cwd=str(REPO_ROOT),
+                check=False,
+            )
+            if install_pins.returncode != 0:
+                code = int(install_pins.returncode)
+            else:
+                install_pkgs = subprocess.run(
+                    [
+                        python,
+                        "-m",
+                        "pip",
+                        "install",
+                        "-q",
+                        "-e",
+                        str(REPO_ROOT / "generated/contracts/moex-dams/0.1"),
+                        "-e",
+                        str(REPO_ROOT / "packages/modeling-kernel"),
+                        "-e",
+                        str(REPO_ROOT / "packages/standard-linkml"),
+                        "-e",
+                        str(REPO_ROOT / "packages/specification-dams[dev]"),
+                        "-e",
+                        str(REPO_ROOT / "packages/repository-loader[dev]"),
+                        "pytest",
+                        "ruamel.yaml",
+                    ],
+                    cwd=str(REPO_ROOT),
+                    check=False,
+                )
+                if install_pkgs.returncode != 0:
+                    code = int(install_pkgs.returncode)
+                else:
+                    code = _run_pytest(
+                        python,
+                        "packages/specification-dams/tests",
+                        "packages/standard-linkml/tests",
+                        "packages/repository-loader/tests",
+                        "tests/architecture",
+                        "tests/migration",
+                    )
         elif step_id == "check-manifest":
             # ADR-047: repository manifest integrity
             code = _run_python_module(
@@ -360,7 +417,7 @@ def _print_table(results: list[StepResult]) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Run Stage 0 checks (Makefile check + architecture-check + publish-gate).",
+        description="Run Stage 0 checks (Makefile check, incl. dams-packages-check + publish-gate).",
     )
     parser.add_argument(
         "--keep-going",

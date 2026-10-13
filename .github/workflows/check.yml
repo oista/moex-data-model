@@ -26,30 +26,12 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y make
 
       # Primary entry: scripts/check_all.py (Makefile ``check`` delegates here).
-      # Slice-cli pytest excludes dams/architecture/repo-loader (owned by dams-packages).
+      # Includes dams-packages-check (specification-dams / standard-linkml /
+      # repository-loader / tests/architecture / tests/migration + pyshacl).
+      # Slice-cli pytest excludes that suite (no duplicate).
       # pwsh is preinstalled on ubuntu-latest for the underlying .ps1 steps.
       - name: Stage 0 check_all
         run: python scripts/check_all.py
-
-  # DAMS / LinkML / repository-loader / architecture / migration tests (audit A3 / R2-5)
-  dams-packages:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version-file: .python-version
-          cache: pip
-          cache-dependency-path: |
-            requirements-linkml.txt
-            packages/**/pyproject.toml
-
-      - name: Install make
-        run: sudo apt-get update && sudo apt-get install -y make
-
-      - name: dams-packages-check
-        run: make dams-packages-check
 
   # Viewer + ontology packages stay outside Stage 0 gate (heavier / separate deps)
   viewer-and-packages:
@@ -70,6 +52,7 @@ jobs:
       - name: Install make
         run: sudo apt-get update && sudo apt-get install -y make
 
+      # Ontology stack only — drawDB/DBML owned by workbench-check (no duplicate).
       - name: Ontology packages pytest
         run: make packages-check
 
@@ -79,7 +62,7 @@ jobs:
       - name: Viewer pytest + check
         run: make viewer-check
 
-  # Workbench: API (SQLite), web (npm), drawDB adapter round-trip
+  # Workbench: API (SQLite), web (npm), drawDB adapter + DBML projection
   workbench-check:
     runs-on: ubuntu-latest
     steps:
