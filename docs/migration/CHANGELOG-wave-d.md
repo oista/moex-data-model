@@ -41,3 +41,5 @@ Docs / architecture-check only — **no** aggregate schema bump in this wave.
 ## D5 — deferred
 
 Breaking identity train (6.0.0) only after ADR-051 evidence gate and explicit go-ahead.
+
+Work packages, owners, and entry criteria (R3-6): [TRAIN-6.0.0.md](TRAIN-6.0.0.md) — core T6-1…T6-3 (`api_version` rename, selection/binding → `EmbeddedElement`, orphan slot removal); optional T6-4…T6-8; pre-train minors M-1…M-5. Indexed from [P2-BACKLOG.md](P2-BACKLOG.md) F0-3 / F0-5…F0-7.

@@ -22,7 +22,7 @@ CI: `tests/architecture/test_schema_version_timeline.py` fails if the aggregate 
 | 5.0.0 | Governance assignment authority (removal) | ADR-049 PR-5; [CHANGELOG-governance.md](CHANGELOG-governance.md) |
 | 5.1.0 | Qualified assertion metadata (additive) | ADR-053 D1/D2; [CHANGELOG-assertion-metadata.md](CHANGELOG-assertion-metadata.md); INV-057 |
 | 5.1.0 | Global `element_id` uniqueness (no aggregate bump) | INV-058 + `check-manifest`; [CHANGELOG-global-element-id.md](CHANGELOG-global-element-id.md); ADR-054 |
-| 6.0.0 | *(planned)* Identity / embedded selection train | ADR-052 D5; only after ADR-051 evidence gate |
+| 6.0.0 | *(planned)* Identity / embedded selection train | ADR-052 D5; checklist [TRAIN-6.0.0.md](TRAIN-6.0.0.md) (G1–G6 + T6-*); only after ADR-051 evidence gate |
 
 ## Dual version surfaces
 
