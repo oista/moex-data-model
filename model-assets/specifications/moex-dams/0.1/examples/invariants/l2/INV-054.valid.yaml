@@ -1,0 +1,23 @@
+element_id: dams:model/inv042/1
+name: inv042_ok
+description: single approved classification assignment
+lifecycle_status: draft
+api_version: dams.moex/v0.1
+model_version: 1.0.0
+implementation_scope: solution
+solution_ref: eam:solution/INV042
+data_owner_ref: org:role/OWNER
+governance_classification: internal
+logical_entities:
+- element_id: dams:logical/inv042/X
+  name: X
+  description: entity X
+  lifecycle_status: draft
+  context_ref: dams:context/inv042
+  solution_data_role: producer
+classification_assignments:
+- assignment_id: dams:asg/inv042/ok
+  target_element_ref: dams:logical/inv042/X
+  assignment_scope: element
+  governance_classification: confidential
+  approval_status: approved

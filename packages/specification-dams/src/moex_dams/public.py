@@ -1,7 +1,11 @@
 """Public API for specification-dams."""
 
 from moex_dams.application.assess import SliceResult, assess_implementation
-from moex_dams.application.diff import diff_graphs, diff_implementations
+from moex_dams.application.diff import (
+    diff_governance_assignments,
+    diff_graphs,
+    diff_implementations,
+)
 from moex_dams.application.digest import (
     DigestMatch,
     DigestMismatch,
@@ -148,6 +152,7 @@ __all__ = [
     "collect_requirement_rows",
     "default_catalog_paths",
     "default_dams_rule_sets",
+    "diff_governance_assignments",
     "diff_graphs",
     "diff_implementations",
     "diff_schema_element_uris",

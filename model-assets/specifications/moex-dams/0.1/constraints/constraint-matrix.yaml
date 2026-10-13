@@ -1373,6 +1373,78 @@ invariants:
     L1: not-applicable
     L2: implemented
     L3: not-applicable
+- id: INV-054
+  title: No conflicting GovernanceAssignments on same target
+  statement: >
+    Two approved GovernanceAssignments of the same family on the same target
+    with overlapping validity windows and different values must fail
+    (conflicting_assignments). Nearest-target resolution must not pick a silent winner.
+  source: ADR-049
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-049
+  implementation:
+    dams_validator: moex_dams.rules.governance_assignments.check_governance_assignments
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-054.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-054.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-055
+  title: GovernanceAssignment target_element_ref resolves in package
+  statement: >
+    target_element_ref (or deprecated classified_element_ref / policy_target_ref)
+    must identify an element in the ModelPackage containment cascade
+    (dangling_target is an error).
+  source: ADR-049
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-049
+  implementation:
+    dams_validator: moex_dams.rules.governance_assignments.check_governance_assignments
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-055.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-055.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-056
+  title: Inline authored default shadowed by assignment is warned
+  statement: >
+    When an element declares an inline governed slot whose value differs from
+    the effective value supplied by an approved GovernanceAssignment, emit
+    shadowed_default (warning). Defaults remain legal under exceptions.
+  source: ADR-049
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: warning
+  status: implemented
+  adr_ref: ADR-049
+  implementation:
+    dams_validator: moex_dams.rules.governance_assignments.check_governance_assignments
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-056.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-056.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
 invariant_id_registry:
 - INV-001
 - INV-002
@@ -1427,3 +1499,6 @@ invariant_id_registry:
 - INV-051
 - INV-052
 - INV-053
+- INV-054
+- INV-055
+- INV-056
