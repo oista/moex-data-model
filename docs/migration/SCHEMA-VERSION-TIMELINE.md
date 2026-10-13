@@ -16,7 +16,8 @@ Catalogue path `moex-dams/0.1/` is the **product label** (MOEX DAMS 0.1). It is 
 | 3.2.0 | Topology ownership (additive) | ADR-048 PR-1; deprecate authored topology slots |
 | 4.0.0 | Topology ownership (removal) | ADR-048 PR-5; [CHANGELOG-topology.md](CHANGELOG-topology.md) |
 | 4.1.0 | Audit Wave C hardening | [CHANGELOG-wave-c.md](CHANGELOG-wave-c.md); INV-042…053; ADR-050 |
-| 5.0.0 | *(reserved)* Governance assignment authority | ADR-049 — **not on `main` yet** |
+| 4.2.0 | Governance assignment authority (additive) | ADR-049 PR-1…4; INV-054…056 |
+| 5.0.0 | Governance assignment authority (removal) | ADR-049 PR-5; [CHANGELOG-governance.md](CHANGELOG-governance.md) |
 | 6.0.0 | *(planned)* Identity / embedded selection train | ADR-052 D5; only after ADR-051 evidence gate |
 
 ## Dual version surfaces

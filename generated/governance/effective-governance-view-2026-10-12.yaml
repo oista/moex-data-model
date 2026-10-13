@@ -1,0 +1,251 @@
+# Generated EffectiveGovernanceView (ADR-049). Do not edit by hand.
+# Regenerate: python -m moex_dams.governance.cli materialize --root .
+as_of: '2026-10-12'
+built_at: '2026-10-12T19:17:57+00:00'
+input_digest: sha256:f6a439200b3881e1991844d390144afbbcf46f5e7f8ad188817fc6d51ccc9649
+package_refs:
+- dams:model/example-min/1.0.0
+- dams:model/gov-asg-example/1.0.0
+elements:
+- element_ref: dams:logical/example-min/Account
+  package_ref: dams:model/example-min/1.0.0
+  slots:
+  - slot_name: data_owner_ref
+    value: '"org:role/EXAMPLE_DATA_OWNER"'
+    layer: inline
+    source_element_id: dams:model/example-min/1.0.0
+  - slot_name: data_steward_ref
+    value: 'null'
+    layer: none
+  - slot_name: governance_classification
+    value: '"internal"'
+    layer: inline
+    source_element_id: dams:logical/example-min/Account
+  - slot_name: owning_unit_ref
+    value: 'null'
+    layer: none
+  - slot_name: policy_refs
+    value: '[]'
+    layer: none
+- element_ref: dams:logical/example-min/Account/account_id
+  package_ref: dams:model/example-min/1.0.0
+  slots:
+  - slot_name: data_owner_ref
+    value: '"org:role/EXAMPLE_DATA_OWNER"'
+    layer: inline
+    source_element_id: dams:model/example-min/1.0.0
+  - slot_name: data_steward_ref
+    value: 'null'
+    layer: none
+  - slot_name: governance_classification
+    value: '"internal"'
+    layer: inline
+    source_element_id: dams:logical/example-min/Account
+  - slot_name: owning_unit_ref
+    value: 'null'
+    layer: none
+  - slot_name: policy_refs
+    value: '[]'
+    layer: none
+- element_ref: dams:logical/example-min/Party
+  package_ref: dams:model/example-min/1.0.0
+  slots:
+  - slot_name: data_owner_ref
+    value: '"org:role/EXAMPLE_DATA_OWNER"'
+    layer: inline
+    source_element_id: dams:logical/example-min/Party
+  - slot_name: data_steward_ref
+    value: 'null'
+    layer: none
+  - slot_name: governance_classification
+    value: '"internal"'
+    layer: inline
+    source_element_id: dams:logical/example-min/Party
+  - slot_name: owning_unit_ref
+    value: 'null'
+    layer: none
+  - slot_name: policy_refs
+    value: '[]'
+    layer: none
+- element_ref: dams:logical/example-min/Party/party_id
+  package_ref: dams:model/example-min/1.0.0
+  slots:
+  - slot_name: data_owner_ref
+    value: '"org:role/EXAMPLE_DATA_OWNER"'
+    layer: inline
+    source_element_id: dams:logical/example-min/Party
+  - slot_name: data_steward_ref
+    value: 'null'
+    layer: none
+  - slot_name: governance_classification
+    value: '"internal"'
+    layer: inline
+    source_element_id: dams:logical/example-min/Party
+  - slot_name: owning_unit_ref
+    value: 'null'
+    layer: none
+  - slot_name: policy_refs
+    value: '[]'
+    layer: none
+- element_ref: dams:model/example-min/1.0.0
+  package_ref: dams:model/example-min/1.0.0
+  slots:
+  - slot_name: data_owner_ref
+    value: '"org:role/EXAMPLE_DATA_OWNER"'
+    layer: inline
+    source_element_id: dams:model/example-min/1.0.0
+  - slot_name: data_steward_ref
+    value: 'null'
+    layer: none
+  - slot_name: governance_classification
+    value: 'null'
+    layer: none
+  - slot_name: owning_unit_ref
+    value: 'null'
+    layer: none
+  - slot_name: policy_refs
+    value: '[]'
+    layer: none
+- element_ref: dams:physical/example-min/party-topic
+  package_ref: dams:model/example-min/1.0.0
+  slots:
+  - slot_name: data_owner_ref
+    value: '"org:role/EXAMPLE_DATA_OWNER"'
+    layer: inline
+    source_element_id: dams:model/example-min/1.0.0
+  - slot_name: data_steward_ref
+    value: 'null'
+    layer: none
+  - slot_name: governance_classification
+    value: 'null'
+    layer: none
+  - slot_name: owning_unit_ref
+    value: 'null'
+    layer: none
+  - slot_name: policy_refs
+    value: '[]'
+    layer: none
+- element_ref: dams:structure/example-min/party-topic
+  package_ref: dams:model/example-min/1.0.0
+  slots:
+  - slot_name: data_owner_ref
+    value: '"org:role/EXAMPLE_DATA_OWNER"'
+    layer: inline
+    source_element_id: dams:model/example-min/1.0.0
+  - slot_name: data_steward_ref
+    value: 'null'
+    layer: none
+  - slot_name: governance_classification
+    value: 'null'
+    layer: none
+  - slot_name: owning_unit_ref
+    value: 'null'
+    layer: none
+  - slot_name: policy_refs
+    value: '[]'
+    layer: none
+- element_ref: dams:structure/example-min/party-topic#party_id
+  package_ref: dams:model/example-min/1.0.0
+  slots:
+  - slot_name: data_owner_ref
+    value: '"org:role/EXAMPLE_DATA_OWNER"'
+    layer: inline
+    source_element_id: dams:model/example-min/1.0.0
+  - slot_name: data_steward_ref
+    value: 'null'
+    layer: none
+  - slot_name: governance_classification
+    value: 'null'
+    layer: none
+  - slot_name: owning_unit_ref
+    value: 'null'
+    layer: none
+  - slot_name: policy_refs
+    value: '[]'
+    layer: none
+- element_ref: dams:structure/example-min/party-topic#root
+  package_ref: dams:model/example-min/1.0.0
+  slots:
+  - slot_name: data_owner_ref
+    value: '"org:role/EXAMPLE_DATA_OWNER"'
+    layer: inline
+    source_element_id: dams:model/example-min/1.0.0
+  - slot_name: data_steward_ref
+    value: 'null'
+    layer: none
+  - slot_name: governance_classification
+    value: 'null'
+    layer: none
+  - slot_name: owning_unit_ref
+    value: 'null'
+    layer: none
+  - slot_name: policy_refs
+    value: '[]'
+    layer: none
+- element_ref: dams:logical/gov-asg-example/Party
+  package_ref: dams:model/gov-asg-example/1.0.0
+  slots:
+  - slot_name: data_owner_ref
+    value: '"org:role/EXAMPLE_DATA_OWNER"'
+    layer: inline
+    source_element_id: dams:model/gov-asg-example/1.0.0
+  - slot_name: data_steward_ref
+    value: 'null'
+    layer: none
+  - slot_name: governance_classification
+    value: '"confidential"'
+    layer: assignment
+    source_element_id: dams:logical/gov-asg-example/Party
+    assignment_id: dams:asg/gov-asg-example/class/party
+  - slot_name: owning_unit_ref
+    value: 'null'
+    layer: none
+  - slot_name: policy_refs
+    value: '["pol:P-BASE", "pol:P-EXTRA"]'
+    layer: assignment
+    source_element_id: dams:logical/gov-asg-example/Party
+    assignment_id: dams:asg/gov-asg-example/pol/party
+- element_ref: dams:logical/gov-asg-example/Party/party_id
+  package_ref: dams:model/gov-asg-example/1.0.0
+  slots:
+  - slot_name: data_owner_ref
+    value: '"org:role/EXAMPLE_DATA_OWNER"'
+    layer: inline
+    source_element_id: dams:model/gov-asg-example/1.0.0
+  - slot_name: data_steward_ref
+    value: 'null'
+    layer: none
+  - slot_name: governance_classification
+    value: '"confidential"'
+    layer: assignment
+    source_element_id: dams:logical/gov-asg-example/Party
+    assignment_id: dams:asg/gov-asg-example/class/party
+  - slot_name: owning_unit_ref
+    value: 'null'
+    layer: none
+  - slot_name: policy_refs
+    value: '["pol:P-BASE", "pol:P-EXTRA"]'
+    layer: assignment
+    source_element_id: dams:logical/gov-asg-example/Party
+    assignment_id: dams:asg/gov-asg-example/pol/party
+- element_ref: dams:model/gov-asg-example/1.0.0
+  package_ref: dams:model/gov-asg-example/1.0.0
+  slots:
+  - slot_name: data_owner_ref
+    value: '"org:role/EXAMPLE_DATA_OWNER"'
+    layer: inline
+    source_element_id: dams:model/gov-asg-example/1.0.0
+  - slot_name: data_steward_ref
+    value: 'null'
+    layer: none
+  - slot_name: governance_classification
+    value: '"internal"'
+    layer: inline
+    source_element_id: dams:model/gov-asg-example/1.0.0
+  - slot_name: owning_unit_ref
+    value: 'null'
+    layer: none
+  - slot_name: policy_refs
+    value: '["pol:P-BASE"]'
+    layer: inline
+    source_element_id: dams:model/gov-asg-example/1.0.0

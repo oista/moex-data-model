@@ -15,28 +15,50 @@ default_prefix: dams
 default_range: string
 
 classes:
-  ClassificationAssignment:
-    description: Версионируемое назначение категории классификации элементу модели с основанием и периодом действия.
+  GovernanceAssignment:
+    abstract: true
+    description: >
+      Authored authoritative governance fact for a target element (ADR-049).
+      Overrides inline authored defaults (ADR-023 cascade) for the validity
+      window and assignment_scope. Effective values are not stored on this
+      class; they appear only in EffectiveGovernanceView.
     mixins:
       - HasValidity
+      - HasProvenance
     slots:
       - assignment_id
-      - classified_element_ref
+      - target_element_ref
+      - assignment_scope
+
+  ClassificationAssignment:
+    is_a: GovernanceAssignment
+    description: >
+      Версионируемое назначение категории классификации элементу модели
+      с основанием и периодом действия (ADR-049 authoritative layer).
+    slots:
       - classification_term_ref
       - governance_classification
       - classification_source
       - classification_rationale
-      - approval_status
 
   PolicyBinding:
-    description: Применение управляемой политики к элементу модели.
-    mixins:
-      - HasValidity
+    is_a: GovernanceAssignment
+    description: >
+      Применение управляемой политики к элементу модели
+      (ADR-049 authoritative layer).
     slots:
-      - policy_binding_id
-      - policy_target_ref
       - policy_ref
-      - approval_status
+      - binding_effect
+
+  OwnershipAssignment:
+    is_a: GovernanceAssignment
+    description: >
+      Версионируемое назначение data owner / steward / owning unit
+      элементу модели (ADR-049 authoritative layer).
+    slots:
+      - data_owner_ref
+      - data_steward_ref
+      - owning_unit_ref
 
   HasLifecycle:
     mixin: true
@@ -51,8 +73,9 @@ classes:
     mixin: true
     description: >
       Mixin владения: data owner, data steward и организационное подразделение.
-      Отсутствие слота означает наследование эффективного значения по containment
-      cascade (ADR-023); заданное значение — локальный override.
+      Authored default (ADR-023 cascade: absent key inherits; present = override).
+      Overridden by OwnershipAssignment when approved and in force (ADR-049).
+      Effective ownership is not stored on the element.
     slots:
       - data_owner_ref
       - data_steward_ref
@@ -71,8 +94,9 @@ classes:
     mixin: true
     description: >
       Базовая и специальная классификация чувствительности данных.
-      governance_classification участвует в containment cascade (ADR-023):
-      пустой слот наследуется от родителя, заданный — override.
+      Authored default: governance_classification участвует в containment
+      cascade (ADR-023). Overridden by ClassificationAssignment when approved
+      and in force (ADR-049). Effective classification is not stored here.
     slots:
       - governance_classification
       - security_classification
@@ -84,8 +108,10 @@ classes:
     mixin: true
     description: >
       Mixin привязки управляемых политик к элементу модели.
-      policy_refs участвует в containment cascade (ADR-023): отсутствие ключа —
-      наследование; присутствующий список (в т.ч. пустой) — полная замена.
+      Authored default: policy_refs участвует в containment cascade (ADR-023);
+      absent key inherits; present list (including empty) is full replace.
+      Overridden by PolicyBinding when approved and in force (ADR-049).
+      Effective policy set is not stored here.
     slots:
       - policy_refs
 
@@ -147,23 +173,29 @@ slots:
     identifier: true
     range: uriorcurie
     required: true
-  classified_element_ref:
+  target_element_ref:
     range: uriorcurie
     required: true
+    description: >
+      Element covered by this assignment (element_id) (ADR-049).
+  assignment_scope:
+    range: AssignmentScopeEnum
+    required: true
+    description: >
+      element = target only; subtree = target and descendants in the
+      containment cascade (ADR-023 / ADR-049).
   classification_term_ref:
     range: DataClassificationTerm
     inlined: false
-  policy_binding_id:
-    identifier: true
-    range: uriorcurie
-    required: true
-  policy_target_ref:
-    range: uriorcurie
-    required: true
   policy_ref:
     range: Policy
     inlined: false
     required: true
+  binding_effect:
+    range: BindingEffectEnum
+    description: >
+      How this PolicyBinding combines with lower layers (ADR-049).
+      Default replace = list-replace like ADR-023; add = union onto cascade.
   lifecycle_status:
     range: LifecycleStatusEnum
     required: true

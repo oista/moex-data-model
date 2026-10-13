@@ -24,6 +24,11 @@ from moex_dams.mappings.dams_to_graph import build_dams_graph, package_index
 # Keys compared for property deltas (order matters for messaging).
 _DOC_KEYS = frozenset({"description", "title", "name"})
 _GOV_KEYS = frozenset({"governance_classification"})
+_ASSIGNMENT_COLLECTIONS = (
+    "classification_assignments",
+    "policy_bindings",
+    "ownership_assignments",
+)
 _SKIP_KEYS = frozenset(
     {
         "element_id",
@@ -107,7 +112,7 @@ def diff_implementations(
     right_body = repo.load_implementation(right_ref, path=right_path)
     left_graph = build_dams_graph(left_body)
     right_graph = build_dams_graph(right_body)
-    return diff_graphs(
+    report = diff_graphs(
         left_graph,
         right_graph,
         left_index=package_index(left_body.data),
@@ -115,6 +120,70 @@ def diff_implementations(
         base_label=base_label or left_path.name,
         target_label=target_label or right_path.name,
     )
+    asg_changes = diff_governance_assignments(left_body.data, right_body.data)
+    if not asg_changes:
+        return report
+    return SemanticDiffReport(
+        id=report.id,
+        base_label=report.base_label,
+        target_label=report.target_label,
+        changes=tuple(report.changes) + tuple(asg_changes),
+    )
+
+
+def diff_governance_assignments(
+    left: dict[str, Any],
+    right: dict[str, Any],
+) -> list[SemanticChange]:
+    """Compare GovernanceAssignment collections as first-class authored objects.
+
+    Declared inline slots remain compared via ``_GOV_KEYS`` / item delta
+    (ADR-023). Assignments are not materialised effective values (ADR-049).
+    """
+    changes: list[SemanticChange] = []
+    for key in _ASSIGNMENT_COLLECTIONS:
+        left_by_id = {
+            str(item.get("assignment_id") or item.get("policy_binding_id") or idx): item
+            for idx, item in enumerate(left.get(key) or [])
+            if isinstance(item, dict)
+        }
+        right_by_id = {
+            str(item.get("assignment_id") or item.get("policy_binding_id") or idx): item
+            for idx, item in enumerate(right.get(key) or [])
+            if isinstance(item, dict)
+        }
+        for aid in sorted(right_by_id.keys() - left_by_id.keys()):
+            changes.append(
+                SemanticChange(
+                    change_code="DAMS-DIFF-ASG-ADD",
+                    category=ChangeCategory.GOVERNANCE,
+                    subject_ref=aid,
+                    message=f"Added {key} assignment {aid}",
+                    path=key,
+                )
+            )
+        for aid in sorted(left_by_id.keys() - right_by_id.keys()):
+            changes.append(
+                SemanticChange(
+                    change_code="DAMS-DIFF-ASG-REMOVE",
+                    category=ChangeCategory.GOVERNANCE,
+                    subject_ref=aid,
+                    message=f"Removed {key} assignment {aid}",
+                    path=key,
+                )
+            )
+        for aid in sorted(left_by_id.keys() & right_by_id.keys()):
+            if left_by_id[aid] != right_by_id[aid]:
+                changes.append(
+                    SemanticChange(
+                        change_code="DAMS-DIFF-ASG-CHANGE",
+                        category=ChangeCategory.GOVERNANCE,
+                        subject_ref=aid,
+                        message=f"Changed {key} assignment {aid}",
+                        path=key,
+                    )
+                )
+    return changes
 
 
 def diff_graphs(

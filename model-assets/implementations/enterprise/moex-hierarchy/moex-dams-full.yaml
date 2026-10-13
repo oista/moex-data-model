@@ -3,7 +3,7 @@
 # Do not edit by hand — regenerated at viewer publication build.
 name: moex_dams
 id: https://data.moex.com/dams/v0.1
-version: 4.1.0
+version: 5.0.0
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml:
@@ -650,6 +650,32 @@ enums:
         text: confidential
       restricted:
         text: restricted
+  AssignmentScopeEnum:
+    name: AssignmentScopeEnum
+    description: 'Scope of a GovernanceAssignment relative to target_element_ref (ADR-049).
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      element:
+        text: element
+        description: Applies only to the target element.
+      subtree:
+        text: subtree
+        description: Applies to the target and descendants in the containment cascade.
+  BindingEffectEnum:
+    name: BindingEffectEnum
+    description: 'How a PolicyBinding combines with lower-layer policy_refs (ADR-049).
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      replace:
+        text: replace
+        description: Full replace of effective policy list (default; ADR-023 list-replace).
+      add:
+        text: add
+        description: Union onto the next lower layer (cascade or nearer assignment).
   LogicalDataTypeEnum:
     name: LogicalDataTypeEnum
     description: 'Seed catalog only (ADR-036). Not the range of LogicalAttribute.
@@ -1296,6 +1322,13 @@ slots:
     multivalued: true
     inlined: true
     inlined_as_list: true
+  ownership_assignments:
+    name: ownership_assignments
+    from_schema: https://data.moex.com/dams/v0.1
+    range: OwnershipAssignment
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
   registry_id:
     name: registry_id
     from_schema: https://data.moex.com/dams/registries/v0.1
@@ -1400,33 +1433,42 @@ slots:
     identifier: true
     range: uriorcurie
     required: true
-  classified_element_ref:
-    name: classified_element_ref
+  target_element_ref:
+    name: target_element_ref
+    description: 'Element covered by this assignment (element_id) (ADR-049).
+
+      '
     from_schema: https://data.moex.com/dams/governance/v0.1
     range: uriorcurie
+    required: true
+  assignment_scope:
+    name: assignment_scope
+    description: 'element = target only; subtree = target and descendants in the containment
+      cascade (ADR-023 / ADR-049).
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: AssignmentScopeEnum
     required: true
   classification_term_ref:
     name: classification_term_ref
     from_schema: https://data.moex.com/dams/governance/v0.1
     range: DataClassificationTerm
     inlined: false
-  policy_binding_id:
-    name: policy_binding_id
-    from_schema: https://data.moex.com/dams/governance/v0.1
-    identifier: true
-    range: uriorcurie
-    required: true
-  policy_target_ref:
-    name: policy_target_ref
-    from_schema: https://data.moex.com/dams/governance/v0.1
-    range: uriorcurie
-    required: true
   policy_ref:
     name: policy_ref
     from_schema: https://data.moex.com/dams/governance/v0.1
     range: Policy
     required: true
     inlined: false
+  binding_effect:
+    name: binding_effect
+    description: 'How this PolicyBinding combines with lower layers (ADR-049). Default
+      replace = list-replace like ADR-023; add = union onto cascade.
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: BindingEffectEnum
   lifecycle_status:
     name: lifecycle_status
     from_schema: https://data.moex.com/dams/governance/v0.1
@@ -3223,6 +3265,7 @@ classes:
     - dimensions
     - classification_assignments
     - policy_bindings
+    - ownership_assignments
     tree_root: true
   RegistryEntry:
     name: RegistryEntry
@@ -3350,32 +3393,59 @@ classes:
     slots:
     - valid_from
     - valid_to
-  ClassificationAssignment:
-    name: ClassificationAssignment
-    description: Версионируемое назначение категории классификации элементу модели
-      с основанием и периодом действия.
+  GovernanceAssignment:
+    name: GovernanceAssignment
+    description: 'Authored authoritative governance fact for a target element (ADR-049).
+      Overrides inline authored defaults (ADR-023 cascade) for the validity window
+      and assignment_scope. Effective values are not stored on this class; they appear
+      only in EffectiveGovernanceView.
+
+      '
     from_schema: https://data.moex.com/dams/governance/v0.1
+    abstract: true
     mixins:
     - HasValidity
+    - HasProvenance
     slots:
     - assignment_id
-    - classified_element_ref
+    - target_element_ref
+    - assignment_scope
+  ClassificationAssignment:
+    name: ClassificationAssignment
+    description: 'Версионируемое назначение категории классификации элементу модели
+      с основанием и периодом действия (ADR-049 authoritative layer).
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    is_a: GovernanceAssignment
+    slots:
     - classification_term_ref
     - governance_classification
     - classification_source
     - classification_rationale
-    - approval_status
   PolicyBinding:
     name: PolicyBinding
-    description: Применение управляемой политики к элементу модели.
+    description: 'Применение управляемой политики к элементу модели (ADR-049 authoritative
+      layer).
+
+      '
     from_schema: https://data.moex.com/dams/governance/v0.1
-    mixins:
-    - HasValidity
+    is_a: GovernanceAssignment
     slots:
-    - policy_binding_id
-    - policy_target_ref
     - policy_ref
-    - approval_status
+    - binding_effect
+  OwnershipAssignment:
+    name: OwnershipAssignment
+    description: 'Версионируемое назначение data owner / steward / owning unit элементу
+      модели (ADR-049 authoritative layer).
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    is_a: GovernanceAssignment
+    slots:
+    - data_owner_ref
+    - data_steward_ref
+    - owning_unit_ref
   HasLifecycle:
     name: HasLifecycle
     description: 'Mixin жизненного цикла: статус, период действия и ссылка на заменяющий
@@ -3390,8 +3460,9 @@ classes:
   HasOwnership:
     name: HasOwnership
     description: 'Mixin владения: data owner, data steward и организационное подразделение.
-      Отсутствие слота означает наследование эффективного значения по containment
-      cascade (ADR-023); заданное значение — локальный override.
+      Authored default (ADR-023 cascade: absent key inherits; present = override).
+      Overridden by OwnershipAssignment when approved and in force (ADR-049). Effective
+      ownership is not stored on the element.
 
       '
     from_schema: https://data.moex.com/dams/governance/v0.1
@@ -3412,9 +3483,10 @@ classes:
     - business_importance
   HasGovernanceClassification:
     name: HasGovernanceClassification
-    description: 'Базовая и специальная классификация чувствительности данных. governance_classification
-      участвует в containment cascade (ADR-023): пустой слот наследуется от родителя,
-      заданный — override.
+    description: 'Базовая и специальная классификация чувствительности данных. Authored
+      default: governance_classification участвует в containment cascade (ADR-023).
+      Overridden by ClassificationAssignment when approved and in force (ADR-049).
+      Effective classification is not stored here.
 
       '
     from_schema: https://data.moex.com/dams/governance/v0.1
@@ -3427,9 +3499,10 @@ classes:
     - classification_rationale
   HasPolicyBindings:
     name: HasPolicyBindings
-    description: 'Mixin привязки управляемых политик к элементу модели. policy_refs
-      участвует в containment cascade (ADR-023): отсутствие ключа — наследование;
-      присутствующий список (в т.ч. пустой) — полная замена.
+    description: 'Mixin привязки управляемых политик к элементу модели. Authored default:
+      policy_refs участвует в containment cascade (ADR-023); absent key inherits;
+      present list (including empty) is full replace. Overridden by PolicyBinding
+      when approved and in force (ADR-049). Effective policy set is not stored here.
 
       '
     from_schema: https://data.moex.com/dams/governance/v0.1

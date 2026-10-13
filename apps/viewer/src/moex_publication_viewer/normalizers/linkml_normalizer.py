@@ -75,9 +75,10 @@ _SCHEMA_GROUP_META_BASE: dict[str, tuple[int, str, str, str, str]] = {
         "Governance",
         "Сквозные правила владения, жизненного цикла, классификации, политик и provenance — "
         "горизонтальные «грани», накладываемые на любые элементы модели.",
-        "Оформлен mixins плюс самостоятельными PolicyBinding и ClassificationAssignment, а не "
-        "полями только в LogicalEntity: одни и те же concerns нужны DataCarrier, Mapping, "
-        "package. История классификации не должна теряться в inline-полях.",
+        "Inline-слоты mixins — authored defaults (ADR-023 cascade). Авторитетный слой — "
+        "GovernanceAssignment (ClassificationAssignment, PolicyBinding, OwnershipAssignment) "
+        "с окном действия и scope (ADR-049). Эффективные значения читаются из "
+        "материализованного EffectiveGovernanceView, а не пишутся в элементы модели.",
         "moex-governance.yaml",
     ),
     "moex_integration": (

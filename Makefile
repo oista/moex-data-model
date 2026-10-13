@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check viewer-serve packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements check-constraints dams-packages-check generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate digest-check ontology-check check-manifest lock-verify check-topology
+.PHONY: viewer viewer-check viewer-serve packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements check-constraints dams-packages-check generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate digest-check ontology-check check-manifest lock-verify check-topology check-governance
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -62,6 +62,11 @@ lock-verify:
 check-topology:
 	$(PYTHON) -m pip install -q -e "./$(DAMS)"
 	$(PYTHON) -m moex_dams.catalog.cli check --root .
+
+# ADR-049: EffectiveGovernanceView freshness + blocking assignment diagnostics
+check-governance:
+	$(PYTHON) -m pip install -q -e "./$(DAMS)"
+	$(PYTHON) -m moex_dams.governance.cli check --root .
 
 # Uses package .venv (Python 3.11+). Without make:
 #   powershell -NoProfile -File packages/standard-linkml/scripts/check.ps1

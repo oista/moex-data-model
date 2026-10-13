@@ -65,6 +65,7 @@ Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decision
 | [ADR-046](ADR-046-typed-mapping-endpoints.md) | Typed Mapping endpoints (subclasses + separate collections) | Accepted | typed Mapping collections; schema 3.1.0 |
 | [ADR-047](ADR-047-repository-manifest-and-lock.md) | Repository manifest and lock | Accepted | repository manifest + lock |
 | [ADR-048](ADR-048-topology-ownership.md) | Topology ownership (Clinkr/EAM SoT, DAMS semantic bindings) | Accepted | topology ownership; schema 4.0.0→4.1.0 |
+| [ADR-049](ADR-049-governance-assignment-authority.md) | Governance assignment authority (assignments over cascade; EffectiveGovernanceView) | Accepted | schema 5.0.0; INV-054..056; see governance-inventory.md |
 | [ADR-050](ADR-050-containment-parent-refs.md) | Containment parent refs (owner equality / INV-052) | Accepted | containment equality; Wave C3 |
 | [ADR-051](ADR-051-dams-schema-compatibility.md) | DAMS schema compatibility (semver + release trains) | Accepted | aggregate semver; timeline; evidence gate |
 | [ADR-052](ADR-052-identity-and-versioning.md) | Identity and versioning (five layers) | Accepted | identity map; api_version rename deferred; id_prefixes lint |
@@ -80,5 +81,4 @@ Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decision
 ## Notes
 
 - Aggregate DAMS schema version on `main`: see `model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml` (`version:` field). Catalogue path `0.1/` is the product label; it is not the LinkML semver. Living table: [SCHEMA-VERSION-TIMELINE.md](../migration/SCHEMA-VERSION-TIMELINE.md) (ADR-051).
-- ADR-049 (governance assignment authority) is **not** on `main` yet (number reserved; Wave D4 blocked until it lands).
 - `superseded_by: MODELING_ARCHITECTURE.md` is reserved for drafts that are fully absorbed; Accepted ADRs use `superseded_by: []`.

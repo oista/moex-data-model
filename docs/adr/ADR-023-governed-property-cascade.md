@@ -86,10 +86,11 @@ governed-family extension of this containment cascade.
 | Mechanism | Role |
 |---|---|
 | Inline cascade slots | Declared default on the element |
-| `ClassificationAssignment` / `PolicyBinding` (+ future `OwnershipAssignment`) | Dated / approved exceptions |
+| `ClassificationAssignment` / `PolicyBinding` / `OwnershipAssignment` | Dated / approved authoritative overrides |
 
-v1 resolver reads **inline slots only**. Extension point: assignments override
-cascade for their validity window.
+v1 resolver (this ADR) reads **inline slots only**. The assignment layer —
+priority, scope, conflict diagnostics, and `EffectiveGovernanceView` — is
+specified in [ADR-049](ADR-049-governance-assignment-authority.md).
 
 ### Functional surface
 
@@ -127,4 +128,5 @@ cascade for their validity window.
 - ADR-001 (YAML canonical), ADR-007 (DTO ≠ validator), ADR-013 (requirements catalog / formal_checks)
 - ADR-025 (definition cascade on the semantic axis; closes the deferred realizes note for definitions only)
 - ADR-026 (`entity_tier` / `genesis_kind` are structural metadata on ConceptualEntity; they do **not** participate in this containment cascade)
-)
+- ADR-049 (governance assignment authority: assignments override this cascade; effective view)
+

@@ -276,6 +276,7 @@ def _run_l2_package_checks(data: dict[str, Any]) -> list[Any]:
     """Run L2 package checks once (technical_assets already includes data_structures)."""
     from moex_dams.rules.catalog_topology import check_catalog_topology
     from moex_dams.rules.conceptual_entity import check_conceptual_entities
+    from moex_dams.rules.governance_assignments import check_governance_assignments
     from moex_dams.rules.package_invariants import check_package_invariants
     from moex_dams.rules.relation_terms import check_relation_terms
     from moex_dams.rules.semantic_layer import check_semantic_layer
@@ -290,6 +291,7 @@ def _run_l2_package_checks(data: dict[str, Any]) -> list[Any]:
     diags.extend(check_relation_terms(data))
     diags.extend(check_structural_data(data))
     diags.extend(check_package_invariants(data))
+    diags.extend(check_governance_assignments(data))
     return diags
 
 

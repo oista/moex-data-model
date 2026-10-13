@@ -1,0 +1,23 @@
+element_id: dams:model/inv043-bad/1
+name: inv043_bad
+description: assignment target missing from package
+lifecycle_status: draft
+api_version: dams.moex/v0.1
+model_version: 1.0.0
+implementation_scope: solution
+solution_ref: eam:solution/INV043
+data_owner_ref: org:role/OWNER
+governance_classification: internal
+logical_entities:
+- element_id: dams:logical/inv043-bad/X
+  name: X
+  description: entity X
+  lifecycle_status: draft
+  context_ref: dams:context/inv043
+  solution_data_role: producer
+classification_assignments:
+- assignment_id: dams:asg/inv043/ghost
+  target_element_ref: dams:logical/inv043-bad/MISSING
+  assignment_scope: element
+  governance_classification: confidential
+  approval_status: approved

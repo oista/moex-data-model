@@ -52,10 +52,10 @@
 | Mixin | Назначение |
 |---|---|
 | `HasLifecycle` | Жизненный цикл элемента: `lifecycle_status`, `valid_from`, `valid_to`, `deprecated_by_ref` |
-| `HasOwnership` | Владение: `data_owner_ref`, `data_steward_ref`, `owning_unit_ref` (absent = cascade inherit, ADR-023) |
+| `HasOwnership` | Authored default владения: `data_owner_ref`, `data_steward_ref`, `owning_unit_ref` (absent = cascade inherit, ADR-023); перекрывается `OwnershipAssignment` (ADR-049) |
 | `HasBusinessClassification` | Роль в бизнесе: `entity_type`, `data_class`, `business_importance` (не каскадируются) |
-| `HasGovernanceClassification` | Базовая маркировка: `governance_classification` каскадируется (ADR-023); `security_classification` — Wave 2 |
-| `HasPolicyBindings` | `policy_refs`: absent = inherit; present list (в т.ч. `[]`) = full replace (ADR-023) |
+| `HasGovernanceClassification` | Authored default: `governance_classification` каскадируется (ADR-023); перекрывается `ClassificationAssignment` (ADR-049); `security_classification` — Wave 2 |
+| `HasPolicyBindings` | Authored default `policy_refs`: absent = inherit; present list (в т.ч. `[]`) = full replace (ADR-023); перекрывается `PolicyBinding` (ADR-049) |
 | `HasDefinition` | Эталонное определение (ADR-025): `description` = own `skos:definition`; `definition_source_ref` / `scoped_definitions`; наследование по семантической оси, не containment. Также на `RelationTerm` (ADR-026) |
 | `HasProvenance` | Происхождение и согласование: `source_artifact_ref`, `approval_status`, `approved_by_ref`, `approved_at`. Также на `ExternalClassRef` / `ScopedDefinition` |
 

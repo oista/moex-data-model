@@ -1,0 +1,69 @@
+# Example ModelPackage with authoritative ClassificationAssignment (ADR-049).
+# Inline governance_classification on the package is an authored default;
+# the assignment overrides entity Party for its validity window.
+element_id: dams:model/gov-asg-example/1.0.0
+name: governance_assignments_example
+title: Пример GovernanceAssignment поверх cascade
+description: >
+  Минимальный пакет с ClassificationAssignment (subtree на сущности) и
+  PolicyBinding (add). Effective values читаются из EffectiveGovernanceView.
+lifecycle_status: draft
+api_version: dams.moex/v0.1
+model_version: 1.0.0
+implementation_scope: solution
+solution_ref: eam:solution/GOV_ASG_EXAMPLE
+data_owner_ref: org:role/EXAMPLE_DATA_OWNER
+governance_classification: internal
+policy_refs:
+- pol:P-BASE
+domain_contexts:
+- element_id: dams:context/gov-asg-example
+  name: GovAsgContext
+  title: Контекст примера назначений
+  description: Доменный контекст для демонстрации ADR-049.
+  lifecycle_status: active
+  domain_ref: eam:domain/EXAMPLE
+  solution_ref: eam:solution/GOV_ASG_EXAMPLE
+  namespace: https://data.moex.com/models/gov-asg-example/
+logical_entities:
+- element_id: dams:logical/gov-asg-example/Party
+  name: Party
+  title: Сторона
+  description: Логическая сущность под назначением classification.
+  lifecycle_status: active
+  context_ref: dams:context/gov-asg-example
+  solution_ref: eam:solution/GOV_ASG_EXAMPLE
+  solution_data_role: producer
+  entity_type: core
+  data_class: master_data
+  business_importance: high
+  identity_rule: Локальный идентификатор стороны.
+  business_key_kind: local
+  conceptual_alignment_status: local-only
+  alignment_rationale: Демонстрационный пакет ADR-049.
+  attributes:
+  - element_id: dams:logical/gov-asg-example/Party/party_id
+    name: party_id
+    title: Идентификатор стороны
+    description: Стабильный локальный ключ.
+    lifecycle_status: active
+    owner_entity_ref: dams:logical/gov-asg-example/Party
+    data_type_ref: dams:datatype/string
+    required: true
+    multivalued: false
+classification_assignments:
+- assignment_id: dams:asg/gov-asg-example/class/party
+  target_element_ref: dams:logical/gov-asg-example/Party
+  assignment_scope: subtree
+  governance_classification: confidential
+  approval_status: approved
+  valid_from: 2026-01-01
+  classification_rationale: Пример dated override поверх package default.
+policy_bindings:
+- assignment_id: dams:asg/gov-asg-example/pol/party
+  target_element_ref: dams:logical/gov-asg-example/Party
+  assignment_scope: subtree
+  policy_ref: pol:P-EXTRA
+  binding_effect: add
+  approval_status: approved
+  valid_from: 2026-01-01

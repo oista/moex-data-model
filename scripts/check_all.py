@@ -19,7 +19,8 @@ Mirrors Makefile ``check`` plus ``architecture-check`` and ``publish-gate``
 9. check-manifest              → moex-model check-manifest (ADR-047)
 10. lock-verify                → moex-model lock verify (ADR-047)
 11. check-topology             → moex_dams.catalog.cli check (ADR-048)
-12. publish-gate               → python -m moex_model_cli.gates.publish_gate
+12. check-governance           → moex_dams.governance.cli check (ADR-049)
+13. publish-gate               → python -m moex_model_cli.gates.publish_gate
 
 Usage (from repo root)::
 
@@ -57,6 +58,7 @@ STEP_IDS = (
     "check-manifest",
     "lock-verify",
     "check-topology",
+    "check-governance",
     "publish-gate",
 )
 
@@ -293,6 +295,31 @@ def run_step(step_id: str, python: str) -> StepResult:
             else:
                 code = _run_python_module(
                     python, "moex_dams.catalog.cli", "check", "--root", str(REPO_ROOT)
+                )
+        elif step_id == "check-governance":
+            # ADR-049: EffectiveGovernanceView + blocking assignment diagnostics
+            install = subprocess.run(
+                [
+                    python,
+                    "-m",
+                    "pip",
+                    "install",
+                    "-q",
+                    "-e",
+                    str(REPO_ROOT / "packages/specification-dams"),
+                ],
+                cwd=str(REPO_ROOT),
+                check=False,
+            )
+            if install.returncode != 0:
+                code = int(install.returncode)
+            else:
+                code = _run_python_module(
+                    python,
+                    "moex_dams.governance.cli",
+                    "check",
+                    "--root",
+                    str(REPO_ROOT),
                 )
         elif step_id == "publish-gate":
             # Makefile: publish-gate

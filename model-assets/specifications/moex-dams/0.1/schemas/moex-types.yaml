@@ -245,6 +245,22 @@ enums:
       internal:
       confidential:
       restricted:
+  AssignmentScopeEnum:
+    description: >
+      Scope of a GovernanceAssignment relative to target_element_ref (ADR-049).
+    permissible_values:
+      element:
+        description: Applies only to the target element.
+      subtree:
+        description: Applies to the target and descendants in the containment cascade.
+  BindingEffectEnum:
+    description: >
+      How a PolicyBinding combines with lower-layer policy_refs (ADR-049).
+    permissible_values:
+      replace:
+        description: Full replace of effective policy list (default; ADR-023 list-replace).
+      add:
+        description: Union onto the next lower layer (cascade or nearer assignment).
   LogicalDataTypeEnum:
     deprecated: true
     description: >
