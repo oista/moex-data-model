@@ -33,6 +33,7 @@ from moex_dams.application.schema_diff import (
     write_schema_diff_report,
 )
 from moex_dams.application.rules_runner import (
+    L2_PRODUCTION_MODULES,
     RuleSet,
     default_dams_rule_sets,
     run_rule_sets,
@@ -122,6 +123,7 @@ __all__ = [
     "GovernanceFinding",
     "GraphEdge",
     "GraphNode",
+    "L2_PRODUCTION_MODULES",
     "MappingExternalProvider",
     "ModelPackage",
     "NodeKind",
