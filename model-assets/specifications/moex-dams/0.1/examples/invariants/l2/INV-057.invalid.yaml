@@ -1,0 +1,30 @@
+element_id: dams:model/inv057-bad
+name: inv057-bad
+description: Same concept+IRI on both paths with conflicting confidence
+lifecycle_status: active
+implementation_scope: enterprise
+conceptual_entities:
+- element_id: dams:concept/inv057/C
+  name: C
+  description: concept
+  lifecycle_status: active
+  genesis_kind: external
+  external_class_refs:
+  - external_class_ref_id: dams:extref/inv057/term
+    target_ref: https://example.org/ontology/Term
+    match_kind: close
+    source_kind: ontology
+    confidence: 0.9
+    approval_status: proposed
+aligns_with_mappings:
+- element_id: dams:mapping/align/inv057-bad
+  description: contradicting mirror
+  lifecycle_status: active
+  mapping_type: aligns_with
+  mapping_cardinality: one_to_one
+  source_refs:
+  - dams:concept/inv057/C
+  target_refs:
+  - https://example.org/ontology/Term
+  confidence: 0.1
+  approval_status: proposed

@@ -44,7 +44,7 @@ HasAssertionMetadata:
 - Apply to: `Mapping`, `ExternalClassRef`, `ScopedDefinition`, and `GovernanceAssignment` (ADR-049).
 - Do **not** introduce an abstract class `Assertion` / `QualifiedRelation` in the `is_a` backbone (ADR-044: keep backbone shallow; aspects are mixins).
 
-Implementation: separate additive PR (minor bump), **not** this docs PR. Until then, the table in Context is the normative “as-is / to-be” contract.
+Implementation landed as aggregate **5.1.0** (additive minor per ADR-051). Context table above remains the pre-5.1.0 baseline for readers of older packages.
 
 ### D2. Alignment paths: keep both, clarify roles
 
@@ -96,5 +96,5 @@ ADR-049 is on `main`; audit name map (repeat here for discoverability; canonical
 - [x] Mixin design recorded
 - [x] Alignment dual-path roles fixed
 - [x] Transformation removal scheduled with identity train
-- [ ] Schema mixin PR (minor; follow-up)
-- [ ] Consistency INV ExternalClassRef ↔ AlignsWithMapping (follow-up)
+- [x] Schema mixin PR (minor) — aggregate **5.1.0**; `HasAssertionMetadata` in `moex-governance.yaml` on `Mapping`, `ExternalClassRef`, `ScopedDefinition`, `GovernanceAssignment`; `confidence` slot home moved with the mixin
+- [x] Consistency INV ExternalClassRef ↔ AlignsWithMapping — **INV-057** (`package_invariants.check_alignment_dual_path_consistency`)

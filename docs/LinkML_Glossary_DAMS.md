@@ -57,7 +57,8 @@
 | `HasGovernanceClassification` | Authored default: `governance_classification` каскадируется (ADR-023); перекрывается `ClassificationAssignment` (ADR-049); `security_classification` — Wave 2 |
 | `HasPolicyBindings` | Authored default `policy_refs`: absent = inherit; present list (в т.ч. `[]`) = full replace (ADR-023); перекрывается `PolicyBinding` (ADR-049) |
 | `HasDefinition` | Эталонное определение (ADR-025): `description` = own `skos:definition`; `definition_source_ref` / `scoped_definitions`; наследование по семантической оси, не containment. Также на `RelationTerm` (ADR-026) |
-| `HasProvenance` | Происхождение и согласование: `source_artifact_ref`, `approval_status`, `approved_by_ref`, `approved_at`. Также на `ExternalClassRef` / `ScopedDefinition` |
+| `HasProvenance` | Происхождение и согласование: `source_artifact_ref`, `approval_status`, `approved_by_ref`, `approved_at` |
+| `HasAssertionMetadata` | ADR-053: `HasValidity` + `HasProvenance` + `confidence`. На `Mapping`, `ExternalClassRef`, `ScopedDefinition`, `GovernanceAssignment` |
 
 **Классы КМД (ADR-026), в дополнение к `ConceptualEntity` / `Relationship`:**
 
@@ -274,7 +275,7 @@ LinkML в этом смысле **монотонен**: `slot_usage` может 
 | `imports` | `moex-core.yaml` импортирует `moex-types.yaml`, `moex-governance.yaml` |
 | `is_a` | Все классы верхнего уровня наследуются от `ModelElement` |
 | `abstract` | `ModelElement` — абстрактный корень иерархии |
-| `mixin` + `mixins` | `HasLifecycle`, `HasOwnership`, `HasBusinessClassification`, `HasGovernanceClassification`, `HasPolicyBindings`, `HasDefinition`, `HasProvenance` |
+| `mixin` + `mixins` | `HasLifecycle`, `HasOwnership`, `HasBusinessClassification`, `HasGovernanceClassification`, `HasPolicyBindings`, `HasDefinition`, `HasProvenance`, `HasAssertionMetadata` |
 | `tree_root` | `MoexModelRepository` |
 | `identifier` | `element_id` у `ModelElement`, `registry_id` у `RegistryEntry`, `external_class_ref_id` |
 | `required` | `description` у `ModelElement`, `lifecycle_status` и др.; `forward_label` у `RelationTerm` |

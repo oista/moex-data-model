@@ -45,6 +45,8 @@
     
 
         
+      OwnershipAssignment : confidence
+        
       OwnershipAssignment : data_owner_ref
         
           

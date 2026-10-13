@@ -18,8 +18,8 @@ Docs / architecture-check only — **no** aggregate schema bump in this wave.
 
 ## D3 — ADR-053 Qualified assertion
 
-- Design for `HasAssertionMetadata` mixin (implementation = follow-up minor).
-- `ExternalClassRef` canonical; `AlignsWithMapping` projection.
+- Design for `HasAssertionMetadata` mixin; **implemented in aggregate 5.1.0** ([CHANGELOG-assertion-metadata.md](CHANGELOG-assertion-metadata.md)).
+- `ExternalClassRef` canonical; `AlignsWithMapping` projection; consistency **INV-057**.
 - Transformation hooks removed in 6.0.0 unless a lineage ADR reclaims them.
 
 ## D4 — governance consumer hardening (ADR-049 on main)

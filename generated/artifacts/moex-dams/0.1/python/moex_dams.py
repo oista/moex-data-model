@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-13T16:36:34
+# Generation date: 2026-10-14T00:07:10
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -60,7 +60,7 @@ from linkml_runtime.linkml_model.types import Boolean, Datetime, Decimal, Intege
 from linkml_runtime.utils.metamodelcore import Bool, Decimal, URI, URIorCURIE, XSDDateTime
 
 metamodel_version = "1.11.0"
-version = "5.0.0"
+version = "5.1.0"
 
 # Namespaces
 DAMS = CurieNamespace('dams', 'https://data.moex.com/dams/')
@@ -919,13 +919,7 @@ class GovernanceAssignment(YAMLRoot):
     assignment_id: Union[str, GovernanceAssignmentAssignmentId] = None
     target_element_ref: Union[str, URIorCURIE] = None
     assignment_scope: Union[str, "AssignmentScopeEnum"] = None
-    valid_from: Optional[Union[str, XSDDateTime]] = None
-    valid_to: Optional[Union[str, XSDDateTime]] = None
-    source_artifact_ref: Optional[Union[str, URI]] = None
-    evidence_refs: Optional[Union[Union[str, URI], list[Union[str, URI]]]] = empty_list()
-    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
-    approved_by_ref: Optional[Union[str, RoleRegistryId]] = None
-    approved_at: Optional[Union[str, XSDDateTime]] = None
+    confidence: Optional[Decimal] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.assignment_id):
@@ -943,27 +937,8 @@ class GovernanceAssignment(YAMLRoot):
         if not isinstance(self.assignment_scope, AssignmentScopeEnum):
             self.assignment_scope = AssignmentScopeEnum(self.assignment_scope)
 
-        if self.valid_from is not None and not isinstance(self.valid_from, XSDDateTime):
-            self.valid_from = XSDDateTime(self.valid_from)
-
-        if self.valid_to is not None and not isinstance(self.valid_to, XSDDateTime):
-            self.valid_to = XSDDateTime(self.valid_to)
-
-        if self.source_artifact_ref is not None and not isinstance(self.source_artifact_ref, URI):
-            self.source_artifact_ref = URI(self.source_artifact_ref)
-
-        if not isinstance(self.evidence_refs, list):
-            self.evidence_refs = [self.evidence_refs] if self.evidence_refs is not None else []
-        self.evidence_refs = [v if isinstance(v, URI) else URI(v) for v in self.evidence_refs]
-
-        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
-            self.approval_status = ApprovalStatusEnum(self.approval_status)
-
-        if self.approved_by_ref is not None and not isinstance(self.approved_by_ref, RoleRegistryId):
-            self.approved_by_ref = RoleRegistryId(self.approved_by_ref)
-
-        if self.approved_at is not None and not isinstance(self.approved_at, XSDDateTime):
-            self.approved_at = XSDDateTime(self.approved_at)
+        if self.confidence is not None and not isinstance(self.confidence, Decimal):
+            self.confidence = Decimal(self.confidence)
 
         super().__post_init__(**kwargs)
 
@@ -1284,6 +1259,58 @@ class HasProvenance(YAMLRoot):
 
 
 @dataclass(repr=False)
+class HasAssertionMetadata(YAMLRoot):
+    """
+    Qualified assertion metadata (ADR-053): validity window, provenance / approval, and optional confidence. Applied
+    to Mapping, ExternalClassRef, ScopedDefinition, and GovernanceAssignment. Does not introduce an Assertion /
+    QualifiedRelation class in the is_a backbone (ADR-044).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["HasAssertionMetadata"]
+    class_class_curie: ClassVar[str] = "dams:HasAssertionMetadata"
+    class_name: ClassVar[str] = "HasAssertionMetadata"
+    class_model_uri: ClassVar[URIRef] = DAMS.HasAssertionMetadata
+
+    confidence: Optional[Decimal] = None
+    valid_from: Optional[Union[str, XSDDateTime]] = None
+    valid_to: Optional[Union[str, XSDDateTime]] = None
+    source_artifact_ref: Optional[Union[str, URI]] = None
+    evidence_refs: Optional[Union[Union[str, URI], list[Union[str, URI]]]] = empty_list()
+    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
+    approved_by_ref: Optional[Union[str, RoleRegistryId]] = None
+    approved_at: Optional[Union[str, XSDDateTime]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self.confidence is not None and not isinstance(self.confidence, Decimal):
+            self.confidence = Decimal(self.confidence)
+
+        if self.valid_from is not None and not isinstance(self.valid_from, XSDDateTime):
+            self.valid_from = XSDDateTime(self.valid_from)
+
+        if self.valid_to is not None and not isinstance(self.valid_to, XSDDateTime):
+            self.valid_to = XSDDateTime(self.valid_to)
+
+        if self.source_artifact_ref is not None and not isinstance(self.source_artifact_ref, URI):
+            self.source_artifact_ref = URI(self.source_artifact_ref)
+
+        if not isinstance(self.evidence_refs, list):
+            self.evidence_refs = [self.evidence_refs] if self.evidence_refs is not None else []
+        self.evidence_refs = [v if isinstance(v, URI) else URI(v) for v in self.evidence_refs]
+
+        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
+            self.approval_status = ApprovalStatusEnum(self.approval_status)
+
+        if self.approved_by_ref is not None and not isinstance(self.approved_by_ref, RoleRegistryId):
+            self.approved_by_ref = RoleRegistryId(self.approved_by_ref)
+
+        if self.approved_at is not None and not isinstance(self.approved_at, XSDDateTime):
+            self.approved_at = XSDDateTime(self.approved_at)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
 class HasDefinition(YAMLRoot):
     """
     Mixin эталонного определения (ADR-025 / ADR-044). Слот description индуцируется через DescribedElement;
@@ -1338,11 +1365,7 @@ class ScopedDefinition(YAMLRoot):
     text: str = None
     relation_to_reference: Union[str, "ScopedDefinitionRelationEnum"] = None
     rationale: Optional[str] = None
-    source_artifact_ref: Optional[Union[str, URI]] = None
-    evidence_refs: Optional[Union[Union[str, URI], list[Union[str, URI]]]] = empty_list()
-    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
-    approved_by_ref: Optional[Union[str, RoleRegistryId]] = None
-    approved_at: Optional[Union[str, XSDDateTime]] = None
+    confidence: Optional[Decimal] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.scoped_definition_id):
@@ -1373,21 +1396,8 @@ class ScopedDefinition(YAMLRoot):
         if self.rationale is not None and not isinstance(self.rationale, str):
             self.rationale = str(self.rationale)
 
-        if self.source_artifact_ref is not None and not isinstance(self.source_artifact_ref, URI):
-            self.source_artifact_ref = URI(self.source_artifact_ref)
-
-        if not isinstance(self.evidence_refs, list):
-            self.evidence_refs = [self.evidence_refs] if self.evidence_refs is not None else []
-        self.evidence_refs = [v if isinstance(v, URI) else URI(v) for v in self.evidence_refs]
-
-        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
-            self.approval_status = ApprovalStatusEnum(self.approval_status)
-
-        if self.approved_by_ref is not None and not isinstance(self.approved_by_ref, RoleRegistryId):
-            self.approved_by_ref = RoleRegistryId(self.approved_by_ref)
-
-        if self.approved_at is not None and not isinstance(self.approved_at, XSDDateTime):
-            self.approved_at = XSDDateTime(self.approved_at)
+        if self.confidence is not None and not isinstance(self.confidence, Decimal):
+            self.confidence = Decimal(self.confidence)
 
         super().__post_init__(**kwargs)
 
@@ -2344,8 +2354,8 @@ class RelationTerm(ModelElement):
 @dataclass(repr=False)
 class ExternalClassRef(YAMLRoot):
     """
-    Alignment of a ConceptualEntity to an external class or term (ADR-026). Canonical store for conceptual↔external
-    links; Mapping(aligns_with) may mirror for ExternalTermSelection projections.
+    Alignment of a ConceptualEntity to an external class or term (ADR-026 / ADR-053). Canonical store for
+    conceptual↔external links; AlignsWithMapping may mirror for ExternalTermSelection projections.
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -2360,11 +2370,7 @@ class ExternalClassRef(YAMLRoot):
     source_kind: Union[str, "ExternalSourceKindEnum"] = None
     external_specification_ref: Optional[Union[str, URIorCURIE]] = None
     selection_ref: Optional[Union[str, URIorCURIE]] = None
-    source_artifact_ref: Optional[Union[str, URI]] = None
-    evidence_refs: Optional[Union[Union[str, URI], list[Union[str, URI]]]] = empty_list()
-    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
-    approved_by_ref: Optional[Union[str, RoleRegistryId]] = None
-    approved_at: Optional[Union[str, XSDDateTime]] = None
+    confidence: Optional[Decimal] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.external_class_ref_id):
@@ -2393,21 +2399,8 @@ class ExternalClassRef(YAMLRoot):
         if self.selection_ref is not None and not isinstance(self.selection_ref, URIorCURIE):
             self.selection_ref = URIorCURIE(self.selection_ref)
 
-        if self.source_artifact_ref is not None and not isinstance(self.source_artifact_ref, URI):
-            self.source_artifact_ref = URI(self.source_artifact_ref)
-
-        if not isinstance(self.evidence_refs, list):
-            self.evidence_refs = [self.evidence_refs] if self.evidence_refs is not None else []
-        self.evidence_refs = [v if isinstance(v, URI) else URI(v) for v in self.evidence_refs]
-
-        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
-            self.approval_status = ApprovalStatusEnum(self.approval_status)
-
-        if self.approved_by_ref is not None and not isinstance(self.approved_by_ref, RoleRegistryId):
-            self.approved_by_ref = RoleRegistryId(self.approved_by_ref)
-
-        if self.approved_at is not None and not isinstance(self.approved_at, XSDDateTime):
-            self.approved_at = XSDDateTime(self.approved_at)
+        if self.confidence is not None and not isinstance(self.confidence, Decimal):
+            self.confidence = Decimal(self.confidence)
 
         super().__post_init__(**kwargs)
 
@@ -2421,7 +2414,8 @@ class Mapping(IdentifiedElement):
     entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with
     (enterprise↔external term). Not used for SpecImpl implements/conforms_to. Identity slots
     name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044); polymorphic ModelPackage.mappings
-    removed in 3.1.0 (ADR-046 PR-5); display label = source_refs -> target_refs [mapping_type].
+    removed in 3.1.0 (ADR-046 PR-5); assertion metadata via HasAssertionMetadata (ADR-053); display label =
+    source_refs -> target_refs [mapping_type].
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -2438,14 +2432,9 @@ class Mapping(IdentifiedElement):
     target_refs: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
     transformation_ref: Optional[Union[str, URI]] = None
     transformation_expression: Optional[str] = None
-    confidence: Optional[Decimal] = None
     description: Optional[str] = None
     deprecated_by_ref: Optional[Union[str, URIorCURIE]] = None
-    source_artifact_ref: Optional[Union[str, URI]] = None
-    evidence_refs: Optional[Union[Union[str, URI], list[Union[str, URI]]]] = empty_list()
-    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
-    approved_by_ref: Optional[Union[str, RoleRegistryId]] = None
-    approved_at: Optional[Union[str, XSDDateTime]] = None
+    confidence: Optional[Decimal] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.element_id):
@@ -2482,30 +2471,14 @@ class Mapping(IdentifiedElement):
         if self.transformation_expression is not None and not isinstance(self.transformation_expression, str):
             self.transformation_expression = str(self.transformation_expression)
 
-        if self.confidence is not None and not isinstance(self.confidence, Decimal):
-            self.confidence = Decimal(self.confidence)
-
         if self.description is not None and not isinstance(self.description, str):
             self.description = str(self.description)
 
         if self.deprecated_by_ref is not None and not isinstance(self.deprecated_by_ref, URIorCURIE):
             self.deprecated_by_ref = URIorCURIE(self.deprecated_by_ref)
 
-        if self.source_artifact_ref is not None and not isinstance(self.source_artifact_ref, URI):
-            self.source_artifact_ref = URI(self.source_artifact_ref)
-
-        if not isinstance(self.evidence_refs, list):
-            self.evidence_refs = [self.evidence_refs] if self.evidence_refs is not None else []
-        self.evidence_refs = [v if isinstance(v, URI) else URI(v) for v in self.evidence_refs]
-
-        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
-            self.approval_status = ApprovalStatusEnum(self.approval_status)
-
-        if self.approved_by_ref is not None and not isinstance(self.approved_by_ref, RoleRegistryId):
-            self.approved_by_ref = RoleRegistryId(self.approved_by_ref)
-
-        if self.approved_at is not None and not isinstance(self.approved_at, XSDDateTime):
-            self.approved_at = XSDDateTime(self.approved_at)
+        if self.confidence is not None and not isinstance(self.confidence, Decimal):
+            self.confidence = Decimal(self.confidence)
 
         super().__post_init__(**kwargs)
 
@@ -5740,6 +5713,9 @@ slots.approved_by_ref = Slot(uri=DAMS.approved_by_ref, name="approved_by_ref", c
 slots.approved_at = Slot(uri=DAMS.approved_at, name="approved_at", curie=DAMS.curie('approved_at'),
                    model_uri=DAMS.approved_at, domain=None, range=Optional[Union[str, XSDDateTime]])
 
+slots.confidence = Slot(uri=DAMS.confidence, name="confidence", curie=DAMS.curie('confidence'),
+                   model_uri=DAMS.confidence, domain=None, range=Optional[Decimal])
+
 slots.definition_source_ref = Slot(uri=DAMS.definition_source_ref, name="definition_source_ref", curie=DAMS.curie('definition_source_ref'),
                    model_uri=DAMS.definition_source_ref, domain=None, range=Optional[Union[str, URIorCURIE]])
 
@@ -6081,9 +6057,6 @@ slots.transformation_ref = Slot(uri=DAMS.transformation_ref, name="transformatio
 
 slots.transformation_expression = Slot(uri=DAMS.transformation_expression, name="transformation_expression", curie=DAMS.curie('transformation_expression'),
                    model_uri=DAMS.transformation_expression, domain=None, range=Optional[str])
-
-slots.confidence = Slot(uri=DAMS.confidence, name="confidence", curie=DAMS.curie('confidence'),
-                   model_uri=DAMS.confidence, domain=None, range=Optional[Decimal])
 
 slots.asset_namespace = Slot(uri=DAMS.asset_namespace, name="asset_namespace", curie=DAMS.curie('asset_namespace'),
                    model_uri=DAMS.asset_namespace, domain=None, range=str)

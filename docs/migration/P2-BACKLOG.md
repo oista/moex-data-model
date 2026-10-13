@@ -14,8 +14,8 @@ These are unfinished acceptance checkboxes on **Accepted** ADRs. Ship as **minor
 
 | ID | Item | Source | Notes |
 |---|---|---|---|
-| F0-1 | Schema mixin `HasAssertionMetadata` (`HasValidity` + `HasProvenance` + `confidence`) on `Mapping`, `ExternalClassRef`, `ScopedDefinition`, `GovernanceAssignment` | [ADR-053](../adr/ADR-053-qualified-assertion.md) D1 / Acceptance | Additive minor; no abstract `Assertion` class |
-| F0-2 | L2 INV: `ExternalClassRef` ↔ `AlignsWithMapping` must not contradict when both exist for the same concept + IRI | ADR-053 D2 / Acceptance | Dual path stays; consistency only |
+| F0-1 | ~~Schema mixin `HasAssertionMetadata`~~ **Done** (aggregate 5.1.0) | [ADR-053](../adr/ADR-053-qualified-assertion.md) D1 | See [CHANGELOG-assertion-metadata.md](CHANGELOG-assertion-metadata.md) |
+| F0-2 | ~~L2 INV ExternalClassRef ↔ AlignsWithMapping~~ **Done** (**INV-057**) | ADR-053 D2 | Dual path stays; consistency only |
 | F0-3 | Identity train **6.0.0** (when scheduled): `api_version` → `dams_specification_version`; remove deprecated `transformation_*` unless a lineage ADR reclaims them; optional `VersionedArtifact` per ADR-052 D5 | [ADR-052](../adr/ADR-052-identity-and-versioning.md), ADR-053 D3 | Release train — not silent major-per-theme (ADR-051 D3–D4) |
 
 ---

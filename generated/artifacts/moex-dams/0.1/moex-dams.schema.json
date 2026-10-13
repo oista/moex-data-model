@@ -363,6 +363,7 @@
                     ]
                 },
                 "confidence": {
+                    "description": "Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.\n",
                     "maximum": 1,
                     "minimum": 0,
                     "type": [
@@ -670,6 +671,15 @@
                 "classification_term_ref": {
                     "type": [
                         "string",
+                        "null"
+                    ]
+                },
+                "confidence": {
+                    "description": "Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.\n",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": [
+                        "number",
                         "null"
                     ]
                 },
@@ -3215,6 +3225,7 @@
                     ]
                 },
                 "confidence": {
+                    "description": "Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.\n",
                     "maximum": 1,
                     "minimum": 0,
                     "type": [
@@ -3577,7 +3588,7 @@
         },
         "ExternalClassRef": {
             "additionalProperties": false,
-            "description": "Alignment of a ConceptualEntity to an external class or term (ADR-026). Canonical store for conceptual\u2194external links; Mapping(aligns_with) may mirror for ExternalTermSelection projections.",
+            "description": "Alignment of a ConceptualEntity to an external class or term (ADR-026 / ADR-053). Canonical store for conceptual\u2194external links; AlignsWithMapping may mirror for ExternalTermSelection projections.",
             "properties": {
                 "approval_status": {
                     "$ref": "#/$defs/ApprovalStatusEnum"
@@ -3592,6 +3603,15 @@
                 "approved_by_ref": {
                     "type": [
                         "string",
+                        "null"
+                    ]
+                },
+                "confidence": {
+                    "description": "Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.\n",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": [
+                        "number",
                         "null"
                     ]
                 },
@@ -3640,6 +3660,20 @@
                 "target_ref": {
                     "description": "IRI/CURIE of the external class or term (ADR-026).",
                     "type": "string"
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 }
             },
             "required": [
@@ -3704,6 +3738,7 @@
                     ]
                 },
                 "confidence": {
+                    "description": "Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.\n",
                     "maximum": 1,
                     "minimum": 0,
                     "type": [
@@ -4009,6 +4044,15 @@
                     "$ref": "#/$defs/AssignmentScopeEnum",
                     "description": "element = target only; subtree = target and descendants in the containment cascade (ADR-023 / ADR-049).\n"
                 },
+                "confidence": {
+                    "description": "Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.\n",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
                 "evidence_refs": {
                     "items": {
                         "format": "uri",
@@ -4063,6 +4107,70 @@
             ],
             "title": "GovernanceClassificationEnum",
             "type": "string"
+        },
+        "HasAssertionMetadata": {
+            "additionalProperties": false,
+            "description": "Qualified assertion metadata (ADR-053): validity window, provenance / approval, and optional confidence. Applied to Mapping, ExternalClassRef, ScopedDefinition, and GovernanceAssignment. Does not introduce an Assertion / QualifiedRelation class in the is_a backbone (ADR-044).",
+            "properties": {
+                "approval_status": {
+                    "$ref": "#/$defs/ApprovalStatusEnum"
+                },
+                "approved_at": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "approved_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "confidence": {
+                    "description": "Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.\n",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
+                "evidence_refs": {
+                    "items": {
+                        "format": "uri",
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "source_artifact_ref": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "HasAssertionMetadata",
+            "type": "object"
         },
         "HasBusinessClassification": {
             "additionalProperties": false,
@@ -5304,7 +5412,7 @@
         },
         "Mapping": {
             "additionalProperties": false,
-            "description": "\u042f\u0432\u043d\u043e\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430\u043c\u0438. Prefer typed subclasses (RealizesMapping, EntityPhysicalMapping, FieldMapping, AlignsWithMapping) and separate ModelPackage collections (ADR-046). Base Mapping remains as the inheritance root for those subclasses. Discriminate via mapping_type: realizes (solution\u2192enterprise conceptual), entity_physical (DataCarrier\u2194LogicalEntity), field_mapping/mapsTo (SchemaNode\u2194LogicalAttribute), aligns_with (enterprise\u2194external term). Not used for SpecImpl implements/conforms_to. Identity slots name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044); polymorphic ModelPackage.mappings removed in 3.1.0 (ADR-046 PR-5); display label = source_refs -> target_refs [mapping_type].",
+            "description": "\u042f\u0432\u043d\u043e\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430\u043c\u0438. Prefer typed subclasses (RealizesMapping, EntityPhysicalMapping, FieldMapping, AlignsWithMapping) and separate ModelPackage collections (ADR-046). Base Mapping remains as the inheritance root for those subclasses. Discriminate via mapping_type: realizes (solution\u2192enterprise conceptual), entity_physical (DataCarrier\u2194LogicalEntity), field_mapping/mapsTo (SchemaNode\u2194LogicalAttribute), aligns_with (enterprise\u2194external term). Not used for SpecImpl implements/conforms_to. Identity slots name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044); polymorphic ModelPackage.mappings removed in 3.1.0 (ADR-046 PR-5); assertion metadata via HasAssertionMetadata (ADR-053); display label = source_refs -> target_refs [mapping_type].",
             "properties": {
                 "approval_status": {
                     "$ref": "#/$defs/ApprovalStatusEnum"
@@ -5323,6 +5431,7 @@
                     ]
                 },
                 "confidence": {
+                    "description": "Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.\n",
                     "maximum": 1,
                     "minimum": 0,
                     "type": [
@@ -6443,6 +6552,15 @@
                     "$ref": "#/$defs/AssignmentScopeEnum",
                     "description": "element = target only; subtree = target and descendants in the containment cascade (ADR-023 / ADR-049).\n"
                 },
+                "confidence": {
+                    "description": "Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.\n",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
                 "data_owner_ref": {
                     "type": [
                         "string",
@@ -6629,6 +6747,15 @@
                     "$ref": "#/$defs/BindingEffectEnum",
                     "description": "How this PolicyBinding combines with lower layers (ADR-049). Default replace = list-replace like ADR-023; add = union onto cascade.\n"
                 },
+                "confidence": {
+                    "description": "Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.\n",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
                 "evidence_refs": {
                     "items": {
                         "format": "uri",
@@ -6719,6 +6846,7 @@
                     ]
                 },
                 "confidence": {
+                    "description": "Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.\n",
                     "maximum": 1,
                     "minimum": 0,
                     "type": [
@@ -7678,6 +7806,15 @@
                         "null"
                     ]
                 },
+                "confidence": {
+                    "description": "Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.\n",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
                 "evidence_refs": {
                     "items": {
                         "format": "uri",
@@ -7718,6 +7855,20 @@
                 "text": {
                     "description": "Scoped definition text (skos:definition in this context).",
                     "type": "string"
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 }
             },
             "required": [
@@ -8789,5 +8940,5 @@
     ],
     "title": "moex_dams",
     "type": "object",
-    "version": "5.0.0"
+    "version": "5.1.0"
 }

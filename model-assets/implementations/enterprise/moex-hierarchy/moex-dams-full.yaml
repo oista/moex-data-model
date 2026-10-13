@@ -3,7 +3,7 @@
 # Do not edit by hand — regenerated at viewer publication build.
 name: moex_dams
 id: https://data.moex.com/dams/v0.1
-version: 5.0.0
+version: 5.1.0
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml:
@@ -1565,6 +1565,16 @@ slots:
     name: approved_at
     from_schema: https://data.moex.com/dams/governance/v0.1
     range: datetime
+  confidence:
+    name: confidence
+    description: 'Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata).
+      Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: decimal
+    minimum_value: 0
+    maximum_value: 1
   definition_source_ref:
     name: definition_source_ref
     description: 'Reference to the element or external term whose definition is inherited
@@ -2298,12 +2308,6 @@ slots:
     deprecated: 'True'
     from_schema: https://data.moex.com/dams/core/v0.1
     range: string
-  confidence:
-    name: confidence
-    from_schema: https://data.moex.com/dams/core/v0.1
-    range: decimal
-    minimum_value: 0
-    maximum_value: 1
   asset_namespace:
     name: asset_namespace
     description: 'Пространство имён источника по аналогии с OpenLineage namespace
@@ -3404,8 +3408,7 @@ classes:
     from_schema: https://data.moex.com/dams/governance/v0.1
     abstract: true
     mixins:
-    - HasValidity
-    - HasProvenance
+    - HasAssertionMetadata
     slots:
     - assignment_id
     - target_element_ref
@@ -3521,6 +3524,21 @@ classes:
     - approval_status
     - approved_by_ref
     - approved_at
+  HasAssertionMetadata:
+    name: HasAssertionMetadata
+    description: 'Qualified assertion metadata (ADR-053): validity window, provenance
+      / approval, and optional confidence. Applied to Mapping, ExternalClassRef, ScopedDefinition,
+      and GovernanceAssignment. Does not introduce an Assertion / QualifiedRelation
+      class in the is_a backbone (ADR-044).
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    mixin: true
+    mixins:
+    - HasValidity
+    - HasProvenance
+    slots:
+    - confidence
   HasDefinition:
     name: HasDefinition
     description: 'Mixin эталонного определения (ADR-025 / ADR-044). Слот description
@@ -3560,7 +3578,7 @@ classes:
       '
     from_schema: https://data.moex.com/dams/governance/v0.1
     mixins:
-    - HasProvenance
+    - HasAssertionMetadata
     slots:
     - scoped_definition_id
     - scope_kind
@@ -3826,14 +3844,14 @@ classes:
     - ontology_property_ref
   ExternalClassRef:
     name: ExternalClassRef
-    description: 'Alignment of a ConceptualEntity to an external class or term (ADR-026).
-      Canonical store for conceptual↔external links; Mapping(aligns_with) may mirror
-      for ExternalTermSelection projections.
+    description: 'Alignment of a ConceptualEntity to an external class or term (ADR-026
+      / ADR-053). Canonical store for conceptual↔external links; AlignsWithMapping
+      may mirror for ExternalTermSelection projections.
 
       '
     from_schema: https://data.moex.com/dams/core/v0.1
     mixins:
-    - HasProvenance
+    - HasAssertionMetadata
     slots:
     - external_class_ref_id
     - target_ref
@@ -3851,7 +3869,8 @@ classes:
       aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to.
       Identity slots name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0
       (ADR-044); polymorphic ModelPackage.mappings removed in 3.1.0 (ADR-046 PR-5);
-      display label = source_refs -> target_refs [mapping_type].
+      assertion metadata via HasAssertionMetadata (ADR-053); display label = source_refs
+      -> target_refs [mapping_type].
 
       '
     from_schema: https://data.moex.com/dams/core/v0.1
@@ -3859,7 +3878,7 @@ classes:
     mixins:
     - DescribedElement
     - HasLifecycle
-    - HasProvenance
+    - HasAssertionMetadata
     slots:
     - source_refs
     - target_refs
@@ -3867,7 +3886,6 @@ classes:
     - mapping_cardinality
     - transformation_ref
     - transformation_expression
-    - confidence
     slot_usage:
       description:
         name: description

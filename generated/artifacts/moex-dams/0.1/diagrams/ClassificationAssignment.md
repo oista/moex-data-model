@@ -60,6 +60,8 @@
     
 
         
+      ClassificationAssignment : confidence
+        
       ClassificationAssignment : evidence_refs
         
       ClassificationAssignment : governance_classification

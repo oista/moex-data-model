@@ -152,6 +152,7 @@ Table GovernanceAssignment {
 assignment_id varchar [not null, primary key]
 target_element_ref varchar [not null]
 assignment_scope varchar [not null]
+confidence varchar
 valid_from datetime
 valid_to datetime
 source_artifact_ref varchar
@@ -165,6 +166,7 @@ Table ClassificationAssignment {
 assignment_id varchar [not null, primary key]
 target_element_ref varchar [not null]
 assignment_scope varchar [not null]
+confidence varchar
 valid_from datetime
 valid_to datetime
 source_artifact_ref varchar
@@ -182,6 +184,7 @@ Table PolicyBinding {
 assignment_id varchar [not null, primary key]
 target_element_ref varchar [not null]
 assignment_scope varchar [not null]
+confidence varchar
 valid_from datetime
 valid_to datetime
 source_artifact_ref varchar
@@ -197,6 +200,7 @@ Table OwnershipAssignment {
 assignment_id varchar [not null, primary key]
 target_element_ref varchar [not null]
 assignment_scope varchar [not null]
+confidence varchar
 valid_from datetime
 valid_to datetime
 source_artifact_ref varchar
@@ -249,6 +253,17 @@ approved_by_ref varchar
 approved_at datetime
 }
 
+Table HasAssertionMetadata {
+confidence varchar
+valid_from datetime
+valid_to datetime
+source_artifact_ref varchar
+evidence_refs varchar
+approval_status varchar
+approved_by_ref varchar
+approved_at datetime
+}
+
 Table HasDefinition {
 definition_source_ref varchar
 definition_rationale varchar
@@ -264,6 +279,9 @@ scope_ref varchar [not null]
 text varchar [not null]
 relation_to_reference varchar [not null]
 rationale varchar
+confidence varchar
+valid_from datetime
+valid_to datetime
 source_artifact_ref varchar
 evidence_refs varchar
 approval_status varchar
@@ -574,6 +592,9 @@ match_kind varchar [not null]
 source_kind varchar [not null]
 external_specification_ref varchar
 selection_ref varchar
+confidence varchar
+valid_from datetime
+valid_to datetime
 source_artifact_ref varchar
 evidence_refs varchar
 approval_status varchar
@@ -589,12 +610,12 @@ mapping_type varchar [not null]
 mapping_cardinality varchar [not null]
 transformation_ref varchar
 transformation_expression varchar
-confidence varchar
 Mapping_description varchar
 lifecycle_status varchar [not null]
 deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
+confidence varchar
 source_artifact_ref varchar
 evidence_refs varchar
 approval_status varchar
@@ -609,12 +630,12 @@ mapping_type varchar [not null]
 mapping_cardinality varchar [not null]
 transformation_ref varchar
 transformation_expression varchar
-confidence varchar
 Mapping_description varchar
 lifecycle_status varchar [not null]
 deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
+confidence varchar
 source_artifact_ref varchar
 evidence_refs varchar
 approval_status varchar
@@ -633,12 +654,12 @@ mapping_type varchar [not null]
 mapping_cardinality varchar [not null]
 transformation_ref varchar
 transformation_expression varchar
-confidence varchar
 Mapping_description varchar
 lifecycle_status varchar [not null]
 deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
+confidence varchar
 source_artifact_ref varchar
 evidence_refs varchar
 approval_status varchar
@@ -657,12 +678,12 @@ mapping_type varchar [not null]
 mapping_cardinality varchar [not null]
 transformation_ref varchar
 transformation_expression varchar
-confidence varchar
 Mapping_description varchar
 lifecycle_status varchar [not null]
 deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
+confidence varchar
 source_artifact_ref varchar
 evidence_refs varchar
 approval_status varchar
@@ -681,12 +702,12 @@ mapping_type varchar [not null]
 mapping_cardinality varchar [not null]
 transformation_ref varchar
 transformation_expression varchar
-confidence varchar
 Mapping_description varchar
 lifecycle_status varchar [not null]
 deprecated_by_ref varchar
 valid_from datetime
 valid_to datetime
+confidence varchar
 source_artifact_ref varchar
 evidence_refs varchar
 approval_status varchar
@@ -1376,6 +1397,7 @@ Ref: HasOwnership.owning_unit_ref > OrganizationUnit.registry_id
 Ref: HasGovernanceClassification.sensitivity_term_refs > DataClassificationTerm.registry_id
 Ref: HasPolicyBindings.policy_refs > Policy.registry_id
 Ref: HasProvenance.approved_by_ref > Role.registry_id
+Ref: HasAssertionMetadata.approved_by_ref > Role.registry_id
 Ref: HasDefinition.scoped_definitions > ScopedDefinition.scoped_definition_id
 Ref: ScopedDefinition.approved_by_ref > Role.registry_id
 Ref: ModelElement.glossary_term_refs > GlossaryTerm.registry_id

@@ -56,6 +56,8 @@
     
 
         
+      PolicyBinding : confidence
+        
       PolicyBinding : evidence_refs
         
       PolicyBinding : policy_ref

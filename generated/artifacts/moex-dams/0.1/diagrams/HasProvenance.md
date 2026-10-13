@@ -5,16 +5,10 @@
  classDiagram
     class HasProvenance
     click HasProvenance href "../HasProvenance"
-      HasProvenance <|-- GovernanceAssignment
-        click GovernanceAssignment href "../GovernanceAssignment"
-      HasProvenance <|-- ScopedDefinition
-        click ScopedDefinition href "../ScopedDefinition"
+      HasProvenance <|-- HasAssertionMetadata
+        click HasAssertionMetadata href "../HasAssertionMetadata"
       HasProvenance <|-- ConceptualProperty
         click ConceptualProperty href "../ConceptualProperty"
-      HasProvenance <|-- ExternalClassRef
-        click ExternalClassRef href "../ExternalClassRef"
-      HasProvenance <|-- Mapping
-        click Mapping href "../Mapping"
       HasProvenance <|-- ConceptualDomain
         click ConceptualDomain href "../ConceptualDomain"
       

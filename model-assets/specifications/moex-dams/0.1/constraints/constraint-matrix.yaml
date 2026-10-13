@@ -1444,6 +1444,32 @@ invariants:
     L1: not-applicable
     L2: implemented
     L3: not-applicable
+- id: INV-057
+  title: ExternalClassRef and AlignsWithMapping must not contradict
+  statement: >
+    When the same conceptual entity and external IRI appear both as an
+    ExternalClassRef on the entity and as an AlignsWithMapping
+    (source_refs → target_refs), assertion metadata must agree: if both
+    set confidence, values must be equal; approval_status must not mix
+    approved with rejected (ADR-053 D2; ApprovalStatusEnum).
+  source: ADR-053
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-053
+  implementation:
+    dams_validator: moex_dams.rules.package_invariants.check_alignment_dual_path_consistency
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-057.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-057.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
 invariant_id_registry:
 - INV-001
 - INV-002
@@ -1501,3 +1527,4 @@ invariant_id_registry:
 - INV-054
 - INV-055
 - INV-056
+- INV-057

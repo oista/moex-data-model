@@ -11,8 +11,8 @@ superseded_by: []
 Автогенерируется `scripts/check_constraint_matrix.py`. Источник: `model-assets/specifications/moex-dams/0.1/constraints/constraint-matrix.yaml`. Не редактировать вручную.
 
 **matrix_id:** `dams:constraint-matrix/0.1`  
-**registry size:** 56  
-**invariants:** 56
+**registry size:** 57  
+**invariants:** 57
 
 | ID | Title | Levels | Status | L1 | L2 | L3 | Source status | Scope | Source |
 |---|---|---|---|---|---|---|---|---|---|
@@ -72,6 +72,7 @@ superseded_by: []
 | INV-054 | No conflicting GovernanceAssignments on same target | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-049 |
 | INV-055 | GovernanceAssignment target_element_ref resolves in package | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-049 |
 | INV-056 | Inline authored default shadowed by assignment is warned | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-049 |
+| INV-057 | ExternalClassRef and AlignsWithMapping must not contradict | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-053 |
 
 ## Statements
 
@@ -490,5 +491,12 @@ When an element declares an inline governed slot whose value differs from the ef
 
 
 *adr_ref:* `ADR-049`
+
+### INV-057: ExternalClassRef and AlignsWithMapping must not contradict
+
+When the same conceptual entity and external IRI appear both as an ExternalClassRef on the entity and as an AlignsWithMapping (source_refs → target_refs), assertion metadata must agree: if both set confidence, values must be equal; approval_status must not mix approved with rejected (ADR-053 D2; ApprovalStatusEnum).
+
+
+*adr_ref:* `ADR-053`
 
 См. также: [ADR-045](../adr/ADR-045-executable-constraint-matrix.md), [inventory report](constraint-matrix-inventory-report.md), [adding-an-invariant](../guides/adding-an-invariant.md).
