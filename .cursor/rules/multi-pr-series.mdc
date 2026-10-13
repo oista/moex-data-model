@@ -16,4 +16,12 @@ When a plan defines a sequence **PR-0 … PR-N** (or equivalent numbered steps):
 5. **Schema diff and data migration diff must not mix** in the same commit when the plan separates them (prefer `ruamel.yaml` for data rewrites to preserve comments/key order).
 6. If a spike or prototype already produced the full end state, **archive it** (`wip/…`) and **re-cut** PR-0…PR-N from a clean base; do not open the monolith as PR-0.
 
-User / plan instructions always override this rule when they explicitly ask for a single combined change.
+### Documented PR-5 exceptions (removal / major bump)
+
+When a series plan and its ADR define a final **PR-5** (or equivalent) that **removes** slots deprecated in PR-1…PR-4 and ships a migration script plus regen, that PR-5 **may** combine schema removal, data/example migration, and `generated/**` regen in one commit. Prerequisites:
+
+- The ADR’s PR table names PR-5 as that combined topic (see [ADR-048](docs/adr/ADR-048-topology-ownership.md) D7, [ADR-049](docs/adr/ADR-049-governance-assignment-authority.md) D6).
+- PR-0…PR-4 still obey rule 5 (schema vs data not mixed).
+- The combined PR-5 commit remains one reviewable theme (no unrelated refactors).
+
+Do not invent new PR-5 exceptions without updating the series ADR. User / plan instructions always override this rule when they explicitly ask for a single combined change.
