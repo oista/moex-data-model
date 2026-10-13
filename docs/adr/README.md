@@ -6,7 +6,7 @@ supersedes: []
 superseded_by: []
 ---
 
-# ADR index (001–053)
+# ADR index (001–055)
 
 **Date:** 2026-10-12  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)
@@ -71,6 +71,7 @@ Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decision
 | [ADR-052](ADR-052-identity-and-versioning.md) | Identity and versioning (five layers) | Accepted | identity map; api_version rename deferred; id_prefixes lint |
 | [ADR-053](ADR-053-qualified-assertion.md) | Qualified assertion pattern | Accepted | HasAssertionMetadata; alignment dual-path; Transformation end date |
 | [ADR-054](ADR-054-repository-aggregates-and-manifest.md) | Repository aggregates and manifest (P1b) | Accepted | validation composite; package-only DocumentKind; path-scoped orphans |
+| [ADR-055](ADR-055-integration-source-of-truth.md) | Integration source of truth (Clinkr/EAM topology; audit Wave F) | Accepted | Integration SoT; audit 0.2 remap; P2 backlog |
 
 ## How to accept
 
@@ -83,3 +84,4 @@ Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decision
 
 - Aggregate DAMS schema version on `main`: see `model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml` (`version:` field). Catalogue path `0.1/` is the product label; it is not the LinkML semver. Living table: [SCHEMA-VERSION-TIMELINE.md](../migration/SCHEMA-VERSION-TIMELINE.md) (ADR-051).
 - `superseded_by: MODELING_ARCHITECTURE.md` is reserved for drafts that are fully absorbed; Accepted ADRs use `superseded_by: []`.
+- Post-audit P2 backlog (adapters, Distribution, vocabularies, ADR-053 follow-ups): [P2-BACKLOG.md](../migration/P2-BACKLOG.md) (ADR-055).

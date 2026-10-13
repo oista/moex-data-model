@@ -53,13 +53,13 @@ Implementation: separate additive PR (minor bump), **not** this docs PR. Until t
 | `ExternalClassRef` | **Canonical** authored alignment on a conceptual element (match_kind, specification pin, selection) | Prefer for ontology / glossary / SKOS-style matches |
 | `AlignsWithMapping` | **Package-level** projection / import mirror (URI targets, typed collection) | May mirror an ExternalClassRef; must not contradict it when both present (future L2 INV when both appear for the same concept+IRI) |
 
-Rename to `SemanticAlignment` is **deferred** (breaking + consumer churn); track under P2 backlog. Docs and glossary map audit name → `ExternalClassRef`.
+Rename to `SemanticAlignment` is **deferred** (breaking + consumer churn); track under [P2-BACKLOG.md](../migration/P2-BACKLOG.md) (F2-3) and [ADR-055](ADR-055-integration-source-of-truth.md). Docs and glossary map audit name → `ExternalClassRef`.
 
 ### D3. Transformation / design lineage
 
 - **No** `Transformation` mapping subclass in the near term (no live `mapping_type: transformation` instances after ADR-046).
 - Deprecated hooks `transformation_ref` / `transformation_expression` on `Mapping` are removed in the **6.0.0 identity train** (ADR-052 D5) unless a design-lineage ADR supersedes this decision first.
-- Runtime lineage stays outside DAMS (OpenLineage platform). Optional future: `lineage_source_ref` on `ExecutionAsset` / design facet — P2, not Wave D.
+- Runtime lineage stays outside DAMS (OpenLineage platform). Optional future: `lineage_source_ref` on `ExecutionAsset` / design facet — [P2-BACKLOG.md](../migration/P2-BACKLOG.md) F1-5, not Wave D.
 - DAMS may store **design-time** derivation only after an explicit lineage ADR; until then do not reintroduce a polymorphic transformation mapping type.
 
 ### D4. Evidence and approval
