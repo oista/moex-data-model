@@ -38,9 +38,9 @@ def test_registry_matches_invariants() -> None:
     inv_ids = [inv["id"] for inv in invs]
     assert len(registry) == len(invs)
     assert registry == inv_ids
-    assert len(invs) >= 57
+    assert len(invs) >= 58
     assert inv_ids[0] == "INV-001"
-    assert inv_ids[-1] == "INV-057"
+    assert inv_ids[-1] == "INV-058"
     assert inv_ids == sorted(inv_ids)
 
 

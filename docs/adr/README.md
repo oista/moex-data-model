@@ -70,7 +70,7 @@ Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decision
 | [ADR-051](ADR-051-dams-schema-compatibility.md) | DAMS schema compatibility (semver + release trains) | Accepted | aggregate semver; timeline; evidence gate |
 | [ADR-052](ADR-052-identity-and-versioning.md) | Identity and versioning (five layers) | Accepted | identity map; api_version rename deferred; id_prefixes lint |
 | [ADR-053](ADR-053-qualified-assertion.md) | Qualified assertion pattern | Accepted | HasAssertionMetadata in schema 5.1.0; INV-057; Transformation end date |
-| [ADR-054](ADR-054-repository-aggregates-and-manifest.md) | Repository aggregates and manifest (P1b) | Accepted | validation composite; package-only DocumentKind; path-scoped orphans |
+| [ADR-054](ADR-054-repository-aggregates-and-manifest.md) | Repository aggregates and manifest (P1b) | Accepted | validation composite; package-only DocumentKind; path-scoped orphans; INV-058 global element_id |
 | [ADR-055](ADR-055-integration-source-of-truth.md) | Integration source of truth (Clinkr/EAM topology; audit Wave F) | Accepted | Integration SoT; audit 0.2 remap; P2 backlog |
 
 ## How to accept

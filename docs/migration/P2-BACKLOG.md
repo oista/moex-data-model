@@ -57,7 +57,7 @@ Tracked so P2 does not forget ADR-054 deferrals; not integration work.
 |---|---|---|
 | F3-1 | New `DocumentKind` values + envelopes for flows, bindings, governance sets, requirement catalogs | [ADR-054](../adr/ADR-054-repository-aggregates-and-manifest.md) D2 / Deferred |
 | F3-2 | Extend `assemble()` beyond packages-only when kinds exist | ADR-054 D1 |
-| F3-3 | Global `element_id` collision check on assembled composite | ADR-054 Deferred; Wave C partial coverage |
+| F3-3 | Global `element_id` collision check on assembled composite | **Done** — INV-058 + `check-manifest` (`check_global_element_ids`); hierarchy-view excluded (ADR-054) |
 
 ---
 

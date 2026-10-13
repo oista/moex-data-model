@@ -121,6 +121,17 @@ Do not invent a fourth algorithm without a new ADR.
 ## Deferred
 
 Envelope layouts and `DocumentKind` values for flows, bindings, governance
-sets, requirement catalogs; full `assemble()` of all tree_root slots; global
-id-collision validation of the assembled composite; GitProvider-backed reads;
-CODEOWNERS from manifest `owner`.
+sets, requirement catalogs; full `assemble()` of all tree_root slots;
+GitProvider-backed reads; CODEOWNERS from manifest `owner`.
+
+## Global `element_id` uniqueness (INV-058)
+
+Cross-package `element_id` collisions among **source** packages are errors
+(`check-manifest` → `check_global_element_ids`, matrix **INV-058**, code
+`DAMS-INV-058`). Within a single package document, uniqueness remains
+**INV-050**.
+
+Packages whose envelope sets `dams_model_level: hierarchy-view` are
+**excluded** (derived views may intentionally reuse source ids — today
+`moex:implementation:moex-hierarchy:0.1`). Exclusion is exact-match on that
+level string only.

@@ -1,0 +1,23 @@
+# Repository composite (assemble shape): distinct element_ids across packages.
+repository_id: moex:repository:inv058-valid
+model_packages:
+- element_id: dams:model/inv058/a
+  name: inv058-a
+  description: package A
+  lifecycle_status: active
+  implementation_scope: enterprise
+  conceptual_entities:
+  - element_id: dams:concept/inv058/A
+    name: A
+    description: a
+    lifecycle_status: active
+- element_id: dams:model/inv058/b
+  name: inv058-b
+  description: package B
+  lifecycle_status: active
+  implementation_scope: enterprise
+  conceptual_entities:
+  - element_id: dams:concept/inv058/B
+    name: B
+    description: b
+    lifecycle_status: active

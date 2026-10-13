@@ -11,8 +11,8 @@ superseded_by: []
 Автогенерируется `scripts/check_constraint_matrix.py`. Источник: `model-assets/specifications/moex-dams/0.1/constraints/constraint-matrix.yaml`. Не редактировать вручную.
 
 **matrix_id:** `dams:constraint-matrix/0.1`  
-**registry size:** 57  
-**invariants:** 57
+**registry size:** 58  
+**invariants:** 58
 
 | ID | Title | Levels | Status | L1 | L2 | L3 | Source status | Scope | Source |
 |---|---|---|---|---|---|---|---|---|---|
@@ -73,6 +73,7 @@ superseded_by: []
 | INV-055 | GovernanceAssignment target_element_ref resolves in package | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-049 |
 | INV-056 | Inline authored default shadowed by assignment is warned | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-049 |
 | INV-057 | ExternalClassRef and AlignsWithMapping must not contradict | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-053 |
+| INV-058 | element_id unique across source packages | L2 | implemented | not-applicable | implemented | not-applicable | aligned | repository | audit duplicate ids; ADR-054 deferred global collision; audit R2-6 |
 
 ## Statements
 
@@ -498,5 +499,12 @@ When the same conceptual entity and external IRI appear both as an ExternalClass
 
 
 *adr_ref:* `ADR-053`
+
+### INV-058: element_id unique across source packages
+
+element_id values must be unique across ModelPackage bodies indexed by the repository manifest, excluding packages whose envelope dams_model_level is hierarchy-view (derived views may intentionally reuse source ids). Within a single package document uniqueness remains INV-050.
+
+
+*adr_ref:* `ADR-054`
 
 См. также: [ADR-045](../adr/ADR-045-executable-constraint-matrix.md), [inventory report](constraint-matrix-inventory-report.md), [adding-an-invariant](../guides/adding-an-invariant.md).

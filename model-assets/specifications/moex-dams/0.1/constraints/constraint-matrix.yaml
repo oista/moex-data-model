@@ -1470,6 +1470,31 @@ invariants:
     L1: not-applicable
     L2: implemented
     L3: not-applicable
+- id: INV-058
+  title: element_id unique across source packages
+  statement: >
+    element_id values must be unique across ModelPackage bodies indexed by the
+    repository manifest, excluding packages whose envelope dams_model_level is
+    hierarchy-view (derived views may intentionally reuse source ids). Within a
+    single package document uniqueness remains INV-050.
+  source: audit duplicate ids; ADR-054 deferred global collision; audit R2-6
+  source_status: aligned
+  scope: repository
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-054
+  implementation:
+    dams_validator: moex_dams.rules.repository_invariants.check_repository_element_id_uniqueness
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-058.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-058.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
 invariant_id_registry:
 - INV-001
 - INV-002
@@ -1528,3 +1553,4 @@ invariant_id_registry:
 - INV-055
 - INV-056
 - INV-057
+- INV-058

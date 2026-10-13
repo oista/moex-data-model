@@ -1,0 +1,23 @@
+# Repository composite: same conceptual element_id in two source packages.
+repository_id: moex:repository:inv058-invalid
+model_packages:
+- element_id: dams:model/inv058/a
+  name: inv058-a
+  description: package A
+  lifecycle_status: active
+  implementation_scope: enterprise
+  conceptual_entities:
+  - element_id: dams:concept/inv058/SHARED
+    name: Shared
+    description: shared a
+    lifecycle_status: active
+- element_id: dams:model/inv058/b
+  name: inv058-b
+  description: package B
+  lifecycle_status: active
+  implementation_scope: enterprise
+  conceptual_entities:
+  - element_id: dams:concept/inv058/SHARED
+    name: Shared
+    description: shared b
+    lifecycle_status: active

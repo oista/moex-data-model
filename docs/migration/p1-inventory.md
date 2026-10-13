@@ -145,10 +145,14 @@ review handle (`@org/team`), not `data_owner_ref` (ADR-023).
 ## Deferred (not in this inventory’s acceptance)
 
 Splitting large ModelPackage files; CODEOWNERS generation; GitProvider-backed
-reads; deleting envelope stamps; validating the assembled
-`MOEXModelRepository` instance for id collisions.
+reads; deleting envelope stamps.
 
 **Closed by ADR-054 (P1b):** extra DocumentKind aggregates deferred explicitly
 (package-only index); `MOEXModelRepository` role = validation composite;
 viewer implementation discovery via manifest + coincidence test; path-scoped
 orphan allow-list. See [ADR-054](../adr/ADR-054-repository-aggregates-and-manifest.md).
+
+**Closed by INV-058 (audit R2-6):** global `element_id` uniqueness across
+manifest source packages (`check-manifest` + constraint matrix); packages with
+`dams_model_level: hierarchy-view` excluded. Within-package uniqueness remains
+INV-050.

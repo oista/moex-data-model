@@ -148,6 +148,10 @@ enums:
         description: DSP (вне текущего охвата реализации).
       moex-external-alignment:
         description: External alignment (вне текущего охвата реализации).
+      repository:
+        description: >
+          Cross-document / manifest-scoped checks (e.g. global element_id
+          uniqueness across indexed packages).
 
 slots:
   matrix_id:
