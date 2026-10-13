@@ -12,6 +12,7 @@ superseded_by: []
 **Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Related:** [ADR-030](ADR-030-dams-uri-and-prefix-policy.md), [ADR-032](ADR-032-technical-asset-identity.md), [ADR-039](ADR-039-structure-node-addressing.md), [ADR-042](ADR-042-integrity-digest-revisions.md), [ADR-044](ADR-044-model-element-decomposition.md), [ADR-047](ADR-047-repository-manifest-and-lock.md), [ADR-051](ADR-051-dams-schema-compatibility.md)  
+**Lookup:** [identity-map.md](../architecture/identity-map.md)  
 **Audit:** Wave D2 (Identity decision gate)
 
 ## Context
@@ -63,6 +64,29 @@ Subject to ADR-051 evidence gate:
 
 Schema and data commits stay separate unless the series ADR names the PR-5 exception.
 
+### D6. Operational identity record (Distribution — tooling, not schema)
+
+A published generated artifact is identified by the **tracked** per-artifact manifest under `generated/manifests/` (and the bundle index). Required identity fields:
+
+| Field | Meaning |
+|---|---|
+| `artifact_id` | Stable work/artifact id for that projection |
+| `schema_version` | Aggregate DAMS LinkML semver from `moex-dams.yaml` `version:` |
+| `schema_digest` | Content digest of the schema input (when applicable) |
+| `content_digest` | Content digest of the published bytes / directory |
+| `media_type` | MIME (or well-known type) of the distribution |
+| `role` | Bundle part role (`json-schema`, `owl`, `contracts`, …) |
+
+`generated_at` is **informational only**: it MUST NOT participate in identity, digests, or golden compare. Changing only `generated_at` MUST NOT change any digest.
+
+Optional LinkML `ArtifactDistribution` class remains YAGNI (D1); the operational record closes the audit gap without a schema bump.
+
+### D7. Git revision at release/bundle time only
+
+A **tracked** manifest MUST NOT embed the Git SHA of the commit that contains that manifest (self-referential / non-reproducible). Git revision (`source_revision`) is attached when building the **staged** release bundle (`generated/bundles/`, gitignored): next to `schema_version` on the bundle index. Release mode refuses a dirty tree; development mode may record `unknown`.
+
+Binding `model_revision`, envelope `revision`, and lock `content_hash` (ADR-042 / ADR-047) remain the content-addressed revision surfaces for model assets.
+
 ### Allowlist (classes without `id_prefixes` as of schema 4.1.0)
 
 Maintained in `tools/architecture-check` (`ID_PREFIXES_ALLOWLIST`). Initial set = all concrete `IdentifiedElement`/`ModelElement` descendants that lack induced `id_prefixes` except `TechnicalAsset`, `DataStructure`, `Message` (already declared). Shrink the allowlist when prefixes are added; do not grow without amending this section.
@@ -72,6 +96,7 @@ Maintained in `tools/architecture-check` (`ID_PREFIXES_ALLOWLIST`). Initial set 
 - Identity vocabulary is fixed for audits and reviews without a schema rewrite.
 - `api_version` rename is scheduled, not ambiguous.
 - `id_prefixes` debt becomes visible in CI.
+- Distribution identity is machine-checkable in manifests and publish-gate without introducing FRBR/DCAT classes.
 
 ## Alternatives
 
@@ -86,4 +111,5 @@ Maintained in `tools/architecture-check` (`ID_PREFIXES_ALLOWLIST`). Initial set 
 - [x] Five-layer map published
 - [x] Rename decision recorded (deferred to 6.0.0 train)
 - [x] `id_prefixes` lint + allowlist
+- [x] Operational identity record (D6/D7 — manifests + publish-gate; [identity-map.md](../architecture/identity-map.md))
 - [ ] 6.0.0 train implementation (separate series)

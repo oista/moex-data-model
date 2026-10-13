@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import shutil
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -15,6 +16,53 @@ MANIFESTS = REPO / "generated" / "manifests"
 BUNDLE_DIR = REPO / "generated" / "bundles" / "moex-dams" / "0.1"
 BUNDLE_MANIFEST = MANIFESTS / "moex-dams-bundle.json"
 REQUIREMENTS = REPO / "requirements-linkml.txt"
+SCHEMA = (
+    REPO
+    / "model-assets"
+    / "specifications"
+    / "moex-dams"
+    / "0.1"
+    / "schemas"
+    / "moex-dams.yaml"
+)
+
+
+def schema_version() -> str:
+    for line in SCHEMA.read_text(encoding="utf-8").splitlines():
+        if line.startswith("version:"):
+            return line.split(":", 1)[1].strip().strip('"').strip("'")
+    raise ValueError(f"missing version: in {SCHEMA}")
+
+
+def resolve_source_revision(*, release: bool = False) -> str:
+    """Git SHA for staged bundle only (ADR-052 D7). Tracked manifests omit this."""
+    try:
+        sha = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"],
+            cwd=REPO,
+            text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+        dirty = subprocess.check_output(
+            ["git", "status", "--porcelain"],
+            cwd=REPO,
+            text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        if release:
+            raise RuntimeError(
+                "release bundle requires git revision; git unavailable"
+            ) from None
+        return "unknown"
+    if dirty:
+        if release:
+            raise RuntimeError(
+                "release bundle refuses dirty working tree "
+                "(commit or stash before --release)"
+            )
+        return "unknown"
+    return sha
 
 # (path relative to repo, role, optional artifact-manifest for stable digest)
 BUNDLE_PARTS: tuple[tuple[str, str, str | None], ...] = (
@@ -133,7 +181,7 @@ def bundle_index_digest(parts: list[dict]) -> str:
     return _sha256_bytes(payload)
 
 
-def stage_bundle(parts: list[dict]) -> None:
+def stage_bundle(parts: list[dict], staged_index: dict) -> None:
     if BUNDLE_DIR.exists():
         shutil.rmtree(BUNDLE_DIR)
     BUNDLE_DIR.mkdir(parents=True, exist_ok=True)
@@ -149,12 +197,19 @@ def stage_bundle(parts: list[dict]) -> None:
             )
         else:
             shutil.copy2(src, dest)
+    (BUNDLE_DIR / "BUNDLE.json").write_text(
+        json.dumps(staged_index, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )
 
 
-def build_bundle(*, stage: bool = True) -> dict:
+def build_bundle(*, stage: bool = True, release: bool = False) -> dict:
     parts = collect_parts()
     content_digest = bundle_index_digest(parts)
     toolchain_digest = _sha256_path(REQUIREMENTS)
+    version = schema_version()
+    source_revision = resolve_source_revision(release=release)
     if BUNDLE_MANIFEST.is_file():
         try:
             existing = json.loads(BUNDLE_MANIFEST.read_text(encoding="utf-8"))
@@ -171,22 +226,35 @@ def build_bundle(*, stage: bool = True) -> dict:
         if (
             existing.get("content_digest") == content_digest
             and existing.get("toolchain_digest") == toolchain_digest
+            and existing.get("schema_version") == version
+            and existing.get("role") == "bundle"
+            and existing.get("media_type") == "application/json"
             and same_parts == new_parts
         ):
-            if stage and not BUNDLE_DIR.exists():
-                stage_bundle(parts)
-                (BUNDLE_DIR / "BUNDLE.json").write_text(
-                    json.dumps(existing, indent=2, ensure_ascii=False) + "\n",
-                    encoding="utf-8",
-                    newline="\n",
-                )
-            return existing
+            # Never persist source_revision on the tracked index (ADR-052 D7).
+            tracked = {
+                k: v for k, v in existing.items() if k != "source_revision"
+            }
+            if stage:
+                staged = {**tracked, "source_revision": source_revision}
+                if not BUNDLE_DIR.exists():
+                    stage_bundle(parts, staged)
+                else:
+                    (BUNDLE_DIR / "BUNDLE.json").write_text(
+                        json.dumps(staged, indent=2, ensure_ascii=False) + "\n",
+                        encoding="utf-8",
+                        newline="\n",
+                    )
+            return tracked
 
     index = {
         "artifact_id": "moex:artifact:dams-bundle:0.1",
         "schema_path": (
             "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml"
         ),
+        "schema_version": version,
+        "role": "bundle",
+        "media_type": "application/json",
         "toolchain_pin": "requirements-linkml.txt",
         "toolchain_digest": toolchain_digest,
         "bundle_dir": BUNDLE_DIR.relative_to(REPO).as_posix(),
@@ -201,12 +269,8 @@ def build_bundle(*, stage: bool = True) -> dict:
         newline="\n",
     )
     if stage:
-        stage_bundle(parts)
-        (BUNDLE_DIR / "BUNDLE.json").write_text(
-            json.dumps(index, indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
-            newline="\n",
-        )
+        staged = {**index, "source_revision": source_revision}
+        stage_bundle(parts, staged)
     return index
 
 
@@ -217,9 +281,14 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Only write moex-dams-bundle.json (no copy tree)",
     )
+    parser.add_argument(
+        "--release",
+        action="store_true",
+        help="Require clean git tree; embed source_revision in staged BUNDLE.json",
+    )
     args = parser.parse_args(argv)
     try:
-        index = build_bundle(stage=not args.no_stage)
+        index = build_bundle(stage=not args.no_stage, release=args.release)
     except Exception as exc:  # noqa: BLE001
         print(f"build_release_bundle failed: {exc}", file=sys.stderr)
         return 1

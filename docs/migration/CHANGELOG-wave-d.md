@@ -16,6 +16,13 @@ Docs / architecture-check only — **no** aggregate schema bump in this wave.
 - `VersionedArtifact` still deferred (ADR-044 D6).
 - `id_prefixes` lint + shrink-only allowlist in `tools/architecture-check`.
 
+### D2 follow-up — operational identity (no schema bump)
+
+- Lookup: [identity-map.md](../architecture/identity-map.md).
+- ADR-052 D6/D7: tracked manifests carry `schema_version`, `media_type`, `role`; `generated_at` excluded from digests; Git `source_revision` only on staged release bundle (`--release` refuses dirty tree).
+- Publish-gate enforces identity fields and `schema_version` == aggregate `moex-dams.yaml` `version:`.
+- **Closure status (audit P1 Version identity):** closed at contract/tooling level; schema-level items (`api_version` rename, `VersionedArtifact`, LinkML `ArtifactDistribution`) remain deferred to 6.0.0 by decision.
+
 ## D3 — ADR-053 Qualified assertion
 
 - Design for `HasAssertionMetadata` mixin; **implemented in aggregate 5.1.0** ([CHANGELOG-assertion-metadata.md](CHANGELOG-assertion-metadata.md)).

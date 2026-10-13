@@ -16,7 +16,7 @@ These are unfinished acceptance checkboxes on **Accepted** ADRs. Ship as **minor
 |---|---|---|---|
 | F0-1 | ~~Schema mixin `HasAssertionMetadata`~~ **Done** (aggregate 5.1.0) | [ADR-053](../adr/ADR-053-qualified-assertion.md) D1 | See [CHANGELOG-assertion-metadata.md](CHANGELOG-assertion-metadata.md) |
 | F0-2 | ~~L2 INV ExternalClassRef ↔ AlignsWithMapping~~ **Done** (**INV-057**) | ADR-053 D2 | Dual path stays; consistency only |
-| F0-3 | Identity train **6.0.0** (when scheduled): `api_version` → `dams_specification_version`; remove deprecated `transformation_*` unless a lineage ADR reclaims them; optional `VersionedArtifact` per ADR-052 D5 | [ADR-052](../adr/ADR-052-identity-and-versioning.md), ADR-053 D3 | Release train — not silent major-per-theme (ADR-051 D3–D4) |
+| F0-3 | Identity train **6.0.0** (when scheduled): `api_version` → `dams_specification_version`; remove deprecated `transformation_*` unless a lineage ADR reclaims them; optional `VersionedArtifact` per ADR-052 D5 | [ADR-052](../adr/ADR-052-identity-and-versioning.md), ADR-053 D3 | Still open for schema train. Operational Distribution identity (manifests + publish-gate + [identity-map.md](../architecture/identity-map.md)) already closed audit P1 without this bump — ADR-051 D3–D4 |
 
 ---
 

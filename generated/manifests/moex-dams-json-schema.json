@@ -5,7 +5,10 @@
   "generator_version": "1.11.1",
   "schema_path": "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml",
   "schema_digest": "sha256:b2ff92fc3047b59a392dd5487d3273e4953ab11df9d04cfc9649a2be3e2a8348",
+  "schema_version": "5.1.0",
   "output_path": "generated/artifacts/moex-dams/0.1/moex-dams.schema.json",
   "content_digest": "sha256:c827ccfc03ee6c90cfaa03c8e88f7afb199222820faf6e4f5f63e8aea3cf8036",
+  "role": "json-schema",
+  "media_type": "application/schema+json",
   "generated_at": "2026-10-13T21:07:29.805408+00:00"
 }
