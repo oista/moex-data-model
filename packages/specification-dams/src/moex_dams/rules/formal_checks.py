@@ -1586,10 +1586,17 @@ def check_formal_requirements_for_repo(
 ) -> tuple[Diagnostic, ...]:
     """Entry used by rules_runner; resolves catalog relative to schema if possible."""
     catalog: Path | None = None
+    repo_root: Path | None = None
     # Walk from body source path toward repo requirements catalog
     src = Path(body.source_path) if getattr(body, "source_path", None) else None
     if src is not None:
         for parent in [src.parent, *src.parents]:
+            if (
+                repo_root is None
+                and (parent / "model-assets").is_dir()
+                and (parent / "packages").is_dir()
+            ):
+                repo_root = parent
             candidate = (
                 parent
                 / "model-assets"
@@ -1610,4 +1617,6 @@ def check_formal_requirements_for_repo(
             if candidate2.is_file():
                 catalog = candidate2
                 break
-    return check_formal_requirements(body, catalog_path=catalog)
+    return check_formal_requirements(
+        body, catalog_path=catalog, repo_root=repo_root
+    )

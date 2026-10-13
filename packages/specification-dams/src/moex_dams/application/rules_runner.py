@@ -4,16 +4,38 @@ from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
+from pathlib import Path
 
 from moex_modeling import ConformancePhase, Diagnostic
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
 from moex_dams.application.repository import DamsAssetRepository
+from moex_dams.rules.catalog_topology import check_catalog_topology
 from moex_dams.rules.dams_levels import check_dams_model_level
 from moex_dams.rules.formal_checks import check_formal_requirements_for_repo
+from moex_dams.rules.governance_assignments import check_governance_assignments
 from moex_dams.rules.identifiers import build_dams_curie_resolver, check_identifiers
+from moex_dams.rules.package_invariants import check_package_invariants
 from moex_dams.rules.references import check_references
 from moex_dams.rules.structural import check_structural
+
+# Modules whose L2 validators are reached from assess / formal_checks / schema lint.
+# Meta-test: every constraint-matrix L2-implemented dams_validator must live here.
+L2_PRODUCTION_MODULES: frozenset[str] = frozenset(
+    {
+        "moex_dams.rules.structural",
+        "moex_dams.rules.package_invariants",
+        "moex_dams.rules.governance_assignments",
+        "moex_dams.rules.catalog_topology",
+        "moex_dams.rules.technical_assets",
+        "moex_dams.rules.data_structure",
+        "moex_dams.rules.semantic_layer",
+        "moex_dams.rules.conceptual_entity",
+        "moex_dams.rules.relation_terms",
+        # Schema lint (ontology-check / Stage 8), not package assess — INV-026.
+        "moex_dams.rules.ontology_uris",
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -31,8 +53,26 @@ def run_rule_sets(
     return [(rule_set, rule_set.run(body)) for rule_set in sets]
 
 
+def _repo_root_from_body(body: LinkMLImplementationBody) -> Path | None:
+    src = Path(body.source_path) if getattr(body, "source_path", None) else None
+    if src is None:
+        return None
+    for parent in [src.parent, *src.parents]:
+        if (parent / "model-assets").is_dir() and (parent / "packages").is_dir():
+            return parent
+    return None
+
+
 def default_dams_rule_sets(repo: DamsAssetRepository) -> tuple[RuleSet, ...]:
-    """Register LinkML validate + DAMS structural/reference/identifier rules."""
+    """Register LinkML validate + DAMS structural/reference/identifier/L2 rules.
+
+    L2 package invariants (ADR-045 / Wave C+), catalog topology (ADR-048), and
+    governance assignments (ADR-049) run here so ``assess_implementation`` and
+    the validate CLI apply the same checks as the constraint-matrix L2 runner.
+    Complementary L2 modules (technical_assets, semantic_layer, conceptual,
+    relation_terms) remain on the ``assessment:model-requirements`` path via
+    ``formal_checks``.
+    """
 
     def run_linkml(body: LinkMLImplementationBody) -> tuple[Diagnostic, ...]:
         return repo.validate_standard(body)
@@ -45,6 +85,40 @@ def default_dams_rule_sets(repo: DamsAssetRepository) -> tuple[RuleSet, ...]:
         if resolver is None:
             return ()
         return check_identifiers(body, resolver=resolver)
+
+    def run_package_invariants(
+        body: LinkMLImplementationBody,
+    ) -> tuple[Diagnostic, ...]:
+        data = body.data
+        if not isinstance(data, dict):
+            return ()
+        return tuple(check_package_invariants(data))
+
+    def run_catalog_topology(
+        body: LinkMLImplementationBody,
+    ) -> tuple[Diagnostic, ...]:
+        data = body.data
+        if not isinstance(data, dict):
+            return ()
+        root = _repo_root_from_body(body)
+        return tuple(check_catalog_topology(data, repo_root=root))
+
+    def run_governance_assignments(
+        body: LinkMLImplementationBody,
+    ) -> tuple[Diagnostic, ...]:
+        data = body.data
+        if not isinstance(data, dict):
+            return ()
+        as_of: str | None = None
+        root = _repo_root_from_body(body)
+        if root is not None:
+            try:
+                from moex_dams.governance.materialize import load_as_of
+
+                as_of = load_as_of(root)
+            except Exception:
+                as_of = None
+        return tuple(check_governance_assignments(data, as_of=as_of))
 
     return (
         RuleSet(
@@ -76,6 +150,24 @@ def default_dams_rule_sets(repo: DamsAssetRepository) -> tuple[RuleSet, ...]:
             assessment_id="assessment:dams-levels",
             description="DAMS enterprise-conceptual / solution package rules",
             run=check_dams_model_level,
+        ),
+        RuleSet(
+            phase=ConformancePhase.CORPORATE_SEMANTICS,
+            assessment_id="assessment:package-invariants",
+            description="Wave C package L2 invariants (INV-042..053 subset)",
+            run=run_package_invariants,
+        ),
+        RuleSet(
+            phase=ConformancePhase.CORPORATE_SEMANTICS,
+            assessment_id="assessment:catalog-topology",
+            description="Catalog topology L2 invariants (INV-038..041, ADR-048)",
+            run=run_catalog_topology,
+        ),
+        RuleSet(
+            phase=ConformancePhase.CORPORATE_SEMANTICS,
+            assessment_id="assessment:governance-assignments",
+            description="Governance assignment L2 invariants (INV-054..056, ADR-049)",
+            run=run_governance_assignments,
         ),
         RuleSet(
             phase=ConformancePhase.CORPORATE_SEMANTICS,
