@@ -161,6 +161,45 @@ def check_hashes(loader: RepositoryLoader) -> list[CheckProblem]:
     return out
 
 
+def check_global_element_ids(loader: RepositoryLoader) -> list[CheckProblem]:
+    """INV-058: element_id unique across source packages (exclude hierarchy-view)."""
+    try:
+        from moex_dams.rules.repository_invariants import (
+            HIERARCHY_VIEW_LEVEL,
+            check_repository_element_id_uniqueness,
+        )
+    except ImportError:
+        return [
+            CheckProblem(
+                "element_id_collision",
+                "moex_dams required for global element_id uniqueness check (INV-058)",
+            )
+        ]
+
+    packages: list[dict] = []
+    package_ids: list[str] = []
+    for ref in loader.load_manifest().documents:
+        if ref.kind != "package":
+            continue
+        loaded = loader.load_package(ref.id)
+        level = str(loaded.descriptor.get("dams_model_level") or "")
+        if level == HIERARCHY_VIEW_LEVEL:
+            continue
+        packages.append(loaded.body)
+        package_ids.append(ref.id)
+
+    composite = {
+        "repository_id": loader.load_manifest().repository_id,
+        "model_packages": packages,
+    }
+    diags = check_repository_element_id_uniqueness(
+        composite, package_ids=package_ids
+    )
+    return [
+        CheckProblem("element_id_collision", d.diagnostic_message) for d in diags
+    ]
+
+
 def check_orphans(loader: RepositoryLoader) -> list[CheckProblem]:
     problems: list[CheckProblem] = []
     root = loader.implementations_root
@@ -203,4 +242,5 @@ def run_checks(repo_root: Path) -> list[CheckProblem]:
     problems.extend(check_package_cycles(loader))
     problems.extend(check_hashes(loader))
     problems.extend(check_orphans(loader))
+    problems.extend(check_global_element_ids(loader))
     return problems

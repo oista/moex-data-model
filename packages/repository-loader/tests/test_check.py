@@ -7,6 +7,7 @@ import yaml
 
 from moex_repository_loader.check import (
     check_depends_on,
+    check_global_element_ids,
     check_hashes,
     check_orphans,
     check_package_cycles,
@@ -194,3 +195,98 @@ def test_unique_paths_ok(tmp_path: Path) -> None:
     root = _write_mini_repo(tmp_path)
     loader = RepositoryLoader(root, verify_hashes=False)
     assert check_unique_ids_and_paths(loader) == []
+
+
+def _write_two_package_repo(
+    tmp: Path,
+    *,
+    shared_concept: bool,
+    second_level: str | None = None,
+) -> Path:
+    impl = tmp / "model-assets" / "implementations"
+    docs = []
+    for name, concept in (
+        ("a", "SHARED" if shared_concept else "A"),
+        ("b", "SHARED" if shared_concept else "B"),
+    ):
+        d = impl / name
+        d.mkdir(parents=True)
+        (d / "body.yaml").write_text(
+            yaml.dump(
+                {
+                    "element_id": f"dams:model/{name}",
+                    "name": name,
+                    "conceptual_entities": [
+                        {
+                            "element_id": f"dams:concept/{concept}",
+                            "name": concept,
+                        }
+                    ],
+                },
+                allow_unicode=True,
+                sort_keys=False,
+            ),
+            encoding="utf-8",
+        )
+        envelope: dict = {
+            "id": f"moex:implementation:{name}:0.1",
+            "version": "0.1",
+            "body_ref": "body.yaml",
+            "content_digest": "sha256:dead",
+            "revision": "dead",
+        }
+        if name == "b" and second_level:
+            envelope["dams_model_level"] = second_level
+        (d / "implementation.yaml").write_text(
+            yaml.dump(envelope, allow_unicode=True, sort_keys=False),
+            encoding="utf-8",
+        )
+        docs.append(
+            {
+                "id": f"moex:implementation:{name}:0.1",
+                "kind": "package",
+                "path": f"{name}/implementation.yaml",
+                "version": "0.1",
+                "owner": "@moex/a",
+            }
+        )
+    manifest = {
+        "manifest_schema_version": "0.1.0",
+        "repository_id": "moex:repository:test",
+        "documents": docs,
+    }
+    (impl / "manifest.yaml").write_text(
+        yaml.dump(manifest, allow_unicode=True, sort_keys=False),
+        encoding="utf-8",
+    )
+    loader = RepositoryLoader(tmp, verify_hashes=False)
+    write_lock(loader.lock_path(), loader.compute_all_hashes())
+    return tmp
+
+
+def test_global_element_id_collision(tmp_path: Path) -> None:
+    root = _write_two_package_repo(tmp_path, shared_concept=True)
+    loader = RepositoryLoader(root, verify_hashes=False)
+    problems = check_global_element_ids(loader)
+    assert any(p.code == "element_id_collision" for p in problems)
+    assert any("dams:concept/SHARED" in p.message for p in problems)
+
+
+def test_global_element_id_hierarchy_view_excluded(tmp_path: Path) -> None:
+    root = _write_two_package_repo(
+        tmp_path, shared_concept=True, second_level="hierarchy-view"
+    )
+    loader = RepositoryLoader(root, verify_hashes=False)
+    assert check_global_element_ids(loader) == []
+
+
+def test_global_element_id_unique_ok(tmp_path: Path) -> None:
+    root = _write_two_package_repo(tmp_path, shared_concept=False)
+    loader = RepositoryLoader(root, verify_hashes=False)
+    assert check_global_element_ids(loader) == []
+
+
+def test_real_repo_global_element_ids_ok() -> None:
+    """Source packages have no cross-package collisions; hierarchy-view is excluded."""
+    loader = RepositoryLoader(REPO, verify_hashes=False)
+    assert check_global_element_ids(loader) == []

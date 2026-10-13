@@ -19,8 +19,9 @@ from moex_dams.rules.package_invariants import check_package_invariants
 from moex_dams.rules.references import check_references
 from moex_dams.rules.structural import check_structural
 
-# Modules whose L2 validators are reached from assess / formal_checks / schema lint.
-# Meta-test: every constraint-matrix L2-implemented dams_validator must live here.
+# Modules whose L2 validators are reached from assess / formal_checks / schema
+# lint / check-manifest. Meta-test: every constraint-matrix L2-implemented
+# dams_validator must live here.
 L2_PRODUCTION_MODULES: frozenset[str] = frozenset(
     {
         "moex_dams.rules.structural",
@@ -34,6 +35,8 @@ L2_PRODUCTION_MODULES: frozenset[str] = frozenset(
         "moex_dams.rules.relation_terms",
         # Schema lint (ontology-check / Stage 8), not package assess — INV-026.
         "moex_dams.rules.ontology_uris",
+        # check-manifest (Stage 0), not package assess — INV-058.
+        "moex_dams.rules.repository_invariants",
     }
 )
 

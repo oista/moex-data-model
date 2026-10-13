@@ -279,11 +279,17 @@ def _run_l2_package_checks(data: dict[str, Any]) -> list[Any]:
     from moex_dams.rules.governance_assignments import check_governance_assignments
     from moex_dams.rules.package_invariants import check_package_invariants
     from moex_dams.rules.relation_terms import check_relation_terms
+    from moex_dams.rules.repository_invariants import (
+        check_repository_element_id_uniqueness,
+    )
     from moex_dams.rules.semantic_layer import check_semantic_layer
     from moex_dams.rules.structural import check_structural_data
     from moex_dams.rules.technical_assets import check_technical_assets
 
     diags: list[Any] = []
+    # Repository composite fixtures (INV-058): uniqueness across model_packages.
+    if isinstance(data.get("model_packages"), list):
+        diags.extend(check_repository_element_id_uniqueness(data))
     diags.extend(check_semantic_layer(data))
     diags.extend(check_technical_assets(data))
     diags.extend(check_catalog_topology(data, repo_root=repo_root()))

@@ -63,7 +63,8 @@ def test_every_l2_implemented_validator_module_is_production_wired() -> None:
             missing.append(f"{inv.get('id')}: {dv} (module {module})")
     assert not missing, (
         "L2-implemented validators not listed in L2_PRODUCTION_MODULES "
-        "(wire into default_dams_rule_sets / formal_checks / schema lint):\n"
+        "(wire into default_dams_rule_sets / formal_checks / schema lint / "
+        "check-manifest):\n"
         + "\n".join(missing)
     )
 

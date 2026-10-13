@@ -12,6 +12,7 @@ from moex_modeling import (
 )
 
 from moex_dams.mappings.iter_mappings import iter_mappings
+from moex_dams.rules.repository_invariants import collect_element_ids
 
 
 def _diag(
@@ -247,29 +248,9 @@ def check_binding_compatibility(data: dict[str, Any]) -> list[Diagnostic]:
 
 def check_package_element_id_uniqueness(data: dict[str, Any]) -> list[Diagnostic]:
     """INV-050: element_id values must be unique within a ModelPackage document."""
-    seen: dict[str, str] = {}
-    dups: list[str] = []
-
-    def walk(obj: Any, path: str) -> None:
-        if isinstance(obj, dict):
-            eid = obj.get("element_id")
-            if eid is not None and str(eid).strip():
-                key = str(eid)
-                if key in seen:
-                    dups.append(key)
-                else:
-                    seen[key] = path
-            for k, v in obj.items():
-                if k == "element_id":
-                    continue
-                walk(v, f"{path}/{k}" if path else k)
-        elif isinstance(obj, list):
-            for i, item in enumerate(obj):
-                walk(item, f"{path}[{i}]")
-
-    walk(data, "")
+    locations = collect_element_ids(data)
     out: list[Diagnostic] = []
-    for eid in sorted(set(dups)):
+    for eid in sorted(eid for eid, paths in locations.items() if len(paths) > 1):
         out.append(
             _diag(
                 code="DAMS-INV-050",
