@@ -19,7 +19,9 @@ Mechanical guards for the architecture pack under `docs/architecture/` and DAMS 
    `is_a` parent chain or via another declared sibling mixin (ADR-044).
 6. **id_prefixes** — concrete `IdentifiedElement` / `ModelElement` classes must
    declare (or inherit) `id_prefixes`, unless listed on the ADR-052 shrink-only
-   allowlist (`id_prefixes.py`).
+   allowlist (`id_prefixes.py`); allowlist keys must appear in ADR-052 §
+   id_prefixes allowlist; size must equal `ID_PREFIXES_ALLOWLIST_CEILING`
+   (ratchet — lower both when a class exits).
 
 ## Run
 
@@ -43,3 +45,10 @@ On Windows without `make`, use the three commands above (set `PYTHON` / `py -3.1
 2. Add the class key to `DESCRIPTION_SLOT_USAGE_ALLOWLIST` in
    `src/architecture_check/model_element_roles.py` with a short reason.
 3. CI fails if either side drifts.
+
+## Shrinking the id_prefixes allowlist (ratchet)
+
+1. Add `id_prefixes` on the class (or move it off `ModelElement` per ADR-052 D5), regenerate if needed.
+2. Remove the class from `ID_PREFIXES_ALLOWLIST` and from ADR-052 § id_prefixes allowlist.
+3. Lower `ID_PREFIXES_ALLOWLIST_CEILING` by the same count in the same PR.
+4. Raising the ceiling is forbidden without an explicit debt note in ADR-052.

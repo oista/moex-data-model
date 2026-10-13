@@ -5,6 +5,8 @@
 
 Catalogue path `moex-dams/0.1/` is the **product label** (MOEX DAMS 0.1). It is **not** the LinkML aggregate semver.
 
+CI: `tests/architecture/test_schema_version_timeline.py` fails if the aggregate `version:` is missing from the table below (ADR-051 D6).
+
 ## Timeline (aggregate `moex-dams.yaml`)
 
 | Aggregate version | Theme | Notes / changelog |

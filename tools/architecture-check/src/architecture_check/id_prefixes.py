@@ -4,37 +4,41 @@ from __future__ import annotations
 
 from pathlib import Path
 
-# Shrink-only. Growth requires amending ADR-052 § Allowlist.
-# Snapshot at schema 4.1.0 (Wave D2).
-ID_PREFIXES_ALLOWLIST: frozenset[str] = frozenset(
-    {
-        "AlignsWithMapping",
-        "ConceptualDomain",
-        "ConceptualEntity",
-        "ConceptualProperty",
-        "DataFlow",
-        "DataFlowEntityBinding",
-        "DataModelBinding",
-        "DataType",
-        "Dimension",
-        "DomainContext",
-        "EntityPhysicalMapping",
-        "FieldMapping",
-        "LogicalAttribute",
-        "LogicalEntity",
-        "Mapping",
-        "Metric",
-        "ModelPackage",
-        "ModelSelection",
-        "RealizesMapping",
-        "RelationTerm",
-        "Relationship",
-        "SelectedAttribute",
-        "SelectedEntity",
-        "SpecificationRequirement",
-        "ValueDomain",
-    }
-)
+# Shrink-only. Growth requires amending ADR-052 § id_prefixes allowlist.
+# Ceiling is a ratchet: lower it (and never raise) when classes leave the set.
+# Snapshot at schema 5.1.0 (audit R2-10).
+ID_PREFIXES_ALLOWLIST: dict[str, str] = {
+    "AlignsWithMapping": "mapping subclass; add dams with Mapping family (minor)",
+    "ConceptualDomain": "semantic registry; add dams (minor)",
+    "ConceptualEntity": "core semantic; add dams (minor)",
+    "ConceptualProperty": "core semantic; add dams (minor)",
+    "DataFlow": "integration root; add dams (minor)",
+    "DataFlowEntityBinding": "exit on 6.0.0 (EmbeddedElement / slim id — ADR-052 D5)",
+    "DataModelBinding": "contract binding; add dams (minor)",
+    "DataType": "datatype registry; add dams (minor)",
+    "Dimension": "analytics; add dams (minor)",
+    "DomainContext": "package child; add dams (minor)",
+    "EntityPhysicalMapping": "mapping subclass; add dams with Mapping family (minor)",
+    "FieldMapping": "mapping subclass; add dams with Mapping family (minor)",
+    "LogicalAttribute": "core logical; add dams (minor)",
+    "LogicalEntity": "core logical; add dams (minor)",
+    "Mapping": "abstract base still concrete for generators; add dams (minor)",
+    "Metric": "analytics; add dams (minor)",
+    "ModelPackage": "aggregate root; add dams (minor)",
+    "ModelSelection": "exit on 6.0.0 (EmbeddedElement — ADR-052 D5)",
+    "RealizesMapping": "mapping subclass; add dams with Mapping family (minor)",
+    "RelationTerm": "semantic registry; add dams (minor)",
+    "Relationship": "core logical; add dams (minor)",
+    "SelectedAttribute": "exit on 6.0.0 (EmbeddedElement — ADR-052 D5)",
+    "SelectedEntity": "exit on 6.0.0 (EmbeddedElement — ADR-052 D5)",
+    "SpecificationRequirement": "requirements catalog; add dams (minor)",
+    "ValueDomain": "semantic registry; add dams (minor)",
+}
+
+# Ratchet ceiling: must equal len(ID_PREFIXES_ALLOWLIST) and only decrease.
+ID_PREFIXES_ALLOWLIST_CEILING: int = 25
+
+_ALLOWLIST_MARKER = "## id_prefixes allowlist"
 
 
 def _schema_path(root: Path) -> Path:
@@ -75,8 +79,18 @@ def check_id_prefixes(root: str | Path) -> list[str]:
     if not schema.is_file():
         return [f"missing DAMS schema: {schema}"]
 
-    sv = SchemaView(str(schema))
     errors: list[str] = []
+    size = len(ID_PREFIXES_ALLOWLIST)
+    if size != ID_PREFIXES_ALLOWLIST_CEILING:
+        errors.append(
+            f"ID_PREFIXES_ALLOWLIST size {size} must equal ratchet ceiling "
+            f"{ID_PREFIXES_ALLOWLIST_CEILING}. When a class leaves the "
+            f"allowlist, remove it and lower the ceiling in the same PR. "
+            f"Raising the ceiling requires amending ADR-052 § id_prefixes "
+            f"allowlist with an explicit debt note."
+        )
+
+    sv = SchemaView(str(schema))
     missing: list[str] = []
     for cname in sorted(sv.all_classes()):
         cdef = sv.get_class(cname)
@@ -94,14 +108,40 @@ def check_id_prefixes(root: str | Path) -> list[str]:
                 f"id_prefixes; add prefixes or amend ADR-052 allowlist"
             )
 
-    stale = sorted(ID_PREFIXES_ALLOWLIST - set(missing))
+    stale = sorted(set(ID_PREFIXES_ALLOWLIST) - set(missing))
     for cname in stale:
         errors.append(
             f"{cname}: in ID_PREFIXES_ALLOWLIST but already has induced "
-            f"id_prefixes; remove from allowlist (ADR-052 shrink-only)"
+            f"id_prefixes; remove from allowlist and lower the ceiling "
+            f"(ADR-052 shrink-only)"
         )
 
-    unknown = sorted(set(missing) - ID_PREFIXES_ALLOWLIST)
-    # unknown already reported above as errors; keep list for clarity
-    _ = unknown
     return sorted(errors)
+
+
+def check_id_prefixes_allowlist_documented(root: str | Path) -> list[str]:
+    """Every allowlist class must appear under ADR-052 § id_prefixes allowlist."""
+    adr = Path(root) / "docs" / "adr" / "ADR-052-identity-and-versioning.md"
+    if not adr.is_file():
+        return [f"missing ADR-052: {adr}"]
+    text = adr.read_text(encoding="utf-8")
+    if _ALLOWLIST_MARKER not in text:
+        return [
+            f"ADR-052 must contain section '{_ALLOWLIST_MARKER}' listing "
+            "ID_PREFIXES_ALLOWLIST keys"
+        ]
+    section = text.split(_ALLOWLIST_MARKER, 1)[1]
+    next_h2 = section.find("\n## ")
+    if next_h2 >= 0:
+        section = section[:next_h2]
+    missing = [
+        name
+        for name in ID_PREFIXES_ALLOWLIST
+        if f"`{name}`" not in section
+    ]
+    if not missing:
+        return []
+    return [
+        "ADR-052 allowlist section missing classes (amend ADR before growing "
+        f"ID_PREFIXES_ALLOWLIST): {', '.join(sorted(missing))}"
+    ]
