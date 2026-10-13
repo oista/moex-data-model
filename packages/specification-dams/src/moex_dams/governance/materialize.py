@@ -10,7 +10,8 @@ from typing import Any
 
 import yaml
 
-from moex_dams.rules.cascade import GOVERNED_SLOTS, diagnose_governance, resolve_governed
+from moex_dams.rules.assignment_resolver import diagnose_governance, resolve_governed
+from moex_dams.rules.cascade import GOVERNED_SLOTS
 
 DEFAULT_AS_OF = "2026-10-12"
 
@@ -46,8 +47,40 @@ def governance_view_path(repo_root: Path | str, as_of: str) -> Path:
     return Path(repo_root) / "generated" / "governance" / f"effective-governance-view-{safe}.yaml"
 
 
+def _manifest_package_body_paths(repo_root: Path) -> list[Path]:
+    """Resolve ModelPackage body paths via ADR-047 repository manifest (optional)."""
+    try:
+        from moex_repository_loader.loader import RepositoryLoader
+    except ImportError:
+        return []
+    impl = repo_root / "model-assets" / "implementations"
+    if not (impl / "manifest.yaml").is_file():
+        return []
+    loader = RepositoryLoader(repo_root, verify_hashes=False)
+    paths: list[Path] = []
+    for ref in loader.load_manifest().documents:
+        if ref.kind != "package":
+            continue
+        env_path = impl / Path(ref.path)
+        if not env_path.is_file():
+            continue
+        try:
+            descriptor = yaml.safe_load(env_path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if not isinstance(descriptor, dict):
+            continue
+        body_name = descriptor.get("body_ref") or descriptor.get("implementation_body")
+        if not body_name:
+            continue
+        body_path = (env_path.parent / str(body_name)).resolve()
+        if body_path.is_file():
+            paths.append(body_path)
+    return paths
+
+
 def discover_package_paths(repo_root: Path) -> list[Path]:
-    """Curated ModelPackage examples plus optional governance fixtures."""
+    """Governance fixtures, curated examples, and manifest package bodies (ADR-047)."""
     paths: list[Path] = []
     example = (
         repo_root
@@ -76,6 +109,7 @@ def discover_package_paths(repo_root: Path) -> list[Path]:
     if impl.is_dir():
         for p in sorted(impl.rglob("*.governance.yaml")):
             paths.append(p)
+    paths.extend(_manifest_package_body_paths(repo_root))
     seen: set[Path] = set()
     out: list[Path] = []
     for p in paths:

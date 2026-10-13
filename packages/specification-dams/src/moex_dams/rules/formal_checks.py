@@ -17,10 +17,10 @@ from moex_modeling import (
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
 from moex_dams.mappings.iter_mappings import iter_mappings
+from moex_dams.rules.assignment_resolver import resolve_governed
 from moex_dams.rules.cascade import (
     DATA_OWNER_PLACEHOLDER,
     find_redundant_overrides,
-    resolve_governed,
 )
 from moex_dams.rules.conceptual_entity import check_conceptual_entities
 from moex_dams.rules.dams_levels import ENTERPRISE_CONCEPTUAL_REF
@@ -1210,6 +1210,9 @@ def check_formal_requirements(
     definition_index: DefinitionIndex | None = None,
     definition_providers: tuple[ExternalDefinitionProvider, ...] = (),
     extra_definition_packages: tuple[dict[str, Any], ...] = (),
+    as_of: str | None = None,
+    assignments: dict[str, list[Any]] | None = None,
+    repo_root: Path | None = None,
 ) -> tuple[Diagnostic, ...]:
     """Run it-solution catalog formal_checks against implementation body."""
     data = body.data
@@ -1225,7 +1228,17 @@ def check_formal_requirements(
         return ()
 
     id_set = _collect_ids(data)
-    resolved = resolve_governed(data)
+    effective_as_of = as_of
+    if effective_as_of is None and repo_root is not None:
+        try:
+            from moex_dams.governance.materialize import load_as_of
+
+            effective_as_of = load_as_of(repo_root)
+        except Exception:
+            effective_as_of = None
+    resolved = resolve_governed(
+        data, as_of=effective_as_of, assignments=assignments
+    )
     def_index = definition_index or build_definition_index(
         data,
         *extra_definition_packages,

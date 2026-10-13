@@ -298,6 +298,7 @@ def run_step(step_id: str, python: str) -> StepResult:
                 )
         elif step_id == "check-governance":
             # ADR-049: EffectiveGovernanceView + blocking assignment diagnostics
+            # repository-loader: Wave D4 manifest-driven package discovery
             install = subprocess.run(
                 [
                     python,
@@ -305,6 +306,8 @@ def run_step(step_id: str, python: str) -> StepResult:
                     "pip",
                     "install",
                     "-q",
+                    "-e",
+                    str(REPO_ROOT / "packages/repository-loader"),
                     "-e",
                     str(REPO_ROOT / "packages/specification-dams"),
                 ],

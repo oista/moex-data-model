@@ -81,12 +81,31 @@ Mirror [ADR-048](ADR-048-topology-ownership.md) / ADR-047: `EffectiveGovernanceV
 
 Schema diff and data diff must not mix. `check_all` green on each PR separately. New invariants start at **INV-042** (INV-038…041 are topology).
 
+### D7. Audit name map (Wave D4)
+
+| Audit name | DAMS representation |
+|---|---|
+| `OwnershipAssignment` | `OwnershipAssignment` |
+| `ClassificationAssignment` | `ClassificationAssignment` |
+| `PolicyAssignment` | `PolicyBinding` (name retained; treat as policy assignment) |
+| `StewardshipAssignment` | Folded into `OwnershipAssignment` (steward actor slots) — no separate class |
+
+Executable invariants for this ADR are **INV-054…INV-056** on current `main` (original series used INV-042…044; renumbered on land to avoid Wave C collisions).
+
+### D8. Wave D4 consumer hardening
+
+- Preferred import: `moex_dams.rules.assignment_resolver` (`resolve_governed` / `diagnose_governance`).
+- Multiple `PolicyBinding` with `binding_effect=replace` at the same nearest target and **different** `policy_ref` sets → `conflicting_assignments` (closes D2 gap).
+- `formal_checks` accept `as_of` / `assignments` / `repo_root` (loads configured `as_of` from `moex-governance-view`).
+- `EffectiveGovernanceView` discovery includes ADR-047 manifest package bodies (plus curated examples / `*.governance.yaml`).
+
 ### Out of scope
 
 - `security_classification` / `sensitivity_term_refs` (Wave 2; same as ADR-023)
 - `classification_term_ref` does not drive effective `governance_classification`
 - Live external policy engines; Neo4j operational graph (ADR-003)
 - Union of policies without `binding_effect`
+- Physical move of `_apply_assignments` out of `cascade.py` (shared helpers; deferred to avoid import cycles)
 
 ## Consequences
 

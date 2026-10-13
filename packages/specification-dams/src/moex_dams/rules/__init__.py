@@ -1,9 +1,9 @@
-from moex_dams.rules.cascade import (
+from moex_dams.rules.assignment_resolver import (
     GovernanceFinding,
     diagnose_governance,
-    find_redundant_overrides,
     resolve_governed,
 )
+from moex_dams.rules.cascade import find_redundant_overrides
 from moex_dams.rules.conceptual_entity import (
     check_conceptual_entities,
     check_conceptual_entities_body,

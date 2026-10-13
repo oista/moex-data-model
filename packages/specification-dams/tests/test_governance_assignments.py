@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from moex_dams.rules.cascade import diagnose_governance, resolve_governed
+from moex_dams.rules.assignment_resolver import diagnose_governance, resolve_governed
 
 
 def _pkg(**overrides):
@@ -245,6 +245,33 @@ def test_shadowed_default() -> None:
         and f.element_id == "dams:logical/cascade/Y"
         and f.slot == "governance_classification"
         for f in findings
+    )
+
+
+def test_conflicting_policy_replace_bindings() -> None:
+    data = _pkg(
+        policy_bindings=[
+            {
+                "assignment_id": "dams:asg/pol/r1",
+                "target_element_ref": "dams:logical/cascade/X",
+                "assignment_scope": "element",
+                "policy_ref": "pol:P3",
+                "binding_effect": "replace",
+                "approval_status": "approved",
+            },
+            {
+                "assignment_id": "dams:asg/pol/r2",
+                "target_element_ref": "dams:logical/cascade/X",
+                "assignment_scope": "element",
+                "policy_ref": "pol:P4",
+                "binding_effect": "replace",
+                "approval_status": "approved",
+            },
+        ]
+    )
+    findings = diagnose_governance(data)
+    assert any(
+        f.code == "conflicting_assignments" and f.slot == "policy_refs" for f in findings
     )
 
 
