@@ -55,7 +55,9 @@ from moex_dams.projection.mermaid_er import (
 from moex_dams.rules.cascade import (
     CascadeCardinality,
     CascadeFamily,
+    GovernanceFinding,
     SlotProvenance,
+    diagnose_governance,
     find_redundant_overrides,
     resolve_governed,
 )
@@ -106,6 +108,7 @@ __all__ = [
     "ElementIndexEntry",
     "ErDiagramManifest",
     "ExternalDefinition",
+    "GovernanceFinding",
     "GraphEdge",
     "GraphNode",
     "MappingExternalProvider",
@@ -129,6 +132,7 @@ __all__ = [
     "check_ontology_uris",
     "check_references",
     "compute_binding_digest",
+    "diagnose_governance",
     "load_merged_schema_prefix_map",
     "check_relation_terms",
     "check_relation_terms_body",
