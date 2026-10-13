@@ -13,6 +13,7 @@ logical_entities:
     description: a
     lifecycle_status: active
     owner_entity_ref: dams:logical/inv048bad/E
+    data_type_ref: dams:datatype/string
 - element_id: dams:logical/inv048bad/F
   name: F
   description: f
@@ -23,6 +24,7 @@ logical_entities:
     description: b
     lifecycle_status: active
     owner_entity_ref: dams:logical/inv048bad/F
+    data_type_ref: dams:datatype/string
 selections:
 - element_id: dams:selection/inv048bad
   name: sel

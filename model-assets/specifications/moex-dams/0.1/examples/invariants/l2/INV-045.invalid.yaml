@@ -13,5 +13,6 @@ logical_entities:
     description: a
     lifecycle_status: active
     owner_entity_ref: dams:logical/inv045bad/E
+    data_type_ref: dams:datatype/string
     minimum_cardinality: 2
     maximum_cardinality: 1
