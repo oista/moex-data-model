@@ -300,14 +300,15 @@ classes:
     description: >
       Solution logical entity realizes an enterprise conceptual entity
       (ADR-046). Designator via L1 rule (not equals_string on enum slot).
-      source_refs narrowed to LogicalEntity in PR-1; ConceptualEntity via
-      any_of deferred if needed.
+      source_refs: LogicalEntity or ConceptualEntity (Wave C4; matches L2 INV-035).
     slot_usage:
       source_refs:
-        range: LogicalEntity
         inlined: false
         multivalued: true
         minimum_cardinality: 1
+        any_of:
+          - range: LogicalEntity
+          - range: ConceptualEntity
       target_refs:
         range: ConceptualEntity
         inlined: false
@@ -815,9 +816,17 @@ slots:
   native_name:
     range: string
     required: true
+    deprecated: true
+    description: >
+      Orphan slot (no class lists it). Deprecated Wave C4; do not use.
+      Prefer SchemaNode / TechnicalAsset native naming slots in their modules.
   native_type:
     range: string
     required: true
+    deprecated: true
+    description: >
+      Orphan slot (no class lists it). Deprecated Wave C4; do not use.
+      Prefer DataType / NativeTypeBinding / SchemaNode.native_type.
   ordinal_position:
     range: integer
     minimum_value: 1
@@ -837,8 +846,16 @@ slots:
     required: true
   transformation_ref:
     range: uri
+    deprecated: true
+    description: >
+      Hook without Transformation mapping type (ADR-046 removed transformation
+      enum). Deprecated Wave C4 pending design-lineage ADR; do not author.
   transformation_expression:
     range: string
+    deprecated: true
+    description: >
+      Hook without Transformation mapping type. Deprecated Wave C4 pending
+      design-lineage ADR; do not author.
   confidence:
     range: decimal
     minimum_value: 0

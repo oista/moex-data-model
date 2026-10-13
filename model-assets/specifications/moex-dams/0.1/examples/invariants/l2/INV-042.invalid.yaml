@@ -1,0 +1,10 @@
+element_id: dams:model/inv042bad
+name: inv042bad
+description: missing solution refs
+lifecycle_status: active
+implementation_scope: solution
+logical_entities:
+- element_id: dams:logical/inv042bad/E
+  name: E
+  description: e
+  lifecycle_status: active

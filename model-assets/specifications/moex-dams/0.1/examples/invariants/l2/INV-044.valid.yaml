@@ -1,0 +1,10 @@
+element_id: dams:model/inv044
+implementation_scope: enterprise
+relation_terms:
+- element_id: dams:relterm/inv044/ok
+  name: ok
+  description: ok
+  lifecycle_status: active
+  forward_label: owns
+  inverse_label: owned_by
+  symmetric: false

@@ -246,6 +246,10 @@ enums:
       confidential:
       restricted:
   LogicalDataTypeEnum:
+    deprecated: true
+    description: >
+      Seed catalog only (ADR-036). Not the range of LogicalAttribute.
+      Prefer DataType registry objects. Deprecated Wave C4.
     permissible_values:
       string:
       integer:

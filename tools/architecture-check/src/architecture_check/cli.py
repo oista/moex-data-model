@@ -10,9 +10,11 @@ from architecture_check.doc_consistency import check_docs
 from architecture_check.kernel_policy import check_extension_policy
 from architecture_check.layer_boundaries import check_layer_boundaries
 from architecture_check.model_element_roles import (
+    check_description_allowlist_documented,
     check_description_declarations,
     check_identified_vs_embedded,
 )
+from architecture_check.redundant_mixins import check_redundant_mixins
 
 
 def _repo_root_from_here() -> Path:
@@ -61,8 +63,12 @@ def main(argv: list[str] | None = None) -> int:
             errors.append(f"layer_boundaries: {msg}")
         for msg in check_description_declarations(root):
             errors.append(f"model_element_roles: {msg}")
+        for msg in check_description_allowlist_documented(root):
+            errors.append(f"model_element_roles: {msg}")
         for msg in check_identified_vs_embedded(root):
             errors.append(f"model_element_roles: {msg}")
+        for msg in check_redundant_mixins(root):
+            errors.append(f"redundant_mixins: {msg}")
 
     if errors:
         print("architecture-check FAILED:", file=sys.stderr)

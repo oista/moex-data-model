@@ -95,7 +95,7 @@ def test_parent_ref_cycle() -> None:
         ),
     ]
     codes = _codes(_errors_from_technical(data))
-    assert any("PDM-006" in c for c in codes)
+    assert any(c == "DAMS-INV-047" or "PDM-006" in c for c in codes)
 
 
 def test_duplicate_asset_namespace_qualified_name() -> None:

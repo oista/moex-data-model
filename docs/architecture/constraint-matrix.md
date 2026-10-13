@@ -11,8 +11,8 @@ superseded_by: []
 Автогенерируется `scripts/check_constraint_matrix.py`. Источник: `model-assets/specifications/moex-dams/0.1/constraints/constraint-matrix.yaml`. Не редактировать вручную.
 
 **matrix_id:** `dams:constraint-matrix/0.1`  
-**registry size:** 41  
-**invariants:** 41
+**registry size:** 53  
+**invariants:** 53
 
 | ID | Title | Levels | Status | L1 | L2 | L3 | Source status | Scope | Source |
 |---|---|---|---|---|---|---|---|---|---|
@@ -57,6 +57,18 @@ superseded_by: []
 | INV-039 | DataFlowEntityBinding.catalog_operation_ref in snapshot | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-048; FLW-003 |
 | INV-040 | DataFlow.bound_catalog_revision matches snapshot | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-048; FLW-004 |
 | INV-041 | DataModelBinding.catalog_revision matches snapshot | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-048; FLW-005 |
+| INV-042 | solution scope requires solution and conceptual refs | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-021; dams_levels; audit solution package without solution |
+| INV-043 | genesis_kind consistent with external_class_refs | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-026; audit genesis native with alignments |
+| INV-044 | inverse_label required when RelationTerm not symmetric | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-026; audit inverse label vs symmetric |
+| INV-045 | LogicalAttribute max cardinality >= min | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | audit min/max cardinality; LogicalAttribute slots |
+| INV-046 | ConceptualEntity parent_concept_ref acyclic | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | audit cyclic inheritance/containment |
+| INV-047 | TechnicalAsset parent_ref acyclic | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | PDM-006; audit cyclic containment |
+| INV-048 | selected attributes belong to selected entity | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | audit selection field outside selected object |
+| INV-049 | compatibility_mode requires baseline when not none | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | audit incompatible baseline/mode combos |
+| INV-050 | element_id unique within package document | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | audit duplicate ids |
+| INV-051 | mapping_cardinality matches endpoint counts | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-046; audit mapping cardinality |
+| INV-052 | LogicalAttribute.owner_entity_ref equals containing entity | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-050; audit containment consistency |
+| INV-053 | Relationship ends are conceptual or logical entities | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | audit Relation model; untyped uriorcurie ends |
 
 ## Statements
 
@@ -368,5 +380,91 @@ When DataModelBinding.catalog_revision is set, it must equal the catalog_revisio
 *requirement_refs:* `DAMS-REQ-FLW-005.c1`
 
 *adr_ref:* `ADR-048`
+
+### INV-042: solution scope requires solution and conceptual refs
+
+When implementation_scope = solution, ModelPackage must set solution_ref and conceptual_implementation_ref.
+
+
+*adr_ref:* `ADR-045`
+
+### INV-043: genesis_kind consistent with external_class_refs
+
+genesis_kind=external requires at least one external_class_refs entry; genesis_kind=native forbids external_class_refs.
+
+
+*adr_ref:* `ADR-045`
+
+### INV-044: inverse_label required when RelationTerm not symmetric
+
+A RelationTerm that is not symmetric must declare inverse_label.
+
+
+*adr_ref:* `ADR-045`
+
+### INV-045: LogicalAttribute max cardinality >= min
+
+When both minimum_cardinality and maximum_cardinality are set on a LogicalAttribute, maximum_cardinality must be >= minimum_cardinality.
+
+
+*adr_ref:* `ADR-045`
+
+### INV-046: ConceptualEntity parent_concept_ref acyclic
+
+ConceptualEntity.parent_concept_ref must not form a self-reference or cycle.
+
+
+*adr_ref:* `ADR-045`
+
+### INV-047: TechnicalAsset parent_ref acyclic
+
+TechnicalAsset.parent_ref must not form a self-reference or cycle.
+
+
+*requirement_refs:* `DAMS-REQ-PDM-006.c1`
+
+*adr_ref:* `ADR-045`
+
+### INV-048: selected attributes belong to selected entity
+
+Each SelectedAttribute.logical_attribute_ref must identify an attribute of the SelectedEntity.logical_entity_ref.
+
+
+*adr_ref:* `ADR-045`
+
+### INV-049: compatibility_mode requires baseline when not none
+
+When DataModelBinding.compatibility_mode is set and is not none, compatibility_baseline_ref must be present.
+
+
+*adr_ref:* `ADR-045`
+
+### INV-050: element_id unique within package document
+
+element_id values must be unique across all objects in a ModelPackage (or binding) YAML document.
+
+
+*adr_ref:* `ADR-045`
+
+### INV-051: mapping_cardinality matches endpoint counts
+
+mapping_cardinality must be consistent with the number of source_refs and target_refs (one_to_one ⇒ 1/1; one_to_many ⇒ 1/≥1; many_to_one ⇒ ≥1/1; many_to_many ⇒ ≥1/≥1).
+
+
+*adr_ref:* `ADR-045`
+
+### INV-052: LogicalAttribute.owner_entity_ref equals containing entity
+
+When LogicalAttribute is inlined under LogicalEntity.attributes, owner_entity_ref must equal the parent entity element_id (containment equality; ADR-050).
+
+
+*adr_ref:* `ADR-050`
+
+### INV-053: Relationship ends are conceptual or logical entities
+
+Relationship.source_entity_ref and target_entity_ref must resolve to a ConceptualEntity or LogicalEntity in the package (not attributes or technical assets).
+
+
+*adr_ref:* `ADR-045`
 
 См. также: [ADR-045](../adr/ADR-045-executable-constraint-matrix.md), [inventory report](constraint-matrix-inventory-report.md), [adding-an-invariant](../guides/adding-an-invariant.md).

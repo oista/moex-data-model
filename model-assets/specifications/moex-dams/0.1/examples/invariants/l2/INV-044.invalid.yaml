@@ -1,0 +1,9 @@
+element_id: dams:model/inv044bad
+implementation_scope: enterprise
+relation_terms:
+- element_id: dams:relterm/inv044bad/x
+  name: x
+  description: x
+  lifecycle_status: active
+  forward_label: owns
+  symmetric: false

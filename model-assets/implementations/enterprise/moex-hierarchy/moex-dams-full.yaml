@@ -3,7 +3,7 @@
 # Do not edit by hand — regenerated at viewer publication build.
 name: moex_dams
 id: https://data.moex.com/dams/v0.1
-version: 4.0.0
+version: 4.1.0
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml:
@@ -652,6 +652,11 @@ enums:
         text: restricted
   LogicalDataTypeEnum:
     name: LogicalDataTypeEnum
+    description: 'Seed catalog only (ADR-036). Not the range of LogicalAttribute.
+      Prefer DataType registry objects. Deprecated Wave C4.
+
+      '
+    deprecated: 'True'
     from_schema: https://data.moex.com/dams/types/v0.1
     permissible_values:
       string:
@@ -2188,11 +2193,21 @@ slots:
     range: FlowDirectionEnum
   native_name:
     name: native_name
+    description: 'Orphan slot (no class lists it). Deprecated Wave C4; do not use.
+      Prefer SchemaNode / TechnicalAsset native naming slots in their modules.
+
+      '
+    deprecated: 'True'
     from_schema: https://data.moex.com/dams/core/v0.1
     range: string
     required: true
   native_type:
     name: native_type
+    description: 'Orphan slot (no class lists it). Deprecated Wave C4; do not use.
+      Prefer DataType / NativeTypeBinding / SchemaNode.native_type.
+
+      '
+    deprecated: 'True'
     from_schema: https://data.moex.com/dams/core/v0.1
     range: string
     required: true
@@ -2225,10 +2240,20 @@ slots:
     required: true
   transformation_ref:
     name: transformation_ref
+    description: 'Hook without Transformation mapping type (ADR-046 removed transformation
+      enum). Deprecated Wave C4 pending design-lineage ADR; do not author.
+
+      '
+    deprecated: 'True'
     from_schema: https://data.moex.com/dams/core/v0.1
     range: uri
   transformation_expression:
     name: transformation_expression
+    description: 'Hook without Transformation mapping type. Deprecated Wave C4 pending
+      design-lineage ADR; do not author.
+
+      '
+    deprecated: 'True'
     from_schema: https://data.moex.com/dams/core/v0.1
     range: string
   confidence:
@@ -3777,8 +3802,8 @@ classes:
   RealizesMapping:
     name: RealizesMapping
     description: 'Solution logical entity realizes an enterprise conceptual entity
-      (ADR-046). Designator via L1 rule (not equals_string on enum slot). source_refs
-      narrowed to LogicalEntity in PR-1; ConceptualEntity via any_of deferred if needed.
+      (ADR-046). Designator via L1 rule (not equals_string on enum slot). source_refs:
+      LogicalEntity or ConceptualEntity (Wave C4; matches L2 INV-035).
 
       '
     from_schema: https://data.moex.com/dams/core/v0.1
@@ -3786,10 +3811,12 @@ classes:
     slot_usage:
       source_refs:
         name: source_refs
-        range: LogicalEntity
         multivalued: true
         inlined: false
         minimum_cardinality: 1
+        any_of:
+        - range: LogicalEntity
+        - range: ConceptualEntity
       target_refs:
         name: target_refs
         range: ConceptualEntity

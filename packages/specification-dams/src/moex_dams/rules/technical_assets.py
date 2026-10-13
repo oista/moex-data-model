@@ -139,11 +139,14 @@ def check_parent_ref_cycles(data: dict[str, Any]) -> list[Diagnostic]:
         if parent_s == sid:
             out.append(
                 _diag(
-                    code="DAMS-REQ-PDM-006.c1",
+                    code="DAMS-INV-047",
                     message=f'TechnicalAsset "{sid}" parent_ref is a self-reference.',
                     subject=sid,
-                    remediation="Remove parent_ref or point it to a distinct ancestor.",
+                    remediation=(
+                        "Remove parent_ref or point it to a distinct ancestor. INV-047."
+                    ),
                     requirement_code="PDM-006",
+                    invariant_id="INV-047",
                 )
             )
             continue
@@ -153,14 +156,18 @@ def check_parent_ref_cycles(data: dict[str, Any]) -> list[Diagnostic]:
             if cur in seen:
                 out.append(
                     _diag(
-                        code="DAMS-REQ-PDM-006.c2",
+                        code="DAMS-INV-047",
                         message=(
                             f'TechnicalAsset "{sid}" participates in a parent_ref cycle '
                             f"(reached {cur!r})."
                         ),
                         subject=sid,
-                        remediation="Break the parent_ref cycle in the containment hierarchy.",
+                        remediation=(
+                            "Break the parent_ref cycle in the containment hierarchy. "
+                            "INV-047."
+                        ),
                         requirement_code="PDM-006",
+                        invariant_id="INV-047",
                     )
                 )
                 break

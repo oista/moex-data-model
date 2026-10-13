@@ -1,0 +1,12 @@
+element_id: dams:model/inv042
+name: inv042
+description: ok
+lifecycle_status: active
+implementation_scope: solution
+solution_ref: eam:solution/X
+conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
+logical_entities:
+- element_id: dams:logical/inv042/E
+  name: E
+  description: e
+  lifecycle_status: active

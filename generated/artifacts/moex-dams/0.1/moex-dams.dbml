@@ -1413,7 +1413,6 @@ Ref: RelationTerm.scoped_definitions > ScopedDefinition.scoped_definition_id
 Ref: ExternalClassRef.approved_by_ref > Role.registry_id
 Ref: Mapping.approved_by_ref > Role.registry_id
 Ref: RealizesMapping.approved_by_ref > Role.registry_id
-Ref: RealizesMapping.RealizesMapping_source_refs > LogicalEntity.element_id
 Ref: RealizesMapping.RealizesMapping_target_refs > ConceptualEntity.element_id
 Ref: EntityPhysicalMapping.approved_by_ref > Role.registry_id
 Ref: EntityPhysicalMapping.EntityPhysicalMapping_source_refs > DataCarrier.element_id

@@ -287,8 +287,8 @@ Name: moex_dams
 | [multivalued](multivalued.md) |  |
 | [name](name.md) |  |
 | [namespace](namespace.md) |  |
-| [native_name](native_name.md) |  |
-| [native_type](native_type.md) |  |
+| [native_name](native_name.md) | Orphan slot (no class lists it) |
+| [native_type](native_type.md) | Orphan slot (no class lists it) |
 | [native_type_bindings](native_type_bindings.md) | Привязки нативных типов диалектов к DataType |
 | [node_kind](node_kind.md) | Вид узла (scalar, object, array, map, union, enum, reference) |
 | [nodes](nodes.md) | Плоский список узлов структуры |
@@ -400,10 +400,10 @@ Name: moex_dams
 | [text](text.md) | Scoped definition text (skos:definition in this context) |
 | [timezone_policy](timezone_policy.md) | Политика часового пояса для timestamp (Wave 2 soft) |
 | [title](title.md) |  |
-| [transformation_expression](transformation_expression.md) |  |
+| [transformation_expression](transformation_expression.md) | Hook without Transformation mapping type |
 | [transformation_mapping_ref](transformation_mapping_ref.md) |  |
 | [transformation_mapping_refs](transformation_mapping_refs.md) |  |
-| [transformation_ref](transformation_ref.md) |  |
+| [transformation_ref](transformation_ref.md) | Hook without Transformation mapping type (ADR-046 removed transformation enum... |
 | [type_family](type_family.md) | Семейство типа (boolean, integer, decimal, …) |
 | [type_name](type_name.md) | Каноническое имя типа в корпоративном реестре |
 | [unit](unit.md) |  |
@@ -461,7 +461,7 @@ Name: moex_dams
 | [IntegrationLevelEnum](IntegrationLevelEnum.md) |  |
 | [LifecycleStatusEnum](LifecycleStatusEnum.md) |  |
 | [LineageRoleEnum](LineageRoleEnum.md) |  |
-| [LogicalDataTypeEnum](LogicalDataTypeEnum.md) |  |
+| [LogicalDataTypeEnum](LogicalDataTypeEnum.md) | Seed catalog only (ADR-036) |
 | [LossinessEnum](LossinessEnum.md) | Оценка потери точности NativeTypeBinding |
 | [MappingCardinalityEnum](MappingCardinalityEnum.md) |  |
 | [MappingCoverageStatusEnum](MappingCoverageStatusEnum.md) | Статус покрытия элемента mapping’ом на соседнем уровне модели (logical ↔ phys... |

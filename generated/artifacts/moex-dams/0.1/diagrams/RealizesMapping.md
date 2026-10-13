@@ -79,15 +79,6 @@
         
       RealizesMapping : source_refs
         
-          
-    
-        
-        
-        RealizesMapping --> "1..*" LogicalEntity : source_refs
-        click LogicalEntity href "../LogicalEntity"
-    
-
-        
       RealizesMapping : target_refs
         
           

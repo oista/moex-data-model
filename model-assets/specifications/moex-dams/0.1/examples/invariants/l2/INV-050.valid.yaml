@@ -1,0 +1,14 @@
+element_id: dams:model/inv050
+name: inv050
+description: ok
+lifecycle_status: active
+implementation_scope: enterprise
+conceptual_entities:
+- element_id: dams:concept/inv050/A
+  name: A
+  description: a
+  lifecycle_status: active
+- element_id: dams:concept/inv050/B
+  name: B
+  description: b
+  lifecycle_status: active

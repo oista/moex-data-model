@@ -1,0 +1,13 @@
+element_id: dams:model/inv046bad
+implementation_scope: enterprise
+conceptual_entities:
+- element_id: dams:concept/inv046bad/A
+  name: A
+  description: a
+  lifecycle_status: active
+  parent_concept_ref: dams:concept/inv046bad/B
+- element_id: dams:concept/inv046bad/B
+  name: B
+  description: b
+  lifecycle_status: active
+  parent_concept_ref: dams:concept/inv046bad/A

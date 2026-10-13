@@ -1,0 +1,22 @@
+element_id: dams:model/inv051
+implementation_scope: solution
+solution_ref: eam:solution/X
+conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
+logical_entities:
+- element_id: dams:logical/inv051/E
+  name: E
+  description: e
+  lifecycle_status: active
+conceptual_entities:
+- element_id: dams:concept/inv051/C
+  name: C
+  description: c
+  lifecycle_status: active
+realizes_mappings:
+- element_id: dams:mapping/inv051/r
+  description: ok
+  lifecycle_status: active
+  mapping_type: realizes
+  mapping_cardinality: one_to_one
+  source_refs: [dams:logical/inv051/E]
+  target_refs: [dams:concept/inv051/C]

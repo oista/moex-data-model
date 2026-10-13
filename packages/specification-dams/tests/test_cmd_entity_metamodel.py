@@ -254,7 +254,7 @@ def test_genesis_external_requires_refs():
         ]
     }
     diags = check_conceptual_entities(data)
-    assert any(d.diagnostic_code == "DAMS-CM-GENESIS-001" for d in diags)
+    assert any(d.diagnostic_code == "DAMS-INV-043" for d in diags)
 
 
 def test_genesis_native_forbids_refs():
@@ -278,7 +278,7 @@ def test_genesis_native_forbids_refs():
         ]
     }
     diags = check_conceptual_entities(data)
-    assert any(d.diagnostic_code == "DAMS-CM-GENESIS-002" for d in diags)
+    assert any(d.diagnostic_code == "DAMS-INV-043" for d in diags)
 
 
 def test_match_kind_exact_allows_inherit():
@@ -398,4 +398,4 @@ def test_non_symmetric_term_requires_inverse():
         "relationships": [],
     }
     diags = check_relation_terms(data)
-    assert any(d.diagnostic_code == "DAMS-CM-RELTERM-002" for d in diags)
+    assert any(d.diagnostic_code == "DAMS-INV-044" for d in diags)

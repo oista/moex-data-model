@@ -1,0 +1,32 @@
+element_id: dams:model/inv048
+implementation_scope: solution
+solution_ref: eam:solution/X
+conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
+logical_entities:
+- element_id: dams:logical/inv048/E
+  name: E
+  description: e
+  lifecycle_status: active
+  attributes:
+  - element_id: dams:logical/inv048/E/a
+    name: a
+    description: a
+    lifecycle_status: active
+    owner_entity_ref: dams:logical/inv048/E
+selections:
+- element_id: dams:selection/inv048
+  name: sel
+  description: sel
+  lifecycle_status: active
+  selected_entities:
+  - element_id: dams:selection/inv048/E
+    name: E
+    description: e
+    lifecycle_status: active
+    logical_entity_ref: dams:logical/inv048/E
+    selected_attributes:
+    - element_id: dams:selection/inv048/E/a
+      name: a
+      description: a
+      lifecycle_status: active
+      logical_attribute_ref: dams:logical/inv048/E/a

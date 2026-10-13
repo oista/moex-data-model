@@ -1098,6 +1098,281 @@ invariants:
     L1: not-applicable
     L2: implemented
     L3: not-applicable
+- id: INV-042
+  title: solution scope requires solution and conceptual refs
+  statement: >
+    When implementation_scope = solution, ModelPackage must set solution_ref and
+    conceptual_implementation_ref.
+  source: ADR-021; dams_levels; audit solution package without solution
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-045
+  implementation:
+    dams_validator: moex_dams.rules.package_invariants.check_solution_scope_refs
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-042.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-042.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-043
+  title: genesis_kind consistent with external_class_refs
+  statement: >
+    genesis_kind=external requires at least one external_class_refs entry;
+    genesis_kind=native forbids external_class_refs.
+  source: ADR-026; audit genesis native with alignments
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-045
+  implementation:
+    dams_validator: moex_dams.rules.conceptual_entity.check_conceptual_entities
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-043.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-043.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-044
+  title: inverse_label required when RelationTerm not symmetric
+  statement: >
+    A RelationTerm that is not symmetric must declare inverse_label.
+  source: ADR-026; audit inverse label vs symmetric
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-045
+  implementation:
+    dams_validator: moex_dams.rules.relation_terms.check_relation_terms
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-044.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-044.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-045
+  title: LogicalAttribute max cardinality >= min
+  statement: >
+    When both minimum_cardinality and maximum_cardinality are set on a
+    LogicalAttribute, maximum_cardinality must be >= minimum_cardinality.
+  source: audit min/max cardinality; LogicalAttribute slots
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-045
+  implementation:
+    dams_validator: moex_dams.rules.package_invariants.check_attribute_cardinality_bounds
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-045.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-045.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-046
+  title: ConceptualEntity parent_concept_ref acyclic
+  statement: >
+    ConceptualEntity.parent_concept_ref must not form a self-reference or cycle.
+  source: audit cyclic inheritance/containment
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-045
+  implementation:
+    dams_validator: moex_dams.rules.package_invariants.check_parent_concept_cycles
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-046.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-046.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-047
+  title: TechnicalAsset parent_ref acyclic
+  statement: >
+    TechnicalAsset.parent_ref must not form a self-reference or cycle.
+  source: PDM-006; audit cyclic containment
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-045
+  requirement_refs: [DAMS-REQ-PDM-006.c1]
+  implementation:
+    dams_validator: moex_dams.rules.technical_assets.check_parent_ref_cycles
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-047.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-047.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-048
+  title: selected attributes belong to selected entity
+  statement: >
+    Each SelectedAttribute.logical_attribute_ref must identify an attribute of
+    the SelectedEntity.logical_entity_ref.
+  source: audit selection field outside selected object
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-045
+  implementation:
+    dams_validator: moex_dams.rules.package_invariants.check_selection_attribute_closure
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-048.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-048.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-049
+  title: compatibility_mode requires baseline when not none
+  statement: >
+    When DataModelBinding.compatibility_mode is set and is not none,
+    compatibility_baseline_ref must be present.
+  source: audit incompatible baseline/mode combos
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-045
+  implementation:
+    dams_validator: moex_dams.rules.package_invariants.check_binding_compatibility
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-049.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-049.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-050
+  title: element_id unique within package document
+  statement: >
+    element_id values must be unique across all objects in a ModelPackage (or
+    binding) YAML document.
+  source: audit duplicate ids
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-045
+  implementation:
+    dams_validator: moex_dams.rules.package_invariants.check_package_element_id_uniqueness
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-050.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-050.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-051
+  title: mapping_cardinality matches endpoint counts
+  statement: >
+    mapping_cardinality must be consistent with the number of source_refs and
+    target_refs (one_to_one ⇒ 1/1; one_to_many ⇒ 1/≥1; many_to_one ⇒ ≥1/1;
+    many_to_many ⇒ ≥1/≥1).
+  source: ADR-046; audit mapping cardinality
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-045
+  implementation:
+    dams_validator: moex_dams.rules.package_invariants.check_mapping_cardinality_consistency
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-051.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-051.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-052
+  title: LogicalAttribute.owner_entity_ref equals containing entity
+  statement: >
+    When LogicalAttribute is inlined under LogicalEntity.attributes, owner_entity_ref
+    must equal the parent entity element_id (containment equality; ADR-050).
+  source: ADR-050; audit containment consistency
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-050
+  implementation:
+    dams_validator: moex_dams.rules.structural.check_structural_data
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-052.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-052.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-053
+  title: Relationship ends are conceptual or logical entities
+  statement: >
+    Relationship.source_entity_ref and target_entity_ref must resolve to a
+    ConceptualEntity or LogicalEntity in the package (not attributes or technical assets).
+  source: audit Relation model; untyped uriorcurie ends
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-045
+  implementation:
+    dams_validator: moex_dams.rules.package_invariants.check_relationship_endpoint_kinds
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-053.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-053.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
 invariant_id_registry:
 - INV-001
 - INV-002
@@ -1140,3 +1415,15 @@ invariant_id_registry:
 - INV-039
 - INV-040
 - INV-041
+- INV-042
+- INV-043
+- INV-044
+- INV-045
+- INV-046
+- INV-047
+- INV-048
+- INV-049
+- INV-050
+- INV-051
+- INV-052
+- INV-053

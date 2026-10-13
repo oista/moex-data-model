@@ -6,7 +6,7 @@ from pathlib import Path
 
 import yaml
 
-# Do not grow without amending ADR-044.
+# Do not grow without amending ADR-044 § Description slot_usage allowlist.
 DESCRIPTION_SLOT_USAGE_ALLOWLIST: dict[str, str] = {
     "HasDefinition": "canonical softened definition + skos:definition exact_mappings",
     "ModelPackage": "D1 required description",
@@ -27,6 +27,8 @@ DESCRIPTION_SLOT_USAGE_ALLOWLIST: dict[str, str] = {
     "DataStructure": "D1 recommended description",
     "Mapping": "D3 optional description (IdentifiedElement; identity slots removed in 3.0.0)",
 }
+
+_ALLOWLIST_MARKER = "## Description slot_usage allowlist"
 
 
 def _schema_dir(root: Path) -> Path:
@@ -82,3 +84,32 @@ def check_identified_vs_embedded(root: str | Path) -> list[str]:
             "IdentifiedElement and EmbeddedElement must not be in one is_a chain"
         )
     return errors
+
+
+def check_description_allowlist_documented(root: str | Path) -> list[str]:
+    """Every allowlist class must appear under ADR-044 allowlist section."""
+    adr = Path(root) / "docs" / "adr" / "ADR-044-model-element-decomposition.md"
+    if not adr.is_file():
+        return [f"missing ADR-044: {adr}"]
+    text = adr.read_text(encoding="utf-8")
+    if _ALLOWLIST_MARKER not in text:
+        return [
+            f"ADR-044 must contain section '{_ALLOWLIST_MARKER}' listing "
+            "DESCRIPTION_SLOT_USAGE_ALLOWLIST keys"
+        ]
+    section = text.split(_ALLOWLIST_MARKER, 1)[1]
+    # Stop at next ## heading if present
+    next_h2 = section.find("\n## ")
+    if next_h2 >= 0:
+        section = section[:next_h2]
+    missing = [
+        name
+        for name in DESCRIPTION_SLOT_USAGE_ALLOWLIST
+        if f"`{name}`" not in section and name not in section
+    ]
+    if not missing:
+        return []
+    return [
+        "ADR-044 allowlist section missing classes (amend ADR before growing "
+        f"DESCRIPTION_SLOT_USAGE_ALLOWLIST): {', '.join(sorted(missing))}"
+    ]

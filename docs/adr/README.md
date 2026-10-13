@@ -64,7 +64,8 @@ Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decision
 | [ADR-045](ADR-045-executable-constraint-matrix.md) | Executable constraint matrix | Accepted | constraint matrix L1/L2/L3 |
 | [ADR-046](ADR-046-typed-mapping-endpoints.md) | Typed Mapping endpoints (subclasses + separate collections) | Accepted | typed Mapping collections; schema 3.1.0 |
 | [ADR-047](ADR-047-repository-manifest-and-lock.md) | Repository manifest and lock | Accepted | repository manifest + lock |
-| [ADR-048](ADR-048-topology-ownership.md) | Topology ownership (Clinkr/EAM SoT, DAMS semantic bindings) | Accepted | topology ownership; schema 4.0.0 |
+| [ADR-048](ADR-048-topology-ownership.md) | Topology ownership (Clinkr/EAM SoT, DAMS semantic bindings) | Accepted | topology ownership; schema 4.0.0→4.1.0 |
+| [ADR-050](ADR-050-containment-parent-refs.md) | Containment parent refs (owner equality / INV-052) | Accepted | containment equality; Wave C3 |
 
 ## How to accept
 

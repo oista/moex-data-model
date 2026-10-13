@@ -1,0 +1,18 @@
+element_id: dams:model/inv053
+implementation_scope: enterprise
+conceptual_entities:
+- element_id: dams:concept/inv053/A
+  name: A
+  description: a
+  lifecycle_status: active
+- element_id: dams:concept/inv053/B
+  name: B
+  description: b
+  lifecycle_status: active
+relationships:
+- element_id: dams:rel/inv053/r
+  name: r
+  description: r
+  lifecycle_status: active
+  source_entity_ref: dams:concept/inv053/A
+  target_entity_ref: dams:concept/inv053/B

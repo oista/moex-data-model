@@ -1,0 +1,17 @@
+element_id: dams:model/inv045bad
+implementation_scope: solution
+solution_ref: eam:solution/X
+conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
+logical_entities:
+- element_id: dams:logical/inv045bad/E
+  name: E
+  description: e
+  lifecycle_status: active
+  attributes:
+  - element_id: dams:logical/inv045bad/E/a
+    name: a
+    description: a
+    lifecycle_status: active
+    owner_entity_ref: dams:logical/inv045bad/E
+    minimum_cardinality: 2
+    maximum_cardinality: 1
