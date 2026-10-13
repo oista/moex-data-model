@@ -10,12 +10,11 @@ REPO = Path(__file__).resolve().parents[2]
 # Assemble tokens so this file does not itself contain contiguous banned literals.
 _CLS = "Physical" + "Field"
 _COLL = "physical" + "_fields"
-_KIND = "message" + "_type"
-RESIDUE_RE = re.compile(
-    rf"{re.escape(_CLS)}|\b{re.escape(_COLL)}\b|\b{re.escape(_KIND)}\b"
-)
+# Note: message_type is a live DataCarrierKindEnum value (ADR-040) — not residue.
+RESIDUE_RE = re.compile(rf"{re.escape(_CLS)}|\b{re.escape(_COLL)}\b")
 
 # Path prefixes (posix, relative to repo root) where residue is allowed.
+# docs/ is NOT blanket-allowlisted: only migration/history/ADR paths (R2-2).
 ALLOW_PREFIXES = (
     "scripts/migrate_physical_field_to_schema_node.py",
     "scripts/spike_schema_node_generators.py",
@@ -23,7 +22,14 @@ ALLOW_PREFIXES = (
     "tests/migration/",
     "tests/architecture/test_no_physical_field_residue.py",
     "tests/architecture/test_architecture_docs_current.py",
-    "docs/",
+    "docs/migration/",
+    "docs/changelog/",
+    "docs/adr/",
+    "docs/audit/",
+    "docs/superpowers/",
+    "docs/architecture/model-element-inventory-report.md",
+    "docs/architecture/invariant-candidates.csv",
+    "docs/architecture/uml/description.md",
     "tmp/",
     ".cursor/",
     "generated/",
@@ -92,6 +98,19 @@ TEXT_SUFFIXES = {
     ".makefile",
 }
 
+_HISTORICAL_MARKERS = (
+    "removed",
+    "replaces",
+    "вместо",
+    "заменя",
+    "удал",
+    "legacy",
+    "deprecated",
+    "прежн",
+    "historical",
+    "историч",
+)
+
 
 def _rel_posix(path: Path) -> str:
     return path.relative_to(REPO).as_posix()
@@ -134,6 +153,11 @@ def _iter_files() -> list[Path]:
     return files
 
 
+def _is_historical_line(line: str) -> bool:
+    lower = line.lower()
+    return any(marker in lower for marker in _HISTORICAL_MARKERS)
+
+
 def test_no_physical_field_residue() -> None:
     offenders: list[str] = []
     for path in _iter_files():
@@ -143,6 +167,10 @@ def test_no_physical_field_residue() -> None:
         except UnicodeDecodeError:
             continue
         for i, line in enumerate(text.splitlines(), start=1):
+            # Allow explicit historical notes in otherwise-scanned docs
+            # (UML "PhysicalField removed", glossary "вместо PhysicalField").
+            if rel.startswith("docs/") and _is_historical_line(line):
+                continue
             if RESIDUE_RE.search(line):
                 offenders.append(f"{rel}:{i}: {line.strip()}")
     assert not offenders, (

@@ -184,16 +184,24 @@ LogicalEntity "0..*" --> "0..1" ITSolution : solution_ref
 ModelElement "0..*" --> "0..*" GlossaryTerm : glossary_term_refs
 
 package "Governance objects" #D9D2E9 {
+  abstract class GovernanceAssignment {
+    +assignment_id [1]
+    +target_element_ref [1]
+    +assignment_scope [1]
+  }
   class PolicyBinding {
-    +policy_binding_id [1]
-    +policy_target_ref [1]
     +policy_ref [1]
+    +binding_effect [1]
   }
   class ClassificationAssignment
+  class OwnershipAssignment
+  GovernanceAssignment <|-- PolicyBinding
+  GovernanceAssignment <|-- ClassificationAssignment
+  GovernanceAssignment <|-- OwnershipAssignment
 }
 
 PolicyBinding "0..*" --> "1" Policy : policy_ref
-PolicyBinding "0..*" --> "1" ModelElement : policy_target_ref
+GovernanceAssignment "0..*" --> "1" ModelElement : target_element_ref
 
 ' ===============================================================
 ' External alignment (separate schema)

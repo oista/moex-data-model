@@ -23,7 +23,7 @@ not improvise.
 |-----------|--------|
 | Default PDF input | `F:\!PASSPORT\!H_DATASC\!Data Architecture\MOEX_DataModel\OKITA\pdf solutions` |
 | CSV output | `packages/standard-linkml/tests/fixtures/er-dictionary/` |
-| Sheets to fill | Entities, Attributes, Relationships, DataCarriers, PhysicalFields, Mappings |
+| Sheets to fill | Entities, Attributes, Relationships, DataCarriers, StructureFields, Mappings |
 | Sheets forbidden | Conceptual |
 | Naming | System/technical names in `name`; RU business text in `title` / `description` |
 | Missing data | **Do not invent.** Leave empty or omit the row; record in `gaps.md` |
@@ -125,7 +125,7 @@ Ignore pure glossary definitions that do not define fields.
    - `technology` = e.g. `REST` if stated
    - `structure_ref` = schema URL if printed
    - `system_ref` / `direction` — **only if printed**; otherwise omit entire object
-4. Fields of request/response DTOs → `PhysicalFields` for objects you actually wrote.
+4. Fields of request/response DTOs → `StructureFields` for objects you actually wrote.
 5. `Mappings` — only if the document explicitly maps API fields to logical
    entities/attributes. Name similarity (`inn` vs `MoexINN`) is **not** enough.
 
@@ -240,7 +240,7 @@ Organization,id,id,Уникальный идентификатор (MCDB ID),BIG
 ### 6.3 API field without system_ref
 
 PDF documents `EmployeeReadDto.rowId: uuid` but no EAM system CURIE and no
-schema URI → **do not** write DataCarriers/PhysicalFields; gap:
+schema URI → **do not** write DataCarriers/StructureFields; gap:
 
 ```markdown
 ## Unmapped / incomplete technical asset (DataCarrier)s
