@@ -43,12 +43,14 @@ inv_manifest = Path(r'$InvManifest')
 # Bare list document — not a LinkML instance root (see script header).
 SKIP = {
     'registries.yaml': 'bare YAML list of registry entries, not a single class instance',
+    # ADR-049: assignment collections are on MOEXModelRepository; this file is a
+    # ModelPackage body fixture for cascade/materialize (pytest + check-governance).
+    'governance-assignments.example.yaml': 'package-body fixture with assignment collections; not ModelPackage L1 root',
 }
 
 TARGETS = {
     'client-contract-binding.yaml': 'DataModelBinding',
     'client-data-flow.yaml': 'DataFlow',
-    'governance-assignments.example.yaml': 'ModelPackage',
 }
 
 validator = make_linkml_validator(schema)
