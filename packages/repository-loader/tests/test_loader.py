@@ -29,6 +29,23 @@ def test_load_manifest_sorts_by_id() -> None:
     assert len(ids) == 8
 
 
+def test_assemble_packages_only() -> None:
+    """ADR-054: assemble fills repository_id + model_packages; no other aggregates."""
+    loader = RepositoryLoader(REPO, verify_hashes=False)
+    composite = loader.assemble()
+    assert composite["repository_id"] == "moex:repository:implementations"
+    assert len(composite["model_packages"]) == 8
+    assert set(composite.keys()) == {"repository_id", "model_packages"}
+
+
+def test_package_dirs() -> None:
+    loader = RepositoryLoader(REPO, verify_hashes=False)
+    dirs = loader.package_dirs()
+    assert "solutions/crm" in dirs
+    assert "enterprise/moex-enterprise-conceptual-model/0.1" in dirs
+    assert len(dirs) == 8
+
+
 def test_shuffled_manifest_same_document_id_order() -> None:
     """YAML document order must not affect loader order (sorted by id)."""
     impl = REPO / "model-assets" / "implementations"

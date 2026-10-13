@@ -9,9 +9,9 @@ superseded_by: []
 # ADR-047: Repository manifest and lock
 
 **Date:** 2026-10-12  
-**Status:** Accepted — manifest + lock + loader + `check-manifest` / `lock-verify` in Stage 0 (PRs #25–#29). Deferred: extra DocumentKind aggregates (P1b).
+**Status:** Accepted — manifest + lock + loader + `check-manifest` / `lock-verify` in Stage 0 (PRs #25–#29). Extra DocumentKind aggregates deferred by [ADR-054](ADR-054-repository-aggregates-and-manifest.md) (P1b).
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [ADR-002](ADR-002-git-published-source.md), [ADR-031](ADR-031-technical-asset-registry.md), [ADR-042](ADR-042-integrity-digest-revisions.md) (canonical digest algorithm reused for lock `content_hash`), [ADR-044](ADR-044-model-element-decomposition.md)  
+**Related:** [ADR-002](ADR-002-git-published-source.md), [ADR-031](ADR-031-technical-asset-registry.md), [ADR-042](ADR-042-integrity-digest-revisions.md) (canonical digest algorithm reused for lock `content_hash`), [ADR-044](ADR-044-model-element-decomposition.md), [ADR-054](ADR-054-repository-aggregates-and-manifest.md)  
 **Inventory:** [p1-inventory.md](../migration/p1-inventory.md)
 
 ## Context
@@ -142,6 +142,7 @@ minor. Lock has its own `lock_schema_version` with the same rule.
 
 ## Deferred
 
-See [p1-inventory.md](../migration/p1-inventory.md) “Deferred” and the
-implementation plan’s deferred list (GitProvider reader, CODEOWNERS, stamp
-removal, assembled-repo validation, viewer/API migration, extra document kinds).
+See [ADR-054](ADR-054-repository-aggregates-and-manifest.md) for the P1b
+decision on aggregates / DocumentKind, and [p1-inventory.md](../migration/p1-inventory.md)
+for remaining items (GitProvider reader, CODEOWNERS, stamp removal, assembled-repo
+id-collision validation).

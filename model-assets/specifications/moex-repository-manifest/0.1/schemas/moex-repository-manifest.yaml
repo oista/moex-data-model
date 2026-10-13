@@ -4,8 +4,9 @@ version: 0.1.0
 title: MOEX repository manifest
 description: >
   Index of addressable implementation documents under model-assets/implementations
-  (ADR-047). Not part of the DAMS domain model; do not import from moex-dams.yaml
-  in the P1 series (keeps generated/ and golden unchanged).
+  (ADR-047 / ADR-054). Not part of the DAMS domain model; do not import from
+  moex-dams.yaml (keeps generated/ and golden unchanged). DocumentKind remains
+  package-only until separate envelopes exist (ADR-054 D2).
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml: https://w3id.org/linkml/
@@ -94,7 +95,9 @@ slots:
     inlined_as_list: true
     required: true
     minimum_cardinality: 1
-    description: Indexed documents (packages today).
+    description: >
+      Indexed documents. Only kind=package is used (ADR-054); other kinds deferred
+      until addressable envelopes exist.
   id:
     identifier: true
     range: uriorcurie
