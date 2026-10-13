@@ -1,3 +1,11 @@
+---
+status: Accepted
+version: "0.1"
+normative: false
+supersedes: []
+superseded_by: MODELING_ARCHITECTURE.md
+---
+
 # Identity map — what changed?
 
 **Normative:** [ADR-052](../adr/ADR-052-identity-and-versioning.md) (five layers), [ADR-051](../adr/ADR-051-dams-schema-compatibility.md) (schema semver), [ADR-042](../adr/ADR-042-integrity-digest-revisions.md), [ADR-047](../adr/ADR-047-repository-manifest-and-lock.md).
