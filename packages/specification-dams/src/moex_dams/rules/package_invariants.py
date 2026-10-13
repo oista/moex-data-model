@@ -263,6 +263,11 @@ def check_package_element_id_uniqueness(data: dict[str, Any]) -> list[Diagnostic
     return out
 
 
+_KNOWN_MAPPING_CARDINALITIES = frozenset(
+    {"one_to_one", "one_to_many", "many_to_one", "many_to_many"}
+)
+
+
 def check_mapping_cardinality_consistency(data: dict[str, Any]) -> list[Diagnostic]:
     """INV-051: mapping_cardinality agrees with source/target multiset sizes."""
     out: list[Diagnostic] = []
@@ -273,6 +278,23 @@ def check_mapping_cardinality_consistency(data: dict[str, Any]) -> list[Diagnost
         n_src = len(m.get("source_refs") or [])
         n_tgt = len(m.get("target_refs") or [])
         mid = str(m.get("element_id") or "")
+        if card not in _KNOWN_MAPPING_CARDINALITIES:
+            out.append(
+                _diag(
+                    code="DAMS-INV-051",
+                    invariant_id="INV-051",
+                    message=(
+                        f'Mapping "{mid}" has unknown mapping_cardinality={card!r} '
+                        f"(expected one of {sorted(_KNOWN_MAPPING_CARDINALITIES)})."
+                    ),
+                    subject=mid or None,
+                    remediation=(
+                        "Use MappingCardinalityEnum: one_to_one, one_to_many, "
+                        "many_to_one, or many_to_many. INV-051."
+                    ),
+                )
+            )
+            continue
         ok = True
         if card == "one_to_one" and not (n_src == 1 and n_tgt == 1):
             ok = False
@@ -302,7 +324,13 @@ def check_mapping_cardinality_consistency(data: dict[str, Any]) -> list[Diagnost
 
 
 def check_relationship_endpoint_kinds(data: dict[str, Any]) -> list[Diagnostic]:
-    """INV-053: Relationship ends resolve to ConceptualEntity or LogicalEntity."""
+    """INV-053: Relationship ends resolve to in-package Conceptual/Logical entity.
+
+    Ends must be ConceptualEntity or LogicalEntity **in the same package
+    document**. Wrong kinds (attributes, technical assets), unresolved
+    ``dams:`` ids, cross-package entity ids, and non-``dams:`` refs that are
+    not local entities all fail.
+    """
     conceptual = {
         str(e["element_id"])
         for e in (data.get("conceptual_entities") or [])
@@ -314,23 +342,6 @@ def check_relationship_endpoint_kinds(data: dict[str, Any]) -> list[Diagnostic]:
         if isinstance(e, dict) and e.get("element_id")
     }
     allowed = conceptual | logical
-    # Known non-entity ids in-package (attributes, tech, etc.)
-    forbidden: set[str] = set()
-    for ent in data.get("logical_entities") or []:
-        if not isinstance(ent, dict):
-            continue
-        for a in ent.get("attributes") or []:
-            if isinstance(a, dict) and a.get("element_id"):
-                forbidden.add(str(a["element_id"]))
-    for key in (
-        "data_carriers",
-        "access_points",
-        "data_containers",
-        "execution_assets",
-    ):
-        for el in data.get(key) or []:
-            if isinstance(el, dict) and el.get("element_id"):
-                forbidden.add(str(el["element_id"]))
 
     out: list[Diagnostic] = []
     for rel in data.get("relationships") or []:
@@ -344,26 +355,23 @@ def check_relationship_endpoint_kinds(data: dict[str, Any]) -> list[Diagnostic]:
             ref_s = str(ref)
             if ref_s in allowed:
                 continue
-            if ref_s in forbidden or ref_s:  # unresolved or wrong kind
-                # External/cross-package refs: only fail when clearly wrong kind
-                if ref_s in forbidden or (
-                    ref_s.startswith("dams:") and ref_s not in allowed
-                ):
-                    out.append(
-                        _diag(
-                            code="DAMS-INV-053",
-                            invariant_id="INV-053",
-                            message=(
-                                f'Relationship "{rid}" {slot}={ref_s!r} must resolve '
-                                "to ConceptualEntity or LogicalEntity."
-                            ),
-                            subject=rid or None,
-                            remediation=(
-                                "Point relationship ends at conceptual or logical "
-                                "entities. INV-053."
-                            ),
-                        )
-                    )
+            out.append(
+                _diag(
+                    code="DAMS-INV-053",
+                    invariant_id="INV-053",
+                    message=(
+                        f'Relationship "{rid}" {slot}={ref_s!r} must resolve '
+                        "to a ConceptualEntity or LogicalEntity in this package "
+                        "(not attributes, technical assets, cross-package, or "
+                        "non-entity refs)."
+                    ),
+                    subject=rid or None,
+                    remediation=(
+                        "Point relationship ends at conceptual or logical "
+                        "entities authored in the same package document. INV-053."
+                    ),
+                )
+            )
     return out
 
 

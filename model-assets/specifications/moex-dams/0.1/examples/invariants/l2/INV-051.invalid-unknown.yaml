@@ -1,0 +1,19 @@
+element_id: dams:model/inv051unk
+implementation_scope: enterprise
+conceptual_entities:
+- element_id: dams:concept/inv051unk/A
+  name: A
+  description: a
+  lifecycle_status: active
+- element_id: dams:concept/inv051unk/B
+  name: B
+  description: b
+  lifecycle_status: active
+realizes_mappings:
+- element_id: dams:map/inv051unk
+  mapping_type: realizes
+  mapping_cardinality: one-to-one
+  source_refs:
+  - dams:concept/inv051unk/A
+  target_refs:
+  - dams:concept/inv051unk/B

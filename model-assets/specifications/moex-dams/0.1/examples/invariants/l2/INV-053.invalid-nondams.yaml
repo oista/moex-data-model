@@ -1,0 +1,16 @@
+element_id: dams:model/inv053nondams
+implementation_scope: solution
+solution_ref: eam:solution/X
+conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
+logical_entities:
+- element_id: dams:logical/inv053nondams/E
+  name: E
+  description: e
+  lifecycle_status: active
+relationships:
+- element_id: dams:rel/inv053nondams/r
+  name: r
+  description: r
+  lifecycle_status: active
+  source_entity_ref: dams:logical/inv053nondams/E
+  target_entity_ref: eam:entity/Other

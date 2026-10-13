@@ -45,7 +45,6 @@ def check_dams_model_level(body: LinkMLImplementationBody) -> tuple[Diagnostic, 
     logical = data.get("logical_entities") or []
     mappings = list(iter_mappings(data))
     solution_ref = data.get("solution_ref")
-    conceptual_ref = data.get("conceptual_implementation_ref")
 
     if scope == "enterprise":
         if solution_ref:
@@ -88,28 +87,9 @@ def check_dams_model_level(body: LinkMLImplementationBody) -> tuple[Diagnostic, 
             )
 
     elif scope == "solution":
-        if not solution_ref:
-            diagnostics.append(
-                Diagnostic(
-                    diagnostic_code="DAMS-LEVEL-004",
-                    severity=DiagnosticSeverity.ERROR,
-                    diagnostic_message="solution scope requires solution_ref",
-                    conformance_phase=ConformancePhase.CORPORATE_SEMANTICS,
-                    subject_ref=subject,
-                )
-            )
-        if not conceptual_ref:
-            diagnostics.append(
-                Diagnostic(
-                    diagnostic_code="DAMS-LEVEL-005",
-                    severity=DiagnosticSeverity.ERROR,
-                    diagnostic_message=(
-                        "solution scope requires conceptual_implementation_ref"
-                    ),
-                    conformance_phase=ConformancePhase.CORPORATE_SEMANTICS,
-                    subject_ref=subject,
-                )
-            )
+        # solution_ref / conceptual_implementation_ref: owned by INV-042
+        # (moex_dams.rules.package_invariants.check_solution_scope_refs).
+        # Former DAMS-LEVEL-004/005 codes remain aliases in constraint_matrix.
         if not logical and not technical:
             diagnostics.append(
                 Diagnostic(
