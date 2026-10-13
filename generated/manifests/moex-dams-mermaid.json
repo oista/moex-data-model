@@ -4,8 +4,8 @@
   "generator_module": "linkml.generators.mermaidclassdiagramgen",
   "generator_version": "1.11.1",
   "schema_path": "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml",
-  "schema_digest": "sha256:4316823e3c4bce3143d46c0ca5ccb2ccef38e363149e8737585047d79d0d2c47",
+  "schema_digest": "sha256:b2ff92fc3047b59a392dd5487d3273e4953ab11df9d04cfc9649a2be3e2a8348",
   "output_path": "generated/artifacts/moex-dams/0.1/diagrams",
-  "content_digest": "sha256:c0c95178d714060530f52e2c34620209b680d0fbc9a17a18bdd5d8680c57ed48",
-  "generated_at": "2026-10-13T13:36:34.565847+00:00"
+  "content_digest": "sha256:e8eb47b0444e8662307354e76b160867567a7f8a6cead03f71586aa66d6f6353",
+  "generated_at": "2026-10-13T21:07:10.557721+00:00"
 }

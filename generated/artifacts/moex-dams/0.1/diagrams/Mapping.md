@@ -9,8 +9,8 @@
         click DescribedElement href "../DescribedElement"
       HasLifecycle <|-- Mapping
         click HasLifecycle href "../HasLifecycle"
-      HasProvenance <|-- Mapping
-        click HasProvenance href "../HasProvenance"
+      HasAssertionMetadata <|-- Mapping
+        click HasAssertionMetadata href "../HasAssertionMetadata"
       IdentifiedElement <|-- Mapping
         click IdentifiedElement href "../IdentifiedElement"
       

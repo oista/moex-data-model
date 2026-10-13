@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from moex_dams.rules.package_invariants import (
+    check_alignment_dual_path_consistency,
     check_mapping_cardinality_consistency,
     check_package_element_id_uniqueness,
     check_selection_attribute_closure,
@@ -72,3 +73,30 @@ def test_mapping_cardinality() -> None:
     }
     diags = check_mapping_cardinality_consistency(data)
     assert any(d.diagnostic_code == "DAMS-INV-051" for d in diags)
+
+
+def test_alignment_dual_path_confidence_conflict() -> None:
+    data = {
+        "conceptual_entities": [
+            {
+                "element_id": "dams:concept/C",
+                "external_class_refs": [
+                    {
+                        "target_ref": "https://example.org/T",
+                        "confidence": 0.9,
+                    }
+                ],
+            }
+        ],
+        "aligns_with_mappings": [
+            {
+                "element_id": "dams:map/a",
+                "mapping_type": "aligns_with",
+                "source_refs": ["dams:concept/C"],
+                "target_refs": ["https://example.org/T"],
+                "confidence": 0.1,
+            }
+        ],
+    }
+    diags = check_alignment_dual_path_consistency(data)
+    assert any(d.diagnostic_code == "DAMS-INV-057" for d in diags)

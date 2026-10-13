@@ -36,11 +36,12 @@ Name: moex_dams
 | [EmbeddedElement](EmbeddedElement.md) | Встраиваемый вспомогательный объект без собственного жизненного цикла и глоба... |
 | [EntityPhysicalMapping](EntityPhysicalMapping.md) | Explicit entity-level link between DataCarrier and LogicalEntity (ADR-046 / P... |
 | [ExecutionAsset](ExecutionAsset.md) | Исполняемый актив (pipeline / job) с минимальной lineage-ролью |
-| [ExternalClassRef](ExternalClassRef.md) | Alignment of a ConceptualEntity to an external class or term (ADR-026) |
+| [ExternalClassRef](ExternalClassRef.md) | Alignment of a ConceptualEntity to an external class or term (ADR-026 / ADR-0... |
 | [FieldMapping](FieldMapping.md) | mapsTo between LogicalAttribute and SchemaNode address (structure_id#local_ke... |
 | [FormalCheck](FormalCheck.md) | Одна машиночитаемая проверка требования |
 | [GlossaryTerm](GlossaryTerm.md) | Термин корпоративного бизнес-глоссария |
 | [GovernanceAssignment](GovernanceAssignment.md) | Authored authoritative governance fact for a target element (ADR-049) |
+| [HasAssertionMetadata](HasAssertionMetadata.md) | Qualified assertion metadata (ADR-053): validity window, provenance / approva... |
 | [HasBusinessClassification](HasBusinessClassification.md) | Классификация роли и бизнес-значимости логической сущности |
 | [HasDefinition](HasDefinition.md) | Mixin эталонного определения (ADR-025 / ADR-044) |
 | [HasGovernanceClassification](HasGovernanceClassification.md) | Базовая и специальная классификация чувствительности данных |
@@ -157,7 +158,7 @@ Name: moex_dams
 | [conceptual_entity_refs](conceptual_entity_refs.md) |  |
 | [conceptual_implementation_ref](conceptual_implementation_ref.md) | Required for solution packages: reference to the enterprise-conceptual SpecIm... |
 | [conceptual_properties](conceptual_properties.md) | Значимые концептуальные свойства (только enterprise-пакеты) |
-| [confidence](confidence.md) |  |
+| [confidence](confidence.md) | Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata) |
 | [constraint_expressions](constraint_expressions.md) | Временные выражения ограничений до введения Expression |
 | [consumes_refs](consumes_refs.md) |  |
 | [containment_kind](containment_kind.md) |  |

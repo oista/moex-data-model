@@ -5,8 +5,8 @@
  classDiagram
     class ScopedDefinition
     click ScopedDefinition href "../ScopedDefinition"
-      HasProvenance <|-- ScopedDefinition
-        click HasProvenance href "../HasProvenance"
+      HasAssertionMetadata <|-- ScopedDefinition
+        click HasAssertionMetadata href "../HasAssertionMetadata"
       
       ScopedDefinition : approval_status
         
@@ -31,6 +31,8 @@
         click Role href "../Role"
     
 
+        
+      ScopedDefinition : confidence
         
       ScopedDefinition : evidence_refs
         
@@ -65,6 +67,10 @@
       ScopedDefinition : source_artifact_ref
         
       ScopedDefinition : text
+        
+      ScopedDefinition : valid_from
+        
+      ScopedDefinition : valid_to
         
       
 ```

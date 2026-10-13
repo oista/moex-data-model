@@ -251,11 +251,11 @@ classes:
 
   ExternalClassRef:
     mixins:
-      - HasProvenance
+      - HasAssertionMetadata
     description: >
-      Alignment of a ConceptualEntity to an external class or term (ADR-026).
-      Canonical store for conceptual↔external links; Mapping(aligns_with) may
-      mirror for ExternalTermSelection projections.
+      Alignment of a ConceptualEntity to an external class or term (ADR-026 /
+      ADR-053). Canonical store for conceptual↔external links;
+      AlignsWithMapping may mirror for ExternalTermSelection projections.
     slots:
       - external_class_ref_id
       - target_ref
@@ -269,7 +269,7 @@ classes:
     mixins:
       - DescribedElement
       - HasLifecycle
-      - HasProvenance
+      - HasAssertionMetadata
     description: >
       Явное соответствие между элементами. Prefer typed subclasses
       (RealizesMapping, EntityPhysicalMapping, FieldMapping,
@@ -281,8 +281,8 @@ classes:
       Not used for SpecImpl implements/conforms_to.
       Identity slots name/title/aliases/glossary_term_refs/tags removed in
       DAMS 3.0.0 (ADR-044); polymorphic ModelPackage.mappings removed in
-      3.1.0 (ADR-046 PR-5); display label = source_refs -> target_refs
-      [mapping_type].
+      3.1.0 (ADR-046 PR-5); assertion metadata via HasAssertionMetadata
+      (ADR-053); display label = source_refs -> target_refs [mapping_type].
     slots:
       - source_refs
       - target_refs
@@ -290,7 +290,6 @@ classes:
       - mapping_cardinality
       - transformation_ref
       - transformation_expression
-      - confidence
     slot_usage:
       description:
         required: false
@@ -856,7 +855,3 @@ slots:
     description: >
       Hook without Transformation mapping type. Deprecated Wave C4 pending
       design-lineage ADR; do not author.
-  confidence:
-    range: decimal
-    minimum_value: 0
-    maximum_value: 1

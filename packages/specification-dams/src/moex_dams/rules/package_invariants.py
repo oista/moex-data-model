@@ -386,6 +386,99 @@ def check_relationship_endpoint_kinds(data: dict[str, Any]) -> list[Diagnostic]:
     return out
 
 
+_APPROVED_STATUSES = frozenset({"approved"})
+_REJECTED_STATUSES = frozenset({"rejected"})
+
+
+def _norm_iri(value: object) -> str:
+    return str(value or "").strip().rstrip("/")
+
+
+def check_alignment_dual_path_consistency(data: dict[str, Any]) -> list[Diagnostic]:
+    """INV-057: ExternalClassRef ↔ AlignsWithMapping must not contradict (ADR-053)."""
+    ecr_by_pair: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    for ent in data.get("conceptual_entities") or []:
+        if not isinstance(ent, dict):
+            continue
+        concept_id = _norm_iri(ent.get("element_id"))
+        if not concept_id:
+            continue
+        for ecr in ent.get("external_class_refs") or []:
+            if not isinstance(ecr, dict):
+                continue
+            target = _norm_iri(ecr.get("target_ref"))
+            if not target:
+                continue
+            ecr_by_pair.setdefault((concept_id, target), []).append(ecr)
+
+    out: list[Diagnostic] = []
+    for mapping in iter_mappings(data):
+        if str(mapping.get("mapping_type") or "") != "aligns_with":
+            continue
+        sources = [
+            _norm_iri(s) for s in (mapping.get("source_refs") or []) if _norm_iri(s)
+        ]
+        targets = [
+            _norm_iri(t) for t in (mapping.get("target_refs") or []) if _norm_iri(t)
+        ]
+        mid = str(mapping.get("element_id") or "")
+        map_conf = mapping.get("confidence")
+        map_approval = str(mapping.get("approval_status") or "").strip().lower()
+        for concept_id in sources:
+            for target in targets:
+                peers = ecr_by_pair.get((concept_id, target)) or []
+                if not peers:
+                    continue
+                for ecr in peers:
+                    ecr_conf = ecr.get("confidence")
+                    if map_conf is not None and ecr_conf is not None:
+                        try:
+                            if abs(float(map_conf) - float(ecr_conf)) > 1e-9:
+                                out.append(
+                                    _diag(
+                                        code="DAMS-INV-057",
+                                        invariant_id="INV-057",
+                                        message=(
+                                            f'AlignsWithMapping "{mid}" and ExternalClassRef '
+                                            f"for {concept_id} → {target} disagree on confidence "
+                                            f"({map_conf} vs {ecr_conf})."
+                                        ),
+                                        subject=mid or concept_id,
+                                        remediation=(
+                                            "Align confidence on both paths or drop one. "
+                                            "INV-057 / ADR-053."
+                                        ),
+                                    )
+                                )
+                        except (TypeError, ValueError):
+                            pass
+                    ecr_approval = str(ecr.get("approval_status") or "").strip().lower()
+                    if (
+                        map_approval in _APPROVED_STATUSES
+                        and ecr_approval in _REJECTED_STATUSES
+                    ) or (
+                        map_approval in _REJECTED_STATUSES
+                        and ecr_approval in _APPROVED_STATUSES
+                    ):
+                        out.append(
+                            _diag(
+                                code="DAMS-INV-057",
+                                invariant_id="INV-057",
+                                message=(
+                                    f'AlignsWithMapping "{mid}" and ExternalClassRef '
+                                    f"for {concept_id} → {target} disagree on approval_status "
+                                    f"({map_approval!r} vs {ecr_approval!r})."
+                                ),
+                                subject=mid or concept_id,
+                                remediation=(
+                                    "Align approval_status on both paths or drop one. "
+                                    "INV-057 / ADR-053."
+                                ),
+                            )
+                        )
+    return out
+
+
 def check_package_invariants(data: dict[str, Any]) -> list[Diagnostic]:
     """Run Wave C package invariants that live in this module."""
     out: list[Diagnostic] = []
@@ -397,4 +490,5 @@ def check_package_invariants(data: dict[str, Any]) -> list[Diagnostic]:
     out.extend(check_package_element_id_uniqueness(data))
     out.extend(check_mapping_cardinality_consistency(data))
     out.extend(check_relationship_endpoint_kinds(data))
+    out.extend(check_alignment_dual_path_consistency(data))
     return out

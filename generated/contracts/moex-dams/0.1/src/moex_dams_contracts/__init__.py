@@ -34,7 +34,7 @@ from pydantic import (
 
 
 metamodel_version = "1.11.0"
-version = "5.0.0"
+version = "5.1.0"
 
 
 class ConfiguredBaseModel(BaseModel):
@@ -1190,7 +1190,23 @@ class HasProvenance(ConfiguredBaseModel):
     approved_at: Optional[datetime ] = Field(default=None)
 
 
-class GovernanceAssignment(HasProvenance, HasValidity):
+class HasAssertionMetadata(HasProvenance, HasValidity):
+    """
+    Qualified assertion metadata (ADR-053): validity window, provenance / approval, and optional confidence. Applied to Mapping, ExternalClassRef, ScopedDefinition, and GovernanceAssignment. Does not introduce an Assertion / QualifiedRelation class in the is_a backbone (ADR-044).
+
+    """
+    confidence: Optional[Decimal] = Field(default=None, description="""Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.
+""", ge=0, le=1)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    source_artifact_ref: Optional[str] = Field(default=None)
+    evidence_refs: Optional[list[str]] = Field(default=None)
+    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
+    approved_by_ref: Optional[str] = Field(default=None)
+    approved_at: Optional[datetime ] = Field(default=None)
+
+
+class GovernanceAssignment(HasAssertionMetadata):
     """
     Authored authoritative governance fact for a target element (ADR-049). Overrides inline authored defaults (ADR-023 cascade) for the validity window and assignment_scope. Effective values are not stored on this class; they appear only in EffectiveGovernanceView.
 
@@ -1200,6 +1216,8 @@ class GovernanceAssignment(HasProvenance, HasValidity):
 """)
     assignment_scope: AssignmentScopeEnum = Field(default=..., description="""element = target only; subtree = target and descendants in the containment cascade (ADR-023 / ADR-049).
 """)
+    confidence: Optional[Decimal] = Field(default=None, description="""Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.
+""", ge=0, le=1)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
     source_artifact_ref: Optional[str] = Field(default=None)
@@ -1223,6 +1241,8 @@ class ClassificationAssignment(GovernanceAssignment):
 """)
     assignment_scope: AssignmentScopeEnum = Field(default=..., description="""element = target only; subtree = target and descendants in the containment cascade (ADR-023 / ADR-049).
 """)
+    confidence: Optional[Decimal] = Field(default=None, description="""Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.
+""", ge=0, le=1)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
     source_artifact_ref: Optional[str] = Field(default=None)
@@ -1245,6 +1265,8 @@ class PolicyBinding(GovernanceAssignment):
 """)
     assignment_scope: AssignmentScopeEnum = Field(default=..., description="""element = target only; subtree = target and descendants in the containment cascade (ADR-023 / ADR-049).
 """)
+    confidence: Optional[Decimal] = Field(default=None, description="""Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.
+""", ge=0, le=1)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
     source_artifact_ref: Optional[str] = Field(default=None)
@@ -1267,6 +1289,8 @@ class OwnershipAssignment(GovernanceAssignment):
 """)
     assignment_scope: AssignmentScopeEnum = Field(default=..., description="""element = target only; subtree = target and descendants in the containment cascade (ADR-023 / ADR-049).
 """)
+    confidence: Optional[Decimal] = Field(default=None, description="""Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.
+""", ge=0, le=1)
     valid_from: Optional[datetime ] = Field(default=None)
     valid_to: Optional[datetime ] = Field(default=None)
     source_artifact_ref: Optional[str] = Field(default=None)
@@ -1290,7 +1314,7 @@ class HasDefinition(DescribedElement):
 """)
 
 
-class ScopedDefinition(HasProvenance):
+class ScopedDefinition(HasAssertionMetadata):
     """
     Контекстное определение элемента модели (ADR-025 / ISO 11179 Context). Не является отдельным термином глоссария и не заменяет эталонное определение вне указанного scope.
 
@@ -1302,6 +1326,10 @@ class ScopedDefinition(HasProvenance):
     text: str = Field(default=..., description="""Scoped definition text (skos:definition in this context).""")
     relation_to_reference: ScopedDefinitionRelationEnum = Field(default=...)
     rationale: Optional[str] = Field(default=None, description="""Why this scoped wording differs from the reference definition.""")
+    confidence: Optional[Decimal] = Field(default=None, description="""Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.
+""", ge=0, le=1)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
     source_artifact_ref: Optional[str] = Field(default=None)
     evidence_refs: Optional[list[str]] = Field(default=None)
     approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
@@ -1672,9 +1700,9 @@ class RelationTerm(ModelElement, HasDefinition):
     valid_to: Optional[datetime ] = Field(default=None)
 
 
-class ExternalClassRef(HasProvenance):
+class ExternalClassRef(HasAssertionMetadata):
     """
-    Alignment of a ConceptualEntity to an external class or term (ADR-026). Canonical store for conceptual↔external links; Mapping(aligns_with) may mirror for ExternalTermSelection projections.
+    Alignment of a ConceptualEntity to an external class or term (ADR-026 / ADR-053). Canonical store for conceptual↔external links; AlignsWithMapping may mirror for ExternalTermSelection projections.
 
     """
     external_class_ref_id: str = Field(default=...)
@@ -1684,6 +1712,10 @@ class ExternalClassRef(HasProvenance):
     source_kind: ExternalSourceKindEnum = Field(default=..., description="""Kind of external source (ontology, corp architecture, …).""")
     external_specification_ref: Optional[str] = Field(default=None, description="""Optional ExternalSpecification / version pin (ADR-020).""")
     selection_ref: Optional[str] = Field(default=None, description="""Optional ExternalTermSelection id (ADR-020).""")
+    confidence: Optional[Decimal] = Field(default=None, description="""Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.
+""", ge=0, le=1)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
     source_artifact_ref: Optional[str] = Field(default=None)
     evidence_refs: Optional[list[str]] = Field(default=None)
     approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
@@ -1691,9 +1723,9 @@ class ExternalClassRef(HasProvenance):
     approved_at: Optional[datetime ] = Field(default=None)
 
 
-class Mapping(HasProvenance, HasLifecycle, DescribedElement, IdentifiedElement):
+class Mapping(HasAssertionMetadata, HasLifecycle, DescribedElement, IdentifiedElement):
     """
-    Явное соответствие между элементами. Prefer typed subclasses (RealizesMapping, EntityPhysicalMapping, FieldMapping, AlignsWithMapping) and separate ModelPackage collections (ADR-046). Base Mapping remains as the inheritance root for those subclasses. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to. Identity slots name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044); polymorphic ModelPackage.mappings removed in 3.1.0 (ADR-046 PR-5); display label = source_refs -> target_refs [mapping_type].
+    Явное соответствие между элементами. Prefer typed subclasses (RealizesMapping, EntityPhysicalMapping, FieldMapping, AlignsWithMapping) and separate ModelPackage collections (ADR-046). Base Mapping remains as the inheritance root for those subclasses. Discriminate via mapping_type: realizes (solution→enterprise conceptual), entity_physical (DataCarrier↔LogicalEntity), field_mapping/mapsTo (SchemaNode↔LogicalAttribute), aligns_with (enterprise↔external term). Not used for SpecImpl implements/conforms_to. Identity slots name/title/aliases/glossary_term_refs/tags removed in DAMS 3.0.0 (ADR-044); polymorphic ModelPackage.mappings removed in 3.1.0 (ADR-046 PR-5); assertion metadata via HasAssertionMetadata (ADR-053); display label = source_refs -> target_refs [mapping_type].
 
     """
     source_refs: Optional[list[str]] = Field(default=None, min_length=1)
@@ -1704,18 +1736,19 @@ class Mapping(HasProvenance, HasLifecycle, DescribedElement, IdentifiedElement):
 """)
     transformation_expression: Optional[str] = Field(default=None, description="""Hook without Transformation mapping type. Deprecated Wave C4 pending design-lineage ADR; do not author.
 """)
-    confidence: Optional[Decimal] = Field(default=None, ge=0, le=1)
     description: Optional[str] = Field(default=None)
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
     deprecated_by_ref: Optional[str] = Field(default=None)
+    confidence: Optional[Decimal] = Field(default=None, description="""Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.
+""", ge=0, le=1)
+    element_id: str = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
     source_artifact_ref: Optional[str] = Field(default=None)
     evidence_refs: Optional[list[str]] = Field(default=None)
     approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
     approved_by_ref: Optional[str] = Field(default=None)
     approved_at: Optional[datetime ] = Field(default=None)
-    element_id: str = Field(default=...)
-    valid_from: Optional[datetime ] = Field(default=None)
-    valid_to: Optional[datetime ] = Field(default=None)
 
 
 class RealizesMapping(Mapping):
@@ -1731,18 +1764,19 @@ class RealizesMapping(Mapping):
 """)
     transformation_expression: Optional[str] = Field(default=None, description="""Hook without Transformation mapping type. Deprecated Wave C4 pending design-lineage ADR; do not author.
 """)
-    confidence: Optional[Decimal] = Field(default=None, ge=0, le=1)
     description: Optional[str] = Field(default=None)
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
     deprecated_by_ref: Optional[str] = Field(default=None)
+    confidence: Optional[Decimal] = Field(default=None, description="""Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.
+""", ge=0, le=1)
+    element_id: str = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
     source_artifact_ref: Optional[str] = Field(default=None)
     evidence_refs: Optional[list[str]] = Field(default=None)
     approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
     approved_by_ref: Optional[str] = Field(default=None)
     approved_at: Optional[datetime ] = Field(default=None)
-    element_id: str = Field(default=...)
-    valid_from: Optional[datetime ] = Field(default=None)
-    valid_to: Optional[datetime ] = Field(default=None)
 
 
 class EntityPhysicalMapping(Mapping):
@@ -1758,18 +1792,19 @@ class EntityPhysicalMapping(Mapping):
 """)
     transformation_expression: Optional[str] = Field(default=None, description="""Hook without Transformation mapping type. Deprecated Wave C4 pending design-lineage ADR; do not author.
 """)
-    confidence: Optional[Decimal] = Field(default=None, ge=0, le=1)
     description: Optional[str] = Field(default=None)
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
     deprecated_by_ref: Optional[str] = Field(default=None)
+    confidence: Optional[Decimal] = Field(default=None, description="""Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.
+""", ge=0, le=1)
+    element_id: str = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
     source_artifact_ref: Optional[str] = Field(default=None)
     evidence_refs: Optional[list[str]] = Field(default=None)
     approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
     approved_by_ref: Optional[str] = Field(default=None)
     approved_at: Optional[datetime ] = Field(default=None)
-    element_id: str = Field(default=...)
-    valid_from: Optional[datetime ] = Field(default=None)
-    valid_to: Optional[datetime ] = Field(default=None)
 
 
 class FieldMapping(Mapping):
@@ -1785,18 +1820,19 @@ class FieldMapping(Mapping):
 """)
     transformation_expression: Optional[str] = Field(default=None, description="""Hook without Transformation mapping type. Deprecated Wave C4 pending design-lineage ADR; do not author.
 """)
-    confidence: Optional[Decimal] = Field(default=None, ge=0, le=1)
     description: Optional[str] = Field(default=None)
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
     deprecated_by_ref: Optional[str] = Field(default=None)
+    confidence: Optional[Decimal] = Field(default=None, description="""Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.
+""", ge=0, le=1)
+    element_id: str = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
     source_artifact_ref: Optional[str] = Field(default=None)
     evidence_refs: Optional[list[str]] = Field(default=None)
     approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
     approved_by_ref: Optional[str] = Field(default=None)
     approved_at: Optional[datetime ] = Field(default=None)
-    element_id: str = Field(default=...)
-    valid_from: Optional[datetime ] = Field(default=None)
-    valid_to: Optional[datetime ] = Field(default=None)
 
 
 class AlignsWithMapping(Mapping):
@@ -1812,18 +1848,19 @@ class AlignsWithMapping(Mapping):
 """)
     transformation_expression: Optional[str] = Field(default=None, description="""Hook without Transformation mapping type. Deprecated Wave C4 pending design-lineage ADR; do not author.
 """)
-    confidence: Optional[Decimal] = Field(default=None, ge=0, le=1)
     description: Optional[str] = Field(default=None)
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
     deprecated_by_ref: Optional[str] = Field(default=None)
+    confidence: Optional[Decimal] = Field(default=None, description="""Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata). Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.
+""", ge=0, le=1)
+    element_id: str = Field(default=...)
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
     source_artifact_ref: Optional[str] = Field(default=None)
     evidence_refs: Optional[list[str]] = Field(default=None)
     approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
     approved_by_ref: Optional[str] = Field(default=None)
     approved_at: Optional[datetime ] = Field(default=None)
-    element_id: str = Field(default=...)
-    valid_from: Optional[datetime ] = Field(default=None)
-    valid_to: Optional[datetime ] = Field(default=None)
 
 
 class HasStructure(ConfiguredBaseModel):
@@ -2685,6 +2722,7 @@ HasBusinessClassification.model_rebuild()
 HasGovernanceClassification.model_rebuild()
 HasPolicyBindings.model_rebuild()
 HasProvenance.model_rebuild()
+HasAssertionMetadata.model_rebuild()
 GovernanceAssignment.model_rebuild()
 ClassificationAssignment.model_rebuild()
 PolicyBinding.model_rebuild()

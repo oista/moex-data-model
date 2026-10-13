@@ -23,8 +23,7 @@ classes:
       window and assignment_scope. Effective values are not stored on this
       class; they appear only in EffectiveGovernanceView.
     mixins:
-      - HasValidity
-      - HasProvenance
+      - HasAssertionMetadata
     slots:
       - assignment_id
       - target_element_ref
@@ -125,6 +124,19 @@ classes:
       - approved_by_ref
       - approved_at
 
+  HasAssertionMetadata:
+    mixin: true
+    mixins:
+      - HasValidity
+      - HasProvenance
+    description: >
+      Qualified assertion metadata (ADR-053): validity window, provenance /
+      approval, and optional confidence. Applied to Mapping, ExternalClassRef,
+      ScopedDefinition, and GovernanceAssignment. Does not introduce an
+      Assertion / QualifiedRelation class in the is_a backbone (ADR-044).
+    slots:
+      - confidence
+
   HasDefinition:
     mixin: true
     mixins:
@@ -155,7 +167,7 @@ classes:
 
   ScopedDefinition:
     mixins:
-      - HasProvenance
+      - HasAssertionMetadata
     description: >
       Контекстное определение элемента модели (ADR-025 / ISO 11179 Context).
       Не является отдельным термином глоссария и не заменяет эталонное
@@ -251,6 +263,13 @@ slots:
     inlined: false
   approved_at:
     range: datetime
+  confidence:
+    range: decimal
+    minimum_value: 0
+    maximum_value: 1
+    description: >
+      Optional assertion confidence in [0, 1] (ADR-053 HasAssertionMetadata).
+      Shared by Mapping, ExternalClassRef, ScopedDefinition, GovernanceAssignment.
   definition_source_ref:
     range: uriorcurie
     description: >

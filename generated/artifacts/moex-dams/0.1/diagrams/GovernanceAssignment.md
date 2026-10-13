@@ -5,10 +5,8 @@
  classDiagram
     class GovernanceAssignment
     click GovernanceAssignment href "../GovernanceAssignment"
-      HasValidity <|-- GovernanceAssignment
-        click HasValidity href "../HasValidity"
-      HasProvenance <|-- GovernanceAssignment
-        click HasProvenance href "../HasProvenance"
+      HasAssertionMetadata <|-- GovernanceAssignment
+        click HasAssertionMetadata href "../HasAssertionMetadata"
       
 
       GovernanceAssignment <|-- ClassificationAssignment
@@ -55,6 +53,8 @@
         click AssignmentScopeEnum href "../AssignmentScopeEnum"
     
 
+        
+      GovernanceAssignment : confidence
         
       GovernanceAssignment : evidence_refs
         

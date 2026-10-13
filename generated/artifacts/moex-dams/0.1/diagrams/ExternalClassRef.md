@@ -5,8 +5,8 @@
  classDiagram
     class ExternalClassRef
     click ExternalClassRef href "../ExternalClassRef"
-      HasProvenance <|-- ExternalClassRef
-        click HasProvenance href "../HasProvenance"
+      HasAssertionMetadata <|-- ExternalClassRef
+        click HasAssertionMetadata href "../HasAssertionMetadata"
       
       ExternalClassRef : approval_status
         
@@ -31,6 +31,8 @@
         click Role href "../Role"
     
 
+        
+      ExternalClassRef : confidence
         
       ExternalClassRef : evidence_refs
         
@@ -65,6 +67,10 @@
 
         
       ExternalClassRef : target_ref
+        
+      ExternalClassRef : valid_from
+        
+      ExternalClassRef : valid_to
         
       
 ```
