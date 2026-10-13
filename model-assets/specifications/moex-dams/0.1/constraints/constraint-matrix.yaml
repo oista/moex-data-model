@@ -1102,8 +1102,10 @@ invariants:
   title: solution scope requires solution and conceptual refs
   statement: >
     When implementation_scope = solution, ModelPackage must set solution_ref and
-    conceptual_implementation_ref.
-  source: ADR-021; dams_levels; audit solution package without solution
+    conceptual_implementation_ref. Canonical diagnostic_code is DAMS-INV-042
+    (invariant_id=INV-042). Former dams_levels codes DAMS-LEVEL-004/005 are
+    aliases only and are no longer emitted.
+  source: ADR-021; audit solution package without solution
   source_status: aligned
   scope: moex-dams
   levels: [L2]
@@ -1306,9 +1308,10 @@ invariants:
 - id: INV-051
   title: mapping_cardinality matches endpoint counts
   statement: >
-    mapping_cardinality must be consistent with the number of source_refs and
-    target_refs (one_to_one ⇒ 1/1; one_to_many ⇒ 1/≥1; many_to_one ⇒ ≥1/1;
-    many_to_many ⇒ ≥1/≥1).
+    mapping_cardinality must be a MappingCardinalityEnum value and consistent
+    with the number of source_refs and target_refs (one_to_one ⇒ 1/1;
+    one_to_many ⇒ 1/≥1; many_to_one ⇒ ≥1/1; many_to_many ⇒ ≥1/≥1).
+    Unknown cardinality strings are errors (not silently ignored).
   source: ADR-046; audit mapping cardinality
   source_status: aligned
   scope: moex-dams
@@ -1354,7 +1357,10 @@ invariants:
   title: Relationship ends are conceptual or logical entities
   statement: >
     Relationship.source_entity_ref and target_entity_ref must resolve to a
-    ConceptualEntity or LogicalEntity in the package (not attributes or technical assets).
+    ConceptualEntity or LogicalEntity authored in the same package document.
+    Wrong kinds (attributes, technical assets), unresolved dams: ids,
+    cross-package entity ids, and non-dams refs that are not local entities
+    are errors.
   source: audit Relation model; untyped uriorcurie ends
   source_status: aligned
   scope: moex-dams

@@ -57,7 +57,7 @@ superseded_by: []
 | INV-039 | DataFlowEntityBinding.catalog_operation_ref in snapshot | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-048; FLW-003 |
 | INV-040 | DataFlow.bound_catalog_revision matches snapshot | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-048; FLW-004 |
 | INV-041 | DataModelBinding.catalog_revision matches snapshot | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-048; FLW-005 |
-| INV-042 | solution scope requires solution and conceptual refs | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-021; dams_levels; audit solution package without solution |
+| INV-042 | solution scope requires solution and conceptual refs | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-021; audit solution package without solution |
 | INV-043 | genesis_kind consistent with external_class_refs | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-026; audit genesis native with alignments |
 | INV-044 | inverse_label required when RelationTerm not symmetric | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-026; audit inverse label vs symmetric |
 | INV-045 | LogicalAttribute max cardinality >= min | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | audit min/max cardinality; LogicalAttribute slots |
@@ -388,7 +388,7 @@ When DataModelBinding.catalog_revision is set, it must equal the catalog_revisio
 
 ### INV-042: solution scope requires solution and conceptual refs
 
-When implementation_scope = solution, ModelPackage must set solution_ref and conceptual_implementation_ref.
+When implementation_scope = solution, ModelPackage must set solution_ref and conceptual_implementation_ref. Canonical diagnostic_code is DAMS-INV-042 (invariant_id=INV-042). Former dams_levels codes DAMS-LEVEL-004/005 are aliases only and are no longer emitted.
 
 
 *adr_ref:* `ADR-045`
@@ -453,7 +453,7 @@ element_id values must be unique across all objects in a ModelPackage (or bindin
 
 ### INV-051: mapping_cardinality matches endpoint counts
 
-mapping_cardinality must be consistent with the number of source_refs and target_refs (one_to_one ⇒ 1/1; one_to_many ⇒ 1/≥1; many_to_one ⇒ ≥1/1; many_to_many ⇒ ≥1/≥1).
+mapping_cardinality must be a MappingCardinalityEnum value and consistent with the number of source_refs and target_refs (one_to_one ⇒ 1/1; one_to_many ⇒ 1/≥1; many_to_one ⇒ ≥1/1; many_to_many ⇒ ≥1/≥1). Unknown cardinality strings are errors (not silently ignored).
 
 
 *adr_ref:* `ADR-045`
@@ -467,7 +467,7 @@ When LogicalAttribute is inlined under LogicalEntity.attributes, owner_entity_re
 
 ### INV-053: Relationship ends are conceptual or logical entities
 
-Relationship.source_entity_ref and target_entity_ref must resolve to a ConceptualEntity or LogicalEntity in the package (not attributes or technical assets).
+Relationship.source_entity_ref and target_entity_ref must resolve to a ConceptualEntity or LogicalEntity authored in the same package document. Wrong kinds (attributes, technical assets), unresolved dams: ids, cross-package entity ids, and non-dams refs that are not local entities are errors.
 
 
 *adr_ref:* `ADR-045`

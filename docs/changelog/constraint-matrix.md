@@ -10,6 +10,21 @@ superseded_by: []
 
 Журнал серии PR-C0..C5. Тексты инвариантов не дублируются: см. матрицу (с PR-C1) и [constraint-matrix-inventory-report.md](../architecture/constraint-matrix-inventory-report.md).
 
+## Audit R2-8: INV-042 / INV-051 / INV-053 quality
+
+**Добавлено / ужесточено**
+
+- INV-042: единственный эмиттер — `check_solution_scope_refs` (`DAMS-INV-042` +
+  `invariant_id`). `dams_levels` больше не эмитит `DAMS-LEVEL-004`/`005`
+  (коды остались алиасами в `DIAGNOSTIC_CODE_ALIASES`).
+- INV-051: неизвестный `mapping_cardinality` — error (не silent skip); фикстура
+  `INV-051.invalid-unknown.yaml`.
+- INV-053: любые концы, не резолвящиеся в Conceptual/Logical entity **этого**
+  пакета (включая non-`dams:` и cross-package), — error; фикстура
+  `INV-053.invalid-nondams.yaml`.
+
+**Стало строже:** silent-pass на unknown cardinality и на non-dams relationship ends убран.
+
 ## PR-C0: инвентаризация и spike (схемы и `generated/**` не менялись)
 
 **Добавлено**

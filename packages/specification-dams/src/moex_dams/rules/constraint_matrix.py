@@ -31,6 +31,7 @@ DIAGNOSTIC_CODE_ALIASES: dict[str, frozenset[str]] = {
     "INV-026": frozenset({"MOEX-ONT-004"}),
     "INV-033": frozenset({"DAMS-REQ-PDM-009.c1"}),
     "INV-034": frozenset({"DAMS-REQ-PDM-009.c2"}),
+    # Historical dams_levels codes (retired R2-8; INV-042 emits DAMS-INV-042).
     "INV-042": frozenset({"DAMS-LEVEL-004", "DAMS-LEVEL-005"}),
     "INV-043": frozenset({"DAMS-CM-GENESIS-001", "DAMS-CM-GENESIS-002"}),
     "INV-044": frozenset({"DAMS-CM-RELTERM-002"}),
