@@ -1,5 +1,5 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
 normative: false
 supersedes: []
@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-025: Definition cascade and glossary terminology
 
 **Date:** 2026-10-04  
-**Status:** Proposed  
+**Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Related:** [ADR-001](ADR-001-linkml-yaml-canonical.md), [ADR-012](ADR-012-semantic-diff-review.md), [ADR-013](ADR-013-specification-requirements-catalog.md), [ADR-020](ADR-020-external-specification-scope-and-term-selection.md), [ADR-023](ADR-023-governed-property-cascade.md), [ADR-024](ADR-024-unified-class-entity.md), [ADR-027](ADR-027-glossary-term-relations.md)  
 **Amends:** ADR-023 (closes deferred `realizes` inheritance for **definitions** only), ADR-024 (generalises “glossary = view”)  

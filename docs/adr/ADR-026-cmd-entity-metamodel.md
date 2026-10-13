@@ -1,5 +1,5 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
 normative: false
 supersedes: []
@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-026: Conceptual entity metamodel (tier, genesis, relation terms)
 
 **Date:** 2026-10-04  
-**Status:** Proposed  
+**Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Related:** [ADR-020](ADR-020-external-specification-scope-and-term-selection.md), [ADR-021](ADR-021-dams-implementation-profile-and-levels.md), [ADR-023](ADR-023-governed-property-cascade.md), [ADR-024](ADR-024-unified-class-entity.md), [ADR-025](ADR-025-definition-cascade-and-glossary.md)  
 **Amends:** ADR-021 (§4 relation table), ADR-025 (exact source via `match_kind`)  

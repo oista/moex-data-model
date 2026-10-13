@@ -17,7 +17,7 @@ superseded_by: []
 
 ## Context
 
-Aggregate DAMS schema `version` moved 2.0 → 3.0 → 4.0 → (planned 5.0) while the catalogue path stayed `moex-dams/0.1/`. Breaking removals shipped with thin instance evidence (often one example). Consumers need one place that defines:
+Aggregate DAMS schema `version` moved 2.0 → 3.0 → 4.0 → 5.0.0 (ADR-049 PR-5) → 5.1.0 (ADR-053 additive) while the catalogue path stayed `moex-dams/0.1/`. Breaking removals shipped with thin instance evidence (often one example). Consumers need one place that defines:
 
 1. What major / minor / patch mean for DAMS.
 2. How `moex-dams.yaml` `version:` relates to the `0.1/` path and generated folders.
@@ -77,7 +77,7 @@ Thin majors (one example only) remain possible under (2) but must not be silent.
 ## Consequences
 
 - Wave D / future 6.0.0 identity train must cite this ADR and fill the evidence gate.
-- ADR-049 (governance, reserved 5.0.0) should land as its own major or be folded into a train with an explicit exception note.
+- ADR-049 governance landed as aggregate **5.0.0** (PR-5 removal) after additive **4.2.0**; see [SCHEMA-VERSION-TIMELINE.md](../migration/SCHEMA-VERSION-TIMELINE.md).
 - CI does not auto-enforce the evidence gate; reviewers and CHANGELOG checklist do.
 
 ## Alternatives

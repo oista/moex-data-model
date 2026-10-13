@@ -1,15 +1,15 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
 normative: false
 supersedes: []
-superseded_by: MODELING_ARCHITECTURE.md
+superseded_by: []
 ---
 
 # ADR-015: MOEX Publication Viewer — UI/UX Design Standard (MOEX Atlas)
 
 **Date:** 2026-09-28  
-**Status:** Proposed 0.1  
+**Status:** Accepted 0.1  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Related:** [viewer-decisions.md](../architecture/viewer-decisions.md), [viewer-atlas design principles](../design/viewer-atlas/README.md), [ADR-016](ADR-016-publication-section-kinds-and-profiles.md), [ADR-019](ADR-019-publication-contract-inheritance.md)
 
