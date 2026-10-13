@@ -44,7 +44,12 @@ Git SHA is attached only at staged bundle build time (ADR-052 D7).
 
 ## Deferred (schema train 6.0.0)
 
-- Rename `api_version` → `dams_specification_version`
-- Optional `VersionedArtifact` mixin / `ArtifactDistribution` class (YAGNI until consumers need them)
+Trackable work packages, owners, and entry criteria: [TRAIN-6.0.0.md](../migration/TRAIN-6.0.0.md) (T6-1…T6-8). Summary:
+
+- **T6-1** — Rename `api_version` → `dams_specification_version`
+- **T6-2** — Selection/binding classes off full `ModelElement` → `EmbeddedElement`
+- **T6-3** — Remove deprecated orphan slots / enum
+- **T6-4** — Optional `VersionedArtifact` mixin (ADR-044 D6 trigger)
+- LinkML `ArtifactDistribution` class remains YAGNI (ADR-052 D1); operational manifests already cover Distribution identity (D6)
 
 These do **not** block answering “what changed?” once operational manifests and this map are in place.

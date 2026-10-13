@@ -55,12 +55,12 @@ Reaffirm ADR-044 D6: no mixin until a third class grows both `previous_version_r
 
 ### D5. Release train items (schema 6.0.0 — not in this ADR PR)
 
-Subject to ADR-051 evidence gate:
+Subject to ADR-051 evidence gate. **Trackable checklist:** [TRAIN-6.0.0.md](../migration/TRAIN-6.0.0.md) (entry criteria G1–G6; work packages T6-*).
 
-1. Rename `api_version` → `dams_specification_version` (+ data migration).
-2. Move `ModelSelection` / `SelectedEntity` / `SelectedAttribute` / `DataFlowEntityBinding` off full `ModelElement` onto `EmbeddedElement` or slim `IdentifiedElement` (ADR-044 remainder).
-3. Remove slots already deprecated in Wave C (`native_name` / `native_type` orphans, `transformation_*` on Mapping, `LogicalDataTypeEnum` if unused).
-4. Optional: `RelationshipEnd` / typed relationship profiles (may stay L2-only per Wave C INV).
+1. **T6-1** — Rename `api_version` → `dams_specification_version` (+ data migration).
+2. **T6-2** — Move `ModelSelection` / `SelectedEntity` / `SelectedAttribute` / `DataFlowEntityBinding` off full `ModelElement` onto `EmbeddedElement` or slim `IdentifiedElement` (ADR-044 remainder).
+3. **T6-3** — Remove slots already deprecated in Wave C (`native_name` / `native_type` orphans, `transformation_*` on Mapping, `LogicalDataTypeEnum` if unused).
+4. **T6-5** (optional) — `RelationshipEnd` / typed relationship profiles (may stay L2-only per Wave C INV).
 
 Schema and data commits stay separate unless the series ADR names the PR-5 exception.
 
@@ -154,4 +154,4 @@ Default prefix for new declarations: `dams` ([ADR-030](ADR-030-dams-uri-and-pref
 - [x] `id_prefixes` lint + allowlist
 - [x] `id_prefixes` allowlist documented in this ADR + ratchet ceiling (R2-10)
 - [x] Operational identity record (D6/D7 — manifests + publish-gate; [identity-map.md](../architecture/identity-map.md))
-- [ ] 6.0.0 train implementation (separate series)
+- [ ] 6.0.0 train implementation (separate series) — checklist [TRAIN-6.0.0.md](../migration/TRAIN-6.0.0.md)

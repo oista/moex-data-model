@@ -78,7 +78,7 @@ Source: architect audit § «Acceptance criteria для DAMS 0.2» and integrati
 | Conceptual property ↔ glossary ↔ logical attributes | **Partial** | ADR-034/035; no `DataRepresentation` (P2) |
 | Governance single SoT | **Partial** | ADR-049; inline defaults remain by design |
 | No normative conditional invariant only in prose | **Partial** | ADR-045 + Waves A–C; remaining gaps tracked as INV / waivers |
-| Identity policy for addressable nodes | **Partial** | ADR-052 map; 6.0.0 train for rename / VersionedArtifact |
+| Identity policy for addressable nodes | **Partial** | ADR-052 map; train checklist [TRAIN-6.0.0.md](../migration/TRAIN-6.0.0.md) (T6-1 rename / T6-4 VersionedArtifact) |
 | Document aggregates / manifest | **Closed with deferral** | ADR-047 + ADR-054 (package-only kinds) |
 | Reproducible migration / golden artifacts | **In progress** | ADR-011 / ADR-051; per-series CHANGELOGs |
 
