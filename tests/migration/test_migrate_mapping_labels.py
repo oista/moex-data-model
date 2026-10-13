@@ -1,4 +1,4 @@
-"""Tests for scripts/migrate_mapping_labels.py."""
+"""Tests for scripts/archive/migrate_mapping_labels.py."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ REPO = Path(__file__).resolve().parents[2]
 
 
 def _load():
-    path = REPO / "scripts" / "migrate_mapping_labels.py"
+    path = REPO / "scripts" / "archive" / "migrate_mapping_labels.py"
     spec = importlib.util.spec_from_file_location("migrate_mapping_labels", path)
     mod = importlib.util.module_from_spec(spec)
     assert spec.loader is not None

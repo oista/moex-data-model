@@ -11,8 +11,8 @@ In DAMS 3.0.0 Mapping identity slots are removed; use --strip-deprecated
 to delete name/title/aliases/tags/glossary_term_refs from instance YAML.
 
 Usage:
-  python scripts/migrate_mapping_labels.py --report docs/migration/mapping-name-report.md
-  python scripts/migrate_mapping_labels.py --strip-deprecated
+  python scripts/archive/migrate_mapping_labels.py --report docs/migration/mapping-name-report.md
+  python scripts/archive/migrate_mapping_labels.py --strip-deprecated
 """
 
 from __future__ import annotations
@@ -22,7 +22,7 @@ from pathlib import Path
 
 from ruamel.yaml import YAML
 
-REPO = Path(__file__).resolve().parents[1]
+REPO = Path(__file__).resolve().parents[2]
 IMPL_ROOT = REPO / "model-assets" / "implementations"
 DENYLIST = frozenset({"moex-dams-full.yaml"})
 DEPRECATED_MAPPING_SLOTS = ("name", "title", "aliases", "glossary_term_refs", "tags")

@@ -34,9 +34,10 @@ viewer-serve:
 	$(PYTHON) -m moex_publication_viewer.cli serve --root . --port 8765
 
 # Ontology stack pytest (outside Stage 0 make check; gated in GHA viewer-and-packages)
+ONTOLOGY := packages/ontology
 packages-check:
-	$(PYTHON) -m pip install -e "./generated/contracts/moex-dams/0.1" -e "./$(KERNEL)" -e "./packages/standard-linkml" -e "./$(DAMS)" -e "./$(DRAWDB_ADAPTER)" -e "./$(OWL)" -e "./$(MAPPINGS)" -e "./$(CATALOG)" -e "./packages/linkml-tooling[map,automator]" pytest PyYAML
-	$(PYTHON) -m pytest $(OWL)/tests $(MAPPINGS)/tests $(CATALOG)/tests $(DRAWDB_ADAPTER)/tests $(DAMS)/tests/test_dbml_projection.py packages/linkml-tooling/tests packages/modeling-kernel/tests/test_stage7_ports.py -q
+	$(PYTHON) -m pip install -e "./generated/contracts/moex-dams/0.1" -e "./$(KERNEL)" -e "./packages/standard-linkml" -e "./$(DAMS)" -e "./$(DRAWDB_ADAPTER)" -e "./$(OWL)" -e "./$(ONTOLOGY)" -e "./$(MAPPINGS)" -e "./$(CATALOG)" -e "./packages/linkml-tooling[map,automator]" pytest PyYAML
+	$(PYTHON) -m pytest $(OWL)/tests $(ONTOLOGY)/tests $(MAPPINGS)/tests $(CATALOG)/tests $(DRAWDB_ADAPTER)/tests $(DAMS)/tests/test_dbml_projection.py packages/linkml-tooling/tests packages/modeling-kernel/tests/test_stage7_ports.py -q
 
 drawdb-adapter-check:
 	$(PYTHON) -m pip install -e "./generated/contracts/moex-dams/0.1" -e "./$(KERNEL)" -e "./packages/standard-linkml" -e "./$(DAMS)" -e "./$(DRAWDB_ADAPTER)[dev]" pytest
@@ -95,11 +96,12 @@ validate-requirements:
 check-constraints:
 	$(PYTHON) scripts/check_constraint_matrix.py --gate-strict
 
-# Package pytest for DAMS / LinkML / repository-loader / architecture (CI job dams-packages)
+# Package pytest for DAMS / LinkML / repository-loader / architecture / migration (CI job dams-packages).
+# Owns full specification-dams suite (incl. L3 + pyshacl); Stage 0 slice-cli does not duplicate it.
 dams-packages-check:
 	$(PYTHON) -m pip install -q -r requirements-linkml.txt pyshacl==0.40.1
-	$(PYTHON) -m pip install -q -e "./generated/contracts/moex-dams/0.1" -e "./$(KERNEL)" -e "./packages/standard-linkml" -e "./$(DAMS)[dev]" -e "./packages/repository-loader[dev]" pytest
-	$(PYTHON) -m pytest packages/specification-dams/tests packages/standard-linkml/tests packages/repository-loader/tests tests/architecture -q
+	$(PYTHON) -m pip install -q -e "./generated/contracts/moex-dams/0.1" -e "./$(KERNEL)" -e "./packages/standard-linkml" -e "./$(DAMS)[dev]" -e "./packages/repository-loader[dev]" pytest ruamel.yaml
+	$(PYTHON) -m pytest packages/specification-dams/tests packages/standard-linkml/tests packages/repository-loader/tests tests/architecture tests/migration -q
 
 # gen-pydantic → generated/contracts/moex-dams/0.1 (moex_dams_contracts)
 generate-contracts:

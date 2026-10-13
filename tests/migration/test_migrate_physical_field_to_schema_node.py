@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "scripts"))
+sys.path.insert(0, str(REPO / "scripts" / "archive"))
 
 from migrate_physical_field_to_schema_node import (  # noqa: E402
     _collect_local_keys,

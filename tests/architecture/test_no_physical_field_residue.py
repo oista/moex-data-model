@@ -16,7 +16,7 @@ RESIDUE_RE = re.compile(rf"{re.escape(_CLS)}|\b{re.escape(_COLL)}\b")
 # Path prefixes (posix, relative to repo root) where residue is allowed.
 # docs/ is NOT blanket-allowlisted: only migration/history/ADR paths (R2-2).
 ALLOW_PREFIXES = (
-    "scripts/migrate_physical_field_to_schema_node.py",
+    "scripts/archive/",
     "scripts/spike_schema_node_generators.py",
     "scripts/migrate_physical_to_technical_asset.py",
     "tests/migration/",
