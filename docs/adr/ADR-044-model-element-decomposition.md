@@ -67,7 +67,7 @@ New mixin `HasValidity` (`valid_from`, `valid_to`); `HasLifecycle` includes it a
 
 ### D6. No `VersionedArtifact` mixin yet
 
-Abstract slot `artifact_version` (range `SemVer`); `model_version` and `structure_version` use `is_a`. Revisit a mixin when a third class grows `previous_version_ref` + `content_digest`.
+Abstract slot `artifact_version` (range `SemVer`); `model_version` and `structure_version` use `is_a`. Revisit a mixin when a third class grows `previous_version_ref` + `content_digest`. Reaffirmed and mapped to the five identity layers in [ADR-052](ADR-052-identity-and-versioning.md).
 
 ### D7. EmbeddedElement uses DescribedElement
 
