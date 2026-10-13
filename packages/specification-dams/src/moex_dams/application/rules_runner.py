@@ -20,8 +20,8 @@ from moex_dams.rules.references import check_references
 from moex_dams.rules.structural import check_structural
 
 # Modules whose L2 validators are reached from assess / formal_checks / schema
-# lint / check-manifest. Meta-test: every constraint-matrix L2-implemented
-# dams_validator must live here.
+# lint / check-manifest. Kept for docs; the normative gate is
+# ``L2_PRODUCTION_CALLABLES`` (exact dotted path).
 L2_PRODUCTION_MODULES: frozenset[str] = frozenset(
     {
         "moex_dams.rules.structural",
@@ -37,6 +37,49 @@ L2_PRODUCTION_MODULES: frozenset[str] = frozenset(
         "moex_dams.rules.ontology_uris",
         # check-manifest (Stage 0), not package assess — INV-058.
         "moex_dams.rules.repository_invariants",
+    }
+)
+
+# Exact ``dams_validator`` paths from constraint-matrix L2-implemented rows that
+# are wired into a production channel. Meta-test requires every L2-implemented
+# matrix ``dams_validator`` to appear here (module allowlist alone is not enough).
+L2_PRODUCTION_CALLABLES: frozenset[str] = frozenset(
+    {
+        # assess → package-invariants
+        "moex_dams.rules.package_invariants.check_solution_scope_refs",
+        "moex_dams.rules.package_invariants.check_attribute_cardinality_bounds",
+        "moex_dams.rules.package_invariants.check_parent_concept_cycles",
+        "moex_dams.rules.package_invariants.check_selection_attribute_closure",
+        "moex_dams.rules.package_invariants.check_binding_compatibility",
+        "moex_dams.rules.package_invariants.check_package_element_id_uniqueness",
+        "moex_dams.rules.package_invariants.check_mapping_cardinality_consistency",
+        "moex_dams.rules.package_invariants.check_relationship_endpoint_kinds",
+        "moex_dams.rules.package_invariants.check_alignment_dual_path_consistency",
+        # assess → catalog-topology / governance-assignments / structural
+        "moex_dams.rules.catalog_topology.check_catalog_topology",
+        "moex_dams.rules.governance_assignments.check_governance_assignments",
+        "moex_dams.rules.structural.check_structural_data",
+        # assess → model-requirements (formal_checks)
+        "moex_dams.rules.conceptual_entity.check_conceptual_entities",
+        "moex_dams.rules.relation_terms.check_relation_terms",
+        "moex_dams.rules.technical_assets.check_parent_ref_cycles",
+        "moex_dams.rules.technical_assets.check_direction_forbidden",
+        "moex_dams.rules.technical_assets.check_mapping_endpoint_types",
+        "moex_dams.rules.technical_assets.check_operation_interface_ref",
+        "moex_dams.rules.technical_assets.check_in_memory_location",
+        "moex_dams.rules.data_structure.check_source_pointer_requires_artifact",
+        "moex_dams.rules.data_structure.check_schema_dialect_format_family",
+        "moex_dams.rules.data_structure.check_node_kind_shape",
+        "moex_dams.rules.data_structure.check_reference_node_target",
+        "moex_dams.rules.data_structure.check_message_refs_kinds",
+        "moex_dams.rules.data_structure.check_node_edge_cycles",
+        "moex_dams.rules.data_structure.check_relational_slots",
+        "moex_dams.rules.data_structure.check_local_key_unique",
+        "moex_dams.rules.semantic_layer.check_identifying_requires_is_identifying",
+        # schema lint / Stage 0 validate-schemas — INV-026
+        "moex_dams.rules.ontology_uris.check_ontology_uris",
+        # check-manifest — INV-058
+        "moex_dams.rules.repository_invariants.check_repository_element_id_uniqueness",
     }
 )
 
