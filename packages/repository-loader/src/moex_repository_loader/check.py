@@ -13,26 +13,23 @@ from moex_repository_loader.lock import lock_update_hint, verify_lock
 
 OWNER_RE = re.compile(r"^@[\w.-]+(/[\w.-]+)?$")
 
-ORPHAN_ALLOW_NAMES = frozenset(
+# Path-scoped allow-list (ADR-054 D4). Relative to model-assets/implementations/.
+# Prefer exact paths over bare basenames so a stray data-types.yaml under a
+# solution package is not silently accepted.
+ORPHAN_ALLOW_EXACT = frozenset(
     {
         "manifest.yaml",
-        "manifest.lock",
-        "publish.yaml",
-        "solution-xlsx.profile.yaml",
-        "moex-dams-full.yaml",
-        # ontology catalog stubs under implementations/ontologies/
-        "application.yaml",
-        "corporate.yaml",
-        "fibo.yaml",
-        "moex-data.yaml",
-        "moex-hr.yaml",
-        "prov-o.yaml",
-        # enterprise conceptual siblings
-        "controlled-vocabularies.yaml",
-        "data-types.yaml",
-        "relation-terms.yaml",
-        # draft import sidecar
-        "inference-evidence.json",
+        "solutions/solution-xlsx.profile.yaml",
+        "enterprise/moex-hierarchy/moex-dams-full.yaml",
+        "ontologies/application.yaml",
+        "ontologies/corporate.yaml",
+        "ontologies/fibo.yaml",
+        "ontologies/moex-data.yaml",
+        "ontologies/moex-hr.yaml",
+        "ontologies/prov-o.yaml",
+        "enterprise/moex-enterprise-conceptual-model/0.1/controlled-vocabularies.yaml",
+        "enterprise/moex-enterprise-conceptual-model/0.1/data-types.yaml",
+        "enterprise/moex-enterprise-conceptual-model/0.1/relation-terms.yaml",
     }
 )
 ORPHAN_ALLOW_DIR_NAMES = frozenset({"publications"})
@@ -44,15 +41,19 @@ class CheckProblem:
     message: str
 
 
-def _is_allowed_orphan(rel_posix: str) -> bool:
-    name = Path(rel_posix).name
-    if name in ORPHAN_ALLOW_NAMES:
+def _is_allowed_orphan(rel_posix: str, package_dirs: frozenset[str]) -> bool:
+    """Return True if rel_posix may exist without being a DocumentRef or body_ref."""
+    if rel_posix in ORPHAN_ALLOW_EXACT:
         return True
     parts = Path(rel_posix).parts
     if any(p in ORPHAN_ALLOW_DIR_NAMES for p in parts):
         return True
-    if name == "publish.yaml":
-        return True
+    # Sibling publish.yaml of an indexed package only (not implementations/ root).
+    if Path(rel_posix).name == "publish.yaml":
+        parent = Path(rel_posix).parent.as_posix()
+        if parent in ("", "."):
+            return False
+        return parent in package_dirs
     return False
 
 
@@ -166,6 +167,7 @@ def check_orphans(loader: RepositoryLoader) -> list[CheckProblem]:
     indexed_envs = {
         ref.path.replace("\\", "/") for ref in loader.load_manifest().documents
     }
+    package_dirs = frozenset(loader.package_dirs())
     # Every implementation.yaml must be indexed.
     for path in sorted(root.rglob("implementation.yaml")):
         rel = path.relative_to(root).as_posix()
@@ -186,7 +188,7 @@ def check_orphans(loader: RepositoryLoader) -> list[CheckProblem]:
         rel = path.relative_to(root).as_posix()
         if rel in indexed_envs or rel in body_paths:
             continue
-        if _is_allowed_orphan(rel):
+        if _is_allowed_orphan(rel, package_dirs):
             continue
         problems.append(CheckProblem("orphan", f"yaml outside manifest allow-list: {rel}"))
     return problems

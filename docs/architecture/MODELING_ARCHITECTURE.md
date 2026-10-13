@@ -320,6 +320,42 @@ flowchart LR
 
 Каждая стадия возвращает typed `Diagnostic` и может дать `ConformanceAssessment`. Весь запуск — immutable `ConformanceReport` (агрегат assessments).
 
+### 9.1 Three integrity mechanisms (do not invent a fourth)
+
+Repository and binding integrity use three distinct digests. They are not interchangeable ([ADR-042](../adr/ADR-042-integrity-digest-revisions.md), [ADR-047](../adr/ADR-047-repository-manifest-and-lock.md), [ADR-054](../adr/ADR-054-repository-aggregates-and-manifest.md)).
+
+```mermaid
+flowchart TB
+    subgraph binding [ADR-042 DataModelBinding]
+        BBody[Binding body YAML]
+        BCanon[Canonical JSON skip integrity_digest generated_at]
+        BHash["integrity_digest sha256:..."]
+        BBody --> BCanon --> BHash
+    end
+    subgraph envelope [Envelope stamps]
+        EBody[Raw body bytes]
+        EHash["content_digest / revision"]
+        EBody --> EHash
+    end
+    subgraph lock [ADR-047 manifest.lock]
+        LDesc[implementation.yaml without stamps]
+        LBody[Parsed body YAML]
+        LCanon[Canonical JSON descriptor plus body]
+        LHash["content_hash sha256:..."]
+        LDesc --> LCanon
+        LBody --> LCanon
+        LCanon --> LHash
+    end
+```
+
+| Mechanism | What is hashed | CI / gate | Notes |
+|---|---|---|---|
+| Binding `integrity_digest` | Binding body, stamps excluded | digest CLI / publish-gate | Authority for contract snapshots |
+| Envelope `content_digest` | Raw body bytes at import | Not verified in Stage 0 | Legacy; lock excludes these stamps |
+| Lock `content_hash` | Descriptor (no stamps) + body, canonical JSON | `lock-verify` / `check-manifest` | Sorted JSONL; no aggregate hash |
+
+`MOEXModelRepository` is a validation composite assembled from package documents only ([ADR-054](../adr/ADR-054-repository-aggregates-and-manifest.md)); it is not an authored mega-document.
+
 Ожидаемая невалидность модели не является exception. Exceptions используются для отказа инфраструктуры или нарушения внутреннего контракта.
 
 Диагностика имеет стабильные поля:

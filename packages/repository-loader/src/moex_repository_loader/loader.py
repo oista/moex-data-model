@@ -136,7 +136,14 @@ class RepositoryLoader:
         return loaded
 
     def assemble(self) -> dict[str, Any]:
-        """In-memory MOEXModelRepository-shaped mapping (packages only today)."""
+        """Build in-memory MOEXModelRepository validation composite (ADR-054).
+
+        Populates ``repository_id`` and ``model_packages`` from every
+        ``DocumentRef`` with ``kind: package``. Other tree_root collections
+        (flows, bindings, governance assignments, registries, metrics) are
+        intentionally omitted until DocumentKind expands — they are not
+        authored via the file index today.
+        """
         manifest = self.load_manifest()
         packages: list[dict[str, Any]] = []
         for ref in manifest.documents:
@@ -147,6 +154,16 @@ class RepositoryLoader:
             "repository_id": manifest.repository_id,
             "model_packages": packages,
         }
+
+    def package_dirs(self) -> tuple[str, ...]:
+        """Posix-relative directories of indexed packages (parent of implementation.yaml)."""
+        dirs: list[str] = []
+        for ref in self.load_manifest().documents:
+            if ref.kind != "package":
+                continue
+            parent = Path(ref.path).parent.as_posix()
+            dirs.append("." if parent == "" else parent)
+        return tuple(dirs)
 
     def _read_pair(self, ref: DocumentRef) -> tuple[dict[str, Any], dict[str, Any]]:
         env_text = self._store.read_text(ref.path)

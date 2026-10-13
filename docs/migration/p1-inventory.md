@@ -144,7 +144,11 @@ review handle (`@org/team`), not `data_owner_ref` (ADR-023).
 
 ## Deferred (not in this inventory’s acceptance)
 
-Splitting large ModelPackage files; flow/contract/assignment document kinds;
-CODEOWNERS generation; GitProvider-backed reads; deleting envelope stamps;
-viewer/API full loader migration; validating the assembled
+Splitting large ModelPackage files; CODEOWNERS generation; GitProvider-backed
+reads; deleting envelope stamps; validating the assembled
 `MOEXModelRepository` instance for id collisions.
+
+**Closed by ADR-054 (P1b):** extra DocumentKind aggregates deferred explicitly
+(package-only index); `MOEXModelRepository` role = validation composite;
+viewer implementation discovery via manifest + coincidence test; path-scoped
+orphan allow-list. See [ADR-054](../adr/ADR-054-repository-aggregates-and-manifest.md).

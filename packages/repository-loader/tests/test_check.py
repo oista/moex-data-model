@@ -107,13 +107,35 @@ def test_orphan_implementation(tmp_path: Path) -> None:
     assert any(p.code == "orphan" and "other" in p.message for p in problems)
 
 
-def test_no_orphan_when_allowlisted(tmp_path: Path) -> None:
+def test_no_orphan_when_sibling_publish_allowlisted(tmp_path: Path) -> None:
+    root = _write_mini_repo(tmp_path)
+    (root / "model-assets" / "implementations" / "pkg" / "publish.yaml").write_text(
+        "kind: publication_module\n", encoding="utf-8"
+    )
+    loader = RepositoryLoader(root, verify_hashes=False)
+    assert check_orphans(loader) == []
+
+
+def test_root_publish_yaml_is_orphan(tmp_path: Path) -> None:
+    """ADR-054: bare basename allow-list removed; root publish.yaml fails."""
     root = _write_mini_repo(tmp_path)
     (root / "model-assets" / "implementations" / "publish.yaml").write_text(
         "kind: publication_module\n", encoding="utf-8"
     )
     loader = RepositoryLoader(root, verify_hashes=False)
-    assert check_orphans(loader) == []
+    problems = check_orphans(loader)
+    assert any(p.code == "orphan" and "publish.yaml" in p.message for p in problems)
+
+
+def test_stray_data_types_yaml_is_orphan(tmp_path: Path) -> None:
+    """Path-scoped allow-list: data-types.yaml only under enterprise conceptual."""
+    root = _write_mini_repo(tmp_path)
+    (root / "model-assets" / "implementations" / "pkg" / "data-types.yaml").write_text(
+        "x: 1\n", encoding="utf-8"
+    )
+    loader = RepositoryLoader(root, verify_hashes=False)
+    problems = check_orphans(loader)
+    assert any(p.code == "orphan" and "data-types.yaml" in p.message for p in problems)
 
 
 def test_cycle_detected(tmp_path: Path) -> None:
