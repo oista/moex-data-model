@@ -11,7 +11,7 @@ superseded_by: []
 **Date:** 2026-10-12  
 **Status:** Accepted (PR-5 landed: authored DataFlow topology slots removed; schema **4.0.0**)  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [ADR-013](ADR-013-specification-requirements-catalog.md), [ADR-040](ADR-040-message-integration-model.md), [ADR-042](ADR-042-integrity-digest-revisions.md), [ADR-045](ADR-045-executable-constraint-matrix.md), [ADR-046](ADR-046-typed-mapping-endpoints.md), [ADR-047](ADR-047-repository-manifest-and-lock.md)  
+**Related:** [ADR-013](ADR-013-specification-requirements-catalog.md), [ADR-040](ADR-040-message-integration-model.md), [ADR-042](ADR-042-integrity-digest-revisions.md), [ADR-045](ADR-045-executable-constraint-matrix.md), [ADR-046](ADR-046-typed-mapping-endpoints.md), [ADR-047](ADR-047-repository-manifest-and-lock.md), [ADR-055](ADR-055-integration-source-of-truth.md)  
 **Inventory:** [topology-inventory.md](../migration/topology-inventory.md)
 
 ## Context
