@@ -1,0 +1,109 @@
+id: https://data.moex.com/dams/governance-view/v0.1
+name: moex_governance_view
+version: 0.1.0
+title: MOEX EffectiveGovernanceView read model
+description: >
+  Materialized effective governance read model (ADR-049). Not part of the DAMS
+  domain model; do not import from moex-dams.yaml. Authored SoT remains inline
+  defaults (ADR-023) plus GovernanceAssignment objects.
+license: https://www.apache.org/licenses/LICENSE-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  xsd: http://www.w3.org/2001/XMLSchema#
+  dams: https://data.moex.com/dams/
+  govv: https://data.moex.com/dams/governance-view/
+imports:
+  - linkml:types
+default_prefix: govv
+default_range: string
+annotations:
+  dams.materialized_module: "true"
+
+enums:
+  GovernanceLayerEnum:
+    description: Provenance layer of an effective governed slot (ADR-049).
+    permissible_values:
+      assignment:
+        description: Value comes from an approved GovernanceAssignment.
+      inline:
+        description: Value comes from the ADR-023 containment cascade of authored defaults.
+      none:
+        description: No declared or inherited value.
+
+classes:
+  EffectiveGovernanceView:
+    tree_root: true
+    description: Materialized effective governance read model; generated only (ADR-049).
+    annotations:
+      materialized: "true"
+    slots:
+      - as_of
+      - built_at
+      - input_digest
+      - package_refs
+      - elements
+
+  EffectiveElementGovernance:
+    description: Effective governed slots for one cascade element.
+    slots:
+      - element_ref
+      - package_ref
+      - slots
+
+  EffectiveSlot:
+    description: One effective governed slot with provenance.
+    slots:
+      - slot_name
+      - value
+      - layer
+      - source_element_id
+      - assignment_id
+      - valid_to
+
+slots:
+  as_of:
+    range: date
+    required: true
+    description: Resolution date used for assignment validity windows (CI-fixed).
+  built_at:
+    range: datetime
+    description: Wall-clock build timestamp; ignored by check-governance diff.
+  input_digest:
+    range: string
+    required: true
+    description: Digest of package + assignment inputs used to build this view.
+  package_refs:
+    range: uriorcurie
+    multivalued: true
+    description: ModelPackage element_ids included in this view.
+  elements:
+    range: EffectiveElementGovernance
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  element_ref:
+    range: uriorcurie
+    required: true
+  package_ref:
+    range: uriorcurie
+    required: true
+  slots:
+    range: EffectiveSlot
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  slot_name:
+    range: string
+    required: true
+  value:
+    range: string
+    description: JSON-serialized scalar or list value.
+  layer:
+    range: GovernanceLayerEnum
+    required: true
+  source_element_id:
+    range: uriorcurie
+  assignment_id:
+    range: uriorcurie
+  valid_to:
+    range: date

@@ -52,6 +52,11 @@ from moex_dams.projection.mermaid_er import (
     project_model_package_to_er_diagram,
     write_er_diagram_artifact,
 )
+from moex_dams.governance.materialize import (
+    check_governance_view,
+    governance_view_path,
+    materialize_governance_view,
+)
 from moex_dams.rules.cascade import (
     CascadeCardinality,
     CascadeFamily,
@@ -127,13 +132,16 @@ __all__ = [
     "build_ontology_profile",
     "check_conceptual_entities",
     "check_conceptual_entities_body",
+    "check_governance_view",
     "check_identifiers",
     "check_formal_requirements",
     "check_ontology_uris",
     "check_references",
     "compute_binding_digest",
     "diagnose_governance",
+    "governance_view_path",
     "load_merged_schema_prefix_map",
+    "materialize_governance_view",
     "check_relation_terms",
     "check_relation_terms_body",
     "check_structural",
