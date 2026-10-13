@@ -1,5 +1,5 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.2"
 normative: false
 supersedes: []
@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-013: Каталог требований к спецификации в DAMS LinkML
 
 **Date:** 2026-09-28  
-**Status:** Proposed  
+**Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Design:** [2026-09-28-dams-requirements-explorer-design.md](../superpowers/specs/2026-09-28-dams-requirements-explorer-design.md)
 

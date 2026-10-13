@@ -61,5 +61,5 @@ Conclusion: **inline is the lived authored surface**; assignment collections are
 - No bulk rewrite of esed / import packages for defaults.
 - Deprecation window is PR-shaped (PR-1…PR-4) for legacy target/id slot names on assignment classes.
 - PR-5 migration script primarily targets external consumers of `classified_element_ref` / `policy_target_ref` / `policy_binding_id`.
-- New invariants start at INV-042 (INV-038…041 reserved for topology ownership).
+- Governance assignment invariants landed as **INV-054…056** (Wave C used INV-042…053 first; INV-038…041 remain topology ownership).
 - Effective read model must live outside `moex-dams/0.1/schemas/` (ADR-047 / ADR-048 pattern).

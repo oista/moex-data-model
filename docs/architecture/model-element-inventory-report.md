@@ -14,7 +14,7 @@ superseded_by: []
 **Matrix:** [model-element-matrix-before.csv](model-element-matrix-before.csv) / [model-element-matrix-before.md](model-element-matrix-before.md)  
 **ADR:** [ADR-044](../adr/ADR-044-model-element-decomposition.md)  
 
-This report is the **before**-matrix for ADR-044. It is historical for class roles at 2.0.0; do not treat §4 proposals as unfinished work if ADR-044 / schema already landed them. Still deferred after acceptance: selection/binding helpers as EmbeddedElement, VersionedArtifact (D6), redundant-mixin lint.
+This report is the **before**-matrix for ADR-044. It is historical for class roles at 2.0.0; do not treat §4 proposals as unfinished work if ADR-044 / schema already landed them. Still deferred after acceptance (scheduled for the 6.0.0 identity train, ADR-052 D5): selection/binding helpers as `EmbeddedElement`, `VersionedArtifact` (ADR-044 D6). The redundant-mixin lint shipped in Wave C1 (`tools/architecture-check`).
 
 ## 1. Schemas inventoried (13 modules under `0.1/schemas/`)
 
@@ -136,7 +136,7 @@ List must not grow without an ADR-044 amendment. Architecture-check (PR-2) enfor
 | `packages/specification-dams` `rules/cascade.py`, `definitions.py` | ADR-023 / ADR-025 resolvers — unaffected by mixin reshape if induced slots stay |
 | `apps/viewer` glossary / hierarchy | Uses `definition_source_ref` + `description`; optional description already handled |
 | `scripts/migrate_*` | Pattern for PR-3 mapping label migration |
-| Implementations | Many `mappings:` blocks (ucd, crm, mdm, drafts) with `mapping_type`; Mapping `name` present on elements — inventory for migrate script in PR-3 |
+| Implementations | At inventory time many `mappings:` blocks (ucd, crm, mdm, drafts) with `mapping_type` and Mapping `name` — migrated to typed collections by ADR-046 PR-3 (`field_mappings` / `realizes_mappings` / …); this row is historical |
 
 ## 7. Golden / fixtures touched by later PRs
 

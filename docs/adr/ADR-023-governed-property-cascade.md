@@ -1,5 +1,5 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
 normative: false
 supersedes: []
@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-023: Containment cascade of governed properties
 
 **Date:** 2026-10-04  
-**Status:** Proposed  
+**Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Related:** [ADR-001](ADR-001-linkml-yaml-canonical.md), [ADR-007](ADR-007-pydantic-dto-not-validator.md), [ADR-013](ADR-013-specification-requirements-catalog.md)  
 **Requirements:** [IT_SOLUTION_MODEL_REQUIREMENTS.md](../architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md)

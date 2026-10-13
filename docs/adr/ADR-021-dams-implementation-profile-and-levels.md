@@ -1,5 +1,6 @@
 ---
-status: Proposed
+status: Accepted
+superseded_by: []
 version: "0.1"
 date: 2026-09-28
 ---
