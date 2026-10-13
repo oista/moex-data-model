@@ -28,8 +28,8 @@
 
 ## Группа 3. Интеграционный слой (новое из обсуждения потоков данных)
 
-13. DataFlow — поток данных между решениями/системами (топология)
-14. DataFlowEntityBinding — привязка кросс-системной сущности к конкретному потоку
+13. DataFlow — ссылочная проекция интеграции Clinkr (`integration_ref`; топология в TopologyView, ADR-048)
+14. DataFlowEntityBinding — привязка логических сущностей/носителей к потоку (+ catalog_operation/participant refs)
 
 ## Группа 4. Справочники (Registries) — внешние ключи
 
@@ -51,7 +51,7 @@
 
 ## Группа 6. Governance / жизненный цикл (сквозные mixins)
 
-27. HasLineage (mixin) — source_system_ref, ingestion_timestamp
-28. HasClassification (mixin) — класс данных, маркировка чувствительности
-29. HasLifecycle (mixin) — статус (Draft/Active/Deprecated/Retired), даты
-30. HasOwnership (mixin) — владелец/steward
+27. HasProvenance (mixin) — source, approval_status, approved_by/at
+28. HasGovernanceClassification / HasBusinessClassification / HasPolicyBindings (mixins) — authored defaults; authoritative layer = GovernanceAssignment (ADR-049)
+29. HasLifecycle / HasValidity (mixins) — статус (Draft/Active/Deprecated/Retired), valid_from/to
+30. HasOwnership (mixin) — data_owner / steward / owning_unit (cascade ADR-023)

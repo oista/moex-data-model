@@ -366,8 +366,8 @@ MOEX ModelGraph
 - LogicalAttribute.
 - Relationship.
 - TechnicalAsset (`DataCarrier`, `AccessPoint`, `DataContainer`, `ExecutionAsset`).
-- PhysicalField.
-- Mapping.
+- DataStructure / SchemaNode.
+- Mapping (typed subclasses: RealizesMapping, EntityPhysicalMapping, FieldMapping, AlignsWithMapping).
 - DataFlow.
 - DataModelBinding.
 - RegistryReference.

@@ -492,7 +492,11 @@ classes:
       - domain_contexts
       - logical_entities
       - data_carriers
-      - mappings
+      - data_structures
+      - realizes_mappings
+      - entity_physical_mappings
+      - field_mappings
+      - aligns_with_mappings
 
   LogicalEntity:
     is_a: ModelElement
@@ -514,11 +518,16 @@ classes:
     slots:
       - solution_ref
       - system_ref
-      - object_kind
+      - asset_namespace
       - qualified_name
-      - native_schema_ref
+      - structure_ref
       - direction
-      - physical_fields
+
+  DataStructure:
+    is_a: ModelElement
+    slots:
+      - structure_version
+      - nodes
 ```
 
 ## Классификация
@@ -553,6 +562,10 @@ slots:
 
 ## Поток Clinkr
 
+Топология (source/target solution/system/platform, channel, integration_spec)
+читается из `TopologyView` по файл-снимку каталога; на `DataFlow` остаётся
+только привязка (ADR-048 / ADR-055).
+
 ```yaml
 classes:
   DataFlow:
@@ -560,16 +573,7 @@ classes:
     slots:
       - integration_ref
       - contract_ref
-      - source_solution_ref
-      - target_solution_ref
-      - source_system_ref
-      - target_system_ref
-      - source_platform_ref
-      - target_platform_ref
-      - integration_level
-      - integration_class
-      - integration_channel
-      - integration_spec_ref
+      - bound_catalog_revision
       - entity_bindings
 
   DataFlowEntityBinding:
@@ -579,9 +583,12 @@ classes:
       - source_model_ref
       - logical_entity_ref
       - logical_attribute_refs
-      - physical_object_refs
-      - physical_field_refs
+      - carrier_refs
+      - schema_node_refs
       - transformation_mapping_refs
+      - catalog_operation_ref
+      - catalog_participant_ref
+      - direction
 ```
 
 ## Контрактный selection

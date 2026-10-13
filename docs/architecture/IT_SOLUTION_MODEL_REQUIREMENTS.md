@@ -54,8 +54,8 @@ superseded_by: MODELING_ARCHITECTURE.md
   └── связи с корпоративными понятиями
 
 Физическое представление
-  ├── TechnicalAsset
-  ├── PhysicalField
+  ├── TechnicalAsset (DataCarrier / AccessPoint / DataContainer / ExecutionAsset)
+  ├── DataStructure / SchemaNode
   ├── native schemas / formats
   ├── ИТ-системы и технологии
   └── API, files, topics, datasets, tables, views
@@ -295,7 +295,7 @@ applies_to:
 ```yaml
 applies_to:
   target_kinds:
-    - PhysicalField
+    - SchemaNode
 ```
 
 Область применимости нужна, чтобы:
@@ -702,7 +702,7 @@ relation/alignment/realization показывает, что данные озн�
 
 ### 7.2. Status coverage между logical и physical слоями
 
-Для LogicalAttribute и PhysicalField используется единый vocabulary:
+Для LogicalAttribute и SchemaNode используется единый vocabulary:
 
 ```yaml
 MappingCoverageStatusEnum:
@@ -732,15 +732,17 @@ MappingCoverageStatusEnum:
 Для logical attribute, который подлежит физической реализации в данном package, должно существовать:
 
 ```text
-- reference на PhysicalField;
+- FieldMapping на SchemaNode (адрес structure_id#local_key);
 - и/или transformation expression;
 - и/или status/rationale, объясняющие отсутствие direct physical mapping.
 ```
 
-Field reference и expression могут использоваться одновременно:
+SchemaNode reference и expression могут использоваться одновременно:
 
 ```yaml
-physical_field_ref: trading_access.status_cd
+# FieldMapping.target_refs item (SchemaNodeRef)
+target_refs:
+  - dams:structure/trading-access#status_cd
 transformation_expression: >
   decode(status_cd, 'A', 'active', 'S', 'suspended', 'T', 'terminated')
 mapping_coverage_status: derived
@@ -853,17 +855,17 @@ External dataset
 - lifecycle status;
 - entity-level mapping или technical-only exception.
 
-### 9.2. Physical field
+### 9.2. Schema node (DataStructure)
 
-Каждый PhysicalField должен иметь:
+Каждый SchemaNode должен иметь:
 
-- parent TechnicalAsset;
-- native name;
-- native type;
-- nullability/required semantics;
-- lifecycle status, если применимо;
-- mapping coverage status;
-- mapping на logical attribute, expression или documented exception.
+- parent DataStructure (`structure_id` + `local_key`);
+- `node_kind` (scalar / object / array / …);
+- native name и native type (для scalar) либо children/item_node;
+- nullability/required / occurs semantics;
+- lifecycle status носителя, если применимо;
+- mapping coverage status на связанном FieldMapping;
+- FieldMapping на LogicalAttribute, expression или documented exception.
 
 ### 9.3. Entity-level mapping
 
@@ -893,7 +895,7 @@ mapping_coverage_status: mapped
 
 Attribute-level mapping доказывает, как physical field соотносится с logical attribute.
 
-`PDM-004` считается выполненным, если PhysicalField:
+`PDM-004` считается выполненным, если SchemaNode (через FieldMapping):
 
 - участвует в mapping на LogicalAttribute;
 - и/или участвует в documented transformation expression;
@@ -1111,7 +1113,7 @@ XOR допустим, только когда два значения не мо�
 ```text
 declared owner override + inherited effective owner
 conceptual_entity_refs + alignment_rationale
-physical_field_ref + transformation_expression
+SchemaNodeRef (FieldMapping) + transformation_expression
 ```
 
 Корректные паттерны:
@@ -1281,7 +1283,7 @@ Solution Data Model
 4. Установить conceptual alignment:
    aligned / pending / local-only / not-applicable.
 
-5. Описать TechnicalAsset и PhysicalField для известной реализации.
+5. Описать TechnicalAsset и DataStructure/SchemaNode для известной реализации.
 
 6. Добавить entity-level и attribute-level mappings.
 

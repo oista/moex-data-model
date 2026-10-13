@@ -31,7 +31,7 @@ Target directory (filling runs for this mission):
 | `Attributes.csv` | **yes** | logical attributes |
 | `Relationships.csv` | no | logical relationships |
 | `DataCarriers.csv` | no | technical asset (DataCarrier)s |
-| `PhysicalFields.csv` | no | physical fields |
+| `StructureFields.csv` | no | schema nodes (structure fields) |
 | `Mappings.csv` | no | logical↔physical mappings |
 | `gaps.md` | agent deliverable | omissions / conflicts / unmapped facts |
 | `Conceptual.csv` | **out of scope** | do **not** create |
@@ -134,7 +134,7 @@ name,title,description,asset_kind,qualified_name,technology,system_ref,direction
 **do not write the row**. List the candidate object in `gaps.md` with missing
 fields named.
 
-### 2.5 `PhysicalFields.csv`
+### 2.5 `StructureFields.csv`
 
 ```
 object,name,description,native_name,native_type,required,schema_path
@@ -310,7 +310,7 @@ missing. Every skipped inventable-looking value must state why it was not filled
 2. `Entities.name` unique; non-empty.
 3. Every `Attributes.entity` ∈ Entities; `(entity,name)` unique.
 4. Every `Relationships.source`/`target` ∈ Entities; `name` unique when file present.
-5. Every `PhysicalFields.object` ∈ DataCarriers written rows.
+5. Every `StructureFields.object` ∈ DataCarriers written rows.
 6. Every mapping token resolves per §6.
 7. No `Conceptual.csv`.
 8. No fabricated `system_ref` / `structure_ref` / cardinalities / mappings.
