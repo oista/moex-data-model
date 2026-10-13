@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-044: ModelElement decomposition
 
 **Date:** 2026-10-06  
-**Status:** Accepted — `moex-base` mixins and Mapping→IdentifiedElement landed (schema through 3.0.0+). Deferred: selection/binding helpers still ModelElement; VersionedArtifact (D6); redundant-mixin lint.
+**Status:** Accepted — `moex-base` mixins and Mapping→IdentifiedElement landed (schema through 3.0.0+). Redundant-mixin lint and description allowlist gate live in `tools/architecture-check`. Deferred: selection/binding helpers still ModelElement; VersionedArtifact (D6).
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Related:** [ADR-023](ADR-023-governed-property-cascade.md), [ADR-025](ADR-025-definition-cascade-and-glossary.md), [ADR-038](ADR-038-datastructure-and-schemanode.md), [ADR-040](ADR-040-message-integration-model.md)  
 **Inventory:** [model-element-inventory-report.md](../architecture/model-element-inventory-report.md), [model-element-matrix-before.csv](../architecture/model-element-matrix-before.csv)
@@ -115,6 +115,31 @@ New classes/mixins are **not** added to `moex-structure` (ADR-040 core↔structu
 - Architecture-check gains an allowlist for `slot_usage.description` (PR-2); list must not grow without an ADR note.
 - Duplicate ADR-034 / ADR-035 numbering is out of scope here (handled by `chore/adr-renumber-phase1-tail` → ADR-042 / ADR-043).
 - Frontmatter `superseded_by: MODELING_ARCHITECTURE.md` on Accepted ADRs was cleared in audit Wave B1 (`superseded_by: []`).
+- Audit Wave C1: `tools/architecture-check` runs `check_redundant_mixins` and requires every allowlist class to be listed below before code allowlist growth.
+
+## Description slot_usage allowlist
+
+Classes permitted to declare `slot_usage.description` (must match
+`DESCRIPTION_SLOT_USAGE_ALLOWLIST` in `tools/architecture-check`):
+
+- `HasDefinition` — canonical softened definition + skos:definition exact_mappings
+- `ModelPackage` — D1 required description
+- `DomainContext` — D1 required description
+- `TechnicalAsset` — quantum / CDE invariant required description
+- `ConceptualDomain` — preserve pre-ADR-044 required
+- `DataType` — preserve pre-ADR-044 required
+- `ValueDomain` — preserve pre-ADR-044 required
+- `DataFlow` — preserve pre-ADR-044 required
+- `DataFlowEntityBinding` — preserve pre-ADR-044 required
+- `DataModelBinding` — preserve pre-ADR-044 required
+- `ModelSelection` — preserve pre-ADR-044 required
+- `SelectedEntity` — preserve pre-ADR-044 required
+- `SelectedAttribute` — preserve pre-ADR-044 required
+- `Metric` — preserve pre-ADR-044 required
+- `Dimension` — preserve pre-ADR-044 required
+- `SpecificationRequirement` — preserve pre-ADR-044 required
+- `DataStructure` — D1 recommended description
+- `Mapping` — D3 optional description (IdentifiedElement; identity slots removed in 3.0.0)
 
 ## Spike results (PR-0, LinkML 1.11.1)
 

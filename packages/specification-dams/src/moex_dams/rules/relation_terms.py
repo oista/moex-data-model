@@ -20,11 +20,16 @@ def _diag(
     subject: str | None,
     *,
     remediation: str | None = None,
+    invariant_id: str | None = None,
 ) -> Diagnostic:
     parts = [message]
     details: list[DiagnosticDetail] = [
         DiagnosticDetail(detail_key="finding", detail_value=message)
     ]
+    if invariant_id:
+        details.append(
+            DiagnosticDetail(detail_key="invariant_id", detail_value=str(invariant_id))
+        )
     if remediation and str(remediation).strip():
         parts.append(f"Remediation: {remediation}")
         details.append(
@@ -99,14 +104,15 @@ def check_relation_terms(data: dict[str, Any]) -> list[Diagnostic]:
         if not symmetric and not (isinstance(inverse, str) and inverse.strip()):
             out.append(
                 _diag(
-                    "DAMS-CM-RELTERM-002",
+                    "DAMS-INV-044",
                     DiagnosticSeverity.ERROR,
                     (
                         f'RelationTerm "{tid}" is not symmetric and requires '
                         "inverse_label."
                     ),
                     tid,
-                    remediation="Set inverse_label or mark symmetric: true.",
+                    remediation="Set inverse_label or mark symmetric: true. INV-044.",
+                    invariant_id="INV-044",
                 )
             )
 

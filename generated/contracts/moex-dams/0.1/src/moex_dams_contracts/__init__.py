@@ -34,7 +34,7 @@ from pydantic import (
 
 
 metamodel_version = "1.11.0"
-version = "4.0.0"
+version = "4.1.0"
 
 
 class ConfiguredBaseModel(BaseModel):
@@ -418,6 +418,10 @@ class GovernanceClassificationEnum(str, Enum):
 
 
 class LogicalDataTypeEnum(str, Enum):
+    """
+    Seed catalog only (ADR-036). Not the range of LogicalAttribute. Prefer DataType registry objects. Deprecated Wave C4.
+
+    """
     string = "string"
     integer = "integer"
     decimal = "decimal"
@@ -1607,8 +1611,10 @@ class Mapping(HasProvenance, HasLifecycle, DescribedElement, IdentifiedElement):
     target_refs: Optional[list[str]] = Field(default=None, min_length=1)
     mapping_type: MappingTypeEnum = Field(default=...)
     mapping_cardinality: MappingCardinalityEnum = Field(default=...)
-    transformation_ref: Optional[str] = Field(default=None)
-    transformation_expression: Optional[str] = Field(default=None)
+    transformation_ref: Optional[str] = Field(default=None, description="""Hook without Transformation mapping type (ADR-046 removed transformation enum). Deprecated Wave C4 pending design-lineage ADR; do not author.
+""")
+    transformation_expression: Optional[str] = Field(default=None, description="""Hook without Transformation mapping type. Deprecated Wave C4 pending design-lineage ADR; do not author.
+""")
     confidence: Optional[Decimal] = Field(default=None, ge=0, le=1)
     description: Optional[str] = Field(default=None)
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
@@ -1625,15 +1631,17 @@ class Mapping(HasProvenance, HasLifecycle, DescribedElement, IdentifiedElement):
 
 class RealizesMapping(Mapping):
     """
-    Solution logical entity realizes an enterprise conceptual entity (ADR-046). Designator via L1 rule (not equals_string on enum slot). source_refs narrowed to LogicalEntity in PR-1; ConceptualEntity via any_of deferred if needed.
+    Solution logical entity realizes an enterprise conceptual entity (ADR-046). Designator via L1 rule (not equals_string on enum slot). source_refs: LogicalEntity or ConceptualEntity (Wave C4; matches L2 INV-035).
 
     """
     source_refs: Optional[list[str]] = Field(default=None, min_length=1)
     target_refs: Optional[list[str]] = Field(default=None, min_length=1)
     mapping_type: MappingTypeEnum = Field(default=...)
     mapping_cardinality: MappingCardinalityEnum = Field(default=...)
-    transformation_ref: Optional[str] = Field(default=None)
-    transformation_expression: Optional[str] = Field(default=None)
+    transformation_ref: Optional[str] = Field(default=None, description="""Hook without Transformation mapping type (ADR-046 removed transformation enum). Deprecated Wave C4 pending design-lineage ADR; do not author.
+""")
+    transformation_expression: Optional[str] = Field(default=None, description="""Hook without Transformation mapping type. Deprecated Wave C4 pending design-lineage ADR; do not author.
+""")
     confidence: Optional[Decimal] = Field(default=None, ge=0, le=1)
     description: Optional[str] = Field(default=None)
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
@@ -1657,8 +1665,10 @@ class EntityPhysicalMapping(Mapping):
     target_refs: Optional[list[str]] = Field(default=None, min_length=1, max_length=1)
     mapping_type: MappingTypeEnum = Field(default=...)
     mapping_cardinality: MappingCardinalityEnum = Field(default=...)
-    transformation_ref: Optional[str] = Field(default=None)
-    transformation_expression: Optional[str] = Field(default=None)
+    transformation_ref: Optional[str] = Field(default=None, description="""Hook without Transformation mapping type (ADR-046 removed transformation enum). Deprecated Wave C4 pending design-lineage ADR; do not author.
+""")
+    transformation_expression: Optional[str] = Field(default=None, description="""Hook without Transformation mapping type. Deprecated Wave C4 pending design-lineage ADR; do not author.
+""")
     confidence: Optional[Decimal] = Field(default=None, ge=0, le=1)
     description: Optional[str] = Field(default=None)
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
@@ -1682,8 +1692,10 @@ class FieldMapping(Mapping):
     target_refs: Optional[list[str]] = Field(default=None, min_length=1)
     mapping_type: MappingTypeEnum = Field(default=...)
     mapping_cardinality: MappingCardinalityEnum = Field(default=...)
-    transformation_ref: Optional[str] = Field(default=None)
-    transformation_expression: Optional[str] = Field(default=None)
+    transformation_ref: Optional[str] = Field(default=None, description="""Hook without Transformation mapping type (ADR-046 removed transformation enum). Deprecated Wave C4 pending design-lineage ADR; do not author.
+""")
+    transformation_expression: Optional[str] = Field(default=None, description="""Hook without Transformation mapping type. Deprecated Wave C4 pending design-lineage ADR; do not author.
+""")
     confidence: Optional[Decimal] = Field(default=None, ge=0, le=1)
     description: Optional[str] = Field(default=None)
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
@@ -1707,8 +1719,10 @@ class AlignsWithMapping(Mapping):
     target_refs: Optional[list[str]] = Field(default=None, min_length=1)
     mapping_type: MappingTypeEnum = Field(default=...)
     mapping_cardinality: MappingCardinalityEnum = Field(default=...)
-    transformation_ref: Optional[str] = Field(default=None)
-    transformation_expression: Optional[str] = Field(default=None)
+    transformation_ref: Optional[str] = Field(default=None, description="""Hook without Transformation mapping type (ADR-046 removed transformation enum). Deprecated Wave C4 pending design-lineage ADR; do not author.
+""")
+    transformation_expression: Optional[str] = Field(default=None, description="""Hook without Transformation mapping type. Deprecated Wave C4 pending design-lineage ADR; do not author.
+""")
     confidence: Optional[Decimal] = Field(default=None, ge=0, le=1)
     description: Optional[str] = Field(default=None)
     lifecycle_status: LifecycleStatusEnum = Field(default=...)
@@ -1766,7 +1780,8 @@ class TechnicalAsset(ModelElement, HasPolicyBindings, HasGovernanceClassificatio
     asset_namespace: str = Field(default=..., description="""Пространство имён источника по аналогии с OpenLineage namespace (например postgres://host:5432, kafka://cluster, s3://bucket). Отдельный слот от DomainContext.namespace (ADR-B).
 """)
     qualified_name: str = Field(default=...)
-    native_name: Optional[str] = Field(default=None)
+    native_name: Optional[str] = Field(default=None, description="""Orphan slot (no class lists it). Deprecated Wave C4; do not use. Prefer SchemaNode / TechnicalAsset native naming slots in their modules.
+""")
     system_ref: str = Field(default=...)
     parent_ref: Optional[str] = Field(default=None, description="""Родитель в контейнерной иерархии (без циклов).""")
     technology: Optional[str] = Field(default=None)
@@ -1817,7 +1832,8 @@ class DataCarrier(TechnicalAsset, HasLocation, Contains, HasStructure):
     asset_namespace: str = Field(default=..., description="""Пространство имён источника по аналогии с OpenLineage namespace (например postgres://host:5432, kafka://cluster, s3://bucket). Отдельный слот от DomainContext.namespace (ADR-B).
 """)
     qualified_name: str = Field(default=...)
-    native_name: Optional[str] = Field(default=None)
+    native_name: Optional[str] = Field(default=None, description="""Orphan slot (no class lists it). Deprecated Wave C4; do not use. Prefer SchemaNode / TechnicalAsset native naming slots in their modules.
+""")
     system_ref: str = Field(default=...)
     parent_ref: Optional[str] = Field(default=None, description="""Родитель в контейнерной иерархии (без циклов).""")
     technology: Optional[str] = Field(default=None)
@@ -1871,7 +1887,8 @@ class AccessPoint(TechnicalAsset, HasLocation, HasProtocolBinding):
     asset_namespace: str = Field(default=..., description="""Пространство имён источника по аналогии с OpenLineage namespace (например postgres://host:5432, kafka://cluster, s3://bucket). Отдельный слот от DomainContext.namespace (ADR-B).
 """)
     qualified_name: str = Field(default=...)
-    native_name: Optional[str] = Field(default=None)
+    native_name: Optional[str] = Field(default=None, description="""Orphan slot (no class lists it). Deprecated Wave C4; do not use. Prefer SchemaNode / TechnicalAsset native naming slots in their modules.
+""")
     system_ref: str = Field(default=...)
     parent_ref: Optional[str] = Field(default=None, description="""Родитель в контейнерной иерархии (без циклов).""")
     technology: Optional[str] = Field(default=None)
@@ -1913,7 +1930,8 @@ class DataContainer(TechnicalAsset, Contains):
     asset_namespace: str = Field(default=..., description="""Пространство имён источника по аналогии с OpenLineage namespace (например postgres://host:5432, kafka://cluster, s3://bucket). Отдельный слот от DomainContext.namespace (ADR-B).
 """)
     qualified_name: str = Field(default=...)
-    native_name: Optional[str] = Field(default=None)
+    native_name: Optional[str] = Field(default=None, description="""Orphan slot (no class lists it). Deprecated Wave C4; do not use. Prefer SchemaNode / TechnicalAsset native naming slots in their modules.
+""")
     system_ref: str = Field(default=...)
     parent_ref: Optional[str] = Field(default=None, description="""Родитель в контейнерной иерархии (без циклов).""")
     technology: Optional[str] = Field(default=None)
@@ -1956,7 +1974,8 @@ class ExecutionAsset(TechnicalAsset):
     asset_namespace: str = Field(default=..., description="""Пространство имён источника по аналогии с OpenLineage namespace (например postgres://host:5432, kafka://cluster, s3://bucket). Отдельный слот от DomainContext.namespace (ADR-B).
 """)
     qualified_name: str = Field(default=...)
-    native_name: Optional[str] = Field(default=None)
+    native_name: Optional[str] = Field(default=None, description="""Orphan slot (no class lists it). Deprecated Wave C4; do not use. Prefer SchemaNode / TechnicalAsset native naming slots in their modules.
+""")
     system_ref: str = Field(default=...)
     parent_ref: Optional[str] = Field(default=None, description="""Родитель в контейнерной иерархии (без циклов).""")
     technology: Optional[str] = Field(default=None)
@@ -2187,12 +2206,14 @@ class SchemaNode(EmbeddedElement):
     Узел дерева структуры. Идентичность (DataStructure.element_id, local_key). Рёбра children/item_node — строки local_key (плоская форма, ADR-038). Форма и физика в одном узле (как ODCS).
 
     """
-    native_name: Optional[str] = Field(default=None)
+    native_name: Optional[str] = Field(default=None, description="""Orphan slot (no class lists it). Deprecated Wave C4; do not use. Prefer SchemaNode / TechnicalAsset native naming slots in their modules.
+""")
     node_kind: SchemaNodeKindEnum = Field(default=..., description="""Вид узла (scalar, object, array, map, union, enum, reference).""")
     children: Optional[list[str]] = Field(default=None, description="""local_key дочерних узлов (object / union).""")
     item_node: Optional[str] = Field(default=None, description="""local_key узла элемента массива или значения map.""")
     data_type_ref: Optional[str] = Field(default=None, description="""Ссылка на корпоративный DataType.""")
-    native_type: Optional[str] = Field(default=None)
+    native_type: Optional[str] = Field(default=None, description="""Orphan slot (no class lists it). Deprecated Wave C4; do not use. Prefer DataType / NativeTypeBinding / SchemaNode.native_type.
+""")
     nullable: Optional[bool] = Field(default=None, description="""Допустимость null (отдельно от required).""")
     required: Optional[bool] = Field(default=None)
     min_occurs: Optional[int] = Field(default=None, description="""Минимальная кратность.""", ge=0)

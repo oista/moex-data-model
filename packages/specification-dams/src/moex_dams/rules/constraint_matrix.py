@@ -31,6 +31,11 @@ DIAGNOSTIC_CODE_ALIASES: dict[str, frozenset[str]] = {
     "INV-026": frozenset({"MOEX-ONT-004"}),
     "INV-033": frozenset({"DAMS-REQ-PDM-009.c1"}),
     "INV-034": frozenset({"DAMS-REQ-PDM-009.c2"}),
+    "INV-042": frozenset({"DAMS-LEVEL-004", "DAMS-LEVEL-005"}),
+    "INV-043": frozenset({"DAMS-CM-GENESIS-001", "DAMS-CM-GENESIS-002"}),
+    "INV-044": frozenset({"DAMS-CM-RELTERM-002"}),
+    "INV-047": frozenset({"DAMS-REQ-PDM-006.c1", "DAMS-REQ-PDM-006.c2"}),
+    "INV-052": frozenset({"DAMS-STRUCT-005"}),
 }
 
 
@@ -270,13 +275,21 @@ def _collect_invariant_ids(diags: list[Any]) -> set[str]:
 def _run_l2_package_checks(data: dict[str, Any]) -> list[Any]:
     """Run L2 package checks once (technical_assets already includes data_structures)."""
     from moex_dams.rules.catalog_topology import check_catalog_topology
+    from moex_dams.rules.conceptual_entity import check_conceptual_entities
+    from moex_dams.rules.package_invariants import check_package_invariants
+    from moex_dams.rules.relation_terms import check_relation_terms
     from moex_dams.rules.semantic_layer import check_semantic_layer
+    from moex_dams.rules.structural import check_structural_data
     from moex_dams.rules.technical_assets import check_technical_assets
 
     diags: list[Any] = []
     diags.extend(check_semantic_layer(data))
     diags.extend(check_technical_assets(data))
     diags.extend(check_catalog_topology(data, repo_root=repo_root()))
+    diags.extend(check_conceptual_entities(data))
+    diags.extend(check_relation_terms(data))
+    diags.extend(check_structural_data(data))
+    diags.extend(check_package_invariants(data))
     return diags
 
 

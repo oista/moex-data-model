@@ -185,3 +185,25 @@ superseded_by: []
 
 **Стало строже:** entity_physical / field_mapping проверяют направление концов, не только
 наличие пары классов; realizes / aligns_with покрыты явными INV.
+
+## Audit Wave C: validation hardening (INV-042..053)
+
+**Добавлено**
+
+- INV-042..051 (L2): solution scope refs, genesis, inverse_label, attribute
+  cardinality bounds, parent_concept_ref cycles, TechnicalAsset parent_ref cycles,
+  selection attribute closure, binding compatibility baseline, package-local
+  element_id uniqueness, mapping_cardinality vs endpoint counts.
+- INV-052 (L2, ADR-050): `owner_entity_ref` must equal containing LogicalEntity
+  (was warning `DAMS-STRUCT-005`, now error).
+- INV-053 (L2): Relationship ends resolve to ConceptualEntity|LogicalEntity.
+- `moex_dams.rules.package_invariants` + L2 runner wiring (conceptual/relation/
+  structural checks).
+- Architecture-check: redundant mixin lint + ADR-044 description allowlist gate.
+
+**Стало строже:** mismatch `owner_entity_ref` is error; audit prose gaps above are
+matrix-tagged with negative fixtures.
+
+**Схема (minor 4.1.0):** RealizesMapping `source_refs` any_of LogicalEntity|
+ConceptualEntity; deprecated orphan `native_name`/`native_type` and
+`transformation_*` hooks; `LogicalDataTypeEnum` marked deprecated.

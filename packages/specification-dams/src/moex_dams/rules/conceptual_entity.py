@@ -24,11 +24,16 @@ def _diag(
     subject: str | None,
     *,
     remediation: str | None = None,
+    invariant_id: str | None = None,
 ) -> Diagnostic:
     parts = [message]
     details: list[DiagnosticDetail] = [
         DiagnosticDetail(detail_key="finding", detail_value=message)
     ]
+    if invariant_id:
+        details.append(
+            DiagnosticDetail(detail_key="invariant_id", detail_value=str(invariant_id))
+        )
     if remediation and str(remediation).strip():
         parts.append(f"Remediation: {remediation}")
         details.append(
@@ -240,27 +245,34 @@ def check_conceptual_entities(data: dict[str, Any]) -> list[Diagnostic]:
         if genesis == "external" and not has_ext:
             out.append(
                 _diag(
-                    "DAMS-CM-GENESIS-001",
+                    "DAMS-INV-043",
                     DiagnosticSeverity.ERROR,
                     (
                         f'ConceptualEntity "{eid}" has genesis_kind=external but '
                         "no external_class_refs."
                     ),
                     eid,
-                    remediation="Add at least one ExternalClassRef or set genesis_kind=native.",
+                    remediation=(
+                        "Add at least one ExternalClassRef or set genesis_kind=native. "
+                        "INV-043."
+                    ),
+                    invariant_id="INV-043",
                 )
             )
         elif genesis == "native" and has_ext:
             out.append(
                 _diag(
-                    "DAMS-CM-GENESIS-002",
+                    "DAMS-INV-043",
                     DiagnosticSeverity.ERROR,
                     (
                         f'ConceptualEntity "{eid}" has genesis_kind=native but '
                         "declares external_class_refs."
                     ),
                     eid,
-                    remediation="Clear external_class_refs or set genesis_kind=external.",
+                    remediation=(
+                        "Clear external_class_refs or set genesis_kind=external. INV-043."
+                    ),
+                    invariant_id="INV-043",
                 )
             )
         elif genesis is None and has_ext:

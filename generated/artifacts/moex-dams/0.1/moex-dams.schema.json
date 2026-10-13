@@ -174,6 +174,7 @@
                     "type": "string"
                 },
                 "native_name": {
+                    "description": "Orphan slot (no class lists it). Deprecated Wave C4; do not use. Prefer SchemaNode / TechnicalAsset native naming slots in their modules.\n",
                     "type": [
                         "string",
                         "null"
@@ -433,12 +434,14 @@
                     ]
                 },
                 "transformation_expression": {
+                    "description": "Hook without Transformation mapping type. Deprecated Wave C4 pending design-lineage ADR; do not author.\n",
                     "type": [
                         "string",
                         "null"
                     ]
                 },
                 "transformation_ref": {
+                    "description": "Hook without Transformation mapping type (ADR-046 removed transformation enum). Deprecated Wave C4 pending design-lineage ADR; do not author.\n",
                     "format": "uri",
                     "type": [
                         "string",
@@ -1459,6 +1462,7 @@
                     "type": "string"
                 },
                 "native_name": {
+                    "description": "Orphan slot (no class lists it). Deprecated Wave C4; do not use. Prefer SchemaNode / TechnicalAsset native naming slots in their modules.\n",
                     "type": [
                         "string",
                         "null"
@@ -1747,6 +1751,7 @@
                     "type": "string"
                 },
                 "native_name": {
+                    "description": "Orphan slot (no class lists it). Deprecated Wave C4; do not use. Prefer SchemaNode / TechnicalAsset native naming slots in their modules.\n",
                     "type": [
                         "string",
                         "null"
@@ -3227,12 +3232,14 @@
                     ]
                 },
                 "transformation_expression": {
+                    "description": "Hook without Transformation mapping type. Deprecated Wave C4 pending design-lineage ADR; do not author.\n",
                     "type": [
                         "string",
                         "null"
                     ]
                 },
                 "transformation_ref": {
+                    "description": "Hook without Transformation mapping type (ADR-046 removed transformation enum). Deprecated Wave C4 pending design-lineage ADR; do not author.\n",
                     "format": "uri",
                     "type": [
                         "string",
@@ -3387,6 +3394,7 @@
                     "type": "string"
                 },
                 "native_name": {
+                    "description": "Orphan slot (no class lists it). Deprecated Wave C4; do not use. Prefer SchemaNode / TechnicalAsset native naming slots in their modules.\n",
                     "type": [
                         "string",
                         "null"
@@ -3712,12 +3720,14 @@
                     ]
                 },
                 "transformation_expression": {
+                    "description": "Hook without Transformation mapping type. Deprecated Wave C4 pending design-lineage ADR; do not author.\n",
                     "type": [
                         "string",
                         "null"
                     ]
                 },
                 "transformation_ref": {
+                    "description": "Hook without Transformation mapping type (ADR-046 removed transformation enum). Deprecated Wave C4 pending design-lineage ADR; do not author.\n",
                     "format": "uri",
                     "type": [
                         "string",
@@ -4791,7 +4801,7 @@
             "type": "object"
         },
         "LogicalDataTypeEnum": {
-            "description": "",
+            "description": "Seed catalog only (ADR-036). Not the range of LogicalAttribute. Prefer DataType registry objects. Deprecated Wave C4.",
             "enum": [
                 "string",
                 "integer",
@@ -5248,12 +5258,14 @@
                     ]
                 },
                 "transformation_expression": {
+                    "description": "Hook without Transformation mapping type. Deprecated Wave C4 pending design-lineage ADR; do not author.\n",
                     "type": [
                         "string",
                         "null"
                     ]
                 },
                 "transformation_ref": {
+                    "description": "Hook without Transformation mapping type (ADR-046 removed transformation enum). Deprecated Wave C4 pending design-lineage ADR; do not author.\n",
                     "format": "uri",
                     "type": [
                         "string",
@@ -6417,7 +6429,7 @@
         },
         "RealizesMapping": {
             "additionalProperties": false,
-            "description": "Solution logical entity realizes an enterprise conceptual entity (ADR-046). Designator via L1 rule (not equals_string on enum slot). source_refs narrowed to LogicalEntity in PR-1; ConceptualEntity via any_of deferred if needed.",
+            "description": "Solution logical entity realizes an enterprise conceptual entity (ADR-046). Designator via L1 rule (not equals_string on enum slot). source_refs: LogicalEntity or ConceptualEntity (Wave C4; matches L2 INV-035).",
             "if": {
                 "properties": {
                     "mapping_type": {}
@@ -6494,6 +6506,14 @@
                 },
                 "source_refs": {
                     "items": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ],
                         "type": "string"
                     },
                     "minItems": 1,
@@ -6513,12 +6533,14 @@
                     ]
                 },
                 "transformation_expression": {
+                    "description": "Hook without Transformation mapping type. Deprecated Wave C4 pending design-lineage ADR; do not author.\n",
                     "type": [
                         "string",
                         "null"
                     ]
                 },
                 "transformation_ref": {
+                    "description": "Hook without Transformation mapping type (ADR-046 removed transformation enum). Deprecated Wave C4 pending design-lineage ADR; do not author.\n",
                     "format": "uri",
                     "type": [
                         "string",
@@ -7300,12 +7322,14 @@
                     ]
                 },
                 "native_name": {
+                    "description": "Orphan slot (no class lists it). Deprecated Wave C4; do not use. Prefer SchemaNode / TechnicalAsset native naming slots in their modules.\n",
                     "type": [
                         "string",
                         "null"
                     ]
                 },
                 "native_type": {
+                    "description": "Orphan slot (no class lists it). Deprecated Wave C4; do not use. Prefer DataType / NativeTypeBinding / SchemaNode.native_type.\n",
                     "type": [
                         "string",
                         "null"
@@ -7914,6 +7938,7 @@
                     "type": "string"
                 },
                 "native_name": {
+                    "description": "Orphan slot (no class lists it). Deprecated Wave C4; do not use. Prefer SchemaNode / TechnicalAsset native naming slots in their modules.\n",
                     "type": [
                         "string",
                         "null"
@@ -8492,5 +8517,5 @@
     ],
     "title": "moex_dams",
     "type": "object",
-    "version": "4.0.0"
+    "version": "4.1.0"
 }

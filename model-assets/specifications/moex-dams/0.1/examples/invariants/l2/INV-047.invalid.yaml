@@ -1,0 +1,23 @@
+element_id: dams:model/inv047bad
+implementation_scope: solution
+solution_ref: eam:solution/X
+conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
+data_carriers:
+- element_id: dams:physical/inv047bad/a
+  name: a
+  description: a
+  lifecycle_status: active
+  system_ref: eam:system/X
+  asset_namespace: ns
+  qualified_name: a
+  asset_kind: relational_table
+  parent_ref: dams:physical/inv047bad/b
+- element_id: dams:physical/inv047bad/b
+  name: b
+  description: b
+  lifecycle_status: active
+  system_ref: eam:system/X
+  asset_namespace: ns
+  qualified_name: b
+  asset_kind: relational_table
+  parent_ref: dams:physical/inv047bad/a

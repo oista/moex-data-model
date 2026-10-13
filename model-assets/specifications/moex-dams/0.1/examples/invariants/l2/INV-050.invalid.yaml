@@ -1,0 +1,14 @@
+element_id: dams:model/inv050bad
+name: inv050bad
+description: bad
+lifecycle_status: active
+implementation_scope: enterprise
+conceptual_entities:
+- element_id: dams:concept/inv050bad/DUP
+  name: A
+  description: a
+  lifecycle_status: active
+- element_id: dams:concept/inv050bad/DUP
+  name: B
+  description: b
+  lifecycle_status: active

@@ -1,0 +1,42 @@
+element_id: dams:model/inv048bad
+implementation_scope: solution
+solution_ref: eam:solution/X
+conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
+logical_entities:
+- element_id: dams:logical/inv048bad/E
+  name: E
+  description: e
+  lifecycle_status: active
+  attributes:
+  - element_id: dams:logical/inv048bad/E/a
+    name: a
+    description: a
+    lifecycle_status: active
+    owner_entity_ref: dams:logical/inv048bad/E
+- element_id: dams:logical/inv048bad/F
+  name: F
+  description: f
+  lifecycle_status: active
+  attributes:
+  - element_id: dams:logical/inv048bad/F/b
+    name: b
+    description: b
+    lifecycle_status: active
+    owner_entity_ref: dams:logical/inv048bad/F
+selections:
+- element_id: dams:selection/inv048bad
+  name: sel
+  description: sel
+  lifecycle_status: active
+  selected_entities:
+  - element_id: dams:selection/inv048bad/E
+    name: E
+    description: e
+    lifecycle_status: active
+    logical_entity_ref: dams:logical/inv048bad/E
+    selected_attributes:
+    - element_id: dams:selection/inv048bad/E/wrong
+      name: wrong
+      description: wrong
+      lifecycle_status: active
+      logical_attribute_ref: dams:logical/inv048bad/F/b

@@ -1,0 +1,8 @@
+element_id: dams:model/inv043
+implementation_scope: enterprise
+conceptual_entities:
+- element_id: dams:concept/inv043/C
+  name: C
+  description: c
+  lifecycle_status: active
+  genesis_kind: native

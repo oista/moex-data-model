@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-12T21:55:24
+# Generation date: 2026-10-13T00:47:23
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -60,7 +60,7 @@ from linkml_runtime.linkml_model.types import Boolean, Datetime, Decimal, Intege
 from linkml_runtime.utils.metamodelcore import Bool, Decimal, URI, URIorCURIE, XSDDateTime
 
 metamodel_version = "1.11.0"
-version = "4.0.0"
+version = "4.1.0"
 
 # Namespaces
 DAMS = CurieNamespace('dams', 'https://data.moex.com/dams/')
@@ -2424,8 +2424,7 @@ class Mapping(IdentifiedElement):
 class RealizesMapping(Mapping):
     """
     Solution logical entity realizes an enterprise conceptual entity (ADR-046). Designator via L1 rule (not
-    equals_string on enum slot). source_refs narrowed to LogicalEntity in PR-1; ConceptualEntity via any_of deferred
-    if needed.
+    equals_string on enum slot). source_refs: LogicalEntity or ConceptualEntity (Wave C4; matches L2 INV-035).
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -2438,7 +2437,7 @@ class RealizesMapping(Mapping):
     mapping_type: Union[str, "MappingTypeEnum"] = None
     mapping_cardinality: Union[str, "MappingCardinalityEnum"] = None
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
-    source_refs: Optional[Union[Union[str, LogicalEntityElementId], list[Union[str, LogicalEntityElementId]]]] = empty_list()
+    source_refs: Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]] = empty_list()
     target_refs: Optional[Union[Union[str, ConceptualEntityElementId], list[Union[str, ConceptualEntityElementId]]]] = empty_list()
 
     def __post_init__(self, *_: str, **kwargs: Any):
@@ -2449,7 +2448,7 @@ class RealizesMapping(Mapping):
 
         if not isinstance(self.source_refs, list):
             self.source_refs = [self.source_refs] if self.source_refs is not None else []
-        self.source_refs = [v if isinstance(v, LogicalEntityElementId) else LogicalEntityElementId(v) for v in self.source_refs]
+        self.source_refs = [v if isinstance(v, URIorCURIE) else URIorCURIE(v) for v in self.source_refs]
 
         if not isinstance(self.target_refs, list):
             self.target_refs = [self.target_refs] if self.target_refs is not None else []
@@ -4861,7 +4860,10 @@ class GovernanceClassificationEnum(EnumDefinitionImpl):
     )
 
 class LogicalDataTypeEnum(EnumDefinitionImpl):
-
+    """
+    Seed catalog only (ADR-036). Not the range of LogicalAttribute. Prefer DataType registry objects. Deprecated Wave
+    C4.
+    """
     string = LinkMLPermissibleValue(text="string")
     integer = LinkMLPermissibleValue(text="integer")
     decimal = LinkMLPermissibleValue(text="decimal")
@@ -4876,6 +4878,7 @@ class LogicalDataTypeEnum(EnumDefinitionImpl):
 
     _defn = EnumDefinition(
         name="LogicalDataTypeEnum",
+        description="""Seed catalog only (ADR-036). Not the range of LogicalAttribute. Prefer DataType registry objects. Deprecated Wave C4.""",
     )
 
 class FlowDirectionEnum(EnumDefinitionImpl):
@@ -6455,7 +6458,7 @@ slots.Mapping_description = Slot(uri=DAMS.description, name="Mapping_description
                    model_uri=DAMS.Mapping_description, domain=Mapping, range=Optional[str])
 
 slots.RealizesMapping_source_refs = Slot(uri=DAMS.source_refs, name="RealizesMapping_source_refs", curie=DAMS.curie('source_refs'),
-                   model_uri=DAMS.RealizesMapping_source_refs, domain=RealizesMapping, range=Optional[Union[Union[str, LogicalEntityElementId], list[Union[str, LogicalEntityElementId]]]])
+                   model_uri=DAMS.RealizesMapping_source_refs, domain=RealizesMapping, range=Optional[Union[Union[str, URIorCURIE], list[Union[str, URIorCURIE]]]])
 
 slots.RealizesMapping_target_refs = Slot(uri=DAMS.target_refs, name="RealizesMapping_target_refs", curie=DAMS.curie('target_refs'),
                    model_uri=DAMS.RealizesMapping_target_refs, domain=RealizesMapping, range=Optional[Union[Union[str, ConceptualEntityElementId], list[Union[str, ConceptualEntityElementId]]]])

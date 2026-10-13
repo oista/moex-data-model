@@ -1,0 +1,13 @@
+element_id: dams:model/inv043bad
+implementation_scope: enterprise
+conceptual_entities:
+- element_id: dams:concept/inv043bad/C
+  name: C
+  description: c
+  lifecycle_status: active
+  genesis_kind: native
+  external_class_refs:
+  - external_class_ref_id: dams:extref/inv043bad
+    target_ref: fibo:Thing
+    match_kind: close
+    source_kind: ontology

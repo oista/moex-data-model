@@ -2,42 +2,69 @@
 
 from __future__ import annotations
 
-from moex_modeling import ConformancePhase, Diagnostic, DiagnosticSeverity
+from typing import Any
+
+from moex_modeling import (
+    ConformancePhase,
+    Diagnostic,
+    DiagnosticDetail,
+    DiagnosticSeverity,
+)
 from moex_standard_linkml.domain.body import LinkMLImplementationBody
 
 
-def check_structural(body: LinkMLImplementationBody) -> tuple[Diagnostic, ...]:
-    data = body.data
+def _struct_diag(
+    *,
+    code: str,
+    message: str,
+    subject: str | None,
+    severity: DiagnosticSeverity = DiagnosticSeverity.ERROR,
+    invariant_id: str | None = None,
+) -> Diagnostic:
+    details: list[DiagnosticDetail] = [
+        DiagnosticDetail(detail_key="finding", detail_value=message)
+    ]
+    if invariant_id:
+        details.append(
+            DiagnosticDetail(detail_key="invariant_id", detail_value=invariant_id)
+        )
+    return Diagnostic(
+        diagnostic_code=code,
+        severity=severity,
+        diagnostic_message=message,
+        conformance_phase=ConformancePhase.CORPORATE_SEMANTICS,
+        subject_ref=subject,
+        diagnostic_details=tuple(details),
+    )
+
+
+def check_structural_data(data: dict[str, Any]) -> list[Diagnostic]:
+    """Structural checks on a ModelPackage-shaped mapping (INV-052 owner equality)."""
     diagnostics: list[Diagnostic] = []
 
     if not data.get("element_id"):
         diagnostics.append(
-            Diagnostic(
-                diagnostic_code="DAMS-STRUCT-001",
-                severity=DiagnosticSeverity.ERROR,
-                diagnostic_message="ModelPackage requires element_id",
-                conformance_phase=ConformancePhase.CORPORATE_SEMANTICS,
-                subject_ref=body.source_path,
+            _struct_diag(
+                code="DAMS-STRUCT-001",
+                message="ModelPackage requires element_id",
+                subject=None,
             )
         )
     if not data.get("name"):
         diagnostics.append(
-            Diagnostic(
-                diagnostic_code="DAMS-STRUCT-002",
-                severity=DiagnosticSeverity.ERROR,
-                diagnostic_message="ModelPackage requires name",
-                conformance_phase=ConformancePhase.CORPORATE_SEMANTICS,
-                subject_ref=body.element_id,
+            _struct_diag(
+                code="DAMS-STRUCT-002",
+                message="ModelPackage requires name",
+                subject=str(data.get("element_id") or "") or None,
             )
         )
     if not data.get("model_version"):
         diagnostics.append(
-            Diagnostic(
-                diagnostic_code="DAMS-STRUCT-003",
+            _struct_diag(
+                code="DAMS-STRUCT-003",
+                message="ModelPackage missing model_version",
+                subject=str(data.get("element_id") or "") or None,
                 severity=DiagnosticSeverity.WARNING,
-                diagnostic_message="ModelPackage missing model_version",
-                conformance_phase=ConformancePhase.CORPORATE_SEMANTICS,
-                subject_ref=body.element_id,
             )
         )
 
@@ -56,15 +83,13 @@ def check_structural(body: LinkMLImplementationBody) -> tuple[Diagnostic, ...]:
         for key_ref in key_refs:
             if str(key_ref) not in attr_ids:
                 diagnostics.append(
-                    Diagnostic(
-                        diagnostic_code="DAMS-STRUCT-004",
-                        severity=DiagnosticSeverity.ERROR,
-                        diagnostic_message=(
+                    _struct_diag(
+                        code="DAMS-STRUCT-004",
+                        message=(
                             f"key_attribute_refs entry {key_ref!r} is not among "
                             f"attributes of {eid}"
                         ),
-                        conformance_phase=ConformancePhase.CORPORATE_SEMANTICS,
-                        subject_ref=str(eid) if eid else None,
+                        subject=str(eid) if eid else None,
                     )
                 )
 
@@ -74,16 +99,19 @@ def check_structural(body: LinkMLImplementationBody) -> tuple[Diagnostic, ...]:
             owner = attr.get("owner_entity_ref")
             if owner and eid and str(owner) != str(eid):
                 diagnostics.append(
-                    Diagnostic(
-                        diagnostic_code="DAMS-STRUCT-005",
-                        severity=DiagnosticSeverity.WARNING,
-                        diagnostic_message=(
+                    _struct_diag(
+                        code="DAMS-INV-052",
+                        message=(
                             f"attribute {attr.get('element_id')} owner_entity_ref "
                             f"{owner!r} differs from parent entity {eid}"
                         ),
-                        conformance_phase=ConformancePhase.CORPORATE_SEMANTICS,
-                        subject_ref=str(attr.get("element_id")),
+                        subject=str(attr.get("element_id")),
+                        invariant_id="INV-052",
                     )
                 )
 
-    return tuple(diagnostics)
+    return diagnostics
+
+
+def check_structural(body: LinkMLImplementationBody) -> tuple[Diagnostic, ...]:
+    return tuple(check_structural_data(body.data))

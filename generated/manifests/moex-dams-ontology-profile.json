@@ -4,10 +4,10 @@
   "generator_module": "moex_dams.application.ontology_report",
   "generator_version": "1.11.1",
   "schema_path": "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml",
-  "schema_digest": "sha256:c2d9c464fd641b7aa688e3fb5b6c3243ba801b85fb598b1dcfd7608b3c477953",
+  "schema_digest": "sha256:4ad6b075785b872569aedb0a5be4544ea8084d471406d0457482628c8af5c6a6",
   "output_path": "generated/artifacts/moex-dams/0.1/ontology-profile.json",
-  "content_digest": "sha256:f538db925f3efe13e6035259e442777697e451ee0041093783e27d4b8f5d9f8a",
-  "generated_at": "2026-10-12T18:55:43.529791+00:00",
+  "content_digest": "sha256:321740609ead93253af80e9bb5fcbdc1df351026c34d93c8887d4a419b08b757",
+  "generated_at": "2026-10-12T21:47:44.685693+00:00",
   "generator_options": {
     "digest_mode": "json_sorted"
   }
