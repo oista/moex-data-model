@@ -1,5 +1,13 @@
 # Changelog: Topology ownership (ADR-048)
 
+## Post-4.0.0 hygiene (R2-4)
+
+- Removed dual-read fallback in `effective_topology` (TopologyView only;
+  `source: missing` when no fact).
+- Removed unused `TOPOLOGY_SLOT_MAP` and authored-slot `topology_changed`
+  emission from `collect_drift` (enum value kept for a future previous-view check).
+- Explicit test: committed catalog-snapshot `digest` equals `canonical_digest()`.
+
 ## 4.0.0 (PR-5)
 
 Breaking:

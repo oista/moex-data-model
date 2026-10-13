@@ -8,16 +8,6 @@ from typing import Any
 from moex_dams.catalog.refs import parse_catalog_ref
 from moex_dams.catalog.snapshot import CatalogSnapshot
 
-# Authored topology slots still present during the deprecation window.
-TOPOLOGY_SLOT_MAP = {
-    "source_solution_ref": ("source", "solution_ref"),
-    "target_solution_ref": ("target", "solution_ref"),
-    "source_system_ref": ("source", "system_ref"),
-    "target_system_ref": ("target", "system_ref"),
-    "source_platform_ref": ("source", "platform_ref"),
-    "target_platform_ref": ("target", "platform_ref"),
-}
-
 
 @dataclass(frozen=True, slots=True)
 class DriftFinding:
@@ -140,24 +130,9 @@ def collect_drift(
             )
         )
 
-    derived = derived_topology(obj)
-    for slot, expected in derived.items():
-        authored = flow.get(slot)
-        if authored is None or authored == "" or expected is None:
-            continue
-        if str(authored) != str(expected):
-            findings.append(
-                DriftFinding(
-                    code="topology_changed",
-                    severity="warning",
-                    subject_ref=flow_id,
-                    message=(
-                        f"{slot} authored={authored!r} differs from "
-                        f"snapshot={expected!r}"
-                    ),
-                    catalog_revision=rev,
-                )
-            )
+    # topology_changed (authored slots vs snapshot) was dual-read only;
+    # after ADR-048 PR-5 DataFlow no longer carries topology slots.
+    # Enum value remains in moex-topology for a future previous-view check.
 
     ops = {
         str(op.get("operation_id"))

@@ -1,4 +1,4 @@
-"""Dual-read helper: TopologyView facts with fallback to deprecated DataFlow slots."""
+"""Read TopologyView facts for a DataFlow (ADR-048; dual-read window closed)."""
 
 from __future__ import annotations
 
@@ -61,44 +61,23 @@ def effective_topology(
     flow: dict[str, Any],
     view: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Return effective topology fields for a DataFlow.
+    """Return effective topology fields for a DataFlow from TopologyView only.
 
-    Prefer TopologyView fact when present; otherwise fall back to deprecated
-    authored slots on the flow (ADR-048 dual-read window).
+    Authored topology slots were removed in ADR-048 PR-5; there is no
+    deprecated-slot fallback. When the view has no fact for the flow,
+    ``source`` is ``"missing"`` and topology keys are omitted.
     """
     fact = _fact_for_flow(view, flow.get("element_id"))
     out: dict[str, Any] = {
         "flow_ref": flow.get("element_id"),
         "integration_ref": flow.get("integration_ref"),
-        "source": "topology_view" if fact else "authored_deprecated",
+        "source": "topology_view" if fact else "missing",
     }
-    if fact:
-        out["binding_status"] = fact.get("binding_status")
-        for key in TOPOLOGY_KEYS:
-            if key in fact and fact[key] is not None:
-                out[key] = fact[key]
+    if not fact:
         return out
 
+    out["binding_status"] = fact.get("binding_status")
     for key in TOPOLOGY_KEYS:
-        if key in flow and flow[key] is not None:
-            out[key] = flow[key]
+        if key in fact and fact[key] is not None:
+            out[key] = fact[key]
     return out
-
-
-def authored_vs_effective_mismatches(
-    flow: dict[str, Any],
-    view: dict[str, Any] | None,
-) -> list[str]:
-    """List topology slots where authored deprecated values disagree with the view."""
-    fact = _fact_for_flow(view, flow.get("element_id"))
-    if not fact:
-        return []
-    mismatches: list[str] = []
-    for key in TOPOLOGY_KEYS:
-        authored = flow.get(key)
-        derived = fact.get(key)
-        if authored is None or authored == "" or derived is None:
-            continue
-        if str(authored) != str(derived):
-            mismatches.append(key)
-    return mismatches

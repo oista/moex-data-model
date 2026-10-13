@@ -52,6 +52,17 @@ def test_load_repo_snapshot() -> None:
     assert snap.get("clinkr", "integration", "INT-00421") is not None
 
 
+def test_committed_snapshot_digest_matches_canonical() -> None:
+    """Committed fixture digest must equal canonical_digest(payload)."""
+    raw = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
+    declared = raw.get("digest")
+    assert isinstance(declared, str) and declared.startswith("sha256:")
+    assert declared == canonical_digest(raw)
+    # load_snapshot also rejects mismatches; round-trip through loader.
+    snap = load_snapshot(SNAPSHOT)
+    assert snap.digest == declared
+
+
 def test_duplicate_object_rejected(tmp_path: Path) -> None:
     data = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     data["objects"].append(dict(data["objects"][0]))
@@ -89,12 +100,14 @@ def test_stale_revision_warning() -> None:
     assert any(f.code == "stale_revision" and f.severity == "warning" for f in findings)
 
 
-def test_topology_changed_warning() -> None:
+def test_authored_topology_slots_do_not_emit_topology_changed() -> None:
+    """Post PR-5: leftover keys on flow YAML are ignored (no dual-read)."""
     snap = load_snapshot(SNAPSHOT)
     flow = yaml.safe_load(FLOW.read_text(encoding="utf-8"))
     flow["source_system_ref"] = "eam:system/OTHER"
-    findings, _ = collect_drift(flow, snap)
-    assert any(f.code == "topology_changed" for f in findings)
+    findings, obj = collect_drift(flow, snap)
+    assert obj is not None
+    assert not any(f.code == "topology_changed" for f in findings)
 
 
 def test_unmapped_exchange_warning() -> None:

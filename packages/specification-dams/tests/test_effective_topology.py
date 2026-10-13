@@ -1,4 +1,4 @@
-"""Tests for effective_topology dual-read (ADR-048 PR-3)."""
+"""Tests for TopologyView-only effective_topology (ADR-048 post dual-read)."""
 
 from __future__ import annotations
 
@@ -7,7 +7,6 @@ from pathlib import Path
 import yaml
 
 from moex_dams.catalog.effective_topology import (
-    authored_vs_effective_mismatches,
     effective_topology,
     load_topology_view,
 )
@@ -34,25 +33,22 @@ def test_effective_prefers_topology_view() -> None:
     assert eff["binding_status"] in {"resolved", "unmapped", "stale", "broken"}
 
 
-def test_fallback_to_authored_when_no_view() -> None:
+def test_missing_when_no_view() -> None:
     flow = {
         "element_id": "dams:flow/x",
         "integration_ref": "clinkr:integration/INT-00421",
+        # Legacy authored keys must be ignored after PR-5.
         "source_system_ref": "eam:system/TRADING_CORE",
     }
     eff = effective_topology(flow, None)
-    assert eff["source"] == "authored_deprecated"
-    assert eff["source_system_ref"] == "eam:system/TRADING_CORE"
+    assert eff["source"] == "missing"
+    assert "source_system_ref" not in eff
+    assert eff["integration_ref"] == "clinkr:integration/INT-00421"
 
 
-def test_no_mismatches_when_aligned() -> None:
+def test_missing_when_view_has_no_fact() -> None:
     flow = yaml.safe_load(FLOW.read_text(encoding="utf-8"))
-    view = load_topology_view(REPO, "2026-10-12.fixture.1")
-    assert authored_vs_effective_mismatches(flow, view) == []
-
-
-def test_mismatch_detected() -> None:
-    flow = yaml.safe_load(FLOW.read_text(encoding="utf-8"))
-    flow["source_system_ref"] = "eam:system/OTHER"
-    view = load_topology_view(REPO, "2026-10-12.fixture.1")
-    assert "source_system_ref" in authored_vs_effective_mismatches(flow, view)
+    view = {"facts": [{"flow_ref": "dams:flow/other", "source_system_ref": "eam:system/X"}]}
+    eff = effective_topology(flow, view)
+    assert eff["source"] == "missing"
+    assert "source_system_ref" not in eff
