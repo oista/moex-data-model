@@ -11,7 +11,7 @@ from moex_modeling import (
     DiagnosticSeverity,
 )
 
-from moex_dams.rules.cascade import diagnose_governance
+from moex_dams.rules.assignment_resolver import diagnose_governance
 
 _CODE_TO_INV = {
     "conflicting_assignments": ("INV-054", "DAMS-INV-054", DiagnosticSeverity.ERROR),

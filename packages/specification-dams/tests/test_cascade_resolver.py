@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
+from moex_dams.rules.assignment_resolver import resolve_governed
 from moex_dams.rules.cascade import (
     DATA_OWNER_PLACEHOLDER,
     find_redundant_overrides,
-    resolve_governed,
 )
 
 
