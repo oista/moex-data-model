@@ -71,6 +71,17 @@
     
 
         
+      MOEXModelRepository : ownership_assignments
+        
+          
+    
+        
+        
+        MOEXModelRepository --> "*" OwnershipAssignment : ownership_assignments
+        click OwnershipAssignment href "../OwnershipAssignment"
+    
+
+        
       MOEXModelRepository : policy_bindings
         
           

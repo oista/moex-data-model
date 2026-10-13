@@ -5,10 +5,8 @@
  classDiagram
     class HasValidity
     click HasValidity href "../HasValidity"
-      HasValidity <|-- ClassificationAssignment
-        click ClassificationAssignment href "../ClassificationAssignment"
-      HasValidity <|-- PolicyBinding
-        click PolicyBinding href "../PolicyBinding"
+      HasValidity <|-- GovernanceAssignment
+        click GovernanceAssignment href "../GovernanceAssignment"
       HasValidity <|-- HasLifecycle
         click HasLifecycle href "../HasLifecycle"
       

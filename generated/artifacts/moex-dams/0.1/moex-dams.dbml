@@ -148,25 +148,65 @@ valid_from datetime
 valid_to datetime
 }
 
+Table GovernanceAssignment {
+assignment_id varchar [not null, primary key]
+target_element_ref varchar [not null]
+assignment_scope varchar [not null]
+valid_from datetime
+valid_to datetime
+source_artifact_ref varchar
+evidence_refs varchar
+approval_status varchar
+approved_by_ref varchar
+approved_at datetime
+}
+
 Table ClassificationAssignment {
 assignment_id varchar [not null, primary key]
-classified_element_ref varchar [not null]
+target_element_ref varchar [not null]
+assignment_scope varchar [not null]
+valid_from datetime
+valid_to datetime
+source_artifact_ref varchar
+evidence_refs varchar
+approval_status varchar
+approved_by_ref varchar
+approved_at datetime
 classification_term_ref varchar
 governance_classification varchar
 classification_source varchar
 classification_rationale varchar
-approval_status varchar
-valid_from datetime
-valid_to datetime
 }
 
 Table PolicyBinding {
-policy_binding_id varchar [not null, primary key]
-policy_target_ref varchar [not null]
-policy_ref varchar [not null]
-approval_status varchar
+assignment_id varchar [not null, primary key]
+target_element_ref varchar [not null]
+assignment_scope varchar [not null]
 valid_from datetime
 valid_to datetime
+source_artifact_ref varchar
+evidence_refs varchar
+approval_status varchar
+approved_by_ref varchar
+approved_at datetime
+policy_ref varchar [not null]
+binding_effect varchar
+}
+
+Table OwnershipAssignment {
+assignment_id varchar [not null, primary key]
+target_element_ref varchar [not null]
+assignment_scope varchar [not null]
+valid_from datetime
+valid_to datetime
+source_artifact_ref varchar
+evidence_refs varchar
+approval_status varchar
+approved_by_ref varchar
+approved_at datetime
+data_owner_ref varchar
+data_steward_ref varchar
+owning_unit_ref varchar
 }
 
 Table HasLifecycle {
@@ -1314,14 +1354,22 @@ metrics varchar
 dimensions varchar
 classification_assignments varchar
 policy_bindings varchar
+ownership_assignments varchar
 }
 
 Ref: ITSolution.member_system_refs > ITSystem.registry_id
 Ref: ITSolution.platform_ref > ITPlatform.registry_id
 Ref: BusinessDomain.parent_domain_ref > BusinessDomain.registry_id
 Ref: HasSemanticAnnotations.glossary_term_refs > GlossaryTerm.registry_id
+Ref: GovernanceAssignment.approved_by_ref > Role.registry_id
+Ref: ClassificationAssignment.approved_by_ref > Role.registry_id
 Ref: ClassificationAssignment.classification_term_ref > DataClassificationTerm.registry_id
+Ref: PolicyBinding.approved_by_ref > Role.registry_id
 Ref: PolicyBinding.policy_ref > Policy.registry_id
+Ref: OwnershipAssignment.approved_by_ref > Role.registry_id
+Ref: OwnershipAssignment.data_owner_ref > Role.registry_id
+Ref: OwnershipAssignment.data_steward_ref > Role.registry_id
+Ref: OwnershipAssignment.owning_unit_ref > OrganizationUnit.registry_id
 Ref: HasOwnership.data_owner_ref > Role.registry_id
 Ref: HasOwnership.data_steward_ref > Role.registry_id
 Ref: HasOwnership.owning_unit_ref > OrganizationUnit.registry_id
@@ -1548,4 +1596,5 @@ Ref: MOEXModelRepository.data_model_bindings > DataModelBinding.element_id
 Ref: MOEXModelRepository.metrics > Metric.element_id
 Ref: MOEXModelRepository.dimensions > Dimension.element_id
 Ref: MOEXModelRepository.classification_assignments > ClassificationAssignment.assignment_id
-Ref: MOEXModelRepository.policy_bindings > PolicyBinding.policy_binding_id
+Ref: MOEXModelRepository.policy_bindings > PolicyBinding.assignment_id
+Ref: MOEXModelRepository.ownership_assignments > OwnershipAssignment.assignment_id

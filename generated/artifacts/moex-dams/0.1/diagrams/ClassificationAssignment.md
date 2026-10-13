@@ -5,8 +5,8 @@
  classDiagram
     class ClassificationAssignment
     click ClassificationAssignment href "../ClassificationAssignment"
-      HasValidity <|-- ClassificationAssignment
-        click HasValidity href "../HasValidity"
+      GovernanceAssignment <|-- ClassificationAssignment
+        click GovernanceAssignment href "../GovernanceAssignment"
       
       ClassificationAssignment : approval_status
         
@@ -19,7 +19,31 @@
     
 
         
+      ClassificationAssignment : approved_at
+        
+      ClassificationAssignment : approved_by_ref
+        
+          
+    
+        
+        
+        ClassificationAssignment --> "0..1" Role : approved_by_ref
+        click Role href "../Role"
+    
+
+        
       ClassificationAssignment : assignment_id
+        
+      ClassificationAssignment : assignment_scope
+        
+          
+    
+        
+        
+        ClassificationAssignment --> "1" AssignmentScopeEnum : assignment_scope
+        click AssignmentScopeEnum href "../AssignmentScopeEnum"
+    
+
         
       ClassificationAssignment : classification_rationale
         
@@ -36,7 +60,7 @@
     
 
         
-      ClassificationAssignment : classified_element_ref
+      ClassificationAssignment : evidence_refs
         
       ClassificationAssignment : governance_classification
         
@@ -48,6 +72,10 @@
         click GovernanceClassificationEnum href "../GovernanceClassificationEnum"
     
 
+        
+      ClassificationAssignment : source_artifact_ref
+        
+      ClassificationAssignment : target_element_ref
         
       ClassificationAssignment : valid_from
         

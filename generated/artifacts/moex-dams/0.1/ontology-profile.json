@@ -39,7 +39,7 @@
       "is_mixin": false,
       "name": "ClassificationAssignment",
       "parents": [
-        "HasValidity"
+        "GovernanceAssignment"
       ]
     },
     {
@@ -234,6 +234,15 @@
       "name": "GlossaryTerm",
       "parents": [
         "RegistryEntry"
+      ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/GovernanceAssignment",
+      "is_mixin": false,
+      "name": "GovernanceAssignment",
+      "parents": [
+        "HasProvenance",
+        "HasValidity"
       ]
     },
     {
@@ -462,6 +471,14 @@
       ]
     },
     {
+      "iri": "https://data.moex.com/dams/OwnershipAssignment",
+      "is_mixin": false,
+      "name": "OwnershipAssignment",
+      "parents": [
+        "GovernanceAssignment"
+      ]
+    },
+    {
       "iri": "https://data.moex.com/dams/PermissibleValue",
       "is_mixin": false,
       "name": "PermissibleValue",
@@ -480,7 +497,7 @@
       "is_mixin": false,
       "name": "PolicyBinding",
       "parents": [
-        "HasValidity"
+        "GovernanceAssignment"
       ]
     },
     {
@@ -645,6 +662,34 @@
         {
           "iri": "https://data.moex.com/dams/ApprovalStatusEnum#superseded",
           "name": "superseded"
+        }
+      ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/AssignmentScopeEnum",
+      "name": "AssignmentScopeEnum",
+      "values": [
+        {
+          "iri": "https://data.moex.com/dams/AssignmentScopeEnum#element",
+          "name": "element"
+        },
+        {
+          "iri": "https://data.moex.com/dams/AssignmentScopeEnum#subtree",
+          "name": "subtree"
+        }
+      ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/BindingEffectEnum",
+      "name": "BindingEffectEnum",
+      "values": [
+        {
+          "iri": "https://data.moex.com/dams/BindingEffectEnum#add",
+          "name": "add"
+        },
+        {
+          "iri": "https://data.moex.com/dams/BindingEffectEnum#replace",
+          "name": "replace"
         }
       ]
     },
@@ -1957,10 +2002,10 @@
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "xsd": "http://www.w3.org/2001/XMLSchema#"
   },
-  "schema_digest": "sha256:7347325945fca757f8c2f67c8a50db8edfe2a0c305e8dd610c2cc21e3496905f",
+  "schema_digest": "sha256:e1a8cb4faee714c317343a5c097d1310b8b2d3a42f35f16929ac00dec4cb50a6",
   "schema_id": "https://data.moex.com/dams/v0.1",
   "schema_name": "moex_dams",
-  "schema_version": "4.1.0",
+  "schema_version": "5.0.0",
   "slots": [
     {
       "iri": "https://data.moex.com/dams/access_points",
@@ -2043,6 +2088,10 @@
       "name": "assignment_id"
     },
     {
+      "iri": "https://data.moex.com/dams/assignment_scope",
+      "name": "assignment_scope"
+    },
+    {
       "iri": "https://data.moex.com/dams/associative",
       "name": "associative"
     },
@@ -2053,6 +2102,10 @@
     {
       "iri": "https://data.moex.com/dams/base_type_ref",
       "name": "base_type_ref"
+    },
+    {
+      "iri": "https://data.moex.com/dams/binding_effect",
+      "name": "binding_effect"
     },
     {
       "iri": "https://data.moex.com/dams/binding_id",
@@ -2137,10 +2190,6 @@
     {
       "iri": "https://data.moex.com/dams/classification_term_ref",
       "name": "classification_term_ref"
-    },
-    {
-      "iri": "https://data.moex.com/dams/classified_element_ref",
-      "name": "classified_element_ref"
     },
     {
       "iri": "https://data.moex.com/dams/code",
@@ -2775,6 +2824,10 @@
       "name": "owner_entity_ref"
     },
     {
+      "iri": "https://data.moex.com/dams/ownership_assignments",
+      "name": "ownership_assignments"
+    },
+    {
       "iri": "https://data.moex.com/dams/ownership_inheritance_rule",
       "name": "ownership_inheritance_rule"
     },
@@ -2815,10 +2868,6 @@
       "name": "platform_ref"
     },
     {
-      "iri": "https://data.moex.com/dams/policy_binding_id",
-      "name": "policy_binding_id"
-    },
-    {
       "iri": "https://data.moex.com/dams/policy_bindings",
       "name": "policy_bindings"
     },
@@ -2829,10 +2878,6 @@
     {
       "iri": "https://data.moex.com/dams/policy_refs",
       "name": "policy_refs"
-    },
-    {
-      "iri": "https://data.moex.com/dams/policy_target_ref",
-      "name": "policy_target_ref"
     },
     {
       "iri": "https://data.moex.com/dams/precision",
@@ -3121,6 +3166,10 @@
     {
       "iri": "https://data.moex.com/dams/target_class",
       "name": "target_class"
+    },
+    {
+      "iri": "https://data.moex.com/dams/target_element_ref",
+      "name": "target_element_ref"
     },
     {
       "iri": "https://data.moex.com/dams/target_entity_ref",

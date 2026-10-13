@@ -34,7 +34,7 @@ from pydantic import (
 
 
 metamodel_version = "1.11.0"
-version = "4.1.0"
+version = "5.0.0"
 
 
 class ConfiguredBaseModel(BaseModel):
@@ -415,6 +415,36 @@ class GovernanceClassificationEnum(str, Enum):
     internal = "internal"
     confidential = "confidential"
     restricted = "restricted"
+
+
+class AssignmentScopeEnum(str, Enum):
+    """
+    Scope of a GovernanceAssignment relative to target_element_ref (ADR-049).
+
+    """
+    element = "element"
+    """
+    Applies only to the target element.
+    """
+    subtree = "subtree"
+    """
+    Applies to the target and descendants in the containment cascade.
+    """
+
+
+class BindingEffectEnum(str, Enum):
+    """
+    How a PolicyBinding combines with lower-layer policy_refs (ADR-049).
+
+    """
+    replace = "replace"
+    """
+    Full replace of effective policy list (default; ADR-023 list-replace).
+    """
+    add = "add"
+    """
+    Union onto the next lower layer (cascade or nearer assignment).
+    """
 
 
 class LogicalDataTypeEnum(str, Enum):
@@ -1098,33 +1128,6 @@ class HasValidity(ConfiguredBaseModel):
     valid_to: Optional[datetime ] = Field(default=None)
 
 
-class ClassificationAssignment(HasValidity):
-    """
-    Версионируемое назначение категории классификации элементу модели с основанием и периодом действия.
-    """
-    assignment_id: str = Field(default=...)
-    classified_element_ref: str = Field(default=...)
-    classification_term_ref: Optional[str] = Field(default=None)
-    governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
-    classification_source: Optional[str] = Field(default=None)
-    classification_rationale: Optional[str] = Field(default=None)
-    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
-    valid_from: Optional[datetime ] = Field(default=None)
-    valid_to: Optional[datetime ] = Field(default=None)
-
-
-class PolicyBinding(HasValidity):
-    """
-    Применение управляемой политики к элементу модели.
-    """
-    policy_binding_id: str = Field(default=...)
-    policy_target_ref: str = Field(default=...)
-    policy_ref: str = Field(default=...)
-    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
-    valid_from: Optional[datetime ] = Field(default=None)
-    valid_to: Optional[datetime ] = Field(default=None)
-
-
 class HasLifecycle(HasValidity):
     """
     Mixin жизненного цикла: статус, период действия и ссылка на заменяющий элемент.
@@ -1137,7 +1140,7 @@ class HasLifecycle(HasValidity):
 
 class HasOwnership(ConfiguredBaseModel):
     """
-    Mixin владения: data owner, data steward и организационное подразделение. Отсутствие слота означает наследование эффективного значения по containment cascade (ADR-023); заданное значение — локальный override.
+    Mixin владения: data owner, data steward и организационное подразделение. Authored default (ADR-023 cascade: absent key inherits; present = override). Overridden by OwnershipAssignment when approved and in force (ADR-049). Effective ownership is not stored on the element.
 
     """
     data_owner_ref: Optional[str] = Field(default=None)
@@ -1158,7 +1161,7 @@ class HasBusinessClassification(ConfiguredBaseModel):
 
 class HasGovernanceClassification(ConfiguredBaseModel):
     """
-    Базовая и специальная классификация чувствительности данных. governance_classification участвует в containment cascade (ADR-023): пустой слот наследуется от родителя, заданный — override.
+    Базовая и специальная классификация чувствительности данных. Authored default: governance_classification участвует в containment cascade (ADR-023). Overridden by ClassificationAssignment when approved and in force (ADR-049). Effective classification is not stored here.
 
     """
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
@@ -1170,7 +1173,7 @@ class HasGovernanceClassification(ConfiguredBaseModel):
 
 class HasPolicyBindings(ConfiguredBaseModel):
     """
-    Mixin привязки управляемых политик к элементу модели. policy_refs участвует в containment cascade (ADR-023): отсутствие ключа — наследование; присутствующий список (в т.ч. пустой) — полная замена.
+    Mixin привязки управляемых политик к элементу модели. Authored default: policy_refs участвует в containment cascade (ADR-023); absent key inherits; present list (including empty) is full replace. Overridden by PolicyBinding when approved and in force (ADR-049). Effective policy set is not stored here.
 
     """
     policy_refs: Optional[list[str]] = Field(default=None)
@@ -1180,6 +1183,92 @@ class HasProvenance(ConfiguredBaseModel):
     """
     Mixin происхождения и согласования: исходный артефакт, evidence, статус и согласующий.
     """
+    source_artifact_ref: Optional[str] = Field(default=None)
+    evidence_refs: Optional[list[str]] = Field(default=None)
+    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
+    approved_by_ref: Optional[str] = Field(default=None)
+    approved_at: Optional[datetime ] = Field(default=None)
+
+
+class GovernanceAssignment(HasProvenance, HasValidity):
+    """
+    Authored authoritative governance fact for a target element (ADR-049). Overrides inline authored defaults (ADR-023 cascade) for the validity window and assignment_scope. Effective values are not stored on this class; they appear only in EffectiveGovernanceView.
+
+    """
+    assignment_id: str = Field(default=...)
+    target_element_ref: str = Field(default=..., description="""Element covered by this assignment (element_id) (ADR-049).
+""")
+    assignment_scope: AssignmentScopeEnum = Field(default=..., description="""element = target only; subtree = target and descendants in the containment cascade (ADR-023 / ADR-049).
+""")
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    source_artifact_ref: Optional[str] = Field(default=None)
+    evidence_refs: Optional[list[str]] = Field(default=None)
+    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
+    approved_by_ref: Optional[str] = Field(default=None)
+    approved_at: Optional[datetime ] = Field(default=None)
+
+
+class ClassificationAssignment(GovernanceAssignment):
+    """
+    Версионируемое назначение категории классификации элементу модели с основанием и периодом действия (ADR-049 authoritative layer).
+
+    """
+    classification_term_ref: Optional[str] = Field(default=None)
+    governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
+    classification_source: Optional[str] = Field(default=None)
+    classification_rationale: Optional[str] = Field(default=None)
+    assignment_id: str = Field(default=...)
+    target_element_ref: str = Field(default=..., description="""Element covered by this assignment (element_id) (ADR-049).
+""")
+    assignment_scope: AssignmentScopeEnum = Field(default=..., description="""element = target only; subtree = target and descendants in the containment cascade (ADR-023 / ADR-049).
+""")
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    source_artifact_ref: Optional[str] = Field(default=None)
+    evidence_refs: Optional[list[str]] = Field(default=None)
+    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
+    approved_by_ref: Optional[str] = Field(default=None)
+    approved_at: Optional[datetime ] = Field(default=None)
+
+
+class PolicyBinding(GovernanceAssignment):
+    """
+    Применение управляемой политики к элементу модели (ADR-049 authoritative layer).
+
+    """
+    policy_ref: str = Field(default=...)
+    binding_effect: Optional[BindingEffectEnum] = Field(default=None, description="""How this PolicyBinding combines with lower layers (ADR-049). Default replace = list-replace like ADR-023; add = union onto cascade.
+""")
+    assignment_id: str = Field(default=...)
+    target_element_ref: str = Field(default=..., description="""Element covered by this assignment (element_id) (ADR-049).
+""")
+    assignment_scope: AssignmentScopeEnum = Field(default=..., description="""element = target only; subtree = target and descendants in the containment cascade (ADR-023 / ADR-049).
+""")
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
+    source_artifact_ref: Optional[str] = Field(default=None)
+    evidence_refs: Optional[list[str]] = Field(default=None)
+    approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
+    approved_by_ref: Optional[str] = Field(default=None)
+    approved_at: Optional[datetime ] = Field(default=None)
+
+
+class OwnershipAssignment(GovernanceAssignment):
+    """
+    Версионируемое назначение data owner / steward / owning unit элементу модели (ADR-049 authoritative layer).
+
+    """
+    data_owner_ref: Optional[str] = Field(default=None)
+    data_steward_ref: Optional[str] = Field(default=None)
+    owning_unit_ref: Optional[str] = Field(default=None)
+    assignment_id: str = Field(default=...)
+    target_element_ref: str = Field(default=..., description="""Element covered by this assignment (element_id) (ADR-049).
+""")
+    assignment_scope: AssignmentScopeEnum = Field(default=..., description="""element = target only; subtree = target and descendants in the containment cascade (ADR-023 / ADR-049).
+""")
+    valid_from: Optional[datetime ] = Field(default=None)
+    valid_to: Optional[datetime ] = Field(default=None)
     source_artifact_ref: Optional[str] = Field(default=None)
     evidence_refs: Optional[list[str]] = Field(default=None)
     approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
@@ -2567,6 +2656,7 @@ class MOEXModelRepository(ConfiguredBaseModel):
     dimensions: Optional[list[Dimension]] = Field(default=None)
     classification_assignments: Optional[list[ClassificationAssignment]] = Field(default=None)
     policy_bindings: Optional[list[PolicyBinding]] = Field(default=None)
+    ownership_assignments: Optional[list[OwnershipAssignment]] = Field(default=None)
 
 
 # Model rebuild
@@ -2589,14 +2679,16 @@ NamedElement.model_rebuild()
 DescribedElement.model_rebuild()
 HasSemanticAnnotations.model_rebuild()
 HasValidity.model_rebuild()
-ClassificationAssignment.model_rebuild()
-PolicyBinding.model_rebuild()
 HasLifecycle.model_rebuild()
 HasOwnership.model_rebuild()
 HasBusinessClassification.model_rebuild()
 HasGovernanceClassification.model_rebuild()
 HasPolicyBindings.model_rebuild()
 HasProvenance.model_rebuild()
+GovernanceAssignment.model_rebuild()
+ClassificationAssignment.model_rebuild()
+PolicyBinding.model_rebuild()
+OwnershipAssignment.model_rebuild()
 HasDefinition.model_rebuild()
 ScopedDefinition.model_rebuild()
 ModelElement.model_rebuild()

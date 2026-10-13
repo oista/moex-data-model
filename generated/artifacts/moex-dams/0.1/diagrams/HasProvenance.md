@@ -5,6 +5,8 @@
  classDiagram
     class HasProvenance
     click HasProvenance href "../HasProvenance"
+      HasProvenance <|-- GovernanceAssignment
+        click GovernanceAssignment href "../GovernanceAssignment"
       HasProvenance <|-- ScopedDefinition
         click ScopedDefinition href "../ScopedDefinition"
       HasProvenance <|-- ConceptualProperty

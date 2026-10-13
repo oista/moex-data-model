@@ -493,6 +493,24 @@
             "title": "ApprovalStatusEnum",
             "type": "string"
         },
+        "AssignmentScopeEnum": {
+            "description": "Scope of a GovernanceAssignment relative to target_element_ref (ADR-049).",
+            "enum": [
+                "element",
+                "subtree"
+            ],
+            "title": "AssignmentScopeEnum",
+            "type": "string"
+        },
+        "BindingEffectEnum": {
+            "description": "How a PolicyBinding combines with lower-layer policy_refs (ADR-049).",
+            "enum": [
+                "replace",
+                "add"
+            ],
+            "title": "BindingEffectEnum",
+            "type": "string"
+        },
         "BusinessDomain": {
             "additionalProperties": false,
             "description": "\u0411\u0438\u0437\u043d\u0435\u0441-\u0434\u043e\u043c\u0435\u043d \u0438\u043b\u0438 \u043f\u0440\u0435\u0434\u043c\u0435\u0442\u043d\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c; \u043c\u0430\u0441\u0442\u0435\u0440 \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u044f\u0435\u0442\u0441\u044f \u0430\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u043d\u044b\u043c governance",
@@ -612,13 +630,30 @@
         },
         "ClassificationAssignment": {
             "additionalProperties": false,
-            "description": "\u0412\u0435\u0440\u0441\u0438\u043e\u043d\u0438\u0440\u0443\u0435\u043c\u043e\u0435 \u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u0438 \u043a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u0438 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0443 \u043c\u043e\u0434\u0435\u043b\u0438 \u0441 \u043e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u0435\u043c \u0438 \u043f\u0435\u0440\u0438\u043e\u0434\u043e\u043c \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044f.",
+            "description": "\u0412\u0435\u0440\u0441\u0438\u043e\u043d\u0438\u0440\u0443\u0435\u043c\u043e\u0435 \u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u0438 \u043a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u0438 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0443 \u043c\u043e\u0434\u0435\u043b\u0438 \u0441 \u043e\u0441\u043d\u043e\u0432\u0430\u043d\u0438\u0435\u043c \u0438 \u043f\u0435\u0440\u0438\u043e\u0434\u043e\u043c \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044f (ADR-049 authoritative layer).",
             "properties": {
                 "approval_status": {
                     "$ref": "#/$defs/ApprovalStatusEnum"
                 },
+                "approved_at": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "approved_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "assignment_id": {
                     "type": "string"
+                },
+                "assignment_scope": {
+                    "$ref": "#/$defs/AssignmentScopeEnum",
+                    "description": "element = target only; subtree = target and descendants in the containment cascade (ADR-023 / ADR-049).\n"
                 },
                 "classification_rationale": {
                     "type": [
@@ -638,11 +673,29 @@
                         "null"
                     ]
                 },
-                "classified_element_ref": {
-                    "type": "string"
+                "evidence_refs": {
+                    "items": {
+                        "format": "uri",
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
                 },
                 "governance_classification": {
                     "$ref": "#/$defs/GovernanceClassificationEnum"
+                },
+                "source_artifact_ref": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "target_element_ref": {
+                    "description": "Element covered by this assignment (element_id) (ADR-049).\n",
+                    "type": "string"
                 },
                 "valid_from": {
                     "format": "date-time",
@@ -661,7 +714,8 @@
             },
             "required": [
                 "assignment_id",
-                "classified_element_ref"
+                "target_element_ref",
+                "assignment_scope"
             ],
             "title": "ClassificationAssignment",
             "type": "object"
@@ -3928,6 +3982,77 @@
             "title": "GlossaryTerm",
             "type": "object"
         },
+        "GovernanceAssignment": {
+            "additionalProperties": false,
+            "description": "Authored authoritative governance fact for a target element (ADR-049). Overrides inline authored defaults (ADR-023 cascade) for the validity window and assignment_scope. Effective values are not stored on this class; they appear only in EffectiveGovernanceView.",
+            "properties": {
+                "approval_status": {
+                    "$ref": "#/$defs/ApprovalStatusEnum"
+                },
+                "approved_at": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "approved_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "assignment_id": {
+                    "type": "string"
+                },
+                "assignment_scope": {
+                    "$ref": "#/$defs/AssignmentScopeEnum",
+                    "description": "element = target only; subtree = target and descendants in the containment cascade (ADR-023 / ADR-049).\n"
+                },
+                "evidence_refs": {
+                    "items": {
+                        "format": "uri",
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "source_artifact_ref": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "target_element_ref": {
+                    "description": "Element covered by this assignment (element_id) (ADR-049).\n",
+                    "type": "string"
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "assignment_id",
+                "target_element_ref",
+                "assignment_scope"
+            ],
+            "title": "GovernanceAssignment",
+            "type": "object"
+        },
         "GovernanceClassificationEnum": {
             "description": "\u0411\u0430\u0437\u043e\u0432\u0430\u044f \u0448\u043a\u0430\u043b\u0430 \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u0438\u044f \u0434\u043e\u0441\u0442\u0443\u043f\u0430; \u0441\u043f\u0435\u0446\u0438\u0430\u043b\u044c\u043d\u044b\u0435 \u0432\u0438\u0434\u044b \u0442\u0430\u0439\u043d\u044b \u0437\u0430\u0434\u0430\u044e\u0442\u0441\u044f \u043e\u0442\u0434\u0435\u043b\u044c\u043d\u044b\u043c\u0438 \u0442\u0435\u0440\u043c\u0438\u043d\u0430\u043c\u0438 \u043a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u0438.",
             "enum": [
@@ -3997,7 +4122,7 @@
         },
         "HasGovernanceClassification": {
             "additionalProperties": false,
-            "description": "\u0411\u0430\u0437\u043e\u0432\u0430\u044f \u0438 \u0441\u043f\u0435\u0446\u0438\u0430\u043b\u044c\u043d\u0430\u044f \u043a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u044f \u0447\u0443\u0432\u0441\u0442\u0432\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438 \u0434\u0430\u043d\u043d\u044b\u0445. governance_classification \u0443\u0447\u0430\u0441\u0442\u0432\u0443\u0435\u0442 \u0432 containment cascade (ADR-023): \u043f\u0443\u0441\u0442\u043e\u0439 \u0441\u043b\u043e\u0442 \u043d\u0430\u0441\u043b\u0435\u0434\u0443\u0435\u0442\u0441\u044f \u043e\u0442 \u0440\u043e\u0434\u0438\u0442\u0435\u043b\u044f, \u0437\u0430\u0434\u0430\u043d\u043d\u044b\u0439 \u2014 override.",
+            "description": "\u0411\u0430\u0437\u043e\u0432\u0430\u044f \u0438 \u0441\u043f\u0435\u0446\u0438\u0430\u043b\u044c\u043d\u0430\u044f \u043a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u044f \u0447\u0443\u0432\u0441\u0442\u0432\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438 \u0434\u0430\u043d\u043d\u044b\u0445. Authored default: governance_classification \u0443\u0447\u0430\u0441\u0442\u0432\u0443\u0435\u0442 \u0432 containment cascade (ADR-023). Overridden by ClassificationAssignment when approved and in force (ADR-049). Effective classification is not stored here.",
             "properties": {
                 "classification_rationale": {
                     "type": [
@@ -4088,7 +4213,7 @@
         },
         "HasOwnership": {
             "additionalProperties": false,
-            "description": "Mixin \u0432\u043b\u0430\u0434\u0435\u043d\u0438\u044f: data owner, data steward \u0438 \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u043e\u043d\u043d\u043e\u0435 \u043f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435. \u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0438\u0435 \u0441\u043b\u043e\u0442\u0430 \u043e\u0437\u043d\u0430\u0447\u0430\u0435\u0442 \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \u044d\u0444\u0444\u0435\u043a\u0442\u0438\u0432\u043d\u043e\u0433\u043e \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u043f\u043e containment cascade (ADR-023); \u0437\u0430\u0434\u0430\u043d\u043d\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u2014 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u0439 override.",
+            "description": "Mixin \u0432\u043b\u0430\u0434\u0435\u043d\u0438\u044f: data owner, data steward \u0438 \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u043e\u043d\u043d\u043e\u0435 \u043f\u043e\u0434\u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435. Authored default (ADR-023 cascade: absent key inherits; present = override). Overridden by OwnershipAssignment when approved and in force (ADR-049). Effective ownership is not stored on the element.",
             "properties": {
                 "data_owner_ref": {
                     "type": [
@@ -4121,7 +4246,7 @@
         },
         "HasPolicyBindings": {
             "additionalProperties": false,
-            "description": "Mixin \u043f\u0440\u0438\u0432\u044f\u0437\u043a\u0438 \u0443\u043f\u0440\u0430\u0432\u043b\u044f\u0435\u043c\u044b\u0445 \u043f\u043e\u043b\u0438\u0442\u0438\u043a \u043a \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0443 \u043c\u043e\u0434\u0435\u043b\u0438. policy_refs \u0443\u0447\u0430\u0441\u0442\u0432\u0443\u0435\u0442 \u0432 containment cascade (ADR-023): \u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0438\u0435 \u043a\u043b\u044e\u0447\u0430 \u2014 \u043d\u0430\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0435; \u043f\u0440\u0438\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0439 \u0441\u043f\u0438\u0441\u043e\u043a (\u0432 \u0442.\u0447. \u043f\u0443\u0441\u0442\u043e\u0439) \u2014 \u043f\u043e\u043b\u043d\u0430\u044f \u0437\u0430\u043c\u0435\u043d\u0430.",
+            "description": "Mixin \u043f\u0440\u0438\u0432\u044f\u0437\u043a\u0438 \u0443\u043f\u0440\u0430\u0432\u043b\u044f\u0435\u043c\u044b\u0445 \u043f\u043e\u043b\u0438\u0442\u0438\u043a \u043a \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0443 \u043c\u043e\u0434\u0435\u043b\u0438. Authored default: policy_refs \u0443\u0447\u0430\u0441\u0442\u0432\u0443\u0435\u0442 \u0432 containment cascade (ADR-023); absent key inherits; present list (including empty) is full replace. Overridden by PolicyBinding when approved and in force (ADR-049). Effective policy set is not stored here.",
             "properties": {
                 "policy_refs": {
                     "items": {
@@ -5134,6 +5259,15 @@
                 "model_packages": {
                     "items": {
                         "$ref": "#/$defs/ModelPackage"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "ownership_assignments": {
+                    "items": {
+                        "$ref": "#/$defs/OwnershipAssignment"
                     },
                     "type": [
                         "array",
@@ -6282,6 +6416,95 @@
             "title": "OrganizationUnit",
             "type": "object"
         },
+        "OwnershipAssignment": {
+            "additionalProperties": false,
+            "description": "\u0412\u0435\u0440\u0441\u0438\u043e\u043d\u0438\u0440\u0443\u0435\u043c\u043e\u0435 \u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 data owner / steward / owning unit \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0443 \u043c\u043e\u0434\u0435\u043b\u0438 (ADR-049 authoritative layer).",
+            "properties": {
+                "approval_status": {
+                    "$ref": "#/$defs/ApprovalStatusEnum"
+                },
+                "approved_at": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "approved_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "assignment_id": {
+                    "type": "string"
+                },
+                "assignment_scope": {
+                    "$ref": "#/$defs/AssignmentScopeEnum",
+                    "description": "element = target only; subtree = target and descendants in the containment cascade (ADR-023 / ADR-049).\n"
+                },
+                "data_owner_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_steward_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "evidence_refs": {
+                    "items": {
+                        "format": "uri",
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "owning_unit_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "source_artifact_ref": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "target_element_ref": {
+                    "description": "Element covered by this assignment (element_id) (ADR-049).\n",
+                    "type": "string"
+                },
+                "valid_from": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "valid_to": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "assignment_id",
+                "target_element_ref",
+                "assignment_scope"
+            ],
+            "title": "OwnershipAssignment",
+            "type": "object"
+        },
         "PermissibleValue": {
             "additionalProperties": false,
             "description": "\u0414\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u043e\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u0432\u043d\u0443\u0442\u0440\u0438 ValueDomain (\u0432\u0441\u0442\u0440\u0430\u0438\u0432\u0430\u0435\u043c\u044b\u0439).",
@@ -6377,18 +6600,57 @@
         },
         "PolicyBinding": {
             "additionalProperties": false,
-            "description": "\u041f\u0440\u0438\u043c\u0435\u043d\u0435\u043d\u0438\u0435 \u0443\u043f\u0440\u0430\u0432\u043b\u044f\u0435\u043c\u043e\u0439 \u043f\u043e\u043b\u0438\u0442\u0438\u043a\u0438 \u043a \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0443 \u043c\u043e\u0434\u0435\u043b\u0438.",
+            "description": "\u041f\u0440\u0438\u043c\u0435\u043d\u0435\u043d\u0438\u0435 \u0443\u043f\u0440\u0430\u0432\u043b\u044f\u0435\u043c\u043e\u0439 \u043f\u043e\u043b\u0438\u0442\u0438\u043a\u0438 \u043a \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0443 \u043c\u043e\u0434\u0435\u043b\u0438 (ADR-049 authoritative layer).",
             "properties": {
                 "approval_status": {
                     "$ref": "#/$defs/ApprovalStatusEnum"
                 },
-                "policy_binding_id": {
+                "approved_at": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "approved_by_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "assignment_id": {
                     "type": "string"
+                },
+                "assignment_scope": {
+                    "$ref": "#/$defs/AssignmentScopeEnum",
+                    "description": "element = target only; subtree = target and descendants in the containment cascade (ADR-023 / ADR-049).\n"
+                },
+                "binding_effect": {
+                    "$ref": "#/$defs/BindingEffectEnum",
+                    "description": "How this PolicyBinding combines with lower layers (ADR-049). Default replace = list-replace like ADR-023; add = union onto cascade.\n"
+                },
+                "evidence_refs": {
+                    "items": {
+                        "format": "uri",
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
                 },
                 "policy_ref": {
                     "type": "string"
                 },
-                "policy_target_ref": {
+                "source_artifact_ref": {
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "target_element_ref": {
+                    "description": "Element covered by this assignment (element_id) (ADR-049).\n",
                     "type": "string"
                 },
                 "valid_from": {
@@ -6407,9 +6669,10 @@
                 }
             },
             "required": [
-                "policy_binding_id",
-                "policy_target_ref",
-                "policy_ref"
+                "policy_ref",
+                "assignment_id",
+                "target_element_ref",
+                "assignment_scope"
             ],
             "title": "PolicyBinding",
             "type": "object"
@@ -8490,6 +8753,15 @@
                 "null"
             ]
         },
+        "ownership_assignments": {
+            "items": {
+                "$ref": "#/$defs/OwnershipAssignment"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
         "policy_bindings": {
             "items": {
                 "$ref": "#/$defs/PolicyBinding"
@@ -8517,5 +8789,5 @@
     ],
     "title": "moex_dams",
     "type": "object",
-    "version": "4.1.0"
+    "version": "5.0.0"
 }

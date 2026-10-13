@@ -40,6 +40,7 @@ Name: moex_dams
 | [FieldMapping](FieldMapping.md) | mapsTo between LogicalAttribute and SchemaNode address (structure_id#local_ke... |
 | [FormalCheck](FormalCheck.md) | Одна машиночитаемая проверка требования |
 | [GlossaryTerm](GlossaryTerm.md) | Термин корпоративного бизнес-глоссария |
+| [GovernanceAssignment](GovernanceAssignment.md) | Authored authoritative governance fact for a target element (ADR-049) |
 | [HasBusinessClassification](HasBusinessClassification.md) | Классификация роли и бизнес-значимости логической сущности |
 | [HasDefinition](HasDefinition.md) | Mixin эталонного определения (ADR-025 / ADR-044) |
 | [HasGovernanceClassification](HasGovernanceClassification.md) | Базовая и специальная классификация чувствительности данных |
@@ -69,9 +70,10 @@ Name: moex_dams
 | [NamedElement](NamedElement.md) | Именование элемента модели (name, title, aliases) |
 | [NativeTypeBinding](NativeTypeBinding.md) | Привязка нативного типа диалекта (SQL, JSON Schema и т |
 | [OrganizationUnit](OrganizationUnit.md) | Организационное подразделение |
+| [OwnershipAssignment](OwnershipAssignment.md) | Версионируемое назначение data owner / steward / owning unit элементу модели ... |
 | [PermissibleValue](PermissibleValue.md) | Допустимое значение внутри ValueDomain (встраиваемый) |
 | [Policy](Policy.md) | Политика доступа, хранения, качества или архитектурный инвариант |
-| [PolicyBinding](PolicyBinding.md) | Применение управляемой политики к элементу модели |
+| [PolicyBinding](PolicyBinding.md) | Применение управляемой политики к элементу модели (ADR-049 authoritative laye... |
 | [RealizesMapping](RealizesMapping.md) | Solution logical entity realizes an enterprise conceptual entity (ADR-046) |
 | [RegistryEntry](RegistryEntry.md) | Локальная ссылочная проекция записи внешней мастер-системы; не является масте... |
 | [Relationship](Relationship.md) | Именованная связь между логическими или концептуальными сущностями |
@@ -115,9 +117,11 @@ Name: moex_dams
 | [asset_kind](asset_kind.md) | Разновидность актива |
 | [asset_namespace](asset_namespace.md) | Пространство имён источника по аналогии с OpenLineage namespace (например pos... |
 | [assignment_id](assignment_id.md) |  |
+| [assignment_scope](assignment_scope.md) | element = target only; subtree = target and descendants in the containment ca... |
 | [associative](associative.md) |  |
 | [attributes](attributes.md) |  |
 | [base_type_ref](base_type_ref.md) | Базовый тип, от которого наследуются параметры |
+| [binding_effect](binding_effect.md) | How this PolicyBinding combines with lower layers (ADR-049) |
 | [binding_id](binding_id.md) |  |
 | [binding_ref](binding_ref.md) | Ссылка на внешнее описание binding |
 | [bound_catalog_revision](bound_catalog_revision.md) | Ревизия файл-снимка каталога, на которой подтверждена привязка flow (ADR-048) |
@@ -139,7 +143,6 @@ Name: moex_dams
 | [classification_rationale](classification_rationale.md) |  |
 | [classification_source](classification_source.md) |  |
 | [classification_term_ref](classification_term_ref.md) |  |
-| [classified_element_ref](classified_element_ref.md) |  |
 | [code](code.md) |  |
 | [column_position](column_position.md) | Позиция колонки (только schema_format=relational; DAMS-валидатор) |
 | [compatibility_baseline_ref](compatibility_baseline_ref.md) |  |
@@ -298,6 +301,7 @@ Name: moex_dams
 | [ordinal](ordinal.md) | Порядок значения в перечислении |
 | [ordinal_position](ordinal_position.md) |  |
 | [owner_entity_ref](owner_entity_ref.md) | Structural parent LogicalEntity of this attribute (containment), not the data... |
+| [ownership_assignments](ownership_assignments.md) |  |
 | [ownership_inheritance_rule](ownership_inheritance_rule.md) | Deprecated as source of truth (ADR-023) |
 | [owning_unit_ref](owning_unit_ref.md) |  |
 | [parameter_mapping](parameter_mapping.md) | Описание отображения параметров (precision/scale/length) |
@@ -308,11 +312,9 @@ Name: moex_dams
 | [payload_structure_ref](payload_structure_ref.md) | Структура тела сообщения |
 | [permissible_values](permissible_values.md) | Встроенный список допустимых значений |
 | [platform_ref](platform_ref.md) |  |
-| [policy_binding_id](policy_binding_id.md) |  |
 | [policy_bindings](policy_bindings.md) |  |
 | [policy_ref](policy_ref.md) |  |
 | [policy_refs](policy_refs.md) |  |
-| [policy_target_ref](policy_target_ref.md) |  |
 | [precision](precision.md) | Точность для decimal (общее число цифр) |
 | [previous_version_ref](previous_version_ref.md) | Предыдущая версия этой структуры |
 | [produces_refs](produces_refs.md) |  |
@@ -385,6 +387,7 @@ Name: moex_dams
 | [system_ref](system_ref.md) |  |
 | [tags](tags.md) |  |
 | [target_class](target_class.md) | Имя класса LinkML (например LogicalEntity) |
+| [target_element_ref](target_element_ref.md) | Element covered by this assignment (element_id) (ADR-049) |
 | [target_entity_ref](target_entity_ref.md) |  |
 | [target_max_cardinality](target_max_cardinality.md) |  |
 | [target_min_cardinality](target_min_cardinality.md) |  |
@@ -430,6 +433,8 @@ Name: moex_dams
 | --- | --- |
 | [AccessPointKindEnum](AccessPointKindEnum.md) |  |
 | [ApprovalStatusEnum](ApprovalStatusEnum.md) |  |
+| [AssignmentScopeEnum](AssignmentScopeEnum.md) | Scope of a GovernanceAssignment relative to target_element_ref (ADR-049) |
+| [BindingEffectEnum](BindingEffectEnum.md) | How a PolicyBinding combines with lower-layer policy_refs (ADR-049) |
 | [BusinessImportanceEnum](BusinessImportanceEnum.md) | Важность сущности в модели решения (не criticality бизнес-процесса) |
 | [BusinessKeyKindEnum](BusinessKeyKindEnum.md) | Характер бизнес-ключа логической сущности |
 | [CheckSeverityEnum](CheckSeverityEnum.md) |  |

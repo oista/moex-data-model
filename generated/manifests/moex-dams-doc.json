@@ -4,10 +4,10 @@
   "generator_module": "linkml.generators.docgen",
   "generator_version": "1.11.1",
   "schema_path": "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml",
-  "schema_digest": "sha256:4ad6b075785b872569aedb0a5be4544ea8084d471406d0457482628c8af5c6a6",
+  "schema_digest": "sha256:4316823e3c4bce3143d46c0ca5ccb2ccef38e363149e8737585047d79d0d2c47",
   "output_path": "generated/artifacts/moex-dams/0.1/docs",
-  "content_digest": "sha256:0cb573e7a596fe7cd20a61492e2d5a817c25710bc72441a08d26ef042ab286bd",
-  "generated_at": "2026-10-12T21:47:36.454559+00:00",
+  "content_digest": "sha256:377d26e8d99632746adc36480691dd74b757b9ce0e7e79e58bb4a3731351ecfa",
+  "generated_at": "2026-10-13T13:36:51.210640+00:00",
   "generator_options": {
     "git_policy": "index_subset"
   }

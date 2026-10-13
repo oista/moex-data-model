@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-13T00:47:23
+# Generation date: 2026-10-13T16:36:34
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -60,7 +60,7 @@ from linkml_runtime.linkml_model.types import Boolean, Datetime, Decimal, Intege
 from linkml_runtime.utils.metamodelcore import Bool, Decimal, URI, URIorCURIE, XSDDateTime
 
 metamodel_version = "1.11.0"
-version = "4.1.0"
+version = "5.0.0"
 
 # Namespaces
 DAMS = CurieNamespace('dams', 'https://data.moex.com/dams/')
@@ -157,11 +157,19 @@ class IdentifiedElementElementId(URIorCURIE):
     pass
 
 
-class ClassificationAssignmentAssignmentId(URIorCURIE):
+class GovernanceAssignmentAssignmentId(URIorCURIE):
     pass
 
 
-class PolicyBindingPolicyBindingId(URIorCURIE):
+class ClassificationAssignmentAssignmentId(GovernanceAssignmentAssignmentId):
+    pass
+
+
+class PolicyBindingAssignmentId(GovernanceAssignmentAssignmentId):
+    pass
+
+
+class OwnershipAssignmentAssignmentId(GovernanceAssignmentAssignmentId):
     pass
 
 
@@ -361,7 +369,8 @@ class MOEXModelRepository(YAMLRoot):
     metrics: Optional[Union[dict[Union[str, MetricElementId], Union[dict, "Metric"]], list[Union[dict, "Metric"]]]] = empty_dict()
     dimensions: Optional[Union[dict[Union[str, DimensionElementId], Union[dict, "Dimension"]], list[Union[dict, "Dimension"]]]] = empty_dict()
     classification_assignments: Optional[Union[dict[Union[str, ClassificationAssignmentAssignmentId], Union[dict, "ClassificationAssignment"]], list[Union[dict, "ClassificationAssignment"]]]] = empty_dict()
-    policy_bindings: Optional[Union[dict[Union[str, PolicyBindingPolicyBindingId], Union[dict, "PolicyBinding"]], list[Union[dict, "PolicyBinding"]]]] = empty_dict()
+    policy_bindings: Optional[Union[dict[Union[str, PolicyBindingAssignmentId], Union[dict, "PolicyBinding"]], list[Union[dict, "PolicyBinding"]]]] = empty_dict()
+    ownership_assignments: Optional[Union[dict[Union[str, OwnershipAssignmentAssignmentId], Union[dict, "OwnershipAssignment"]], list[Union[dict, "OwnershipAssignment"]]]] = empty_dict()
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.repository_id):
@@ -383,7 +392,9 @@ class MOEXModelRepository(YAMLRoot):
 
         self._normalize_inlined_as_list(slot_name="classification_assignments", slot_type=ClassificationAssignment, key_name="assignment_id", keyed=True)
 
-        self._normalize_inlined_as_list(slot_name="policy_bindings", slot_type=PolicyBinding, key_name="policy_binding_id", keyed=True)
+        self._normalize_inlined_as_list(slot_name="policy_bindings", slot_type=PolicyBinding, key_name="assignment_id", keyed=True)
+
+        self._normalize_inlined_as_list(slot_name="ownership_assignments", slot_type=OwnershipAssignment, key_name="assignment_id", keyed=True)
 
         super().__post_init__(**kwargs)
 
@@ -892,9 +903,76 @@ class HasValidity(YAMLRoot):
 
 
 @dataclass(repr=False)
-class ClassificationAssignment(YAMLRoot):
+class GovernanceAssignment(YAMLRoot):
     """
-    Версионируемое назначение категории классификации элементу модели с основанием и периодом действия.
+    Authored authoritative governance fact for a target element (ADR-049). Overrides inline authored defaults (ADR-023
+    cascade) for the validity window and assignment_scope. Effective values are not stored on this class; they appear
+    only in EffectiveGovernanceView.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["GovernanceAssignment"]
+    class_class_curie: ClassVar[str] = "dams:GovernanceAssignment"
+    class_name: ClassVar[str] = "GovernanceAssignment"
+    class_model_uri: ClassVar[URIRef] = DAMS.GovernanceAssignment
+
+    assignment_id: Union[str, GovernanceAssignmentAssignmentId] = None
+    target_element_ref: Union[str, URIorCURIE] = None
+    assignment_scope: Union[str, "AssignmentScopeEnum"] = None
+    valid_from: Optional[Union[str, XSDDateTime]] = None
+    valid_to: Optional[Union[str, XSDDateTime]] = None
+    source_artifact_ref: Optional[Union[str, URI]] = None
+    evidence_refs: Optional[Union[Union[str, URI], list[Union[str, URI]]]] = empty_list()
+    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
+    approved_by_ref: Optional[Union[str, RoleRegistryId]] = None
+    approved_at: Optional[Union[str, XSDDateTime]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.assignment_id):
+            self.MissingRequiredField("assignment_id")
+        if not isinstance(self.assignment_id, GovernanceAssignmentAssignmentId):
+            self.assignment_id = GovernanceAssignmentAssignmentId(self.assignment_id)
+
+        if self._is_empty(self.target_element_ref):
+            self.MissingRequiredField("target_element_ref")
+        if not isinstance(self.target_element_ref, URIorCURIE):
+            self.target_element_ref = URIorCURIE(self.target_element_ref)
+
+        if self._is_empty(self.assignment_scope):
+            self.MissingRequiredField("assignment_scope")
+        if not isinstance(self.assignment_scope, AssignmentScopeEnum):
+            self.assignment_scope = AssignmentScopeEnum(self.assignment_scope)
+
+        if self.valid_from is not None and not isinstance(self.valid_from, XSDDateTime):
+            self.valid_from = XSDDateTime(self.valid_from)
+
+        if self.valid_to is not None and not isinstance(self.valid_to, XSDDateTime):
+            self.valid_to = XSDDateTime(self.valid_to)
+
+        if self.source_artifact_ref is not None and not isinstance(self.source_artifact_ref, URI):
+            self.source_artifact_ref = URI(self.source_artifact_ref)
+
+        if not isinstance(self.evidence_refs, list):
+            self.evidence_refs = [self.evidence_refs] if self.evidence_refs is not None else []
+        self.evidence_refs = [v if isinstance(v, URI) else URI(v) for v in self.evidence_refs]
+
+        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
+            self.approval_status = ApprovalStatusEnum(self.approval_status)
+
+        if self.approved_by_ref is not None and not isinstance(self.approved_by_ref, RoleRegistryId):
+            self.approved_by_ref = RoleRegistryId(self.approved_by_ref)
+
+        if self.approved_at is not None and not isinstance(self.approved_at, XSDDateTime):
+            self.approved_at = XSDDateTime(self.approved_at)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
+class ClassificationAssignment(GovernanceAssignment):
+    """
+    Версионируемое назначение категории классификации элементу модели с основанием и периодом действия (ADR-049
+    authoritative layer).
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -904,25 +982,18 @@ class ClassificationAssignment(YAMLRoot):
     class_model_uri: ClassVar[URIRef] = DAMS.ClassificationAssignment
 
     assignment_id: Union[str, ClassificationAssignmentAssignmentId] = None
-    classified_element_ref: Union[str, URIorCURIE] = None
+    target_element_ref: Union[str, URIorCURIE] = None
+    assignment_scope: Union[str, "AssignmentScopeEnum"] = None
     classification_term_ref: Optional[Union[str, DataClassificationTermRegistryId]] = None
     governance_classification: Optional[Union[str, "GovernanceClassificationEnum"]] = None
     classification_source: Optional[str] = None
     classification_rationale: Optional[str] = None
-    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
-    valid_from: Optional[Union[str, XSDDateTime]] = None
-    valid_to: Optional[Union[str, XSDDateTime]] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
         if self._is_empty(self.assignment_id):
             self.MissingRequiredField("assignment_id")
         if not isinstance(self.assignment_id, ClassificationAssignmentAssignmentId):
             self.assignment_id = ClassificationAssignmentAssignmentId(self.assignment_id)
-
-        if self._is_empty(self.classified_element_ref):
-            self.MissingRequiredField("classified_element_ref")
-        if not isinstance(self.classified_element_ref, URIorCURIE):
-            self.classified_element_ref = URIorCURIE(self.classified_element_ref)
 
         if self.classification_term_ref is not None and not isinstance(self.classification_term_ref, DataClassificationTermRegistryId):
             self.classification_term_ref = DataClassificationTermRegistryId(self.classification_term_ref)
@@ -936,22 +1007,13 @@ class ClassificationAssignment(YAMLRoot):
         if self.classification_rationale is not None and not isinstance(self.classification_rationale, str):
             self.classification_rationale = str(self.classification_rationale)
 
-        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
-            self.approval_status = ApprovalStatusEnum(self.approval_status)
-
-        if self.valid_from is not None and not isinstance(self.valid_from, XSDDateTime):
-            self.valid_from = XSDDateTime(self.valid_from)
-
-        if self.valid_to is not None and not isinstance(self.valid_to, XSDDateTime):
-            self.valid_to = XSDDateTime(self.valid_to)
-
         super().__post_init__(**kwargs)
 
 
 @dataclass(repr=False)
-class PolicyBinding(YAMLRoot):
+class PolicyBinding(GovernanceAssignment):
     """
-    Применение управляемой политики к элементу модели.
+    Применение управляемой политики к элементу модели (ADR-049 authoritative layer).
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -960,37 +1022,62 @@ class PolicyBinding(YAMLRoot):
     class_name: ClassVar[str] = "PolicyBinding"
     class_model_uri: ClassVar[URIRef] = DAMS.PolicyBinding
 
-    policy_binding_id: Union[str, PolicyBindingPolicyBindingId] = None
-    policy_target_ref: Union[str, URIorCURIE] = None
+    assignment_id: Union[str, PolicyBindingAssignmentId] = None
+    target_element_ref: Union[str, URIorCURIE] = None
+    assignment_scope: Union[str, "AssignmentScopeEnum"] = None
     policy_ref: Union[str, PolicyRegistryId] = None
-    approval_status: Optional[Union[str, "ApprovalStatusEnum"]] = None
-    valid_from: Optional[Union[str, XSDDateTime]] = None
-    valid_to: Optional[Union[str, XSDDateTime]] = None
+    binding_effect: Optional[Union[str, "BindingEffectEnum"]] = None
 
     def __post_init__(self, *_: str, **kwargs: Any):
-        if self._is_empty(self.policy_binding_id):
-            self.MissingRequiredField("policy_binding_id")
-        if not isinstance(self.policy_binding_id, PolicyBindingPolicyBindingId):
-            self.policy_binding_id = PolicyBindingPolicyBindingId(self.policy_binding_id)
-
-        if self._is_empty(self.policy_target_ref):
-            self.MissingRequiredField("policy_target_ref")
-        if not isinstance(self.policy_target_ref, URIorCURIE):
-            self.policy_target_ref = URIorCURIE(self.policy_target_ref)
+        if self._is_empty(self.assignment_id):
+            self.MissingRequiredField("assignment_id")
+        if not isinstance(self.assignment_id, PolicyBindingAssignmentId):
+            self.assignment_id = PolicyBindingAssignmentId(self.assignment_id)
 
         if self._is_empty(self.policy_ref):
             self.MissingRequiredField("policy_ref")
         if not isinstance(self.policy_ref, PolicyRegistryId):
             self.policy_ref = PolicyRegistryId(self.policy_ref)
 
-        if self.approval_status is not None and not isinstance(self.approval_status, ApprovalStatusEnum):
-            self.approval_status = ApprovalStatusEnum(self.approval_status)
+        if self.binding_effect is not None and not isinstance(self.binding_effect, BindingEffectEnum):
+            self.binding_effect = BindingEffectEnum(self.binding_effect)
 
-        if self.valid_from is not None and not isinstance(self.valid_from, XSDDateTime):
-            self.valid_from = XSDDateTime(self.valid_from)
+        super().__post_init__(**kwargs)
 
-        if self.valid_to is not None and not isinstance(self.valid_to, XSDDateTime):
-            self.valid_to = XSDDateTime(self.valid_to)
+
+@dataclass(repr=False)
+class OwnershipAssignment(GovernanceAssignment):
+    """
+    Версионируемое назначение data owner / steward / owning unit элементу модели (ADR-049 authoritative layer).
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["OwnershipAssignment"]
+    class_class_curie: ClassVar[str] = "dams:OwnershipAssignment"
+    class_name: ClassVar[str] = "OwnershipAssignment"
+    class_model_uri: ClassVar[URIRef] = DAMS.OwnershipAssignment
+
+    assignment_id: Union[str, OwnershipAssignmentAssignmentId] = None
+    target_element_ref: Union[str, URIorCURIE] = None
+    assignment_scope: Union[str, "AssignmentScopeEnum"] = None
+    data_owner_ref: Optional[Union[str, RoleRegistryId]] = None
+    data_steward_ref: Optional[Union[str, RoleRegistryId]] = None
+    owning_unit_ref: Optional[Union[str, OrganizationUnitRegistryId]] = None
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if self._is_empty(self.assignment_id):
+            self.MissingRequiredField("assignment_id")
+        if not isinstance(self.assignment_id, OwnershipAssignmentAssignmentId):
+            self.assignment_id = OwnershipAssignmentAssignmentId(self.assignment_id)
+
+        if self.data_owner_ref is not None and not isinstance(self.data_owner_ref, RoleRegistryId):
+            self.data_owner_ref = RoleRegistryId(self.data_owner_ref)
+
+        if self.data_steward_ref is not None and not isinstance(self.data_steward_ref, RoleRegistryId):
+            self.data_steward_ref = RoleRegistryId(self.data_steward_ref)
+
+        if self.owning_unit_ref is not None and not isinstance(self.owning_unit_ref, OrganizationUnitRegistryId):
+            self.owning_unit_ref = OrganizationUnitRegistryId(self.owning_unit_ref)
 
         super().__post_init__(**kwargs)
 
@@ -1033,8 +1120,9 @@ class HasLifecycle(YAMLRoot):
 @dataclass(repr=False)
 class HasOwnership(YAMLRoot):
     """
-    Mixin владения: data owner, data steward и организационное подразделение. Отсутствие слота означает наследование
-    эффективного значения по containment cascade (ADR-023); заданное значение — локальный override.
+    Mixin владения: data owner, data steward и организационное подразделение. Authored default (ADR-023 cascade:
+    absent key inherits; present = override). Overridden by OwnershipAssignment when approved and in force (ADR-049).
+    Effective ownership is not stored on the element.
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -1096,8 +1184,9 @@ class HasBusinessClassification(YAMLRoot):
 @dataclass(repr=False)
 class HasGovernanceClassification(YAMLRoot):
     """
-    Базовая и специальная классификация чувствительности данных. governance_classification участвует в containment
-    cascade (ADR-023): пустой слот наследуется от родителя, заданный — override.
+    Базовая и специальная классификация чувствительности данных. Authored default: governance_classification участвует
+    в containment cascade (ADR-023). Overridden by ClassificationAssignment when approved and in force (ADR-049).
+    Effective classification is not stored here.
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -1135,8 +1224,9 @@ class HasGovernanceClassification(YAMLRoot):
 @dataclass(repr=False)
 class HasPolicyBindings(YAMLRoot):
     """
-    Mixin привязки управляемых политик к элементу модели. policy_refs участвует в containment cascade (ADR-023):
-    отсутствие ключа — наследование; присутствующий список (в т.ч. пустой) — полная замена.
+    Mixin привязки управляемых политик к элементу модели. Authored default: policy_refs участвует в containment
+    cascade (ADR-023); absent key inherits; present list (including empty) is full replace. Overridden by
+    PolicyBinding when approved and in force (ADR-049). Effective policy set is not stored here.
     """
     _inherited_slots: ClassVar[list[str]] = []
 
@@ -4859,6 +4949,38 @@ class GovernanceClassificationEnum(EnumDefinitionImpl):
         description="""Базовая шкала ограничения доступа; специальные виды тайны задаются отдельными терминами классификации.""",
     )
 
+class AssignmentScopeEnum(EnumDefinitionImpl):
+    """
+    Scope of a GovernanceAssignment relative to target_element_ref (ADR-049).
+    """
+    element = LinkMLPermissibleValue(
+        text="element",
+        description="Applies only to the target element.")
+    subtree = LinkMLPermissibleValue(
+        text="subtree",
+        description="Applies to the target and descendants in the containment cascade.")
+
+    _defn = EnumDefinition(
+        name="AssignmentScopeEnum",
+        description="""Scope of a GovernanceAssignment relative to target_element_ref (ADR-049).""",
+    )
+
+class BindingEffectEnum(EnumDefinitionImpl):
+    """
+    How a PolicyBinding combines with lower-layer policy_refs (ADR-049).
+    """
+    replace = LinkMLPermissibleValue(
+        text="replace",
+        description="Full replace of effective policy list (default; ADR-023 list-replace).")
+    add = LinkMLPermissibleValue(
+        text="add",
+        description="Union onto the next lower layer (cascade or nearer assignment).")
+
+    _defn = EnumDefinition(
+        name="BindingEffectEnum",
+        description="""How a PolicyBinding combines with lower-layer policy_refs (ADR-049).""",
+    )
+
 class LogicalDataTypeEnum(EnumDefinitionImpl):
     """
     Seed catalog only (ADR-036). Not the range of LogicalAttribute. Prefer DataType registry objects. Deprecated Wave
@@ -5478,7 +5600,10 @@ slots.classification_assignments = Slot(uri=DAMS.classification_assignments, nam
                    model_uri=DAMS.classification_assignments, domain=None, range=Optional[Union[dict[Union[str, ClassificationAssignmentAssignmentId], Union[dict, ClassificationAssignment]], list[Union[dict, ClassificationAssignment]]]])
 
 slots.policy_bindings = Slot(uri=DAMS.policy_bindings, name="policy_bindings", curie=DAMS.curie('policy_bindings'),
-                   model_uri=DAMS.policy_bindings, domain=None, range=Optional[Union[dict[Union[str, PolicyBindingPolicyBindingId], Union[dict, PolicyBinding]], list[Union[dict, PolicyBinding]]]])
+                   model_uri=DAMS.policy_bindings, domain=None, range=Optional[Union[dict[Union[str, PolicyBindingAssignmentId], Union[dict, PolicyBinding]], list[Union[dict, PolicyBinding]]]])
+
+slots.ownership_assignments = Slot(uri=DAMS.ownership_assignments, name="ownership_assignments", curie=DAMS.curie('ownership_assignments'),
+                   model_uri=DAMS.ownership_assignments, domain=None, range=Optional[Union[dict[Union[str, OwnershipAssignmentAssignmentId], Union[dict, OwnershipAssignment]], list[Union[dict, OwnershipAssignment]]]])
 
 slots.registry_id = Slot(uri=DAMS.registry_id, name="registry_id", curie=DAMS.curie('registry_id'),
                    model_uri=DAMS.registry_id, domain=None, range=URIRef)
@@ -5540,20 +5665,20 @@ slots.artifact_version = Slot(uri=DAMS.artifact_version, name="artifact_version"
 slots.assignment_id = Slot(uri=DAMS.assignment_id, name="assignment_id", curie=DAMS.curie('assignment_id'),
                    model_uri=DAMS.assignment_id, domain=None, range=URIRef)
 
-slots.classified_element_ref = Slot(uri=DAMS.classified_element_ref, name="classified_element_ref", curie=DAMS.curie('classified_element_ref'),
-                   model_uri=DAMS.classified_element_ref, domain=None, range=Union[str, URIorCURIE])
+slots.target_element_ref = Slot(uri=DAMS.target_element_ref, name="target_element_ref", curie=DAMS.curie('target_element_ref'),
+                   model_uri=DAMS.target_element_ref, domain=None, range=Union[str, URIorCURIE])
+
+slots.assignment_scope = Slot(uri=DAMS.assignment_scope, name="assignment_scope", curie=DAMS.curie('assignment_scope'),
+                   model_uri=DAMS.assignment_scope, domain=None, range=Union[str, "AssignmentScopeEnum"])
 
 slots.classification_term_ref = Slot(uri=DAMS.classification_term_ref, name="classification_term_ref", curie=DAMS.curie('classification_term_ref'),
                    model_uri=DAMS.classification_term_ref, domain=None, range=Optional[Union[str, DataClassificationTermRegistryId]])
 
-slots.policy_binding_id = Slot(uri=DAMS.policy_binding_id, name="policy_binding_id", curie=DAMS.curie('policy_binding_id'),
-                   model_uri=DAMS.policy_binding_id, domain=None, range=URIRef)
-
-slots.policy_target_ref = Slot(uri=DAMS.policy_target_ref, name="policy_target_ref", curie=DAMS.curie('policy_target_ref'),
-                   model_uri=DAMS.policy_target_ref, domain=None, range=Union[str, URIorCURIE])
-
 slots.policy_ref = Slot(uri=DAMS.policy_ref, name="policy_ref", curie=DAMS.curie('policy_ref'),
                    model_uri=DAMS.policy_ref, domain=None, range=Union[str, PolicyRegistryId])
+
+slots.binding_effect = Slot(uri=DAMS.binding_effect, name="binding_effect", curie=DAMS.curie('binding_effect'),
+                   model_uri=DAMS.binding_effect, domain=None, range=Optional[Union[str, "BindingEffectEnum"]])
 
 slots.lifecycle_status = Slot(uri=DAMS.lifecycle_status, name="lifecycle_status", curie=DAMS.curie('lifecycle_status'),
                    model_uri=DAMS.lifecycle_status, domain=None, range=Union[str, "LifecycleStatusEnum"])

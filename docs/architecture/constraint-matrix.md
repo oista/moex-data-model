@@ -11,8 +11,8 @@ superseded_by: []
 Автогенерируется `scripts/check_constraint_matrix.py`. Источник: `model-assets/specifications/moex-dams/0.1/constraints/constraint-matrix.yaml`. Не редактировать вручную.
 
 **matrix_id:** `dams:constraint-matrix/0.1`  
-**registry size:** 53  
-**invariants:** 53
+**registry size:** 56  
+**invariants:** 56
 
 | ID | Title | Levels | Status | L1 | L2 | L3 | Source status | Scope | Source |
 |---|---|---|---|---|---|---|---|---|---|
@@ -69,6 +69,9 @@ superseded_by: []
 | INV-051 | mapping_cardinality matches endpoint counts | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-046; audit mapping cardinality |
 | INV-052 | LogicalAttribute.owner_entity_ref equals containing entity | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-050; audit containment consistency |
 | INV-053 | Relationship ends are conceptual or logical entities | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | audit Relation model; untyped uriorcurie ends |
+| INV-054 | No conflicting GovernanceAssignments on same target | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-049 |
+| INV-055 | GovernanceAssignment target_element_ref resolves in package | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-049 |
+| INV-056 | Inline authored default shadowed by assignment is warned | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-049 |
 
 ## Statements
 
@@ -466,5 +469,26 @@ Relationship.source_entity_ref and target_entity_ref must resolve to a Conceptua
 
 
 *adr_ref:* `ADR-045`
+
+### INV-054: No conflicting GovernanceAssignments on same target
+
+Two approved GovernanceAssignments of the same family on the same target with overlapping validity windows and different values must fail (conflicting_assignments). Nearest-target resolution must not pick a silent winner.
+
+
+*adr_ref:* `ADR-049`
+
+### INV-055: GovernanceAssignment target_element_ref resolves in package
+
+target_element_ref must identify an element in the ModelPackage containment cascade (dangling_target is an error).
+
+
+*adr_ref:* `ADR-049`
+
+### INV-056: Inline authored default shadowed by assignment is warned
+
+When an element declares an inline governed slot whose value differs from the effective value supplied by an approved GovernanceAssignment, emit shadowed_default (warning). Defaults remain legal under exceptions.
+
+
+*adr_ref:* `ADR-049`
 
 См. также: [ADR-045](../adr/ADR-045-executable-constraint-matrix.md), [inventory report](constraint-matrix-inventory-report.md), [adding-an-invariant](../guides/adding-an-invariant.md).
