@@ -16,3 +16,4 @@ logical_entities:
     description: a
     lifecycle_status: active
     owner_entity_ref: dams:logical/inv052bad/OTHER
+    data_type_ref: dams:datatype/string
