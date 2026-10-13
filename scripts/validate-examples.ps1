@@ -48,6 +48,7 @@ SKIP = {
 TARGETS = {
     'client-contract-binding.yaml': 'DataModelBinding',
     'client-data-flow.yaml': 'DataFlow',
+    'governance-assignments.example.yaml': 'ModelPackage',
 }
 
 validator = make_linkml_validator(schema)
