@@ -25,6 +25,7 @@ Docs / architecture-check only — **no** aggregate schema bump in this wave.
 ## D4 — governance consumer hardening (ADR-049 on main)
 
 - Preferred import: `moex_dams.rules.assignment_resolver` (`resolve_governed` / `diagnose_governance`).
+- Audit R2-9: physical split — `_apply_assignments` / `resolve_governed` / `diagnose_governance` live in `assignment_resolver.py`; `cascade.py` is ADR-023 containment only (see ADR-049 D9).
 - Conflicting `PolicyBinding` with `binding_effect=replace` → `conflicting_assignments`.
 - `formal_checks` accept `as_of` / `assignments` / `repo_root` (configured `as_of` from `moex-governance-view`).
 - `EffectiveGovernanceView` discovery includes ADR-047 manifest package bodies.

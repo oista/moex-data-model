@@ -99,13 +99,19 @@ Executable invariants for this ADR are **INV-054…INV-056** on current `main` (
 - `formal_checks` accept `as_of` / `assignments` / `repo_root` (loads configured `as_of` from `moex-governance-view`).
 - `EffectiveGovernanceView` discovery includes ADR-047 manifest package bodies (plus curated examples / `*.governance.yaml`).
 
+### D9. Module split (audit R2-9)
+
+- `cascade.py` is ADR-023 containment only (`_cascade_only`, `iter_cascade_nodes`, families, `find_redundant_overrides`).
+- `assignment_resolver.py` owns ADR-049 assignment merge (`_apply_assignments`, `resolve_governed`, `diagnose_governance`, `GovernanceFinding`).
+- Direction of imports: `assignment_resolver` → `cascade`; `cascade.find_redundant_overrides` uses a **lazy** import of `resolve_governed` so there is no load-time cycle.
+- Guard: `packages/specification-dams/tests/test_assignment_module_boundary.py`.
+
 ### Out of scope
 
 - `security_classification` / `sensitivity_term_refs` (Wave 2; same as ADR-023)
 - `classification_term_ref` does not drive effective `governance_classification`
 - Live external policy engines; Neo4j operational graph (ADR-003)
 - Union of policies without `binding_effect`
-- Physical move of `_apply_assignments` out of `cascade.py` (shared helpers; deferred to avoid import cycles)
 
 ## Consequences
 
