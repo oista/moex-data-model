@@ -14,6 +14,7 @@ from architecture_check.model_element_roles import (
     check_description_declarations,
     check_identified_vs_embedded,
 )
+from architecture_check.id_prefixes import check_id_prefixes
 from architecture_check.redundant_mixins import check_redundant_mixins
 
 
@@ -69,6 +70,8 @@ def main(argv: list[str] | None = None) -> int:
             errors.append(f"model_element_roles: {msg}")
         for msg in check_redundant_mixins(root):
             errors.append(f"redundant_mixins: {msg}")
+        for msg in check_id_prefixes(root):
+            errors.append(f"id_prefixes: {msg}")
 
     if errors:
         print("architecture-check FAILED:", file=sys.stderr)

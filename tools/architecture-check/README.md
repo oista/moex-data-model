@@ -17,6 +17,9 @@ Mechanical guards for the architecture pack under `docs/architecture/` and DAMS 
    EmbeddedElement must not share an `is_a` chain.
 5. **redundant_mixins** — class must not re-declare a mixin already induced via
    `is_a` parent chain or via another declared sibling mixin (ADR-044).
+6. **id_prefixes** — concrete `IdentifiedElement` / `ModelElement` classes must
+   declare (or inherit) `id_prefixes`, unless listed on the ADR-052 shrink-only
+   allowlist (`id_prefixes.py`).
 
 ## Run
 
