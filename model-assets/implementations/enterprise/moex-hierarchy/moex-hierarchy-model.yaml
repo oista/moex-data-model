@@ -1447,3 +1447,5 @@ relationships:
   relation_term_ref: dams:relterm/ofTerminal
   term_direction: forward
   _source_implementation: moex-enterprise-conceptual-model
+realizes_mappings: []
+aligns_with_mappings: []
