@@ -344,8 +344,9 @@ artifact:
 - **Semantic diff API + Web preview (2026-09-28):** `POST /workspaces/{id}/semantic-diff` (published vs draft); Workbench **Review changes** panel. PR attach still out.
 - **Stage 0 foundation CI (2026-09-28):** `requirements-linkml.txt` (exact pins; `uv.lock` deferred), `.python-version` 3.12, `.linkmllint.yaml`, `validate-examples`, `compare-golden` (contracts + JSON Schema + OWL/SHACL/DBML/Mermaid), `.github/workflows/check.yml`.
 - **Stage 6 golden matrix (2026-09-28):** `make generate-artifacts` / `moex-model compile --artifacts` → OWL, SHACL, regenerable `moex-dams.dbml`, Mermaid, Python, Doc, RDF + manifests; in `compare-golden`. Colored `moex-dams-drawdb-colored.dbml` remains curated sample (not golden). gen-doc git = index_subset; Playwright bridge smoke via `make web-e2e`. Still open: full upstream drawDB editor import.
-- **Viewer + ontology packages CI (2026-09-28):** GHA job `viewer-and-packages` runs `make packages-check` (standard-owl / semantic-mappings / ontology-catalog) and `make viewer-check` alongside Stage 0 `make check`.
-- **Workbench CI (2026-09-28):** GHA job `workbench-check` runs `make drawdb-adapter-check`, `make api-check`, `make web-check`.
+- **Viewer + ontology packages CI (2026-09-28):** GHA job `viewer-and-packages` runs `make packages-check` (standard-owl / ontology / semantic-mappings / ontology-catalog; no drawDB) and `make viewer-check` alongside Stage 0 `make check`.
+- **Workbench CI (2026-09-28):** GHA job `workbench-check` runs `make drawdb-adapter-check` (drawDB + DBML projection), `make api-check`, `make web-check`.
+- **Stage 0 dams packages (2026-10-14):** `scripts/check_all.py` / `make check` includes `dams-packages-check` (specification-dams, standard-linkml, repository-loader, tests/architecture, tests/migration). Separate GHA job `dams-packages` removed to avoid duplicate pytest.
 - **PDF→ER agent docs (2026-09-28):** playbook + model contract under [`docs/agents/`](agents/); design status delivered. Filling runs still write fixture CSVs + `gaps.md` at runtime.
 
 ### Результат
