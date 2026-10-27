@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-14T00:07:10
+# Generation date: 2026-10-27T20:36:07
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -60,7 +60,7 @@ from linkml_runtime.linkml_model.types import Boolean, Datetime, Decimal, Intege
 from linkml_runtime.utils.metamodelcore import Bool, Decimal, URI, URIorCURIE, XSDDateTime
 
 metamodel_version = "1.11.0"
-version = "5.1.0"
+version = "5.2.0"
 
 # Namespaces
 DAMS = CurieNamespace('dams', 'https://data.moex.com/dams/')
@@ -4452,6 +4452,8 @@ class SpecificationRequirement(ModelElement):
     statement: str = None
     description: str = None
     lifecycle_status: Union[str, "RequirementLifecycleStatus"] = 'draft'
+    obligation: Optional[Union[str, "RequirementObligationEnum"]] = None
+    responsible_role: Optional[Union[str, "RequirementResponsibleRoleEnum"]] = None
     applies_to: Optional[Union[dict, RequirementApplicability]] = None
     formal_checks: Optional[Union[dict[Union[str, FormalCheckCheckId], Union[dict, FormalCheck]], list[Union[dict, FormalCheck]]]] = empty_dict()
     implementation_status: Optional[Union[str, "RequirementImplementationStatus"]] = None
@@ -4492,6 +4494,12 @@ class SpecificationRequirement(ModelElement):
             self.MissingRequiredField("lifecycle_status")
         if not isinstance(self.lifecycle_status, RequirementLifecycleStatus):
             self.lifecycle_status = RequirementLifecycleStatus(self.lifecycle_status)
+
+        if self.obligation is not None and not isinstance(self.obligation, RequirementObligationEnum):
+            self.obligation = RequirementObligationEnum(self.obligation)
+
+        if self.responsible_role is not None and not isinstance(self.responsible_role, RequirementResponsibleRoleEnum):
+            self.responsible_role = RequirementResponsibleRoleEnum(self.responsible_role)
 
         if self.applies_to is not None and not isinstance(self.applies_to, RequirementApplicability):
             self.applies_to = RequirementApplicability(**as_dict(self.applies_to))
@@ -5232,8 +5240,12 @@ class RequirementImplementationStatus(EnumDefinitionImpl):
 
 class RequirementSectionEnum(EnumDefinitionImpl):
     """
-    Раздел каталога требований (трёхбуквенный код в code).
+    Раздел каталога требований. Значение совпадает с префиксом `code` (CDM|LDM|PDM|REF|ATR|FLW|CLS|GEN); суффикс — две
+    или три цифры (ADR-056).
     """
+    CDM = LinkMLPermissibleValue(
+        text="CDM",
+        description="Концептуальная модель (нормативный хребет ADR-056)")
     LDM = LinkMLPermissibleValue(
         text="LDM",
         description="Логическая модель")
@@ -5258,7 +5270,42 @@ class RequirementSectionEnum(EnumDefinitionImpl):
 
     _defn = EnumDefinition(
         name="RequirementSectionEnum",
-        description="Раздел каталога требований (трёхбуквенный код в code).",
+        description="""Раздел каталога требований. Значение совпадает с префиксом `code` (CDM|LDM|PDM|REF|ATR|FLW|CLS|GEN); суффикс — две или три цифры (ADR-056).""",
+    )
+
+class RequirementObligationEnum(EnumDefinitionImpl):
+    """
+    Класс обязательности требования из нормативного документа (ADR-056). Не заменяет CheckSeverityEnum у formal_checks.
+    """
+    mandatory = LinkMLPermissibleValue(
+        text="mandatory",
+        description="ОБЯЗАТЕЛЬНО — assess severity error, когда проверка исполнима")
+    recommended = LinkMLPermissibleValue(
+        text="recommended",
+        description="РЕКОМЕНДУЕТСЯ — assess severity warning, когда проверка исполнима")
+
+    _defn = EnumDefinition(
+        name="RequirementObligationEnum",
+        description="""Класс обязательности требования из нормативного документа (ADR-056). Не заменяет CheckSeverityEnum у formal_checks.""",
+    )
+
+class RequirementResponsibleRoleEnum(EnumDefinitionImpl):
+    """
+    Роль, ответственная за выполнение требования (нормативная таблица, ADR-056).
+    """
+    data_architecture = LinkMLPermissibleValue(
+        text="data_architecture",
+        description="Архитектура данных")
+    it_owner = LinkMLPermissibleValue(
+        text="it_owner",
+        description="ИТ-владелец")
+    business_owner = LinkMLPermissibleValue(
+        text="business_owner",
+        description="бизнес-владелец")
+
+    _defn = EnumDefinition(
+        name="RequirementResponsibleRoleEnum",
+        description="Роль, ответственная за выполнение требования (нормативная таблица, ADR-056).",
     )
 
 class FormalCheckKindEnum(EnumDefinitionImpl):
@@ -6490,7 +6537,13 @@ slots.effective = Slot(uri=DAMS.effective, name="effective", curie=DAMS.curie('e
 
 slots.code = Slot(uri=DAMS.code, name="code", curie=DAMS.curie('code'),
                    model_uri=DAMS.code, domain=None, range=str,
-                   pattern=re.compile(r'^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$'))
+                   pattern=re.compile(r'^(CDM|LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{2,3}$'))
+
+slots.obligation = Slot(uri=DAMS.obligation, name="obligation", curie=DAMS.curie('obligation'),
+                   model_uri=DAMS.obligation, domain=None, range=Optional[Union[str, "RequirementObligationEnum"]])
+
+slots.responsible_role = Slot(uri=DAMS.responsible_role, name="responsible_role", curie=DAMS.curie('responsible_role'),
+                   model_uri=DAMS.responsible_role, domain=None, range=Optional[Union[str, "RequirementResponsibleRoleEnum"]])
 
 slots.requirement_level = Slot(uri=DAMS.requirement_level, name="requirement_level", curie=DAMS.curie('requirement_level'),
                    model_uri=DAMS.requirement_level, domain=None, range=Union[str, "RequirementLevelEnum"])

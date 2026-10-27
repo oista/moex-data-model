@@ -35,7 +35,7 @@
     
         
         
-        SpecificationRequirement --> "1..*" FormalCheck : formal_checks
+        SpecificationRequirement --> "*" FormalCheck : formal_checks
         click FormalCheck href "../FormalCheck"
     
 
@@ -75,6 +75,17 @@
         
       SpecificationRequirement : name
         
+      SpecificationRequirement : obligation
+        
+          
+    
+        
+        
+        SpecificationRequirement --> "0..1" RequirementObligationEnum : obligation
+        click RequirementObligationEnum href "../RequirementObligationEnum"
+    
+
+        
       SpecificationRequirement : requirement_level
         
           
@@ -94,6 +105,17 @@
         
         SpecificationRequirement --> "1" RequirementSectionEnum : requirement_section
         click RequirementSectionEnum href "../RequirementSectionEnum"
+    
+
+        
+      SpecificationRequirement : responsible_role
+        
+          
+    
+        
+        
+        SpecificationRequirement --> "0..1" RequirementResponsibleRoleEnum : responsible_role
+        click RequirementResponsibleRoleEnum href "../RequirementResponsibleRoleEnum"
     
 
         

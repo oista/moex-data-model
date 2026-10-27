@@ -53,6 +53,8 @@ classes:
       - code
       - requirement_level
       - requirement_section
+      - obligation
+      - responsible_role
       - statement
       - applies_to
       - formal_checks
@@ -120,7 +122,20 @@ slots:
   code:
     range: string
     required: true
-    pattern: '^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$'
+    pattern: '^(CDM|LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{2,3}$'
+    description: >
+      Код требования: раздел + две или три цифры (ADR-056). Трёхзначные
+      исторические коды (GEN-001, LDM-001, …) остаются валидными.
+  obligation:
+    range: RequirementObligationEnum
+    description: >
+      ОБЯЗАТЕЛЬНО / РЕКОМЕНДУЕТСЯ из нормативного документа (ADR-056).
+      Необязателен на исторических записях до миграции каталога.
+  responsible_role:
+    range: RequirementResponsibleRoleEnum
+    description: >
+      Ответственная роль из нормативной таблицы (ADR-056). Необязателен
+      на исторических записях до миграции каталога.
   requirement_level:
     range: RequirementLevelEnum
     required: true
@@ -155,7 +170,10 @@ slots:
     multivalued: true
     inlined: true
     inlined_as_list: true
-    minimum_cardinality: 1
+    minimum_cardinality: 0
+    description: >
+      Исполняемое подмножество нормы. Пустой список допустим для ручных
+      правил (ADR-013 / ADR-056); это human-review, не молчание.
   implementation_status:
     range: RequirementImplementationStatus
     description: >

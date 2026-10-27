@@ -144,7 +144,7 @@ Name: moex_dams
 | [classification_rationale](classification_rationale.md) |  |
 | [classification_source](classification_source.md) |  |
 | [classification_term_ref](classification_term_ref.md) |  |
-| [code](code.md) |  |
+| [code](code.md) | Код требования: раздел + две или три цифры (ADR-056) |
 | [column_position](column_position.md) | Позиция колонки (только schema_format=relational; DAMS-валидатор) |
 | [compatibility_baseline_ref](compatibility_baseline_ref.md) |  |
 | [compatibility_mode](compatibility_mode.md) |  |
@@ -218,7 +218,7 @@ Name: moex_dams
 | [filter_expression](filter_expression.md) |  |
 | [flow_ref](flow_ref.md) |  |
 | [foreign_key_target](foreign_key_target.md) | Цель внешнего ключа как structure_id#local_key (только relational) |
-| [formal_checks](formal_checks.md) |  |
+| [formal_checks](formal_checks.md) | Исполняемое подмножество нормы |
 | [format_pattern](format_pattern.md) | Шаблон/формат значения для ValueDomain (regex или маска) |
 | [forward_label](forward_label.md) | Natural-language label source → target (ADR-026) |
 | [forward_label_en](forward_label_en.md) | English forward label (ADR-026) |
@@ -297,6 +297,7 @@ Name: moex_dams
 | [node_kind](node_kind.md) | Вид узла (scalar, object, array, map, union, enum, reference) |
 | [nodes](nodes.md) | Плоский список узлов структуры |
 | [nullable](nullable.md) | Допустимость null (отдельно от required) |
+| [obligation](obligation.md) | ОБЯЗАТЕЛЬНО / РЕКОМЕНДУЕТСЯ из нормативного документа (ADR-056) |
 | [ontology_property_ref](ontology_property_ref.md) | Optional owl:ObjectProperty IRI |
 | [operation_name](operation_name.md) |  |
 | [ordinal](ordinal.md) | Порядок значения в перечислении |
@@ -346,6 +347,7 @@ Name: moex_dams
 | [requirement_level](requirement_level.md) |  |
 | [requirement_section](requirement_section.md) |  |
 | [requirements](requirements.md) |  |
+| [responsible_role](responsible_role.md) | Ответственная роль из нормативной таблицы (ADR-056) |
 | [root_local_key](root_local_key.md) | local_key корневого узла в nodes |
 | [scale](scale.md) | Масштаб для decimal (число цифр после запятой); scale ≤ precision |
 | [schema_dialect](schema_dialect.md) | Диалект / версия языка схемы (JSON Schema dialect IRI, AsyncAPI format id) |
@@ -478,7 +480,9 @@ Name: moex_dams
 | [RequirementImplementationStatus](RequirementImplementationStatus.md) | Статус реализации утверждённого требования |
 | [RequirementLevelEnum](RequirementLevelEnum.md) | Уровень применения требования к спецификации |
 | [RequirementLifecycleStatus](RequirementLifecycleStatus.md) | Статус жизненного цикла нормативного требования (SpecificationRequirement) |
-| [RequirementSectionEnum](RequirementSectionEnum.md) | Раздел каталога требований (трёхбуквенный код в code) |
+| [RequirementObligationEnum](RequirementObligationEnum.md) | Класс обязательности требования из нормативного документа (ADR-056) |
+| [RequirementResponsibleRoleEnum](RequirementResponsibleRoleEnum.md) | Роль, ответственная за выполнение требования (нормативная таблица, ADR-056) |
+| [RequirementSectionEnum](RequirementSectionEnum.md) | Раздел каталога требований |
 | [SchemaFormatEnum](SchemaFormatEnum.md) | Формат схемы DataStructure (стартовый набор; перенос в реестр — отдельно) |
 | [SchemaNodeKindEnum](SchemaNodeKindEnum.md) | Вид узла SchemaNode |
 | [ScopedDefinitionRelationEnum](ScopedDefinitionRelationEnum.md) | How a scoped definition relates to the element's reference definition (ADR-02... |
