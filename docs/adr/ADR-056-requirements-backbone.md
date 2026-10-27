@@ -11,7 +11,8 @@ superseded_by: []
 **Date:** 2026-10-27  
 **Status:** Proposed (PR-0: ADR + inventory; schemas / `generated/` untouched)  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
-**Related:** [ADR-013](ADR-013-specification-requirements-catalog.md), [ADR-021](ADR-021-dams-implementation-profile-and-levels.md), [ADR-023](ADR-023-governed-property-cascade.md), [ADR-025](ADR-025-definition-cascade-and-glossary.md), [ADR-026](ADR-026-cmd-entity-metamodel.md), [ADR-029](ADR-029-cdm-from-er-sketch-and-realization.md), [ADR-045](ADR-045-executable-constraint-matrix.md), [ADR-046](ADR-046-typed-mapping-endpoints.md), [ADR-048](ADR-048-topology-ownership.md)  
+**Amends:** [ADR-013](ADR-013-specification-requirements-catalog.md) (code pattern `{SECTION}-{NN}`/`{NNN}`; section `CDM`; optional empty `formal_checks`; `obligation` / `responsible_role`)  
+**Related:** [ADR-013](ADR-013-specification-requirements-catalog.md), [ADR-021](ADR-021-dams-implementation-profile-and-levels.md), [ADR-023](ADR-023-governed-property-cascade.md), [ADR-025](ADR-025-definition-cascade-and-glossary.md), [ADR-026](ADR-026-cmd-entity-metamodel.md), [ADR-029](ADR-029-cdm-from-er-sketch-and-realization.md), [ADR-045](ADR-045-executable-constraint-matrix.md), [ADR-046](ADR-046-typed-mapping-endpoints.md), [ADR-048](ADR-048-topology-ownership.md), [ADR-051](ADR-051-dams-schema-compatibility.md)  
 **Inventory:** [requirements-inventory.md](../migration/requirements-inventory.md)  
 **Plan:** `.cursor/plans/moex-data-model_requirements_backbone_*.plan.md` (workspace)
 
@@ -44,6 +45,38 @@ The 21 normative rules are the **spine** of the DAMS requirements catalog. Codes
 | РЕКОМЕНДУЕТСЯ | `obligation: recommended`, check severity `warning` when automated |
 
 Manual rules (no executable `formal_checks`) remain valid per [ADR-013](ADR-013-specification-requirements-catalog.md): absence of checks means human-review, not silence.
+
+Responsible roles from the normative table (catalog slot `responsible_role` in PR-1):
+
+| Normative label | Slot value |
+|---|---|
+| Архитектура данных | `data_architecture` |
+| ИТ-владелец | `it_owner` |
+| бизнес-владелец | `business_owner` |
+
+#### Backbone catalog (21)
+
+Statements are the normative text (minor edits allowed later without reshaping the series). `formal_checks` may be empty until PR-5 / PR-7.
+
+| Code | Obligation | Role | Statement (normative) |
+|---|---|---|---|
+| CDM-01 | mandatory | data_architecture | Для каждого сущности концептуальной модели внесено соответствующее определение глоссария, раскрывающее единый(общий) для Группы бизнес-смысл термина, независимо от предметной области и способов реализации |
+| CDM-02 | mandatory | data_architecture | Полностью описаны базовые типы связей между сущностями КМД — «Входит в состав», «Является разновидностью» |
+| LDM-01 | mandatory | it_owner | Логическая модель данных (ЛМД) определена на уровне ИТ-решения |
+| LDM-02 | mandatory | it_owner | ЛМД соответствует актуальной версии принятой спецификации. Версия спецификации указана в описании модели |
+| LDM-03 | mandatory | it_owner | Модель ИТ-решения зарегистрирована в Дата-каталоге |
+| LDM-04 | mandatory | business_owner | Для каждой сущности ЛМД должно быть внесено определение бизнес-термина глоссария, раскрывающее его смысл, применительно к описываемому ИТ-решению (включая ссылку на нормативную документацию, при её наличии) |
+| LDM-05 | mandatory | business_owner | Для каждой сущности ЛМД описаны атрибуты, необходимые для однозначного представления её бизнес-смысла, идентификации, характеристик, состояния и участия в предусмотренных бизнес-процессах |
+| LDM-06 | mandatory | business_owner | Для каждой сущности ЛМД определен состав атрибутов уникального идентификатора. Приоритетный порядок выбора идентификатора – бизнес ключ, натуральный ключ, суррогатный ключ (при отсутствии перечисленных выше альтернатив) |
+| LDM-07 | mandatory | business_owner | Полностью описаны существующие базовые типы связей между сущностями — «Входит в состав», «Является разновидностью», «Ссылается на справочник» |
+| LDM-08 | mandatory | business_owner | В дополнение к описанию базовых типов связей между сущностями ЛМД, описаны остальные типы связей (согласно справочнику типов) |
+| LDM-09 | mandatory | it_owner | Для каждой сущности ЛМД указан Класс данных. В случае смешанной классификации сущности — Класс данных указан для её атрибутов |
+| LDM-10 | mandatory | it_owner | Для каждой сущности ЛМД указан Класс конфиденциальности данных. В случае смешанной классификации сущности — Класс конфиденциальности указан для её атрибутов |
+| LDM-11 | mandatory | business_owner | Для каждой сущности ЛМД указан владелец данных. В случае нескольких владельцев — владелец указан для атрибутов сущности |
+| LDM-12 | mandatory | it_owner | Для каждой сущности ЛМД указана система-источник. При различии источников отдельных атрибутов источники указаны на уровне соответствующих атрибутов |
+| LDM-13 | recommended | it_owner | Для каждой сущности ЛМД указана Классификация ИОД. В случае смешанной классификации – указывается более высокая степень чувствительности, либо размечаются отдельные атрибуты |
+| PDM-01 | mandatory | it_owner | В ФМД описаны все сущности и атрибуты, через которые ИТ-решение выступает поставщиком данных в интеграциях |
+| PDM-02 | mandatory | it_owner | Для каждого атрибута сущности ФМД, несущего бизнес-смысл, указана связь с атрибутом сущности ЛМД |
 
 ### D2. Disposition of the 57 current entries
 

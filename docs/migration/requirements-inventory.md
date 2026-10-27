@@ -83,10 +83,10 @@ Body assess loader: `packages/specification-dams/src/moex_dams/rules/formal_chec
 | CLS-001 | Независимость осей классификации | 1 warning | `runner` | D | Drop | `formal_checks.py` |
 | CLS-002 | Режим защиты данных | 1 warning | `runner` | D | Drop; slot deprecation separate (PR-10+) | `formal_checks.py` |
 | FLW-001 | Потоки через границы решений | 1 warning | `runner` | A | PDM-01 | `formal_checks.py` |
-| FLW-002 | integration_ref по снимку каталога | 1 `custom` | `python` + INV (ADR-048) | C | matrix / `catalog_topology.py` | `catalog_topology.py`; `test_catalog_topology.py` |
-| FLW-003 | catalog_operation_ref в снимке | 1 `custom` | `python` + INV | C | matrix / topology | same |
-| FLW-004 | bound_catalog_revision | 1 `custom` | `python` + INV | C | matrix / topology | same |
-| FLW-005 | DataModelBinding.catalog_revision | 1 `custom` | `python` + INV | C | matrix / topology | same |
+| FLW-002 | integration_ref по снимку каталога | 1 `custom` | `python` + **INV-038** | C | INV-038 / `catalog_topology.py` | `catalog_topology.py`; `test_catalog_topology.py` |
+| FLW-003 | catalog_operation_ref в снимке | 1 `custom` | `python` + **INV-039** | C | INV-039 | same |
+| FLW-004 | bound_catalog_revision | 1 `custom` | `python` + **INV-040** | C | INV-040 | same |
+| FLW-005 | DataModelBinding.catalog_revision | 1 `custom` | `python` + **INV-041** | C | INV-041 | same |
 
 ## Conceptual catalog (9)
 
@@ -121,7 +121,10 @@ Aliases also in `packages/specification-dams/src/moex_dams/rules/constraint_matr
 | INV-033… | DAMS-REQ-PDM-009.c1 | PDM-009 |
 | INV-034 | DAMS-REQ-PDM-009.c2 | PDM-009 |
 | INV-047 | DAMS-REQ-PDM-006.c1/c2 | PDM-006 |
-| (topology) | DAMS-REQ-FLW-002…005 | FLW-002…005 |
+| INV-038 | DAMS-REQ-FLW-002.c1 | FLW-002 |
+| INV-039 | DAMS-REQ-FLW-003.c1 | FLW-003 |
+| INV-040 | DAMS-REQ-FLW-004.c1 | FLW-004 |
+| INV-041 | DAMS-REQ-FLW-005.c1 | FLW-005 |
 | INV-042 | DAMS-LEVEL-004/005 | levels (not catalog PDM) |
 | INV-043 | DAMS-CM-GENESIS-001/002 | CM-CON-003 family |
 | INV-044 | DAMS-CM-RELTERM-002 | CM-REF-002 |
@@ -137,6 +140,8 @@ Observed before series coding:
 | `code` pattern `^(LDM\|PDM\|REF\|ATR\|FLW\|CLS\|GEN)-[0-9]{3}$` | Blocks `CDM-*` and two-digit `LDM-01` |
 | No `CDM` in `RequirementSectionEnum` | Same |
 | `formal_checks` `minimum_cardinality: 1` | Blocks manual backbone rows (LDM-03, …) |
+| `catalog_validate.py` `CATALOG-CHECKS-MISSING` | Same constraint in the semantic gate; must allow empty checks in PR-1 |
+| `catalog_validate.py` `CODE_PATTERN` | Duplicates the YAML `code` pattern; update in the same PR as the schema |
 | No `obligation` / `responsible_role` slots | Normative classification / owner not representable |
 | `superseded_by` single-valued | Fan-out only in ADR table (D3) |
 | Runner ignores `lifecycle_status` | PR-2 required before mass supersede |
