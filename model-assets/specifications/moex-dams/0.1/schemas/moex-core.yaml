@@ -157,6 +157,7 @@ classes:
       - HasBusinessClassification
       - HasGovernanceClassification
       - HasPolicyBindings
+      - HasDataSource
       - HasDefinition
     description: Представление бизнес-сущности в доменном контексте и модели конкретного решения.
     slots:
@@ -179,6 +180,7 @@ classes:
       - HasOwnership
       - HasGovernanceClassification
       - HasPolicyBindings
+      - HasDataSource
       - HasDefinition
     description: >
       Логический атрибут сущности: идентификация, обязательность, кардинальность
@@ -189,6 +191,7 @@ classes:
       - concept_ref
       - value_domain_ref
       - data_type_ref
+      - data_class
       - critical_data_element
       - required
       - multivalued

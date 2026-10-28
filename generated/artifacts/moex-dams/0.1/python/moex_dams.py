@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-27T20:36:07
+# Generation date: 2026-10-28T10:34:43
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -60,7 +60,7 @@ from linkml_runtime.linkml_model.types import Boolean, Datetime, Decimal, Intege
 from linkml_runtime.utils.metamodelcore import Bool, Decimal, URI, URIorCURIE, XSDDateTime
 
 metamodel_version = "1.11.0"
-version = "5.2.0"
+version = "5.3.0"
 
 # Namespaces
 DAMS = CurieNamespace('dams', 'https://data.moex.com/dams/')
@@ -1259,6 +1259,30 @@ class HasProvenance(YAMLRoot):
 
 
 @dataclass(repr=False)
+class HasDataSource(YAMLRoot):
+    """
+    Система-источник данных (происхождение смысла), не место хранения. Отличается от TechnicalAsset.system_ref (где
+    данные лежат или предоставляются). Inline-only cascade LogicalEntity → LogicalAttribute (ADR-023 / ADR-056 PR-7);
+    не входит в GOVERNED_SLOTS / assignment layer. Внешние ИТ-системы (вне ITSolution.member_system_refs) допускаются.
+    """
+    _inherited_slots: ClassVar[list[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = DAMS["HasDataSource"]
+    class_class_curie: ClassVar[str] = "dams:HasDataSource"
+    class_name: ClassVar[str] = "HasDataSource"
+    class_model_uri: ClassVar[URIRef] = DAMS.HasDataSource
+
+    source_system_refs: Optional[Union[Union[str, ITSystemRegistryId], list[Union[str, ITSystemRegistryId]]]] = empty_list()
+
+    def __post_init__(self, *_: str, **kwargs: Any):
+        if not isinstance(self.source_system_refs, list):
+            self.source_system_refs = [self.source_system_refs] if self.source_system_refs is not None else []
+        self.source_system_refs = [v if isinstance(v, ITSystemRegistryId) else ITSystemRegistryId(v) for v in self.source_system_refs]
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass(repr=False)
 class HasAssertionMetadata(YAMLRoot):
     """
     Qualified assertion metadata (ADR-053): validity window, provenance / approval, and optional confidence. Applied
@@ -1946,6 +1970,7 @@ class LogicalEntity(ModelElement):
     classification_source: Optional[str] = None
     classification_rationale: Optional[str] = None
     policy_refs: Optional[Union[Union[str, PolicyRegistryId], list[Union[str, PolicyRegistryId]]]] = empty_list()
+    source_system_refs: Optional[Union[Union[str, ITSystemRegistryId], list[Union[str, ITSystemRegistryId]]]] = empty_list()
     definition_source_ref: Optional[Union[str, URIorCURIE]] = None
     definition_rationale: Optional[str] = None
     scoped_definitions: Optional[Union[dict[Union[str, ScopedDefinitionScopedDefinitionId], Union[dict, ScopedDefinition]], list[Union[dict, ScopedDefinition]]]] = empty_dict()
@@ -2039,6 +2064,10 @@ class LogicalEntity(ModelElement):
             self.policy_refs = [self.policy_refs] if self.policy_refs is not None else []
         self.policy_refs = [v if isinstance(v, PolicyRegistryId) else PolicyRegistryId(v) for v in self.policy_refs]
 
+        if not isinstance(self.source_system_refs, list):
+            self.source_system_refs = [self.source_system_refs] if self.source_system_refs is not None else []
+        self.source_system_refs = [v if isinstance(v, ITSystemRegistryId) else ITSystemRegistryId(v) for v in self.source_system_refs]
+
         if self.definition_source_ref is not None and not isinstance(self.definition_source_ref, URIorCURIE):
             self.definition_source_ref = URIorCURIE(self.definition_source_ref)
 
@@ -2072,6 +2101,7 @@ class LogicalAttribute(ModelElement):
     concept_ref: Optional[Union[str, ConceptualPropertyElementId]] = None
     value_domain_ref: Optional[Union[str, ValueDomainElementId]] = None
     data_type_ref: Optional[Union[str, DataTypeElementId]] = None
+    data_class: Optional[Union[str, "DataClassEnum"]] = None
     critical_data_element: Optional[Union[bool, Bool]] = None
     minimum_cardinality: Optional[int] = None
     maximum_cardinality: Optional[int] = None
@@ -2092,6 +2122,7 @@ class LogicalAttribute(ModelElement):
     classification_source: Optional[str] = None
     classification_rationale: Optional[str] = None
     policy_refs: Optional[Union[Union[str, PolicyRegistryId], list[Union[str, PolicyRegistryId]]]] = empty_list()
+    source_system_refs: Optional[Union[Union[str, ITSystemRegistryId], list[Union[str, ITSystemRegistryId]]]] = empty_list()
     definition_source_ref: Optional[Union[str, URIorCURIE]] = None
     definition_rationale: Optional[str] = None
     scoped_definitions: Optional[Union[dict[Union[str, ScopedDefinitionScopedDefinitionId], Union[dict, ScopedDefinition]], list[Union[dict, ScopedDefinition]]]] = empty_dict()
@@ -2125,6 +2156,9 @@ class LogicalAttribute(ModelElement):
 
         if self.data_type_ref is not None and not isinstance(self.data_type_ref, DataTypeElementId):
             self.data_type_ref = DataTypeElementId(self.data_type_ref)
+
+        if self.data_class is not None and not isinstance(self.data_class, DataClassEnum):
+            self.data_class = DataClassEnum(self.data_class)
 
         if self.critical_data_element is not None and not isinstance(self.critical_data_element, Bool):
             self.critical_data_element = Bool(self.critical_data_element)
@@ -2187,6 +2221,10 @@ class LogicalAttribute(ModelElement):
         if not isinstance(self.policy_refs, list):
             self.policy_refs = [self.policy_refs] if self.policy_refs is not None else []
         self.policy_refs = [v if isinstance(v, PolicyRegistryId) else PolicyRegistryId(v) for v in self.policy_refs]
+
+        if not isinstance(self.source_system_refs, list):
+            self.source_system_refs = [self.source_system_refs] if self.source_system_refs is not None else []
+        self.source_system_refs = [v if isinstance(v, ITSystemRegistryId) else ITSystemRegistryId(v) for v in self.source_system_refs]
 
         if self.definition_source_ref is not None and not isinstance(self.definition_source_ref, URIorCURIE):
             self.definition_source_ref = URIorCURIE(self.definition_source_ref)
@@ -5744,6 +5782,9 @@ slots.classification_rationale = Slot(uri=DAMS.classification_rationale, name="c
 
 slots.policy_refs = Slot(uri=DAMS.policy_refs, name="policy_refs", curie=DAMS.curie('policy_refs'),
                    model_uri=DAMS.policy_refs, domain=None, range=Optional[Union[Union[str, PolicyRegistryId], list[Union[str, PolicyRegistryId]]]])
+
+slots.source_system_refs = Slot(uri=DAMS.source_system_refs, name="source_system_refs", curie=DAMS.curie('source_system_refs'),
+                   model_uri=DAMS.source_system_refs, domain=None, range=Optional[Union[Union[str, ITSystemRegistryId], list[Union[str, ITSystemRegistryId]]]])
 
 slots.source_artifact_ref = Slot(uri=DAMS.source_artifact_ref, name="source_artifact_ref", curie=DAMS.curie('source_artifact_ref'),
                    model_uri=DAMS.source_artifact_ref, domain=None, range=Optional[Union[str, URI]])

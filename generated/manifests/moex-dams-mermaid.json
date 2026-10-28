@@ -4,11 +4,11 @@
   "generator_module": "linkml.generators.mermaidclassdiagramgen",
   "generator_version": "1.11.1",
   "schema_path": "model-assets/specifications/moex-dams/0.1/schemas/moex-dams.yaml",
-  "schema_digest": "sha256:6f2cce58dd7789bd1d56701ea2283d5a5b83b36d4c58cd10bffc1f6e2cfd64e7",
-  "schema_version": "5.2.0",
+  "schema_digest": "sha256:7b559322224519e126238e33813f10a3caa2ec724648f5a3ad5a1eaa0956ec74",
+  "schema_version": "5.3.0",
   "output_path": "generated/artifacts/moex-dams/0.1/diagrams",
-  "content_digest": "sha256:92ff72c00435ee9e73fa048031ef6f380098fc5c462995810635befbdb2af3cb",
+  "content_digest": "sha256:e831d18b947aa761dd780472151b54c7eb239c26fc12531c02759331565e2030",
   "role": "mermaid",
   "media_type": "text/markdown",
-  "generated_at": "2026-10-27T17:36:07.983686+00:00"
+  "generated_at": "2026-10-28T07:34:43.350710+00:00"
 }

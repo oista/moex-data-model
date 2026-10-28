@@ -1,8 +1,8 @@
 # Generated EffectiveGovernanceView (ADR-049). Do not edit by hand.
 # Regenerate: python -m moex_dams.governance.cli materialize --root .
 as_of: '2026-10-12'
-built_at: '2026-10-27T17:48:30+00:00'
-input_digest: sha256:35469cf740dccddf59bc5bbfd27729e7bfc758221ae5e56e0a542001174a060c
+built_at: '2026-10-28T08:37:25+00:00'
+input_digest: sha256:fb2d23210e7dbcb97f2c786435fa686894c48e3016ae12a73decfa9d055909bd
 package_refs:
 - dams:model/example-min/1.0.0
 - dams:model/gov-asg-example/1.0.0

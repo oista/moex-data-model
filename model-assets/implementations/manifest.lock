@@ -1,9 +1,9 @@
 {"lock_schema_version": "0.1.0"}
 {"content_hash": "sha256:a92fbf774ce9856b7558723602cc55e232c5cbfc8e6e4f84674b8033af16705d", "id": "moex:implementation:client-accounts-csv-draft:0.1"}
-{"content_hash": "sha256:700e028bb9faaff8392c197879e2d6c4116b91dc361087154b3e4b888c37ea75", "id": "moex:implementation:crm:0.1.0"}
-{"content_hash": "sha256:58d447c54a9d66f5a587ed7065eae38dfb06534592552bebc59f51af97499d41", "id": "moex:implementation:esed:0.1.0"}
-{"content_hash": "sha256:6a873842ed2b28da4dd6cd3a47fb4d141b193c8d76b2cffc360b94ea0824c7f5", "id": "moex:implementation:mdm:0.1.0"}
+{"content_hash": "sha256:ecb963e3f9a6ae264d74f4c290a7bfe6c47d99802f4de7b65a1177515124bfb1", "id": "moex:implementation:crm:0.1.0"}
+{"content_hash": "sha256:5eb2b5f13add49403b01253c7b14a58f5fa8f4ae5ebb1a67761e8abeb7e58ef8", "id": "moex:implementation:esed:0.1.0"}
+{"content_hash": "sha256:71133b6d68a1089fd4f3828e192d720aa50971b5aecfdd346b38e1391398b303", "id": "moex:implementation:mdm:0.1.0"}
 {"content_hash": "sha256:b4b954bc6488e91fedadcde95fc8b5877406a1ad2893ba627944f6cefb52c90e", "id": "moex:implementation:moex-enterprise-conceptual-model:0.1"}
 {"content_hash": "sha256:b6ec96548fd0fac59b7286f7d994eebd07c429efbe828118856a70bffd80352d", "id": "moex:implementation:moex-fibo-application:0.1"}
 {"content_hash": "sha256:9fcc81d576db5ce23256fefd379380047d20195bad90f849f3de17f487ad9d98", "id": "moex:implementation:moex-hierarchy:0.1"}
-{"content_hash": "sha256:114191f802a488adf07a3bf9c89b15faa2844adc3b02c2352c168534af734bbe", "id": "moex:implementation:ucd:0.1.0"}
+{"content_hash": "sha256:dda7362d6133dba2cdeda1817a10fb88b02ffc5ef2ff65d1a4ae922dc8c02f04", "id": "moex:implementation:ucd:0.1.0"}

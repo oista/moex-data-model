@@ -34,7 +34,7 @@ from pydantic import (
 
 
 metamodel_version = "1.11.0"
-version = "5.2.0"
+version = "5.3.0"
 
 
 class ConfiguredBaseModel(BaseModel):
@@ -1193,7 +1193,8 @@ class HasBusinessClassification(ConfiguredBaseModel):
     Классификация роли и бизнес-значимости логической сущности.
     """
     entity_type: Optional[EntityTypeEnum] = Field(default=None)
-    data_class: Optional[DataClassEnum] = Field(default=None)
+    data_class: Optional[DataClassEnum] = Field(default=None, description="""Природа данных (master/reference/transactional/…). На LogicalEntity — ось LDM-09; на LogicalAttribute — override при смешанной классификации (inline cascade ADR-023 / ADR-056 PR-7; absent = inherit from entity).
+""")
     business_importance: Optional[BusinessImportanceEnum] = Field(default=None)
 
 
@@ -1226,6 +1227,15 @@ class HasProvenance(ConfiguredBaseModel):
     approval_status: Optional[ApprovalStatusEnum] = Field(default=None)
     approved_by_ref: Optional[str] = Field(default=None)
     approved_at: Optional[datetime ] = Field(default=None)
+
+
+class HasDataSource(ConfiguredBaseModel):
+    """
+    Система-источник данных (происхождение смысла), не место хранения. Отличается от TechnicalAsset.system_ref (где данные лежат или предоставляются). Inline-only cascade LogicalEntity → LogicalAttribute (ADR-023 / ADR-056 PR-7); не входит в GOVERNED_SLOTS / assignment layer. Внешние ИТ-системы (вне ITSolution.member_system_refs) допускаются.
+
+    """
+    source_system_refs: Optional[list[str]] = Field(default=None, description="""ИТ-системы — источники данных элемента (происхождение), не носители хранения. List-replace cascade: ключ отсутствует = наследование; [] = явное «нет источников»; непустой список = полная замена (ADR-023 / ADR-056 PR-7 LDM-12).
+""")
 
 
 class HasAssertionMetadata(HasProvenance, HasValidity):
@@ -1499,7 +1509,8 @@ class ConceptualEntity(ModelElement, HasDefinition, HasBusinessClassification, H
     ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     entity_type: Optional[EntityTypeEnum] = Field(default=None)
-    data_class: Optional[DataClassEnum] = Field(default=None)
+    data_class: Optional[DataClassEnum] = Field(default=None, description="""Природа данных (master/reference/transactional/…). На LogicalEntity — ось LDM-09; на LogicalAttribute — override при смешанной классификации (inline cascade ADR-023 / ADR-056 PR-7; absent = inherit from entity).
+""")
     business_importance: Optional[BusinessImportanceEnum] = Field(default=None)
     definition_source_ref: Optional[str] = Field(default=None, description="""Reference to the element or external term whose definition is inherited or adapted (ADR-025). Orthogonal to glossary_term_refs (term assignment).
 """)
@@ -1565,7 +1576,7 @@ class ConceptualProperty(ModelElement, HasDefinition, HasProvenance, HasPolicyBi
     valid_to: Optional[datetime ] = Field(default=None)
 
 
-class LogicalEntity(ModelElement, HasDefinition, HasPolicyBindings, HasGovernanceClassification, HasBusinessClassification, HasOwnership):
+class LogicalEntity(ModelElement, HasDefinition, HasDataSource, HasPolicyBindings, HasGovernanceClassification, HasBusinessClassification, HasOwnership):
     """
     Представление бизнес-сущности в доменном контексте и модели конкретного решения.
     """
@@ -1588,7 +1599,8 @@ class LogicalEntity(ModelElement, HasDefinition, HasPolicyBindings, HasGovernanc
     ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     entity_type: Optional[EntityTypeEnum] = Field(default=None)
-    data_class: Optional[DataClassEnum] = Field(default=None)
+    data_class: Optional[DataClassEnum] = Field(default=None, description="""Природа данных (master/reference/transactional/…). На LogicalEntity — ось LDM-09; на LogicalAttribute — override при смешанной классификации (inline cascade ADR-023 / ADR-056 PR-7; absent = inherit from entity).
+""")
     business_importance: Optional[BusinessImportanceEnum] = Field(default=None)
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
     security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
@@ -1596,6 +1608,8 @@ class LogicalEntity(ModelElement, HasDefinition, HasPolicyBindings, HasGovernanc
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
     policy_refs: Optional[list[str]] = Field(default=None)
+    source_system_refs: Optional[list[str]] = Field(default=None, description="""ИТ-системы — источники данных элемента (происхождение), не носители хранения. List-replace cascade: ключ отсутствует = наследование; [] = явное «нет источников»; непустой список = полная замена (ADR-023 / ADR-056 PR-7 LDM-12).
+""")
     definition_source_ref: Optional[str] = Field(default=None, description="""Reference to the element or external term whose definition is inherited or adapted (ADR-025). Orthogonal to glossary_term_refs (term assignment).
 """)
     definition_rationale: Optional[str] = Field(default=None, description="""Human rationale for declaring an own definition when a source is also cited, or for overriding an inherited definition.
@@ -1615,7 +1629,7 @@ class LogicalEntity(ModelElement, HasDefinition, HasPolicyBindings, HasGovernanc
     valid_to: Optional[datetime ] = Field(default=None)
 
 
-class LogicalAttribute(ModelElement, HasDefinition, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
+class LogicalAttribute(ModelElement, HasDefinition, HasDataSource, HasPolicyBindings, HasGovernanceClassification, HasOwnership):
     """
     Логический атрибут сущности: идентификация, обязательность, кардинальность и ссылки на представление (DataType/ValueDomain) и опционально на ConceptualProperty (вариант B, ADR-034).
 
@@ -1626,6 +1640,8 @@ class LogicalAttribute(ModelElement, HasDefinition, HasPolicyBindings, HasGovern
 """)
     value_domain_ref: Optional[str] = Field(default=None, description="""Ссылка на домен представления значений.""")
     data_type_ref: Optional[str] = Field(default=None, description="""Ссылка на корпоративный DataType. Обязателен data_type_ref и/или value_domain_ref (ADR-034 шаг 2 / PR-5).
+""")
+    data_class: Optional[DataClassEnum] = Field(default=None, description="""Природа данных (master/reference/transactional/…). На LogicalEntity — ось LDM-09; на LogicalAttribute — override при смешанной классификации (inline cascade ADR-023 / ADR-056 PR-7; absent = inherit from entity).
 """)
     critical_data_element: Optional[bool] = Field(default=None, description="""Признак критичного элемента данных (CDE). Единственный источник правды для critical_data; термин CDE в ClassificationAssignment не вводится (ADR-034).
 """)
@@ -1652,6 +1668,8 @@ class LogicalAttribute(ModelElement, HasDefinition, HasPolicyBindings, HasGovern
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
     policy_refs: Optional[list[str]] = Field(default=None)
+    source_system_refs: Optional[list[str]] = Field(default=None, description="""ИТ-системы — источники данных элемента (происхождение), не носители хранения. List-replace cascade: ключ отсутствует = наследование; [] = явное «нет источников»; непустой список = полная замена (ADR-023 / ADR-056 PR-7 LDM-12).
+""")
     definition_source_ref: Optional[str] = Field(default=None, description="""Reference to the element or external term whose definition is inherited or adapted (ADR-025). Orthogonal to glossary_term_refs (term assignment).
 """)
     definition_rationale: Optional[str] = Field(default=None, description="""Human rationale for declaring an own definition when a source is also cited, or for overriding an inherited definition.
@@ -2766,6 +2784,7 @@ HasBusinessClassification.model_rebuild()
 HasGovernanceClassification.model_rebuild()
 HasPolicyBindings.model_rebuild()
 HasProvenance.model_rebuild()
+HasDataSource.model_rebuild()
 HasAssertionMetadata.model_rebuild()
 GovernanceAssignment.model_rebuild()
 ClassificationAssignment.model_rebuild()
