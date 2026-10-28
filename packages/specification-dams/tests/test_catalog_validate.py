@@ -7,6 +7,7 @@ from pathlib import Path
 import yaml
 
 from moex_dams.rules.catalog_validate import (
+    CODE_PATTERN,
     validate_requirement_catalog,
     validate_requirement_catalog_file,
 )
@@ -92,3 +93,42 @@ def test_duplicate_check_id_detected() -> None:
     reqs[1]["formal_checks"][0]["check_id"] = reqs[0]["formal_checks"][0]["check_id"]
     issues = validate_requirement_catalog(data)
     assert any(i.code == "CATALOG-CHECK-ID-DUP" for i in issues)
+
+
+def test_code_pattern_accepts_two_digit_backbone_and_three_digit_legacy() -> None:
+    assert CODE_PATTERN.match("CDM-01")
+    assert CODE_PATTERN.match("LDM-13")
+    assert CODE_PATTERN.match("PDM-02")
+    assert CODE_PATTERN.match("GEN-001")
+    assert CODE_PATTERN.match("LDM-001")
+    assert not CODE_PATTERN.match("CM-GEN-001")
+    assert not CODE_PATTERN.match("LDM-1")
+    assert not CODE_PATTERN.match("LDM-0011")
+
+
+def test_empty_formal_checks_allowed_for_manual_rules() -> None:
+    data = {
+        "catalog_id": "dams:req-catalog/manual/0.1",
+        "name": "manual",
+        "requirements": [
+            {
+                "element_id": "dams:req/LDM-03",
+                "code": "LDM-03",
+                "title": "catalog registration",
+                "description": "manual",
+                "lifecycle_status": "approved",
+                "requirement_level": "it_solution",
+                "requirement_section": "LDM",
+                "obligation": "mandatory",
+                "responsible_role": "it_owner",
+                "statement": "Модель ИТ-решения зарегистрирована в Дата-каталоге",
+                "applies_to": {
+                    "applicability_id": "appl:LDM-03",
+                    "applies_target_class": "ModelPackage",
+                },
+                "formal_checks": [],
+            }
+        ],
+    }
+    issues = validate_requirement_catalog(data)
+    assert issues == [], [f"{i.code}: {i.message}" for i in issues]

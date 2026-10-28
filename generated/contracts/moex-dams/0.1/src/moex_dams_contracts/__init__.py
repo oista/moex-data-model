@@ -34,7 +34,7 @@ from pydantic import (
 
 
 metamodel_version = "1.11.0"
-version = "5.1.0"
+version = "5.2.0"
 
 
 class ConfiguredBaseModel(BaseModel):
@@ -666,7 +666,12 @@ class RequirementImplementationStatus(str, Enum):
 
 class RequirementSectionEnum(str, Enum):
     """
-    Раздел каталога требований (трёхбуквенный код в code).
+    Раздел каталога требований. Значение совпадает с префиксом `code` (CDM|LDM|PDM|REF|ATR|FLW|CLS|GEN); суффикс — две или три цифры (ADR-056).
+
+    """
+    CDM = "CDM"
+    """
+    Концептуальная модель (нормативный хребет ADR-056)
     """
     LDM = "LDM"
     """
@@ -695,6 +700,39 @@ class RequirementSectionEnum(str, Enum):
     GEN = "GEN"
     """
     Общие требования
+    """
+
+
+class RequirementObligationEnum(str, Enum):
+    """
+    Класс обязательности требования из нормативного документа (ADR-056). Не заменяет CheckSeverityEnum у formal_checks.
+
+    """
+    mandatory = "mandatory"
+    """
+    ОБЯЗАТЕЛЬНО — assess severity error, когда проверка исполнима
+    """
+    recommended = "recommended"
+    """
+    РЕКОМЕНДУЕТСЯ — assess severity warning, когда проверка исполнима
+    """
+
+
+class RequirementResponsibleRoleEnum(str, Enum):
+    """
+    Роль, ответственная за выполнение требования (нормативная таблица, ADR-056).
+    """
+    data_architecture = "data_architecture"
+    """
+    Архитектура данных
+    """
+    it_owner = "it_owner"
+    """
+    ИТ-владелец
+    """
+    business_owner = "business_owner"
+    """
+    бизнес-владелец
     """
 
 
@@ -2634,13 +2672,19 @@ class SpecificationRequirement(ModelElement):
     """
     Нормативное требование к модели, соответствующей reference specification (каталог для уровня ИТ-решения и др.).
     """
-    code: str = Field(default=...)
+    code: str = Field(default=..., description="""Код требования: раздел + две или три цифры (ADR-056). Трёхзначные исторические коды (GEN-001, LDM-001, …) остаются валидными.
+""")
     requirement_level: RequirementLevelEnum = Field(default=...)
     requirement_section: RequirementSectionEnum = Field(default=...)
+    obligation: Optional[RequirementObligationEnum] = Field(default=None, description="""ОБЯЗАТЕЛЬНО / РЕКОМЕНДУЕТСЯ из нормативного документа (ADR-056). Необязателен на исторических записях до миграции каталога.
+""")
+    responsible_role: Optional[RequirementResponsibleRoleEnum] = Field(default=None, description="""Ответственная роль из нормативной таблицы (ADR-056). Необязателен на исторических записях до миграции каталога.
+""")
     statement: str = Field(default=..., description="""Полная нормативная формулировка на русском для человека: без имён LinkML-классов, слотов, kinds проверок и сленга метамодели.
 """)
     applies_to: Optional[RequirementApplicability] = Field(default=None, description="""Область применимости требования для formal_checks runner.""")
-    formal_checks: Optional[list[FormalCheck]] = Field(default=None, min_length=1)
+    formal_checks: Optional[list[FormalCheck]] = Field(default=None, description="""Исполняемое подмножество нормы. Пустой список допустим для ручных правил (ADR-013 / ADR-056); это human-review, не молчание.
+""", min_length=0)
     implementation_status: Optional[RequirementImplementationStatus] = Field(default=None, description="""Статус реализации требования. Осмысленно при lifecycle_status=approved; обязательность при approved не проверяется в этой версии схемы.
 """)
     superseded_by: Optional[str] = Field(default=None, description="""Ссылка на требование, которым данное заменено (при lifecycle_status=superseded). Отличается от deprecated_by_ref (HasLifecycle): deprecated_by_ref означает «устарело из-за …» без обязательной замены нормой; superseded_by — «заменено указанным требованием». Обязательность при superseded не проверяется здесь.
@@ -2659,7 +2703,7 @@ class SpecificationRequirement(ModelElement):
 
     @field_validator('code')
     def pattern_code(cls, v):
-        pattern=re.compile(r"^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$")
+        pattern=re.compile(r"^(CDM|LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{2,3}$")
         if isinstance(v, list):
             for element in v:
                 if isinstance(element, str) and not pattern.match(element):

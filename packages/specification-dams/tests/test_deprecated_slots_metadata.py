@@ -43,4 +43,4 @@ def test_moex_deprecated_slots_not_imported_archive_only():
 
 def test_schema_major_version_bumped():
     sv = SchemaView(str(SCHEMA))
-    assert sv.schema.version == "5.1.0"
+    assert sv.schema.version == "5.2.0"

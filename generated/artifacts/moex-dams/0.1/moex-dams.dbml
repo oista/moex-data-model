@@ -1348,6 +1348,8 @@ tags varchar
 code varchar [not null]
 requirement_level varchar [not null]
 requirement_section varchar [not null]
+obligation varchar
+responsible_role varchar
 statement varchar [not null]
 applies_to varchar
 formal_checks varchar

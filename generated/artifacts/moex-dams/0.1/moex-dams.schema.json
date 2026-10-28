@@ -7442,9 +7442,29 @@
             "title": "RequirementLifecycleStatus",
             "type": "string"
         },
-        "RequirementSectionEnum": {
-            "description": "\u0420\u0430\u0437\u0434\u0435\u043b \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u0439 (\u0442\u0440\u0451\u0445\u0431\u0443\u043a\u0432\u0435\u043d\u043d\u044b\u0439 \u043a\u043e\u0434 \u0432 code).",
+        "RequirementObligationEnum": {
+            "description": "\u041a\u043b\u0430\u0441\u0441 \u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f \u0438\u0437 \u043d\u043e\u0440\u043c\u0430\u0442\u0438\u0432\u043d\u043e\u0433\u043e \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430 (ADR-056). \u041d\u0435 \u0437\u0430\u043c\u0435\u043d\u044f\u0435\u0442 CheckSeverityEnum \u0443 formal_checks.",
             "enum": [
+                "mandatory",
+                "recommended"
+            ],
+            "title": "RequirementObligationEnum",
+            "type": "string"
+        },
+        "RequirementResponsibleRoleEnum": {
+            "description": "\u0420\u043e\u043b\u044c, \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u0430\u044f \u0437\u0430 \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u0435 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f (\u043d\u043e\u0440\u043c\u0430\u0442\u0438\u0432\u043d\u0430\u044f \u0442\u0430\u0431\u043b\u0438\u0446\u0430, ADR-056).",
+            "enum": [
+                "data_architecture",
+                "it_owner",
+                "business_owner"
+            ],
+            "title": "RequirementResponsibleRoleEnum",
+            "type": "string"
+        },
+        "RequirementSectionEnum": {
+            "description": "\u0420\u0430\u0437\u0434\u0435\u043b \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u0439. \u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u0441\u043e\u0432\u043f\u0430\u0434\u0430\u0435\u0442 \u0441 \u043f\u0440\u0435\u0444\u0438\u043a\u0441\u043e\u043c `code` (CDM|LDM|PDM|REF|ATR|FLW|CLS|GEN); \u0441\u0443\u0444\u0444\u0438\u043a\u0441 \u2014 \u0434\u0432\u0435 \u0438\u043b\u0438 \u0442\u0440\u0438 \u0446\u0438\u0444\u0440\u044b (ADR-056).",
+            "enum": [
+                "CDM",
                 "LDM",
                 "PDM",
                 "REF",
@@ -8164,7 +8184,8 @@
                     "description": "\u041e\u0431\u043b\u0430\u0441\u0442\u044c \u043f\u0440\u0438\u043c\u0435\u043d\u0438\u043c\u043e\u0441\u0442\u0438 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f \u0434\u043b\u044f formal_checks runner."
                 },
                 "code": {
-                    "pattern": "^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$",
+                    "description": "\u041a\u043e\u0434 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f: \u0440\u0430\u0437\u0434\u0435\u043b + \u0434\u0432\u0435 \u0438\u043b\u0438 \u0442\u0440\u0438 \u0446\u0438\u0444\u0440\u044b (ADR-056). \u0422\u0440\u0451\u0445\u0437\u043d\u0430\u0447\u043d\u044b\u0435 \u0438\u0441\u0442\u043e\u0440\u0438\u0447\u0435\u0441\u043a\u0438\u0435 \u043a\u043e\u0434\u044b (GEN-001, LDM-001, \u2026) \u043e\u0441\u0442\u0430\u044e\u0442\u0441\u044f \u0432\u0430\u043b\u0438\u0434\u043d\u044b\u043c\u0438.\n",
+                    "pattern": "^(CDM|LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{2,3}$",
                     "type": "string"
                 },
                 "deprecated_by_ref": {
@@ -8180,10 +8201,11 @@
                     "type": "string"
                 },
                 "formal_checks": {
+                    "description": "\u0418\u0441\u043f\u043e\u043b\u043d\u044f\u0435\u043c\u043e\u0435 \u043f\u043e\u0434\u043c\u043d\u043e\u0436\u0435\u0441\u0442\u0432\u043e \u043d\u043e\u0440\u043c\u044b. \u041f\u0443\u0441\u0442\u043e\u0439 \u0441\u043f\u0438\u0441\u043e\u043a \u0434\u043e\u043f\u0443\u0441\u0442\u0438\u043c \u0434\u043b\u044f \u0440\u0443\u0447\u043d\u044b\u0445 \u043f\u0440\u0430\u0432\u0438\u043b (ADR-013 / ADR-056); \u044d\u0442\u043e human-review, \u043d\u0435 \u043c\u043e\u043b\u0447\u0430\u043d\u0438\u0435.\n",
                     "items": {
                         "$ref": "#/$defs/FormalCheck"
                     },
-                    "minItems": 1,
+                    "minItems": 0,
                     "type": [
                         "array",
                         "null"
@@ -8208,11 +8230,19 @@
                 "name": {
                     "type": "string"
                 },
+                "obligation": {
+                    "$ref": "#/$defs/RequirementObligationEnum",
+                    "description": "\u041e\u0411\u042f\u0417\u0410\u0422\u0415\u041b\u042c\u041d\u041e / \u0420\u0415\u041a\u041e\u041c\u0415\u041d\u0414\u0423\u0415\u0422\u0421\u042f \u0438\u0437 \u043d\u043e\u0440\u043c\u0430\u0442\u0438\u0432\u043d\u043e\u0433\u043e \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430 (ADR-056). \u041d\u0435\u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u0435\u043d \u043d\u0430 \u0438\u0441\u0442\u043e\u0440\u0438\u0447\u0435\u0441\u043a\u0438\u0445 \u0437\u0430\u043f\u0438\u0441\u044f\u0445 \u0434\u043e \u043c\u0438\u0433\u0440\u0430\u0446\u0438\u0438 \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430.\n"
+                },
                 "requirement_level": {
                     "$ref": "#/$defs/RequirementLevelEnum"
                 },
                 "requirement_section": {
                     "$ref": "#/$defs/RequirementSectionEnum"
+                },
+                "responsible_role": {
+                    "$ref": "#/$defs/RequirementResponsibleRoleEnum",
+                    "description": "\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u0430\u044f \u0440\u043e\u043b\u044c \u0438\u0437 \u043d\u043e\u0440\u043c\u0430\u0442\u0438\u0432\u043d\u043e\u0439 \u0442\u0430\u0431\u043b\u0438\u0446\u044b (ADR-056). \u041d\u0435\u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u0435\u043d \u043d\u0430 \u0438\u0441\u0442\u043e\u0440\u0438\u0447\u0435\u0441\u043a\u0438\u0445 \u0437\u0430\u043f\u0438\u0441\u044f\u0445 \u0434\u043e \u043c\u0438\u0433\u0440\u0430\u0446\u0438\u0438 \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430.\n"
                 },
                 "statement": {
                     "description": "\u041f\u043e\u043b\u043d\u0430\u044f \u043d\u043e\u0440\u043c\u0430\u0442\u0438\u0432\u043d\u0430\u044f \u0444\u043e\u0440\u043c\u0443\u043b\u0438\u0440\u043e\u0432\u043a\u0430 \u043d\u0430 \u0440\u0443\u0441\u0441\u043a\u043e\u043c \u0434\u043b\u044f \u0447\u0435\u043b\u043e\u0432\u0435\u043a\u0430: \u0431\u0435\u0437 \u0438\u043c\u0451\u043d LinkML-\u043a\u043b\u0430\u0441\u0441\u043e\u0432, \u0441\u043b\u043e\u0442\u043e\u0432, kinds \u043f\u0440\u043e\u0432\u0435\u0440\u043e\u043a \u0438 \u0441\u043b\u0435\u043d\u0433\u0430 \u043c\u0435\u0442\u0430\u043c\u043e\u0434\u0435\u043b\u0438.\n",
@@ -8940,5 +8970,5 @@
     ],
     "title": "moex_dams",
     "type": "object",
-    "version": "5.1.0"
+    "version": "5.2.0"
 }
