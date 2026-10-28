@@ -51,7 +51,7 @@ Body assess loader: `packages/specification-dams/src/moex_dams/rules/formal_chec
 | LDM-006 | Связь с корпоративными понятиями | 1 | `runner` | B | Keep; **recode** in PR-10 (collides with backbone LDM-06) | `formal_checks.py`; ADR-025 / ADR-029 |
 | LDM-007 | Семантическая включённость | 1 | `runner` | D | Drop | `formal_checks.py` |
 | LDM-008 | Полнота реализации зависимых концептов | 1 warning | `runner` | D | Drop (ADR-029 soft) | `formal_checks.py` |
-| ATR-001 | Основные свойства атрибута | 4 (`slot_required` + `custom`) | `runner` + `python` (`semantic_layer` type) | C | Schema `required` already (PR-8 verify) + SEM checks | `formal_checks.py`; `semantic_layer.py` |
+| ATR-001 | Основные свойства атрибута | deprecated (PR-9) | was `runner` | C | Schema `required` (PR-8); row kept until PR-10 | schema L1 |
 | ATR-002 | Именование атрибута | 1 warning | `runner` | D | Drop (linter-class) | `formal_checks.py` |
 | ATR-004 | Дополнительные свойства по типу атрибута | 1 warning | `runner` | D | Drop | `formal_checks.py` |
 | ATR-005 | Отображение атрибута на реализацию | 2 | `runner` | D | Drop (reverse of PDM-02) | `formal_checks.py` |
@@ -60,8 +60,8 @@ Body assess loader: `packages/specification-dams/src/moex_dams/rules/formal_chec
 | REF-001 | Концы связи | 4 | `runner` | C | Schema `required` on ends (PR-8 verify) + `references.py` | `formal_checks.py`; `references.py` |
 | REF-002 | Кардинальность связи | 1 | `runner` | B | Keep as recommended (PR-10) | `formal_checks.py` |
 | REF-003 | Тип логической связи | 1 warning | `runner` | A | LDM-07 / LDM-08 | `formal_checks.py` |
-| PDM-001 | Основные свойства носителя данных | 7 | `runner` | C | Schema except `structure_ref` (conditional); `technology` class `slot_usage` PR-8 | `formal_checks.py` |
-| PDM-002 | Основные свойства узла схемы | 3 | `runner` | C | `local_key` already schema; c2/c3 stay conditional catalog | `formal_checks.py` |
+| PDM-001 | Основные свойства носителя данных | deprecated (PR-9) | was `runner` | C | Schema + **INV-065** (`structure_ref`); row kept until PR-10 delete | `technical_assets.check_carrier_structure_ref` |
+| PDM-002 | Основные свойства узла схемы | deprecated (PR-9) | was `runner` | C | Schema `local_key` + **INV-066/067**; row kept until PR-10 delete | `data_structure.check_scalar_node_*` |
 | PDM-003 | Отображение сущности и носителя | 1 | `runner` | A | PDM-02 | `formal_checks.py`; ADR-046 |
 | PDM-004 | Отображение узла схемы и атрибута | 1 | `runner` | A | PDM-02 | `formal_checks.py`; ADR-046 |
 | PDM-005 | Уникальность ключа технического актива | 1 `custom` | `python` + **INV-059** | C | INV-059 | `technical_assets.py`; `test_technical_asset_checks.py` |
@@ -92,15 +92,15 @@ Body assess loader: `packages/specification-dams/src/moex_dams/rules/formal_chec
 
 | Code | Title | Lifecycle | Checks / kinds | Enforced today | Group | Destination | Consumers |
 |---|---|---|---|---|---|---|---|
-| CM-GEN-001 | Идентичность пакета КМД | draft | 6 `slot_required` | docs / export; codes `CM-*` outside IT-solution `code` pattern | C | Schema + `dams_levels` / STRUCT | `test_export_requirements.py`; `test_requirement_statuses.py` |
-| CM-GEN-002 | Область enterprise-conceptual | proposed | 1 | `python` levels (`DAMS-LEVEL-002`) | C | `dams_levels.py` | `test_dams_levels.py` |
+| CM-GEN-001 | Идентичность пакета КМД | deprecated (PR-9) | was `slot_required` | C | Schema + `dams_levels` / STRUCT; row until PR-10 | export / status tests |
+| CM-GEN-002 | Область enterprise-conceptual | deprecated (PR-9) | was `python` `DAMS-LEVEL-002` | C | `dams_levels.py`; row until PR-10 | `test_dams_levels.py` |
 | CM-CON-001 | Концептуальная сущность | approved | 4 | docs intent; entity checks overlap Python | A | CDM-01 | `conceptual_entity.py` (partial) |
-| CM-REF-001 | Концы связей КМД | draft | 4 | ref diagnostics | C | `references.py` / STRUCT | refs rules |
+| CM-REF-001 | Концы связей КМД | deprecated (PR-9) | was ref diagnostics | C | `references.py` / STRUCT; row until PR-10 | refs rules |
 | CM-CON-002 | entity_tier primary/dependent | proposed | 1 `custom` | `python` `DAMS-CM-TIER-*` | A | CDM-02 | `conceptual_entity.py`; `test_cmd_entity_metamodel.py` |
-| CM-CON-003 | genesis external/native | approved | 1 `custom` | `python` `DAMS-CM-GENESIS-*` + INV-043 aliases | C | keep Python / INV | `conceptual_entity.py` |
+| CM-CON-003 | genesis external/native | deprecated (PR-9) | `python` + INV-043 | C | keep Python / INV; row until PR-10 | `conceptual_entity.py` |
 | CM-REF-002 | RelationTerm | approved | 1 `custom` | `python` `DAMS-CM-RELTERM-*` + INV-044 | A | CDM-02 | `relation_terms.py` |
-| CM-PDM-000 | Запрет технического слоя | approved | 1 `custom` | `python` `DAMS-LEVEL-003` | C | `dams_levels.py` | `test_dams_levels.py` |
-| CM-PROP-001 | ConceptualProperty только enterprise | approved | 1 `custom` | `python` `DAMS-SEM-PROP-SCOPE` | C | `semantic_layer.py` | `test_semantic_layer.py` |
+| CM-PDM-000 | Запрет технического слоя | deprecated (PR-9) | `python` `DAMS-LEVEL-003` | C | `dams_levels.py`; row until PR-10 | `test_dams_levels.py` |
+| CM-PROP-001 | ConceptualProperty только enterprise | deprecated (PR-9) | `python` `DAMS-SEM-PROP-SCOPE` | C | `semantic_layer.py`; row until PR-10 | `test_semantic_layer.py` |
 
 ## Constraint-matrix `requirement_refs` (today)
 
@@ -175,10 +175,17 @@ Note: conceptual catalog already uses `CM-*` codes that do not match the IT-solu
 | LDM-12 | Manual; no logical source-system slot | Slot `source_system_refs` + cascade; warning then error | `runner` `ldm12_source_system` (PR-7d/f) |
 | LDM-13 | Manual; ИОД vocabulary unclear | Mapped to `sensitivity_term_refs`; **stays manual** until PR-10 | Human-review; executable later |
 
+## PR-9 outcome (Group C)
+
+- All 31 Group C rows are `lifecycle_status: deprecated` (25 IT-solution + 6 conceptual). Catalog still has **74** rows; export tests unchanged.
+- Runner skips them (PR-2). Enforcement stays in schema / Python / INV; new INV-065…067 cover former runner conditionals PDM-001.c5 / PDM-002.c2–c3.
+- Viewer (`apps/viewer`) hides `deprecated` / `superseded` / `rejected` by default (`requirements.show_inactive`).
+- **PR-10** deletes deprecated + superseded rows, rewrites matrix `requirement_refs`, cleans aliases / `requirement_code=`.
+
 ## Implications for migration
 
 - PR-0 is documentation only: no catalog, schema, or `generated/` edits.
 - Do not mark rows `superseded` until PR-2 lands (otherwise assess still fires old checks).
-- Do not delete Group C rows until PR-3 INV coverage exists for the six PDM gaps.
+- Group C INV homes (PR-3) + PR-9 deprecation landed; physical deletion is PR-10.
 - When statements of the normative 21 rules change slightly, edit PR-4 rows only; disposition groups stay stable.
 - PR-7a is documentation only (amends ADR-023 / ADR-056); schema and cascade code follow in PR-7b…7f.
