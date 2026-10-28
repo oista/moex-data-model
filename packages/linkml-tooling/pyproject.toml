@@ -18,6 +18,10 @@ dependencies = [
 map = [
     "linkml-map==0.5.4",
     "linkml-runtime>=1.7,<2.0",
+    # pint 0.26.2+ rejects ucumvert alias ``i.U.`` (DefinitionSyntaxError);
+    # linkml-map → ucumvert 0.3.2 has no fix yet. Keep last known-good.
+    "pint==0.26.1",
+    "ucumvert==0.3.2",
 ]
 automator = [
     "schema-automator==0.5.7",

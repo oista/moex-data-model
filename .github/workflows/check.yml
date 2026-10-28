@@ -6,8 +6,10 @@ on:
   pull_request:
 
 jobs:
+  # Pin 24.04: ubuntu-latest moved to 26.04 (2026-10-19); Playwright 1.51
+  # cannot install chromium deps there ("does not support … ubuntu26.04-x64").
   check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -29,13 +31,13 @@ jobs:
       # Includes dams-packages-check (specification-dams / standard-linkml /
       # repository-loader / tests/architecture / tests/migration + pyshacl).
       # Slice-cli pytest excludes that suite (no duplicate).
-      # pwsh is preinstalled on ubuntu-latest for the underlying .ps1 steps.
+      # pwsh is preinstalled on ubuntu-24.04 for the underlying .ps1 steps.
       - name: Stage 0 check_all
         run: python scripts/check_all.py
 
   # Viewer + ontology packages stay outside Stage 0 gate (heavier / separate deps)
   viewer-and-packages:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -64,7 +66,7 @@ jobs:
 
   # Workbench: API (SQLite), web (npm), drawDB adapter + DBML projection
   workbench-check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
