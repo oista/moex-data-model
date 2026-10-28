@@ -1323,3 +1323,309 @@ requirements:
     severity: warning
     diagnostic_code: DAMS-SEM-ATTR-CONCEPT-OPTIONAL
     remediation: Не добавляйте обязательность concept_ref.
+
+# ADR-056 backbone (PR-4): statements only; formal_checks land in PR-5.
+- element_id: dams:req/LDM-01
+  name: logical_model_at_it_solution
+  title: ЛМД на уровне ИТ-решения
+  description: >
+    ADR-056 backbone LDM-01. Checks deferred to PR-5 (from GEN-002 / GEN-003).
+  lifecycle_status: approved
+  implementation_status: not_started
+  code: LDM-01
+  obligation: mandatory
+  responsible_role: it_owner
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: Логическая модель данных (ЛМД) определена на уровне ИТ-решения
+  applies_to:
+    applicability_id: appl:LDM-01
+    applies_target_class: ModelPackage
+    applies_implementation_scope: solution
+    applies_dams_model_level: solution
+  formal_checks: []
+- element_id: dams:req/LDM-02
+  name: logical_model_spec_version
+  title: Соответствие спецификации и версия
+  description: >
+    ADR-056 backbone LDM-02. Checks deferred to PR-5 (from GEN-001.c5).
+  lifecycle_status: approved
+  implementation_status: not_started
+  code: LDM-02
+  obligation: mandatory
+  responsible_role: it_owner
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: >
+    ЛМД соответствует актуальной версии принятой спецификации. Версия спецификации
+    указана в описании модели
+  applies_to:
+    applicability_id: appl:LDM-02
+    applies_target_class: ModelPackage
+    applies_implementation_scope: solution
+  formal_checks: []
+- element_id: dams:req/LDM-03
+  name: model_registered_in_data_catalog
+  title: Регистрация модели в Дата-каталоге
+  description: >
+    ADR-056 backbone LDM-03. Manual until PR-7 (no catalog-registration slot).
+  lifecycle_status: approved
+  implementation_status: not_started
+  code: LDM-03
+  obligation: mandatory
+  responsible_role: it_owner
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: Модель ИТ-решения зарегистрирована в Дата-каталоге
+  applies_to:
+    applicability_id: appl:LDM-03
+    applies_target_class: ModelPackage
+    applies_implementation_scope: solution
+  formal_checks: []
+- element_id: dams:req/LDM-04
+  name: logical_entity_business_definition
+  title: Определение бизнес-термина сущности ЛМД
+  description: >
+    ADR-056 backbone LDM-04. Checks deferred to PR-5 (from LDM-002.c3).
+  lifecycle_status: approved
+  implementation_status: not_started
+  code: LDM-04
+  obligation: mandatory
+  responsible_role: business_owner
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: >
+    Для каждой сущности ЛМД должно быть внесено определение бизнес-термина глоссария,
+    раскрывающее его смысл, применительно к описываемому ИТ-решению (включая ссылку
+    на нормативную документацию, при её наличии)
+  applies_to:
+    applicability_id: appl:LDM-04
+    applies_target_class: LogicalEntity
+    applies_implementation_scope: solution
+  formal_checks: []
+- element_id: dams:req/LDM-05
+  name: logical_entity_attributes_complete
+  title: Атрибуты сущности ЛМД
+  description: >
+    ADR-056 backbone LDM-05. Checks deferred to PR-5 (from LDM-005 floor).
+  lifecycle_status: approved
+  implementation_status: not_started
+  code: LDM-05
+  obligation: mandatory
+  responsible_role: business_owner
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: >
+    Для каждой сущности ЛМД описаны атрибуты, необходимые для однозначного представления
+    её бизнес-смысла, идентификации, характеристик, состояния и участия в предусмотренных
+    бизнес-процессах
+  applies_to:
+    applicability_id: appl:LDM-05
+    applies_target_class: LogicalEntity
+    applies_implementation_scope: solution
+  formal_checks: []
+- element_id: dams:req/LDM-06
+  name: logical_entity_unique_identifier
+  title: Уникальный идентификатор сущности ЛМД
+  description: >
+    ADR-056 backbone LDM-06. Checks deferred to PR-5 (from LDM-004). Distinct from
+    legacy LDM-006 (conceptual alignment; Group B).
+  lifecycle_status: approved
+  implementation_status: not_started
+  code: LDM-06
+  obligation: mandatory
+  responsible_role: business_owner
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: >
+    Для каждой сущности ЛМД определен состав атрибутов уникального идентификатора.
+    Приоритетный порядок выбора идентификатора – бизнес ключ, натуральный ключ,
+    суррогатный ключ (при отсутствии перечисленных выше альтернатив)
+  applies_to:
+    applicability_id: appl:LDM-06
+    applies_target_class: LogicalEntity
+    applies_implementation_scope: solution
+  formal_checks: []
+- element_id: dams:req/LDM-07
+  name: logical_base_relationship_kinds
+  title: Базовые типы связей ЛМД
+  description: >
+    ADR-056 backbone LDM-07. Checks deferred to PR-5 (from REF-003).
+  lifecycle_status: approved
+  implementation_status: not_started
+  code: LDM-07
+  obligation: mandatory
+  responsible_role: business_owner
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: >
+    Полностью описаны существующие базовые типы связей между сущностями —
+    «Входит в состав», «Является разновидностью», «Ссылается на справочник»
+  applies_to:
+    applicability_id: appl:LDM-07
+    applies_target_class: Relationship
+    applies_implementation_scope: solution
+  formal_checks: []
+- element_id: dams:req/LDM-08
+  name: logical_other_relationship_kinds
+  title: Остальные типы связей ЛМД
+  description: >
+    ADR-056 backbone LDM-08. Checks deferred to PR-5 (from REF-003).
+  lifecycle_status: approved
+  implementation_status: not_started
+  code: LDM-08
+  obligation: mandatory
+  responsible_role: business_owner
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: >
+    В дополнение к описанию базовых типов связей между сущностями ЛМД, описаны
+    остальные типы связей (согласно справочнику типов)
+  applies_to:
+    applicability_id: appl:LDM-08
+    applies_target_class: Relationship
+    applies_implementation_scope: solution
+  formal_checks: []
+- element_id: dams:req/LDM-09
+  name: logical_entity_data_class
+  title: Класс данных сущности ЛМД
+  description: >
+    ADR-056 backbone LDM-09. Entity-level checks in PR-5 (from LDM-003.c2);
+    attribute mixed-class gap is PR-7.
+  lifecycle_status: approved
+  implementation_status: not_started
+  code: LDM-09
+  obligation: mandatory
+  responsible_role: it_owner
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: >
+    Для каждой сущности ЛМД указан Класс данных. В случае смешанной классификации
+    сущности — Класс данных указан для её атрибутов
+  applies_to:
+    applicability_id: appl:LDM-09
+    applies_target_class: LogicalEntity
+    applies_implementation_scope: solution
+  formal_checks: []
+- element_id: dams:req/LDM-10
+  name: logical_entity_confidentiality_class
+  title: Класс конфиденциальности сущности ЛМД
+  description: >
+    ADR-056 backbone LDM-10. Checks deferred to PR-5 (from LDM-003.c4).
+  lifecycle_status: approved
+  implementation_status: not_started
+  code: LDM-10
+  obligation: mandatory
+  responsible_role: it_owner
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: >
+    Для каждой сущности ЛМД указан Класс конфиденциальности данных. В случае
+    смешанной классификации сущности — Класс конфиденциальности указан для её атрибутов
+  applies_to:
+    applicability_id: appl:LDM-10
+    applies_target_class: LogicalEntity
+    applies_implementation_scope: solution
+  formal_checks: []
+- element_id: dams:req/LDM-11
+  name: logical_entity_data_owner
+  title: Владелец данных сущности ЛМД
+  description: >
+    ADR-056 backbone LDM-11. Checks deferred to PR-5 (from GEN-001.c7 / LDM-002.c5).
+  lifecycle_status: approved
+  implementation_status: not_started
+  code: LDM-11
+  obligation: mandatory
+  responsible_role: business_owner
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: >
+    Для каждой сущности ЛМД указан владелец данных. В случае нескольких владельцев —
+    владелец указан для атрибутов сущности
+  applies_to:
+    applicability_id: appl:LDM-11
+    applies_target_class: LogicalEntity
+    applies_implementation_scope: solution
+  formal_checks: []
+- element_id: dams:req/LDM-12
+  name: logical_entity_source_system
+  title: Система-источник сущности ЛМД
+  description: >
+    ADR-056 backbone LDM-12. Manual until PR-7 (no logical source-system slot).
+  lifecycle_status: approved
+  implementation_status: not_started
+  code: LDM-12
+  obligation: mandatory
+  responsible_role: it_owner
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: >
+    Для каждой сущности ЛМД указана система-источник. При различии источников
+    отдельных атрибутов источники указаны на уровне соответствующих атрибутов
+  applies_to:
+    applicability_id: appl:LDM-12
+    applies_target_class: LogicalEntity
+    applies_implementation_scope: solution
+  formal_checks: []
+- element_id: dams:req/LDM-13
+  name: logical_entity_iod_classification
+  title: Классификация ИОД сущности ЛМД
+  description: >
+    ADR-056 backbone LDM-13 (recommended). Mapping to sensitivity slots is PR-7.
+  lifecycle_status: approved
+  implementation_status: not_started
+  code: LDM-13
+  obligation: recommended
+  responsible_role: it_owner
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: >
+    Для каждой сущности ЛМД указана Классификация ИОД. В случае смешанной классификации –
+    указывается более высокая степень чувствительности, либо размечаются отдельные атрибуты
+  applies_to:
+    applicability_id: appl:LDM-13
+    applies_target_class: LogicalEntity
+    applies_implementation_scope: solution
+  formal_checks: []
+- element_id: dams:req/PDM-01
+  name: physical_integration_provider_coverage
+  title: Покрытие ФМД поставщика в интеграциях
+  description: >
+    ADR-056 backbone PDM-01. Checks deferred to PR-5 (from FLW-001). Distinct from
+    legacy PDM-001 (DataCarrier core slots; Group C).
+  lifecycle_status: approved
+  implementation_status: not_started
+  code: PDM-01
+  obligation: mandatory
+  responsible_role: it_owner
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: >
+    В ФМД описаны все сущности и атрибуты, через которые ИТ-решение выступает
+    поставщиком данных в интеграциях
+  applies_to:
+    applicability_id: appl:PDM-01
+    applies_target_class: ModelPackage
+    applies_implementation_scope: solution
+  formal_checks: []
+- element_id: dams:req/PDM-02
+  name: physical_to_logical_attribute_link
+  title: Связь атрибута ФМД с атрибутом ЛМД
+  description: >
+    ADR-056 backbone PDM-02. Checks deferred to PR-5 (from PDM-003 / PDM-004).
+    Distinct from legacy PDM-002 (SchemaNode core; Group C).
+  lifecycle_status: approved
+  implementation_status: not_started
+  code: PDM-02
+  obligation: mandatory
+  responsible_role: it_owner
+  requirement_level: it_solution
+  requirement_section: PDM
+  statement: >
+    Для каждого атрибута сущности ФМД, несущего бизнес-смысл, указана связь
+    с атрибутом сущности ЛМД
+  applies_to:
+    applicability_id: appl:PDM-02
+    applies_target_class: SchemaNode
+    applies_implementation_scope: solution
+  formal_checks: []

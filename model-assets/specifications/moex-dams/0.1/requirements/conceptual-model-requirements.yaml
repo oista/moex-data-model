@@ -271,3 +271,47 @@ requirements:
         severity: error
         diagnostic_code: DAMS-SEM-PROP-SCOPE
         description: Validated by check_semantic_layer (ADR-034).
+
+  # ADR-056 backbone (PR-4): statements only; formal_checks in PR-5 / Python CM rules.
+  - element_id: dams:req/CDM-01
+    name: conceptual_entity_glossary_definition
+    title: Определение глоссария для сущности КМД
+    description: >
+      ADR-056 backbone CDM-01. Executable subset deferred (PR-5 / conceptual Python).
+    lifecycle_status: approved
+    implementation_status: not_started
+    code: CDM-01
+    obligation: mandatory
+    responsible_role: data_architecture
+    requirement_level: conceptual_model
+    requirement_section: CDM
+    statement: >
+      Для каждого сущности концептуальной модели внесено соответствующее определение
+      глоссария, раскрывающее единый(общий) для Группы бизнес-смысл термина, независимо
+      от предметной области и способов реализации
+    applies_to:
+      applicability_id: appl:CDM-01
+      applies_target_class: ConceptualEntity
+      applies_implementation_scope: enterprise
+    formal_checks: []
+
+  - element_id: dams:req/CDM-02
+    name: conceptual_base_relationship_kinds
+    title: Базовые типы связей КМД
+    description: >
+      ADR-056 backbone CDM-02. Executable subset deferred (PR-5 / conceptual Python).
+    lifecycle_status: approved
+    implementation_status: not_started
+    code: CDM-02
+    obligation: mandatory
+    responsible_role: data_architecture
+    requirement_level: conceptual_model
+    requirement_section: CDM
+    statement: >
+      Полностью описаны базовые типы связей между сущностями КМД — «Входит в состав»,
+      «Является разновидностью»
+    applies_to:
+      applicability_id: appl:CDM-02
+      applies_target_class: Relationship
+      applies_implementation_scope: enterprise
+    formal_checks: []
