@@ -181,7 +181,7 @@ def check_parent_ref_cycles(data: dict[str, Any]) -> list[Diagnostic]:
 
 
 def check_unique_asset_keys(data: dict[str, Any]) -> list[Diagnostic]:
-    """PRIMARY unique_keys: (asset_namespace, qualified_name) across all collections."""
+    """INV-059: (asset_namespace, qualified_name) unique across collections (PDM-005)."""
     seen: dict[tuple[str, str], str] = {}
     out: list[Diagnostic] = []
     for el, sid, _class_name in iter_technical_assets(data):
@@ -193,7 +193,8 @@ def check_unique_asset_keys(data: dict[str, Any]) -> list[Diagnostic]:
         if key in seen:
             out.append(
                 _diag(
-                    code="DAMS-REQ-PDM-005.c1",
+                    code="DAMS-INV-059",
+                    invariant_id="INV-059",
                     message=(
                         f'TechnicalAsset "{sid}" duplicates (asset_namespace, '
                         f'qualified_name)=({ns!r}, {qn!r}) already used by "{seen[key]}".'
@@ -201,7 +202,8 @@ def check_unique_asset_keys(data: dict[str, Any]) -> list[Diagnostic]:
                     subject=sid,
                     remediation=(
                         "Ensure asset_namespace + qualified_name is unique across "
-                        "data_carriers, access_points, data_containers, and execution_assets."
+                        "data_carriers, access_points, data_containers, and "
+                        "execution_assets. INV-059."
                     ),
                     requirement_code="PDM-005",
                 )
@@ -212,7 +214,7 @@ def check_unique_asset_keys(data: dict[str, Any]) -> list[Diagnostic]:
 
 
 def check_asset_kind_allowlists(data: dict[str, Any]) -> list[Diagnostic]:
-    """asset_kind must belong to the enum of the concrete subclass collection."""
+    """INV-060: asset_kind must belong to the subclass enum (PDM-007)."""
     out: list[Diagnostic] = []
     for el, sid, class_name in iter_technical_assets(data):
         kind = str(el.get("asset_kind") or "")
@@ -222,13 +224,16 @@ def check_asset_kind_allowlists(data: dict[str, Any]) -> list[Diagnostic]:
         if kind not in allow:
             out.append(
                 _diag(
-                    code="DAMS-REQ-PDM-007.c1",
+                    code="DAMS-INV-060",
+                    invariant_id="INV-060",
                     message=(
                         f'{class_name} "{sid}" has asset_kind {kind!r} not allowed '
                         f"for this subclass."
                     ),
                     subject=sid,
-                    remediation=f"Use one of: {', '.join(sorted(allow))}.",
+                    remediation=(
+                        f"Use one of: {', '.join(sorted(allow))}. INV-060."
+                    ),
                     requirement_code="PDM-007",
                 )
             )
@@ -416,7 +421,7 @@ def check_mapping_endpoint_types(data: dict[str, Any]) -> list[Diagnostic]:
 
 
 def check_carrier_refs_are_data_carriers(data: dict[str, Any]) -> list[Diagnostic]:
-    """DataFlowEntityBinding / SelectedEntity carrier_refs must be DataCarrier ids."""
+    """INV-061: DataFlowEntityBinding / SelectedEntity carrier_refs → DataCarrier (PDM-010)."""
     carrier_ids = technical_asset_ids_by_class(data)["DataCarrier"]
     non_carrier_tech: set[str] = set()
     for class_name, ids in technical_asset_ids_by_class(data).items():
@@ -435,13 +440,17 @@ def check_carrier_refs_are_data_carriers(data: dict[str, Any]) -> list[Diagnosti
             if rid in non_carrier_tech:
                 out.append(
                     _diag(
-                        code="DAMS-REQ-PDM-010.c1",
+                        code="DAMS-INV-061",
+                        invariant_id="INV-061",
                         message=(
                             f'{context} "{owner_id}" carrier_refs includes {rid!r} '
                             "which is not a DataCarrier."
                         ),
                         subject=owner_id,
-                        remediation="Point carrier_refs only at data_carriers element_ids.",
+                        remediation=(
+                            "Point carrier_refs only at data_carriers element_ids. "
+                            "INV-061."
+                        ),
                         requirement_code="PDM-010",
                     )
                 )

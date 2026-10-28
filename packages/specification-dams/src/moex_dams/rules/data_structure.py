@@ -246,7 +246,7 @@ def check_node_edge_cycles(data: dict[str, Any]) -> list[Diagnostic]:
 
 
 def check_root_local_key(data: dict[str, Any]) -> list[Diagnostic]:
-    """root_local_key must exist in nodes; root kind constrained by schema_format."""
+    """INV-062: root_local_key exists; root kind constrained by schema_format (PDM-015)."""
     out: list[Diagnostic] = []
     for ds in data.get("data_structures") or []:
         if not isinstance(ds, dict):
@@ -259,13 +259,16 @@ def check_root_local_key(data: dict[str, Any]) -> list[Diagnostic]:
         if root_lk not in by_key:
             out.append(
                 _diag(
-                    code="DAMS-REQ-PDM-015.c1",
+                    code="DAMS-INV-062",
+                    invariant_id="INV-062",
                     message=(
                         f'DataStructure "{sid}" root_local_key {root_lk!r} '
                         "does not exist in nodes."
                     ),
                     subject=sid or None,
-                    remediation="Point root_local_key at an existing node local_key.",
+                    remediation=(
+                        "Point root_local_key at an existing node local_key. INV-062."
+                    ),
                     requirement_code="PDM-015",
                 )
             )
@@ -277,26 +280,30 @@ def check_root_local_key(data: dict[str, Any]) -> list[Diagnostic]:
             if kind != "object":
                 out.append(
                     _diag(
-                        code="DAMS-REQ-PDM-015.c2",
+                        code="DAMS-INV-062",
+                        invariant_id="INV-062",
                         message=(
                             f'DataStructure "{sid}" with schema_format=relational '
                             f"requires root node_kind=object (got {kind!r})."
                         ),
                         subject=f"{sid}#{root_lk}" if sid else root_lk,
-                        remediation="Set the root SchemaNode node_kind to object.",
+                        remediation=(
+                            "Set the root SchemaNode node_kind to object. INV-062."
+                        ),
                         requirement_code="PDM-015",
                     )
                 )
         elif kind not in ("object", "array"):
             out.append(
                 _diag(
-                    code="DAMS-REQ-PDM-015.c2",
+                    code="DAMS-INV-062",
+                    invariant_id="INV-062",
                     message=(
                         f'DataStructure "{sid}" root node_kind must be object or array '
                         f"(got {kind!r})."
                     ),
                     subject=f"{sid}#{root_lk}" if sid else root_lk,
-                    remediation="Use object or array as the structure root.",
+                    remediation="Use object or array as the structure root. INV-062.",
                     requirement_code="PDM-015",
                 )
             )
@@ -339,7 +346,7 @@ def check_relational_slots(data: dict[str, Any]) -> list[Diagnostic]:
 
 
 def check_occurs_bounds(data: dict[str, Any]) -> list[Diagnostic]:
-    """max_occurs >= min_occurs when both are set."""
+    """INV-063: max_occurs >= min_occurs when both are set (PDM-017)."""
     out: list[Diagnostic] = []
     for ds in data.get("data_structures") or []:
         if not isinstance(ds, dict):
@@ -359,12 +366,13 @@ def check_occurs_bounds(data: dict[str, Any]) -> list[Diagnostic]:
                 lk = str(node.get("local_key") or "")
                 out.append(
                     _diag(
-                        code="DAMS-REQ-PDM-017.c1",
+                        code="DAMS-INV-063",
+                        invariant_id="INV-063",
                         message=(
                             f'SchemaNode "{sid}#{lk}" has max_occurs={mx} < min_occurs={mn}.'
                         ),
                         subject=f"{sid}#{lk}" if sid and lk else (sid or lk or None),
-                        remediation="Ensure max_occurs >= min_occurs.",
+                        remediation="Ensure max_occurs >= min_occurs. INV-063.",
                         requirement_code="PDM-017",
                     )
                 )
@@ -655,7 +663,7 @@ def check_message_refs_kinds(data: dict[str, Any]) -> list[Diagnostic]:
 
 
 def check_message_payload(data: dict[str, Any]) -> list[Diagnostic]:
-    """Message requires payload_structure_ref pointing to an existing DataStructure."""
+    """INV-064: Message payload_structure_ref → existing DataStructure (PDM-019)."""
     known = data_structure_ids(data)
     out: list[Diagnostic] = []
     for msg in data.get("messages") or []:
@@ -666,10 +674,14 @@ def check_message_payload(data: dict[str, Any]) -> list[Diagnostic]:
         if pref is None or not str(pref).strip():
             out.append(
                 _diag(
-                    code="DAMS-REQ-PDM-019.c1",
+                    code="DAMS-INV-064",
+                    invariant_id="INV-064",
                     message=f'Message "{mid}" requires payload_structure_ref.',
                     subject=mid or None,
-                    remediation="Set payload_structure_ref to a DataStructure element_id.",
+                    remediation=(
+                        "Set payload_structure_ref to a DataStructure element_id. "
+                        "INV-064."
+                    ),
                     requirement_code="PDM-019",
                 )
             )
@@ -678,13 +690,17 @@ def check_message_payload(data: dict[str, Any]) -> list[Diagnostic]:
         if pref_s not in known:
             out.append(
                 _diag(
-                    code="DAMS-REQ-PDM-019.c2",
+                    code="DAMS-INV-064",
+                    invariant_id="INV-064",
                     message=(
                         f'Message "{mid}" payload_structure_ref {pref_s!r} '
                         "does not resolve to a DataStructure in this package."
                     ),
                     subject=mid or None,
-                    remediation="Point payload_structure_ref at an existing data_structures id.",
+                    remediation=(
+                        "Point payload_structure_ref at an existing data_structures "
+                        "id. INV-064."
+                    ),
                     requirement_code="PDM-019",
                 )
             )
@@ -692,13 +708,17 @@ def check_message_payload(data: dict[str, Any]) -> list[Diagnostic]:
         if href is not None and str(href).strip() and str(href) not in known:
             out.append(
                 _diag(
-                    code="DAMS-REQ-PDM-019.c3",
+                    code="DAMS-INV-064",
+                    invariant_id="INV-064",
                     message=(
                         f'Message "{mid}" headers_structure_ref {href!r} '
                         "does not resolve to a DataStructure in this package."
                     ),
                     subject=mid or None,
-                    remediation="Point headers_structure_ref at an existing data_structures id.",
+                    remediation=(
+                        "Point headers_structure_ref at an existing data_structures "
+                        "id. INV-064."
+                    ),
                     requirement_code="PDM-019",
                 )
             )

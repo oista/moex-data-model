@@ -37,6 +37,15 @@ DIAGNOSTIC_CODE_ALIASES: dict[str, frozenset[str]] = {
     "INV-044": frozenset({"DAMS-CM-RELTERM-002"}),
     "INV-047": frozenset({"DAMS-REQ-PDM-006.c1", "DAMS-REQ-PDM-006.c2"}),
     "INV-052": frozenset({"DAMS-STRUCT-005"}),
+    # ADR-056 PR-3: Group C PDM gaps tagged onto INV homes.
+    "INV-059": frozenset({"DAMS-REQ-PDM-005.c1"}),
+    "INV-060": frozenset({"DAMS-REQ-PDM-007.c1"}),
+    "INV-061": frozenset({"DAMS-REQ-PDM-010.c1"}),
+    "INV-062": frozenset({"DAMS-REQ-PDM-015.c1", "DAMS-REQ-PDM-015.c2"}),
+    "INV-063": frozenset({"DAMS-REQ-PDM-017.c1"}),
+    "INV-064": frozenset(
+        {"DAMS-REQ-PDM-019.c1", "DAMS-REQ-PDM-019.c2", "DAMS-REQ-PDM-019.c3"}
+    ),
 }
 
 

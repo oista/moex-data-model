@@ -64,21 +64,21 @@ Body assess loader: `packages/specification-dams/src/moex_dams/rules/formal_chec
 | PDM-002 | Основные свойства узла схемы | 3 | `runner` | C | Schema `required` (PR-8) | `formal_checks.py` |
 | PDM-003 | Отображение сущности и носителя | 1 | `runner` | A | PDM-02 | `formal_checks.py`; ADR-046 |
 | PDM-004 | Отображение узла схемы и атрибута | 1 | `runner` | A | PDM-02 | `formal_checks.py`; ADR-046 |
-| PDM-005 | Уникальность ключа технического актива | 1 `custom` | `python` `technical_assets`; **no INV** | C | New INV in PR-3 | `technical_assets.py`; `test_technical_asset_checks.py` |
+| PDM-005 | Уникальность ключа технического актива | 1 `custom` | `python` + **INV-059** | C | INV-059 | `technical_assets.py`; `test_technical_asset_checks.py` |
 | PDM-006 | Иерархия parent_ref без циклов | 1 `custom` | `python` + **INV-047** | C | INV-047 | `technical_assets.py`; matrix |
-| PDM-007 | Допустимые asset_kind по подклассу | 1 `custom` | `python`; **no INV** | C | New INV in PR-3 | `technical_assets.py` |
+| PDM-007 | Допустимые asset_kind по подклассу | 1 `custom` | `python` + **INV-060** | C | INV-060 | `technical_assets.py` |
 | PDM-008 | Запрет direction для контейнеров | 1 `custom` | `python` + **INV-018** | C | INV-018 | `technical_assets.py`; matrix |
 | PDM-009 | Типы концов Mapping | 1 `custom` | `python` + **INV-033…036** (+ field resolve) | C | INV-033+ | `technical_assets.py`; `data_structure.py`; `test_mapping_endpoint_invariants.py` |
-| PDM-010 | carrier_refs только на DataCarrier | 1 `custom` | `python`; **no INV** | C | New INV in PR-3 | `technical_assets.py` |
+| PDM-010 | carrier_refs только на DataCarrier | 1 `custom` | `python` + **INV-061** | C | INV-061 | `technical_assets.py` |
 | PDM-011 | operation требует interface_ref | 1 `custom` | `python` + **INV-016** | C | INV-016 | `technical_assets.py`; matrix |
 | PDM-012 | in_memory без location | 1 `custom` | `python` + **INV-015** | C | INV-015 | `technical_assets.py`; matrix |
 | PDM-013 | Уникальность local_key | 1 `custom` | `python` + **INV-022** | C | INV-022 | `data_structure.py`; matrix |
 | PDM-014 | Ацикличность SchemaNode | 1 `custom` | `python` + **INV-020** | C | INV-020 | `data_structure.py`; matrix |
-| PDM-015 | Корень DataStructure | 1 `custom` | `python`; **no INV** | C | New INV in PR-3 | `data_structure.py`; `test_data_structure_checks.py` |
+| PDM-015 | Корень DataStructure | 1 `custom` | `python` + **INV-062** | C | INV-062 | `data_structure.py`; `test_data_structure_checks.py` |
 | PDM-016 | Реляционные признаки только relational | 1 `custom` | `python` + **INV-021** | C | INV-021 | `data_structure.py`; matrix |
-| PDM-017 | Границы кратности узла | 1 `custom` | `python`; **no INV** | C | New INV in PR-3 | `data_structure.py` |
+| PDM-017 | Границы кратности узла | 1 `custom` | `python` + **INV-063** | C | INV-063 | `data_structure.py` |
 | PDM-018 | message_refs по виду AccessPoint | 1 `custom` | `python` + **INV-017 / INV-019** | C | INV-017/019 | `data_structure.py`; matrix |
-| PDM-019 | Payload Message | 1 `custom` | `python`; **no INV** | C | New INV in PR-3 | `data_structure.py` |
+| PDM-019 | Payload Message | 1 `custom` | `python` + **INV-064** | C | INV-064 | `data_structure.py` |
 | PDM-020 | Форма узла по node_kind | 1 `custom` | `python` + **INV-012 / INV-013** | C | INV-012/013 | `data_structure.py`; matrix |
 | CLS-001 | Независимость осей классификации | 1 warning | `runner` | D | Drop | `formal_checks.py` |
 | CLS-002 | Режим защиты данных | 1 warning | `runner` | D | Drop; slot deprecation separate (PR-10+) | `formal_checks.py` |
@@ -129,7 +129,7 @@ Aliases also in `packages/specification-dams/src/moex_dams/rules/constraint_matr
 | INV-043 | DAMS-CM-GENESIS-001/002 | CM-CON-003 family |
 | INV-044 | DAMS-CM-RELTERM-002 | CM-REF-002 |
 
-**Missing INV (PR-3 must add before PR-9):** PDM-005, PDM-007, PDM-010, PDM-015, PDM-017, PDM-019.
+**Missing INV (PR-3):** closed — PDM-005→INV-059, PDM-007→INV-060, PDM-010→INV-061, PDM-015→INV-062, PDM-017→INV-063, PDM-019→INV-064.
 
 ## Metamodel blockers (PR-1)
 

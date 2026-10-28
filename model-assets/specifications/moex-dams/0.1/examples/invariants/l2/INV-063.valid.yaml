@@ -1,0 +1,19 @@
+element_id: dams:model/inv063
+implementation_scope: enterprise
+data_structures:
+- element_id: dams:structure/inv063/T
+  schema_format: json_schema
+  structure_version: 1.0.0
+  root_local_key: root
+  nodes:
+  - local_key: root
+    node_kind: object
+    children:
+    - items
+  - local_key: items
+    node_kind: array
+    min_occurs: 0
+    max_occurs: 10
+    item_node: item
+  - local_key: item
+    node_kind: scalar

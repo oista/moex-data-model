@@ -1,0 +1,16 @@
+element_id: dams:model/inv064
+implementation_scope: enterprise
+data_structures:
+- element_id: dams:structure/inv064/payload
+  schema_format: json_schema
+  structure_version: 1.0.0
+  root_local_key: root
+  nodes:
+  - local_key: root
+    node_kind: object
+messages:
+- element_id: dams:message/inv064/m
+  name: m
+  description: message with resolvable payload
+  lifecycle_status: active
+  payload_structure_ref: dams:structure/inv064/payload

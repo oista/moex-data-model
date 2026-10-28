@@ -1,0 +1,13 @@
+element_id: dams:model/inv059
+implementation_scope: enterprise
+data_carriers:
+- element_id: dams:carrier/inv059/a
+  name: a
+  asset_kind: relational_table
+  asset_namespace: ns
+  qualified_name: public.a
+- element_id: dams:carrier/inv059/b
+  name: b
+  asset_kind: relational_table
+  asset_namespace: ns
+  qualified_name: public.b

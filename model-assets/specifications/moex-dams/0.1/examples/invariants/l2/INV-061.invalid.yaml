@@ -1,0 +1,20 @@
+element_id: dams:model/inv061
+implementation_scope: enterprise
+data_containers:
+- element_id: dams:container/inv061/bucket
+  name: bucket
+  asset_kind: bucket
+  asset_namespace: ns
+  qualified_name: party-bucket
+data_flows:
+- element_id: dams:flow/inv061
+  name: bad_flow
+  description: carrier_refs point at DataContainer
+  lifecycle_status: active
+  entity_bindings:
+  - element_id: dams:flow/inv061/bind
+    name: bind
+    description: bad binding
+    lifecycle_status: active
+    carrier_refs:
+    - dams:container/inv061/bucket
