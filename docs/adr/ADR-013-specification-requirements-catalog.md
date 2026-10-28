@@ -28,14 +28,17 @@ LinkML нет класса «Requirement catalog»; `class.rules` / `slot.requir
   (модуль `moex-requirements.yaml`).
 - Инстансы каталога — отдельный YAML под деревом DAMS (`requirements/…`),
   **не** вложены в solution `ModelPackage`.
-- Каждое требование: код `{SECTION}-{NNN}`, уровень (`it_solution` /
-  `conceptual_model`), раздел (LDM/PDM/REF/ATR/FLW/CLS/GEN), русская
-  `statement` (норма для человека **без** сленга метамодели), `applies_to`,
-  набор `formal_checks` с `diagnostic_code`, `severity`, `remediation`.
+- Каждое требование: код `{SECTION}-{NN}` или `{SECTION}-{NNN}` (ADR-056),
+  уровень (`it_solution` / `conceptual_model`), раздел
+  (CDM/LDM/PDM/REF/ATR/FLW/CLS/GEN), опционально `obligation` /
+  `responsible_role`, русская `statement` (норма для человека **без** сленга
+  метамодели), `applies_to`, набор `formal_checks` с `diagnostic_code`,
+  `severity`, `remediation` (пустой список допустим для manual rules).
 - **Каталог — источник структурированных правил.** Не каждая нормативная
   формулировка автоматически исполняема: `formal_checks` — исполняемое
   подмножество. Отсутствие `formal_checks` — не молчание, а зона
-  human-review / manual.
+  human-review / manual. Нормативный хребет кодов — [ADR-056](ADR-056-requirements-backbone.md).
+  Assess пропускает `lifecycle_status` ∈ {`deprecated`,`superseded`,`rejected`}.
 - Каждая исполняемая проверка имеет стабильный diagnostic code и severity.
 - **Assess wiring (v0.2):** `moex_dams.rules.formal_checks` подключён к
   `default_dams_rule_sets` / `assess_implementation`. Gate публикации

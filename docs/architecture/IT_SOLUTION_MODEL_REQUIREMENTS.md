@@ -931,30 +931,55 @@ service-only correlation token.
 
 ---
 
-## 10. Классы требований Wave 1
+## 10. Классы требований (ADR-056 backbone + legacy)
+
+Нормативный **хребет** каталога — коды `CDM-01`/`CDM-02`, `LDM-01`…`LDM-13`,
+`PDM-01`/`PDM-02` ([ADR-056](../adr/ADR-056-requirements-backbone.md)). Исторические
+трёхзначные коды Wave 1 частично **superseded** (Group A) или остаются до PR-9/PR-10
+(Group B/C/D). Таблица ниже — ориентир для читателя; machine-readable source of truth —
+`requirements/*.yaml`.
+
+### 10.1. Backbone (нормативный документ)
 
 | Группа | Код | Назначение |
 |---|---|---|
-| General | `GEN-001` | Идентичность и ответственность пакета |
-| General | `GEN-002` | Привязка пакета к ИТ-решению |
-| General | `GEN-003` | Непустой состав модели |
-| General | `GEN-004` | Связь physical object с logical meaning |
-| Logical data model | `LDM-001` | Контекст и роль данных |
-| Logical data model | `LDM-002` | Наименование, resolvable definition (ADR-025), lifecycle, ownership |
-| Logical data model | `LDM-003` | Независимые оси классификации |
-| Logical data model | `LDM-004` | Правило идентичности и ключ |
-| Logical data model | `LDM-005` | Наличие атрибутов |
-| Logical data model | `LDM-006` | Conceptual alignment |
-| Logical data model | `LDM-007` | Семантическая включённость |
-| Logical data model | `LDM-008` | Полнота реализации зависимых концептов (warning; ADR-029) |
-| Attribute | `ATR-001` | Основные свойства logical attribute |
-| Attribute | `ATR-005` | Mapping logical attribute на реализацию |
-| Relationship | `REF-001` | Концы relationship и разрешимость refs |
-| Relationship | `REF-002` | Cardinality relationship |
-| Physical data model | `PDM-001` | Основные свойства physical object |
-| Physical data model | `PDM-002` | Основные свойства physical field |
-| Physical data model | `PDM-003` | Mapping physical object ↔ logical entity |
-| Physical data model | `PDM-004` | Mapping physical field ↔ logical attribute |
+| Conceptual | `CDM-01` | Определение глоссария / эталонное определение сущности КМД |
+| Conceptual | `CDM-02` | Базовые типы связей КМД |
+| Logical | `LDM-01` | ЛМД на уровне ИТ-решения |
+| Logical | `LDM-02` | Соответствие спецификации; версия в описании модели |
+| Logical | `LDM-03` | Регистрация в Дата-каталоге (manual до PR-7) |
+| Logical | `LDM-04` | Определение бизнес-термина сущности ЛМД |
+| Logical | `LDM-05` | Атрибуты сущности |
+| Logical | `LDM-06` | Уникальный идентификатор |
+| Logical | `LDM-07` | Базовые типы связей ЛМД |
+| Logical | `LDM-08` | Остальные типы связей по справочнику |
+| Logical | `LDM-09` | Класс данных |
+| Logical | `LDM-10` | Класс конфиденциальности |
+| Logical | `LDM-11` | Владелец данных |
+| Logical | `LDM-12` | Система-источник (manual до PR-7) |
+| Logical | `LDM-13` | Классификация ИОД (recommended) |
+| Physical | `PDM-01` | Покрытие ФМД поставщика в интеграциях |
+| Physical | `PDM-02` | Связь атрибута ФМД с атрибутом ЛМД |
+
+### 10.2. Legacy Wave 1 (ещё в каталоге / assess)
+
+| Группа | Код | Статус ADR-056 |
+|---|---|---|
+| General | `GEN-001`…`GEN-003` | Group A → superseded → LDM-02 / LDM-01 / LDM-11 |
+| General | `GEN-004` | Group D (drop later) |
+| Logical | `LDM-001` | Group D |
+| Logical | `LDM-002`…`LDM-005` | Group A → LDM-04 / LDM-09 / LDM-06 / LDM-05 |
+| Logical | `LDM-006` | Group B (recode in PR-10; ≠ backbone `LDM-06`) |
+| Logical | `LDM-007` / `LDM-008` | Group D |
+| Attribute | `ATR-*` | Group C/D |
+| Relationship | `REF-001` | Group C |
+| Relationship | `REF-002` | Group B |
+| Relationship | `REF-003` | Group A → LDM-07 |
+| Physical | `PDM-001` / `PDM-002` / `PDM-005`… | Group C (≠ backbone `PDM-01`/`PDM-02`) |
+| Physical | `PDM-003` / `PDM-004` | Group A → PDM-02 |
+| Flow | `FLW-001` | Group A → PDM-01 |
+| Flow | `FLW-002`… | Group C |
+| Classification | `CLS-*` | Group D |
 
 ---
 

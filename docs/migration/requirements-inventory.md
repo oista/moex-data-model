@@ -9,9 +9,9 @@
 
 | Catalog | Path | Count |
 |---|---|---:|
-| IT-solution | [`it-solution-requirements.yaml`](../../model-assets/specifications/moex-dams/0.1/requirements/it-solution-requirements.yaml) | 48 |
-| Conceptual | [`conceptual-model-requirements.yaml`](../../model-assets/specifications/moex-dams/0.1/requirements/conceptual-model-requirements.yaml) | 9 |
-| **Total** | | **57** |
+| IT-solution | [`it-solution-requirements.yaml`](../../model-assets/specifications/moex-dams/0.1/requirements/it-solution-requirements.yaml) | 63 (48 legacy + 15 backbone LDM/PDM) |
+| Conceptual | [`conceptual-model-requirements.yaml`](../../model-assets/specifications/moex-dams/0.1/requirements/conceptual-model-requirements.yaml) | 11 (9 legacy + CDM-01/02) |
+| **Total** | | **74** |
 
 Metamodel: [`moex-requirements.yaml`](../../model-assets/specifications/moex-dams/0.1/schemas/moex-requirements.yaml).  
 Body assess loader: `packages/specification-dams/src/moex_dams/rules/formal_checks.py` → `load_it_solution_catalog` (IT-solution file **only**; conceptual catalog is export / documentation / status tests).
