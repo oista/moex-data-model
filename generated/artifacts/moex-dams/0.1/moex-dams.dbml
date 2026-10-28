@@ -452,7 +452,6 @@ HasDefinition_description varchar
 Table LogicalEntity {
 element_id varchar [not null, primary key]
 name varchar [not null]
-title varchar
 aliases varchar
 description varchar
 lifecycle_status varchar [not null]
@@ -473,6 +472,7 @@ business_key_kind varchar
 conceptual_alignment_status varchar
 alignment_rationale varchar
 isolation_rationale varchar
+LogicalEntity_title varchar [not null]
 data_owner_ref varchar
 data_steward_ref varchar
 owning_unit_ref varchar
@@ -491,6 +491,7 @@ definition_source_ref varchar
 definition_rationale varchar
 scoped_definitions varchar
 HasDefinition_description varchar
+title varchar
 }
 
 Table LogicalAttribute {
@@ -798,7 +799,6 @@ TechnicalAsset_qualified_name varchar [not null]
 TechnicalAsset_native_name varchar [not null]
 TechnicalAsset_system_ref varchar [not null]
 parent_ref varchar
-TechnicalAsset_technology varchar
 lineage_role varchar
 TechnicalAsset_direction varchar
 solution_ref varchar
@@ -816,11 +816,13 @@ policy_refs varchar
 mapping_coverage_status varchar
 mapping_rationale varchar
 DataCarrier_asset_kind varchar [not null]
+DataCarrier_technology varchar [not null]
 structure_ref varchar
 data_format varchar
 location_uri varchar
 region varchar
 containment_kind varchar
+TechnicalAsset_technology varchar
 asset_kind varchar [not null]
 description varchar
 }

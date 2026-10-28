@@ -16,6 +16,7 @@ logical_entities:
   context_ref: dams:context/inv044
   solution_data_role: producer
   governance_classification: confidential
+  title: X
 classification_assignments:
 - assignment_id: dams:asg/inv044/shadow
   target_element_ref: dams:logical/inv044-bad/X

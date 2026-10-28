@@ -5,6 +5,7 @@ logical_entities:
   name: E
   description: e
   lifecycle_status: active
+  title: E
 realizes_mappings:
 - element_id: dams:mapping/inv035/r
   description: ok

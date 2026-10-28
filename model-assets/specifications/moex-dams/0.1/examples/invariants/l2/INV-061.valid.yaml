@@ -6,6 +6,7 @@ data_carriers:
   asset_kind: relational_table
   asset_namespace: ns
   qualified_name: public.t
+  technology: fixture
 data_flows:
 - element_id: dams:flow/inv061
   name: ok_flow

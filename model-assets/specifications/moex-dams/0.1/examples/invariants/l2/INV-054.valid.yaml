@@ -15,6 +15,7 @@ logical_entities:
   lifecycle_status: draft
   context_ref: dams:context/inv042
   solution_data_role: producer
+  title: X
 classification_assignments:
 - assignment_id: dams:asg/inv042/ok
   target_element_ref: dams:logical/inv042/X

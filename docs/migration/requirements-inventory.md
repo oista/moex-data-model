@@ -24,7 +24,7 @@ Body assess loader: `packages/specification-dams/src/moex_dams/rules/formal_chec
 | `custom-skip` | Catalog row has `kind: custom`; runner **skips**; real check is elsewhere |
 | `python` | Dedicated rule module emits diagnostics |
 | `INV` | Row referenced from [`constraint-matrix.yaml`](../../model-assets/specifications/moex-dams/0.1/constraints/constraint-matrix.yaml) |
-| `schema` | Likely / intended LinkML `required` or shape (verify in PR-8) |
+| `schema` | LinkML `required` / class `slot_usage` (ADR-056 PR-8 closed `LogicalEntity.title`, `DataCarrier.technology`) |
 
 ## Disposition summary
 
@@ -39,29 +39,29 @@ Body assess loader: `packages/specification-dams/src/moex_dams/rules/formal_chec
 
 | Code | Title | Checks / kinds | Enforced today | Group | Destination | Consumers |
 |---|---|---|---|---|---|---|
-| GEN-001 | Идентичность и ответственность пакета | 7 `slot_required` | `runner` (+ cascade placeholder lint `GEN-001`) | A | LDM-02 (`api_version`); LDM-11 (`data_owner_ref`); identity → schema PR-8 | `formal_checks.py`; `test_formal_checks.py`; `test_cascade_resolver.py` |
+| GEN-001 | Идентичность и ответственность пакета | 7 `slot_required` | `runner` (+ cascade placeholder lint `GEN-001`) | A | LDM-02 (`api_version`); LDM-11 (`data_owner_ref`); identity already schema `required` (PR-8) | `formal_checks.py`; `test_formal_checks.py`; `test_cascade_resolver.py` |
 | GEN-002 | Привязка к ИТ-решению | 2 | `runner` | A | LDM-01 | `formal_checks.py` |
 | GEN-003 | Непустой состав модели | 1 | `runner` | A | LDM-01 (LogicalEntity floor = PR-10) | `formal_checks.py` |
 | GEN-004 | Носители данных связаны со смыслом | 1 | `runner` | D | Drop (duplicate of PDM-003 / PDM-02) | `formal_checks.py` |
 | LDM-001 | Контекст и роль данных | 3 | `runner` | D | Drop; slots become optional unless schema requires | `formal_checks.py` |
-| LDM-002 | Обозначение и ответственность сущности | 5 | `runner` (`definition_resolvable`, ownership `effective`) | A | LDM-04; LDM-11; naming → schema PR-8 | `formal_checks.py`; `definitions.py`; `test_definition_resolver.py` |
+| LDM-002 | Обозначение и ответственность сущности | 5 | `runner` (`definition_resolvable`, ownership `effective`) | A | LDM-04; LDM-11; `title` class `slot_usage` (PR-8); name/lifecycle already schema | `formal_checks.py`; `definitions.py`; `test_definition_resolver.py` |
 | LDM-003 | Классификация сущности | 4 | `runner` (`governance` `effective`) | A | LDM-09; LDM-10; drop entity_type/importance obligation PR-10 | `formal_checks.py`; cascade |
 | LDM-004 | Правило идентичности | 1 | `runner` | A | LDM-06 | `formal_checks.py` |
 | LDM-005 | Наличие характеристик | 1 | `runner` | A | LDM-05 | `formal_checks.py` |
 | LDM-006 | Связь с корпоративными понятиями | 1 | `runner` | B | Keep; **recode** in PR-10 (collides with backbone LDM-06) | `formal_checks.py`; ADR-025 / ADR-029 |
 | LDM-007 | Семантическая включённость | 1 | `runner` | D | Drop | `formal_checks.py` |
 | LDM-008 | Полнота реализации зависимых концептов | 1 warning | `runner` | D | Drop (ADR-029 soft) | `formal_checks.py` |
-| ATR-001 | Основные свойства атрибута | 4 (`slot_required` + `custom`) | `runner` + `python` (`semantic_layer` type) | C | Schema `required` + SEM checks | `formal_checks.py`; `semantic_layer.py` |
+| ATR-001 | Основные свойства атрибута | 4 (`slot_required` + `custom`) | `runner` + `python` (`semantic_layer` type) | C | Schema `required` already (PR-8 verify) + SEM checks | `formal_checks.py`; `semantic_layer.py` |
 | ATR-002 | Именование атрибута | 1 warning | `runner` | D | Drop (linter-class) | `formal_checks.py` |
 | ATR-004 | Дополнительные свойства по типу атрибута | 1 warning | `runner` | D | Drop | `formal_checks.py` |
 | ATR-005 | Отображение атрибута на реализацию | 2 | `runner` | D | Drop (reverse of PDM-02) | `formal_checks.py` |
 | ATR-006 | Представление атрибута (тип или домен) | 1 `custom` | `custom-skip` → `python` `DAMS-SEM-ATTR-TYPE` | C | Keep SEM rule; drop catalog row | `semantic_layer.py`; `test_semantic_layer.py` |
 | ATR-007 | concept_ref опционален | 1 `custom` | Negation / test contract | D | Drop; keep `test_missing_concept_ref_is_silent` | `test_semantic_layer.py` |
-| REF-001 | Концы связи | 4 | `runner` | C | Schema / ref rules | `formal_checks.py`; `references.py` |
+| REF-001 | Концы связи | 4 | `runner` | C | Schema `required` on ends (PR-8 verify) + `references.py` | `formal_checks.py`; `references.py` |
 | REF-002 | Кардинальность связи | 1 | `runner` | B | Keep as recommended (PR-10) | `formal_checks.py` |
 | REF-003 | Тип логической связи | 1 warning | `runner` | A | LDM-07 / LDM-08 | `formal_checks.py` |
-| PDM-001 | Основные свойства носителя данных | 7 | `runner` | C | Schema `required` (PR-8) | `formal_checks.py` |
-| PDM-002 | Основные свойства узла схемы | 3 | `runner` | C | Schema `required` (PR-8) | `formal_checks.py` |
+| PDM-001 | Основные свойства носителя данных | 7 | `runner` | C | Schema except `structure_ref` (conditional); `technology` class `slot_usage` PR-8 | `formal_checks.py` |
+| PDM-002 | Основные свойства узла схемы | 3 | `runner` | C | `local_key` already schema; c2/c3 stay conditional catalog | `formal_checks.py` |
 | PDM-003 | Отображение сущности и носителя | 1 | `runner` | A | PDM-02 | `formal_checks.py`; ADR-046 |
 | PDM-004 | Отображение узла схемы и атрибута | 1 | `runner` | A | PDM-02 | `formal_checks.py`; ADR-046 |
 | PDM-005 | Уникальность ключа технического актива | 1 `custom` | `python` + **INV-059** | C | INV-059 | `technical_assets.py`; `test_technical_asset_checks.py` |

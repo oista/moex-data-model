@@ -21,3 +21,4 @@ data_carriers:
   qualified_name: t
   asset_kind: relational_table
   parent_ref: dams:physical/inv047/db
+  technology: fixture

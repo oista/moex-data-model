@@ -34,7 +34,7 @@ from pydantic import (
 
 
 metamodel_version = "1.11.0"
-version = "5.3.0"
+version = "5.4.0"
 
 
 class ConfiguredBaseModel(BaseModel):
@@ -1616,7 +1616,8 @@ class LogicalEntity(ModelElement, HasDefinition, HasDataSource, HasPolicyBinding
 """)
     scoped_definitions: Optional[list[ScopedDefinition]] = Field(default=None, description="""Context-scoped definitions (ADR-025); v1 scope_kind = system.""")
     name: str = Field(default=...)
-    title: Optional[str] = Field(default=None)
+    title: str = Field(default=..., description="""Русское бизнес-название в единственном числе (ADR-056 PR-8; formerly LDM-002.c1 catalog slot_required).
+""")
     aliases: Optional[list[str]] = Field(default=None)
     description: Optional[str] = Field(default=None, description="""Reference definition (skos:definition via exact_mappings; RDF predicate remains dams:description per ADR-044). Absent means inherit via definition_source_ref (ontology class or GlossaryTerm) per ADR-025. Prefer definition cascade over copying text from related ConceptualProperty / LogicalAttribute.
 """)
@@ -2018,7 +2019,8 @@ class DataCarrier(TechnicalAsset, HasLocation, Contains, HasStructure):
 """)
     system_ref: str = Field(default=...)
     parent_ref: Optional[str] = Field(default=None, description="""Родитель в контейнерной иерархии (без циклов).""")
-    technology: Optional[str] = Field(default=None)
+    technology: str = Field(default=..., description="""Технология хранения или предоставления данных (ADR-056 PR-8; formerly PDM-001.c4 catalog slot_required). Not required on AccessPoint / DataContainer / ExecutionAsset.
+""")
     asset_kind: DataCarrierKindEnum = Field(default=..., description="""Разновидность актива. На подклассах сужается через slot_usage на соответствующий enum.
 """)
     lineage_role: Optional[LineageRoleEnum] = Field(default=None, description="""Роль актива в lineage (source, sink, intermediate, none).""")

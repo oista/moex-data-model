@@ -6,6 +6,7 @@ data_carriers:
   asset_kind: relational_table
   asset_namespace: ns
   qualified_name: public.t
+  technology: fixture
 data_containers:
 - element_id: dams:container/inv060/db
   name: db

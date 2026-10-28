@@ -3,7 +3,7 @@
 # Do not edit by hand — regenerated at viewer publication build.
 name: moex_dams
 id: https://data.moex.com/dams/v0.1
-version: 5.3.0
+version: 5.4.0
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml:
@@ -3846,6 +3846,14 @@ classes:
     - conceptual_alignment_status
     - alignment_rationale
     - isolation_rationale
+    slot_usage:
+      title:
+        name: title
+        description: 'Русское бизнес-название в единственном числе (ADR-056 PR-8;
+          formerly LDM-002.c1 catalog slot_required).
+
+          '
+        required: true
   LogicalAttribute:
     name: LogicalAttribute
     description: 'Логический атрибут сущности: идентификация, обязательность, кардинальность
@@ -4241,6 +4249,14 @@ classes:
       asset_kind:
         name: asset_kind
         range: DataCarrierKindEnum
+        required: true
+      technology:
+        name: technology
+        description: 'Технология хранения или предоставления данных (ADR-056 PR-8;
+          formerly PDM-001.c4 catalog slot_required). Not required on AccessPoint
+          / DataContainer / ExecutionAsset.
+
+          '
         required: true
     rules:
     - preconditions:

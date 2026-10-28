@@ -1610,10 +1610,8 @@
                     ]
                 },
                 "technology": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                    "description": "\u0422\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438\u044f \u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f \u0438\u043b\u0438 \u043f\u0440\u0435\u0434\u043e\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u0438\u044f \u0434\u0430\u043d\u043d\u044b\u0445 (ADR-056 PR-8; formerly PDM-001.c4 catalog slot_required). Not required on AccessPoint / DataContainer / ExecutionAsset.\n",
+                    "type": "string"
                 },
                 "title": {
                     "type": [
@@ -1640,6 +1638,7 @@
                 "asset_namespace",
                 "qualified_name",
                 "system_ref",
+                "technology",
                 "asset_kind",
                 "name",
                 "description",
@@ -5320,10 +5319,8 @@
                     ]
                 },
                 "title": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                    "description": "\u0420\u0443\u0441\u0441\u043a\u043e\u0435 \u0431\u0438\u0437\u043d\u0435\u0441-\u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u0432 \u0435\u0434\u0438\u043d\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u043c \u0447\u0438\u0441\u043b\u0435 (ADR-056 PR-8; formerly LDM-002.c1 catalog slot_required).\n",
+                    "type": "string"
                 },
                 "valid_from": {
                     "format": "date-time",
@@ -5344,6 +5341,7 @@
                 "context_ref",
                 "solution_data_role",
                 "name",
+                "title",
                 "lifecycle_status",
                 "element_id"
             ],
@@ -9015,5 +9013,5 @@
     ],
     "title": "moex_dams",
     "type": "object",
-    "version": "5.3.0"
+    "version": "5.4.0"
 }

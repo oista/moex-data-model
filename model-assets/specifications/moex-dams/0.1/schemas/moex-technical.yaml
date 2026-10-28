@@ -110,6 +110,12 @@ classes:
       asset_kind:
         range: DataCarrierKindEnum
         required: true
+      technology:
+        required: true
+        description: >
+          Технология хранения или предоставления данных (ADR-056 PR-8;
+          formerly PDM-001.c4 catalog slot_required). Not required on
+          AccessPoint / DataContainer / ExecutionAsset.
     rules:
       - description: 'INV-015: in_memory носитель не имеет location_uri и region'
         preconditions:

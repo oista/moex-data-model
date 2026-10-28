@@ -6,3 +6,4 @@ data_carriers:
   asset_kind: in_memory
   asset_namespace: ns
   qualified_name: mem
+  technology: fixture

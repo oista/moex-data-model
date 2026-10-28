@@ -8,3 +8,4 @@ logical_entities:
   name: E
   description: e
   lifecycle_status: active
+  title: E
