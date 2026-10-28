@@ -549,9 +549,14 @@ def test_ldm07_relationship_kind_required_for_active() -> None:
 
 
 def test_pdm001_system_ref_required() -> None:
+    """Catalog PDM-001 deprecated (PR-9); system_ref is LinkML required (L1 / PR-8)."""
     data = _example()
     data["data_carriers"][0].pop("system_ref", None)
-    assert any("PDM-001" in d.diagnostic_code and "system_ref" in d.diagnostic_message for d in _errors(data))
+    # Runner no longer emits DAMS-REQ-PDM-001.c1; Python INV path unchanged.
+    assert not any(
+        "PDM-001" in d.diagnostic_code and "system_ref" in d.diagnostic_message
+        for d in _errors(data)
+    )
 
 
 def test_pdm002_scalar_type_required() -> None:

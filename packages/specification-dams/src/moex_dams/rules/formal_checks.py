@@ -33,6 +33,7 @@ from moex_dams.rules.definitions import (
     resolve_definition,
     validate_scoped_definition_systems,
 )
+from moex_dams.rules.references import check_references
 from moex_dams.rules.relation_terms import check_relation_terms
 from moex_dams.rules.semantic_layer import check_semantic_layer
 from moex_dams.rules.technical_assets import (
@@ -1460,6 +1461,9 @@ def check_formal_requirements(
     diagnostics.extend(check_relation_terms(data))
     diagnostics.extend(check_technical_assets(data))
     diagnostics.extend(check_semantic_layer(data))
+    # REF ends resolve here too: REF-001 catalog row is deprecated (ADR-056 PR-9),
+    # but DAMS-REF-005/006 must keep firing via references.py.
+    diagnostics.extend(check_references(body))
     return tuple(diagnostics)
 
 

@@ -4,8 +4,8 @@ requirements:
 - element_id: dams:req/CM-GEN-001
   name: conceptual_package_identity
   title: Идентичность пакета концептуальной модели
-  description: Обязательные поля корня ModelPackage для enterprise-conceptual.
-  lifecycle_status: draft
+  description: 'Enforcement: LinkML required ModelPackage slots + dams_levels/STRUCT. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: CM-GEN-001
   requirement_level: conceptual_model
   requirement_section: GEN
@@ -51,10 +51,9 @@ requirements:
 - element_id: dams:req/CM-GEN-002
   name: conceptual_implementation_scope
   title: Область enterprise-conceptual
-  description: >
-    Пакет концептуальной модели должен иметь implementation_scope: enterprise
-    и не ссылаться на конкретное ИТ-решение.
-  lifecycle_status: proposed
+  description: >-
+    Enforcement: DAMS-LEVEL-002 / dams_levels.py. Catalog row retired ADR-056 PR-9.
+  lifecycle_status: deprecated
   code: CM-GEN-002
   requirement_level: conceptual_model
   requirement_section: GEN
@@ -108,8 +107,8 @@ requirements:
 - element_id: dams:req/CM-REF-001
   name: conceptual_relationship_endpoints
   title: Концы связей концептуальных сущностей
-  description: Обязательные концы Relationship на концептуальном уровне.
-  lifecycle_status: draft
+  description: 'Enforcement: references.py / STRUCT. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: CM-REF-001
   requirement_level: conceptual_model
   requirement_section: REF
@@ -175,10 +174,9 @@ requirements:
 - element_id: dams:req/CM-CON-003
   name: conceptual_entity_genesis
   title: Генезис концептуальной сущности (external/native)
-  description: >
-    Genesis and external_class_refs (ADR-026). external ⇔ ≥1
-    external_class_refs; native ⇔ empty. match_kind drives ADR-025 exactness.
-  lifecycle_status: approved
+  description: >-
+    Enforcement: INV-043 / conceptual_entity.py (genesis). Catalog row retired ADR-056 PR-9.
+  lifecycle_status: deprecated
   code: CM-CON-003
   requirement_level: conceptual_model
   requirement_section: GEN
@@ -230,10 +228,9 @@ requirements:
 - element_id: dams:req/CM-PDM-000
   name: conceptual_no_physical
   title: Запрет технического слоя
-  description: >
-    Enterprise-conceptual пакет не содержит коллекций TechnicalAsset (data_carriers / access_points /
-    data_containers / execution_assets) (ADR-021 / ADR-031).
-  lifecycle_status: approved
+  description: >-
+    Enforcement: DAMS-LEVEL-003 / dams_levels.py. Catalog row retired ADR-056 PR-9.
+  lifecycle_status: deprecated
   code: CM-PDM-000
   requirement_level: conceptual_model
   requirement_section: PDM
@@ -256,10 +253,9 @@ requirements:
 - element_id: dams:req/CM-PROP-001
   name: conceptual_property_enterprise_only
   title: ConceptualProperty только в enterprise
-  description: >
-    Реализовано в semantic_layer (DAMS-SEM-PROP-SCOPE). Значимые свойства КМД
-    не размещаются в solution-пакетах (ADR-034).
-  lifecycle_status: approved
+  description: >-
+    Enforcement: DAMS-SEM-PROP-SCOPE / semantic_layer.py. Catalog row retired ADR-056 PR-9.
+  lifecycle_status: deprecated
   code: CM-PROP-001
   requirement_level: conceptual_model
   requirement_section: LDM
