@@ -480,6 +480,43 @@ def load_it_solution_catalog(catalog_path: Path | None = None) -> list[dict[str,
     return [r for r in reqs if isinstance(r, dict)]
 
 
+def _effective_slot(
+    resolved: dict[str, Any],
+    element_id: str | None,
+    slot: str,
+) -> Any:
+    if not element_id:
+        return None
+    prov = (resolved.get(element_id) or {}).get(slot)
+    return None if prov is None else prov.value
+
+
+def _entity_or_all_attrs_effective(
+    *,
+    el: dict[str, Any],
+    subject: str | None,
+    resolved: dict[str, Any],
+    slot: str,
+) -> tuple[bool, list[str]]:
+    """True if entity effective slot is filled, or every attribute has it filled.
+
+    Returns (ok, missing_attribute_ids). missing is empty when ok or entity has
+    no attributes (entity-level miss with empty attrs → ok=False, missing=[]).
+    """
+    entity_val = _effective_slot(resolved, subject, slot)
+    if _filled(entity_val):
+        return True, []
+    attrs = [a for a in (el.get("attributes") or []) if isinstance(a, dict)]
+    if not attrs:
+        return False, []
+    missing: list[str] = []
+    for attr in attrs:
+        aid = str(attr.get("element_id") or attr.get("name") or "")
+        if not _filled(_effective_slot(resolved, aid or None, slot)):
+            missing.append(aid or "(anonymous attribute)")
+    return (not missing), missing
+
+
 def _run_conditional(
     *,
     template: str,
@@ -489,12 +526,14 @@ def _run_conditional(
     check: dict[str, Any],
     statement: str | None,
     requirement_code: str | None = None,
+    resolved: dict[str, Any] | None = None,
 ) -> list[Diagnostic]:
     code = str(check.get("diagnostic_code") or check.get("check_id") or "DAMS-REQ")
     sev = _severity(check.get("severity"))
     rem = check.get("remediation")
     out: list[Diagnostic] = []
     req_kw = {"requirement_code": requirement_code}
+    resolved = resolved or {}
 
     if template == "implementation_scope_solution":
         if data.get("implementation_scope") != "solution":
@@ -1194,6 +1233,60 @@ def _run_conditional(
             )
         return out
 
+    if template == "ldm09_data_class":
+        ok, missing = _entity_or_all_attrs_effective(
+            el=el, subject=subject, resolved=resolved, slot="data_class"
+        )
+        if not ok:
+            if missing:
+                detail = " missing on attributes: " + ", ".join(missing)
+            else:
+                detail = " (entity has no attributes to carry mixed classification)"
+            out.append(
+                _diag(
+                    code=code,
+                    severity=sev,
+                    message=(
+                        f'LogicalEntity "{subject}" must have effective data_class '
+                        f"on the entity or on every attribute{detail}."
+                    ),
+                    subject=subject,
+                    remediation=rem,
+                    statement=statement,
+                    requirement_code=requirement_code,
+                )
+            )
+        return out
+
+    if template == "ldm12_source_system":
+        ok, missing = _entity_or_all_attrs_effective(
+            el=el,
+            subject=subject,
+            resolved=resolved,
+            slot="source_system_refs",
+        )
+        if not ok:
+            if missing:
+                detail = " missing on attributes: " + ", ".join(missing)
+            else:
+                detail = " (entity has no attributes to carry mixed sources)"
+            out.append(
+                _diag(
+                    code=code,
+                    severity=sev,
+                    message=(
+                        f'LogicalEntity "{subject}" must have effective '
+                        f"source_system_refs on the entity or on every attribute"
+                        f"{detail}."
+                    ),
+                    subject=subject,
+                    remediation=rem,
+                    statement=statement,
+                    requirement_code=requirement_code,
+                )
+            )
+        return out
+
     # Unknown template — surface as warning so authors notice
     out.append(
         _diag(
@@ -1417,6 +1510,7 @@ def check_formal_requirements(
                             check=check,
                             statement=statement,
                             requirement_code=requirement_code,
+                            resolved=resolved,
                         )
                     )
                 elif kind == "custom":

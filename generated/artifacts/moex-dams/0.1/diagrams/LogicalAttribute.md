@@ -11,6 +11,8 @@
         click HasGovernanceClassification href "../HasGovernanceClassification"
       HasPolicyBindings <|-- LogicalAttribute
         click HasPolicyBindings href "../HasPolicyBindings"
+      HasDataSource <|-- LogicalAttribute
+        click HasDataSource href "../HasDataSource"
       HasDefinition <|-- LogicalAttribute
         click HasDefinition href "../HasDefinition"
       ModelElement <|-- LogicalAttribute
@@ -36,6 +38,17 @@
       LogicalAttribute : critical_data_element
         
       LogicalAttribute : currency_attribute_ref
+        
+      LogicalAttribute : data_class
+        
+          
+    
+        
+        
+        LogicalAttribute --> "0..1" DataClassEnum : data_class
+        click DataClassEnum href "../DataClassEnum"
+    
+
         
       LogicalAttribute : data_owner_ref
         
@@ -205,6 +218,17 @@
         
         LogicalAttribute --> "*" DataClassificationTerm : sensitivity_term_refs
         click DataClassificationTerm href "../DataClassificationTerm"
+    
+
+        
+      LogicalAttribute : source_system_refs
+        
+          
+    
+        
+        
+        LogicalAttribute --> "*" ITSystem : source_system_refs
+        click ITSystem href "../ITSystem"
     
 
         

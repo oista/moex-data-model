@@ -95,6 +95,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: Проверка доверенности на карточке — характеристика SupportingDocument.
+  source_system_refs:
+  - eam:system/ESED
 - element_id: dams:logical/esed/common_state
   name: common_state
   title: common_state
@@ -137,6 +139,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: local-only
   alignment_rationale: Workflow/lookup состояние ЕСЭД; корпоративного концепта нет.
+  source_system_refs:
+  - eam:system/ESED
 - element_id: dams:logical/esed/common_type
   name: common_type
   title: common_type
@@ -179,6 +183,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: local-only
   alignment_rationale: Workflow/lookup вид ЕСЭД; корпоративного концепта нет.
+  source_system_refs:
+  - eam:system/ESED
 - element_id: dams:logical/esed/division
   name: division
   title: division
@@ -234,6 +240,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: ЕСЭД division реализует корпоративный Department.
+  source_system_refs:
+  - eam:system/ESED
 - element_id: dams:logical/esed/document
   name: document
   title: document
@@ -531,6 +539,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: ЕСЭД document реализует SupportingDocument.
+  source_system_refs:
+  - eam:system/ESED
 - element_id: dams:logical/esed/employee
   name: employee
   title: employee
@@ -619,6 +629,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: ЕСЭД employee реализует Employee. Отдельного Person в пакете нет; Person живёт в MDM/UCD (LDM-008 warning допустим).
+  source_system_refs:
+  - eam:system/ESED
 - element_id: dams:logical/esed/file
   name: file
   title: file
@@ -694,6 +706,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: not-applicable
   alignment_rationale: Физическое хранилище вложения ЕСЭД; не бизнес-понятие CDM.
+  source_system_refs:
+  - eam:system/ESED
 - element_id: dams:logical/esed/file_binary
   name: file_binary
   title: file_binary
@@ -747,6 +761,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: not-applicable
   alignment_rationale: Бинарные данные файла ЕСЭД; не бизнес-понятие CDM.
+  source_system_refs:
+  - eam:system/ESED
 - element_id: dams:logical/esed/instance
   name: instance
   title: instance
@@ -791,6 +807,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: Карточка/экземпляр документа ЕСЭД — то же понятие SupportingDocument, другое зерно относительно document.
+  source_system_refs:
+  - eam:system/ESED
 - element_id: dams:logical/esed/organization
   name: organization
   title: organization
@@ -901,6 +919,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: ЕСЭД organization (партнёр ЭДО, ИНН/КПП/ОГРН) реализует LegalEntity; не Counterparty (коммерческая роль).
+  source_system_refs:
+  - eam:system/ESED
 - element_id: dams:logical/esed/organization_employee
   name: organization_employee
   title: organization_employee
@@ -967,6 +987,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: Сотрудник контрагента в ЕСЭД — Person, не Employee МОЕХ.
+  source_system_refs:
+  - eam:system/ESED
 - element_id: dams:logical/esed/universal_item
   name: universal_item
   title: universal_item
@@ -1020,6 +1042,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: local-only
   alignment_rationale: Универсальный справочник значений ЕСЭД; корпоративного концепта нет.
+  source_system_refs:
+  - eam:system/ESED
 relationships:
 - element_id: dams:rel/esed/attorney_check_info_to_instance_via_instance_id
   name: attorney_check_info_to_instance_via_instance_id

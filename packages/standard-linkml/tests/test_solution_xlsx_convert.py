@@ -52,6 +52,14 @@ def test_convert_crm_builds_package(tmp_path):
         for m in result.package.get("realizes_mappings") or []
     )
     assert "mappings" not in result.package
+    # ADR-056 PR-7e: cascade slots stay on entity; not copied to attributes.
+    # stamp_source_system_refs defaults off — entities also omit the slot.
+    for ent in result.package["logical_entities"]:
+        assert "source_system_refs" not in ent
+        assert ent.get("data_class")  # entity-level from mapper defaults
+        for attr in ent.get("attributes") or []:
+            assert "data_class" not in attr
+            assert "source_system_refs" not in attr
 
 
 def test_writer_no_overwrite(tmp_path):

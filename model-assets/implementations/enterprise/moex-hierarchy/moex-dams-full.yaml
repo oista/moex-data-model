@@ -3,7 +3,7 @@
 # Do not edit by hand — regenerated at viewer publication build.
 name: moex_dams
 id: https://data.moex.com/dams/v0.1
-version: 5.1.0
+version: 5.3.0
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml:
@@ -940,9 +940,15 @@ enums:
         description: Проверено
   RequirementSectionEnum:
     name: RequirementSectionEnum
-    description: Раздел каталога требований (трёхбуквенный код в code).
+    description: 'Раздел каталога требований. Значение совпадает с префиксом `code`
+      (CDM|LDM|PDM|REF|ATR|FLW|CLS|GEN); суффикс — две или три цифры (ADR-056).
+
+      '
     from_schema: https://data.moex.com/dams/types/v0.1
     permissible_values:
+      CDM:
+        text: CDM
+        description: Концептуальная модель (нормативный хребет ADR-056)
       LDM:
         text: LDM
         description: Логическая модель
@@ -964,6 +970,35 @@ enums:
       GEN:
         text: GEN
         description: Общие требования
+  RequirementObligationEnum:
+    name: RequirementObligationEnum
+    description: 'Класс обязательности требования из нормативного документа (ADR-056).
+      Не заменяет CheckSeverityEnum у formal_checks.
+
+      '
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      mandatory:
+        text: mandatory
+        description: ОБЯЗАТЕЛЬНО — assess severity error, когда проверка исполнима
+      recommended:
+        text: recommended
+        description: РЕКОМЕНДУЕТСЯ — assess severity warning, когда проверка исполнима
+  RequirementResponsibleRoleEnum:
+    name: RequirementResponsibleRoleEnum
+    description: Роль, ответственная за выполнение требования (нормативная таблица,
+      ADR-056).
+    from_schema: https://data.moex.com/dams/types/v0.1
+    permissible_values:
+      data_architecture:
+        text: data_architecture
+        description: Архитектура данных
+      it_owner:
+        text: it_owner
+        description: ИТ-владелец
+      business_owner:
+        text: business_owner
+        description: бизнес-владелец
   FormalCheckKindEnum:
     name: FormalCheckKindEnum
     description: Вид формальной проверки в нотации, близкой к LinkML constraints.
@@ -1508,6 +1543,11 @@ slots:
     range: EntityTypeEnum
   data_class:
     name: data_class
+    description: 'Природа данных (master/reference/transactional/…). На LogicalEntity
+      — ось LDM-09; на LogicalAttribute — override при смешанной классификации (inline
+      cascade ADR-023 / ADR-056 PR-7; absent = inherit from entity).
+
+      '
     from_schema: https://data.moex.com/dams/governance/v0.1
     range: DataClassEnum
   business_importance:
@@ -1541,6 +1581,17 @@ slots:
     name: policy_refs
     from_schema: https://data.moex.com/dams/governance/v0.1
     range: Policy
+    multivalued: true
+    inlined: false
+  source_system_refs:
+    name: source_system_refs
+    description: 'ИТ-системы — источники данных элемента (происхождение), не носители
+      хранения. List-replace cascade: ключ отсутствует = наследование; [] = явное
+      «нет источников»; непустой список = полная замена (ADR-023 / ADR-056 PR-7 LDM-12).
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    range: ITSystem
     multivalued: true
     inlined: false
   source_artifact_ref:
@@ -3160,10 +3211,30 @@ slots:
     range: boolean
   code:
     name: code
+    description: 'Код требования: раздел + две или три цифры (ADR-056). Трёхзначные
+      исторические коды (GEN-001, LDM-001, …) остаются валидными.
+
+      '
     from_schema: https://data.moex.com/dams/requirements/v0.1
     range: string
     required: true
-    pattern: ^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$
+    pattern: ^(CDM|LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{2,3}$
+  obligation:
+    name: obligation
+    description: 'ОБЯЗАТЕЛЬНО / РЕКОМЕНДУЕТСЯ из нормативного документа (ADR-056).
+      Необязателен на исторических записях до миграции каталога.
+
+      '
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: RequirementObligationEnum
+  responsible_role:
+    name: responsible_role
+    description: 'Ответственная роль из нормативной таблицы (ADR-056). Необязателен
+      на исторических записях до миграции каталога.
+
+      '
+    from_schema: https://data.moex.com/dams/requirements/v0.1
+    range: RequirementResponsibleRoleEnum
   requirement_level:
     name: requirement_level
     from_schema: https://data.moex.com/dams/requirements/v0.1
@@ -3215,12 +3286,16 @@ slots:
     range: ImplementationProfileEnum
   formal_checks:
     name: formal_checks
+    description: 'Исполняемое подмножество нормы. Пустой список допустим для ручных
+      правил (ADR-013 / ADR-056); это human-review, не молчание.
+
+      '
     from_schema: https://data.moex.com/dams/requirements/v0.1
     range: FormalCheck
     multivalued: true
     inlined: true
     inlined_as_list: true
-    minimum_cardinality: 1
+    minimum_cardinality: 0
   implementation_status:
     name: implementation_status
     description: 'Статус реализации требования. Осмысленно при lifecycle_status=approved;
@@ -3524,6 +3599,19 @@ classes:
     - approval_status
     - approved_by_ref
     - approved_at
+  HasDataSource:
+    name: HasDataSource
+    description: 'Система-источник данных (происхождение смысла), не место хранения.
+      Отличается от TechnicalAsset.system_ref (где данные лежат или предоставляются).
+      Inline-only cascade LogicalEntity → LogicalAttribute (ADR-023 / ADR-056 PR-7);
+      не входит в GOVERNED_SLOTS / assignment layer. Внешние ИТ-системы (вне ITSolution.member_system_refs)
+      допускаются.
+
+      '
+    from_schema: https://data.moex.com/dams/governance/v0.1
+    mixin: true
+    slots:
+    - source_system_refs
   HasAssertionMetadata:
     name: HasAssertionMetadata
     description: 'Qualified assertion metadata (ADR-053): validity window, provenance
@@ -3743,6 +3831,7 @@ classes:
     - HasBusinessClassification
     - HasGovernanceClassification
     - HasPolicyBindings
+    - HasDataSource
     - HasDefinition
     slots:
     - context_ref
@@ -3770,12 +3859,14 @@ classes:
     - HasOwnership
     - HasGovernanceClassification
     - HasPolicyBindings
+    - HasDataSource
     - HasDefinition
     slots:
     - owner_entity_ref
     - concept_ref
     - value_domain_ref
     - data_type_ref
+    - data_class
     - critical_data_element
     - required
     - multivalued
@@ -4888,6 +4979,8 @@ classes:
     - code
     - requirement_level
     - requirement_section
+    - obligation
+    - responsible_role
     - statement
     - applies_to
     - formal_checks

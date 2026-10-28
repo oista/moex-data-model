@@ -138,8 +138,11 @@ def test_normative_docs_have_no_authored_topology_or_legacy_governance_slots() -
             # Enum table rows like `integration_channel_enum` are not slot names.
             if "_enum" in line.lower():
                 continue
+            # `source_system_refs` (HasDataSource, ADR-056 PR-7) is a different slot
+            # from the removed DataFlow `source_system_ref`.
+            check_line = line.replace("source_system_refs", "")
             for token in _TOPOLOGY_AUTHORED + _GOVERNANCE_LEGACY:
-                if token in line:
+                if token in check_line:
                     offenders.append(f"{rel}:{i}: {line.strip()}")
                     break
     assert not offenders, (

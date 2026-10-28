@@ -23,6 +23,7 @@ CI: `tests/architecture/test_schema_version_timeline.py` fails if the aggregate 
 | 5.1.0 | Qualified assertion metadata (additive) | ADR-053 D1/D2; [CHANGELOG-assertion-metadata.md](CHANGELOG-assertion-metadata.md); INV-057 |
 | 5.1.0 | Global `element_id` uniqueness (no aggregate bump) | INV-058 + `check-manifest`; [CHANGELOG-global-element-id.md](CHANGELOG-global-element-id.md); ADR-054 |
 | 5.2.0 | Requirements catalog metamodel (additive) | ADR-056 PR-1; [CHANGELOG-requirements-metamodel.md](CHANGELOG-requirements-metamodel.md) |
+| 5.3.0 | Data class / source cascade slots (additive) | ADR-056 PR-7b; [CHANGELOG-source-cascade.md](CHANGELOG-source-cascade.md); amends ADR-023 |
 | 6.0.0 | *(planned)* Identity / embedded selection train | ADR-052 D5; checklist [TRAIN-6.0.0.md](TRAIN-6.0.0.md) (G1–G6 + T6-*); only after ADR-051 evidence gate |
 
 ## Dual version surfaces

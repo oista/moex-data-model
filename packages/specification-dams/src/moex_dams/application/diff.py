@@ -60,6 +60,7 @@ _SKIP_KEYS = frozenset(
         "source_entity_ref",
         "target_entity_ref",
         "sensitivity_term_refs",
+        "source_system_refs",
     }
 )
 

@@ -53,9 +53,10 @@
 |---|---|
 | `HasLifecycle` | Жизненный цикл элемента: `lifecycle_status`, `valid_from`, `valid_to`, `deprecated_by_ref` |
 | `HasOwnership` | Authored default владения: `data_owner_ref`, `data_steward_ref`, `owning_unit_ref` (absent = cascade inherit, ADR-023); перекрывается `OwnershipAssignment` (ADR-049) |
-| `HasBusinessClassification` | Роль в бизнесе: `entity_type`, `data_class`, `business_importance` (не каскадируются) |
+| `HasBusinessClassification` | Роль в бизнесе: `entity_type`, `business_importance` (не каскадируются); `data_class` каскадируется entity→attribute (ADR-056 PR-7, inline-only) |
 | `HasGovernanceClassification` | Authored default: `governance_classification` каскадируется (ADR-023); перекрывается `ClassificationAssignment` (ADR-049); `security_classification` — Wave 2 |
 | `HasPolicyBindings` | Authored default `policy_refs`: absent = inherit; present list (в т.ч. `[]`) = full replace (ADR-023); перекрывается `PolicyBinding` (ADR-049) |
+| `HasDataSource` | Система-источник данных (`source_system_refs`); inline cascade entity→attribute (ADR-056 PR-7); **не** assignment layer / не `TechnicalAsset.system_ref` |
 | `HasDefinition` | Эталонное определение (ADR-025): `description` = own `skos:definition`; `definition_source_ref` / `scoped_definitions`; наследование по семантической оси, не containment. Также на `RelationTerm` (ADR-026) |
 | `HasProvenance` | Происхождение и согласование: `source_artifact_ref`, `approval_status`, `approved_by_ref`, `approved_at` |
 | `HasAssertionMetadata` | ADR-053: `HasValidity` + `HasProvenance` + `confidence`. На `Mapping`, `ExternalClassRef`, `ScopedDefinition`, `GovernanceAssignment` |
@@ -275,7 +276,7 @@ LinkML в этом смысле **монотонен**: `slot_usage` может 
 | `imports` | `moex-core.yaml` импортирует `moex-types.yaml`, `moex-governance.yaml` |
 | `is_a` | Все классы верхнего уровня наследуются от `ModelElement` |
 | `abstract` | `ModelElement` — абстрактный корень иерархии |
-| `mixin` + `mixins` | `HasLifecycle`, `HasOwnership`, `HasBusinessClassification`, `HasGovernanceClassification`, `HasPolicyBindings`, `HasDefinition`, `HasProvenance`, `HasAssertionMetadata` |
+| `mixin` + `mixins` | `HasLifecycle`, `HasOwnership`, `HasBusinessClassification`, `HasGovernanceClassification`, `HasPolicyBindings`, `HasDataSource`, `HasDefinition`, `HasProvenance`, `HasAssertionMetadata` |
 | `tree_root` | `MoexModelRepository` |
 | `identifier` | `element_id` у `ModelElement`, `registry_id` у `RegistryEntry`, `external_class_ref_id` |
 | `required` | `description` у `ModelElement`, `lifecycle_status` и др.; `forward_label` у `RelationTerm` |

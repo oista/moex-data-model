@@ -26,6 +26,9 @@ class CascadeFamily:
     name: str
     slots: tuple[str, ...]
     cardinality: CascadeCardinality
+    # When False: resolve in containment cascade only; exclude from ADR-049
+    # assignment overlay and EffectiveGovernanceView (ADR-056 PR-7).
+    assignable: bool = True
 
 
 @dataclass(frozen=True)
@@ -55,6 +58,21 @@ POLICIES_FAMILY = CascadeFamily(
     cardinality=CascadeCardinality.LIST_REPLACE,
 )
 
+DATA_CLASS_FAMILY = CascadeFamily(
+    name="data_class",
+    slots=("data_class",),
+    cardinality=CascadeCardinality.SCALAR,
+    assignable=False,
+)
+
+SOURCE_FAMILY = CascadeFamily(
+    name="source",
+    slots=("source_system_refs",),
+    cardinality=CascadeCardinality.LIST_REPLACE,
+    assignable=False,
+)
+
+# Assignable families only — ADR-049 assignments + EffectiveGovernanceView.
 GOVERNED_FAMILIES: tuple[CascadeFamily, ...] = (
     OWNERSHIP_FAMILY,
     CLASSIFICATION_FAMILY,
@@ -63,6 +81,19 @@ GOVERNED_FAMILIES: tuple[CascadeFamily, ...] = (
 
 GOVERNED_SLOTS: frozenset[str] = frozenset(
     slot for family in GOVERNED_FAMILIES for slot in family.slots
+)
+
+# All containment-cascade families (assignable + inline-only).
+CASCADE_FAMILIES: tuple[CascadeFamily, ...] = (
+    OWNERSHIP_FAMILY,
+    CLASSIFICATION_FAMILY,
+    POLICIES_FAMILY,
+    DATA_CLASS_FAMILY,
+    SOURCE_FAMILY,
+)
+
+CASCADE_SLOTS: frozenset[str] = frozenset(
+    slot for family in CASCADE_FAMILIES for slot in family.slots
 )
 
 # Containment edges from package root (DomainContext is intentionally excluded).
@@ -160,7 +191,7 @@ def _resolve_element(
 ) -> dict[str, SlotProvenance]:
     eid = _element_id(el, level)
     effective: dict[str, SlotProvenance] = {}
-    for family in GOVERNED_FAMILIES:
+    for family in CASCADE_FAMILIES:
         for slot in family.slots:
             effective[slot] = _resolve_slot(
                 el=el,
@@ -282,7 +313,7 @@ def find_redundant_overrides(
         eid = _element_id(el, level)
         pid = _element_id(parent, "ModelPackage")
         parent_eff = resolved.get(pid, {})
-        for slot in GOVERNED_SLOTS:
+        for slot in CASCADE_SLOTS:
             if not _slot_declared(el, slot):
                 continue
             declared = el.get(slot)

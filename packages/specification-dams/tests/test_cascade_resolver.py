@@ -204,3 +204,76 @@ def test_redundant_override_detected() -> None:
 
 def test_placeholder_constant() -> None:
     assert DATA_OWNER_PLACEHOLDER == "org:role/DATA_OWNER_PENDING"
+
+
+def test_data_class_inherits_entity_to_attribute() -> None:
+    data = _pkg()
+    data["logical_entities"][0]["data_class"] = "master_data"
+    resolved = resolve_governed(data)
+    a1 = resolved["dams:logical/cascade/X/a1"]
+    assert a1["data_class"].value == "master_data"
+    assert a1["data_class"].source_element_id == "dams:logical/cascade/X"
+
+
+def test_data_class_attribute_override() -> None:
+    data = _pkg()
+    data["logical_entities"][0]["data_class"] = "master_data"
+    data["logical_entities"][0]["attributes"][0]["data_class"] = "transactional_data"
+    resolved = resolve_governed(data)
+    a1 = resolved["dams:logical/cascade/X/a1"]
+    assert a1["data_class"].value == "transactional_data"
+    assert a1["data_class"].source_element_id == "dams:logical/cascade/X/a1"
+    a2 = resolved["dams:logical/cascade/X/a2"]
+    assert a2["data_class"].value == "master_data"
+
+
+def test_data_class_only_on_attributes() -> None:
+    data = _pkg()
+    # entity X has no data_class; both attributes declare it
+    data["logical_entities"][0]["attributes"][0]["data_class"] = "master_data"
+    data["logical_entities"][0]["attributes"][1]["data_class"] = "reference_data"
+    resolved = resolve_governed(data)
+    x = resolved["dams:logical/cascade/X"]
+    assert x["data_class"].value is None
+    assert resolved["dams:logical/cascade/X/a1"]["data_class"].value == "master_data"
+    assert resolved["dams:logical/cascade/X/a2"]["data_class"].value == "reference_data"
+
+
+def test_source_system_refs_list_replace() -> None:
+    data = _pkg()
+    data["logical_entities"][0]["source_system_refs"] = ["eam:system/A"]
+    data["logical_entities"][0]["attributes"][1]["source_system_refs"] = []
+    resolved = resolve_governed(data)
+    a1 = resolved["dams:logical/cascade/X/a1"]
+    assert a1["source_system_refs"].value == ["eam:system/A"]
+    a2 = resolved["dams:logical/cascade/X/a2"]
+    assert a2["source_system_refs"].value == []
+    assert a2["source_system_refs"].source_element_id == "dams:logical/cascade/X/a2"
+
+
+def test_source_system_refs_absent_inherits_empty_from_package() -> None:
+    resolved = resolve_governed(_pkg())
+    x = resolved["dams:logical/cascade/X"]
+    assert x["source_system_refs"].value == []
+    a1 = resolved["dams:logical/cascade/X/a1"]
+    assert a1["source_system_refs"].value == []
+
+
+def test_redundant_data_class_override_detected() -> None:
+    data = _pkg()
+    data["logical_entities"][0]["data_class"] = "master_data"
+    data["logical_entities"][0]["attributes"][0]["data_class"] = "master_data"
+    findings = find_redundant_overrides(data)
+    assert any(
+        eid == "dams:logical/cascade/X/a1" and slot == "data_class"
+        for eid, slot, _v, _p in findings
+    )
+
+
+def test_inline_only_slots_not_in_governed_slots() -> None:
+    from moex_dams.rules.cascade import CASCADE_SLOTS, GOVERNED_SLOTS
+
+    assert "data_class" in CASCADE_SLOTS
+    assert "source_system_refs" in CASCADE_SLOTS
+    assert "data_class" not in GOVERNED_SLOTS
+    assert "source_system_refs" not in GOVERNED_SLOTS

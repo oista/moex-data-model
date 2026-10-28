@@ -260,6 +260,12 @@
       "parents": []
     },
     {
+      "iri": "https://data.moex.com/dams/HasDataSource",
+      "is_mixin": true,
+      "name": "HasDataSource",
+      "parents": []
+    },
+    {
       "iri": "https://data.moex.com/dams/HasDefinition",
       "is_mixin": true,
       "name": "HasDefinition",
@@ -372,6 +378,7 @@
       "is_mixin": false,
       "name": "LogicalAttribute",
       "parents": [
+        "HasDataSource",
         "HasDefinition",
         "HasGovernanceClassification",
         "HasOwnership",
@@ -385,6 +392,7 @@
       "name": "LogicalEntity",
       "parents": [
         "HasBusinessClassification",
+        "HasDataSource",
         "HasDefinition",
         "HasGovernanceClassification",
         "HasOwnership",
@@ -2046,10 +2054,10 @@
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "xsd": "http://www.w3.org/2001/XMLSchema#"
   },
-  "schema_digest": "sha256:73c5dfbae7f0e5d12d88882ef8f7c80f54579d65867c23a81b31935df270e14f",
+  "schema_digest": "sha256:ec50c5a70e16cddbb78f7e8a9321d2f0c50a1cd483a6e20d8f65b4d06bce632c",
   "schema_id": "https://data.moex.com/dams/v0.1",
   "schema_name": "moex_dams",
-  "schema_version": "5.2.0",
+  "schema_version": "5.3.0",
   "slots": [
     {
       "iri": "https://data.moex.com/dams/access_points",
@@ -3178,6 +3186,10 @@
     {
       "iri": "https://data.moex.com/dams/source_role",
       "name": "source_role"
+    },
+    {
+      "iri": "https://data.moex.com/dams/source_system_refs",
+      "name": "source_system_refs"
     },
     {
       "iri": "https://data.moex.com/dams/source_uri",

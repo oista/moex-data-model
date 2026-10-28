@@ -227,6 +227,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: CRM CONTACT — локальная проекция корпоративного Person (ФИО, контакты, MDM/UCD id); флаг ЕИО остаётся атрибутом (ADR-029).
+  source_system_refs:
+  - eam:system/CRM
 - element_id: dams:logical/crm/CUSTOMER
   name: CUSTOMER
   title: Клиент
@@ -514,6 +516,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: 'CRM CUSTOMER реализует Client (клиентская роль) и LegalEntity (карточка ЮЛ: ИНН/КПП/ОГРН, наименования); не Counterparty (ADR-029).'
+  source_system_refs:
+  - eam:system/CRM
 - element_id: dams:logical/crm/LEAD
   name: LEAD
   title: Привлечение
@@ -721,6 +725,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: local-only
   alignment_rationale: Заявка привлечения CRM; в enterprise CDM нет концепта Lead/Attraction. SalesFunnel — справочник воронки, не экземпляр заявки. Волна B — follow-up.
+  source_system_refs:
+  - eam:system/CRM
 relationships:
 - element_id: dams:rel/crm/CONTACT_to_CUSTOMER_via_Account
   name: CONTACT_to_CUSTOMER_via_Account

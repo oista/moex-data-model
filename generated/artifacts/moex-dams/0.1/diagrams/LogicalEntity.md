@@ -13,6 +13,8 @@
         click HasGovernanceClassification href "../HasGovernanceClassification"
       HasPolicyBindings <|-- LogicalEntity
         click HasPolicyBindings href "../HasPolicyBindings"
+      HasDataSource <|-- LogicalEntity
+        click HasDataSource href "../HasDataSource"
       HasDefinition <|-- LogicalEntity
         click HasDefinition href "../HasDefinition"
       ModelElement <|-- LogicalEntity
@@ -274,6 +276,17 @@
         
         LogicalEntity --> "0..1" ITSolution : solution_ref
         click ITSolution href "../ITSolution"
+    
+
+        
+      LogicalEntity : source_system_refs
+        
+          
+    
+        
+        
+        LogicalEntity --> "*" ITSystem : source_system_refs
+        click ITSystem href "../ITSystem"
     
 
         

@@ -124,6 +124,17 @@ classes:
       - approved_by_ref
       - approved_at
 
+  HasDataSource:
+    mixin: true
+    description: >
+      Система-источник данных (происхождение смысла), не место хранения.
+      Отличается от TechnicalAsset.system_ref (где данные лежат или
+      предоставляются). Inline-only cascade LogicalEntity → LogicalAttribute
+      (ADR-023 / ADR-056 PR-7); не входит в GOVERNED_SLOTS / assignment layer.
+      Внешние ИТ-системы (вне ITSolution.member_system_refs) допускаются.
+    slots:
+      - source_system_refs
+
   HasAssertionMetadata:
     mixin: true
     mixins:
@@ -232,6 +243,10 @@ slots:
     range: EntityTypeEnum
   data_class:
     range: DataClassEnum
+    description: >
+      Природа данных (master/reference/transactional/…). На LogicalEntity —
+      ось LDM-09; на LogicalAttribute — override при смешанной классификации
+      (inline cascade ADR-023 / ADR-056 PR-7; absent = inherit from entity).
   business_importance:
     range: BusinessImportanceEnum
   governance_classification:
@@ -251,6 +266,15 @@ slots:
     range: Policy
     multivalued: true
     inlined: false
+  source_system_refs:
+    range: ITSystem
+    multivalued: true
+    inlined: false
+    description: >
+      ИТ-системы — источники данных элемента (происхождение), не носители
+      хранения. List-replace cascade: ключ отсутствует = наследование;
+      [] = явное «нет источников»; непустой список = полная замена
+      (ADR-023 / ADR-056 PR-7 LDM-12).
   source_artifact_ref:
     range: uri
   evidence_refs:

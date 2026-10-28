@@ -43,6 +43,7 @@ Name: moex_dams
 | [GovernanceAssignment](GovernanceAssignment.md) | Authored authoritative governance fact for a target element (ADR-049) |
 | [HasAssertionMetadata](HasAssertionMetadata.md) | Qualified assertion metadata (ADR-053): validity window, provenance / approva... |
 | [HasBusinessClassification](HasBusinessClassification.md) | Классификация роли и бизнес-значимости логической сущности |
+| [HasDataSource](HasDataSource.md) | Система-источник данных (происхождение смысла), не место хранения |
 | [HasDefinition](HasDefinition.md) | Mixin эталонного определения (ADR-025 / ADR-044) |
 | [HasGovernanceClassification](HasGovernanceClassification.md) | Базовая и специальная классификация чувствительности данных |
 | [HasLifecycle](HasLifecycle.md) | Mixin жизненного цикла: статус, период действия и ссылка на заменяющий элемен... |
@@ -170,7 +171,7 @@ Name: moex_dams
 | [critical_data_element](critical_data_element.md) | Признак критичного элемента данных (CDE) |
 | [currency_attribute_ref](currency_attribute_ref.md) | Ссылка на атрибут валюты для денежной величины (Wave 2 soft) |
 | [data_carriers](data_carriers.md) | Коллекция носителей данных пакета (Variant B, ADR-031) |
-| [data_class](data_class.md) |  |
+| [data_class](data_class.md) | Природа данных (master/reference/transactional/…) |
 | [data_containers](data_containers.md) | Коллекция контейнеров пакета (Variant B, ADR-031) |
 | [data_flows](data_flows.md) |  |
 | [data_format](data_format.md) | Wire-формат носителя (parquet, csv, json); не путать с schema_format |
@@ -380,6 +381,7 @@ Name: moex_dams
 | [source_pointer](source_pointer.md) | JSON Pointer или аналог внутри source_artifact_ref |
 | [source_refs](source_refs.md) |  |
 | [source_role](source_role.md) |  |
+| [source_system_refs](source_system_refs.md) | ИТ-системы — источники данных элемента (происхождение), не носители хранения |
 | [source_uri](source_uri.md) |  |
 | [specification_version](specification_version.md) |  |
 | [statement](statement.md) | Полная нормативная формулировка на русском для человека: без имён LinkML-клас... |

@@ -42,10 +42,14 @@ def enrich_package(
         key = match_key(name) or name
         # Ownership / governance_classification inherit from package via ADR-023
         # cascade — do not stamp declared overrides on every entity/attribute.
+        # data_class / source_system_refs: entity-level only (ADR-056 PR-7);
+        # never copy-down onto attributes.
         ent["business_key_kind"] = defaults.business_key_kind
         ent["identity_rule"] = defaults.identity_rule.strip()
         ent["conceptual_alignment_status"] = defaults.conceptual_alignment_status
         ent["alignment_rationale"] = defaults.alignment_rationale.strip()
+        if defaults.stamp_source_system_refs and system.system_ref:
+            ent.setdefault("source_system_refs", [system.system_ref])
 
         has_pk = any(a.pk for a in attrs_by_obj.get(key, []))
         if has_pk:
@@ -67,6 +71,9 @@ def enrich_package(
             else:
                 attr["mapping_coverage_status"] = defaults.mapping_coverage_status_planned
                 attr["mapping_rationale"] = defaults.mapping_rationale_planned.strip()
+            # ADR-023 / ADR-056: no copy-down of cascade slots onto attributes.
+            attr.pop("data_class", None)
+            attr.pop("source_system_refs", None)
 
     for carrier in package.get("data_carriers") or []:
         carrier["mapping_coverage_status"] = defaults.mapping_coverage_status_mapped

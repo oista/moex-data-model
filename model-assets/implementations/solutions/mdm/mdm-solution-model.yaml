@@ -326,6 +326,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: MDM ENTERPRISE — золотая запись ЮЛ; реализует LegalEntity (Organization — parent_concept, не дублируем).
+  source_system_refs:
+  - eam:system/MDM
 - element_id: dams:logical/mdm/PERSON
   name: PERSON
   title: Физические лица (ФЛ)
@@ -480,6 +482,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: MDM PERSON — золотая запись ФЛ; реализует корпоративный Person.
+  source_system_refs:
+  - eam:system/MDM
 - element_id: dams:logical/mdm/PERSON_CEO
   name: PERSON_CEO
   title: ЕИО (СЕО) Единоличный исполнительный орган
@@ -522,6 +526,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: local-only
   alignment_rationale: 'Ассоциация ЮЛ–ФЛ (ЕИО / T_CEO), не Person и не LegalEntity. Волна B: концепт SoleExecutive — follow-up.'
+  source_system_refs:
+  - eam:system/MDM
 - element_id: dams:logical/mdm/PERSON_REPRESENTATIVE
   name: PERSON_REPRESENTATIVE
   title: Представители ЮЛ
@@ -564,6 +570,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: local-only
   alignment_rationale: 'Ассоциация ЮЛ–ФЛ (представитель / T_REPRESENTATIVE). Волна B: концепт LegalRepresentative — follow-up.'
+  source_system_refs:
+  - eam:system/MDM
 relationships:
 - element_id: dams:rel/mdm/PERSON_CEO_to_ENTERPRISE_via_ENTERPRISE_ID
   name: PERSON_CEO_to_ENTERPRISE_via_ENTERPRISE_ID

@@ -2,13 +2,13 @@
   "summary": {
     "overall_result": "conformant_with_warnings",
     "implementation_id": "moex:implementation:mdm:0.1.0",
-    "revision": "298ebf7a33af",
-    "content_digest": "sha256:298ebf7a33afc97b704ea89be6b290a727837a7e0ee14a48edac28c195ccbf24",
+    "revision": "4bebe4452649",
+    "content_digest": "sha256:4bebe445264932a78bfec2fbeb37168fceda35df5403e4a38a33c429020a92ea",
     "package_id": "dams:model/mdm/0.1.0",
     "node_count": 150,
     "edge_count": 305,
     "is_conformant": true,
-    "bundle_digest": "sha256:22030c3a34f9fdbd97e72453f90a3769fde88e9d31b171b6718edf036237ef72"
+    "bundle_digest": "sha256:34d343133759506681a1186d1cdb07d4f87c6c9f637ed930fb4601f1494169b5"
   },
   "nodes": [
     {
@@ -726,6 +726,48 @@
       "kind": "relationship"
     },
     {
+      "id": "dams:mapping/mdm/realizes_ENTERPRISE",
+      "name": null,
+      "title": null,
+      "description": "MDM ENTERPRISE realizes enterprise dams:concept/LegalEntity (ADR-021/029).",
+      "kind": "mapping"
+    },
+    {
+      "id": "dams:mapping/mdm/realizes_PERSON",
+      "name": null,
+      "title": null,
+      "description": "MDM PERSON realizes enterprise dams:concept/Person (ADR-021/029).",
+      "kind": "mapping"
+    },
+    {
+      "id": "dams:mapping/mdm/entity_phys_ENTERPRISE",
+      "name": null,
+      "title": null,
+      "description": "Mapping entity_phys_ENTERPRISE",
+      "kind": "mapping"
+    },
+    {
+      "id": "dams:mapping/mdm/entity_phys_PERSON",
+      "name": null,
+      "title": null,
+      "description": "Mapping entity_phys_PERSON",
+      "kind": "mapping"
+    },
+    {
+      "id": "dams:mapping/mdm/entity_phys_PERSON_CEO",
+      "name": null,
+      "title": null,
+      "description": "Mapping entity_phys_PERSON_CEO",
+      "kind": "mapping"
+    },
+    {
+      "id": "dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE",
+      "name": null,
+      "title": null,
+      "description": "Mapping entity_phys_PERSON_REPRESENTATIVE",
+      "kind": "mapping"
+    },
+    {
       "id": "dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID",
       "name": null,
       "title": null,
@@ -1017,48 +1059,6 @@
       "name": null,
       "title": null,
       "description": "Mapping map_PERSON_REPRESENTATIVE_PERSON_ID. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_REF_REPRESENTATIVE",
-      "kind": "mapping"
-    },
-    {
-      "id": "dams:mapping/mdm/entity_phys_ENTERPRISE",
-      "name": null,
-      "title": null,
-      "description": "Mapping entity_phys_ENTERPRISE",
-      "kind": "mapping"
-    },
-    {
-      "id": "dams:mapping/mdm/entity_phys_PERSON",
-      "name": null,
-      "title": null,
-      "description": "Mapping entity_phys_PERSON",
-      "kind": "mapping"
-    },
-    {
-      "id": "dams:mapping/mdm/entity_phys_PERSON_CEO",
-      "name": null,
-      "title": null,
-      "description": "Mapping entity_phys_PERSON_CEO",
-      "kind": "mapping"
-    },
-    {
-      "id": "dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE",
-      "name": null,
-      "title": null,
-      "description": "Mapping entity_phys_PERSON_REPRESENTATIVE",
-      "kind": "mapping"
-    },
-    {
-      "id": "dams:mapping/mdm/realizes_ENTERPRISE",
-      "name": null,
-      "title": null,
-      "description": "MDM ENTERPRISE realizes enterprise dams:concept/LegalEntity (ADR-021/029).",
-      "kind": "mapping"
-    },
-    {
-      "id": "dams:mapping/mdm/realizes_PERSON",
-      "name": null,
-      "title": null,
-      "description": "MDM PERSON realizes enterprise dams:concept/Person (ADR-021/029).",
       "kind": "mapping"
     }
   ],
@@ -2030,6 +2030,114 @@
       "kind": "relates_to"
     },
     {
+      "id": "dams:model/mdm/0.1.0->dams:mapping/mdm/realizes_ENTERPRISE:contains",
+      "source": "dams:model/mdm/0.1.0",
+      "target": "dams:mapping/mdm/realizes_ENTERPRISE",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:mapping/mdm/realizes_ENTERPRISE->dams:logical/mdm/ENTERPRISE:maps_to",
+      "source": "dams:mapping/mdm/realizes_ENTERPRISE",
+      "target": "dams:logical/mdm/ENTERPRISE",
+      "kind": "maps_to"
+    },
+    {
+      "id": "dams:mapping/mdm/realizes_ENTERPRISE->dams:concept/LegalEntity:maps_to",
+      "source": "dams:mapping/mdm/realizes_ENTERPRISE",
+      "target": "dams:concept/LegalEntity",
+      "kind": "maps_to"
+    },
+    {
+      "id": "dams:model/mdm/0.1.0->dams:mapping/mdm/realizes_PERSON:contains",
+      "source": "dams:model/mdm/0.1.0",
+      "target": "dams:mapping/mdm/realizes_PERSON",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:mapping/mdm/realizes_PERSON->dams:logical/mdm/PERSON:maps_to",
+      "source": "dams:mapping/mdm/realizes_PERSON",
+      "target": "dams:logical/mdm/PERSON",
+      "kind": "maps_to"
+    },
+    {
+      "id": "dams:mapping/mdm/realizes_PERSON->dams:concept/Person:maps_to",
+      "source": "dams:mapping/mdm/realizes_PERSON",
+      "target": "dams:concept/Person",
+      "kind": "maps_to"
+    },
+    {
+      "id": "dams:model/mdm/0.1.0->dams:mapping/mdm/entity_phys_ENTERPRISE:contains",
+      "source": "dams:model/mdm/0.1.0",
+      "target": "dams:mapping/mdm/entity_phys_ENTERPRISE",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:mapping/mdm/entity_phys_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:maps_to",
+      "source": "dams:mapping/mdm/entity_phys_ENTERPRISE",
+      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
+      "kind": "maps_to"
+    },
+    {
+      "id": "dams:mapping/mdm/entity_phys_ENTERPRISE->dams:logical/mdm/ENTERPRISE:maps_to",
+      "source": "dams:mapping/mdm/entity_phys_ENTERPRISE",
+      "target": "dams:logical/mdm/ENTERPRISE",
+      "kind": "maps_to"
+    },
+    {
+      "id": "dams:model/mdm/0.1.0->dams:mapping/mdm/entity_phys_PERSON:contains",
+      "source": "dams:model/mdm/0.1.0",
+      "target": "dams:mapping/mdm/entity_phys_PERSON",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:mapping/mdm/entity_phys_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:maps_to",
+      "source": "dams:mapping/mdm/entity_phys_PERSON",
+      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
+      "kind": "maps_to"
+    },
+    {
+      "id": "dams:mapping/mdm/entity_phys_PERSON->dams:logical/mdm/PERSON:maps_to",
+      "source": "dams:mapping/mdm/entity_phys_PERSON",
+      "target": "dams:logical/mdm/PERSON",
+      "kind": "maps_to"
+    },
+    {
+      "id": "dams:model/mdm/0.1.0->dams:mapping/mdm/entity_phys_PERSON_CEO:contains",
+      "source": "dams:model/mdm/0.1.0",
+      "target": "dams:mapping/mdm/entity_phys_PERSON_CEO",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:mapping/mdm/entity_phys_PERSON_CEO->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO:maps_to",
+      "source": "dams:mapping/mdm/entity_phys_PERSON_CEO",
+      "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
+      "kind": "maps_to"
+    },
+    {
+      "id": "dams:mapping/mdm/entity_phys_PERSON_CEO->dams:logical/mdm/PERSON_CEO:maps_to",
+      "source": "dams:mapping/mdm/entity_phys_PERSON_CEO",
+      "target": "dams:logical/mdm/PERSON_CEO",
+      "kind": "maps_to"
+    },
+    {
+      "id": "dams:model/mdm/0.1.0->dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE:contains",
+      "source": "dams:model/mdm/0.1.0",
+      "target": "dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE",
+      "kind": "contains"
+    },
+    {
+      "id": "dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE:maps_to",
+      "source": "dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE",
+      "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
+      "kind": "maps_to"
+    },
+    {
+      "id": "dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE->dams:logical/mdm/PERSON_REPRESENTATIVE:maps_to",
+      "source": "dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE",
+      "target": "dams:logical/mdm/PERSON_REPRESENTATIVE",
+      "kind": "maps_to"
+    },
+    {
       "id": "dams:model/mdm/0.1.0->dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID:contains",
       "source": "dams:model/mdm/0.1.0",
       "target": "dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID",
@@ -2783,114 +2891,6 @@
       "id": "dams:mapping/mdm/map_PERSON_REPRESENTATIVE_PERSON_ID->dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key3:maps_to",
       "source": "dams:mapping/mdm/map_PERSON_REPRESENTATIVE_PERSON_ID",
       "target": "dams:structure/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE#reference_key3",
-      "kind": "maps_to"
-    },
-    {
-      "id": "dams:model/mdm/0.1.0->dams:mapping/mdm/entity_phys_ENTERPRISE:contains",
-      "source": "dams:model/mdm/0.1.0",
-      "target": "dams:mapping/mdm/entity_phys_ENTERPRISE",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:mapping/mdm/entity_phys_ENTERPRISE->dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE:maps_to",
-      "source": "dams:mapping/mdm/entity_phys_ENTERPRISE",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_ENTERPRISE",
-      "kind": "maps_to"
-    },
-    {
-      "id": "dams:mapping/mdm/entity_phys_ENTERPRISE->dams:logical/mdm/ENTERPRISE:maps_to",
-      "source": "dams:mapping/mdm/entity_phys_ENTERPRISE",
-      "target": "dams:logical/mdm/ENTERPRISE",
-      "kind": "maps_to"
-    },
-    {
-      "id": "dams:model/mdm/0.1.0->dams:mapping/mdm/entity_phys_PERSON:contains",
-      "source": "dams:model/mdm/0.1.0",
-      "target": "dams:mapping/mdm/entity_phys_PERSON",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:mapping/mdm/entity_phys_PERSON->dams:physical/mdm/INTERNALDM_MDM_V_PERSON:maps_to",
-      "source": "dams:mapping/mdm/entity_phys_PERSON",
-      "target": "dams:physical/mdm/INTERNALDM_MDM_V_PERSON",
-      "kind": "maps_to"
-    },
-    {
-      "id": "dams:mapping/mdm/entity_phys_PERSON->dams:logical/mdm/PERSON:maps_to",
-      "source": "dams:mapping/mdm/entity_phys_PERSON",
-      "target": "dams:logical/mdm/PERSON",
-      "kind": "maps_to"
-    },
-    {
-      "id": "dams:model/mdm/0.1.0->dams:mapping/mdm/entity_phys_PERSON_CEO:contains",
-      "source": "dams:model/mdm/0.1.0",
-      "target": "dams:mapping/mdm/entity_phys_PERSON_CEO",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:mapping/mdm/entity_phys_PERSON_CEO->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO:maps_to",
-      "source": "dams:mapping/mdm/entity_phys_PERSON_CEO",
-      "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_CEO",
-      "kind": "maps_to"
-    },
-    {
-      "id": "dams:mapping/mdm/entity_phys_PERSON_CEO->dams:logical/mdm/PERSON_CEO:maps_to",
-      "source": "dams:mapping/mdm/entity_phys_PERSON_CEO",
-      "target": "dams:logical/mdm/PERSON_CEO",
-      "kind": "maps_to"
-    },
-    {
-      "id": "dams:model/mdm/0.1.0->dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE:contains",
-      "source": "dams:model/mdm/0.1.0",
-      "target": "dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE->dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE:maps_to",
-      "source": "dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE",
-      "target": "dams:physical/mdm/MOSCOW_EXCHANGE_T_REF_REPRESENTATIVE",
-      "kind": "maps_to"
-    },
-    {
-      "id": "dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE->dams:logical/mdm/PERSON_REPRESENTATIVE:maps_to",
-      "source": "dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE",
-      "target": "dams:logical/mdm/PERSON_REPRESENTATIVE",
-      "kind": "maps_to"
-    },
-    {
-      "id": "dams:model/mdm/0.1.0->dams:mapping/mdm/realizes_ENTERPRISE:contains",
-      "source": "dams:model/mdm/0.1.0",
-      "target": "dams:mapping/mdm/realizes_ENTERPRISE",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:mapping/mdm/realizes_ENTERPRISE->dams:logical/mdm/ENTERPRISE:maps_to",
-      "source": "dams:mapping/mdm/realizes_ENTERPRISE",
-      "target": "dams:logical/mdm/ENTERPRISE",
-      "kind": "maps_to"
-    },
-    {
-      "id": "dams:mapping/mdm/realizes_ENTERPRISE->dams:concept/LegalEntity:maps_to",
-      "source": "dams:mapping/mdm/realizes_ENTERPRISE",
-      "target": "dams:concept/LegalEntity",
-      "kind": "maps_to"
-    },
-    {
-      "id": "dams:model/mdm/0.1.0->dams:mapping/mdm/realizes_PERSON:contains",
-      "source": "dams:model/mdm/0.1.0",
-      "target": "dams:mapping/mdm/realizes_PERSON",
-      "kind": "contains"
-    },
-    {
-      "id": "dams:mapping/mdm/realizes_PERSON->dams:logical/mdm/PERSON:maps_to",
-      "source": "dams:mapping/mdm/realizes_PERSON",
-      "target": "dams:logical/mdm/PERSON",
-      "kind": "maps_to"
-    },
-    {
-      "id": "dams:mapping/mdm/realizes_PERSON->dams:concept/Person:maps_to",
-      "source": "dams:mapping/mdm/realizes_PERSON",
-      "target": "dams:concept/Person",
       "kind": "maps_to"
     }
   ],
@@ -5704,7 +5704,7 @@
             "title": "revision",
             "description": null,
             "attributes": {
-              "value": "298ebf7a33af"
+              "value": "4bebe4452649"
             },
             "children": [],
             "tags": [],
@@ -5715,7 +5715,7 @@
             "title": "content_digest",
             "description": null,
             "attributes": {
-              "value": "sha256:298ebf7a33afc97b704ea89be6b290a727837a7e0ee14a48edac28c195ccbf24"
+              "value": "sha256:4bebe445264932a78bfec2fbeb37168fceda35df5403e4a38a33c429020a92ea"
             },
             "children": [],
             "tags": [],
@@ -6988,6 +6988,78 @@
             "source_ref": null
           },
           {
+            "id": "dams:mapping/mdm/realizes_ENTERPRISE",
+            "title": "dams:mapping/mdm/realizes_ENTERPRISE",
+            "description": "MDM ENTERPRISE realizes enterprise dams:concept/LegalEntity (ADR-021/029).",
+            "attributes": {
+              "kind": "mapping",
+              "name": null
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:mapping/mdm/realizes_PERSON",
+            "title": "dams:mapping/mdm/realizes_PERSON",
+            "description": "MDM PERSON realizes enterprise dams:concept/Person (ADR-021/029).",
+            "attributes": {
+              "kind": "mapping",
+              "name": null
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:mapping/mdm/entity_phys_ENTERPRISE",
+            "title": "dams:mapping/mdm/entity_phys_ENTERPRISE",
+            "description": "Mapping entity_phys_ENTERPRISE",
+            "attributes": {
+              "kind": "mapping",
+              "name": null
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:mapping/mdm/entity_phys_PERSON",
+            "title": "dams:mapping/mdm/entity_phys_PERSON",
+            "description": "Mapping entity_phys_PERSON",
+            "attributes": {
+              "kind": "mapping",
+              "name": null
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:mapping/mdm/entity_phys_PERSON_CEO",
+            "title": "dams:mapping/mdm/entity_phys_PERSON_CEO",
+            "description": "Mapping entity_phys_PERSON_CEO",
+            "attributes": {
+              "kind": "mapping",
+              "name": null
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
+            "id": "dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE",
+            "title": "dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE",
+            "description": "Mapping entity_phys_PERSON_REPRESENTATIVE",
+            "attributes": {
+              "kind": "mapping",
+              "name": null
+            },
+            "children": [],
+            "tags": [],
+            "source_ref": null
+          },
+          {
             "id": "dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID",
             "title": "dams:mapping/mdm/map_ENTERPRISE_ENTERPRISE_ID",
             "description": "Mapping map_ENTERPRISE_ENTERPRISE_ID. BaseSrc=MDM/MDM/V_ENTERPRISE",
@@ -7483,78 +7555,6 @@
             "id": "dams:mapping/mdm/map_PERSON_REPRESENTATIVE_PERSON_ID",
             "title": "dams:mapping/mdm/map_PERSON_REPRESENTATIVE_PERSON_ID",
             "description": "Mapping map_PERSON_REPRESENTATIVE_PERSON_ID. BaseSrc=ECBD/Единая клиентская база данных/V_ECBD_REF_REPRESENTATIVE",
-            "attributes": {
-              "kind": "mapping",
-              "name": null
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:mapping/mdm/entity_phys_ENTERPRISE",
-            "title": "dams:mapping/mdm/entity_phys_ENTERPRISE",
-            "description": "Mapping entity_phys_ENTERPRISE",
-            "attributes": {
-              "kind": "mapping",
-              "name": null
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:mapping/mdm/entity_phys_PERSON",
-            "title": "dams:mapping/mdm/entity_phys_PERSON",
-            "description": "Mapping entity_phys_PERSON",
-            "attributes": {
-              "kind": "mapping",
-              "name": null
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:mapping/mdm/entity_phys_PERSON_CEO",
-            "title": "dams:mapping/mdm/entity_phys_PERSON_CEO",
-            "description": "Mapping entity_phys_PERSON_CEO",
-            "attributes": {
-              "kind": "mapping",
-              "name": null
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE",
-            "title": "dams:mapping/mdm/entity_phys_PERSON_REPRESENTATIVE",
-            "description": "Mapping entity_phys_PERSON_REPRESENTATIVE",
-            "attributes": {
-              "kind": "mapping",
-              "name": null
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:mapping/mdm/realizes_ENTERPRISE",
-            "title": "dams:mapping/mdm/realizes_ENTERPRISE",
-            "description": "MDM ENTERPRISE realizes enterprise dams:concept/LegalEntity (ADR-021/029).",
-            "attributes": {
-              "kind": "mapping",
-              "name": null
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "dams:mapping/mdm/realizes_PERSON",
-            "title": "dams:mapping/mdm/realizes_PERSON",
-            "description": "MDM PERSON realizes enterprise dams:concept/Person (ADR-021/029).",
             "attributes": {
               "kind": "mapping",
               "name": null
