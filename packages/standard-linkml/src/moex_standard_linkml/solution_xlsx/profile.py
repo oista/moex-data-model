@@ -186,6 +186,9 @@ class PackageDefaults(BaseModel):
         "Физическое соответствие не выведено из ObjectAttribute; "
         "заполните mapping вручную или повторите импорт после доработки источника."
     )
+    # ADR-056 PR-7e: optional stamp of LDM-12 source on LogicalEntity only.
+    # Off by default — system_ref of carriers is storage, not proven data origin.
+    stamp_source_system_refs: bool = False
 
 
 class ConformsTo(BaseModel):
