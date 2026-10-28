@@ -57,8 +57,14 @@ def test_display_config_catalog():
     assert expected <= keys
     assert cfg["defaults"]["appearance.theme"] == "light"
     assert cfg["defaults"]["glossary.show_relation_blocks"] is True
+    assert cfg["defaults"]["requirements.show_inactive"] is False
     theme = next(s for s in cfg["settings"] if s["key"] == "appearance.theme")
     assert "system" in theme["options"]
+    inactive = next(
+        s for s in cfg["settings"] if s["key"] == "requirements.show_inactive"
+    )
+    assert inactive["type"] == "bool"
+    assert inactive["default"] is False
 
 
 def test_load_viewer_config_shape():

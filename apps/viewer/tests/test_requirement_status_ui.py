@@ -75,6 +75,19 @@ def test_js_requirement_status_table_and_mark() -> None:
         assert label in JS
 
 
+def test_js_hides_inactive_requirements_by_default() -> None:
+    """Sidebar filter contract: inactive statuses hidden unless prefs override."""
+    assert "const INACTIVE_REQUIREMENT_STATUSES" in JS
+    assert "function filterInactiveRequirements" in JS
+    assert "function isInactiveRequirement" in JS
+    assert 'getPref("requirements.show_inactive")' in JS
+    chunk = JS.split("const INACTIVE_REQUIREMENT_STATUSES")[1].split(
+        "function filterExplorerItemsForPrefs"
+    )[0]
+    for status in ("deprecated", "superseded", "rejected"):
+        assert f'"{status}"' in chunk
+
+
 def test_normalizer_loads_status_and_resolves_superseded(tmp_path: Path) -> None:
     spec_dir = tmp_path / "moex-dams" / "0.1"
     req_dir = spec_dir / "requirements"
