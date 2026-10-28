@@ -418,8 +418,12 @@ enums:
       verified:
         description: Проверено
   RequirementSectionEnum:
-    description: Раздел каталога требований (трёхбуквенный код в code).
+    description: >
+      Раздел каталога требований. Значение совпадает с префиксом `code`
+      (CDM|LDM|PDM|REF|ATR|FLW|CLS|GEN); суффикс — две или три цифры (ADR-056).
     permissible_values:
+      CDM:
+        description: Концептуальная модель (нормативный хребет ADR-056)
       LDM:
         description: Логическая модель
       PDM:
@@ -434,6 +438,24 @@ enums:
         description: Классификация данных
       GEN:
         description: Общие требования
+  RequirementObligationEnum:
+    description: >
+      Класс обязательности требования из нормативного документа (ADR-056).
+      Не заменяет CheckSeverityEnum у formal_checks.
+    permissible_values:
+      mandatory:
+        description: ОБЯЗАТЕЛЬНО — assess severity error, когда проверка исполнима
+      recommended:
+        description: РЕКОМЕНДУЕТСЯ — assess severity warning, когда проверка исполнима
+  RequirementResponsibleRoleEnum:
+    description: Роль, ответственная за выполнение требования (нормативная таблица, ADR-056).
+    permissible_values:
+      data_architecture:
+        description: Архитектура данных
+      it_owner:
+        description: ИТ-владелец
+      business_owner:
+        description: бизнес-владелец
   FormalCheckKindEnum:
     description: Вид формальной проверки в нотации, близкой к LinkML constraints.
     permissible_values:

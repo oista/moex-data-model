@@ -1666,12 +1666,48 @@
       ]
     },
     {
+      "iri": "https://data.moex.com/dams/RequirementObligationEnum",
+      "name": "RequirementObligationEnum",
+      "values": [
+        {
+          "iri": "https://data.moex.com/dams/RequirementObligationEnum#mandatory",
+          "name": "mandatory"
+        },
+        {
+          "iri": "https://data.moex.com/dams/RequirementObligationEnum#recommended",
+          "name": "recommended"
+        }
+      ]
+    },
+    {
+      "iri": "https://data.moex.com/dams/RequirementResponsibleRoleEnum",
+      "name": "RequirementResponsibleRoleEnum",
+      "values": [
+        {
+          "iri": "https://data.moex.com/dams/RequirementResponsibleRoleEnum#business_owner",
+          "name": "business_owner"
+        },
+        {
+          "iri": "https://data.moex.com/dams/RequirementResponsibleRoleEnum#data_architecture",
+          "name": "data_architecture"
+        },
+        {
+          "iri": "https://data.moex.com/dams/RequirementResponsibleRoleEnum#it_owner",
+          "name": "it_owner"
+        }
+      ]
+    },
+    {
       "iri": "https://data.moex.com/dams/RequirementSectionEnum",
       "name": "RequirementSectionEnum",
       "values": [
         {
           "iri": "https://data.moex.com/dams/RequirementSectionEnum#ATR",
           "name": "ATR"
+        },
+        {
+          "iri": "https://data.moex.com/dams/RequirementSectionEnum#CDM",
+          "name": "CDM"
         },
         {
           "iri": "https://data.moex.com/dams/RequirementSectionEnum#CLS",
@@ -2010,10 +2046,10 @@
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "xsd": "http://www.w3.org/2001/XMLSchema#"
   },
-  "schema_digest": "sha256:56b504042e93799a6bd250d62e0463590eed382e991c790d5d4dc6040a2d8895",
+  "schema_digest": "sha256:73c5dfbae7f0e5d12d88882ef8f7c80f54579d65867c23a81b31935df270e14f",
   "schema_id": "https://data.moex.com/dams/v0.1",
   "schema_name": "moex_dams",
-  "schema_version": "5.1.0",
+  "schema_version": "5.2.0",
   "slots": [
     {
       "iri": "https://data.moex.com/dams/access_points",
@@ -2812,6 +2848,10 @@
       "name": "nullable"
     },
     {
+      "iri": "https://data.moex.com/dams/obligation",
+      "name": "obligation"
+    },
+    {
       "iri": "https://data.moex.com/dams/ontology_property_ref",
       "name": "ontology_property_ref"
     },
@@ -3006,6 +3046,10 @@
     {
       "iri": "https://data.moex.com/dams/requirements",
       "name": "requirements"
+    },
+    {
+      "iri": "https://data.moex.com/dams/responsible_role",
+      "name": "responsible_role"
     },
     {
       "iri": "https://data.moex.com/dams/root_local_key",

@@ -123,9 +123,9 @@ def test_mapping_is_identified_element_without_name():
     assert sv.get_class("Mapping").is_a == "IdentifiedElement"
 
 
-def test_schema_version_is_5_1_0():
+def test_schema_version_is_5_2_0():
     sv = SchemaView(str(SCHEMA))
-    assert sv.schema.version == "5.1.0"
+    assert sv.schema.version == "5.2.0"
 
 
 def test_pydantic_field_required_sets_match_for_key_classes():

@@ -9,7 +9,7 @@ from typing import Any
 
 import yaml
 
-CODE_PATTERN = re.compile(r"^(LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{3}$")
+CODE_PATTERN = re.compile(r"^(CDM|LDM|PDM|REF|ATR|FLW|CLS|GEN)-[0-9]{2,3}$")
 
 ALLOWED_KINDS = frozenset(
     {
@@ -124,7 +124,7 @@ def validate_requirement_catalog(data: dict[str, Any]) -> list[CatalogIssue]:
             issues.append(
                 CatalogIssue(
                     "CATALOG-CODE-PATTERN",
-                    f"code {code!r} does not match SECTION-NNN",
+                    f"code {code!r} does not match SECTION-NN or SECTION-NNN",
                     label,
                 )
             )
@@ -190,11 +190,11 @@ def validate_requirement_catalog(data: dict[str, Any]) -> list[CatalogIssue]:
                         )
 
         checks = req.get("formal_checks") or []
-        if not isinstance(checks, list) or not checks:
+        if not isinstance(checks, list):
             issues.append(
                 CatalogIssue(
-                    "CATALOG-CHECKS-MISSING",
-                    "formal_checks must contain at least one check",
+                    "CATALOG-CHECKS-TYPE",
+                    "formal_checks must be a list (empty allowed for manual rules)",
                     label,
                 )
             )
