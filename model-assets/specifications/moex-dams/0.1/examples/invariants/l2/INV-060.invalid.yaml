@@ -1,0 +1,8 @@
+element_id: dams:model/inv060
+implementation_scope: enterprise
+data_carriers:
+- element_id: dams:carrier/inv060/bad
+  name: bad
+  asset_kind: database
+  asset_namespace: ns
+  qualified_name: public.bad

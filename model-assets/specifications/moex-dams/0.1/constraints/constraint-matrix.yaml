@@ -1501,6 +1501,156 @@ invariants:
     L1: not-applicable
     L2: implemented
     L3: not-applicable
+- id: INV-059
+  title: TechnicalAsset (asset_namespace, qualified_name) unique
+  statement: >
+    Пара (asset_namespace, qualified_name) уникальна среди всех технических
+    активов пакета (data_carriers, access_points, data_containers, execution_assets).
+  source: PDM-005; ADR-056 PR-3
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-056
+  requirement_refs: [DAMS-REQ-PDM-005.c1]
+  notes: 'ADR-056 PR-3: tagged existing check_unique_asset_keys.'
+  implementation:
+    dams_validator: moex_dams.rules.technical_assets.check_unique_asset_keys
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-059.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-059.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-060
+  title: asset_kind допустим для подкласса TechnicalAsset
+  statement: >
+    Значение asset_kind принадлежит перечислению соответствующего подкласса
+    TechnicalAsset (DataCarrier / AccessPoint / DataContainer / ExecutionAsset).
+  source: PDM-007; ADR-056 PR-3
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-056
+  requirement_refs: [DAMS-REQ-PDM-007.c1]
+  notes: 'ADR-056 PR-3: tagged existing check_asset_kind_allowlists.'
+  implementation:
+    dams_validator: moex_dams.rules.technical_assets.check_asset_kind_allowlists
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-060.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-060.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-061
+  title: carrier_refs только на DataCarrier
+  statement: >
+    В DataFlowEntityBinding и SelectedEntity слот carrier_refs ссылается только
+    на идентификаторы DataCarrier, а не на DataContainer / AccessPoint /
+    ExecutionAsset.
+  source: PDM-010; ADR-056 PR-3
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-056
+  requirement_refs: [DAMS-REQ-PDM-010.c1]
+  notes: 'ADR-056 PR-3: tagged existing check_carrier_refs_are_data_carriers.'
+  implementation:
+    dams_validator: moex_dams.rules.technical_assets.check_carrier_refs_are_data_carriers
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-061.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-061.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-062
+  title: Корень DataStructure
+  statement: >
+    root_local_key указывает на существующий узел. Для relational корень —
+    object; иначе object или array.
+  source: PDM-015; ADR-056 PR-3
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-056
+  requirement_refs: [DAMS-REQ-PDM-015.c1, DAMS-REQ-PDM-015.c2]
+  notes: 'ADR-056 PR-3: tagged existing check_root_local_key.'
+  implementation:
+    dams_validator: moex_dams.rules.data_structure.check_root_local_key
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-062.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-062.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-063
+  title: Границы кратности SchemaNode
+  statement: >
+    Если заданы и min_occurs, и max_occurs, то max_occurs не меньше min_occurs.
+  source: PDM-017; ADR-056 PR-3
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-056
+  requirement_refs: [DAMS-REQ-PDM-017.c1]
+  notes: 'ADR-056 PR-3: tagged existing check_occurs_bounds.'
+  implementation:
+    dams_validator: moex_dams.rules.data_structure.check_occurs_bounds
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-063.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-063.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-064
+  title: Payload Message
+  statement: >
+    У Message задан payload_structure_ref на существующую DataStructure пакета;
+    headers_structure_ref при наличии тоже резолвится.
+  source: PDM-019; ADR-056 PR-3
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-056
+  requirement_refs: [DAMS-REQ-PDM-019.c1, DAMS-REQ-PDM-019.c2, DAMS-REQ-PDM-019.c3]
+  notes: 'ADR-056 PR-3: tagged existing check_message_payload.'
+  implementation:
+    dams_validator: moex_dams.rules.data_structure.check_message_payload
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-064.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-064.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
 invariant_id_registry:
 - INV-001
 - INV-002
@@ -1560,3 +1710,9 @@ invariant_id_registry:
 - INV-056
 - INV-057
 - INV-058
+- INV-059
+- INV-060
+- INV-061
+- INV-062
+- INV-063
+- INV-064

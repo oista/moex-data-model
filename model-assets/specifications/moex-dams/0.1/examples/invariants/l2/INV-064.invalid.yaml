@@ -1,0 +1,7 @@
+element_id: dams:model/inv064
+implementation_scope: enterprise
+messages:
+- element_id: dams:message/inv064/m
+  name: m
+  description: message missing payload_structure_ref
+  lifecycle_status: active

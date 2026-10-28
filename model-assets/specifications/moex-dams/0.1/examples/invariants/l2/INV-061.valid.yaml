@@ -1,0 +1,20 @@
+element_id: dams:model/inv061
+implementation_scope: enterprise
+data_carriers:
+- element_id: dams:carrier/inv061/t
+  name: t
+  asset_kind: relational_table
+  asset_namespace: ns
+  qualified_name: public.t
+data_flows:
+- element_id: dams:flow/inv061
+  name: ok_flow
+  description: carrier_refs point at DataCarrier
+  lifecycle_status: active
+  entity_bindings:
+  - element_id: dams:flow/inv061/bind
+    name: bind
+    description: ok binding
+    lifecycle_status: active
+    carrier_refs:
+    - dams:carrier/inv061/t

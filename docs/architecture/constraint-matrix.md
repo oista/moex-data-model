@@ -11,8 +11,8 @@ superseded_by: []
 Автогенерируется `scripts/check_constraint_matrix.py`. Источник: `model-assets/specifications/moex-dams/0.1/constraints/constraint-matrix.yaml`. Не редактировать вручную.
 
 **matrix_id:** `dams:constraint-matrix/0.1`  
-**registry size:** 58  
-**invariants:** 58
+**registry size:** 64  
+**invariants:** 64
 
 | ID | Title | Levels | Status | L1 | L2 | L3 | Source status | Scope | Source |
 |---|---|---|---|---|---|---|---|---|---|
@@ -74,6 +74,12 @@ superseded_by: []
 | INV-056 | Inline authored default shadowed by assignment is warned | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-049 |
 | INV-057 | ExternalClassRef and AlignsWithMapping must not contradict | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | ADR-053 |
 | INV-058 | element_id unique across source packages | L2 | implemented | not-applicable | implemented | not-applicable | aligned | repository | audit duplicate ids; ADR-054 deferred global collision; audit R2-6 |
+| INV-059 | TechnicalAsset (asset_namespace, qualified_name) unique | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | PDM-005; ADR-056 PR-3 |
+| INV-060 | asset_kind допустим для подкласса TechnicalAsset | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | PDM-007; ADR-056 PR-3 |
+| INV-061 | carrier_refs только на DataCarrier | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | PDM-010; ADR-056 PR-3 |
+| INV-062 | Корень DataStructure | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | PDM-015; ADR-056 PR-3 |
+| INV-063 | Границы кратности SchemaNode | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | PDM-017; ADR-056 PR-3 |
+| INV-064 | Payload Message | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | PDM-019; ADR-056 PR-3 |
 
 ## Statements
 
@@ -506,5 +512,71 @@ element_id values must be unique across ModelPackage bodies indexed by the repos
 
 
 *adr_ref:* `ADR-054`
+
+### INV-059: TechnicalAsset (asset_namespace, qualified_name) unique
+
+Пара (asset_namespace, qualified_name) уникальна среди всех технических активов пакета (data_carriers, access_points, data_containers, execution_assets).
+
+
+*Notes:* ADR-056 PR-3: tagged existing check_unique_asset_keys.
+
+*requirement_refs:* `DAMS-REQ-PDM-005.c1`
+
+*adr_ref:* `ADR-056`
+
+### INV-060: asset_kind допустим для подкласса TechnicalAsset
+
+Значение asset_kind принадлежит перечислению соответствующего подкласса TechnicalAsset (DataCarrier / AccessPoint / DataContainer / ExecutionAsset).
+
+
+*Notes:* ADR-056 PR-3: tagged existing check_asset_kind_allowlists.
+
+*requirement_refs:* `DAMS-REQ-PDM-007.c1`
+
+*adr_ref:* `ADR-056`
+
+### INV-061: carrier_refs только на DataCarrier
+
+В DataFlowEntityBinding и SelectedEntity слот carrier_refs ссылается только на идентификаторы DataCarrier, а не на DataContainer / AccessPoint / ExecutionAsset.
+
+
+*Notes:* ADR-056 PR-3: tagged existing check_carrier_refs_are_data_carriers.
+
+*requirement_refs:* `DAMS-REQ-PDM-010.c1`
+
+*adr_ref:* `ADR-056`
+
+### INV-062: Корень DataStructure
+
+root_local_key указывает на существующий узел. Для relational корень — object; иначе object или array.
+
+
+*Notes:* ADR-056 PR-3: tagged existing check_root_local_key.
+
+*requirement_refs:* `DAMS-REQ-PDM-015.c1`, `DAMS-REQ-PDM-015.c2`
+
+*adr_ref:* `ADR-056`
+
+### INV-063: Границы кратности SchemaNode
+
+Если заданы и min_occurs, и max_occurs, то max_occurs не меньше min_occurs.
+
+
+*Notes:* ADR-056 PR-3: tagged existing check_occurs_bounds.
+
+*requirement_refs:* `DAMS-REQ-PDM-017.c1`
+
+*adr_ref:* `ADR-056`
+
+### INV-064: Payload Message
+
+У Message задан payload_structure_ref на существующую DataStructure пакета; headers_structure_ref при наличии тоже резолвится.
+
+
+*Notes:* ADR-056 PR-3: tagged existing check_message_payload.
+
+*requirement_refs:* `DAMS-REQ-PDM-019.c1`, `DAMS-REQ-PDM-019.c2`, `DAMS-REQ-PDM-019.c3`
+
+*adr_ref:* `ADR-056`
 
 См. также: [ADR-045](../adr/ADR-045-executable-constraint-matrix.md), [inventory report](constraint-matrix-inventory-report.md), [adding-an-invariant](../guides/adding-an-invariant.md).

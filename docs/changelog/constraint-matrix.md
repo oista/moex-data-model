@@ -201,6 +201,28 @@ superseded_by: []
 **Стало строже:** entity_physical / field_mapping проверяют направление концов, не только
 наличие пары классов; realizes / aligns_with покрыты явными INV.
 
+## ADR-056 PR-3: INV homes for Group C PDM gaps
+
+**Добавлено**
+
+- INV-059 (L2): `(asset_namespace, qualified_name)` unique — PDM-005 /
+  `check_unique_asset_keys`.
+- INV-060 (L2): `asset_kind` allowlist by TechnicalAsset subclass — PDM-007 /
+  `check_asset_kind_allowlists`.
+- INV-061 (L2): `carrier_refs` only DataCarrier — PDM-010 /
+  `check_carrier_refs_are_data_carriers`.
+- INV-062 (L2): DataStructure root — PDM-015 / `check_root_local_key`.
+- INV-063 (L2): SchemaNode occurs bounds — PDM-017 / `check_occurs_bounds`.
+- INV-064 (L2): Message payload structure — PDM-019 / `check_message_payload`.
+- L2 fixtures under `examples/invariants/l2/INV-059..064.*.yaml`.
+- Canonical codes `DAMS-INV-059..064`; former `DAMS-REQ-PDM-0xx.c*` kept as
+  aliases in `DIAGNOSTIC_CODE_ALIASES`.
+
+**Стало строже:** нет (проверки уже исполнялись через Python; теперь у них
+есть строки матрицы и негативные фикстуры gate_strict).
+
+**Каталог требований:** не менялся (Group C rows остаются до PR-9).
+
 ## Audit Wave C: validation hardening (INV-042..053)
 
 **Добавлено**

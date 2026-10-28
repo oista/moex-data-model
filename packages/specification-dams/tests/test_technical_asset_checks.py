@@ -104,7 +104,7 @@ def test_duplicate_asset_namespace_qualified_name() -> None:
         _base_carrier(element_id="dams:physical/neg/a", qualified_name="dup.key"),
         _base_carrier(element_id="dams:physical/neg/b", name="b", qualified_name="dup.key"),
     ]
-    assert "DAMS-REQ-PDM-005.c1" in _codes(_errors_from_technical(data))
+    assert "DAMS-INV-059" in _codes(_errors_from_technical(data))
 
 
 def test_operation_without_interface_ref() -> None:
@@ -146,7 +146,7 @@ def test_wrong_asset_kind() -> None:
     data["data_carriers"] = [
         _base_carrier(asset_kind="database")  # container kind on carrier
     ]
-    assert "DAMS-REQ-PDM-007.c1" in _codes(_errors_from_technical(data))
+    assert "DAMS-INV-060" in _codes(_errors_from_technical(data))
 
 
 def test_entity_physical_wrong_endpoint_types() -> None:
@@ -223,7 +223,7 @@ def test_carrier_refs_pointing_at_data_container() -> None:
             ],
         }
     ]
-    assert "DAMS-REQ-PDM-010.c1" in _codes(_errors_from_technical(data))
+    assert "DAMS-INV-061" in _codes(_errors_from_technical(data))
 
 
 def test_direction_on_data_container() -> None:
@@ -254,4 +254,4 @@ def test_technical_checks_wired_into_formal_requirements() -> None:
     ]
     diags = check_formal_requirements(_body(data), catalog_path=CATALOG)
     codes = {d.diagnostic_code for d in diags if d.severity == DiagnosticSeverity.ERROR}
-    assert "DAMS-REQ-PDM-005.c1" in codes
+    assert "DAMS-INV-059" in codes

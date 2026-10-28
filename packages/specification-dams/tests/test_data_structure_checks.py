@@ -60,4 +60,4 @@ def test_missing_root_local_key() -> None:
     data = _pkg()
     data["data_structures"][0]["root_local_key"] = "missing"
     codes = {d.diagnostic_code for d in check_data_structures(data)}
-    assert "DAMS-REQ-PDM-015.c1" in codes
+    assert "DAMS-INV-062" in codes
