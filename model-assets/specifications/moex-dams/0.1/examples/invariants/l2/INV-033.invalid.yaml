@@ -5,6 +5,7 @@ logical_entities:
   name: E
   description: e
   lifecycle_status: active
+  title: E
 data_carriers:
 - element_id: dams:physical/inv033/T
   name: T
@@ -14,6 +15,7 @@ data_carriers:
   asset_namespace: ns
   qualified_name: T
   asset_kind: relational_table
+  technology: fixture
 entity_physical_mappings:
 - element_id: dams:mapping/inv033/ep-bad
   description: reversed ends

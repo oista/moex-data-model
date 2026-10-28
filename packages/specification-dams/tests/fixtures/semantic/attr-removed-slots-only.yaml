@@ -8,27 +8,28 @@ lifecycle_status: active
 implementation_scope: solution
 solution_ref: eam:solution/NEG
 domain_contexts:
-  - element_id: dams:ctx/neg
-    name: neg_ctx
-    description: Neg context
-    lifecycle_status: active
+- element_id: dams:ctx/neg
+  name: neg_ctx
+  description: Neg context
+  lifecycle_status: active
 logical_entities:
-  - element_id: dams:logical/neg/E
-    name: E
-    description: Entity
+- element_id: dams:logical/neg/E
+  name: E
+  description: Entity
+  lifecycle_status: active
+  context_ref: dams:ctx/neg
+  solution_data_role: producer
+  attributes:
+  - element_id: dams:logical/neg/E/a
+    name: a
+    description: Attribute typed only via removed slots
     lifecycle_status: active
-    context_ref: dams:ctx/neg
-    solution_data_role: producer
-    attributes:
-      - element_id: dams:logical/neg/E/a
-        name: a
-        description: Attribute typed only via removed slots
-        lifecycle_status: active
-        owner_entity_ref: dams:logical/neg/E
+    owner_entity_ref: dams:logical/neg/E
         # Removed in PR-5 — must not satisfy typing:
-        logical_type: string
-        format_pattern: "\\d+"
-        value_set_ref: urn:example:vs
-        unit_code: 1
-        required: true
-        multivalued: false
+    logical_type: string
+    format_pattern: "\\d+"
+    value_set_ref: urn:example:vs
+    unit_code: 1
+    required: true
+    multivalued: false
+  title: E

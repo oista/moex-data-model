@@ -14,6 +14,7 @@ logical_entities:
     lifecycle_status: active
     owner_entity_ref: dams:logical/inv048/E
     data_type_ref: dams:datatype/string
+  title: E
 selections:
 - element_id: dams:selection/inv048
   name: sel

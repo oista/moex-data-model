@@ -11,6 +11,7 @@ logical_entities:
     description: a
     lifecycle_status: active
     data_type_ref: dams:datatype/string
+  title: E
 data_structures:
 - element_id: dams:structure/inv034/S
   schema_format: json_schema

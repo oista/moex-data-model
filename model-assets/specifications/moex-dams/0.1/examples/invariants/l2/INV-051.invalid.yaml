@@ -7,10 +7,12 @@ logical_entities:
   name: E
   description: e
   lifecycle_status: active
+  title: E
 - element_id: dams:logical/inv051bad/F
   name: F
   description: f
   lifecycle_status: active
+  title: F
 conceptual_entities:
 - element_id: dams:concept/inv051bad/C
   name: C

@@ -16,3 +16,4 @@ logical_entities:
     data_type_ref: dams:datatype/string
     minimum_cardinality: 2
     maximum_cardinality: 1
+  title: E

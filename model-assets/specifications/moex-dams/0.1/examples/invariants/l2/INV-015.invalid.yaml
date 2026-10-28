@@ -7,3 +7,4 @@ data_carriers:
   asset_namespace: ns
   qualified_name: mem
   location_uri: mem://x
+  technology: fixture

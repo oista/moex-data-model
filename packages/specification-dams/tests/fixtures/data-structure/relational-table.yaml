@@ -14,6 +14,7 @@ data_carriers:
   qualified_name: SCHEMA.T_PARTY
   asset_kind: relational_table
   structure_ref: dams:structure/fixture/T_PARTY
+  technology: fixture
 data_structures:
 - element_id: dams:structure/fixture/T_PARTY
   name: T_PARTY

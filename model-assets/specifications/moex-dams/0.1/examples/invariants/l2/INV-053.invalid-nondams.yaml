@@ -7,6 +7,7 @@ logical_entities:
   name: E
   description: e
   lifecycle_status: active
+  title: E
 relationships:
 - element_id: dams:rel/inv053nondams/r
   name: r

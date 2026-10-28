@@ -14,6 +14,7 @@ logical_entities:
     lifecycle_status: active
     owner_entity_ref: dams:logical/inv053bad/E
     data_type_ref: dams:datatype/string
+  title: E
 relationships:
 - element_id: dams:rel/inv053bad/r
   name: r

@@ -17,3 +17,4 @@ logical_entities:
     lifecycle_status: active
     owner_entity_ref: dams:logical/inv052/E
     data_type_ref: dams:datatype/string
+  title: E
