@@ -19,7 +19,15 @@ def test_build_governance_view_from_inline_package(tmp_path: Path) -> None:
         "data_owner_ref": "org:role/OWNER",
         "governance_classification": "internal",
         "policy_refs": ["pol:P1"],
-        "logical_entities": [],
+        "logical_entities": [
+            {
+                "element_id": "dams:logical/gov-mat/E",
+                "name": "E",
+                "data_class": "master_data",
+                "source_system_refs": ["eam:system/S"],
+                "attributes": [],
+            }
+        ],
     }
     view, findings = build_governance_view([(body, {})], as_of="2026-10-12")
     assert view["as_of"] == "2026-10-12"
@@ -27,6 +35,11 @@ def test_build_governance_view_from_inline_package(tmp_path: Path) -> None:
     assert "dams:model/gov-mat/1" in view["package_refs"]
     assert any(e["element_ref"] == "dams:model/gov-mat/1" for e in view["elements"])
     assert findings == []
+    # Inline-only cascade slots must not leak into EffectiveGovernanceView.
+    for el in view["elements"]:
+        names = {row["slot_name"] for row in el.get("slots") or []}
+        assert "data_class" not in names
+        assert "source_system_refs" not in names
     text = dump_governance_view(view)
     assert "EffectiveGovernanceView" in text or "as_of" in text
 

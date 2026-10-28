@@ -69,6 +69,12 @@ from moex_dams.rules.assignment_resolver import (
     resolve_governed,
 )
 from moex_dams.rules.cascade import (
+    CASCADE_FAMILIES,
+    CASCADE_SLOTS,
+    DATA_CLASS_FAMILY,
+    GOVERNED_FAMILIES,
+    GOVERNED_SLOTS,
+    SOURCE_FAMILY,
     CascadeCardinality,
     CascadeFamily,
     SlotProvenance,
@@ -107,6 +113,12 @@ from moex_dams.rules.structural import check_structural
 
 __all__ = [
     "EXPORT_COLUMNS",
+    "CASCADE_FAMILIES",
+    "CASCADE_SLOTS",
+    "DATA_CLASS_FAMILY",
+    "GOVERNED_FAMILIES",
+    "GOVERNED_SLOTS",
+    "SOURCE_FAMILY",
     "CascadeCardinality",
     "CascadeFamily",
     "DamsAssetRepository",
