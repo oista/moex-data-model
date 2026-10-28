@@ -1386,7 +1386,8 @@ requirements:
   name: model_registered_in_data_catalog
   title: Регистрация модели в Дата-каталоге
   description: >
-    ADR-056 backbone LDM-03. Manual until PR-7 (no catalog-registration slot).
+    ADR-056 backbone LDM-03. Manual by decision (PR-7): no catalog-registration slot in the schema;
+    registration in the Data Catalog is an organisational fact outside the model.
   lifecycle_status: approved
   implementation_status: not_started
   code: LDM-03
@@ -1539,8 +1540,8 @@ requirements:
   name: logical_entity_data_class
   title: Класс данных сущности ЛМД
   description: >
-    ADR-056 backbone LDM-09. Entity-level checks in PR-5 (from LDM-003.c2);
-    attribute mixed-class gap is PR-7.
+    ADR-056 backbone LDM-09. data_class is on the entity or on every attribute
+    (inline cascade, PR-7).
   lifecycle_status: approved
   implementation_status: implemented
   code: LDM-09
@@ -1557,11 +1558,13 @@ requirements:
     applies_implementation_scope: solution
   formal_checks:
   - check_id: LDM-09.c1
-    kind: slot_required
+    kind: conditional_branch
     target_class: LogicalEntity
-    target_slot: data_class
+    expression: ldm09_data_class
     severity: error
-    remediation: Укажите природу данных (data_class).
+    remediation: >
+      Укажите data_class на сущности либо на каждом её атрибуте
+      (смешанная классификация).
     diagnostic_code: DAMS-REQ-LDM-003.c2
 - element_id: dams:req/LDM-10
   name: logical_entity_confidentiality_class
@@ -1633,9 +1636,10 @@ requirements:
   name: logical_entity_source_system
   title: Система-источник сущности ЛМД
   description: >
-    ADR-056 backbone LDM-12. Manual until PR-7 (no logical source-system slot).
+    ADR-056 backbone LDM-12. source_system_refs is on the entity or on every attribute
+    (inline cascade, PR-7).
   lifecycle_status: approved
-  implementation_status: not_started
+  implementation_status: implemented
   code: LDM-12
   obligation: mandatory
   responsible_role: it_owner
@@ -1648,12 +1652,22 @@ requirements:
     applicability_id: appl:LDM-12
     applies_target_class: LogicalEntity
     applies_implementation_scope: solution
-  formal_checks: []
+  formal_checks:
+  - check_id: LDM-12.c1
+    kind: conditional_branch
+    target_class: LogicalEntity
+    expression: ldm12_source_system
+    severity: error
+    remediation: >
+      Укажите source_system_refs на сущности либо на каждом её атрибуте
+      (разные источники).
+    diagnostic_code: DAMS-REQ-LDM-12.c1
 - element_id: dams:req/LDM-13
   name: logical_entity_iod_classification
   title: Классификация ИОД сущности ЛМД
   description: >
-    ADR-056 backbone LDM-13 (recommended). Mapping to sensitivity slots is PR-7.
+    ADR-056 backbone LDM-13 (recommended). Maps to sensitivity_term_refs (entity/attribute);
+    stays manual until PR-10 (ИОД vocabulary / severity order).
   lifecycle_status: approved
   implementation_status: not_started
   code: LDM-13

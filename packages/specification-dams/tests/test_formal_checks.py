@@ -164,6 +164,8 @@ def test_catalog_expressions_all_have_runner_templates() -> None:
         "cls002_security_soft",
         "ref003_kind_soft",
         "atr004_type_specific_soft",
+        "ldm09_data_class",
+        "ldm12_source_system",
     }
     assert exprs <= known, f"Catalog templates missing in runner: {exprs - known}"
     assert known <= exprs or True  # runner may have extras unused
@@ -601,7 +603,7 @@ def test_pdm004_field_needs_mapping() -> None:
 def test_cls001_axes_warning() -> None:
     data = _example()
     data["logical_entities"][0].pop("data_class", None)
-    # Also triggers LDM-003 error; soft CLS may still fire
+    # Also triggers LDM-09 (diagnostic alias DAMS-REQ-LDM-003.c2); soft CLS may still fire
     errs = _errors(data)
     assert any("LDM-003" in d.diagnostic_code for d in errs)
 
@@ -817,3 +819,66 @@ def test_ldm008_skips_primary_concepts() -> None:
         and "LDM-008" in d.diagnostic_code
     ]
     assert warns == []
+
+
+# --- LDM-09 / LDM-12 cascade coverage (ADR-056 PR-7) ---------------------------
+
+
+def test_ldm09_entity_data_class_ok() -> None:
+    data = _example()
+    assert "DAMS-REQ-LDM-003.c2" not in _codes(_errors(data))
+
+
+def test_ldm09_mixed_attrs_ok() -> None:
+    data = _example()
+    ent = data["logical_entities"][0]
+    ent.pop("data_class", None)
+    for attr in ent.get("attributes") or []:
+        attr["data_class"] = "master_data"
+    assert "DAMS-REQ-LDM-003.c2" not in _codes(_errors(data))
+
+
+def test_ldm09_missing_lists_attrs() -> None:
+    data = _example()
+    ent = data["logical_entities"][0]
+    ent.pop("data_class", None)
+    for attr in ent.get("attributes") or []:
+        attr.pop("data_class", None)
+    errs = [d for d in _errors(data) if d.diagnostic_code == "DAMS-REQ-LDM-003.c2"]
+    assert errs
+    assert "missing on attributes" in errs[0].diagnostic_message
+
+
+def test_ldm09_no_attrs_fails() -> None:
+    data = _example()
+    ent = data["logical_entities"][0]
+    ent.pop("data_class", None)
+    ent["attributes"] = []
+    # Also clears LDM-005; LDM-09 must still fire for empty attributes.
+    errs = [d for d in _errors(data) if d.diagnostic_code == "DAMS-REQ-LDM-003.c2"]
+    assert errs
+    assert "no attributes" in errs[0].diagnostic_message
+
+
+def test_ldm12_errors_without_source() -> None:
+    data = _example()
+    for ent in data["logical_entities"]:
+        ent.pop("source_system_refs", None)
+        for attr in ent.get("attributes") or []:
+            attr.pop("source_system_refs", None)
+    errs = [d for d in _errors(data) if d.diagnostic_code == "DAMS-REQ-LDM-12.c1"]
+    assert errs
+
+
+def test_ldm12_entity_source_ok() -> None:
+    data = _example()
+    assert "DAMS-REQ-LDM-12.c1" not in _codes(_errors(data))
+
+
+def test_ldm12_mixed_attrs_ok() -> None:
+    data = _example()
+    for ent in data["logical_entities"]:
+        ent.pop("source_system_refs", None)
+        for attr in ent.get("attributes") or []:
+            attr["source_system_refs"] = ["eam:system/EXAMPLE"]
+    assert "DAMS-REQ-LDM-12.c1" not in _codes(_errors(data))
