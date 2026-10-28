@@ -20,3 +20,9 @@ Additive minor (ADR-051 D2): catalog shape only; **no** instance catalog rewrite
 - Backbone rows CDM-01…PDM-02 (PR-4).
 - Runner lifecycle skip (PR-2).
 - Existing IT-solution / conceptual catalog instances unchanged.
+
+## PR-2: runner honours requirement lifecycle (no schema change)
+
+- `check_formal_requirements` skips requirements with `lifecycle_status` `deprecated`, `superseded` or `rejected`; `draft`, `proposed` and `approved` stay enforced.
+- `load_it_solution_catalog` still returns every row (viewer / export keep showing deprecated requirements).
+- No behaviour change on the current catalog: all rows are `approved`. Prerequisite for PR-5 (mass `superseded` without double-firing).

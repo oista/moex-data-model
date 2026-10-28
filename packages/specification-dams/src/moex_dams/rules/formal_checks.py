@@ -54,6 +54,10 @@ _DEFAULT_CATALOG = (
     / "it-solution-requirements.yaml"
 )
 
+# ADR-056: requirements in these lifecycle states are not enforced by assess.
+# The catalog loader still returns them (viewer / export show deprecated rows).
+_INACTIVE_REQUIREMENT_STATUSES = frozenset({"deprecated", "superseded", "rejected"})
+
 
 def _severity(raw: str | None) -> DiagnosticSeverity:
     if raw == "info":
@@ -1251,6 +1255,8 @@ def check_formal_requirements(
     diagnostics: list[Diagnostic] = []
 
     for req in reqs:
+        if str(req.get("lifecycle_status") or "") in _INACTIVE_REQUIREMENT_STATUSES:
+            continue
         if not _applies(req, data):
             continue
         statement = req.get("statement")

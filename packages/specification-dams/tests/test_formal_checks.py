@@ -82,6 +82,12 @@ MDM = (
     / "mdm"
     / "mdm-solution-model.yaml"
 )
+STATUS_SHOWCASE = (
+    Path(__file__).resolve().parent
+    / "fixtures"
+    / "requirements"
+    / "status-showcase.yaml"
+)
 
 
 def _body(data: dict, path: str = "memory.yaml") -> LinkMLImplementationBody:
@@ -210,6 +216,36 @@ def test_default_rule_sets_include_formal_checks() -> None:
     repo = DamsAssetRepository(default_schema_path=SCHEMA)
     ids = {r.assessment_id for r in default_dams_rule_sets(repo)}
     assert "assessment:model-requirements" in ids
+
+
+# --- Requirement lifecycle (ADR-056 PR-2) -------------------------------------
+
+
+def _showcase_codes() -> set[str]:
+    """Codes fired by the status-showcase catalog on a package without ``name``."""
+    data = {"element_id": "dams:package/lifecycle-probe"}
+    return _codes(
+        check_formal_requirements(_body(data), catalog_path=STATUS_SHOWCASE)
+    )
+
+
+def test_runner_enforces_draft_proposed_approved_requirements() -> None:
+    assert {
+        "DAMS-REQ-GEN-801.c1",  # draft
+        "DAMS-REQ-GEN-802.c1",  # proposed
+        "DAMS-REQ-GEN-803.c1",  # approved
+    } <= _showcase_codes()
+
+
+def test_runner_skips_rejected_deprecated_superseded_requirements() -> None:
+    fired = _showcase_codes()
+    assert fired.isdisjoint(
+        {
+            "DAMS-REQ-GEN-804.c1",  # rejected
+            "DAMS-REQ-GEN-805.c1",  # deprecated
+            "DAMS-REQ-GEN-806.c1",  # superseded
+        }
+    )
 
 
 # --- GEN ----------------------------------------------------------------------
