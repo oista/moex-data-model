@@ -12,6 +12,7 @@ superseded_by: []
 **Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Related:** [ADR-001](ADR-001-linkml-yaml-canonical.md), [ADR-007](ADR-007-pydantic-dto-not-validator.md), [ADR-013](ADR-013-specification-requirements-catalog.md)  
+**Amended by:** [ADR-056](ADR-056-requirements-backbone.md) (PR-7: inline-only `data_class` / `source_system_refs` cascade families)  
 **Requirements:** [IT_SOLUTION_MODEL_REQUIREMENTS.md](../architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md)
 
 ## Context
@@ -66,17 +67,26 @@ text-rule inheritance.
    **full replace**, not union.
 5. Effective values are **never** written back into the model YAML.
 
-### Families (v1)
+### Families (v1 + ADR-056 PR-7)
 
-| Family | Slots | Cardinality | Root obligation |
-|---|---|---|---|
-| ownership | `data_owner_ref`, `data_steward_ref`, `owning_unit_ref` | scalar | package must declare `data_owner_ref` |
-| classification | `governance_classification` | scalar | logical entity must have effective classification |
-| policies | `policy_refs` | list-replace | none (optional) |
+| Family | Slots | Cardinality | Assignable (ADR-049) | Root obligation |
+|---|---|---|---|---|
+| ownership | `data_owner_ref`, `data_steward_ref`, `owning_unit_ref` | scalar | yes | package must declare `data_owner_ref` |
+| classification | `governance_classification` | scalar | yes | logical entity must have effective classification |
+| policies | `policy_refs` | list-replace | yes | none (optional) |
+| data_class | `data_class` | scalar | **no** (inline-only) | LDM-09: effective on entity **or** on every attribute |
+| source | `source_system_refs` | list-replace | **no** (inline-only) | LDM-12: effective on entity **or** on every attribute |
 
-**Not in cascade:** `entity_type`, `data_class`, `business_importance`
-(intrinsic entity axes); `security_classification` / `sensitivity_term_refs`
-(Wave 2). Inheritance of **definitions** via the semantic chain
+**Inline-only families** (`data_class`, `source`) participate in the containment
+resolver for `LogicalEntity` → `LogicalAttribute` only. They are **not** in
+`GOVERNED_SLOTS`, are not overridden by `OwnershipAssignment` /
+`ClassificationAssignment` / `PolicyBinding`, and do **not** appear in
+`EffectiveGovernanceView`. `ModelPackage` has no default for these slots
+(no package-level mixin).
+
+**Not in cascade:** `entity_type`, `business_importance` (intrinsic entity axes);
+`security_classification` / `sensitivity_term_refs` (Wave 2 / LDM-13 mapping).
+Inheritance of **definitions** via the semantic chain
 (`realizes` / `conceptual_entity_refs` / external exact sources) is specified
 separately in [ADR-025](ADR-025-definition-cascade-and-glossary.md) — not as a
 governed-family extension of this containment cascade.

@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-056: Requirements backbone (normative modeling rules)
 
 **Date:** 2026-10-27  
-**Status:** Proposed (PR-0…PR-2 landed; PR-4/PR-5/PR-6 on stack `feat/requirements-backbone-pr4-pr5-pr6`; PR-3 parallel)  
+**Status:** Proposed (PR-0…PR-7 landed on `feat/requirements-backbone-pr7-schema-gaps`)  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Amends:** [ADR-013](ADR-013-specification-requirements-catalog.md) (code pattern `{SECTION}-{NN}`/`{NNN}`; section `CDM`; optional empty `formal_checks`; `obligation` / `responsible_role`)  
 **Related:** [ADR-013](ADR-013-specification-requirements-catalog.md), [ADR-021](ADR-021-dams-implementation-profile-and-levels.md), [ADR-023](ADR-023-governed-property-cascade.md), [ADR-025](ADR-025-definition-cascade-and-glossary.md), [ADR-026](ADR-026-cmd-entity-metamodel.md), [ADR-029](ADR-029-cdm-from-er-sketch-and-realization.md), [ADR-045](ADR-045-executable-constraint-matrix.md), [ADR-046](ADR-046-typed-mapping-endpoints.md), [ADR-048](ADR-048-topology-ownership.md), [ADR-051](ADR-051-dams-schema-compatibility.md)  
@@ -134,16 +134,31 @@ Number lookalikes (must not be confused during coexistence):
 | **PR-4** | Add 21 backbone rows (statements only, no checks yet) | Catalog data |
 | **PR-5** | Move Group A checks onto backbone; old rows `superseded` | Catalog data + tests |
 | **PR-6** | Docs / explorer / export consumers | Docs (+ export tests) |
-| **PR-7** | Schema gaps for LDM-03 / 09(attr) / 12 / 13 (decisions) | Schema (later) |
+| **PR-7a** | Docs: amend ADR-023 (inline-only `data_class` / `source`); close LDM-03/09/12/13 decisions | **No** |
+| **PR-7b** | Additive schema: `HasDataSource` / `source_system_refs`; `data_class` on `LogicalAttribute`; MINOR bump + regen | Schema + regen |
+| **PR-7c** | Cascade code: `assignable` flag; `DATA_CLASS_FAMILY` / `SOURCE_FAMILY`; `CASCADE_SLOTS` | Code + tests |
+| **PR-7d** | Catalog checks: `ldm09_data_class`, `ldm12_source_system` (warning); LDM-03/13 descriptions | Catalog + code + tests |
+| **PR-7e** | Importers: no copy-down of cascade slots to attributes (optional profile key off) | Code + tests |
+| **PR-7f** | Data fill `source_system_refs` (ruamel); then LDM-12 severity warning→error | Data then catalog |
 | **PR-8** | Move `slot_required` obligations into LinkML `required` | Schema; data separate commit if needed |
 | **PR-9** | Retire Group C from catalog; rebind matrix / aliases | Catalog + matrix + Python codes |
 | **PR-10** | Group D / B / GEN-003 / glossary wording / diagnostic policy; final cleanup | Decisions + cleanup |
 
 `check_all` (and listed gates) must be green **on each PR branch separately**. No combined “all PRs green” tree as proof of intermediate validity ([multi-pr-series](../../.cursor/rules/multi-pr-series.mdc)). No PR-5-style schema+data+regen exception is claimed for this series.
 
-### D5. Deferred to PR-7…PR-10 (do not decide in PR-0…PR-6)
+### D5. PR-7 decisions (closed) and still deferred to PR-8…PR-10
 
-- Schema slots for LDM-03 (data-catalog registration), LDM-09 on attributes, LDM-12 (source system on logical), LDM-13 (ИОД vs `sensitivity_term_refs`).
+**Closed in PR-7:**
+
+| Backbone | Decision |
+|---|---|
+| **LDM-03** | Remains **manual** (publication / process gate). No catalog-registration slot. |
+| **LDM-09** | `data_class` cascades entity→attribute (inline-only family; amends ADR-023). Assess: effective on entity **or** on every attribute. |
+| **LDM-12** | `source_system_refs` cascades entity→attribute (inline-only). Same effective rule; roll out as warning then error (PR-7f). |
+| **LDM-13** | Mapped to existing `sensitivity_term_refs`; stays **manual** until PR-10 (dictionary / severity order for ИОД). |
+
+**Still deferred (PR-8…PR-10):**
+
 - Whether GEN-003 under LDM-01 requires ≥1 `LogicalEntity`.
 - CDM-01 / LDM-04 wording vs ADR-025 (definition on element; glossary is a **view**, not a mandatory sibling term record).
 - Dropping mandatory `identity_rule`, `entity_type`, `business_importance`.
@@ -151,6 +166,7 @@ Number lookalikes (must not be confused during coexistence):
 - Renaming Group B `LDM-006` / keeping REF-002 as recommended.
 - Deprecating `security_classification` (CLS-002 overlap with `governance_classification`).
 - Renaming diagnostic codes to `DAMS-INV-*` vs keeping `DAMS-REQ-*` stable.
+- LDM-13 executable checks (after ИОД vocabulary).
 
 ## Consequences
 
@@ -166,7 +182,7 @@ Number lookalikes (must not be confused during coexistence):
 | Renumber backbone to three-digit DAMS codes | Breaks normative document identity |
 | Keep all 57 as peer requirements | Dilutes normative spine; mixes invariants with modeling rules |
 | Big-bang replace in one PR | Violates multi-PR series; breaks intermediate assess |
-| Encode process-only LDM-03 as body assess today | No slot; belongs in publication/process gate until PR-7 |
+| Encode process-only LDM-03 as body assess | Rejected in PR-7a; stays manual publication/process gate |
 
 ## Related
 

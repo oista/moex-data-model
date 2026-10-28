@@ -166,9 +166,19 @@ Note: conceptual catalog already uses `CM-*` codes that do not match the IT-solu
 | `docs/architecture/constraint-matrix.md` | INV ↔ requirement_refs prose |
 | `docs/superpowers/specs/2026-09-28-dams-requirements-explorer-design.md` | Explorer tree by section |
 
+## Backbone gaps closed / deferred in PR-7 (ADR-056)
+
+| Backbone | Before PR-7 | PR-7 decision | Enforcement after PR-7 |
+|---|---|---|---|
+| LDM-03 | Manual (`formal_checks: []`); hoped-for catalog slot | **Stays manual** (publication / process gate); no slot | Human-review only |
+| LDM-09 | Entity `slot_required` `data_class` only; no attribute slot | Cascade entity→attribute (inline-only); check effective on entity **or** every attribute | `runner` `ldm09_data_class` (PR-7d) |
+| LDM-12 | Manual; no logical source-system slot | Slot `source_system_refs` + cascade; warning then error | `runner` `ldm12_source_system` (PR-7d/f) |
+| LDM-13 | Manual; ИОД vocabulary unclear | Mapped to `sensitivity_term_refs`; **stays manual** until PR-10 | Human-review; executable later |
+
 ## Implications for migration
 
 - PR-0 is documentation only: no catalog, schema, or `generated/` edits.
 - Do not mark rows `superseded` until PR-2 lands (otherwise assess still fires old checks).
 - Do not delete Group C rows until PR-3 INV coverage exists for the six PDM gaps.
 - When statements of the normative 21 rules change slightly, edit PR-4 rows only; disposition groups stay stable.
+- PR-7a is documentation only (amends ADR-023 / ADR-056); schema and cascade code follow in PR-7b…7f.

@@ -531,6 +531,13 @@ consumer group.
 | `data_class` | Какова природа данных? |
 | `business_importance` | Насколько сущность важна для бизнеса? |
 | `governance_classification` | Какие правила управления и доступа применимы? |
+| `source_system_refs` | Из каких ИТ-систем происходят данные сущности? |
+
+`data_class` и `source_system_refs` участвуют в containment cascade
+сущность → атрибут (ADR-023 / ADR-056 PR-7, **только inline**, без
+assignment layer). При смешанной классификации или разных источниках
+значение задаётся на атрибутах; иначе достаточно объявления на сущности
+(LDM-09, LDM-12).
 
 Пример корректного заполнения:
 
@@ -539,6 +546,8 @@ entity_type: core
 data_class: master_data
 business_importance: high
 governance_classification: confidential
+source_system_refs:
+  - eam:system/MDM
 ```
 
 ### 6.3. Entity type
@@ -698,6 +707,10 @@ relation/alignment/realization показывает, что данные озн�
 - lifecycle status, если он поддерживается моделью;
 - classification: локальный `governance_classification` либо наследование
   эффективного значения от сущности/пакета (ADR-023 containment cascade);
+- при смешанной природе данных — локальный `data_class` (иначе наследование
+  от сущности; ADR-056 PR-7 / LDM-09);
+- при отличии источника от сущности — локальный `source_system_refs`
+  (иначе наследование; LDM-12);
 - definition и naming metadata согласно применимым правилам.
 
 ### 7.2. Status coverage между logical и physical слоями
