@@ -95,6 +95,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: UCD AGREEMENT реализует корпоративный Agreement.
+  source_system_refs:
+  - eam:system/UCD
 - element_id: dams:logical/ucd/AUTHORIZATION
   name: AUTHORIZATION
   title: Полномочия сотрудника
@@ -181,6 +183,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: local-only
   alignment_rationale: Полномочия сотрудника UCD; RoleAssignment в CDM — IAM User↔Role, не Employee↔тип полномочия.
+  source_system_refs:
+  - eam:system/UCD
 - element_id: dams:logical/ucd/EMPOYEE
   name: EMPOYEE
   title: Сотрудник
@@ -313,6 +317,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: UCD EMPOYEE реализует Employee (reified роль Person); Person уже на UCD PERSON. Связь EMPOYEE→PERSON закрывает LDM-008.
+  source_system_refs:
+  - eam:system/UCD
 - element_id: dams:logical/ucd/ORGANIZATION
   name: ORGANIZATION
   title: Организация
@@ -423,6 +429,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: UCD ORGANIZATION (ИНН, typeId) реализует LegalEntity.
+  source_system_refs:
+  - eam:system/UCD
 - element_id: dams:logical/ucd/ORGANIZATION_TYPE
   name: ORGANIZATION_TYPE
   title: Тип организации
@@ -476,6 +484,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: local-only
   alignment_rationale: Классификатор типа организации в контуре UCD; отдельного корпоративного концепта нет.
+  source_system_refs:
+  - eam:system/UCD
 - element_id: dams:logical/ucd/PERSON
   name: PERSON
   title: Персона
@@ -553,6 +563,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: UCD PERSON реализует корпоративный Person.
+  source_system_refs:
+  - eam:system/UCD
 - element_id: dams:logical/ucd/POSITION
   name: POSITION
   title: Должность сотрудника
@@ -608,6 +620,8 @@ logical_entities:
   identity_rule: Идентичность определяется первичным ключом сущности в контуре ИТ-решения (требует уточнения владельцем данных).
   conceptual_alignment_status: aligned
   alignment_rationale: UCD POSITION — каталог должностей; ближайший корпоративный концепт StaffPosition (штатная единица). Зерно без Department — осознанно.
+  source_system_refs:
+  - eam:system/UCD
 relationships:
 - element_id: dams:rel/ucd/AGREEMENT_to_ORGANIZATION_via_organizationId
   name: AGREEMENT_to_ORGANIZATION_via_organizationId

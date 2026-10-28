@@ -49,6 +49,8 @@ logical_entities:
     multivalued: false
     mapping_coverage_status: mapped
     data_type_ref: dams:datatype/identifier
+  source_system_refs:
+  - eam:system/EXAMPLE_CORE
 - element_id: dams:logical/example-min/Account
   name: ExampleAccount
   title: Счёт
@@ -68,6 +70,8 @@ logical_entities:
   - dams:logical/example-min/Account/account_id
   conceptual_alignment_status: pending
   alignment_rationale: Связь с корпоративным понятием счёта будет утверждена после согласования.
+  source_system_refs:
+  - eam:system/EXAMPLE_CORE
   attributes:
   - element_id: dams:logical/example-min/Account/account_id
     name: account_id
