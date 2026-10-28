@@ -37,15 +37,17 @@ Specification explorer
 ├─ Требования
 │   ├─ Концептуальная модель
 │   │     ├─ Требования к модели
-│   │     │     └─ CM-GEN-001, CM-CON-001, … (kind: requirement)
+│   │     │     ├─ CDM → CDM-01, CDM-02 (ADR-056 backbone)
+│   │     │     ├─ GEN → CM-GEN-* (и прочие section folders)
+│   │     │     └─ … (LDM/REF/PDM folders for legacy CM-* rows)
 │   │     ├─ Спецификация требований
 │   │     │     └─ minimal/*.required.yaml (kind: source_file)
 │   │     └─ Спецификация модели
 │   │           └─ …/conceptual-model.skeleton.yaml (kind: source_file)
 │   ├─ ИТ-решения
 │   │     ├─ Требования к модели
-│   │     │     ├─ LDM (folder + code) → LDM-* (kind: requirement)
-│   │     │     ├─ PDM → PDM-*
+│   │     │     ├─ LDM → LDM-01..13 (backbone) + legacy LDM-00x
+│   │     │     ├─ PDM → PDM-01/02 (backbone) + legacy PDM-00x
 │   │     │     ├─ REF → REF-*
 │   │     │     ├─ ATR → ATR-*
 │   │     │     ├─ FLW → FLW-*
@@ -69,8 +71,10 @@ Specification explorer
 
 0. `group:requirements-conceptual` — enterprise-conceptual level (ADR-021). Children:
 
-   1. `group:requirements-conceptual-list` — items with `kind=requirement`,
-      `requirement_level=conceptual_model`
+   1. `group:requirements-conceptual-list` — section folders (same order as IT:
+      CDM|LDM|PDM|REF|ATR|FLW|CLS|GEN, non-empty only); leaves
+      `kind=requirement`, `requirement_level=conceptual_model` (includes ADR-056
+      `CDM-01`/`CDM-02`)
    2. `group:requirements-conceptual-min-spec` — same required-only schema projection
    3. `group:requirements-conceptual-model-spec` — skeleton from
       `project_conceptual_model_skeleton` (no example child)
@@ -78,10 +82,12 @@ Specification explorer
 1. `group:requirements-it-solutions` — level group; description: requirements for IT-solution data models. Children:
 
    1. `group:requirements-list` — section folders (`group_style=section_folder`,
-      `requirement_section` = LDM|PDM|REF|ATR|FLW|CLS|GEN in enum order, non-empty
-      only); each folder holds `kind=requirement` leaves with attributes:
-      `code`, `requirement_level`, `requirement_section`, `statement`, `formal_checks`.
-      Nav mark: folder icon + three-letter section code.
+      `requirement_section` = CDM|LDM|PDM|REF|ATR|FLW|CLS|GEN in enum order,
+      non-empty only; CDM usually empty at IT level); each folder holds
+      `kind=requirement` leaves with attributes: `code`, `requirement_level`,
+      `requirement_section`, `statement`, `formal_checks` (may be empty),
+      `obligation`, `responsible_role`, `lifecycle_status`.
+      Nav mark: folder icon + three-letter section code (`cdm`/`ldm`/`pdm` glyphs).
    2. `group:requirements-min-spec` — `source_file` items from build-time required-only
       projection (classes/slots with `required: true` or `minimum_cardinality ≥ 1`,
       plus referenced enums)

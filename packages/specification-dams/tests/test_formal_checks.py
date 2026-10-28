@@ -371,16 +371,18 @@ def test_ldm001_ref_resolves() -> None:
     assert "DAMS-REF-002" in _codes(_errors(data))
 
 
-def test_ldm002_title_required() -> None:
+def test_ldm002_title_not_enforced_after_group_a_supersede() -> None:
+    """title/name/lifecycle slot_required moved to schema in ADR-056 PR-8."""
     data = _example()
     data["logical_entities"][0].pop("title", None)
-    assert "DAMS-REQ-LDM-002.c1" in _codes(_errors(data))
+    assert "DAMS-REQ-LDM-002.c1" not in _codes(_errors(data))
 
 
-def test_ldm003_entity_type_required() -> None:
+def test_ldm003_entity_type_not_enforced_after_group_a_supersede() -> None:
+    """entity_type obligation dropped from backbone (ADR-056 PR-10)."""
     data = _example()
     data["logical_entities"][0].pop("entity_type", None)
-    assert "DAMS-REQ-LDM-003.c1" in _codes(_errors(data))
+    assert "DAMS-REQ-LDM-003.c1" not in _codes(_errors(data))
 
 
 def test_ldm004_identity_missing() -> None:
@@ -536,11 +538,12 @@ def test_ref002_draft_with_rationale_ok() -> None:
     assert "DAMS-REQ-REF-002.c1" not in _codes(_errors(data))
 
 
-def test_ref003_kind_soft_warning() -> None:
+def test_ldm07_relationship_kind_required_for_active() -> None:
+    """ADR-056: REF-003 soft warning handed to LDM-07 as error (diagnostic alias)."""
     data = _example()
     data["relationships"][0].pop("relationship_kind", None)
     data["relationships"][0]["lifecycle_status"] = "active"
-    assert any("REF-003" in d.diagnostic_code for d in _warns(data))
+    assert any("REF-003" in d.diagnostic_code for d in _errors(data))
 
 
 # --- PDM ----------------------------------------------------------------------

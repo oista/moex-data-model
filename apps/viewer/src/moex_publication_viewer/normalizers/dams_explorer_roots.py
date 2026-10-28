@@ -277,6 +277,7 @@ def _section_ref(section_id: str, title: str) -> PublicationItem:
 
 # Order matches RequirementSectionEnum in moex-types.yaml.
 _SECTION_ORDER: tuple[str, ...] = (
+    "CDM",
     "LDM",
     "PDM",
     "REF",
@@ -286,6 +287,7 @@ _SECTION_ORDER: tuple[str, ...] = (
     "GEN",
 )
 _SECTION_LABELS: dict[str, str] = {
+    "CDM": "Концептуальная модель",
     "LDM": "Логическая модель",
     "PDM": "Физическая модель",
     "REF": "Связи сущностей",
@@ -334,6 +336,8 @@ def _load_requirement_items(
                     "description": req.get("description"),
                     "lifecycle_status": req.get("lifecycle_status"),
                     "implementation_status": req.get("implementation_status"),
+                    "obligation": req.get("obligation"),
+                    "responsible_role": req.get("responsible_role"),
                     "superseded_by": req.get("superseded_by"),
                     "formal_checks": req.get("formal_checks") or [],
                     "element_id": req.get("element_id"),
@@ -380,7 +384,7 @@ def _group_it_requirements_by_section(
             "requirement_count": len(children),
             "member_ids": [c.id for c in children],
         }
-        if code in ("LDM", "PDM"):
+        if code in ("CDM", "LDM", "PDM"):
             attrs["nav_glyph"] = code.lower()
         groups.append(
             PublicationItem(
@@ -632,6 +636,9 @@ def wrap_dams_explorer_roots(
         },
         children=section_groups,
     )
+    conceptual_section_groups = _group_it_requirements_by_section(
+        conceptual_req_items
+    )
     conceptual_list_group = PublicationItem(
         id="group:requirements-conceptual-list",
         title="Требования к модели",
@@ -641,12 +648,12 @@ def wrap_dams_explorer_roots(
             "section_root": "requirements-conceptual-list",
             "purpose": (
                 "Пункты требований к enterprise-conceptual модели "
-                "с формальными проверками (ADR-021)."
+                "с формальными проверками (ADR-021 / ADR-056 CDM)."
             ),
             "requirement_count": len(conceptual_req_items),
-            "member_ids": [r.id for r in conceptual_req_items],
+            "member_ids": [g.id for g in conceptual_section_groups],
         },
-        children=conceptual_req_items,
+        children=conceptual_section_groups,
     )
     min_files = _build_minimal_spec_file_items(spec_dir)
     skeleton_files = _build_model_skeleton_file_items(spec_dir)

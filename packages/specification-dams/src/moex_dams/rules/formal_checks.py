@@ -1137,13 +1137,15 @@ def _run_conditional(
         return out
 
     if template == "ref003_kind_soft":
+        # Severity comes from the FormalCheck (soft warning on legacy REF-003;
+        # error when handed to ADR-056 backbone LDM-07).
         if str(el.get("lifecycle_status") or "active") == "active" and not _filled(
             el.get("relationship_kind")
         ):
             out.append(
                 _diag(
                     code=code,
-                    severity=DiagnosticSeverity.WARNING,
+                    severity=sev,
                     message=(
                         f'Relationship "{subject}" is active without relationship_kind.'
                     ),

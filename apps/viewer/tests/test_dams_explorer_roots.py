@@ -169,14 +169,23 @@ def test_wrap_roots_loads_requirements_catalog():
     conceptual_list = next(
         c for c in conceptual.children if c.id == "group:requirements-conceptual-list"
     )
-    cm_codes = {c.attributes.get("code") for c in conceptual_list.children}
+    assert all(
+        c.attributes.get("kind") == "group"
+        and c.attributes.get("group_style") == "section_folder"
+        for c in conceptual_list.children
+    )
+    assert "group:requirements-section-CDM" in {c.id for c in conceptual_list.children}
+    cm_leaves = [r for g in conceptual_list.children for r in (g.children or [])]
+    cm_codes = {c.attributes.get("code") for c in cm_leaves}
+    assert "CDM-01" in cm_codes
+    assert "CDM-02" in cm_codes
     assert "CM-GEN-001" in cm_codes
     assert "CM-CON-001" in cm_codes
     assert "CM-REF-001" in cm_codes
     assert "CM-PDM-000" in cm_codes
     assert all(
         c.attributes.get("requirement_level") == "conceptual_model"
-        for c in conceptual_list.children
+        for c in cm_leaves
     )
     conceptual_spec = next(
         c
@@ -229,6 +238,8 @@ def test_wrap_roots_loads_requirements_catalog():
     assert "GEN-003" in codes
     assert "GEN-004" in codes
     assert "LDM-001" in codes
+    assert "LDM-01" in codes
+    assert "LDM-06" in codes
     assert "LDM-006" in codes
     assert "LDM-007" in codes
     assert "ATR-001" in codes
@@ -236,11 +247,14 @@ def test_wrap_roots_loads_requirements_catalog():
     assert "REF-001" in codes
     assert "REF-002" in codes
     assert "PDM-001" in codes
+    assert "PDM-01" in codes
+    assert "PDM-02" in codes
     assert "PDM-003" in codes
     assert "CLS-001" in codes
     assert all(c.attributes.get("kind") == "requirement" for c in req_leaves)
     assert all(c.attributes.get("statement") for c in req_leaves)
-    assert all(c.attributes.get("formal_checks") for c in req_leaves)
+    # Manual backbone rows may have an empty formal_checks list (ADR-056).
+    assert all(isinstance(c.attributes.get("formal_checks"), list) for c in req_leaves)
 
     it_spec = next(c for c in it.children if c.id == "group:requirements-it-spec")
     assert it_spec.title == "Спецификация"
