@@ -2,13 +2,13 @@
   "summary": {
     "overall_result": "conformant_with_warnings",
     "implementation_id": "moex:implementation:mdm:0.1.0",
-    "revision": "4bebe4452649",
-    "content_digest": "sha256:4bebe445264932a78bfec2fbeb37168fceda35df5403e4a38a33c429020a92ea",
+    "revision": "054b2953a2a5",
+    "content_digest": "sha256:054b2953a2a535699778454b53811c8f1ceba3e533889916e1d54db6308a3c46",
     "package_id": "dams:model/mdm/0.1.0",
     "node_count": 150,
     "edge_count": 305,
     "is_conformant": true,
-    "bundle_digest": "sha256:34d343133759506681a1186d1cdb07d4f87c6c9f637ed930fb4601f1494169b5"
+    "bundle_digest": "sha256:7e24e61d3e0c37366ccab020dd967c9a3a630675a5037dc4c65c25ac00e12d65"
   },
   "nodes": [
     {
@@ -5704,7 +5704,7 @@
             "title": "revision",
             "description": null,
             "attributes": {
-              "value": "4bebe4452649"
+              "value": "054b2953a2a5"
             },
             "children": [],
             "tags": [],
@@ -5715,7 +5715,7 @@
             "title": "content_digest",
             "description": null,
             "attributes": {
-              "value": "sha256:4bebe445264932a78bfec2fbeb37168fceda35df5403e4a38a33c429020a92ea"
+              "value": "sha256:054b2953a2a535699778454b53811c8f1ceba3e533889916e1d54db6308a3c46"
             },
             "children": [],
             "tags": [],

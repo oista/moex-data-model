@@ -140,7 +140,7 @@ Number lookalikes (must not be confused during coexistence):
 | **PR-7d** | Catalog checks: `ldm09_data_class`, `ldm12_source_system` (warning); LDM-03/13 descriptions | Catalog + code + tests |
 | **PR-7e** | Importers: no copy-down of cascade slots to attributes (optional profile key off) | Code + tests |
 | **PR-7f** | Data fill `source_system_refs` (ruamel); then LDM-12 severity warning→error | Data then catalog |
-| **PR-8** | Move `slot_required` obligations into LinkML `required` | Schema; data separate commit if needed |
+| **PR-8** | Move remaining `slot_required` gaps into class `slot_usage` (`LogicalEntity.title`, `DataCarrier.technology`); 5.4.0 | Schema + regen; fixture fill separate commit |
 | **PR-9** | Retire Group C from catalog; rebind matrix / aliases | Catalog + matrix + Python codes |
 | **PR-10** | Group D / B / GEN-003 / glossary wording / diagnostic policy; final cleanup | Decisions + cleanup |
 
@@ -157,7 +157,13 @@ Number lookalikes (must not be confused during coexistence):
 | **LDM-12** | `source_system_refs` cascades entity→attribute (inline-only). Same effective rule; roll out as warning then error (PR-7f). |
 | **LDM-13** | Mapped to existing `sensitivity_term_refs`; stays **manual** until PR-10 (dictionary / severity order for ИОД). |
 
-**Still deferred (PR-8…PR-10):**
+**Closed in PR-8:**
+
+| Topic | Decision |
+|---|---|
+| Catalog `slot_required` → schema | Most identity / ATR / REF / PDM core slots were already LinkML `required`. Gaps closed with class `slot_usage`: `LogicalEntity.title`, `DataCarrier.technology`. Conditional PDM-001.c5 / PDM-002.c2–c3 stay catalog. Group D `entity_type` is not schema-required; `context_ref` / `solution_data_role` were already schema-required (relaxing is PR-10). |
+
+**Still deferred (PR-9…PR-10):**
 
 - Whether GEN-003 under LDM-01 requires ≥1 `LogicalEntity`.
 - CDM-01 / LDM-04 wording vs ADR-025 (definition on element; glossary is a **view**, not a mandatory sibling term record).

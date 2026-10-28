@@ -44,6 +44,7 @@ ALLOWED_DELTAS: dict[tuple[str, str], str] = {
     ("Mapping", "glossary_term_refs"): ABSENT,
     ("Mapping", "tags"): ABSENT,
     ("FormalCheck", "description"): OPT,
+    ("LogicalEntity", "title"): REQ,  # ADR-056 PR-8 class slot_usage
     # ADR-053: HasAssertionMetadata induces HasValidity on these classes.
     ("ExternalClassRef", "valid_from"): OPT,
     ("ExternalClassRef", "valid_to"): OPT,
@@ -123,9 +124,9 @@ def test_mapping_is_identified_element_without_name():
     assert sv.get_class("Mapping").is_a == "IdentifiedElement"
 
 
-def test_schema_version_is_5_3_0():
+def test_schema_version_is_5_4_0():
     sv = SchemaView(str(SCHEMA))
-    assert sv.schema.version == "5.3.0"
+    assert sv.schema.version == "5.4.0"
 
 
 def test_pydantic_field_required_sets_match_for_key_classes():

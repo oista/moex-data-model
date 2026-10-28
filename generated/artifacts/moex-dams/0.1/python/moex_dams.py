@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-28T10:34:43
+# Generation date: 2026-10-28T12:47:26
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -60,7 +60,7 @@ from linkml_runtime.linkml_model.types import Boolean, Datetime, Decimal, Intege
 from linkml_runtime.utils.metamodelcore import Bool, Decimal, URI, URIorCURIE, XSDDateTime
 
 metamodel_version = "1.11.0"
-version = "5.3.0"
+version = "5.4.0"
 
 # Namespaces
 DAMS = CurieNamespace('dams', 'https://data.moex.com/dams/')
@@ -1947,6 +1947,7 @@ class LogicalEntity(ModelElement):
     lifecycle_status: Union[str, "LifecycleStatusEnum"] = None
     context_ref: Union[str, DomainContextElementId] = None
     solution_data_role: Union[str, "SolutionDataRoleEnum"] = None
+    title: str = None
     conceptual_entity_refs: Optional[Union[Union[str, ConceptualEntityElementId], list[Union[str, ConceptualEntityElementId]]]] = empty_list()
     solution_ref: Optional[Union[str, ITSolutionRegistryId]] = None
     attributes: Optional[Union[dict[Union[str, LogicalAttributeElementId], Union[dict, "LogicalAttribute"]], list[Union[dict, "LogicalAttribute"]]]] = empty_dict()
@@ -1990,6 +1991,11 @@ class LogicalEntity(ModelElement):
             self.MissingRequiredField("solution_data_role")
         if not isinstance(self.solution_data_role, SolutionDataRoleEnum):
             self.solution_data_role = SolutionDataRoleEnum(self.solution_data_role)
+
+        if self._is_empty(self.title):
+            self.MissingRequiredField("title")
+        if not isinstance(self.title, str):
+            self.title = str(self.title)
 
         if not isinstance(self.conceptual_entity_refs, list):
             self.conceptual_entity_refs = [self.conceptual_entity_refs] if self.conceptual_entity_refs is not None else []
@@ -2911,6 +2917,7 @@ class DataCarrier(TechnicalAsset):
     system_ref: Union[str, ITSystemRegistryId] = None
     description: str = None
     asset_kind: Union[str, "DataCarrierKindEnum"] = None
+    technology: str = None
     mapping_coverage_status: Optional[Union[str, "MappingCoverageStatusEnum"]] = None
     mapping_rationale: Optional[str] = None
     structure_ref: Optional[Union[str, DataStructureElementId]] = None
@@ -2929,6 +2936,11 @@ class DataCarrier(TechnicalAsset):
             self.MissingRequiredField("asset_kind")
         if not isinstance(self.asset_kind, DataCarrierKindEnum):
             self.asset_kind = DataCarrierKindEnum(self.asset_kind)
+
+        if self._is_empty(self.technology):
+            self.MissingRequiredField("technology")
+        if not isinstance(self.technology, str):
+            self.technology = str(self.technology)
 
         if self.mapping_coverage_status is not None and not isinstance(self.mapping_coverage_status, MappingCoverageStatusEnum):
             self.mapping_coverage_status = MappingCoverageStatusEnum(self.mapping_coverage_status)
@@ -6640,6 +6652,9 @@ slots.DomainContext_description = Slot(uri=DAMS.description, name="DomainContext
 slots.ConceptualProperty_genesis_kind = Slot(uri=DAMS.genesis_kind, name="ConceptualProperty_genesis_kind", curie=DAMS.curie('genesis_kind'),
                    model_uri=DAMS.ConceptualProperty_genesis_kind, domain=ConceptualProperty, range=Union[str, "GenesisKindEnum"])
 
+slots.LogicalEntity_title = Slot(uri=DAMS.title, name="LogicalEntity_title", curie=DAMS.curie('title'),
+                   model_uri=DAMS.LogicalEntity_title, domain=LogicalEntity, range=str)
+
 slots.LogicalAttribute_data_type_ref = Slot(uri=DAMS.data_type_ref, name="LogicalAttribute_data_type_ref", curie=DAMS.curie('data_type_ref'),
                    model_uri=DAMS.LogicalAttribute_data_type_ref, domain=LogicalAttribute, range=Optional[Union[str, DataTypeElementId]])
 
@@ -6693,6 +6708,9 @@ slots.TechnicalAsset_direction = Slot(uri=DAMS.direction, name="TechnicalAsset_d
 
 slots.DataCarrier_asset_kind = Slot(uri=DAMS.asset_kind, name="DataCarrier_asset_kind", curie=DAMS.curie('asset_kind'),
                    model_uri=DAMS.DataCarrier_asset_kind, domain=DataCarrier, range=Union[str, "DataCarrierKindEnum"])
+
+slots.DataCarrier_technology = Slot(uri=DAMS.technology, name="DataCarrier_technology", curie=DAMS.curie('technology'),
+                   model_uri=DAMS.DataCarrier_technology, domain=DataCarrier, range=str)
 
 slots.AccessPoint_asset_kind = Slot(uri=DAMS.asset_kind, name="AccessPoint_asset_kind", curie=DAMS.curie('asset_kind'),
                    model_uri=DAMS.AccessPoint_asset_kind, domain=AccessPoint, range=Union[str, "AccessPointKindEnum"])

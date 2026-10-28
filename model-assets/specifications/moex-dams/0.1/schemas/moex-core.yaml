@@ -173,6 +173,12 @@ classes:
       - conceptual_alignment_status
       - alignment_rationale
       - isolation_rationale
+    slot_usage:
+      title:
+        required: true
+        description: >
+          Русское бизнес-название в единственном числе (ADR-056 PR-8;
+          formerly LDM-002.c1 catalog slot_required).
 
   LogicalAttribute:
     is_a: ModelElement
