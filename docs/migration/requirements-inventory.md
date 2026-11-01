@@ -41,14 +41,14 @@ Body assess loader: `packages/specification-dams/src/moex_dams/rules/formal_chec
 |---|---|---|---|---|---|---|
 | GEN-001 | Идентичность и ответственность пакета | 7 `slot_required` | `runner` (+ cascade placeholder lint `GEN-001`) | A | LDM-02 (`api_version`); LDM-11 (`data_owner_ref`); identity already schema `required` (PR-8) | `formal_checks.py`; `test_formal_checks.py`; `test_cascade_resolver.py` |
 | GEN-002 | Привязка к ИТ-решению | 2 | `runner` | A | LDM-01 | `formal_checks.py` |
-| GEN-003 | Непустой состав модели | 1 | `runner` | A | LDM-01 (LogicalEntity floor = PR-10) | `formal_checks.py` |
+| GEN-003 | Непустой состав модели | 1 | `runner` | A | LDM-01 (≥1 `LogicalEntity` in PR-10c) | `formal_checks.py` |
 | GEN-004 | Носители данных связаны со смыслом | 1 | `runner` | D | Drop (duplicate of PDM-003 / PDM-02) | `formal_checks.py` |
 | LDM-001 | Контекст и роль данных | 3 | `runner` | D | Drop; slots become optional unless schema requires | `formal_checks.py` |
 | LDM-002 | Обозначение и ответственность сущности | 5 | `runner` (`definition_resolvable`, ownership `effective`) | A | LDM-04; LDM-11; `title` class `slot_usage` (PR-8); name/lifecycle already schema | `formal_checks.py`; `definitions.py`; `test_definition_resolver.py` |
 | LDM-003 | Классификация сущности | 4 | `runner` (`governance` `effective`) | A | LDM-09; LDM-10; drop entity_type/importance obligation PR-10 | `formal_checks.py`; cascade |
 | LDM-004 | Правило идентичности | 1 | `runner` | A | LDM-06 | `formal_checks.py` |
 | LDM-005 | Наличие характеристик | 1 | `runner` | A | LDM-05 | `formal_checks.py` |
-| LDM-006 | Связь с корпоративными понятиями | 1 | `runner` | B | Keep; **recode** in PR-10 (collides with backbone LDM-06) | `formal_checks.py`; ADR-025 / ADR-029 |
+| LDM-006 | Связь с корпоративными понятиями | 1 | `runner` | B | Recode to **LDM-101** in PR-10c | `formal_checks.py`; ADR-025 / ADR-029 |
 | LDM-007 | Семантическая включённость | 1 | `runner` | D | Drop | `formal_checks.py` |
 | LDM-008 | Полнота реализации зависимых концептов | 1 warning | `runner` | D | Drop (ADR-029 soft) | `formal_checks.py` |
 | ATR-001 | Основные свойства атрибута | deprecated (PR-9) | was `runner` | C | Schema `required` (PR-8); row kept until PR-10 | schema L1 |
@@ -58,7 +58,7 @@ Body assess loader: `packages/specification-dams/src/moex_dams/rules/formal_chec
 | ATR-006 | Представление атрибута (тип или домен) | 1 `custom` | `custom-skip` → `python` `DAMS-SEM-ATTR-TYPE` | C | Keep SEM rule; drop catalog row | `semantic_layer.py`; `test_semantic_layer.py` |
 | ATR-007 | concept_ref опционален | 1 `custom` | Negation / test contract | D | Drop; keep `test_missing_concept_ref_is_silent` | `test_semantic_layer.py` |
 | REF-001 | Концы связи | 4 | `runner` | C | Schema `required` on ends (PR-8 verify) + `references.py` | `formal_checks.py`; `references.py` |
-| REF-002 | Кардинальность связи | 1 | `runner` | B | Keep as recommended (PR-10) | `formal_checks.py` |
+| REF-002 | Кардинальность связи | 1 | `runner` | B | Keep code; `warning` / `recommended` (PR-10c) | `formal_checks.py` |
 | REF-003 | Тип логической связи | 1 warning | `runner` | A | LDM-07 / LDM-08 | `formal_checks.py` |
 | PDM-001 | Основные свойства носителя данных | deprecated (PR-9) | was `runner` | C | Schema + **INV-065** (`structure_ref`); row kept until PR-10 delete | `technical_assets.check_carrier_structure_ref` |
 | PDM-002 | Основные свойства узла схемы | deprecated (PR-9) | was `runner` | C | Schema `local_key` + **INV-066/067**; row kept until PR-10 delete | `data_structure.check_scalar_node_*` |
@@ -81,7 +81,7 @@ Body assess loader: `packages/specification-dams/src/moex_dams/rules/formal_chec
 | PDM-019 | Payload Message | 1 `custom` | `python` + **INV-064** | C | INV-064 | `data_structure.py` |
 | PDM-020 | Форма узла по node_kind | 1 `custom` | `python` + **INV-012 / INV-013** | C | INV-012/013 | `data_structure.py`; matrix |
 | CLS-001 | Независимость осей классификации | 1 warning | `runner` | D | Drop | `formal_checks.py` |
-| CLS-002 | Режим защиты данных | 1 warning | `runner` | D | Drop; slot deprecation separate (PR-10+) | `formal_checks.py` |
+| CLS-002 | Режим защиты данных | 1 warning | `runner` | D | Drop row (PR-10d); slot `security_classification` deprecated in PR-10e | `formal_checks.py` |
 | FLW-001 | Потоки через границы решений | 1 warning | `runner` | A | PDM-01 | `formal_checks.py` |
 | FLW-002 | integration_ref по снимку каталога | 1 `custom` | `python` + **INV-038** | C | INV-038 / `catalog_topology.py` | `catalog_topology.py`; `test_catalog_topology.py` |
 | FLW-003 | catalog_operation_ref в снимке | 1 `custom` | `python` + **INV-039** | C | INV-039 | same |
@@ -173,19 +173,32 @@ Note: conceptual catalog already uses `CM-*` codes that do not match the IT-solu
 | LDM-03 | Manual (`formal_checks: []`); hoped-for catalog slot | **Stays manual** (publication / process gate); no slot | Human-review only |
 | LDM-09 | Entity `slot_required` `data_class` only; no attribute slot | Cascade entity→attribute (inline-only); check effective on entity **or** every attribute | `runner` `ldm09_data_class` (PR-7d) |
 | LDM-12 | Manual; no logical source-system slot | Slot `source_system_refs` + cascade; warning then error | `runner` `ldm12_source_system` (PR-7d/f) |
-| LDM-13 | Manual; ИОД vocabulary unclear | Mapped to `sensitivity_term_refs`; **stays manual** until PR-10 | Human-review; executable later |
+| LDM-13 | Manual; ИОД vocabulary unclear | Mapped to `sensitivity_term_refs`; **stays manual** (ИОД vocabulary backlog) | Human-review |
 
 ## PR-9 outcome (Group C)
 
 - All 31 Group C rows are `lifecycle_status: deprecated` (25 IT-solution + 6 conceptual). Catalog still has **74** rows; export tests unchanged.
 - Runner skips them (PR-2). Enforcement stays in schema / Python / INV; new INV-065…067 cover former runner conditionals PDM-001.c5 / PDM-002.c2–c3.
 - Viewer (`apps/viewer`) hides `deprecated` / `superseded` / `rejected` by default (`requirements.show_inactive`).
-- **PR-10** deletes deprecated + superseded rows, rewrites matrix `requirement_refs`, cleans aliases / `requirement_code=`.
+- **PR-10f** deletes deprecated + superseded rows, rewrites matrix `requirement_refs`, cleans `requirement_code=`. Diagnostic codes stay stable.
 
 ## Implications for migration
 
 - PR-0 is documentation only: no catalog, schema, or `generated/` edits.
 - Do not mark rows `superseded` until PR-2 lands (otherwise assess still fires old checks).
 - Group C INV homes (PR-3) + PR-9 deprecation landed; physical deletion is PR-10.
-- When statements of the normative 21 rules change slightly, edit PR-4 rows only; disposition groups stay stable.
+- When statements of the normative **17** rules change slightly, edit backbone catalog rows only; disposition groups stay stable.
 - PR-7a is documentation only (amends ADR-023 / ADR-056); schema and cascade code follow in PR-7b…7f.
+
+## PR-10a outcome (audit decisions)
+
+Authoritative table: [ADR-056 D6](../adr/ADR-056-requirements-backbone.md). Measured 2026-11-01.
+
+| Item | Result |
+|---|---|
+| Backbone count | 17 (not 21) |
+| Four solution models, Group D if dropped now | −1 error (ATR-005 `esed`); −123 warnings (ATR-002 114, ATR-004 7, LDM-008 2) |
+| LDM-06 `key_attribute_refs` | 24/24 non-technical entities filled (all `surrogate`) |
+| LDM-07 `relationship_kind` | 31/31 relationships missing; all `draft` so check is silent |
+| CDM-01/02 on enterprise model | 82/82 descriptions; 104/104 kind+term |
+| Final catalog after PR-10f | 19 rows (15 backbone LDM/PDM + `LDM-101` + `REF-002` + 2 CDM) |

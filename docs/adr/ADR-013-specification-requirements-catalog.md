@@ -28,7 +28,9 @@ LinkML нет класса «Requirement catalog»; `class.rules` / `slot.requir
   (модуль `moex-requirements.yaml`).
 - Инстансы каталога — отдельный YAML под деревом DAMS (`requirements/…`),
   **не** вложены в solution `ModelPackage`.
-- Каждое требование: код `{SECTION}-{NN}` или `{SECTION}-{NNN}` (ADR-056),
+- Каждое требование: код `{SECTION}-{NN}` или `{SECTION}-{NNN}` (ADR-056).
+  Двузначные `NN` — нормативный хребет; трёхзначные `1NN` — локальные
+  расширения DAMS, которые не должны пересекаться с хребтом. Также:
   уровень (`it_solution` / `conceptual_model`), раздел
   (CDM/LDM/PDM/REF/ATR/FLW/CLS/GEN), опционально `obligation` /
   `responsible_role`, русская `statement` (норма для человека **без** сленга
