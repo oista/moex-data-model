@@ -135,3 +135,59 @@ def test_package_validate_matrix_ok() -> None:
 
     data = _load_matrix()
     assert validate_matrix(data, run_fixtures=False, gate_strict=True) == []
+
+
+def _catalog_diagnostic_tokens() -> set[str]:
+    tokens: set[str] = set()
+    req_dir = (
+        REPO
+        / "model-assets"
+        / "specifications"
+        / "moex-dams"
+        / "0.1"
+        / "requirements"
+    )
+    for name in (
+        "it-solution-requirements.yaml",
+        "conceptual-model-requirements.yaml",
+    ):
+        raw = yaml.safe_load((req_dir / name).read_text(encoding="utf-8"))
+        for req in raw.get("requirements") or []:
+            if not isinstance(req, dict):
+                continue
+            code = req.get("code")
+            if code:
+                tokens.add(str(code))
+            for check in req.get("formal_checks") or []:
+                if not isinstance(check, dict):
+                    continue
+                for key in ("check_id", "diagnostic_code"):
+                    val = check.get(key)
+                    if val:
+                        tokens.add(str(val))
+    return tokens
+
+
+def test_requirement_refs_resolve_to_catalog_or_alias() -> None:
+    """Every matrix requirement_refs token must exist in catalogs or aliases.
+
+    After ADR-056 PR-10f deletes deprecated catalog rows, aliases remain the
+    home for historical DAMS-REQ-* codes. This guard fails on dangling refs.
+    """
+    from moex_dams.rules.constraint_matrix import (
+        DIAGNOSTIC_CODE_ALIASES,
+        canonical_diagnostic_code,
+    )
+
+    known = _catalog_diagnostic_tokens()
+    for inv_id, aliases in DIAGNOSTIC_CODE_ALIASES.items():
+        known.update(aliases)
+        known.add(canonical_diagnostic_code(inv_id))
+    data = _load_matrix()
+    dangling: list[str] = []
+    for inv in data["invariants"]:
+        for ref in inv.get("requirement_refs") or []:
+            token = str(ref)
+            if token not in known:
+                dangling.append(f"{inv['id']}:{token}")
+    assert dangling == [], "dangling requirement_refs: " + ", ".join(dangling)
