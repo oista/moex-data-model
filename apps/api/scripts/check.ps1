@@ -38,6 +38,10 @@ try {
         -e (Join-Path $RepoRoot "apps/cli") `
         -e "$ApiRoot[dev,stage7]" -q
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    # Editable installs can float LinkML past the golden pin; re-constrain so
+    # in-suite ``/jobs`` compile regenerates the same contracts as compare-golden.
+    & $VenvPython -m pip install -q -r (Join-Path $RepoRoot "requirements-linkml.txt")
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     & $VenvPython -m pytest (Join-Path $ApiRoot "tests") -q
     exit $LASTEXITCODE
 } finally {

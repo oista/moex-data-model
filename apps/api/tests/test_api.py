@@ -151,40 +151,68 @@ def test_job_validate_idempotent(client: TestClient) -> None:
 
 
 def test_compile_job_lists_and_previews_artifacts(client: TestClient) -> None:
+    """Compile must not leave drifted contracts that break later publish-gate tests.
+
+    ``/jobs`` compile runs ``generate_contracts.py`` in the live repo. If the API
+    venv LinkML floats past the golden pin, rewritten contracts diverge from the
+    committed bundle index and ``test_publication_from_draft_idempotent`` fails
+    with refresh_bundle=False. Snapshot and restore the tracked contract files.
+    """
+    from moex_model_cli.bootstrap import find_repo_root
+
+    root = find_repo_root()
+    restore_paths = [
+        root
+        / "generated"
+        / "contracts"
+        / "moex-dams"
+        / "0.1"
+        / "src"
+        / "moex_dams_contracts"
+        / "__init__.py",
+        root / "generated" / "manifests" / "moex-dams-contracts.json",
+    ]
+    snapshots = {
+        path: path.read_bytes() for path in restore_paths if path.is_file()
+    }
     headers = {
         "X-Moex-Actor": "compiler",
         "Idempotency-Key": "idem-compile-art-1",
     }
-    r = client.post(
-        "/jobs",
-        json={
-            "kind": "compile",
-            "workspace_id": "ws-compile",
-            "implementation_id": "moex:implementation:mdm:0.1.0",
-            "source": "published",
-        },
-        headers=headers,
-    )
-    assert r.status_code == 200
-    assert r.json()["status"] == "succeeded"
-    job_id = r.json()["id"]
+    try:
+        r = client.post(
+            "/jobs",
+            json={
+                "kind": "compile",
+                "workspace_id": "ws-compile",
+                "implementation_id": "moex:implementation:mdm:0.1.0",
+                "source": "published",
+            },
+            headers=headers,
+        )
+        assert r.status_code == 200
+        assert r.json()["status"] == "succeeded"
+        job_id = r.json()["id"]
 
-    arts = client.get(
-        f"/jobs/{job_id}/artifacts",
-        headers={"X-Moex-Actor": "compiler"},
-    )
-    assert arts.status_code == 200
-    items = arts.json()
-    assert len(items) >= 1
-    assert items[0]["kind"] == "pydantic-contracts"
-    art_id = items[0]["id"]
+        arts = client.get(
+            f"/jobs/{job_id}/artifacts",
+            headers={"X-Moex-Actor": "compiler"},
+        )
+        assert arts.status_code == 200
+        items = arts.json()
+        assert len(items) >= 1
+        assert items[0]["kind"] == "pydantic-contracts"
+        art_id = items[0]["id"]
 
-    content = client.get(
-        f"/jobs/{job_id}/artifacts/{art_id}/content",
-        headers={"X-Moex-Actor": "compiler"},
-    )
-    assert content.status_code == 200
-    assert "directory:" in content.text or "class " in content.text
+        content = client.get(
+            f"/jobs/{job_id}/artifacts/{art_id}/content",
+            headers={"X-Moex-Actor": "compiler"},
+        )
+        assert content.status_code == 200
+        assert "directory:" in content.text or "class " in content.text
+    finally:
+        for path, data in snapshots.items():
+            path.write_bytes(data)
 
 
 def test_mdm_body(client: TestClient) -> None:
