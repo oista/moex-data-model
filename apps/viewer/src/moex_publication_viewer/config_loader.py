@@ -53,6 +53,17 @@ DEFAULT_DISPLAY_SETTINGS: list[dict[str, Any]] = [
         "group": "Navigation",
     },
     {
+        "key": "requirements.show_inactive",
+        "type": "bool",
+        "default": False,
+        "label": "Show inactive requirements",
+        "description": (
+            "Shows deprecated, superseded, and rejected requirements in the sidebar. "
+            "Search and deep links still open hidden items when this is off."
+        ),
+        "group": "Navigation",
+    },
+    {
         "key": "text.hide_adr_refs",
         "type": "bool",
         "default": False,

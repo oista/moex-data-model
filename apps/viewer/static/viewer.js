@@ -307,10 +307,61 @@
     return folder;
   }
 
+  const INACTIVE_REQUIREMENT_STATUSES = new Set([
+    "deprecated",
+    "superseded",
+    "rejected",
+  ]);
+
+  function isInactiveRequirement(node) {
+    if ((node?.attributes?.kind || "") !== "requirement") return false;
+    const status = String(node.attributes?.lifecycle_status || "")
+      .trim()
+      .toLowerCase();
+    return INACTIVE_REQUIREMENT_STATUSES.has(status);
+  }
+
+  function countRequirementLeaves(node) {
+    if (!node) return 0;
+    if ((node.attributes?.kind || "") === "requirement") return 1;
+    return (node.children || []).reduce(
+      (n, child) => n + countRequirementLeaves(child),
+      0
+    );
+  }
+
+  function filterInactiveRequirements(node) {
+    if (!node) return null;
+    if (isInactiveRequirement(node)) return null;
+    const kids = node.children || [];
+    if (!kids.length) return node;
+    const filteredKids = kids
+      .map((child) => filterInactiveRequirements(child))
+      .filter(Boolean);
+    if (
+      (node.attributes?.kind || "") === "group" &&
+      node.attributes?.group_style === "section_folder" &&
+      !filteredKids.length
+    ) {
+      return null;
+    }
+    const next = { ...node, children: filteredKids };
+    if (node.attributes && node.attributes.requirement_count != null) {
+      next.attributes = {
+        ...node.attributes,
+        requirement_count: countRequirementLeaves(next),
+        member_ids: filteredKids.map((c) => c.id),
+      };
+    }
+    return next;
+  }
+
   function filterExplorerItemsForPrefs(items) {
     const hidden = new Set(getPref("navigation.hidden_roots") || []);
     const showGlossaryFolder = getPref("glossary.show_overview_folder") !== false;
     const glossaryView = getPref("glossary.view") || "by-definition-site";
+    const showInactiveRequirements =
+      getPref("requirements.show_inactive") === true;
     return (items || [])
       .filter((g) => {
         const root = g.attributes?.section_root;
@@ -318,20 +369,30 @@
         return true;
       })
       .map((g) => {
-        if (g.attributes?.section_root !== "overview" && g.id !== "group:overview") {
-          return g;
+        let node = g;
+        if (
+          g.attributes?.section_root === "overview" ||
+          g.id === "group:overview"
+        ) {
+          let children = (g.children || []).filter((c) => {
+            if (c.id === "group:overview-glossary" && !showGlossaryFolder) {
+              return false;
+            }
+            return true;
+          });
+          children = children.map((c) =>
+            c.id === "group:overview-glossary"
+              ? filterGlossaryFolderChildren(c, glossaryView)
+              : c
+          );
+          node = { ...g, children };
         }
-        let children = (g.children || []).filter((c) => {
-          if (c.id === "group:overview-glossary" && !showGlossaryFolder) return false;
-          return true;
-        });
-        children = children.map((c) =>
-          c.id === "group:overview-glossary"
-            ? filterGlossaryFolderChildren(c, glossaryView)
-            : c
-        );
-        return { ...g, children };
-      });
+        if (!showInactiveRequirements) {
+          node = filterInactiveRequirements(node);
+        }
+        return node;
+      })
+      .filter(Boolean);
   }
 
   loadPrefs();

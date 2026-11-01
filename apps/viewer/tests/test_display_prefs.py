@@ -37,6 +37,9 @@ def test_viewer_js_prefs_store_contract():
         "glossary.show_relation_blocks",
         "text.hide_adr_refs",
         "navigation.hidden_roots",
+        "requirements.show_inactive",
+        "INACTIVE_REQUIREMENT_STATUSES",
+        "filterInactiveRequirements",
     ):
         assert needle in JS, needle
 
