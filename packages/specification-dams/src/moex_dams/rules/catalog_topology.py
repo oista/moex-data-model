@@ -94,7 +94,7 @@ def check_catalog_topology(
                 subject=str(path),
                 invariant_id="INV-038",
                 severity=DiagnosticSeverity.ERROR,
-                requirement_code="FLW-002",
+                requirement_code="INV-038",
             )
         ]
 
@@ -111,7 +111,7 @@ def check_catalog_topology(
                         subject=f.subject_ref or flow_id,
                         invariant_id="INV-038",
                         severity=DiagnosticSeverity.ERROR,
-                        requirement_code="FLW-002",
+                        requirement_code="INV-038",
                     )
                 )
             elif f.code == "stale_revision":
@@ -122,7 +122,7 @@ def check_catalog_topology(
                         subject=f.subject_ref or flow_id,
                         invariant_id="INV-040",
                         severity=DiagnosticSeverity.WARNING,
-                        requirement_code="FLW-004",
+                        requirement_code="INV-040",
                     )
                 )
             elif f.code == "unmapped_exchange" and "catalog_operation_ref" in f.message:
@@ -134,7 +134,7 @@ def check_catalog_topology(
                         subject=f.subject_ref or flow_id,
                         invariant_id="INV-039",
                         severity=DiagnosticSeverity.WARNING,
-                        requirement_code="FLW-003",
+                        requirement_code="INV-039",
                     )
                 )
 
@@ -167,7 +167,7 @@ def check_catalog_topology(
                                 subject=bid,
                                 invariant_id="INV-039",
                                 severity=DiagnosticSeverity.WARNING,
-                                requirement_code="FLW-003",
+                                requirement_code="INV-039",
                             )
                         )
 
@@ -187,7 +187,7 @@ def check_catalog_topology(
                     subject=bid,
                     invariant_id="INV-041",
                     severity=DiagnosticSeverity.WARNING,
-                    requirement_code="FLW-005",
+                    requirement_code="INV-041",
                 )
             )
 

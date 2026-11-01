@@ -474,23 +474,23 @@ def test_export_requirements_xlsx(
     captured = capsys.readouterr()
     assert code == 0, captured.out
     assert out.is_file()
-    # 57 legacy + 15 IT backbone + LDM-101 + 2 CDM (ADR-056 PR-10c)
-    assert "rows=75" in captured.out
+    # ADR-056 PR-10f: 19 active rows (15 LDM/PDM backbone + LDM-101 + REF-002 + 2 CDM)
+    assert "rows=19" in captured.out
     assert "catalogs=2" in captured.out
     wb = load_workbook(out)
     ws = wb.active
     assert ws.title == "requirements"
     codes = {ws.cell(row=r, column=5).value for r in range(2, ws.max_row + 1)}
-    assert "GEN-001" in codes
-    assert "CM-GEN-001" in codes
-    assert "PDM-001" in codes
     assert "LDM-01" in codes
     assert "LDM-101" in codes
+    assert "REF-002" in codes
+    assert "PDM-01" in codes
     assert "CDM-01" in codes
+    assert "GEN-001" not in codes
     statements = {
         ws.cell(row=r, column=9).value or "" for r in range(2, ws.max_row + 1)
     }
-    assert any("У пакета модели данных ИТ-решения" in s for s in statements)
+    assert any("Логическая модель данных" in s for s in statements)
 
 
 def test_ontology_report_json(

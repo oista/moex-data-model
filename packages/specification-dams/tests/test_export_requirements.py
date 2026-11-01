@@ -97,13 +97,15 @@ def test_real_catalogs_row_count() -> None:
     root = Path(__file__).resolve().parents[3]
     rows = collect_requirement_rows([IT_SOLUTION, CONCEPTUAL], root=root)
     codes = [r["code"] for r in rows]
-    assert "GEN-001" in codes
-    assert "CM-GEN-001" in codes
     assert "LDM-01" in codes
-    assert "CDM-01" in codes
-    # 57 legacy + 15 IT backbone + LDM-101 + 2 CDM = 75
-    assert len(rows) == 75
     assert "LDM-101" in codes
+    assert "REF-002" in codes
+    assert "CDM-01" in codes
+    assert "CDM-02" in codes
+    # ADR-056 PR-10f: inactive rows deleted — 15 backbone LDM/PDM + LDM-101 + REF-002 + 2 CDM
+    assert len(rows) == 19
+    assert "GEN-001" not in codes
+    assert "CM-GEN-001" not in codes
     assert rows == sorted(
         rows,
         key=lambda r: (

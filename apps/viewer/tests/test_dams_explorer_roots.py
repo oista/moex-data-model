@@ -177,12 +177,7 @@ def test_wrap_roots_loads_requirements_catalog():
     assert "group:requirements-section-CDM" in {c.id for c in conceptual_list.children}
     cm_leaves = [r for g in conceptual_list.children for r in (g.children or [])]
     cm_codes = {c.attributes.get("code") for c in cm_leaves}
-    assert "CDM-01" in cm_codes
-    assert "CDM-02" in cm_codes
-    assert "CM-GEN-001" in cm_codes
-    assert "CM-CON-001" in cm_codes
-    assert "CM-REF-001" in cm_codes
-    assert "CM-PDM-000" in cm_codes
+    assert cm_codes == {"CDM-01", "CDM-02"}
     assert all(
         c.attributes.get("requirement_level") == "conceptual_model"
         for c in cm_leaves
@@ -204,6 +199,7 @@ def test_wrap_roots_loads_requirements_catalog():
     assert cm_skel.attributes.get("file_name") == "conceptual-model.skeleton.yaml"
     cm_skel_text = cm_skel.attributes.get("text") or ""
     assert "conceptual_entities:" in cm_skel_text
+    assert "description:" in cm_skel_text
     assert "relationships:" in cm_skel_text
     assert ("physical" + "_objects:") not in cm_skel_text
 
@@ -217,10 +213,6 @@ def test_wrap_roots_loads_requirements_catalog():
         "group:requirements-section-LDM",
         "group:requirements-section-PDM",
         "group:requirements-section-REF",
-        "group:requirements-section-ATR",
-        "group:requirements-section-FLW",
-        "group:requirements-section-CLS",
-        "group:requirements-section-GEN",
     ]
     assert all(
         c.attributes.get("kind") == "group"
@@ -231,27 +223,27 @@ def test_wrap_roots_loads_requirements_catalog():
     assert by_section["LDM"].attributes.get("nav_glyph") == "ldm"
     assert by_section["PDM"].attributes.get("nav_glyph") == "pdm"
     assert by_section["REF"].attributes.get("nav_glyph") is None
-    assert by_section["GEN"].attributes.get("nav_glyph") is None
     req_leaves = [r for g in list_group.children for r in (g.children or [])]
     codes = {c.attributes.get("code") for c in req_leaves}
-    assert "GEN-001" in codes
-    assert "GEN-003" in codes
-    assert "GEN-004" in codes
-    assert "LDM-001" in codes
-    assert "LDM-01" in codes
-    assert "LDM-06" in codes
-    assert "LDM-006" in codes
-    assert "LDM-101" in codes
-    assert "LDM-007" in codes
-    assert "ATR-001" in codes
-    assert "ATR-005" in codes
-    assert "REF-001" in codes
-    assert "REF-002" in codes
-    assert "PDM-001" in codes
-    assert "PDM-01" in codes
-    assert "PDM-02" in codes
-    assert "PDM-003" in codes
-    assert "CLS-001" in codes
+    assert codes == {
+        "LDM-01",
+        "LDM-02",
+        "LDM-03",
+        "LDM-04",
+        "LDM-05",
+        "LDM-06",
+        "LDM-07",
+        "LDM-08",
+        "LDM-09",
+        "LDM-10",
+        "LDM-11",
+        "LDM-12",
+        "LDM-13",
+        "LDM-101",
+        "PDM-01",
+        "PDM-02",
+        "REF-002",
+    }
     assert all(c.attributes.get("kind") == "requirement" for c in req_leaves)
     assert all(c.attributes.get("statement") for c in req_leaves)
     # Manual backbone rows may have an empty formal_checks list (ADR-056).
@@ -271,7 +263,7 @@ def test_wrap_roots_loads_requirements_catalog():
     it_skel = it_by_title["Спецификация модели"]
     assert it_skel.attributes.get("file_name") == "it-solution-model.skeleton.yaml"
     skel_text = it_skel.attributes.get("text") or ""
-    assert "element_id:" in skel_text
+    assert "api_version:" in skel_text
     assert "logical_entities:" in skel_text
     assert "<required>" in skel_text or "<must-resolve-in-package>" in skel_text
 
@@ -328,14 +320,13 @@ def test_model_skeleton_projection_from_formal_checks():
     out = project_it_solution_model_skeleton(catalog)
     assert "requirements/minimal/it-solution-model.skeleton.yaml" in out
     text = out["requirements/minimal/it-solution-model.skeleton.yaml"]
-    assert "element_id:" in text
+    # Derived from active formal_checks / applies_to (PR-10f spine), not schema identity.
     assert "api_version:" in text
-    assert "model_version:" in text
+    assert "solution_ref:" in text
     assert "logical_entities:" in text
-    assert "context_ref:" in text
-    assert "solution_data_role:" in text
+    assert "governance_classification:" in text
+    assert "description:" in text
     assert "attributes:" in text
-    assert "owner_entity_ref:" in text
     assert "relationships:" in text
     assert "data_carriers:" in text
     assert ("physical" + "_objects:") not in text
@@ -350,8 +341,7 @@ def test_conceptual_model_skeleton_projection():
     out = project_conceptual_model_skeleton(catalog)
     assert "requirements/minimal/conceptual-model.skeleton.yaml" in out
     text = out["requirements/minimal/conceptual-model.skeleton.yaml"]
-    assert "element_id:" in text
-    assert "implementation_scope:" in text
     assert "conceptual_entities:" in text
+    assert "description:" in text
     assert "relationships:" in text
     assert ("physical" + "_objects:") not in text
