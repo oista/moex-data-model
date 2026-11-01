@@ -620,27 +620,6 @@ def _run_conditional(
             )
         return out
 
-    if template == "pdm001_structure_ref":
-        kind = str(el.get("asset_kind") or "")
-        if kind == "in_memory":
-            return out
-        if not _filled(el.get("structure_ref")):
-            out.append(
-                _diag(
-                    code=code,
-                    severity=sev,
-                    message=(
-                        f'DataCarrier "{subject}" missing required structure_ref '
-                        "(not required for in_memory)."
-                    ),
-                    subject=subject,
-                    remediation=rem,
-                    statement=statement,
-                    requirement_code=requirement_code,
-                )
-            )
-        return out
-
     if template == "ldm004_identity":
         entity_type = str(el.get("entity_type") or "")
         if entity_type == "technical":
@@ -989,47 +968,6 @@ def _run_conditional(
                 severity=sev,
                 message=(
                     f'Relationship "{subject}" missing cardinality: {", ".join(missing)}.'
-                ),
-                subject=subject,
-                remediation=rem,
-                statement=statement,
-                requirement_code=requirement_code,
-            )
-        )
-        return out
-
-    if template == "pdm002_scalar_type":
-        if str(el.get("node_kind") or "") != "scalar":
-            return out
-        if _filled(el.get("native_type")) or _filled(el.get("data_type_ref")):
-            return out
-        out.append(
-            _diag(
-                code=code,
-                severity=sev,
-                message=(
-                    f'SchemaNode "{subject}" (scalar) needs native_type or data_type_ref.'
-                ),
-                subject=subject,
-                remediation=rem,
-                statement=statement,
-                requirement_code=requirement_code,
-            )
-        )
-        return out
-
-    if template == "pdm002_scalar_required":
-        if str(el.get("node_kind") or "") != "scalar":
-            return out
-        if "required" in el:
-            return out
-        out.append(
-            _diag(
-                code=code,
-                severity=sev,
-                message=(
-                    f'SchemaNode "{subject}" (scalar) must declare required '
-                    "(nullable/presence semantics)."
                 ),
                 subject=subject,
                 remediation=rem,

@@ -620,13 +620,7 @@ requirements:
     severity: error
     remediation: Укажите технологию хранения/предоставления.
     diagnostic_code: DAMS-REQ-PDM-001.c4
-  - check_id: PDM-001.c5
-    kind: conditional_branch
-    target_class: DataCarrier
-    expression: pdm001_structure_ref
-    severity: error
-    remediation: Укажите structure_ref (ссылку на структуру/схему); для in_memory не требуется.
-    diagnostic_code: DAMS-REQ-PDM-001.c5
+  # PDM-001.c5 (structure_ref except in_memory) → INV-065 / check_carrier_structure_ref
   - check_id: PDM-001.c6
     kind: slot_required
     target_class: DataCarrier
@@ -644,7 +638,7 @@ requirements:
 - element_id: dams:req/PDM-002
   name: schema_node_core
   title: Основные свойства узла схемы
-  description: local_key; scalar needs type; required on scalar.
+  description: local_key; scalar type/required enforced by INV-066/067 (ADR-056 PR-9).
   lifecycle_status: approved
   code: PDM-002
   requirement_level: it_solution
@@ -662,20 +656,8 @@ requirements:
     severity: error
     remediation: Укажите local_key узла внутри DataStructure.
     diagnostic_code: DAMS-REQ-PDM-002.c1
-  - check_id: PDM-002.c2
-    kind: conditional_branch
-    target_class: SchemaNode
-    expression: pdm002_scalar_type
-    severity: error
-    remediation: Для scalar укажите native_type или data_type_ref.
-    diagnostic_code: DAMS-REQ-PDM-002.c2
-  - check_id: PDM-002.c3
-    kind: conditional_branch
-    target_class: SchemaNode
-    expression: pdm002_scalar_required
-    severity: error
-    remediation: Для scalar явно укажите required (nullable/presence semantics).
-    diagnostic_code: DAMS-REQ-PDM-002.c3
+  # PDM-002.c2 (scalar type) → INV-066 / check_scalar_node_type
+  # PDM-002.c3 (scalar required) → INV-067 / check_scalar_node_required
 - element_id: dams:req/PDM-003
   name: entity_physical_mapping
   title: Отображение сущности и носителя данных

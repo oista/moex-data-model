@@ -662,6 +662,82 @@ def check_message_refs_kinds(data: dict[str, Any]) -> list[Diagnostic]:
     return out
 
 
+def check_scalar_node_type(data: dict[str, Any]) -> list[Diagnostic]:
+    """INV-066: scalar SchemaNode needs native_type or data_type_ref (PDM-002.c2)."""
+    out: list[Diagnostic] = []
+    for struct in data.get("data_structures") or []:
+        if not isinstance(struct, dict):
+            continue
+        sid = str(struct.get("element_id") or struct.get("name") or "")
+        for node in struct.get("nodes") or []:
+            if not isinstance(node, dict):
+                continue
+            if str(node.get("node_kind") or "") != "scalar":
+                continue
+            local = str(node.get("local_key") or "")
+            subject = f"{sid}#{local}" if sid and local else (local or sid)
+            native = node.get("native_type")
+            dtype = node.get("data_type_ref")
+            native_ok = (
+                bool(str(native).strip()) if isinstance(native, str) else native is not None
+            )
+            dtype_ok = (
+                bool(str(dtype).strip()) if isinstance(dtype, str) else dtype is not None
+            )
+            if native_ok or dtype_ok:
+                continue
+            out.append(
+                _diag(
+                    code="DAMS-INV-066",
+                    invariant_id="INV-066",
+                    message=(
+                        f'SchemaNode "{subject}" (scalar) needs native_type or '
+                        "data_type_ref."
+                    ),
+                    subject=subject or None,
+                    remediation=(
+                        "Set native_type or data_type_ref on scalar nodes. INV-066."
+                    ),
+                    requirement_code="PDM-002",
+                )
+            )
+    return out
+
+
+def check_scalar_node_required(data: dict[str, Any]) -> list[Diagnostic]:
+    """INV-067: scalar SchemaNode must declare required (PDM-002.c3)."""
+    out: list[Diagnostic] = []
+    for struct in data.get("data_structures") or []:
+        if not isinstance(struct, dict):
+            continue
+        sid = str(struct.get("element_id") or struct.get("name") or "")
+        for node in struct.get("nodes") or []:
+            if not isinstance(node, dict):
+                continue
+            if str(node.get("node_kind") or "") != "scalar":
+                continue
+            if "required" in node:
+                continue
+            local = str(node.get("local_key") or "")
+            subject = f"{sid}#{local}" if sid and local else (local or sid)
+            out.append(
+                _diag(
+                    code="DAMS-INV-067",
+                    invariant_id="INV-067",
+                    message=(
+                        f'SchemaNode "{subject}" (scalar) must declare required '
+                        "(nullable/presence semantics)."
+                    ),
+                    subject=subject or None,
+                    remediation=(
+                        "Set required true/false on scalar SchemaNode. INV-067."
+                    ),
+                    requirement_code="PDM-002",
+                )
+            )
+    return out
+
+
 def check_message_payload(data: dict[str, Any]) -> list[Diagnostic]:
     """INV-064: Message payload_structure_ref → existing DataStructure (PDM-019)."""
     known = data_structure_ids(data)
@@ -740,4 +816,6 @@ def check_data_structures(data: dict[str, Any]) -> tuple[Diagnostic, ...]:
     diags.extend(check_field_mapping_structure_ends(data))
     diags.extend(check_message_refs_kinds(data))
     diags.extend(check_message_payload(data))
+    diags.extend(check_scalar_node_type(data))
+    diags.extend(check_scalar_node_required(data))
     return tuple(diags)

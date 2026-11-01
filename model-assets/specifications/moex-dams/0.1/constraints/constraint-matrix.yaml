@@ -1651,6 +1651,80 @@ invariants:
     L1: not-applicable
     L2: implemented
     L3: not-applicable
+- id: INV-065
+  title: DataCarrier.structure_ref required (except in_memory)
+  statement: >
+    У DataCarrier с asset_kind ≠ in_memory задан structure_ref на структуру данных.
+    Для in_memory structure_ref не требуется.
+  source: PDM-001.c5; ADR-056 PR-9
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-056
+  requirement_refs: [DAMS-REQ-PDM-001.c5]
+  notes: 'ADR-056 PR-9: re-homed from formal_checks pdm001_structure_ref.'
+  implementation:
+    dams_validator: moex_dams.rules.technical_assets.check_carrier_structure_ref
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-065.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-065.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-066
+  title: Scalar SchemaNode has type
+  statement: >
+    У SchemaNode с node_kind=scalar задан native_type или data_type_ref.
+  source: PDM-002.c2; ADR-056 PR-9
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-056
+  requirement_refs: [DAMS-REQ-PDM-002.c2]
+  notes: 'ADR-056 PR-9: re-homed from formal_checks pdm002_scalar_type.'
+  implementation:
+    dams_validator: moex_dams.rules.data_structure.check_scalar_node_type
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-066.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-066.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
+- id: INV-067
+  title: Scalar SchemaNode declares required
+  statement: >
+    У SchemaNode с node_kind=scalar явно задан слот required
+    (nullable/presence semantics).
+  source: PDM-002.c3; ADR-056 PR-9
+  source_status: aligned
+  scope: moex-dams
+  levels: [L2]
+  severity: error
+  status: implemented
+  adr_ref: ADR-056
+  requirement_refs: [DAMS-REQ-PDM-002.c3]
+  notes: 'ADR-056 PR-9: re-homed from formal_checks pdm002_scalar_required.'
+  implementation:
+    dams_validator: moex_dams.rules.data_structure.check_scalar_node_required
+  tests:
+    l2_valid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-067.valid.yaml
+    l2_invalid:
+    - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-067.invalid.yaml
+  level_status:
+    L1: not-applicable
+    L2: implemented
+    L3: not-applicable
 invariant_id_registry:
 - INV-001
 - INV-002
@@ -1716,3 +1790,6 @@ invariant_id_registry:
 - INV-062
 - INV-063
 - INV-064
+- INV-065
+- INV-066
+- INV-067

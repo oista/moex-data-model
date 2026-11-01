@@ -1,0 +1,10 @@
+element_id: dams:model/inv065
+implementation_scope: enterprise
+data_carriers:
+- element_id: dams:carrier/inv065/table
+  name: table
+  asset_kind: relational_table
+  asset_namespace: ns
+  qualified_name: table
+  technology: fixture
+  lifecycle_status: active
