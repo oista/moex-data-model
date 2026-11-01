@@ -10,10 +10,7 @@ requirements:
   code: GEN-001
   requirement_level: it_solution
   requirement_section: GEN
-  statement: У пакета модели данных ИТ-решения должны быть стабильный идентификатор, понятное название, описание, версия и
-    статус жизненного цикла. Должен быть указан ответственный за данные (владелец данных) либо явно описано, от какого объекта
-    наследуется эта ответственность (например от ИТ-решения или доменного контекста). Локальное уточнение ответственности
-    поверх правила наследования допускается.
+  statement: У пакета модели данных ИТ-решения должны быть стабильный идентификатор, понятное название, описание, версия и статус жизненного цикла. Должен быть указан ответственный за данные (владелец данных) либо явно описано, от какого объекта наследуется эта ответственность (например от ИТ-решения или доменного контекста). Локальное уточнение ответственности поверх правила наследования допускается.
   applies_to:
     applicability_id: appl:GEN-001
     applies_target_class: ModelPackage
@@ -68,8 +65,7 @@ requirements:
     target_slot: data_owner_ref
     severity: error
     diagnostic_code: DAMS-REQ-GEN-001.c7
-    remediation: Укажите data_owner_ref на пакете модели (корень containment cascade, ADR-023). ownership_inheritance_rule
-      — только пояснение, не замена владельца.
+    remediation: Укажите data_owner_ref на пакете модели (корень containment cascade, ADR-023). ownership_inheritance_rule — только пояснение, не замена владельца.
   superseded_by: dams:req/LDM-02
 - element_id: dams:req/GEN-002
   name: solution_binding
@@ -79,8 +75,7 @@ requirements:
   code: GEN-002
   requirement_level: it_solution
   requirement_section: GEN
-  statement: Пакет модели конкретного ИТ-решения должен ссылаться на одно ИТ-решение и быть помечен как модель уровня решения,
-    а не как общекорпоративная концептуальная модель.
+  statement: Пакет модели конкретного ИТ-решения должен ссылаться на одно ИТ-решение и быть помечен как модель уровня решения, а не как общекорпоративная концептуальная модель.
   applies_to:
     applicability_id: appl:GEN-002
     applies_target_class: ModelPackage
@@ -108,8 +103,7 @@ requirements:
   code: GEN-003
   requirement_level: it_solution
   requirement_section: GEN
-  statement: Пакет модели ИТ-решения должен содержать хотя бы одну логическую сущность или хотя бы один технический актив
-    (носитель данных, точка доступа, контейнер или исполняемый актив). Пустой пакет не допускается.
+  statement: Пакет модели ИТ-решения должен содержать хотя бы одну логическую сущность или хотя бы один технический актив (носитель данных, точка доступа, контейнер или исполняемый актив). Пустой пакет не допускается.
   applies_to:
     applicability_id: appl:GEN-003
     applies_target_class: ModelPackage
@@ -157,8 +151,7 @@ requirements:
     expression: data_carrying_entity_mapping_or_technical
     severity: error
     diagnostic_code: DAMS-REQ-GEN-004.c1
-    remediation: 'Добавьте Mapping типа entity_physical на логическую сущность либо укажите mapping_coverage_status: technical-only
-      и mapping_rationale.'
+    remediation: 'Добавьте Mapping типа entity_physical на логическую сущность либо укажите mapping_coverage_status: technical-only и mapping_rationale.'
 - element_id: dams:req/LDM-001
   name: logical_entity_context
   title: Контекст и роль данных
@@ -168,8 +161,7 @@ requirements:
   code: LDM-001
   requirement_level: it_solution
   requirement_section: LDM
-  statement: Каждая логическая сущность должна быть отнесена к доменному контексту внутри пакета и к роли данных решения (создаёт/хранит,
-    потребляет или посредничает).
+  statement: Каждая логическая сущность должна быть отнесена к доменному контексту внутри пакета и к роли данных решения (создаёт/хранит, потребляет или посредничает).
   applies_to:
     applicability_id: appl:LDM-001
     applies_target_class: LogicalEntity
@@ -204,9 +196,7 @@ requirements:
   code: LDM-002
   requirement_level: it_solution
   requirement_section: LDM
-  statement: У логической сущности должны быть русское бизнес-название, техническое имя, разрешимое эталонное определение
-    (own description либо наследование по ADR-025), статус жизненного цикла и ответственный за данные либо наследование ответственности
-    (ADR-023).
+  statement: У логической сущности должны быть русское бизнес-название, техническое имя, разрешимое эталонное определение (own description либо наследование по ADR-025), статус жизненного цикла и ответственный за данные либо наследование ответственности (ADR-023).
   applies_to:
     applicability_id: appl:LDM-002
     applies_target_class: LogicalEntity
@@ -259,8 +249,7 @@ requirements:
   code: LDM-003
   requirement_level: it_solution
   requirement_section: LDM
-  statement: Для логической сущности должны быть независимо указаны архитектурная роль, природа данных, важность для бизнеса
-    и базовая классификация управления доступом/чувствительностью. Эти признаки не подменяют друг друга.
+  statement: Для логической сущности должны быть независимо указаны архитектурная роль, природа данных, важность для бизнеса и базовая классификация управления доступом/чувствительностью. Эти признаки не подменяют друг друга.
   applies_to:
     applicability_id: appl:LDM-003
     applies_target_class: LogicalEntity
@@ -303,9 +292,7 @@ requirements:
   code: LDM-004
   requirement_level: it_solution
   requirement_section: LDM
-  statement: Для логической сущности должно быть описано, по каким деловым признакам два экземпляра считаются одним и тем
-    же объектом, и указан характер ключа (натуральный, составной, внешний, локальный, суррогатный, производный) и/или состав
-    ключевых атрибутов. Одного технического суррогатного ключа без делового правила для нетехнической сущности недостаточно.
+  statement: Для логической сущности должно быть описано, по каким деловым признакам два экземпляра считаются одним и тем же объектом, и указан характер ключа (натуральный, составной, внешний, локальный, суррогатный, производный) и/или состав ключевых атрибутов. Одного технического суррогатного ключа без делового правила для нетехнической сущности недостаточно.
   applies_to:
     applicability_id: appl:LDM-004
     applies_target_class: LogicalEntity
@@ -316,8 +303,7 @@ requirements:
     expression: ldm004_identity
     severity: error
     diagnostic_code: DAMS-REQ-LDM-004.c1
-    remediation: Добавьте identity_rule и business_key_kind и/или key_attribute_refs. Для нетехнической сущности одного surrogate
-      недостаточно.
+    remediation: Добавьте identity_rule и business_key_kind и/или key_attribute_refs. Для нетехнической сущности одного surrogate недостаточно.
   superseded_by: dams:req/LDM-06
 - element_id: dams:req/LDM-005
   name: logical_entity_has_attributes
@@ -327,8 +313,7 @@ requirements:
   code: LDM-005
   requirement_level: it_solution
   requirement_section: LDM
-  statement: У логической сущности должен быть хотя бы один логический атрибут. Исключение — техническая сущность с письменным
-    обоснованием, почему характеристик нет.
+  statement: У логической сущности должен быть хотя бы один логический атрибут. Исключение — техническая сущность с письменным обоснованием, почему характеристик нет.
   applies_to:
     applicability_id: appl:LDM-005
     applies_target_class: LogicalEntity
@@ -349,9 +334,7 @@ requirements:
   code: LDM-006
   requirement_level: it_solution
   requirement_section: LDM
-  statement: 'Логическая сущность должна быть прослеживаемо связана с корпоративным понятием либо иметь допустимый статус
-    выравнивания с обоснованием: «ожидает решения», «только локальный смысл» или «не применимо» (только для технических сущностей).
-    Ссылка на корпоративное понятие и пояснение характера реализации могут присутствовать одновременно.'
+  statement: 'Логическая сущность должна быть прослеживаемо связана с корпоративным понятием либо иметь допустимый статус выравнивания с обоснованием: «ожидает решения», «только локальный смысл» или «не применимо» (только для технических сущностей). Ссылка на корпоративное понятие и пояснение характера реализации могут присутствовать одновременно.'
   applies_to:
     applicability_id: appl:LDM-006
     applies_target_class: LogicalEntity
@@ -362,8 +345,7 @@ requirements:
     expression: ldm006_alignment
     severity: error
     diagnostic_code: DAMS-REQ-LDM-006.c1
-    remediation: Укажите conceptual_entity_refs (aligned) либо conceptual_alignment_status с alignment_rationale (pending/local-only;
-      not-applicable только для technical).
+    remediation: Укажите conceptual_entity_refs (aligned) либо conceptual_alignment_status с alignment_rationale (pending/local-only; not-applicable только для technical).
 - element_id: dams:req/LDM-007
   name: semantic_inclusion
   title: Семантическая включённость
@@ -372,9 +354,7 @@ requirements:
   code: LDM-007
   requirement_level: it_solution
   requirement_section: LDM
-  statement: 'Нетехническая логическая сущность не должна быть изолированной: должна быть связь с другой логической сущностью,
-    либо выравнивание/реализация корпоративного понятия, либо письменное обоснование изоляции. Одного только отображения на
-    таблицу/API недостаточно, чтобы считать сущность включённой в смысловую модель.'
+  statement: 'Нетехническая логическая сущность не должна быть изолированной: должна быть связь с другой логической сущностью, либо выравнивание/реализация корпоративного понятия, либо письменное обоснование изоляции. Одного только отображения на таблицу/API недостаточно, чтобы считать сущность включённой в смысловую модель.'
   applies_to:
     applicability_id: appl:LDM-007
     applies_target_class: LogicalEntity
@@ -385,8 +365,7 @@ requirements:
     expression: ldm007_semantic_inclusion
     severity: error
     diagnostic_code: DAMS-REQ-LDM-007.c1
-    remediation: Добавьте связь с другой сущностью, conceptual alignment/realizes или isolation_rationale. Physical mapping
-      сам по себе не достаточен.
+    remediation: Добавьте связь с другой сущностью, conceptual alignment/realizes или isolation_rationale. Physical mapping сам по себе не достаточен.
 - element_id: dams:req/LDM-008
   name: realization_completeness
   title: Полнота реализации зависимых концептов
@@ -420,13 +399,12 @@ requirements:
 - element_id: dams:req/ATR-001
   name: logical_attribute_core
   title: Основные свойства атрибута
-  description: owner, type, required, multivalued.
-  lifecycle_status: approved
+  description: 'Enforcement: LinkML required slots on LogicalAttribute (PR-8). Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: ATR-001
   requirement_level: it_solution
   requirement_section: ATR
-  statement: У логического атрибута должны быть указаны владеющая сущность, представление типа (data_type_ref и/или value_domain_ref),
-    обязательность заполнения и признак множественности.
+  statement: У логического атрибута должны быть указаны владеющая сущность, представление типа (data_type_ref и/или value_domain_ref), обязательность заполнения и признак множественности.
   applies_to:
     applicability_id: appl:ATR-001
     applies_target_class: LogicalAttribute
@@ -467,8 +445,7 @@ requirements:
   code: ATR-002
   requirement_level: it_solution
   requirement_section: ATR
-  statement: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не
-    включайте в имя тип конкретной базы данных, длину поля или название таблицы.
+  statement: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.
   applies_to:
     applicability_id: appl:ATR-002
     applies_target_class: LogicalAttribute
@@ -488,10 +465,7 @@ requirements:
   code: ATR-005
   requirement_level: it_solution
   requirement_section: ATR
-  statement: Для логического атрибута, который считается подлежащим физической реализации в этом пакете (не помечен как планируемый,
-    производный, унаследованный, неприменимый или только технический), должно быть задано соответствие физическому полю и/или
-    правило вычисления, либо письменное обоснование отсутствия. Поле и правило вычисления могут быть указаны вместе. Статус
-    «планируется» требует обоснования и не должен быть постоянным обходом для уже активных элементов.
+  statement: Для логического атрибута, который считается подлежащим физической реализации в этом пакете (не помечен как планируемый, производный, унаследованный, неприменимый или только технический), должно быть задано соответствие физическому полю и/или правило вычисления, либо письменное обоснование отсутствия. Поле и правило вычисления могут быть указаны вместе. Статус «планируется» требует обоснования и не должен быть постоянным обходом для уже активных элементов.
   applies_to:
     applicability_id: appl:ATR-005
     applies_target_class: LogicalAttribute
@@ -502,27 +476,24 @@ requirements:
     expression: atr005_mapping_coverage
     severity: error
     diagnostic_code: DAMS-REQ-ATR-005.c1
-    remediation: Добавьте field_mapping и/или derived_expression, либо укажите mapping_coverage_status (planned/derived/inherited/technical-only/not-applicable)
-      с mapping_rationale при необходимости.
+    remediation: Добавьте field_mapping и/или derived_expression, либо укажите mapping_coverage_status (planned/derived/inherited/technical-only/not-applicable) с mapping_rationale при необходимости.
   - check_id: ATR-005.c2
     kind: conditional_branch
     target_class: LogicalAttribute
     expression: planned_on_active_warning
     severity: warning
     diagnostic_code: DAMS-REQ-ATR-005.c2
-    remediation: Для активных элементов замените planned на фактическое mapping или повысьте зрелость статуса. planned не
-      постоянный обход.
+    remediation: Для активных элементов замените planned на фактическое mapping или повысьте зрелость статуса. planned не постоянный обход.
 - element_id: dams:req/REF-001
   name: relationship_endpoints
   title: Концы связи
-  description: source/target refs resolve.
-  lifecycle_status: approved
+  description: 'Enforcement: LinkML required ends + references.py (DAMS-REF-005/006). Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   implementation_status: not_started
   code: REF-001
   requirement_level: it_solution
   requirement_section: REF
-  statement: У логической связи должны быть явно указаны исходная и целевая сущности, и обе ссылки должны указывать на сущности
-    того же пакета.
+  statement: У логической связи должны быть явно указаны исходная и целевая сущности, и обе ссылки должны указывать на сущности того же пакета.
   applies_to:
     applicability_id: appl:REF-001
     applies_target_class: Relationship
@@ -563,8 +534,7 @@ requirements:
   code: REF-002
   requirement_level: it_solution
   requirement_section: REF
-  statement: У активной логической связи должны быть заданы минимальная и максимальная кардинальность с обеих сторон. Для
-    черновика допускается незаполненность только при соответствующем статусе жизненного цикла и кратком обосновании.
+  statement: У активной логической связи должны быть заданы минимальная и максимальная кардинальность с обеих сторон. Для черновика допускается незаполненность только при соответствующем статусе жизненного цикла и кратком обосновании.
   applies_to:
     applicability_id: appl:REF-002
     applies_target_class: Relationship
@@ -579,15 +549,13 @@ requirements:
 - element_id: dams:req/PDM-001
   name: data_carrier_core
   title: Основные свойства носителя данных
-  description: system, asset_kind, namespace, name, technology, structure, lifecycle.
-  lifecycle_status: approved
+  description: 'Enforcement: LinkML required/slot_usage (system_ref, asset_kind, …); structure_ref → INV-065. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   implementation_status: in_progress
   code: PDM-001
   requirement_level: it_solution
   requirement_section: PDM
-  statement: У носителя данных (DataCarrier) должны быть указаны ИТ-система, вид актива (asset_kind), пространство имён (asset_namespace),
-    квалифицированное имя, технология и ссылка на структуру (structure_ref; не требуется для in_memory), а также статус жизненного
-    цикла.
+  statement: У носителя данных (DataCarrier) должны быть указаны ИТ-система, вид актива (asset_kind), пространство имён (asset_namespace), квалифицированное имя, технология и ссылка на структуру (structure_ref; не требуется для in_memory), а также статус жизненного цикла.
   applies_to:
     applicability_id: appl:PDM-001
     applies_target_class: DataCarrier
@@ -620,13 +588,7 @@ requirements:
     severity: error
     remediation: Укажите технологию хранения/предоставления.
     diagnostic_code: DAMS-REQ-PDM-001.c4
-  - check_id: PDM-001.c5
-    kind: conditional_branch
-    target_class: DataCarrier
-    expression: pdm001_structure_ref
-    severity: error
-    remediation: Укажите structure_ref (ссылку на структуру/схему); для in_memory не требуется.
-    diagnostic_code: DAMS-REQ-PDM-001.c5
+  # PDM-001.c5 (structure_ref except in_memory) → INV-065 / check_carrier_structure_ref
   - check_id: PDM-001.c6
     kind: slot_required
     target_class: DataCarrier
@@ -644,13 +606,12 @@ requirements:
 - element_id: dams:req/PDM-002
   name: schema_node_core
   title: Основные свойства узла схемы
-  description: local_key; scalar needs type; required on scalar.
-  lifecycle_status: approved
+  description: 'Enforcement: LinkML local_key required; scalar type → INV-066; scalar required → INV-067. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-002
   requirement_level: it_solution
   requirement_section: PDM
-  statement: У узла схемы (SchemaNode) должен быть локальный ключ (local_key). Для скалярного узла должны быть указаны нативный
-    тип или ссылка на DataType, а также семантика обязательности (слот required).
+  statement: У узла схемы (SchemaNode) должен быть локальный ключ (local_key). Для скалярного узла должны быть указаны нативный тип или ссылка на DataType, а также семантика обязательности (слот required).
   applies_to:
     applicability_id: appl:PDM-002
     applies_target_class: SchemaNode
@@ -662,20 +623,8 @@ requirements:
     severity: error
     remediation: Укажите local_key узла внутри DataStructure.
     diagnostic_code: DAMS-REQ-PDM-002.c1
-  - check_id: PDM-002.c2
-    kind: conditional_branch
-    target_class: SchemaNode
-    expression: pdm002_scalar_type
-    severity: error
-    remediation: Для scalar укажите native_type или data_type_ref.
-    diagnostic_code: DAMS-REQ-PDM-002.c2
-  - check_id: PDM-002.c3
-    kind: conditional_branch
-    target_class: SchemaNode
-    expression: pdm002_scalar_required
-    severity: error
-    remediation: Для scalar явно укажите required (nullable/presence semantics).
-    diagnostic_code: DAMS-REQ-PDM-002.c3
+  # PDM-002.c2 (scalar type) → INV-066 / check_scalar_node_type
+  # PDM-002.c3 (scalar required) → INV-067 / check_scalar_node_required
 - element_id: dams:req/PDM-003
   name: entity_physical_mapping
   title: Отображение сущности и носителя данных
@@ -684,9 +633,7 @@ requirements:
   code: PDM-003
   requirement_level: it_solution
   requirement_section: PDM
-  statement: Для носителя данных (DataCarrier), который несёт данные и не помечен как только технический, должно существовать
-    явное отображение уровня сущности на одну или несколько логических сущностей. Наличие отображений отдельных полей само
-    по себе не засчитывается как доказательство на уровне носителя.
+  statement: Для носителя данных (DataCarrier), который несёт данные и не помечен как только технический, должно существовать явное отображение уровня сущности на одну или несколько логических сущностей. Наличие отображений отдельных полей само по себе не засчитывается как доказательство на уровне носителя.
   applies_to:
     applicability_id: appl:PDM-003
     applies_target_class: DataCarrier
@@ -706,8 +653,7 @@ requirements:
     expression: pdm003_entity_physical
     severity: error
     diagnostic_code: DAMS-REQ-PDM-003.c1
-    remediation: Добавьте Mapping с mapping_type entity_physical между этим носителем и ≥1 логической сущностью, либо technical-only
-      + mapping_rationale.
+    remediation: Добавьте Mapping с mapping_type entity_physical между этим носителем и ≥1 логической сущностью, либо technical-only + mapping_rationale.
   superseded_by: dams:req/PDM-02
 - element_id: dams:req/PDM-004
   name: field_attribute_mapping
@@ -717,8 +663,7 @@ requirements:
   code: PDM-004
   requirement_level: it_solution
   requirement_section: PDM
-  statement: Для скалярного узла схемы, не помеченного как только технический, должно быть отображение на логический атрибут
-    и/или правило преобразования, либо письменное исключение. Концы field_mapping — LogicalAttribute и structure_id#local_key.
+  statement: Для скалярного узла схемы, не помеченного как только технический, должно быть отображение на логический атрибут и/или правило преобразования, либо письменное исключение. Концы field_mapping — LogicalAttribute и structure_id#local_key.
   applies_to:
     applicability_id: appl:PDM-004
     applies_target_class: SchemaNode
@@ -734,13 +679,12 @@ requirements:
 - element_id: dams:req/PDM-005
   name: technical_asset_unique_key
   title: Уникальность ключа технического актива
-  description: (asset_namespace, qualified_name) unique across collections.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-059 / technical_assets.check_unique_asset_keys. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-005
   requirement_level: it_solution
   requirement_section: PDM
-  statement: Пара (asset_namespace, qualified_name) должна быть уникальна среди всех технических активов пакета (data_carriers,
-    access_points, data_containers, execution_assets).
+  statement: Пара (asset_namespace, qualified_name) должна быть уникальна среди всех технических активов пакета (data_carriers, access_points, data_containers, execution_assets).
   applies_to:
     applicability_id: appl:PDM-005
     applies_target_class: TechnicalAsset
@@ -755,13 +699,12 @@ requirements:
 - element_id: dams:req/PDM-006
   name: parent_ref_acyclic
   title: Иерархия parent_ref без циклов
-  description: parent_ref must not self-ref or cycle.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-047 / technical_assets.check_parent_ref_cycles. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-006
   requirement_level: it_solution
   requirement_section: PDM
-  statement: Ссылка parent_ref технического актива не должна указывать на сам актив и не должна образовывать циклы в контейнерной
-    иерархии.
+  statement: Ссылка parent_ref технического актива не должна указывать на сам актив и не должна образовывать циклы в контейнерной иерархии.
   applies_to:
     applicability_id: appl:PDM-006
     applies_target_class: TechnicalAsset
@@ -776,13 +719,12 @@ requirements:
 - element_id: dams:req/PDM-007
   name: asset_kind_allowlist
   title: Допустимые asset_kind по подклассу
-  description: asset_kind must match subclass enum.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-060 / technical_assets.check_asset_kind_allowlists. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-007
   requirement_level: it_solution
   requirement_section: PDM
-  statement: Значение asset_kind должно принадлежать перечислению соответствующего подкласса TechnicalAsset (DataCarrierKindEnum,
-    AccessPointKindEnum, DataContainerKindEnum или ExecutionAssetKindEnum).
+  statement: Значение asset_kind должно принадлежать перечислению соответствующего подкласса TechnicalAsset (DataCarrierKindEnum, AccessPointKindEnum, DataContainerKindEnum или ExecutionAssetKindEnum).
   applies_to:
     applicability_id: appl:PDM-007
     applies_target_class: TechnicalAsset
@@ -797,8 +739,8 @@ requirements:
 - element_id: dams:req/PDM-008
   name: direction_forbidden_on_containers
   title: Запрет direction для контейнеров и исполнения
-  description: direction forbidden on DataContainer and ExecutionAsset.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-018 / technical_assets.check_direction_forbidden. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-008
   requirement_level: it_solution
   requirement_section: PDM
@@ -817,8 +759,8 @@ requirements:
 - element_id: dams:req/PDM-009
   name: mapping_endpoint_types
   title: Типы концов Mapping
-  description: Direction-aware Mapping endpoint class checks (ADR-046).
-  lifecycle_status: approved
+  description: 'Enforcement: INV-033…036 / technical_assets.check_mapping_endpoint_types (+ data_structure). Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-009
   requirement_level: it_solution
   requirement_section: PDM
@@ -843,13 +785,12 @@ requirements:
 - element_id: dams:req/PDM-010
   name: carrier_refs_data_carrier_only
   title: carrier_refs только на DataCarrier
-  description: Bindings must not point carrier_refs at containers.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-061 / technical_assets.check_carrier_refs_are_data_carriers. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-010
   requirement_level: it_solution
   requirement_section: PDM
-  statement: В DataFlowEntityBinding и SelectedEntity слот carrier_refs должен ссылаться только на идентификаторы DataCarrier,
-    а не на DataContainer, AccessPoint или ExecutionAsset.
+  statement: В DataFlowEntityBinding и SelectedEntity слот carrier_refs должен ссылаться только на идентификаторы DataCarrier, а не на DataContainer, AccessPoint или ExecutionAsset.
   applies_to:
     applicability_id: appl:PDM-010
     applies_target_class: ModelPackage
@@ -864,8 +805,8 @@ requirements:
 - element_id: dams:req/PDM-011
   name: operation_requires_interface
   title: operation требует interface_ref
-  description: AccessPoint operation must set interface_ref.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-016 / technical_assets.check_operation_interface_ref. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-011
   requirement_level: it_solution
   requirement_section: PDM
@@ -884,8 +825,8 @@ requirements:
 - element_id: dams:req/PDM-012
   name: in_memory_no_location
   title: in_memory без location
-  description: in_memory must not set location_uri/region.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-015 / technical_assets.check_in_memory_location. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-012
   requirement_level: it_solution
   requirement_section: PDM
@@ -904,8 +845,8 @@ requirements:
 - element_id: dams:req/PDM-013
   name: schema_node_local_key_unique
   title: Уникальность local_key в DataStructure
-  description: local_key unique within DataStructure.nodes.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-022 / data_structure.check_local_key_unique. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-013
   requirement_level: it_solution
   requirement_section: PDM
@@ -924,13 +865,12 @@ requirements:
 - element_id: dams:req/PDM-014
   name: schema_node_acyclic
   title: Ацикличность рёбер SchemaNode
-  description: children/item_node must form a tree.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-020 / data_structure.check_node_edge_cycles. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-014
   requirement_level: it_solution
   requirement_section: PDM
-  statement: Рёбра children и item_node внутри DataStructure не должны образовывать циклы. Рекурсия схемы моделируется через
-    node_kind=reference.
+  statement: Рёбра children и item_node внутри DataStructure не должны образовывать циклы. Рекурсия схемы моделируется через node_kind=reference.
   applies_to:
     applicability_id: appl:PDM-014
     applies_target_class: DataStructure
@@ -945,8 +885,8 @@ requirements:
 - element_id: dams:req/PDM-015
   name: data_structure_root
   title: Корень DataStructure
-  description: root_local_key exists; root kind by schema_format.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-062 / data_structure.check_root_local_key. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-015
   requirement_level: it_solution
   requirement_section: PDM
@@ -965,13 +905,12 @@ requirements:
 - element_id: dams:req/PDM-016
   name: relational_slots_only
   title: Реляционные признаки только для relational
-  description: column_position/PK/UQ/FK only when schema_format=relational.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-021 / data_structure.check_relational_slots. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-016
   requirement_level: it_solution
   requirement_section: PDM
-  statement: Слоты column_position, is_primary_key, is_unique и foreign_key_target допустимы только при schema_format=relational
-    у родительской DataStructure.
+  statement: Слоты column_position, is_primary_key, is_unique и foreign_key_target допустимы только при schema_format=relational у родительской DataStructure.
   applies_to:
     applicability_id: appl:PDM-016
     applies_target_class: SchemaNode
@@ -986,8 +925,8 @@ requirements:
 - element_id: dams:req/PDM-017
   name: occurs_bounds
   title: Границы кратности узла
-  description: max_occurs >= min_occurs when both set.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-063 / data_structure.check_occurs_bounds. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-017
   requirement_level: it_solution
   requirement_section: PDM
@@ -1006,8 +945,8 @@ requirements:
 - element_id: dams:req/PDM-018
   name: message_refs_kinds
   title: message_refs по виду AccessPoint
-  description: message_refs forbidden on interface; allowed for operation|channel.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-017/019 / data_structure.check_message_refs_kinds. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-018
   requirement_level: it_solution
   requirement_section: PDM
@@ -1026,8 +965,8 @@ requirements:
 - element_id: dams:req/PDM-019
   name: message_payload_structure
   title: Payload Message
-  description: Message requires payload_structure_ref to existing DataStructure.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-064 / data_structure.check_message_payload. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-019
   requirement_level: it_solution
   requirement_section: PDM
@@ -1046,13 +985,12 @@ requirements:
 - element_id: dams:req/PDM-020
   name: schema_node_kind_shape
   title: Форма узла по node_kind
-  description: array/map item_node; scalar/enum no children.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-012/013 / data_structure.check_node_kind_shape. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: PDM-020
   requirement_level: it_solution
   requirement_section: PDM
-  statement: Узлы array и map требуют item_node и не должны иметь children; узлы scalar и enum не должны иметь children и
-    item_node.
+  statement: Узлы array и map требуют item_node и не должны иметь children; узлы scalar и enum не должны иметь children и item_node.
   applies_to:
     applicability_id: appl:PDM-020
     applies_target_class: SchemaNode
@@ -1072,8 +1010,7 @@ requirements:
   code: CLS-001
   requirement_level: it_solution
   requirement_section: CLS
-  statement: Архитектурная роль сущности и природа данных — разные оси классификации и должны заполняться независимо. Нельзя
-    подменять одно другим.
+  statement: Архитектурная роль сущности и природа данных — разные оси классификации и должны заполняться независимо. Нельзя подменять одно другим.
   applies_to:
     applicability_id: appl:CLS-001
     applies_target_class: LogicalEntity
@@ -1093,8 +1030,7 @@ requirements:
   code: FLW-001
   requirement_level: it_solution
   requirement_section: FLW
-  statement: Если решение предоставляет или получает данные за пределами своей границы, потоки данных и соответствия должны
-    быть описаны явно. На этапе первичной публикации отсутствие таких описаний отмечается как предупреждение.
+  statement: Если решение предоставляет или получает данные за пределами своей границы, потоки данных и соответствия должны быть описаны явно. На этапе первичной публикации отсутствие таких описаний отмечается как предупреждение.
   applies_to:
     applicability_id: appl:FLW-001
     applies_target_class: ModelPackage
@@ -1111,8 +1047,8 @@ requirements:
 - element_id: dams:req/FLW-002
   name: integration_ref_resolvable
   title: integration_ref разрешим по снимку каталога
-  description: ADR-048 — orphan_ref / unknown_catalog against file catalog snapshot.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-038 / catalog_topology.py. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: FLW-002
   requirement_level: it_solution
   requirement_section: FLW
@@ -1134,8 +1070,8 @@ requirements:
 - element_id: dams:req/FLW-003
   name: catalog_operation_bound
   title: catalog_operation_ref существует в снимке
-  description: ADR-048 — entity binding operation must exist on catalog integration object.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-039 / catalog_topology.py. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: FLW-003
   requirement_level: it_solution
   requirement_section: FLW
@@ -1157,8 +1093,8 @@ requirements:
 - element_id: dams:req/FLW-004
   name: bound_catalog_revision_fresh
   title: bound_catalog_revision не устарел
-  description: ADR-048 — stale_revision when bound revision lags snapshot.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-040 / catalog_topology.py. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: FLW-004
   requirement_level: it_solution
   requirement_section: FLW
@@ -1180,8 +1116,8 @@ requirements:
 - element_id: dams:req/FLW-005
   name: contract_catalog_revision
   title: DataModelBinding.catalog_revision согласован со снимком
-  description: ADR-048 — contract slice pins catalog topology revision.
-  lifecycle_status: approved
+  description: 'Enforcement: INV-041 / catalog_topology.py. Catalog row retired ADR-056 PR-9.'
+  lifecycle_status: deprecated
   code: FLW-005
   requirement_level: it_solution
   requirement_section: FLW
@@ -1208,8 +1144,7 @@ requirements:
   code: CLS-002
   requirement_level: it_solution
   requirement_section: CLS
-  statement: Если к сущности применена повышенная классификация управления доступом, рекомендуется отдельно указать требуемый
-    режим защиты данных. Это не заменяет классификацию управления и не смешивается с критичностью процесса.
+  statement: Если к сущности применена повышенная классификация управления доступом, рекомендуется отдельно указать требуемый режим защиты данных. Это не заменяет классификацию управления и не смешивается с критичностью процесса.
   applies_to:
     applicability_id: appl:CLS-002
     applies_target_class: LogicalEntity
@@ -1220,8 +1155,7 @@ requirements:
     expression: cls002_security_soft
     severity: warning
     diagnostic_code: DAMS-REQ-CLS-002.c1
-    remediation: Укажите security_classification (internal/confidential/restricted) для сущностей с confidential/restricted
-      governance.
+    remediation: Укажите security_classification (internal/confidential/restricted) для сущностей с confidential/restricted governance.
 - element_id: dams:req/REF-003
   name: relationship_kind_soft
   title: Тип логической связи
@@ -1230,8 +1164,7 @@ requirements:
   code: REF-003
   requirement_level: it_solution
   requirement_section: REF
-  statement: Для активной логической связи рекомендуется указать тип отношения (ассоциация, композиция, ссылка на справочник
-    и т.п.), чтобы отличать смысловые связи от технических. На этапе первичной публикации отсутствие типа отмечается предупреждением.
+  statement: Для активной логической связи рекомендуется указать тип отношения (ассоциация, композиция, ссылка на справочник и т.п.), чтобы отличать смысловые связи от технических. На этапе первичной публикации отсутствие типа отмечается предупреждением.
   applies_to:
     applicability_id: appl:REF-003
     applies_target_class: Relationship
@@ -1252,9 +1185,7 @@ requirements:
   code: ATR-004
   requirement_level: it_solution
   requirement_section: ATR
-  statement: Для денежных величин, количеств и отметок времени рекомендуется указать валюту или ссылку на атрибут валюты,
-    единицу измерения и политику часового пояса соответственно. На этапе первичной публикации это предупреждение, а не блокирующая
-    ошибка.
+  statement: Для денежных величин, количеств и отметок времени рекомендуется указать валюту или ссылку на атрибут валюты, единицу измерения и политику часового пояса соответственно. На этапе первичной публикации это предупреждение, а не блокирующая ошибка.
   applies_to:
     applicability_id: appl:ATR-004
     applies_target_class: LogicalAttribute
@@ -1270,10 +1201,9 @@ requirements:
 - element_id: dams:req/ATR-006
   name: attribute_representation_present
   title: Представление атрибута (тип или домен)
-  description: >
-    Строгое представление: value_domain_ref и/или data_type_ref (PR-5 / ADR-034 шаг 2).
-    Реализовано в packages/specification-dams/.../semantic_layer.py (DAMS-SEM-ATTR-TYPE).
-  lifecycle_status: approved
+  description: >-
+    Enforcement: DAMS-SEM-ATTR-TYPE / semantic_layer.py. Catalog row retired ADR-056 PR-9.
+  lifecycle_status: deprecated
   code: ATR-006
   requirement_level: it_solution
   requirement_section: ATR
@@ -1486,8 +1416,7 @@ requirements:
     expression: ldm004_identity
     severity: error
     diagnostic_code: DAMS-REQ-LDM-004.c1
-    remediation: Добавьте identity_rule и business_key_kind и/или key_attribute_refs. Для нетехнической сущности одного surrogate
-      недостаточно.
+    remediation: Добавьте identity_rule и business_key_kind и/или key_attribute_refs. Для нетехнической сущности одного surrogate недостаточно.
 - element_id: dams:req/LDM-07
   name: logical_base_relationship_kinds
   title: Базовые типы связей ЛМД
@@ -1620,8 +1549,7 @@ requirements:
     target_slot: data_owner_ref
     severity: error
     diagnostic_code: DAMS-REQ-GEN-001.c7
-    remediation: Укажите data_owner_ref на пакете модели (корень containment cascade, ADR-023). ownership_inheritance_rule
-      — только пояснение, не замена владельца.
+    remediation: Укажите data_owner_ref на пакете модели (корень containment cascade, ADR-023). ownership_inheritance_rule — только пояснение, не замена владельца.
   - check_id: LDM-11.c2
     kind: at_least_one_slots
     target_class: LogicalEntity
@@ -1746,8 +1674,7 @@ requirements:
     expression: pdm003_entity_physical
     severity: error
     diagnostic_code: DAMS-REQ-PDM-003.c1
-    remediation: Добавьте Mapping с mapping_type entity_physical между этим носителем и ≥1 логической сущностью, либо technical-only
-      + mapping_rationale.
+    remediation: Добавьте Mapping с mapping_type entity_physical между этим носителем и ≥1 логической сущностью, либо technical-only + mapping_rationale.
   - check_id: PDM-02.c2
     kind: conditional_branch
     target_class: SchemaNode

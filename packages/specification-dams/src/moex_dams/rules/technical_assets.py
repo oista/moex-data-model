@@ -570,6 +570,38 @@ def check_in_memory_location(data: dict[str, Any]) -> list[Diagnostic]:
     return out
 
 
+def check_carrier_structure_ref(data: dict[str, Any]) -> list[Diagnostic]:
+    """INV-065: DataCarrier.structure_ref required except asset_kind=in_memory (PDM-001.c5)."""
+    out: list[Diagnostic] = []
+    for el in data.get("data_carriers") or []:
+        if not isinstance(el, dict):
+            continue
+        if str(el.get("asset_kind") or "") == "in_memory":
+            continue
+        sid = str(el.get("element_id") or el.get("name") or "")
+        ref = el.get("structure_ref")
+        filled = bool(str(ref).strip()) if isinstance(ref, str) else ref is not None
+        if filled:
+            continue
+        out.append(
+            _diag(
+                code="DAMS-INV-065",
+                invariant_id="INV-065",
+                message=(
+                    f'DataCarrier "{sid}" missing required structure_ref '
+                    "(not required for in_memory)."
+                ),
+                subject=sid or None,
+                remediation=(
+                    "Set structure_ref to a DataStructure element_id "
+                    "(skip for in_memory). INV-065."
+                ),
+                requirement_code="PDM-001",
+            )
+        )
+    return out
+
+
 def check_technical_assets(data: dict[str, Any]) -> tuple[Diagnostic, ...]:
     """Run all TechnicalAsset semantic checks."""
     diags: list[Diagnostic] = []
@@ -581,5 +613,6 @@ def check_technical_assets(data: dict[str, Any]) -> tuple[Diagnostic, ...]:
     diags.extend(check_carrier_refs_are_data_carriers(data))
     diags.extend(check_operation_interface_ref(data))
     diags.extend(check_in_memory_location(data))
+    diags.extend(check_carrier_structure_ref(data))
     diags.extend(check_data_structures(data))
     return tuple(diags)

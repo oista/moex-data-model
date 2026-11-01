@@ -33,6 +33,7 @@ from moex_dams.rules.definitions import (
     resolve_definition,
     validate_scoped_definition_systems,
 )
+from moex_dams.rules.references import check_references
 from moex_dams.rules.relation_terms import check_relation_terms
 from moex_dams.rules.semantic_layer import check_semantic_layer
 from moex_dams.rules.technical_assets import (
@@ -620,27 +621,6 @@ def _run_conditional(
             )
         return out
 
-    if template == "pdm001_structure_ref":
-        kind = str(el.get("asset_kind") or "")
-        if kind == "in_memory":
-            return out
-        if not _filled(el.get("structure_ref")):
-            out.append(
-                _diag(
-                    code=code,
-                    severity=sev,
-                    message=(
-                        f'DataCarrier "{subject}" missing required structure_ref '
-                        "(not required for in_memory)."
-                    ),
-                    subject=subject,
-                    remediation=rem,
-                    statement=statement,
-                    requirement_code=requirement_code,
-                )
-            )
-        return out
-
     if template == "ldm004_identity":
         entity_type = str(el.get("entity_type") or "")
         if entity_type == "technical":
@@ -989,47 +969,6 @@ def _run_conditional(
                 severity=sev,
                 message=(
                     f'Relationship "{subject}" missing cardinality: {", ".join(missing)}.'
-                ),
-                subject=subject,
-                remediation=rem,
-                statement=statement,
-                requirement_code=requirement_code,
-            )
-        )
-        return out
-
-    if template == "pdm002_scalar_type":
-        if str(el.get("node_kind") or "") != "scalar":
-            return out
-        if _filled(el.get("native_type")) or _filled(el.get("data_type_ref")):
-            return out
-        out.append(
-            _diag(
-                code=code,
-                severity=sev,
-                message=(
-                    f'SchemaNode "{subject}" (scalar) needs native_type or data_type_ref.'
-                ),
-                subject=subject,
-                remediation=rem,
-                statement=statement,
-                requirement_code=requirement_code,
-            )
-        )
-        return out
-
-    if template == "pdm002_scalar_required":
-        if str(el.get("node_kind") or "") != "scalar":
-            return out
-        if "required" in el:
-            return out
-        out.append(
-            _diag(
-                code=code,
-                severity=sev,
-                message=(
-                    f'SchemaNode "{subject}" (scalar) must declare required '
-                    "(nullable/presence semantics)."
                 ),
                 subject=subject,
                 remediation=rem,
@@ -1522,6 +1461,9 @@ def check_formal_requirements(
     diagnostics.extend(check_relation_terms(data))
     diagnostics.extend(check_technical_assets(data))
     diagnostics.extend(check_semantic_layer(data))
+    # REF ends resolve here too: REF-001 catalog row is deprecated (ADR-056 PR-9),
+    # but DAMS-REF-005/006 must keep firing via references.py.
+    diagnostics.extend(check_references(body))
     return tuple(diagnostics)
 
 

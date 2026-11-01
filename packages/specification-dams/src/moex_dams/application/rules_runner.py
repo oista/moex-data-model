@@ -70,6 +70,7 @@ L2_PRODUCTION_CALLABLES: frozenset[str] = frozenset(
         "moex_dams.rules.technical_assets.check_mapping_endpoint_types",
         "moex_dams.rules.technical_assets.check_operation_interface_ref",
         "moex_dams.rules.technical_assets.check_in_memory_location",
+        "moex_dams.rules.technical_assets.check_carrier_structure_ref",
         "moex_dams.rules.data_structure.check_source_pointer_requires_artifact",
         "moex_dams.rules.data_structure.check_schema_dialect_format_family",
         "moex_dams.rules.data_structure.check_node_kind_shape",
@@ -81,6 +82,8 @@ L2_PRODUCTION_CALLABLES: frozenset[str] = frozenset(
         "moex_dams.rules.data_structure.check_root_local_key",
         "moex_dams.rules.data_structure.check_occurs_bounds",
         "moex_dams.rules.data_structure.check_message_payload",
+        "moex_dams.rules.data_structure.check_scalar_node_type",
+        "moex_dams.rules.data_structure.check_scalar_node_required",
         "moex_dams.rules.semantic_layer.check_identifying_requires_is_identifying",
         # schema lint / Stage 0 validate-schemas — INV-026
         "moex_dams.rules.ontology_uris.check_ontology_uris",

@@ -46,6 +46,10 @@ DIAGNOSTIC_CODE_ALIASES: dict[str, frozenset[str]] = {
     "INV-064": frozenset(
         {"DAMS-REQ-PDM-019.c1", "DAMS-REQ-PDM-019.c2", "DAMS-REQ-PDM-019.c3"}
     ),
+    # ADR-056 PR-9: re-homed runner conditionals from PDM-001/PDM-002.
+    "INV-065": frozenset({"DAMS-REQ-PDM-001.c5"}),
+    "INV-066": frozenset({"DAMS-REQ-PDM-002.c2"}),
+    "INV-067": frozenset({"DAMS-REQ-PDM-002.c3"}),
 }
 
 

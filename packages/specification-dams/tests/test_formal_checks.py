@@ -155,9 +155,6 @@ def test_catalog_expressions_all_have_runner_templates() -> None:
         "planned_on_active_warning",
         "ref002_cardinality",
         "pdm004_field_mapping",
-        "pdm001_structure_ref",
-        "pdm002_scalar_type",
-        "pdm002_scalar_required",
         "atr002_snake_case",
         "cls001_axes_present",
         "flw001_soft_presence",
@@ -552,12 +549,18 @@ def test_ldm07_relationship_kind_required_for_active() -> None:
 
 
 def test_pdm001_system_ref_required() -> None:
+    """Catalog PDM-001 deprecated (PR-9); system_ref is LinkML required (L1 / PR-8)."""
     data = _example()
     data["data_carriers"][0].pop("system_ref", None)
-    assert any("PDM-001" in d.diagnostic_code and "system_ref" in d.diagnostic_message for d in _errors(data))
+    # Runner no longer emits DAMS-REQ-PDM-001.c1; Python INV path unchanged.
+    assert not any(
+        "PDM-001" in d.diagnostic_code and "system_ref" in d.diagnostic_message
+        for d in _errors(data)
+    )
 
 
 def test_pdm002_scalar_type_required() -> None:
+    """Scalar type check re-homed to INV-066 (ADR-056 PR-9)."""
     data = _example()
     node = next(
         n
@@ -566,7 +569,26 @@ def test_pdm002_scalar_type_required() -> None:
     )
     node.pop("native_type", None)
     node.pop("data_type_ref", None)
-    assert any("PDM-002" in d.diagnostic_code for d in _errors(data))
+    assert "DAMS-INV-066" in _codes(_errors(data))
+
+
+def test_inv065_structure_ref_required_except_in_memory() -> None:
+    data = _example()
+    carrier = data["data_carriers"][0]
+    assert str(carrier.get("asset_kind") or "") != "in_memory"
+    carrier.pop("structure_ref", None)
+    assert "DAMS-INV-065" in _codes(_errors(data))
+
+
+def test_inv067_scalar_required_declared() -> None:
+    data = _example()
+    node = next(
+        n
+        for n in data["data_structures"][0]["nodes"]
+        if n.get("node_kind") == "scalar"
+    )
+    node.pop("required", None)
+    assert "DAMS-INV-067" in _codes(_errors(data))
 
 
 def test_pdm003_not_inferred_from_field_mapping() -> None:

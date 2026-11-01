@@ -38,9 +38,9 @@ def test_registry_matches_invariants() -> None:
     inv_ids = [inv["id"] for inv in invs]
     assert len(registry) == len(invs)
     assert registry == inv_ids
-    assert len(invs) >= 64
+    assert len(invs) >= 67
     assert inv_ids[0] == "INV-001"
-    assert inv_ids[-1] == "INV-064"
+    assert inv_ids[-1] == "INV-067"
     assert inv_ids == sorted(inv_ids)
 
 
@@ -94,6 +94,9 @@ def test_known_waivers_and_level_status() -> None:
         "INV-062",
         "INV-063",
         "INV-064",
+        "INV-065",
+        "INV-066",
+        "INV-067",
     ):
         assert statuses[inv_id] == "implemented"
     assert level_status["INV-020"]["L3"] == "waived"

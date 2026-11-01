@@ -948,9 +948,10 @@ service-only correlation token.
 
 Нормативный **хребет** каталога — коды `CDM-01`/`CDM-02`, `LDM-01`…`LDM-13`,
 `PDM-01`/`PDM-02` ([ADR-056](../adr/ADR-056-requirements-backbone.md)). Исторические
-трёхзначные коды Wave 1 частично **superseded** (Group A) или остаются до PR-9/PR-10
-(Group B/C/D). Таблица ниже — ориентир для читателя; machine-readable source of truth —
-`requirements/*.yaml`.
+трёхзначные коды Wave 1: Group A **superseded**, Group C **deprecated** (PR-9; удаление
+в PR-10), Group B/D до PR-10. Viewer по умолчанию скрывает inactive-статусы
+(`requirements.show_inactive`). Таблица ниже — ориентир для читателя; machine-readable
+source of truth — `requirements/*.yaml`.
 
 ### 10.1. Backbone (нормативный документ)
 
@@ -984,14 +985,15 @@ service-only correlation token.
 | Logical | `LDM-002`…`LDM-005` | Group A → LDM-04 / LDM-09 / LDM-06 / LDM-05 |
 | Logical | `LDM-006` | Group B (recode in PR-10; ≠ backbone `LDM-06`) |
 | Logical | `LDM-007` / `LDM-008` | Group D |
-| Attribute | `ATR-*` | Group C/D |
-| Relationship | `REF-001` | Group C |
+| Attribute | `ATR-001` / `ATR-006` | Group C → **deprecated** (schema / SEM) |
+| Attribute | `ATR-002` / `ATR-004` / `ATR-005` / `ATR-007` | Group D (drop in PR-10) |
+| Relationship | `REF-001` | Group C → **deprecated** (schema + `references.py`) |
 | Relationship | `REF-002` | Group B |
 | Relationship | `REF-003` | Group A → LDM-07 |
-| Physical | `PDM-001` / `PDM-002` / `PDM-005`… | Group C (≠ backbone `PDM-01`/`PDM-02`) |
+| Physical | `PDM-001` / `PDM-002` / `PDM-005`…`PDM-020` | Group C → **deprecated** (schema / INV-012…067; ≠ backbone `PDM-01`/`PDM-02`) |
 | Physical | `PDM-003` / `PDM-004` | Group A → PDM-02 |
 | Flow | `FLW-001` | Group A → PDM-01 |
-| Flow | `FLW-002`… | Group C |
+| Flow | `FLW-002`…`FLW-005` | Group C → **deprecated** (INV-038…041) |
 | Classification | `CLS-*` | Group D |
 
 ---

@@ -1,0 +1,26 @@
+element_id: dams:model/inv065
+implementation_scope: enterprise
+data_structures:
+- element_id: dams:structure/inv065/s
+  schema_format: json_schema
+  structure_version: 1.0.0
+  root_local_key: root
+  nodes:
+  - local_key: root
+    node_kind: object
+data_carriers:
+- element_id: dams:carrier/inv065/table
+  name: table
+  asset_kind: relational_table
+  asset_namespace: ns
+  qualified_name: table
+  technology: fixture
+  structure_ref: dams:structure/inv065/s
+  lifecycle_status: active
+- element_id: dams:carrier/inv065/mem
+  name: mem
+  asset_kind: in_memory
+  asset_namespace: ns
+  qualified_name: mem
+  technology: fixture
+  lifecycle_status: active

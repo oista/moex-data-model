@@ -11,8 +11,8 @@ superseded_by: []
 Автогенерируется `scripts/check_constraint_matrix.py`. Источник: `model-assets/specifications/moex-dams/0.1/constraints/constraint-matrix.yaml`. Не редактировать вручную.
 
 **matrix_id:** `dams:constraint-matrix/0.1`  
-**registry size:** 64  
-**invariants:** 64
+**registry size:** 67  
+**invariants:** 67
 
 | ID | Title | Levels | Status | L1 | L2 | L3 | Source status | Scope | Source |
 |---|---|---|---|---|---|---|---|---|---|
@@ -80,6 +80,9 @@ superseded_by: []
 | INV-062 | Корень DataStructure | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | PDM-015; ADR-056 PR-3 |
 | INV-063 | Границы кратности SchemaNode | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | PDM-017; ADR-056 PR-3 |
 | INV-064 | Payload Message | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | PDM-019; ADR-056 PR-3 |
+| INV-065 | DataCarrier.structure_ref required (except in_memory) | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | PDM-001.c5; ADR-056 PR-9 |
+| INV-066 | Scalar SchemaNode has type | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | PDM-002.c2; ADR-056 PR-9 |
+| INV-067 | Scalar SchemaNode declares required | L2 | implemented | not-applicable | implemented | not-applicable | aligned | moex-dams | PDM-002.c3; ADR-056 PR-9 |
 
 ## Statements
 
@@ -576,6 +579,39 @@ root_local_key указывает на существующий узел. Для
 *Notes:* ADR-056 PR-3: tagged existing check_message_payload.
 
 *requirement_refs:* `DAMS-REQ-PDM-019.c1`, `DAMS-REQ-PDM-019.c2`, `DAMS-REQ-PDM-019.c3`
+
+*adr_ref:* `ADR-056`
+
+### INV-065: DataCarrier.structure_ref required (except in_memory)
+
+У DataCarrier с asset_kind ≠ in_memory задан structure_ref на структуру данных. Для in_memory structure_ref не требуется.
+
+
+*Notes:* ADR-056 PR-9: re-homed from formal_checks pdm001_structure_ref.
+
+*requirement_refs:* `DAMS-REQ-PDM-001.c5`
+
+*adr_ref:* `ADR-056`
+
+### INV-066: Scalar SchemaNode has type
+
+У SchemaNode с node_kind=scalar задан native_type или data_type_ref.
+
+
+*Notes:* ADR-056 PR-9: re-homed from formal_checks pdm002_scalar_type.
+
+*requirement_refs:* `DAMS-REQ-PDM-002.c2`
+
+*adr_ref:* `ADR-056`
+
+### INV-067: Scalar SchemaNode declares required
+
+У SchemaNode с node_kind=scalar явно задан слот required (nullable/presence semantics).
+
+
+*Notes:* ADR-056 PR-9: re-homed from formal_checks pdm002_scalar_required.
+
+*requirement_refs:* `DAMS-REQ-PDM-002.c3`
 
 *adr_ref:* `ADR-056`
 

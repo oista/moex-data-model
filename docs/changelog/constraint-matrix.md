@@ -223,6 +223,23 @@ superseded_by: []
 
 **Каталог требований:** не менялся (Group C rows остаются до PR-9).
 
+## ADR-056 PR-9: re-home conditionals + deprecate Group C
+
+**Добавлено**
+
+- INV-065 (L2): DataCarrier `structure_ref` required except `in_memory` —
+  former PDM-001.c5 / `check_carrier_structure_ref`.
+- INV-066 (L2): scalar SchemaNode needs `native_type` or `data_type_ref` —
+  former PDM-002.c2 / `check_scalar_node_type`.
+- INV-067 (L2): scalar SchemaNode declares `required` — former PDM-002.c3 /
+  `check_scalar_node_required`.
+- L2 fixtures `INV-065..067.*.yaml`; aliases `DAMS-REQ-PDM-001.c5`,
+  `DAMS-REQ-PDM-002.c2`, `DAMS-REQ-PDM-002.c3`.
+
+**Каталог требований:** 31 Group C rows → `lifecycle_status: deprecated`
+(delete + matrix `requirement_refs` rewrite → PR-10). See
+[CHANGELOG-requirements-retire-c.md](../migration/CHANGELOG-requirements-retire-c.md).
+
 ## Audit Wave C: validation hardening (INV-042..053)
 
 **Добавлено**

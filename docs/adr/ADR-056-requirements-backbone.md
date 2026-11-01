@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-056: Requirements backbone (normative modeling rules)
 
 **Date:** 2026-10-27  
-**Status:** Proposed (PR-0…PR-7 landed on `feat/requirements-backbone-pr7-schema-gaps`)  
+**Status:** Proposed (PR-0…PR-9 landed; Group C deprecated, deletion deferred to PR-10)  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Amends:** [ADR-013](ADR-013-specification-requirements-catalog.md) (code pattern `{SECTION}-{NN}`/`{NNN}`; section `CDM`; optional empty `formal_checks`; `obligation` / `responsible_role`)  
 **Related:** [ADR-013](ADR-013-specification-requirements-catalog.md), [ADR-021](ADR-021-dams-implementation-profile-and-levels.md), [ADR-023](ADR-023-governed-property-cascade.md), [ADR-025](ADR-025-definition-cascade-and-glossary.md), [ADR-026](ADR-026-cmd-entity-metamodel.md), [ADR-029](ADR-029-cdm-from-er-sketch-and-realization.md), [ADR-045](ADR-045-executable-constraint-matrix.md), [ADR-046](ADR-046-typed-mapping-endpoints.md), [ADR-048](ADR-048-topology-ownership.md), [ADR-051](ADR-051-dams-schema-compatibility.md)  
@@ -84,7 +84,7 @@ Statements are the normative text (minor edits allowed later without reshaping t
 |---|---:|---|
 | **A** Dissolve into backbone | 14 | Executable checks move under new codes; old rows `superseded` |
 | **B** Keep as local extensions | 2 | Remain in catalog with new stable codes if number collides |
-| **C** Leave catalog; keep enforcement | 31 | Schema `required`, Python rules, and/or `INV-*` (constraint matrix) |
+| **C** Leave catalog; keep enforcement | 31 | Schema `required`, Python rules, and/or `INV-*`; rows `deprecated` in PR-9 (delete in PR-10) |
 | **D** Remove | 10 | Drop as modeling requirements after deprecation window |
 
 **Group A:** GEN-001, GEN-002, GEN-003, LDM-002, LDM-003, LDM-004, LDM-005, REF-003, PDM-003, PDM-004, FLW-001, CM-CON-001, CM-REF-002, CM-CON-002.
@@ -141,8 +141,9 @@ Number lookalikes (must not be confused during coexistence):
 | **PR-7e** | Importers: no copy-down of cascade slots to attributes (optional profile key off) | Code + tests |
 | **PR-7f** | Data fill `source_system_refs` (ruamel); then LDM-12 severity warning→error | Data then catalog |
 | **PR-8** | Move remaining `slot_required` gaps into class `slot_usage` (`LogicalEntity.title`, `DataCarrier.technology`); 5.4.0 | Schema + regen; fixture fill separate commit |
-| **PR-9** | Retire Group C from catalog; rebind matrix / aliases | Catalog + matrix + Python codes |
-| **PR-10** | Group D / B / GEN-003 / glossary wording / diagnostic policy; final cleanup | Decisions + cleanup |
+| **PR-9a** | Viewer: hide `deprecated` / `superseded` / `rejected` by default (`requirements.show_inactive`) | Viewer only |
+| **PR-9b** | Re-home PDM-001.c5 / PDM-002.c2–c3 → INV-065…067; mark Group C `deprecated` | Catalog + matrix + Python (no LinkML schema) |
+| **PR-10** | Delete deprecated/superseded rows; rebind matrix `requirement_refs` / aliases; Group D / B / GEN-003 / glossary wording / diagnostic policy | Catalog cleanup + decisions |
 
 `check_all` (and listed gates) must be green **on each PR branch separately**. No combined “all PRs green” tree as proof of intermediate validity ([multi-pr-series](../../.cursor/rules/multi-pr-series.mdc)). No PR-5-style schema+data+regen exception is claimed for this series.
 
@@ -163,7 +164,14 @@ Number lookalikes (must not be confused during coexistence):
 |---|---|
 | Catalog `slot_required` → schema | Most identity / ATR / REF / PDM core slots were already LinkML `required`. Gaps closed with class `slot_usage`: `LogicalEntity.title`, `DataCarrier.technology`. Conditional PDM-001.c5 / PDM-002.c2–c3 stay catalog. Group D `entity_type` is not schema-required; `context_ref` / `solution_data_role` were already schema-required (relaxing is PR-10). |
 
-**Still deferred (PR-9…PR-10):**
+**Closed in PR-9:**
+
+| Topic | Decision |
+|---|---|
+| Group C retirement | 31 rows marked `lifecycle_status: deprecated` (not deleted). Viewer hides inactive statuses by default. Enforcement homes: schema / Python / INV (incl. INV-065…067 for former runner conditionals). |
+| Catalog deletion / matrix rebind | Deferred to **PR-10** (delete deprecated+superseded rows; rewrite `requirement_refs`; drop `requirement_code=` args; `DAMS-REQ-PDM-009.c3` → `DAMS-INV-034`). |
+
+**Still deferred (PR-10):**
 
 - Whether GEN-003 under LDM-01 requires ≥1 `LogicalEntity`.
 - CDM-01 / LDM-04 wording vs ADR-025 (definition on element; glossary is a **view**, not a mandatory sibling term record).
@@ -173,13 +181,14 @@ Number lookalikes (must not be confused during coexistence):
 - Deprecating `security_classification` (CLS-002 overlap with `governance_classification`).
 - Renaming diagnostic codes to `DAMS-INV-*` vs keeping `DAMS-REQ-*` stable.
 - LDM-13 executable checks (after ИОД vocabulary).
+- Physical deletion of Group A `superseded` + Group C `deprecated` rows and matrix cleanup.
 
 ## Consequences
 
 - Normative backbone becomes the human-facing requirements spine; assess and INV remain the executable subset.
 - Coexistence of old three-digit and new two-digit codes requires PR-1 pattern widening before PR-4 insert.
 - Runner must honour lifecycle (PR-2) before mass `superseded` (PR-5) or assess will double-fire.
-- Group C must have INV homes (PR-3) before catalog deletion (PR-9).
+- Group C got INV homes (PR-3) and PR-9 deprecation; physical deletion waits for PR-10.
 
 ## Alternatives considered
 
