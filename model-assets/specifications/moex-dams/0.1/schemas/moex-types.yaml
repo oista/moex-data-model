@@ -315,7 +315,7 @@ enums:
       entity_physical:
         description: >
           Explicit entity-level link between DataCarrier and LogicalEntity
-          (PDM-003). Do not infer from field_mapping alone.
+          (PDM-02). Do not infer from field_mapping alone.
       field_mapping:
         description: >
           mapsTo between SchemaNode (structure_id#local_key) and LogicalAttribute

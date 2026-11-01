@@ -337,7 +337,7 @@ classes:
     is_a: Mapping
     description: >
       Explicit entity-level link between DataCarrier and LogicalEntity
-      (ADR-046 / PDM-003). Exactly one source and one target; cardinality
+      (ADR-046 / PDM-02). Exactly one source and one target; cardinality
       one_to_one.
     slot_usage:
       source_refs:
@@ -697,7 +697,7 @@ slots:
     description: Обоснование статуса выравнивания с концептуальным уровнем.
   isolation_rationale:
     range: string
-    description: Обоснование семантической изоляции сущности (LDM-007).
+    description: Обоснование семантической изоляции сущности.
   mapping_coverage_status:
     range: MappingCoverageStatusEnum
     description: >

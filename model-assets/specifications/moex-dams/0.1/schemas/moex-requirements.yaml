@@ -80,7 +80,7 @@ slots:
     identifier: true
     range: string
     required: true
-    description: Stable id for applies_to blocks (e.g. appl:LDM-001).
+    description: Stable id for applies_to blocks (e.g. appl:LDM-01).
   check_id:
     identifier: true
     range: string

@@ -25,6 +25,7 @@ CI: `tests/architecture/test_schema_version_timeline.py` fails if the aggregate 
 | 5.2.0 | Requirements catalog metamodel (additive) | ADR-056 PR-1; [CHANGELOG-requirements-metamodel.md](CHANGELOG-requirements-metamodel.md) |
 | 5.3.0 | Data class / source cascade slots (additive) | ADR-056 PR-7b; [CHANGELOG-source-cascade.md](CHANGELOG-source-cascade.md); amends ADR-023 |
 | 5.4.0 | Catalog slot_required → class slot_usage | ADR-056 PR-8; [CHANGELOG-required-slots.md](CHANGELOG-required-slots.md); `LogicalEntity.title`, `DataCarrier.technology` |
+| 5.5.0 | Requirements backbone schema texts | ADR-056 PR-10e; [CHANGELOG-requirements-schema-texts.md](CHANGELOG-requirements-schema-texts.md); deprecate `security_classification` |
 | 6.0.0 | *(planned)* Identity / embedded selection train | ADR-052 D5; checklist [TRAIN-6.0.0.md](TRAIN-6.0.0.md) (G1–G6 + T6-*); only after ADR-051 evidence gate |
 
 ## Dual version surfaces
