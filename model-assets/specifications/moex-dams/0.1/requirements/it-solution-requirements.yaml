@@ -120,8 +120,10 @@ requirements:
 - element_id: dams:req/GEN-004
   name: data_carrier_semantic_link
   title: Носители данных связаны со смыслом
-  description: DataCarrier имеет entity mapping или technical-only.
-  lifecycle_status: approved
+  description: >
+    Dropped ADR-056 PR-10d (Group D). Duplicate of backbone PDM-02 /
+    former PDM-003 entity_physical mapping.
+  lifecycle_status: deprecated
   code: GEN-004
   requirement_level: it_solution
   requirement_section: GEN
@@ -155,8 +157,10 @@ requirements:
 - element_id: dams:req/LDM-001
   name: logical_entity_context
   title: Контекст и роль данных
-  description: Обязательные context_ref и solution_data_role.
-  lifecycle_status: approved
+  description: >
+    Dropped ADR-056 PR-10d (Group D). context_ref / solution_data_role stay
+    schema-required; relaxing them is a separate schema change.
+  lifecycle_status: deprecated
   implementation_status: implemented
   code: LDM-001
   requirement_level: it_solution
@@ -379,8 +383,10 @@ requirements:
 - element_id: dams:req/LDM-007
   name: semantic_inclusion
   title: Семантическая включённость
-  description: Relationship / conceptual / isolation — не physical mapping alone.
-  lifecycle_status: approved
+  description: >
+    Dropped ADR-056 PR-10d (Group D). Isolation/inclusion is not a backbone rule;
+    conceptual alignment remains LDM-101.
+  lifecycle_status: deprecated
   code: LDM-007
   requirement_level: it_solution
   requirement_section: LDM
@@ -400,9 +406,9 @@ requirements:
   name: realization_completeness
   title: Полнота реализации зависимых концептов
   description: >
-    Warning when an aligned LogicalEntity realizes a dependent enterprise concept
-    without a logical Relationship to a peer that realizes each owner (ADR-029).
-  lifecycle_status: approved
+    Dropped ADR-056 PR-10d (Group D). ADR-029 realization completeness stays a
+    soft modeling hint, not a catalog requirement.
+  lifecycle_status: deprecated
   code: LDM-008
   requirement_level: it_solution
   requirement_section: LDM
@@ -470,8 +476,8 @@ requirements:
 - element_id: dams:req/ATR-002
   name: attribute_naming
   title: Именование атрибута
-  description: Wave 2 soft — lower_snake_case technical name.
-  lifecycle_status: approved
+  description: Dropped ADR-056 PR-10d (Group D). Naming style is linter-class, not a modeling rule.
+  lifecycle_status: deprecated
   code: ATR-002
   requirement_level: it_solution
   requirement_section: ATR
@@ -490,8 +496,10 @@ requirements:
 - element_id: dams:req/ATR-005
   name: attribute_physical_coverage
   title: Отображение атрибута на реализацию
-  description: Mapping coverage for applicable attributes.
-  lifecycle_status: approved
+  description: >
+    Dropped ADR-056 PR-10d (Group D). Reverse of backbone PDM-02 (physical→logical);
+    not a separate logical-attribute obligation.
+  lifecycle_status: deprecated
   code: ATR-005
   requirement_level: it_solution
   requirement_section: ATR
@@ -1037,8 +1045,10 @@ requirements:
 - element_id: dams:req/CLS-001
   name: classification_axes_independent
   title: Независимость осей классификации
-  description: Wave 2 warning — entity_type vs data_class.
-  lifecycle_status: approved
+  description: >
+    Dropped ADR-056 PR-10d (Group D). entity_type is an exception flag;
+    data_class is backbone LDM-09.
+  lifecycle_status: deprecated
   code: CLS-001
   requirement_level: it_solution
   requirement_section: CLS
@@ -1171,8 +1181,10 @@ requirements:
 - element_id: dams:req/CLS-002
   name: security_classification_soft
   title: Режим защиты данных
-  description: Wave 2 warning — security_classification when governance is confidential/restricted.
-  lifecycle_status: approved
+  description: >
+    Dropped ADR-056 PR-10d (Group D). Overlaps governance_classification;
+    security_classification slot deprecation is PR-10e.
+  lifecycle_status: deprecated
   code: CLS-002
   requirement_level: it_solution
   requirement_section: CLS
@@ -1212,8 +1224,8 @@ requirements:
 - element_id: dams:req/ATR-004
   name: attribute_type_specific_soft
   title: Дополнительные свойства по типу атрибута
-  description: Wave 2 warning — currency/unit/timezone when type implies them.
-  lifecycle_status: approved
+  description: Dropped ADR-056 PR-10d (Group D). Type-specific extras are recommendations, not catalog rules.
+  lifecycle_status: deprecated
   code: ATR-004
   requirement_level: it_solution
   requirement_section: ATR
@@ -1257,9 +1269,9 @@ requirements:
   name: attribute_concept_ref_optional
   title: concept_ref опционален
   description: >
-    Негативное требование: отсутствие concept_ref не даёт error/warning.
-    Проверка — тест test_missing_concept_ref_is_silent.
-  lifecycle_status: approved
+    Dropped ADR-056 PR-10d (Group D). Negation lives in
+    test_missing_concept_ref_is_silent, not a catalog row.
+  lifecycle_status: deprecated
   code: ATR-007
   requirement_level: it_solution
   requirement_section: ATR

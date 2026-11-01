@@ -352,9 +352,12 @@ def test_gen003_empty_package() -> None:
 
 
 def test_gen004_data_carrying_needs_entity_mapping() -> None:
+    """GEN-004 dropped (PR-10d); backbone PDM-02 still uses DAMS-REQ-PDM-003.c1."""
     data = _example()
     _drop_mapping_types(data, "entity_physical")
-    assert "DAMS-REQ-GEN-004.c1" in _codes(_errors(data))
+    codes = _codes(_errors(data))
+    assert "DAMS-REQ-GEN-004.c1" not in codes
+    assert "DAMS-REQ-PDM-003.c1" in codes
 
 
 def test_gen004_infra_database_skipped() -> None:
@@ -383,9 +386,22 @@ def test_gen004_infra_database_skipped() -> None:
 
 
 def test_ldm001_ref_resolves() -> None:
+    """Dangling context_ref still fails via references.py after LDM-001 deprecate."""
     data = _example()
     data["logical_entities"][0]["context_ref"] = "dams:context/missing"
-    assert "DAMS-REF-002" in _codes(_errors(data))
+    codes = _codes(_errors(data))
+    assert "DAMS-REF-002" in codes
+    assert "DAMS-REQ-LDM-001.c3" not in codes
+
+
+def test_ldm001_slots_not_enforced_after_group_d() -> None:
+    """Catalog LDM-001 dropped; schema still requires the slots (PR-10e backlog)."""
+    data = _example()
+    data["logical_entities"][0].pop("context_ref", None)
+    data["logical_entities"][0].pop("solution_data_role", None)
+    codes = _codes(_errors(data))
+    assert "DAMS-REQ-LDM-001.c1" not in codes
+    assert "DAMS-REQ-LDM-001.c2" not in codes
 
 
 def test_ldm002_title_not_enforced_after_group_a_supersede() -> None:
@@ -463,8 +479,8 @@ def test_ldm006_pending_requires_rationale() -> None:
 
 
 def test_ldm007_isolated_entity() -> None:
+    """LDM-007 dropped in ADR-056 PR-10d (Group D)."""
     data = _example()
-    # Single entity, no relationships, no conceptual, no isolation
     data["logical_entities"] = [deepcopy(data["logical_entities"][0])]
     e = data["logical_entities"][0]
     e.pop("conceptual_entity_refs", None)
@@ -473,10 +489,11 @@ def test_ldm007_isolated_entity() -> None:
     e.pop("isolation_rationale", None)
     data["relationships"] = []
     _drop_mapping_types(data, "realizes")
-    assert "DAMS-REQ-LDM-007.c1" in _codes(_errors(data))
+    assert "DAMS-REQ-LDM-007.c1" not in _codes(_errors(data))
 
 
 def test_ldm007_physical_mapping_alone_insufficient() -> None:
+    """LDM-007 dropped in ADR-056 PR-10d (Group D)."""
     data = _example()
     data["logical_entities"] = [deepcopy(data["logical_entities"][0])]
     e = data["logical_entities"][0]
@@ -485,8 +502,7 @@ def test_ldm007_physical_mapping_alone_insufficient() -> None:
     e.pop("alignment_rationale", None)
     e.pop("isolation_rationale", None)
     data["relationships"] = []
-    # Keep only field + entity_physical mappings — still not semantic inclusion
-    assert "DAMS-REQ-LDM-007.c1" in _codes(_errors(data))
+    assert "DAMS-REQ-LDM-007.c1" not in _codes(_errors(data))
 
 
 # --- ATR ----------------------------------------------------------------------
@@ -507,19 +523,23 @@ def test_atr001_typed_ref_required() -> None:
 
 
 def test_atr002_snake_case_warning() -> None:
+    """ATR-002 dropped in ADR-056 PR-10d (Group D)."""
     data = _example()
     data["logical_entities"][0]["attributes"][0]["name"] = "partyId"
     warns = [d for d in _warns(data) if "ATR-002" in d.diagnostic_code]
-    assert warns
+    assert warns == []
     assert _errors(data) == []
 
 
 def test_atr005_missing_mapping() -> None:
+    """ATR-005 dropped in ADR-056 PR-10d; PDM-02 still covers field mapping."""
     data = _example()
     attr = data["logical_entities"][0]["attributes"][0]
     attr.pop("mapping_coverage_status", None)
     _drop_mapping_types(data, "field_mapping")
-    assert "DAMS-REQ-ATR-005.c1" in _codes(_errors(data))
+    codes = _codes(_errors(data))
+    assert "DAMS-REQ-ATR-005.c1" not in codes
+    assert "DAMS-REQ-PDM-004.c1" in codes
 
 
 def test_atr005_planned_on_active_warning() -> None:
@@ -530,7 +550,7 @@ def test_atr005_planned_on_active_warning() -> None:
     attr["mapping_rationale"] = "later"
     # Drop field mapping so coverage is exception-based
     _drop_mapping_types(data, "field_mapping")
-    assert any("ATR-005.c2" in d.diagnostic_code for d in _warns(data))
+    assert not any("ATR-005.c2" in d.diagnostic_code for d in _warns(data))
 
 
 def test_atr005_field_plus_expression_ok() -> None:
@@ -636,8 +656,10 @@ def test_inv067_scalar_required_declared() -> None:
 def test_pdm003_not_inferred_from_field_mapping() -> None:
     data = _example()
     _drop_mapping_types(data, "entity_physical")
-    # field_mapping remains — must still fail PDM-003 / GEN-004
-    assert "DAMS-REQ-PDM-003.c1" in _codes(_errors(data))
+    # field_mapping remains — PDM-02 (alias PDM-003) still fails; GEN-004 is gone
+    codes = _codes(_errors(data))
+    assert "DAMS-REQ-PDM-003.c1" in codes
+    assert "DAMS-REQ-GEN-004.c1" not in codes
 
 
 def test_pdm003_technical_only_with_rationale_ok() -> None:
@@ -673,10 +695,11 @@ def test_cls001_axes_warning() -> None:
 
 
 def test_cls002_security_soft() -> None:
+    """CLS-002 dropped in ADR-056 PR-10d (Group D)."""
     data = _example()
     data["logical_entities"][0]["governance_classification"] = "confidential"
     data["logical_entities"][0].pop("security_classification", None)
-    assert any("CLS-002" in d.diagnostic_code for d in _warns(data))
+    assert not any("CLS-002" in d.diagnostic_code for d in _warns(data))
 
 
 def test_flw001_soft_when_outbound() -> None:
@@ -701,7 +724,7 @@ def test_atr004_datetime_timezone_soft() -> None:
             "mapping_rationale": "Not persisted yet.",
         }
     )
-    assert any("ATR-004" in d.diagnostic_code for d in _warns(data))
+    assert not any("ATR-004" in d.diagnostic_code for d in _warns(data))
 
 
 def test_enterprise_package_skipped() -> None:
@@ -795,8 +818,7 @@ def test_ldm008_warns_when_dependent_owner_link_missing() -> None:
         if d.severity == DiagnosticSeverity.WARNING
         and "LDM-008" in d.diagnostic_code
     ]
-    assert warns
-    assert any("LegalEntity" in d.diagnostic_message for d in warns)
+    assert warns == []
 
 
 def test_ldm008_passes_when_owner_realizer_linked() -> None:
