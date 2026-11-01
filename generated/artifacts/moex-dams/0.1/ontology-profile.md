@@ -1,8 +1,8 @@
 # Ontology profile: moex_dams
 
 - schema_id: `https://data.moex.com/dams/v0.1`
-- schema_version: `5.4.0`
-- schema_digest: `sha256:6e65f695cde87a48f6cb470b59f004d8bc63e5eccb89537859429261ab98ccc4`
+- schema_version: `5.5.0`
+- schema_digest: `sha256:0e91f46dc23eb9bdd6de7b593fe09a4b24d8d1e277283e97294c04b91d62e899`
 - default_prefix: `dams`
 - classes: 80
 - slots: 331

@@ -253,7 +253,10 @@ slots:
     range: GovernanceClassificationEnum
   security_classification:
     range: SecurityClassificationEnum
-    description: Режим защиты (Wave 2); ортогонален governance_classification.
+    deprecated: true
+    description: >
+      Deprecated ADR-056 PR-10e. Use governance_classification. Slot remains
+      until a later series removes it (MAJOR).
   sensitivity_term_refs:
     range: DataClassificationTerm
     multivalued: true

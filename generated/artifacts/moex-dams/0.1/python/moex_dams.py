@@ -1,5 +1,5 @@
 # Auto generated from moex-dams.yaml by pythongen.py version: 0.0.1
-# Generation date: 2026-10-28T12:47:26
+# Generation date: 2026-11-01T13:18:29
 # Schema: moex_dams
 #
 # id: https://data.moex.com/dams/v0.1
@@ -60,7 +60,7 @@ from linkml_runtime.linkml_model.types import Boolean, Datetime, Decimal, Intege
 from linkml_runtime.utils.metamodelcore import Bool, Decimal, URI, URIorCURIE, XSDDateTime
 
 metamodel_version = "1.11.0"
-version = "5.4.0"
+version = "5.5.0"
 
 # Namespaces
 DAMS = CurieNamespace('dams', 'https://data.moex.com/dams/')
@@ -2567,7 +2567,7 @@ class RealizesMapping(Mapping):
 @dataclass(repr=False)
 class EntityPhysicalMapping(Mapping):
     """
-    Explicit entity-level link between DataCarrier and LogicalEntity (ADR-046 / PDM-003). Exactly one source and one
+    Explicit entity-level link between DataCarrier and LogicalEntity (ADR-046 / PDM-02). Exactly one source and one
     target; cardinality one_to_one.
     """
     _inherited_slots: ClassVar[list[str]] = []
@@ -5093,7 +5093,7 @@ class MappingTypeEnum(EnumDefinitionImpl):
     """
     entity_physical = LinkMLPermissibleValue(
         text="entity_physical",
-        description="""Explicit entity-level link between DataCarrier and LogicalEntity (PDM-003). Do not infer from field_mapping alone.""")
+        description="""Explicit entity-level link between DataCarrier and LogicalEntity (PDM-02). Do not infer from field_mapping alone.""")
     field_mapping = LinkMLPermissibleValue(
         text="field_mapping",
         description="""mapsTo between SchemaNode (structure_id#local_key) and LogicalAttribute (ADR-038).""")

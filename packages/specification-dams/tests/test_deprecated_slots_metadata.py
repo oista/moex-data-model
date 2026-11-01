@@ -43,4 +43,11 @@ def test_moex_deprecated_slots_not_imported_archive_only():
 
 def test_schema_major_version_bumped():
     sv = SchemaView(str(SCHEMA))
-    assert sv.schema.version == "5.4.0"
+    assert sv.schema.version == "5.5.0"
+
+
+def test_security_classification_is_deprecated():
+    sv = SchemaView(str(SCHEMA))
+    slot = sv.get_slot("security_classification")
+    assert slot is not None
+    assert slot.deprecated in (True, "True", "true")
