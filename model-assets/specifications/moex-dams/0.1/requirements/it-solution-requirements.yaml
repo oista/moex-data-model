@@ -332,6 +332,8 @@ requirements:
   description: Status-driven conceptual alignment.
   lifecycle_status: approved
   code: LDM-006
+  obligation: mandatory
+  responsible_role: data_architecture
   requirement_level: it_solution
   requirement_section: LDM
   statement: 'Логическая сущность должна быть прослеживаемо связана с корпоративным понятием либо иметь допустимый статус выравнивания с обоснованием: «ожидает решения», «только локальный смысл» или «не применимо» (только для технических сущностей). Ссылка на корпоративное понятие и пояснение характера реализации могут присутствовать одновременно.'
@@ -532,6 +534,8 @@ requirements:
   description: Four cardinality slots when active.
   lifecycle_status: approved
   code: REF-002
+  obligation: recommended
+  responsible_role: business_owner
   requirement_level: it_solution
   requirement_section: REF
   statement: У активной логической связи должны быть заданы минимальная и максимальная кардинальность с обеих сторон. Для черновика допускается незаполненность только при соответствующем статусе жизненного цикла и кратком обосновании.
