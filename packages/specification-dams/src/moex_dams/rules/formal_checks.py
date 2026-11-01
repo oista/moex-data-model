@@ -45,15 +45,16 @@ from moex_dams.rules.technical_assets import (
 # DataCarrier kinds (GEN-004 / PDM-003 allowlist).
 DATA_CARRYING_KINDS = DATA_CARRIER_KINDS
 
-_DEFAULT_CATALOG = (
+_REQ_DIR = (
     Path(__file__).resolve().parents[5]
     / "model-assets"
     / "specifications"
     / "moex-dams"
     / "0.1"
     / "requirements"
-    / "it-solution-requirements.yaml"
 )
+_DEFAULT_CATALOG = _REQ_DIR / "it-solution-requirements.yaml"
+_DEFAULT_CONCEPTUAL_CATALOG = _REQ_DIR / "conceptual-model-requirements.yaml"
 
 # ADR-056: requirements in these lifecycle states are not enforced by assess.
 # The catalog loader still returns them (viewer / export show deprecated rows).
@@ -193,6 +194,12 @@ def _iter_targets(
     """Return (element_dict, subject_ref) for instances of target_class."""
     if target_class == "ModelPackage":
         return [(data, str(data.get("element_id") or "ModelPackage"))]
+    if target_class == "ConceptualEntity":
+        out = []
+        for e in data.get("conceptual_entities") or []:
+            if isinstance(e, dict):
+                out.append((e, str(e.get("element_id") or e.get("name"))))
+        return out
     if target_class == "LogicalEntity":
         out = []
         for e in data.get("logical_entities") or []:
@@ -442,6 +449,9 @@ def _applies(req: dict[str, Any], data: dict[str, Any]) -> bool:
             return False
         if impl_scope is None and not data.get("solution_ref"):
             return False
+    if scope == "enterprise":
+        if data.get("implementation_scope") != "enterprise" or data.get("solution_ref"):
+            return False
     level = applies.get("applies_dams_model_level")
     if level == "solution" and data.get("implementation_scope") == "enterprise":
         return False
@@ -463,15 +473,7 @@ def _filter_by_kinds(
     ]
 
 
-def load_it_solution_catalog(catalog_path: Path | None = None) -> list[dict[str, Any]]:
-    path = catalog_path or _DEFAULT_CATALOG
-    if not path.is_file():
-        # Repo-relative fallback from CWD
-        alt = (
-            Path("model-assets/specifications/moex-dams/0.1/requirements/"
-                 "it-solution-requirements.yaml")
-        )
-        path = alt if alt.is_file() else path
+def _load_catalog_file(path: Path) -> list[dict[str, Any]]:
     if not path.is_file():
         return []
     raw = yaml.safe_load(path.read_text(encoding="utf-8"))
@@ -479,6 +481,43 @@ def load_it_solution_catalog(catalog_path: Path | None = None) -> list[dict[str,
         return []
     reqs = raw.get("requirements") or []
     return [r for r in reqs if isinstance(r, dict)]
+
+
+def load_it_solution_catalog(catalog_path: Path | None = None) -> list[dict[str, Any]]:
+    path = catalog_path or _DEFAULT_CATALOG
+    if not path.is_file():
+        alt = (
+            Path("model-assets/specifications/moex-dams/0.1/requirements/"
+                 "it-solution-requirements.yaml")
+        )
+        path = alt if alt.is_file() else path
+    return _load_catalog_file(path)
+
+
+def load_conceptual_catalog(catalog_path: Path | None = None) -> list[dict[str, Any]]:
+    path = catalog_path or _DEFAULT_CONCEPTUAL_CATALOG
+    if not path.is_file():
+        alt = (
+            Path("model-assets/specifications/moex-dams/0.1/requirements/"
+                 "conceptual-model-requirements.yaml")
+        )
+        path = alt if alt.is_file() else path
+    return _load_catalog_file(path)
+
+
+def _is_enterprise_package(data: dict[str, Any]) -> bool:
+    return (
+        data.get("implementation_scope") == "enterprise"
+        and not data.get("solution_ref")
+    )
+
+
+def _conceptual_catalog_path(it_solution_path: Path | None) -> Path:
+    if it_solution_path is not None:
+        sibling = it_solution_path.parent / "conceptual-model-requirements.yaml"
+        if sibling.is_file():
+            return sibling
+    return _DEFAULT_CONCEPTUAL_CATALOG
 
 
 def _effective_slot(
@@ -1226,6 +1265,84 @@ def _run_conditional(
             )
         return out
 
+    if template == "ldm01_has_logical_entity":
+        if not data.get("logical_entities"):
+            out.append(
+                _diag(
+                    code=code,
+                    severity=sev,
+                    message="Model package has no logical entities.",
+                    subject=subject,
+                    remediation=rem,
+                    statement=statement,
+                    **req_kw,
+                )
+            )
+        return out
+
+    if template == "ldm06_identifier":
+        if str(el.get("entity_type") or "") == "technical":
+            return out
+        keys = el.get("key_attribute_refs") or []
+        kind = el.get("business_key_kind")
+        if not _filled(keys):
+            out.append(
+                _diag(
+                    code=code,
+                    severity=sev,
+                    message=(
+                        f'LogicalEntity "{subject}" has no key_attribute_refs '
+                        "(unique identifier attributes)."
+                    ),
+                    subject=subject,
+                    remediation=rem,
+                    statement=statement,
+                    **req_kw,
+                )
+            )
+        if kind == "surrogate" and not _filled(el.get("identity_rule")):
+            out.append(
+                _diag(
+                    code=code,
+                    severity=sev,
+                    message=(
+                        f'LogicalEntity "{subject}" uses a surrogate key without '
+                        "identity_rule explaining why a business/natural key is absent."
+                    ),
+                    subject=subject,
+                    remediation=rem,
+                    statement=statement,
+                    **req_kw,
+                )
+            )
+        return out
+
+    if template == "cdm02_relation_typed":
+        if str(el.get("lifecycle_status") or "active") != "active":
+            return out
+        missing: list[str] = []
+        if not _filled(el.get("relationship_kind")):
+            missing.append("relationship_kind")
+        if not _filled(el.get("relation_term_ref")):
+            missing.append("relation_term_ref")
+        if missing:
+            out.append(
+                _diag(
+                    code=code,
+                    severity=sev,
+                    message=(
+                        f'Relationship "{subject}" is active without '
+                        + " and ".join(missing)
+                        + "."
+                    ),
+                    subject=subject,
+                    remediation=rem,
+                    statement=statement,
+                    **req_kw,
+                )
+            )
+        return out
+
     # Unknown template — surface as warning so authors notice
     out.append(
         _diag(
@@ -1257,11 +1374,10 @@ def check_formal_requirements(
     if not isinstance(data, dict):
         return ()
 
-    # Skip enterprise conceptual packages
-    if data.get("implementation_scope") == "enterprise" and not data.get("solution_ref"):
-        return ()
-
-    reqs = load_it_solution_catalog(catalog_path)
+    if _is_enterprise_package(data):
+        reqs = load_conceptual_catalog(_conceptual_catalog_path(catalog_path))
+    else:
+        reqs = load_it_solution_catalog(catalog_path)
     if not reqs:
         return ()
 

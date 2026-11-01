@@ -276,9 +276,11 @@ requirements:
   name: conceptual_entity_glossary_definition
   title: Определение глоссария для сущности КМД
   description: >
-    ADR-056 backbone CDM-01. Executable subset deferred (PR-5 / conceptual Python).
+    ADR-056 backbone CDM-01. «Определение глоссария» — эффективное определение
+    элемента (own description / definition_source_ref / cascade); глоссарий —
+    представление, не обязательная соседняя запись термина (ADR-025).
   lifecycle_status: approved
-  implementation_status: in_progress
+  implementation_status: implemented
   code: CDM-01
   obligation: mandatory
   responsible_role: data_architecture
@@ -294,18 +296,23 @@ requirements:
     applies_implementation_scope: enterprise
   formal_checks:
   - check_id: CDM-01.c1
-    kind: slot_required
+    kind: definition_resolvable
     target_class: ConceptualEntity
-    target_slot: description
     severity: error
+    diagnostic_code: DAMS-REQ-CDM-01.c1
+    remediation: >
+      Задайте description (own), либо definition_source_ref для наследования
+      эталонного определения (ADR-025). Глоссарий — представление того же текста.
 
 - element_id: dams:req/CDM-02
   name: conceptual_base_relationship_kinds
   title: Базовые типы связей КМД
   description: >-
-    ADR-056 backbone CDM-02. Enforced by check_relation_terms / check_conceptual_entities (not IT-solution formal_checks runner).
+    ADR-056 backbone CDM-02. Active relationships need relationship_kind and
+    relation_term_ref. Specialization via ConceptualEntity.parent_concept_ref
+    is allowed without a separate specialization Relationship.
   lifecycle_status: approved
-  implementation_status: in_progress
+  implementation_status: implemented
   code: CDM-02
   obligation: mandatory
   responsible_role: data_architecture
@@ -318,4 +325,13 @@ requirements:
     applicability_id: appl:CDM-02
     applies_target_class: Relationship
     applies_implementation_scope: enterprise
-  formal_checks: []
+  formal_checks:
+  - check_id: CDM-02.c1
+    kind: conditional_branch
+    target_class: Relationship
+    expression: cdm02_relation_typed
+    severity: error
+    diagnostic_code: DAMS-REQ-CDM-02.c1
+    remediation: >
+      Задайте relationship_kind и relation_term_ref. Специализация через
+      parent_concept_ref на сущности допускается.

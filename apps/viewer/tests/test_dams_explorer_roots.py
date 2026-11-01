@@ -241,6 +241,7 @@ def test_wrap_roots_loads_requirements_catalog():
     assert "LDM-01" in codes
     assert "LDM-06" in codes
     assert "LDM-006" in codes
+    assert "LDM-101" in codes
     assert "LDM-007" in codes
     assert "ATR-001" in codes
     assert "ATR-005" in codes

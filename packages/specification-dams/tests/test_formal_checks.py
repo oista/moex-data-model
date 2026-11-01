@@ -133,13 +133,25 @@ def test_catalog_expressions_all_have_runner_templates() -> None:
     """Every conditional_branch expression in catalog must be implemented."""
     from moex_dams.rules import formal_checks as fc
 
-    cat = yaml.safe_load(CATALOG.read_text(encoding="utf-8"))
-    exprs = {
-        c["expression"]
-        for r in cat["requirements"]
-        for c in r.get("formal_checks") or []
-        if c.get("kind") == "conditional_branch" and c.get("expression")
-    }
+    catalogs = [
+        CATALOG,
+        REPO
+        / "model-assets"
+        / "specifications"
+        / "moex-dams"
+        / "0.1"
+        / "requirements"
+        / "conceptual-model-requirements.yaml",
+    ]
+    exprs: set[str] = set()
+    for path in catalogs:
+        cat = yaml.safe_load(path.read_text(encoding="utf-8"))
+        exprs.update(
+            c["expression"]
+            for r in cat["requirements"]
+            for c in r.get("formal_checks") or []
+            if c.get("kind") == "conditional_branch" and c.get("expression")
+        )
     # Probe unknown template path via a synthetic call
     known = {
         "implementation_scope_solution",
@@ -163,6 +175,9 @@ def test_catalog_expressions_all_have_runner_templates() -> None:
         "atr004_type_specific_soft",
         "ldm09_data_class",
         "ldm12_source_system",
+        "ldm01_has_logical_entity",
+        "ldm06_identifier",
+        "cdm02_relation_typed",
     }
     assert exprs <= known, f"Catalog templates missing in runner: {exprs - known}"
     assert known <= exprs or True  # runner may have extras unused
@@ -313,6 +328,7 @@ def test_gen002_implementation_scope() -> None:
 
 
 def test_gen003_empty_package() -> None:
+    """Empty solution package fails LDM-01.c3 (GEN-003 is superseded Group A)."""
     data = {
         "element_id": "dams:model/empty",
         "name": "empty",
@@ -324,13 +340,15 @@ def test_gen003_empty_package() -> None:
         "solution_ref": "eam:solution/X",
         "data_owner_ref": "org:role/X",
     }
-    assert "DAMS-REQ-GEN-003.c1" in _codes(
+    codes = _codes(
         [
             d
             for d in check_formal_requirements(_body(data), catalog_path=CATALOG)
             if d.severity == DiagnosticSeverity.ERROR
         ]
     )
+    assert "DAMS-REQ-LDM-01.c3" in codes
+    assert "DAMS-REQ-GEN-003.c1" not in codes
 
 
 def test_gen004_data_carrying_needs_entity_mapping() -> None:
@@ -384,15 +402,38 @@ def test_ldm003_entity_type_not_enforced_after_group_a_supersede() -> None:
     assert "DAMS-REQ-LDM-003.c1" not in _codes(_errors(data))
 
 
-def test_ldm004_identity_missing() -> None:
+def test_ldm01_requires_logical_entity() -> None:
+    data = _example()
+    data["logical_entities"] = []
+    codes = _codes(_errors(data))
+    assert "DAMS-REQ-LDM-01.c3" in codes
+    # Physical assets still satisfy legacy GEN-003 (Group D until PR-10d).
+    assert "DAMS-REQ-GEN-003.c1" not in codes
+
+
+def test_ldm06_identifier_missing_keys() -> None:
     data = _example()
     for ent in data["logical_entities"]:
-        ent.pop("identity_rule", None)
-        ent["business_key_kind"] = "surrogate"
         ent.pop("key_attribute_refs", None)
     codes = _codes(_errors(data))
-    assert any("LDM-004" in c for c in codes)
+    assert "DAMS-REQ-LDM-06.c1" in codes
     assert any("Remediation:" in d.diagnostic_message for d in _errors(data))
+
+
+def test_ldm06_surrogate_needs_identity_rule() -> None:
+    data = _example()
+    e = data["logical_entities"][0]
+    e["business_key_kind"] = "surrogate"
+    e.pop("identity_rule", None)
+    assert "DAMS-REQ-LDM-06.c1" in _codes(_errors(data))
+
+
+def test_ldm06_natural_key_without_identity_rule_ok() -> None:
+    data = _example()
+    e = data["logical_entities"][0]
+    e["business_key_kind"] = "natural"
+    e.pop("identity_rule", None)
+    assert "DAMS-REQ-LDM-06.c1" not in _codes(_errors(data))
 
 
 def test_ldm005_no_attributes() -> None:
@@ -519,7 +560,8 @@ def test_ref002_cardinality_required_when_active() -> None:
         "target_max_cardinality",
     ):
         rel.pop(s, None)
-    assert "DAMS-REQ-REF-002.c1" in _codes(_errors(data))
+    assert "DAMS-REQ-REF-002.c1" in _codes(_warns(data))
+    assert "DAMS-REQ-REF-002.c1" not in _codes(_errors(data))
 
 
 def test_ref002_draft_with_rationale_ok() -> None:
@@ -904,3 +946,88 @@ def test_ldm12_mixed_attrs_ok() -> None:
         for attr in ent.get("attributes") or []:
             attr["source_system_refs"] = ["eam:system/EXAMPLE"]
     assert "DAMS-REQ-LDM-12.c1" not in _codes(_errors(data))
+
+
+# --- CDM (enterprise conceptual catalog, ADR-056 PR-10c) -----------------------
+
+
+def _enterprise_pkg() -> dict:
+    return {
+        "element_id": "dams:model/cdm-test",
+        "name": "cdm_test",
+        "description": "Minimal enterprise package for CDM-01/02.",
+        "lifecycle_status": "draft",
+        "api_version": "dams.moex/v0.1",
+        "model_version": "0.1.0",
+        "implementation_scope": "enterprise",
+        "conceptual_entities": [
+            {
+                "element_id": "dams:concept/Party",
+                "name": "Party",
+                "title": "Сторона",
+                "description": "Бизнес-актор независимо от формы реализации.",
+                "lifecycle_status": "active",
+            },
+            {
+                "element_id": "dams:concept/LegalEntity",
+                "name": "LegalEntity",
+                "title": "Юридическое лицо",
+                "description": "Организация как субъект права.",
+                "lifecycle_status": "active",
+                "parent_concept_ref": "dams:concept/Party",
+            },
+        ],
+        "relationships": [
+            {
+                "element_id": "dams:rel/LegalEntity/ofParty",
+                "name": "ofParty",
+                "description": "Юрлицо входит в состав стороны.",
+                "lifecycle_status": "active",
+                "source_entity_ref": "dams:concept/LegalEntity",
+                "target_entity_ref": "dams:concept/Party",
+                "relationship_kind": "composition",
+                "relation_term_ref": "dams:relterm/partOf",
+            }
+        ],
+    }
+
+
+def _cdm_diags(data: dict) -> list:
+    return list(
+        check_formal_requirements(_body(data, "enterprise.yaml"), catalog_path=CATALOG)
+    )
+
+
+def test_cdm01_02_happy_path() -> None:
+    codes = _codes(
+        [d for d in _cdm_diags(_enterprise_pkg()) if d.severity == DiagnosticSeverity.ERROR]
+    )
+    assert "DAMS-REQ-CDM-01.c1" not in codes
+    assert "DAMS-REQ-CDM-02.c1" not in codes
+
+
+def test_cdm01_definition_required() -> None:
+    data = _enterprise_pkg()
+    data["conceptual_entities"][0].pop("description", None)
+    assert "DAMS-REQ-CDM-01.c1" in _codes(
+        [d for d in _cdm_diags(data) if d.severity == DiagnosticSeverity.ERROR]
+    )
+
+
+def test_cdm02_active_relationship_needs_kind_and_term() -> None:
+    data = _enterprise_pkg()
+    data["relationships"][0].pop("relationship_kind", None)
+    data["relationships"][0].pop("relation_term_ref", None)
+    assert "DAMS-REQ-CDM-02.c1" in _codes(
+        [d for d in _cdm_diags(data) if d.severity == DiagnosticSeverity.ERROR]
+    )
+
+
+def test_cdm02_parent_concept_ref_without_specialization_rel_ok() -> None:
+    """Specialization may live on parent_concept_ref; no extra Relationship required."""
+    data = _enterprise_pkg()
+    data["relationships"] = []
+    codes = _codes(
+        [d for d in _cdm_diags(data) if d.severity == DiagnosticSeverity.ERROR]
+    )
+    assert "DAMS-REQ-CDM-02.c1" not in codes

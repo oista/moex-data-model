@@ -329,8 +329,10 @@ requirements:
 - element_id: dams:req/LDM-006
   name: conceptual_alignment
   title: Связь с корпоративными понятиями
-  description: Status-driven conceptual alignment.
-  lifecycle_status: approved
+  description: >
+    Status-driven conceptual alignment. Recoded to LDM-101 in ADR-056 PR-10c
+    (collision with backbone LDM-06).
+  lifecycle_status: superseded
   code: LDM-006
   obligation: mandatory
   responsible_role: data_architecture
@@ -342,6 +344,32 @@ requirements:
     applies_target_class: LogicalEntity
   formal_checks:
   - check_id: LDM-006.c1
+    kind: conditional_branch
+    target_class: LogicalEntity
+    expression: ldm006_alignment
+    severity: error
+    diagnostic_code: DAMS-REQ-LDM-006.c1
+    remediation: Укажите conceptual_entity_refs (aligned) либо conceptual_alignment_status с alignment_rationale (pending/local-only; not-applicable только для technical).
+  superseded_by: dams:req/LDM-101
+- element_id: dams:req/LDM-101
+  name: conceptual_alignment
+  title: Связь с корпоративными понятиями
+  description: >
+    Local extension (ADR-013 `{SECTION}-1NN`). Same checks as former LDM-006;
+    diagnostic DAMS-REQ-LDM-006.c1 stays stable.
+  lifecycle_status: approved
+  implementation_status: implemented
+  code: LDM-101
+  obligation: mandatory
+  responsible_role: data_architecture
+  requirement_level: it_solution
+  requirement_section: LDM
+  statement: 'Логическая сущность должна быть прослеживаемо связана с корпоративным понятием либо иметь допустимый статус выравнивания с обоснованием: «ожидает решения», «только локальный смысл» или «не применимо» (только для технических сущностей). Ссылка на корпоративное понятие и пояснение характера реализации могут присутствовать одновременно.'
+  applies_to:
+    applicability_id: appl:LDM-101
+    applies_target_class: LogicalEntity
+  formal_checks:
+  - check_id: LDM-101.c1
     kind: conditional_branch
     target_class: LogicalEntity
     expression: ldm006_alignment
@@ -547,7 +575,7 @@ requirements:
     kind: conditional_branch
     target_class: Relationship
     expression: ref002_cardinality
-    severity: error
+    severity: warning
     diagnostic_code: DAMS-REQ-REF-002.c1
     remediation: Задайте source/target min и max cardinality либо для draft укажите cardinality_rationale.
 - element_id: dams:req/PDM-001
@@ -1255,7 +1283,8 @@ requirements:
   name: logical_model_at_it_solution
   title: ЛМД на уровне ИТ-решения
   description: >
-    ADR-056 backbone LDM-01. Checks deferred to PR-5 (from GEN-002 / GEN-003).
+    ADR-056 backbone LDM-01. GEN-002 scope plus ≥1 LogicalEntity (PR-10c).
+    Physical-only packages do not satisfy the logical-model floor.
   lifecycle_status: approved
   implementation_status: implemented
   code: LDM-01
@@ -1285,10 +1314,10 @@ requirements:
   - check_id: LDM-01.c3
     kind: conditional_branch
     target_class: ModelPackage
-    expression: non_empty_logical_or_physical
+    expression: ldm01_has_logical_entity
     severity: error
-    diagnostic_code: DAMS-REQ-GEN-003.c1
-    remediation: Добавьте хотя бы одну логическую сущность или технический актив (DataCarrier и др.).
+    diagnostic_code: DAMS-REQ-LDM-01.c3
+    remediation: Добавьте хотя бы одну логическую сущность.
 - element_id: dams:req/LDM-02
   name: logical_model_spec_version
   title: Соответствие спецификации и версия
@@ -1339,7 +1368,9 @@ requirements:
   name: logical_entity_business_definition
   title: Определение бизнес-термина сущности ЛМД
   description: >
-    ADR-056 backbone LDM-04. Checks deferred to PR-5 (from LDM-002.c3).
+    ADR-056 backbone LDM-04. «Определение бизнес-термина глоссария» — эффективное
+    определение элемента (own description / definition_source_ref / cascade);
+    глоссарий — представление, не обязательная соседняя запись термина (ADR-025).
   lifecycle_status: approved
   implementation_status: implemented
   code: LDM-04
@@ -1396,8 +1427,9 @@ requirements:
   name: logical_entity_unique_identifier
   title: Уникальный идентификатор сущности ЛМД
   description: >
-    ADR-056 backbone LDM-06. Checks deferred to PR-5 (from LDM-004). Distinct from
-    legacy LDM-006 (conceptual alignment; Group B).
+    ADR-056 backbone LDM-06. Identifier is key_attribute_refs (not identity_rule
+    prose). Surrogate still needs identity_rule explaining why there is no
+    business/natural key. Distinct from Group B LDM-101 (was LDM-006).
   lifecycle_status: approved
   implementation_status: implemented
   code: LDM-06
@@ -1417,10 +1449,13 @@ requirements:
   - check_id: LDM-06.c1
     kind: conditional_branch
     target_class: LogicalEntity
-    expression: ldm004_identity
+    expression: ldm06_identifier
     severity: error
-    diagnostic_code: DAMS-REQ-LDM-004.c1
-    remediation: Добавьте identity_rule и business_key_kind и/или key_attribute_refs. Для нетехнической сущности одного surrogate недостаточно.
+    diagnostic_code: DAMS-REQ-LDM-06.c1
+    remediation: >
+      Укажите key_attribute_refs (состав уникального идентификатора).
+      Для суррогатного ключа добавьте identity_rule — почему нет бизнес-ключа
+      или натурального ключа.
 - element_id: dams:req/LDM-07
   name: logical_base_relationship_kinds
   title: Базовые типы связей ЛМД

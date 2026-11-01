@@ -101,8 +101,9 @@ def test_real_catalogs_row_count() -> None:
     assert "CM-GEN-001" in codes
     assert "LDM-01" in codes
     assert "CDM-01" in codes
-    # 57 legacy + 15 IT backbone (LDM-01..13, PDM-01..02) + 2 CDM = 74
-    assert len(rows) == 74
+    # 57 legacy + 15 IT backbone + LDM-101 + 2 CDM = 75
+    assert len(rows) == 75
+    assert "LDM-101" in codes
     assert rows == sorted(
         rows,
         key=lambda r: (

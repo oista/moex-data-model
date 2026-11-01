@@ -474,8 +474,8 @@ def test_export_requirements_xlsx(
     captured = capsys.readouterr()
     assert code == 0, captured.out
     assert out.is_file()
-    # 57 legacy + 15 IT backbone + 2 CDM (ADR-056 PR-4)
-    assert "rows=74" in captured.out
+    # 57 legacy + 15 IT backbone + LDM-101 + 2 CDM (ADR-056 PR-10c)
+    assert "rows=75" in captured.out
     assert "catalogs=2" in captured.out
     wb = load_workbook(out)
     ws = wb.active
@@ -485,6 +485,7 @@ def test_export_requirements_xlsx(
     assert "CM-GEN-001" in codes
     assert "PDM-001" in codes
     assert "LDM-01" in codes
+    assert "LDM-101" in codes
     assert "CDM-01" in codes
     statements = {
         ws.cell(row=r, column=9).value or "" for r in range(2, ws.max_row + 1)
