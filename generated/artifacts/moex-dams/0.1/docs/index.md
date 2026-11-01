@@ -246,7 +246,7 @@ Name: moex_dams
 | [is_identifying](is_identifying.md) | Является ли свойство идентифицирующим (бизнес-ключ) |
 | [is_primary_key](is_primary_key.md) | Признак первичного ключа (только relational; DAMS-валидатор) |
 | [is_unique](is_unique.md) | Признак уникальности колонки (только relational; DAMS-валидатор) |
-| [isolation_rationale](isolation_rationale.md) | Обоснование семантической изоляции сущности (LDM-007) |
+| [isolation_rationale](isolation_rationale.md) | Обоснование семантической изоляции сущности |
 | [item_node](item_node.md) | local_key узла элемента массива или значения map |
 | [key_attribute_refs](key_attribute_refs.md) |  |
 | [kind](kind.md) |  |
@@ -358,7 +358,7 @@ Name: moex_dams
 | [scope_ref](scope_ref.md) | Target of the scope (e |
 | [scoped_definition_id](scoped_definition_id.md) |  |
 | [scoped_definitions](scoped_definitions.md) | Context-scoped definitions (ADR-025); v1 scope_kind = system |
-| [security_classification](security_classification.md) | Режим защиты (Wave 2); ортогонален governance_classification |
+| [security_classification](security_classification.md) | Deprecated ADR-056 PR-10e |
 | [selected_attributes](selected_attributes.md) |  |
 | [selected_entities](selected_entities.md) |  |
 | [selection_ref](selection_ref.md) | Optional ExternalTermSelection id (ADR-020) |

@@ -34,7 +34,7 @@ from pydantic import (
 
 
 metamodel_version = "1.11.0"
-version = "5.4.0"
+version = "5.5.0"
 
 
 class ConfiguredBaseModel(BaseModel):
@@ -503,7 +503,7 @@ class MappingTypeEnum(str, Enum):
     """
     entity_physical = "entity_physical"
     """
-    Explicit entity-level link between DataCarrier and LogicalEntity (PDM-003). Do not infer from field_mapping alone.
+    Explicit entity-level link between DataCarrier and LogicalEntity (PDM-02). Do not infer from field_mapping alone.
 
     """
     field_mapping = "field_mapping"
@@ -1204,7 +1204,8 @@ class HasGovernanceClassification(ConfiguredBaseModel):
 
     """
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
-    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Deprecated ADR-056 PR-10e. Use governance_classification. Slot remains until a later series removes it (MAJOR).
+""")
     sensitivity_term_refs: Optional[list[str]] = Field(default=None)
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
@@ -1443,7 +1444,8 @@ class ModelPackage(ModelElement, HasPolicyBindings, HasGovernanceClassification,
     ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
-    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Deprecated ADR-056 PR-10e. Use governance_classification. Slot remains until a later series removes it (MAJOR).
+""")
     sensitivity_term_refs: Optional[list[str]] = Field(default=None)
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
@@ -1592,7 +1594,7 @@ class LogicalEntity(ModelElement, HasDefinition, HasDataSource, HasPolicyBinding
     business_key_kind: Optional[BusinessKeyKindEnum] = Field(default=None)
     conceptual_alignment_status: Optional[ConceptualAlignmentStatusEnum] = Field(default=None)
     alignment_rationale: Optional[str] = Field(default=None, description="""Обоснование статуса выравнивания с концептуальным уровнем.""")
-    isolation_rationale: Optional[str] = Field(default=None, description="""Обоснование семантической изоляции сущности (LDM-007).""")
+    isolation_rationale: Optional[str] = Field(default=None, description="""Обоснование семантической изоляции сущности.""")
     data_owner_ref: Optional[str] = Field(default=None)
     data_steward_ref: Optional[str] = Field(default=None)
     owning_unit_ref: Optional[str] = Field(default=None)
@@ -1603,7 +1605,8 @@ class LogicalEntity(ModelElement, HasDefinition, HasDataSource, HasPolicyBinding
 """)
     business_importance: Optional[BusinessImportanceEnum] = Field(default=None)
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
-    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Deprecated ADR-056 PR-10e. Use governance_classification. Slot remains until a later series removes it (MAJOR).
+""")
     sensitivity_term_refs: Optional[list[str]] = Field(default=None)
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
@@ -1664,7 +1667,8 @@ class LogicalAttribute(ModelElement, HasDefinition, HasDataSource, HasPolicyBind
     ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
-    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Deprecated ADR-056 PR-10e. Use governance_classification. Slot remains until a later series removes it (MAJOR).
+""")
     sensitivity_term_refs: Optional[list[str]] = Field(default=None)
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
@@ -1838,7 +1842,7 @@ class RealizesMapping(Mapping):
 
 class EntityPhysicalMapping(Mapping):
     """
-    Explicit entity-level link between DataCarrier and LogicalEntity (ADR-046 / PDM-003). Exactly one source and one target; cardinality one_to_one.
+    Explicit entity-level link between DataCarrier and LogicalEntity (ADR-046 / PDM-02). Exactly one source and one target; cardinality one_to_one.
 
     """
     source_refs: Optional[list[str]] = Field(default=None, min_length=1, max_length=1)
@@ -1980,7 +1984,8 @@ class TechnicalAsset(ModelElement, HasPolicyBindings, HasGovernanceClassificatio
     ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
-    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Deprecated ADR-056 PR-10e. Use governance_classification. Slot remains until a later series removes it (MAJOR).
+""")
     sensitivity_term_refs: Optional[list[str]] = Field(default=None)
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
@@ -2033,7 +2038,8 @@ class DataCarrier(TechnicalAsset, HasLocation, Contains, HasStructure):
     ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
-    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Deprecated ADR-056 PR-10e. Use governance_classification. Slot remains until a later series removes it (MAJOR).
+""")
     sensitivity_term_refs: Optional[list[str]] = Field(default=None)
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
@@ -2087,7 +2093,8 @@ class AccessPoint(TechnicalAsset, HasLocation, HasProtocolBinding):
     ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
-    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Deprecated ADR-056 PR-10e. Use governance_classification. Slot remains until a later series removes it (MAJOR).
+""")
     sensitivity_term_refs: Optional[list[str]] = Field(default=None)
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
@@ -2130,7 +2137,8 @@ class DataContainer(TechnicalAsset, Contains):
     ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
-    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Deprecated ADR-056 PR-10e. Use governance_classification. Slot remains until a later series removes it (MAJOR).
+""")
     sensitivity_term_refs: Optional[list[str]] = Field(default=None)
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
@@ -2174,7 +2182,8 @@ class ExecutionAsset(TechnicalAsset):
     ownership_inheritance_rule: Optional[str] = Field(default=None, description="""Deprecated as source of truth (ADR-023). Human-readable rationale for ownership inheritance/override only; does not substitute data_owner_ref. Effective ownership is resolved by the containment cascade.
 """)
     governance_classification: Optional[GovernanceClassificationEnum] = Field(default=None)
-    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Режим защиты (Wave 2); ортогонален governance_classification.""")
+    security_classification: Optional[SecurityClassificationEnum] = Field(default=None, description="""Deprecated ADR-056 PR-10e. Use governance_classification. Slot remains until a later series removes it (MAJOR).
+""")
     sensitivity_term_refs: Optional[list[str]] = Field(default=None)
     classification_source: Optional[str] = Field(default=None)
     classification_rationale: Optional[str] = Field(default=None)
@@ -2661,7 +2670,7 @@ class RequirementApplicability(ConfiguredBaseModel):
     Область применимости требования (без graph queries): класс цели, профиль и уровень модели.
 
     """
-    applicability_id: str = Field(default=..., description="""Stable id for applies_to blocks (e.g. appl:LDM-001).""")
+    applicability_id: str = Field(default=..., description="""Stable id for applies_to blocks (e.g. appl:LDM-01).""")
     applies_target_class: Optional[str] = Field(default=None, description="""Имя класса LinkML, к экземплярам которого применяется требование.""")
     applies_target_kinds: Optional[list[str]] = Field(default=None, description="""Опциональный allowlist asset_kind / facet (например relational_table, stream_topic).""")
     applies_implementation_scope: Optional[ImplementationScopeEnum] = Field(default=None)

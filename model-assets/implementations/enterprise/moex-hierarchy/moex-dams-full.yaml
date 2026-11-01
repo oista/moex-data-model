@@ -3,7 +3,7 @@
 # Do not edit by hand — regenerated at viewer publication build.
 name: moex_dams
 id: https://data.moex.com/dams/v0.1
-version: 5.4.0
+version: 5.5.0
 license: https://www.apache.org/licenses/LICENSE-2.0
 prefixes:
   linkml:
@@ -773,7 +773,7 @@ enums:
       entity_physical:
         text: entity_physical
         description: 'Explicit entity-level link between DataCarrier and LogicalEntity
-          (PDM-003). Do not infer from field_mapping alone.
+          (PDM-02). Do not infer from field_mapping alone.
 
           '
       field_mapping:
@@ -1560,7 +1560,11 @@ slots:
     range: GovernanceClassificationEnum
   security_classification:
     name: security_classification
-    description: Режим защиты (Wave 2); ортогонален governance_classification.
+    description: 'Deprecated ADR-056 PR-10e. Use governance_classification. Slot remains
+      until a later series removes it (MAJOR).
+
+      '
+    deprecated: 'True'
     from_schema: https://data.moex.com/dams/governance/v0.1
     range: SecurityClassificationEnum
   sensitivity_term_refs:
@@ -2089,7 +2093,7 @@ slots:
     range: string
   isolation_rationale:
     name: isolation_rationale
-    description: Обоснование семантической изоляции сущности (LDM-007).
+    description: Обоснование семантической изоляции сущности.
     from_schema: https://data.moex.com/dams/core/v0.1
     range: string
   mapping_coverage_status:
@@ -3143,7 +3147,7 @@ slots:
     range: string
   applicability_id:
     name: applicability_id
-    description: Stable id for applies_to blocks (e.g. appl:LDM-001).
+    description: Stable id for applies_to blocks (e.g. appl:LDM-01).
     from_schema: https://data.moex.com/dams/requirements/v0.1
     identifier: true
     range: string
@@ -4028,7 +4032,7 @@ classes:
   EntityPhysicalMapping:
     name: EntityPhysicalMapping
     description: 'Explicit entity-level link between DataCarrier and LogicalEntity
-      (ADR-046 / PDM-003). Exactly one source and one target; cardinality one_to_one.
+      (ADR-046 / PDM-02). Exactly one source and one target; cardinality one_to_one.
 
       '
     from_schema: https://data.moex.com/dams/core/v0.1
