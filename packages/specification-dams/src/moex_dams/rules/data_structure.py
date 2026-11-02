@@ -176,7 +176,7 @@ def check_local_key_unique(data: dict[str, Any]) -> list[Diagnostic]:
                         remediation=(
                             "Ensure local_key is unique within DataStructure.nodes. INV-022."
                         ),
-                        requirement_code="PDM-013",
+                        requirement_code="INV-022",
                     )
                 )
     return out
@@ -239,7 +239,7 @@ def check_node_edge_cycles(data: dict[str, Any]) -> list[Diagnostic]:
                             "Remove cycles; use node_kind=reference for recursive schemas. "
                             "INV-020."
                         ),
-                        requirement_code="PDM-014",
+                        requirement_code="INV-020",
                     )
                 )
     return out
@@ -269,7 +269,7 @@ def check_root_local_key(data: dict[str, Any]) -> list[Diagnostic]:
                     remediation=(
                         "Point root_local_key at an existing node local_key. INV-062."
                     ),
-                    requirement_code="PDM-015",
+                    requirement_code="INV-062",
                 )
             )
             continue
@@ -290,7 +290,7 @@ def check_root_local_key(data: dict[str, Any]) -> list[Diagnostic]:
                         remediation=(
                             "Set the root SchemaNode node_kind to object. INV-062."
                         ),
-                        requirement_code="PDM-015",
+                        requirement_code="INV-062",
                     )
                 )
         elif kind not in ("object", "array"):
@@ -304,7 +304,7 @@ def check_root_local_key(data: dict[str, Any]) -> list[Diagnostic]:
                     ),
                     subject=f"{sid}#{root_lk}" if sid else root_lk,
                     remediation="Use object or array as the structure root. INV-062.",
-                    requirement_code="PDM-015",
+                    requirement_code="INV-062",
                 )
             )
     return out
@@ -339,7 +339,7 @@ def check_relational_slots(data: dict[str, Any]) -> list[Diagnostic]:
                             "Remove relational slots or set schema_format=relational. "
                             "INV-021."
                         ),
-                        requirement_code="PDM-016",
+                        requirement_code="INV-021",
                     )
                 )
     return out
@@ -373,7 +373,7 @@ def check_occurs_bounds(data: dict[str, Any]) -> list[Diagnostic]:
                         ),
                         subject=f"{sid}#{lk}" if sid and lk else (sid or lk or None),
                         remediation="Ensure max_occurs >= min_occurs. INV-063.",
-                        requirement_code="PDM-017",
+                        requirement_code="INV-063",
                     )
                 )
     return out
@@ -411,7 +411,7 @@ def check_node_kind_shape(data: dict[str, Any]) -> list[Diagnostic]:
                             remediation=(
                                 "Set item_node to the element/value node local_key. INV-012."
                             ),
-                            requirement_code="PDM-020",
+                            requirement_code="INV-012",
                         )
                     )
                 if has_children:
@@ -427,7 +427,7 @@ def check_node_kind_shape(data: dict[str, Any]) -> list[Diagnostic]:
                             remediation=(
                                 "Remove children; use item_node for array/map. INV-012."
                             ),
-                            requirement_code="PDM-020",
+                            requirement_code="INV-013",
                         )
                     )
             elif kind in ("scalar", "enum"):
@@ -442,7 +442,7 @@ def check_node_kind_shape(data: dict[str, Any]) -> list[Diagnostic]:
                             ),
                             subject=subject,
                             remediation="Remove children from scalar/enum nodes. INV-013.",
-                            requirement_code="PDM-020",
+                            requirement_code="INV-013",
                         )
                     )
                 if has_item:
@@ -456,7 +456,7 @@ def check_node_kind_shape(data: dict[str, Any]) -> list[Diagnostic]:
                             ),
                             subject=subject,
                             remediation="Remove item_node from scalar/enum nodes. INV-013.",
-                            requirement_code="PDM-020",
+                            requirement_code="INV-013",
                         )
                     )
     return out
@@ -490,7 +490,7 @@ def check_field_mapping_structure_ends(data: dict[str, Any]) -> list[Diagnostic]
                         "Use dams:structure/…#local_key that exists in "
                         "data_structures.nodes. INV-034."
                     ),
-                    requirement_code="PDM-009",
+                    requirement_code="INV-034",
                 )
             )
     return out
@@ -640,7 +640,7 @@ def check_message_refs_kinds(data: dict[str, Any]) -> list[Diagnostic]:
                     ),
                     subject=sid or None,
                     remediation="Put message_refs on operation or channel AccessPoints. INV-017.",
-                    requirement_code="PDM-018",
+                    requirement_code="INV-017",
                 )
             )
         elif kind and kind not in MESSAGE_REFS_ALLOWED_KINDS:
@@ -656,7 +656,7 @@ def check_message_refs_kinds(data: dict[str, Any]) -> list[Diagnostic]:
                     remediation=(
                         "message_refs is only for asset_kind operation or channel. INV-019."
                     ),
-                    requirement_code="PDM-018",
+                    requirement_code="INV-019",
                 )
             )
     return out
@@ -698,7 +698,7 @@ def check_scalar_node_type(data: dict[str, Any]) -> list[Diagnostic]:
                     remediation=(
                         "Set native_type or data_type_ref on scalar nodes. INV-066."
                     ),
-                    requirement_code="PDM-002",
+                    requirement_code="INV-066",
                 )
             )
     return out
@@ -732,7 +732,7 @@ def check_scalar_node_required(data: dict[str, Any]) -> list[Diagnostic]:
                     remediation=(
                         "Set required true/false on scalar SchemaNode. INV-067."
                     ),
-                    requirement_code="PDM-002",
+                    requirement_code="INV-067",
                 )
             )
     return out
@@ -758,7 +758,7 @@ def check_message_payload(data: dict[str, Any]) -> list[Diagnostic]:
                         "Set payload_structure_ref to a DataStructure element_id. "
                         "INV-064."
                     ),
-                    requirement_code="PDM-019",
+                    requirement_code="INV-064",
                 )
             )
             continue
@@ -777,7 +777,7 @@ def check_message_payload(data: dict[str, Any]) -> list[Diagnostic]:
                         "Point payload_structure_ref at an existing data_structures "
                         "id. INV-064."
                     ),
-                    requirement_code="PDM-019",
+                    requirement_code="INV-064",
                 )
             )
         href = msg.get("headers_structure_ref")
@@ -795,7 +795,7 @@ def check_message_payload(data: dict[str, Any]) -> list[Diagnostic]:
                         "Point headers_structure_ref at an existing data_structures "
                         "id. INV-064."
                     ),
-                    requirement_code="PDM-019",
+                    requirement_code="INV-064",
                 )
             )
     return out

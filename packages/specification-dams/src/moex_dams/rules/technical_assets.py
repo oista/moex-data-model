@@ -145,7 +145,7 @@ def check_parent_ref_cycles(data: dict[str, Any]) -> list[Diagnostic]:
                     remediation=(
                         "Remove parent_ref or point it to a distinct ancestor. INV-047."
                     ),
-                    requirement_code="PDM-006",
+                    requirement_code="INV-047",
                     invariant_id="INV-047",
                 )
             )
@@ -166,7 +166,7 @@ def check_parent_ref_cycles(data: dict[str, Any]) -> list[Diagnostic]:
                             "Break the parent_ref cycle in the containment hierarchy. "
                             "INV-047."
                         ),
-                        requirement_code="PDM-006",
+                        requirement_code="INV-047",
                         invariant_id="INV-047",
                     )
                 )
@@ -205,7 +205,7 @@ def check_unique_asset_keys(data: dict[str, Any]) -> list[Diagnostic]:
                         "data_carriers, access_points, data_containers, and "
                         "execution_assets. INV-059."
                     ),
-                    requirement_code="PDM-005",
+                    requirement_code="INV-059",
                 )
             )
         else:
@@ -234,7 +234,7 @@ def check_asset_kind_allowlists(data: dict[str, Any]) -> list[Diagnostic]:
                     remediation=(
                         f"Use one of: {', '.join(sorted(allow))}. INV-060."
                     ),
-                    requirement_code="PDM-007",
+                    requirement_code="INV-060",
                 )
             )
     return out
@@ -265,7 +265,7 @@ def check_direction_forbidden(data: dict[str, Any]) -> list[Diagnostic]:
                     remediation=(
                         "Remove direction; it is only for DataCarrier/AccessPoint. INV-018."
                     ),
-                    requirement_code="PDM-008",
+                    requirement_code="INV-018",
                 )
             )
     return out
@@ -341,7 +341,7 @@ def check_mapping_endpoint_types(data: dict[str, Any]) -> list[Diagnostic]:
                             "Set source_refs to one DataCarrier id and target_refs to "
                             "one LogicalEntity id. INV-033."
                         ),
-                        requirement_code="PDM-009",
+                        requirement_code="INV-033",
                     )
                 )
         elif mtype == "field_mapping":
@@ -365,7 +365,7 @@ def check_mapping_endpoint_types(data: dict[str, Any]) -> list[Diagnostic]:
                             "Use LogicalAttribute ids in source_refs and resolvable "
                             "SchemaNodeRef targets. INV-034."
                         ),
-                        requirement_code="PDM-009",
+                        requirement_code="INV-034",
                     )
                 )
         elif mtype == "realizes":
@@ -393,7 +393,7 @@ def check_mapping_endpoint_types(data: dict[str, Any]) -> list[Diagnostic]:
                             "Point source_refs at logical/conceptual entities and "
                             "target_refs at conceptual entities. INV-035."
                         ),
-                        requirement_code="PDM-009",
+                        requirement_code="INV-035",
                     )
                 )
         elif mtype == "aligns_with":
@@ -414,7 +414,7 @@ def check_mapping_endpoint_types(data: dict[str, Any]) -> list[Diagnostic]:
                             "Use one ConceptualEntity source and absolute http(s) "
                             "IRI targets. INV-036."
                         ),
-                        requirement_code="PDM-009",
+                        requirement_code="INV-036",
                     )
                 )
     return out
@@ -451,7 +451,7 @@ def check_carrier_refs_are_data_carriers(data: dict[str, Any]) -> list[Diagnosti
                             "Point carrier_refs only at data_carriers element_ids. "
                             "INV-061."
                         ),
-                        requirement_code="PDM-010",
+                        requirement_code="INV-061",
                     )
                 )
 
@@ -525,7 +525,7 @@ def check_operation_interface_ref(data: dict[str, Any]) -> list[Diagnostic]:
                     remediation=(
                         "Set interface_ref to the parent AccessPoint (interface). INV-016."
                     ),
-                    requirement_code="PDM-011",
+                    requirement_code="INV-016",
                 )
             )
     return out
@@ -564,7 +564,7 @@ def check_in_memory_location(data: dict[str, Any]) -> list[Diagnostic]:
                     remediation=(
                         "Remove location_uri and region for in_memory carriers. INV-015."
                     ),
-                    requirement_code="PDM-012",
+                    requirement_code="INV-015",
                 )
             )
     return out
@@ -596,7 +596,7 @@ def check_carrier_structure_ref(data: dict[str, Any]) -> list[Diagnostic]:
                     "Set structure_ref to a DataStructure element_id "
                     "(skip for in_memory). INV-065."
                 ),
-                requirement_code="PDM-001",
+                requirement_code="INV-065",
             )
         )
     return out

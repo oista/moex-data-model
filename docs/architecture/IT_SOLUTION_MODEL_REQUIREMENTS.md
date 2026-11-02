@@ -975,26 +975,14 @@ source of truth — `requirements/*.yaml`.
 | Physical | `PDM-01` | Покрытие ФМД поставщика в интеграциях |
 | Physical | `PDM-02` | Связь атрибута ФМД с атрибутом ЛМД |
 
-### 10.2. Legacy Wave 1 (ещё в каталоге / assess)
+### 10.2. Local extensions (ещё в каталоге)
 
-| Группа | Код | Статус ADR-056 |
-|---|---|---|
-| General | `GEN-001`…`GEN-003` | Group A → superseded → LDM-02 / LDM-01 / LDM-11 |
-| General | `GEN-004` | Group D (drop later) |
-| Logical | `LDM-001` | Group D |
-| Logical | `LDM-002`…`LDM-005` | Group A → LDM-04 / LDM-09 / LDM-06 / LDM-05 |
-| Logical | `LDM-006` | Group B (recode in PR-10; ≠ backbone `LDM-06`) |
-| Logical | `LDM-007` / `LDM-008` | Group D |
-| Attribute | `ATR-001` / `ATR-006` | Group C → **deprecated** (schema / SEM) |
-| Attribute | `ATR-002` / `ATR-004` / `ATR-005` / `ATR-007` | Group D (drop in PR-10) |
-| Relationship | `REF-001` | Group C → **deprecated** (schema + `references.py`) |
-| Relationship | `REF-002` | Group B |
-| Relationship | `REF-003` | Group A → LDM-07 |
-| Physical | `PDM-001` / `PDM-002` / `PDM-005`…`PDM-020` | Group C → **deprecated** (schema / INV-012…067; ≠ backbone `PDM-01`/`PDM-02`) |
-| Physical | `PDM-003` / `PDM-004` | Group A → PDM-02 |
-| Flow | `FLW-001` | Group A → PDM-01 |
-| Flow | `FLW-002`…`FLW-005` | Group C → **deprecated** (INV-038…041) |
-| Classification | `CLS-*` | Group D |
+| Код | Роль |
+|---|---|
+| `LDM-101` | Conceptual alignment (бывший `LDM-006`; `{SECTION}-1NN`) |
+| `REF-002` | Кардинальность связи (`recommended` / warning) |
+
+Legacy Wave 1/2 rows (GEN / ATR / CLS / FLW / трёхзначные PDM-00x и т.д.) **удалены** в ADR-056 PR-10f. Их смысл живёт в schema `required`, Python INV и алиасах `DIAGNOSTIC_CODE_ALIASES`.
 
 ---
 

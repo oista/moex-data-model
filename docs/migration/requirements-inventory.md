@@ -9,12 +9,12 @@
 
 | Catalog | Path | Count |
 |---|---|---:|
-| IT-solution | [`it-solution-requirements.yaml`](../../model-assets/specifications/moex-dams/0.1/requirements/it-solution-requirements.yaml) | 63 (48 legacy + 15 backbone LDM/PDM) |
-| Conceptual | [`conceptual-model-requirements.yaml`](../../model-assets/specifications/moex-dams/0.1/requirements/conceptual-model-requirements.yaml) | 11 (9 legacy + CDM-01/02) |
-| **Total** | | **74** |
+| IT-solution | [`it-solution-requirements.yaml`](../../model-assets/specifications/moex-dams/0.1/requirements/it-solution-requirements.yaml) | **17** (15 backbone LDM/PDM + `LDM-101` + `REF-002`; PR-10f) |
+| Conceptual | [`conceptual-model-requirements.yaml`](../../model-assets/specifications/moex-dams/0.1/requirements/conceptual-model-requirements.yaml) | **2** (`CDM-01`/`CDM-02`; PR-10f) |
+| **Total** | | **19** |
 
 Metamodel: [`moex-requirements.yaml`](../../model-assets/specifications/moex-dams/0.1/schemas/moex-requirements.yaml).  
-Body assess loader: `packages/specification-dams/src/moex_dams/rules/formal_checks.py` → `load_it_solution_catalog` (IT-solution file **only**; conceptual catalog is export / documentation / status tests).
+Body assess loader: `packages/specification-dams/src/moex_dams/rules/formal_checks.py` → IT-solution catalog for solution packages; conceptual catalog for enterprise packages (PR-10c).
 
 ### Enforcement legend
 
@@ -177,10 +177,15 @@ Note: conceptual catalog already uses `CM-*` codes that do not match the IT-solu
 
 ## PR-9 outcome (Group C)
 
-- All 31 Group C rows are `lifecycle_status: deprecated` (25 IT-solution + 6 conceptual). Catalog still has **74** rows; export tests unchanged.
-- Runner skips them (PR-2). Enforcement stays in schema / Python / INV; new INV-065…067 cover former runner conditionals PDM-001.c5 / PDM-002.c2–c3.
+- All 31 Group C rows were `lifecycle_status: deprecated` (25 IT-solution + 6 conceptual) until PR-10f.
+- Runner skipped them (PR-2). Enforcement stays in schema / Python / INV; INV-065…067 cover former runner conditionals PDM-001.c5 / PDM-002.c2–c3.
 - Viewer (`apps/viewer`) hides `deprecated` / `superseded` / `rejected` by default (`requirements.show_inactive`).
-- **PR-10f** deletes deprecated + superseded rows, rewrites matrix `requirement_refs`, cleans `requirement_code=`. Diagnostic codes stay stable.
+
+## PR-10f outcome (deletion)
+
+- Deleted 56 inactive rows; catalogs now **19** active rows. See [CHANGELOG-requirements-cleanup.md](CHANGELOG-requirements-cleanup.md).
+- Matrix `requirement_refs` rebound (INV-033…036 → `PDM-02`; others cleared with `source` notes).
+- `requirement_code=` in INV emitters uses INV ids; diagnostic codes unchanged.
 
 ## Implications for migration
 

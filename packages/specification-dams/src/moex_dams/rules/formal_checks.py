@@ -1613,7 +1613,7 @@ def _cascade_governance_lints(
                     "Replace the package-level data_owner_ref with a real "
                     "org:role/... once ownership is assigned."
                 ),
-                requirement_code="GEN-001",
+                requirement_code="LDM-11",
             )
         )
 

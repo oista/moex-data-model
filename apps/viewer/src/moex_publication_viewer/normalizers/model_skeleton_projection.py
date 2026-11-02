@@ -35,6 +35,11 @@ _CLASS_PATH: dict[str, tuple[str, ...]] = {
 
 _PLACEHOLDER = "<required>"
 _REF_PLACEHOLDER = "<must-resolve-in-package>"
+_INACTIVE_LIFECYCLE = frozenset({"deprecated", "superseded", "rejected"})
+# conditional_branch expressions that imply nested instance structure
+_EXPRESSION_NESTED: dict[str, str] = {
+    "ldm005_attributes": "LogicalAttribute",
+}
 
 
 def _placeholder_for(kind: str, slot: str) -> Any:
@@ -91,16 +96,35 @@ def project_model_skeleton_from_catalog(
     root: dict[str, Any] = {}
     # Collect slots per class (preserve insertion order, first kind wins for placeholder)
     by_class: dict[str, dict[str, str]] = {}
+    ensure_classes: set[str] = set()
     for req in data.get("requirements") or []:
         if not isinstance(req, dict):
             continue
+        lifecycle = str(req.get("lifecycle_status") or "approved").lower()
+        if lifecycle in _INACTIVE_LIFECYCLE:
+            continue
+        applies = req.get("applies_to") or {}
+        if isinstance(applies, dict):
+            applies_class = str(applies.get("applies_target_class") or "")
+            if applies_class in _CLASS_PATH:
+                ensure_classes.add(applies_class)
         for check in req.get("formal_checks") or []:
             if not isinstance(check, dict):
                 continue
             kind = str(check.get("kind") or "")
             target_class = str(check.get("target_class") or "")
-            target_slot = str(check.get("target_slot") or "")
             if not target_class or target_class not in _CLASS_PATH:
+                continue
+            ensure_classes.add(target_class)
+            if kind == "definition_resolvable":
+                slots = by_class.setdefault(target_class, {})
+                if "description" not in slots:
+                    slots["description"] = "slot_required"
+                continue
+            if kind == "conditional_branch":
+                nested = _EXPRESSION_NESTED.get(str(check.get("expression") or ""))
+                if nested and nested in _CLASS_PATH:
+                    ensure_classes.add(nested)
                 continue
             if kind not in (
                 "slot_required",
@@ -127,6 +151,9 @@ def project_model_skeleton_from_catalog(
             slots = by_class.setdefault(target_class, {})
             if target_slot not in slots:
                 slots[target_slot] = kind
+
+    for target_class in sorted(ensure_classes, key=lambda c: len(_CLASS_PATH[c])):
+        _node_at(root, _CLASS_PATH[target_class])
 
     for target_class, slots in by_class.items():
         node = _node_at(root, _CLASS_PATH[target_class])

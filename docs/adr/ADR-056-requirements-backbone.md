@@ -1,5 +1,5 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
 normative: false
 supersedes: []
@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-056: Requirements backbone (normative modeling rules)
 
 **Date:** 2026-10-27  
-**Status:** Proposed (PR-0…PR-9 close-out; PR-10a records audit decisions; deletion is PR-10f)  
+**Status:** Accepted (PR-0…PR-10f: inactive catalog rows deleted; spine = 19)  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Amends:** [ADR-013](ADR-013-specification-requirements-catalog.md) (code pattern `{SECTION}-{NN}`/`{NNN}`; section `CDM`; optional empty `formal_checks`; `obligation` / `responsible_role`)  
 **Related:** [ADR-013](ADR-013-specification-requirements-catalog.md), [ADR-021](ADR-021-dams-implementation-profile-and-levels.md), [ADR-023](ADR-023-governed-property-cascade.md), [ADR-025](ADR-025-definition-cascade-and-glossary.md), [ADR-026](ADR-026-cmd-entity-metamodel.md), [ADR-029](ADR-029-cdm-from-er-sketch-and-realization.md), [ADR-045](ADR-045-executable-constraint-matrix.md), [ADR-046](ADR-046-typed-mapping-endpoints.md), [ADR-048](ADR-048-topology-ownership.md), [ADR-051](ADR-051-dams-schema-compatibility.md)  

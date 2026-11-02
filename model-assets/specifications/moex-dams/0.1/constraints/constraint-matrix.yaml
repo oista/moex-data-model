@@ -318,13 +318,12 @@ invariants:
 - id: INV-012
   title: SchemaNode array|map → item_node, без children
   statement: Для node_kind array или map обязателен item_node и запрещены children.
-  source: ADR-038:31; PDM-020
+  source: ADR-038:31; PDM-020; former requirement_refs DAMS-REQ-PDM-020.c1, DAMS-REQ-PDM-020.c2 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L1, L2, L3]
   severity: error
   status: implemented
-  requirement_refs: [DAMS-REQ-PDM-020.c1, DAMS-REQ-PDM-020.c2]
   implementation:
     linkml_rule:
       schema_file: moex-structure.yaml
@@ -350,7 +349,7 @@ invariants:
 - id: INV-013
   title: SchemaNode scalar|enum без children и item_node
   statement: Для node_kind scalar или enum запрещены children и item_node.
-  source: PDM-020
+  source: PDM-020; former requirement_refs DAMS-REQ-PDM-020.c3, DAMS-REQ-PDM-020.c4 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels:
@@ -359,7 +358,6 @@ invariants:
   - L3
   severity: error
   status: implemented
-  requirement_refs: [DAMS-REQ-PDM-020.c3, DAMS-REQ-PDM-020.c4]
   notes: L1 multi-ABSENT ослаблен в JSON Schema (linkml-rules-support §3.2).
   implementation:
     linkml_rule:
@@ -421,7 +419,7 @@ invariants:
 - id: INV-015
   title: DataCarrier in_memory без location_uri и region
   statement: Для asset_kind = in_memory запрещены location_uri и region.
-  source: PDM-012
+  source: PDM-012; former requirement_refs DAMS-REQ-PDM-012.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels:
@@ -430,7 +428,6 @@ invariants:
   - L3
   severity: error
   status: implemented
-  requirement_refs: [DAMS-REQ-PDM-012.c1]
   notes: L1 multi-ABSENT ослаблен в JSON Schema (linkml-rules-support §3.2).
   implementation:
     linkml_rule:
@@ -460,13 +457,12 @@ invariants:
 - id: INV-016
   title: AccessPoint operation → interface_ref
   statement: Для access_point_kind = operation обязателен interface_ref.
-  source: PDM-011; slot interface_ref
+  source: PDM-011; slot interface_ref; former requirement_refs DAMS-REQ-PDM-011.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L1, L2, L3]
   severity: error
   status: implemented
-  requirement_refs: [DAMS-REQ-PDM-011.c1]
   implementation:
     linkml_rule:
       schema_file: moex-technical.yaml
@@ -492,7 +488,7 @@ invariants:
 - id: INV-017
   title: AccessPoint interface без operation-полей
   statement: Для access_point_kind = interface запрещены operation_name, http_method, path_template, message_refs.
-  source: ADR-040:40-41; PDM-018
+  source: ADR-040:40-41; PDM-018; former requirement_refs DAMS-REQ-PDM-018.c1 (ADR-056 PR-10f)
   source_status: partial
   scope: moex-dams
   levels:
@@ -501,7 +497,6 @@ invariants:
   - L3
   severity: error
   status: implemented
-  requirement_refs: [DAMS-REQ-PDM-018.c1]
   notes: ADR явно называет только message_refs; L1 multi-ABSENT ослаблен.
   implementation:
     linkml_rule:
@@ -531,13 +526,12 @@ invariants:
 - id: INV-018
   title: direction запрещён для DataContainer и ExecutionAsset
   statement: Слот direction не задаётся у DataContainer и ExecutionAsset.
-  source: moex-technical.yaml; PDM-008
+  source: moex-technical.yaml; PDM-008; former requirement_refs DAMS-REQ-PDM-008.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: error
   status: implemented
-  requirement_refs: [DAMS-REQ-PDM-008.c1]
   notes: 'L1 rules в схеме нет (описание устарело). PR-C3: L2 check_direction_forbidden с invariant_id=INV-018; unit-тест
     test_inv_018_direction_forbidden_tagged.'
   implementation:
@@ -554,13 +548,12 @@ invariants:
 - id: INV-019
   title: message_refs только у operation/channel
   statement: message_refs допустимы только у AccessPoint kind operation или channel.
-  source: moex-structure.yaml; ADR-040:40-41; PDM-018
+  source: moex-structure.yaml; ADR-040:40-41; PDM-018; former requirement_refs DAMS-REQ-PDM-018.c2 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: error
   status: implemented
-  requirement_refs: [DAMS-REQ-PDM-018.c2]
   notes: 'L1 частично покрыт INV-017 (только interface). PR-C3: tagged INV-019.'
   implementation:
     dams_validator: moex_dams.rules.data_structure.check_message_refs_kinds
@@ -576,13 +569,12 @@ invariants:
 - id: INV-020
   title: SchemaNode без циклов children/item_node
   statement: Рёбра children и item_node не образуют циклов.
-  source: ADR-038:32; PDM-014
+  source: ADR-038:32; PDM-014; former requirement_refs DAMS-REQ-PDM-014.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2, L3]
   severity: error
   status: implemented
-  requirement_refs: [DAMS-REQ-PDM-014.c1]
   notes: 'PR-C3 tagged INV-020 on existing cycle checker; L3 — PR-C4.'
   implementation:
     dams_validator: moex_dams.rules.data_structure.check_node_edge_cycles
@@ -600,13 +592,12 @@ invariants:
 - id: INV-021
   title: Реляционные признаки только при relational
   statement: Реляционные признаки узла допустимы только при schema_format = relational.
-  source: ADR-038:40-42; PDM-016
+  source: ADR-038:40-42; PDM-016; former requirement_refs DAMS-REQ-PDM-016.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: error
   status: implemented
-  requirement_refs: [DAMS-REQ-PDM-016.c1]
   notes: 'PR-C3 tagged INV-021 on existing relational-slot checker.'
   implementation:
     dams_validator: moex_dams.rules.data_structure.check_relational_slots
@@ -622,13 +613,12 @@ invariants:
 - id: INV-022
   title: local_key уникален в DataStructure
   statement: local_key уникален внутри одной DataStructure.
-  source: ADR-038; PDM-013
+  source: ADR-038; PDM-013; former requirement_refs DAMS-REQ-PDM-013.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: error
   status: implemented
-  requirement_refs: [DAMS-REQ-PDM-013.c1]
   notes: 'PR-C3 tagged INV-022 on existing uniqueness checker.'
   implementation:
     dams_validator: moex_dams.rules.data_structure.check_local_key_unique
@@ -738,14 +728,13 @@ invariants:
 - id: INV-028
   title: RealizesMapping.mapping_type = realizes
   statement: У RealizesMapping слот mapping_type равен realizes.
-  source: moex-core.yaml RealizesMapping rule 0; ADR-046
+  source: moex-core.yaml RealizesMapping rule 0; ADR-046; former requirement_refs DAMS-REQ-PDM-009.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L1, L3]
   severity: error
   status: implemented
   adr_ref: ADR-046
-  requirement_refs: [DAMS-REQ-PDM-009.c1]
   notes: L3 SPARQL mirrors LinkML PRESENT precondition (fail only when present and wrong).
   implementation:
     linkml_rule:
@@ -765,14 +754,13 @@ invariants:
 - id: INV-029
   title: EntityPhysicalMapping.mapping_type = entity_physical
   statement: У EntityPhysicalMapping слот mapping_type равен entity_physical.
-  source: moex-core.yaml EntityPhysicalMapping rule 0; ADR-046
+  source: moex-core.yaml EntityPhysicalMapping rule 0; ADR-046; former requirement_refs DAMS-REQ-PDM-009.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L1]
   severity: error
   status: implemented
   adr_ref: ADR-046
-  requirement_refs: [DAMS-REQ-PDM-009.c1]
   implementation:
     linkml_rule:
       schema_file: moex-core.yaml
@@ -788,14 +776,13 @@ invariants:
 - id: INV-030
   title: EntityPhysicalMapping.mapping_cardinality = one_to_one
   statement: У EntityPhysicalMapping слот mapping_cardinality равен one_to_one.
-  source: moex-core.yaml EntityPhysicalMapping rule 1; ADR-046
+  source: moex-core.yaml EntityPhysicalMapping rule 1; ADR-046; former requirement_refs DAMS-REQ-PDM-009.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L1]
   severity: error
   status: implemented
   adr_ref: ADR-046
-  requirement_refs: [DAMS-REQ-PDM-009.c1]
   implementation:
     linkml_rule:
       schema_file: moex-core.yaml
@@ -811,14 +798,13 @@ invariants:
 - id: INV-031
   title: FieldMapping.mapping_type = field_mapping
   statement: У FieldMapping слот mapping_type равен field_mapping.
-  source: moex-core.yaml FieldMapping rule 0; ADR-046
+  source: moex-core.yaml FieldMapping rule 0; ADR-046; former requirement_refs DAMS-REQ-PDM-009.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L1]
   severity: error
   status: implemented
   adr_ref: ADR-046
-  requirement_refs: [DAMS-REQ-PDM-009.c1]
   implementation:
     linkml_rule:
       schema_file: moex-core.yaml
@@ -834,14 +820,13 @@ invariants:
 - id: INV-032
   title: AlignsWithMapping.mapping_type = aligns_with
   statement: У AlignsWithMapping слот mapping_type равен aligns_with.
-  source: moex-core.yaml AlignsWithMapping rule 0; ADR-046
+  source: moex-core.yaml AlignsWithMapping rule 0; ADR-046; former requirement_refs DAMS-REQ-PDM-009.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L1]
   severity: error
   status: implemented
   adr_ref: ADR-046
-  requirement_refs: [DAMS-REQ-PDM-009.c1]
   implementation:
     linkml_rule:
       schema_file: moex-core.yaml
@@ -859,14 +844,15 @@ invariants:
   statement: >
     EntityPhysicalMapping.source_refs ⊆ DataCarrier (ровно 1) и target_refs ⊆ LogicalEntity
     (ровно 1); направление carrier→logical.
-  source: PDM-009.c1; ADR-046
+  source: PDM-009.c1; ADR-046; former DAMS-REQ-PDM-009.c1 → PDM-02 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2, L3]
   severity: error
   status: implemented
   adr_ref: ADR-046
-  requirement_refs: [DAMS-REQ-PDM-009.c1]
+  requirement_refs:
+  - PDM-02
   implementation:
     dams_validator: moex_dams.rules.technical_assets.check_mapping_endpoint_types
     shacl: model-assets/specifications/moex-dams/0.1/constraints/shacl/manual/invariants.ttl
@@ -888,14 +874,15 @@ invariants:
   statement: >
     FieldMapping.source_refs ⊆ LogicalAttribute; target_refs соответствуют pattern
     dams:structure/…#… и резолвятся в data_structures.nodes.
-  source: PDM-009.c2/c3; ADR-046; ADR-039
+  source: PDM-009.c2/c3; ADR-046; ADR-039; former DAMS-REQ-PDM-009.c2 → PDM-02 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2, L3]
   severity: error
   status: implemented
   adr_ref: ADR-046
-  requirement_refs: [DAMS-REQ-PDM-009.c2]
+  requirement_refs:
+  - PDM-02
   notes: >
     L2 checks kinds+pattern+resolve; L3 here is endpoint minCount.
     SchemaNodeRef pattern alone is INV-037 (gen-shacl missed typeof pattern).
@@ -920,14 +907,15 @@ invariants:
   statement: >
     RealizesMapping.source_refs ⊆ LogicalEntity|ConceptualEntity (min 1);
     target_refs ⊆ ConceptualEntity (min 1; внешние conceptual id допустимы).
-  source: PDM-009; ADR-046; ADR-029
+  source: PDM-009; ADR-046; ADR-029; former DAMS-REQ-PDM-009.c1 → PDM-02 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2, L3]
   severity: error
   status: implemented
   adr_ref: ADR-046
-  requirement_refs: [DAMS-REQ-PDM-009.c1]
+  requirement_refs:
+  - PDM-02
   implementation:
     dams_validator: moex_dams.rules.technical_assets.check_mapping_endpoint_types
     shacl: model-assets/specifications/moex-dams/0.1/constraints/shacl/manual/invariants.ttl
@@ -949,14 +937,15 @@ invariants:
   statement: >
     AlignsWithMapping.source_refs — ровно один ConceptualEntity; target_refs —
     абсолютные http(s) IRI.
-  source: PDM-009; ADR-046
+  source: PDM-009; ADR-046; former DAMS-REQ-PDM-009.c1 → PDM-02 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2, L3]
   severity: error
   status: implemented
   adr_ref: ADR-046
-  requirement_refs: [DAMS-REQ-PDM-009.c1]
+  requirement_refs:
+  - PDM-02
   implementation:
     dams_validator: moex_dams.rules.technical_assets.check_mapping_endpoint_types
     shacl: model-assets/specifications/moex-dams/0.1/constraints/shacl/manual/invariants.ttl
@@ -979,14 +968,13 @@ invariants:
     У FieldMapping каждый target_refs соответствует pattern SchemaNodeRef
     (^dams:structure/.+#.+$). L1 — typeof SchemaNodeRef; L3 — manual SHACL
     (gen-shacl не эмитит pattern на слот).
-  source: moex-types.yaml SchemaNodeRef; ADR-046; ADR-039
+  source: moex-types.yaml SchemaNodeRef; ADR-046; ADR-039; former requirement_refs DAMS-REQ-PDM-009.c2 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L3]
   severity: error
   status: implemented
   adr_ref: ADR-046
-  requirement_refs: [DAMS-REQ-PDM-009.c2]
   notes: >
     L1 covered by SchemaNodeRef typeof pattern in JSON Schema; L2 pattern
     check is part of INV-034 / check_mapping_endpoint_types.
@@ -1007,14 +995,13 @@ invariants:
     DataFlow.integration_ref must parse as {catalog}:{kind}/{external_id} and
     resolve to an object in the file catalog snapshot. Unknown catalog prefix
     or missing object is an error (orphan_ref / unknown_catalog).
-  source: ADR-048; DAMS-F-007; FLW-002
+  source: ADR-048; DAMS-F-007; FLW-002; former requirement_refs DAMS-REQ-FLW-002.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: error
   status: implemented
   adr_ref: ADR-048
-  requirement_refs: [DAMS-REQ-FLW-002.c1]
   implementation:
     dams_validator: moex_dams.rules.catalog_topology.check_catalog_topology
   tests:
@@ -1031,14 +1018,13 @@ invariants:
   statement: >
     If DataFlowEntityBinding.catalog_operation_ref is set, it must identify an
     operation on the resolved integration object in the catalog snapshot.
-  source: ADR-048; FLW-003
+  source: ADR-048; FLW-003; former requirement_refs DAMS-REQ-FLW-003.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: warning
   status: implemented
   adr_ref: ADR-048
-  requirement_refs: [DAMS-REQ-FLW-003.c1]
   implementation:
     dams_validator: moex_dams.rules.catalog_topology.check_catalog_topology
   tests:
@@ -1055,14 +1041,13 @@ invariants:
   statement: >
     When DataFlow.bound_catalog_revision is set, it must equal the catalog_revision
     of the file catalog snapshot (else stale_revision warning).
-  source: ADR-048; FLW-004
+  source: ADR-048; FLW-004; former requirement_refs DAMS-REQ-FLW-004.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: warning
   status: implemented
   adr_ref: ADR-048
-  requirement_refs: [DAMS-REQ-FLW-004.c1]
   implementation:
     dams_validator: moex_dams.rules.catalog_topology.check_catalog_topology
   tests:
@@ -1079,14 +1064,13 @@ invariants:
   statement: >
     When DataModelBinding.catalog_revision is set, it must equal the catalog_revision
     of the file catalog snapshot (topology change without contract rebuild).
-  source: ADR-048; FLW-005
+  source: ADR-048; FLW-005; former requirement_refs DAMS-REQ-FLW-005.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: warning
   status: implemented
   adr_ref: ADR-048
-  requirement_refs: [DAMS-REQ-FLW-005.c1]
   implementation:
     dams_validator: moex_dams.rules.catalog_topology.check_catalog_topology
   tests:
@@ -1217,14 +1201,13 @@ invariants:
   title: TechnicalAsset parent_ref acyclic
   statement: >
     TechnicalAsset.parent_ref must not form a self-reference or cycle.
-  source: PDM-006; audit cyclic containment
+  source: PDM-006; audit cyclic containment; former requirement_refs DAMS-REQ-PDM-006.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: error
   status: implemented
   adr_ref: ADR-045
-  requirement_refs: [DAMS-REQ-PDM-006.c1]
   implementation:
     dams_validator: moex_dams.rules.technical_assets.check_parent_ref_cycles
   tests:
@@ -1506,14 +1489,13 @@ invariants:
   statement: >
     Пара (asset_namespace, qualified_name) уникальна среди всех технических
     активов пакета (data_carriers, access_points, data_containers, execution_assets).
-  source: PDM-005; ADR-056 PR-3
+  source: PDM-005; ADR-056 PR-3; former requirement_refs DAMS-REQ-PDM-005.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: error
   status: implemented
   adr_ref: ADR-056
-  requirement_refs: [DAMS-REQ-PDM-005.c1]
   notes: 'ADR-056 PR-3: tagged existing check_unique_asset_keys.'
   implementation:
     dams_validator: moex_dams.rules.technical_assets.check_unique_asset_keys
@@ -1531,14 +1513,13 @@ invariants:
   statement: >
     Значение asset_kind принадлежит перечислению соответствующего подкласса
     TechnicalAsset (DataCarrier / AccessPoint / DataContainer / ExecutionAsset).
-  source: PDM-007; ADR-056 PR-3
+  source: PDM-007; ADR-056 PR-3; former requirement_refs DAMS-REQ-PDM-007.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: error
   status: implemented
   adr_ref: ADR-056
-  requirement_refs: [DAMS-REQ-PDM-007.c1]
   notes: 'ADR-056 PR-3: tagged existing check_asset_kind_allowlists.'
   implementation:
     dams_validator: moex_dams.rules.technical_assets.check_asset_kind_allowlists
@@ -1557,14 +1538,13 @@ invariants:
     В DataFlowEntityBinding и SelectedEntity слот carrier_refs ссылается только
     на идентификаторы DataCarrier, а не на DataContainer / AccessPoint /
     ExecutionAsset.
-  source: PDM-010; ADR-056 PR-3
+  source: PDM-010; ADR-056 PR-3; former requirement_refs DAMS-REQ-PDM-010.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: error
   status: implemented
   adr_ref: ADR-056
-  requirement_refs: [DAMS-REQ-PDM-010.c1]
   notes: 'ADR-056 PR-3: tagged existing check_carrier_refs_are_data_carriers.'
   implementation:
     dams_validator: moex_dams.rules.technical_assets.check_carrier_refs_are_data_carriers
@@ -1582,14 +1562,13 @@ invariants:
   statement: >
     root_local_key указывает на существующий узел. Для relational корень —
     object; иначе object или array.
-  source: PDM-015; ADR-056 PR-3
+  source: PDM-015; ADR-056 PR-3; former requirement_refs DAMS-REQ-PDM-015.c1, DAMS-REQ-PDM-015.c2 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: error
   status: implemented
   adr_ref: ADR-056
-  requirement_refs: [DAMS-REQ-PDM-015.c1, DAMS-REQ-PDM-015.c2]
   notes: 'ADR-056 PR-3: tagged existing check_root_local_key.'
   implementation:
     dams_validator: moex_dams.rules.data_structure.check_root_local_key
@@ -1606,14 +1585,13 @@ invariants:
   title: Границы кратности SchemaNode
   statement: >
     Если заданы и min_occurs, и max_occurs, то max_occurs не меньше min_occurs.
-  source: PDM-017; ADR-056 PR-3
+  source: PDM-017; ADR-056 PR-3; former requirement_refs DAMS-REQ-PDM-017.c1 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: error
   status: implemented
   adr_ref: ADR-056
-  requirement_refs: [DAMS-REQ-PDM-017.c1]
   notes: 'ADR-056 PR-3: tagged existing check_occurs_bounds.'
   implementation:
     dams_validator: moex_dams.rules.data_structure.check_occurs_bounds
@@ -1631,14 +1609,14 @@ invariants:
   statement: >
     У Message задан payload_structure_ref на существующую DataStructure пакета;
     headers_structure_ref при наличии тоже резолвится.
-  source: PDM-019; ADR-056 PR-3
+  source: PDM-019; ADR-056 PR-3; former requirement_refs DAMS-REQ-PDM-019.c1, DAMS-REQ-PDM-019.c2, DAMS-REQ-PDM-019.c3 (ADR-056
+    PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: error
   status: implemented
   adr_ref: ADR-056
-  requirement_refs: [DAMS-REQ-PDM-019.c1, DAMS-REQ-PDM-019.c2, DAMS-REQ-PDM-019.c3]
   notes: 'ADR-056 PR-3: tagged existing check_message_payload.'
   implementation:
     dams_validator: moex_dams.rules.data_structure.check_message_payload
@@ -1656,14 +1634,13 @@ invariants:
   statement: >
     У DataCarrier с asset_kind ≠ in_memory задан structure_ref на структуру данных.
     Для in_memory structure_ref не требуется.
-  source: PDM-001.c5; ADR-056 PR-9
+  source: PDM-001.c5; ADR-056 PR-9; former requirement_refs DAMS-REQ-PDM-001.c5 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: error
   status: implemented
   adr_ref: ADR-056
-  requirement_refs: [DAMS-REQ-PDM-001.c5]
   notes: 'ADR-056 PR-9: re-homed from formal_checks pdm001_structure_ref.'
   implementation:
     dams_validator: moex_dams.rules.technical_assets.check_carrier_structure_ref
@@ -1680,14 +1657,13 @@ invariants:
   title: Scalar SchemaNode has type
   statement: >
     У SchemaNode с node_kind=scalar задан native_type или data_type_ref.
-  source: PDM-002.c2; ADR-056 PR-9
+  source: PDM-002.c2; ADR-056 PR-9; former requirement_refs DAMS-REQ-PDM-002.c2 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: error
   status: implemented
   adr_ref: ADR-056
-  requirement_refs: [DAMS-REQ-PDM-002.c2]
   notes: 'ADR-056 PR-9: re-homed from formal_checks pdm002_scalar_type.'
   implementation:
     dams_validator: moex_dams.rules.data_structure.check_scalar_node_type
@@ -1705,14 +1681,13 @@ invariants:
   statement: >
     У SchemaNode с node_kind=scalar явно задан слот required
     (nullable/presence semantics).
-  source: PDM-002.c3; ADR-056 PR-9
+  source: PDM-002.c3; ADR-056 PR-9; former requirement_refs DAMS-REQ-PDM-002.c3 (ADR-056 PR-10f)
   source_status: aligned
   scope: moex-dams
   levels: [L2]
   severity: error
   status: implemented
   adr_ref: ADR-056
-  requirement_refs: [DAMS-REQ-PDM-002.c3]
   notes: 'ADR-056 PR-9: re-homed from formal_checks pdm002_scalar_required.'
   implementation:
     dams_validator: moex_dams.rules.data_structure.check_scalar_node_required

@@ -72,7 +72,7 @@ Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decision
 | [ADR-053](ADR-053-qualified-assertion.md) | Qualified assertion pattern | Accepted | HasAssertionMetadata in schema 5.1.0; INV-057; Transformation end date |
 | [ADR-054](ADR-054-repository-aggregates-and-manifest.md) | Repository aggregates and manifest (P1b) | Accepted | validation composite; package-only DocumentKind; path-scoped orphans; INV-058 global element_id |
 | [ADR-055](ADR-055-integration-source-of-truth.md) | Integration source of truth (Clinkr/EAM topology; audit Wave F) | Accepted | Integration SoT; audit 0.2 remap; P2 backlog |
-| [ADR-056](ADR-056-requirements-backbone.md) | Requirements backbone (normative CDM/LDM/PDM rules) | Proposed | requirements catalog spine; see requirements-inventory.md |
+| [ADR-056](ADR-056-requirements-backbone.md) | Requirements backbone (normative CDM/LDM/PDM rules) | Accepted | requirements catalog spine; see requirements-inventory.md |
 
 ## How to accept
 
