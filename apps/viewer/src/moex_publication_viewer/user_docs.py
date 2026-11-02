@@ -30,6 +30,10 @@ MANIFEST_NAME = "user-docs.yaml"
 TOC_NAME = "toc.yaml"
 GLOSSARY_NAME = "glossary.yaml"
 INDEX_NAME = "index.html"
+DEFERRED_CHAPTER_ID = "not-yet-told"
+DEFERRED_CHAPTER_TITLE = "Что ещё не рассказано"
+DEFERRED_PAGE_ID = "accepted-not-told"
+DEFERRED_PAGE_TITLE = "Принятые решения без страницы"
 
 GLOSSARY_LINK_RE = re.compile(r"\[([^\]]+)\]\(glossary:([A-Za-z0-9_-]+)\)")
 MD_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
@@ -135,6 +139,104 @@ def _adr_ids_in_text(text: str) -> set[str]:
         if parsed:
             found.add(f"ADR-{int(parsed.group(1)):03d}")
     return found
+
+
+def _adr_rel_path(root: Path, adr_id: str) -> str | None:
+    match = re.match(r"ADR-(\d+)$", adr_id, re.IGNORECASE)
+    if not match:
+        return None
+    number = int(match.group(1))
+    adr_dir = root.resolve() / "docs" / "adr"
+    if not adr_dir.is_dir():
+        return None
+    matches = sorted(adr_dir.glob(f"ADR-{number:03d}*.md"))
+    if not matches:
+        return None
+    return matches[0].relative_to(root.resolve()).as_posix()
+
+
+def deferred_page_markdown(root: Path, rows: dict[str, str]) -> str:
+    """Reader-facing page for ``toc.yaml`` ``not_covered``. Not a hand-written file."""
+    lines = [
+        f"# {DEFERRED_PAGE_TITLE}",
+        "",
+        "Эти решения уже приняты. На остальных страницах их ещё нет. "
+        "Пока страницы нет, само решение действует: его читают в файле в `docs/adr/`.",
+        "",
+    ]
+    for adr_id in sorted(rows, key=lambda item: int(item.split("-", 1)[1])):
+        reason = rows[adr_id].strip()
+        rel = _adr_rel_path(root, adr_id)
+        if rel:
+            lines.append(f"- [{adr_id}]({rel}) — {reason}")
+        else:
+            lines.append(f"- {adr_id} — {reason}")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def _insert_deferred_chapter(
+    chapters: list[PublicationItem],
+    root: Path,
+    rows: dict[str, str],
+) -> None:
+    if not rows:
+        return
+    content = render_markdown(deferred_page_markdown(root, rows))
+    page = PublicationItem(
+        id=DEFERRED_PAGE_ID,
+        title=DEFERRED_PAGE_TITLE,
+        attributes={
+            "kind": "doc_page",
+            "generated_from": "toc.yaml:not_covered",
+            "content": content,
+        },
+    )
+    chapter = PublicationItem(
+        id=f"group:{DEFERRED_CHAPTER_ID}",
+        title=DEFERRED_CHAPTER_TITLE,
+        attributes={"kind": "group", "role": "chapter"},
+        children=[page],
+    )
+    glossary_at = next(
+        (i for i, item in enumerate(chapters) if item.id == "group:glossary"),
+        None,
+    )
+    if glossary_at is None:
+        chapters.append(chapter)
+    else:
+        chapters.insert(glossary_at, chapter)
+
+
+def _item_content_by_id(module: PublicationModule, item_id: str) -> str:
+    def _walk(items: list[PublicationItem]) -> str:
+        for item in items:
+            if item.id == item_id:
+                return str(item.attributes.get("content") or "")
+            found = _walk(list(item.children))
+            if found:
+                return found
+        return ""
+
+    for section in module.sections:
+        found = _walk(list(section.items))
+        if found:
+            return found
+    return ""
+
+
+def _deferred_visibility_errors(content: str, rows: dict[str, str]) -> list[str]:
+    if not rows:
+        return []
+    if not content:
+        return ["not_covered list is not shown on a page"]
+    errors: list[str] = []
+    for adr_id, reason in rows.items():
+        if adr_id not in content or reason not in content:
+            errors.append(
+                f"{adr_id} is listed in not_covered but is not visible on the deferred page"
+            )
+    return errors
 
 
 def _adr_ids_from_paths(paths: list[Path]) -> set[str]:
@@ -464,6 +566,8 @@ def compile_user_docs_module(root: Path) -> PublicationModule:
     errors.extend(toc_errors)
     terms, term_ids, gloss_errors = _load_glossary(docs_dir)
     errors.extend(gloss_errors)
+    not_covered, nc_errors = _not_covered_map(toc)
+    errors.extend(nc_errors)
     if errors:
         raise UserDocsError(errors)
 
@@ -522,9 +626,9 @@ def compile_user_docs_module(root: Path) -> PublicationModule:
             )
         )
 
-    # Second pass: see_also already validated inside _glossary_items
     if errors:
         raise UserDocsError(errors)
+    _insert_deferred_chapter(chapters_out, root, not_covered)
 
     module_id = str(manifest.get("module_id") or MODULE_ID).strip()
     title = str(manifest.get("title") or "Документация продукта").strip()
@@ -766,6 +870,15 @@ def check_user_docs(root: Path) -> tuple[list[str], list[str]]:
 
     not_covered, nc_errors = _not_covered_map(toc)
     errors.extend(nc_errors)
+
+    if not_covered and not errors:
+        try:
+            module = compile_user_docs_module(root)
+        except UserDocsError as exc:
+            errors.extend(exc.errors)
+        else:
+            content = _item_content_by_id(module, DEFERRED_PAGE_ID)
+            errors.extend(_deferred_visibility_errors(content, not_covered))
 
     scan_blob = "\n".join(str(r.get("body") or "") for r in records)
     mentioned = {m.group(0).upper() for m in ADR_MENTION_RE.finditer(scan_blob)}

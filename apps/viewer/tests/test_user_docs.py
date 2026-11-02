@@ -387,6 +387,33 @@ def test_check_warns_when_mentioned_adr_missing_from_sources(tmp_path: Path):
 
 def test_check_not_covered_rejects_pr_number(tmp_path: Path):
     _write_user_docs(tmp_path, not_covered=[{"adr": "ADR-001", "reason": "позже, PR-3"}])
-    build_user_docs(tmp_path)
+    try:
+        build_user_docs(tmp_path)
+        assert False, "expected UserDocsError"
+    except UserDocsError as exc:
+        assert any("future PR" in e for e in exc.errors)
     errors, _warnings = check_user_docs(tmp_path)
     assert any("future PR" in e for e in errors)
+
+
+def test_build_shows_not_covered_page(tmp_path: Path):
+    _write_user_docs(tmp_path)
+    module = compile_user_docs_module(tmp_path)
+    chapter_ids = [item.id for item in module.sections[0].items]
+    assert chapter_ids.index("group:not-yet-told") < chapter_ids.index("group:glossary")
+    chapter = next(item for item in module.sections[0].items if item.id == "group:not-yet-told")
+    content = str(chapter.children[0].attributes.get("content") or "")
+    assert "ADR-001" in content
+    assert REASON in content
+    assert "docs/adr/ADR-001-sample.md" in content
+
+
+def test_check_not_covered_must_be_visible(tmp_path: Path, monkeypatch):
+    _write_user_docs(tmp_path)
+    build_user_docs(tmp_path)
+    monkeypatch.setattr(
+        "moex_publication_viewer.user_docs.deferred_page_markdown",
+        lambda _root, _rows: "# Пусто\n\nНичего.\n",
+    )
+    errors, _warnings = check_user_docs(tmp_path)
+    assert any("not visible" in e for e in errors)
