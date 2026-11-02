@@ -22,6 +22,12 @@ from moex_publication_viewer.models.publication_models import (
 from moex_publication_viewer.normalizers.markdown_normalizer import render_markdown
 from moex_publication_viewer.package_docs import split_frontmatter
 from moex_publication_viewer.renderers.html_renderer import render_viewer
+from moex_publication_viewer.user_docs_generated import (
+    DESCRIPTIONS_REL,
+    generated_specs,
+    load_descriptions,
+    render_generated,
+)
 
 MODULE_ID = "user-docs"
 SECTION_ID = "pages"
@@ -552,6 +558,84 @@ def _glossary_items(
     return items, errors, warnings, source_meta
 
 
+def _prepare_generated(
+    root: Path,
+    toc: dict[str, Any],
+) -> tuple[dict[str, str], list[str], list[str]]:
+    """Markdown for ``generated:`` pages, plus errors and warnings."""
+    specs = generated_specs(toc)
+    errors: list[str] = []
+    warnings: list[str] = []
+    path = root.resolve() / DESCRIPTIONS_REL
+    groups: dict[str, dict[str, str]] | None = None
+    state = "absent"
+    if path.is_file():
+        raw, groups, load_errors = load_descriptions(path)
+        errors.extend(load_errors)
+        if raw is None:
+            state = "broken"
+        else:
+            state = "ready"
+            _verified, draft, review_errors = _parse_review_state(
+                raw, DESCRIPTIONS_REL.as_posix()
+            )
+            errors.extend(review_errors)
+            if draft and not review_errors:
+                warnings.append(
+                    f"{DESCRIPTIONS_REL.as_posix()}: draft, verified_at is not set"
+                )
+    markdown, gen_errors = render_generated(
+        root,
+        specs,
+        groups,
+        descriptions_state=state,
+    )
+    errors.extend(gen_errors)
+    return markdown, errors, warnings
+
+
+def _generated_item(
+    page: dict[str, Any],
+    markdown: str,
+    *,
+    docs_dir: Path,
+    root: Path,
+    term_ids: set[str],
+) -> tuple[PublicationItem | None, list[str]]:
+    errors: list[str] = []
+    page_id = str(page.get("id") or "").strip()
+    title = str(page.get("title") or "").strip()
+    kind = str(page.get("generated") or "").strip()
+    loc = f"{docs_dir / TOC_NAME}: page '{page_id or kind}'"
+    errors.extend(
+        _check_markdown_file_links(
+            markdown,
+            page_path=docs_dir / TOC_NAME,
+            root=root,
+            loc=loc,
+        )
+    )
+    content, link_errors = _page_html_from_markdown(
+        markdown, term_ids, source_label=loc
+    )
+    errors.extend(link_errors)
+    if errors:
+        return None, errors
+    item = PublicationItem(
+        id=page_id or kind,
+        title=title or page_id or kind,
+        attributes={
+            "kind": "doc_page",
+            "generated": kind,
+            "content": content,
+            "sources": [],
+            "verified_at": None,
+            "draft": False,
+        },
+    )
+    return item, errors
+
+
 def compile_user_docs_module(root: Path) -> PublicationModule:
     """Compile docs/user into a single PublicationModule. Raises UserDocsError."""
     root = root.resolve()
@@ -574,6 +658,8 @@ def compile_user_docs_module(root: Path) -> PublicationModule:
     chapters_out: list[PublicationItem] = []
     entry_html = ""
     bodies_for_scan: list[str] = []
+    generated_md, gen_errors, _gen_warnings = _prepare_generated(root, toc)
+    errors.extend(gen_errors)
 
     for chapter in toc.get("chapters") or []:
         if not isinstance(chapter, dict):
@@ -604,6 +690,23 @@ def compile_user_docs_module(root: Path) -> PublicationModule:
                     errors.append(f"{TOC_NAME}: page must be a mapping")
                     continue
                 toc_id = str(page.get("id") or "").strip()
+                if "generated" in page:
+                    body = generated_md.get(toc_id, "")
+                    if not body:
+                        continue
+                    item, page_errors = _generated_item(
+                        page,
+                        body,
+                        docs_dir=docs_dir,
+                        root=root,
+                        term_ids=term_ids,
+                    )
+                    errors.extend(page_errors)
+                    if item is not None:
+                        children.append(item)
+                        if not entry_html:
+                            entry_html = str(item.attributes.get("content") or "")
+                    continue
                 item, page_errors, _warn, _sources, _verified, body, _draft = _read_page(
                     docs_dir,
                     page,
@@ -751,6 +854,10 @@ def _collect_page_records(
     if errors:
         return toc, [], errors, warnings
 
+    generated_md, gen_errors, gen_warnings = _prepare_generated(root, toc)
+    errors.extend(gen_errors)
+    warnings.extend(gen_warnings)
+
     records: list[dict[str, Any]] = []
     for chapter in toc.get("chapters") or []:
         if not isinstance(chapter, dict):
@@ -796,6 +903,21 @@ def _collect_page_records(
             if not isinstance(page, dict):
                 continue
             toc_id = str(page.get("id") or "").strip()
+            if "generated" in page:
+                records.append(
+                    {
+                        "kind": "generated",
+                        "id": toc_id,
+                        "body": generated_md.get(toc_id, ""),
+                        "sources": [],
+                        "verified_at": None,
+                        "draft": False,
+                        "generated": True,
+                        "path": docs_dir / TOC_NAME,
+                        "ok": toc_id in generated_md,
+                    }
+                )
+                continue
             item, page_errors, page_warnings, sources, verified, body, draft = _read_page(
                 docs_dir,
                 page,
@@ -880,7 +1002,9 @@ def check_user_docs(root: Path) -> tuple[list[str], list[str]]:
             content = _item_content_by_id(module, DEFERRED_PAGE_ID)
             errors.extend(_deferred_visibility_errors(content, not_covered))
 
-    scan_blob = "\n".join(str(r.get("body") or "") for r in records)
+    scan_blob = "\n".join(
+        str(r.get("body") or "") for r in records if not r.get("generated")
+    )
     mentioned = {m.group(0).upper() for m in ADR_MENTION_RE.finditer(scan_blob)}
     mentioned_norm = set()
     for mid in mentioned:
@@ -901,6 +1025,8 @@ def check_user_docs(root: Path) -> tuple[list[str], list[str]]:
     for record in records:
         if record.get("draft"):
             warnings.append(f"{record.get('id')}: draft, verified_at is not set")
+        if record.get("generated"):
+            continue
         mentioned_here = _adr_ids_in_text(str(record.get("body") or ""))
         in_sources = _adr_ids_from_paths(record.get("sources") or [])
         for adr_id in sorted(mentioned_here - in_sources):
