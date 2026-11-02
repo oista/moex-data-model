@@ -1,0 +1,24 @@
+---
+description: Keep docs/user current when ADR, layout, or CLI changes; plain-language rules from ADR-057
+alwaysApply: true
+---
+
+# User documentation (ADR-057)
+
+Точка входа для человека и агента: [docs/user/00-start/what-is-this.md](docs/user/00-start/what-is-this.md) и [docs/user/00-start/how-to-read.md](docs/user/00-start/how-to-read.md). Нормы остаются в Accepted ADR и [MODELING_ARCHITECTURE.md](docs/architecture/MODELING_ARCHITECTURE.md). `docs/user` описывает текущее состояние и новых норм не вводит.
+
+## Когда обновлять в том же PR
+
+Обновить затронутую страницу, поля `sources` / `verified_at` и строку в [docs/user/40-status/whats-new.md](docs/user/40-status/whats-new.md), если меняется:
+
+- новый ADR или статус ADR;
+- раскладка `apps/`, `packages/` или `model-assets/`;
+- команды CLI.
+
+## Правило языка (ADR-057 D2)
+
+1. Сначала обычное русское объяснение. Имя из репозитория — только если без него нельзя найти место в коде, и сразу с пояснением.
+2. Термин определяется только в [docs/user/glossary.yaml](docs/user/glossary.yaml). На странице его не определяют заново.
+3. Страница отвечает на четыре вопроса: что это, зачем, где лежит, что сейчас работает.
+4. Ссылка на термин: `[слово](glossary:id)`.
+5. Поле `verified_at` ставит человек после сверки с источниками, не агент в черновике.

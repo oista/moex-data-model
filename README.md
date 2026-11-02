@@ -130,6 +130,8 @@ py -3.14 -m moex_model_cli publish --root .
 
 ## Документация
 
+Текущее устройство продукта для человека и агента: [`docs/user/index.html`](docs/user/index.html), исходная страница [`docs/user/00-start/what-is-this.md`](docs/user/00-start/what-is-this.md).
+
 | Документ | Статус |
 |---|---|
 | [MODELING_ARCHITECTURE.md](docs/architecture/MODELING_ARCHITECTURE.md) | **normative** — ядро платформы |
@@ -138,7 +140,7 @@ py -3.14 -m moex_model_cli publish --root .
 | [linkml_architecture.md](docs/architecture/linkml_architecture.md) | Draft — Workbench / LinkML toolchain |
 | [CHECKLIST.md](docs/architecture/CHECKLIST.md) | process gate для PR по architecture |
 | [IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) | Draft — Workbench MVP roadmap |
-| [docs/adr/](docs/adr/README.md) | Proposed — ADR-001–012 (Workbench / toolchain) |
+| [docs/adr/](docs/adr/README.md) | указатель ADR-001–057; статус — в строке ADR |
 | [MOEX Data Model Specification v0.1](docs/MOEX%20Data%20Model%20Specification%20v0.1%20на%20основе%20LinkML.md) | спецификация DAMS на LinkML |
 
 ## Именование
