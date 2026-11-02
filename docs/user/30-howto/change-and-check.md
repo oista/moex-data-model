@@ -14,7 +14,7 @@ draft: true
 
 Модель правят в YAML и прогоняют одной общей командой. Так в коммит не попадает файл, который уже не сходится с остальным репозиторием.
 
-Из корня: `python scripts/check_all.py`. То же делает `make check`. Один шаг запускают так: `python scripts/check_all.py --only compare-golden`. Имена шагов совпадают с целями Makefile. Пока шаг не прошёл, следующие не запускаются. Чтобы увидеть все сбои за один проход, добавляют `--keep-going`.
+Из корня: `python scripts/check_all.py`. То же делает `make check`. Один шаг запускают так: `python scripts/check_all.py --only compare-golden`. Имя шага обычно совпадает с целью Makefile. Шаг `slice-cli` отдельной цели не имеет: он проверяет программу `moex-model`. Шаг `user-docs` сверяет уже собранный HTML, это цель `make user-docs-check`. Пока шаг не прошёл, следующие не запускаются. Чтобы увидеть все сбои за один проход, добавляют `--keep-going`.
 
 Шаг `compare-golden` сверяет каталог `generated/` со свежей сборкой. Это [производные файлы](glossary:derived-artifact): их снова получают из YAML (ADR-011). Если шаг упал, схема и эталон разъехались. Соберите заново то, о чём он пишет: `make generate-contracts`, `make generate-artifacts` и `make generate-bundle`. Затем повторите `python scripts/check_all.py --only compare-golden`. Каталог `generated/` руками не правят. Если схему менять не собирались, верните правку схемы и оставьте эталон как был.
 
