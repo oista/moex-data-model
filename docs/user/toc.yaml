@@ -62,6 +62,30 @@ chapters:
       - id: publication-view
         path: 20-architecture/publication.md
         title: Публикация и просмотр
+  - id: howto
+    title: Как это работает
+    pages:
+      - id: change-and-check
+        path: 30-howto/change-and-check.md
+        title: Изменить модель и проверить
+      - id: add-package
+        path: 30-howto/add-package.md
+        title: Добавить спецификацию или реализацию
+      - id: build-viewer
+        path: 30-howto/build-viewer.md
+        title: Собрать просмотр
+      - id: add-invariant
+        path: 30-howto/add-invariant.md
+        title: Добавить инвариант
+      - id: import-xlsx
+        path: 30-howto/import-xlsx.md
+        title: Импорт из таблицы
+      - id: import-schema
+        path: 30-howto/import-schema.md
+        title: Черновой импорт схемы
+      - id: pull-request-series
+        path: 30-howto/pull-request-series.md
+        title: Серии правок
   - id: reference
     title: Справочник
     pages:
@@ -96,8 +120,3 @@ chapters:
         title: Известные расхождения
   - id: glossary
     title: Глоссарий
-not_covered:
-  - adr: ADR-009
-    reason: "ещё не описано: нет сценария чернового импорта схемы"
-  - adr: ADR-022
-    reason: "ещё не описано: нет сценария импорта из таблицы"
