@@ -5,6 +5,7 @@ sources:
   - docs/adr/ADR-001-linkml-yaml-canonical.md
   - docs/adr/ADR-002-git-published-source.md
   - docs/adr/ADR-011-reproducible-artifacts.md
+  - docs/adr/ADR-003-postgres-operational.md
 verified_at: 2026-11-02
 ---
 
@@ -14,6 +15,6 @@ verified_at: 2026-11-02
 
 Всё остальное — [производный файл](glossary:derived-artifact). HTML просмотра, DBML, картинки, OWL и каталог `generated/` собираются из YAML и сами источником не являются. Их можно удалить и получить снова. Приложение drawDB показывает схему, но не хранит модель. OWL-файл тоже не тот механизм, которым модель проверяют.
 
-Операционная база и файловое хранилище могут держать черновики, задачи и уже собранные файлы. Опубликованные файлы в Git они не заменяют.
+Черновики, задачи и поиск по уже собранным файлам можно держать в отдельной базе или в файловом хранилище. Сделать такой базой PostgreSQL предложено в [ADR-003](docs/adr/ADR-003-postgres-operational.md). Это решение ещё не принято, поэтому база сейчас не устройство продукта. Опубликованные файлы модели остаются в Git.
 
-Где прочитать решение: [ADR-001](docs/adr/ADR-001-linkml-yaml-canonical.md), [ADR-002](docs/adr/ADR-002-git-published-source.md), [ADR-005](docs/adr/ADR-005-drawdb-isolated.md), [ADR-006](docs/adr/ADR-006-dbml-projection.md), [ADR-010](docs/adr/ADR-010-owl-not-primary-validation.md), [ADR-011](docs/adr/ADR-011-reproducible-artifacts.md).
+Где прочитать решение: [ADR-001](docs/adr/ADR-001-linkml-yaml-canonical.md), [ADR-002](docs/adr/ADR-002-git-published-source.md), [ADR-003](docs/adr/ADR-003-postgres-operational.md), [ADR-005](docs/adr/ADR-005-drawdb-isolated.md), [ADR-006](docs/adr/ADR-006-dbml-projection.md), [ADR-010](docs/adr/ADR-010-owl-not-primary-validation.md), [ADR-011](docs/adr/ADR-011-reproducible-artifacts.md).
