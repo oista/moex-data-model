@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api } from "../api/client";
 import type { TransformRunResult } from "../api/types";
@@ -49,21 +49,31 @@ export function TransformPage() {
     [specs, specRel],
   );
 
+  // useMutation copies mutationFn onto its observer in an effect. A submit in
+  // that window still runs the previous function, which would see specRel and
+  // sampleRel from before the catalog auto-select. Refs are current on render.
+  const specRelRef = useRef(specRel);
+  const sampleRelRef = useRef(sampleRel);
+  specRelRef.current = specRel;
+  sampleRelRef.current = sampleRel;
+
   const run = useMutation({
     mutationFn: async () => {
-      if (!specRel) throw new Error("choose a transform spec");
+      const spec = specRelRef.current;
+      const sample = sampleRelRef.current;
+      if (!spec) throw new Error("choose a transform spec");
       if (sampleSource === "bundled") {
-        if (!sampleRel) throw new Error("choose a bundled sample");
+        if (!sample) throw new Error("choose a bundled sample");
         return api.runTransform(workspaceId, {
-          spec_rel: specRel,
+          spec_rel: spec,
           mode,
           backend,
-          sample_rel: sampleRel,
+          sample_rel: sample,
         });
       }
       if (!file) throw new Error("choose a sample file");
       return api.runTransform(workspaceId, {
-        spec_rel: specRel,
+        spec_rel: spec,
         mode,
         backend,
         file,
