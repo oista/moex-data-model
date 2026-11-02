@@ -740,6 +740,7 @@ relationships:
   source_max_cardinality: 999999
   target_min_cardinality: 0
   target_max_cardinality: 1
+  relationship_kind: reference
 - element_id: dams:rel/crm/CUSTOMER_to_CONTACT_via_PrimaryContact
   name: CUSTOMER_to_CONTACT_via_PrimaryContact
   title: CUSTOMER_to_CONTACT_via_PrimaryContact
@@ -752,6 +753,7 @@ relationships:
   source_max_cardinality: 999999
   target_min_cardinality: 0
   target_max_cardinality: 1
+  relationship_kind: reference
 - element_id: dams:rel/crm/CUSTOMER_to_CUSTOMER_via_PrimaryAccount
   name: CUSTOMER_to_CUSTOMER_via_PrimaryAccount
   title: CUSTOMER_to_CUSTOMER_via_PrimaryAccount
@@ -764,6 +766,7 @@ relationships:
   source_max_cardinality: 999999
   target_min_cardinality: 0
   target_max_cardinality: 1
+  relationship_kind: reference
 - element_id: dams:rel/crm/LEAD_to_CUSTOMER_via_MoexAccount
   name: LEAD_to_CUSTOMER_via_MoexAccount
   title: LEAD_to_CUSTOMER_via_MoexAccount
@@ -776,6 +779,7 @@ relationships:
   source_max_cardinality: 999999
   target_min_cardinality: 0
   target_max_cardinality: 1
+  relationship_kind: reference
 - element_id: dams:rel/crm/LEAD_to_CONTACT_via_MoexContact
   name: LEAD_to_CONTACT_via_MoexContact
   title: LEAD_to_CONTACT_via_MoexContact
@@ -788,6 +792,7 @@ relationships:
   source_max_cardinality: 999999
   target_min_cardinality: 0
   target_max_cardinality: 1
+  relationship_kind: reference
 implementation_scope: solution
 conceptual_implementation_ref: moex:implementation:moex-enterprise-conceptual-model:0.1
 data_owner_ref: org:role/DATA_OWNER_PENDING
