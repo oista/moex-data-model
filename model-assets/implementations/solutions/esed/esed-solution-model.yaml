@@ -2725,6 +2725,15 @@ field_mappings:
   - dams:structure/esed/dvsys_binaries#storageid
   mapping_type: field_mapping
   mapping_cardinality: one_to_one
+- element_id: dams:mapping/esed/map_file_binary_pk
+  description: Mapping map_file_binary_pk (DocsVision dvsys_binaries.ID → file_binary.id)
+  lifecycle_status: draft
+  source_refs:
+  - dams:logical/esed/file_binary/id
+  target_refs:
+  - dams:structure/esed/dvsys_binaries#id
+  mapping_type: field_mapping
+  mapping_cardinality: one_to_one
 - element_id: dams:mapping/esed/map_instance_instance_id
   description: Mapping map_instance_instance_id
   lifecycle_status: draft
