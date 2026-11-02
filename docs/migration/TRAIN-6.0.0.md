@@ -48,10 +48,12 @@ Until G1–G6 pass, keep shipping **minors** (F0-4 allowlist ratchet, Group 1–
 | **T6-6** | Strengthen Mapping endpoint typing at L1 where generators allow (JSON Schema / Pydantic item types); keep L2 as SoT for id→class resolution | DAMS maintainers | Prefer **non-breaking** (tighter generated artifacts) | Spike report (LinkML 1.x limits; ADR-046 spike baseline); no false invalids on 8 packages | Spike + optional gen improvements landed **or** waiver “L2 remains normative for kinds” in ADR-046 amendment | Audit mapping §; ADR-046 |
 | **T6-7** | Rich ownership / stewardship: role type, scope beyond `assignment_scope`, delegation — **without** inventing `StewardshipAssignment` unless ADR-049 is amended | DAMS maintainers | Additive preferred | Product priority; ADR-049 D7 map still holds | Slots on `OwnershipAssignment` **or** ADR-049 amendment rejecting audit extras | Audit governance §; ADR-049 D7 / Out of scope |
 | **T6-8** | Manifest `DocumentKind` expansion (flows, bindings, governance sets, requirement catalogs) + envelopes — **only when** first non-package envelope is authored | DAMS maintainers | Additive (manifest module) then consumers | First real envelope file exists (not a speculative kind) | Kinds in `moex-repository-manifest`; viewer/loader paths; ADR-054 update | ADR-054 Deferred; P2 F3-1/F3-2 |
+| **T6-9** | Remove deprecated `security_classification` slot and `SecurityClassificationEnum`; prefer `governance_classification` | DAMS maintainers | **Yes** (slot/enum removal) | G1–G6; grep shows zero authored values **or** strip leftovers; separate theme from T6-3 Wave C orphans | Slot and enum absent from schema; regen; residue test; timeline **6.0.0** row notes removal | ADR-056 PR-10e / D7; P2 F4-5 |
 
 **T6-1…T6-3** are the **core train** (must ship together under one aggregate **6.0.0** per ADR-051 D3).  
 **T6-4…T6-5** are optional co-travelers.  
-**T6-6…T6-8** may ship as **minors before or after** 6.0.0 if they do not require the core renames; list them here so they are not lost.
+**T6-6…T6-8** may ship as **minors before or after** 6.0.0 if they do not require the core renames; list them here so they are not lost.  
+**T6-9** co-travels with the same aggregate **6.0.0** removal PR (distinct theme from T6-3).
 
 ---
 
@@ -77,6 +79,7 @@ Schema diff and data migration stay in **separate commits** unless PR-5 exceptio
 | `api_version` slot | _TBD_ | `scripts/migrate_api_version_to_dams_specification_version.py` (to create) | |
 | Selection / binding `ModelElement` shape | _TBD_ | _TBD_ | |
 | `transformation_*` / orphan natives / `LogicalDataTypeEnum` | _TBD_ (expect zero authored) | n/a or strip | Zero-use exception OK per ADR-051 D4#2 |
+| `security_classification` / `SecurityClassificationEnum` | 0 authored solution values (schema def + hierarchy mirror only) | strip if any residue; else n/a | Zero-use exception OK per ADR-051 D4#2; ADR-056 D7 / T6-9 |
 
 ---
 
@@ -111,3 +114,4 @@ Ship as ordinary minors when convenient; they reduce risk before the major.
 | Date | Event |
 |---|---|
 | 2026-10-14 | File created (audit closure R3-6): residual P1 items made explicit with owners and entry criteria. Train **not** started. |
+| 2026-11-02 | Added **T6-9** (`security_classification` removal) from ADR-056 D7 / P2 F4-5. Train still **not** started (G1 unmet). |
