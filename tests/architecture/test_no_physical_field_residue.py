@@ -34,6 +34,9 @@ ALLOW_PREFIXES = (
     ".cursor/",
     "generated/",
     "apps/viewer/static/",
+    # Committed viewer shell. The token is inlined viewer.js, already
+    # allowlisted above, not documentation prose.
+    "docs/user/index.html",
     "model-assets/implementations/enterprise/",
     "packages/standard-linkml/README.md",
     "packages/standard-linkml/templates/",
