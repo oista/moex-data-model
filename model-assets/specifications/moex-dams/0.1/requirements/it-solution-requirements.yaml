@@ -408,7 +408,7 @@ requirements:
   title: Классификация ИОД сущности ЛМД
   description: >
     ADR-056 backbone LDM-13 (recommended). Maps to sensitivity_term_refs (entity/attribute);
-    stays manual until PR-10 (ИОД vocabulary / severity order).
+    stays manual until an ИОД vocabulary / severity order exists (P2-BACKLOG F4-1).
   lifecycle_status: approved
   implementation_status: not_started
   code: LDM-13

@@ -29,7 +29,7 @@ Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decision
 | [ADR-010](ADR-010-owl-not-primary-validation.md) | OWL не применяется как основной механизм validation | Accepted | OWL not primary validation |
 | [ADR-011](ADR-011-reproducible-artifacts.md) | Generated artifacts должны быть воспроизводимыми | Accepted | golden / reproducible artifacts |
 | [ADR-012](ADR-012-semantic-diff-review.md) | Все изменения публикуются через semantic diff и review | Proposed | semantic diff shipped; mandatory publish/PR gate still open |
-| [ADR-013](ADR-013-specification-requirements-catalog.md) | Каталог требований к спецификации в DAMS LinkML | Accepted | requirements catalog |
+| [ADR-013](ADR-013-specification-requirements-catalog.md) | Каталог требований к спецификации в DAMS LinkML | Accepted | requirements catalog; codes `NN` normative / `1NN` local (ADR-056) |
 | [ADR-014](ADR-014-fibo-profile-metamodel.md) | FIBO profile — ReferenceSpecification; domain content outside Spec explorer | Accepted | FIBO profile metamodel |
 | [ADR-015](ADR-015-viewer-ui-atlas.md) | MOEX Publication Viewer — UI/UX Design Standard (MOEX Atlas) | Accepted | viewer UI atlas |
 | [ADR-016](ADR-016-publication-section-kinds-and-profiles.md) | Publication section kinds and profiles | Accepted | publication section kinds |

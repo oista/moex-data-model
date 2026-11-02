@@ -129,10 +129,11 @@ def test_example_package_has_no_errors() -> None:
     assert _errors(_example()) == []
 
 
-def test_catalog_expressions_all_have_runner_templates() -> None:
-    """Every conditional_branch expression in catalog must be implemented."""
-    from moex_dams.rules import formal_checks as fc
+# Empty after ADR-056 PR-11e removed Group C/D dead templates.
+_ALLOWED_UNUSED_CONDITIONAL_TEMPLATES: frozenset[str] = frozenset()
 
+
+def _catalog_conditional_expressions() -> set[str]:
     catalogs = [
         CATALOG,
         REPO
@@ -152,39 +153,51 @@ def test_catalog_expressions_all_have_runner_templates() -> None:
             for c in r.get("formal_checks") or []
             if c.get("kind") == "conditional_branch" and c.get("expression")
         )
-    # Probe unknown template path via a synthetic call
-    known = {
-        "implementation_scope_solution",
-        "non_empty_logical_or_physical",
-        "data_carrying_entity_mapping_or_technical",
-        "pdm003_entity_physical",
-        "ldm004_identity",
-        "ldm005_attributes",
-        "ldm006_alignment",
-        "ldm007_semantic_inclusion",
-        "ldm008_realization_completeness",
-        "atr005_mapping_coverage",
-        "planned_on_active_warning",
-        "ref002_cardinality",
-        "pdm004_field_mapping",
-        "atr002_snake_case",
-        "cls001_axes_present",
-        "flw001_soft_presence",
-        "cls002_security_soft",
-        "ref003_kind_soft",
-        "atr004_type_specific_soft",
-        "ldm09_data_class",
-        "ldm12_source_system",
-        "ldm01_has_logical_entity",
-        "ldm06_identifier",
-        "cdm02_relation_typed",
-    }
+    return exprs
+
+
+def _runner_conditional_templates() -> set[str]:
+    """Parse template names from _run_conditional branches (incl. multi-name tuples)."""
+    import re
+
+    from moex_dams.rules import formal_checks as fc
+
+    src = Path(fc.__file__).read_text(encoding="utf-8")
+    # Capture content between "if/elif template ==/in" and the colon of that statement.
+    names: set[str] = set()
+    for m in re.finditer(
+        r"(?:if|elif)\s+template\s+(?:==|in)\s+(\([^)]+\)|\"[^\"]+\")",
+        src,
+    ):
+        chunk = m.group(1)
+        names.update(re.findall(r"\"([^\"]+)\"", chunk))
+    return names
+
+
+def test_catalog_expressions_all_have_runner_templates() -> None:
+    """Every conditional_branch expression in catalog must be implemented."""
+    exprs = _catalog_conditional_expressions()
+    known = _runner_conditional_templates()
     assert exprs <= known, f"Catalog templates missing in runner: {exprs - known}"
-    assert known <= exprs or True  # runner may have extras unused
     # Ensure runner source references each catalog expression
+    from moex_dams.rules import formal_checks as fc
+
     src = Path(fc.__file__).read_text(encoding="utf-8")
     missing = [e for e in exprs if e not in src]
     assert missing == [], missing
+
+
+def test_runner_templates_used_or_allowlisted() -> None:
+    """Runner templates with no catalog row must be explicitly allowlisted (PR-11d)."""
+    exprs = _catalog_conditional_expressions()
+    known = _runner_conditional_templates()
+    unused = known - exprs
+    assert unused <= _ALLOWED_UNUSED_CONDITIONAL_TEMPLATES, (
+        f"Unexpected unused runner templates (add to allowlist or wire catalog): "
+        f"{unused - _ALLOWED_UNUSED_CONDITIONAL_TEMPLATES}"
+    )
+    stale = _ALLOWED_UNUSED_CONDITIONAL_TEMPLATES - unused
+    assert not stale, f"Allowlist entries no longer unused in runner: {stale}"
 
 
 def test_assess_includes_formal_requirement_diagnostics() -> None:
@@ -1053,3 +1066,64 @@ def test_cdm02_parent_concept_ref_without_specialization_rel_ok() -> None:
         [d for d in _cdm_diags(data) if d.severity == DiagnosticSeverity.ERROR]
     )
     assert "DAMS-REQ-CDM-02.c1" not in codes
+
+
+def test_ldm06_technical_entity_skips_identifier() -> None:
+    data = _example()
+    e = data["logical_entities"][0]
+    e["entity_type"] = "technical"
+    e.pop("key_attribute_refs", None)
+    e.pop("identity_rule", None)
+    assert "DAMS-REQ-LDM-06.c1" not in _codes(_errors(data))
+
+
+def test_ldm06_dangling_key_ref_is_struct_not_ldm06() -> None:
+    """Membership of key_attribute_refs is DAMS-STRUCT-004 (ADR-056 D6), not LDM-06."""
+    from moex_dams.rules.structural import check_structural_data
+
+    data = _example()
+    e = data["logical_entities"][0]
+    e["key_attribute_refs"] = ["dams:logical/missing-key-attr"]
+    e["business_key_kind"] = "natural"
+    e.pop("identity_rule", None)
+    assert "DAMS-REQ-LDM-06.c1" not in _codes(_errors(data))
+    struct_codes = {d.diagnostic_code for d in check_structural_data(data)}
+    assert "DAMS-STRUCT-004" in struct_codes
+
+
+def test_cdm02_draft_relationship_skipped() -> None:
+    data = _enterprise_pkg()
+    data["relationships"][0]["lifecycle_status"] = "draft"
+    data["relationships"][0].pop("relationship_kind", None)
+    data["relationships"][0].pop("relation_term_ref", None)
+    assert "DAMS-REQ-CDM-02.c1" not in _codes(
+        [d for d in _cdm_diags(data) if d.severity == DiagnosticSeverity.ERROR]
+    )
+
+
+def test_cdm02_kind_without_term_errors() -> None:
+    data = _enterprise_pkg()
+    data["relationships"][0]["lifecycle_status"] = "active"
+    data["relationships"][0]["relationship_kind"] = "composition"
+    data["relationships"][0].pop("relation_term_ref", None)
+    assert "DAMS-REQ-CDM-02.c1" in _codes(
+        [d for d in _cdm_diags(data) if d.severity == DiagnosticSeverity.ERROR]
+    )
+
+
+def test_cdm01_inherited_definition_via_definition_source_ref() -> None:
+    data = _enterprise_pkg()
+    parent = data["conceptual_entities"][0]
+    child = {
+        "element_id": "dams:concept/Subsidiary",
+        "name": "Subsidiary",
+        "title": "Дочернее понятие",
+        "lifecycle_status": "active",
+        "definition_source_ref": parent["element_id"],
+        "parent_concept_ref": parent["element_id"],
+    }
+    # No own description — must resolve via definition_source_ref.
+    data["conceptual_entities"].append(child)
+    assert "DAMS-REQ-CDM-01.c1" not in _codes(
+        [d for d in _cdm_diags(data) if d.severity == DiagnosticSeverity.ERROR]
+    )

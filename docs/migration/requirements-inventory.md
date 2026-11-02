@@ -35,7 +35,7 @@ Body assess loader: `packages/specification-dams/src/moex_dams/rules/formal_chec
 | C | Remove from catalog; keep enforcement | 31 |
 | D | Remove entirely (after window) | 10 |
 
-## IT-solution catalog (48)
+## IT-solution catalog (48 pre-series; historical until PR-10f)
 
 | Code | Title | Checks / kinds | Enforced today | Group | Destination | Consumers |
 |---|---|---|---|---|---|---|
@@ -88,7 +88,7 @@ Body assess loader: `packages/specification-dams/src/moex_dams/rules/formal_chec
 | FLW-004 | bound_catalog_revision | 1 `custom` | `python` + **INV-040** | C | INV-040 | same |
 | FLW-005 | DataModelBinding.catalog_revision | 1 `custom` | `python` + **INV-041** | C | INV-041 | same |
 
-## Conceptual catalog (9)
+## Conceptual catalog (9 pre-series; historical until PR-10f)
 
 | Code | Title | Lifecycle | Checks / kinds | Enforced today | Group | Destination | Consumers |
 |---|---|---|---|---|---|---|---|
@@ -102,11 +102,11 @@ Body assess loader: `packages/specification-dams/src/moex_dams/rules/formal_chec
 | CM-PDM-000 | Запрет технического слоя | deprecated (PR-9) | `python` `DAMS-LEVEL-003` | C | `dams_levels.py`; row until PR-10 | `test_dams_levels.py` |
 | CM-PROP-001 | ConceptualProperty только enterprise | deprecated (PR-9) | `python` `DAMS-SEM-PROP-SCOPE` | C | `semantic_layer.py`; row until PR-10 | `test_semantic_layer.py` |
 
-## Constraint-matrix `requirement_refs` (today)
+## Constraint-matrix `requirement_refs` (historical pre-PR-10f)
 
-Aliases also in `packages/specification-dams/src/moex_dams/rules/constraint_matrix.py` (`INV_*_DIAGNOSTIC_ALIASES`).
+Before PR-10f many INV rows pointed at three-digit catalog diagnostics. That table is archived here for migration archaeology. Aliases remain in `packages/specification-dams/src/moex_dams/rules/constraint_matrix.py` (`DIAGNOSTIC_CODE_ALIASES`).
 
-| INV | `requirement_refs` (diagnostic codes) | Catalog code |
+| INV | Former `requirement_refs` (diagnostic codes) | Former catalog code |
 |---|---|---|
 | INV-012 | DAMS-REQ-PDM-020.c1/c2 | PDM-020 |
 | INV-013 | DAMS-REQ-PDM-020.c3/c4 | PDM-020 |
@@ -130,6 +130,19 @@ Aliases also in `packages/specification-dams/src/moex_dams/rules/constraint_matr
 | INV-044 | DAMS-CM-RELTERM-002 | CM-REF-002 |
 
 **Missing INV (PR-3):** closed — PDM-005→INV-059, PDM-007→INV-060, PDM-010→INV-061, PDM-015→INV-062, PDM-017→INV-063, PDM-019→INV-064.
+
+## Constraint-matrix `requirement_refs` (current, post PR-10f)
+
+Only four invariants keep live `requirement_refs`; all resolve to backbone `PDM-02`:
+
+| INV | `requirement_refs` | Catalog |
+|---|---|---|
+| INV-033 | `PDM-02` | PDM-02.c1 / PDM-02.c2 |
+| INV-034 | `PDM-02` | same |
+| INV-035 | `PDM-02` | same |
+| INV-036 | `PDM-02` | same |
+
+Other INV rows keep former codes only in `source:` prose (“former requirement_refs … (PR-10f)”).
 
 ## Metamodel blockers (PR-1)
 
@@ -189,11 +202,12 @@ Note: conceptual catalog already uses `CM-*` codes that do not match the IT-solu
 
 ## Implications for migration
 
-- PR-0 is documentation only: no catalog, schema, or `generated/` edits.
-- Do not mark rows `superseded` until PR-2 lands (otherwise assess still fires old checks).
-- Group C INV homes (PR-3) + PR-9 deprecation landed; physical deletion is PR-10.
+- Series PR-0…PR-10f is **complete** (catalogs = 19 rows). Historical guidance below is for archaeology of intermediate states.
+- PR-0 was documentation only: no catalog, schema, or `generated/` edits.
+- Rows were not marked `superseded` until PR-2 landed (otherwise assess still fired old checks).
+- Group C INV homes (PR-3) + PR-9 deprecation landed; physical deletion completed in PR-10f.
 - When statements of the normative **17** rules change slightly, edit backbone catalog rows only; disposition groups stay stable.
-- PR-7a is documentation only (amends ADR-023 / ADR-056); schema and cascade code follow in PR-7b…7f.
+- PR-7a was documentation only (amends ADR-023 / ADR-056); schema and cascade code followed in PR-7b…7f.
 
 ## PR-10a outcome (audit decisions)
 

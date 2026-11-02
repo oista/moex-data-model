@@ -37,7 +37,7 @@ Authored solution packages (`ucd` / `mdm` / `esed` / `crm`) already populate bot
 | PDM-002.c2/c3 | Conditional on `node_kind=scalar` |
 | GEN-001.c7 / LDM-11 | Cascade `data_owner_ref` |
 | LDM-09 / LDM-10 | Cascade / mixed classification |
-| LDM-001 `context_ref` / `solution_data_role` | Already schema-required (pre-PR-8). Relaxing is PR-10 if Group D drops the catalog row |
+| LDM-001 `context_ref` / `solution_data_role` | Already schema-required (pre-PR-8). ADR-056 D6 kept them required; relaxing is P2 backlog (not PR-10) |
 
 Catalog rows themselves are **not** removed in this PR (PR-9).
 
