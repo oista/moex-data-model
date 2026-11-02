@@ -24,6 +24,7 @@ Mirrors Makefile ``check`` (see Makefile targets ``check``, ``architecture-check
 12. check-topology             → moex_dams.catalog.cli check (ADR-048)
 13. check-governance           → moex_dams.governance.cli check (ADR-049)
 14. publish-gate               → python -m moex_model_cli.gates.publish_gate
+15. user-docs                  → moex_publication_viewer.cli check-user-docs (ADR-057)
 
 Usage (from repo root)::
 
@@ -64,6 +65,7 @@ STEP_IDS = (
     "check-topology",
     "check-governance",
     "publish-gate",
+    "user-docs",
 )
 
 
@@ -384,6 +386,31 @@ def run_step(step_id: str, python: str) -> StepResult:
         elif step_id == "publish-gate":
             # Makefile: publish-gate
             code = _run_python_module(python, "moex_model_cli.gates.publish_gate")
+        elif step_id == "user-docs":
+            # ADR-057: docs/user freshness (Makefile user-docs-check)
+            install = subprocess.run(
+                [
+                    python,
+                    "-m",
+                    "pip",
+                    "install",
+                    "-q",
+                    "-e",
+                    str(REPO_ROOT / "apps/viewer[dev]"),
+                ],
+                cwd=str(REPO_ROOT),
+                check=False,
+            )
+            if install.returncode != 0:
+                code = int(install.returncode)
+            else:
+                code = _run_python_module(
+                    python,
+                    "moex_publication_viewer.cli",
+                    "check-user-docs",
+                    "--root",
+                    str(REPO_ROOT),
+                )
         else:
             detail = f"unknown step {step_id!r}"
             code = 2
@@ -417,7 +444,7 @@ def _print_table(results: list[StepResult]) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Run Stage 0 checks (Makefile check, incl. dams-packages-check + publish-gate).",
+        description="Run Stage 0 checks (Makefile check, incl. publish-gate + user-docs).",
     )
     parser.add_argument(
         "--keep-going",

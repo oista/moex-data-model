@@ -102,7 +102,7 @@ python scripts/check_all.py
 # или: make check
 ```
 
-Порядок: `generate-contracts` → slice/CLI pytest (`apps/cli/scripts/check.ps1`) → `validate-schemas` → `validate-examples` → `validate-requirements` → `compare-golden` (contracts, JSON Schema, OWL, SHACL, DBML, Mermaid) → `architecture-check` → `publish-gate`.  
+Порядок совпадает с шапкой [`scripts/check_all.py`](scripts/check_all.py), её же выполняет `make check`: `generate-contracts` → slice/CLI pytest (`apps/cli/scripts/check.ps1`) → `validate-schemas` → `validate-examples` → `validate-requirements` → `check-constraints` → `compare-golden` (contracts, JSON Schema, OWL, SHACL, DBML, Mermaid) → `architecture-check` → `dams-packages-check` → `check-manifest` → `lock-verify` → `check-topology` → `check-governance` → `publish-gate` → `user-docs`.  
 Флаги: `--keep-going`, `--only <step>`. Интерпретатор: `$PYTHON` / [`.python-version`](.python-version) / `apps/cli/.venv`.  
 Pin: [`requirements-linkml.txt`](requirements-linkml.txt), CI: [`.github/workflows/check.yml`](.github/workflows/check.yml).
 
@@ -130,6 +130,8 @@ py -3.14 -m moex_model_cli publish --root .
 
 ## Документация
 
+Текущее устройство продукта для человека и агента: [`docs/user/index.html`](docs/user/index.html), исходная страница [`docs/user/00-start/what-is-this.md`](docs/user/00-start/what-is-this.md).
+
 | Документ | Статус |
 |---|---|
 | [MODELING_ARCHITECTURE.md](docs/architecture/MODELING_ARCHITECTURE.md) | **normative** — ядро платформы |
@@ -138,7 +140,7 @@ py -3.14 -m moex_model_cli publish --root .
 | [linkml_architecture.md](docs/architecture/linkml_architecture.md) | Draft — Workbench / LinkML toolchain |
 | [CHECKLIST.md](docs/architecture/CHECKLIST.md) | process gate для PR по architecture |
 | [IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) | Draft — Workbench MVP roadmap |
-| [docs/adr/](docs/adr/README.md) | Proposed — ADR-001–012 (Workbench / toolchain) |
+| [docs/adr/](docs/adr/README.md) | указатель ADR-001–057; статус — в строке ADR |
 | [MOEX Data Model Specification v0.1](docs/MOEX%20Data%20Model%20Specification%20v0.1%20на%20основе%20LinkML.md) | спецификация DAMS на LinkML |
 
 ## Именование

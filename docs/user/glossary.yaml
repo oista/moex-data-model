@@ -1,0 +1,609 @@
+terms:
+  - id: modeling-standard
+    draft: true
+    term: Стандарт моделирования
+    short: Язык и правила, на которых пишут модель.
+    explanation: >
+      Стандарт задаёт, какими конструкциями вообще можно описать модель.
+      В этом репозитории основной пример — LinkML. По стандарту строят
+      спецификации и конкретные реализации.
+    see_also:
+      - linkml
+      - reference-specification
+      - specification-implementation
+    sources:
+      - docs/architecture/MODELING_ARCHITECTURE.md
+  - id: reference-specification
+    draft: true
+    term: Спецификация
+    short: Правила, как применять выбранный стандарт в предметной области.
+    explanation: >
+      Спецификация говорит, какие понятия обязательны и как они называются.
+      Пример сейчас — DAMS 0.1. На спецификацию ссылаются реализации.
+      Сама спецификация моделью конкретного решения не является.
+    see_also:
+      - modeling-standard
+      - dams
+      - specification-implementation
+    sources:
+      - docs/architecture/MODELING_ARCHITECTURE.md
+  - id: specification-implementation
+    draft: true
+    term: Реализация
+    short: Конкретная модель, собранная по спецификации.
+    explanation: >
+      Реализация — уже заполненное описание области или решения.
+      Она указывает точную редакцию спецификации, по которой собрана.
+      Пример сейчас — пакет mdm. Её сверяют со спецификацией и публикуют
+      для просмотра.
+    see_also:
+      - reference-specification
+      - model-package
+      - publication
+    sources:
+      - docs/architecture/MODELING_ARCHITECTURE.md
+  - id: linkml
+    draft: true
+    term: LinkML
+    short: Язык, на котором сейчас записана спецификация DAMS и модели.
+    explanation: >
+      LinkML — текстовый язык схем. В нём описывают классы, поля и связи,
+      а файлы хранят в YAML. Для DAMS это и есть тот язык, который правят
+      руками. Картинки и другие форматы из него собирают, а не пишут вместо него.
+    see_also:
+      - modeling-standard
+      - dams
+      - published-source
+    sources:
+      - docs/architecture/MODELING_ARCHITECTURE.md
+      - docs/adr/ADR-001-linkml-yaml-canonical.md
+  - id: dams
+    draft: true
+    term: DAMS
+    short: Спецификация описания данных MOEX, сейчас версии 0.1.
+    explanation: >
+      DAMS задаёт, из каких частей состоит модель данных MOEX и как эти части
+      называются. Каталог спецификации лежит в model-assets/specifications/moex-dams/0.1/.
+      Номер 0.1 — метка продукта. Номер схемы внутри этого каталога меняется
+      отдельно, по правилам совместимости.
+    see_also:
+      - reference-specification
+      - linkml
+      - model-package
+    sources:
+      - docs/architecture/MODELING_ARCHITECTURE.md
+  - id: model-package
+    draft: true
+    term: Модельный пакет
+    short: Документ одной модели — общей для предприятия или для решения.
+    explanation: >
+      В пакете лежат сущности и техническое описание одной модели.
+      У пакета данных два уровня: общая модель предприятия и модель решения.
+      Отдельного логического пакета нет. Пример решения — каталог mdm.
+    see_also:
+      - specification-implementation
+      - model-repository
+      - conceptual-layer
+    sources:
+      - docs/architecture/MODELING_ARCHITECTURE.md
+      - docs/adr/ADR-021-dams-implementation-profile-and-levels.md
+  - id: model-repository
+    draft: true
+    term: Репозиторий моделей
+    short: Набор пакетов, который собирают вместе на проверке.
+    explanation: >
+      Репозиторий моделей не правят как один большой файл. На проверке его
+      собирают из документов пакетов, перечисленных в описи состава.
+      В спецификации DAMS этот собранный корень называется MOEXModelRepository.
+    see_also:
+      - model-package
+      - repository-manifest
+      - repository-lock
+    sources:
+      - docs/architecture/MODELING_ARCHITECTURE.md
+      - docs/adr/ADR-054-repository-aggregates-and-manifest.md
+  - id: repository-manifest
+    draft: true
+    term: Опись состава
+    short: Ручной список документов, которые входят в репозиторий моделей.
+    explanation: >
+      Опись лежит в model-assets/implementations/manifest.yaml. Её меняют,
+      когда документ добавляют, убирают или переносят. Сами модели в описи
+      не хранятся: там только ссылки на их файлы.
+    see_also:
+      - model-repository
+      - repository-lock
+    sources:
+      - docs/adr/ADR-047-repository-manifest-and-lock.md
+  - id: repository-lock
+    draft: true
+    term: Фиксация состава
+    short: Сгенерированный снимок описи, чтобы проверка видела тот же состав.
+    explanation: >
+      Фиксация — файл manifest.lock рядом с описью. Его пишет только команда
+      обновления фиксации. Проверка, сборка и публикация этот файл не
+      переписывают. Если опись и фиксация разъехались, проверка это покажет.
+    see_also:
+      - repository-manifest
+      - integrity-digest
+    sources:
+      - docs/adr/ADR-047-repository-manifest-and-lock.md
+  - id: conceptual-layer
+    draft: true
+    term: Понятийный слой
+    short: Описание того, о каких предметах говорит модель.
+    explanation: >
+      Понятийный слой отвечает на вопрос «что это значит», а не «в какой
+      таблице это лежит». На уровне пакета ему соответствует общая модель
+      предприятия. Внутри неё единицы — понятийные сущности.
+    see_also:
+      - conceptual-entity
+      - logical-layer
+      - model-package
+    sources:
+      - docs/adr/ADR-021-dams-implementation-profile-and-levels.md
+      - docs/adr/ADR-026-cmd-entity-metamodel.md
+  - id: logical-layer
+    draft: true
+    term: Логический слой
+    short: Описание того, как смысл разложен в данные решения.
+    explanation: >
+      Логический слой показывает сущности и свойства решения и то, какую
+      понятийную сущность они реализуют. Это не отдельный вид пакета и не
+      копия текста определения.
+    see_also:
+      - logical-entity
+      - conceptual-layer
+      - mapping
+    sources:
+      - docs/adr/ADR-021-dams-implementation-profile-and-levels.md
+  - id: physical-layer
+    draft: true
+    term: Технический слой
+    short: Описание того, где данные лежат и как к ним обращаются.
+    explanation: >
+      Технический слой — носители, точки доступа, контейнеры и то, что данные
+      исполняет. Раньше это смешивали в одном списке «физических объектов».
+      Сейчас единица учёта — технический объект. Колонка таблицы такой
+      единицей не является.
+    see_also:
+      - technical-asset
+      - data-structure
+      - message
+    sources:
+      - docs/adr/ADR-031-technical-asset-registry.md
+  - id: conceptual-entity
+    draft: true
+    term: Понятийная сущность
+    short: Устойчивый предмет области со своим смыслом.
+    explanation: >
+      Понятийная сущность называет то, о чём говорит предприятие: сторону
+      сделки, инструмент, дату. У неё есть собственное определение. Логические
+      сущности решения на неё ссылаются, а не подменяют её.
+    see_also:
+      - conceptual-layer
+      - logical-entity
+      - definition
+    sources:
+      - docs/adr/ADR-026-cmd-entity-metamodel.md
+  - id: logical-entity
+    draft: true
+    term: Логическая сущность
+    short: Единица данных решения, которая реализует понятийную сущность.
+    explanation: >
+      Логическая сущность описывает, как предмет области представлен в данных
+      решения. Связь с понятием предприятия — отдельное отображение, а не
+      копия текста.
+    see_also:
+      - logical-layer
+      - conceptual-entity
+      - mapping
+    sources:
+      - docs/adr/ADR-021-dams-implementation-profile-and-levels.md
+  - id: technical-asset
+    draft: true
+    term: Технический объект
+    short: Учитываемая техническая единица данных, к которой можно обратиться.
+    explanation: >
+      Технический объект — носитель, точка доступа, контейнер или исполнитель.
+      В схеме это общий тип TechnicalAsset и четыре отдельных списка в пакете.
+      Поле или колонка техническим объектом не являются: они узлы структуры.
+    see_also:
+      - data-quantum
+      - physical-layer
+      - data-structure
+    sources:
+      - docs/adr/ADR-031-technical-asset-registry.md
+  - id: data-quantum
+    draft: true
+    term: Квант данных
+    short: Технический объект, к которому обращаются как к целому.
+    explanation: >
+      Квант данных — технический объект со своим именем. На него ссылаются
+      целиком: в связях, потоках и привязках. Колонка, поле и поле сообщения
+      квантом не являются. Их адрес — узел структуры на этом объекте, а не
+      отдельный технический объект.
+    see_also:
+      - technical-asset
+      - schema-node
+    sources:
+      - docs/adr/ADR-031-technical-asset-registry.md
+      - docs/adr/ADR-033-technical-asset-quantum-boundary.md
+  - id: data-structure
+    draft: true
+    term: Структура данных
+    short: Дерево, которое описывает форму данных на техническом объекте.
+    explanation: >
+      Структура данных говорит, из каких частей состоит таблица, файл или
+      сообщение. Корень структуры один, внутри — узлы. Структура не заменяет
+      сам технический объект: объект отвечает «где», структура отвечает «какой формы».
+    see_also:
+      - schema-node
+      - technical-asset
+    sources:
+      - docs/adr/ADR-038-datastructure-and-schemanode.md
+  - id: schema-node
+    draft: true
+    term: Узел структуры
+    short: "Один элемент в дереве структуры: поле, колонка, вложенный блок."
+    explanation: >
+      У узла есть место в дереве и адрес, по которому его находят. Узел можно
+      связать с типом данных. Узел не является квантом данных и не является
+      отдельной системой на чертеже.
+    see_also:
+      - data-structure
+      - data-quantum
+    sources:
+      - docs/adr/ADR-038-datastructure-and-schemanode.md
+      - docs/adr/ADR-039-structure-node-addressing.md
+  - id: message
+    draft: true
+    term: Сообщение
+    short: Техническое описание данных, которыми системы обмениваются.
+    explanation: >
+      Сообщение — отдельная модель обмена, а не ещё одна таблица. У него своя
+      структура. Канал, по которому сообщение едет, в эту модель не копируют:
+      канал принадлежит чертежу систем.
+    see_also:
+      - data-structure
+      - topology
+    sources:
+      - docs/adr/ADR-040-message-integration-model.md
+  - id: mapping
+    draft: true
+    term: Отображение
+    short: Записанная связь между элементами разных слоёв.
+    explanation: >
+      Отображение связывает, например, элемент решения с понятием предприятия
+      или техническое поле с логическим. Связь хранят отдельной записью
+      нужного вида, а не копией полей с обеих сторон.
+    see_also:
+      - conceptual-layer
+      - logical-layer
+      - physical-layer
+    sources:
+      - docs/adr/ADR-046-typed-mapping-endpoints.md
+  - id: published-source
+    draft: true
+    term: Опубликованный источник
+    short: Файлы модели в Git. Пока изменения нет в Git, для остальных его нет.
+    explanation: >
+      Опубликованная модель — это ревизия файлов в Git, а не черновик в базе
+      и не собранный HTML. Для DAMS правят YAML. Всё, что собрано из этих
+      файлов, источником не является.
+    see_also:
+      - derived-artifact
+      - linkml
+      - operational-store
+    sources:
+      - docs/adr/ADR-002-git-published-source.md
+      - docs/adr/ADR-001-linkml-yaml-canonical.md
+  - id: derived-artifact
+    draft: true
+    term: Производный файл
+    short: Файл, который собирают из модели и который можно собрать заново.
+    explanation: >
+      Производные файлы — HTML просмотра, DBML, картинки, OWL и содержимое
+      каталога generated/. Их не правят как модель. Если сборка повторяема,
+      тот же исход даёт тот же файл.
+    see_also:
+      - published-source
+      - publication
+    sources:
+      - docs/adr/ADR-011-reproducible-artifacts.md
+      - docs/adr/ADR-006-dbml-projection.md
+  - id: topology
+    draft: true
+    term: Топология
+    short: Чертёж систем, площадок и каналов, по которым ходят данные.
+    explanation: >
+      Топология отвечает, какая система с какой связана и по какому каналу.
+      Этот чертёж ведёт внешняя система учёта, а не файлы DAMS. В модели
+      хранят ссылку на элемент чертежа и смысл данных на этой связи.
+    see_also:
+      - topology-ownership
+      - message
+    sources:
+      - docs/adr/ADR-048-topology-ownership.md
+  - id: topology-ownership
+    draft: true
+    term: Владение топологией
+    short: Чертёж принадлежит внешней системе, смысл данных — этой модели.
+    explanation: >
+      Факты чертежа (системы, класс интеграции, канал) не копируют в YAML.
+      Иначе при изменении внешней системы копия устареет. Модель держит
+      ссылку и смысловую привязку.
+    see_also:
+      - topology
+    sources:
+      - docs/adr/ADR-048-topology-ownership.md
+      - docs/adr/ADR-055-integration-source-of-truth.md
+  - id: governance-assignment
+    draft: true
+    term: Назначение ответственности
+    short: Утверждённая запись о владельце, классе или правиле на элемент.
+    explanation: >
+      Назначение действует в указанные даты и покрывает один элемент или его
+      вместе с вложенными. Оно сильнее значения, записанного прямо на элементе.
+      Две разные утверждённые записи на один элемент в одно время — ошибка.
+    see_also:
+      - effective-governance
+    sources:
+      - docs/adr/ADR-049-governance-assignment-authority.md
+  - id: effective-governance
+    draft: true
+    term: Действующая ответственность
+    short: Собранная на дату картина того, кто отвечает и какие правила действуют.
+    explanation: >
+      Эту картину получают так: если есть подходящее назначение, берут его,
+      иначе берут значение на элементе или унаследованное от объемлющего.
+      Картину не записывают руками обратно в файл модели.
+    see_also:
+      - governance-assignment
+    sources:
+      - docs/adr/ADR-049-governance-assignment-authority.md
+      - docs/adr/ADR-023-governed-property-cascade.md
+  - id: definition
+    draft: true
+    term: Определение
+    short: Фраза на элементе, которая говорит, что этот элемент означает.
+    explanation: >
+      Определение хранят на самом элементе, а не копируют на каждый нижний
+      уровень. Если своего текста нет, его можно получить по цепочке смысла
+      от более общего элемента.
+    see_also:
+      - definition-cascade
+      - conceptual-entity
+    sources:
+      - docs/adr/ADR-025-definition-cascade-and-glossary.md
+  - id: definition-cascade
+    draft: true
+    term: Наследование определений
+    short: Подстановка определения от более общего элемента по цепочке смысла.
+    explanation: >
+      Цепочка идёт от класса внешней онтологии к понятию предприятия и дальше
+      к сущности решения. Это не наследование владельца по вложенности таблиц
+      и папок. Как термины связаны между собой иерархией или ассоциацией,
+      отдельным принятым решением ещё не зафиксировано.
+    see_also:
+      - definition
+    sources:
+      - docs/adr/ADR-025-definition-cascade-and-glossary.md
+  - id: model-requirement
+    draft: true
+    term: Требование к модели
+    short: Обязанность модели, записанная в каталоге спецификации.
+    explanation: >
+      Требование говорит, что в модели должно быть на месте: определение,
+      связь, запрет противоречия. Каталог лежит рядом со спецификацией DAMS.
+      Ствол каталога — короткие коды каркаса требований. Похожий номер в
+      другом списке — не то же правило.
+    see_also:
+      - requirements-backbone
+      - conformance-check
+      - constraint-matrix
+    sources:
+      - docs/adr/ADR-013-specification-requirements-catalog.md
+      - docs/adr/ADR-056-requirements-backbone.md
+  - id: conformance-check
+    draft: true
+    term: Проверка соответствия
+    short: Машинная сверка реализации с требованиями спецификации.
+    explanation: >
+      Проверка отвечает, выполнила ли конкретная модель то, что требует
+      спецификация. Она опирается на каталог требований и на матрицу проверок.
+      Текстовое описание правила без машины и без отрицательного теста
+      сделанной проверкой не считается.
+    see_also:
+      - model-requirement
+      - constraint-matrix
+      - negative-test
+    sources:
+      - docs/architecture/MODELING_ARCHITECTURE.md
+      - docs/adr/ADR-045-executable-constraint-matrix.md
+  - id: constraint-matrix
+    draft: true
+    term: Матрица проверок
+    short: Список обязательных правил и того, какая машина их выполняет.
+    explanation: >
+      У правила три уровня. Первый — условие внутри одного объекта, записанное
+      в схеме. Второй — проверка связей между объектами в коде. Третий —
+      проверка графового представления отдельными формами; из правил схемы
+      этот уровень сам не появляется. Уровень без отрицательного теста
+      считается несделанным. Строка матрицы нумеруется своим кодом, не кодом
+      требования.
+    see_also:
+      - conformance-check
+      - model-requirement
+      - invariant-code
+      - negative-test
+    sources:
+      - docs/adr/ADR-045-executable-constraint-matrix.md
+      - docs/architecture/constraint-matrix.md
+  - id: model-version
+    draft: true
+    term: Версия модели
+    short: Опубликованный номер модели, например 1.2.0.
+    explanation: >
+      Версия — метка выпущенного состава, а не коммит Git и не время сборки.
+      Номер схемы DAMS и номер пакета решения — разные версии. Поле api_version
+      на пакете сейчас хранит метку спецификации DAMS, а не версию HTTP-интерфейса.
+    see_also:
+      - model-revision
+      - distribution
+    sources:
+      - docs/adr/ADR-052-identity-and-versioning.md
+      - docs/architecture/identity-map.md
+  - id: model-revision
+    draft: true
+    term: Редакция модели
+    short: Конкретный снимок содержания, а не маркетинговый номер.
+    explanation: >
+      Редакция — коммит Git, ревизия привязки или хэш фиксации состава.
+      Две поставки одной и той же версии могут отличаться редакцией, если
+      содержание уже другое, а номер ещё не подняли.
+    see_also:
+      - model-version
+      - integrity-digest
+    sources:
+      - docs/adr/ADR-052-identity-and-versioning.md
+      - docs/architecture/identity-map.md
+  - id: distribution
+    draft: true
+    term: Поставка
+    short: Конкретный файл, который отдали читателю.
+    explanation: >
+      Поставка — путь, тип содержимого и хэш байтов. Это не сама модель и не
+      её номер версии. Один номер версии может иметь несколько поставок:
+      YAML, собранная схема, собранный HTML.
+    see_also:
+      - model-version
+      - derived-artifact
+    sources:
+      - docs/adr/ADR-052-identity-and-versioning.md
+      - docs/architecture/identity-map.md
+  - id: integrity-digest
+    draft: true
+    term: Отпечаток состава
+    short: Короткий хэш, по которому видно, изменилось ли содержание.
+    explanation: >
+      Отпечаток считают по содержанию модели. Он отвечает на вопрос «байты
+      уже другие?», даже если номер версии не меняли. Тот же приём используется
+      в фиксации состава репозитория.
+    see_also:
+      - model-revision
+      - repository-lock
+    sources:
+      - docs/adr/ADR-042-integrity-digest-revisions.md
+  - id: fibo
+    draft: true
+    term: FIBO
+    short: Внешний свод финансовых понятий, подключённый как профиль спецификации.
+    explanation: >
+      FIBO описывает, как устроены его онтологии. В этом репозитории подключён
+      профиль этих правил. Предметные классы FIBO, например «юридическое лицо»,
+      в профиль спецификации не входят: это уже содержание реализации.
+    see_also:
+      - external-specification
+      - external-profile
+      - reference-specification
+    sources:
+      - docs/adr/ADR-014-fibo-profile-metamodel.md
+  - id: external-specification
+    draft: true
+    term: Внешняя спецификация
+    short: Чужой свод правил, на который модель ссылается, не копируя его целиком.
+    explanation: >
+      Внешняя спецификация остаётся чужим источником. Сейчас так подключён
+      профиль FIBO. Загрузка внешних файлов, прикладная онтология как
+      реализация и отбор отдельных терминов ещё не приняты как законченный
+      механизм.
+    see_also:
+      - fibo
+      - external-profile
+      - reference-specification
+    sources:
+      - docs/adr/ADR-014-fibo-profile-metamodel.md
+      - docs/architecture/MODELING_ARCHITECTURE.md
+  - id: publication
+    draft: true
+    term: Публикация
+    short: Собранный просмотр модели для чтения.
+    explanation: >
+      Публикация — HTML и связанные с ним данные, которые получают из файлов
+      модели. Просмотр открывают из apps/viewer. Публикацию не правят руками:
+      правят модель, затем собирают просмотр заново.
+    see_also:
+      - derived-artifact
+      - specification-implementation
+    sources:
+      - docs/architecture/MODELING_ARCHITECTURE.md
+  - id: requirements-backbone
+    draft: true
+    term: Каркас требований
+    short: Нормативные правила модели, они же ствол каталога требований.
+    explanation: >
+      Каркас — семнадцать правил: два про понятийное описание (CDM-01, CDM-02),
+      тринадцать про логическое (LDM-01 … LDM-13) и два про техническое
+      (PDM-01, PDM-02). Эти коды и есть ствол каталога. Похожий номер другого
+      вида, например прежний LDM-001, тем же правилом не был.
+    see_also:
+      - model-requirement
+      - invariant-code
+    sources:
+      - docs/adr/ADR-056-requirements-backbone.md
+  - id: invariant-code
+    draft: true
+    term: Код проверки
+    short: Номер строки в матрице проверок, вида INV-001.
+    explanation: >
+      Код проверки помечает одну строку матрицы: что запрещено и какая машина
+      это выполняет. Это не код каркаса требований и не номер правила в каталоге.
+      Совпадение цифр ничего не доказывает.
+    see_also:
+      - constraint-matrix
+      - requirements-backbone
+      - negative-test
+    sources:
+      - docs/adr/ADR-045-executable-constraint-matrix.md
+      - docs/architecture/constraint-matrix.md
+  - id: negative-test
+    draft: true
+    term: Отрицательный тест
+    short: Пример, который проверка обязана отвергнуть.
+    explanation: >
+      Отрицательный тест — заведомо неправильный фрагмент модели. Если проверка
+      его пропускает, этот уровень правила считается несделанным, даже когда
+      текст правила уже написан.
+    see_also:
+      - constraint-matrix
+      - conformance-check
+    sources:
+      - docs/adr/ADR-045-executable-constraint-matrix.md
+  - id: external-profile
+    draft: true
+    term: Профиль внешней спецификации
+    short: Описание того, как устроен чужой свод, без его предметных классов.
+    explanation: >
+      Профиль говорит, какими конструкциями записан внешний свод и как на него
+      ссылаться. Сами понятия этого свода, например «юридическое лицо», в профиль
+      не входят: их место в содержании реализации. Сейчас так подключён профиль FIBO.
+    see_also:
+      - external-specification
+      - fibo
+    sources:
+      - docs/adr/ADR-014-fibo-profile-metamodel.md
+  - id: operational-store
+    draft: true
+    term: Операционное хранилище
+    short: Место для черновиков и поиска. Файлы модели в Git оно не заменяет.
+    explanation: >
+      Операционное хранилище — база или файлы рядом с ней, где могут лежать
+      черновик, задача и уже собранный результат. Решение сделать такой базой
+      PostgreSQL записано, но не принято, поэтому база сейчас не устройство
+      продукта. Опубликованная модель остаётся в Git.
+    see_also:
+      - published-source
+    sources:
+      - docs/adr/ADR-002-git-published-source.md
+      - docs/adr/ADR-003-postgres-operational.md
