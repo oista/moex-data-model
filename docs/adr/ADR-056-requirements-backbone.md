@@ -201,12 +201,25 @@ Counts and assess impact measured 2026-11-01 on four solution models (`crm`, `es
 | LDM-13 | Stays **manual** until an ИОД vocabulary exists. |
 | PR-10f window | Inactive rows deleted in PR-10f after PR-10c and PR-10d landed on `main`. |
 
+### D7. Disposition of D6 backlog (P2 F4-1…F4-5)
+
+Closed dispositions for the five D6 deferrals tracked as [P2-BACKLOG](../migration/P2-BACKLOG.md) Group 4. D6 text above is historical (PR-10a); this section is authoritative for what happens next.
+
+| ID | Topic | Disposition |
+|---|---|---|
+| **F4-4** | `context_ref` / `solution_data_role` | **Keep** schema-required on `LogicalEntity`. Catalog row LDM-001 was deleted; schema obligation remains. Four solution models already fill both slots. Relaxing `required` is rejected (would widen accepted instances without a data need). |
+| **F4-1** | LDM-13 / ИОД | Stays **manual** (`formal_checks: []`). Class `DataClassificationTerm` exists; no authored ИОД vocabulary or severity order yet; `sensitivity_term_refs` unused in solutions. Automate only after Product ships the vocabulary. LDM-10 continues to enforce `governance_classification`. |
+| **F4-2** | LDM-02 “current version” | Do **not** compare `api_version` to aggregate schema semver (5.5.0). Slot value is the product label `dams.moex/v0.1` (ADR-051 D1, ADR-052 D2). Presence remains schema-required and `LDM-02.c1`. Any richer check waits for rename to `dams_specification_version` (**T6-1** in [TRAIN-6.0.0](../migration/TRAIN-6.0.0.md)). |
+| **F4-5** | Remove `security_classification` | Slot already `deprecated` (PR-10e). Physical removal is **T6-9** in the aggregate **6.0.0** train (ADR-051 D3 batch breaking removals). Zero authored solution values today; evidence-gate exception ADR-051 D4#2 is acceptable. Do not open a separate major only for this slot. |
+| **F4-3** | LDM-07 hidden debt | Fill `relationship_kind: reference` on all 31 draft solution relationships (crm/esed/mdm/ucd). Keep `lifecycle_status: draft`; do not add `relation_term_ref` or promote to `active`. Names `*_via_*_id` are FK-style links. |
+
 ## Consequences
 
 - Normative backbone is the human-facing requirements spine (19 catalog rows after PR-10f); assess and INV remain the executable subset.
 - Coexistence of old three-digit and new two-digit codes required PR-1 pattern widening before PR-4 insert.
 - Runner must honour lifecycle (PR-2) before mass `superseded` (PR-5) or assess will double-fire.
 - Group C got INV homes (PR-3) and PR-9 deprecation; physical deletion completed in PR-10f.
+- D6 backlog dispositions (D7): keep `context_ref`/`solution_data_role` required; LDM-13 and LDM-02 “current version” stay deferred; `security_classification` removal rides train 6.0.0 (T6-9); LDM-07 debt filled with `reference` on draft links.
 
 ## Alternatives considered
 
@@ -222,3 +235,5 @@ Counts and assess impact measured 2026-11-01 on four solution models (`crm`, `es
 - Inventory: [requirements-inventory.md](../migration/requirements-inventory.md)
 - Catalog metamodel: [moex-requirements.yaml](../../model-assets/specifications/moex-dams/0.1/schemas/moex-requirements.yaml)
 - Body assess doc: [IT_SOLUTION_MODEL_REQUIREMENTS.md](../architecture/IT_SOLUTION_MODEL_REQUIREMENTS.md)
+- Backlog: [P2-BACKLOG.md](../migration/P2-BACKLOG.md) Group 4 (F4-1…F4-5)
+- Schema train: [TRAIN-6.0.0.md](../migration/TRAIN-6.0.0.md) (T6-1 rename; T6-9 `security_classification` removal)

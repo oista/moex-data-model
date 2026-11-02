@@ -81,11 +81,11 @@ Closed series: PR-0…PR-10f ([ADR-056](../adr/ADR-056-requirements-backbone.md)
 
 | ID | Item | Source | Owner | Target | Notes |
 |---|---|---|---|---|---|
-| F4-1 | ИОД vocabulary + automate **LDM-13** (`sensitivity_term_refs`) | ADR-056 D5/D6 | DAMS maintainers | Product priority | Stays manual until vocabulary exists |
-| F4-2 | “Current specification version” check for **LDM-02** (beyond `api_version` presence) | ADR-056 D6; ADR-051 | DAMS maintainers | After train / Product | Presence already schema-required |
-| F4-3 | Fill `relationship_kind` on 31 draft solution relationships before promoting to `active` | ADR-056 D6 (LDM-07 debt) | Solution owners | Before `active` | Silent today because all are `draft` |
-| F4-4 | Relax schema-required `context_ref` / `solution_data_role` (or keep) | ADR-056 D6 | DAMS maintainers | Explicit product call | Out of backbone series |
-| F4-5 | Remove deprecated slot `security_classification` (MAJOR) | ADR-056 PR-10e; schema 5.5.0 | DAMS maintainers | Later MAJOR series | Prefer `governance_classification` |
+| F4-1 | ИОД vocabulary + automate **LDM-13** (`sensitivity_term_refs`) | ADR-056 D5/D6/D7 | DAMS maintainers | Product priority | Deferred (not a defect): stays manual until Product ships vocabulary; LDM-10 covers `governance_classification` |
+| F4-2 | “Current specification version” check for **LDM-02** (beyond `api_version` presence) | ADR-056 D6/D7; ADR-051/052 | DAMS maintainers | After **T6-1** | Deferred: `api_version` is product label `dams.moex/v0.1`, not aggregate 5.5.0; presence already schema-required |
+| F4-3 | Fill `relationship_kind` on 31 draft solution relationships before promoting to `active` | ADR-056 D6/D7 (LDM-07 debt) | Solution owners | Data PR (`reference` on draft) | Closes in stacked data PR; keep draft; no `relation_term_ref` / no `active` |
+| F4-4 | Relax schema-required `context_ref` / `solution_data_role` (or keep) | ADR-056 D6/D7 | DAMS maintainers | — | **Done** — keep required (ADR-056 D7) |
+| F4-5 | Remove deprecated slot `security_classification` (MAJOR) | ADR-056 PR-10e; D7 | DAMS maintainers | [TRAIN-6.0.0](TRAIN-6.0.0.md) **T6-9** | Prefer `governance_classification`; batch in aggregate 6.0.0 (not a solo major) |
 | F4-6 | Pass `extra_definition_packages` in assess/`check_formal_requirements_for_repo` so LDM-04/CDM-01 inherit across packages | **Done** — `load_related_definition_packages` via `repo_root` (conceptual_implementation_ref + dams: definition refs) | DAMS maintainers | — | Closed |
 | F4-7 | Replace 30 `DAMS-REQ-GEN-001.placeholder` owner stubs on crm/esed/mdm/ucd | LDM-11 | Solution owners | Product priority | Impact script baseline post PR-11a |
 | F4-8 | Drift check for tracked `mdm/publications/vertical_slice.json` (or stop committing it) | publication / viewer | DAMS maintainers | Minor | Stale after catalog cleanup until regen |
