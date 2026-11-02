@@ -44,6 +44,24 @@ chapters:
       - id: external-ontologies
         path: 10-concepts/external-ontologies.md
         title: Внешние онтологии
+  - id: architecture
+    title: Архитектура
+    pages:
+      - id: architecture-path
+        path: 20-architecture/path.md
+        title: Общая схема
+      - id: applications
+        path: 20-architecture/applications.md
+        title: Приложения
+      - id: code-packages
+        path: 20-architecture/code-packages.md
+        title: Пакеты кода
+      - id: dams-schemas
+        path: 20-architecture/dams-schemas.md
+        title: Как устроены схемы DAMS
+      - id: publication-view
+        path: 20-architecture/publication.md
+        title: Публикация и просмотр
   - id: reference
     title: Справочник
     pages:
@@ -79,27 +97,7 @@ chapters:
   - id: glossary
     title: Глоссарий
 not_covered:
-  - adr: ADR-004
-    reason: "ещё не описано: нет главы о том, как устроены приложения и пакеты кода"
-  - adr: ADR-007
-    reason: "ещё не описано: нет главы о том, чем код проверок отличается от схем"
-  - adr: ADR-008
-    reason: "ещё не описано: нет главы о подключении языка LinkML"
   - adr: ADR-009
     reason: "ещё не описано: нет сценария чернового импорта схемы"
-  - adr: ADR-015
-    reason: "ещё не описано: нет главы об оформлении просмотра"
-  - adr: ADR-016
-    reason: "ещё не описано: нет главы о видах разделов публикации"
-  - adr: ADR-019
-    reason: "ещё не описано: нет главы о том, как реализация наследует контракт публикации"
   - adr: ADR-022
     reason: "ещё не описано: нет сценария импорта из таблицы"
-  - adr: ADR-043
-    reason: "ещё не описано: служебный реестр переходных меток не разобран"
-  - adr: ADR-044
-    reason: "ещё не описано: нет главы о разложении общего класса схемы"
-  - adr: ADR-050
-    reason: "ещё не описано: правило равенства владельца не разобрано"
-  - adr: ADR-053
-    reason: "ещё не описано: метаданные утверждения не разобраны"
