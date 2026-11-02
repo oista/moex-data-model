@@ -1,6 +1,6 @@
 ---
 name: "moex-data-model: Requirements backbone"
-overview: Заменить каталог требований на «хребет» из 17 утверждённых правил (CDM-01..02, LDM-01..13, PDM-01..02), разобрав 57 прежних записей по группам A/B/C/D. PR-0…PR-8 влиты, PR-9 открыт; PR-10 разбит на 10a…10f по итогам аудита.
+overview: Заменить каталог требований на «хребет» из 17 утверждённых правил (CDM-01..02, LDM-01..13, PDM-01..02), разобрав 57 прежних записей по группам A/B/C/D. Серия PR-0…PR-10f завершена (#56…#72); каталоги = 19 строк.
 todos:
   - id: pr0-adr-inventory
     content: "PR-0: ADR-056 + requirements-inventory.md (#56)"
@@ -31,25 +31,25 @@ todos:
     status: completed
   - id: pr9-closeout
     content: "PR-9 close-out: вынести b1818f7 (api fix) в отдельный PR; влить fixup 754b525 в c4054f7; влить #64, затем #65; каждая ветка зелёная отдельно"
-    status: in_progress
+    status: completed
   - id: pr10a-decisions-docs
     content: "PR-10a (docs): ADR-056 D6 решения PR-10 с замерами, исправить 21→17, таблица D4 для 10a..10f, inventory; план — Save to Workspace"
-    status: in_progress
+    status: completed
   - id: pr10b-guards
     content: "PR-10b (безопасно): тест-страж requirement_refs, скрипт отчёта по диагностикам, obligation/responsible_role для группы B"
-    status: pending
+    status: completed
   - id: pr10c-backbone-fixes
     content: "PR-10c: ldm06_identifier, LDM-01 ≥1 LogicalEntity, исполнение CDM-01/02 для enterprise, LDM-006→LDM-101, REF-002→warning; сначала код, потом каталог"
-    status: pending
+    status: completed
   - id: pr10d-deprecate-d
     content: "PR-10d: группа D (10) → deprecated, тесты"
-    status: pending
+    status: completed
   - id: pr10e-schema-text
     content: "PR-10e (схема): описания со старыми кодами, security_classification deprecated, MINOR + regen"
-    status: pending
+    status: completed
   - id: pr10f-delete
     content: "PR-10f (ломающий, финал): удалить 56 неактивных строк, переписать 34 requirement_refs, requirement_code=, тесты 74→19, ADR-056 Accepted"
-    status: pending
+    status: completed
 isProject: false
 ---
 
@@ -57,9 +57,9 @@ isProject: false
 
 ## Состояние серии
 
-- Влито в `main`: PR-0 (#56), PR-1 (#57), PR-2 (#60), PR-3 (#59), PR-4/5/6 (#61), PR-7a..f (#62), PR-8 (#63).
-- Открыто: PR-9a (#64, viewer скрывает неактивные требования), PR-9b (#65, группа C → `deprecated`, INV-065..067). Ветка PR-9b стоит поверх PR-9a.
-- Каталоги сейчас: `it-solution` 63 строки, `conceptual` 11 строк (итого 74). Активны 17 строк хребта, группа B (2) и группа D (10). Группа A — `superseded`, группа C — `deprecated`.
+- Серия **завершена**: PR-0…PR-10f влиты (#56…#72). ADR-056 **Accepted**.
+- Каталоги: `it-solution` 17 строк, `conceptual` 2 строки (итого **19**). Доработки — отдельный follow-up (PR-11a…).
+- Историческая заметка аудита ниже сохранена; цифры 63/11/74 относятся к состоянию **до** PR-10f.
 
 ## Итоги аудита
 

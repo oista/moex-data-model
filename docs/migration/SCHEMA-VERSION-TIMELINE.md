@@ -32,7 +32,7 @@ CI: `tests/architecture/test_schema_version_timeline.py` fails if the aggregate 
 
 | Surface | Example | Meaning |
 |---|---|---|
-| Aggregate LinkML `version` | `4.1.0` | Breaking / additive contract for DAMS schema consumers |
+| Aggregate LinkML `version` | `5.5.0` | Breaking / additive contract for DAMS schema consumers |
 | Per-module schema `version` | often `0.1.0` | Module-local; prefer aggregate for release notes |
 | Spec envelope `specification.yaml` | `0.1.0` | Product / catalogue label |
 | Generated artifact folder | `generated/.../moex-dams/0.1/` | Tracks catalogue path, not aggregate semver |

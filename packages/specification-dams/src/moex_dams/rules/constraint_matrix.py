@@ -676,7 +676,7 @@ def _run_l3_fixtures(
 def render_markdown(data: dict[str, Any]) -> str:
     lines = [
         "---",
-        "status: Proposed",
+        "status: Accepted",
         'version: "0.1"',
         "normative: false",
         "supersedes: []",

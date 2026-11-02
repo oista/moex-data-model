@@ -75,6 +75,23 @@ Tracked so P2 does not forget ADR-054 deferrals; not integration work.
 
 ---
 
+## Group 4 — ADR-056 requirements backbone follow-ups
+
+Closed series: PR-0…PR-10f ([ADR-056](../adr/ADR-056-requirements-backbone.md)). Items below are **not** open bugs against the Accepted ADR; they are deferred product / schema work.
+
+| ID | Item | Source | Owner | Target | Notes |
+|---|---|---|---|---|---|
+| F4-1 | ИОД vocabulary + automate **LDM-13** (`sensitivity_term_refs`) | ADR-056 D5/D6 | DAMS maintainers | Product priority | Stays manual until vocabulary exists |
+| F4-2 | “Current specification version” check for **LDM-02** (beyond `api_version` presence) | ADR-056 D6; ADR-051 | DAMS maintainers | After train / Product | Presence already schema-required |
+| F4-3 | Fill `relationship_kind` on 31 draft solution relationships before promoting to `active` | ADR-056 D6 (LDM-07 debt) | Solution owners | Before `active` | Silent today because all are `draft` |
+| F4-4 | Relax schema-required `context_ref` / `solution_data_role` (or keep) | ADR-056 D6 | DAMS maintainers | Explicit product call | Out of backbone series |
+| F4-5 | Remove deprecated slot `security_classification` (MAJOR) | ADR-056 PR-10e; schema 5.5.0 | DAMS maintainers | Later MAJOR series | Prefer `governance_classification` |
+| F4-6 | Pass `extra_definition_packages` in assess/`check_formal_requirements_for_repo` so LDM-04/CDM-01 inherit across packages | ADR-025; formal_checks | DAMS maintainers | Minor | Latent; in-repo models self-contained today |
+| F4-7 | Replace 30 `DAMS-REQ-GEN-001.placeholder` owner stubs on crm/esed/mdm/ucd | LDM-11 | Solution owners | Product priority | Impact script baseline post PR-11a |
+| F4-8 | Drift check for tracked `mdm/publications/vertical_slice.json` (or stop committing it) | publication / viewer | DAMS maintainers | Minor | Stale after catalog cleanup until regen |
+
+---
+
 ## Explicit non-goals (until a new ADR)
 
 - Runtime lineage store inside DAMS (OpenLineage platform remains SoT for runs).

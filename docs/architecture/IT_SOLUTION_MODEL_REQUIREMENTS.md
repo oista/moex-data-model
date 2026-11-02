@@ -217,12 +217,12 @@ Markdown, ADR и архитектурные документы объясняю�
 Минимальная структура требования:
 
 ```yaml
-id: LDM-004
-title: Правило идентичности
+id: LDM-06
+title: Уникальный идентификатор сущности ЛМД
 statement: >
-  Для логической сущности должно быть описано, по каким деловым
-  признакам два экземпляра считаются одним и тем же объектом,
-  и указан характер ключа и/или состав ключевых атрибутов.
+  Для каждой сущности ЛМД определен состав атрибутов уникального идентификатора.
+  Приоритетный порядок выбора идентификатора – бизнес ключ, натуральный ключ,
+  суррогатный ключ (при отсутствии перечисленных выше альтернатив)
 severity: error
 
 applies_to:
@@ -232,21 +232,13 @@ applies_to:
     - LogicalEntity
 
 formal_checks:
-  - id: LDM-004.c1
-    kind: slot_required
-    slot: identity_rule
-    diagnostic_code: DAMS-REQ-LDM-004.c1
+  - id: LDM-06.c1
+    kind: conditional_branch
+    expression: ldm06_identifier
+    diagnostic_code: DAMS-REQ-LDM-06.c1
     remediation: >
-      Укажите правило бизнес-идентичности сущности.
-
-  - id: LDM-004.c2
-    kind: at_least_one_slots
-    slots:
-      - business_key_kind
-      - key_attribute_refs
-    diagnostic_code: DAMS-REQ-LDM-004.c2
-    remediation: >
-      Укажите характер бизнес-ключа и/или ключевые атрибуты.
+      Для нетехнической сущности укажите key_attribute_refs;
+      для surrogate добавьте identity_rule как обоснование.
 ```
 
 ### 3.3. Пользовательская формулировка
@@ -349,7 +341,7 @@ physical field reference + transformation expression
 Каждая исполнимая проверка должна формировать стабильный diagnostic:
 
 ```text
-DAMS-REQ-LDM-004.c1
+DAMS-REQ-LDM-06.c1
 ```
 
 Diagnostic должен содержать:
@@ -366,16 +358,16 @@ Diagnostic должен содержать:
 Пример:
 
 ```text
-DAMS-REQ-LDM-004.c1
+DAMS-REQ-LDM-06.c1
 LogicalEntity "TradingMember" (trading:TradingMember)
-does not define a business identity rule.
+needs key_attribute_refs (non-technical entity).
 
-Required by LDM-004:
-Для логической сущности должно быть описано, по каким деловым
-признакам два экземпляра считаются одним и тем же объектом.
+Required by LDM-06:
+Для каждой сущности ЛМД определен состав атрибутов уникального идентификатора.
 
 Remediation:
-Укажите identity rule и характер бизнес-ключа либо ключевые атрибуты.
+Для нетехнической сущности укажите key_attribute_refs;
+для surrogate добавьте identity_rule как обоснование.
 ```
 
 ### 4.3. Проверка самого каталога
@@ -442,43 +434,39 @@ Wave 1 проверяет:
 
 ### 5.2. Требования уровня пакета
 
-#### GEN-001. Идентичность и ответственность пакета
+> **История (Wave 1):** коды `GEN-001`…`GEN-004` перенесены в хребет ADR-056
+> (`LDM-01`, `LDM-02`, `LDM-11`, `PDM-02`) и удалены из каталога в PR-10f.
+> Ниже — нормативный смысл в терминах хребта.
+
+#### LDM-02 / LDM-11. Идентичность и ответственность пакета (бывш. GEN-001)
 
 Пакет модели данных ИТ-решения должен иметь:
 
 - стабильный идентификатор;
 - название;
 - описание;
-- версию;
+- версию (`api_version` / LDM-02);
 - lifecycle status;
 - data owner (`data_owner_ref`) на пакете как корень containment cascade
-  (ADR-023).
+  (ADR-023; LDM-11).
 
 Потомки (логическая сущность, атрибут) могут не задавать владельца и наследуют
 эффективное значение от пакета; локальный override допускается покомпонентно
 (`data_owner_ref` / `data_steward_ref` / `owning_unit_ref`). Свободная строка
 `ownership_inheritance_rule` — только пояснение, не источник истины.
 
-#### GEN-002. Привязка к ИТ-решению
+#### LDM-01. Привязка к ИТ-решению и непустой состав (бывш. GEN-002 / GEN-003)
 
 Пакет DAMS solution model должен:
 
 - ссылаться на одно ИТ-решение;
 - иметь scope `solution`;
-- быть отличим от enterprise conceptual model.
-
-#### GEN-003. Непустой состав модели
-
-Пакет должен содержать хотя бы одно из:
-
-```text
-- LogicalEntity;
-- TechnicalAsset.
-```
+- быть отличим от enterprise conceptual model;
+- содержать хотя бы одну `LogicalEntity` (`LDM-01.c3`).
 
 Пустой пакет не является моделью данных решения.
 
-#### GEN-004. Физические объекты связаны со смыслом
+#### PDM-02. Физические объекты связаны со смыслом (бывш. GEN-004 / PDM-003)
 
 Если в пакете есть physical object, который несёт данные, предоставляет payload или содержит schema/fields, он должен:
 
@@ -884,7 +872,7 @@ External dataset
 
 Entity-level mapping доказывает, какой логический смысл представляет physical object.
 
-`PDM-003` считается выполненным, если существует явный Mapping:
+`PDM-02` (entity side; formerly `PDM-003`) считается выполненным, если существует явный Mapping:
 
 ```text
 TechnicalAsset
@@ -908,7 +896,7 @@ mapping_coverage_status: mapped
 
 Attribute-level mapping доказывает, как physical field соотносится с logical attribute.
 
-`PDM-004` считается выполненным, если SchemaNode (через FieldMapping):
+`PDM-02` (field side; formerly `PDM-004`) считается выполненным, если SchemaNode (через FieldMapping):
 
 - участвует в mapping на LogicalAttribute;
 - и/или участвует в documented transformation expression;
@@ -948,10 +936,10 @@ service-only correlation token.
 
 Нормативный **хребет** каталога — коды `CDM-01`/`CDM-02`, `LDM-01`…`LDM-13`,
 `PDM-01`/`PDM-02` ([ADR-056](../adr/ADR-056-requirements-backbone.md)). Исторические
-трёхзначные коды Wave 1: Group A **superseded**, Group C **deprecated** (PR-9; удаление
-в PR-10), Group B/D до PR-10. Viewer по умолчанию скрывает inactive-статусы
+трёхзначные коды Wave 1 удалены в PR-10f (Group A superseded → deleted; Group C/D
+deprecated → deleted). Viewer по умолчанию скрывает inactive-статусы
 (`requirements.show_inactive`). Таблица ниже — ориентир для читателя; machine-readable
-source of truth — `requirements/*.yaml`.
+source of truth — `requirements/*.yaml` (19 строк).
 
 ### 10.1. Backbone (нормативный документ)
 
@@ -961,7 +949,7 @@ source of truth — `requirements/*.yaml`.
 | Conceptual | `CDM-02` | Базовые типы связей КМД |
 | Logical | `LDM-01` | ЛМД на уровне ИТ-решения |
 | Logical | `LDM-02` | Соответствие спецификации; версия в описании модели |
-| Logical | `LDM-03` | Регистрация в Дата-каталоге (manual до PR-7) |
+| Logical | `LDM-03` | Регистрация в Дата-каталоге (manual; process gate) |
 | Logical | `LDM-04` | Определение бизнес-термина сущности ЛМД |
 | Logical | `LDM-05` | Атрибуты сущности |
 | Logical | `LDM-06` | Уникальный идентификатор |
@@ -970,8 +958,8 @@ source of truth — `requirements/*.yaml`.
 | Logical | `LDM-09` | Класс данных |
 | Logical | `LDM-10` | Класс конфиденциальности |
 | Logical | `LDM-11` | Владелец данных |
-| Logical | `LDM-12` | Система-источник (manual до PR-7) |
-| Logical | `LDM-13` | Классификация ИОД (recommended) |
+| Logical | `LDM-12` | Система-источник (`ldm12_source_system`, error) |
+| Logical | `LDM-13` | Классификация ИОД (recommended; manual до словаря ИОД) |
 | Physical | `PDM-01` | Покрытие ФМД поставщика в интеграциях |
 | Physical | `PDM-02` | Связь атрибута ФМД с атрибутом ЛМД |
 
@@ -1270,7 +1258,7 @@ Solution Data Model
 | Генезис | `genesis_kind`, `external_class_refs` | `external` ⇔ есть выравнивание на класс онтологии / внешней спецификации с `match_kind`; `native` — без внешних родителей. Канон — `external_class_refs`; `Mapping(aligns_with)` — проекция. |
 | Связи | `RelationTerm` + `Relationship.relation_term_ref` | Прямая и обратная формулировка из справочника; одна запись `Relationship` на пару. |
 
-Требования каталога: `CM-CON-002` (tier), `CM-CON-003` (genesis), `CM-REF-002` (relation term). Exactness для наследования определений (ADR-025) берётся из `match_kind` (`exact` / `equivalent`). Модельный глоссарий КМД — генерируемое view (`build_model_glossary`), не отдельный dataset.
+Хребет КМД: `CDM-01` (определение), `CDM-02` (типы связей / `relation_term_ref`). Tier/genesis enforcement остаётся в Python / INV (бывшие `CM-CON-002` / `CM-CON-003` / `CM-REF-002`, удалены PR-10f). Exactness для наследования определений (ADR-025) берётся из `match_kind` (`exact` / `equivalent`). Модельный глоссарий КМД — генерируемое view (`build_model_glossary`), не отдельный dataset.
 
 ---
 

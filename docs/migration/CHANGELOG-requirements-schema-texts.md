@@ -19,7 +19,7 @@ ADR-051 D2 treats “deprecate without removal” as MINOR. This PR does not del
 ## Not changed
 
 - Authored YAML may still set `security_classification`.
-- Catalog rows for Group D remain until PR-10f deletes them.
+- Catalog rows for Group D were deleted in PR-10f (after this schema PR).
 - No data migration.
 
 ## Migration
