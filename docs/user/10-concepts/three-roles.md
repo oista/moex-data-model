@@ -2,7 +2,7 @@
 id: three-roles
 sources:
   - docs/architecture/MODELING_ARCHITECTURE.md
-verified_at: 2026-11-02
+draft: true
 ---
 
 # Три роли

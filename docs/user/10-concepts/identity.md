@@ -5,7 +5,7 @@ sources:
   - docs/adr/ADR-042-integrity-digest-revisions.md
   - docs/adr/ADR-051-dams-schema-compatibility.md
   - docs/adr/ADR-052-identity-and-versioning.md
-verified_at: 2026-11-02
+draft: true
 ---
 
 # Версии и отпечаток

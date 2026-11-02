@@ -10,4 +10,4 @@
 
 Страницу в `docs/user/` в этом случае исправляют. Черновики, `docs/migration/` и `.cursor/plans/` текущим состоянием продукта не являются.
 
-Если PR меняет ADR, раскладку `apps/` / `packages/` / `model-assets/` или команды CLI — следуйте [.cursor/rules/user-docs.mdc](.cursor/rules/user-docs.mdc).
+Если PR меняет принятое решение (новый ADR, его статус или текст), схемы, каталог требований, матрицу проверок, раскладку `apps/` / `packages/` / `model-assets/`, нормативные файлы в `docs/architecture/`, шаги проверки, команды CLI или оболочку просмотрщика — следуйте [.cursor/rules/user-docs.mdc](.cursor/rules/user-docs.mdc).

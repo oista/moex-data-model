@@ -4,7 +4,7 @@ sources:
   - docs/architecture/MODELING_ARCHITECTURE.md
   - docs/adr/ADR-047-repository-manifest-and-lock.md
   - docs/adr/ADR-054-repository-aggregates-and-manifest.md
-verified_at: 2026-11-02
+draft: true
 ---
 
 # Пакет и репозиторий моделей

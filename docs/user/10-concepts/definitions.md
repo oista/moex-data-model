@@ -3,7 +3,7 @@ id: definitions
 sources:
   - docs/adr/ADR-025-definition-cascade-and-glossary.md
   - docs/adr/ADR-027-glossary-term-relations.md
-verified_at: 2026-11-02
+draft: true
 ---
 
 # Определения

@@ -2,7 +2,7 @@
 id: repo-map
 sources:
   - README.md
-verified_at: 2026-11-02
+draft: true
 ---
 
 # Карта репозитория

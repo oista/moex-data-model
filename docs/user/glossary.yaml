@@ -1,5 +1,6 @@
 terms:
   - id: modeling-standard
+    draft: true
     term: Стандарт моделирования
     short: Язык и правила, на которых пишут модель.
     explanation: >
@@ -12,8 +13,8 @@ terms:
       - specification-implementation
     sources:
       - docs/architecture/MODELING_ARCHITECTURE.md
-
   - id: reference-specification
+    draft: true
     term: Спецификация
     short: Правила, как применять выбранный стандарт в предметной области.
     explanation: >
@@ -26,8 +27,8 @@ terms:
       - specification-implementation
     sources:
       - docs/architecture/MODELING_ARCHITECTURE.md
-
   - id: specification-implementation
+    draft: true
     term: Реализация
     short: Конкретная модель, собранная по спецификации.
     explanation: >
@@ -41,8 +42,8 @@ terms:
       - publication
     sources:
       - docs/architecture/MODELING_ARCHITECTURE.md
-
   - id: linkml
+    draft: true
     term: LinkML
     short: Язык, на котором сейчас записана спецификация DAMS и модели.
     explanation: >
@@ -56,8 +57,8 @@ terms:
     sources:
       - docs/architecture/MODELING_ARCHITECTURE.md
       - docs/adr/ADR-001-linkml-yaml-canonical.md
-
   - id: dams
+    draft: true
     term: DAMS
     short: Спецификация описания данных MOEX, сейчас версии 0.1.
     explanation: >
@@ -71,8 +72,8 @@ terms:
       - model-package
     sources:
       - docs/architecture/MODELING_ARCHITECTURE.md
-
   - id: model-package
+    draft: true
     term: Модельный пакет
     short: Документ одной модели — общей для предприятия или для решения.
     explanation: >
@@ -86,8 +87,8 @@ terms:
     sources:
       - docs/architecture/MODELING_ARCHITECTURE.md
       - docs/adr/ADR-021-dams-implementation-profile-and-levels.md
-
   - id: model-repository
+    draft: true
     term: Репозиторий моделей
     short: Набор пакетов, который собирают вместе на проверке.
     explanation: >
@@ -101,8 +102,8 @@ terms:
     sources:
       - docs/architecture/MODELING_ARCHITECTURE.md
       - docs/adr/ADR-054-repository-aggregates-and-manifest.md
-
   - id: repository-manifest
+    draft: true
     term: Опись состава
     short: Ручной список документов, которые входят в репозиторий моделей.
     explanation: >
@@ -114,8 +115,8 @@ terms:
       - repository-lock
     sources:
       - docs/adr/ADR-047-repository-manifest-and-lock.md
-
   - id: repository-lock
+    draft: true
     term: Фиксация состава
     short: Сгенерированный снимок описи, чтобы проверка видела тот же состав.
     explanation: >
@@ -127,8 +128,8 @@ terms:
       - integrity-digest
     sources:
       - docs/adr/ADR-047-repository-manifest-and-lock.md
-
   - id: conceptual-layer
+    draft: true
     term: Понятийный слой
     short: Описание того, о каких предметах говорит модель.
     explanation: >
@@ -142,8 +143,8 @@ terms:
     sources:
       - docs/adr/ADR-021-dams-implementation-profile-and-levels.md
       - docs/adr/ADR-026-cmd-entity-metamodel.md
-
   - id: logical-layer
+    draft: true
     term: Логический слой
     short: Описание того, как смысл разложен в данные решения.
     explanation: >
@@ -156,8 +157,8 @@ terms:
       - mapping
     sources:
       - docs/adr/ADR-021-dams-implementation-profile-and-levels.md
-
   - id: physical-layer
+    draft: true
     term: Технический слой
     short: Описание того, где данные лежат и как к ним обращаются.
     explanation: >
@@ -171,8 +172,8 @@ terms:
       - message
     sources:
       - docs/adr/ADR-031-technical-asset-registry.md
-
   - id: conceptual-entity
+    draft: true
     term: Понятийная сущность
     short: Устойчивый предмет области со своим смыслом.
     explanation: >
@@ -185,8 +186,8 @@ terms:
       - definition
     sources:
       - docs/adr/ADR-026-cmd-entity-metamodel.md
-
   - id: logical-entity
+    draft: true
     term: Логическая сущность
     short: Единица данных решения, которая реализует понятийную сущность.
     explanation: >
@@ -199,8 +200,8 @@ terms:
       - mapping
     sources:
       - docs/adr/ADR-021-dams-implementation-profile-and-levels.md
-
   - id: technical-asset
+    draft: true
     term: Технический объект
     short: Учитываемая техническая единица данных, к которой можно обратиться.
     explanation: >
@@ -213,22 +214,23 @@ terms:
       - data-structure
     sources:
       - docs/adr/ADR-031-technical-asset-registry.md
-
   - id: data-quantum
+    draft: true
     term: Квант данных
-    short: "То же, что технический объект: единица, к которой можно обратиться."
+    short: Технический объект, к которому обращаются как к целому.
     explanation: >
-      Квант данных — предметное имя технического объекта. Граница кванта
-      проведена так, чтобы колонка, поле сообщения и похожая мелочь внутрь
-      кванта не попадали. Они описываются узлами структуры на этом объекте.
+      Квант данных — технический объект со своим именем. На него ссылаются
+      целиком: в связях, потоках и привязках. Колонка, поле и поле сообщения
+      квантом не являются. Их адрес — узел структуры на этом объекте, а не
+      отдельный технический объект.
     see_also:
       - technical-asset
       - schema-node
     sources:
       - docs/adr/ADR-031-technical-asset-registry.md
       - docs/adr/ADR-033-technical-asset-quantum-boundary.md
-
   - id: data-structure
+    draft: true
     term: Структура данных
     short: Дерево, которое описывает форму данных на техническом объекте.
     explanation: >
@@ -240,8 +242,8 @@ terms:
       - technical-asset
     sources:
       - docs/adr/ADR-038-datastructure-and-schemanode.md
-
   - id: schema-node
+    draft: true
     term: Узел структуры
     short: "Один элемент в дереве структуры: поле, колонка, вложенный блок."
     explanation: >
@@ -254,8 +256,8 @@ terms:
     sources:
       - docs/adr/ADR-038-datastructure-and-schemanode.md
       - docs/adr/ADR-039-structure-node-addressing.md
-
   - id: message
+    draft: true
     term: Сообщение
     short: Техническое описание данных, которыми системы обмениваются.
     explanation: >
@@ -267,8 +269,8 @@ terms:
       - topology
     sources:
       - docs/adr/ADR-040-message-integration-model.md
-
   - id: mapping
+    draft: true
     term: Отображение
     short: Записанная связь между элементами разных слоёв.
     explanation: >
@@ -281,8 +283,8 @@ terms:
       - physical-layer
     sources:
       - docs/adr/ADR-046-typed-mapping-endpoints.md
-
   - id: published-source
+    draft: true
     term: Опубликованный источник
     short: Файлы модели в Git. Пока изменения нет в Git, для остальных его нет.
     explanation: >
@@ -292,11 +294,12 @@ terms:
     see_also:
       - derived-artifact
       - linkml
+      - operational-store
     sources:
       - docs/adr/ADR-002-git-published-source.md
       - docs/adr/ADR-001-linkml-yaml-canonical.md
-
   - id: derived-artifact
+    draft: true
     term: Производный файл
     short: Файл, который собирают из модели и который можно собрать заново.
     explanation: >
@@ -309,8 +312,8 @@ terms:
     sources:
       - docs/adr/ADR-011-reproducible-artifacts.md
       - docs/adr/ADR-006-dbml-projection.md
-
   - id: topology
+    draft: true
     term: Топология
     short: Чертёж систем, площадок и каналов, по которым ходят данные.
     explanation: >
@@ -322,8 +325,8 @@ terms:
       - message
     sources:
       - docs/adr/ADR-048-topology-ownership.md
-
   - id: topology-ownership
+    draft: true
     term: Владение топологией
     short: Чертёж принадлежит внешней системе, смысл данных — этой модели.
     explanation: >
@@ -335,8 +338,8 @@ terms:
     sources:
       - docs/adr/ADR-048-topology-ownership.md
       - docs/adr/ADR-055-integration-source-of-truth.md
-
   - id: governance-assignment
+    draft: true
     term: Назначение ответственности
     short: Утверждённая запись о владельце, классе или правиле на элемент.
     explanation: >
@@ -347,8 +350,8 @@ terms:
       - effective-governance
     sources:
       - docs/adr/ADR-049-governance-assignment-authority.md
-
   - id: effective-governance
+    draft: true
     term: Действующая ответственность
     short: Собранная на дату картина того, кто отвечает и какие правила действуют.
     explanation: >
@@ -360,8 +363,8 @@ terms:
     sources:
       - docs/adr/ADR-049-governance-assignment-authority.md
       - docs/adr/ADR-023-governed-property-cascade.md
-
   - id: definition
+    draft: true
     term: Определение
     short: Фраза на элементе, которая говорит, что этот элемент означает.
     explanation: >
@@ -373,8 +376,8 @@ terms:
       - conceptual-entity
     sources:
       - docs/adr/ADR-025-definition-cascade-and-glossary.md
-
   - id: definition-cascade
+    draft: true
     term: Наследование определений
     short: Подстановка определения от более общего элемента по цепочке смысла.
     explanation: >
@@ -386,23 +389,24 @@ terms:
       - definition
     sources:
       - docs/adr/ADR-025-definition-cascade-and-glossary.md
-
   - id: model-requirement
+    draft: true
     term: Требование к модели
     short: Обязанность модели, записанная в каталоге спецификации.
     explanation: >
       Требование говорит, что в модели должно быть на месте: определение,
       связь, запрет противоречия. Каталог лежит рядом со спецификацией DAMS.
-      Коды нормативного каркаса и коды этого каталога по номеру не совпадают
-      по смыслу.
+      Ствол каталога — короткие коды каркаса требований. Похожий номер в
+      другом списке — не то же правило.
     see_also:
+      - requirements-backbone
       - conformance-check
       - constraint-matrix
     sources:
       - docs/adr/ADR-013-specification-requirements-catalog.md
       - docs/adr/ADR-056-requirements-backbone.md
-
   - id: conformance-check
+    draft: true
     term: Проверка соответствия
     short: Машинная сверка реализации с требованиями спецификации.
     explanation: >
@@ -413,26 +417,31 @@ terms:
     see_also:
       - model-requirement
       - constraint-matrix
+      - negative-test
     sources:
       - docs/architecture/MODELING_ARCHITECTURE.md
       - docs/adr/ADR-045-executable-constraint-matrix.md
-
   - id: constraint-matrix
+    draft: true
     term: Матрица проверок
     short: Список обязательных правил и того, какая машина их выполняет.
     explanation: >
       У правила три уровня. Первый — условие внутри одного объекта, записанное
       в схеме. Второй — проверка связей между объектами в коде. Третий —
-      проверка RDF-представления. Уровень без отрицательного теста считается
-      несделанным.
+      проверка графового представления отдельными формами; из правил схемы
+      этот уровень сам не появляется. Уровень без отрицательного теста
+      считается несделанным. Строка матрицы нумеруется своим кодом, не кодом
+      требования.
     see_also:
       - conformance-check
       - model-requirement
+      - invariant-code
+      - negative-test
     sources:
       - docs/adr/ADR-045-executable-constraint-matrix.md
       - docs/architecture/constraint-matrix.md
-
   - id: model-version
+    draft: true
     term: Версия модели
     short: Опубликованный номер модели, например 1.2.0.
     explanation: >
@@ -445,8 +454,8 @@ terms:
     sources:
       - docs/adr/ADR-052-identity-and-versioning.md
       - docs/architecture/identity-map.md
-
   - id: model-revision
+    draft: true
     term: Редакция модели
     short: Конкретный снимок содержания, а не маркетинговый номер.
     explanation: >
@@ -459,8 +468,8 @@ terms:
     sources:
       - docs/adr/ADR-052-identity-and-versioning.md
       - docs/architecture/identity-map.md
-
   - id: distribution
+    draft: true
     term: Поставка
     short: Конкретный файл, который отдали читателю.
     explanation: >
@@ -473,8 +482,8 @@ terms:
     sources:
       - docs/adr/ADR-052-identity-and-versioning.md
       - docs/architecture/identity-map.md
-
   - id: integrity-digest
+    draft: true
     term: Отпечаток состава
     short: Короткий хэш, по которому видно, изменилось ли содержание.
     explanation: >
@@ -486,8 +495,8 @@ terms:
       - repository-lock
     sources:
       - docs/adr/ADR-042-integrity-digest-revisions.md
-
   - id: fibo
+    draft: true
     term: FIBO
     short: Внешний свод финансовых понятий, подключённый как профиль спецификации.
     explanation: >
@@ -496,11 +505,12 @@ terms:
       в профиль спецификации не входят: это уже содержание реализации.
     see_also:
       - external-specification
+      - external-profile
       - reference-specification
     sources:
       - docs/adr/ADR-014-fibo-profile-metamodel.md
-
   - id: external-specification
+    draft: true
     term: Внешняя спецификация
     short: Чужой свод правил, на который модель ссылается, не копируя его целиком.
     explanation: >
@@ -510,12 +520,13 @@ terms:
       механизм.
     see_also:
       - fibo
+      - external-profile
       - reference-specification
     sources:
       - docs/adr/ADR-014-fibo-profile-metamodel.md
       - docs/architecture/MODELING_ARCHITECTURE.md
-
   - id: publication
+    draft: true
     term: Публикация
     short: Собранный просмотр модели для чтения.
     explanation: >
@@ -527,3 +538,72 @@ terms:
       - specification-implementation
     sources:
       - docs/architecture/MODELING_ARCHITECTURE.md
+  - id: requirements-backbone
+    draft: true
+    term: Каркас требований
+    short: Нормативные правила модели, они же ствол каталога требований.
+    explanation: >
+      Каркас — семнадцать правил: два про понятийное описание (CDM-01, CDM-02),
+      тринадцать про логическое (LDM-01 … LDM-13) и два про техническое
+      (PDM-01, PDM-02). Эти коды и есть ствол каталога. Похожий номер другого
+      вида, например прежний LDM-001, тем же правилом не был.
+    see_also:
+      - model-requirement
+      - invariant-code
+    sources:
+      - docs/adr/ADR-056-requirements-backbone.md
+  - id: invariant-code
+    draft: true
+    term: Код проверки
+    short: Номер строки в матрице проверок, вида INV-001.
+    explanation: >
+      Код проверки помечает одну строку матрицы: что запрещено и какая машина
+      это выполняет. Это не код каркаса требований и не номер правила в каталоге.
+      Совпадение цифр ничего не доказывает.
+    see_also:
+      - constraint-matrix
+      - requirements-backbone
+      - negative-test
+    sources:
+      - docs/adr/ADR-045-executable-constraint-matrix.md
+      - docs/architecture/constraint-matrix.md
+  - id: negative-test
+    draft: true
+    term: Отрицательный тест
+    short: Пример, который проверка обязана отвергнуть.
+    explanation: >
+      Отрицательный тест — заведомо неправильный фрагмент модели. Если проверка
+      его пропускает, этот уровень правила считается несделанным, даже когда
+      текст правила уже написан.
+    see_also:
+      - constraint-matrix
+      - conformance-check
+    sources:
+      - docs/adr/ADR-045-executable-constraint-matrix.md
+  - id: external-profile
+    draft: true
+    term: Профиль внешней спецификации
+    short: Описание того, как устроен чужой свод, без его предметных классов.
+    explanation: >
+      Профиль говорит, какими конструкциями записан внешний свод и как на него
+      ссылаться. Сами понятия этого свода, например «юридическое лицо», в профиль
+      не входят: их место в содержании реализации. Сейчас так подключён профиль FIBO.
+    see_also:
+      - external-specification
+      - fibo
+    sources:
+      - docs/adr/ADR-014-fibo-profile-metamodel.md
+  - id: operational-store
+    draft: true
+    term: Операционное хранилище
+    short: Место для черновиков и поиска. Файлы модели в Git оно не заменяет.
+    explanation: >
+      Операционное хранилище — база или файлы рядом с ней, где могут лежать
+      черновик, задача и уже собранный результат. Решение сделать такой базой
+      PostgreSQL записано, но не принято, поэтому база сейчас не устройство
+      продукта. Опубликованная модель остаётся в Git.
+    see_also:
+      - published-source
+    sources:
+      - docs/adr/ADR-002-git-published-source.md
+      - docs/adr/ADR-003-postgres-operational.md

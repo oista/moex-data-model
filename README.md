@@ -102,7 +102,7 @@ python scripts/check_all.py
 # или: make check
 ```
 
-Порядок: `generate-contracts` → slice/CLI pytest (`apps/cli/scripts/check.ps1`) → `validate-schemas` → `validate-examples` → `validate-requirements` → `compare-golden` (contracts, JSON Schema, OWL, SHACL, DBML, Mermaid) → `architecture-check` → `publish-gate`.  
+Порядок совпадает с шапкой [`scripts/check_all.py`](scripts/check_all.py), её же выполняет `make check`: `generate-contracts` → slice/CLI pytest (`apps/cli/scripts/check.ps1`) → `validate-schemas` → `validate-examples` → `validate-requirements` → `check-constraints` → `compare-golden` (contracts, JSON Schema, OWL, SHACL, DBML, Mermaid) → `architecture-check` → `dams-packages-check` → `check-manifest` → `lock-verify` → `check-topology` → `check-governance` → `publish-gate` → `user-docs`.  
 Флаги: `--keep-going`, `--only <step>`. Интерпретатор: `$PYTHON` / [`.python-version`](.python-version) / `apps/cli/.venv`.  
 Pin: [`requirements-linkml.txt`](requirements-linkml.txt), CI: [`.github/workflows/check.yml`](.github/workflows/check.yml).
 

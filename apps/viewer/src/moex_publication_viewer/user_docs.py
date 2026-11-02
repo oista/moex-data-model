@@ -90,7 +90,67 @@ def replace_glossary_links(
     return GLOSSARY_LINK_RE.sub(_repl, body), errors
 
 
-def _term_page_markdown(term: dict[str, Any], term_ids: set[str]) -> tuple[str, list[str]]:
+def _term_labels(terms: list[dict[str, Any]]) -> dict[str, str]:
+    labels: dict[str, str] = {}
+    for term in terms:
+        tid = str(term.get("id") or "").strip()
+        if not tid:
+            continue
+        labels[tid] = str(term.get("term") or tid).strip() or tid
+    return labels
+
+
+def _draft_prefix() -> str:
+    return render_markdown(
+        "Черновик: человек ещё не сверил этот текст с источниками.\n\n"
+    )
+
+
+def _parse_review_state(meta: dict[str, Any], loc: str) -> tuple[date | None, bool, list[str]]:
+    """Human `verified_at` or explicit `draft: true`. Not both, and not neither."""
+    errors: list[str] = []
+    if "draft" in meta and meta.get("draft") is not None and not isinstance(meta.get("draft"), bool):
+        errors.append(f"{loc}: draft must be true or false")
+        return None, False, errors
+    draft = meta.get("draft") is True
+    raw = meta.get("verified_at")
+    has_verified = raw is not None and str(raw).strip() != ""
+    if draft and has_verified:
+        errors.append(f"{loc}: draft: true cannot be combined with verified_at")
+        return None, True, errors
+    if not draft and not has_verified:
+        errors.append(f"{loc}: set verified_at after human review, or draft: true")
+        return None, False, errors
+    if draft:
+        return None, True, errors
+    verified, ver_errors = _parse_verified_at(raw, loc)
+    errors.extend(ver_errors)
+    return verified, False, errors
+
+
+def _adr_ids_in_text(text: str) -> set[str]:
+    found: set[str] = set()
+    for match in ADR_MENTION_RE.finditer(text):
+        parsed = re.match(r"ADR-(\d+)$", match.group(0), re.IGNORECASE)
+        if parsed:
+            found.add(f"ADR-{int(parsed.group(1)):03d}")
+    return found
+
+
+def _adr_ids_from_paths(paths: list[Path]) -> set[str]:
+    found: set[str] = set()
+    for path in paths:
+        match = ADR_FILE_RE.match(path.name)
+        if match:
+            found.add(f"ADR-{int(match.group(1)):03d}")
+    return found
+
+
+def _term_page_markdown(
+    term: dict[str, Any],
+    term_ids: set[str],
+    term_labels: dict[str, str] | None = None,
+) -> tuple[str, list[str]]:
     term_id = str(term.get("id") or "").strip()
     name = str(term.get("term") or term_id).strip()
     short = str(term.get("short") or "").strip()
@@ -98,6 +158,7 @@ def _term_page_markdown(term: dict[str, Any], term_ids: set[str]) -> tuple[str, 
     see_also = term.get("see_also") or []
     if not isinstance(see_also, list):
         see_also = [see_also]
+    labels = term_labels or {}
     errors: list[str] = []
     lines = [f"# {name}", ""]
     if short:
@@ -114,7 +175,7 @@ def _term_page_markdown(term: dict[str, Any], term_ids: set[str]) -> tuple[str, 
             if rid not in term_ids:
                 errors.append(f"glossary '{term_id}': see_also unknown id '{rid}'")
                 continue
-            lines.append(f"- [{rid}](glossary:{rid})")
+            lines.append(f"- [{labels.get(rid) or rid}](glossary:{rid})")
         lines.append("")
     body = "\n".join(lines)
     body, link_errors = replace_glossary_links(body, term_ids)
@@ -268,8 +329,8 @@ def _read_page(
     root: Path,
     term_ids: set[str],
     toc_id: str,
-) -> tuple[PublicationItem | None, list[str], list[str], list[Path], date | None, str]:
-    """Return item, errors, warnings, source paths, verified_at, body text for ADR scan."""
+) -> tuple[PublicationItem | None, list[str], list[str], list[Path], date | None, str, bool]:
+    """Return item, errors, warnings, source paths, verified_at, body, draft."""
     errors: list[str] = []
     warnings: list[str] = []
     rel = str(page.get("path") or "").strip().replace("\\", "/")
@@ -282,7 +343,7 @@ def _read_page(
         errors.append(f"{loc}: id '{page_id}' does not match toc id '{toc_id}'")
     if not rel:
         errors.append(f"{loc}: path is required")
-        return None, errors, warnings, [], None, ""
+        return None, errors, warnings, [], None, "", False
     if not title:
         errors.append(f"{loc}: title is required")
     path = (docs_dir / rel).resolve()
@@ -290,15 +351,15 @@ def _read_page(
         path.relative_to(docs_dir.resolve())
     except ValueError:
         errors.append(f"{loc}: path escapes docs/user: {rel}")
-        return None, errors, warnings, [], None, ""
+        return None, errors, warnings, [], None, "", False
     if not path.is_file():
         errors.append(f"{loc}: missing markdown '{rel}'")
-        return None, errors, warnings, [], None, ""
+        return None, errors, warnings, [], None, "", False
     try:
         raw = path.read_text(encoding="utf-8")
     except OSError as exc:
         errors.append(f"{path}: cannot read: {exc}")
-        return None, errors, warnings, [], None, ""
+        return None, errors, warnings, [], None, "", False
     meta, body = split_frontmatter(raw)
     fm_id = str(meta.get("id") or "").strip()
     if not fm_id:
@@ -307,15 +368,17 @@ def _read_page(
         errors.append(f"{rel}: frontmatter id '{fm_id}' does not match toc id '{page_id}'")
     sources, src_errors = _validate_sources(meta.get("sources"), root=root, loc=rel)
     errors.extend(src_errors)
-    verified, ver_errors = _parse_verified_at(meta.get("verified_at"), rel)
-    errors.extend(ver_errors)
+    verified, draft, review_errors = _parse_review_state(meta, rel)
+    errors.extend(review_errors)
     errors.extend(
         _check_markdown_file_links(body, page_path=path, root=root, loc=rel)
     )
     content, link_errors = _page_html_from_markdown(body, term_ids, source_label=rel)
     errors.extend(link_errors)
     if errors:
-        return None, errors, warnings, sources, verified, body
+        return None, errors, warnings, sources, verified, body, draft
+    if draft:
+        content = _draft_prefix() + content
     item = PublicationItem(
         id=page_id or fm_id,
         title=title or page_id or fm_id,
@@ -325,9 +388,10 @@ def _read_page(
             "content": content,
             "sources": [str(s.relative_to(root.resolve()).as_posix()) for s in sources],
             "verified_at": verified.isoformat() if verified else None,
+            "draft": draft,
         },
     )
-    return item, errors, warnings, sources, verified, body
+    return item, errors, warnings, sources, verified, body, draft
 
 
 def _glossary_items(
@@ -340,6 +404,7 @@ def _glossary_items(
     warnings: list[str] = []
     items: list[PublicationItem] = []
     source_meta: list[tuple[list[Path], date | None]] = []
+    labels = _term_labels(terms)
     for term in terms:
         tid = str(term.get("id") or "").strip()
         loc = f"{GLOSSARY_NAME}:{tid}"
@@ -354,14 +419,16 @@ def _glossary_items(
             errors.append(f"{loc}: explanation is required")
         sources, src_errors = _validate_sources(term.get("sources"), root=root, loc=loc)
         errors.extend(src_errors)
-        # Glossary cards use "today" as soft stamp only when sources exist;
-        # ADR-057 requires sources on terms; verified_at is page-only.
-        md, md_errors = _term_page_markdown(term, term_ids)
+        verified, draft, review_errors = _parse_review_state(term, loc)
+        errors.extend(review_errors)
+        md, md_errors = _term_page_markdown(term, term_ids, labels)
         errors.extend([f"{loc}: {e}" for e in md_errors])
-        if md_errors or src_errors or not name:
+        if md_errors or src_errors or review_errors or not name:
             source_meta.append((sources, None))
             continue
         content = render_markdown(md)
+        if draft:
+            content = _draft_prefix() + content
         items.append(
             PublicationItem(
                 id=tid,
@@ -374,10 +441,12 @@ def _glossary_items(
                     "sources": [
                         str(s.relative_to(root.resolve()).as_posix()) for s in sources
                     ],
+                    "verified_at": verified.isoformat() if verified else None,
+                    "draft": draft,
                 },
             )
         )
-        source_meta.append((sources, None))
+        source_meta.append((sources, verified))
     return items, errors, warnings, source_meta
 
 
@@ -431,7 +500,7 @@ def compile_user_docs_module(root: Path) -> PublicationModule:
                     errors.append(f"{TOC_NAME}: page must be a mapping")
                     continue
                 toc_id = str(page.get("id") or "").strip()
-                item, page_errors, _warn, _sources, _verified, body = _read_page(
+                item, page_errors, _warn, _sources, _verified, body, _draft = _read_page(
                     docs_dir,
                     page,
                     root=root,
@@ -550,6 +619,11 @@ def _not_covered_map(toc: dict[str, Any]) -> tuple[dict[str, str], list[str]]:
         if not reason:
             errors.append(f"{loc}: reason is required for {adr}")
             continue
+        if re.search(r"\bPR-\d+\b", reason, re.IGNORECASE):
+            errors.append(
+                f"{loc}: reason for {adr} must describe the product, not a future PR"
+            )
+            continue
         out[adr] = reason
     return out, errors
 
@@ -586,6 +660,8 @@ def _collect_page_records(
                     term.get("sources"), root=root, loc=loc
                 )
                 errors.extend(src_errors)
+                verified, draft, review_errors = _parse_review_state(term, loc)
+                errors.extend(review_errors)
                 see_also = term.get("see_also") or []
                 if not isinstance(see_also, list):
                     see_also = [see_also]
@@ -606,7 +682,8 @@ def _collect_page_records(
                         "id": tid,
                         "body": body,
                         "sources": sources,
-                        "verified_at": None,
+                        "verified_at": verified,
+                        "draft": draft,
                         "path": docs_dir / GLOSSARY_NAME,
                     }
                 )
@@ -615,7 +692,7 @@ def _collect_page_records(
             if not isinstance(page, dict):
                 continue
             toc_id = str(page.get("id") or "").strip()
-            item, page_errors, page_warnings, sources, verified, body = _read_page(
+            item, page_errors, page_warnings, sources, verified, body, draft = _read_page(
                 docs_dir,
                 page,
                 root=root,
@@ -632,6 +709,7 @@ def _collect_page_records(
                     "body": body,
                     "sources": sources,
                     "verified_at": verified,
+                    "draft": draft,
                     "path": (docs_dir / str(page.get("path") or "")),
                     "ok": item is not None,
                 }
@@ -707,6 +785,16 @@ def check_user_docs(root: Path) -> tuple[list[str], list[str]]:
             f"in toc.yaml not_covered"
         )
 
+    for record in records:
+        if record.get("draft"):
+            warnings.append(f"{record.get('id')}: draft, verified_at is not set")
+        mentioned_here = _adr_ids_in_text(str(record.get("body") or ""))
+        in_sources = _adr_ids_from_paths(record.get("sources") or [])
+        for adr_id in sorted(mentioned_here - in_sources):
+            warnings.append(
+                f"{record.get('id')}: mentions {adr_id} but it is not in sources"
+            )
+
     git_ok = True
     try:
         probe = subprocess.run(
@@ -723,6 +811,8 @@ def check_user_docs(root: Path) -> tuple[list[str], list[str]]:
         warnings.append("git unavailable; skipping verified_at freshness warnings")
     else:
         for record in records:
+            if record.get("draft"):
+                continue
             verified: date | None = record.get("verified_at")
             if verified is None:
                 continue

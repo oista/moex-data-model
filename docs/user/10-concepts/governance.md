@@ -4,7 +4,7 @@ sources:
   - docs/adr/ADR-023-governed-property-cascade.md
   - docs/adr/ADR-049-governance-assignment-authority.md
   - docs/adr/ADR-056-requirements-backbone.md
-verified_at: 2026-11-02
+draft: true
 ---
 
 # Кто за что отвечает

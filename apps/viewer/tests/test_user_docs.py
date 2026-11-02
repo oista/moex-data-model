@@ -18,7 +18,7 @@ from moex_publication_viewer.user_docs import (
 )
 
 
-REASON = "ещё не описано; появится в PR-2 или PR-3"
+REASON = "ещё не описано: нет главы, которая это рассказывает"
 
 
 def _write_user_docs(
@@ -83,6 +83,9 @@ def _write_user_docs(
             "sources": sources,
         },
     ]
+    for term in terms:
+        if "draft" not in term and "verified_at" not in term:
+            term["draft"] = True
     (docs_user / "glossary.yaml").write_text(
         yaml.safe_dump({"terms": terms}, allow_unicode=True, sort_keys=False),
         encoding="utf-8",
@@ -248,3 +251,142 @@ def test_check_html_mismatch(tmp_path: Path):
     index.write_text(index.read_text(encoding="utf-8") + "\n<!-- drift -->\n", encoding="utf-8")
     errors, _warnings = check_user_docs(tmp_path)
     assert any("does not match a fresh build" in e for e in errors)
+
+
+def test_glossary_see_also_uses_term_name(tmp_path: Path):
+    _write_user_docs(tmp_path)
+    module = compile_user_docs_module(tmp_path)
+    glossary = next(item for item in module.sections[0].items if item.id == "group:glossary")
+    card = next(child for child in glossary.children if child.id == "modeling-standard")
+    content = str(card.attributes.get("content") or "")
+    assert ">Спецификация</a>" in content
+    assert ">reference-specification</a>" not in content
+
+
+def test_check_draft_with_verified_at_is_error(tmp_path: Path):
+    docs = _write_user_docs(tmp_path)
+    page = docs / "00-start" / "what-is-this.md"
+    text = page.read_text(encoding="utf-8").replace(
+        "verified_at: 2099-01-01\n",
+        "draft: true\nverified_at: 2099-01-01\n",
+    )
+    page.write_text(text, encoding="utf-8")
+    errors, _warnings = check_user_docs(tmp_path)
+    assert any("cannot be combined" in e for e in errors)
+
+
+def test_check_draft_does_not_count_as_freshness(tmp_path: Path, monkeypatch):
+    docs = _write_user_docs(tmp_path)
+    page = docs / "00-start" / "what-is-this.md"
+    text = page.read_text(encoding="utf-8").replace("verified_at: 2099-01-01\n", "draft: true\n")
+    page.write_text(text, encoding="utf-8")
+    build_user_docs(tmp_path)
+
+    future = date.today() + timedelta(days=1)
+
+    def fake_git_date(_root: Path, _path: Path):
+        return future
+
+    monkeypatch.setattr(
+        "moex_publication_viewer.user_docs._git_commit_date",
+        fake_git_date,
+    )
+    import moex_publication_viewer.user_docs as ud
+
+    real_run = ud.subprocess.run
+
+    def fake_run(cmd, *args, **kwargs):
+        if cmd[:2] == ["git", "-C"] and "rev-parse" in cmd:
+            class R:
+                returncode = 0
+                stdout = "true\n"
+                stderr = ""
+
+            return R()
+        return real_run(cmd, *args, **kwargs)
+
+    monkeypatch.setattr(ud.subprocess, "run", fake_run)
+    errors, warnings = check_user_docs(tmp_path)
+    assert errors == []
+    assert any(w.startswith("what-is-this: draft") for w in warnings)
+    assert not any("changed in git" in w for w in warnings)
+
+
+def test_check_glossary_stale_verified_at_is_warning(tmp_path: Path, monkeypatch):
+    _write_user_docs(
+        tmp_path,
+        glossary_terms=[
+            {
+                "id": "modeling-standard",
+                "term": "Стандарт",
+                "short": "Язык модели.",
+                "explanation": "Формализм для записи модели.",
+                "see_also": [],
+                "sources": ["docs/architecture/MODELING_ARCHITECTURE.md"],
+                "verified_at": "2000-01-01",
+            },
+            {
+                "id": "reference-specification",
+                "term": "Спецификация",
+                "short": "Норма на стандарте.",
+                "explanation": "Профиль применения стандарта.",
+                "see_also": [],
+                "sources": ["docs/architecture/MODELING_ARCHITECTURE.md"],
+                "draft": True,
+            },
+            {
+                "id": "specification-implementation",
+                "term": "Реализация",
+                "short": "Конкретная модель.",
+                "explanation": "Версионированное тело модели.",
+                "see_also": [],
+                "sources": ["docs/architecture/MODELING_ARCHITECTURE.md"],
+                "draft": True,
+            },
+        ],
+    )
+    build_user_docs(tmp_path)
+    future = date.today() + timedelta(days=1)
+
+    def fake_git_date(_root: Path, _path: Path):
+        return future
+
+    monkeypatch.setattr(
+        "moex_publication_viewer.user_docs._git_commit_date",
+        fake_git_date,
+    )
+    import moex_publication_viewer.user_docs as ud
+
+    real_run = ud.subprocess.run
+
+    def fake_run(cmd, *args, **kwargs):
+        if cmd[:2] == ["git", "-C"] and "rev-parse" in cmd:
+            class R:
+                returncode = 0
+                stdout = "true\n"
+                stderr = ""
+
+            return R()
+        return real_run(cmd, *args, **kwargs)
+
+    monkeypatch.setattr(ud.subprocess, "run", fake_run)
+    errors, warnings = check_user_docs(tmp_path)
+    assert errors == []
+    assert any(
+        w.startswith("modeling-standard:") and "changed in git" in w for w in warnings
+    )
+
+
+def test_check_warns_when_mentioned_adr_missing_from_sources(tmp_path: Path):
+    _write_user_docs(tmp_path, page_body="См. ADR-002.\n")
+    build_user_docs(tmp_path)
+    errors, warnings = check_user_docs(tmp_path)
+    assert errors == []
+    assert any("ADR-002" in w and "sources" in w for w in warnings)
+
+
+def test_check_not_covered_rejects_pr_number(tmp_path: Path):
+    _write_user_docs(tmp_path, not_covered=[{"adr": "ADR-001", "reason": "позже, PR-3"}])
+    build_user_docs(tmp_path)
+    errors, _warnings = check_user_docs(tmp_path)
+    assert any("future PR" in e for e in errors)

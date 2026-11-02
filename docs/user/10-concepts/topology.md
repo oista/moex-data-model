@@ -3,7 +3,7 @@ id: topology
 sources:
   - docs/adr/ADR-048-topology-ownership.md
   - docs/adr/ADR-055-integration-source-of-truth.md
-verified_at: 2026-11-02
+draft: true
 ---
 
 # Топология

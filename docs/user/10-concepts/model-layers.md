@@ -20,7 +20,7 @@ sources:
   - model-assets/specifications/moex-dams/0.1/schemas/moex-semantic.yaml
   - model-assets/specifications/moex-dams/0.1/schemas/moex-structure.yaml
   - model-assets/specifications/moex-dams/0.1/schemas/moex-technical.yaml
-verified_at: 2026-11-02
+draft: true
 ---
 
 # Слои модели
