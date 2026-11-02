@@ -22,7 +22,6 @@ from moex_dams.rules.cascade import (
     find_redundant_overrides,
 )
 from moex_dams.rules.conceptual_entity import check_conceptual_entities
-from moex_dams.rules.dams_levels import ENTERPRISE_CONCEPTUAL_REF
 from moex_dams.rules.definitions import (
     DefinitionIndex,
     DefinitionMode,
@@ -325,23 +324,164 @@ def _has_field_mapping(
 
 
 
-def _enterprise_body_path(conceptual_ref: str) -> Path | None:
-    """Resolve enterprise ModelPackage body for a conceptual_implementation_ref."""
-    if conceptual_ref != ENTERPRISE_CONCEPTUAL_REF:
+def _load_yaml_dict(path: Path) -> dict[str, Any] | None:
+    try:
+        raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except Exception:
         return None
-    # packages/specification-dams/src/moex_dams/rules → repo root = parents[5]
-    root = Path(__file__).resolve().parents[5]
-    path = (
-        root
-        / "model-assets"
-        / "implementations"
-        / "enterprise"
-        / "moex-enterprise-conceptual-model"
-        / "0.1"
-        / "enterprise-conceptual-model.yaml"
-    )
-    return path if path.is_file() else None
+    return raw if isinstance(raw, dict) else None
 
+
+def _iter_implementation_envelopes(
+    repo_root: Path,
+) -> list[tuple[str, Path]]:
+    """Return (implementation id, body path) for each implementation.yaml envelope."""
+    impl_root = repo_root / "model-assets" / "implementations"
+    if not impl_root.is_dir():
+        return []
+    out: list[tuple[str, Path]] = []
+    for envelope in sorted(impl_root.rglob("implementation.yaml")):
+        raw = _load_yaml_dict(envelope)
+        if raw is None:
+            continue
+        body_ref = raw.get("body_ref") or raw.get("implementation_body")
+        if not body_ref:
+            continue
+        body_path = (envelope.parent / str(body_ref)).resolve()
+        if not body_path.is_file():
+            continue
+        impl_id = str(raw.get("id") or "").strip()
+        if not impl_id:
+            continue
+        out.append((impl_id, body_path))
+    return out
+
+
+def _definition_bearing_ids(data: dict[str, Any]) -> set[str]:
+    """Element ids indexed by DefinitionIndex.add_package."""
+    ids: set[str] = set()
+    for ent in data.get("conceptual_entities") or []:
+        if isinstance(ent, dict) and ent.get("element_id"):
+            ids.add(str(ent["element_id"]))
+    for term in data.get("relation_terms") or []:
+        if isinstance(term, dict) and term.get("element_id"):
+            ids.add(str(term["element_id"]))
+    for ent in data.get("logical_entities") or []:
+        if not isinstance(ent, dict) or not ent.get("element_id"):
+            continue
+        ids.add(str(ent["element_id"]))
+        for attr in ent.get("attributes") or []:
+            if isinstance(attr, dict) and attr.get("element_id"):
+                ids.add(str(attr["element_id"]))
+    return ids
+
+
+def _needed_cross_package_definition_refs(data: dict[str, Any]) -> set[str]:
+    """dams: refs that definition cascade may need from another package."""
+    local = _collect_ids(data)
+    needed: set[str] = set()
+
+    def consider(ref: Any) -> None:
+        if not isinstance(ref, str):
+            return
+        key = ref.strip()
+        if not key.startswith("dams:"):
+            return
+        if key in local:
+            return
+        needed.add(key)
+
+    for key in ("conceptual_entities", "logical_entities", "relation_terms"):
+        for el in data.get(key) or []:
+            if not isinstance(el, dict):
+                continue
+            consider(el.get("definition_source_ref"))
+            if key == "logical_entities":
+                refs = el.get("conceptual_entity_refs") or []
+                if isinstance(refs, list):
+                    cleaned = [str(r) for r in refs if r]
+                    if len(cleaned) == 1:
+                        consider(cleaned[0])
+                for attr in el.get("attributes") or []:
+                    if isinstance(attr, dict):
+                        consider(attr.get("definition_source_ref"))
+    return needed
+
+
+def load_related_definition_packages(
+    data: dict[str, Any],
+    repo_root: Path,
+    *,
+    source_path: Path | None = None,
+) -> tuple[dict[str, Any], ...]:
+    """Load sibling ModelPackage bodies needed for ADR-025 definition cascade.
+
+    Declared ``conceptual_implementation_ref`` is loaded first. Remaining
+    unresolved ``dams:`` definition refs are satisfied by scanning other
+    implementation envelopes. Missing files do not raise.
+    """
+    if not isinstance(data, dict):
+        return ()
+
+    envelopes = _iter_implementation_envelopes(repo_root)
+    if not envelopes:
+        return ()
+
+    source_resolved = source_path.resolve() if source_path is not None else None
+    by_id: dict[str, Path] = {}
+    for impl_id, body_path in envelopes:
+        if source_resolved is not None and body_path == source_resolved:
+            continue
+        # First envelope wins for a given implementation id.
+        by_id.setdefault(impl_id, body_path)
+
+    loaded: list[dict[str, Any]] = []
+    seen_paths: set[Path] = set()
+    indexed_ids: set[str] = set(_definition_bearing_ids(data))
+
+    def take(path: Path) -> dict[str, Any] | None:
+        key = path.resolve()
+        if key in seen_paths:
+            return None
+        if source_resolved is not None and key == source_resolved:
+            return None
+        pkg = _load_yaml_dict(key)
+        if pkg is None:
+            return None
+        seen_paths.add(key)
+        loaded.append(pkg)
+        indexed_ids.update(_definition_bearing_ids(pkg))
+        return pkg
+
+    conceptual_ref = data.get("conceptual_implementation_ref")
+    if isinstance(conceptual_ref, str) and conceptual_ref.strip():
+        path = by_id.get(conceptual_ref.strip())
+        if path is not None:
+            take(path)
+
+    needed = _needed_cross_package_definition_refs(data)
+    open_refs = {ref for ref in needed if ref not in indexed_ids}
+    if open_refs:
+        for _impl_id, body_path in envelopes:
+            if not open_refs:
+                break
+            if source_resolved is not None and body_path.resolve() == source_resolved:
+                continue
+            if body_path.resolve() in seen_paths:
+                continue
+            pkg = _load_yaml_dict(body_path)
+            if pkg is None:
+                continue
+            pkg_ids = _definition_bearing_ids(pkg)
+            closes = open_refs & pkg_ids
+            if not closes:
+                continue
+            seen_paths.add(body_path.resolve())
+            loaded.append(pkg)
+            indexed_ids.update(pkg_ids)
+            open_refs -= closes
+
+    return tuple(loaded)
 
 
 def _concepts_realized_by_logical(
@@ -979,6 +1119,20 @@ def check_formal_requirements(
     resolved = resolve_governed(
         data, as_of=effective_as_of, assignments=assignments
     )
+    related: tuple[dict[str, Any], ...] = ()
+    if (
+        repo_root is not None
+        and not extra_definition_packages
+        and definition_index is None
+    ):
+        src = (
+            Path(body.source_path)
+            if getattr(body, "source_path", None)
+            else None
+        )
+        related = load_related_definition_packages(
+            data, repo_root, source_path=src
+        )
     def_index = definition_index or build_definition_index(
         data,
         *extra_definition_packages,
@@ -988,6 +1142,9 @@ def check_formal_requirements(
         def_index.add_package(data)
         for pkg in extra_definition_packages:
             def_index.add_package(pkg)
+    elif related:
+        for pkg in related:
+            def_index.add_package(pkg, overwrite=False)
     diagnostics: list[Diagnostic] = []
 
     for req in reqs:

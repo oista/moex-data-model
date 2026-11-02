@@ -88,27 +88,39 @@ class DefinitionIndex:
     def get(self, element_id: str) -> _IndexedElement | None:
         return self.elements.get(element_id)
 
-    def add_package(self, body_data: dict[str, Any]) -> None:
-        """Index ConceptualEntity / LogicalEntity / LogicalAttribute / RelationTerm."""
+    def add_package(
+        self, body_data: dict[str, Any], *, overwrite: bool = True
+    ) -> None:
+        """Index ConceptualEntity / LogicalEntity / LogicalAttribute / RelationTerm.
+
+        When ``overwrite`` is False, keep the first indexed element for a given
+        ``element_id`` (used by assess auto-load of related packages).
+        """
         if not isinstance(body_data, dict):
             return
+
+        def _put(eid: str, level: str, data: dict[str, Any]) -> None:
+            if not overwrite and eid in self.elements:
+                return
+            self.elements[eid] = _IndexedElement(eid, level, data)
+
         for ent in body_data.get("conceptual_entities") or []:
             if isinstance(ent, dict) and ent.get("element_id"):
                 eid = str(ent["element_id"])
-                self.elements[eid] = _IndexedElement(eid, "ConceptualEntity", ent)
+                _put(eid, "ConceptualEntity", ent)
         for term in body_data.get("relation_terms") or []:
             if isinstance(term, dict) and term.get("element_id"):
                 tid = str(term["element_id"])
-                self.elements[tid] = _IndexedElement(tid, "RelationTerm", term)
+                _put(tid, "RelationTerm", term)
         for ent in body_data.get("logical_entities") or []:
             if not isinstance(ent, dict) or not ent.get("element_id"):
                 continue
             eid = str(ent["element_id"])
-            self.elements[eid] = _IndexedElement(eid, "LogicalEntity", ent)
+            _put(eid, "LogicalEntity", ent)
             for attr in ent.get("attributes") or []:
                 if isinstance(attr, dict) and attr.get("element_id"):
                     aid = str(attr["element_id"])
-                    self.elements[aid] = _IndexedElement(aid, "LogicalAttribute", attr)
+                    _put(aid, "LogicalAttribute", attr)
 
     def add_solution_systems(
         self, solution_ref: str, system_refs: list[str] | tuple[str, ...]

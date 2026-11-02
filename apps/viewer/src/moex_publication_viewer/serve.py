@@ -114,7 +114,7 @@ def _optional_formal_diagnostics(root: Path, edited_file: Path) -> list[dict[str
             data=data,
             source_path=str(edited_file),
         )
-        diags = check_formal_requirements(body)
+        diags = check_formal_requirements(body, repo_root=root)
         out: list[dict[str, Any]] = []
         for d in diags:
             out.append(
