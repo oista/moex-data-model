@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import re
 from pathlib import Path
 from typing import Any
 
@@ -324,28 +323,6 @@ def _has_field_mapping(
     return False
 
 
-def _entity_in_relationship(data: dict[str, Any], entity_id: str) -> bool:
-    for r in data.get("relationships") or []:
-        if not isinstance(r, dict):
-            continue
-        if str(r.get("source_entity_ref")) == entity_id or str(
-            r.get("target_entity_ref")
-        ) == entity_id:
-            return True
-    return False
-
-
-def _has_realizes(data: dict[str, Any], entity_id: str) -> bool:
-    for m in iter_mappings(data):
-        if str(m.get("mapping_type") or "") != "realizes":
-            continue
-        refs = {str(x) for x in (m.get("source_refs") or []) + (m.get("target_refs") or [])}
-        if entity_id in refs:
-            return True
-    return False
-
-
-_ENTERPRISE_BODY_CACHE: dict[str, dict[str, Any] | None] = {}
 
 
 def _enterprise_body_path(conceptual_ref: str) -> Path | None:
@@ -365,29 +342,6 @@ def _enterprise_body_path(conceptual_ref: str) -> Path | None:
     )
     return path if path.is_file() else None
 
-
-def _load_enterprise_concepts(
-    conceptual_ref: str | None,
-) -> dict[str, dict[str, Any]]:
-    """Map conceptual element_id → entity dict from the enterprise package."""
-    if not conceptual_ref:
-        return {}
-    if conceptual_ref in _ENTERPRISE_BODY_CACHE:
-        body = _ENTERPRISE_BODY_CACHE[conceptual_ref]
-    else:
-        path = _enterprise_body_path(str(conceptual_ref))
-        body = None
-        if path is not None:
-            raw = yaml.safe_load(path.read_text(encoding="utf-8"))
-            body = raw if isinstance(raw, dict) else None
-        _ENTERPRISE_BODY_CACHE[conceptual_ref] = body
-    if not body:
-        return {}
-    out: dict[str, dict[str, Any]] = {}
-    for el in body.get("conceptual_entities") or []:
-        if isinstance(el, dict) and el.get("element_id"):
-            out[str(el["element_id"])] = el
-    return out
 
 
 def _concepts_realized_by_logical(
@@ -414,27 +368,6 @@ def _concepts_realized_by_logical(
                 refs.add(str(t))
     return refs
 
-
-def _logical_linked_to_owner_realizer(
-    data: dict[str, Any],
-    logical_id: str,
-    owner_concept: str,
-) -> bool:
-    """True if a Relationship links logical_id to a peer realizing owner_concept."""
-    for rel in data.get("relationships") or []:
-        if not isinstance(rel, dict):
-            continue
-        src = str(rel.get("source_entity_ref") or "")
-        tgt = str(rel.get("target_entity_ref") or "")
-        if src == logical_id:
-            peer = tgt
-        elif tgt == logical_id:
-            peer = src
-        else:
-            continue
-        if owner_concept in _concepts_realized_by_logical(data, peer):
-            return True
-    return False
 
 
 def _applies(req: dict[str, Any], data: dict[str, Any]) -> bool:
@@ -590,38 +523,7 @@ def _run_conditional(
             )
         return out
 
-    if template == "non_empty_logical_or_physical":
-        has_tech = any(
-            data.get(k)
-            for k in (
-                "data_carriers",
-                "access_points",
-                "data_containers",
-                "execution_assets",
-            )
-        )
-        if not (data.get("logical_entities") or has_tech):
-            out.append(
-                _diag(
-                    code=code,
-                    severity=sev,
-                    message=(
-                        "Model package has neither logical entities nor "
-                        "technical assets (data_carriers / access_points / "
-                        "data_containers / execution_assets)."
-                    ),
-                    subject=subject,
-                    remediation=rem,
-                    statement=statement,
-                    **req_kw,
-                )
-            )
-        return out
-
-    if template in (
-        "data_carrying_entity_mapping_or_technical",
-        "pdm003_entity_physical",
-    ):
+    if template == "pdm003_entity_physical":
         if not _is_data_carrying(el):
             return out
         status = str(el.get("mapping_coverage_status") or "")
@@ -658,61 +560,6 @@ def _run_conditional(
                     requirement_code=requirement_code,
                 )
             )
-        return out
-
-    if template == "ldm004_identity":
-        entity_type = str(el.get("entity_type") or "")
-        if entity_type == "technical":
-            return out
-        if not _filled(el.get("identity_rule")):
-            out.append(
-                _diag(
-                    code=code,
-                    severity=sev,
-                    message=f'LogicalEntity "{subject}" does not define identity_rule.',
-                    subject=subject,
-                    remediation=rem,
-                    statement=statement,
-                    requirement_code=requirement_code,
-                )
-            )
-        kind = el.get("business_key_kind")
-        keys = el.get("key_attribute_refs") or []
-        if not _filled(kind) and not _filled(keys):
-            out.append(
-                _diag(
-                    code=code,
-                    severity=sev,
-                    message=(
-                        f'LogicalEntity "{subject}" needs business_key_kind '
-                        "and/or key_attribute_refs."
-                    ),
-                    subject=subject,
-                    remediation=rem,
-                    statement=statement,
-                    requirement_code=requirement_code,
-                )
-            )
-        elif kind == "surrogate" and not _filled(el.get("identity_rule")):
-            out.append(
-                _diag(
-                    code=code,
-                    severity=sev,
-                    message=(
-                        f'LogicalEntity "{subject}": surrogate alone does not '
-                        "satisfy identity for a non-technical entity."
-                    ),
-                    subject=subject,
-                    remediation=rem,
-                    statement=statement,
-                    requirement_code=requirement_code,
-                )
-            )
-        elif kind == "surrogate" and not _filled(keys) and _filled(el.get("identity_rule")):
-            # surrogate + identity_rule without key refs: still warn via surrogate-alone spirit
-            # Plan: surrogate alone insufficient — require identity_rule (already) AND
-            # not treat surrogate as sole proof. If only surrogate kind with identity_rule, OK.
-            pass
         return out
 
     if template == "ldm005_attributes":
@@ -825,170 +672,6 @@ def _run_conditional(
             )
         return out
 
-    if template == "ldm007_semantic_inclusion":
-        if str(el.get("entity_type") or "") == "technical":
-            return out
-        eid = str(el.get("element_id") or "")
-        alignedish = str(el.get("conceptual_alignment_status") or "") in (
-            "aligned",
-            "pending",
-            "local-only",
-        ) and (
-            _filled(el.get("conceptual_entity_refs"))
-            or _filled(el.get("alignment_rationale"))
-        )
-        ok = (
-            _entity_in_relationship(data, eid)
-            or _filled(el.get("conceptual_entity_refs"))
-            or _has_realizes(data, eid)
-            or alignedish
-            or _filled(el.get("isolation_rationale"))
-        )
-        if not ok:
-            out.append(
-                _diag(
-                    code=code,
-                    severity=sev,
-                    message=(
-                        f'LogicalEntity "{subject}" is semantically isolated '
-                        "(no relationship, conceptual alignment, or isolation rationale)."
-                    ),
-                    subject=subject,
-                    remediation=rem,
-                    statement=statement,
-                    requirement_code=requirement_code,
-                )
-            )
-        return out
-
-    if template == "ldm008_realization_completeness":
-        status = str(el.get("conceptual_alignment_status") or "")
-        refs = [str(r) for r in (el.get("conceptual_entity_refs") or []) if r]
-        aligned = status == "aligned" or (not status and refs)
-        if not aligned or not refs:
-            return out
-        enterprise = _load_enterprise_concepts(
-            str(data.get("conceptual_implementation_ref") or "") or None
-        )
-        if not enterprise:
-            return out
-        eid = str(el.get("element_id") or "")
-        for cref in refs:
-            concept = enterprise.get(cref)
-            if not concept or str(concept.get("entity_tier") or "") != "dependent":
-                continue
-            owners = [str(o) for o in (concept.get("depends_on_refs") or []) if o]
-            for owner in owners:
-                if _logical_linked_to_owner_realizer(data, eid, owner):
-                    continue
-                out.append(
-                    _diag(
-                        code=code,
-                        severity=sev,
-                        message=(
-                            f'LogicalEntity "{subject}" realizes dependent concept '
-                            f'"{cref}" but has no Relationship to a logical entity '
-                            f'that realizes owner "{owner}".'
-                        ),
-                        subject=subject,
-                        remediation=rem,
-                        statement=statement,
-                        requirement_code=requirement_code,
-                    )
-                )
-        return out
-
-    if template == "atr005_mapping_coverage":
-        status = str(el.get("mapping_coverage_status") or "")
-        if status in (
-            "planned",
-            "derived",
-            "inherited",
-            "technical-only",
-            "not-applicable",
-        ):
-            if status in ("planned", "technical-only", "not-applicable", "inherited") and not _filled(
-                el.get("mapping_rationale")
-            ):
-                # derived may use derived_expression instead
-                if status == "derived" and _filled(el.get("derived_expression")):
-                    return out
-                if status != "derived":
-                    out.append(
-                        _diag(
-                            code=code,
-                            severity=sev,
-                            message=(
-                                f'LogicalAttribute "{subject}" status {status} '
-                                "requires mapping_rationale."
-                            ),
-                            subject=subject,
-                            remediation=rem,
-                            statement=statement,
-                            requirement_code=requirement_code,
-                        )
-                    )
-            elif status == "derived" and not (
-                _filled(el.get("derived_expression")) or _filled(el.get("mapping_rationale"))
-            ):
-                out.append(
-                    _diag(
-                        code=code,
-                        severity=sev,
-                        message=(
-                            f'LogicalAttribute "{subject}" derived requires '
-                            "derived_expression or mapping_rationale."
-                        ),
-                        subject=subject,
-                        remediation=rem,
-                        statement=statement,
-                        requirement_code=requirement_code,
-                    )
-                )
-            return out
-        aid = str(el.get("element_id") or "")
-        if status == "mapped" or not status:
-            if _has_field_mapping(data, logical_attr_id=aid) or _filled(
-                el.get("derived_expression")
-            ):
-                return out
-            out.append(
-                _diag(
-                    code=code,
-                    severity=sev,
-                    message=(
-                        f'LogicalAttribute "{subject}" needs field_mapping, '
-                        "derived_expression, or mapping_coverage_status exception."
-                    ),
-                    subject=subject,
-                    remediation=rem,
-                    statement=statement,
-                    requirement_code=requirement_code,
-                )
-            )
-        return out
-
-    if template == "planned_on_active_warning":
-        if (
-            str(el.get("mapping_coverage_status") or "") == "planned"
-            and str(el.get("lifecycle_status") or "") == "active"
-        ):
-            out.append(
-                _diag(
-                    code=code,
-                    severity=DiagnosticSeverity.WARNING,
-                    message=(
-                        f'"{subject}" uses mapping_coverage_status planned while '
-                        "lifecycle_status is active; planned is not a permanent bypass."
-                    ),
-                    subject=subject,
-                    remediation=rem,
-                    statement=statement,
-                    requirement_code=requirement_code,
-                )
-            )
-        return out
-
     if template == "ref002_cardinality":
         status = str(el.get("lifecycle_status") or "active")
         slots = (
@@ -1067,45 +750,6 @@ def _run_conditional(
         )
         return out
 
-    if template == "atr002_snake_case":
-        name = str(el.get("name") or "")
-        if not name:
-            return out
-        if not re.fullmatch(r"[a-z][a-z0-9]*(_[a-z0-9]+)*", name):
-            out.append(
-                _diag(
-                    code=code,
-                    severity=DiagnosticSeverity.WARNING,
-                    message=(
-                        f'LogicalAttribute "{subject}" name "{name}" should be '
-                        "lower_snake_case."
-                    ),
-                    subject=subject,
-                    remediation=rem,
-                    statement=statement,
-                    requirement_code=requirement_code,
-                )
-            )
-        return out
-
-    if template == "cls001_axes_present":
-        if not el.get("entity_type") or not el.get("data_class"):
-            out.append(
-                _diag(
-                    code=code,
-                    severity=DiagnosticSeverity.WARNING,
-                    message=(
-                        f'LogicalEntity "{subject}" should set both entity_type '
-                        "and data_class independently."
-                    ),
-                    subject=subject,
-                    remediation=rem,
-                    statement=statement,
-                    requirement_code=requirement_code,
-                )
-            )
-        return out
-
     if template == "flw001_soft_presence":
         # Soft: warn if package has outbound/inbound data_carriers and no data_flows
         carriers = data.get("data_carriers") or []
@@ -1132,27 +776,6 @@ def _run_conditional(
                 )
         return out
 
-    if template == "cls002_security_soft":
-        gov = str(el.get("governance_classification") or "")
-        if gov in ("confidential", "restricted") and not _filled(
-            el.get("security_classification")
-        ):
-            out.append(
-                _diag(
-                    code=code,
-                    severity=DiagnosticSeverity.WARNING,
-                    message=(
-                        f'LogicalEntity "{subject}" has governance {gov} but no '
-                        "security_classification."
-                    ),
-                    subject=subject,
-                    remediation=rem,
-                    statement=statement,
-                    requirement_code=requirement_code,
-                )
-            )
-        return out
-
     if template == "ref003_kind_soft":
         # Severity comes from the FormalCheck (soft warning on legacy REF-003;
         # error when handed to ADR-056 backbone LDM-07).
@@ -1165,43 +788,6 @@ def _run_conditional(
                     severity=sev,
                     message=(
                         f'Relationship "{subject}" is active without relationship_kind.'
-                    ),
-                    subject=subject,
-                    remediation=rem,
-                    statement=statement,
-                    requirement_code=requirement_code,
-                )
-            )
-        return out
-
-    if template == "atr004_type_specific_soft":
-        dtr = str(el.get("data_type_ref") or "").strip()
-        leaf = dtr.rsplit("/", 1)[-1] if dtr else ""
-        if leaf == "decimal" and not _filled(el.get("currency_attribute_ref")):
-            # Soft hint only when name suggests money/amount/quantity
-            name = str(el.get("name") or "").lower()
-            if any(t in name for t in ("amount", "rate", "quantity", "price", "sum")):
-                out.append(
-                    _diag(
-                        code=code,
-                        severity=DiagnosticSeverity.WARNING,
-                        message=(
-                            f'LogicalAttribute "{subject}" looks quantitative; '
-                            "consider currency_attribute_ref or ValueDomain.unit_code."
-                        ),
-                        subject=subject,
-                        remediation=rem,
-                        statement=statement,
-                        requirement_code=requirement_code,
-                    )
-                )
-        if leaf == "datetime" and not _filled(el.get("timezone_policy")):
-            out.append(
-                _diag(
-                    code=code,
-                    severity=DiagnosticSeverity.WARNING,
-                    message=(
-                        f'LogicalAttribute "{subject}" is datetime without timezone_policy.'
                     ),
                     subject=subject,
                     remediation=rem,

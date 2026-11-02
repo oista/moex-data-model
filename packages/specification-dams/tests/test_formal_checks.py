@@ -129,22 +129,8 @@ def test_example_package_has_no_errors() -> None:
     assert _errors(_example()) == []
 
 
-# Dead after ADR-056 PR-10f (Group C/D deleted). Cleared in PR-11e.
-_ALLOWED_UNUSED_CONDITIONAL_TEMPLATES = frozenset(
-    {
-        "non_empty_logical_or_physical",
-        "data_carrying_entity_mapping_or_technical",
-        "ldm004_identity",
-        "ldm007_semantic_inclusion",
-        "ldm008_realization_completeness",
-        "atr005_mapping_coverage",
-        "planned_on_active_warning",
-        "atr002_snake_case",
-        "cls001_axes_present",
-        "cls002_security_soft",
-        "atr004_type_specific_soft",
-    }
-)
+# Empty after ADR-056 PR-11e removed Group C/D dead templates.
+_ALLOWED_UNUSED_CONDITIONAL_TEMPLATES: frozenset[str] = frozenset()
 
 
 def _catalog_conditional_expressions() -> set[str]:
