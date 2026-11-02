@@ -8,7 +8,7 @@
     "node_count": 150,
     "edge_count": 305,
     "is_conformant": true,
-    "bundle_digest": "sha256:7e24e61d3e0c37366ccab020dd967c9a3a630675a5037dc4c65c25ac00e12d65"
+    "bundle_digest": "sha256:8fe6067d1695d9c0ce4197fe2e0cc9aac2dba753f5cb8b10544362c0ef2d4108"
   },
   "nodes": [
     {
@@ -2896,343 +2896,7 @@
   ],
   "diagnostics": [
     {
-      "id": "DAMS-REQ-ATR-002.c1:0",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID\" name \"ENTERPRISE_ID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:1",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/SHORT_NAME\" name \"SHORT_NAME\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/SHORT_NAME"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:2",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG\" name \"SHORT_NAME_ENG\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:3",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/FULL_NAME\" name \"FULL_NAME\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/FULL_NAME"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:4",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG\" name \"FULL_NAME_ENG\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:5",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/COUNTRY_CODE\" name \"COUNTRY_CODE\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/COUNTRY_CODE"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:6",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/INN\" name \"INN\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/INN"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:7",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KPP\" name \"KPP\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/KPP"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:8",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/OGRN\" name \"OGRN\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/OGRN"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:9",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION\" name \"ADDR_EGRUL_REGION\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:10",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/TERMINATION_DATE\" name \"TERMINATION_DATE\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/TERMINATION_DATE"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:11",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT\" name \"INN_NONRESIDENT\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:12",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/LEI\" name \"LEI\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/LEI"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:13",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KIO\" name \"KIO\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/KIO"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:14",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT\" name \"REG_NUM_NONRESIDENT\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:15",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME\" name \"CEO_FIRSTNAME\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:16",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_INN\" name \"CEO_INN\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_INN"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:17",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC\" name \"CEO_PATRONYMIC\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:18",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_POSITION\" name \"CEO_POSITION\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_POSITION"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:19",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_SURNAME\" name \"CEO_SURNAME\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_SURNAME"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:20",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER\" name \"TRUST_RULE_NUMBER\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:21",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ECBD_ID\" name \"ECBD_ID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/ECBD_ID"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:22",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/UNICODE\" name \"UNICODE\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/UNICODE"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:23",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CODE_NSD\" name \"CODE_NSD\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/CODE_NSD"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:24",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KBD_FIRMID\" name \"KBD_FIRMID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/KBD_FIRMID"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:25",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG\" name \"ACTIVE_FLAG\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:26",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/PERSON_ID\" name \"PERSON_ID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/PERSON/PERSON_ID"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:27",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/FIO\" name \"FIO\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/PERSON/FIO"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:28",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/LAST_NAME\" name \"LAST_NAME\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/PERSON/LAST_NAME"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:29",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/FIRST_NAME\" name \"FIRST_NAME\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/PERSON/FIRST_NAME"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:30",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/PATRONYMIC\" name \"PATRONYMIC\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/PERSON/PATRONYMIC"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:31",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/DATEBIRTH\" name \"DATEBIRTH\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/PERSON/DATEBIRTH"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:32",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/ADDRESS_F\" name \"ADDRESS_F\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/PERSON/ADDRESS_F"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:33",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/INN\" name \"INN\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/PERSON/INN"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:34",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/SNILS\" name \"SNILS\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/PERSON/SNILS"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:35",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE\" name \"IDENTITY_DOCUMENT_CODE\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:36",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA\" name \"IDENTITY_DOCUMENT_CODE_OMEGA\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:37",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE\" name \"IDENTITY_DOCUMENT_TYPE\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:38",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID\" name \"ENTERPRISE_ID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:39",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/PERSON_CEO/PERSON_ID\" name \"PERSON_ID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/PERSON_CEO/PERSON_ID"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:40",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID\" name \"ENTERPRISE_ID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:41",
-      "code": "DAMS-REQ-ATR-002.c1",
-      "severity": "warning",
-      "phase": "corporate_semantics",
-      "message": "LogicalAttribute \"dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID\" name \"PERSON_ID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-      "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID"
-    },
-    {
-      "id": "DAMS-REQ-GEN-001.placeholder:42",
+      "id": "DAMS-REQ-GEN-001.placeholder:0",
       "code": "DAMS-REQ-GEN-001.placeholder",
       "severity": "warning",
       "phase": "corporate_semantics",
@@ -3240,7 +2904,7 @@
       "subject_ref": "dams:model/mdm/0.1.0"
     },
     {
-      "id": "DAMS-REQ-GEN-001.placeholder:43",
+      "id": "DAMS-REQ-GEN-001.placeholder:1",
       "code": "DAMS-REQ-GEN-001.placeholder",
       "severity": "warning",
       "phase": "corporate_semantics",
@@ -3248,7 +2912,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE"
     },
     {
-      "id": "DAMS-REQ-GEN-001.placeholder:44",
+      "id": "DAMS-REQ-GEN-001.placeholder:2",
       "code": "DAMS-REQ-GEN-001.placeholder",
       "severity": "warning",
       "phase": "corporate_semantics",
@@ -3256,7 +2920,7 @@
       "subject_ref": "dams:logical/mdm/PERSON"
     },
     {
-      "id": "DAMS-REQ-GEN-001.placeholder:45",
+      "id": "DAMS-REQ-GEN-001.placeholder:3",
       "code": "DAMS-REQ-GEN-001.placeholder",
       "severity": "warning",
       "phase": "corporate_semantics",
@@ -3264,7 +2928,7 @@
       "subject_ref": "dams:logical/mdm/PERSON_CEO"
     },
     {
-      "id": "DAMS-REQ-GEN-001.placeholder:46",
+      "id": "DAMS-REQ-GEN-001.placeholder:4",
       "code": "DAMS-REQ-GEN-001.placeholder",
       "severity": "warning",
       "phase": "corporate_semantics",
@@ -3272,7 +2936,7 @@
       "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:47",
+      "id": "DAMS-CASCADE-redundant-override:5",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3280,7 +2944,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:48",
+      "id": "DAMS-CASCADE-redundant-override:6",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3288,7 +2952,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:49",
+      "id": "DAMS-CASCADE-redundant-override:7",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3296,7 +2960,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/SHORT_NAME"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:50",
+      "id": "DAMS-CASCADE-redundant-override:8",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3304,7 +2968,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:51",
+      "id": "DAMS-CASCADE-redundant-override:9",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3312,7 +2976,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/FULL_NAME"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:52",
+      "id": "DAMS-CASCADE-redundant-override:10",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3320,7 +2984,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:53",
+      "id": "DAMS-CASCADE-redundant-override:11",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3328,7 +2992,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/COUNTRY_CODE"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:54",
+      "id": "DAMS-CASCADE-redundant-override:12",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3336,7 +3000,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/INN"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:55",
+      "id": "DAMS-CASCADE-redundant-override:13",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3344,7 +3008,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/KPP"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:56",
+      "id": "DAMS-CASCADE-redundant-override:14",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3352,7 +3016,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/OGRN"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:57",
+      "id": "DAMS-CASCADE-redundant-override:15",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3360,7 +3024,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:58",
+      "id": "DAMS-CASCADE-redundant-override:16",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3368,7 +3032,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/TERMINATION_DATE"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:59",
+      "id": "DAMS-CASCADE-redundant-override:17",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3376,7 +3040,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:60",
+      "id": "DAMS-CASCADE-redundant-override:18",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3384,7 +3048,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/LEI"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:61",
+      "id": "DAMS-CASCADE-redundant-override:19",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3392,7 +3056,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/KIO"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:62",
+      "id": "DAMS-CASCADE-redundant-override:20",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3400,7 +3064,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:63",
+      "id": "DAMS-CASCADE-redundant-override:21",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3408,7 +3072,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:64",
+      "id": "DAMS-CASCADE-redundant-override:22",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3416,7 +3080,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_INN"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:65",
+      "id": "DAMS-CASCADE-redundant-override:23",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3424,7 +3088,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:66",
+      "id": "DAMS-CASCADE-redundant-override:24",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3432,7 +3096,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_POSITION"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:67",
+      "id": "DAMS-CASCADE-redundant-override:25",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3440,7 +3104,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_SURNAME"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:68",
+      "id": "DAMS-CASCADE-redundant-override:26",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3448,7 +3112,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:69",
+      "id": "DAMS-CASCADE-redundant-override:27",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3456,7 +3120,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/ECBD_ID"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:70",
+      "id": "DAMS-CASCADE-redundant-override:28",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3464,7 +3128,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/UNICODE"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:71",
+      "id": "DAMS-CASCADE-redundant-override:29",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3472,7 +3136,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/CODE_NSD"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:72",
+      "id": "DAMS-CASCADE-redundant-override:30",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3480,7 +3144,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/KBD_FIRMID"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:73",
+      "id": "DAMS-CASCADE-redundant-override:31",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3488,7 +3152,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:74",
+      "id": "DAMS-CASCADE-redundant-override:32",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3496,7 +3160,7 @@
       "subject_ref": "dams:logical/mdm/PERSON"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:75",
+      "id": "DAMS-CASCADE-redundant-override:33",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3504,7 +3168,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/PERSON_ID"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:76",
+      "id": "DAMS-CASCADE-redundant-override:34",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3512,7 +3176,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/FIO"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:77",
+      "id": "DAMS-CASCADE-redundant-override:35",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3520,7 +3184,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/LAST_NAME"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:78",
+      "id": "DAMS-CASCADE-redundant-override:36",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3528,7 +3192,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/FIRST_NAME"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:79",
+      "id": "DAMS-CASCADE-redundant-override:37",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3536,7 +3200,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/PATRONYMIC"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:80",
+      "id": "DAMS-CASCADE-redundant-override:38",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3544,7 +3208,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/DATEBIRTH"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:81",
+      "id": "DAMS-CASCADE-redundant-override:39",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3552,7 +3216,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/ADDRESS_F"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:82",
+      "id": "DAMS-CASCADE-redundant-override:40",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3560,7 +3224,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/INN"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:83",
+      "id": "DAMS-CASCADE-redundant-override:41",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3568,7 +3232,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/SNILS"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:84",
+      "id": "DAMS-CASCADE-redundant-override:42",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3576,7 +3240,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:85",
+      "id": "DAMS-CASCADE-redundant-override:43",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3584,7 +3248,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:86",
+      "id": "DAMS-CASCADE-redundant-override:44",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3592,7 +3256,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:87",
+      "id": "DAMS-CASCADE-redundant-override:45",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3600,7 +3264,7 @@
       "subject_ref": "dams:logical/mdm/PERSON_CEO"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:88",
+      "id": "DAMS-CASCADE-redundant-override:46",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3608,7 +3272,7 @@
       "subject_ref": "dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:89",
+      "id": "DAMS-CASCADE-redundant-override:47",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3616,7 +3280,7 @@
       "subject_ref": "dams:logical/mdm/PERSON_CEO/PERSON_ID"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:90",
+      "id": "DAMS-CASCADE-redundant-override:48",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3624,7 +3288,7 @@
       "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:91",
+      "id": "DAMS-CASCADE-redundant-override:49",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3632,7 +3296,7 @@
       "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:92",
+      "id": "DAMS-CASCADE-redundant-override:50",
       "code": "DAMS-CASCADE-redundant-override",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3640,7 +3304,7 @@
       "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:93",
+      "id": "DAMS-DEF-description-eq-title:51",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3648,7 +3312,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:94",
+      "id": "DAMS-DEF-description-eq-title:52",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3656,7 +3320,7 @@
       "subject_ref": "dams:logical/mdm/PERSON"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:95",
+      "id": "DAMS-DEF-description-eq-title:53",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3664,7 +3328,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:96",
+      "id": "DAMS-DEF-description-eq-title:54",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3672,7 +3336,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/SHORT_NAME"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:97",
+      "id": "DAMS-DEF-description-eq-title:55",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3680,7 +3344,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:98",
+      "id": "DAMS-DEF-description-eq-title:56",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3688,7 +3352,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/FULL_NAME"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:99",
+      "id": "DAMS-DEF-description-eq-title:57",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3696,7 +3360,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:100",
+      "id": "DAMS-DEF-description-eq-title:58",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3704,7 +3368,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/COUNTRY_CODE"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:101",
+      "id": "DAMS-DEF-description-eq-title:59",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3712,7 +3376,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/INN"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:102",
+      "id": "DAMS-DEF-description-eq-title:60",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3720,7 +3384,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/KPP"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:103",
+      "id": "DAMS-DEF-description-eq-title:61",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3728,7 +3392,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/OGRN"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:104",
+      "id": "DAMS-DEF-description-eq-title:62",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3736,7 +3400,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:105",
+      "id": "DAMS-DEF-description-eq-title:63",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3744,7 +3408,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/TERMINATION_DATE"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:106",
+      "id": "DAMS-DEF-description-eq-title:64",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3752,7 +3416,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:107",
+      "id": "DAMS-DEF-description-eq-title:65",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3760,7 +3424,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/LEI"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:108",
+      "id": "DAMS-DEF-description-eq-title:66",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3768,7 +3432,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/KIO"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:109",
+      "id": "DAMS-DEF-description-eq-title:67",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3776,7 +3440,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:110",
+      "id": "DAMS-DEF-description-eq-title:68",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3784,7 +3448,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:111",
+      "id": "DAMS-DEF-description-eq-title:69",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3792,7 +3456,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_INN"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:112",
+      "id": "DAMS-DEF-description-eq-title:70",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3800,7 +3464,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:113",
+      "id": "DAMS-DEF-description-eq-title:71",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3808,7 +3472,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_POSITION"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:114",
+      "id": "DAMS-DEF-description-eq-title:72",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3816,7 +3480,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_SURNAME"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:115",
+      "id": "DAMS-DEF-description-eq-title:73",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3824,7 +3488,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:116",
+      "id": "DAMS-DEF-description-eq-title:74",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3832,7 +3496,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/ECBD_ID"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:117",
+      "id": "DAMS-DEF-description-eq-title:75",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3840,7 +3504,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/UNICODE"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:118",
+      "id": "DAMS-DEF-description-eq-title:76",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3848,7 +3512,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/CODE_NSD"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:119",
+      "id": "DAMS-DEF-description-eq-title:77",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3856,7 +3520,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/KBD_FIRMID"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:120",
+      "id": "DAMS-DEF-description-eq-title:78",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3864,7 +3528,7 @@
       "subject_ref": "dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:121",
+      "id": "DAMS-DEF-description-eq-title:79",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3872,7 +3536,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/PERSON_ID"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:122",
+      "id": "DAMS-DEF-description-eq-title:80",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3880,7 +3544,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/FIO"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:123",
+      "id": "DAMS-DEF-description-eq-title:81",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3888,7 +3552,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/LAST_NAME"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:124",
+      "id": "DAMS-DEF-description-eq-title:82",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3896,7 +3560,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/FIRST_NAME"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:125",
+      "id": "DAMS-DEF-description-eq-title:83",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3904,7 +3568,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/PATRONYMIC"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:126",
+      "id": "DAMS-DEF-description-eq-title:84",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3912,7 +3576,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/DATEBIRTH"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:127",
+      "id": "DAMS-DEF-description-eq-title:85",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3920,7 +3584,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/ADDRESS_F"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:128",
+      "id": "DAMS-DEF-description-eq-title:86",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3928,7 +3592,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/INN"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:129",
+      "id": "DAMS-DEF-description-eq-title:87",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3936,7 +3600,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/SNILS"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:130",
+      "id": "DAMS-DEF-description-eq-title:88",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3944,7 +3608,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:131",
+      "id": "DAMS-DEF-description-eq-title:89",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3952,7 +3616,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:132",
+      "id": "DAMS-DEF-description-eq-title:90",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3960,7 +3624,7 @@
       "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:133",
+      "id": "DAMS-DEF-description-eq-title:91",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3968,7 +3632,7 @@
       "subject_ref": "dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:134",
+      "id": "DAMS-DEF-description-eq-title:92",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3976,7 +3640,7 @@
       "subject_ref": "dams:logical/mdm/PERSON_CEO/PERSON_ID"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:135",
+      "id": "DAMS-DEF-description-eq-title:93",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3984,7 +3648,7 @@
       "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:136",
+      "id": "DAMS-DEF-description-eq-title:94",
       "code": "DAMS-DEF-description-eq-title",
       "severity": "info",
       "phase": "corporate_semantics",
@@ -3994,513 +3658,9 @@
   ],
   "model_assessment": [
     {
-      "id": "DAMS-REQ-ATR-002.c1:0",
+      "id": "DAMS-REQ-GEN-001.placeholder:0",
       "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID\" name \"ENTERPRISE_ID\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:1",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/SHORT_NAME",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/SHORT_NAME\" name \"SHORT_NAME\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/SHORT_NAME",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:2",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG\" name \"SHORT_NAME_ENG\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:3",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/FULL_NAME",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/FULL_NAME\" name \"FULL_NAME\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/FULL_NAME",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:4",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG\" name \"FULL_NAME_ENG\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:5",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/COUNTRY_CODE",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/COUNTRY_CODE\" name \"COUNTRY_CODE\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/COUNTRY_CODE",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:6",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/INN",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/INN\" name \"INN\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/INN",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:7",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/KPP",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KPP\" name \"KPP\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/KPP",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:8",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/OGRN",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/OGRN\" name \"OGRN\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/OGRN",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:9",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION\" name \"ADDR_EGRUL_REGION\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:10",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/TERMINATION_DATE",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/TERMINATION_DATE\" name \"TERMINATION_DATE\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/TERMINATION_DATE",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:11",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT\" name \"INN_NONRESIDENT\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:12",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/LEI",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/LEI\" name \"LEI\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/LEI",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:13",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/KIO",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KIO\" name \"KIO\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/KIO",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:14",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT\" name \"REG_NUM_NONRESIDENT\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:15",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME\" name \"CEO_FIRSTNAME\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:16",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/CEO_INN",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_INN\" name \"CEO_INN\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/CEO_INN",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:17",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC\" name \"CEO_PATRONYMIC\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:18",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/CEO_POSITION",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_POSITION\" name \"CEO_POSITION\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/CEO_POSITION",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:19",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/CEO_SURNAME",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_SURNAME\" name \"CEO_SURNAME\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/CEO_SURNAME",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:20",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER\" name \"TRUST_RULE_NUMBER\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:21",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/ECBD_ID",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ECBD_ID\" name \"ECBD_ID\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/ECBD_ID",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:22",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/UNICODE",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/UNICODE\" name \"UNICODE\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/UNICODE",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:23",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/CODE_NSD",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CODE_NSD\" name \"CODE_NSD\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/CODE_NSD",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:24",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/KBD_FIRMID",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KBD_FIRMID\" name \"KBD_FIRMID\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/KBD_FIRMID",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:25",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG",
-      "finding": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG\" name \"ACTIVE_FLAG\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:26",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/PERSON/PERSON_ID",
-      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/PERSON_ID\" name \"PERSON_ID\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/PERSON/PERSON_ID",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:27",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/PERSON/FIO",
-      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/FIO\" name \"FIO\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/PERSON/FIO",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:28",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/PERSON/LAST_NAME",
-      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/LAST_NAME\" name \"LAST_NAME\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/PERSON/LAST_NAME",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:29",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/PERSON/FIRST_NAME",
-      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/FIRST_NAME\" name \"FIRST_NAME\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/PERSON/FIRST_NAME",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:30",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/PERSON/PATRONYMIC",
-      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/PATRONYMIC\" name \"PATRONYMIC\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/PERSON/PATRONYMIC",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:31",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/PERSON/DATEBIRTH",
-      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/DATEBIRTH\" name \"DATEBIRTH\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/PERSON/DATEBIRTH",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:32",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/PERSON/ADDRESS_F",
-      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/ADDRESS_F\" name \"ADDRESS_F\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/PERSON/ADDRESS_F",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:33",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/PERSON/INN",
-      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/INN\" name \"INN\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/PERSON/INN",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:34",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/PERSON/SNILS",
-      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/SNILS\" name \"SNILS\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/PERSON/SNILS",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:35",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE",
-      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE\" name \"IDENTITY_DOCUMENT_CODE\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:36",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA",
-      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA\" name \"IDENTITY_DOCUMENT_CODE_OMEGA\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:37",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE",
-      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE\" name \"IDENTITY_DOCUMENT_TYPE\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:38",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID",
-      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID\" name \"ENTERPRISE_ID\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:39",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/PERSON_CEO/PERSON_ID",
-      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON_CEO/PERSON_ID\" name \"PERSON_ID\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/PERSON_CEO/PERSON_ID",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:40",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID",
-      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID\" name \"ENTERPRISE_ID\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-ATR-002.c1:41",
-      "status": "warn",
-      "requirement_code": "ATR-002",
-      "statement": "Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Не включайте в имя тип конкретной базы данных, длину поля или название таблицы.",
-      "subject": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID",
-      "finding": "LogicalAttribute \"dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID\" name \"PERSON_ID\" should be lower_snake_case.",
-      "severity": "warning",
-      "remediation": "Переименуйте name в lower_snake_case (например party_id).",
-      "source_location": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID",
-      "diagnostic_code": "DAMS-REQ-ATR-002.c1"
-    },
-    {
-      "id": "DAMS-REQ-GEN-001.placeholder:42",
-      "status": "warn",
-      "requirement_code": "GEN-001",
+      "requirement_code": "LDM-11",
       "statement": null,
       "subject": "dams:model/mdm/0.1.0",
       "finding": "Effective data_owner_ref on \"dams:model/mdm/0.1.0\" is placeholder 'org:role/DATA_OWNER_PENDING'.",
@@ -4510,9 +3670,9 @@
       "diagnostic_code": "DAMS-REQ-GEN-001.placeholder"
     },
     {
-      "id": "DAMS-REQ-GEN-001.placeholder:43",
+      "id": "DAMS-REQ-GEN-001.placeholder:1",
       "status": "warn",
-      "requirement_code": "GEN-001",
+      "requirement_code": "LDM-11",
       "statement": null,
       "subject": "dams:logical/mdm/ENTERPRISE",
       "finding": "Effective data_owner_ref on \"dams:logical/mdm/ENTERPRISE\" is placeholder 'org:role/DATA_OWNER_PENDING'.",
@@ -4522,9 +3682,9 @@
       "diagnostic_code": "DAMS-REQ-GEN-001.placeholder"
     },
     {
-      "id": "DAMS-REQ-GEN-001.placeholder:44",
+      "id": "DAMS-REQ-GEN-001.placeholder:2",
       "status": "warn",
-      "requirement_code": "GEN-001",
+      "requirement_code": "LDM-11",
       "statement": null,
       "subject": "dams:logical/mdm/PERSON",
       "finding": "Effective data_owner_ref on \"dams:logical/mdm/PERSON\" is placeholder 'org:role/DATA_OWNER_PENDING'.",
@@ -4534,9 +3694,9 @@
       "diagnostic_code": "DAMS-REQ-GEN-001.placeholder"
     },
     {
-      "id": "DAMS-REQ-GEN-001.placeholder:45",
+      "id": "DAMS-REQ-GEN-001.placeholder:3",
       "status": "warn",
-      "requirement_code": "GEN-001",
+      "requirement_code": "LDM-11",
       "statement": null,
       "subject": "dams:logical/mdm/PERSON_CEO",
       "finding": "Effective data_owner_ref on \"dams:logical/mdm/PERSON_CEO\" is placeholder 'org:role/DATA_OWNER_PENDING'.",
@@ -4546,9 +3706,9 @@
       "diagnostic_code": "DAMS-REQ-GEN-001.placeholder"
     },
     {
-      "id": "DAMS-REQ-GEN-001.placeholder:46",
+      "id": "DAMS-REQ-GEN-001.placeholder:4",
       "status": "warn",
-      "requirement_code": "GEN-001",
+      "requirement_code": "LDM-11",
       "statement": null,
       "subject": "dams:logical/mdm/PERSON_REPRESENTATIVE",
       "finding": "Effective data_owner_ref on \"dams:logical/mdm/PERSON_REPRESENTATIVE\" is placeholder 'org:role/DATA_OWNER_PENDING'.",
@@ -4558,7 +3718,7 @@
       "diagnostic_code": "DAMS-REQ-GEN-001.placeholder"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:47",
+      "id": "DAMS-CASCADE-redundant-override:5",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4570,7 +3730,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:48",
+      "id": "DAMS-CASCADE-redundant-override:6",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4582,7 +3742,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:49",
+      "id": "DAMS-CASCADE-redundant-override:7",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4594,7 +3754,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:50",
+      "id": "DAMS-CASCADE-redundant-override:8",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4606,7 +3766,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:51",
+      "id": "DAMS-CASCADE-redundant-override:9",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4618,7 +3778,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:52",
+      "id": "DAMS-CASCADE-redundant-override:10",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4630,7 +3790,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:53",
+      "id": "DAMS-CASCADE-redundant-override:11",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4642,7 +3802,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:54",
+      "id": "DAMS-CASCADE-redundant-override:12",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4654,7 +3814,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:55",
+      "id": "DAMS-CASCADE-redundant-override:13",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4666,7 +3826,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:56",
+      "id": "DAMS-CASCADE-redundant-override:14",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4678,7 +3838,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:57",
+      "id": "DAMS-CASCADE-redundant-override:15",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4690,7 +3850,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:58",
+      "id": "DAMS-CASCADE-redundant-override:16",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4702,7 +3862,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:59",
+      "id": "DAMS-CASCADE-redundant-override:17",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4714,7 +3874,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:60",
+      "id": "DAMS-CASCADE-redundant-override:18",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4726,7 +3886,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:61",
+      "id": "DAMS-CASCADE-redundant-override:19",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4738,7 +3898,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:62",
+      "id": "DAMS-CASCADE-redundant-override:20",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4750,7 +3910,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:63",
+      "id": "DAMS-CASCADE-redundant-override:21",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4762,7 +3922,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:64",
+      "id": "DAMS-CASCADE-redundant-override:22",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4774,7 +3934,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:65",
+      "id": "DAMS-CASCADE-redundant-override:23",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4786,7 +3946,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:66",
+      "id": "DAMS-CASCADE-redundant-override:24",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4798,7 +3958,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:67",
+      "id": "DAMS-CASCADE-redundant-override:25",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4810,7 +3970,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:68",
+      "id": "DAMS-CASCADE-redundant-override:26",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4822,7 +3982,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:69",
+      "id": "DAMS-CASCADE-redundant-override:27",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4834,7 +3994,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:70",
+      "id": "DAMS-CASCADE-redundant-override:28",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4846,7 +4006,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:71",
+      "id": "DAMS-CASCADE-redundant-override:29",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4858,7 +4018,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:72",
+      "id": "DAMS-CASCADE-redundant-override:30",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4870,7 +4030,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:73",
+      "id": "DAMS-CASCADE-redundant-override:31",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4882,7 +4042,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:74",
+      "id": "DAMS-CASCADE-redundant-override:32",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4894,7 +4054,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:75",
+      "id": "DAMS-CASCADE-redundant-override:33",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4906,7 +4066,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:76",
+      "id": "DAMS-CASCADE-redundant-override:34",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4918,7 +4078,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:77",
+      "id": "DAMS-CASCADE-redundant-override:35",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4930,7 +4090,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:78",
+      "id": "DAMS-CASCADE-redundant-override:36",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4942,7 +4102,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:79",
+      "id": "DAMS-CASCADE-redundant-override:37",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4954,7 +4114,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:80",
+      "id": "DAMS-CASCADE-redundant-override:38",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4966,7 +4126,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:81",
+      "id": "DAMS-CASCADE-redundant-override:39",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4978,7 +4138,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:82",
+      "id": "DAMS-CASCADE-redundant-override:40",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -4990,7 +4150,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:83",
+      "id": "DAMS-CASCADE-redundant-override:41",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5002,7 +4162,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:84",
+      "id": "DAMS-CASCADE-redundant-override:42",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5014,7 +4174,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:85",
+      "id": "DAMS-CASCADE-redundant-override:43",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5026,7 +4186,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:86",
+      "id": "DAMS-CASCADE-redundant-override:44",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5038,7 +4198,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:87",
+      "id": "DAMS-CASCADE-redundant-override:45",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5050,7 +4210,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:88",
+      "id": "DAMS-CASCADE-redundant-override:46",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5062,7 +4222,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:89",
+      "id": "DAMS-CASCADE-redundant-override:47",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5074,7 +4234,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:90",
+      "id": "DAMS-CASCADE-redundant-override:48",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5086,7 +4246,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:91",
+      "id": "DAMS-CASCADE-redundant-override:49",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5098,7 +4258,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-CASCADE-redundant-override:92",
+      "id": "DAMS-CASCADE-redundant-override:50",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5110,7 +4270,7 @@
       "diagnostic_code": "DAMS-CASCADE-redundant-override"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:93",
+      "id": "DAMS-DEF-description-eq-title:51",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5122,7 +4282,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:94",
+      "id": "DAMS-DEF-description-eq-title:52",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5134,7 +4294,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:95",
+      "id": "DAMS-DEF-description-eq-title:53",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5146,7 +4306,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:96",
+      "id": "DAMS-DEF-description-eq-title:54",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5158,7 +4318,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:97",
+      "id": "DAMS-DEF-description-eq-title:55",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5170,7 +4330,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:98",
+      "id": "DAMS-DEF-description-eq-title:56",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5182,7 +4342,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:99",
+      "id": "DAMS-DEF-description-eq-title:57",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5194,7 +4354,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:100",
+      "id": "DAMS-DEF-description-eq-title:58",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5206,7 +4366,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:101",
+      "id": "DAMS-DEF-description-eq-title:59",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5218,7 +4378,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:102",
+      "id": "DAMS-DEF-description-eq-title:60",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5230,7 +4390,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:103",
+      "id": "DAMS-DEF-description-eq-title:61",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5242,7 +4402,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:104",
+      "id": "DAMS-DEF-description-eq-title:62",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5254,7 +4414,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:105",
+      "id": "DAMS-DEF-description-eq-title:63",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5266,7 +4426,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:106",
+      "id": "DAMS-DEF-description-eq-title:64",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5278,7 +4438,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:107",
+      "id": "DAMS-DEF-description-eq-title:65",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5290,7 +4450,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:108",
+      "id": "DAMS-DEF-description-eq-title:66",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5302,7 +4462,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:109",
+      "id": "DAMS-DEF-description-eq-title:67",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5314,7 +4474,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:110",
+      "id": "DAMS-DEF-description-eq-title:68",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5326,7 +4486,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:111",
+      "id": "DAMS-DEF-description-eq-title:69",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5338,7 +4498,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:112",
+      "id": "DAMS-DEF-description-eq-title:70",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5350,7 +4510,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:113",
+      "id": "DAMS-DEF-description-eq-title:71",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5362,7 +4522,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:114",
+      "id": "DAMS-DEF-description-eq-title:72",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5374,7 +4534,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:115",
+      "id": "DAMS-DEF-description-eq-title:73",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5386,7 +4546,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:116",
+      "id": "DAMS-DEF-description-eq-title:74",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5398,7 +4558,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:117",
+      "id": "DAMS-DEF-description-eq-title:75",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5410,7 +4570,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:118",
+      "id": "DAMS-DEF-description-eq-title:76",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5422,7 +4582,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:119",
+      "id": "DAMS-DEF-description-eq-title:77",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5434,7 +4594,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:120",
+      "id": "DAMS-DEF-description-eq-title:78",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5446,7 +4606,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:121",
+      "id": "DAMS-DEF-description-eq-title:79",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5458,7 +4618,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:122",
+      "id": "DAMS-DEF-description-eq-title:80",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5470,7 +4630,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:123",
+      "id": "DAMS-DEF-description-eq-title:81",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5482,7 +4642,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:124",
+      "id": "DAMS-DEF-description-eq-title:82",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5494,7 +4654,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:125",
+      "id": "DAMS-DEF-description-eq-title:83",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5506,7 +4666,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:126",
+      "id": "DAMS-DEF-description-eq-title:84",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5518,7 +4678,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:127",
+      "id": "DAMS-DEF-description-eq-title:85",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5530,7 +4690,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:128",
+      "id": "DAMS-DEF-description-eq-title:86",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5542,7 +4702,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:129",
+      "id": "DAMS-DEF-description-eq-title:87",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5554,7 +4714,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:130",
+      "id": "DAMS-DEF-description-eq-title:88",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5566,7 +4726,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:131",
+      "id": "DAMS-DEF-description-eq-title:89",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5578,7 +4738,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:132",
+      "id": "DAMS-DEF-description-eq-title:90",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5590,7 +4750,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:133",
+      "id": "DAMS-DEF-description-eq-title:91",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5602,7 +4762,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:134",
+      "id": "DAMS-DEF-description-eq-title:92",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5614,7 +4774,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:135",
+      "id": "DAMS-DEF-description-eq-title:93",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -5626,7 +4786,7 @@
       "diagnostic_code": "DAMS-DEF-description-eq-title"
     },
     {
-      "id": "DAMS-DEF-description-eq-title:136",
+      "id": "DAMS-DEF-description-eq-title:94",
       "status": "fail",
       "requirement_code": null,
       "statement": null,
@@ -7585,553 +6745,7 @@
         ],
         "items": [
           {
-            "id": "DAMS-REQ-ATR-002.c1:0",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID\" name \"ENTERPRISE_ID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:1",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/SHORT_NAME\" name \"SHORT_NAME\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/SHORT_NAME"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:2",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG\" name \"SHORT_NAME_ENG\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:3",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/FULL_NAME\" name \"FULL_NAME\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/FULL_NAME"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:4",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG\" name \"FULL_NAME_ENG\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:5",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/COUNTRY_CODE\" name \"COUNTRY_CODE\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/COUNTRY_CODE"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:6",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/INN\" name \"INN\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/INN"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:7",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KPP\" name \"KPP\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/KPP"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:8",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/OGRN\" name \"OGRN\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/OGRN"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:9",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION\" name \"ADDR_EGRUL_REGION\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:10",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/TERMINATION_DATE\" name \"TERMINATION_DATE\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/TERMINATION_DATE"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:11",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT\" name \"INN_NONRESIDENT\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:12",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/LEI\" name \"LEI\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/LEI"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:13",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KIO\" name \"KIO\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/KIO"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:14",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT\" name \"REG_NUM_NONRESIDENT\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:15",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME\" name \"CEO_FIRSTNAME\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:16",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_INN\" name \"CEO_INN\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_INN"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:17",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC\" name \"CEO_PATRONYMIC\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:18",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_POSITION\" name \"CEO_POSITION\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_POSITION"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:19",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_SURNAME\" name \"CEO_SURNAME\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/CEO_SURNAME"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:20",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER\" name \"TRUST_RULE_NUMBER\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:21",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ECBD_ID\" name \"ECBD_ID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/ECBD_ID"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:22",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/UNICODE\" name \"UNICODE\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/UNICODE"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:23",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CODE_NSD\" name \"CODE_NSD\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/CODE_NSD"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:24",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KBD_FIRMID\" name \"KBD_FIRMID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/KBD_FIRMID"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:25",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG\" name \"ACTIVE_FLAG\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:26",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/PERSON_ID\" name \"PERSON_ID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/PERSON/PERSON_ID"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:27",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/FIO\" name \"FIO\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/PERSON/FIO"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:28",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/LAST_NAME\" name \"LAST_NAME\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/PERSON/LAST_NAME"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:29",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/FIRST_NAME\" name \"FIRST_NAME\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/PERSON/FIRST_NAME"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:30",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/PATRONYMIC\" name \"PATRONYMIC\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/PERSON/PATRONYMIC"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:31",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/DATEBIRTH\" name \"DATEBIRTH\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/PERSON/DATEBIRTH"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:32",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/ADDRESS_F\" name \"ADDRESS_F\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/PERSON/ADDRESS_F"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:33",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/INN\" name \"INN\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/PERSON/INN"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:34",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/SNILS\" name \"SNILS\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/PERSON/SNILS"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:35",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE\" name \"IDENTITY_DOCUMENT_CODE\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:36",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA\" name \"IDENTITY_DOCUMENT_CODE_OMEGA\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:37",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE\" name \"IDENTITY_DOCUMENT_TYPE\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:38",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID\" name \"ENTERPRISE_ID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:39",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/PERSON_CEO/PERSON_ID\" name \"PERSON_ID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/PERSON_CEO/PERSON_ID"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:40",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID\" name \"ENTERPRISE_ID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-ATR-002.c1:41",
-            "title": "DAMS-REQ-ATR-002.c1",
-            "description": "LogicalAttribute \"dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID\" name \"PERSON_ID\" should be lower_snake_case. Required by: Техническое имя логического атрибута должно быть в стиле нижнего регистра с подчёркиваниями между словами. Remediation: Переименуйте name в lower_snake_case (например party_id).",
-            "attributes": {
-              "severity": "warning",
-              "phase": "corporate_semantics",
-              "subject_ref": "dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID"
-            },
-            "children": [],
-            "tags": [],
-            "source_ref": null
-          },
-          {
-            "id": "DAMS-REQ-GEN-001.placeholder:42",
+            "id": "DAMS-REQ-GEN-001.placeholder:0",
             "title": "DAMS-REQ-GEN-001.placeholder",
             "description": "Effective data_owner_ref on \"dams:model/mdm/0.1.0\" is placeholder 'org:role/DATA_OWNER_PENDING'. Remediation: Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
             "attributes": {
@@ -8144,7 +6758,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-REQ-GEN-001.placeholder:43",
+            "id": "DAMS-REQ-GEN-001.placeholder:1",
             "title": "DAMS-REQ-GEN-001.placeholder",
             "description": "Effective data_owner_ref on \"dams:logical/mdm/ENTERPRISE\" is placeholder 'org:role/DATA_OWNER_PENDING'. Remediation: Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
             "attributes": {
@@ -8157,7 +6771,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-REQ-GEN-001.placeholder:44",
+            "id": "DAMS-REQ-GEN-001.placeholder:2",
             "title": "DAMS-REQ-GEN-001.placeholder",
             "description": "Effective data_owner_ref on \"dams:logical/mdm/PERSON\" is placeholder 'org:role/DATA_OWNER_PENDING'. Remediation: Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
             "attributes": {
@@ -8170,7 +6784,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-REQ-GEN-001.placeholder:45",
+            "id": "DAMS-REQ-GEN-001.placeholder:3",
             "title": "DAMS-REQ-GEN-001.placeholder",
             "description": "Effective data_owner_ref on \"dams:logical/mdm/PERSON_CEO\" is placeholder 'org:role/DATA_OWNER_PENDING'. Remediation: Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
             "attributes": {
@@ -8183,7 +6797,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-REQ-GEN-001.placeholder:46",
+            "id": "DAMS-REQ-GEN-001.placeholder:4",
             "title": "DAMS-REQ-GEN-001.placeholder",
             "description": "Effective data_owner_ref on \"dams:logical/mdm/PERSON_REPRESENTATIVE\" is placeholder 'org:role/DATA_OWNER_PENDING'. Remediation: Replace the package-level data_owner_ref with a real org:role/... once ownership is assigned.",
             "attributes": {
@@ -8196,7 +6810,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:47",
+            "id": "DAMS-CASCADE-redundant-override:5",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE\" declares data_owner_ref equal to effective value inherited from \"dams:model/mdm/0.1.0\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8209,7 +6823,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:48",
+            "id": "DAMS-CASCADE-redundant-override:6",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8222,7 +6836,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:49",
+            "id": "DAMS-CASCADE-redundant-override:7",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/SHORT_NAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8235,7 +6849,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:50",
+            "id": "DAMS-CASCADE-redundant-override:8",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8248,7 +6862,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:51",
+            "id": "DAMS-CASCADE-redundant-override:9",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/FULL_NAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8261,7 +6875,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:52",
+            "id": "DAMS-CASCADE-redundant-override:10",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8274,7 +6888,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:53",
+            "id": "DAMS-CASCADE-redundant-override:11",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/COUNTRY_CODE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8287,7 +6901,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:54",
+            "id": "DAMS-CASCADE-redundant-override:12",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/INN\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8300,7 +6914,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:55",
+            "id": "DAMS-CASCADE-redundant-override:13",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/KPP\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8313,7 +6927,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:56",
+            "id": "DAMS-CASCADE-redundant-override:14",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/OGRN\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8326,7 +6940,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:57",
+            "id": "DAMS-CASCADE-redundant-override:15",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8339,7 +6953,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:58",
+            "id": "DAMS-CASCADE-redundant-override:16",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/TERMINATION_DATE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8352,7 +6966,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:59",
+            "id": "DAMS-CASCADE-redundant-override:17",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8365,7 +6979,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:60",
+            "id": "DAMS-CASCADE-redundant-override:18",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/LEI\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8378,7 +6992,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:61",
+            "id": "DAMS-CASCADE-redundant-override:19",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/KIO\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8391,7 +7005,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:62",
+            "id": "DAMS-CASCADE-redundant-override:20",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8404,7 +7018,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:63",
+            "id": "DAMS-CASCADE-redundant-override:21",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8417,7 +7031,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:64",
+            "id": "DAMS-CASCADE-redundant-override:22",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/CEO_INN\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8430,7 +7044,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:65",
+            "id": "DAMS-CASCADE-redundant-override:23",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8443,7 +7057,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:66",
+            "id": "DAMS-CASCADE-redundant-override:24",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/CEO_POSITION\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8456,7 +7070,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:67",
+            "id": "DAMS-CASCADE-redundant-override:25",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/CEO_SURNAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8469,7 +7083,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:68",
+            "id": "DAMS-CASCADE-redundant-override:26",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8482,7 +7096,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:69",
+            "id": "DAMS-CASCADE-redundant-override:27",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/ECBD_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8495,7 +7109,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:70",
+            "id": "DAMS-CASCADE-redundant-override:28",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/UNICODE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8508,7 +7122,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:71",
+            "id": "DAMS-CASCADE-redundant-override:29",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/CODE_NSD\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8521,7 +7135,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:72",
+            "id": "DAMS-CASCADE-redundant-override:30",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/KBD_FIRMID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8534,7 +7148,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:73",
+            "id": "DAMS-CASCADE-redundant-override:31",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/ENTERPRISE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8547,7 +7161,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:74",
+            "id": "DAMS-CASCADE-redundant-override:32",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON\" declares data_owner_ref equal to effective value inherited from \"dams:model/mdm/0.1.0\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8560,7 +7174,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:75",
+            "id": "DAMS-CASCADE-redundant-override:33",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON/PERSON_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8573,7 +7187,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:76",
+            "id": "DAMS-CASCADE-redundant-override:34",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON/FIO\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8586,7 +7200,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:77",
+            "id": "DAMS-CASCADE-redundant-override:35",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON/LAST_NAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8599,7 +7213,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:78",
+            "id": "DAMS-CASCADE-redundant-override:36",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON/FIRST_NAME\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8612,7 +7226,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:79",
+            "id": "DAMS-CASCADE-redundant-override:37",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON/PATRONYMIC\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8625,7 +7239,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:80",
+            "id": "DAMS-CASCADE-redundant-override:38",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON/DATEBIRTH\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8638,7 +7252,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:81",
+            "id": "DAMS-CASCADE-redundant-override:39",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON/ADDRESS_F\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8651,7 +7265,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:82",
+            "id": "DAMS-CASCADE-redundant-override:40",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON/INN\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8664,7 +7278,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:83",
+            "id": "DAMS-CASCADE-redundant-override:41",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON/SNILS\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8677,7 +7291,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:84",
+            "id": "DAMS-CASCADE-redundant-override:42",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8690,7 +7304,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:85",
+            "id": "DAMS-CASCADE-redundant-override:43",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8703,7 +7317,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:86",
+            "id": "DAMS-CASCADE-redundant-override:44",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8716,7 +7330,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:87",
+            "id": "DAMS-CASCADE-redundant-override:45",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON_CEO\" declares data_owner_ref equal to effective value inherited from \"dams:model/mdm/0.1.0\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8729,7 +7343,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:88",
+            "id": "DAMS-CASCADE-redundant-override:46",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON_CEO\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8742,7 +7356,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:89",
+            "id": "DAMS-CASCADE-redundant-override:47",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON_CEO/PERSON_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON_CEO\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8755,7 +7369,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:90",
+            "id": "DAMS-CASCADE-redundant-override:48",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON_REPRESENTATIVE\" declares data_owner_ref equal to effective value inherited from \"dams:model/mdm/0.1.0\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8768,7 +7382,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:91",
+            "id": "DAMS-CASCADE-redundant-override:49",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON_REPRESENTATIVE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8781,7 +7395,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-CASCADE-redundant-override:92",
+            "id": "DAMS-CASCADE-redundant-override:50",
             "title": "DAMS-CASCADE-redundant-override",
             "description": "Element \"dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID\" declares governance_classification equal to effective value inherited from \"dams:logical/mdm/PERSON_REPRESENTATIVE\" (redundant override). Remediation: Remove the declared slot to inherit from the parent (ADR-023 containment cascade).",
             "attributes": {
@@ -8794,7 +7408,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:93",
+            "id": "DAMS-DEF-description-eq-title:51",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalEntity \"dams:logical/mdm/ENTERPRISE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -8807,7 +7421,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:94",
+            "id": "DAMS-DEF-description-eq-title:52",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalEntity \"dams:logical/mdm/PERSON\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -8820,7 +7434,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:95",
+            "id": "DAMS-DEF-description-eq-title:53",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -8833,7 +7447,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:96",
+            "id": "DAMS-DEF-description-eq-title:54",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/SHORT_NAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -8846,7 +7460,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:97",
+            "id": "DAMS-DEF-description-eq-title:55",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/SHORT_NAME_ENG\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -8859,7 +7473,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:98",
+            "id": "DAMS-DEF-description-eq-title:56",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/FULL_NAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -8872,7 +7486,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:99",
+            "id": "DAMS-DEF-description-eq-title:57",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/FULL_NAME_ENG\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -8885,7 +7499,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:100",
+            "id": "DAMS-DEF-description-eq-title:58",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/COUNTRY_CODE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -8898,7 +7512,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:101",
+            "id": "DAMS-DEF-description-eq-title:59",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/INN\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -8911,7 +7525,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:102",
+            "id": "DAMS-DEF-description-eq-title:60",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KPP\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -8924,7 +7538,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:103",
+            "id": "DAMS-DEF-description-eq-title:61",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/OGRN\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -8937,7 +7551,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:104",
+            "id": "DAMS-DEF-description-eq-title:62",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ADDR_EGRUL_REGION\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -8950,7 +7564,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:105",
+            "id": "DAMS-DEF-description-eq-title:63",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/TERMINATION_DATE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -8963,7 +7577,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:106",
+            "id": "DAMS-DEF-description-eq-title:64",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/INN_NONRESIDENT\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -8976,7 +7590,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:107",
+            "id": "DAMS-DEF-description-eq-title:65",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/LEI\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -8989,7 +7603,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:108",
+            "id": "DAMS-DEF-description-eq-title:66",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KIO\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9002,7 +7616,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:109",
+            "id": "DAMS-DEF-description-eq-title:67",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/REG_NUM_NONRESIDENT\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9015,7 +7629,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:110",
+            "id": "DAMS-DEF-description-eq-title:68",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_FIRSTNAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9028,7 +7642,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:111",
+            "id": "DAMS-DEF-description-eq-title:69",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_INN\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9041,7 +7655,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:112",
+            "id": "DAMS-DEF-description-eq-title:70",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_PATRONYMIC\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9054,7 +7668,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:113",
+            "id": "DAMS-DEF-description-eq-title:71",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_POSITION\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9067,7 +7681,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:114",
+            "id": "DAMS-DEF-description-eq-title:72",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CEO_SURNAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9080,7 +7694,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:115",
+            "id": "DAMS-DEF-description-eq-title:73",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/TRUST_RULE_NUMBER\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9093,7 +7707,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:116",
+            "id": "DAMS-DEF-description-eq-title:74",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ECBD_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9106,7 +7720,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:117",
+            "id": "DAMS-DEF-description-eq-title:75",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/UNICODE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9119,7 +7733,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:118",
+            "id": "DAMS-DEF-description-eq-title:76",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/CODE_NSD\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9132,7 +7746,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:119",
+            "id": "DAMS-DEF-description-eq-title:77",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/KBD_FIRMID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9145,7 +7759,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:120",
+            "id": "DAMS-DEF-description-eq-title:78",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/ENTERPRISE/ACTIVE_FLAG\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9158,7 +7772,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:121",
+            "id": "DAMS-DEF-description-eq-title:79",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON/PERSON_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9171,7 +7785,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:122",
+            "id": "DAMS-DEF-description-eq-title:80",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON/FIO\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9184,7 +7798,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:123",
+            "id": "DAMS-DEF-description-eq-title:81",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON/LAST_NAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9197,7 +7811,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:124",
+            "id": "DAMS-DEF-description-eq-title:82",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON/FIRST_NAME\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9210,7 +7824,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:125",
+            "id": "DAMS-DEF-description-eq-title:83",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON/PATRONYMIC\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9223,7 +7837,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:126",
+            "id": "DAMS-DEF-description-eq-title:84",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON/DATEBIRTH\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9236,7 +7850,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:127",
+            "id": "DAMS-DEF-description-eq-title:85",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON/ADDRESS_F\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9249,7 +7863,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:128",
+            "id": "DAMS-DEF-description-eq-title:86",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON/INN\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9262,7 +7876,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:129",
+            "id": "DAMS-DEF-description-eq-title:87",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON/SNILS\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9275,7 +7889,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:130",
+            "id": "DAMS-DEF-description-eq-title:88",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9288,7 +7902,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:131",
+            "id": "DAMS-DEF-description-eq-title:89",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_CODE_OMEGA\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9301,7 +7915,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:132",
+            "id": "DAMS-DEF-description-eq-title:90",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON/IDENTITY_DOCUMENT_TYPE\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9314,7 +7928,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:133",
+            "id": "DAMS-DEF-description-eq-title:91",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON_CEO/ENTERPRISE_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9327,7 +7941,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:134",
+            "id": "DAMS-DEF-description-eq-title:92",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON_CEO/PERSON_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9340,7 +7954,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:135",
+            "id": "DAMS-DEF-description-eq-title:93",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON_REPRESENTATIVE/ENTERPRISE_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
@@ -9353,7 +7967,7 @@
             "source_ref": null
           },
           {
-            "id": "DAMS-DEF-description-eq-title:136",
+            "id": "DAMS-DEF-description-eq-title:94",
             "title": "DAMS-DEF-description-eq-title",
             "description": "LogicalAttribute \"dams:logical/mdm/PERSON_REPRESENTATIVE/PERSON_ID\" description equals title (likely not a real definition). Remediation: Replace description with an unambiguous definition or inherit via definition_source_ref (ADR-025).",
             "attributes": {
