@@ -5,8 +5,15 @@ Usage (repo root)::
     python scripts/report_requirement_impact.py
 
 Prints per-file and total counts keyed by (requirement_code, diagnostic_code,
-severity). Used as before/after evidence for ADR-056 PR-10c/10d/10f.
+severity). Used as before/after evidence for ADR-056 PR-10c/10d/10f and
+follow-up PR-11.
+
 Does not write files.
+
+Target discovery (documented limitation):
+- Under ``model-assets/implementations/solutions/**``: ``*-solution-model.yaml``
+  (all four current solutions use that name).
+- Under the enterprise conceptual tree: ``enterprise-conceptual-model.yaml``.
 """
 
 from __future__ import annotations
@@ -22,8 +29,12 @@ REPO = Path(__file__).resolve().parents[1]
 
 
 def _details_map(diag: object) -> dict[str, str]:
+    """Read Diagnostic.diagnostic_details (kernel domain field name)."""
     out: dict[str, str] = {}
-    for item in getattr(diag, "details", None) or ():
+    details = getattr(diag, "diagnostic_details", None)
+    if details is None:
+        details = getattr(diag, "details", None)
+    for item in details or ():
         key = getattr(item, "detail_key", None)
         if key:
             out[str(key)] = str(getattr(item, "detail_value", "") or "")
@@ -52,10 +63,11 @@ def _count_file(path: Path, *, repo_root: Path) -> collections.Counter[tuple[str
     return counts
 
 
-def _iter_targets() -> list[Path]:
+def _iter_targets(repo_root: Path | None = None) -> list[Path]:
+    root = repo_root or REPO
     roots = [
-        REPO / "model-assets" / "implementations" / "solutions",
-        REPO
+        root / "model-assets" / "implementations" / "solutions",
+        root
         / "model-assets"
         / "implementations"
         / "enterprise"
@@ -63,11 +75,11 @@ def _iter_targets() -> list[Path]:
         / "0.1",
     ]
     out: list[Path] = []
-    for root in roots:
-        if not root.is_dir():
+    for base in roots:
+        if not base.is_dir():
             continue
-        out.extend(sorted(root.rglob("*-solution-model.yaml")))
-        out.extend(sorted(root.glob("enterprise-conceptual-model.yaml")))
+        out.extend(sorted(base.rglob("*-solution-model.yaml")))
+        out.extend(sorted(base.glob("enterprise-conceptual-model.yaml")))
     return out
 
 
