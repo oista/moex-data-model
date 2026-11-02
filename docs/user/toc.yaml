@@ -5,100 +5,71 @@ chapters:
       - id: what-is-this
         path: 00-start/what-is-this.md
         title: Что это за продукт
+      - id: how-to-read
+        path: 00-start/how-to-read.md
+        title: Как читать эту документацию
+      - id: repo-map
+        path: 00-start/repo-map.md
+        title: Карта репозитория
+  - id: concepts
+    title: Ключевые идеи
+    pages:
+      - id: three-roles
+        path: 10-concepts/three-roles.md
+        title: Три роли
+      - id: model-package
+        path: 10-concepts/model-package.md
+        title: Пакет и репозиторий моделей
+      - id: model-layers
+        path: 10-concepts/model-layers.md
+        title: Слои модели
+      - id: source-of-truth
+        path: 10-concepts/source-of-truth.md
+        title: Что правят руками
+      - id: topology
+        path: 10-concepts/topology.md
+        title: Топология
+      - id: governance
+        path: 10-concepts/governance.md
+        title: Кто за что отвечает
+      - id: definitions
+        path: 10-concepts/definitions.md
+        title: Определения
+      - id: requirements
+        path: 10-concepts/requirements.md
+        title: Требования и проверки
+      - id: identity
+        path: 10-concepts/identity.md
+        title: Версии и отпечаток
+      - id: external-ontologies
+        path: 10-concepts/external-ontologies.md
+        title: Внешние онтологии
   - id: glossary
     title: Глоссарий
 not_covered:
-  - adr: ADR-001
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-002
-    reason: "ещё не описано; появится в PR-2 или PR-3"
   - adr: ADR-004
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-005
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-006
-    reason: "ещё не описано; появится в PR-2 или PR-3"
+    reason: "устройство приложений и пакетов — раздел «Архитектура», PR-3"
   - adr: ADR-007
-    reason: "ещё не описано; появится в PR-2 или PR-3"
+    reason: "устройство приложений и пакетов — раздел «Архитектура», PR-3"
   - adr: ADR-008
-    reason: "ещё не описано; появится в PR-2 или PR-3"
+    reason: "устройство приложений и пакетов — раздел «Архитектура», PR-3"
   - adr: ADR-009
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-010
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-011
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-013
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-014
-    reason: "ещё не описано; появится в PR-2 или PR-3"
+    reason: "черновой импорт — раздел «Как это работает», PR-3"
   - adr: ADR-015
-    reason: "ещё не описано; появится в PR-2 или PR-3"
+    reason: "оформление просмотра — раздел «Архитектура», PR-3"
   - adr: ADR-016
-    reason: "ещё не описано; появится в PR-2 или PR-3"
+    reason: "виды разделов публикации — раздел «Архитектура», PR-3"
   - adr: ADR-019
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-021
-    reason: "ещё не описано; появится в PR-2 или PR-3"
+    reason: "наследование контракта публикации — раздел «Архитектура», PR-3"
   - adr: ADR-022
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-023
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-025
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-026
-    reason: "ещё не описано; появится в PR-2 или PR-3"
+    reason: "импорт из таблицы — раздел «Как это работает», PR-3"
   - adr: ADR-030
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-031
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-032
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-033
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-034
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-035
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-036
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-037
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-038
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-039
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-040
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-041
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-042
-    reason: "ещё не описано; появится в PR-2 или PR-3"
+    reason: "правила адресов схемы — деталь, не отдельная идея; справочник PR-3"
   - adr: ADR-043
-    reason: "ещё не описано; появится в PR-2 или PR-3"
+    reason: "служебный реестр переходных меток — деталь схемы, PR-3"
   - adr: ADR-044
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-045
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-046
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-047
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-048
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-049
-    reason: "ещё не описано; появится в PR-2 или PR-3"
+    reason: "разложение общего класса схемы — раздел «Архитектура», PR-3"
   - adr: ADR-050
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-051
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-052
-    reason: "ещё не описано; появится в PR-2 или PR-3"
+    reason: "правило равенства владельца — деталь проверки, PR-3"
   - adr: ADR-053
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-054
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-055
-    reason: "ещё не описано; появится в PR-2 или PR-3"
-  - adr: ADR-056
-    reason: "ещё не описано; появится в PR-2 или PR-3"
+    reason: "метаданные утверждения — деталь схемы, PR-3"
