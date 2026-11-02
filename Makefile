@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check viewer-serve packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements check-constraints dams-packages-check generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate digest-check ontology-check check-manifest lock-verify check-topology check-governance
+.PHONY: viewer viewer-check viewer-serve user-docs user-docs-check packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements check-constraints dams-packages-check generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate digest-check ontology-check check-manifest lock-verify check-topology check-governance
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -32,6 +32,15 @@ viewer-check:
 viewer-serve:
 	$(PYTHON) -m pip install -e "./$(VIEWER)[dev]"
 	$(PYTHON) -m moex_publication_viewer.cli serve --root . --port 8765
+
+# ADR-057: product user documentation (docs/user/index.html)
+user-docs:
+	$(PYTHON) -m pip install -e "./$(VIEWER)[dev]"
+	$(PYTHON) -m moex_publication_viewer.cli build-user-docs --root .
+
+user-docs-check:
+	$(PYTHON) -m pip install -e "./$(VIEWER)[dev]"
+	$(PYTHON) -m moex_publication_viewer.cli check-user-docs --root .
 
 # Ontology stack pytest (outside Stage 0 make check; gated in GHA viewer-and-packages).
 # drawDB adapter + DBML projection live only in drawdb-adapter-check (workbench-check) — no duplicate.
@@ -146,7 +155,7 @@ web-e2e:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File apps/web/scripts/e2e.ps1
 
 # Stage 0 gate: contracts → slice → schemas → examples → golden → architecture-check
-# → dams-packages-check → manifest/lock/topology/governance → publish-gate.
+# → dams-packages-check → manifest/lock/topology/governance → publish-gate → user-docs.
 # Cross-platform entry: scripts/check_all.py
 # Individual targets above remain for Linux/macOS/Make and for --only steps.
 check check-all:

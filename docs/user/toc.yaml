@@ -1,0 +1,104 @@
+chapters:
+  - id: start
+    title: Начало
+    pages:
+      - id: what-is-this
+        path: 00-start/what-is-this.md
+        title: Что это за продукт
+  - id: glossary
+    title: Глоссарий
+not_covered:
+  - adr: ADR-001
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-002
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-004
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-005
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-006
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-007
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-008
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-009
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-010
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-011
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-013
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-014
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-015
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-016
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-019
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-021
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-022
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-023
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-025
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-026
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-030
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-031
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-032
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-033
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-034
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-035
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-036
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-037
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-038
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-039
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-040
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-041
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-042
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-043
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-044
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-045
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-046
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-047
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-048
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-049
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-050
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-051
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-052
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-053
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-054
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-055
+    reason: "ещё не описано; появится в PR-2 или PR-3"
+  - adr: ADR-056
+    reason: "ещё не описано; появится в PR-2 или PR-3"

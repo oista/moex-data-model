@@ -4993,6 +4993,20 @@
       if (btn) btn.setAttribute("aria-current", "page");
     }
 
+    function findDocPage(items, id) {
+      for (const it of items || []) {
+        if (it.id === id && it.attributes?.kind !== "group") return it;
+        const nested = findDocPage(it.children, id);
+        if (nested) return nested;
+      }
+      return null;
+    }
+
+    function showDocPage(item, btn) {
+      page.innerHTML = item?.attributes?.content || section.content || "";
+      markCurrent(btn);
+    }
+
     function addNode(parent, item) {
       const kids = item.children || [];
       if (item.attributes?.kind === "group" && kids.length) {
@@ -5012,15 +5026,35 @@
       btn.textContent = item.title || item.id;
       btn.dataset.docId = item.id;
       btn.addEventListener("click", () => {
-        page.innerHTML = item.attributes?.content || "";
-        markCurrent(btn);
+        selectedItemId = item.id;
+        showDocPage(item, btn);
+        replaceHashQuiet({
+          node: nodeForModule(currentModuleId)?.id || currentNodeId,
+          module: shortModule(currentModuleId),
+          section: section.id,
+          item: item.id,
+        });
       });
       parent.appendChild(btn);
     }
 
     (section.items || []).forEach((item) => addNode(toc, item));
-    const firstBtn = toc.querySelector(".doc-toc-item");
-    markCurrent(firstBtn);
+    const focusId = selectedItemId || null;
+    const focused = focusId ? findDocPage(section.items, focusId) : null;
+    const focusBtn = focused
+      ? toc.querySelector(`.doc-toc-item[data-doc-id="${CSS.escape(focused.id)}"]`)
+      : null;
+    if (focused && focusBtn) {
+      showDocPage(focused, focusBtn);
+    } else {
+      const firstBtn = toc.querySelector(".doc-toc-item");
+      markCurrent(firstBtn);
+      if (firstBtn && !section.content) {
+        const firstId = firstBtn.dataset.docId;
+        const firstItem = findDocPage(section.items, firstId);
+        if (firstItem) showDocPage(firstItem, firstBtn);
+      }
+    }
 
     panel.appendChild(toc);
     panel.appendChild(page);

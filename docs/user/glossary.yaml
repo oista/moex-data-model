@@ -1,0 +1,37 @@
+terms:
+  - id: modeling-standard
+    term: Стандарт моделирования
+    short: Язык и правила, на которых пишут модель.
+    explanation: >
+      Стандарт задаёт формализм. В этом репозитории основной пример — LinkML.
+      По стандарту строят спецификации и конкретные реализации.
+    see_also:
+      - reference-specification
+      - specification-implementation
+    sources:
+      - docs/architecture/MODELING_ARCHITECTURE.md
+
+  - id: reference-specification
+    term: Спецификация
+    short: Норма или профиль на выбранном стандарте.
+    explanation: >
+      Спецификация говорит, как именно применять стандарт для предметной области.
+      Пример сейчас — MOEX DAMS 0.1. На спецификацию ссылаются реализации.
+    see_also:
+      - modeling-standard
+      - specification-implementation
+    sources:
+      - docs/architecture/MODELING_ARCHITECTURE.md
+
+  - id: specification-implementation
+    term: Реализация
+    short: Конкретная версионированная модель по спецификации.
+    explanation: >
+      Реализация — это уже заполненная модель для решения или домена.
+      Пример сейчас — пакет mdm. Её сверяют со спецификацией и публикуют
+      для просмотра.
+    see_also:
+      - modeling-standard
+      - reference-specification
+    sources:
+      - docs/architecture/MODELING_ARCHITECTURE.md
