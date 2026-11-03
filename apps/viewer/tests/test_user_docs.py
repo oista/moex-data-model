@@ -30,6 +30,9 @@ def _write_user_docs(
     sources: list[str] | None = None,
     verified_at: str = "2099-01-01",
     include_adr_fixture: bool = True,
+    extra_pages: list[dict] | None = None,
+    extra_files: dict[str, str] | None = None,
+    descriptions: dict | None = None,
 ) -> Path:
     docs_user = root / "docs" / "user"
     docs_user.mkdir(parents=True)
@@ -119,7 +122,8 @@ def _write_user_docs(
                         "id": "what-is-this",
                         "path": "00-start/what-is-this.md",
                         "title": "Что это за продукт",
-                    }
+                    },
+                    *(extra_pages or []),
                 ],
             },
             {"id": "glossary", "title": "Глоссарий"},
@@ -134,7 +138,95 @@ def _write_user_docs(
         "module_id: user-docs\ntitle: Документация продукта\n",
         encoding="utf-8",
     )
+    for rel, text in (extra_files or {}).items():
+        path = root / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8")
+    if descriptions is not None:
+        desc = docs_user / "90-reference" / "descriptions.yaml"
+        desc.parent.mkdir(parents=True, exist_ok=True)
+        desc.write_text(
+            yaml.safe_dump(descriptions, allow_unicode=True, sort_keys=False),
+            encoding="utf-8",
+        )
     return docs_user
+
+
+def _page(module, page_id: str):
+    for chapter in module.sections[0].items:
+        for child in chapter.children:
+            if child.id == page_id:
+                return child
+    raise AssertionError(page_id)
+
+
+_CLI_PY = '''
+import argparse
+
+def build_parser():
+    parser = argparse.ArgumentParser()
+    sub = parser.add_subparsers(dest="command", required=True)
+    sub.add_parser("validate", help="Check the model")
+    lock = sub.add_parser("lock", help="Lock files")
+    lock_sub = lock.add_subparsers(dest="lock_action", required=True)
+    lock_sub.add_parser("update", help="Rewrite the lock")
+    return parser
+'''
+
+_VIEWER_PY = '''
+import argparse
+
+def main():
+    parser = argparse.ArgumentParser()
+    sub = parser.add_subparsers(dest="command", required=True)
+    sub.add_parser("build-user-docs", help="Build product docs")
+    return parser
+'''
+
+_MAKEFILE = """
+.PHONY: check user-docs drawdb-up
+check:
+\tpython scripts/check_all.py
+user-docs:
+\techo build
+drawdb-up:
+\techo up
+"""
+
+_CHECK_ALL_PY = '''
+STEP_IDS = (
+    "user-docs",
+    "slice-cli",
+)
+'''
+
+_COMMAND_FILES = {
+    "apps/cli/src/moex_model_cli/__main__.py": _CLI_PY,
+    "apps/viewer/src/moex_publication_viewer/cli.py": _VIEWER_PY,
+    "Makefile": _MAKEFILE,
+    "scripts/check_all.py": _CHECK_ALL_PY,
+}
+
+_PHRASES = {
+    "draft": True,
+    "moex-model": {
+        "validate": "Проверяет модель.",
+        "lock": "Фиксирует состав.",
+        "lock update": "Переписывает фиксацию.",
+    },
+    "moex-publication-viewer": {
+        "build-user-docs": "Собирает документацию.",
+    },
+    "make": {
+        "check": "Запускает общую проверку.",
+        "user-docs": "Собирает страницы.",
+        "drawdb-up": "Поднимает редактор схем.",
+    },
+    "check_all": {
+        "user-docs": "Сверяет страницы.",
+        "slice-cli": "Гоняет проверки программы.",
+    },
+}
 
 
 def test_replace_glossary_links_ok():
@@ -417,3 +509,168 @@ def test_check_not_covered_must_be_visible(tmp_path: Path, monkeypatch):
     )
     errors, _warnings = check_user_docs(tmp_path)
     assert any("not visible" in e for e in errors)
+
+
+def _generated_repo(tmp_path: Path, **kwargs) -> None:
+    extra_pages = kwargs.pop(
+        "extra_pages",
+        [
+            {"id": "adr-status", "generated": "adr-status", "title": "Статусы решений"},
+            {
+                "id": "moex-model-commands",
+                "generated": "cli-commands",
+                "tool": "moex-model",
+                "title": "Команды moex-model",
+            },
+            {
+                "id": "viewer-commands",
+                "generated": "cli-commands",
+                "tool": "moex-publication-viewer",
+                "title": "Команды просмотра",
+            },
+            {"id": "make-targets", "generated": "make-targets", "title": "Цели Makefile"},
+            {"id": "check-steps", "generated": "check-steps", "title": "Шаги общей проверки"},
+        ],
+    )
+    files = dict(_COMMAND_FILES)
+    files.update(kwargs.pop("extra_files", {}))
+    files["docs/adr/ADR-001-sample.md"] = (
+        "---\nstatus: Accepted\n---\n\n# ADR-001: Канонический YAML\n"
+    )
+    _write_user_docs(
+        tmp_path,
+        extra_pages=extra_pages,
+        extra_files=files,
+        descriptions=kwargs.pop("descriptions", _PHRASES),
+        **kwargs,
+    )
+
+
+def test_generated_adr_status_lists_title_and_counts(tmp_path: Path):
+    _generated_repo(tmp_path)
+    module = compile_user_docs_module(tmp_path)
+    content = str(_page(module, "adr-status").attributes.get("content") or "")
+    assert "Канонический YAML" in content
+    assert "Принято: 1" in content
+    assert "Не принято: 1" in content
+    assert "ADR-002" in content
+
+
+def test_generated_adr_status_does_not_cover_accepted_adr(tmp_path: Path):
+    _generated_repo(tmp_path, not_covered=[])
+    build_user_docs(tmp_path)
+    errors, _warnings = check_user_docs(tmp_path)
+    assert any("ADR-001" in e and "not_covered" in e for e in errors)
+
+
+def test_generated_cli_commands_include_nested_and_russian_phrase(tmp_path: Path):
+    _generated_repo(tmp_path)
+    module = compile_user_docs_module(tmp_path)
+    content = str(_page(module, "moex-model-commands").attributes.get("content") or "")
+    assert "lock update" in content
+    assert "Переписывает фиксацию." in content
+    viewer = str(_page(module, "viewer-commands").attributes.get("content") or "")
+    assert "build-user-docs" in viewer
+    assert "Собирает документацию." in viewer
+    assert "lock update" not in viewer
+
+
+def test_generated_make_targets_mark_check_membership(tmp_path: Path):
+    _generated_repo(tmp_path)
+    module = compile_user_docs_module(tmp_path)
+    content = str(_page(module, "make-targets").attributes.get("content") or "")
+    assert "make user-docs" in content
+    assert "Имя совпадает с шагом общей проверки." in content
+    assert "make drawdb-up" in content
+    assert "В общую проверку не входит." in content
+
+
+def test_generated_check_steps_keep_source_order(tmp_path: Path):
+    _generated_repo(tmp_path)
+    module = compile_user_docs_module(tmp_path)
+    content = str(_page(module, "check-steps").attributes.get("content") or "")
+    assert content.find("user-docs") < content.find("slice-cli")
+    assert "Сверяет страницы." in content
+
+
+def test_missing_command_phrase_is_error(tmp_path: Path):
+    phrases = {
+        "draft": True,
+        "moex-model": {
+            "lock": "Фиксирует состав.",
+            "lock update": "Переписывает фиксацию.",
+        },
+        "moex-publication-viewer": _PHRASES["moex-publication-viewer"],
+        "make": _PHRASES["make"],
+        "check_all": _PHRASES["check_all"],
+    }
+    _generated_repo(tmp_path, descriptions=phrases)
+    try:
+        compile_user_docs_module(tmp_path)
+        assert False, "expected UserDocsError"
+    except UserDocsError as exc:
+        assert any("validate" in e and "missing" in e for e in exc.errors)
+
+
+def test_unknown_command_phrase_is_error(tmp_path: Path):
+    phrases = {
+        "draft": True,
+        "moex-model": {**_PHRASES["moex-model"], "retired": "Уже нет."},
+        "moex-publication-viewer": _PHRASES["moex-publication-viewer"],
+        "make": _PHRASES["make"],
+        "check_all": _PHRASES["check_all"],
+    }
+    _generated_repo(tmp_path, descriptions=phrases)
+    try:
+        compile_user_docs_module(tmp_path)
+        assert False, "expected UserDocsError"
+    except UserDocsError as exc:
+        assert any("retired" in e and "unknown" in e for e in exc.errors)
+
+
+def test_empty_command_phrase_is_error(tmp_path: Path):
+    phrases = {
+        "draft": True,
+        "moex-model": {**_PHRASES["moex-model"], "validate": "  "},
+        "moex-publication-viewer": _PHRASES["moex-publication-viewer"],
+        "make": _PHRASES["make"],
+        "check_all": _PHRASES["check_all"],
+    }
+    _generated_repo(tmp_path, descriptions=phrases)
+    try:
+        compile_user_docs_module(tmp_path)
+        assert False, "expected UserDocsError"
+    except UserDocsError as exc:
+        assert any("validate" in e and "empty" in e for e in exc.errors)
+
+
+def test_descriptions_draft_and_verified_at_conflict(tmp_path: Path):
+    phrases = {**_PHRASES, "verified_at": "2099-01-01"}
+    _generated_repo(tmp_path, descriptions=phrases)
+    try:
+        compile_user_docs_module(tmp_path)
+        assert False, "expected UserDocsError"
+    except UserDocsError as exc:
+        assert any("verified_at" in e for e in exc.errors)
+
+
+def test_descriptions_draft_warns(tmp_path: Path):
+    _generated_repo(tmp_path)
+    build_user_docs(tmp_path)
+    errors, warnings = check_user_docs(tmp_path)
+    assert not any("ADR-001" in e and "not mentioned" in e for e in errors)
+    assert any("descriptions.yaml" in w and "draft" in w for w in warnings)
+
+
+def test_unknown_generated_kind_is_error(tmp_path: Path):
+    _generated_repo(
+        tmp_path,
+        extra_pages=[{"id": "nope", "generated": "nope", "title": "Нет"}],
+        descriptions={"draft": True},
+        extra_files={},
+    )
+    try:
+        compile_user_docs_module(tmp_path)
+        assert False, "expected UserDocsError"
+    except UserDocsError as exc:
+        assert any("unknown generated kind" in e for e in exc.errors)
