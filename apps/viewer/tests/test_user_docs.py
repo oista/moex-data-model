@@ -301,6 +301,62 @@ def test_check_not_covered_satisfies(tmp_path: Path):
     assert errors == []
 
 
+def test_check_tail_only_adr_does_not_cover(tmp_path: Path):
+    _write_user_docs(
+        tmp_path,
+        not_covered=[],
+        page_body=(
+            "Краткое описание продукта.\n\n"
+            "Где прочитать решение: [ADR-001](docs/adr/ADR-001-sample.md).\n"
+        ),
+        sources=[
+            "docs/architecture/MODELING_ARCHITECTURE.md",
+            "docs/adr/ADR-001-sample.md",
+        ],
+    )
+    build_user_docs(tmp_path)
+    errors, _warnings = check_user_docs(tmp_path)
+    assert any("ADR-001" in e and "not_covered" in e for e in errors)
+
+
+def test_check_paragraph_adr_covers(tmp_path: Path):
+    _write_user_docs(
+        tmp_path,
+        not_covered=[],
+        page_body="Правило записано в YAML (ADR-001).\n",
+        sources=[
+            "docs/architecture/MODELING_ARCHITECTURE.md",
+            "docs/adr/ADR-001-sample.md",
+        ],
+    )
+    build_user_docs(tmp_path)
+    errors, _warnings = check_user_docs(tmp_path)
+    assert not any("ADR-001" in e and "not_covered" in e for e in errors)
+
+
+def test_check_glossary_only_adr_does_not_cover(tmp_path: Path):
+    _write_user_docs(
+        tmp_path,
+        not_covered=[],
+        glossary_terms=[
+            {
+                "id": "modeling-standard",
+                "term": "Стандарт",
+                "short": "Язык модели.",
+                "explanation": "Формализм для записи модели (ADR-001).",
+                "see_also": [],
+                "sources": [
+                    "docs/architecture/MODELING_ARCHITECTURE.md",
+                    "docs/adr/ADR-001-sample.md",
+                ],
+            },
+        ],
+    )
+    build_user_docs(tmp_path)
+    errors, _warnings = check_user_docs(tmp_path)
+    assert any("ADR-001" in e and "not_covered" in e for e in errors)
+
+
 def test_check_stale_verified_at_is_warning(tmp_path: Path, monkeypatch):
     _write_user_docs(tmp_path, verified_at="2000-01-01")
     build_user_docs(tmp_path)
