@@ -25,4 +25,4 @@ draft: true
 
 Элемент, который миграция или импорт собрали не до конца, помечают списком `tags` значением `transitional`. Других переходных значений нет. Поле `annotations.transitional` для этого не используют. Метки разделов в `publish.yaml` к этому списку не относятся (ADR-043). Снять метку можно только отдельным изменением данных, после того как идентичность элемента подтверждена.
 
-Где прочитать решения: [ADR-044](docs/adr/ADR-044-model-element-decomposition.md), [ADR-053](docs/adr/ADR-053-qualified-assertion.md), [ADR-050](docs/adr/ADR-050-containment-parent-refs.md), [ADR-043](docs/adr/ADR-043-transitional-tags-registry.md).
+Где прочитать решения: [ADR-044](docs/adr/ADR-044-model-element-decomposition.md), [ADR-053](docs/adr/ADR-053-qualified-assertion.md), [ADR-050](docs/adr/ADR-050-containment-parent-refs.md). Остальные номера названы выше, рядом со своим смыслом.
