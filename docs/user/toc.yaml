@@ -44,6 +44,29 @@ chapters:
       - id: external-ontologies
         path: 10-concepts/external-ontologies.md
         title: Внешние онтологии
+  - id: reference
+    title: Справочник
+    pages:
+      - id: moex-model-commands
+        generated: cli-commands
+        tool: moex-model
+        title: Команды moex-model
+      - id: viewer-commands
+        generated: cli-commands
+        tool: moex-publication-viewer
+        title: Команды просмотра
+      - id: make-targets
+        generated: make-targets
+        title: Цели сборки
+      - id: check-steps
+        generated: check-steps
+        title: Шаги общей проверки
+      - id: addresses
+        path: 90-reference/addresses.md
+        title: Адреса и префиксы
+      - id: normative-docs
+        path: 90-reference/normative-docs.md
+        title: Нормативные документы
   - id: glossary
     title: Глоссарий
 not_covered:
@@ -63,8 +86,6 @@ not_covered:
     reason: "ещё не описано: нет главы о том, как реализация наследует контракт публикации"
   - adr: ADR-022
     reason: "ещё не описано: нет сценария импорта из таблицы"
-  - adr: ADR-030
-    reason: "ещё не описано: правила адресов схемы не вынесены в справочник"
   - adr: ADR-043
     reason: "ещё не описано: служебный реестр переходных меток не разобран"
   - adr: ADR-044
