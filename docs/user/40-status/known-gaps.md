@@ -4,13 +4,10 @@ sources:
   - docs/adr/ADR-002-git-published-source.md
   - docs/adr/ADR-003-postgres-operational.md
   - docs/adr/ADR-045-executable-constraint-matrix.md
-  - docs/adr/ADR-057-user-documentation.md
   - docs/architecture/MODELING_ARCHITECTURE.md
   - docs/architecture/linkml_architecture.md
   - docs/guides/adding-an-invariant.md
   - README.md
-  - .cursor/rules/user-docs.mdc
-  - scripts/check_all.py
   - apps/api/src/moex_model_api/db/session.py
   - infra/compose/postgres.yml
 draft: true
@@ -25,8 +22,6 @@ draft: true
 Черновик рабочей среды в конце пишет, что проекты решений имеют статус Proposed. Это [linkml_architecture.md](docs/architecture/linkml_architecture.md), сам файл в статусе Draft. У многих решений в собственной шапке статус Accepted. Права шапка решения: принятое решение стоит выше черновика. Фраза в конце черновика устарела.
 
 У [MODELING_ARCHITECTURE.md](docs/architecture/MODELING_ARCHITECTURE.md) в шапке сразу `status: Proposed` и `normative: true`. Корень репозитория зовёт этот файл нормативным и тут же пишет, что он Proposed 0.2. Пока статус Proposed, файл не перекрывает принятое решение. Слово «нормативный» не делает его принятым. На три роли продукта по-прежнему опираются здесь, потому что отдельного принятого решения про них нет. Где файл расходится с принятым решением, побеждает решение.
-
-[ADR-057](docs/adr/ADR-057-user-documentation.md) описывает эту документацию и всё ещё Proposed. При этом общая проверка уже гоняет шаг `user-docs` из `scripts/check_all.py`, а правило для агентов в `.cursor/rules/user-docs.mdc` повторяет этот текст. Статус прав в том, что решение ещё не принято и нормой не стало. Проверка и правило — это уже поведение репозитория, их статус не отменяет. Принять решение может только человек, отдельным шагом.
 
 Единственная инструкция, как добавить строку в матрицу проверок, — [adding-an-invariant.md](docs/guides/adding-an-invariant.md). У неё статус Proposed. Само решение [ADR-045](docs/adr/ADR-045-executable-constraint-matrix.md) принято. Корень репозитория указывает на инструкцию как на руководство и не говорит, что она не принята. Правы принятое решение и матрица проверок. Инструкция — записанный порядок, по ней нельзя рассказывать, будто так уже решено.
 
