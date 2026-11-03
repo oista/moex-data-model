@@ -40,6 +40,8 @@ DEFERRED_CHAPTER_ID = "not-yet-told"
 DEFERRED_CHAPTER_TITLE = "Что ещё не рассказано"
 DEFERRED_PAGE_ID = "accepted-not-told"
 DEFERRED_PAGE_TITLE = "Принятые решения без страницы"
+# ADR ids on these lines do not count as page coverage (ADR-057 D4).
+WHERE_TO_READ_PREFIX = "Где прочитать"
 
 GLOSSARY_LINK_RE = re.compile(r"\[([^\]]+)\]\(glossary:([A-Za-z0-9_-]+)\)")
 MD_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
@@ -145,6 +147,16 @@ def _adr_ids_in_text(text: str) -> set[str]:
         if parsed:
             found.add(f"ADR-{int(parsed.group(1)):03d}")
     return found
+
+
+def _body_for_adr_coverage(body: str) -> str:
+    """Drop «Где прочитать…» lines; a tail link alone is not coverage."""
+    lines = []
+    for line in str(body or "").splitlines():
+        if line.lstrip().startswith(WHERE_TO_READ_PREFIX):
+            continue
+        lines.append(line)
+    return "\n".join(lines)
 
 
 def _adr_rel_path(root: Path, adr_id: str) -> str | None:
@@ -1003,7 +1015,9 @@ def check_user_docs(root: Path) -> tuple[list[str], list[str]]:
             errors.extend(_deferred_visibility_errors(content, not_covered))
 
     scan_blob = "\n".join(
-        str(r.get("body") or "") for r in records if not r.get("generated")
+        _body_for_adr_coverage(str(r.get("body") or ""))
+        for r in records
+        if not r.get("generated") and r.get("kind") != "term"
     )
     mentioned = {m.group(0).upper() for m in ADR_MENTION_RE.finditer(scan_blob)}
     mentioned_norm = set()
