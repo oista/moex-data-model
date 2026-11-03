@@ -67,6 +67,15 @@ chapters:
       - id: normative-docs
         path: 90-reference/normative-docs.md
         title: Нормативные документы
+  - id: status
+    title: Состояние
+    pages:
+      - id: decision-status
+        generated: adr-status
+        title: Статусы решений
+      - id: known-gaps
+        path: 40-status/known-gaps.md
+        title: Известные расхождения
   - id: glossary
     title: Глоссарий
 not_covered:
