@@ -73,7 +73,7 @@ Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decision
 | [ADR-054](ADR-054-repository-aggregates-and-manifest.md) | Repository aggregates and manifest (P1b) | Accepted | validation composite; package-only DocumentKind; path-scoped orphans; INV-058 global element_id |
 | [ADR-055](ADR-055-integration-source-of-truth.md) | Integration source of truth (Clinkr/EAM topology; audit Wave F) | Accepted | Integration SoT; audit 0.2 remap; P2 backlog |
 | [ADR-056](ADR-056-requirements-backbone.md) | Requirements backbone (normative CDM/LDM/PDM rules) | Accepted | requirements catalog spine; see requirements-inventory.md |
-| [ADR-057](ADR-057-user-documentation.md) | Пользовательская документация как описание текущего состояния | Proposed | docs/user; shell via Publication Viewer; series PR-0…PR-4 |
+| [ADR-057](ADR-057-user-documentation.md) | Пользовательская документация как описание текущего состояния | Accepted | docs/user; shell via Publication Viewer; series PR-0…PR-4 |
 
 ## How to accept
 

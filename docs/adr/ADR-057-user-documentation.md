@@ -1,5 +1,5 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
 normative: false
 supersedes: []
@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-057: Пользовательская документация как описание текущего состояния
 
 **Date:** 2026-11-02  
-**Status:** Proposed  
+**Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Related:** [ADR-015](ADR-015-viewer-ui-atlas.md), [ADR-016](ADR-016-publication-section-kinds-and-profiles.md), [ADR-028](ADR-028-package-documentation-section.md)  
 **Plan:** [.cursor/plans/moex-data-model_user_documentation_c2ba011f.plan.md](../../.cursor/plans/moex-data-model_user_documentation_c2ba011f.plan.md)
@@ -233,8 +233,8 @@ Cursor-правило для агентов повторяет эту обяза
 | PR-4 | правило для агентов и правка корневого README |
 
 Первая серия вводит документацию. Вторая дописывает главы, которых в ней нет.
-Статус ADR от номера серии не зависит и остаётся Proposed, пока человек его
-не примет.
+Статус ADR от номера серии не зависит. Решение принято отдельно, после того
+как главы второй серии написаны.
 
 ### Вторая серия: недостающие главы
 
@@ -249,8 +249,8 @@ Cursor-правило для агентов повторяет эту обяза
 | PR-6 | «Как это работает» |
 | PR-7 | подчистка уже написанных страниц и предложение принять ADR |
 
-Противоречие в D2 снято. В Accepted этот ADR переводят отдельным решением
-человека, когда главы второй серии написаны. Агент статус сам не меняет.
+Противоречие в D2 снято. Решение принято отдельным шагом человека, когда
+главы второй серии написаны. Агент статус сам не меняет.
 
 ## Consequences
 
