@@ -14,6 +14,10 @@ venv/
 auth/*
 !auth/.gitkeep
 
+# Local GitLab CA for the compose mount. The directory itself stays.
+certs/*.pem
+!certs/.gitkeep
+
 # Air-gap pack output (ADR-058). Built on a machine with Docker, not committed.
 reports/docker/
 
