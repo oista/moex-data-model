@@ -51,6 +51,7 @@ OVERLAY_TREES = (
 OVERLAY_FILES = (
     "docker/models-sync.sh",
     "docker/nginx.conf",
+    "docker/40-moex-auth.sh",
 )
 WEB_DIST = "apps/web/dist"
 
@@ -575,6 +576,9 @@ USER root
 RUN rm -rf /usr/share/nginx/html
 COPY apps/web/dist /usr/share/nginx/html
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker/40-moex-auth.sh /docker-entrypoint.d/40-moex-auth.sh
+RUN sed -i 's/\\r$//' /docker-entrypoint.d/40-moex-auth.sh \\
+    && chmod 755 /docker-entrypoint.d/40-moex-auth.sh
 ARG MOEX_GIT_SHA=
 ARG MOEX_PARENT_TAG=
 LABEL moexmodel.git_sha="${{MOEX_GIT_SHA}}" \\

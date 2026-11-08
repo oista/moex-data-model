@@ -10,6 +10,10 @@ build/
 venv/
 .env
 
+# nginx basic-auth passwords. The directory stays; the file does not.
+auth/*
+!auth/.gitkeep
+
 # Air-gap pack output (ADR-058). Built on a machine with Docker, not committed.
 reports/docker/
 
