@@ -54,6 +54,12 @@ COPY docker/models-sync.sh ./docker/models-sync.sh
 RUN sed -i 's/\r$//' /app/docker/models-sync.sh \
     && chmod 755 /app/docker/models-sync.sh
 
+# Editable installs accept linkml>=1.7,<2, which currently resolves to 1.12.
+# 1.12 imports linkml_runtime.utils.rdf_canonicalize, missing from the
+# viewer's pin linkml-runtime==1.11.1. Stay on the toolchain in
+# requirements-linkml.txt so publish-gate can import inside this image.
+RUN pip install "linkml==1.11.1" "linkml-runtime==1.11.1"
+
 USER moex
 
 ARG DEPS_FINGERPRINT=
