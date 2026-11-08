@@ -22,6 +22,6 @@ RUN sed -i 's/\r$//' /docker-entrypoint.d/40-moex-auth.sh \
     && chmod 755 /docker-entrypoint.d/40-moex-auth.sh
 COPY --from=build /src/dist /usr/share/nginx/html
 RUN mkdir -p /usr/share/nginx/viewer \
-    && chown nginx:nginx /usr/share/nginx/viewer
+    && chown 10001:10001 /usr/share/nginx/viewer
 
 EXPOSE 80

@@ -160,6 +160,7 @@ pack-full:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/pack-docker-images.ps1 -Mode Full
 
 pack-contour:
+	$(if $(PARENT_TAG),,$(error pack-contour needs PARENT_TAG, the last Full version already on the server))
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/pack-docker-images.ps1 -Contour -ParentTag $(PARENT_TAG)
 
 # Stage 0 gate: contracts → slice → schemas → examples → golden → architecture-check
