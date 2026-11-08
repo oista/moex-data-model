@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check viewer-serve user-docs user-docs-check packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements check-constraints dams-packages-check generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate digest-check ontology-check check-manifest lock-verify check-topology check-governance pack-full pack-contour
+.PHONY: viewer viewer-check viewer-serve user-docs user-docs-check packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements check-constraints dams-packages-check generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate digest-check ontology-check check-manifest lock-verify check-topology check-governance pack-full pack-contour models-repo-check
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -162,6 +162,10 @@ pack-full:
 pack-contour:
 	$(if $(PARENT_TAG),,$(error pack-contour needs PARENT_TAG, the last Full version already on the server))
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/pack-docker-images.ps1 -Contour -ParentTag $(PARENT_TAG)
+
+# ADR-058 D7: owned paths must still pass the model checks. Outside check_all.
+models-repo-check:
+	$(PYTHON) scripts/export_models_repo.py verify
 
 # Stage 0 gate: contracts → slice → schemas → examples → golden → architecture-check
 # → dams-packages-check → manifest/lock/topology/governance → publish-gate → user-docs.
