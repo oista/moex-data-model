@@ -13,9 +13,15 @@ from __future__ import annotations
 import json
 import os
 import sys
+import time
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+from starlette.responses import JSONResponse, Response
+
+from moex_model_api.auth import PUBLIC_PATHS
 from moex_model_cli.bootstrap import MARKER, find_repo_root
 
 CONTRACTS_MANIFEST_REL = Path("generated/manifests/moex-dams-contracts.json")
@@ -104,6 +110,50 @@ def check_models(models: Path, image_manifest: Path) -> ModelsPreflight:
         schema_version=version,
         problems=problems,
     )
+
+
+def models_ready_required() -> bool:
+    raw = os.environ.get("MOEX_REQUIRE_MODELS_READY", "").strip().lower()
+    return raw in {"1", "true", "yes"}
+
+
+def _ready_ttl_seconds() -> float:
+    raw = os.environ.get("MOEX_MODELS_READY_TTL", "5").strip()
+    try:
+        return max(0.0, float(raw))
+    except ValueError:
+        return 5.0
+
+
+class ModelsReadyMiddleware(BaseHTTPMiddleware):
+    """Answer 503 until the models checkout matches this process.
+
+    The process stays up: on a first install the models volume is empty
+    until sync clones it. ``/health`` and ``/ready`` stay open. The flag
+    defaults off so a local process accepts requests immediately.
+    """
+
+    def __init__(self, app: object) -> None:
+        super().__init__(app)  # type: ignore[arg-type]
+        self._cached_at = 0.0
+        self._cached: ModelsPreflight | None = None
+
+    def _report(self) -> ModelsPreflight:
+        now = time.monotonic()
+        if self._cached is not None and now - self._cached_at < _ready_ttl_seconds():
+            return self._cached
+        report = check_models(models_root(), image_manifest_path())
+        self._cached = report
+        self._cached_at = now
+        return report
+
+    async def dispatch(self, request: Request, call_next) -> Response:
+        if not models_ready_required() or request.url.path in PUBLIC_PATHS:
+            return await call_next(request)
+        report = self._report()
+        if report.status != "ready":
+            return JSONResponse(report.to_dict(), status_code=503)
+        return await call_next(request)
 
 
 def main(argv: list[str] | None = None) -> int:

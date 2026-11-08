@@ -160,3 +160,78 @@ def test_ready_endpoint_uses_models_root(
     payload = response.json()
     assert payload["status"] == "ready"
     assert payload["schema_version"] == "5.5.0"
+
+
+def _gate(monkeypatch: pytest.MonkeyPatch, tmp_path: Path, *, ready: bool) -> TestClient:
+    models = tmp_path / "models"
+    image = tmp_path / "image" / CONTRACTS_MANIFEST_REL
+    if ready:
+        body = _manifest()
+        _write_models(models, body)
+    else:
+        models.mkdir()
+        body = _manifest()
+    image.parent.mkdir(parents=True, exist_ok=True)
+    image.write_text(json.dumps(body), encoding="utf-8")
+    monkeypatch.setenv("MOEX_REQUIRE_MODELS_READY", "1")
+    monkeypatch.setenv("MOEX_MODELS_READY_TTL", "0")
+    monkeypatch.setenv("MOEX_MODELS_ROOT", str(models))
+    monkeypatch.setenv("MOEX_IMAGE_CONTRACTS_MANIFEST", str(image))
+    monkeypatch.delenv("MOEX_AUTH_MODE", raising=False)
+    return TestClient(create_app(database_url="sqlite:///:memory:"))
+
+
+def test_ready_gate_503_when_models_empty(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    with _gate(monkeypatch, tmp_path, ready=False) as client:
+        blocked = client.get("/implementations")
+        health = client.get("/health")
+        ready = client.get("/ready")
+    assert blocked.status_code == 503
+    assert blocked.json()["status"] == "not_ready"
+    assert health.status_code == 200
+    assert ready.status_code == 503
+
+
+def test_ready_gate_503_when_schema_differs(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    models = tmp_path / "models"
+    image = tmp_path / "image" / CONTRACTS_MANIFEST_REL
+    _write_models(models, _manifest(schema_digest="sha256:clone"))
+    image.parent.mkdir(parents=True)
+    image.write_text(
+        json.dumps(_manifest(schema_digest="sha256:image")),
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("MOEX_REQUIRE_MODELS_READY", "1")
+    monkeypatch.setenv("MOEX_MODELS_READY_TTL", "0")
+    monkeypatch.setenv("MOEX_MODELS_ROOT", str(models))
+    monkeypatch.setenv("MOEX_IMAGE_CONTRACTS_MANIFEST", str(image))
+    monkeypatch.delenv("MOEX_AUTH_MODE", raising=False)
+    with TestClient(create_app(database_url="sqlite:///:memory:")) as client:
+        response = client.get("/implementations")
+    assert response.status_code == 503
+    assert response.json()["contracts_match"] is False
+
+
+def test_ready_gate_opens_after_models_match(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    with _gate(monkeypatch, tmp_path, ready=True) as client:
+        response = client.get("/implementations")
+    assert response.status_code == 200
+
+
+def test_ready_gate_off_by_default(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    models = tmp_path / "models"
+    models.mkdir()
+    monkeypatch.delenv("MOEX_REQUIRE_MODELS_READY", raising=False)
+    monkeypatch.setenv("MOEX_MODELS_ROOT", str(models))
+    monkeypatch.delenv("MOEX_AUTH_MODE", raising=False)
+    with TestClient(create_app(database_url="sqlite:///:memory:")) as client:
+        response = client.get("/implementations")
+    assert response.status_code != 503
