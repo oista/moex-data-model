@@ -1,0 +1,10 @@
+# Replace @moex-spec-sync with the GitLab group that opens spec-sync
+# merge requests. Those paths are not edited by hand in this project.
+
+[Schemas from the program repository]
+model-assets/specifications/ @moex-spec-sync
+model-assets/standards/ @moex-spec-sync
+model-assets/external-sources/ @moex-spec-sync
+generated/ @moex-spec-sync
+packages/ontology/publications/ @moex-spec-sync
+packages/ontology/publish.yaml @moex-spec-sync

@@ -1,0 +1,37 @@
+# ADR-058 D7. Paths are relative to the monorepo root.
+# Every first-level directory under model-assets/ belongs to exactly one owner.
+# exclude names are not copied as trees. packages/ontology/publications is the
+# only path under packages/ that leaves this repository.
+
+gitlab_owned:
+  - model-assets/implementations
+  - model-assets/external-selections
+  - model-assets/transformations
+  - model-assets/external-scopes
+  - model-assets/catalog-snapshots
+
+code_owned:
+  - model-assets/specifications
+  - model-assets/standards
+  - model-assets/external-sources
+  - generated
+  - packages/ontology/publications
+  - packages/ontology/publish.yaml
+
+# Copied from deploy/models-repo/ onto the models repository root.
+root_files:
+  - README.md
+  - CODEOWNERS
+
+exclude:
+  - apps
+  - packages
+  - tests
+  - docs
+  - scripts
+  - tools
+  - infra
+  - .venv
+  - .pytest_cache
+  - output
+  - tmp
