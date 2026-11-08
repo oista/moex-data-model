@@ -26,7 +26,12 @@ from moex_model_cli.asset_registry import FilesystemImplementationCatalog
 from moex_model_cli.bootstrap import find_repo_root
 from moex_model_cli.commands.compile import run_compile
 from moex_model_api.auth import select_auth_middleware
-from moex_model_api.preflight import check_models, image_manifest_path, models_root
+from moex_model_api.preflight import (
+    ModelsReadyMiddleware,
+    check_models,
+    image_manifest_path,
+    models_root,
+)
 from moex_model_api.db import models as orm
 from moex_model_api.db.session import init_db, make_engine, session_factory
 from moex_model_api.db.stores import (
@@ -383,6 +388,8 @@ def create_app(
 
     app = FastAPI(title="MOEX Model API", version="0.5.0")
     app.add_middleware(select_auth_middleware())
+    # Added last, so it runs first: 503 before auth while models are not ready.
+    app.add_middleware(ModelsReadyMiddleware)
     app.state.engine = engine
     app.state.session_factory = factory
     app.state.git_provider = git_provider or make_git_provider(repo_root=repo_root)

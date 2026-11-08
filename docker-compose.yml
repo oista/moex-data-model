@@ -15,6 +15,7 @@ services:
     environment:
       MOEX_API_HOST: ${MOEX_API_HOST:-0.0.0.0}
       MOEX_API_PORT: ${MOEX_API_PORT:-8000}
+      MOEX_REQUIRE_MODELS_READY: ${MOEX_REQUIRE_MODELS_READY:-1}
       MOEX_DATABASE_URL: ${MOEX_DATABASE_URL:-sqlite:////data/moex_api.sqlite}
       MOEX_AUTH_MODE: ${MOEX_AUTH_MODE:-dev}
       MOEX_AUTH_HEADER: ${MOEX_AUTH_HEADER:-X-Remote-User}
