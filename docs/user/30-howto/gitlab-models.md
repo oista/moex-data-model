@@ -8,6 +8,7 @@ sources:
   - scripts/export_models_repo.py
   - docker-compose.yml
   - .env.example
+  - docker/models-sync.sh
   - deploy/models-repo/.gitlab-ci.yml
   - apps/api/src/moex_model_api/app.py
   - deploy/models-repo/CODEOWNERS
@@ -40,7 +41,7 @@ draft: true
 
 ## Значения на сервере
 
-`MOEX_GIT_PROVIDER=gitlab`. `MOEX_GITLAB_URL` — адрес локального GitLab, как его видит контейнер, не `localhost` контейнера. `MOEX_GITLAB_PROJECT` — `группа/moex-models` или числовой id. `MOEX_GITLAB_BASE=main`. `MOEX_MODELS_GIT_URL` — `https://…/moex-models.git`. `MOEX_MODELS_GIT_REF=main`. `MOEX_MODELS_SYNC_INTERVAL` — секунды между заборами, по умолчанию 300. `MOEX_AUTH_MODE=trusted-header`. Порт 8000 наружу не публикуют: интерфейс открыт только через nginx веб-приложения.
+`MOEX_GIT_PROVIDER=gitlab`. `MOEX_GITLAB_URL` — адрес локального GitLab, как его видит контейнер, не `localhost` контейнера. `MOEX_GITLAB_PROJECT` — `группа/moex-models` или числовой id. `MOEX_GITLAB_BASE=main`. `MOEX_MODELS_GIT_URL` — `https://…/moex-models.git`. `MOEX_MODELS_GIT_REF=main`. `MOEX_MODELS_SYNC_INTERVAL` — секунды между заборами, по умолчанию 60. Сборка просмотра начинается только после того, как закончилась предыдущая, даже если она длилась дольше интервала. `MOEX_AUTH_MODE=trusted-header`. Порт 8000 наружу не публикуют: интерфейс открыт только через nginx веб-приложения.
 
 Если сертификат GitLab внутренний, файл CA кладут в `./certs/gitlab-ca.pem` и пишут `MOEX_GITLAB_CA_BUNDLE=/certs/gitlab-ca.pem`. Каталог `certs` смонтирован в контейнеры интерфейса и синхронизации. Для публичного сертификата переменную оставляют пустой.
 
