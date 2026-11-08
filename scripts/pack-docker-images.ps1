@@ -75,8 +75,12 @@ function Ensure-Dir([string]$Path) {
 
 function Invoke-Python {
     param([string[]]$PythonArgs)
-    & python @PythonArgs
+    # Keep python's stdout off this function's pipeline. Otherwise a printed
+    # path is returned together with the real result and the contour zip
+    # stores that file twice.
+    $output = & python @PythonArgs
     if ($LASTEXITCODE -ne 0) { throw "python $($PythonArgs -join ' ') failed" }
+    if ($output) { $output | Out-Host }
 }
 
 function Get-DepsFingerprint {
