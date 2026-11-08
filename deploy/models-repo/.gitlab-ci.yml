@@ -1,0 +1,36 @@
+# Checks for the models repository. The pipeline stays empty until the
+# GitLab project defines MOEX_MODELS_CI=1. The runner is expected to already
+# have moex-data-model-api loaded (pull_policy: if-not-present).
+
+workflow:
+  rules:
+    - if: '$MOEX_MODELS_CI == "1"'
+    - when: never
+
+# MODEL_TAG must name an image the runner already has. "local" matches a
+# development tag; on a closed runner set it to the tag from the last delivery.
+variables:
+  MODEL_TAG: "local"
+
+default:
+  image: moex-data-model-api:$MODEL_TAG
+  pull_policy: if-not-present
+
+models-check:
+  rules:
+    - if: '$MOEX_MODELS_CI == "1"'
+  script:
+    - moex-model check-manifest --root .
+    - echo "If lock verify fails after an edit from the UI, run moex-model lock update --root . on this merge request branch and commit manifest.lock."
+    - moex-model lock verify --root .
+    - python -m moex_dams.catalog.cli check --root .
+    - python -m moex_dams.governance.cli check --root .
+    - python -m moex_publication_viewer.cli build --root . --dist /tmp/viewer
+    - python -m moex_model_api.preflight
+
+semantic-diff:
+  allow_failure: true
+  rules:
+    - if: '$MOEX_MODELS_CI == "1" && $CI_PIPELINE_SOURCE == "merge_request_event"'
+  script:
+    - moex-model semantic-diff --from "$CI_MERGE_REQUEST_DIFF_BASE_SHA" --to HEAD

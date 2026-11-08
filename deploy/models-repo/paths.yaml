@@ -22,6 +22,7 @@ code_owned:
 root_files:
   - README.md
   - CODEOWNERS
+  - .gitlab-ci.yml
 
 exclude:
   - apps
