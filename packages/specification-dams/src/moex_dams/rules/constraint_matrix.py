@@ -286,7 +286,9 @@ def _collect_invariant_ids(diags: list[Any]) -> set[str]:
     return out
 
 
-def _run_l2_package_checks(data: dict[str, Any]) -> list[Any]:
+def _run_l2_package_checks(
+    data: dict[str, Any], root: Path | None = None
+) -> list[Any]:
     """Run L2 package checks once (technical_assets already includes data_structures)."""
     from moex_dams.rules.catalog_topology import check_catalog_topology
     from moex_dams.rules.conceptual_entity import check_conceptual_entities
@@ -300,13 +302,16 @@ def _run_l2_package_checks(data: dict[str, Any]) -> list[Any]:
     from moex_dams.rules.structural import check_structural_data
     from moex_dams.rules.technical_assets import check_technical_assets
 
+    # Default stays the checkout that contains this file. The image keeps code
+    # under /app and the models volume elsewhere, so the gate passes that root.
+    root = root or repo_root()
     diags: list[Any] = []
     # Repository composite fixtures (INV-058): uniqueness across model_packages.
     if isinstance(data.get("model_packages"), list):
         diags.extend(check_repository_element_id_uniqueness(data))
     diags.extend(check_semantic_layer(data))
     diags.extend(check_technical_assets(data))
-    diags.extend(check_catalog_topology(data, repo_root=repo_root()))
+    diags.extend(check_catalog_topology(data, repo_root=root))
     diags.extend(check_conceptual_entities(data))
     diags.extend(check_relation_terms(data))
     diags.extend(check_structural_data(data))
@@ -362,7 +367,7 @@ def _run_l2_fixtures(
         if not isinstance(data, dict):
             errors.append(f"{iid}: L2 valid fixture must be a mapping: {vp}")
             continue
-        ids = _collect_invariant_ids(_run_l2_package_checks(data))
+        ids = _collect_invariant_ids(_run_l2_package_checks(data, root))
         if iid in ids:
             errors.append(f"{iid}: L2 valid fixture must not emit {iid}: {vp}")
 
@@ -380,7 +385,7 @@ def _run_l2_fixtures(
             if not isinstance(data, dict):
                 errors.append(f"{iid}: L2 invalid fixture must be a mapping: {ip}")
                 continue
-            diags = _run_l2_package_checks(data)
+            diags = _run_l2_package_checks(data, root)
         matched = [d for d in diags if _diag_matches_inv(d, iid)]
         if not matched:
             errors.append(

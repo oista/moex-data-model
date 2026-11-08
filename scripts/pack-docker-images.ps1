@@ -75,8 +75,12 @@ function Ensure-Dir([string]$Path) {
 
 function Invoke-Python {
     param([string[]]$PythonArgs)
-    & python @PythonArgs
+    # Keep python's stdout off this function's pipeline. Otherwise a printed
+    # path is returned together with the real result and the contour zip
+    # stores that file twice.
+    $output = & python @PythonArgs
     if ($LASTEXITCODE -ne 0) { throw "python $($PythonArgs -join ' ') failed" }
+    if ($output) { $output | Out-Host }
 }
 
 function Get-DepsFingerprint {
@@ -160,10 +164,30 @@ function New-ContourDropZip {
     return $zipPath
 }
 
+function Write-LfFile([string]$Path, [string]$Text) {
+    # sha256sum and the apply script run on Linux. Set-Content on Windows
+    # writes CRLF, and the CR becomes part of the filename in the sum file.
+    $normalized = ($Text -replace "`r`n", "`n" -replace "`r", "`n")
+    if (-not $normalized.EndsWith("`n")) { $normalized += "`n" }
+    [System.IO.File]::WriteAllText($Path, $normalized)
+}
+
 function Get-ComposeImageId([string]$Service) {
-    $id = (& docker compose -f docker-compose.yml images -q $Service 2>$null | Select-Object -First 1)
-    if (-not $id) {
-        throw "No image id for compose service '$Service'; run build first"
+    # The tag compose just built. `docker compose images` follows containers
+    # that are already running, and tagging that id back onto $MODEL_TAG
+    # replaces the new image with the old one.
+    $ref = switch ($Service) {
+        "model-api" { "${ImageApi}:$($env:MODEL_TAG)" }
+        "model-web" { "${ImageWeb}:$($env:MODEL_TAG)" }
+        default { throw "unknown service $Service" }
+    }
+    $prevEap = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    $id = (& docker image inspect $ref --format "{{.Id}}" 2>$null)
+    $code = $LASTEXITCODE
+    $ErrorActionPreference = $prevEap
+    if ($code -ne 0 -or -not $id) {
+        throw "No image id for $ref; run build first"
     }
     return $id.Trim()
 }
@@ -340,7 +364,7 @@ function Invoke-OverlayPack {
 
     $hash = (Get-FileHash -Algorithm SHA256 -Path $zipPath).Hash.ToLowerInvariant()
     $shaFile = "$zipPath.sha256"
-    "$hash  $zipName" | Set-Content -Path $shaFile -Encoding ascii
+    Write-LfFile $shaFile "$hash  $zipName"
     $sizeBytes = (Get-Item $zipPath).Length
 
     $bundlePath = $null
@@ -366,7 +390,7 @@ function Invoke-OverlayPack {
         $outManifest.config_bundle = (Split-Path $bundlePath -Leaf)
     }
     $manifestFile = Join-Path $Dir "$Prefix-${newTag}-overlay.manifest.json"
-    $outManifest | ConvertTo-Json -Depth 6 | Set-Content -Path $manifestFile -Encoding utf8
+    Write-LfFile $manifestFile ($outManifest | ConvertTo-Json -Depth 6)
 
     Invoke-Retention -Dir $Dir -Keep $KeepLast -PrefixFilter "$Prefix-" -ModeFilter "overlay"
     if ($bundlePath) {
@@ -546,7 +570,7 @@ if ($NoGzip) {
 }
 
 $hash = (Get-FileHash -Algorithm SHA256 -Path $OutFile).Hash.ToLowerInvariant()
-"$hash  $(Split-Path $OutFile -Leaf)" | Set-Content -Path $ShaFile -Encoding ascii
+Write-LfFile $ShaFile "$hash  $(Split-Path $OutFile -Leaf)"
 $sizeBytes = (Get-Item $OutFile).Length
 
 $bundlePath = $null
@@ -568,7 +592,7 @@ $manifest = [ordered]@{
 if ($bundlePath) {
     $manifest.config_bundle = (Split-Path $bundlePath -Leaf)
 }
-$manifest | ConvertTo-Json -Depth 4 | Set-Content -Path $ManifestFile -Encoding utf8
+Write-LfFile $ManifestFile ($manifest | ConvertTo-Json -Depth 4)
 
 Invoke-Retention -Dir $OutDir -Keep $KeepLast -PrefixFilter "$Prefix-" -ModeFilter "full"
 Invoke-Retention -Dir $OutDir -Keep $KeepLast -PrefixFilter "release-bundle-"
