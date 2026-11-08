@@ -1,0 +1,81 @@
+# Local and closed-contour launch.
+# The first -f must stay this file. docker/docker-compose.prod.yml only
+# swaps in already loaded images. Volume paths resolve from this file.
+
+services:
+  model-api:
+    image: moex-data-model-api:${MODEL_TAG:-local}
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+      args:
+        DEPS_FINGERPRINT: ${DEPS_FINGERPRINT:-}
+        MOEX_VERSION: ${MOEX_VERSION:-0.1.0}
+        GIT_SHA: ${GIT_SHA:-unknown}
+    environment:
+      MOEX_API_HOST: ${MOEX_API_HOST:-0.0.0.0}
+      MOEX_API_PORT: ${MOEX_API_PORT:-8000}
+      MOEX_DATABASE_URL: ${MOEX_DATABASE_URL:-sqlite:////data/moex_api.sqlite}
+      MOEX_AUTH_MODE: ${MOEX_AUTH_MODE:-dev}
+      MOEX_AUTH_HEADER: ${MOEX_AUTH_HEADER:-X-Remote-User}
+      MOEX_GIT_PROVIDER: ${MOEX_GIT_PROVIDER:-local}
+      MOEX_GITLAB_URL: ${MOEX_GITLAB_URL:-}
+      MOEX_GITLAB_PROJECT: ${MOEX_GITLAB_PROJECT:-}
+      MOEX_GITLAB_TOKEN: ${MOEX_GITLAB_TOKEN:-}
+      MOEX_GITLAB_BASE: ${MOEX_GITLAB_BASE:-main}
+      MOEX_GITLAB_CA_BUNDLE: ${MOEX_GITLAB_CA_BUNDLE:-}
+      MOEX_MODELS_ROOT: /models
+      MOEX_IMAGE_CONTRACTS_MANIFEST: /app/generated/manifests/moex-dams-contracts.json
+    volumes:
+      - models:/models
+      - data:/data
+    working_dir: /models
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+
+  model-web:
+    image: moex-data-model-web:${MODEL_TAG:-local}
+    build:
+      context: .
+      dockerfile: docker/web.Dockerfile
+    ports:
+      - "${MOEX_WEB_PORT:-8080}:80"
+    volumes:
+      - viewer:/usr/share/nginx/viewer:ro
+    depends_on:
+      model-api:
+        condition: service_healthy
+
+  models-sync:
+    image: moex-data-model-api:${MODEL_TAG:-local}
+    environment:
+      MOEX_MODELS_ROOT: /models
+      MOEX_MODELS_GIT_URL: ${MOEX_MODELS_GIT_URL:-}
+      MOEX_MODELS_GIT_REF: ${MOEX_MODELS_GIT_REF:-main}
+      MOEX_MODELS_DEPLOY_USER: ${MOEX_MODELS_DEPLOY_USER:-}
+      MOEX_MODELS_DEPLOY_TOKEN: ${MOEX_MODELS_DEPLOY_TOKEN:-}
+      MOEX_MODELS_SYNC_INTERVAL: ${MOEX_MODELS_SYNC_INTERVAL:-300}
+      MOEX_VIEWER_DIST: /viewer-dist
+      MOEX_GITLAB_CA_BUNDLE: ${MOEX_GITLAB_CA_BUNDLE:-}
+    volumes:
+      - models:/models
+      - viewer:/viewer-dist
+    command: ["/app/docker/models-sync.sh"]
+    depends_on:
+      model-api:
+        condition: service_started
+
+volumes:
+  models:
+  data:
+  viewer:
