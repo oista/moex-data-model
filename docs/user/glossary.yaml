@@ -653,6 +653,38 @@ terms:
       - overlay-pack
     sources:
       - docs/adr/ADR-058-airgap-image-deploy.md
+  - id: models-repo
+    draft: true
+    term: Репозиторий моделей
+    short: Отдельный проект GitLab, в котором лежит опубликованная модель.
+    explanation: >
+      Репозиторий моделей выделяют из этого репозитория по списку путей.
+      В нём остаются каталоги модели и производные файлы, без кода программ.
+      На сервере рабочая копия этого проекта — то, что читают служебный
+      интерфейс и просмотр. Реализации правят там. Схемы приходят отдельной
+      синхронизацией из репозитория программ.
+    see_also:
+      - spec-sync
+      - published-source
+      - contour-drop
+    sources:
+      - docs/adr/ADR-058-airgap-image-deploy.md
+      - docs/adr/ADR-002-git-published-source.md
+  - id: spec-sync
+    draft: true
+    term: Синхронизация схем
+    short: Запрос на слияние, которым схемы и производные файлы попадают в репозиторий моделей.
+    explanation: >
+      Синхронизация схем копирует в репозиторий моделей только то, чем владеет
+      репозиторий программ: спецификации, стандарты, внешние источники,
+      каталог generated и публикацию FIBO. Реализации она не трогает и
+      останавливается, если они изменились. Это единственный путь схем
+      в локальный GitLab. Откат — обратный запрос на слияние.
+    see_also:
+      - models-repo
+      - reference-specification
+    sources:
+      - docs/adr/ADR-058-airgap-image-deploy.md
   - id: deps-fingerprint
     draft: true
     term: Отпечаток зависимостей
