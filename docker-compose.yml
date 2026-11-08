@@ -30,6 +30,9 @@ services:
     volumes:
       - models:/models
       - data:/data
+      # Present only when the local GitLab certificate is not public.
+      # Create ./certs and set MOEX_GITLAB_CA_BUNDLE. Absent file is ignored.
+      - ./certs:/certs:ro
     working_dir: /models
     healthcheck:
       test:
@@ -78,6 +81,7 @@ services:
     volumes:
       - models:/models
       - viewer:/viewer-dist
+      - ./certs:/certs:ro
     command: ["/app/docker/models-sync.sh"]
     depends_on:
       model-api:
