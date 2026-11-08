@@ -9,6 +9,13 @@ RUN npm run build
 
 FROM nginx:1.27-alpine
 
+ARG DEPS_FINGERPRINT=
+ARG MOEX_VERSION=
+ARG GIT_SHA=
+LABEL moexmodel.deps_fingerprint="${DEPS_FINGERPRINT}" \
+      moexmodel.full_version="${MOEX_VERSION}" \
+      moexmodel.git_sha="${GIT_SHA}"
+
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /src/dist /usr/share/nginx/html
 RUN mkdir -p /usr/share/nginx/viewer \

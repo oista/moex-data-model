@@ -48,6 +48,10 @@ services:
     build:
       context: .
       dockerfile: docker/web.Dockerfile
+      args:
+        DEPS_FINGERPRINT: ${DEPS_FINGERPRINT:-}
+        MOEX_VERSION: ${MOEX_VERSION:-0.1.0}
+        GIT_SHA: ${GIT_SHA:-unknown}
     ports:
       - "${MOEX_WEB_PORT:-8080}:80"
     volumes:

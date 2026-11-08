@@ -1,4 +1,4 @@
-.PHONY: viewer viewer-check viewer-serve user-docs user-docs-check packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements check-constraints dams-packages-check generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate digest-check ontology-check check-manifest lock-verify check-topology check-governance
+.PHONY: viewer viewer-check viewer-serve user-docs user-docs-check packages-check architecture-check linkml-ingest-check vertical-slice-check check check-all validate-schemas lint-schemas validate-examples validate-requirements check-constraints dams-packages-check generate-contracts generate-artifacts generate-bundle compare-golden api-check web-check web-e2e drawdb-up drawdb-adapter-check publish-gate digest-check ontology-check check-manifest lock-verify check-topology check-governance pack-full pack-contour
 
 # Prefer Python 3.11+ (pyproject requires-python). Override: make PYTHON="py -3.14" …
 # Default `python` on many Windows hosts is 3.10 and cannot install this package.
@@ -153,6 +153,14 @@ web-check:
 # Playwright Chromium smoke: Diagram page ↔ drawDB static-bridge postMessage
 web-e2e:
 	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File apps/web/scripts/e2e.ps1
+
+# ADR-058: pack images for a server without a registry. Contour needs PARENT_TAG
+# of the last Full pack already loaded on that server.
+pack-full:
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/pack-docker-images.ps1 -Mode Full
+
+pack-contour:
+	$(PWSH) -NoProfile -ExecutionPolicy Bypass -File scripts/pack-docker-images.ps1 -Contour -ParentTag $(PARENT_TAG)
 
 # Stage 0 gate: contracts → slice → schemas → examples → golden → architecture-check
 # → dams-packages-check → manifest/lock/topology/governance → publish-gate → user-docs.
