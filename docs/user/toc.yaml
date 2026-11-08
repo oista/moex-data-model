@@ -89,6 +89,9 @@ chapters:
       - id: deploy-airgap
         path: 30-howto/deploy-airgap.md
         title: Развернуть на рабочем сервере
+      - id: gitlab-models
+        path: 30-howto/gitlab-models.md
+        title: Модели в локальном GitLab
   - id: reference
     title: Справочник
     pages:
