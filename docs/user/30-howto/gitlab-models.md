@@ -9,7 +9,7 @@ sources:
   - docker-compose.yml
   - .env.example
   - deploy/models-repo/.gitlab-ci.yml
-draft: true
+verified_at: 2026-11-08
 ---
 
 # Модели в локальном GitLab

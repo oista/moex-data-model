@@ -29,7 +29,7 @@ draft: true
 
 Единственная инструкция, как добавить строку в матрицу проверок, — [adding-an-invariant.md](docs/guides/adding-an-invariant.md). У неё статус Proposed. Само решение [ADR-045](docs/adr/ADR-045-executable-constraint-matrix.md) принято. Корень репозитория указывает на инструкцию как на руководство и не говорит, что она не принята. Правы принятое решение и матрица проверок. Инструкция — записанный порядок, по ней нельзя рассказывать, будто так уже решено.
 
-[ADR-058](docs/adr/ADR-058-airgap-image-deploy.md) выносит модели в отдельный репозиторий и не принят. Файл `model-assets/external-sources/fibo/registry.yaml` в поле `upstream_url` указывает на фикстуру `packages/external-sources/tests/fixtures/mini_ontology`. Этот каталог в репозиторий моделей не входит. Права граница в решении: фикстуру туда не кладут. Ссылку в реестре этим не переписывают.
+[ADR-058](docs/adr/ADR-058-airgap-image-deploy.md) принят и выносит модели в отдельный репозиторий. Файл `model-assets/external-sources/fibo/registry.yaml` в поле `upstream_url` указывает на фикстуру `packages/external-sources/tests/fixtures/mini_ontology`. Этот каталог в репозиторий моделей не входит. Права граница в решении: фикстуру туда не кладут. Ссылку в реестре этим не переписывают.
 
 На дереве с переводами строк LF команды `moex-model check-manifest --root .` и `moex-model lock verify --root .` расходятся по четырём реализациям: crm, esed, mdm, ucd. Хеш в `model-assets/implementations/manifest.lock` не совпадает с разобранным телом файла. Фиксацию здесь не переписывают.
 
