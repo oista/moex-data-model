@@ -54,8 +54,11 @@ services:
         GIT_SHA: ${GIT_SHA:-unknown}
     ports:
       - "${MOEX_WEB_PORT:-8080}:80"
+    environment:
+      MOEX_AUTH_MODE: ${MOEX_AUTH_MODE:-dev}
     volumes:
       - viewer:/usr/share/nginx/viewer:ro
+      - ./auth:/etc/nginx/auth:ro
     depends_on:
       model-api:
         condition: service_healthy

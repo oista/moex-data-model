@@ -17,6 +17,9 @@ LABEL moexmodel.deps_fingerprint="${DEPS_FINGERPRINT}" \
       moexmodel.git_sha="${GIT_SHA}"
 
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker/40-moex-auth.sh /docker-entrypoint.d/40-moex-auth.sh
+RUN sed -i 's/\r$//' /docker-entrypoint.d/40-moex-auth.sh \
+    && chmod 755 /docker-entrypoint.d/40-moex-auth.sh
 COPY --from=build /src/dist /usr/share/nginx/html
 RUN mkdir -p /usr/share/nginx/viewer \
     && chown nginx:nginx /usr/share/nginx/viewer

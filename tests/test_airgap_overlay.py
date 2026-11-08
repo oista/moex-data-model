@@ -36,6 +36,7 @@ def _minimal_repo(tmp: Path) -> Path:
     _touch(tmp / "docker" / "web.Dockerfile", "FROM nginx:1.27-alpine\n")
     _touch(tmp / "docker" / "models-sync.sh", "#!/bin/sh\n")
     _touch(tmp / "docker" / "nginx.conf", "server { listen 80; }\n")
+    _touch(tmp / "docker" / "40-moex-auth.sh", "#!/bin/sh\n")
     _touch(tmp / "pyproject.toml", 'version = "0.1.0"\n')
     _touch(tmp / "apps" / "web" / "package-lock.json", "{}\n")
     _touch(tmp / "apps" / "web" / "dist" / "index.html", "<html></html>\n")
@@ -120,6 +121,8 @@ def test_dockerfiles_replace_code_without_install() -> None:
     assert "npm " not in web
     assert "apps/web/dist" in web
     assert "nginx.conf" in web
+    assert "40-moex-auth.sh" in web
+    assert "docker/40-moex-auth.sh" in ao.OVERLAY_FILES
 
 
 def test_stage_copies_dist_and_skips_node_modules(tmp_path: Path) -> None:
