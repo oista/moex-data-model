@@ -161,9 +161,21 @@ function New-ContourDropZip {
 }
 
 function Get-ComposeImageId([string]$Service) {
-    $id = (& docker compose -f docker-compose.yml images -q $Service 2>$null | Select-Object -First 1)
-    if (-not $id) {
-        throw "No image id for compose service '$Service'; run build first"
+    # The tag compose just built. `docker compose images` follows containers
+    # that are already running, and tagging that id back onto $MODEL_TAG
+    # replaces the new image with the old one.
+    $ref = switch ($Service) {
+        "model-api" { "${ImageApi}:$($env:MODEL_TAG)" }
+        "model-web" { "${ImageWeb}:$($env:MODEL_TAG)" }
+        default { throw "unknown service $Service" }
+    }
+    $prevEap = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    $id = (& docker image inspect $ref --format "{{.Id}}" 2>$null)
+    $code = $LASTEXITCODE
+    $ErrorActionPreference = $prevEap
+    if ($code -ne 0 -or -not $id) {
+        throw "No image id for $ref; run build first"
     }
     return $id.Trim()
 }
