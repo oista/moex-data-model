@@ -160,6 +160,14 @@ function New-ContourDropZip {
     return $zipPath
 }
 
+function Write-LfFile([string]$Path, [string]$Text) {
+    # sha256sum and the apply script run on Linux. Set-Content on Windows
+    # writes CRLF, and the CR becomes part of the filename in the sum file.
+    $normalized = ($Text -replace "`r`n", "`n" -replace "`r", "`n")
+    if (-not $normalized.EndsWith("`n")) { $normalized += "`n" }
+    [System.IO.File]::WriteAllText($Path, $normalized)
+}
+
 function Get-ComposeImageId([string]$Service) {
     # The tag compose just built. `docker compose images` follows containers
     # that are already running, and tagging that id back onto $MODEL_TAG
@@ -352,7 +360,7 @@ function Invoke-OverlayPack {
 
     $hash = (Get-FileHash -Algorithm SHA256 -Path $zipPath).Hash.ToLowerInvariant()
     $shaFile = "$zipPath.sha256"
-    "$hash  $zipName" | Set-Content -Path $shaFile -Encoding ascii
+    Write-LfFile $shaFile "$hash  $zipName"
     $sizeBytes = (Get-Item $zipPath).Length
 
     $bundlePath = $null
@@ -378,7 +386,7 @@ function Invoke-OverlayPack {
         $outManifest.config_bundle = (Split-Path $bundlePath -Leaf)
     }
     $manifestFile = Join-Path $Dir "$Prefix-${newTag}-overlay.manifest.json"
-    $outManifest | ConvertTo-Json -Depth 6 | Set-Content -Path $manifestFile -Encoding utf8
+    Write-LfFile $manifestFile ($outManifest | ConvertTo-Json -Depth 6)
 
     Invoke-Retention -Dir $Dir -Keep $KeepLast -PrefixFilter "$Prefix-" -ModeFilter "overlay"
     if ($bundlePath) {
@@ -558,7 +566,7 @@ if ($NoGzip) {
 }
 
 $hash = (Get-FileHash -Algorithm SHA256 -Path $OutFile).Hash.ToLowerInvariant()
-"$hash  $(Split-Path $OutFile -Leaf)" | Set-Content -Path $ShaFile -Encoding ascii
+Write-LfFile $ShaFile "$hash  $(Split-Path $OutFile -Leaf)"
 $sizeBytes = (Get-Item $OutFile).Length
 
 $bundlePath = $null
@@ -580,7 +588,7 @@ $manifest = [ordered]@{
 if ($bundlePath) {
     $manifest.config_bundle = (Split-Path $bundlePath -Leaf)
 }
-$manifest | ConvertTo-Json -Depth 4 | Set-Content -Path $ManifestFile -Encoding utf8
+Write-LfFile $ManifestFile ($manifest | ConvertTo-Json -Depth 4)
 
 Invoke-Retention -Dir $OutDir -Keep $KeepLast -PrefixFilter "$Prefix-" -ModeFilter "full"
 Invoke-Retention -Dir $OutDir -Keep $KeepLast -PrefixFilter "release-bundle-"
