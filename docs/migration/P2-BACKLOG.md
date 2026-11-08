@@ -1,7 +1,7 @@
 # P2 backlog (post audit Waves A–F)
 
 **Date:** 2026-10-13  
-**Updated:** 2026-10-14 (R3-6 — train 6.0.0 work packages)  
+**Updated:** 2026-11-03 (F0-7 done — INV-045, INV-046, INV-048, INV-049; M-5 / F0-4 stays open)  
 **Normative decisions:** [ADR-055](../adr/ADR-055-integration-source-of-truth.md) (Integration SoT), [ADR-051](../adr/ADR-051-dams-schema-compatibility.md), [ADR-052](../adr/ADR-052-identity-and-versioning.md), [ADR-053](../adr/ADR-053-qualified-assertion.md)  
 **Schema train 6.0.0:** [TRAIN-6.0.0.md](TRAIN-6.0.0.md) (entry criteria G1–G6, work packages T6-1…T6-8, pre-train minors M-1…M-5)  
 **Out of scope for this file:** implementation, schema bumps, `generated/**`. Track work as separate series after a D4 trigger (ADR-055) or an explicit product priority.
@@ -30,7 +30,7 @@ These are unfinished acceptance checkboxes on **Accepted** ADRs. Ship as **minor
 | F0-4 | `id_prefixes` allowlist ratchet — add `dams` prefixes for remaining non-selection classes; lower ceiling | ADR-052 § Ratchet schedule; TRAIN M-5 | DAMS maintainers | Next minor after F0-3 or earlier additive minor | Ceiling must drop with each exit; see architecture-check README |
 | F0-5 | Mapping endpoint **L1** typing spike (JSON Schema / Pydantic item types); L2 remains SoT for id→class | Audit mapping §; ADR-046; TRAIN T6-6 | DAMS maintainers | Minor before or after 6.0.0 | Non-goal: pretend JSON Schema resolves cross-doc `element_id` |
 | F0-6 | Rich ownership slots (role type, delegation) on `OwnershipAssignment` — **no** new `StewardshipAssignment` unless ADR-049 amended | Audit governance §; ADR-049 D7; TRAIN T6-7 | DAMS maintainers | Product priority | Stewardship stays folded per ADR-049 |
-| F0-7 | Pre-train validation minors: selection closure, baseline/mode, `LogicalAttribute` min/max, `parent_concept_ref` cycles | Audit “Negative examples”; TRAIN M-1…M-4 | DAMS maintainers | Any minor | Fill matrix gaps without a major |
+| F0-7 | ~~Pre-train validation minors: selection closure, baseline/mode, `LogicalAttribute` min/max, `parent_concept_ref` cycles~~ **Done** (INV-048, INV-049, INV-045, INV-046) | Audit “Negative examples”; TRAIN M-1…M-4 | DAMS maintainers | — | L2 rows implemented. M-5 / F0-4 (`id_prefixes` ceiling) stays open |
 
 ---
 
