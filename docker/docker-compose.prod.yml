@@ -1,0 +1,19 @@
+# Already loaded images. No build on the closed host.
+#
+#   docker compose -f docker-compose.yml -f docker/docker-compose.prod.yml up -d
+#
+# First -f must stay docker-compose.yml so volume paths resolve from the
+# deploy root. Set MODEL_TAG to the tag produced by the pack script.
+
+services:
+  model-api:
+    image: moex-data-model-api:${MODEL_TAG:-local}
+    build: !reset null
+
+  model-web:
+    image: moex-data-model-web:${MODEL_TAG:-local}
+    build: !reset null
+
+  models-sync:
+    image: moex-data-model-api:${MODEL_TAG:-local}
+    build: !reset null

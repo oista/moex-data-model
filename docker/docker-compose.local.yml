@@ -1,0 +1,16 @@
+# Bind the checkout as the models tree. No GitLab fetch.
+# The viewer build writes publication_conformance.json into this tree,
+# the same way a local viewer build does. First -f must stay docker-compose.yml:
+#
+#   docker compose -f docker-compose.yml -f docker/docker-compose.local.yml up -d --build
+
+services:
+  model-api:
+    volumes: !override
+      - .:/models
+      - data:/data
+
+  models-sync:
+    volumes: !override
+      - .:/models
+      - viewer:/viewer-dist
