@@ -1,5 +1,5 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
 normative: false
 supersedes: []
@@ -9,7 +9,7 @@ superseded_by: []
 # ADR-058: Поставка образов на закрытый сервер
 
 **Date:** 2026-11-08  
-**Status:** Proposed  
+**Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)  
 **Related:** [ADR-002](ADR-002-git-published-source.md), [ADR-004](ADR-004-modular-monolith.md), [ADR-012](ADR-012-semantic-diff-review.md)  
 **Precedent (not a dependency):** `moex-prodata-platform` [ADR-0044](../../../moex-prodata-platform/docs/adr/ADR-0044-airgap-image-deploy.md)
@@ -26,7 +26,7 @@ superseded_by: []
 
 ## Decision
 
-Шаги PR-0…PR-4 из таблицы D6 уже в репозитории: образы служебного интерфейса и веб-приложения, compose, скрипты полной поставки и поставки поверх, провайдер GitLab, сверка копии моделей с контрактами образа. Граница репозитория моделей и то, кто какими путями владеет, записаны в D7 и в `deploy/models-repo/paths.yaml`. Выделение в проект GitLab делает оператор командой наполнения. Статус остаётся Proposed: его принимает человек. Ниже — как поставка устроена. До статуса Accepted по этому тексту нельзя говорить, что рабочий сервер уже запущен.
+Шаги PR-0…PR-4 из таблицы D6 уже в репозитории: образы служебного интерфейса и веб-приложения, compose, скрипты полной поставки и поставки поверх, провайдер GitLab, сверка копии моделей с контрактами образа. Граница репозитория моделей и то, кто какими путями владеет, записаны в D7 и в `deploy/models-repo/paths.yaml`. Выделение в проект GitLab и запуск рабочего сервера делает оператор: архив собирают, переносят и применяют. Ниже — как поставка устроена. Принятое решение ещё не значит, что рабочий сервер уже запущен.
 
 ### D1. Два канала
 
@@ -132,7 +132,7 @@ superseded_by: []
 
 ## Проверка
 
-Пока статус Proposed, принятие решения отдельно от кода. Код серии проверяется так:
+Код серии проверяется так:
 
 - `make pack-full` — архив образов, SHA256 и манифест с `deps_fingerprint`;
 - `make pack-contour PARENT_TAG=<версия полной поставки>` — пакет для контура;

@@ -74,7 +74,7 @@ Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decision
 | [ADR-055](ADR-055-integration-source-of-truth.md) | Integration source of truth (Clinkr/EAM topology; audit Wave F) | Accepted | Integration SoT; audit 0.2 remap; P2 backlog |
 | [ADR-056](ADR-056-requirements-backbone.md) | Requirements backbone (normative CDM/LDM/PDM rules) | Accepted | requirements catalog spine; see requirements-inventory.md |
 | [ADR-057](ADR-057-user-documentation.md) | Пользовательская документация как описание текущего состояния | Accepted | docs/user; shell via Publication Viewer; series PR-0…PR-4 |
-| [ADR-058](ADR-058-airgap-image-deploy.md) | Поставка образов на закрытый сервер | Proposed | air-gap; модели в локальном GitLab; полная поставка / поставка поверх / пакет для контура |
+| [ADR-058](ADR-058-airgap-image-deploy.md) | Поставка образов на закрытый сервер | Accepted | air-gap; модели в локальном GitLab; полная поставка / поставка поверх / пакет для контура |
 
 ## How to accept
 
