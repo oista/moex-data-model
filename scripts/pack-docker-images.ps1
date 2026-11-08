@@ -545,7 +545,7 @@ if (-not $SkipBuild) {
     if ($LASTEXITCODE -ne 0) { throw "Smoke api failed" }
 
     Write-Host "Smoke: web root ..."
-    & docker run --rm --entrypoint sh $TagWeb -c "test -f /usr/share/nginx/html/index.html && test -f /etc/nginx/conf.d/default.conf"
+    & docker run --rm --add-host model-api:127.0.0.1 --entrypoint sh $TagWeb -c "touch /etc/nginx/conf.d/auth.inc && nginx -t && test -f /usr/share/nginx/html/index.html && test -f /etc/nginx/conf.d/default.conf"
     if ($LASTEXITCODE -ne 0) { throw "Smoke web failed" }
 } else {
     Write-Host "SkipBuild: using existing tags $Tag / $TagWeb"
