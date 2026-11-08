@@ -8,7 +8,7 @@ Outbound adapter for published Git assets (ADR-002). Application code depends on
 ```python
 from moex_git import make_git_provider
 
-# MOEX_GIT_PROVIDER=local|github (default local)
+# MOEX_GIT_PROVIDER=local|github|gitlab (default local)
 git = make_git_provider(repo_root=".")
 ```
 
@@ -31,3 +31,14 @@ data = git.get_file("HEAD", "README.md")
 - write: `create_branch` / `commit_files` / `create_review` (opens PR)
 
 Env: `MOEX_GITHUB_TOKEN`, `MOEX_GITHUB_REPO=owner/name`, `MOEX_GITHUB_BASE=main`.
+
+## GitLab
+
+`GitLabGitProvider` uses GitLab REST API v4 (`httpx`) the same way, including a
+GitLab that is not on the public internet. `create_review` opens a merge request.
+A project path `group/name` is sent with the slash encoded so the API routes it
+as one project.
+
+Env: `MOEX_GITLAB_URL`, `MOEX_GITLAB_TOKEN`, `MOEX_GITLAB_PROJECT=group/name`,
+`MOEX_GITLAB_BASE=main`. `MOEX_GITLAB_CA_BUNDLE` is a PEM file for an internal
+certificate.
