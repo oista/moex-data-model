@@ -97,14 +97,14 @@ Schema diff and data migration stay in **separate commits** unless PR-5 exceptio
 
 ## Pre-train minors (recommended, not part of 6.0.0 bump)
 
-Ship as ordinary minors when convenient; they reduce risk before the major.
+M-1…M-4 are already L2 rows in the constraint matrix. M-5 remains an ordinary minor and is not part of the 6.0.0 bump.
 
 | ID | Item | Owner | Entry criteria | Source |
 |---|---|---|---|---|
-| **M-1** | Selection closure INV (selected fields ⊆ selected entities/objects) if still missing from matrix | DAMS maintainers | Negative fixture design ready | Audit “Negative examples” |
-| **M-2** | Binding baseline/mode compatibility INV | DAMS maintainers | Rules agreed with ADR-042 consumers | Audit binding § |
-| **M-3** | `LogicalAttribute` min/max cardinality consistency INV | DAMS maintainers | — | Audit cardinality § |
-| **M-4** | `parent_concept_ref` cycle INV (conceptual) if not already covered | DAMS maintainers | — | Audit cycles § |
+| **M-1** | ~~Selection closure INV (selected fields ⊆ selected entities/objects)~~ **Done** (**INV-048**) | DAMS maintainers | — | Audit “Negative examples” |
+| **M-2** | ~~Binding baseline/mode compatibility INV~~ **Done** (**INV-049**) | DAMS maintainers | — | Audit binding § |
+| **M-3** | ~~`LogicalAttribute` min/max cardinality consistency INV~~ **Done** (**INV-045**) | DAMS maintainers | — | Audit cardinality § |
+| **M-4** | ~~`parent_concept_ref` cycle INV (conceptual)~~ **Done** (**INV-046**) | DAMS maintainers | — | Audit cycles § |
 | **M-5** | `id_prefixes` allowlist ratchet (F0-4) — lower ceiling after adding `dams` prefixes to non-selection classes | DAMS maintainers | Per ADR-052 ratchet schedule | ADR-052; P2 F0-4 |
 
 ---
@@ -115,3 +115,4 @@ Ship as ordinary minors when convenient; they reduce risk before the major.
 |---|---|
 | 2026-10-14 | File created (audit closure R3-6): residual P1 items made explicit with owners and entry criteria. Train **not** started. |
 | 2026-11-02 | Added **T6-9** (`security_classification` removal) from ADR-056 D7 / P2 F4-5. Train still **not** started (G1 unmet). |
+| 2026-11-03 | Recorded **M-1…M-4** / P2 **F0-7** as done: **INV-048**, **INV-049**, **INV-045**, **INV-046**. **M-5** / F0-4 stays open. Train still **not** started (G1 unmet). |

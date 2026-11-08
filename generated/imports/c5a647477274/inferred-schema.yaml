@@ -1,0 +1,32 @@
+name: MiniPerson
+id: https://example.org/MiniPerson
+imports:
+- linkml:types
+prefixes:
+  MiniPerson:
+    prefix_prefix: MiniPerson
+    prefix_reference: https://example.org/MiniPerson
+  linkml:
+    prefix_prefix: linkml
+    prefix_reference: https://w3id.org/linkml/
+default_prefix: MiniPerson
+slots:
+  name:
+    name: name
+    required: true
+  age:
+    name: age
+    range: integer
+classes:
+  MiniPerson:
+    name: MiniPerson
+    slots:
+    - name
+    - age
+    slot_usage:
+      name:
+        name: name
+        required: true
+      age:
+        name: age
+        range: integer
