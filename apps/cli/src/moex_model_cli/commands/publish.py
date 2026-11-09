@@ -9,8 +9,23 @@ from moex_publication.application.build_publication import (
     build_publication_module,
     export_slice_projection,
 )
-from moex_model_cli.bootstrap import DEFAULT_SLICE_JSON, SlicePaths
+from moex_model_cli.bootstrap import (
+    DEFAULT_SLICE_JSON,
+    SlicePaths,
+    resolve_body_from_implementation_envelope,
+)
 from moex_model_cli.gates.publish_gate import refuse_generated_draft, verify_publish_gate
+from moex_repository_loader.loader import RepositoryLoader
+
+
+def resolve_implementation_body(root: Path, implementation_id: str) -> Path:
+    """Resolve the YAML body for a manifest implementation id."""
+    loader = RepositoryLoader(root, verify_hashes=False)
+    for ref in loader.load_manifest().documents:
+        if ref.id == implementation_id:
+            envelope = loader.implementations_root / ref.path
+            return resolve_body_from_implementation_envelope(envelope)
+    raise ValueError(f"unknown implementation_id: {implementation_id}")
 
 
 def run_publish(
@@ -38,9 +53,19 @@ def run_publish(
         if errors:
             return 1, "publish-gate FAILED\n" + "\n".join(errors) + "\n"
         lines.append("publish-gate OK")
+
+    try:
+        implementation_path = (
+            resolve_implementation_body(paths.root, implementation_id)
+            if implementation_id
+            else paths.implementation
+        )
+    except ValueError as exc:
+        return 1, f"publish FAILED\n{exc}\n"
+
     result = export_slice_projection(
         schema_path=paths.schema,
-        implementation_path=paths.implementation,
+        implementation_path=implementation_path,
         out_path=out_path,
         implementation_id=implementation_id,
     )

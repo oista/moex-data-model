@@ -11,7 +11,7 @@ from moex_model_cli.bootstrap import (
     resolve_body_from_implementation_envelope,
 )
 from moex_publication.application.build_publication import export_slice_projection
-from moex_publication.slice_canonical import slices_equal
+from moex_publication.slice_canonical import slices_equal, strip_volatile
 from moex_repository_loader.loader import RepositoryLoader
 
 
@@ -42,11 +42,32 @@ def check_publications_fresh(repo_root: Path) -> tuple[int, str]:
             fresh_data = json.loads(out.read_text(encoding="utf-8"))
             if not slices_equal(committed_data, fresh_data):
                 rel = committed.relative_to(root).as_posix()
-                problems.append(
+                hint = (
                     f"{rel} is stale; regenerate with "
                     f"moex-model publish --root . --implementation-id {ref.id} "
                     f"--out {rel}"
                 )
+                # Surface one concrete mismatch to debug platform/env drift.
+                left = strip_volatile(committed_data)
+                right = strip_volatile(fresh_data)
+                left_s = json.dumps(left, sort_keys=True, ensure_ascii=False)
+                right_s = json.dumps(right, sort_keys=True, ensure_ascii=False)
+                for i, (a, b) in enumerate(zip(left_s, right_s)):
+                    if a != b:
+                        start = max(0, i - 40)
+                        hint += (
+                            f" (first diff @{i}: "
+                            f"committed…{left_s[start:i+40]!r} "
+                            f"vs fresh…{right_s[start:i+40]!r})"
+                        )
+                        break
+                else:
+                    if len(left_s) != len(right_s):
+                        hint += (
+                            f" (length committed={len(left_s)} "
+                            f"fresh={len(right_s)})"
+                        )
+                problems.append(hint)
 
     if not checked:
         return 0, "publications-fresh OK (no vertical_slice.json found)\n"

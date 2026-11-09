@@ -2,14 +2,20 @@
 
 from __future__ import annotations
 
+import json
 from datetime import date, timedelta
 from pathlib import Path
 
 import pytest
 
 from moex_model_cli.__main__ import main
+from moex_model_cli.bootstrap import SlicePaths
 from moex_model_cli.commands.matrix_check import check_waiver_expiry
 from moex_model_cli.commands.fmt_cmd import canonical_bytes
+from moex_model_cli.commands.publish import (
+    resolve_implementation_body,
+    run_publish,
+)
 
 
 def test_semantic_diff_fail_on_never(repo_root: Path, capsys) -> None:
@@ -36,6 +42,26 @@ def test_publications_fresh_ok(repo_root: Path, capsys) -> None:
     captured = capsys.readouterr()
     assert code == 0, captured.out
     assert "publications-fresh OK" in captured.out
+
+
+def test_publish_resolves_body_from_implementation_id(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    """--implementation-id must select that impl's body, not the MDM default."""
+    paths = SlicePaths.resolve(root=repo_root)
+    crm_id = "moex:implementation:crm:0.1.0"
+    crm_body = resolve_implementation_body(repo_root, crm_id)
+    assert crm_body != paths.implementation
+    out = tmp_path / "crm_slice.json"
+    code, text = run_publish(
+        paths,
+        out=out,
+        implementation_id=crm_id,
+        skip_gate=True,
+    )
+    assert code == 0, text
+    data = json.loads(out.read_text(encoding="utf-8"))
+    assert data["summary"]["implementation_id"] == crm_id
 
 
 def test_fmt_canonical_roundtrip() -> None:
