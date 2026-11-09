@@ -6,14 +6,14 @@ supersedes: []
 superseded_by: []
 ---
 
-# ADR index (001–058)
+# ADR index (001–059)
 
-**Date:** 2026-11-08  
+**Date:** 2026-11-09  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md)
 
 Decisions referenced from [linkml_architecture.md](../architecture/linkml_architecture.md). Each ADR has its own frontmatter `status`. On conflict with an Accepted ADR, the ADR wins over informal architecture notes until MODELING_ARCHITECTURE is updated.
 
-Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decisions.md). UI presentation — [ADR-015](ADR-015-viewer-ui-atlas.md) / [viewer-atlas](../design/viewer-atlas/README.md).
+Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decisions.md). UI presentation — [ADR-015](ADR-015-viewer-ui-atlas.md) / [viewer-atlas](../design/viewer-atlas/README.md). Пункт меню в рабочем приложении — [ADR-059](ADR-059-viewer-in-workbench.md).
 
 | ADR | Title | Status | Scope / schema (on `main`) |
 |---|---|---|---|
@@ -75,6 +75,7 @@ Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decision
 | [ADR-056](ADR-056-requirements-backbone.md) | Requirements backbone (normative CDM/LDM/PDM rules) | Accepted | requirements catalog spine; see requirements-inventory.md |
 | [ADR-057](ADR-057-user-documentation.md) | Пользовательская документация как описание текущего состояния | Accepted | docs/user; shell via Publication Viewer; series PR-0…PR-4 |
 | [ADR-058](ADR-058-airgap-image-deploy.md) | Поставка образов на закрытый сервер | Accepted | air-gap; модели в локальном GitLab; полная поставка / поставка поверх / пакет для контура |
+| [ADR-059](ADR-059-viewer-in-workbench.md) | Просмотр в рабочем приложении | Accepted | пункт Viewer открывает `/viewer/` в новой вкладке; read-only; сборка из GitLab по смене коммита; атомарный current |
 
 ## How to accept
 

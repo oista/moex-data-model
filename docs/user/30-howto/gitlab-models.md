@@ -8,6 +8,7 @@ sources:
   - scripts/export_models_repo.py
   - docker-compose.yml
   - .env.example
+  - docker/models-sync.sh
   - deploy/models-repo/.gitlab-ci.yml
   - apps/api/src/moex_model_api/app.py
   - deploy/models-repo/CODEOWNERS
@@ -23,6 +24,8 @@ draft: true
 Зачем отдельно. Опубликованная модель остаётся ревизией Git (ADR-002). Если положить файлы модели в образ программ, правка модели потребует новой сборки программ. [Защищённая ветка](glossary:protected-branch) `main` не даёт записать правку мимо просмотра: служебный интерфейс открывает ветку и [запрос на слияние](glossary:merge-request), а в `main` напрямую не коммитит. Разбор изменения перед слиянием записан в [ADR-012](docs/adr/ADR-012-semantic-diff-review.md). Прямой push в `main` закрыт. Слияние ждёт зелёный pipeline проверки `models-check`. Разбор `semantic-diff` ошибку показывает, но слияние не блокирует.
 
 Где лежит. Список путей и файлы корня — `deploy/models-repo/`. Команды — `scripts/export_models_repo.py`. На сервере копия монтируется томом `models`, шаг `models-sync` в `docker-compose.yml` забирает ревизию. Секреты — в `.env` рядом с compose, образец в `.env.example`.
+
+На рабочем сервере app-srv GitLab стоит на той же машине и слушает `http://192.168.10.140:8929`. Проект моделей — `root/moex-models`, ветка `main`. Своего сертификата нет, поэтому `MOEX_GITLAB_CA_BUNDLE` оставляют пустым. Контейнерам нельзя указывать `localhost`: для контейнера это он сам, а не GitLab на хосте. Из контейнеров служебного интерфейса и шага синхронизации открывается адрес сервера `192.168.10.140:8929`; тот же порт отвечает и на мосту Docker `172.17.0.1`. В `.env` на app-srv оба адреса, `MOEX_GITLAB_URL` и `MOEX_MODELS_GIT_URL`, указывают на адрес сервера. Режим `MOEX_AUTH_MODE` там пока `dev`. Переход на `trusted-header` и файл `auth/htpasswd` — отдельное решение.
 
 Что сейчас работает. Команды выделения и [синхронизации схем](glossary:spec-sync) есть. Образы и compose умеют читать GitLab, если в `.env` заданы адрес и токены. Сам проект в GitLab этим репозиторием не создаётся: его заводит человек по шагам ниже.
 
@@ -40,7 +43,7 @@ draft: true
 
 ## Значения на сервере
 
-`MOEX_GIT_PROVIDER=gitlab`. `MOEX_GITLAB_URL` — адрес локального GitLab, как его видит контейнер, не `localhost` контейнера. `MOEX_GITLAB_PROJECT` — `группа/moex-models` или числовой id. `MOEX_GITLAB_BASE=main`. `MOEX_MODELS_GIT_URL` — `https://…/moex-models.git`. `MOEX_MODELS_GIT_REF=main`. `MOEX_MODELS_SYNC_INTERVAL` — секунды между заборами, по умолчанию 300. `MOEX_AUTH_MODE=trusted-header`. Порт 8000 наружу не публикуют: интерфейс открыт только через nginx веб-приложения.
+`MOEX_GIT_PROVIDER=gitlab`. `MOEX_GITLAB_URL` — адрес локального GitLab, как его видит контейнер, не `localhost` контейнера. `MOEX_GITLAB_PROJECT` — `группа/moex-models` или числовой id. `MOEX_GITLAB_BASE=main`. `MOEX_MODELS_GIT_URL` — `https://…/moex-models.git`. `MOEX_MODELS_GIT_REF=main`. `MOEX_MODELS_SYNC_INTERVAL` — секунды между заборами, по умолчанию 60. Сборка просмотра начинается только после того, как закончилась предыдущая, даже если она длилась дольше интервала. `MOEX_AUTH_MODE=trusted-header`. Порт 8000 наружу не публикуют: интерфейс открыт только через nginx веб-приложения.
 
 Если сертификат GitLab внутренний, файл CA кладут в `./certs/gitlab-ca.pem` и пишут `MOEX_GITLAB_CA_BUNDLE=/certs/gitlab-ca.pem`. Каталог `certs` смонтирован в контейнеры интерфейса и синхронизации. Для публичного сертификата переменную оставляют пустой.
 

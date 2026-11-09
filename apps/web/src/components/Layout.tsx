@@ -17,6 +17,9 @@ export function Layout() {
         <NavLink to="/workspaces/ws-workbench/import">Import</NavLink>
         <NavLink to="/workspaces/ws-workbench/transform">Transform</NavLink>
         <NavLink to="/models">Models</NavLink>
+        <a href="/viewer/" target="_blank" rel="noopener noreferrer">
+          Viewer
+        </a>
         <p className="lede" style={{ marginTop: "1rem", fontSize: "0.85rem" }}>
           Signed in as <strong>{actor}</strong>
         </p>
