@@ -65,6 +65,9 @@ def test_skips_build_when_commit_and_image_match(tmp_path: Path) -> None:
     assert log.read_text(encoding="utf-8").count("\n") == 1
     assert _read_info(dist)["commit"] == current
     assert not (tmp_path / "models" / "from-build").exists()
+    link = dist / "current"
+    if link.is_symlink():
+        assert not os.readlink(link).startswith("/")
 
 
 def test_rebuilds_and_keeps_two_releases(tmp_path: Path) -> None:
@@ -125,6 +128,23 @@ def test_failed_build_keeps_previous_current(tmp_path: Path) -> None:
     assert not (tmp_path / "models" / "from-build").exists()
 
 
+def test_failed_fetch_keeps_the_published_viewer(tmp_path: Path) -> None:
+    bare, seed = _bare_repo(tmp_path)
+    _commit(seed, "schema: first\n")
+    _push(seed)
+    log = tmp_path / "build-log"
+    dist = tmp_path / "viewer"
+    env = _env(tmp_path, bare, dist, log, _ok_builder(tmp_path))
+    assert _run(env).returncode == 0
+    previous = _read_info(dist)["commit"]
+    env["MOEX_MODELS_GIT_URL"] = (tmp_path / "missing.git").as_posix()
+    failed = _run(env)
+    assert failed.returncode == 0, failed.stderr
+    assert "git sync failed" in failed.stderr
+    assert _read_info(dist)["commit"] == previous
+    assert log.read_text(encoding="utf-8").count("\n") == 1
+
+
 def test_bind_mount_builds_in_the_models_tree(tmp_path: Path) -> None:
     models = tmp_path / "models"
     _git_init(models)
@@ -143,7 +163,7 @@ def test_bind_mount_builds_in_the_models_tree(tmp_path: Path) -> None:
     built_root = log.read_text(encoding="utf-8").strip()
     assert Path(built_root) == models
     assert (models / "from-build").is_file()
-    assert (dist / "current").is_symlink() or (dist / "current").exists()
+    assert (dist / "current").is_symlink() or (dist / "current").is_dir()
 
 
 def test_image_sha_falls_back_to_manifest_hash(tmp_path: Path) -> None:

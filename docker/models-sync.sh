@@ -58,13 +58,14 @@ sync_git() {
       echo "ERROR: $ROOT is not a git checkout and is not empty" >&2
       return 1
     fi
-    run_git clone --branch "$REF" --single-branch "$URL" "$ROOT"
+    run_git clone --branch "$REF" --single-branch "$URL" "$ROOT" || return 1
     return 0
   fi
-  git -C "$ROOT" remote set-url origin "$URL"
-  run_git -C "$ROOT" fetch origin "$REF"
-  git -C "$ROOT" checkout "$REF"
-  git -C "$ROOT" merge --ff-only FETCH_HEAD
+  # sync_git runs under "if !", which turns set -e off for this function.
+  git -C "$ROOT" remote set-url origin "$URL" || return 1
+  run_git -C "$ROOT" fetch origin "$REF" || return 1
+  git -C "$ROOT" checkout "$REF" || return 1
+  git -C "$ROOT" merge --ff-only FETCH_HEAD || return 1
 }
 
 models_commit() {
@@ -163,7 +164,10 @@ publish_viewer() {
     '}' > "$release/build-info.json"
   next="$DIST/.current-next"
   rm -rf "$next"
-  ln -sfn "$release" "$next"
+  # Relative target: nginx mounts this volume at another path, so an
+  # absolute /viewer-dist/... link is broken there.
+  rel="${release#"$DIST"/}"
+  ln -sfn "$rel" "$next"
   # In the image, ln creates a symlink and mv -T replaces it in one rename.
   # A real directory only shows up when ln had to copy (no symlink privilege).
   if [ -d "$DIST/current" ] && [ ! -L "$DIST/current" ]; then
