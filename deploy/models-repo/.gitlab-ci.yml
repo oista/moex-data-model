@@ -9,8 +9,11 @@ workflow:
 
 # MODEL_TAG must name an image the runner already has. "local" matches a
 # development tag; on a closed runner set it to the tag from the last delivery.
+# GIT_DEPTH 0 fetches full history so semantic-diff can resolve
+# CI_MERGE_REQUEST_DIFF_BASE_SHA (shallow clones previously failed with git show 128).
 variables:
   MODEL_TAG: "local"
+  GIT_DEPTH: "0"
 
 default:
   image:
@@ -29,9 +32,124 @@ models-check:
     - python -m moex_publication_viewer.cli build --root . --dist /tmp/viewer
     - python -m moex_model_api.preflight
 
+validate:
+  rules:
+    - if: '$MOEX_MODELS_CI == "1"'
+  script:
+    - mkdir -p out
+    - >
+      moex-model ci-validate --root .
+      --check-baseline-growth
+      --growth-base-ref "${CI_MERGE_REQUEST_DIFF_BASE_SHA:-HEAD}"
+      --junit out/junit.xml
+      --codequality out/gl-code-quality.json
+      --json > out/ci-validate.json
+  artifacts:
+    when: always
+    expire_in: 14 days
+    paths:
+      - out/
+    reports:
+      junit: out/junit.xml
+      codequality: out/gl-code-quality.json
+
 semantic-diff:
-  allow_failure: true
   rules:
     - if: '$MOEX_MODELS_CI == "1" && $CI_PIPELINE_SOURCE == "merge_request_event"'
   script:
-    - moex-model semantic-diff --from "$CI_MERGE_REQUEST_DIFF_BASE_SHA" --to HEAD
+    - mkdir -p out
+    # Collect the report without failing yet; breaking-gate enforces the
+    # approved-breaking label from a Maintainer (access_level >= 40).
+    - >
+      moex-model semantic-diff
+      --root .
+      --from "$CI_MERGE_REQUEST_DIFF_BASE_SHA"
+      --to HEAD
+      --all
+      --fail-on never
+      --json > out/semantic-diff.json
+    - >
+      moex-model semantic-diff
+      --root .
+      --from "$CI_MERGE_REQUEST_DIFF_BASE_SHA"
+      --to HEAD
+      --all
+      --fail-on never
+      | tee out/semantic-diff.txt
+    - moex-model breaking-gate --from-report out/semantic-diff.json
+  artifacts:
+    when: always
+    expire_in: 14 days
+    paths:
+      - out/semantic-diff.txt
+      - out/semantic-diff.json
+
+publications-fresh:
+  rules:
+    - if: '$MOEX_MODELS_CI == "1"'
+  script:
+    - moex-model publications-fresh --root .
+
+fmt-check:
+  allow_failure: true
+  rules:
+    - if: '$MOEX_MODELS_CI == "1"'
+  script:
+    - moex-model fmt --root . --check
+
+secrets:
+  allow_failure: true
+  image:
+    name: zricethezav/gitleaks:v8.18.4
+    pull_policy: if-not-present
+  rules:
+    - if: '$MOEX_MODELS_CI == "1" && $CI_PIPELINE_SOURCE == "merge_request_event"'
+  script:
+    - >
+      gitleaks detect --no-banner --redact
+      --source .
+      --config .gitleaks.toml
+      --log-opts "$CI_MERGE_REQUEST_DIFF_BASE_SHA..HEAD"
+
+matrix-check:
+  rules:
+    - if: '$MOEX_MODELS_CI == "1"'
+  needs:
+    - job: validate
+      artifacts: true
+  script:
+    - mkdir -p out
+    - >
+      moex-model matrix-check --root .
+      --ci-validate-json out/ci-validate.json
+      --junit out/traceability.xml
+      --json > out/matrix-check.json
+  artifacts:
+    when: always
+    expire_in: 14 days
+    paths:
+      - out/matrix-check.json
+      - out/traceability.xml
+    reports:
+      junit: out/traceability.xml
+
+mr-summary:
+  allow_failure: true
+  rules:
+    - if: '$MOEX_MODELS_CI == "1" && $CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+  needs:
+    - job: validate
+      artifacts: true
+    - job: semantic-diff
+      artifacts: true
+      optional: true
+    - job: matrix-check
+      artifacts: true
+      optional: true
+  script:
+    - >
+      moex-model mr-summary
+      --ci-validate-json out/ci-validate.json
+      --semantic-diff-file out/semantic-diff.txt
+      --matrix-json out/matrix-check.json
