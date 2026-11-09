@@ -151,12 +151,14 @@ def verify_tree(dest: Path) -> None:
 
 def _copy_tree(src: Path, dest: Path) -> None:
     if dest.exists():
-        shutil.rmtree(dest)
+        if dest.is_dir():
+            shutil.rmtree(dest)
+        else:
+            dest.unlink()
     dest.parent.mkdir(parents=True, exist_ok=True)
     if src.is_dir():
         shutil.copytree(src, dest)
     elif src.is_file():
-        dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dest)
     else:
         raise ExportError(f"missing path to copy: {src}")
