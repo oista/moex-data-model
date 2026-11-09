@@ -58,6 +58,9 @@ semantic-diff:
     - if: '$MOEX_MODELS_CI == "1" && $CI_PIPELINE_SOURCE == "merge_request_event"'
   script:
     - mkdir -p out
+    # Ensure the merge-base commit is present (GIT_DEPTH:0 alone is not
+    # enough when the runner reuses a shallow build dir).
+    - git fetch --no-tags origin "$CI_MERGE_REQUEST_DIFF_BASE_SHA"
     # Collect the report without failing yet; breaking-gate enforces the
     # approved-breaking label from a Maintainer (access_level >= 40).
     - >
