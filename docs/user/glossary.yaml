@@ -723,13 +723,32 @@ terms:
       Запрос на слияние — запись в GitLab: какая ветка, во что её влить
       и кто смотрит. Служебный интерфейс создаёт такой запрос, когда
       публикует правку модели. В защищённую ветку он коммит не кладёт.
-      Автор запроса сам его не утверждает.
+      Сливает запрос в репозитории моделей только Maintainer.
     see_also:
       - protected-branch
       - models-repo
+      - code-owners
     sources:
       - docs/adr/ADR-058-airgap-image-deploy.md
       - docs/adr/ADR-012-semantic-diff-review.md
+  - id: code-owners
+    draft: true
+    term: Владельцы кода
+    short: Группы GitLab, которые файл CODEOWNERS называет ответственными за пути.
+    explanation: >
+      Файл CODEOWNERS в корне репозитория моделей сопоставляет каталогу
+      группу GitLab. Пути моделей принадлежат группе архитекторов данных,
+      пути схем и файлы корня — группе синхронизации схем. В Community
+      Edition GitLab только показывает владельцев в запросе на слияние.
+      Обязательное подтверждение владельцем там недоступно, поэтому слияние
+      ограничивают ролью Maintainer.
+    see_also:
+      - models-repo
+      - merge-request
+      - spec-sync
+    sources:
+      - docs/adr/ADR-058-airgap-image-deploy.md
+      - deploy/models-repo/CODEOWNERS
   - id: deps-fingerprint
     draft: true
     term: Отпечаток зависимостей
