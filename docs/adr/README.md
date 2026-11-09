@@ -75,7 +75,7 @@ Viewer-specific decisions: [viewer-decisions.md](../architecture/viewer-decision
 | [ADR-056](ADR-056-requirements-backbone.md) | Requirements backbone (normative CDM/LDM/PDM rules) | Accepted | requirements catalog spine; see requirements-inventory.md |
 | [ADR-057](ADR-057-user-documentation.md) | Пользовательская документация как описание текущего состояния | Accepted | docs/user; shell via Publication Viewer; series PR-0…PR-4 |
 | [ADR-058](ADR-058-airgap-image-deploy.md) | Поставка образов на закрытый сервер | Accepted | air-gap; модели в локальном GitLab; полная поставка / поставка поверх / пакет для контура |
-| [ADR-059](ADR-059-viewer-in-workbench.md) | Просмотр в рабочем приложении | Accepted | пункт Viewer; iframe; read-only; сборка из GitLab по смене коммита; атомарный current |
+| [ADR-059](ADR-059-viewer-in-workbench.md) | Просмотр в рабочем приложении | Accepted | пункт Viewer открывает `/viewer/` в новой вкладке; read-only; сборка из GitLab по смене коммита; атомарный current |
 
 ## How to accept
 

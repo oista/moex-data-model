@@ -6,7 +6,6 @@ import { EditorPage } from "./pages/EditorPage";
 import { ImportWizardPage } from "./pages/ImportWizardPage";
 import { ModelDetailPage } from "./pages/ModelDetailPage";
 import { ModelsPage } from "./pages/ModelsPage";
-import { ViewerPage } from "./pages/ViewerPage";
 import { TransformPage } from "./pages/TransformPage";
 import { ValidationPage } from "./pages/ValidationPage";
 import { WorkspacesPage } from "./pages/WorkspacesPage";
@@ -26,7 +25,6 @@ export function App() {
           element={<TransformPage />}
         />
         <Route path="models" element={<ModelsPage />} />
-        <Route path="viewer-embed" element={<ViewerPage />} />
         <Route path="models/:slug/edit" element={<EditorPage />} />
         <Route path="models/:slug/diagram" element={<DiagramPage />} />
         <Route path="models/:slug" element={<ModelDetailPage />} />

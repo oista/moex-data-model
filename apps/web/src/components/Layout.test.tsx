@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { Layout } from "./Layout";
 
 describe("Layout", () => {
-  it("links Viewer to the embed route", () => {
+  it("opens Viewer in a new tab without the workbench", () => {
     render(
       <MemoryRouter>
         <Routes>
@@ -16,7 +16,8 @@ describe("Layout", () => {
     );
 
     const link = screen.getByRole("link", { name: "Viewer" });
-    expect(link.getAttribute("href")).toBe("/viewer-embed");
+    expect(link.getAttribute("href")).toBe("/viewer/");
+    expect(link.getAttribute("target")).toBe("_blank");
     const models = screen.getByRole("link", { name: "Models" });
     expect(
       models.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_FOLLOWING,
