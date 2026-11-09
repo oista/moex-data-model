@@ -41,6 +41,7 @@ invariants:
   waiver_reason: L1 LinkML rule uses equals_string on boolean is_identifying; JSON Schema emits const:"true" and rejects valid
     instances (linkml-rules-support §3.1). Covered by L2/L3.
   adr_ref: ADR-045
+  waiver_expires: '2027-02-07'
 - id: INV-002
   title: DataType.precision только для decimal
   statement: Слот precision допустим только при type_family = decimal.
@@ -384,6 +385,7 @@ invariants:
   waiver_reason: L1 multi-slot value_presence ABSENT weakens to «not all present» in JSON Schema (linkml-rules-support §3.2).
     Covered by L2/L3.
   adr_ref: ADR-045
+  waiver_expires: '2027-02-07'
 - id: INV-014
   title: SchemaNode reference → reference_target
   statement: Для node_kind = reference обязателен reference_target.
@@ -454,6 +456,7 @@ invariants:
   waiver_reason: L1 multi-slot value_presence ABSENT weakens to «not all present» in JSON Schema (linkml-rules-support §3.2).
     Covered by L2/L3.
   adr_ref: ADR-045
+  waiver_expires: '2027-02-07'
 - id: INV-016
   title: AccessPoint operation → interface_ref
   statement: Для access_point_kind = operation обязателен interface_ref.
@@ -523,6 +526,7 @@ invariants:
   waiver_reason: L1 multi-slot value_presence ABSENT weakens to «not all present» in JSON Schema (linkml-rules-support §3.2).
     Covered by L2/L3.
   adr_ref: ADR-045
+  waiver_expires: '2027-02-07'
 - id: INV-018
   title: direction запрещён для DataContainer и ExecutionAsset
   statement: Слот direction не задаётся у DataContainer и ExecutionAsset.
@@ -589,6 +593,7 @@ invariants:
     - model-assets/specifications/moex-dams/0.1/examples/invariants/l2/INV-020.invalid.yaml
   waiver_reason: L3 cycle detection needs SPARQL property paths over children/item_node; deferred — L2 covers cycles (PR-C4b).
   adr_ref: ADR-045
+  waiver_expires: '2027-02-07'
 - id: INV-021
   title: Реляционные признаки только при relational
   statement: Реляционные признаки узла допустимы только при schema_format = relational.
@@ -650,6 +655,7 @@ invariants:
   tests: {}
   waiver_reason: source_status=partial; L2 not invented without confirmed norm (PR-C5).
   adr_ref: ADR-045
+  waiver_expires: '2027-02-07'
 - id: INV-024
   title: scope_ref system ∈ member_system_refs
   statement: При scope_kind = system значение scope_ref входит в ITSolution.member_system_refs.
@@ -668,6 +674,7 @@ invariants:
   tests: {}
   waiver_reason: source_status=partial; L2 not invented without confirmed norm (PR-C5).
   adr_ref: ADR-045
+  waiver_expires: '2027-02-07'
 - id: INV-025
   title: tags только из реестра переходных тегов
   statement: Значения tags принадлежат реестру переходных тегов (ADR-043).
@@ -686,6 +693,7 @@ invariants:
   tests: {}
   waiver_reason: No package-instance tags validator in moex_dams/rules (PR-C5).
   adr_ref: ADR-045
+  waiver_expires: '2027-02-07'
 - id: INV-026
   title: 'URI префикса оканчивается на / или #'
   statement: URI префикса онтологии оканчивается на '/' или '#'.
@@ -725,6 +733,7 @@ invariants:
   tests: {}
   waiver_reason: source_status=partial; ownership/classification cascade not packaged as INV (PR-C5).
   adr_ref: ADR-045
+  waiver_expires: '2027-02-07'
 - id: INV-028
   title: RealizesMapping.mapping_type = realizes
   statement: У RealizesMapping слот mapping_type равен realizes.

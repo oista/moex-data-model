@@ -56,6 +56,7 @@ classes:
       - status
       - level_status
       - waiver_reason
+      - waiver_expires
       - adr_ref
       - requirement_refs
       - notes
@@ -258,6 +259,11 @@ slots:
     required: true
   waiver_reason:
     range: string
+  waiver_expires:
+    range: date
+    description: >-
+      Срок действия waiver (YYYY-MM-DD). Для status/level_status waived
+      обязательно после окна миграции Stage 1; просроченное блокирует matrix-check.
   adr_ref:
     range: string
     description: Ссылка на ADR при status/level_status waived (обязательна для waived).

@@ -88,7 +88,8 @@ def assess_implementation(
         specification_version=DAMS_VERSION,
         specification_revision=DAMS_VERSION,
     )
-    package_bytes = implementation_path.read_bytes()
+    # LF-normalize so Windows CRLF checkouts match Linux CI digests.
+    package_bytes = implementation_path.read_bytes().replace(b"\r\n", b"\n")
     digest = "sha256:" + hashlib.sha256(package_bytes).hexdigest()
     revision = digest.removeprefix("sha256:")[:12]
     impl_id = implementation_id or f"moex:implementation:{implementation_path.stem}"
@@ -213,7 +214,10 @@ def assess_implementation(
         name="moex-dams",
         version=DAMS_VERSION,
         revision=DAMS_VERSION,
-        content_digest="sha256:" + hashlib.sha256(schema_path.read_bytes()).hexdigest(),
+        content_digest="sha256:"
+        + hashlib.sha256(
+            schema_path.read_bytes().replace(b"\r\n", b"\n")
+        ).hexdigest(),
         specification_kind=SpecificationKind.DATA_MODEL,
         expressed_in=standard_ref,
         root_type=spec_body.root_class or "MOEXModelRepository",

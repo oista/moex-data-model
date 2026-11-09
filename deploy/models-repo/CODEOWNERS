@@ -16,3 +16,7 @@ packages/ontology/publish.yaml @moex/spec-sync
 [Root files from the program repository]
 /CODEOWNERS @moex/spec-sync
 /.gitlab-ci.yml @moex/spec-sync
+/.gitleaks.toml @moex/spec-sync
+
+[CI baselines]
+/.moex/ @moex/data-architects

@@ -100,6 +100,17 @@ def build_parser() -> argparse.ArgumentParser:
     semantic.add_argument("--left", type=Path, default=None, help="Base YAML file")
     semantic.add_argument("--right", type=Path, default=None, help="Target YAML file")
     semantic.add_argument("--json", action="store_true", help="Print SemanticDiffReport JSON")
+    semantic.add_argument(
+        "--fail-on",
+        choices=("breaking", "never"),
+        default=None,
+        help="Exit 1 only for the named class (default: exit 1 on breaking)",
+    )
+    semantic.add_argument(
+        "--all",
+        action="store_true",
+        help="Diff every implementation body from manifest.yaml (--from/--to)",
+    )
 
     coverage = sub.add_parser(
         "concept-coverage",
@@ -474,6 +485,119 @@ def build_parser() -> argparse.ArgumentParser:
     )
     _add_slice_args(lock_verify)
 
+    ci_validate = sub.add_parser(
+        "ci-validate",
+        help="Validate every implementation from manifest; enforce warning baseline",
+    )
+    _add_slice_args(ci_validate)
+    ci_validate.add_argument(
+        "--baseline",
+        type=Path,
+        default=None,
+        help="Path to .moex/warning-baseline.yaml (default under --root)",
+    )
+    ci_validate.add_argument(
+        "--write-baseline",
+        action="store_true",
+        help="Write soft-diagnostic baseline from current tree and exit 0",
+    )
+    ci_validate.add_argument(
+        "--check-baseline-growth",
+        action="store_true",
+        help="Fail if baseline grew vs --growth-base-ref",
+    )
+    ci_validate.add_argument(
+        "--growth-base-ref",
+        default=None,
+        help="Git ref for previous baseline (usually CI_MERGE_REQUEST_DIFF_BASE_SHA)",
+    )
+    ci_validate.add_argument("--junit", type=Path, default=None, help="Write JUnit XML")
+    ci_validate.add_argument(
+        "--codequality",
+        type=Path,
+        default=None,
+        help="Write GitLab Code Quality JSON",
+    )
+    ci_validate.add_argument("--json", action="store_true", help="Print JSON report")
+
+    breaking = sub.add_parser(
+        "breaking-gate",
+        help="Require approved-breaking label from Maintainer when changes break",
+    )
+    breaking.add_argument(
+        "--has-breaking",
+        action="store_true",
+        help="Treat as breaking (normally set by CI after semantic-diff)",
+    )
+    breaking.add_argument(
+        "--from-report",
+        type=Path,
+        default=None,
+        help="SemanticDiffReport JSON; sets has-breaking from has_breaking field",
+    )
+
+    pubs = sub.add_parser(
+        "publications-fresh",
+        help="Regenerate vertical_slice.json and compare to committed copies",
+    )
+    _add_slice_args(pubs)
+
+    fmt = sub.add_parser(
+        "fmt",
+        help="Check or rewrite YAML to the canonical form",
+    )
+    _add_slice_args(fmt)
+    fmt.add_argument("--check", action="store_true", help="Fail on non-canonical files")
+    fmt.add_argument("--write", action="store_true", help="Rewrite files in place")
+    fmt.add_argument(
+        "paths",
+        nargs="*",
+        type=Path,
+        help="Optional files or directories (default: implementations + .moex)",
+    )
+
+    matrix = sub.add_parser(
+        "matrix-check",
+        help="Check waiver_expires and requirement/check/result traceability",
+    )
+    _add_slice_args(matrix)
+    matrix.add_argument("--json", action="store_true", help="Print JSON report")
+    matrix.add_argument(
+        "--no-require-expires",
+        action="store_true",
+        help="Allow waived rows without waiver_expires (migration window)",
+    )
+    matrix.add_argument(
+        "--no-traceability",
+        action="store_true",
+        help="Only check waiver expiry / structural rules already covered",
+    )
+    matrix.add_argument(
+        "--ci-validate-json",
+        type=Path,
+        default=None,
+        help="ci-validate JSON artifact; hard codes feed traceability fail rows",
+    )
+    matrix.add_argument(
+        "--junit",
+        type=Path,
+        default=None,
+        help="Write traceability JUnit XML",
+    )
+
+    mr_summary = sub.add_parser(
+        "mr-summary",
+        help="Post or update the CI diagnostics summary comment on a GitLab MR",
+    )
+    mr_summary.add_argument("--ci-validate-json", type=Path, default=None)
+    mr_summary.add_argument("--semantic-diff-file", type=Path, default=None)
+    mr_summary.add_argument("--matrix-json", type=Path, default=None)
+    mr_summary.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print markdown instead of calling the GitLab API",
+    )
+
     return parser
 
 
@@ -493,7 +617,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     paths = SlicePaths.resolve(
-        root=args.root,
+        root=getattr(args, "root", None),
         schema=getattr(args, "schema", None),
         implementation=getattr(args, "implementation", None),
     )
@@ -550,6 +674,8 @@ def main(argv: list[str] | None = None) -> int:
             left=args.left,
             right=args.right,
             as_json=args.json,
+            fail_on=getattr(args, "fail_on", None),
+            all_from_manifest=bool(getattr(args, "all", False)),
         )
     elif args.command == "concept-coverage":
         from moex_model_cli.commands.concept_coverage import run_concept_coverage
@@ -683,6 +809,69 @@ def main(argv: list[str] | None = None) -> int:
             code, text = run_lock_update(paths.root)
         else:
             code, text = run_lock_verify(paths.root)
+    elif args.command == "ci-validate":
+        from moex_model_cli.commands.ci_validate import run_ci_validate
+
+        code, text = run_ci_validate(
+            paths.root,
+            baseline_path=args.baseline,
+            write_baseline_flag=args.write_baseline,
+            check_baseline_growth=args.check_baseline_growth,
+            growth_base_ref=args.growth_base_ref,
+            junit_path=args.junit,
+            codequality_path=args.codequality,
+            as_json=args.json,
+        )
+    elif args.command == "breaking-gate":
+        from moex_model_cli.commands.breaking_gate import (
+            report_has_breaking,
+            run_breaking_gate_from_env,
+        )
+        import json as _json
+
+        has_breaking = bool(args.has_breaking)
+        if args.from_report is not None:
+            report_path = (
+                args.from_report
+                if args.from_report.is_absolute()
+                else paths.root / args.from_report
+            )
+            payload = _json.loads(report_path.read_text(encoding="utf-8"))
+            has_breaking = report_has_breaking(payload)
+        code, text = run_breaking_gate_from_env(has_breaking=has_breaking)
+    elif args.command == "publications-fresh":
+        from moex_model_cli.commands.publications_fresh import run_publications_fresh
+
+        code, text = run_publications_fresh(paths.root)
+    elif args.command == "fmt":
+        from moex_model_cli.commands.fmt_cmd import run_fmt
+
+        code, text = run_fmt(
+            paths.root,
+            check=args.check,
+            write=args.write,
+            paths=list(args.paths) or None,
+        )
+    elif args.command == "matrix-check":
+        from moex_model_cli.commands.matrix_check import run_matrix_check
+
+        code, text = run_matrix_check(
+            paths.root,
+            require_expires=not args.no_require_expires,
+            with_traceability=not args.no_traceability,
+            ci_validate_json=args.ci_validate_json,
+            junit_path=args.junit,
+            as_json=args.json,
+        )
+    elif args.command == "mr-summary":
+        from moex_model_cli.commands.mr_summary import run_mr_summary
+
+        code, text = run_mr_summary(
+            ci_validate_json=args.ci_validate_json,
+            semantic_diff_file=args.semantic_diff_file,
+            matrix_json=args.matrix_json,
+            dry_run=args.dry_run,
+        )
     else:
         return 2
 

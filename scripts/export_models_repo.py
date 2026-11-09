@@ -38,7 +38,7 @@ def load_paths(path: Path | None = None) -> dict[str, list[str]]:
     if not isinstance(raw, dict):
         raise ExportError(f"{PATHS_FILE} must be a mapping")
     out: dict[str, list[str]] = {}
-    for key in ("gitlab_owned", "code_owned", "root_files", "exclude"):
+    for key in ("gitlab_owned", "code_owned", "root_files", "seed_files", "exclude"):
         value = raw.get(key) or []
         if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
             raise ExportError(f"{key} must be a list of strings")
@@ -131,6 +131,8 @@ def verify_steps(py: str, dest: Path) -> list[list[str]]:
             str(dest / ".viewer-dist"),
         ],
         [py, "-m", "moex_model_api.preflight"],
+        [py, "-m", "moex_model_cli", "ci-validate", "--root", str(dest)],
+        [py, "-m", "moex_model_cli", "publications-fresh", "--root", str(dest)],
     ]
 
 
@@ -160,12 +162,34 @@ def _copy_tree(src: Path, dest: Path) -> None:
         raise ExportError(f"missing path to copy: {src}")
 
 
-def _copy_root_files(dest: Path, spec: dict[str, list[str]]) -> None:
-    for name in spec["root_files"]:
+def _copy_named_templates(
+    dest: Path,
+    names: list[str],
+    *,
+    only_missing: bool = False,
+) -> None:
+    for name in names:
         src = TEMPLATE_DIR / name
         if not src.is_file():
             raise ExportError(f"root template missing: {src}")
-        shutil.copy2(src, dest / name)
+        target = dest / name
+        if only_missing and target.is_file():
+            continue
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, target)
+
+
+def _copy_root_files(dest: Path, spec: dict[str, list[str]]) -> None:
+    _copy_named_templates(dest, spec["root_files"])
+
+
+def _copy_seed_files(
+    dest: Path,
+    spec: dict[str, list[str]],
+    *,
+    only_missing: bool,
+) -> None:
+    _copy_named_templates(dest, spec.get("seed_files") or [], only_missing=only_missing)
 
 
 def _owned_dirty(repo: Path, prefixes: list[str]) -> list[str]:
@@ -209,6 +233,8 @@ def cmd_verify(_args: argparse.Namespace) -> int:
     with tempfile.TemporaryDirectory(prefix="moex-models-") as tmp:
         dest = Path(tmp) / "tree"
         materialize(dest, spec)
+        _copy_root_files(dest, spec)
+        _copy_seed_files(dest, spec, only_missing=False)
         verify_tree(dest)
     print("verify OK")
     return 0
@@ -242,6 +268,7 @@ def cmd_seed(args: argparse.Namespace) -> int:
         cmd.extend(["--path", rel])
     _run(cmd, cwd=dest)
     _copy_root_files(dest, spec)
+    _copy_seed_files(dest, spec, only_missing=False)
     sha = _git_sha(REPO_ROOT)
     _commit(dest, f"Add models repository root files.\n\nExported from {sha}.")
     print(dest)
@@ -275,6 +302,7 @@ def cmd_spec_sync(args: argparse.Namespace) -> int:
         for rel in spec["code_owned"]:
             _copy_tree(staged / rel, clone / rel)
     _copy_root_files(clone, spec)
+    _copy_seed_files(clone, spec, only_missing=True)
     leaked = _owned_dirty(clone, spec["gitlab_owned"])
     if leaked:
         _run(["git", "-C", str(clone), "reset", "--hard"])

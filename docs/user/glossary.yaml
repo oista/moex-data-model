@@ -731,6 +731,50 @@ terms:
     sources:
       - docs/adr/ADR-058-airgap-image-deploy.md
       - docs/adr/ADR-012-semantic-diff-review.md
+  - id: ci-validate
+    draft: true
+    term: Проверка реализаций в CI
+    short: Прогон validate по описи и бюджет soft-диагностик в запросе на слияние.
+    explanation: >
+      Команда moex-model ci-validate обходит документы манифеста, собирает
+      отчёт соответствия и сравнивает soft-диагностики с файлом бюджета.
+      Новое предупреждение и рост счётчика блокируют слияние. Ошибки на
+      решениях из списка gate тоже блокируют.
+    see_also:
+      - merge-request
+      - models-repo
+      - breaking-change
+    sources:
+      - docs/adr/ADR-012-semantic-diff-review.md
+      - deploy/models-repo/.gitlab-ci.yml
+  - id: breaking-change
+    draft: true
+    term: Ломающее изменение
+    short: Изменение модели, которое semantic-diff относит к классу breaking.
+    explanation: >
+      Удаление слота, смена обязательности или идентификатора ломают
+      совместимость. Такой запрос на слияние красный, пока Maintainer не
+      поставит метку approved-breaking. Метку от Developer pipeline не
+      принимает.
+    see_also:
+      - merge-request
+      - ci-validate
+    sources:
+      - docs/adr/ADR-012-semantic-diff-review.md
+  - id: waiver
+    draft: true
+    term: Waiver
+    short: Сознательный отказ проверять инвариант до указанного срока.
+    explanation: >
+      В матрице проверок у записи со статусом waived обязательны причина,
+      ссылка на ADR и дата waiver_expires. Просроченный waiver блокирует
+      matrix-check. Трассировка «требование — проверка — результат»
+      помечает такие строки как waived.
+    see_also:
+      - reference-specification
+    sources:
+      - docs/adr/ADR-045-executable-constraint-matrix.md
+      - model-assets/specifications/moex-dams/0.1/constraints/constraint-matrix.yaml
   - id: code-owners
     draft: true
     term: Владельцы кода

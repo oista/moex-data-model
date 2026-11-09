@@ -18,11 +18,18 @@ code_owned:
   - packages/ontology/publications
   - packages/ontology/publish.yaml
 
-# Copied from deploy/models-repo/ onto the models repository root.
+# Copied from deploy/models-repo/ onto the models repository root on every
+# seed and spec-sync (owned by @moex/spec-sync).
 root_files:
   - README.md
   - CODEOWNERS
   - .gitlab-ci.yml
+  - .gitleaks.toml
+
+# Copied on seed always. On spec-sync only when the destination file is missing
+# (baseline is owned by @moex/data-architects in the models repository).
+seed_files:
+  - .moex/warning-baseline.yaml
 
 exclude:
   - apps

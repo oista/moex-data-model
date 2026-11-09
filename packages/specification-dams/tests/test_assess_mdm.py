@@ -56,3 +56,26 @@ def test_build_graph_from_provider(
     graph = build_dams_graph(body)
     assert "dams:logical/mdm/ENTERPRISE" in graph.node_ids()
     assert "dams:logical/mdm/ENTERPRISE/ENTERPRISE_ID" in graph.node_ids()
+
+
+def test_assess_digest_ignores_crlf(dams_schema: Path, tmp_path: Path) -> None:
+    """Windows checkout CRLF must not change revision vs Linux LF."""
+    root = Path(__file__).resolve().parents[3]
+    src = root / "model-assets/implementations/solutions/mdm/mdm-solution-model.yaml"
+    raw_lf = src.read_bytes().replace(b"\r\n", b"\n")
+    lf_path = tmp_path / "lf.yaml"
+    crlf_path = tmp_path / "crlf.yaml"
+    lf_path.write_bytes(raw_lf)
+    crlf_path.write_bytes(raw_lf.replace(b"\n", b"\r\n"))
+    a = assess_implementation(
+        schema_path=dams_schema,
+        implementation_path=lf_path,
+        implementation_id="moex:implementation:mdm:0.1.0",
+    )
+    b = assess_implementation(
+        schema_path=dams_schema,
+        implementation_path=crlf_path,
+        implementation_id="moex:implementation:mdm:0.1.0",
+    )
+    assert a.implementation.revision == b.implementation.revision
+    assert a.implementation.content_digest == b.implementation.content_digest

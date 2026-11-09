@@ -58,6 +58,8 @@ def test_root_templates_exist() -> None:
     spec = load_paths()
     for name in spec["root_files"]:
         assert (TEMPLATE_DIR / name).is_file(), name
+    for name in spec.get("seed_files") or []:
+        assert (TEMPLATE_DIR / name).is_file(), name
 
 
 def test_verify_runs_only_models_check_commands() -> None:

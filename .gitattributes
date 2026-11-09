@@ -4,5 +4,8 @@
 # Generated artifacts must stay LF so Windows/Linux digests match.
 generated/** text eol=lf
 
+# Model bodies/publications are hashed into vertical_slice revision; keep LF.
+model-assets/** text eol=lf
+
 # Toolchain file is hashed byte-for-byte into the release-bundle digest.
 requirements-linkml.txt text eol=lf
