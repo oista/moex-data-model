@@ -8,6 +8,7 @@ from pathlib import Path
 
 from moex_git.ports import FileChange
 from moex_model_cli.bootstrap import (
+    DEFAULT_SCHEMA,
     SlicePaths,
     resolve_body_from_implementation_envelope,
 )
@@ -64,7 +65,7 @@ def slice_publication_change(
         return None
 
     impl_id = implementation_id or _implementation_id_for_body(root, rel)
-    schema = SlicePaths.resolve(root=root).schema
+    schema = SlicePaths.resolve(root=root, schema=root / DEFAULT_SCHEMA).schema
 
     with tempfile.TemporaryDirectory(prefix="moex-slice-pub-") as tmp:
         tmp_path = Path(tmp)
