@@ -558,3 +558,27 @@ classes:
     assert code == 1
     assert "MOEX-ONT-010" in captured.out
     assert "BREAKING" in captured.out
+
+
+def test_concept_coverage_json(
+    repo_root: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    code = main(["concept-coverage", "--root", str(repo_root), "--json"])
+    captured = capsys.readouterr()
+    assert code == 0, captured.err
+    payload = json.loads(captured.out)
+    assert payload["attribute_count"] > 0
+
+
+def test_concept_coverage_implementation_id_crm(repo_root: Path) -> None:
+    code = main(
+        [
+            "concept-coverage",
+            "--root",
+            str(repo_root),
+            "--implementation-id",
+            "moex:implementation:crm:0.1.0",
+        ]
+    )
+    assert code == 0

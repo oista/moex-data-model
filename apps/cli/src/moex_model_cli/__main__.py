@@ -554,7 +554,7 @@ def main(argv: list[str] | None = None) -> int:
     elif args.command == "concept-coverage":
         from moex_model_cli.commands.concept_coverage import run_concept_coverage
 
-        code, text = run_concept_coverage(paths, as_json=args.json)
+        code, text = run_concept_coverage([paths.implementation], as_json=args.json)
     elif args.command == "schema-diff":
         from moex_model_cli.commands.schema_diff import run_schema_diff
 
