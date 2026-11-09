@@ -945,6 +945,10 @@ def test_publication_of_mdm_edit_commits_body_and_lock(
         name.startswith("generated/governance/effective-governance-view-")
         for name in names
     ), names
+    assert (
+        "model-assets/implementations/solutions/mdm/publications/vertical_slice.json"
+        in names
+    ), names
 
     work = tmp_path / "lock-verify"
     subprocess.run(
