@@ -1,10 +1,18 @@
-# Replace @moex-spec-sync with the GitLab group that opens spec-sync
-# merge requests. Those paths are not edited by hand in this project.
+[Models]
+model-assets/implementations/ @moex/data-architects
+model-assets/external-selections/ @moex/data-architects
+model-assets/transformations/ @moex/data-architects
+model-assets/external-scopes/ @moex/data-architects
+model-assets/catalog-snapshots/ @moex/data-architects
 
 [Schemas from the program repository]
-model-assets/specifications/ @moex-spec-sync
-model-assets/standards/ @moex-spec-sync
-model-assets/external-sources/ @moex-spec-sync
-generated/ @moex-spec-sync
-packages/ontology/publications/ @moex-spec-sync
-packages/ontology/publish.yaml @moex-spec-sync
+model-assets/specifications/ @moex/spec-sync
+model-assets/standards/ @moex/spec-sync
+model-assets/external-sources/ @moex/spec-sync
+generated/ @moex/spec-sync
+packages/ontology/publications/ @moex/spec-sync
+packages/ontology/publish.yaml @moex/spec-sync
+
+[Root files from the program repository]
+/CODEOWNERS @moex/spec-sync
+/.gitlab-ci.yml @moex/spec-sync
