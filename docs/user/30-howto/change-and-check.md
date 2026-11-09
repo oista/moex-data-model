@@ -7,6 +7,7 @@ sources:
   - scripts/generate_contracts.py
   - docs/adr/ADR-011-reproducible-artifacts.md
   - docs/adr/ADR-047-repository-manifest-and-lock.md
+  - apps/api/src/moex_model_api/app.py
 draft: true
 ---
 
@@ -18,6 +19,6 @@ draft: true
 
 Шаг `compare-golden` сверяет каталог `generated/` со свежей сборкой. Это [производные файлы](glossary:derived-artifact): их снова получают из YAML (ADR-011). Если шаг упал, схема и эталон разъехались. Соберите заново то, о чём он пишет: `make generate-contracts`, `make generate-artifacts` и `make generate-bundle`. Затем повторите `python scripts/check_all.py --only compare-golden`. Каталог `generated/` руками не правят. Если схему менять не собирались, верните правку схемы и оставьте эталон как был.
 
-Если менялся состав документов или сам документ из [описи состава](glossary:repository-manifest), устаревает [фиксация состава](glossary:repository-lock). Её переписывает только `moex-model lock update --root .`. Команда `moex-model lock verify --root .` (цель `make lock-verify`) файл не переписывает, она только сверяет (ADR-047). Оба шага входят в общую проверку: `check-manifest` и `lock-verify`.
+Если менялся состав документов или сам документ из [описи состава](glossary:repository-manifest), устаревает [фиксация состава](glossary:repository-lock). Её переписывает `moex-model lock update --root .`. Запрос публикации из служебного интерфейса тоже приносит обновлённую фиксацию. Команда `moex-model lock verify --root .` (цель `make lock-verify`) файл не переписывает, она только сверяет (ADR-047). Оба шага входят в общую проверку: `check-manifest` и `lock-verify`.
 
 Где прочитать решение: [ADR-011](docs/adr/ADR-011-reproducible-artifacts.md), [ADR-047](docs/adr/ADR-047-repository-manifest-and-lock.md).

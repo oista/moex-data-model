@@ -51,6 +51,7 @@ from moex_model_api.implementation_support import (
     paths_for_asset,
     relative_body_path,
 )
+from moex_model_api.relock import relock_change
 from moex_model_api.indexing import elements_from_package
 from moex_model_api.ports import (
     ArtifactRecord,
@@ -1497,15 +1498,15 @@ def create_app(
 
         try:
             git.create_branch(base_revision, branch_name)
-            commit_sha = git.commit_files(
-                branch_name,
-                [
-                    FileChange(
-                        path=rel,
-                        content=draft.content.encode("utf-8"),
-                    )
-                ],
+            body_change = FileChange(
+                path=rel,
+                content=draft.content.encode("utf-8"),
             )
+            files = [body_change]
+            lock_change = relock_change(git, base_revision, rel, draft.content)
+            if lock_change is not None:
+                files.append(lock_change)
+            commit_sha = git.commit_files(branch_name, files)
             review = git.create_review(branch_name, body.title)
             status = "submitted"
         except Exception as exc:  # noqa: BLE001

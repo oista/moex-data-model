@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -53,6 +54,56 @@ def temp_git_repo(tmp_path: Path) -> Path:
 @pytest.fixture()
 def publish_client(temp_git_repo: Path) -> TestClient:
     git = LocalGitProvider(temp_git_repo)
+    with TestClient(
+        create_app(database_url="sqlite:///:memory:", git_provider=git)
+    ) as c:
+        yield c
+
+
+def _init_git_repo(root: Path) -> None:
+    subprocess.run(["git", "init"], cwd=root, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "config", "user.email", "test@example.com"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "Test"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+    )
+
+
+@pytest.fixture()
+def temp_git_repo_with_models(tmp_path: Path) -> Path:
+    from moex_model_cli.bootstrap import find_repo_root
+
+    root = tmp_path / "gitrepo"
+    root.mkdir()
+    _init_git_repo(root)
+    src = find_repo_root() / "model-assets" / "implementations"
+    dest = root / "model-assets" / "implementations"
+    shutil.copytree(src, dest)
+    subprocess.run(
+        ["git", "add", "model-assets"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "commit", "-m", "models"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+    )
+    return root
+
+
+@pytest.fixture()
+def publish_client_with_models(temp_git_repo_with_models: Path) -> TestClient:
+    git = LocalGitProvider(temp_git_repo_with_models)
     with TestClient(
         create_app(database_url="sqlite:///:memory:", git_provider=git)
     ) as c:
@@ -838,3 +889,76 @@ def test_diagram_reject_element_id_strip(client: TestClient) -> None:
             headers=headers,
         )
         assert applied.status_code == 400
+
+
+def test_publication_of_mdm_edit_commits_body_and_lock(
+    publish_client_with_models: TestClient,
+    temp_git_repo_with_models: Path,
+    tmp_path: Path,
+) -> None:
+    headers = {"X-Moex-Actor": "publisher"}
+    published = publish_client_with_models.get("/implementations/mdm/body").json()
+    content = published["content"].replace(
+        "Доменный контекст модели решения MDM",
+        "Доменный контекст модели решения MDM (правка фиксации)",
+        1,
+    )
+    assert content != published["content"]
+    put = publish_client_with_models.put(
+        "/workspaces/ws-relock/documents/mdm",
+        json={"content": content, "base_digest": published["content_digest"]},
+        headers=headers,
+    )
+    assert put.status_code == 200
+
+    posted = publish_client_with_models.post(
+        "/publications",
+        json={
+            "workspace_id": "ws-relock",
+            "implementation_id": MDM_ID,
+            "title": "Publish MDM with lock",
+            "base_ref": "HEAD",
+        },
+        headers=headers,
+    )
+    assert posted.status_code == 200, posted.text
+    body = posted.json()
+    assert body["branch_name"].startswith("workbench/publish-")
+    sha = body["commit_sha"]
+
+    listed = subprocess.run(
+        ["git", "diff-tree", "--no-commit-id", "--name-only", "-r", sha],
+        cwd=temp_git_repo_with_models,
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    names = [
+        line.strip().replace("\\", "/")
+        for line in listed.stdout.splitlines()
+        if line.strip()
+    ]
+    assert len(names) == 2
+    assert "model-assets/implementations/manifest.lock" in names
+    assert any(name.endswith("mdm-solution-model.yaml") for name in names)
+
+    work = tmp_path / "lock-verify"
+    subprocess.run(
+        ["git", "worktree", "add", "--detach", str(work), sha],
+        cwd=temp_git_repo_with_models,
+        check=True,
+        capture_output=True,
+    )
+    try:
+        from moex_model_cli.commands.lock_cmd import run_lock_verify
+
+        code, text = run_lock_verify(work)
+        assert code == 0, text
+    finally:
+        subprocess.run(
+            ["git", "worktree", "remove", "--force", str(work)],
+            cwd=temp_git_repo_with_models,
+            check=True,
+            capture_output=True,
+        )

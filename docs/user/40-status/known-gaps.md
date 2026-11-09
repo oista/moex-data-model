@@ -13,7 +13,6 @@ sources:
   - docs/adr/ADR-058-airgap-image-deploy.md
   - model-assets/external-sources/fibo/registry.yaml
   - model-assets/implementations/manifest.lock
-  - apps/api/src/moex_model_api/app.py
 draft: true
 ---
 
@@ -32,7 +31,5 @@ draft: true
 [ADR-058](docs/adr/ADR-058-airgap-image-deploy.md) принят и выносит модели в отдельный репозиторий. Файл `model-assets/external-sources/fibo/registry.yaml` в поле `upstream_url` указывает на фикстуру `packages/external-sources/tests/fixtures/mini_ontology`. Этот каталог в репозиторий моделей не входит. Права граница в решении: фикстуру туда не кладут. Ссылку в реестре этим не переписывают.
 
 На дереве с переводами строк LF команды `moex-model check-manifest --root .` и `moex-model lock verify --root .` расходятся по четырём реализациям: crm, esed, mdm, ucd. Хеш в `model-assets/implementations/manifest.lock` не совпадает с разобранным телом файла. Фиксацию здесь не переписывают.
-
-Публикация из служебного интерфейса коммитит файл модели и не переписывает `model-assets/implementations/manifest.lock`. Это видно в `apps/api/src/moex_model_api/app.py`: в коммит уходит один файл. После такой правки сверка фиксации (`moex-model lock verify --root .`) на копии моделей расходится, пока фиксацию не обновят на ветке запроса. Интерфейс сам фиксацию не пишет.
 
 [ADR-003](docs/adr/ADR-003-postgres-operational.md) предлагает сделать [операционным хранилищем](glossary:operational-store) PostgreSQL и не принят. В тексте самого решения сказано, что на текущем срезе этой базы нет. Рядом уже лежат два файла. Служебный интерфейс по умолчанию открывает SQLite в памяти: `apps/api/src/moex_model_api/db/session.py`. Файл `infra/compose/postgres.yml` поднимает PostgreSQL, и в общую проверку он не входит. Права принятая сторона: опубликованная модель живёт в Git ([ADR-002](docs/adr/ADR-002-git-published-source.md)). Непринятое решение не делает базу устройством продукта. SQLite и compose — локальный запуск и заготовка, не принятое хранилище.
