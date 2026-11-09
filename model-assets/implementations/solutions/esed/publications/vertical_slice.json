@@ -2,8 +2,8 @@
   "summary": {
     "overall_result": "conformant_with_warnings",
     "implementation_id": "moex:implementation:esed:0.1.0",
-    "revision": "c58ee458a3ca",
-    "content_digest": "sha256:c58ee458a3cab0a3d6955cdcec80716cd954f6c13c1ccc153e763016133c9498",
+    "revision": "d5ae42d8188d",
+    "content_digest": "sha256:d5ae42d8188d464c9a15828dd0277503f54bd4a8381a139eba39572422213895",
     "package_id": "dams:model/esed/0.1.0",
     "node_count": 277,
     "edge_count": 581,
@@ -8969,7 +8969,7 @@
             "title": "revision",
             "description": null,
             "attributes": {
-              "value": "c58ee458a3ca"
+              "value": "d5ae42d8188d"
             },
             "children": [],
             "tags": [],
@@ -8980,7 +8980,7 @@
             "title": "content_digest",
             "description": null,
             "attributes": {
-              "value": "sha256:c58ee458a3cab0a3d6955cdcec80716cd954f6c13c1ccc153e763016133c9498"
+              "value": "sha256:d5ae42d8188d464c9a15828dd0277503f54bd4a8381a139eba39572422213895"
             },
             "children": [],
             "tags": [],

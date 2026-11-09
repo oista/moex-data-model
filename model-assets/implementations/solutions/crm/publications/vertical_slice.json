@@ -2,8 +2,8 @@
   "summary": {
     "overall_result": "conformant_with_warnings",
     "implementation_id": "moex:implementation:crm:0.1.0",
-    "revision": "cb50425790bc",
-    "content_digest": "sha256:cb50425790bcb35d383b238404e2d66aaa5c3dc60743fc1c5e3ba1e23b261a46",
+    "revision": "a7a8b2644698",
+    "content_digest": "sha256:a7a8b2644698c1115523af987c1a60173194492f03410377c56d9880ba7c73eb",
     "package_id": "dams:model/crm/0.1.0",
     "node_count": 195,
     "edge_count": 398,
@@ -6357,7 +6357,7 @@
             "title": "revision",
             "description": null,
             "attributes": {
-              "value": "cb50425790bc"
+              "value": "a7a8b2644698"
             },
             "children": [],
             "tags": [],
@@ -6368,7 +6368,7 @@
             "title": "content_digest",
             "description": null,
             "attributes": {
-              "value": "sha256:cb50425790bcb35d383b238404e2d66aaa5c3dc60743fc1c5e3ba1e23b261a46"
+              "value": "sha256:a7a8b2644698c1115523af987c1a60173194492f03410377c56d9880ba7c73eb"
             },
             "children": [],
             "tags": [],

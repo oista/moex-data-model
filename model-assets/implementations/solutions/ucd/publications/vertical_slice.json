@@ -2,8 +2,8 @@
   "summary": {
     "overall_result": "conformant_with_warnings",
     "implementation_id": "moex:implementation:ucd:0.1.0",
-    "revision": "939382245bfd",
-    "content_digest": "sha256:939382245bfd76f83cbf388e6d9aaebc060f71f53d2f8b42a4896d37d7240475",
+    "revision": "fe9152baf644",
+    "content_digest": "sha256:fe9152baf644547a528c9f3d2e876b784cec173ac8ad70587b0ffdb4fd653ad2",
     "package_id": "dams:model/ucd/0.1.0",
     "node_count": 160,
     "edge_count": 334,
@@ -5248,7 +5248,7 @@
             "title": "revision",
             "description": null,
             "attributes": {
-              "value": "939382245bfd"
+              "value": "fe9152baf644"
             },
             "children": [],
             "tags": [],
@@ -5259,7 +5259,7 @@
             "title": "content_digest",
             "description": null,
             "attributes": {
-              "value": "sha256:939382245bfd76f83cbf388e6d9aaebc060f71f53d2f8b42a4896d37d7240475"
+              "value": "sha256:fe9152baf644547a528c9f3d2e876b784cec173ac8ad70587b0ffdb4fd653ad2"
             },
             "children": [],
             "tags": [],
