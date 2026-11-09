@@ -51,6 +51,7 @@ from moex_model_api.implementation_support import (
     paths_for_asset,
     relative_body_path,
 )
+from moex_model_api.governance_view import governance_view_change
 from moex_model_api.relock import relock_change
 from moex_model_api.indexing import elements_from_package
 from moex_model_api.ports import (
@@ -1506,6 +1507,9 @@ def create_app(
             lock_change = relock_change(git, base_revision, rel, draft.content)
             if lock_change is not None:
                 files.append(lock_change)
+            view_change = governance_view_change(repo_root, rel, draft.content)
+            if view_change is not None:
+                files.append(view_change)
             commit_sha = git.commit_files(branch_name, files)
             review = git.create_review(branch_name, body.title)
             status = "submitted"

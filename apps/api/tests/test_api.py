@@ -939,9 +939,12 @@ def test_publication_of_mdm_edit_commits_body_and_lock(
         for line in listed.stdout.splitlines()
         if line.strip()
     ]
-    assert len(names) == 2
     assert "model-assets/implementations/manifest.lock" in names
     assert any(name.endswith("mdm-solution-model.yaml") for name in names)
+    assert any(
+        name.startswith("generated/governance/effective-governance-view-")
+        for name in names
+    ), names
 
     work = tmp_path / "lock-verify"
     subprocess.run(
@@ -951,10 +954,17 @@ def test_publication_of_mdm_edit_commits_body_and_lock(
         capture_output=True,
     )
     try:
+        from moex_dams.governance.materialize import check_governance_view
+        from moex_model_cli.bootstrap import find_repo_root
         from moex_model_cli.commands.lock_cmd import run_lock_verify
 
         code, text = run_lock_verify(work)
         assert code == 0, text
+        spec_src = find_repo_root() / "model-assets" / "specifications"
+        spec_dest = work / "model-assets" / "specifications"
+        shutil.copytree(spec_src, spec_dest)
+        errors = check_governance_view(work)
+        assert errors == [], errors
     finally:
         subprocess.run(
             ["git", "worktree", "remove", "--force", str(work)],

@@ -13,8 +13,9 @@ variables:
   MODEL_TAG: "local"
 
 default:
-  image: moex-data-model-api:$MODEL_TAG
-  pull_policy: if-not-present
+  image:
+    name: moex-data-model-api:$MODEL_TAG
+    pull_policy: if-not-present
 
 models-check:
   rules:

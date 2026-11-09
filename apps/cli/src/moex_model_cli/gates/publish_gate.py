@@ -138,6 +138,11 @@ def _bundle_ok(root: Path, *, refresh_bundle: bool) -> list[str]:
 
     script = root / "scripts" / "build_release_bundle.py"
     if not script.is_file():
+        # The models repository does not carry program scripts. A publication
+        # from that tree still runs the artifact checks above. Rebuilding the
+        # release bundle stays required in the program repository.
+        if not refresh_bundle:
+            return []
         return ["publish-gate: missing scripts/build_release_bundle.py"]
     spec = importlib.util.spec_from_file_location("moex_build_release_bundle", script)
     if spec is None or spec.loader is None:
