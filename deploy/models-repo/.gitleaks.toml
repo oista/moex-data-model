@@ -1,0 +1,22 @@
+title = "moex-models"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "gitlab-pat"
+description = "GitLab Personal Access Token"
+regex = '''glpat-[0-9a-zA-Z\-\_]{20,}'''
+tags = ["key", "GitLab"]
+
+[allowlist]
+description = "Model URIs and lock hashes"
+paths = [
+  '''manifest\.lock$''',
+  '''generated/''',
+]
+regexes = [
+  '''https://data\.moex\.com/''',
+  '''dams:(model|logical|physical|conceptual)/''',
+  '''moex:(implementation|spec|repository):''',
+]
