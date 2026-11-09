@@ -109,16 +109,13 @@ def _python() -> str:
     return sys.executable
 
 
-def verify_tree(dest: Path) -> None:
-    """Run the model checks against an extracted tree. Fail closed."""
-    py = _python()
-    env = os.environ.copy()
-    env["MOEX_MODELS_ROOT"] = str(dest)
-    env["MOEX_IMAGE_CONTRACTS_MANIFEST"] = str(IMAGE_MANIFEST)
-    # preflight lives in apps/api, which is not part of the CLI virtualenv.
-    api_src = str(REPO_ROOT / "apps" / "api" / "src")
-    env["PYTHONPATH"] = api_src + os.pathsep + env.get("PYTHONPATH", "")
-    steps = [
+def verify_steps(py: str, dest: Path) -> list[list[str]]:
+    """Commands of the models-check job in deploy/models-repo/.gitlab-ci.yml.
+
+    publish_gate is not here: it needs scripts/build_release_bundle.py, which
+    stays in the program repository.
+    """
+    return [
         [py, "-m", "moex_model_cli", "check-manifest", "--root", str(dest)],
         [py, "-m", "moex_model_cli", "lock", "verify", "--root", str(dest)],
         [py, "-m", "moex_dams.catalog.cli", "check", "--root", str(dest)],
@@ -134,9 +131,19 @@ def verify_tree(dest: Path) -> None:
             str(dest / ".viewer-dist"),
         ],
         [py, "-m", "moex_model_api.preflight"],
-        [py, "-m", "moex_model_cli.gates.publish_gate"],
     ]
-    for cmd in steps:
+
+
+def verify_tree(dest: Path) -> None:
+    """Run the model checks against an extracted tree. Fail closed."""
+    py = _python()
+    env = os.environ.copy()
+    env["MOEX_MODELS_ROOT"] = str(dest)
+    env["MOEX_IMAGE_CONTRACTS_MANIFEST"] = str(IMAGE_MANIFEST)
+    # preflight lives in apps/api, which is not part of the CLI virtualenv.
+    api_src = str(REPO_ROOT / "apps" / "api" / "src")
+    env["PYTHONPATH"] = api_src + os.pathsep + env.get("PYTHONPATH", "")
+    for cmd in verify_steps(py, dest):
         _run(cmd, cwd=dest, env=env)
 
 
