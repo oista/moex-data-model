@@ -1,5 +1,5 @@
 ---
-status: Proposed
+status: Accepted
 version: "0.1"
 normative: false
 supersedes: []
@@ -9,7 +9,7 @@ superseded_by: MODELING_ARCHITECTURE.md
 # ADR-012: Все изменения публикуются через semantic diff и review
 
 **Date:** 2026-09-28  
-**Status:** Proposed  
+**Status:** Accepted  
 **Normative parent:** [MODELING_ARCHITECTURE.md](../architecture/MODELING_ARCHITECTURE.md) — нет отдельной секции под review workflow; §11 (источники истины) смежный  
 **Workbench:** [linkml_architecture.md](../architecture/linkml_architecture.md) Git Publishing Service
 
@@ -28,15 +28,25 @@ superseded_by: MODELING_ARCHITECTURE.md
 5. review (PR)  
 6. merge → immutable revision → artifacts  
 
-Прямая запись в published branch без diff/review не допускается. Breaking changes требуют migration note / approval (IMPLEMENTATION_PLAN этап 10).
+Прямая запись в published branch без diff/review не допускается. Breaking changes требуют migration note / approval.
 
-На текущем срезе: `moex-model validate` / `assess` даёт `ConformanceReport`; **`moex-model semantic-diff`** и `specification-dams.diff_implementations` классифицируют изменения (breaking / compatible / governance / operational). **API preview** — `POST /workspaces/{id}/semantic-diff`; **Web** — кнопка Review changes на editor. **PR automation ещё нет.**
+### Stage 1 (репозиторий моделей)
+
+На merge request в репозитории моделей:
+
+1. `moex-model ci-validate` проверяет каждую реализацию из `manifest.yaml` и бюджет soft-диагностик (`.moex/warning-baseline.yaml`).
+2. `moex-model semantic-diff --all --from $CI_MERGE_REQUEST_DIFF_BASE_SHA --to HEAD` классифицирует изменения. Job берёт полную историю (`GIT_DEPTH: 0`).
+3. Breaking-изменения блокируют pipeline, пока на MR нет метки `approved-breaking`, поставленной участником с `access_level >= 40` (Maintainer). В GitLab CE ограничить, кто ставит метки, нельзя — проверку делает job `breaking-gate` через API.
+4. Метка годна только если она поставлена не раньше последней версии MR (`GET .../merge_requests/:iid/versions`: `head_commit_sha` совпадает с `CI_COMMIT_SHA`, `label.created_at >= version.created_at`). После новых коммитов метку ставят снова.
+
+Команды: `moex-model validate` / `assess` → `ConformanceReport`; `moex-model semantic-diff`; API preview `POST /workspaces/{id}/semantic-diff`; Web — Review changes.
 
 ## Consequences
 
 - drawDB/import не публикуют сами (ADR-006, ADR-009).
 - Нужен стабильный diagnostic code (уже есть в kernel `Diagnostic`).
 - GitProvider.create_review — первая реализация может быть GitHub, без GitHub DTO в domain.
+- В CE обход через правку `.gitlab-ci.yml` закрывается ролью Maintainer на слиянии и секцией CODEOWNERS для корневых CI-файлов.
 
 ## Alternatives
 
